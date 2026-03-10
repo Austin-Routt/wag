@@ -1,0 +1,18 @@
+meta:
+  title: The Vacation Example
+  source: > 
+   van Gijzel, Bas and Prakken, Henry. "Relating Carneades with abstract 
+   argumentation" Proceedings of the Twenty-Second International Joint
+   Conference on Artificial Intelligence (IJCAI-2011), (2011), pp. 1113-1119.
+
+statements: 
+  italy: "Let's go to Italy."
+  greece: "Let's go to Greece."
+
+issues:
+  i1:
+    positions: [italy, greece]
+    standard: PE
+
+tests:
+  out: [italy, greece]

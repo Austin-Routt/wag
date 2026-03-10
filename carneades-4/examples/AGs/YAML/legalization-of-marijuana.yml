@@ -1,0 +1,156 @@
+meta:
+  title: Legalization of Marijuana
+  notes: "A reconstruction of arguments about the pros and cons of legalizing marijuana"
+  source: >
+    http://www.nytimes.com/2014/08/01/opinion/Legalizing-Marijuana-Pros-and-Cons.html?_r=0#addenda
+    http://www.dbp.idebate.org/en/index.php/Debate:_Legalization_of_Marijuana#Pro.2Fcon_resources
+
+statements:
+  legalize: Marijuana should be legalized.
+  ¬legalize:  Marijuana should not be legalized.
+  harmless: Marijuana is harmless.
+  ¬harmless: Marijuana is not harmless.
+  # liberty: Individuals should  be free to use marijuana.
+  # nliberty: Individuals should not be free  to use marijuana.
+  social_costs: Legalization would entail heavy social costs.
+  ¬social_costs: Legalization would not entail heavy  social costs.
+  reduced_consumption: Legalization would reduce the consumption of marijuana.
+  ¬reduced_consumption: Legalization  would not reduce the consumption of marijuana.
+  # gateway: Marijuana is a gateway drug.
+  # ¬gateway: Marijuana is not a gateway drug.
+  # relieve_courts: Legalization would relieve strained courts.
+  # ¬relieve_courts: Legalization would not relieve strained courts.
+  reduce_crime: Legalization would reduce crime.
+  ¬reduce_crime:  Legalization would not reduce crime.
+  # prohibition_feasible: The  prohibition of marijuana is feasible.
+  # ¬prohibition_feasible: The prohibition of marijuana is not feasible.
+  economical: Legalization would be economical.
+  ¬economical: Legalization would not be economical.
+  # regulation_superior: Regulation of marijuana would be superior to a ban.
+  # ¬regulation_superior: Regulation of marijuana  would not be superior to a ban.
+  # racist: Prohibition enforcement is racially biased.
+  # ¬racist: Prohibition enforcement is not racially  biased.
+  # growing_potency: Marijuana is growing in potency.
+  # ¬growing_potency: Marijuana is not growing in potency.
+  # growing_potency_irrelevant: It does not matter whether marijuana is growing in potency.
+  legal_drugs_have_higher_consumption: Legal drugs, like alcohol and tobacco, are used more than illegal drugs.
+  # legalization_desired: The public wants marijuana to be legalized.
+  # ¬legalization_desired: The public does not want marijuana to be legalized.
+  # treaties: Legalization would contravene international treaties.
+  # ¬treaties: Legalization would not contravene international treaties.
+  us_drug_use_statistics: 52 percent of Americans 12 or older used alcohol, 27 percent used tobacco and only 7 percent used marijuana.
+  emergency_rooms: Marrijuana emergency roolm admissions are reported at the rate of 1,250 a day and 455,000 a year.
+  highway_crashes: Highway crashes double for marijuana users.
+  robbed_future: Prohibition has robbed children of their future, through imprisonment.
+  prison_complex: Prohibition has led to the construction of a huge prison-industrial complex.
+  harmful_for_young_brains: Marijuana is harmful for still-developing adolescent brains.
+  costs_of_regulation: Legalization would create an economic burden for regulating the drug.
+  costs_of_treatment:  Legalization would create an economic burden to treat new problematic users.
+  increased_risk_of_substance_use_disorders: Research shows that use of marijuana, especially in early adolescence, significantly heightens risks of substance use disorders in later life.
+  better_treatment_and_prevention_infrastructure: Legalize would require the provision of a much better prevention and treatment infrastructure.
+
+issues:
+  i1:
+    positions: [legalize, ¬legalize]
+  i2:
+    positions: [harmless, ¬harmless]
+  # i3:
+  #   positions: [liberty, nliberty]
+  i4:
+    positions: [social_costs, ¬social_costs]
+  i5:
+    positions: [reduced_consumption, ¬reduced_consumption]
+  # i6:
+  #   positions: [gateway,¬gateway]
+  # i7:
+  #   positions: [relieve_courts, ¬relieve_courts]
+  i8:
+    positions: [reduce_crime, ¬reduce_crime]
+  # i9:
+  #   positions: [prohibition_feasible, ¬prohibition_feasible]
+  i10:
+    positions: [economical, ¬economical]
+  # i11:
+  #   positions: [regulation_superior, ¬regulation_superior]
+  # i12:
+  #   positions: [racist, ¬racist]
+  # i13:
+  #   positions: [growing_potency, ¬growing_potency]
+  # i14:
+  #  positions: [legalization_desired, ¬legalization_desired]
+  # i15:
+  #   positions: [treaties, ¬treaties]
+      
+arguments:
+  a1:
+    scheme: cumulative
+    conclusion: legalize
+    premises:
+      - harmless
+      # - liberty
+      - ¬social_costs
+      - reduced_consumption
+      #- ¬gateway
+      # - relieve_courts
+      - reduce_crime
+      # - ¬prohibition_feasible
+      - economical
+      # - regulation_superior
+      # - racist
+      # - ¬growing_potency
+      # - legalization_desired
+      # - ¬treaties
+  a2:
+    scheme: cumulative
+    conclusion: ¬legalize
+    premises:
+      - ¬harmless
+      # - nliberty
+      - social_costs
+      - ¬reduced_consumption
+      # - gateway
+      # - ¬relieve_courts
+      - ¬reduce_crime
+      # - prohibition_feasible
+      - ¬economical
+      # - ¬regulation_superior
+      # - ¬racist
+      # - growing_potency
+      # - ¬legalization_desired
+      # - treaties
+  a3:
+    conclusion: ¬reduced_consumption
+    premises:
+      - legal_drugs_have_higher_consumption
+  a4:
+    conclusion: legal_drugs_have_higher_consumption
+    premises:
+      - us_drug_use_statistics
+  a5:
+    conclusion: ¬harmless
+    scheme: cumulative
+    premises:
+      - emergency_rooms
+      - highway_crashes
+      - harmful_for_young_brains
+      - increased_risk_of_substance_use_disorders
+  a6:
+    conclusion: ¬social_costs
+    premises:
+      - robbed_future
+      - prison_complex 
+  a7:
+    conclusion: ¬economical
+    scheme: cumulative
+    premises:
+      - costs_of_regulation
+      - costs_of_treatment
+      - better_treatment_and_prevention_infrastructure
+
+assumptions:
+  - us_drug_use_statistics
+  - harmful_for_young_brains
+  - emergency_rooms
+  - costs_of_regulation
+  - robbed_future
+  - prison_complex

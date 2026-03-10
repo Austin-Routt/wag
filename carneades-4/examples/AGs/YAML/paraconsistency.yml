@@ -1,0 +1,34 @@
+meta:
+  title: Example of Paraconsistency
+  note: >
+    Inconsistent assumptions do not cause inconsistent conclusions
+    to be derived for other issues.
+
+statements:
+  p: P is true
+  ¬p: P is not true
+  q: Q is true.
+  ¬q: Q is not true
+
+issues:
+  i1: 
+    positions: [p, ¬p]
+  i2:
+    positions: [q, ¬q]
+
+arguments:
+  a1:
+    conclusion: q
+    premises: [p]
+  a2:
+    conclusion: ¬q
+    premises: [¬p]
+
+# inconsistent assumptions!
+assumptions: [p, ¬p]
+
+tests:
+  in:  [p, ¬p]
+  out: [q, ¬q]
+
+  

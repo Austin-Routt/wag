@@ -1,0 +1,18 @@
+meta:
+  title: Trivial Examples
+
+statements: 
+  p: P 
+  q: 
+    text: Q
+    assumed: true
+  r: 
+    text: R
+
+arguments:
+  a1:
+    conclusion: r
+
+tests:
+  in: [q, r]
+  out: [p]

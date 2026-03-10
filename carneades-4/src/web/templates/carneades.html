@@ -1,0 +1,37 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Carneades {{.Version}}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+<div data-role="page" id="mainPage">
+
+	<div data-role="header">
+		<h1>Carneades {{.Version}}</h1>
+	</div>
+
+    <ul data-role="listview" data-inset="true">
+        <!-- <li data-role="list-divider">Tools</li> -->
+		<li><a href="/carneades/eval-form">Evaluate a Structured Argument Graph</a></li>
+        <li><a href="/carneades/dung-form">Compute Extensions of a Dung Abstract Argumentation Framework</a></li>
+    </ul>
+    
+	<div data-role="footer" data-id="main-footer" data-position="fixed">
+		<div data-role="navbar">
+	  		<ul>
+	    			<li><a href="/carneades/" class="ui-btn-active" data-icon="home">Home</a></li>
+	   			<li><a href="/carneades/help" data-icon="info">Help</a></li>
+				<li><a href="/carneades/dataprot" data-icon="info">Data Protection</a></li>
+					<li><a href="/carneades/imprint" data-icon="info">Imprint</a></li>
+	  		</ul>
+		</div>
+	</div>
+</div> <!-- main page -->
+
+</body>
+</html>

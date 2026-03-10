@@ -1,0 +1,130 @@
+{
+  "AS:practical_reasoning": {
+    "carneades_id": "practical_reasoning1",
+    "name": "Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.70,
+    "variables": {
+      "A":  { "type": "action", "description": "Action to be performed" },
+      "S1": { "type": "state",  "description": "Current circumstances" },
+      "S2": { "type": "state",  "description": "Future state after action" },
+      "G":  { "type": "goal",   "description": "Goal to be realized" },
+      "V":  { "type": "value",  "description": "Value promoted by the goal" }
+    },
+    "premise_templates_en": [
+      "In the current circumstances {S1}",
+      "Performing {A} in {S1} would bring about {S2}",
+      "Goal {G} would be realized in {S2}",
+      "Goal {G} would promote value {V}"
+    ],
+    "conclusion_template_en": "Action {A} should be performed"
+  },
+
+  "AS:consequences": {
+    "carneades_id": "positive_consequences",
+    "name": "Argument from Positive Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": { "type": "action", "description": "Action" },
+      "G": { "type": "event",  "description": "Good consequence" }
+    },
+    "premise_templates_en": [
+      "Action {A} brings about {G}",
+      "{G} is a good outcome"
+    ],
+    "conclusion_template_en": "Action {A} should be performed"
+  },
+
+  "AS:values": {
+    "carneades_id": "positive_value",
+    "name": "Argument from Values",
+    "semantic_type": "value",
+    "thesis_independent": false,
+    "base_weight": 0.60,
+    "variables": {
+      "V": { "type": "value",  "description": "Value being invoked" },
+      "A": { "type": "entity", "description": "Agent or judger" },
+      "G": { "type": "goal",   "description": "Goal affected" }
+    },
+    "premise_templates_en": [
+      "Agent {A} judges {V} as a positive value",
+      "Value {V} positively affects goal {G} for agent {A}"
+    ],
+    "conclusion_template_en": "There is reason to retain goal {G} because of value {V}"
+  },
+
+  "AS:sign": {
+    "carneades_id": "sign",
+    "name": "Argument from Sign",
+    "semantic_type": "causality",
+    "thesis_independent": false,
+    "base_weight": 0.60,
+    "variables": {
+      "A": { "type": "event", "description": "Observable sign or indicator" },
+      "B": { "type": "event", "description": "Indicated condition" }
+    },
+    "premise_templates_en": [
+      "{A} is observed to be the case",
+      "{B} is indicated when {A} is true"
+    ],
+    "conclusion_template_en": "{B} is true in the current situation"
+  },
+
+  "AS:expert_opinion": {
+    "carneades_id": "credible_source",
+    "name": "Argument from Expert Opinion",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.70,
+    "variables": {
+      "W": { "type": "entity",      "description": "Expert or credible source" },
+      "D": { "type": "domain",      "description": "Field of expertise" },
+      "S": { "type": "proposition", "description": "Proposition asserted" }
+    },
+    "premise_templates_en": [
+      "{W} is a credible source for domain {D}",
+      "{W} asserts that {S}",
+      "{S} is in the domain of {D}"
+    ],
+    "conclusion_template_en": "{S}"
+  },
+
+  "AS:position_to_know": {
+    "carneades_id": "position_to_know",
+    "name": "Argument from Position to Know",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.65,
+    "variables": {
+      "W": { "type": "entity",      "description": "Knowledgeable source" },
+      "D": { "type": "domain",      "description": "Domain of knowledge" },
+      "S": { "type": "proposition", "description": "Proposition asserted" }
+    },
+    "premise_templates_en": [
+      "{W} is in a position to know about {D}",
+      "{W} asserts that {S}",
+      "{S} is in the domain of {D}"
+    ],
+    "conclusion_template_en": "{S}"
+  },
+
+  "AS:analogy": {
+    "carneades_id": "analogy",
+    "name": "Argument from Analogy",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.55,
+    "variables": {
+      "A": { "type": "proposition", "description": "Proposition claimed to hold" },
+      "C": { "type": "case",        "description": "Similar case" }
+    },
+    "premise_templates_en": [
+      "{C} is a similar case",
+      "{A} is true in case {C}"
+    ],
+    "conclusion_template_en": "{A}"
+  }
+}

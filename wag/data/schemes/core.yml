@@ -1,0 +1,155 @@
+# WAG Core Argumentation Schemes for Carneades-4
+#
+# This file combines 7 schemes from the Kurtuldu YAML collection into a
+# single loadable file. These are the Minimum Viable NASCQ subset centered
+# on practical reasoning.
+#
+# Source YAML files and their contributions:
+#   3_practical-reasoning.yml    → practical_reasoning1, positive_consequences
+#   2_argumen-from-commitment.yml → positive_value
+#   4_abductive-reasoning.yml    → sign
+#   1_arguments-from-position-to-know.yml → credible_source, position_to_know
+#   1_arguments-based-on-cases.yml → analogy
+#
+# Variable names are preserved exactly from the originals so that
+# InstantiateScheme substitution works correctly.
+
+language:
+  # --- practical_reasoning1 ---
+  current_circumstances/1: "%s is the case in the current circumstances."
+  would_bring_about/3: "Performing %s in %s would bring about %s."
+  would_be_realized/2: "%s would be realized in %s."
+  would_promote_value/2: "Achieving the goal %s would promote the value %s."
+  should_be_performed/1: "Action %s should be performed."
+  legitimate_value/1: "%s is a legitimate value."
+  worthy_goal/1: "%s is a worthy goal."
+  possible/1: "Action %s is possible."
+  bring_about_more_effectively/2: "There exists an action that would bring about %s more effectively than %s."
+  realize_more_effectively/2: "There exists an action that would realize the goal %s more effectively than %s."
+  promote_more_effectively/2: "There exists an action that would promote the value %s more effectively than %s."
+  side_effects/2: "Performing %s in %s would have side-effects which demote some value."
+  # --- positive_consequences ---
+  brings_about/2: "The action %s brings about %s."
+  good/1: "%s is good."
+  # --- positive_value ---
+  judged_positive_value/2: "Agent %s judges %s as a positive value."
+  positive_affects/3: "Value %s positively affects goal %s for agent %s."
+  reason_retaining_goal/2: "There is reason to retain goal %s because of value %s."
+  # --- sign ---
+  finding_true/1: "%s is observed to be the case."
+  indicated_true/2: "%s is indicated when %s is true."
+  true_in_situation/1: "%s is true in the current situation."
+  strong_correlation/2: "There is a strong correlation between %s and %s."
+  # --- credible_source ---
+  credible_source/2: "%s is a credible source for the domain %s."
+  asserts/2: "%s asserts that %s is true."
+  in_domain/2: "%s is in the domain of %s."
+  biased/1: "%s is biased."
+  dishonest/1: "%s is dishonest."
+  other_credible_sources_disagree/1: "Other credible sources disagree with %s."
+  # --- position_to_know ---
+  position_to_know/2: "%s is in a position to know about things in domain %s."
+  # --- analogy ---
+  similar_case/1: "%s is a similar case."
+  in_case/2: "%s is true in case %s."
+  relevant_differences/1: "There are relevant differences in case %s."
+  more_on_point/2: "There is a case more on point than %s regarding %s."
+
+argument_schemes:
+  - id: practical_reasoning1
+    meta:
+      title: Argument from Value-Based Practical Reasoning
+      source: "Atkinson & Bench-Capon (2007)"
+    variables: [A,S1,S2,G,V]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - current_circumstances(S1)
+      - would_bring_about(A,S1,S2)
+      - would_be_realized(G,S2)
+      - would_promote_value(G,V)
+    assumptions:
+      - legitimate_value(V)
+      - worthy_goal(G)
+      - possible(A)
+    exceptions:
+      - bring_about_more_effectively(S2,A)
+      - realize_more_effectively(G,A)
+      - promote_more_effectively(V,A)
+      - side_effects(A,S1)
+
+  - id: positive_consequences
+    meta:
+      title: Argument from Positive Consequences
+      source: "Walton (1995)"
+    variables: [A,G]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - brings_about(A,G)
+      - good(G)
+
+  - id: positive_value
+    meta:
+      title: Argument from Values (Positive)
+      source: "Bench-Capon (2003)"
+    variables: [V,A,G]
+    conclusions:
+      - reason_retaining_goal(V,G)
+    premises:
+      - judged_positive_value(V,A)
+      - positive_affects(V,G,A)
+
+  - id: sign
+    meta:
+      title: Argument from Sign
+      source: "Walton (2006)"
+    variables: [A,B]
+    conclusions:
+      - true_in_situation(B)
+    premises:
+      - finding_true(A)
+      - indicated_true(B,A)
+    assumptions:
+      - strong_correlation(A,B)
+
+  - id: credible_source
+    meta:
+      title: Argument from Credible Source
+      source: "Wyner (2016)"
+    variables: [W,D,S]
+    conclusions: [S]
+    premises:
+      - credible_source(W,D)
+      - asserts(W,S)
+      - in_domain(S,D)
+    exceptions:
+      - biased(W)
+      - dishonest(W)
+      - other_credible_sources_disagree(S)
+
+  - id: position_to_know
+    meta:
+      title: Argument from Position to Know
+      source: "Walton (2002)"
+    variables: [W,D,S]
+    conclusions: [S]
+    premises:
+      - position_to_know(W,D)
+      - asserts(W,S)
+      - in_domain(S,D)
+    exceptions:
+      - dishonest(W)
+
+  - id: analogy
+    meta:
+      title: Argument from Analogy
+      source: "Walton (2006)"
+    variables: [A,C]
+    conclusions: [A]
+    premises:
+      - similar_case(C)
+      - in_case(A,C)
+    exceptions:
+      - relevant_differences(C)
+      - more_on_point(A,C)

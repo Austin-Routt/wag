@@ -1,0 +1,34 @@
+meta:
+  title: An undercut argument is unsupported, even if some of its premises are undecided.
+
+statements: 
+  p: P
+  ¬p: ¬P
+  q: Q
+  ¬app(a1): ¬app(a1)
+
+issues:
+  i1:
+    positions: [p, ¬p]
+  
+arguments:
+  a1:
+    premises: [p]
+    conclusion: q
+    undercutter: ¬app(a1)
+  a2:
+    premises: [p]
+    conclusion: ¬p 
+  a3:
+    premises: [¬p]
+    conclusion: p
+
+assumptions:
+  - ¬app(a1)
+
+tests:
+  undecided: [p,¬p]
+  in: [¬app(a1)]
+  out: [q]
+
+  

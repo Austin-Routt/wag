@@ -1,0 +1,79 @@
+{
+  "CQ:other_goals": {
+    "name": "Other Goals Question",
+    "semantic_type": "value",
+    "question_template_en": "Are there goals other than {G} that should have priority?",
+    "caes_mapping": {
+      "positive_answer_type": "rebuttal",
+      "negative_answer_type": "support",
+      "target": "conclusion"
+    }
+  },
+
+  "CQ:other_means": {
+    "name": "Other Means Question",
+    "semantic_type": "action",
+    "question_template_en": "Are there alternative actions to {A} that also achieve {G}?",
+    "caes_mapping": {
+      "positive_answer_type": "rebuttal",
+      "negative_answer_type": "support",
+      "target": "conclusion"
+    }
+  },
+
+  "CQ:side_effect": {
+    "name": "Side Effects Question",
+    "semantic_type": "causality",
+    "question_template_en": "Would performing {A} have undesirable side effects?",
+    "caes_mapping": {
+      "positive_answer_type": "undercutter",
+      "negative_answer_type": "support",
+      "target": "argument"
+    }
+  },
+
+  "CQ:possibility": {
+    "name": "Possibility Question",
+    "semantic_type": "causality",
+    "question_template_en": "Is it actually possible to perform action {A}?",
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise",
+      "target_premise_pattern": "possible({A})"
+    }
+  },
+
+  "CQ:best_means": {
+    "name": "Best Means Question",
+    "semantic_type": "action",
+    "question_template_en": "Is {A} the best way to achieve {G}?",
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "rebuttal",
+      "target": "conclusion"
+    }
+  },
+
+  "CQ:evidence": {
+    "name": "Evidence Question",
+    "semantic_type": "truth",
+    "question_template_en": "Is there sufficient evidence for the claimed connection between {A} and {G}?",
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+
+  "CQ:likelihood": {
+    "name": "Likelihood Question",
+    "semantic_type": "truth",
+    "question_template_en": "How likely is it that the claimed effect will actually occur?",
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+meta:
+  title: CHR Partial Order Example
+  notes: >
+    This example illustrates how argumentation schemes are mapped to 
+    Constraint Handling Rules (CHR). While any CHR program
+    can be represented with argumentation schemes in Carneades,
+    assumptions ("facts") must be ground, i.e. not contain
+    any variables. This limits the CHR queries which may
+    be expressed, but assures that all statements
+    in Carneades argument graphs are ground formulas. To overcome
+    this limitation, to an extent, ground terms instead of
+    variables have been used in the assumptions.  But this
+    change also made it necessary to change the conclusion of the
+    antisymmetry rule from X=Y to eq(X,Y), since the builtin
+    equality predicate of CHR requires X and Y to be unifiable.
+    With these changes, the inference engine is able to derive
+    that eq(c,a), but not that all three variables are equal,
+    as in the original CHR version.
+  source: >
+    https://en.wikipedia.org/wiki/Constraint_Handling_Rules
+
+language:
+  leq/2: "%v ≤ %v"
+  eq/2: "%v = %v"
+
+argument_schemes:
+  - id: reflexivity
+    variables: [X]
+    deletions: 
+      - leq(X,X)
+    conclusions:
+      - true
+
+  - id: antisymmetry
+    variables: [X,Y]
+    deletions:
+      - leq(X,Y) 
+      - leq(Y,X)
+    conclusions:
+      - eq(X,Y)
+
+  - id: transitivity
+    variables: [X,Y,Z]
+    premises:
+      - leq(X,Y)
+      - leq(Y,Z)
+    conclusions:
+      - leq(X,Z)
+
+  - id: idempotence
+    variables: [X,Y]
+    premises:
+      - leq(X,Y)
+    deletions:
+      - leq(X,Y)
+    conclusions:
+      - true
+
+assumptions:
+  - leq(a,b)
+  - leq(b,c)
+  - leq(c,a)
+  

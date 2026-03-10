@@ -1,0 +1,22 @@
+meta:
+  title: An Odd Loop Example
+
+statements:
+  p: P
+  q: Q
+  r: R
+
+arguments:
+  a1:
+    conclusion: q
+    premises: [p]
+  a2:
+    conclusion: p
+    premises: [r]
+  a3:
+    conclusion: r
+    premises: [q]
+
+tests:
+  undecided: [p,q,r]
+

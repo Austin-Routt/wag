@@ -1,0 +1,19 @@
+{
+  "ask_edges": [
+    { "cq": "CQ:other_goals",  "scheme": "AS:practical_reasoning" },
+    { "cq": "CQ:other_means",  "scheme": "AS:practical_reasoning" },
+    { "cq": "CQ:side_effect",  "scheme": "AS:practical_reasoning" },
+    { "cq": "CQ:possibility",  "scheme": "AS:practical_reasoning" },
+    { "cq": "CQ:best_means",   "scheme": "AS:practical_reasoning" },
+    { "cq": "CQ:evidence",     "scheme": "AS:consequences" },
+    { "cq": "CQ:side_effect",  "scheme": "AS:consequences" },
+    { "cq": "CQ:likelihood",   "scheme": "AS:consequences" },
+    { "cq": "CQ:likelihood",   "scheme": "AS:sign" }
+  ],
+  "backup_edges": [
+    { "scheme": "AS:values",        "cq": "CQ:other_goals" },
+    { "scheme": "AS:consequences",  "cq": "CQ:other_means" },
+    { "scheme": "AS:sign",          "cq": "CQ:side_effect" },
+    { "scheme": "AS:sign",          "cq": "CQ:possibility" }
+  ]
+}

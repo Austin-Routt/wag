@@ -1,0 +1,47 @@
+meta:
+  title: The Jogging Example, Using Cumulative Arguments
+  source: > 
+    Prakken, H. A study of accrual of arguments, with
+    applications to evidential reasoning, In Proceedings of the 10th
+    International Conference on Artificial Intelligence and Law, ACM,
+    (2005), 85-94.
+
+statements: 
+  hot: It is hot.
+  ¬hot: It is not hot.
+  rain: It is raining.
+  ¬rain: It is not raining.
+  jog: Go jogging.
+  ¬jog: Do not go jogging.
+
+issues:
+  i1:
+    positions: [jog, ¬jog]
+  i2:
+    positions: [rain,¬rain]
+  i3:
+    positions: [hot,¬hot]
+
+arguments:
+  a1:
+    scheme: cumulative
+    conclusion: ¬jog
+    premises: [rain,¬hot]
+
+  a2: 
+    scheme: cumulative
+    conclusion: ¬jog
+    premises: [hot,¬rain]
+
+  a3:
+    scheme: cumulative
+    conclusion: jog
+    premises: [rain, hot]
+
+assumptions: [rain, hot]
+
+tests:
+  in: [rain, hot, jog]
+  out: [¬jog,¬hot,¬rain]
+  undecided: []
+

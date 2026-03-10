@@ -1,0 +1,485 @@
+meta:
+  title: Walton Argumentation Schemes
+  notes: >
+    Here we illustrate one way to represent many of the argumentation schemes of Doug Walton,
+    including critical questions. 
+  source: >
+    Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
+    Argumentation Schemes. Cambridge University Press.
+
+language:
+  applicable/1: "Argument %s is applicable."
+  asserts/2: "%s asserts that %s is true."
+  bad/1: "%s is bad."
+  bad_moral_character/1: "%s has bad moral character."
+  based_on_evidence/1: "The assertion %v is based on evidence."
+  believes/2: "%s believes %s to be true."
+  biased/1: "%s is biased."
+  bribed/1: "%s was bribed."
+  brings_about/2: "The action %s brings about %s."
+  bring_about_more_effectively/2: "There exists an action that would bring about %s more effectively than %s."
+  causes/2: "Event %s causes event %s."
+  causes_both/2: "Some other event causes both %s and %s."
+  character_is_relevant/1: "Character is relevant for evaluating the plausibility of the assertion: %s"
+  classified_as/2: "Objects which satisfy definition %s are classified as instances of class %s."
+  correlated/2: "Events %s and %s are correlated."
+  credible_source/2: "Witness %s is a credible source for the domain %s."
+  current_circumstances/1: "%s is the case in the current circumstances."
+  defeasibly_implies/2: "If %s is true then presumably %s is also true."
+  dishonest/1: "%s is dishonest."
+  expert/2: "%s is an expert in the %s domain."
+  explanation/2: "Theory %s explains %s."
+  explanatory_theory/2: "There exists a theory explaining how event %s causes event %s."
+  feasible/1: "It is feasible to perform the action %s."
+  future_losses_outweigh/1: "Future losses of completing the action %s outweigh its value."
+  good/1: "%s is good."
+  good_moral_character/1: "%s is of good moral character."
+  has_conclusion/2: "Rule %s has conclusion %s."
+  has_occurred/1: "An event %s has occurred."
+  horrible_costs/1: "Event %s would entail horrible costs."
+  implausible/1: "%s is implausible."
+  implies/2: "%s implies %s."
+  inadequate_definition/2: "%s is an inadequate definition of %s."
+  inapplicable_rule/1: "Rule %s is inapplicable in this case."
+  incompatible_goal/1: "Another goal is incompatible with %s."
+  inconsistent_with_known_facts/1: "%s is inconsistent with the known facts."
+  inconsistent_with_other_experts/1:  "%s is inconsistent with what other experts assert."
+  inconsistent_with_other_witnesses/1: "%s is inconsistent with what other witnesses assert."
+  in_case/2: "%s is true in case %s."
+  in_domain/2: "%s is in the domain of %s."
+  intervening_actions/2: "Intervening actions are needed after performing %s to achieve %s."
+  instance/2: "%s is an instance of class %s."
+  interference/1: "An event has occurred which interferes with event %s."
+  internally_consistent/1: "%s is internally consistent."
+  known/1: "%s is known to be true."
+  legitimate_value/1: "%s is a legitimate value."
+  looks_like/2: "%s looks like a %s."
+  in/2: "%s contains %s as a member."
+  more_coherent_explanation/2: "There exists a more coherent explanation than theory %s of observation %s."
+  more_on_point/2: "%s is false in another case which is more on point than case %s."
+  negative_consequences/1: "Performing action %s would have negative consequences."
+  observed/1:  "%s has been observed."
+  other_credible_sources_disagree/1: "Other credible sources disagree with %s."
+  position_to_know/2: "%s is in a position to know about things in a certain subject domain %s."
+  positive_consequences/1: "Performing action %s would have positive consequences."
+  possible/1: "Action %s is possible."
+  promote_more_effectively/2: "There exists an action that would promote the value %s more effectively than %s."
+  realize_more_effectively/2: "There exists an action that would realize the goal %s more effectively than %s."
+  relevant_differences/1: "There are relevant differences between case %s and the current case."
+  relevant_differences/2: "There are relevant differences between case %s and case %s."
+  rule_of_case/2: "Rule %s is the ratio decidendi of case %s."
+  satisfies_definition/2: "%s satisfies definition %s."
+  should_be_performed/1: "Action %s should be performed."
+  side_effects/2: "Performing %s in %s would have side-effects which demote some value."
+  similar_case/1: "Case %s is similar to the current case."
+  subclass/2:  "%s is a subclass of %s."
+  sunk_costs/2:  "The costs incurred performing %s thus far are %s."
+  too_high_to_waste/1: "The sunk costs of %s are too high to waste."
+  trustworthy/1: "%s is trustworthy."
+  uninvestigated/1: "The truth of %s has not been sufficiently investigated."
+  untrustworthy/1: "%s is untrustworthy."
+  valid/1: "Rule %s is valid."
+  will_occur/1: "An event %s will occur."
+  worthy_goal/1: "%s is a worthy goal."
+  would_achieve/2: "Performing action %s would achieve goal %s."
+  would_be_realized/2: "%s would be realized in %s."
+  would_be_known/1: "%s would be known if it were true."
+  would_bring_about/3: "Performing %s in %s would bring about %s."
+  would_demote_value/2: "Achieving the goal %s would demote the value %s."
+  would_promote_value/2:  "Achieving the goal %s would promote the value %s."
+  would_realize/2: "Performing %s would realize event %s."
+    
+# statements:
+#    expert(joe,climate): Joe is a climate expert.
+#    in_domain(¬caused_by(global_warming,humans),climate): >
+#       The claim that global warming is not caused by humans is in the climate domain.
+#    asserts(joe,¬caused_by(global_warming,humans)): >
+#       Joe asserts that global warming is not caused by humans.
+#    ¬caused_by(global_warming,humans): >
+#       Global warming is not caused by humans.
+#    based_on_evidence(asserts(joe,¬caused_by(global_warming,humans))): 
+#       "Joe's assertion is based on evidence."
+
+argument_schemes:
+  - id: abduction
+    variables: [S,T,H]
+    conclusions: [H]
+    premises:
+      - observed(S)
+      - explanation(T,S)
+      - in(T,H)
+    exceptions:
+      - more_coherent_explanation(T,S)
+        
+  - id: analogy
+    meta:
+      title: Argument from Analogy
+      source: >
+        Douglas Walton, Fundamentals of Critical Argumentation,
+        Cambridge University Press, New York 2006, p. 96-97.
+    variables: [A,C]
+    conclusions: [A]
+    premises:
+      - similar_case(C)
+      - in_case(A,C)
+    exceptions:
+      - relevant_differences(C)
+      - more_on_point(A,C)
+
+  - id: appearance
+    meta:
+      title: Argument from Appearance
+      source: "Douglas Walton, ‘Argument from Appearance: A New Argumentation Scheme’, 2006."
+    variables: [O,C]
+    conclusions:
+      - instance(O,C)
+    premises:
+      - looks_like(O,C)
+    
+  - id: cause_to_effect
+    meta:
+      title: Argument from Cause to Effect
+    variables: [E1,E2]
+    conclusions:
+      - will_occur(E2)
+    premises:
+      - has_occurred(E1)
+      - causes(E1,E2)
+    exceptions:
+      - interference(E1)
+
+  - id: correlation_to_cause
+    meta:
+      title: Argument from Correlation to Cause
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London, 1995, p. 142.
+    variables: [E1,E2]
+    conclusions:
+      - causes(E1,E2)
+    premises:
+      - correlated(E1,E2)
+    assumptions:
+      - explanatory_theory(E1,E2)
+    exceptions:
+      - causes_both(E1,E2)
+        
+  - id: credible_source
+    meta:
+      title: "Argument from Credible Source"
+      source: "Wyner, A., A
+              functional perspective on argumentation schemes. 
+              Argument and Computation, vol. 7, pp. 113-133. 2016."
+    variables: [W,D,S]
+    conclusions: [S]
+    premises:
+      - credible_source(W,D)
+      - asserts(W,S)
+      - in_domain(S,D)
+    exceptions:
+      - biased(W)
+      - dishonest(W)
+      - other_credible_sources_disagree(S)
+
+  - id: definition_to_verbal_classification
+    meta:
+      title: Argument from Definition to Verbal Classification
+      source: >
+        Douglas Walton, Fundamentals of Critical Argumentation,
+        Cambridge University Press, New York 2006, p. 129.
+    variables: [O,G,D]
+    conclusions:
+      - instance(O,G)
+    premises:
+      - satisfies_definition(O,D)
+      - classified_as(D,G)
+    exceptions:
+      - inadequate_definition(D,G)
+
+  - id: defeasible_modus_ponens
+    meta:
+      title: Defeasible Modus Ponens
+    variables: [A,B]
+    premises:
+      - implies(A,B)
+      - A   
+    conclusions: [B]
+
+  - id: established_rule
+    meta:
+      title: Argument from an Established Rule
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London, 1995, p. 147.
+    variables: [C,R]
+    conclusions: [C]
+    premises:
+      - has_conclusion(R,C)
+      - applicable(R)
+    assumptions:
+      - valid(R)
+
+  - id: ethotic1
+    meta:
+      title: Positive Argument from Ethos
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London, 1995, p. 152.
+    variables: [P,S]
+    conclusions: [S]
+    premises:
+      - asserts(P,S)
+      - good_moral_character(P)
+    assumptions:
+      - character_is_relevant(S)
+
+  - id: ethotic2
+    meta:
+      title: Negative Argument from Ethos
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London, 1995, p. 152.
+    variables: [P,S]
+    conclusions: [¬S]
+    premises:
+      - asserts(P,S)
+      - bad_moral_character(P)
+    assumptions:
+      - character_is_relevant(S)
+
+  - id: expert_opinion
+    meta:
+      title: Argument from Expert Opinion
+      source: >
+        Douglas Walton, Appeal to Expert Opinion, The Pennsylvania University Press,
+        University Park, Albany, 1997, p.211-225.
+    variables: [W,D,S]
+    premises:
+      - expert(W,D)
+      - in_domain(S,D)
+      - asserts(W,S)
+    exceptions:
+      - untrustworthy(W)
+      - inconsistent_with_other_experts(S)
+    assumptions:
+      - based_on_evidence(asserts(W,S))
+    conclusions:
+      - S
+
+  - id: ignorance
+    meta:
+      title: Argument from Ignorance
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London, 1995, p. 150
+    variables: [S]
+    conclusions:
+      - ¬S
+    premises:
+      - would_be_known(S)
+      - ¬known(S)
+    exceptions:
+      - uninvestigated(S)
+
+    
+  - id: negative_consequences
+    meta:
+      title: Argument from Negative Consequences
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London,
+        1995, pp. 155-156.
+    variables: [A,G]
+    conclusions:
+      - ¬should_be_performed(A)
+    premises:
+      - brings_about(A,G)
+      - bad(G)
+      
+  - id: position_to_know
+    meta:
+      title: Argument from Position to Know
+      source: >
+        Douglas Walton, Legal Argumentation and Evidence,
+        The Pennsylvania State University Press, University Park, 2002, p.46.
+    variables: [W,D,S]
+    conclusions: [S]
+    premises:
+      - position_to_know(W,D)
+      - asserts(W,S)
+      - in_domain(S,D)
+    exceptions:
+      - dishonest(W)
+
+  - id: positive_consequences
+    meta:
+      title: Argument from Positive Consequences
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London,
+        1995, pp. 155-156.
+    variables: [A,G]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - brings_about(A,G)
+      - good(G)
+
+  - id: practical_reasoning1
+    meta:
+      title: Argument from Value-Based Practical Reasoning
+      source: >
+        Atkinson, K., and Bench-Capon, T. J. M.
+        Practical reasoning as presumptive argumentation using action
+        based alternating transition systems. Artificial Intelligence 171,
+        10-15 (2007), 855–874.
+    variables: [A,S1,S2,G,V]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - current_circumstances(S1)
+      - would_bring_about(A,S1,S2)
+      - would_be_realized(G,S2)
+      - would_promote_value(G,V)
+    assumptions:
+      - legitimate_value(V)
+      - worthy_goal(G)
+      - possible(A)
+    exceptions:
+      - bring_about_more_effectively(S2,A)
+      - realize_more_effectively(G,A)
+      - promote_more_effectively(V,A)
+      - side_effects(A,S1)
+
+  - id: practical_reasoning2
+    meta:
+      title: Argument from Instrumental Practical Reasoning
+      source: >
+        Walton, Douglas (2015). Goal-Based Reasoning for Argumentation. 
+        Cambridge University Press.
+    variables: [A,S1,S2,G]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - current_circumstances(S1)
+      - would_bring_about(A,S1,S2)
+      - would_be_realized(G,S2)
+    assumptions:
+      - possible(A)
+      - possible(G)
+    exceptions:
+      - bring_about_more_effectively(S2,A)
+      - realize_more_effectively(G,A)
+      - intervening_actions(A,G)
+      - side_effects(A,S1)
+      - incompatible_goal(G)
+
+  - id: precedent
+    meta:
+      title: Argument from Precedent
+      source: >
+        Douglas Walton, A Pragmatic Theory of Fallacy,
+        The University of Alabama Press, Tuscaloosa and London,
+        1995, p. 148
+    variables: [S,C,R]
+    conclusions: [S]
+    premises:
+      - similar_case(C)
+      - rule_of_case(R,C)
+      - has_conclusion(R,S)
+    exceptions:
+      - relevant_differences(R,C)
+      - inapplicable_rule(R)
+
+  - id: slippery_slope_base_case
+    meta:
+      title: Slippery Slope Argument
+      source: >
+        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.
+    variables: [A,E]
+    conclusions:
+      - negative_consequences(A)
+    premises:
+      - would_realize(A,E)
+      - horrible_costs(E)
+
+  - id: slippery_slope_inductive_step
+    meta:
+      title: Slippery Slope Argument
+      source: >
+        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.
+    variables: [E1,E2]
+    conclusions:
+      - horrible_costs(E1)
+    premises:
+      - causes(E1,E2)
+      - horrible_costs(E2)
+            
+  - id: sunk_costs
+    meta:
+      title: Argument from Sunk Costs
+      source: >
+        Douglas Walton, ‘The Sunk Costs Fallacy or Argument from Waste’,
+        Argumentation, 16, 2002, p. 489
+    variables: [A,C]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - sunk_costs(A,C)
+      - too_high_to_waste(C)
+    assumptions:
+      - feasible(A)
+    exceptions:
+      - future_losses_outweigh(A)
+        
+  - id: verbal_classification
+    meta:
+      title: Argument from Verbal Classification
+    variables: [O,F,G]
+    conclusions:
+      - instance(O,G)
+    premises:
+      - instance(O,F)
+      - subclass(F,G)
+
+  - id: witness_testimony
+    meta:
+      title: Argument from Witness Testimony
+      source: >
+        Douglas Walton, Henry Prakken, Chris Reed,
+        Argumentation Schemes and Generalisations in Reasoning about
+        Evidence, Proceedings of the 9th International Conference on
+        Artificial Intelligence and Law, Edinburgh, 2003. New York: ACM
+        Press 2003, pp. 35.  Douglas Walton, Witness Testimony Evidence,
+        Cambridge University Press, 2008.
+    variables: [W,D,S]
+    conclusions: [S]
+    premises:
+      - position_to_know(W,D)
+      - in_domain(D,S)
+      - believes(W,S)
+      - asserts(W,S)
+    assumptions:
+      - internally_consistent(S)
+    exceptions:
+      - inconsistent_with_known_facts(S)
+      - inconsistent_with_other_witnesses(S)
+      - biased(W)
+      - implausible(S)
+
+assumptions:
+  - biased(joe)
+  - expert(joe, climate)
+  - asserts(joe,¬caused_by(global_warming,humans))
+  - in_domain(¬caused_by(global_warming, humans), climate)
+  - implies(biased(joe),untrustworthy(joe))
+  - inconsistent_with_other_experts(¬caused_by(global_warming, humans))
+  
+
+
+
+
+
+
+
+

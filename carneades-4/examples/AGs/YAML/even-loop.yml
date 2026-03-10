@@ -1,0 +1,17 @@
+meta:
+  title: Even Loop Example
+
+statements:
+  p: P
+  q: Q
+
+arguments:
+  a1:
+    conclusion: q
+    premises: [p]
+  a2:
+    conclusion: p
+    premises: [q]
+
+tests:
+  undecided: [p,q]

@@ -1,0 +1,21 @@
+meta:
+  title: Self Defeat Example
+
+statements: 
+  p: P
+  ¬p: ¬P
+
+issue_schemes:
+  negation: ["¬Q", "Q"]
+
+arguments:
+  a1:
+    conclusion: p
+    premises: [¬p]
+  a2:
+    conclusion: ¬p 
+    premises: [p]
+
+tests:
+  undecided: [p, ¬p]
+

@@ -1,0 +1,17 @@
+meta:
+  title: Support Loop Example
+
+statements:
+  p: P
+  q: Q
+
+arguments:
+  a1:
+    conclusion: p
+    premises: [q]
+  a2:
+    conclusion: q
+    premises: [p]
+
+tests:
+  undecided: [p,q]

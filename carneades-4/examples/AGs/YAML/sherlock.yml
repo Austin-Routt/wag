@@ -1,0 +1,61 @@
+meta: 
+  title: "The Sherlock Holmes Example" 
+  source: > 
+      Doyle, A. C. (1932). The Complete Sherlock Holmes 
+      The Memorial Edition. Garden City, New York: Doubleday, Doran & Co.
+
+statements: 
+  gentleman: Watson is a gentleman of medical type.
+  militaryAir: Watson has the air of a military man.
+  armyDoctor: Watson is an army doctor.
+  darkFace: Watson has a dark face.
+  fairWrists: Watson has fair wrists.
+  notNaturalSkinColor: "Darkness is not the natural tint of Watson's skin."
+  warmerClimate: Only a warmer climate can get you exposure to the sun.
+  sunNecessary: Exposure to the sun is necessary to get a suntan.
+  wasInWarmerClimate: Watson must have been recently in a warmer climate.
+  haggard: Watson has a haggard face.
+  hardship: Watson has undergone hardship and sickness.
+  stiffArm: Watson holds his left arm in a stiff and unnatural manner.
+  injured: Watson injured his left arm.
+  afghanistan: Watson has recently been in Afghanistan.
+  ¬afghanistan: Watson has not recently been in Afghaistan.
+
+issues:
+  i1:
+    positions: [afghanistan, ¬afghanistan]
+
+arguments:
+  a1:
+    scheme: cumulative
+    conclusion: armyDoctor
+    premises: [gentleman,militaryAir]
+  a2:
+    conclusion: notNaturalSkinColor
+    premises: [fairWrists, darkFace]
+  a3: 
+    conclusion: wasInWarmerClimate
+    premises: [notNaturalSkinColor, warmerClimate, sunNecessary]
+  a4:
+    scheme: cumulative
+    conclusion: hardship
+    premises: [haggard]
+  a5:
+    scheme: cumulative
+    conclusion: injured
+    premises: [stiffArm]
+  a6:
+    scheme: cumulative
+    conclusion: afghanistan
+    premises: [armyDoctor, hardship, injured, wasInWarmerClimate]
+
+assumptions: [gentleman, fairWrists, darkFace, haggard, stiffArm,
+              warmerClimate, sunNecessary,militaryAir]
+
+tests:
+  in: [gentleman, fairWrists, darkFace, haggard, stiffArm,
+       warmerClimate, sunNecessary, armyDoctor, notNaturalSkinColor,
+       hardship, injured, afghanistan, wasInWarmerClimate,militaryAir]
+  out: [¬afghanistan]
+  undecided: []
+
