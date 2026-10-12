@@ -303,8 +303,8 @@ func (n *NASCQ) buildIndexes() {
 
 	// Collect thesis-independent schemes.
 	n.thesisIndep = nil
-	for id, s := range n.Schemes {
-		if s.ThesisIndependent {
+	for _, id := range sortedSchemeIDs(n.Schemes) { // sorted: map order is random
+		if n.Schemes[id].ThesisIndependent {
 			n.thesisIndep = append(n.thesisIndep, id)
 		}
 	}

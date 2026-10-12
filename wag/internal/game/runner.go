@@ -21,6 +21,12 @@ type GameResult struct {
 	IssueCount     int
 	Panicked       bool   // true if the game panicked (recovered)
 	PanicMessage   string
+
+	// Provenance: with these, a game can be replayed and checked.
+	YAMLSHA256  string           // SHA-256 of the Carneades YAML
+	NASCQSHA256 string           // SHA-256 of the NASCQ schemes, CQs and edges
+	AgentSeeds  map[string]int64 // seed of every agent that implements Seeded, by player name
+	MoveDigest  string           // GameState.MoveDigest() at the end of the game
 }
 
 // RunnerConfig controls the game runner behavior.
@@ -54,7 +60,14 @@ func RunGame(
 	agents []Agent,
 ) (result *GameResult) {
 	result = &GameResult{
-		Scores: make(map[string]float64),
+		Scores:     make(map[string]float64),
+		AgentSeeds: make(map[string]int64),
+	}
+	result.YAMLSHA256, result.NASCQSHA256 = InputHashes(yamlBytes, schemesJSON, cqsJSON, edgesJSON)
+	for _, a := range agents {
+		if s, ok := a.(Seeded); ok {
+			result.AgentSeeds[a.Name()] = s.Seed()
+		}
 	}
 
 	// Panic recovery — record but don't crash.
@@ -152,6 +165,7 @@ done:
 	result.StatementCount = len(gs.Adapter.Graph.Statements)
 	result.ArgumentCount = len(gs.Adapter.Graph.Arguments)
 	result.IssueCount = len(gs.Adapter.Graph.Issues)
+	result.MoveDigest = gs.MoveDigest()
 
 	// Scores and winner.
 	bestScore := -1e9

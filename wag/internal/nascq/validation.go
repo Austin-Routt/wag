@@ -37,19 +37,12 @@ type GraphQuerier interface {
 // reverse lookup is used for S3 (CQ applicability), where any matching
 // NASCQ scheme is sufficient.
 func (n *NASCQ) buildReverseSchemeIndex() {
-	n.reverseSchemeIndex = make(map[string]string, len(n.Schemes))
-	for nascqID, node := range n.Schemes {
-		if node.CarneadesID != "" {
-			// Only store the first mapping (don't overwrite).
-			if _, exists := n.reverseSchemeIndex[node.CarneadesID]; !exists {
-				n.reverseSchemeIndex[nascqID] = node.CarneadesID
-				// We index carneadesID → nascqID
-			}
-		}
-	}
-	// Rebuild: index is carneadesID → nascqID
+	// Index carneadesID → nascqID. When several NASCQ schemes map to the same
+	// Carneades scheme, the one with the smallest NASCQ ID wins, so the choice
+	// does not depend on map iteration order.
 	idx := make(map[string]string, len(n.Schemes))
-	for nascqID, node := range n.Schemes {
+	for _, nascqID := range sortedSchemeIDs(n.Schemes) {
+		node := n.Schemes[nascqID]
 		if node.CarneadesID != "" {
 			if _, exists := idx[node.CarneadesID]; !exists {
 				idx[node.CarneadesID] = nascqID
@@ -81,8 +74,13 @@ func (n *NASCQ) FindNASCQSchemeID(carneadesSchemeID string) string {
 //	result:   "Alice has goal reduce emissions"
 func instantiateTemplate(template string, bindings map[string]string) string {
 	result := template
-	for varName, value := range bindings {
-		result = strings.ReplaceAll(result, "{"+varName+"}", value)
+	names := make([]string, 0, len(bindings))
+	for varName := range bindings {
+		names = append(names, varName)
+	}
+	sort.Strings(names) // a value containing "{X}" must not make the result order-dependent
+	for _, varName := range names {
+		result = strings.ReplaceAll(result, "{"+varName+"}", bindings[varName])
 	}
 	return result
 }

@@ -3,6 +3,7 @@ package game
 import (
 	"math/rand"
 
+	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -114,6 +115,7 @@ func randomWord(rng *rand.Rand, varType string) string {
 // games without panics, the engine is robust.
 type RandomAgent struct {
 	name          string
+	seed          int64
 	rng           *rand.Rand
 	abstainProb   float64 // probability of abstaining (0.0-1.0)
 	supportBias   float64 // probability of choosing support over attack (0.0-1.0)
@@ -125,6 +127,7 @@ type RandomAgent struct {
 func NewRandomAgent(name string, seed int64, abstainProb, supportBias float64) *RandomAgent {
 	return &RandomAgent{
 		name:        name,
+		seed:        seed,
 		rng:         rand.New(rand.NewSource(seed)),
 		abstainProb: abstainProb,
 		supportBias: supportBias,
@@ -132,6 +135,9 @@ func NewRandomAgent(name string, seed int64, abstainProb, supportBias float64) *
 }
 
 func (a *RandomAgent) Name() string { return a.name }
+
+// Seed returns the seed the agent was created with (Seeded).
+func (a *RandomAgent) Seed() int64 { return a.seed }
 
 func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	// Randomly abstain.
@@ -160,10 +166,11 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	// Pick a random action template.
 	tmpl := candidates[a.rng.Intn(len(candidates))]
 
-	// Fill in random variable bindings.
+	// Fill in random variable bindings, in sorted variable order so that the
+	// random draws do not depend on map iteration order.
 	bindings := make(map[string]string)
-	for varName, varSpec := range tmpl.Variables {
-		bindings[varName] = randomWord(a.rng, varSpec.Type)
+	for _, varName := range carneades.SortedKeys(tmpl.Variables) {
+		bindings[varName] = randomWord(a.rng, tmpl.Variables[varName].Type)
 	}
 
 	action := nascq.ProposedAction{
@@ -191,6 +198,7 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 // exercises the rollback mechanism heavily.
 type GreedyAgent struct {
 	name        string
+	seed        int64
 	rng         *rand.Rand
 	trialsPerAction int // how many random binding sets to try per template
 }
@@ -202,12 +210,16 @@ func NewGreedyAgent(name string, seed int64, trialsPerAction int) *GreedyAgent {
 	}
 	return &GreedyAgent{
 		name:            name,
+		seed:            seed,
 		rng:             rand.New(rand.NewSource(seed)),
 		trialsPerAction: trialsPerAction,
 	}
 }
 
 func (a *GreedyAgent) Name() string { return a.name }
+
+// Seed returns the seed the agent was created with (Seeded).
+func (a *GreedyAgent) Seed() int64 { return a.seed }
 
 func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	if len(obs.AvailableActions) == 0 {
@@ -222,8 +234,8 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	for _, tmpl := range obs.AvailableActions {
 		for trial := 0; trial < a.trialsPerAction; trial++ {
 			bindings := make(map[string]string)
-			for varName, varSpec := range tmpl.Variables {
-				bindings[varName] = randomWord(a.rng, varSpec.Type)
+			for _, varName := range carneades.SortedKeys(tmpl.Variables) {
+				bindings[varName] = randomWord(a.rng, tmpl.Variables[varName].Type)
 			}
 
 			action := nascq.ProposedAction{
@@ -278,6 +290,7 @@ func (gs *GameState) BuildObservation() *Observation {
 	for id := range gs.Adapter.Graph.Arguments {
 		argIDs = append(argIDs, id)
 	}
+	carneades.SortArgumentIDs(argIDs) // the order of the enumerated actions must not depend on map order
 
 	// Enumerate available action templates.
 	actions := gs.NASCQ.EnumerateActions(gs.bridge, argIDs)

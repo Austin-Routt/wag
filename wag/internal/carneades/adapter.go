@@ -575,20 +575,34 @@ func (a *Adapter) AddSupport(
 	// by checking if any new arguments were created.
 	a.Graph.InstantiateScheme(carneadesSchemeID, params)
 
-	// Identify and attribute newly created arguments.
-	created := []string{}
-	for id, arg := range a.Graph.Arguments {
-		if !before[id] {
-			if arg.Metadata == nil {
-				arg.Metadata = caes.NewMetadata()
-			}
-			arg.Metadata["owner"] = ownerID
-			arg.Metadata["created_at"] = time.Now().UTC().Format(time.RFC3339)
-			// Override the scheme with a constant-weight copy.
-			arg.Scheme = a.makeWeightedScheme(carneadesSchemeID, weight)
-			arg.Parameters = params
-			created = append(created, id)
+	// Identify and attribute newly created arguments. The returned order is
+	// deterministic: the scheme's main arguments first, then the exception
+	// arguments, each in natural ID order (callers may rely on created[0]
+	// being a main argument; map iteration order is random).
+	var mains, exceptions []string
+	for id := range a.Graph.Arguments {
+		if before[id] {
+			continue
 		}
+		if arg := a.Graph.Arguments[id]; arg.Conclusion != nil && arg.Conclusion.IsUndercutter {
+			exceptions = append(exceptions, id)
+		} else {
+			mains = append(mains, id)
+		}
+	}
+	SortArgumentIDs(mains)
+	SortArgumentIDs(exceptions)
+	created := append(append([]string{}, mains...), exceptions...)
+	for _, id := range created {
+		arg := a.Graph.Arguments[id]
+		if arg.Metadata == nil {
+			arg.Metadata = caes.NewMetadata()
+		}
+		arg.Metadata["owner"] = ownerID
+		arg.Metadata["created_at"] = time.Now().UTC().Format(time.RFC3339)
+		// Override the scheme with a constant-weight copy.
+		arg.Scheme = a.makeWeightedScheme(carneadesSchemeID, weight)
+		arg.Parameters = params
 	}
 	if len(created) == 0 {
 		return nil, fmt.Errorf("InstantiateScheme for scheme %q created no arguments; "+
