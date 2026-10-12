@@ -432,6 +432,8 @@ func (a *Adapter) Evaluate() (caes.Labelling, error) {
 //   - Argument → Statement (via arg.Premises[i].Stmt: arg depends on premise)
 //   - Argument → Statement (via arg.Undercutter: arg depends on undercutter)
 //
+//   - Statement → Argument (via its issue: the arguments for the other positions)
+//
 // A cycle means an argument transitively depends on its own conclusion.
 func (a *Adapter) IsAcyclic() bool {
 	a.mu.Lock()
@@ -460,6 +462,24 @@ func (a *Adapter) IsAcyclic() bool {
 			for _, arg := range stmt.Args {
 				if !visitArg(arg.Id) {
 					return false
+				}
+			}
+			// A position of an issue also depends on the arguments for the
+			// other positions: the issue is resolved by comparing their weights
+			// (review defect #6: a cycle through a rebuttal was not detected and
+			// left statements undecided). The other positions' arguments are
+			// followed, not the positions themselves, so P and ¬P do not form a
+			// cycle by merely sharing an issue.
+			if stmt.Issue != nil {
+				for _, pos := range stmt.Issue.Positions {
+					if pos == nil || pos == stmt {
+						continue
+					}
+					for _, arg := range pos.Args {
+						if !visitArg(arg.Id) {
+							return false
+						}
+					}
 				}
 			}
 		}
