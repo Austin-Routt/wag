@@ -91,9 +91,11 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// Phase 4: Snapshot labels, apply mutation, validate acyclicity
 	// ---------------------------------------------------------------
 	labelsBefore := gs.Adapter.StatementLabels()
+	checkpoint := gs.Adapter.Checkpoint() // a rejected move must leave no trace (review defect #5)
 
 	argIDs, presumptions, err := gs.applyAction(validated, player.ID, weight)
 	if err != nil {
+		gs.Adapter.Restore(checkpoint) // the move may have failed half-way
 		return &TurnResult{
 			Accepted: false,
 			Error:    fmt.Sprintf("adapter error: %v", err),
@@ -102,8 +104,10 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 
 	// Acyclicity check (WAG game rule — Carneades handles cycles but WAG forbids them).
 	if !gs.Adapter.IsAcyclic() {
-		// Rollback: remove the arguments we just created.
-		gs.Adapter.RemoveArguments(append(append([]string{}, argIDs...), presumptions...))
+		// Rollback: restore the graph exactly as it was before the move. Removing
+		// the move's arguments alone left its statements, issues, assumptions and
+		// undercutter pointers behind.
+		gs.Adapter.Restore(checkpoint)
 		return &TurnResult{
 			Accepted: false,
 			Error:    "move creates a cycle in the argument graph",
