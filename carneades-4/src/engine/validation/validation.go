@@ -131,8 +131,15 @@ func validateIssues(ag *caes.ArgGraph) []Problem {
 func validateArguments(ag *caes.ArgGraph) []Problem {
 	problems := []Problem{}
 	for id, arg := range ag.Arguments {
-		if caes.IsBasicScheme(arg.Scheme) {
-			return problems
+		if arg.Conclusion == nil {
+			problems = append(problems, Problem{ARGUMENT, id, "argument has no conclusion", ""})
+			continue
+		}
+		// Arguments without a scheme (e.g. from the CAF importer) or with a basic
+		// scheme have nothing to match. Upstream returned here, which skipped every
+		// remaining argument in (random) map order, and dereferenced a nil scheme.
+		if arg.Scheme == nil || caes.IsBasicScheme(arg.Scheme) {
+			continue
 		}
 		// check that number of parameters matches the number of variables in the scheme
 		if len(arg.Parameters) != len(arg.Scheme.Variables) {
@@ -153,7 +160,7 @@ func validateArguments(ag *caes.ArgGraph) []Problem {
 					p := Problem{ARGUMENT, id, "premise is not a term", pr.Stmt.Id}
 					problems = append(problems, p)
 				} else {
-					if i < len(arg.Scheme.Premises)-1 {
+					if i < len(arg.Scheme.Premises) { // upstream: len-1, so the last premise was read as assumption -1 (index panic)
 						// the premise is not an assumption
 						t2, _ := terms.ReadString(arg.Scheme.Premises[i])
 						// Premises of schemes are checked elsewhere

@@ -511,7 +511,7 @@ func (ag *ArgGraph) Inconsistent() bool {
 				if found {
 					// inconsistency, because a previous position
 					// of the issue was found to be assumed true
-					return false
+					return true // upstream returned false, so inconsistency was never reported
 				} else {
 					found = true
 				}
@@ -581,7 +581,7 @@ func (ag *ArgGraph) InstantiateScheme(id string, parameters []string) {
 		if ok {
 			// bind each schema variable to its value
 			if len(scheme.Variables) != len(parameters) {
-				fmt.Fprintf(os.Stderr, "Scheme formal (%v) and actual parameters (%v) do not match: %v\n", scheme.Variables, parameters)
+				fmt.Fprintf(os.Stderr, "Scheme %v: formal (%v) and actual parameters (%v) do not match\n", id, scheme.Variables, parameters)
 				return
 			}
 

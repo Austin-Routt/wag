@@ -146,4 +146,7 @@ func checkCmd() {
 			fmt.Fprintf(outFile, "%s: %s: %s: %s\n", p.Category, p.Id, p.Description, p.Expression)
 		}
 	}
+	if len(problems) > 0 {
+		os.Exit(1) // fork: upstream exited 0 even when problems were listed
+	}
 }

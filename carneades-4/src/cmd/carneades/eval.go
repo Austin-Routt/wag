@@ -186,10 +186,16 @@ func evalCmd() {
 		}
 	}
 
+	if len(problems) > 0 {
+		os.Exit(1) // fork: upstream printed the problems and exited 0 with no output
+	}
 	if len(problems) == 0 {
 		// Apply the theory of the argument graph, if any, to
 		// derive further arguments
-		ag.Infer()
+		if err := ag.Infer(); err != nil {
+			// fork: upstream ignored inference errors
+			log.Fatal(fmt.Errorf("inference failed: %v", err))
+		}
 
 		// evaluate the argument graph, using grounded semantics
 		// and update the labels of the statements in the argument graph

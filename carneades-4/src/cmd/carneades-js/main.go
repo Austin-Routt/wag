@@ -1,3 +1,10 @@
+//go:build js
+
+// Fork note: GopherJS command. The compile fix (pointer arguments for the
+// GraphML and DOT exporters, the dot package import) comes from the Walton
+// Argumentation Game's bundled copy. The build constraint stays, because
+// ordinary builds and tests do not have the GopherJS toolchain.
+
 package main
 
 import (

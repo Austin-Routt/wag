@@ -51,9 +51,9 @@ func TestYaml(t *testing.T) {
 
 			err = checkLabeling(l, ag.Statements, ag.ExpectedLabeling)
 			if err != nil {
-				fmt.Printf(" check labeling fail: %s \n", err.Error())
+				// fork: upstream only printed this, so a wrong labelling never failed the test
+				t.Errorf("%s: expected labelling not met: %s", fi.Name(), err.Error())
 			}
-			// check(t, err)
 			//	fmt.Printf("---------- Write ArgGraph 2 Yaml: %s ----------\n", filename1)
 			//	yaml.Export(os.Stdout, ag)
 			//	fmt.Printf("---------- End: Write ArgGraph 2 Yaml: %s ----------\n", filename1)

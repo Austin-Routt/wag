@@ -11,6 +11,8 @@
 package yaml
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -923,12 +925,12 @@ func iface2soft(body interface{}, soft map[string]caes.SoftConstraint) (map[stri
 					soft[key.(string)] = caes.SoftConstraint{Factor: factor, NormalizedValues: normValues} // set the NormelizesValues
 				default:
 					return soft,
-						errors.New("*** Error in criteria: soft: key expected factor: ... values: ...-list not '" + fmt.Sprintf("%v' (type=", value, valT) + ")\n")
+						errors.New("*** Error in criteria: soft: key expected factor: ... values: ...-list not '" + fmt.Sprintf("%v' (type=%T", value, valT) + ")\n")
 
 				}
 			default:
 				return soft,
-					errors.New("*** Error in criteria: soft: expected a string-key and not '" + fmt.Sprintf("%v' (type=", key, keyT) + ")\n")
+					errors.New("*** Error in criteria: soft: expected a string-key and not '" + fmt.Sprintf("%v' (type=%T", key, keyT) + ")\n")
 			}
 		}
 	default:
@@ -1487,28 +1489,18 @@ func normStringVec(in []string) []string {
 
 // Export
 
+// mkYamlString renders a string as a YAML double-quoted scalar using JSON
+// escaping, which is valid YAML. Upstream wrapped strings in quotes without
+// escaping backslashes or newlines, so text such as `\(` (common in Kialo
+// markdown) produced files that could not be re-imported.
 func mkYamlString(str string) string {
-	newstr := str
-	if strings.ContainsAny(str, "\n\r:-?,[]{}#&!*|>'\"%@`") {
-		if strings.Contains(str, "\"") {
-			if strings.Contains(str, "'") {
-				// mark \"
-				newstr1 := []rune{}
-				for _, ch := range str {
-					if ch == '"' {
-						newstr1 = append(newstr1, '\\')
-					}
-					newstr1 = append(newstr1, ch)
-				}
-				newstr = "\"" + string(newstr1) + "\""
-			} else {
-				newstr = "'" + newstr + "'"
-			}
-		} else {
-			newstr = "\"" + newstr + "\""
-		}
+	var b bytes.Buffer
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	if err := enc.Encode(str); err != nil {
+		return strconv.Quote(str)
 	}
-	return newstr
+	return strings.TrimRight(b.String(), "\n")
 }
 
 func writeMetaData(f io.Writer, sp1 string, sp2 string, md caes.Metadata) {
@@ -1580,9 +1572,9 @@ func writeWF(f io.Writer, key, name string, weight caes.WeighingFunction) {
 			fmt.Fprintf(f, "# %shard: [", sp4)
 			for ix, val := range c.HardConstraints {
 				if ix != 0 {
-					fmt.Fprintf(f, ", %s", val)
+					fmt.Fprintf(f, ", %v", val)
 				} else {
-					fmt.Fprintf(f, "%s", val)
+					fmt.Fprintf(f, "%v", val)
 				}
 			}
 			fmt.Fprintf(f, "]\n")
