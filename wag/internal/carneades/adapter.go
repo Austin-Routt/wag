@@ -296,7 +296,7 @@ func (a *Adapter) createArgument(
 
 	arg := &caes.Argument{
 		Id:       argID,
-		Metadata: caes.Metadata{"owner": ownerID, "created_at": time.Now().UTC().Format(time.RFC3339)},
+		Metadata: caes.Metadata{"owner": ownerID, RoleKey: RoleMain, "created_at": time.Now().UTC().Format(time.RFC3339)},
 		Scheme:   scheme,
 		Premises: premiseList,
 		// Conclusion is set below.
@@ -593,16 +593,34 @@ func (a *Adapter) AddSupport(
 	SortArgumentIDs(mains)
 	SortArgumentIDs(exceptions)
 	created := append(append([]string{}, mains...), exceptions...)
-	for _, id := range created {
+	now := time.Now().UTC().Format(time.RFC3339)
+	for _, id := range mains {
 		arg := a.Graph.Arguments[id]
 		if arg.Metadata == nil {
 			arg.Metadata = caes.NewMetadata()
 		}
 		arg.Metadata["owner"] = ownerID
-		arg.Metadata["created_at"] = time.Now().UTC().Format(time.RFC3339)
+		arg.Metadata[RoleKey] = RoleMain
+		arg.Metadata["created_at"] = now
 		// Override the scheme with a constant-weight copy.
 		arg.Scheme = a.makeWeightedScheme(carneadesSchemeID, weight)
 		arg.Parameters = params
+	}
+	// Exception arguments (premise: one of the scheme's exceptions; conclusion:
+	// the main arguments' undercutter) are structure the scheme brings with it,
+	// not a claim of the mover (review defect #2: they used to receive the
+	// support scheme and the mover as owner, and so became targets of critical
+	// questions). They keep the scheme InstantiateScheme gave them (none, so
+	// Carneades' default linked weighing) and have no owner. Their weight does
+	// not affect any label: an undercutter is never a position of an issue.
+	for _, id := range exceptions {
+		arg := a.Graph.Arguments[id]
+		if arg.Metadata == nil {
+			arg.Metadata = caes.NewMetadata()
+		}
+		arg.Metadata[RoleKey] = RoleException
+		arg.Metadata["instantiated_by"] = ownerID
+		arg.Metadata["created_at"] = now
 	}
 	if len(created) == 0 {
 		return nil, fmt.Errorf("InstantiateScheme for scheme %q created no arguments; "+

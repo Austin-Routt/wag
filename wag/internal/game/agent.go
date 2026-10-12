@@ -287,8 +287,10 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 func (gs *GameState) BuildObservation() *Observation {
 	// Collect argument IDs for action enumeration.
 	argIDs := make([]string, 0, len(gs.Adapter.Graph.Arguments))
-	for id := range gs.Adapter.Graph.Arguments {
-		argIDs = append(argIDs, id)
+	for id, arg := range gs.Adapter.Graph.Arguments {
+		if carneades.IsAttackable(arg) { // exception and presumption arguments are never targets
+			argIDs = append(argIDs, id)
+		}
 	}
 	carneades.SortArgumentIDs(argIDs) // the order of the enumerated actions must not depend on map order
 
