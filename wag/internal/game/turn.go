@@ -92,7 +92,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// ---------------------------------------------------------------
 	labelsBefore := gs.Adapter.StatementLabels()
 
-	argIDs, err := gs.applyAction(validated, player.ID, weight)
+	argIDs, presumptions, err := gs.applyAction(validated, player.ID, weight)
 	if err != nil {
 		return &TurnResult{
 			Accepted: false,
@@ -103,7 +103,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// Acyclicity check (WAG game rule — Carneades handles cycles but WAG forbids them).
 	if !gs.Adapter.IsAcyclic() {
 		// Rollback: remove the arguments we just created.
-		gs.Adapter.RemoveArguments(argIDs)
+		gs.Adapter.RemoveArguments(append(append([]string{}, argIDs...), presumptions...))
 		return &TurnResult{
 			Accepted: false,
 			Error:    "move creates a cycle in the argument graph",
@@ -132,6 +132,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 		PlayerID:     player.ID,
 		Action:       action,
 		ArgIDs:       argIDs,
+		Presumptions: presumptions,
 		Weight:       weight,
 		ScoreDelta:   scoreDelta,
 		LabelsBefore: labelsBefore,
@@ -148,6 +149,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	return &TurnResult{
 		Accepted:          true,
 		ArgIDs:            argIDs,
+		Presumptions:      presumptions,
 		ScoreDelta:        scoreDelta,
 		Terminated:        reason != "",
 		TerminationReason: reason,
@@ -159,84 +161,79 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 // -------------------------------------------------------------------------
 
 // applyAction translates a NASCQ-validated action into Carneades adapter
-// operations. For support actions, it delegates to AddSupport which uses
-// InstantiateScheme. For attacks, it manually creates premise statements
-// (from the NASCQ-instantiated English templates) and calls the appropriate
-// adapter attack method.
+// operations and returns the arguments of the move and the presumption
+// arguments made for its premises.
 //
-// The premise creation for attacks works as follows:
-//  1. Each instantiated English premise is converted to a clean Prolog atom
-//     via carneades.TextToAtom (e.g., "carbon tax causes recession" →
-//     "carbon_tax_causes_recession").
-//  2. The atom is added as a Statement in the Carneades graph.
-//  3. The atom is added as an Assumption (so it's labeled In during evaluation).
-//  4. The atom IDs are collected and passed to the attack method.
+// Premises are presumed, not assumed (review defect #1). Trusted mode used to
+// call AddAssumption on every premise of a move, and Carneades labels an
+// assumption In whatever is argued against it, so an undermining attack could
+// never succeed. Now every premise of a move gets a presumption argument owned
+// by the mover (weight GameConfig.PresumptionWeight). The assumptions that
+// InstantiateScheme adds for a scheme's declared assumptions (e.g.
+// possible(A)) are retracted and presumed in the same way. Exception
+// arguments' premises are neither assumed nor presumed: an exception holds
+// only if someone argues for it.
 //
-// This approach is pragmatic for Phase 1. In Phase 2+, attacks could also
-// use InstantiateScheme for the backup scheme.
+// For attacks, the premises come from the NASCQ-instantiated English
+// templates: each is converted to a Prolog atom (carneades.TextToAtom), added
+// as a statement and presumed on behalf of the attacker.
 func (gs *GameState) applyAction(
 	va *nascq.ValidatedAction,
 	ownerID string,
 	weight float64,
-) ([]string, error) {
-
+) ([]string, []string, error) {
+	pw := gs.Config.presumptionWeight()
 	switch {
-	// -------------------------------------------------------------------
-	// Support: delegate to InstantiateScheme via adapter
-	// -------------------------------------------------------------------
 	case va.Type == "support":
-			argIDs, err := gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID,
-				va.VariableBindings, weight)
-			if err != nil {
-				return nil, err
+		nAssumptions := gs.Adapter.AssumptionCount()
+		argIDs, err := gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID,
+			va.VariableBindings, weight)
+		if err != nil {
+			return nil, nil, err
+		}
+		gs.Adapter.RetractAssumptionsSince(nAssumptions)
+		var presumptions []string
+		for _, argID := range argIDs {
+			arg := gs.Adapter.Graph.Arguments[argID]
+			if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
+				continue // exception arguments: their premise holds only if argued for
 			}
-			// Trusted mode policy: assume premises of the main argument(s).
-			// Exception arguments (whose conclusion IsUndercutter) are skipped —
-			// assuming their premises would make exceptions true by default,
-			// which would defeat the main argument immediately.
-			for _, argID := range argIDs {
-				arg := gs.Adapter.Graph.Arguments[argID]
-				if arg == nil {
+			for _, p := range arg.Premises {
+				if p.Stmt == nil {
 					continue
 				}
-				if arg.Conclusion != nil && arg.Conclusion.IsUndercutter {
-					continue // skip exception arguments
+				pid, err := gs.Adapter.AddPresumption(ownerID, p.Stmt.Id, pw)
+				if err != nil {
+					return argIDs, presumptions, err
 				}
-				for _, p := range arg.Premises {
-					if p.Stmt != nil {
-						gs.Adapter.AddAssumption(p.Stmt.Id)
-					}
-				}
+				presumptions = appendNew(presumptions, pid)
 			}
-			return argIDs, nil
-
-	// -------------------------------------------------------------------
-	// Attacks: create premises manually, then call adapter attack method
-	// -------------------------------------------------------------------
-	case va.Type == "attack":
-		// Create premise statements from instantiated English templates.
-		premiseIDs, err := gs.createAttackPremises(va)
-		if err != nil {
-			return nil, fmt.Errorf("creating attack premises: %w", err)
 		}
+		return argIDs, presumptions, nil
 
+	case va.Type == "attack":
+		premiseIDs, presumptions, err := gs.createAttackPremises(va, ownerID, pw)
+		if err != nil {
+			return nil, presumptions, fmt.Errorf("creating attack premises: %w", err)
+		}
+		var argIDs []string
 		switch va.CaesAttackType {
 		case "undercutter":
-			return gs.Adapter.AddUndercutter(ownerID, va.CarneadesSchemeID,
+			argIDs, err = gs.Adapter.AddUndercutter(ownerID, va.CarneadesSchemeID,
 				va.TargetArgID, premiseIDs, weight)
 
 		case "rebuttal":
 			// Find the target argument's conclusion ID for the rebuttal.
 			targetArg := gs.Adapter.Graph.Arguments[va.TargetArgID]
 			if targetArg == nil || targetArg.Conclusion == nil {
-				return nil, fmt.Errorf("target argument %q has no conclusion", va.TargetArgID)
+				return nil, presumptions, fmt.Errorf("target argument %q has no conclusion", va.TargetArgID)
 			}
-			return gs.Adapter.AddRebuttal(ownerID, va.CarneadesSchemeID,
+			argIDs, err = gs.Adapter.AddRebuttal(ownerID, va.CarneadesSchemeID,
 				targetArg.Conclusion.Id, premiseIDs, weight, caes.PE)
 
 		case "undermining":
 			// Resolve target premise: if not specified, pick the first
-			// non-assumed premise of the target argument.
+			// premise of the target argument.
 			premiseID := va.TargetPremiseID
 			if premiseID == "" {
 				targetArg := gs.Adapter.Graph.Arguments[va.TargetArgID]
@@ -250,34 +247,48 @@ func (gs *GameState) applyAction(
 				}
 			}
 			if premiseID == "" {
-				return nil, fmt.Errorf("no premise found to undermine in argument %q", va.TargetArgID)
+				return nil, presumptions, fmt.Errorf("no premise found to undermine in argument %q", va.TargetArgID)
 			}
-			return gs.Adapter.AddUndermining(ownerID, va.CarneadesSchemeID,
+			argIDs, err = gs.Adapter.AddUndermining(ownerID, va.CarneadesSchemeID,
 				premiseID, premiseIDs, weight, caes.PE)
 
 		default:
-			return nil, fmt.Errorf("unknown CAES attack type %q", va.CaesAttackType)
+			return nil, presumptions, fmt.Errorf("unknown CAES attack type %q", va.CaesAttackType)
 		}
+		return argIDs, presumptions, err
 
 	default:
-		return nil, fmt.Errorf("unknown action type %q", va.Type)
+		return nil, nil, fmt.Errorf("unknown action type %q", va.Type)
 	}
 }
 
+func appendNew(list []string, id string) []string {
+	for _, x := range list {
+		if x == id {
+			return list
+		}
+	}
+	return append(list, id)
+}
+
 // createAttackPremises creates Statement nodes in the graph for each of the
-// attack argument's premises (derived from NASCQ template instantiation).
-// Each premise is assumed true so it contributes weight to the attack.
-func (gs *GameState) createAttackPremises(va *nascq.ValidatedAction) ([]string, error) {
+// attack argument's premises (derived from NASCQ template instantiation) and
+// presumes each on behalf of the attacker.
+func (gs *GameState) createAttackPremises(va *nascq.ValidatedAction, ownerID string, weight float64) ([]string, []string, error) {
 	premiseIDs := make([]string, 0, len(va.InstPremises))
+	var presumptions []string
 	for _, premText := range va.InstPremises {
 		// Convert English text to a clean Prolog atom for the statement ID.
 		atomID := carneades.TextToAtom(premText)
-		// AddStatement creates or returns existing; AddAssumption makes it In.
 		gs.Adapter.AddStatement(atomID, premText)
-		gs.Adapter.AddAssumption(atomID)
+		pid, err := gs.Adapter.AddPresumption(ownerID, atomID, weight)
+		if err != nil {
+			return premiseIDs, presumptions, err
+		}
+		presumptions = appendNew(presumptions, pid)
 		premiseIDs = append(premiseIDs, atomID)
 	}
-	return premiseIDs, nil
+	return premiseIDs, presumptions, nil
 }
 
 // -------------------------------------------------------------------------
@@ -303,10 +314,12 @@ func (gs *GameState) computeScore(
 	cfg := gs.Config.Scoring
 	score := 0.0
 
-	// Base points for each argument created.
+	// Base points for each argument the player put forward. Exception
+	// arguments (part of the scheme) and presumptions earn nothing: an
+	// exception's conclusion is the mover's own undercutter.
 	for _, argID := range argIDs {
 		arg := gs.Adapter.Graph.Arguments[argID]
-		if arg == nil || arg.Conclusion == nil {
+		if arg == nil || arg.Conclusion == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
 			continue
 		}
 		label := labelsAfter[arg.Conclusion.Id]

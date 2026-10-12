@@ -57,6 +57,25 @@ type GameConfig struct {
 	MaxTurns            int           // 0 = unlimited
 	AbstentionThreshold int           // consecutive all-abstain rounds to trigger end (default: 2)
 	Scoring             ScoringConfig // scoring parameters
+
+	// PresumptionWeight is the weight of the presumption that makes a move's
+	// premises hold until attacked (see carneades.AddPresumption). Any argued
+	// undermining (scheme weights are 0.55-0.70) outweighs it, and the mover
+	// can reinstate the premise by backing it. 0 or less means
+	// DefaultPresumptionWeight.
+	PresumptionWeight float64
+}
+
+// DefaultPresumptionWeight is used when GameConfig.PresumptionWeight is not
+// positive. It equals the presumption weight of the Kialo translator's primary
+// profile.
+const DefaultPresumptionWeight = 0.01
+
+func (c GameConfig) presumptionWeight() float64 {
+	if c.PresumptionWeight > 0 {
+		return c.PresumptionWeight
+	}
+	return DefaultPresumptionWeight
 }
 
 // DefaultGameConfig returns a sensible default configuration for testing.
@@ -102,6 +121,7 @@ type Move struct {
 	Action       nascq.ProposedAction
 	Abstained    bool
 	ArgIDs       []string            // argument IDs created (empty if abstained)
+	Presumptions []string            // presumption arguments created for the move's premises
 	Weight       float64             // scheme base_weight used
 	ScoreDelta   float64             // points awarded this turn
 	LabelsBefore map[string]caes.Label // statement labels before the move
@@ -117,6 +137,7 @@ type TurnResult struct {
 	Accepted          bool     // true if the move was valid and applied
 	Abstained         bool     // true if the player abstained
 	ArgIDs            []string // IDs of arguments created
+	Presumptions      []string // IDs of the presumption arguments created for the move's premises
 	ScoreDelta        float64  // points awarded this turn
 	Error             string   // non-empty if the move was rejected
 	Terminated        bool     // true if the game ended after this turn

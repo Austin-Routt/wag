@@ -39,8 +39,8 @@ func (gs *GameState) MoveDigest() string {
 	var b strings.Builder
 	for _, m := range gs.MoveHistory {
 		a := m.Action
-		fmt.Fprintf(&b, "%d|%s|%s|%s|%s|%s|%s|%s|%s|%t|", m.TurnNumber, m.PlayerID, a.Type, a.AttackType, a.SchemeID,
-			a.AnswersCQID, a.TargetArgID, a.TargetPremiseID, strings.Join(m.ArgIDs, ","), m.Abstained)
+		fmt.Fprintf(&b, "%d|%s|%s|%s|%s|%s|%s|%s|%s|%s|%t|", m.TurnNumber, m.PlayerID, a.Type, a.AttackType, a.SchemeID,
+			a.AnswersCQID, a.TargetArgID, a.TargetPremiseID, strings.Join(m.ArgIDs, ","), strings.Join(m.Presumptions, ","), m.Abstained)
 		for _, k := range carneades.SortedKeys(a.VariableBindings) {
 			fmt.Fprintf(&b, "%s=%s,", k, a.VariableBindings[k])
 		}

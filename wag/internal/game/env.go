@@ -178,6 +178,9 @@ func RenderState(gs *GameState) string {
 			if arg.Conclusion != nil && arg.Conclusion.IsUndercutter {
 				continue
 			}
+			if carneades.ArgumentRole(arg) == carneades.RolePresumption {
+				continue // a premise's presumption, shown through the premise's label
+			}
 
 			conclusionText := "(nil)"
 			label := "?"
