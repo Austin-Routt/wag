@@ -134,7 +134,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	gs.MoveHistory = append(gs.MoveHistory, Move{
 		TurnNumber:   gs.CurrentTurn,
 		PlayerID:     player.ID,
-		Action:       action,
+		Action:       validated.ProposedAction, // with the resolved attack type and undermined premise
 		ArgIDs:       argIDs,
 		Presumptions: presumptions,
 		Weight:       weight,
@@ -236,25 +236,15 @@ func (gs *GameState) applyAction(
 				targetArg.Conclusion.Id, premiseIDs, weight, caes.PE)
 
 		case "undermining":
-			// Resolve target premise: if not specified, pick the first
-			// premise of the target argument.
-			premiseID := va.TargetPremiseID
-			if premiseID == "" {
-				targetArg := gs.Adapter.Graph.Arguments[va.TargetArgID]
-				if targetArg != nil {
-					for _, p := range targetArg.Premises {
-						if p.Stmt != nil {
-							premiseID = p.Stmt.Id
-							break
-						}
-					}
-				}
-			}
-			if premiseID == "" {
-				return nil, presumptions, fmt.Errorf("no premise found to undermine in argument %q", va.TargetArgID)
+			// Validation resolved the premise: the one the mover named, or the
+			// one the CQ's target_premise_pattern designates. (The first
+			// premise used to be taken, so "Is it possible to do A?" undermined
+			// current_circumstances(S1) instead of possible(A).)
+			if va.TargetPremiseID == "" {
+				return nil, presumptions, fmt.Errorf("no premise to undermine in argument %q", va.TargetArgID)
 			}
 			argIDs, err = gs.Adapter.AddUndermining(ownerID, va.CarneadesSchemeID,
-				premiseID, premiseIDs, weight, caes.PE)
+				va.TargetPremiseID, premiseIDs, weight, caes.PE)
 
 		default:
 			return nil, presumptions, fmt.Errorf("unknown CAES attack type %q", va.CaesAttackType)

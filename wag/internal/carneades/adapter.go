@@ -420,6 +420,82 @@ func (a *Adapter) Evaluate() (caes.Labelling, error) {
 	return l, nil
 }
 
+// PremiseMatching returns the ID of the premise of argument argID that a
+// premise pattern in NASCQ notation, such as "possible({A})", designates, or ""
+// if none does. The pattern's {Var} placeholders are replaced by the
+// argument's own bindings of its scheme variables, and the result must equal
+// one of its premises. An argument without such bindings (one not made by
+// instantiating a scheme) still matches when exactly one of its premises has
+// the pattern's predicate and arity.
+func (a *Adapter) PremiseMatching(argID, pattern string) string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	arg := a.Graph.Arguments[argID]
+	if arg == nil || strings.TrimSpace(pattern) == "" {
+		return ""
+	}
+	inst := pattern
+	if arg.Scheme != nil && len(arg.Scheme.Variables) == len(arg.Parameters) {
+		for i, v := range arg.Scheme.Variables {
+			inst = strings.ReplaceAll(inst, "{"+v+"}", arg.Parameters[i])
+		}
+	}
+	if !strings.Contains(inst, "{") {
+		if t, ok := terms.ReadString(inst); ok {
+			for _, p := range arg.Premises {
+				if p.Stmt != nil && p.Stmt.Id == t.String() {
+					return p.Stmt.Id
+				}
+			}
+		}
+	}
+	functor, arity, ok := patternPredicate(pattern)
+	if !ok {
+		return ""
+	}
+	match := ""
+	for _, p := range arg.Premises {
+		if p.Stmt == nil {
+			continue
+		}
+		t, ok := terms.ReadString(p.Stmt.Id)
+		if !ok {
+			continue
+		}
+		if f, ok := terms.Functor(t); ok && f == functor && terms.Arity(t) == arity {
+			if match != "" && match != p.Stmt.Id {
+				return "" // ambiguous
+			}
+			match = p.Stmt.Id
+		}
+	}
+	return match
+}
+
+// patternPredicate returns the predicate and arity of a premise pattern such
+// as "would_bring_about({A},{S1},{S2})" (would_bring_about, 3).
+func patternPredicate(pattern string) (string, int, bool) {
+	pattern = strings.TrimSpace(pattern)
+	open := strings.Index(pattern, "(")
+	if open <= 0 || !strings.HasSuffix(pattern, ")") {
+		return pattern, 0, pattern != "" && !strings.ContainsAny(pattern, "{}(), ")
+	}
+	args, depth := 1, 0
+	for _, r := range pattern[open+1 : len(pattern)-1] {
+		switch r {
+		case '(':
+			depth++
+		case ')':
+			depth--
+		case ',':
+			if depth == 0 {
+				args++
+			}
+		}
+	}
+	return strings.TrimSpace(pattern[:open]), args, true
+}
+
 // GroundedLabels computes a fresh grounded labelling without applying it and
 // returns it by statement ID. Comparing it with the applied labels (or with
 // another call) checks that the labelling is a function of the graph alone:

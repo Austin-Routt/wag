@@ -34,6 +34,21 @@ func (m *mockGraph) PremiseExists(argID, premiseStmtID string) bool {
 	return false
 }
 
+// PremiseMatching mimics the adapter for patterns: the premise with the
+// pattern's predicate (the mock has no variable bindings).
+func (m *mockGraph) PremiseMatching(argID, pattern string) string {
+	pred := pattern
+	if i := strings.Index(pattern, "("); i >= 0 {
+		pred = pattern[:i]
+	}
+	for _, pid := range m.premises[argID] {
+		if strings.HasPrefix(pid, pred+"(") {
+			return pid
+		}
+	}
+	return ""
+}
+
 func newMockGraph() *mockGraph {
 	return &mockGraph{
 		arguments: map[string]string{

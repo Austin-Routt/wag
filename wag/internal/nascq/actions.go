@@ -39,7 +39,9 @@ type ActionTemplate struct {
 //     a. Find the argument's NASCQ scheme (via reverse index)
 //     b. Get the ask-CQs for that scheme
 //     c. For each CQ, get backup schemes
-//     d. Generate attack templates for each (target, CQ, backup) triple
+//     d. Generate attack templates for each (target, CQ, backup) triple;
+//     an undermining template carries the premise its CQ's pattern
+//     designates, and is left out if the target has no such premise
 //
 // Variable bindings are NOT included — the player/agent fills those in.
 func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTemplate {
@@ -83,18 +85,25 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 				continue
 			}
 
+			attackType := AttackTypeOf(cq)
+			if attackType == "" {
+				continue // the CQ maps to no attack (Lint reports it)
+			}
+			// An undermining attacks the premise the CQ's pattern designates;
+			// if the target has no such premise the CQ cannot be answered.
+			premiseID := ""
+			if attackType == "undermining" {
+				if cq.CaesMapping.TargetPremisePattern == "" {
+					continue // the mover would have to name a premise; not enumerated
+				}
+				if premiseID = graph.PremiseMatching(argID, cq.CaesMapping.TargetPremisePattern); premiseID == "" {
+					continue
+				}
+			}
+
 			// Get backup schemes for this CQ.
 			backups := n.GetBackupSchemes(cqID)
 			for _, bs := range backups {
-				// Determine attack type from CQ mapping.
-				attackType := cq.CaesMapping.NegativeAnswerType
-				if cq.CaesMapping.PositiveAnswerType != "support" {
-					attackType = cq.CaesMapping.PositiveAnswerType
-				}
-				if attackType == "support" {
-					attackType = cq.CaesMapping.NegativeAnswerType
-				}
-
 				tmpl := ActionTemplate{
 					Type:                 "attack",
 					AttackType:           attackType,
@@ -107,16 +116,8 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 					PremiseTemplatesEN:   bs.PremiseTemplatesEN,
 					ConclusionTemplateEN: bs.ConclusionTemplateEN,
 					CaesAttackType:       attackType,
+					TargetPremiseID:      premiseID,
 				}
-
-				// For undermining: enumerate premises of the target argument.
-				if attackType == "undermining" {
-					// We can't enumerate premise IDs without accessing the
-					// graph in detail. Leave TargetPremiseID empty — the
-					// agent or UI must fill it in. For random agents, we
-					// handle this in the agent code.
-				}
-
 				actions = append(actions, tmpl)
 			}
 		}

@@ -23,6 +23,30 @@ type GraphQuerier interface {
 	// PremiseExists returns true if the argument with argID has a premise
 	// whose statement ID matches premiseStmtID.
 	PremiseExists(argID, premiseStmtID string) bool
+
+	// PremiseMatching returns the ID of the premise of argID that a CQ's
+	// target_premise_pattern (e.g. "possible({A})") designates, with the
+	// argument's own variable bindings substituted, or "" if none does.
+	PremiseMatching(argID, pattern string) string
+}
+
+// attackTypes are the CAES operations an attack can perform.
+var attackTypes = map[string]bool{"rebuttal": true, "undercutter": true, "undermining": true}
+
+// AttackTypeOf returns the CAES attack operation that answers the critical
+// question: the answer type of its caes_mapping that is not "support". It
+// returns "" if neither answer type is an attack type.
+func AttackTypeOf(cq *CQNode) string {
+	if cq == nil {
+		return ""
+	}
+	if attackTypes[cq.CaesMapping.PositiveAnswerType] {
+		return cq.CaesMapping.PositiveAnswerType
+	}
+	if attackTypes[cq.CaesMapping.NegativeAnswerType] {
+		return cq.CaesMapping.NegativeAnswerType
+	}
+	return ""
 }
 
 // ---------------------------------------------------------------------------
@@ -109,15 +133,44 @@ func instantiateTemplates(scheme *ASNode, bindings map[string]string) (premises 
 //
 // Checks performed (from WAG plan §13, SRD §7.5):
 //
+//	S0: Move shape — a support has no target or CQ; an attack has a target and
+//	    answers a CQ or names an attack type (rebuttal, undercutter, undermining)
 //	S1: Scheme existence — the NASCQ scheme ID must exist
 //	S2: Variable completeness — all scheme variables must have bindings
-//	S3: CQ applicability — if CQ-directed, the CQ must be askable of the target's scheme
-//	S4: Semantic type compatibility — if CQ-directed and thesis-dependent, types must match
+//	S3: CQ applicability — the CQ must be askable of the target's scheme (a
+//	    target made with no NASCQ scheme admits no CQ), and an attack type the
+//	    mover names must be the one the CQ maps to
 //	S5: Backup edge validity — if CQ-directed, the scheme must be a valid backup for the CQ
 //	S6: Template instantiation — substitute variables into English templates
 //	S7: Target argument exists — if attacking, the target must exist in the graph
-//	S8: Target premise exists — for undermining, the specific premise must exist
+//	S8: Target premise — an undermining names a premise of the target, or its
+//	    CQ's target_premise_pattern designates one; the resolved premise is
+//	    returned in the ValidatedAction
+//
+// S4 (semantic types) is not a move check: S5 admits only schemes with an
+// explicit backup edge, which the NASCQ author wired, or thesis-independent
+// ones, which back every CQ, so a type comparison after S5 could never fail.
+// Semantic types are checked where they can fail, on the data (see Lint).
 func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedAction, error) {
+	// S0: Move shape
+	switch action.Type {
+	case "support":
+		if action.TargetArgID != "" || action.AnswersCQID != "" {
+			return nil, fmt.Errorf("S0: a support move takes no target or critical question " +
+				"(answering a critical question in the target's favour is not implemented)")
+		}
+	case "attack":
+		if action.TargetArgID == "" {
+			return nil, fmt.Errorf("S0: an attack needs a target argument")
+		}
+		if action.AnswersCQID == "" && !attackTypes[action.AttackType] {
+			return nil, fmt.Errorf("S0: an attack must answer a critical question or name an attack type "+
+				"(rebuttal, undercutter, undermining); got %q", action.AttackType)
+		}
+	default:
+		return nil, fmt.Errorf("S0: unknown action type %q (want support or attack)", action.Type)
+	}
+
 	// S1: Scheme existence
 	scheme, ok := n.Schemes[action.SchemeID]
 	if !ok {
@@ -166,76 +219,83 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 					nascqSchemeID = caesSchemeID
 				}
 			}
-			if nascqSchemeID != "" {
-				askCQs := n.askIndex[nascqSchemeID]
-				if !containsStr(askCQs, action.AnswersCQID) {
-					return nil, fmt.Errorf("S3: CQ %q is not applicable to scheme %q (ask CQs: %v)",
-						action.AnswersCQID, nascqSchemeID, askCQs)
-				}
+			if nascqSchemeID == "" {
+				return nil, fmt.Errorf("S3: target %q was not made with a NASCQ scheme, so no critical question applies to it",
+					action.TargetArgID)
+			}
+			askCQs := n.askIndex[nascqSchemeID]
+			if !containsStr(askCQs, action.AnswersCQID) {
+				return nil, fmt.Errorf("S3: CQ %q is not applicable to scheme %q (ask CQs: %v)",
+					action.AnswersCQID, nascqSchemeID, askCQs)
 			}
 		}
 	}
 
-	// S5: Backup edge validity (checked BEFORE S4 because an explicit
-	// backup edge overrides semantic type checking — the NASCQ author
-	// already verified compatibility when wiring the edge)
-	hasExplicitBackup := false
+	// S5: Backup edge validity: an explicit backup edge, or a
+	// thesis-independent scheme (which backs every CQ).
 	if action.AnswersCQID != "" {
-		backups := n.GetBackupSchemes(action.AnswersCQID)
-		for _, bs := range backups {
+		backed := false
+		for _, bs := range n.GetBackupSchemes(action.AnswersCQID) {
 			if bs.ID == action.SchemeID {
-				hasExplicitBackup = true
+				backed = true
 				break
 			}
 		}
-		if !hasExplicitBackup {
+		if !backed {
 			return nil, fmt.Errorf("S5: scheme %q cannot back up CQ %q "+
 				"(no backup edge and scheme is not thesis-independent)",
 				action.SchemeID, action.AnswersCQID)
 		}
 	}
 
-	// S4: Semantic type compatibility (only if CQ-directed, thesis-dependent,
-	// and NO explicit backup edge — an explicit edge or thesis-independence
-	// bypasses this check)
-	if action.AnswersCQID != "" && !scheme.ThesisIndependent && !hasExplicitBackup {
-		cq := n.Questions[action.AnswersCQID]
-		if cq != nil && cq.SemanticType != "" && scheme.SemanticType != "" {
-			if cq.SemanticType != scheme.SemanticType {
-				return nil, fmt.Errorf("S4: semantic mismatch: CQ %q expects type %q, "+
-					"but scheme %q provides type %q",
-					action.AnswersCQID, cq.SemanticType,
-					action.SchemeID, scheme.SemanticType)
-			}
-		}
-	}
-
 	// S6: Template instantiation
 	instPremises, instConclusion := instantiateTemplates(scheme, action.VariableBindings)
 
-	// S8: Target premise exists (undermining only)
-	if action.AttackType == "undermining" && action.TargetPremiseID != "" {
-		if graph == nil {
-			return nil, fmt.Errorf("S8: graph querier required for undermining")
-		}
-		if !graph.PremiseExists(action.TargetArgID, action.TargetPremiseID) {
-			return nil, fmt.Errorf("S8: premise %q not found in argument %q",
-				action.TargetPremiseID, action.TargetArgID)
+	// S3 (continued): the CAES attack type comes from the CQ's mapping. An
+	// attack type the mover names must agree with it.
+	caesAttackType := ""
+	if action.Type == "attack" {
+		caesAttackType = action.AttackType
+		if action.AnswersCQID != "" {
+			mapped := AttackTypeOf(n.Questions[action.AnswersCQID])
+			if mapped == "" {
+				return nil, fmt.Errorf("S3: CQ %q maps to no attack type", action.AnswersCQID)
+			}
+			if action.AttackType != "" && action.AttackType != mapped {
+				return nil, fmt.Errorf("S3: CQ %q is answered by an attack of type %q, not %q",
+					action.AnswersCQID, mapped, action.AttackType)
+			}
+			caesAttackType = mapped
 		}
 	}
 
-	// Resolve CAES attack type from CQ mapping
-	caesAttackType := action.AttackType
-	if action.AnswersCQID != "" && action.Type == "attack" {
-		cq := n.Questions[action.AnswersCQID]
-		if cq != nil {
-			if cq.CaesMapping.PositiveAnswerType != "support" {
-				caesAttackType = cq.CaesMapping.PositiveAnswerType
-			} else {
-				caesAttackType = cq.CaesMapping.NegativeAnswerType
+	// S8: Target premise (undermining only). The resolved premise is returned.
+	if caesAttackType == "undermining" {
+		if graph == nil {
+			return nil, fmt.Errorf("S8: graph querier required for undermining")
+		}
+		if action.TargetPremiseID != "" {
+			if !graph.PremiseExists(action.TargetArgID, action.TargetPremiseID) {
+				return nil, fmt.Errorf("S8: premise %q not found in argument %q",
+					action.TargetPremiseID, action.TargetArgID)
+			}
+		} else {
+			pattern := ""
+			if cq := n.Questions[action.AnswersCQID]; cq != nil {
+				pattern = cq.CaesMapping.TargetPremisePattern
+			}
+			if pattern == "" {
+				return nil, fmt.Errorf("S8: name the premise of %q to undermine (target_premise_id)",
+					action.TargetArgID)
+			}
+			action.TargetPremiseID = graph.PremiseMatching(action.TargetArgID, pattern)
+			if action.TargetPremiseID == "" {
+				return nil, fmt.Errorf("S8: argument %q has no premise matching %q",
+					action.TargetArgID, pattern)
 			}
 		}
 	}
+	action.AttackType = caesAttackType
 
 	return &ValidatedAction{
 		ProposedAction:    action,

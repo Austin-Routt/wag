@@ -256,3 +256,9 @@ func (b *graphBridge) PremiseExists(argID, premiseStmtID string) bool {
 	}
 	return false
 }
+
+// PremiseMatching returns the premise of the argument that a CQ's
+// target_premise_pattern designates (see carneades.Adapter.PremiseMatching).
+func (b *graphBridge) PremiseMatching(argID, pattern string) string {
+	return b.gs.Adapter.PremiseMatching(argID, pattern)
+}
