@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -15,13 +16,19 @@ import (
 
 func newTestServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	s, err := New(Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON}, "")
+	_, ts := newTestServerWith(t)
+	return ts
+}
+
+func newTestServerWith(t *testing.T) (*Server, *httptest.Server) {
+	t.Helper()
+	s, err := New(Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON, Contexts: data.ContextsJSON}, "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	ts := httptest.NewServer(s.Handler())
 	t.Cleanup(ts.Close)
-	return ts
+	return s, ts
 }
 
 func call(t *testing.T, ts *httptest.Server, method, path string, body interface{}, out interface{}) int {
@@ -89,8 +96,13 @@ func TestGameFlow(t *testing.T) {
 		VariableBindings: map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"}}
 	var p Preview
 	call(t, ts, "POST", "/api/games/"+st.ID+"/preview", map[string]interface{}{"action": pr}, &p)
-	if !p.OK || len(p.Premises) != 4 || len(p.Changes) == 0 {
+	if !p.OK || len(p.Premises) != 7 || len(p.Changes) == 0 {
 		t.Fatalf("preview: %+v", p)
+	}
+	for _, x := range append(append([]string{p.Conclusion}, p.Premises...), p.Changes[0].Text) {
+		if strings.ContainsAny(x, "{}_") || x == "" {
+			t.Fatalf("preview reads %q", x)
+		}
 	}
 	var mr moveReply
 	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": pr})
@@ -99,8 +111,17 @@ func TestGameFlow(t *testing.T) {
 	}
 	var opts []MoveOption
 	call(t, ts, "GET", "/api/games/"+st.ID+"/moves?target=a1", nil, &opts)
-	if len(opts) != 5 {
-		t.Fatalf("%d move options on a1", len(opts))
+	// Its five critical questions, and the generic premise question about
+	// each of the six premises none of them is about (not possible(A),
+	// which the Possibility Question is about).
+	generic := map[string]bool{}
+	for _, o := range opts {
+		if o.CQ == nascq.CQPremiseAcceptable {
+			generic[o.Stmt] = true
+		}
+	}
+	if len(opts) != 11 || len(generic) != 6 || generic["possible(carbon_tax)"] || !generic["would_bring_about(carbon_tax,status_quo,lower_emissions)"] {
+		t.Fatalf("%d move options on a1, the generic question about %v", len(opts), generic)
 	}
 	q := nascq.ProposedAction{Type: "question", AnswersCQID: "CQ:possibility", TargetArgID: "a1"}
 	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": q})
@@ -225,5 +246,91 @@ func TestCrossSiteRequestsRefused(t *testing.T) {
 	call(t, ts, "GET", "/api/games/"+st.ID, nil, &after)
 	if len(after.Log) != 0 {
 		t.Fatalf("a refused request changed the game: %+v", after.Log)
+	}
+}
+
+// A game exported by a tester loads, replays move by move, and ends with the
+// labels it had when it was exported.
+func TestLoadReplaysAnExport(t *testing.T) {
+	ts := newTestServer(t)
+	b, err := os.ReadFile("testdata/user-game-4.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var exp struct {
+		State State `json:"state"`
+	}
+	if err := json.Unmarshal(b, &exp); err != nil {
+		t.Fatal(err)
+	}
+	var st State
+	if code := call(t, ts, "POST", "/api/load", string(b), &st); code != 200 {
+		t.Fatalf("load: %d", code)
+	}
+	if len(st.Log) != len(exp.State.Log) || st.Round != exp.State.Round || st.Active != exp.State.Active {
+		t.Fatalf("replayed %d moves to round %d (%s to move), exported %d to round %d (%s)",
+			len(st.Log), st.Round, st.Active, len(exp.State.Log), exp.State.Round, exp.State.Active)
+	}
+	for id, s := range exp.State.Statements {
+		if got := st.Statements[id]; got == nil || got.Label != s.Label {
+			t.Errorf("%s: replayed %+v, exported %s", id, got, s.Label)
+		}
+	}
+	for i, p := range exp.State.Players {
+		if st.Players[i].Score != p.Score {
+			t.Errorf("%s scores %v, exported %v", p.ID, st.Players[i].Score, p.Score)
+		}
+	}
+	// The replayed game exports what it needs to be loaded again.
+	var again map[string]interface{}
+	call(t, ts, "GET", "/api/games/"+st.ID+"/export", nil, &again)
+	if again["request"] == nil || again["build"] == nil || again["format"] != "wag-export/2" {
+		t.Fatalf("export lacks request, build or format: %v %v %v", again["request"], again["build"], again["format"])
+	}
+}
+
+// Notes attach to a game and come back in its export.
+func TestNotes(t *testing.T) {
+	ts := newTestServer(t)
+	var st State
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}}}, &st)
+	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/note", map[string]string{"target": "move:1", "kind": "confusing", "text": "What does this mean?", "by": "Ann"}, nil); code != 200 {
+		t.Fatalf("note: %d", code)
+	}
+	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/note", map[string]string{"kind": "bogus", "text": "x"}, nil); code != 400 {
+		t.Fatalf("bad note kind: %d", code)
+	}
+	var exp struct {
+		Notes []Note `json:"notes"`
+	}
+	call(t, ts, "GET", "/api/games/"+st.ID+"/export", nil, &exp)
+	if len(exp.Notes) != 1 || exp.Notes[0].Kind != "confusing" || exp.Notes[0].Target != "move:1" {
+		t.Fatalf("notes: %+v", exp.Notes)
+	}
+}
+
+// A context preset weighs the schemes as its audience would.
+func TestContext(t *testing.T) {
+	ts := newTestServer(t)
+	var meta struct {
+		Contexts []struct{ ID string } `json:"contexts"`
+	}
+	call(t, ts, "GET", "/api/meta", nil, &meta)
+	if len(meta.Contexts) < 4 {
+		t.Fatalf("contexts: %+v", meta.Contexts)
+	}
+	var st State
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Context: "scientific", Standard: "CCE",
+		Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}}}, &st)
+	if st.Config.Context != "scientific" {
+		t.Fatalf("config: %+v", st.Config)
+	}
+	mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": nascq.ProposedAction{Type: "support", SchemeID: "AS:analogy",
+		VariableBindings: map[string]string{"C": "Denmark's fat tax", "A": "food taxes change diets"}}})
+	if a := mr.State.Arguments["a1"]; a == nil || a.BaseWeight != 0.45 {
+		t.Fatalf("an analogy in a scientific inquiry: %+v", a)
+	}
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Context: "nonsense"}, nil); code != http.StatusBadRequest {
+		t.Fatalf("unknown context: %d", code)
 	}
 }

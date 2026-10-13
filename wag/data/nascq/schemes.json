@@ -8,32 +8,37 @@
     "variables": {
       "A": {
         "type": "action",
-        "description": "Action to be performed"
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
       },
       "S1": {
         "type": "state",
-        "description": "Current circumstances"
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
       },
       "S2": {
         "type": "state",
-        "description": "Future state after action"
+        "description": "Future state after action",
+        "example_en": "lower emissions"
       },
       "G": {
         "type": "goal",
-        "description": "Goal to be realized"
+        "description": "Goal to be realized",
+        "example_en": "a stable climate"
       },
       "V": {
         "type": "value",
-        "description": "Value promoted by the goal"
+        "description": "Value promoted by the goal",
+        "example_en": "public health"
       }
     },
     "premise_templates_en": [
-      "In the current circumstances {S1}",
-      "Performing {A} in {S1} would bring about {S2}",
-      "Goal {G} would be realized in {S2}",
-      "Goal {G} would promote value {V}"
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}",
+      "Achieving {G} would promote the value {V}"
     ],
-    "conclusion_template_en": "Action {A} should be performed",
+    "conclusion_template_en": "{A} should be done",
     "description_en": "An agent should do an action because, in the current circumstances, it brings about a state that realizes a goal, which promotes a value.",
     "cues_en": [
       "should",
@@ -60,18 +65,20 @@
     "variables": {
       "A": {
         "type": "action",
-        "description": "Action"
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
       },
       "G": {
         "type": "event",
-        "description": "Good consequence"
+        "description": "Good consequence",
+        "example_en": "cleaner air"
       }
     },
     "premise_templates_en": [
-      "Action {A} brings about {G}",
-      "{G} is a good outcome"
+      "Doing {A} brings about {G}",
+      "{G} is good"
     ],
-    "conclusion_template_en": "Action {A} should be performed",
+    "conclusion_template_en": "{A} should be done",
     "description_en": "An action should be performed because it brings about good consequences.",
     "cues_en": [
       "consequence",
@@ -98,22 +105,25 @@
     "variables": {
       "V": {
         "type": "value",
-        "description": "Value being invoked"
+        "description": "Value being invoked",
+        "example_en": "fairness"
       },
       "A": {
         "type": "entity",
-        "description": "Agent or judger"
+        "description": "Agent or judger",
+        "example_en": "most voters"
       },
       "G": {
         "type": "goal",
-        "description": "Goal affected"
+        "description": "Goal affected",
+        "example_en": "equal pay"
       }
     },
     "premise_templates_en": [
-      "Agent {A} judges {V} as a positive value",
-      "Value {V} positively affects goal {G} for agent {A}"
+      "{V} is a positive value for {A}",
+      "{V} supports the goal {G} for {A}"
     ],
-    "conclusion_template_en": "There is reason to retain goal {G} because of value {V}",
+    "conclusion_template_en": "{V} is a reason to keep the goal {G}",
     "description_en": "A goal is worth keeping because it promotes a value the agent holds.",
     "cues_en": [
       "value",
@@ -140,18 +150,20 @@
     "variables": {
       "A": {
         "type": "event",
-        "description": "Observable sign or indicator"
+        "description": "Observable sign or indicator",
+        "example_en": "wet streets"
       },
       "B": {
         "type": "event",
-        "description": "Indicated condition"
+        "description": "Indicated condition",
+        "example_en": "it rained"
       }
     },
     "premise_templates_en": [
-      "{A} is observed to be the case",
-      "{B} is indicated when {A} is true"
+      "{A} is observed",
+      "{B} is indicated when {A} holds"
     ],
-    "conclusion_template_en": "{B} is true in the current situation",
+    "conclusion_template_en": "{B} holds in the current situation",
     "answer_variable": "B",
     "description_en": "Something is probably true because an observed sign usually indicates it.",
     "cues_en": [
@@ -178,21 +190,24 @@
     "variables": {
       "W": {
         "type": "entity",
-        "description": "Expert or credible source"
+        "description": "Expert or credible source",
+        "example_en": "the IPCC"
       },
       "D": {
         "type": "domain",
-        "description": "Field of expertise"
+        "description": "Field of expertise",
+        "example_en": "climate science"
       },
       "S": {
         "type": "proposition",
-        "description": "Proposition asserted"
+        "description": "Proposition asserted",
+        "example_en": "human activity is warming the planet"
       }
     },
     "premise_templates_en": [
-      "{W} is a credible source for domain {D}",
-      "{W} asserts that {S}",
-      "{S} is in the domain of {D}"
+      "{W} is a credible expert on {D}",
+      "{W} says that {S}",
+      "{S} is a matter of {D}"
     ],
     "conclusion_template_en": "{S}",
     "answer_variable": "S",
@@ -225,21 +240,24 @@
     "variables": {
       "W": {
         "type": "entity",
-        "description": "Knowledgeable source"
+        "description": "Knowledgeable source",
+        "example_en": "a local resident"
       },
       "D": {
         "type": "domain",
-        "description": "Domain of knowledge"
+        "description": "Domain of knowledge",
+        "example_en": "what happens in the village"
       },
       "S": {
         "type": "proposition",
-        "description": "Proposition asserted"
+        "description": "Proposition asserted",
+        "example_en": "the road floods every spring"
       }
     },
     "premise_templates_en": [
       "{W} is in a position to know about {D}",
-      "{W} asserts that {S}",
-      "{S} is in the domain of {D}"
+      "{W} says that {S}",
+      "{S} is a matter of {D}"
     ],
     "conclusion_template_en": "{S}",
     "answer_variable": "S",
@@ -270,16 +288,18 @@
     "variables": {
       "A": {
         "type": "proposition",
-        "description": "Proposition claimed to hold"
+        "description": "Proposition claimed to hold",
+        "example_en": "a carbon tax cuts emissions"
       },
       "C": {
         "type": "case",
-        "description": "Similar case"
+        "description": "Similar case",
+        "example_en": "Sweden's carbon tax"
       }
     },
     "premise_templates_en": [
       "{C} is a similar case",
-      "{A} is true in case {C}"
+      "{A} is true in the case of {C}"
     ],
     "conclusion_template_en": "{A}",
     "answer_variable": "A",

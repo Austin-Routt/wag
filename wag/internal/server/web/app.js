@@ -12,11 +12,18 @@ const plain = s => String(s ?? '').replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)
 const rich = s => esc(s).replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
 let META = null;           // schemes, critical questions, modes
+const SEATS = [['human', 'Human (this browser)'], ['llm', 'Language model (copy and paste)'], ['claude', 'Claude (API)'],
+  ['greedy', 'Rule bot: greedy'], ['random', 'Rule bot: random']];
 let SCHEME = {}, CQ = {};  // by ID
 let G = null;              // the current game's State
 const ui = {
   tab: 'play', gameId: null, focus: null, crumbs: [], openCQ: null, moderator: false, autoplay: true,
   open: new Set(), c: null, cKey: '', previewSeq: 0, setup: null, aiTimer: null, busy: false,
+  view: 'dialogue',      // dialogue (the moves, in order) or board (one claim, its pros and cons)
+  respond: null,         // the log entry whose questions are shown
+  details: new Set(),    // log entries shown with their argument's parts
+  flag: null,            // the log entry (or 'game') a note is being written on
+  lastLog: 0,
 };
 
 // ---------------------------------------------------------------------------
@@ -69,7 +76,7 @@ function setState(st) {
   if (ui.focus && !G.statements[ui.focus]) ui.focus = G.roots[0] || null;
   if (!ui.focus && G.roots.length) { ui.focus = G.roots[0]; ui.crumbs = [ui.focus]; }
   const key = [G.id, G.round, G.active, G.log.length, !!G.pending, G.over].join('|');
-  if (key !== ui.cKey) { ui.cKey = key; ui.c = null; }
+  if (key !== ui.cKey) { ui.cKey = key; ui.c = null; ui.manual = false; }
   renderGamebar();
   if (ui.tab === 'play') renderPlay();
   scheduleAI();
@@ -85,14 +92,15 @@ async function poll() {
 
 function scheduleAI() {
   clearTimeout(ui.aiTimer);
-  if (!G || G.over || G.pending || !G.active_ai || !ui.autoplay) return;
-  ui.aiTimer = setTimeout(aiStep, 900);
+  if (!G || G.over || G.pending || !G.active_ai || !ui.autoplay || G.thinking) return;
+  ui.aiTimer = setTimeout(aiStep, G.active_ai === 'claude' ? 300 : 900);
 }
 async function aiStep() {
-  if (!G || ui.busy) return;
-  ui.busy = true;
+  if (!G || ui.busy || G.thinking) return;
+  ui.busy = G.active_ai !== 'claude'; // a Claude move takes a while: keep polling meanwhile
+  if (G.active_ai === 'claude') { G.thinking = true; renderPlay(); }
   try { const r = await api(`/api/games/${G.id}/ai`, {}); setState(r.state); }
-  catch (e) { toast(e.message); }
+  catch (e) { toast(e.message, 8000); poll(); }
   finally { ui.busy = false; }
 }
 
@@ -112,18 +120,22 @@ function renderGamebar() {
   if (!G) { bar.innerHTML = ''; return; }
   const players = G.players.map(p => {
     const cls = ['pill', p.id === G.active && !G.over ? 'active' : '', p.side].join(' ');
-    const kind = p.kind === 'human' ? '' : ` <span class="muted">(${esc(p.kind)} AI)</span>`;
+    const kind = p.kind === 'human' ? '' : ` <span class="muted">(${esc({ llm: 'language model', claude: 'Claude', greedy: 'rule bot', random: 'rule bot' }[p.kind] || p.kind)})</span>`;
     return `<span class="${cls}" title="${esc(p.side || '')}">${esc(p.id)}${kind} <b>${p.score.toFixed(1)}</b>${p.resigned ? ' ✗' : ''}</span>`;
   }).join('');
   const verdict = G.config.objective === 'claim'
     ? `<span class="pill">Claim <span class="lbl ${(G.verdict || 'out').toLowerCase()}">${esc(G.verdict || 'Out')}</span></span>` : '';
   const mod = G.config.moderated ? `<label class="inline small"><input type="checkbox" id="modtoggle" ${ui.moderator ? 'checked' : ''}> I am the moderator</label>` : '';
-  bar.innerHTML = `
+  const views = ui.tab === 'play' ? `<span class="seg small viewseg">${[['dialogue', 'Dialogue'], ['board', 'Board']].map(([k, l]) => `<button data-view="${k}" class="${ui.view === k ? 'on' : ''}" title="${k === 'dialogue' ? 'The moves in order, each with what it answers and what it changed' : 'One claim at a time, with the arguments for and against it'}">${l}</button>`).join('')}</span>` : '';
+  bar.innerHTML = `${views}
     <span class="pill" title="${esc(G.title)}">${esc(short(G.title, 38))}</span>
     <span class="pill">${esc(G.config.mode)} · round ${G.round}${G.config.max_rounds ? ' / ' + G.config.max_rounds : ''}</span>
     ${players}${verdict}${mod}
+    <button class="small" id="gamenote" title="Write a note on the game: it goes into the export">Note</button>
     <button class="small" id="newgame">New game</button>
-    <a class="small" href="/api/games/${G.id}/export" target="_blank">Export</a>`;
+    <a class="small" href="/api/games/${G.id}/export" target="_blank" title="Download the game as JSON: moves, notes, what you tried, and the build">Export</a>`;
+  const vs = bar.querySelector('.viewseg'); if (vs) vs.onclick = e => { const b = e.target.closest('[data-view]'); if (b) { ui.view = b.dataset.view; renderGamebar(); renderPlay(); } };
+  $('#gamenote').onclick = () => { ui.view = 'dialogue'; ui.flag = 'game'; renderGamebar(); renderPlay(); };
   $('#newgame').onclick = () => { G = null; ui.gameId = null; location.hash = ''; ui.tab = 'play'; render(); };
   const mt = $('#modtoggle'); if (mt) mt.onchange = () => { ui.moderator = mt.checked; renderPlay(); };
 }
@@ -134,13 +146,13 @@ function renderGamebar() {
 function renderSetup() {
   const s = ui.setup || (ui.setup = {
     mode: 'debate', seats: [{ name: 'Alice', kind: 'human' }, { name: 'Bob', kind: 'greedy' }],
-    allow_other: true, moderated: false, require_evidence: false, title: '', claim: '', standard: 'PE',
+    allow_other: true, any_premise: true, moderated: false, require_evidence: false, title: '', claim: '', standard: 'PE', context: 'everyday',
     scoring: '', max_rounds: '', answer_within: '', target: '',
   });
   const modes = META.modes.map(m => `<div class="mode ${m.Name === s.mode ? 'on' : ''}" data-mode="${m.Name}"><b>${esc(m.Name)}</b><span class="small muted">${esc(m.Description)}</span></div>`).join('');
   const seats = s.seats.map((x, i) => `<div class="seat">
       <input type="text" data-seat="${i}" data-f="name" value="${esc(x.name)}" placeholder="Name">
-      <select data-seat="${i}" data-f="kind">${['human', 'random', 'greedy'].map(k => `<option value="${k}" ${x.kind === k ? 'selected' : ''}>${k === 'human' ? 'Human (this browser)' : k + ' AI'}</option>`).join('')}</select>
+      <select data-seat="${i}" data-f="kind">${SEATS.filter(([k]) => k !== 'claude' || META.claude).map(([k, l]) => `<option value="${k}" ${x.kind === k ? 'selected' : ''}>${l}</option>`).join('')}</select>
       <button class="small" data-del="${i}" title="Remove">✕</button></div>`).join('');
   $('#main').innerHTML = `<div class="setup">
     <div class="panel"><h2>New game</h2>
@@ -148,9 +160,14 @@ function renderSetup() {
       <div class="grid2">
         <div><h3>Players</h3><div class="seats">${seats}</div>
           <button class="small" id="addseat" ${s.mode === 'solo' ? 'disabled' : ''}>Add a player</button>
-          <p class="small muted">Debates: even seats argue for the claim (pro), odd seats against it (con). Hot-seat: all human seats play in this browser; other tabs can watch or moderate.</p></div>
-        <div><h3>Options</h3>
+          <p class="small muted">Debates: even seats argue for the claim (pro), odd seats against it (con). Human seats play in this browser; other tabs can watch or moderate.</p>
+          <p class="small muted"><b>Language model</b>: you copy the seat's prompt into any chatbot and paste its reply back. <b>Rule bots</b> play legal moves with placeholder words: they test the rules, they do not understand the topic.${META.claude ? ` <b>Claude</b> plays through the Claude API (${esc(META.claude.model)}, effort ${esc(META.claude.effort)}); each move costs API credits.` : ' Start the server with <span class="mono">--claude</span> to add Claude seats.'}</p></div>
+        <div><h3>Context</h3>
+          <select id="o_ctx">${(META.contexts || []).map(c => `<option value="${esc(c.id)}" ${s.context === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
+          <p class="small muted" id="ctxdesc">${esc(((META.contexts || []).find(c => c.id === s.context) || {}).description || '')}</p>
+          <h3>Options</h3>
           <label class="inline"><input type="checkbox" id="o_other" ${s.allow_other ? 'checked' : ''}> Allow the “Other” scheme (your own premises and conclusion)</label>
+          <label class="inline"><input type="checkbox" id="o_anyp" ${s.any_premise ? 'checked' : ''}> Any premise can be questioned (not only those a scheme's critical questions are about)</label>
           <label class="inline"><input type="checkbox" id="o_mod" ${s.moderated ? 'checked' : ''}> Moderator: every move waits for approval</label>
           <label class="inline"><input type="checkbox" id="o_ev" ${s.require_evidence ? 'checked' : ''}> Require sources for schemes that need evidence</label>
           <div class="grid2">
@@ -175,7 +192,10 @@ function renderSetup() {
         <label>Depth limit (0: everything)</label><input type="number" id="kdepth" value="0" min="0">
         <p><button id="kimport">Import the file</button></p>
       </div>
-      <div class="panel"><h2>Games on this server</h2><ul class="games" id="gamelist"><li class="muted">Loading…</li></ul></div>
+      <div class="panel"><h2>Games on this server</h2><ul class="games" id="gamelist"><li class="muted">Loading…</li></ul>
+        <h3>Load an exported game</h3>
+        <p class="small muted">A file saved with <b>Export</b>: the game is replayed move by move, so you can look at it again or play on.</p>
+        <input type="file" id="lfile" accept=".json,application/json"> <button id="lload">Load</button></div>
     </div></div>`;
   $('#main').onclick = e => {
     const m = e.target.closest('[data-mode]');
@@ -188,19 +208,31 @@ function renderSetup() {
     if (t.dataset.seat !== undefined) s.seats[+t.dataset.seat][t.dataset.f] = t.value;
   };
   $('#main').onchange = $('#main').oninput;
+  const ctx = $('#o_ctx');
+  if (ctx) ctx.onchange = () => {
+    const c = (META.contexts || []).find(x => x.id === ctx.value); if (!c) return;
+    s.context = c.id; s.standard = c.standard || 'PE'; s.require_evidence = !!c.require_evidence; s.moderated = !!c.moderated;
+    s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.claim = $('#o_claim').value; s.title = $('#o_title').value;
+    renderSetup();
+  };
   $('#addseat').onclick = () => { s.seats.push({ name: `Player${s.seats.length + 1}`, kind: 'human' }); renderSetup(); };
   $('#start').onclick = async () => {
     const num = id => { const v = $(id).value.trim(); return v === '' ? undefined : +v; };
-    s.allow_other = $('#o_other').checked; s.moderated = $('#o_mod').checked; s.require_evidence = $('#o_ev').checked;
+    s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.moderated = $('#o_mod').checked; s.require_evidence = $('#o_ev').checked;
     s.claim = $('#o_claim').value; s.standard = $('#o_std').value; s.title = $('#o_title').value;
     s.max_rounds = $('#o_rounds').value; s.answer_within = $('#o_within').value; s.scoring = $('#o_scoring').value;
     const req = {
-      title: s.title, mode: s.mode, seats: s.seats, allow_other: s.allow_other, moderated: s.moderated,
+      title: s.title, mode: s.mode, seats: s.seats, allow_other: s.allow_other, any_premise: s.any_premise, moderated: s.moderated, context: s.context,
       require_evidence: s.require_evidence, claim: s.claim, standard: s.standard, scoring: s.scoring || undefined,
       max_rounds: num('#o_rounds'), answer_within: num('#o_within'),
     };
     try { const st = await api('/api/games', req); ui.gameId = st.id; G = null; setState(st); ui.moderator = s.moderated; render(); }
     catch (e) { toast(e.message); }
+  };
+  $('#lload').onclick = async () => {
+    const f = $('#lfile').files[0]; if (!f) return toast('Choose an exported game first.');
+    try { const st = await api('/api/load', await f.text(), true); G = null; setState(st); toast(`Loaded “${st.title}”: ${st.log.length} moves replayed.`); render(); }
+    catch (e) { toast(e.message, 8000); }
   };
   $('#kimport').onclick = async () => {
     const f = $('#kfile').files[0]; if (!f) return toast('Choose a graph.json first.');
@@ -236,13 +268,132 @@ function afterImport(r) {
 function renderPlay() {
   if (ui.tab !== 'play') return;
   if (!G) return renderSetup();
-  if (!$('#play')) {
-    $('#main').innerHTML = `<div class="play" id="play">
-      <aside><div class="panel sticky" id="mappanel"></div></aside>
-      <section id="board"></section>
-      <aside><div class="sticky" id="side"></div></aside></div>`;
+  const play = $('#play');
+  if (!play || play.dataset.view !== ui.view) {
+    $('#main').innerHTML = ui.view === 'dialogue'
+      ? `<div class="play dialogue-view" id="play" data-view="dialogue">
+          <section id="dialogue"></section>
+          <aside><div class="sticky" id="side"></div></aside></div>`
+      : `<div class="play" id="play" data-view="board">
+          <aside><div class="panel sticky" id="mappanel"></div></aside>
+          <section id="board"></section>
+          <aside><div class="sticky" id="side"></div></aside></div>`;
   }
-  renderMap(); renderBoard(); renderSide();
+  if (ui.view === 'dialogue') renderDialogue(); else { renderMap(); renderBoard(); }
+  renderSide();
+}
+
+// ---------------------------------------------------------------------------
+// The dialogue: the moves in order. Each says what it answers, what it
+// argues, with which scheme, and what it changed; a reply is indented under
+// the move it answers.
+// ---------------------------------------------------------------------------
+const KIND = {
+  argue: ['argues', 'pro'], attack: ['attacks', 'con'], defend: ['defends', 'pro'], question: ['asks', 'q'],
+  pass: ['passes', ''], resign: ['resigns', ''], decide: ['rules', 'mod'], rejected: ['tried a move that was rejected', 'rej'], timeout: ['ran out of time', ''],
+};
+function deltasText(d) {
+  if (!d || !Object.keys(d).length) return '';
+  return Object.entries(d).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(' · ');
+}
+function claimHead() {
+  const turn = G.over ? '<b>Game over.</b>' : G.thinking ? `<b>${esc(G.active)}</b> (Claude) is thinking…` : `<b>${esc(G.active)}</b> to move.`;
+  if (!G.claim || !G.statements[G.claim]) return `<div class="panel claimhead"><div class="small muted">${turn}</div></div>`;
+  const c = G.statements[G.claim];
+  return `<div class="panel claimhead ${c.label}">
+    <div class="small muted">The claim · ${turn}</div>
+    <div class="claimtext">${lbl(c.label)} ${rich(c.text)}</div>
+    <div class="small muted">${esc(c.explain)}</div></div>`;
+}
+function renderDialogue() {
+  const box = $('#dialogue'); if (!box) return;
+  const depth = [];
+  const items = G.log.map((l, i) => {
+    const t = l.target && G.arguments[l.target];
+    const parent = t && t.move >= 0 && t.move < i ? t.move : -1;
+    depth[i] = parent >= 0 ? Math.min(depth[parent] + 1, 5) : 0;
+    return entryCard(l, i, depth[i], parent);
+  }).join('');
+  const gameNotes = (G.notes || []).filter(n => !n.target).map(noteHTML).join('');
+  box.innerHTML = claimHead()
+    + (G.log.length ? `<ol class="dialogue">${items}</ol>` : `<div class="panel"><h2>No moves yet</h2><p>Put forward the first argument with the panel on the right: say it in your own words, choose the scheme it fits, and fill in the scheme's parts. ${G.config.objective === 'claim' ? 'In a debate, pro’s first argument states the claim.' : ''}</p></div>`)
+    + (gameNotes || ui.flag === 'game' ? `<div class="panel"><h2>Notes on the game</h2>${gameNotes}${ui.flag === 'game' ? noteForm('') : ''}</div>` : '');
+  box.onclick = dialogueClick;
+  if (G.log.length !== ui.lastLog) { ui.lastLog = G.log.length; const last = box.querySelector('.entry:last-child'); if (last) last.scrollIntoView({ block: 'nearest' }); }
+}
+function entryCard(l, i, depth, parent) {
+  const [verb, cls] = KIND[l.kind] || [l.kind, ''];
+  const main = l.args && l.args.length ? G.arguments[l.args[0]] : null;
+  const t = l.target ? G.arguments[l.target] : null;
+  const head = `<div class="ehead"><span class="num">#${i + 1}</span><span class="muted">round ${l.round}</span><b>${esc(l.player === 'moderator' ? 'The moderator' : l.player)}</b> <span class="kind ${cls}">${esc(verb)}</span>
+    <span class="grow"></span><span class="small muted">${deltasText(l.deltas)}</span></div>`;
+  let body = '';
+  if (l.kind === 'rejected') {
+    body = `<div class="small">${esc(l.reason || 'The move was not legal.')}</div><div class="small muted">A rejected move costs points; the same player moves again.</div>`;
+  } else if (l.kind === 'pass' || l.kind === 'resign' || l.kind === 'timeout' || l.kind === 'decide') {
+    body = l.kind === 'decide' ? `<div>${esc(l.text)}</div>` : '';
+  } else {
+    if (t) body += `<div class="replyto">↳ ${l.cq_name ? `the <b>${esc(l.cq_name.replace(/ Question$/, ''))}</b> question` : 'a direct reply'} about <button class="link" data-entry="${parent}">${esc(t.owner)}'s ${esc(t.id)}</button>${l.about ? ` (${esc(l.about)})` : ''}</div>`;
+    if (l.question) body += `<div class="qline"><span class="tag">Q</span> ${esc(l.question)}</div>`;
+    if (l.answer) {
+      const st = main ? G.statements[main.conclusion] : null;
+      body += `<div class="aline"><span class="tag">${l.kind === 'argue' ? 'Claim' : 'A'}</span> ${rich(l.answer)} ${st ? lbl(st.label) : ''}</div>`;
+    }
+    if (l.nl) body += `<div class="nl">“${rich(l.nl)}” <span class="muted small">— ${esc(l.player)}'s words</span></div>`;
+    if (main && l.kind !== 'question') {
+      const open = ui.details.has(i);
+      body += `<div class="because"><button class="link" data-details="${i}">${open ? '▾' : '▸'} because (${esc(l.scheme || main.scheme_name)}, ${esc(main.id)})</button>
+        ${main.in_force ? '<span class="lbl in">holds</span>' : `<span class="lbl out" title="${esc(main.why_out)}">does not hold</span> <span class="small muted">${esc(main.why_out)}</span>`}</div>`;
+      if (open) body += argParts(main);
+    }
+  }
+  const eff = (l.effects || []).length ? `<ul class="effects">${l.effects.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : '';
+  const notes = (G.notes || []).filter(n => n.target === 'move:' + (i + 1)).map(noteHTML).join('');
+  const canRespond = main && main.role === 'main' && main.cqs && main.cqs.length && !G.over;
+  const actions = `<div class="eacts">${canRespond ? `<button class="small" data-respond="${i}">${ui.respond === i ? 'Hide the questions' : 'Respond…'}</button>` : ''}
+    <button class="small ghost" data-flag="${i}" title="Note something wrong, confusing or good about this move: it goes into the export">⚑ Note</button>
+    ${main ? `<button class="small ghost" data-board="${esc(main.conclusion)}" title="Show it on the board">Board</button>` : ''}</div>`;
+  const respond = ui.respond === i && main ? `<div class="respond"><div class="small muted">The critical questions of ${esc(main.scheme_name)} about ${esc(main.id)}. Pick one to attack or defend with an argument, or to ask.</div>
+    <div class="cqs">${cqChips(main)}</div>${ui.openCQ && ui.openCQ.arg === main.id ? cqPanel(main, ui.openCQ.cq) : ''}</div>` : '';
+  return `<li class="entry ${cls} ${l.accepted ? '' : 'rej'}" style="--depth:${depth}" id="entry${i}">${head}${body}${eff}${notes}${ui.flag === i ? noteForm('move:' + (i + 1)) : ''}${actions}${respond}</li>`;
+}
+function argParts(a) {
+  const prem = a.premises.map((p, k) => { const ps = G.statements[p]; return `<li><span class="dot ${ps ? ps.label : ''}"></span>${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}</li>`; }).join('');
+  const exIn = (a.exceptions || []).map((e, k) => [e, (a.exception_texts || [])[k]]).filter(([e]) => G.statements[e] && G.statements[e].label === 'in');
+  const ev = (a.evidence || []).map(x => /^https?:\/\//.test(x) ? `<a href="${esc(x)}" target="_blank" rel="noopener">${esc(x)}</a>` : esc(x)).join('; ');
+  return `<div class="parts"><div class="small"><b>C</b> = ${rich(stmtText(a.conclusion))}</div><ol>${prem}</ol>
+    ${exIn.map(([e, tx]) => `<div class="warn small">⚡ exception that holds: ${rich(tx || stmtText(e))}</div>`).join('')}
+    ${ev ? `<div class="ev">Sources: ${ev}</div>` : ''}
+    <div class="small muted">${esc(a.scheme_name)} · weight ${a.base_weight.toFixed(2)} · by ${esc(a.owner)}</div></div>`;
+}
+function noteHTML(n) {
+  return `<div class="note ${esc(n.kind)}"><span class="tag">${esc(n.kind)}</span> ${esc(n.text)} <span class="muted small">— ${esc(n.by || 'tester')}, round ${n.round}</span></div>`;
+}
+function noteForm(target) {
+  return `<div class="noteform" data-target="${esc(target)}">
+    <select id="nkind">${['wrong', 'confusing', 'unreadable', 'good', 'idea', 'note'].map(k => `<option>${k}</option>`).join('')}</select>
+    <input type="text" id="ntext" placeholder="What did you expect, and what happened?">
+    <input type="text" id="nby" placeholder="Your name" value="${esc(ui.noteBy || '')}" style="max-width:9em">
+    <button class="small primary" id="nsave">Save</button> <button class="small" id="ncancel">Cancel</button></div>`;
+}
+async function saveNote(target) {
+  const text = $('#ntext').value.trim(), kind = $('#nkind').value; ui.noteBy = $('#nby').value.trim();
+  if (!text && kind === 'note') return toast('Write the note first.');
+  try { const r = await api(`/api/games/${G.id}/note`, { target, kind, text, by: ui.noteBy }); ui.flag = null; setState(r.state); toast('Noted. It will be in the export.'); }
+  catch (e) { toast(e.message); }
+}
+function dialogueClick(e) {
+  const x = sel => e.target.closest(sel);
+  let b;
+  if ((b = x('#nsave'))) return saveNote(b.closest('.noteform').dataset.target);
+  if (x('#ncancel')) { ui.flag = null; return renderDialogue(); }
+  if ((b = x('[data-flag]'))) { ui.flag = +b.dataset.flag; return renderDialogue(); }
+  if ((b = x('[data-details]'))) { const i = +b.dataset.details; ui.details.has(i) ? ui.details.delete(i) : ui.details.add(i); return renderDialogue(); }
+  if ((b = x('[data-respond]'))) { const i = +b.dataset.respond; ui.respond = ui.respond === i ? null : i; ui.openCQ = null; return renderDialogue(); }
+  if ((b = x('[data-entry]'))) { const el = $('#entry' + b.dataset.entry); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1200); } return; }
+  if ((b = x('[data-board]'))) { ui.view = 'board'; renderGamebar(); renderPlay(); return focusOn(b.dataset.board); }
+  if ((b = x('[data-act]'))) return startTargeted(b.dataset.act, b.dataset.arg, b.dataset.cqid);
+  if ((b = x('[data-cq]'))) { const k = { arg: b.dataset.arg, cq: b.dataset.cq }; ui.openCQ = ui.openCQ && ui.openCQ.arg === k.arg && ui.openCQ.cq === k.cq ? null : k; return renderDialogue(); }
 }
 
 function lbl(l) { return `<span class="lbl ${l}">${{ in: 'IN', out: 'OUT', undecided: 'UND' }[l] || l}</span>`; }
@@ -339,7 +490,7 @@ function argCard(id, side) {
   const a = G.arguments[id]; if (!a) return '';
   const status = a.in_force ? '<span class="lbl in">in force</span>' : `<span class="lbl out" title="${esc(a.why_out)}">out of force</span>`;
   const answers = a.answers ? `<div class="answers">${a.answers.positive ? 'Defends' : 'Attacks'} <button class="link" data-focus="${esc(G.arguments[a.answers.target]?.conclusion)}">${esc(a.answers.target)}</button> on the ${esc(a.answers.cq_name)} (${esc(a.answers.locus)})</div>` : '';
-  const premises = a.premises.map(p => { const ps = G.statements[p]; return `<div class="premise" data-focus="${esc(p)}"><span class="dot ${ps ? ps.label : ''}"></span><span class="ptxt">${rich(ps ? ps.text : p)}</span></div>`; }).join('');
+  const premises = a.premises.map((p, k) => { const ps = G.statements[p]; return `<div class="premise" data-focus="${esc(p)}"><span class="dot ${ps ? ps.label : ''}"></span><span class="ptxt">${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}</span></div>`; }).join('');
   const exIn = (a.exceptions || []).filter(e => G.statements[e]?.label === 'in');
   const warn = !a.in_force && a.why_out ? `<div class="warn">✗ ${esc(a.why_out)}</div>` : '';
   const exc = exIn.map(e => {
@@ -347,22 +498,26 @@ function argCard(id, side) {
     return `<div class="warn" data-focus="${esc(e)}" style="cursor:pointer">⚡ exception holds: ${esc(stmtText(e))}${by ? ` — argued by ${esc(by)}` : ''}</div>`;
   }).join('');
   const ev = (a.evidence || []).map(x => /^https?:\/\//.test(x) ? `<a href="${esc(x)}" target="_blank" rel="noopener">${esc(x)}</a>` : esc(x)).join('<br>');
-  const chips = a.cqs.map(c => {
-    const st = c.open ? 'asked' : c.attacks ? 'attacked' : c.defences ? 'defended' : '';
-    const icons = (c.open ? ' ?' : '') + (c.attacks ? ` ⚔${c.attacks.length}` : '') + (c.defences ? ` 🛡${c.defences.length}` : '');
-    return `<button class="cq ${st}" data-cq="${esc(c.cq)}" data-arg="${esc(id)}" title="${esc(c.question)}">${esc(c.name.replace(/ Question$/, ''))}${icons}</button>`;
-  }).join('');
+  const chips = cqChips(a);
   const panel = ui.openCQ && ui.openCQ.arg === id ? cqPanel(a, ui.openCQ.cq) : '';
   return `<div class="argcard ${side} ${a.in_force ? '' : 'outforce'}">
     <div class="head"><span class="scheme ${a.free ? 'free' : ''}">${esc(a.scheme_name)}</span><span class="muted">by ${esc(a.owner)} · w ${a.base_weight.toFixed(2)}</span>${status}<span class="muted mono">${esc(id)}</span>${a.moderation ? `<span class="pill small">${esc(a.moderation)}</span>` : ''}${a.kialo ? `<span class="pill small" title="Kialo location ${esc(a.kialo.location)}">Kialo</span>` : ''}</div>
     ${answers}
     ${a.text && !a.kialo ? `<div class="nl">“${rich(a.text)}”</div>` : ''}
     ${premises}
-    <div class="therefore">∴ ${esc(short(stmtText(a.conclusion), 120))}</div>
+    <div class="therefore">∴ <b>C</b>: ${esc(short(stmtText(a.conclusion), 140))}</div>
     ${warn}${exc}
     ${ev ? `<div class="ev">Sources: ${ev}</div>` : ''}
     ${chips ? `<div class="cqs">${chips}</div>` : ''}${panel}
   </div>`;
+}
+
+function cqChips(a) {
+  return a.cqs.map(c => {
+    const st = c.open ? 'asked' : c.attacks ? 'attacked' : c.defences ? 'defended' : '';
+    const icons = (c.open ? ' ?' : '') + (c.attacks ? ` ⚔${c.attacks.length}` : '') + (c.defences ? ` 🛡${c.defences.length}` : '');
+    return `<button class="cq ${st}" data-cq="${esc(c.cq)}" data-arg="${esc(a.id)}" title="${esc(c.question)}">${esc(c.name.replace(/ Question$/, ''))}${icons}</button>`;
+  }).join('');
 }
 
 function cqPanel(a, cqid) {
@@ -372,10 +527,11 @@ function cqPanel(a, cqid) {
     c.attacks ? 'attacked by ' + c.attacks.map(x => `<button class="link" data-goarg="${esc(x)}">${esc(x)}</button>`).join(', ') : '',
     c.defences ? 'defended by ' + c.defences.map(x => `<button class="link" data-goarg="${esc(x)}">${esc(x)}</button>`).join(', ') : ''].filter(Boolean).join('; ');
   const can = k => k !== 'question' || c.locus === 'premise' || c.locus === 'argument';
-  const btn = (k, label) => `<button class="small" data-act="${k}" data-arg="${esc(a.id)}" data-cqid="${esc(cqid)}" ${G.can_move && can(k) ? '' : 'disabled'} ${can(k) ? '' : 'title="Raise an exception or a counterclaim with an argument: whoever raises it must prove it"'}>${label}</button>`;
-  return `<div class="cqpanel"><b>${esc(c.name)}</b> <span class="muted">— about the ${esc(c.locus)}</span><div>${esc(c.question)}</div>
+  const btn = (k, label, tip) => `<button class="small" data-act="${k}" data-arg="${esc(a.id)}" data-cqid="${esc(cqid)}" ${G.can_move && can(k) ? '' : 'disabled'} title="${can(k) ? tip : 'Raise an exception or a counterclaim with an argument: whoever raises it must prove it'}">${label}</button>`;
+  const about = { premise: 'a premise: its author must defend it', exception: 'an exception: whoever raises it must argue it', conclusion: 'the conclusion: a counterargument', argument: 'the inference: do the reasons support the conclusion?' }[c.locus] || c.locus;
+  return `<div class="cqpanel"><b>${esc(c.name)}</b> <span class="muted small">— about ${esc(about)}</span><div>${esc(c.question)}</div>
     ${stmts ? `<ul class="small">${stmts}</ul>` : ''}${hist ? `<div class="small muted">${hist}</div>` : ''}
-    <div class="row">${btn('attack', 'Attack: answer against')}${btn('defend', 'Defend: answer for')}${btn('question', 'Ask (no answer)')}</div>
+    <div class="row">${btn('attack', 'Attack: answer no', 'Answer the question against the argument, with an argument of your own')}${btn('defend', 'Defend: answer yes', 'Answer the question in favour of the argument, with an argument of your own')}${btn('question', 'Just ask', 'Ask without answering: the argument stops counting until its author answers')}</div>
     ${G.can_move ? '' : '<div class="small muted">Wait for your turn to act on it.</div>'}</div>`;
 }
 
@@ -408,7 +564,7 @@ function renderSide() {
   if (G.pending) parts.push(pendingPanel());
   if (!G.over) parts.push('<div class="panel" id="composer"></div>');
   if (G.questions && G.questions.length) parts.push(`<div class="panel"><h2>Open questions</h2><ul class="small">${G.questions.map(q => `<li><b>${esc(q.asker)}</b> asks <b>${esc(q.owner)}</b> about <button class="link" data-goarg="${esc(q.target)}">${esc(q.target)}</button>: ${esc(q.question)}${q.turns_left ? ` <span class="req">(${q.turns_left} turn(s) left)</span>` : ''}</li>`).join('')}</ul></div>`);
-  parts.push(`<div class="panel"><h2>History</h2><div class="log"><ol>${G.log.map(l => `<li class="${l.accepted ? '' : 'rej'}"><span class="r">${l.round}.</span> ${esc(l.text)}${l.deltas && Object.keys(l.deltas).length ? ' <span class="muted">(' + Object.entries(l.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ') + ')</span>' : ''}${l.nl ? `<div class="muted small">“${esc(short(l.nl, 160))}”</div>` : ''}</li>`).join('') || '<li class="muted">No moves yet.</li>'}</ol></div></div>`);
+  if (ui.view === 'board') parts.push(`<div class="panel"><h2>History</h2><div class="log"><ol>${G.log.map(l => `<li class="${l.accepted ? '' : 'rej'}"><span class="r">${l.round}.</span> ${esc(l.text)}${l.deltas && Object.keys(l.deltas).length ? ' <span class="muted">(' + Object.entries(l.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ') + ')</span>' : ''}${l.nl ? `<div class="muted small">“${esc(short(l.nl, 160))}”</div>` : ''}</li>`).join('') || '<li class="muted">No moves yet.</li>'}</ol></div></div>`);
   side.innerHTML = parts.join('');
   side.onclick = e => {
     const ga = e.target.closest('[data-goarg]'); if (ga) { const a = G.arguments[ga.dataset.goarg]; if (a) focusOn(a.conclusion); }
@@ -466,28 +622,70 @@ function renderComposer() {
   const me = G.players.find(p => p.id === G.active);
   if (G.pending) { box.innerHTML = `<h2>${esc(G.active)}</h2><p class="muted">The move waits for the moderator.</p>`; return; }
   if (G.active_ai) {
-    box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(${esc(G.active_ai)} AI)</span> is to move</div>
-      <p class="small muted">The AI plays through the same engine: it tries moves and keeps the one that leaves it best placed.</p>
+    const claude = G.active_ai === 'claude';
+    box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(${claude ? 'Claude' : 'rule bot, ' + esc(G.active_ai)})</span> is to move</div>
+      <p class="small muted">${claude ? (G.thinking ? '<b>Thinking…</b> Claude reads the same prompt a language-model seat gets (the rules, the board, the legal questions and the schemes) and replies with a move. Its replies are kept in the export.' : 'Claude reads the same prompt a language-model seat gets and replies with a move; each move costs API credits.')
+        : 'A rule bot plays legal moves with placeholder words (“an expert”, “the subject at hand”) or words already on the board. It tests the rules; it does not understand the topic.'}</p>
       <label class="inline"><input type="checkbox" id="autoplay" ${ui.autoplay ? 'checked' : ''}> Play automatically</label>
-      <p><button id="aistep">Let it move now</button></p>`;
+      <p><button id="aistep" ${G.thinking ? 'disabled' : ''}>Let it move now</button></p>`;
     $('#autoplay').onchange = e => { ui.autoplay = e.target.checked; scheduleAI(); };
     $('#aistep').onclick = aiStep;
     return;
   }
+  if (G.seat_kind === 'llm' && !ui.manual) return composeLLM(box);
   const c = ui.c || (ui.c = newComposer('argue'));
-  const kinds = [['argue', 'Argue'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Question'], ['pass', 'Pass'], ['resign', 'Resign']];
+  const kinds = [['argue', 'New argument'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Ask'], ['pass', 'Pass'], ['resign', 'Resign']];
   const owes = (G.questions || []).filter(q => q.owner === G.active);
   box.innerHTML = `<div class="who">${esc(G.active)} to move${me && me.side ? ` <span class="pill ${me.side}">${me.side}</span>` : ''}</div>
     ${G.last_rejection ? `<div class="warn">Last move rejected: ${esc(G.last_rejection)}</div>` : ''}
     ${owes.length ? `<div class="warn">You owe an answer: ${owes.map(q => `${esc(q.question)} (about ${esc(q.target)})`).join('; ')}</div>` : ''}
-    <div class="seg">${kinds.map(([k, l]) => `<button data-kind="${k}" class="${c.kind === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <div class="seg">${kinds.map(([k, l]) => `<button data-kind="${k}" class="${c.kind === k ? 'on' : ''}" title="${esc(KIND_HELP[k])}">${l}</button>`).join('')}</div>
+    <div class="small muted kindhelp">${esc(KIND_HELP[c.kind])}</div>
+    ${G.seat_kind === 'llm' ? '<p class="small"><button class="link" id="tollm">Back to the language-model prompt</button></p>' : ''}
     <div id="cbody"></div>`;
+  const tl = $('#tollm'); if (tl) tl.onclick = () => { ui.manual = false; renderComposer(); };
   box.querySelector('.seg').onclick = e => { const b = e.target.closest('[data-kind]'); if (!b) return; ui.c = newComposer(b.dataset.kind); renderComposer(); };
   const body = $('#cbody');
   if (c.kind === 'argue') return composeArgue(body, c);
   if (c.kind === 'pass') return composeSimple(body, 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
   if (c.kind === 'resign') return composeSimple(body, 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
   return composeTargeted(body, c);
+}
+
+const KIND_HELP = {
+  argue: 'Put forward a new argument: say it in your own words, pick the scheme it fits, fill in its parts.',
+  attack: 'Answer one of an argument’s critical questions against it, backed by an argument of your own.',
+  defend: 'Answer one of an argument’s critical questions in its favour, backed by an argument of your own.',
+  question: 'Ask a critical question without answering it: the argument stops counting until its author answers.',
+  pass: 'Pass the turn.', resign: 'Give up the game.',
+};
+
+// composeLLM is the composer of a language-model seat: the prompt to copy
+// into any chatbot, and a box for its reply (the text protocol).
+function composeLLM(box) {
+  const c = ui.llm && ui.llm.key === ui.cKey ? ui.llm : (ui.llm = { key: ui.cKey, prompt: '', reply: '' });
+  box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(language model)</span> to move</div>
+    ${G.last_rejection ? `<div class="warn">Last move rejected: ${esc(G.last_rejection)}</div>` : ''}
+    <p class="small">1. Copy this prompt into a language model (any chatbot).</p>
+    <textarea id="llmprompt" readonly class="mono small" rows="7" placeholder="Loading the prompt…">${esc(c.prompt)}</textarea>
+    <p><button id="llmcopy">Copy the prompt</button> <a class="small" href="/api/games/${G.id}/prompt" target="_blank">open as text</a></p>
+    <p class="small">2. Paste its whole reply here. The move is the JSON object at the end.</p>
+    <textarea id="llmreply" rows="6" placeholder="The model's reply">${esc(c.reply)}</textarea>
+    <p><button class="primary" id="llmplay">Play the reply</button> <button class="link small" id="llmmanual">or make the move yourself</button></p>`;
+  if (!c.prompt) fetch(`/api/games/${G.id}/prompt`).then(r => r.text()).then(t => { c.prompt = t; const el = $('#llmprompt'); if (el) el.value = t; });
+  $('#llmcopy').onclick = async () => { const t = $('#llmprompt'); try { await navigator.clipboard.writeText(t.value); toast('Copied.'); } catch (e) { t.select(); document.execCommand('copy'); toast('Copied.'); } };
+  $('#llmreply').oninput = e => { c.reply = e.target.value; };
+  $('#llmmanual').onclick = () => { ui.manual = true; renderComposer(); };
+  $('#llmplay').onclick = async () => {
+    if (ui.busy) return; ui.busy = true;
+    try {
+      const r = await api(`/api/games/${G.id}/reply`, { reply: c.reply });
+      const res = r.result || {};
+      toast(res.accepted || res.abstained ? 'Played.' : res.pending ? 'Sent to the moderator.' : 'Rejected: ' + (res.error || '') + ' Copy the prompt again: it says why.', 8000);
+      setState(r.state);
+    } catch (e) { toast(e.message, 8000); }
+    finally { ui.busy = false; }
+  };
 }
 
 function composeSimple(body, text, action, label) {
@@ -503,8 +701,18 @@ function schemeOptions(ids, selected) {
 
 function templateHTML(t) { return esc(t).replace(/\{(\w+)\}/g, '<span class="var">$1</span>'); }
 
+function schemeTmpl(sc) {
+  const rd = sc.carneades && sc.carneades.reads;
+  return rd
+    ? `<div class="tmpl">${rd.premises.map(p => '<div>' + templateHTML(p) + '</div>').join('')}
+        ${(rd.assumptions || []).length ? '<div class="muted small">assumed: ' + rd.assumptions.map(templateHTML).join('; ') + '</div>' : ''}
+        <div>∴ ${templateHTML(rd.conclusion)}</div>
+        ${(rd.exceptions || []).length ? '<div class="muted small">unless: ' + rd.exceptions.map(templateHTML).join('; ') + '</div>' : ''}</div>`
+    : `<div class="tmpl">${sc.premise_templates_en.filter((p, i) => !sc.free || i < 2).map(p => '<div>' + templateHTML(p) + '</div>').join('')}<div>∴ ${templateHTML(sc.conclusion_template_en)}</div></div>`;
+}
+
 function schemeCard(sc, cq) {
-  const tmpl = `<div class="tmpl">${sc.premise_templates_en.filter((p, i) => !sc.free || i < 2).map(p => '<div>' + templateHTML(p) + '</div>').join('')}<div>∴ ${templateHTML(sc.conclusion_template_en)}</div></div>`;
+  const tmpl = schemeTmpl(sc);
   let why = '';
   if (cq) {
     const linked = (CQ[cq].backed_by || []).includes(sc.id);
@@ -527,7 +735,7 @@ function varInputs(sc, c, answerVar) {
   }
   return sc.variable_order.filter(v => v !== answerVar).map(v => {
     const spec = sc.variables[v];
-    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)} <span class="muted">(${esc(spec.type)})</span></label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}">`;
+    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}">`;
   }).join('');
 }
 function stmtDatalist() {
@@ -538,14 +746,14 @@ function composeArgue(body, c) {
   const ids = META.schemes.filter(s => !s.free || G.config.allow_other).map(s => s.id);
   const sc = SCHEME[c.scheme];
   body.innerHTML = `
-    <label>1. Your argument, in your own words</label>
+    <label>1. Say it in your own words</label>
     <textarea id="nl" placeholder="e.g. According to the IPCC, the climate experts, human activity is warming the planet.">${esc(c.text)}</textarea>
     <button class="small" id="suggest">Which scheme fits?</button>
     <div class="suggest" id="sugg">${(c.suggestions || []).map(s => `<button class="small" data-pick="${esc(s.scheme_id)}" title="matched: ${esc(s.matched.join(', '))}">${esc(s.name)}</button>`).join('') || (c.suggestions ? '<span class="small muted">No cue words matched: choose a scheme yourself' + (G.config.allow_other ? ', or “Other”' : '') + '.</span>' : '')}</div>
-    <label>2. The scheme it fits (official Walton schemes)</label>
+    <label>2. Pick the scheme it fits</label>
     <select id="scheme">${schemeOptions(ids, c.scheme)}</select>
     ${sc ? schemeCard(sc) : ''}
-    ${sc ? '<label>3. Break it into the scheme\'s parts</label>' + varInputs(sc, c, '') : ''}
+    ${sc ? '<label>3. Fill in its parts: short phrases, as in the examples</label>' + varInputs(sc, c, '') : ''}
     ${sc ? evidenceInput(sc, c) : ''}
     <div id="preview"></div>
     <p><button class="primary" id="play1" disabled>Put forward this argument</button></p>`;
@@ -612,15 +820,15 @@ function composeTargeted(body, c) {
     <select id="target">${tlist.map(t => `<option value="${esc(t)}" ${t === c.target ? 'selected' : ''}>${esc(argTitle(t))}: ${esc(short(stmtText(G.arguments[t].conclusion), 60))}</option>`).join('')}</select>
     <div class="small muted">∴ ${esc(stmtText(a.conclusion))}</div>
     <label>2. The critical question</label>
-    <select id="opt">${opts.map(x => `<option value="${esc(optKey(x))}" ${optKey(x) === c.opt ? 'selected' : ''}>${esc(CQ[x.cq].name)}${x.stmt ? ' — ' + esc(short(stmtText(x.stmt), 50)) : ''} (${esc(x.locus)})</option>`).join('')}</select>
-    <div class="answerbox"><b>${esc(questionOf(a, o.cq))}</b><div class="small">About the ${esc(o.locus)}${o.stmt ? ': ' + esc(stmtText(o.stmt).replace(/\.$/, '')) : ''}. You give ${what}.</div>
+    <select id="opt">${opts.map(x => `<option value="${esc(optKey(x))}" ${optKey(x) === c.opt ? 'selected' : ''}>${esc(CQ[x.cq].name.replace(/ Question$/, ''))}${x.stmt ? ': ' + esc(short(stmtText(x.stmt), 60)) : ''}</option>`).join('')}</select>
+    <div class="answerbox"><b>${esc(questionOf(a, o.cq))}</b><div class="small muted">You give ${what}.</div>
       ${answer ? `<div>Your answer: <b>${esc(plain(answer))}</b></div>` : ''}</div>
     ${kind === 'question' ? '' : `
       <label>3. The scheme that backs your answer (from the NASCQ links)</label>
       <select id="scheme">${schemeOptions(schemes, c.scheme)}</select>
       ${sc ? schemeCard(sc, o.cq) : ''}
       ${sc ? `<label>4. In your own words (optional)</label><textarea id="nl">${esc(c.text)}</textarea>` : ''}
-      ${sc ? '<label>5. The scheme\'s parts' + (sc.answer_variable ? ` (<span class="var">${esc(sc.answer_variable)}</span> is your answer)` : '') + '</label>' + varInputs(sc, c, sc.answer_variable) : ''}
+      ${sc ? '<label>5. Fill in its other parts' + (sc.answer_variable ? ` (<span class="var">${esc(sc.answer_variable)}</span> is your answer, filled in for you)` : '') + '</label>' + varInputs(sc, c, sc.answer_variable) : ''}
       ${sc ? evidenceInput(sc, c) : ''}`}
     <div id="preview"></div>
     <p><button class="primary" id="play1" disabled>${{ attack: 'Attack', defend: 'Defend', question: 'Ask' }[kind]}</button></p>`;
@@ -662,8 +870,9 @@ function schedulePreview(c, build, delay = 350) {
     const changes = (p.changes || []).slice(0, 8).map(x => `<div class="chg">${lbl(x.before === 'new' ? 'undecided' : x.before)} → ${lbl(x.after)} ${esc(short(x.text, 70))}</div>`).join('');
     const deltas = p.deltas && Object.keys(p.deltas).length ? `<div class="small">Scores: ${Object.entries(p.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ')}</div>` : '';
     box.innerHTML = `<div class="preview ${p.ok ? 'ok' : 'bad'}">
-      ${p.premises && p.premises.length ? '<b>You argue</b><ol>' + p.premises.map(x => `<li>${rich(x)}</li>`).join('') + '</ol>' : ''}
-      ${p.effect ? `<div>∴ <b>${rich(p.effect)}</b></div>` : ''}
+      ${p.conclusion ? `<div>You argue that <b>C</b>: ${rich(p.conclusion)}</div>` : ''}
+      ${p.premises && p.premises.length ? '<div class="small">because</div><ol>' + p.premises.map(x => `<li>${rich(x)}</li>`).join('') + '</ol>' : ''}
+      ${p.effect && a.target_arg_id ? `<div>∴ <b>${rich(p.effect)}</b></div>` : ''}
       ${p.ok ? `<div class="small" style="margin-top:6px">${changes ? 'What changes:' : 'Legal move.'}</div>${changes}${deltas}` : `<div class="warn">${esc(p.error)}</div>`}</div>`;
     btn.disabled = !p.ok;
   }, delay);
@@ -729,13 +938,13 @@ function networkSVG(sel) {
 
 function schemeDetail(s) {
   if (!s) return '';
-  const vars = s.variable_order.map(v => `<tr><td><span class="var">${esc(v)}</span></td><td>${esc(s.variables[v].type)}</td><td>${esc(s.variables[v].description)}</td></tr>`).join('');
+  const vars = [...s.variable_order, ...(s.answer_variable && !s.variable_order.includes(s.answer_variable) ? [s.answer_variable] : [])].map(v => `<tr><td><span class="var">${esc(v)}</span></td><td>${esc(s.variables[v].type)}</td><td>${esc(s.variables[v].description)}${v === s.answer_variable ? ' <span class="muted">(the answer, when it answers a question)</span>' : ''}</td><td class="muted">${s.variables[v].example_en ? 'e.g. ' + esc(s.variables[v].example_en) : ''}</td></tr>`).join('');
   const asked = s.asked.map(a => `<tr><td><button class="link" data-n="cq" data-id="${esc(a.cq)}">${esc(CQ[a.cq].name)}</button></td><td>${esc(a.locus)}</td><td class="mono">${esc(a.pattern || '')}</td><td>${esc(CQ[a.cq].question_template_en)}</td></tr>`).join('');
   const cn = s.carneades;
   return `<h2>${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h2>
     <p>${esc(s.description_en || '')}</p>
     <p class="small">Semantic type <b>${esc(s.semantic_type)}</b> · weight ${s.base_weight.toFixed(2)}${s.thesis_independent ? ' · thesis-independent (backs every question)' : ''}${s.answer_variable ? ` · answer variable <span class="var">${esc(s.answer_variable)}</span>` : ''}${s.evidence ? ` · evidence ${esc(s.evidence)}: ${esc(s.evidence_note_en)}` : ''}</p>
-    <div class="schemecard tmpl">${s.premise_templates_en.map(p => '<div>' + templateHTML(p) + '</div>').join('')}<div>∴ ${templateHTML(s.conclusion_template_en)}</div></div>
+    <div class="schemecard">${schemeTmpl(s)}</div>
     <h3>Variables</h3><table>${vars}</table>
     <h3>Critical questions asked of it</h3><table><tr><th>Question</th><th>About</th><th>Formula</th><th>Text</th></tr>${asked || '<tr><td colspan=4 class="muted">None</td></tr>'}</table>
     <h3>Backs answers to</h3><p>${s.thesis_independent ? 'every question (thesis-independent)' : s.backs.map(q => `<button class="link" data-n="cq" data-id="${esc(q)}">${esc(CQ[q].name)}</button>`).join(', ') || 'no question yet'}</p>
@@ -774,7 +983,10 @@ function renderRules() {
     <li>the <b>inference</b>: the negative answer undercuts the argument.</li>
   </ul>
   <p><b>Answers are arguments too.</b> A negative answer attacks, a positive answer defends, and either one is a new instance of a scheme with its own critical questions. So a dispute deepens: each answer protects the part above it until it is knocked out.</p>
-  <p><b>Moves:</b> Argue (a new argument) · Attack (answer a question against an argument) · Defend (answer it in the argument's favour) · Question (ask without answering: the proponent must answer) · Pass · Resign.</p>
+  <p><b>Moves:</b> New argument · Attack (answer a question against an argument) · Defend (answer it in the argument's favour) · Ask (a question without an answer: the proponent must answer) · Pass · Resign.</p>
+  <p><b>Any premise can be challenged.</b> Walton's critical questions point at the typical weak spots of a scheme, which are often its exceptions and its conclusion; practical reasoning, for example, has five, and only one (possibility) is about one of its premises. With the option <i>Any premise can be questioned</i> (on by default), the generic <i>Premise Acceptability</i> question is asked of every premise that no question of the scheme is about.</p>
+  <p><b>How to read the English.</b> The players' own words appear in ‘single quotes’; a statement inside another statement in “double quotes”, and one nested deeper in [brackets], shortened. On an argument, its conclusion is called C, so its premises read “‘The IPCC’ says that C” rather than repeating it.</p>
+  <p><b>Who plays.</b> A seat is a person in this browser; a <i>language model</i> (you copy the seat's prompt into any chatbot and paste its reply back: the text protocol, <span class="mono">docs/protocol.md</span>); Claude through the API (when the server runs with <span class="mono">--claude</span>); or a <i>rule bot</i>, which plays legal moves with placeholder words and tests the rules, not the arguments.</p>
   <p><b>Options:</b> the <i>Other</i> scheme lets players write premises and a conclusion freely when no listed scheme fits (it has generic questions, and its arguments are exported for mining new schemes); a <i>moderator</i> approves or rejects each move, may set its weight, and may accept or reject statements (Gordon &amp; Walton 2006); <i>evidence</i> can be required for schemes such as expert opinion.</p>
   <p><b>Winning</b> depends on the mode: points (once per move, or kept live), a debate on a claim (pro carries the burden of proof; the verdict decides), a critical-question duel (an unanswered question loses), solo belief revision, and more. See <span class="mono">docs/game-rules.md</span>.</p>
   </div>`;

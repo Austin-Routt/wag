@@ -58,7 +58,7 @@ func TestOtherScheme(t *testing.T) {
 	if !gs.bridge.PremiseExists(d, "asserts(oecd,"+p2+")") {
 		t.Fatalf("the expert's premises are not about the questioned premise: %v", gs.Adapter.Graph.Arguments[d].Premises)
 	}
-	if !strings.Contains(gs.Say("asserts(oecd,"+p2+")"), "Oecd asserts that “Taxes reduce consumption”") {
+	if !strings.Contains(gs.Say("asserts(oecd,"+p2+")"), "‘Oecd’ says that “Taxes reduce consumption”") {
 		t.Fatalf("Say: %q", gs.Say("asserts(oecd,"+p2+")"))
 	}
 	if arg.Conclusion.Label != caes.In {
@@ -184,7 +184,7 @@ func TestModeration(t *testing.T) {
 	if errs := gs.CheckInvariants(); len(errs) > 0 {
 		t.Fatal(errs)
 	}
-	if !strings.HasPrefix(gs.DescribeMove(gs.MoveHistory[len(gs.MoveHistory)-1]), "The moderator accepts: Action carbon tax is possible") {
+	if !strings.HasPrefix(gs.DescribeMove(gs.MoveHistory[len(gs.MoveHistory)-1]), "The moderator accepts: ‘Carbon tax’ is possible") {
 		t.Fatalf("describe: %q", gs.DescribeMove(gs.MoveHistory[len(gs.MoveHistory)-1]))
 	}
 }

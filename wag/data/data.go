@@ -25,3 +25,9 @@ var CQsJSON []byte
 //
 //go:embed nascq/edges.json
 var EdgesJSON []byte
+
+// ContextsJSON holds the context presets (contexts.json): proof standard,
+// evidence and scheme weights for kinds of discussion.
+//
+//go:embed contexts.json
+var ContextsJSON []byte

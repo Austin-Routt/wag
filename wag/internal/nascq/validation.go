@@ -366,6 +366,10 @@ func (n *NASCQ) validateTarget(action ProposedAction, va *ValidatedAction, graph
 				return nil, fmt.Errorf("S8: premise %q not found in argument %q",
 					action.TargetPremiseID, action.TargetArgID)
 			}
+			if locus.Pattern == "" && action.AnswersCQID != "" && n.CoveredPremises(graph, action.TargetArgID, targetScheme)[action.TargetPremiseID] {
+				return nil, fmt.Errorf("S8: a critical question of its own is about premise %q of %q: ask that one",
+					action.TargetPremiseID, action.TargetArgID)
+			}
 		} else if locus.Pattern == "" {
 			return nil, fmt.Errorf("S8: name the premise of %q (target_premise_id)", action.TargetArgID)
 		} else if action.TargetPremiseID = graph.PremiseMatching(action.TargetArgID, locus.Pattern); action.TargetPremiseID == "" {

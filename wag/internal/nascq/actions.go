@@ -98,16 +98,23 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 
 			// The locus decides what the answers are about; a premise or
 			// exception the target does not have cannot be asked about. A
-			// premise locus without a pattern is about any premise: one set
-			// of templates per premise.
+			// premise locus without a pattern is about any premise that no
+			// other question of the scheme is about: one set of templates per
+			// premise.
 			locus := n.LocusOf(cqID, nascqSchemeID)
 			stmtIDs := []string{""}
 			switch locus.Kind {
 			case "":
 				continue // no locus (Lint reports it)
 			case LocusPremise:
-				if locus.Pattern == "" {
-					stmtIDs = graph.PremiseIDs(argID)
+				if locus.Pattern == "" { // any premise no other question is about
+					covered := n.CoveredPremises(graph, argID, nascqSchemeID)
+					stmtIDs = nil
+					for _, id := range graph.PremiseIDs(argID) {
+						if !covered[id] {
+							stmtIDs = append(stmtIDs, id)
+						}
+					}
 				} else {
 					stmtIDs = []string{graph.PremiseMatching(argID, locus.Pattern)}
 				}

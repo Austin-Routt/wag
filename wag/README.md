@@ -18,7 +18,7 @@ central claim, solo belief revision) are combinations of a few settings.
 | `internal/nascq` | NASCQ loading, move validation (S0–S8, Q1), action enumeration, data lint. |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
 | `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments. |
-| `internal/server` | HTTP server and browser interface (`web/`, embedded): play, moderate, browse the NASCQ, import Kialo. |
+| `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`) and Claude seats (`llm.go`). |
 | `cmd/wag-cli` | Command-line game, data lint and tournaments. |
 | `cmd/wag-server` | The browser prototype: `go run ./cmd/wag-server` opens it at http://127.0.0.1:8080. |
 
@@ -27,7 +27,13 @@ central claim, solo belief revision) are combinations of a few settings.
 ```sh
 go run ./cmd/wag-server                                  # serves http://127.0.0.1:8080 and opens it
 go run ./cmd/wag-server --kialo-dir <visualizer>/data    # also offer the captured Kialo discussions
+go run ./cmd/wag-server --claude                         # also offer Claude seats (ANTHROPIC_API_KEY; costs API credits)
 ```
+
+Building from source needs Go 1.24 or later (the Anthropic SDK requires it).
+A seat can be a person, a language model through the text protocol
+(`../docs/protocol.md`: copy the prompt into any chatbot, paste the reply
+back), Claude through the API, or a rule bot (legal moves, placeholder words).
 
 On Windows, double-click `run-wag-server.bat` (needs Go), or run a prebuilt
 `wag-server.exe` (`GOOS=windows GOARCH=amd64 go build ./cmd/wag-server`).
@@ -100,11 +106,16 @@ The rulebook is `../docs/game-rules.md`; in brief:
   says.
 
 Options: `AllowOther` (the user-defined "Other" scheme, for arguments no
-Walton scheme fits), `RequireEvidence` (schemes marked `evidence: required`
-need a source), `Moderated` (a moderator approves each move and can accept or
-reject statements).
+Walton scheme fits), `AnyPremise` (the generic premise question for every
+premise no critical question covers; on in every mode), `RequireEvidence`
+(schemes marked `evidence: required` need a source), `Moderated` (a moderator
+approves each move and can accept or reject statements), and a context
+preset (`data/contexts.json`: proof standard, sources, draft scheme weights).
 
 `../docs/review-2026-10-13.md`, `../docs/review-2026-10-13-part2.md` and
-`../docs/review-2026-10-13-part3.md` explain the design, what is still missing
-and the balance measurements. `../docs/walton-audit/` audits the Walton scheme
-collection for the NASCQ expansion.
+`../docs/review-2026-10-13-part3.md` and `../docs/review-2026-10-13-part4.md`
+explain the design, what is still missing and the balance measurements.
+`../docs/walton-audit/` audits the Walton scheme collection,
+`../docs/book-catalogue/` catalogues the schemes and critical questions of
+Walton, Reed & Macagno (2008), pp. 1–138, against WAG's, and
+`../docs/kialo-pilot/` is a pilot of formalizing Kialo claims as schemes.

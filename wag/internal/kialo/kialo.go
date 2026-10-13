@@ -71,7 +71,7 @@ type Relation struct {
 // claim, or that would close a cycle (a claim reused under its own
 // descendant), which WAG's graphs may not have.
 func (d *Discussion) Plan(maxDepth int) ([]Relation, *Report) {
-	rep := &Report{Discussion: d.ID, Title: d.Title, Claims: len(d.Claims)}
+	rep := &Report{Discussion: d.ID, Title: d.Title, Claims: len(d.Claims), Depth: maxDepth}
 	children := map[string][]Edge{}
 	for _, e := range d.Edges {
 		if !e.Active {
@@ -204,12 +204,13 @@ type Report struct {
 	Claims        int    `json:"claims"`
 	Pros          int    `json:"pros"`
 	Cons          int    `json:"cons"`
-	Voted         int    `json:"voted"`          // relations with impact votes (the others weigh DefaultWeight)
-	Inactive      int    `json:"inactive"`       // archived or otherwise inactive relations, not imported
-	Unreachable   int    `json:"unreachable"`    // current relations not below the thesis
-	Empty         int    `json:"empty"`          // relations to an empty claim
-	Cycles        int    `json:"cycles"`         // relations left out because they would close a cycle
-	SideConflicts int    `json:"side_conflicts"` // claims reached as both pro and con (the first side is kept)
-	BeyondDepth   int    `json:"beyond_depth"`   // relations below the depth limit
-	Arguments     int    `json:"arguments"`      // arguments created
+	Voted         int    `json:"voted"`           // relations with impact votes (the others weigh DefaultWeight)
+	Inactive      int    `json:"inactive"`        // archived or otherwise inactive relations, not imported
+	Unreachable   int    `json:"unreachable"`     // current relations not below the thesis
+	Empty         int    `json:"empty"`           // relations to an empty claim
+	Cycles        int    `json:"cycles"`          // relations left out because they would close a cycle
+	SideConflicts int    `json:"side_conflicts"`  // claims reached as both pro and con (the first side is kept)
+	BeyondDepth   int    `json:"beyond_depth"`    // relations below the depth limit
+	Arguments     int    `json:"arguments"`       // arguments created
+	Depth         int    `json:"depth,omitempty"` // the depth limit (0: none)
 }

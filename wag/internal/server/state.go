@@ -41,6 +41,12 @@ type State struct {
 	// CanMove: a human player is to move (the moves about an argument come
 	// from /api/games/{id}/moves?target=...).
 	CanMove bool `json:"can_move"`
+	// Thinking: a Claude seat is waiting for the model.
+	Thinking bool `json:"thinking,omitempty"`
+	// Notes are the testers' remarks on the game.
+	Notes []Note `json:"notes"`
+	// SeatKind is the kind of the seat to move (human, llm, random, greedy, claude).
+	SeatKind string `json:"seat_kind,omitempty"`
 }
 
 // ConfigView is the game's configuration, for display.
@@ -56,6 +62,8 @@ type ConfigView struct {
 	Standard        string  `json:"claim_standard,omitempty"`
 	ConcedeOnPass   bool    `json:"concede_on_pass,omitempty"`
 	AllowOther      bool    `json:"allow_other,omitempty"`
+	AnyPremise      bool    `json:"any_premise,omitempty"`
+	Context         string  `json:"context,omitempty"`
 	Moderated       bool    `json:"moderated,omitempty"`
 	RequireEvidence bool    `json:"require_evidence,omitempty"`
 }
@@ -98,28 +106,32 @@ type StmtState struct {
 
 // ArgState is an argument a player made (or a question).
 type ArgState struct {
-	ID          string       `json:"id"`
-	Owner       string       `json:"owner"`
-	Role        string       `json:"role"` // main or question
-	Scheme      string       `json:"scheme"`
-	SchemeName  string       `json:"scheme_name"`
-	Free        bool         `json:"free,omitempty"`
-	Weight      float64      `json:"weight"`      // evaluated: 0 if out of force
-	BaseWeight  float64      `json:"base_weight"` // the weight it was made with
-	InForce     bool         `json:"in_force"`
-	WhyOut      string       `json:"why_out,omitempty"`
-	Conclusion  string       `json:"conclusion"`
-	Premises    []string     `json:"premises"`
-	Exceptions  []string     `json:"exceptions,omitempty"`
-	Undercutter string       `json:"undercutter,omitempty"`
-	UndercutBy  []string     `json:"undercut_by,omitempty"` // arguments for its undercutter
-	Text        string       `json:"text,omitempty"`
-	Evidence    []string     `json:"evidence,omitempty"`
-	Answers     *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
-	CQs         []CQOnArg    `json:"cqs"`
-	Move        int          `json:"move"` // index of the move that made it in the log, -1 if imported
-	Moderation  string       `json:"moderation,omitempty"`
-	Kialo       *KialoOrigin `json:"kialo,omitempty"`
+	ID         string   `json:"id"`
+	Owner      string   `json:"owner"`
+	Role       string   `json:"role"` // main or question
+	Scheme     string   `json:"scheme"`
+	SchemeName string   `json:"scheme_name"`
+	Free       bool     `json:"free,omitempty"`
+	Weight     float64  `json:"weight"`      // evaluated: 0 if out of force
+	BaseWeight float64  `json:"base_weight"` // the weight it was made with
+	InForce    bool     `json:"in_force"`
+	WhyOut     string   `json:"why_out,omitempty"`
+	Conclusion string   `json:"conclusion"`
+	Premises   []string `json:"premises"`
+	Exceptions []string `json:"exceptions,omitempty"`
+	// PremiseTexts and ExceptionTexts read the premises and exceptions as
+	// the card shows them, with the conclusion as "C" (GameState.SayIn).
+	PremiseTexts   []string     `json:"premise_texts,omitempty"`
+	ExceptionTexts []string     `json:"exception_texts,omitempty"`
+	Undercutter    string       `json:"undercutter,omitempty"`
+	UndercutBy     []string     `json:"undercut_by,omitempty"` // arguments for its undercutter
+	Text           string       `json:"text,omitempty"`
+	Evidence       []string     `json:"evidence,omitempty"`
+	Answers        *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
+	CQs            []CQOnArg    `json:"cqs"`
+	Move           int          `json:"move"` // index of the move that made it in the log, -1 if imported
+	Moderation     string       `json:"moderation,omitempty"`
+	Kialo          *KialoOrigin `json:"kialo,omitempty"`
 }
 
 // AnswerOf says which question an answer argument answers.
@@ -172,6 +184,18 @@ type LogEntry struct {
 	Deltas   map[string]float64 `json:"deltas,omitempty"`
 	Args     []string           `json:"args,omitempty"`
 	NL       string             `json:"nl,omitempty"` // the player's own words
+
+	// The move in parts, for the dialogue view.
+	Kind     string   `json:"kind"`               // argue, attack, defend, question, pass, resign, decide, rejected, timeout
+	Target   string   `json:"target,omitempty"`   // the argument the move answers or questions
+	CQ       string   `json:"cq,omitempty"`       // the critical question
+	CQName   string   `json:"cq_name,omitempty"`  // its name
+	Question string   `json:"question,omitempty"` // its text, about the target
+	About    string   `json:"about,omitempty"`    // what of the target it is about, in words
+	Answer   string   `json:"answer,omitempty"`   // what the move argues (its main argument's conclusion)
+	Scheme   string   `json:"scheme,omitempty"`   // the scheme of the main argument
+	Reason   string   `json:"reason,omitempty"`   // why a rejected move was rejected
+	Effects  []string `json:"effects,omitempty"`  // what the move changed: the claim, arguments in or out of force
 }
 
 // MovesState lists, per argument, the critical questions the player to move
@@ -208,7 +232,7 @@ func (s *Session) buildState() *State {
 	c := gs.Config
 	st.Config = ConfigView{Mode: c.Mode, Objective: c.Objective, Scoring: c.Scoring.Model, MaxRounds: c.MaxTurns,
 		TargetScore: c.TargetScore, AnswerWithin: c.AnswerWithin, ConcedeOnPass: c.ConcedeOnPass,
-		AllowOther: c.AllowOther, Moderated: c.Moderated, RequireEvidence: c.RequireEvidence}
+		AllowOther: c.AllowOther, AnyPremise: c.AnyPremise, Context: c.Context, Moderated: c.Moderated, RequireEvidence: c.RequireEvidence}
 	if st.Config.Objective == "" {
 		st.Config.Objective = game.ObjectivePoints
 	}
@@ -317,6 +341,7 @@ func (s *Session) buildState() *State {
 		for _, p := range arg.Premises {
 			if p.Stmt != nil {
 				as.Premises = append(as.Premises, p.Stmt.Id)
+				as.PremiseTexts = append(as.PremiseTexts, gs.SayIn(id, p.Stmt.Id))
 				ps := stmt(p.Stmt)
 				ps.PremiseOf = append(ps.PremiseOf, id)
 			}
@@ -329,6 +354,7 @@ func (s *Session) buildState() *State {
 					if len(x.Premises) == 1 {
 						e := stmt(x.Premises[0].Stmt)
 						as.Exceptions = append(as.Exceptions, e.ID)
+						as.ExceptionTexts = append(as.ExceptionTexts, gs.SayIn(id, e.ID))
 						e.ExceptionOf = append(e.ExceptionOf, id)
 					}
 				default:
@@ -389,8 +415,13 @@ func (s *Session) buildState() *State {
 			cq := CQOnArg{CQ: q.ID, Name: q.Name, Question: gs.QuestionText(q.ID, id), Locus: l.Kind}
 			switch l.Kind {
 			case nascq.LocusPremise:
-				if l.Pattern == "" {
-					cq.Stmts = as.Premises
+				if l.Pattern == "" { // any premise no other question is about
+					covered := gs.NASCQ.CoveredPremises(gs.Bridge(), id, as.Scheme)
+					for _, p := range as.Premises {
+						if !covered[p] {
+							cq.Stmts = append(cq.Stmts, p)
+						}
+					}
 				} else if p := gs.Adapter.PremiseMatching(id, l.Pattern); p != "" {
 					cq.Stmts = []string{p}
 				}
@@ -461,15 +492,14 @@ func (s *Session) buildState() *State {
 		}
 	}
 	for i, m := range gs.MoveHistory {
-		e := LogEntry{Index: i, Round: m.TurnNumber, Player: m.PlayerID, Text: gs.DescribeMove(m),
-			Accepted: len(m.ArgIDs) > 0 || m.Abstained || m.Resigned || m.Action.Type == "decide",
-			Deltas:   m.ScoreDeltas, Args: m.ArgIDs, NL: m.Action.Text}
-		if !e.Accepted && m.Action.Type != "" && m.Moderation == "" {
-			e.Text = fmt.Sprintf("%s's move was rejected", m.PlayerID)
-		}
-		st.Log = append(st.Log, e)
+		st.Log = append(st.Log, logEntry(gs, i, m, madeBy))
 	}
-	st.CanMove = !gs.Terminated && gs.Pending == nil && st.ActiveAI == ""
+	st.CanMove = !gs.Terminated && gs.Pending == nil && st.ActiveAI == "" && !s.thinking
+	st.Thinking = s.thinking
+	st.Notes = append([]Note{}, s.Notes...)
+	if i := gs.ActivePlayerIdx; i >= 0 && i < len(s.Seats) {
+		st.SeatKind = s.Seats[i].Kind
+	}
 	return st
 }
 
@@ -642,5 +672,120 @@ func appendNew(list []string, x string) []string {
 func sortedStrings(xs []string) []string {
 	out := append([]string{}, xs...)
 	sort.Strings(out)
+	return out
+}
+
+// logEntry is a move of the history, in parts and in words.
+func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) LogEntry {
+	a := m.Action
+	e := LogEntry{Index: i, Round: m.TurnNumber, Player: m.PlayerID, Text: gs.DescribeMove(m),
+		Accepted: len(m.ArgIDs) > 0 || m.Abstained || m.Resigned || a.Type == "decide",
+		Deltas:   m.ScoreDeltas, Args: m.ArgIDs, NL: a.Text, Target: a.TargetArgID, CQ: a.AnswersCQID}
+	if q := gs.NASCQ.GetCQ(a.AnswersCQID); q != nil {
+		e.CQName = q.Name
+		if a.TargetArgID != "" {
+			e.Question = gs.QuestionAbout(a.AnswersCQID, a.TargetArgID, a.TargetPremiseID)
+		}
+	}
+	switch {
+	case a.Type == "decide":
+		e.Kind = "decide"
+	case m.Resigned:
+		e.Kind = "resign"
+	case m.TimedOut:
+		e.Kind = "timeout"
+	case m.Abstained:
+		e.Kind = "pass"
+	case !e.Accepted:
+		e.Kind, e.Reason = "rejected", m.Rejection
+		if e.Reason == "" && m.Moderation != "" {
+			e.Reason = m.Moderation
+		}
+		e.Text = fmt.Sprintf("%s's move was rejected", m.PlayerID)
+		if e.Reason != "" {
+			e.Text += ": " + e.Reason
+		}
+	case a.Type == "question":
+		e.Kind = "question"
+	case a.Type == "attack":
+		e.Kind = "attack"
+	case a.TargetArgID != "":
+		e.Kind = "defend"
+	default:
+		e.Kind = "argue"
+	}
+	if len(m.ArgIDs) > 0 && e.Kind != "question" {
+		main := gs.Adapter.Graph.Arguments[m.ArgIDs[0]]
+		if main != nil && main.Conclusion != nil {
+			e.Answer = gs.Say(main.Conclusion.Id)
+			e.Scheme = gs.SchemeName(main)
+		}
+	}
+	if a.TargetArgID != "" && a.AnswersCQID != "" {
+		if t := gs.Adapter.Graph.Arguments[a.TargetArgID]; t != nil && t.Scheme != nil {
+			if sid := gs.NASCQ.FindNASCQSchemeID(t.Scheme.Id); sid != "" {
+				e.About = aboutWords(gs.NASCQ.LocusOf(a.AnswersCQID, sid).Kind)
+			}
+		}
+	}
+	if e.Accepted {
+		e.Effects = effects(gs, m, madeBy)
+	}
+	return e
+}
+
+func aboutWords(locus string) string {
+	return map[string]string{nascq.LocusPremise: "a premise", nascq.LocusException: "an exception",
+		nascq.LocusConclusion: "the conclusion", nascq.LocusArgument: "the inference"}[locus]
+}
+
+// effects says what a move changed: the claim's label, and which arguments
+// that were already on the board went out of force or came back into it.
+// An argument is in force when its premises are In and its undercutter is
+// not (exceptions undercut).
+func effects(gs *game.GameState, m game.Move, madeBy map[string]int) []string {
+	var out []string
+	before, after := m.LabelsBefore, m.LabelsAfter
+	if before == nil || after == nil {
+		return nil
+	}
+	if c := gs.Claim; c != "" {
+		if b, a := before[c], after[c]; b != a {
+			out = append(out, fmt.Sprintf("The claim is now %s (it was %s).", strings.ToUpper(labelName(a)), labelName(b)))
+		}
+	}
+	mine := map[string]bool{}
+	for _, id := range m.ArgIDs {
+		mine[id] = true
+	}
+	inForce := func(arg *caes.Argument, labels map[string]caes.Label) bool {
+		for _, p := range arg.Premises {
+			if p.Stmt != nil && labels[p.Stmt.Id] != caes.In {
+				return false
+			}
+		}
+		return arg.Undercutter == nil || labels[arg.Undercutter.Id] != caes.In
+	}
+	var ids []string
+	for id := range madeBy {
+		ids = append(ids, id)
+	}
+	carneades.SortArgumentIDs(ids)
+	for _, id := range ids {
+		arg := gs.Adapter.Graph.Arguments[id]
+		if arg == nil || mine[id] || carneades.ArgumentRole(arg) != carneades.RoleMain {
+			continue
+		}
+		if _, existed := before[arg.Conclusion.Id]; !existed {
+			continue
+		}
+		b, a := inForce(arg, before), inForce(arg, after)
+		switch {
+		case b && !a:
+			out = append(out, fmt.Sprintf("%s (%s's) no longer holds.", id, ownerOf(arg)))
+		case !b && a:
+			out = append(out, fmt.Sprintf("%s (%s's) holds again.", id, ownerOf(arg)))
+		}
+	}
 	return out
 }

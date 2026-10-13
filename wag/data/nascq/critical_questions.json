@@ -2,7 +2,7 @@
   "CQ:other_goals": {
     "name": "Other Goals Question",
     "semantic_type": "value",
-    "question_template_en": "Are there goals other than {G} that should have priority?",
+    "question_template_en": "Are there goals other than {G} that should come first?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "rebuttal",
@@ -13,7 +13,7 @@
   "CQ:other_means": {
     "name": "Other Means Question",
     "semantic_type": "action",
-    "question_template_en": "Are there alternative actions to {A} that also achieve {G}?",
+    "question_template_en": "Could an action other than {A} also achieve {G}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -24,7 +24,7 @@
   "CQ:side_effect": {
     "name": "Side Effects Question",
     "semantic_type": "causality",
-    "question_template_en": "Would performing {A} have undesirable side effects?",
+    "question_template_en": "Would doing {A} have bad side effects?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -35,7 +35,7 @@
   "CQ:possibility": {
     "name": "Possibility Question",
     "semantic_type": "causality",
-    "question_template_en": "Is it actually possible to perform action {A}?",
+    "question_template_en": "Is {A} actually possible?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -58,7 +58,7 @@
   "CQ:evidence": {
     "name": "Evidence Question",
     "semantic_type": "truth",
-    "question_template_en": "Is there sufficient evidence for the claimed connection between {A} and {G}?",
+    "question_template_en": "Is there enough evidence that doing {A} brings about {G}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -69,7 +69,7 @@
   "CQ:likelihood": {
     "name": "Likelihood Question",
     "semantic_type": "truth",
-    "question_template_en": "How likely is it that the claimed effect will actually occur?",
+    "question_template_en": "How likely is it that the claimed link actually holds?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -80,7 +80,7 @@
   "CQ:other_event": {
     "name": "Other Event Question",
     "semantic_type": "causality",
-    "question_template_en": "Is there another event that would more reliably account for {A}?",
+    "question_template_en": "Could something other than {B} better explain why {A} is observed?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -91,7 +91,7 @@
   "CQ:expertise": {
     "name": "Expertise Question",
     "semantic_type": "source",
-    "question_template_en": "How credible is {W} as an expert source in {D}?",
+    "question_template_en": "How credible is {W} as an expert on {D}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -102,7 +102,7 @@
   "CQ:field": {
     "name": "Field Question",
     "semantic_type": "property",
-    "question_template_en": "Is the claim {S} within the field {D}?",
+    "question_template_en": "Is {S} really a matter of {D}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -113,7 +113,7 @@
   "CQ:opinion": {
     "name": "Opinion Question",
     "semantic_type": "truth",
-    "question_template_en": "Did {W} really assert {S}?",
+    "question_template_en": "Did {W} really say that {S}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -124,7 +124,7 @@
   "CQ:trustworthiness": {
     "name": "Trustworthiness Question",
     "semantic_type": "source",
-    "question_template_en": "Is {W} reliable as a source, honest and unbiased?",
+    "question_template_en": "Is {W} honest and unbiased?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -135,7 +135,7 @@
   "CQ:consistency": {
     "name": "Consistency Question",
     "semantic_type": "truth",
-    "question_template_en": "Is {S} consistent with what other credible sources assert?",
+    "question_template_en": "Do other credible sources agree that {S}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -146,7 +146,7 @@
   "CQ:backup_evidence": {
     "name": "Backup Evidence Question",
     "semantic_type": "truth",
-    "question_template_en": "Is the assertion of {W} based on evidence?",
+    "question_template_en": "Is what {W} says based on evidence?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -157,7 +157,7 @@
   "CQ:position": {
     "name": "Position to Know Question",
     "semantic_type": "source",
-    "question_template_en": "Is {W} in a position to know about {D}?",
+    "question_template_en": "Is {W} really in a position to know about {D}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -168,7 +168,7 @@
   "CQ:difference": {
     "name": "Difference Question",
     "semantic_type": "property",
-    "question_template_en": "Are there relevant differences between {C} and the present case?",
+    "question_template_en": "Does the case of {C} differ from this one in relevant ways?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -179,7 +179,7 @@
   "CQ:truth": {
     "name": "Truth Question",
     "semantic_type": "truth",
-    "question_template_en": "Is {A} really true in the case {C}?",
+    "question_template_en": "Is {A} really true in the case of {C}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -190,7 +190,7 @@
   "CQ:other_case": {
     "name": "Other Case Question",
     "semantic_type": "property",
-    "question_template_en": "Is there another case, more on point than {C}, in which {A} is false?",
+    "question_template_en": "Is there a case more on point than {C} in which {A} is false?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -212,7 +212,7 @@
   "CQ:value_effect": {
     "name": "Value Effect Question",
     "semantic_type": "value",
-    "question_template_en": "Does the value {V} really bear on the goal {G} of {A}?",
+    "question_template_en": "Does {V} really support the goal {G} for {A}?",
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",

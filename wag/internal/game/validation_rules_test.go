@@ -150,18 +150,21 @@ func TestLanguageTemplatesFollowArgumentOrder(t *testing.T) {
 	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:values",
 		VariableBindings: map[string]string{"V": "liberty", "A": "citizens", "G": "free_speech"}})
 	arg := gs.Adapter.Graph.Arguments[r.ArgIDs[0]]
-	if got := arg.Premises[0].Stmt.Text; got != "Value liberty is positive as judged by agent citizens." {
+	if got := arg.Premises[0].Stmt.Text; got != "liberty is a positive value for citizens." {
 		t.Errorf("premise text %q", got)
 	}
-	if got := arg.Conclusion.Text; got != "liberty is a reason for retaining commitment to goal free_speech." {
+	if got := arg.Conclusion.Text; got != "liberty is a reason to keep the goal free_speech." {
 		t.Errorf("conclusion text %q", got)
+	}
+	if got := gs.Say(arg.Conclusion.Id); got != "‘Liberty’ is a reason to keep the goal ‘free speech’." {
+		t.Errorf("conclusion reads %q", got)
 	}
 	if r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:analogy",
 		VariableBindings: map[string]string{"A": "tax_works", "C": "sweden"}}); !r.Accepted {
 		t.Fatalf("analogy support rejected: %s", r.Error)
 	}
 	if s := gs.Adapter.Graph.Statements["more_on_point(tax_works,sweden)"]; s == nil ||
-		s.Text != "tax_works is false in another case which is more on point than case sweden." {
+		s.Text != "tax_works is false in a case more on point than sweden." {
 		t.Errorf("more_on_point text: %+v", s)
 	}
 }

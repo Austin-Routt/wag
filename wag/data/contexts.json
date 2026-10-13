@@ -1,0 +1,45 @@
+{
+  "_note": "Context presets. A preset sets the proof standard of the claim and whether sources are required, and may weigh the schemes as an audience in that context would (Carneades reads an argument's weight as the audience's assessment of it). The weights below are DRAFTS for discussion, not values from Walton or the CAF: change them, or play 'equal' to let the structure alone decide.",
+  "contexts": [
+    {
+      "id": "everyday",
+      "name": "Everyday discussion",
+      "description": "An informal exchange, as on Kialo: the side with the stronger case wins (preponderance of the evidence). Sources are optional. The schemes keep their default weights.",
+      "standard": "PE",
+      "require_evidence": false
+    },
+    {
+      "id": "policy",
+      "name": "Policy deliberation",
+      "description": "What should be done (a deliberation dialogue): arguments from goals, values and consequences carry the most weight; the stronger case wins.",
+      "standard": "PE",
+      "require_evidence": false,
+      "weights": {"AS:practical_reasoning": 0.7, "AS:consequences": 0.7, "AS:values": 0.6, "AS:expert_opinion": 0.6, "AS:position_to_know": 0.55, "AS:sign": 0.5, "AS:analogy": 0.5, "AS:other": 0.45}
+    },
+    {
+      "id": "scientific",
+      "name": "Scientific inquiry",
+      "description": "What is true (an inquiry): evidence and expertise carry the most weight, goals and values the least; the claim must be clear and convincing, and sources are required.",
+      "standard": "CCE",
+      "require_evidence": true,
+      "weights": {"AS:expert_opinion": 0.75, "AS:sign": 0.65, "AS:position_to_know": 0.55, "AS:analogy": 0.45, "AS:other": 0.4, "AS:consequences": 0.35, "AS:practical_reasoning": 0.35, "AS:values": 0.3}
+    },
+    {
+      "id": "legal",
+      "name": "Legal case (criminal)",
+      "description": "Guilt beyond reasonable doubt: witnesses, experts, circumstantial signs and precedent carry the most weight; sources are required. A moderator plays the judge.",
+      "standard": "BRD",
+      "require_evidence": true,
+      "moderated": true,
+      "weights": {"AS:position_to_know": 0.7, "AS:expert_opinion": 0.65, "AS:analogy": 0.6, "AS:sign": 0.55, "AS:other": 0.4, "AS:consequences": 0.4, "AS:practical_reasoning": 0.4, "AS:values": 0.3}
+    },
+    {
+      "id": "equal",
+      "name": "Equal weights",
+      "description": "Every scheme weighs 0.5, so only the structure of the dispute (which premises hold, which exceptions are argued) decides. For testing the rules.",
+      "standard": "PE",
+      "require_evidence": false,
+      "weights": {"*": 0.5}
+    }
+  ]
+}

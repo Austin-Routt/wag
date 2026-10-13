@@ -61,10 +61,8 @@ func (n *NASCQ) EnableOther() {
 		Free:                 true,
 		DescriptionEN:        "An argument that fits none of the listed schemes: write its premises and conclusion yourself. It is recorded for finding new schemes.",
 	}
+	n.Questions[CQPremiseAcceptable] = premiseQuestion()
 	for _, q := range []*CQNode{
-		{ID: CQPremiseAcceptable, Name: "Premise Acceptability Question", SemanticType: TypeTruth,
-			QuestionTemplateEN: "Is this premise acceptable: true, or supported by evidence?",
-			CaesMapping:        CaesMapping{PositiveAnswerType: "support", NegativeAnswerType: "undermining", Target: "premise"}},
 		{ID: CQRelevance, Name: "Relevance and Sufficiency Question", SemanticType: TypeTruth,
 			QuestionTemplateEN: "Are the premises relevant to the conclusion, and together sufficient for it?",
 			CaesMapping:        CaesMapping{PositiveAnswerType: "support", NegativeAnswerType: "undercutter", Target: "argument"}},
@@ -75,13 +73,75 @@ func (n *NASCQ) EnableOther() {
 		n.Questions[q.ID] = q
 	}
 	n.AskEdges = append(n.AskEdges,
-		Edge{CQ: CQPremiseAcceptable, Scheme: OtherSchemeID, Locus: LocusPremise},
 		Edge{CQ: CQRelevance, Scheme: OtherSchemeID, Locus: LocusArgument},
 		Edge{CQ: CQCounter, Scheme: OtherSchemeID, Locus: LocusConclusion},
 	)
+	if !n.hasAsk(CQPremiseAcceptable, OtherSchemeID) {
+		n.AskEdges = append(n.AskEdges, Edge{CQ: CQPremiseAcceptable, Scheme: OtherSchemeID, Locus: LocusPremise})
+	}
 	n.askIndex = make(map[string][]string)
 	n.backupIndex = make(map[string][]string)
 	n.buildIndexes()
+}
+
+func premiseQuestion() *CQNode {
+	return &CQNode{ID: CQPremiseAcceptable, Name: "Premise Acceptability Question", SemanticType: TypeTruth,
+		QuestionTemplateEN: "Is this premise acceptable: true, or supported by evidence?",
+		CaesMapping:        CaesMapping{PositiveAnswerType: "support", NegativeAnswerType: "undermining", Target: "premise"}}
+}
+
+func (n *NASCQ) hasAsk(cqID, schemeID string) bool {
+	for _, e := range n.AskEdges {
+		if e.CQ == cqID && e.Scheme == schemeID {
+			return true
+		}
+	}
+	return false
+}
+
+// EnablePremiseQuestion lets any premise of any argument be questioned or
+// attacked, not only those a scheme's own critical questions are about. In
+// a dialogue a premise can always be challenged ("why should I accept
+// that?"); Walton's critical questions point at the typical weak spots,
+// which are often exceptions and the conclusion. Practical reasoning, for
+// instance, has five critical questions and only one of them (possibility)
+// is about one of its premises.
+//
+// The generic Premise Acceptability Question is asked of every scheme, about
+// any premise that none of the scheme's own critical questions is about
+// (EnumerateActions); the thesis-independent schemes back its answers.
+// Calling it again does nothing.
+func (n *NASCQ) EnablePremiseQuestion() {
+	if _, ok := n.Questions[CQPremiseAcceptable]; !ok {
+		n.Questions[CQPremiseAcceptable] = premiseQuestion()
+	}
+	added := false
+	for _, sid := range sortedSchemeIDs(n.Schemes) {
+		if !n.hasAsk(CQPremiseAcceptable, sid) {
+			n.AskEdges = append(n.AskEdges, Edge{CQ: CQPremiseAcceptable, Scheme: sid, Locus: LocusPremise,
+				Description: "generic: any premise no other critical question is about"})
+			added = true
+		}
+	}
+	if added {
+		n.askIndex = make(map[string][]string)
+		n.backupIndex = make(map[string][]string)
+		n.buildIndexes()
+	}
+}
+
+// CoveredPremises returns the premises of argID that a critical question of
+// the scheme with a premise pattern is about.
+func (n *NASCQ) CoveredPremises(graph GraphQuerier, argID, schemeID string) map[string]bool {
+	out := map[string]bool{}
+	for _, cqID := range n.askIndex[schemeID] {
+		if l := n.LocusOf(cqID, schemeID); l.Kind == LocusPremise && l.Pattern != "" {
+			if id := graph.PremiseMatching(argID, l.Pattern); id != "" {
+				out[id] = true
+			}
+		}
+	}
+	return out
 }
 
 // FreePremises returns the premises of a move made with the user-defined

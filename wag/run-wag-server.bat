@@ -1,6 +1,6 @@
 @echo off
 rem Start the WAG prototype in your browser (Windows).
-rem Needs Go 1.22 or later (https://go.dev/dl/) and the whole repository,
+rem Needs Go 1.24 or later (https://go.dev/dl/) and the whole repository,
 rem because WAG builds against ..\carneades-4.
 rem Extra flags pass through, for example:
 rem   run-wag-server.bat --addr 127.0.0.1:9090

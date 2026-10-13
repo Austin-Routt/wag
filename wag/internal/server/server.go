@@ -40,6 +40,7 @@ var webFiles embed.FS
 // Data is the game data: the Carneades scheme file and the NASCQ files.
 type Data struct {
 	YAML, Schemes, CQs, Edges []byte
+	Contexts                  []byte // context presets (contexts.json); none if empty
 }
 
 // Server holds the games in memory.
@@ -47,6 +48,8 @@ type Server struct {
 	mu       sync.Mutex
 	data     Data
 	kialoDir string
+	claude   *Claude // nil: no Claude seats
+	contexts []game.Context
 	sessions map[string]*Session
 	next     int
 	meta     []byte
@@ -55,15 +58,18 @@ type Server struct {
 // Seat is a player and who plays it.
 type Seat struct {
 	Name string `json:"name"`
-	Kind string `json:"kind"` // human, random, greedy
+	Kind string `json:"kind"` // human; llm (any language model, through the prompt and a pasted reply); random, greedy (rule bots); claude (the Claude API)
 }
 
 func (s Seat) aiKind() string {
-	if s.Kind == "random" || s.Kind == "greedy" {
+	if s.Kind == "random" || s.Kind == "greedy" || s.Kind == "claude" {
 		return s.Kind
 	}
 	return ""
 }
+
+// SetClaude offers Claude seats, played through the Claude API.
+func (s *Server) SetClaude(c *Claude) { s.claude = c; s.meta = nil }
 
 // Session is one game.
 type Session struct {
@@ -76,6 +82,14 @@ type Session struct {
 	Version int // bumped on every change, so pollers can skip unchanged states
 	Created time.Time
 	Import  *kialo.Report
+	Request *NewGameRequest // what started the game (nil for an imported discussion)
+	Seed    int64           // the AI seats' seed
+	Notes   []Note          // testers' remarks
+	Events  []Event         // every request that tried to change the game
+	LLM     []LLMRecord     // what Claude seats replied, move by move
+	// thinking: a Claude seat is waiting for the model; the game takes no
+	// other move meanwhile.
+	thinking bool
 }
 
 // New makes a server for the data; kialoDir, if not empty, is a directory
@@ -84,6 +98,13 @@ func New(d Data, kialoDir string) (*Server, error) {
 	s := &Server{data: d, kialoDir: kialoDir, sessions: map[string]*Session{}}
 	if _, err := s.newState(game.DefaultGameConfig(), []string{"x"}); err != nil {
 		return nil, fmt.Errorf("the game data does not load: %v", err)
+	}
+	if len(d.Contexts) > 0 {
+		cs, err := game.LoadContexts(d.Contexts)
+		if err != nil {
+			return nil, err
+		}
+		s.contexts = cs
 	}
 	return s, nil
 }
@@ -107,6 +128,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/suggest", s.handleSuggest)
 	mux.HandleFunc("/api/games", s.handleGames)
 	mux.HandleFunc("/api/games/", s.handleGame)
+	mux.HandleFunc("/api/load", s.handleLoad)
 	mux.HandleFunc("/api/kialo", s.handleKialoList)
 	mux.HandleFunc("/api/kialo/import", s.handleKialoImport)
 	sub, _ := fs.Sub(webFiles, "web")
@@ -143,6 +165,31 @@ type CarneadesMeta struct {
 	Premises    []string `json:"premises"`
 	Assumptions []string `json:"assumptions,omitempty"`
 	Exceptions  []string `json:"exceptions,omitempty"`
+	// The same formulas as the board reads them, variables as {X}.
+	Reads *SchemeReads `json:"reads,omitempty"`
+}
+
+// SchemeReads is how a scheme's formulas read (game.FormulaText).
+type SchemeReads struct {
+	Conclusion  string   `json:"conclusion"`
+	Premises    []string `json:"premises"`
+	Assumptions []string `json:"assumptions,omitempty"`
+	Exceptions  []string `json:"exceptions,omitempty"`
+}
+
+func readsOf(lang caes.Language, t *caes.Scheme) *SchemeReads {
+	all := func(fs []string) []string {
+		var out []string
+		for _, f := range fs {
+			out = append(out, game.FormulaText(lang, f))
+		}
+		return out
+	}
+	r := &SchemeReads{Premises: all(t.Premises), Assumptions: all(t.Assumptions), Exceptions: all(t.Exceptions)}
+	if len(t.Conclusions) > 0 {
+		r.Conclusion = game.FormulaText(lang, t.Conclusions[0])
+	}
+	return r
 }
 
 // CQMeta is a critical question with its links.
@@ -206,7 +253,7 @@ func (s *Server) buildMeta() ([]byte, error) {
 		if t := theory[sc.CarneadesID]; t != nil {
 			title, _ := t.Metadata["title"].(string)
 			sm.Carneades = &CarneadesMeta{ID: t.Id, Title: title, Conclusions: t.Conclusions, Premises: t.Premises,
-				Assumptions: t.Assumptions, Exceptions: t.Exceptions}
+				Assumptions: t.Assumptions, Exceptions: t.Exceptions, Reads: readsOf(gs.Adapter.Graph.Theory.Language, t)}
 		}
 		schemes = append(schemes, sm)
 	}
@@ -229,10 +276,12 @@ func (s *Server) buildMeta() ([]byte, error) {
 		cqs = append(cqs, cm)
 	}
 	return json.Marshal(map[string]interface{}{
-		"modes":   game.Modes(),
-		"schemes": schemes,
-		"cqs":     cqs,
-		"kialo":   s.kialoDir != "",
+		"modes":    game.Modes(),
+		"schemes":  schemes,
+		"cqs":      cqs,
+		"kialo":    s.kialoDir != "",
+		"claude":   claudeMeta(s.claude),
+		"contexts": s.contexts,
 	})
 }
 
@@ -271,12 +320,14 @@ type NewGameRequest struct {
 	Standard        string   `json:"standard,omitempty"`
 	ConcedeOnPass   *bool    `json:"concede_on_pass,omitempty"`
 	AllowOther      bool     `json:"allow_other"`
+	AnyPremise      *bool    `json:"any_premise,omitempty"` // default: on
+	Context         string   `json:"context,omitempty"`     // a context preset: its scheme weights apply
 	Moderated       bool     `json:"moderated"`
 	RequireEvidence bool     `json:"require_evidence"`
 	Seed            int64    `json:"seed,omitempty"`
 }
 
-func (req *NewGameRequest) config() (game.GameConfig, error) {
+func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, error) {
 	cfg, err := game.ModeConfig(req.Mode)
 	if err != nil {
 		return cfg, err
@@ -318,6 +369,20 @@ func (req *NewGameRequest) config() (game.GameConfig, error) {
 		return cfg, fmt.Errorf("unknown proof standard %q", req.Standard)
 	}
 	cfg.AllowOther, cfg.Moderated, cfg.RequireEvidence = req.AllowOther, req.Moderated, req.RequireEvidence
+	if req.AnyPremise != nil {
+		cfg.AnyPremise = *req.AnyPremise
+	}
+	if req.Context != "" {
+		found := false
+		for _, c := range contexts {
+			if c.ID == req.Context {
+				cfg.Context, cfg.Weights, found = c.ID, c.Weights, true
+			}
+		}
+		if !found {
+			return cfg, fmt.Errorf("unknown context %q", req.Context)
+		}
+	}
 	return cfg, nil
 }
 
@@ -343,13 +408,26 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 		if !readJSON(w, r, &req) {
 			return
 		}
-		cfg, err := req.config()
+		cfg, err := req.config(s.contexts)
 		if err != nil {
 			httpError(w, err, http.StatusBadRequest)
 			return
 		}
 		if len(req.Seats) == 0 {
 			req.Seats = []Seat{{"Alice", "human"}, {"Bob", "greedy"}}
+		}
+		for _, seat := range req.Seats {
+			switch seat.Kind {
+			case "human", "llm", "random", "greedy":
+			case "claude":
+				if s.claude == nil {
+					httpError(w, fmt.Errorf("this server has no Claude seats: start it with --claude"), http.StatusBadRequest)
+					return
+				}
+			default:
+				httpError(w, fmt.Errorf("unknown seat kind %q (human, llm, random, greedy, claude)", seat.Kind), http.StatusBadRequest)
+				return
+			}
 		}
 		if req.Mode == "solo" {
 			req.Seats = req.Seats[:1]
@@ -373,6 +451,7 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 		}
 		s.mu.Lock()
 		ss := s.add(gs, req.Seats, title, "new", req.Seed)
+		ss.Request = &req
 		st := ss.buildState()
 		s.mu.Unlock()
 		writeJSON(w, st)
@@ -388,7 +467,7 @@ func (s *Server) add(gs *game.GameState, seats []Seat, title, source string, see
 	if seed == 0 {
 		seed = time.Now().UnixNano()
 	}
-	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1}
+	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed}
 	for i, seat := range seats {
 		var a game.Agent
 		switch seat.Kind {
@@ -417,6 +496,10 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 	if len(parts) > 1 {
 		action = parts[1]
 	}
+	if ss.thinking && r.Method == http.MethodPost && action != "preview" {
+		httpError(w, fmt.Errorf("%s (Claude) is thinking: wait for its move", ss.GS.ActivePlayer().ID), http.StatusConflict)
+		return
+	}
 	switch action {
 	case "":
 		if v, err := strconv.Atoi(r.URL.Query().Get("since")); err == nil && v == ss.Version {
@@ -435,8 +518,58 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			httpError(w, fmt.Errorf("it is %s's turn, an AI", ss.GS.ActivePlayer().ID), http.StatusConflict)
 			return
 		}
+		player := ss.GS.ActivePlayer().ID
 		res, err := ss.GS.ExecuteTurn(req.Action)
+		ss.event("move", player, short(req.Action), res, err)
 		s.reply(w, ss, res, err)
+	case "note":
+		var req struct {
+			Target string `json:"target"`
+			Kind   string `json:"kind"`
+			Text   string `json:"text"`
+			By     string `json:"by"`
+		}
+		if !readJSON(w, r, &req) {
+			return
+		}
+		n, err := ss.addNote(req.Target, req.Kind, req.Text, req.By)
+		if err != nil {
+			httpError(w, err, http.StatusBadRequest)
+			return
+		}
+		ss.event("note", req.By, n.Kind+" "+n.Target, nil, nil)
+		ss.Version++
+		writeJSON(w, map[string]interface{}{"note": n, "state": ss.buildState()})
+	case "prompt":
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Header().Set("Cache-Control", "no-store")
+		fmt.Fprint(w, ss.Prompt())
+	case "reply":
+		var req struct {
+			Reply string `json:"reply"`
+		}
+		if !readJSON(w, r, &req) {
+			return
+		}
+		if ss.Seats[ss.GS.ActivePlayerIdx].aiKind() != "" {
+			httpError(w, fmt.Errorf("it is %s's turn, an AI", ss.GS.ActivePlayer().ID), http.StatusConflict)
+			return
+		}
+		player := ss.GS.ActivePlayer().ID
+		action, err := ParseReply(req.Reply)
+		if err != nil {
+			ss.event("reply", player, "", nil, err)
+			httpError(w, err, http.StatusBadRequest)
+			return
+		}
+		res, err := ss.GS.ExecuteTurn(action)
+		ss.event("reply", player, short(action), res, err)
+		if err != nil {
+			httpError(w, err, http.StatusConflict)
+			return
+		}
+		ss.Version++
+		writeJSON(w, map[string]interface{}{"result": res, "action": action, "state": ss.buildState()})
 	case "moves":
 		target := r.URL.Query().Get("target")
 		a := ss.GS.Adapter.Graph.Arguments[target]
@@ -457,7 +590,28 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		if !jsonPost(w, r) {
 			return
 		}
+		player := ss.GS.ActivePlayer().ID
+		if ss.Seats[ss.GS.ActivePlayerIdx].Kind == "claude" {
+			if s.claude == nil {
+				httpError(w, fmt.Errorf("this server has no Claude seats: start it with --claude"), http.StatusConflict)
+				return
+			}
+			if ss.GS.Terminated || ss.GS.Pending != nil {
+				httpError(w, fmt.Errorf("no move to make: the game is over or a move awaits the moderator"), http.StatusConflict)
+				return
+			}
+			ss.thinking = true
+			ss.Version++ // pollers see the seat thinking
+			s.mu.Unlock()
+			res, err := s.claudeTurn(ss)
+			s.mu.Lock()
+			ss.thinking = false
+			ss.event("ai", player, "claude", res, err)
+			s.reply(w, ss, res, err)
+			return
+		}
 		res, err := ss.aiMove()
+		ss.event("ai", player, "", res, err)
 		s.reply(w, ss, res, err)
 	case "moderate":
 		var req struct {
@@ -469,6 +623,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		res, err := ss.GS.Moderate(req.Approve, req.Weight, req.Note)
+		ss.event("moderate", game.ModeratorID, fmt.Sprintf("approve=%v weight=%v %s", req.Approve, req.Weight, req.Note), res, err)
 		s.reply(w, ss, res, err)
 	case "decide":
 		var req struct {
@@ -480,6 +635,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		res, err := ss.GS.Decide(req.Statement, req.Decision, req.Note)
+		ss.event("decide", game.ModeratorID, req.Decision+" "+req.Statement, res, err)
 		s.reply(w, ss, res, err)
 	case "export":
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=wag-game-%s.json", ss.ID))
@@ -557,11 +713,9 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 		p.Error = "the game is over"
 		return p
 	}
-	if va, err := gs.NASCQ.Validate(a, gs.Bridge()); err != nil {
+	if _, err := gs.NASCQ.Validate(a, gs.Bridge()); err != nil {
 		p.Error = err.Error()
 		return p
-	} else if a.Type != "question" {
-		p.Premises, p.Conclusion = va.InstPremises, va.InstConclusion
 	}
 	tmpl := nascq.ActionTemplate{Type: a.Type, TargetArgID: a.TargetArgID, AnswersCQID: a.AnswersCQID}
 	if va, err := gs.NASCQ.Validate(a, gs.Bridge()); err == nil {
@@ -573,7 +727,28 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 	p.Effect = gs.Effect(tmpl, a.VariableBindings)
 	before := gs.Adapter.StatementLabels()
 	var after map[string]caes.Label
-	r, err := gs.SimulateThen(a, func(g *game.GameState) { after = g.Adapter.StatementLabels() })
+	texts := map[string]string{} // the changed statements, as the move would leave them
+	r, err := gs.SimulateThen(a, func(g *game.GameState) {
+		after = g.Adapter.StatementLabels()
+		for id, l := range after {
+			if b, ok := before[id]; !ok || b != l {
+				texts[id] = g.Say(id)
+			}
+		}
+		// The argument as the move builds it, answer variable bound.
+		if n := len(g.MoveHistory); n > 0 && a.Type != "question" {
+			if m := g.MoveHistory[n-1]; len(m.ArgIDs) > 0 {
+				if arg := g.Adapter.Graph.Arguments[m.ArgIDs[0]]; arg != nil && arg.Conclusion != nil {
+					for _, pr := range arg.Premises {
+						if pr.Stmt != nil {
+							p.Premises = append(p.Premises, g.SayIn(arg.Id, pr.Stmt.Id))
+						}
+					}
+					p.Conclusion = g.Say(arg.Conclusion.Id)
+				}
+			}
+		}
+	})
 	if err != nil {
 		p.Error = err.Error()
 		return p
@@ -597,17 +772,12 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 		}
 	}
 	for i := range p.Changes {
-		p.Changes[i].Text = previewText(gs, p.Changes[i].Stmt)
+		p.Changes[i].Text = texts[p.Changes[i].Stmt]
+	}
+	if a.TargetArgID == "" && p.Conclusion != "" {
+		p.Effect = strings.TrimSuffix(p.Conclusion, ".")
 	}
 	return p
-}
-
-// previewText renders a statement that may exist only in the simulated game.
-func previewText(gs *game.GameState, id string) string {
-	if gs.Adapter.Graph.Statements[id] != nil {
-		return gs.Say(id)
-	}
-	return id
 }
 
 // describeAction says what a held move would do.
@@ -643,9 +813,17 @@ func (ss *Session) export() map[string]interface{} {
 		mined = append(mined, map[string]interface{}{"argument": id, "owner": a.Owner, "text": a.Text,
 			"premises": prem, "conclusion": st.Statements[a.Conclusion].Text, "kialo": a.Kialo})
 	}
+	var req *NewGameRequest
+	if ss.Request != nil {
+		r := *ss.Request
+		r.Seed = ss.Seed
+		req = &r
+	}
 	return map[string]interface{}{
-		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config,
+		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(),
+		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
 		"history": ss.GS.MoveHistory, "state": st, "other_arguments": mined, "import": ss.Import,
+		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM,
 	}
 }
 
@@ -717,33 +895,40 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
-	d, err := kialo.Parse(b)
-	if err != nil {
-		httpError(w, err, http.StatusBadRequest)
-		return
-	}
-	rels, rep := d.Plan(depth)
-	ad, err := carneades.NewAdapterFromYAML(s.data.YAML)
-	if err != nil {
-		httpError(w, err, http.StatusInternalServerError)
-		return
-	}
-	n, err := nascq.LoadFromBytes(s.data.Schemes, s.data.CQs, s.data.Edges)
-	if err != nil {
-		httpError(w, err, http.StatusInternalServerError)
-		return
-	}
-	gs, err := kialo.Build(d, rels, rep, kialo.Config(), ad, n)
+	gs, rep, err := s.kialoGame(b, depth)
 	if err != nil {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
 	s.mu.Lock()
-	ss := s.add(gs, []Seat{{kialo.ProPlayer, "human"}, {kialo.ConPlayer, "human"}}, d.Title, "kialo:"+d.ID, rand.Int63())
+	ss := s.add(gs, []Seat{{kialo.ProPlayer, "human"}, {kialo.ConPlayer, "human"}}, rep.Title, "kialo:"+rep.Discussion, rand.Int63())
 	ss.Import = rep
 	st := ss.buildState()
 	s.mu.Unlock()
 	writeJSON(w, map[string]interface{}{"state": st, "report": rep})
+}
+
+// kialoGame builds the game of a Kialo discussion (graph.json), down to depth
+// (0: all of it).
+func (s *Server) kialoGame(b []byte, depth int) (*game.GameState, *kialo.Report, error) {
+	d, err := kialo.Parse(b)
+	if err != nil {
+		return nil, nil, err
+	}
+	rels, rep := d.Plan(depth)
+	ad, err := carneades.NewAdapterFromYAML(s.data.YAML)
+	if err != nil {
+		return nil, nil, err
+	}
+	n, err := nascq.LoadFromBytes(s.data.Schemes, s.data.CQs, s.data.Edges)
+	if err != nil {
+		return nil, nil, err
+	}
+	gs, err := kialo.Build(d, rels, rep, kialo.Config(), ad, n)
+	if err != nil {
+		return nil, nil, err
+	}
+	return gs, rep, nil
 }
 
 // ---------------------------------------------------------------------------
@@ -788,4 +973,39 @@ func httpError(w http.ResponseWriter, err error, code int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+}
+
+// short is a one-line form of an action, for the event log.
+func short(a nascq.ProposedAction) string {
+	parts := []string{a.Type}
+	for _, x := range []string{a.TargetArgID, a.AnswersCQID, a.SchemeID} {
+		if x != "" {
+			parts = append(parts, x)
+		}
+	}
+	return strings.Join(parts, " ")
+}
+
+// handleLoad starts a game from an export (/export) and replays its moves.
+func (s *Server) handleLoad(w http.ResponseWriter, r *http.Request) {
+	var e Export
+	if !readJSON(w, r, &e) {
+		return
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	ss, err := s.load(&e)
+	if err != nil {
+		httpError(w, fmt.Errorf("cannot load the game: %v", err), http.StatusBadRequest)
+		return
+	}
+	ss.event("load", "", fmt.Sprintf("%d moves", len(e.History)), nil, nil)
+	writeJSON(w, ss.buildState())
+}
+
+func claudeMeta(c *Claude) interface{} {
+	if c == nil {
+		return nil
+	}
+	return map[string]string{"model": c.Model, "effort": c.Effort}
 }

@@ -3,6 +3,7 @@ package game
 import (
 	"math/rand"
 	"sort"
+	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -96,6 +97,69 @@ var wordPool = map[string][]string{
 	},
 }
 
+// neutralWords are what a bot says when the board has no word of the kind it
+// needs: placeholders that fit any topic. A bot has no grasp of language;
+// these at least do not drag in a topic nobody is discussing.
+var neutralWords = map[string][]string{
+	"entity":      {"an expert", "a researcher", "a witness", "a reviewer"},
+	"domain":      {"the subject at hand", "this field"},
+	"action":      {"the proposal", "the alternative"},
+	"state":       {"the present situation", "the situation afterwards"},
+	"goal":        {"the stated goal", "a better outcome"},
+	"value":       {"the common good", "fairness", "safety"},
+	"event":       {"a related event", "the observed sign"},
+	"proposition": {"the opposite claim", "a further reason"},
+	"case":        {"a comparable case", "an earlier case"},
+	"default":     {"something else"},
+}
+
+// vocabulary is what a bot fills variables with: the words the players have
+// already used for each kind of variable, then neutral placeholders. On an
+// empty board (a bot opening the game) it is the example word pool.
+type vocabulary map[string][]string
+
+// vocabulary collects the words of the accepted moves, by variable type, in
+// the order they were played.
+func (gs *GameState) vocabulary() vocabulary {
+	v := vocabulary{}
+	seen := map[string]bool{}
+	for _, m := range gs.MoveHistory {
+		sc := gs.NASCQ.GetScheme(m.Action.SchemeID)
+		if len(m.ArgIDs) == 0 || sc == nil {
+			continue
+		}
+		for _, name := range carneades.SortedKeys(m.Action.VariableBindings) {
+			spec, ok := sc.Variables[name]
+			w := strings.TrimSpace(m.Action.VariableBindings[name])
+			if !ok || w == "" || strings.ContainsAny(w, "()¬") || seen[spec.Type+"|"+w] {
+				continue // an answer bound to a statement is not a word
+			}
+			seen[spec.Type+"|"+w] = true
+			v[spec.Type] = append(v[spec.Type], w)
+		}
+	}
+	return v
+}
+
+// word draws a word for a variable of type typ. Sources are always neutral:
+// a bot that cited the other side's witness as its own expert would read as
+// nonsense.
+func (v vocabulary) word(rng *rand.Rand, typ string) string {
+	if len(v) == 0 {
+		return randomWord(rng, typ)
+	}
+	neutral, ok := neutralWords[typ]
+	if !ok {
+		neutral = neutralWords["default"]
+	}
+	var pool []string
+	if typ != "entity" {
+		pool = append(append(pool, v[typ]...), v[typ]...) // the board's words twice as likely
+	}
+	pool = append(pool, neutral...)
+	return pool[rng.Intn(len(pool))]
+}
+
 // randomWord picks a random word from the pool for the given variable type.
 func randomWord(rng *rand.Rand, varType string) string {
 	words, ok := wordPool[varType]
@@ -144,7 +208,7 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	// In critical-question play, a question left unanswered loses: answer
 	// one.
 	if answers := dueAnswers(obs); len(answers) > 0 && obs.GameState.Config.AnswerWithin > 0 {
-		return fill(a.rng, answers[a.rng.Intn(len(answers))])
+		return fill(a.rng, answers[a.rng.Intn(len(answers))], obs.GameState.vocabulary())
 	}
 
 	// Randomly abstain.
@@ -172,19 +236,19 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	}
 
 	// Pick a random action template.
-	return fill(a.rng, candidates[a.rng.Intn(len(candidates))])
+	return fill(a.rng, candidates[a.rng.Intn(len(candidates))], obs.GameState.vocabulary())
 }
 
 // fill makes an action of the template with random variable bindings, drawn
 // in sorted variable order so that the draws do not depend on map iteration
 // order. The answer variable is left to the game.
-func fill(rng *rand.Rand, tmpl nascq.ActionTemplate) nascq.ProposedAction {
+func fill(rng *rand.Rand, tmpl nascq.ActionTemplate, words vocabulary) nascq.ProposedAction {
 	var bindings map[string]string
 	if len(tmpl.Variables) > 0 {
 		bindings = make(map[string]string, len(tmpl.Variables))
 		for _, varName := range carneades.SortedKeys(tmpl.Variables) {
 			if varName != tmpl.AnswerVariable {
-				bindings[varName] = randomWord(rng, tmpl.Variables[varName].Type)
+				bindings[varName] = words.word(rng, tmpl.Variables[varName].Type)
 			}
 		}
 	}
@@ -224,8 +288,9 @@ func dueAnswers(obs *Observation) []nascq.ActionTemplate {
 // (up to MaxCandidates of them, plus every answer to a question it owes)
 // with trialsPerAction sets of random bindings, and passing, each through
 // GameState.SimulateThen (which restores the game afterwards), and plays the
-// one that leaves it best placed (Value). Ties go to the first in
-// enumeration order, passing last, so a seeded agent is reproducible.
+// one that leaves it best placed (Value). Equally good moves are chosen
+// between at random (with the agent's seed, so a seeded agent is
+// reproducible); it passes only when no move is better than passing.
 //
 // It used to score templates by a fixed estimate (base weight × 10, +15 for
 // an undercutter) without trying them, so it preferred undercutters whether
@@ -286,17 +351,27 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	me := obs.ActivePlayer.ID
 	gs := obs.GameState
 	var best nascq.ProposedAction
-	bestValue, found := 0.0, false
+	bestValue, found, ties := 0.0, false, 0
 	try := func(action nascq.ProposedAction) {
 		value := 0.0
 		r, err := gs.SimulateThen(action, func(after *GameState) { value = Value(after, me) })
-		if err != nil || r == nil || !r.Accepted {
+		if err != nil || r == nil || (!r.Accepted && !r.Abstained) {
 			return
 		}
-		if !found || value > bestValue {
-			best, bestValue, found = action, value, true
+		switch {
+		case !found || value > bestValue+1e-9:
+			best, bestValue, found, ties = action, value, true, 1
+		case value >= bestValue-1e-9 && action.Type != "abstain":
+			// An equally good move: each of the ties is as likely to be
+			// played (reservoir sampling), so the bot does not answer every
+			// argument with the first question it enumerates.
+			ties++
+			if a.rng.Intn(ties) == 0 {
+				best = action
+			}
 		}
 	}
+	words := gs.vocabulary()
 	tmpls := a.candidates(obs.AvailableActions)
 	if due := dueAnswers(obs); len(due) > 0 {
 		tmpls = append(append([]nascq.ActionTemplate{}, due...), tmpls...)
@@ -307,7 +382,7 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 			trials = 1 // a question: nothing to vary
 		}
 		for trial := 0; trial < trials; trial++ {
-			try(fill(a.rng, tmpl))
+			try(fill(a.rng, tmpl, words))
 		}
 	}
 	try(nascq.ProposedAction{Type: "abstain"})

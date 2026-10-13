@@ -11,6 +11,9 @@
 //	--kialo-dir  directory of captured Kialo discussions (<dir>/<id>/graph.json, as in the
 //	             Kialo research visualizer's data folder), offered for import
 //	--open       open the browser (default true)
+//	--claude     offer Claude seats, played through the Claude API with the
+//	             text protocol (needs ANTHROPIC_API_KEY; moves cost API credits);
+//	             --claude-model (default claude-opus-5-5), --claude-effort (default medium)
 //
 // The engine runs in this process; the browser shows the game and sends the
 // moves. Several tabs can show the same game, for example the players and a
@@ -36,14 +39,17 @@ func main() {
 	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
 	kialoDir := flag.String("kialo-dir", "", "directory of captured Kialo discussions (<dir>/<id>/graph.json)")
 	open := flag.Bool("open", true, "open the browser")
+	claude := flag.Bool("claude", false, "offer Claude seats, played through the Claude API (needs ANTHROPIC_API_KEY or an `ant auth login` profile; the moves cost API credits)")
+	claudeModel := flag.String("claude-model", "claude-opus-5-5", "the model Claude seats use")
+	claudeEffort := flag.String("claude-effort", "medium", "the effort Claude seats use: low, medium, high, xhigh or max")
 	flag.Parse()
 
-	d := server.Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON}
+	d := server.Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON, Contexts: data.ContextsJSON}
 	if *dataDir != "" {
 		for _, x := range []struct {
 			dst  *[]byte
 			path string
-		}{{&d.YAML, "schemes/core.yml"}, {&d.Schemes, "nascq/schemes.json"}, {&d.CQs, "nascq/critical_questions.json"}, {&d.Edges, "nascq/edges.json"}} {
+		}{{&d.YAML, "schemes/core.yml"}, {&d.Schemes, "nascq/schemes.json"}, {&d.CQs, "nascq/critical_questions.json"}, {&d.Edges, "nascq/edges.json"}, {&d.Contexts, "contexts.json"}} {
 			b, err := os.ReadFile(filepath.Join(*dataDir, x.path))
 			if err != nil {
 				fmt.Fprintln(os.Stderr, "Error reading data:", err)
@@ -56,6 +62,10 @@ func main() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
+	}
+	if *claude {
+		srv.SetClaude(server.NewClaude(*claudeModel, *claudeEffort))
+		fmt.Printf("Claude seats play with %s (effort %s).\n", *claudeModel, *claudeEffort)
 	}
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {

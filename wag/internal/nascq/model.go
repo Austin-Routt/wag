@@ -45,8 +45,9 @@ const (
 // The Type and Description fields are used by the UI to guide the player
 // in filling variable bindings.
 type VariableSpec struct {
-	Type        string `json:"type"`        // e.g., "entity", "goal", "action", "proposition"
-	Description string `json:"description"` // human-readable hint for the UI
+	Type        string `json:"type"`                 // e.g., "entity", "goal", "action", "proposition"
+	Description string `json:"description"`          // human-readable hint for the UI
+	Example     string `json:"example_en,omitempty"` // what a player might type
 }
 
 // ASNode represents an Argumentation Scheme node in the NASCQ graph.

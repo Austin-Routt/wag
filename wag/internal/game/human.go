@@ -262,23 +262,23 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 	return bindings
 }
 
-// preview shows the move before it is submitted: the instantiated premises
-// and what follows from them.
+// preview shows the move before it is submitted: its argument as it would
+// read on the board, and what it establishes.
 func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings map[string]string) {
-	shown := bindings
-	if tmpl.AnswerVariable != "" {
-		shown = map[string]string{tmpl.AnswerVariable: "“" + lowerFirst(gs.answerText(tmpl, gs.Adapter.Graph.Arguments[tmpl.TargetArgID])) + "”"}
-		for k, v := range bindings {
-			if k != tmpl.AnswerVariable {
-				shown[k] = v
-			}
-		}
+	act := nascq.ProposedAction{Type: tmpl.Type, AttackType: tmpl.AttackType, SchemeID: tmpl.SchemeID, AnswersCQID: tmpl.AnswersCQID,
+		TargetArgID: tmpl.TargetArgID, TargetPremiseID: tmpl.TargetPremiseID, VariableBindings: bindings}
+	rd, err := gs.Read(act)
+	if err != nil {
+		h.printf("\n  This move would be rejected: %v\n", err)
+		return
 	}
-	h.print("\n  You argue:\n")
-	for _, p := range tmpl.PremiseTemplatesEN {
-		h.printf("      %s\n", nascq.InstantiateTemplate(p, shown))
+	h.printf("\n  You argue that C: %s\n  because:\n", rd.Conclusion)
+	for _, p := range rd.Premises {
+		h.printf("      %s\n", p)
 	}
-	h.printf("    therefore: %s\n", gs.Effect(tmpl, bindings))
+	if tmpl.TargetArgID != "" {
+		h.printf("    therefore: %s\n", gs.Effect(tmpl, bindings))
+	}
 }
 
 // variableOrder returns the template's variables in the order its premise and
@@ -306,6 +306,16 @@ func variableOrder(tmpl nascq.ActionTemplate) []string {
 // QuestionText is the critical question's text with the target argument's
 // own bindings in place of its {Var} placeholders, as far as the target has
 // them (a question argument has none), in the words players typed.
+// QuestionAbout is QuestionText for a question about one statement of the
+// target (a premise or an exception): the generic premise question, which
+// has no words of its own for the premise, names it.
+func (gs *GameState) QuestionAbout(cqID, targetArgID, stmtID string) string {
+	if cqID == nascq.CQPremiseAcceptable && stmtID != "" {
+		return "Is it true that “" + strings.TrimSuffix(gs.SayIn(targetArgID, stmtID), ".") + "”?"
+	}
+	return gs.QuestionText(cqID, targetArgID)
+}
+
 func (gs *GameState) QuestionText(cqID, targetArgID string) string {
 	cq := gs.NASCQ.GetCQ(cqID)
 	if cq == nil {
@@ -314,13 +324,13 @@ func (gs *GameState) QuestionText(cqID, targetArgID string) string {
 	words := gs.words()
 	b := gs.Adapter.ArgumentBindings(targetArgID)
 	for k, v := range b {
-		if w, ok := words[v]; ok {
-			b[k] = w
-		} else if t, ok := terms.ReadString(v); ok {
-			b[k] = gs.sayTerm(t, words, true)
+		if t, ok := terms.ReadString(v); ok {
+			b[k] = gs.sayArg(t, words, 0)
+		} else if w, ok := words[v]; ok {
+			b[k] = "‘" + w + "’"
 		}
 	}
-	return nascq.InstantiateTemplate(cq.QuestionTemplateEN, b)
+	return sentence(nascq.InstantiateTemplate(cq.QuestionTemplateEN, b))
 }
 
 // -------------------------------------------------------------------------

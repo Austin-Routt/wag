@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -36,4 +38,41 @@ func (gs *GameState) SimulateThen(action nascq.ProposedAction, inspect func(*Gam
 	gs.Adapter.Evaluate()
 	gs.restoreSnapshot(snap)
 	return result, err
+}
+
+// Reading is how a move's main argument would read on the board: its
+// premises (the conclusion inside them as "C", see SayIn) and its
+// conclusion, with every variable bound, the answer variable included.
+type Reading struct {
+	Premises   []string
+	Conclusion string
+}
+
+// Read plays action in a simulation (Simulate) and returns how its main
+// argument reads, or why the move would be rejected.
+func (gs *GameState) Read(action nascq.ProposedAction) (*Reading, error) {
+	var out *Reading
+	r, err := gs.SimulateThen(action, func(g *GameState) {
+		n := len(g.MoveHistory)
+		if n == 0 || len(g.MoveHistory[n-1].ArgIDs) == 0 {
+			return
+		}
+		arg := g.Adapter.Graph.Arguments[g.MoveHistory[n-1].ArgIDs[0]]
+		if arg == nil || arg.Conclusion == nil {
+			return
+		}
+		out = &Reading{Conclusion: g.Say(arg.Conclusion.Id)}
+		for _, p := range arg.Premises {
+			if p.Stmt != nil {
+				out.Premises = append(out.Premises, g.SayIn(arg.Id, p.Stmt.Id))
+			}
+		}
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !r.Accepted {
+		return nil, fmt.Errorf("%s", r.Error)
+	}
+	return out, nil
 }

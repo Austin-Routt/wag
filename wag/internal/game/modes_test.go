@@ -473,10 +473,10 @@ func TestHumanWizardDefendQuestionResign(t *testing.T) {
 	act = alice.ChooseAction(gs.BuildObservation())
 	shown := out.String()
 	for _, want := range []string{
-		"! Bob asks you about " + a1 + ": Is it actually possible to perform action carbon tax?",
+		"! Bob asks you about " + a1 + ": Is ‘carbon tax’ actually possible?",
 		"[asked by Bob]",
-		"The answer: Action carbon tax is possible (backing a premise of " + a1 + ").",
-		"dr yes asserts that “action carbon tax is possible”",
+		"The answer: ‘Carbon tax’ is possible (backing a premise of " + a1 + ").",
+		"‘Dr yes’ says that C.",
 	} {
 		if !strings.Contains(shown, want) {
 			t.Errorf("wizard output lacks %q:\n%s", want, shown)
@@ -504,9 +504,9 @@ func TestSay(t *testing.T) {
 			"G": "clean air", "V": "health"}})
 	play(t, gs, answer("attack", "CQ:possibility", "AS:expert_opinion", a1, map[string]string{"W": "Dr. No", "D": "politics"}))
 	for id, want := range map[string]string{
-		"possible(carbon_tax)":                     "Action carbon tax is possible.",
-		"¬possible(carbon_tax)":                    "It is not the case that action carbon tax is possible.",
-		"asserts(dr_no,not(possible(carbon_tax)))": "Dr. No asserts that “it is not the case that action carbon tax is possible” is true.",
+		"possible(carbon_tax)":                     "‘Carbon tax’ is possible.",
+		"¬possible(carbon_tax)":                    "‘Carbon tax’ is not possible.",
+		"asserts(dr_no,not(possible(carbon_tax)))": "‘Dr. No’ says that “‘carbon tax’ is not possible”.",
 		"undercut(a1)":                             "Argument a1 does not apply.",
 	} {
 		id := id
@@ -517,7 +517,7 @@ func TestSay(t *testing.T) {
 				}
 			}
 		}
-		if got := gs.Say(id); got != want && !strings.HasPrefix(id, "asserts(") || strings.HasPrefix(id, "asserts(") && !strings.Contains(got, "asserts that “it is not the case that action carbon tax is possible”") {
+		if got := gs.Say(id); got != want {
 			t.Errorf("Say(%s) = %q, want %q", id, got, want)
 		}
 	}

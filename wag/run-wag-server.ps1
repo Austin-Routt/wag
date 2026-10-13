@@ -1,5 +1,5 @@
 # Start the WAG prototype in your browser (Windows PowerShell).
-# Needs Go 1.22 or later (https://go.dev/dl/) and the whole repository,
+# Needs Go 1.24 or later (https://go.dev/dl/) and the whole repository,
 # because WAG builds against ..\carneades-4. Extra flags pass through:
 #   .\run-wag-server.ps1 --kialo-dir C:\path\to\kialo_visualizer\data
 Set-Location -Path $PSScriptRoot

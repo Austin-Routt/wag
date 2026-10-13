@@ -13,33 +13,112 @@ import (
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
 
-// Say renders a statement in English for players: through the Language
-// templates of the scheme file, with nested statements quoted, ¬ as "it is
-// not the case that", and the words players typed in place of the atoms they
-// became ("carbon tax" for carbon_tax). Statement IDs stay the reference;
-// this is only how they read.
+// Say renders a statement in English for players, through the Language
+// templates of the scheme file:
+//   - the words players typed stand in single quotes, in place of the atoms
+//     they became (‘carbon tax’ for carbon_tax), so that the scheme's words
+//     and the player's can be told apart and fragments still read;
+//   - a statement inside a statement stands in double quotes; one nested
+//     deeper stands in square brackets, shortened;
+//   - a negation reads through the "¬p/n" template of its predicate where
+//     the file has one ("… is not a matter of …"), else as "it is not the
+//     case that …".
+//
+// Statement IDs stay the reference; this is only how they read.
 func (gs *GameState) Say(stmtID string) string {
-	s := gs.say(stmtID, gs.words(), false)
+	return sentence(gs.say(stmtID, gs.words(), 0))
+}
+
+// SayIn is Say for a statement shown with an argument: the argument's
+// conclusion, wherever it occurs inside the statement, reads "C" (the card
+// shows the conclusion as C), so premises such as "W asserts that C" and "C
+// is a matter of D" do not repeat it.
+func (gs *GameState) SayIn(argID, stmtID string) string {
+	words := gs.words()
+	if a := gs.Adapter.Graph.Arguments[argID]; a != nil && a.Conclusion != nil {
+		words = withSelf(words, a.Conclusion.Id)
+	}
+	return sentence(gs.say(stmtID, words, 0))
+}
+
+// selfKey marks, in a words map, the statement that reads "C".
+const selfKey = "\x00self"
+
+func withSelf(words map[string]string, stmtID string) map[string]string {
+	w := make(map[string]string, len(words)+1)
+	for k, v := range words {
+		w[k] = v
+	}
+	w[selfKey] = canonical(stmtID)
+	return w
+}
+
+// canonical is a statement ID in the form terms print it, negation as a
+// leading ¬, so that a statement, the same statement nested in another, and
+// "not(p)" for "¬p" compare equal.
+func canonical(id string) string {
+	neg := false
+	for strings.HasPrefix(id, "¬") {
+		id, neg = strings.TrimPrefix(id, "¬"), !neg
+	}
+	t, ok := terms.ReadString(id)
+	if !ok {
+		if neg {
+			return "¬" + id
+		}
+		return id
+	}
+	for {
+		c, ok := t.(terms.Compound)
+		if !ok || c.Functor != "not" || len(c.Args) != 1 {
+			break
+		}
+		t, neg = c.Args[0], !neg
+	}
+	if neg {
+		return "¬" + t.String()
+	}
+	return t.String()
+}
+
+// sentence capitalizes the first letter (after any opening quotes) and ends
+// the sentence with a period.
+func sentence(s string) string {
+	s = strings.TrimSpace(s)
 	if s == "" {
 		return s
 	}
-	r, n := utf8.DecodeRuneInString(s)
-	s = string(unicode.ToUpper(r)) + s[n:]
-	if !strings.HasSuffix(s, ".") && !strings.HasSuffix(s, "?") {
+	for i, r := range s {
+		if r == '‘' || r == '“' || r == '"' || r == '\'' {
+			continue
+		}
+		s = s[:i] + string(unicode.ToUpper(r)) + s[i+utf8.RuneLen(r):]
+		break
+	}
+	if !strings.HasSuffix(s, ".") && !strings.HasSuffix(s, "?") && !strings.HasSuffix(s, "!") {
 		s += "."
 	}
 	return s
 }
 
-func (gs *GameState) say(id string, words map[string]string, nested bool) string {
+// maxNestedWords is how many words of a statement nested two levels deep
+// are shown.
+const maxNestedWords = 8
+
+func (gs *GameState) say(id string, words map[string]string, depth int) string {
+	if self, ok := words[selfKey]; ok && depth > 0 && canonical(id) == self {
+		return "C"
+	}
 	if rest := strings.TrimPrefix(id, "¬"); rest != id {
-		return "it is not the case that " + gs.say(rest, words, true)
+		if t, ok := terms.ReadString(rest); ok {
+			if out, ok := gs.negative(t, words, depth); ok {
+				return out
+			}
+		}
+		return "it is not the case that " + lowerFirst(gs.say(rest, words, depth))
 	}
 	if text := gs.freeText(id); text != "" {
-		if nested {
-			return strings.TrimSuffix(text, ".")
-		}
-		return text
+		return strings.TrimSuffix(text, ".")
 	}
 	t, ok := terms.ReadString(id)
 	if !ok || strings.TrimSpace(id) == "" {
@@ -48,57 +127,112 @@ func (gs *GameState) say(id string, words map[string]string, nested bool) string
 		}
 		return id
 	}
-	return gs.sayTerm(t, words, nested)
+	return gs.sayTerm(t, words, depth)
 }
 
-func (gs *GameState) sayTerm(t terms.Term, words map[string]string, nested bool) string {
+// negative renders the negation of t through the "¬p/n" template of its
+// predicate, if the Language has one.
+func (gs *GameState) negative(t terms.Term, words map[string]string, depth int) (string, bool) {
+	c, ok := t.(terms.Compound)
+	if !ok {
+		return "", false
+	}
+	tmpl := gs.template("¬"+c.Functor, len(c.Args))
+	if tmpl == "" {
+		return "", false
+	}
+	return gs.fill(tmpl, c.Args, words, depth), true
+}
+
+func (gs *GameState) template(functor string, arity int) string {
+	if th := gs.Adapter.Graph.Theory; th != nil && th.Language != nil {
+		if tmpl := th.Language[fmt.Sprintf("%s/%d", functor, arity)]; strings.Count(strings.ReplaceAll(tmpl, "%%", ""), "%s") == arity {
+			return tmpl
+		}
+	}
+	return ""
+}
+
+// fill instantiates a template with the arguments of a compound: values in
+// single quotes, statements in double quotes (see sayArg).
+func (gs *GameState) fill(tmpl string, args []terms.Term, words map[string]string, depth int) string {
+	vals := make([]interface{}, len(args))
+	for i, a := range args {
+		vals[i] = gs.sayArg(a, words, depth)
+	}
+	out := strings.TrimSuffix(fmt.Sprintf(tmpl, vals...), ".")
+	if depth > 0 && !strings.HasPrefix(tmpl, "%s") { // "Doing %s ..." within a sentence
+		out = lowerFirst(out)
+	}
+	return out
+}
+
+// sayArg renders an argument of a statement: a value as the player's words
+// in single quotes, a statement in double quotes.
+func (gs *GameState) sayArg(a terms.Term, words map[string]string, depth int) string {
+	s := a.String()
+	if self, ok := words[selfKey]; ok && canonical(s) == self {
+		return "C"
+	}
+	if _, isCompound := a.(terms.Compound); isCompound || gs.freeText(s) != "" {
+		inner := gs.say(s, words, depth+1)
+		if depth+1 >= 2 { // [a shortened statement] inside a “quoted” one
+			return "[" + shorten(inner, maxNestedWords) + "]"
+		}
+		return "“" + inner + "”"
+	}
+	if w, ok := words[s]; ok {
+		return "‘" + w + "’"
+	}
+	return "‘" + strings.ReplaceAll(s, "_", " ") + "’"
+}
+
+func (gs *GameState) sayTerm(t terms.Term, words map[string]string, depth int) string {
 	c, ok := t.(terms.Compound)
 	if !ok {
 		s := t.String()
-		if text := gs.freeText(s); text != "" { // a free-text statement used as a value
-			return "“" + strings.TrimSuffix(text, ".") + "”"
+		if text := gs.freeText(s); text != "" {
+			return strings.TrimSuffix(text, ".")
 		}
 		if w, ok := words[s]; ok {
 			return w
 		}
 		return strings.ReplaceAll(s, "_", " ")
 	}
-	var out string
 	switch {
 	case c.Functor == "not" && len(c.Args) == 1:
-		out = "it is not the case that " + gs.sayTerm(c.Args[0], words, true)
+		if out, ok := gs.negative(c.Args[0], words, depth); ok {
+			return out
+		}
+		return "it is not the case that " + lowerFirst(gs.sayTerm(c.Args[0], words, depth))
 	case c.Functor == "undercut" && len(c.Args) == 1:
-		out = fmt.Sprintf("argument %s does not apply", c.Args[0].String())
-	default:
-		args := make([]interface{}, len(c.Args))
+		return fmt.Sprintf("argument %s does not apply", c.Args[0].String())
+	}
+	tmpl := gs.template(c.Functor, len(c.Args))
+	if tmpl == "" {
+		parts := make([]string, len(c.Args))
 		for i, a := range c.Args {
-			if _, isCompound := a.(terms.Compound); isCompound {
-				args[i] = "“" + gs.sayTerm(a, words, true) + "”"
-			} else {
-				args[i] = gs.sayTerm(a, words, true)
-			}
+			parts[i] = gs.sayArg(a, words, depth)
 		}
-		tmpl := ""
-		if th := gs.Adapter.Graph.Theory; th != nil && th.Language != nil {
-			tmpl = th.Language[fmt.Sprintf("%s/%d", c.Functor, len(c.Args))]
-		}
-		if tmpl == "" || strings.Count(tmpl, "%s") != len(args) {
-			parts := make([]string, len(args))
-			for i, a := range args {
-				parts[i] = a.(string)
-			}
-			out = c.Functor + "(" + strings.Join(parts, ", ") + ")"
-		} else {
-			out = fmt.Sprintf(tmpl, args...)
-			if nested && !strings.HasPrefix(tmpl, "%s") { // "Action %s ..." within a sentence
-				out = lowerFirst(out)
-			}
-		}
+		return c.Functor + "(" + strings.Join(parts, ", ") + ")"
 	}
-	if nested {
-		out = strings.TrimSuffix(out, ".")
+	return gs.fill(tmpl, c.Args, words, depth)
+}
+
+// shorten keeps the first n words of s, closing any quotes it cuts.
+func shorten(s string, n int) string {
+	f := strings.Fields(s)
+	if len(f) <= n {
+		return s
 	}
-	return out
+	out := strings.Join(f[:n], " ")
+	if strings.Count(out, "‘") > strings.Count(out, "’") {
+		out += "’"
+	}
+	if strings.Count(out, "“") > strings.Count(out, "”") {
+		out += "”"
+	}
+	return out + " …"
 }
 
 // freeText returns the text of a free-text statement (of the user-defined
@@ -196,28 +330,38 @@ func (gs *GameState) Effect(tmpl nascq.ActionTemplate, bindings map[string]strin
 // answerText is the statement a targeted move from the template argues for
 // (its conclusion), without a final period.
 func (gs *GameState) answerText(tmpl nascq.ActionTemplate, target *caes.Argument) string {
-	not := func(s string) string { return "It is not the case that " + lowerFirst(s) }
 	attack := tmpl.Type == "attack"
 	switch tmpl.Locus.Kind {
-	case nascq.LocusPremise, nascq.LocusException:
-		stmt := gs.sayPlain(tmpl.LocusStmtID)
-		if attack == (tmpl.Locus.Kind == nascq.LocusPremise) {
-			return not(stmt)
+	case nascq.LocusPremise:
+		if attack {
+			return gs.sayPlain(negation(tmpl.LocusStmtID))
 		}
-		return stmt
+		return gs.sayPlain(tmpl.LocusStmtID)
+	case nascq.LocusException:
+		if attack {
+			return gs.sayPlain(tmpl.LocusStmtID)
+		}
+		return gs.sayPlain(negation(tmpl.LocusStmtID))
 	case nascq.LocusConclusion:
 		if attack {
-			return not(gs.sayPlain(target.Conclusion.Id))
+			return gs.sayPlain(negation(target.Conclusion.Id))
 		}
 		return gs.sayPlain(target.Conclusion.Id)
 	case nascq.LocusArgument:
-		concl := gs.sayPlain(target.Conclusion.Id)
 		if attack {
-			return fmt.Sprintf("%s does not support “%s”", tmpl.TargetArgID, concl)
+			return fmt.Sprintf("%s's reasons do not support its conclusion", tmpl.TargetArgID)
 		}
-		return fmt.Sprintf("%s does support “%s”", tmpl.TargetArgID, concl)
+		return fmt.Sprintf("%s's reasons do support its conclusion", tmpl.TargetArgID)
 	}
 	return tmpl.CaesAttackType + " of " + tmpl.TargetArgID
+}
+
+// negation is the ID of the statement that negates id.
+func negation(id string) string {
+	if rest := strings.TrimPrefix(id, "¬"); rest != id {
+		return rest
+	}
+	return "¬" + id
 }
 
 // sayPlain is Say without the final period.
@@ -261,27 +405,44 @@ func (gs *GameState) DescribeMove(m Move) string {
 	main := gs.Adapter.Graph.Arguments[m.ArgIDs[0]]
 	cq := ""
 	if q := gs.NASCQ.GetCQ(a.AnswersCQID); q != nil {
-		cq = q.Name
+		cq = "the " + q.Name
 	}
-	scheme := gs.SchemeName(main)
+	tag := fmt.Sprintf("[%s, %s]", gs.SchemeName(main), m.ArgIDs[0])
 	concl := ""
 	if main != nil && main.Conclusion != nil {
 		concl = gs.Say(main.Conclusion.Id)
+	}
+	target := a.TargetArgID
+	if t := gs.Adapter.Graph.Arguments[target]; t != nil && ownerOf(t) != "" && ownerOf(t) != who {
+		target = ownerOf(t) + "'s " + target
 	}
 	switch {
 	case a.Type == "question":
 		return fmt.Sprintf("%s asks %s about %s: %s", who, ownerOf(gs.Adapter.Graph.Arguments[a.TargetArgID]),
 			a.TargetArgID, gs.QuestionText(a.AnswersCQID, a.TargetArgID))
 	case a.Type == "attack" && cq != "":
-		return fmt.Sprintf("%s attacks %s (%s, %s) with %s %s: %s", who, a.TargetArgID, cq, a.AttackType, scheme, m.ArgIDs[0], concl)
+		return fmt.Sprintf("%s answers %s against %s: %s %s", who, cq, target, concl, tag)
 	case a.Type == "attack":
-		return fmt.Sprintf("%s attacks %s (%s) with %s %s: %s", who, a.TargetArgID, a.AttackType, scheme, m.ArgIDs[0], concl)
+		return fmt.Sprintf("%s attacks %s (%s): %s %s", who, target, attackWords(a.AttackType), concl, tag)
 	case a.TargetArgID != "" && cq != "":
-		return fmt.Sprintf("%s defends %s (%s) with %s %s: %s", who, a.TargetArgID, cq, scheme, m.ArgIDs[0], concl)
+		return fmt.Sprintf("%s answers %s for %s: %s %s", who, cq, target, concl, tag)
 	case a.TargetArgID != "":
-		return fmt.Sprintf("%s defends %s with %s %s: %s", who, a.TargetArgID, scheme, m.ArgIDs[0], concl)
+		return fmt.Sprintf("%s backs %s: %s %s", who, target, concl, tag)
 	}
-	return fmt.Sprintf("%s argues %s with %s: %s", who, m.ArgIDs[0], scheme, concl)
+	return fmt.Sprintf("%s argues: %s %s", who, concl, tag)
+}
+
+// attackWords names an attack type for players.
+func attackWords(t string) string {
+	switch t {
+	case "rebuttal":
+		return "against its conclusion"
+	case "undercutter":
+		return "against its inference"
+	case "undermining":
+		return "against a premise"
+	}
+	return t
 }
 
 // VariableOrder returns the template's variables in the order a player fills

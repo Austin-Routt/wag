@@ -138,6 +138,16 @@ type GameConfig struct {
 	// AllowOther offers the user-defined scheme "Other" (free premises and
 	// conclusion, generic critical questions; nascq.EnableOther).
 	AllowOther bool
+	// AnyPremise lets any premise be questioned or attacked, through the
+	// generic Premise Acceptability Question, not only the premises a
+	// scheme's own critical questions are about (nascq.EnablePremiseQuestion).
+	// The modes turn it on.
+	AnyPremise bool
+	// Context names the context preset the game was set up from (Context),
+	// and Weights are the scheme weights it sets (scheme ID, or "*" for
+	// every scheme, to base weight).
+	Context string
+	Weights map[string]float64
 	// RequireEvidence rejects (E1) an argument made with a scheme whose
 	// evidence is "required" unless the move cites a source.
 	RequireEvidence bool
@@ -234,6 +244,8 @@ type Move struct {
 	Scorable bool
 	TimedOut bool // a void late move, recorded as an abstention
 	Resigned bool
+	// Rejection is why an invalid move was rejected.
+	Rejection string `json:",omitempty"`
 
 	// Moderation is the moderator's verdict on a held move ("approved",
 	// "rejected"), with their note.
@@ -378,6 +390,12 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 	gs.SetClock(nil)
 	if config.AllowOther {
 		n.EnableOther()
+	}
+	if config.AnyPremise {
+		n.EnablePremiseQuestion()
+	}
+	if len(config.Weights) > 0 {
+		gs.applyWeights(config.Weights)
 	}
 	if config.Objective == ObjectiveClaim && config.Claim != "" {
 		if id, err := adapter.MakeIssue(config.Claim, config.ClaimStandard); err == nil {

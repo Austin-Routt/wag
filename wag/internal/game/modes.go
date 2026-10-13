@@ -42,6 +42,7 @@ func ModeConfig(name string) (GameConfig, error) {
 	// snapshot scoring. With it, greedy self-play in the target mode ended in
 	// two rounds, won by the second seat every time; without it, 8.4 rounds
 	// and 7 to 5 (docs/review-2026-10-13-part2.md, section 6).
+	c.AnyPremise = true
 	live := func() { c.Scoring.Model, c.Scoring.UndercutterBonus = ScoringLive, 0 }
 	switch name {
 	case "classic", "":

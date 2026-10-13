@@ -28,7 +28,7 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 	if r, _ := gs.ExecuteTurn(act); !r.Accepted {
 		t.Fatalf("rejected: %s", r.Error)
 	}
-	if !strings.Contains(out.String(), "therefore: Action carbon tax should be performed") {
+	if !strings.Contains(out.String(), "You argue that C: ‘Carbon tax’ should be done.") {
 		t.Errorf("no preview of the support:\n%s", out.String())
 	}
 
@@ -43,10 +43,10 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 	act = bob.ChooseAction(gs.BuildObservation())
 	shown := out.String()
 	for _, want := range []string{
-		"Is it actually possible to perform action carbon tax?",
-		"therefore: It is not the case that action carbon tax is possible (against a premise of a1).",
-		"no parliamentary majority is observed to be the case",
-		"“it is not the case that action carbon tax is possible” is indicated when no parliamentary majority is true",
+		"Is ‘carbon tax’ actually possible?",
+		"therefore: ‘Carbon tax’ is not possible (against a premise of a1).",
+		"‘No parliamentary majority’ is observed.",
+		"C is indicated when ‘no parliamentary majority’ holds.",
 	} {
 		if !strings.Contains(shown, want) {
 			t.Errorf("wizard output lacks %q:\n%s", want, shown)
@@ -57,7 +57,7 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 		t.Fatalf("Bob's attack: %+v", r)
 	}
 	board := RenderState(gs)
-	for _, want := range []string{"[" + r.ArgIDs[0] + "]", "Out ✗     Action carbon tax is possible."} {
+	for _, want := range []string{"[" + r.ArgIDs[0] + "]", "Out ✗     ‘Carbon tax’ is possible."} {
 		if !strings.Contains(board, want) {
 			t.Errorf("board lacks %q:\n%s", want, board)
 		}

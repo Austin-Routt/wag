@@ -447,6 +447,7 @@ func (gs *GameState) rejectInvalid(player *Player, action nascq.ProposedAction, 
 		Action:      action,
 		ScoreDelta:  pen,
 		ScoreDeltas: map[string]float64{player.ID: pen},
+		Rejection:   msg,
 	})
 	return &TurnResult{Accepted: false, Error: msg, ScoreDelta: pen, ScoreDeltas: map[string]float64{player.ID: pen}}
 }
