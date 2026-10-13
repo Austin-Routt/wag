@@ -36,6 +36,10 @@ type Answer struct {
 	// premises are about the answer.
 	AnswerVariable string
 
+	// FreePremises, for SchemeID FreeSchemeID (the user-defined scheme), are
+	// the answering argument's premises in free text.
+	FreePremises []string
+
 	Standard caes.Standard // proof standard of an issue the answer creates
 }
 
@@ -102,6 +106,9 @@ func (a *Adapter) AnswerQuestion(ans Answer) ([]string, error) {
 	}
 	if err != nil {
 		return nil, err
+	}
+	if ans.SchemeID == FreeSchemeID {
+		return a.addFreeArgument(ans.Owner, ans.FreePremises, concl, ans.Weight)
 	}
 	bindings := ans.Bindings
 	if ans.AnswerVariable != "" {

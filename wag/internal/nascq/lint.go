@@ -103,6 +103,14 @@ func (n *NASCQ) Lint() []LintIssue {
 				}
 			}
 		}
+		switch s.Evidence {
+		case "", "required", "recommended":
+		default:
+			add(true, id, "evidence %q is not \"required\", \"recommended\" or empty", s.Evidence)
+		}
+		if s.Evidence == "required" && s.EvidenceNoteEN == "" {
+			add(false, id, "evidence is required but evidence_note_en does not say what to cite")
+		}
 		if v := s.AnswerVariable; v != "" {
 			if _, ok := s.Variables[v]; !ok {
 				add(true, id, "answer_variable %q is not a declared variable", v)

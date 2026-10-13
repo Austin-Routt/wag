@@ -269,6 +269,7 @@ type snapshot struct {
 	terminated, truncated         bool
 	reason, rejection, claim, lsr string
 	questions                     []OpenQuestion
+	pending                       *PendingMove
 	turnStartedAt                 time.Time
 }
 
@@ -277,7 +278,7 @@ func (gs *GameState) takeSnapshot() *snapshot {
 		turn: gs.CurrentTurn, active: gs.ActivePlayerIdx, history: len(gs.MoveHistory),
 		roundHadMove: gs.roundHadMove, consecAllAbstain: gs.ConsecAllAbstain,
 		terminated: gs.Terminated, truncated: gs.Truncated, reason: gs.TerminationReason, rejection: gs.LastRejection,
-		claim: gs.Claim, lsr: gs.Loser, questions: append([]OpenQuestion{}, gs.Questions...),
+		claim: gs.Claim, lsr: gs.Loser, questions: append([]OpenQuestion{}, gs.Questions...), pending: gs.Pending,
 		turnStartedAt: gs.TurnStartedAt,
 	}
 	for _, p := range gs.Players {
@@ -298,6 +299,6 @@ func (gs *GameState) restoreSnapshot(s *snapshot) {
 	gs.CurrentTurn, gs.ActivePlayerIdx, gs.MoveHistory = s.turn, s.active, gs.MoveHistory[:s.history]
 	gs.roundHadMove, gs.ConsecAllAbstain = s.roundHadMove, s.consecAllAbstain
 	gs.Terminated, gs.Truncated, gs.TerminationReason, gs.LastRejection = s.terminated, s.truncated, s.reason, s.rejection
-	gs.Claim, gs.Loser, gs.Questions = s.claim, s.lsr, s.questions
+	gs.Claim, gs.Loser, gs.Questions, gs.Pending = s.claim, s.lsr, s.questions, s.pending
 	gs.TurnStartedAt = s.turnStartedAt
 }

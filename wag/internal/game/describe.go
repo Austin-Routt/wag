@@ -35,6 +35,12 @@ func (gs *GameState) say(id string, words map[string]string, nested bool) string
 	if rest := strings.TrimPrefix(id, "¬"); rest != id {
 		return "it is not the case that " + gs.say(rest, words, true)
 	}
+	if text := gs.freeText(id); text != "" {
+		if nested {
+			return strings.TrimSuffix(text, ".")
+		}
+		return text
+	}
 	t, ok := terms.ReadString(id)
 	if !ok || strings.TrimSpace(id) == "" {
 		if s := gs.Adapter.Graph.Statements[id]; s != nil && s.Text != "" {
@@ -49,6 +55,9 @@ func (gs *GameState) sayTerm(t terms.Term, words map[string]string, nested bool)
 	c, ok := t.(terms.Compound)
 	if !ok {
 		s := t.String()
+		if text := gs.freeText(s); text != "" { // a free-text statement used as a value
+			return "“" + strings.TrimSuffix(text, ".") + "”"
+		}
 		if w, ok := words[s]; ok {
 			return w
 		}
@@ -90,6 +99,18 @@ func (gs *GameState) sayTerm(t terms.Term, words map[string]string, nested bool)
 		out = strings.TrimSuffix(out, ".")
 	}
 	return out
+}
+
+// freeText returns the text of a free-text statement (of the user-defined
+// scheme, or imported), whose ID is a hash of its text; "" for others.
+func (gs *GameState) freeText(id string) string {
+	if !strings.HasPrefix(id, "text_") && !strings.HasPrefix(id, "stmt_") {
+		return ""
+	}
+	if s := gs.Adapter.Graph.Statements[id]; s != nil {
+		return s.Text
+	}
+	return ""
 }
 
 // words maps the atoms that players' bindings became to the words they typed
@@ -217,6 +238,15 @@ func (gs *GameState) DescribeMove(m Move) string {
 	a := m.Action
 	who := m.PlayerID
 	switch {
+	case a.Type == "decide":
+		verb := map[string]string{"accepted": "accepts", "rejected": "rejects", "undecided": "withdraws its decision on"}[m.Decision]
+		line := fmt.Sprintf("The moderator %s: %s", verb, gs.Say(m.DecisionStmt))
+		if a.Text != "" {
+			line += " (" + a.Text + ")"
+		}
+		return line
+	case m.Moderation != "" && len(m.ArgIDs) == 0 && !m.Abstained:
+		return fmt.Sprintf("%s's move was %s", who, m.Moderation)
 	case m.Resigned:
 		return who + " resigns"
 	case m.TimedOut && m.Abstained:

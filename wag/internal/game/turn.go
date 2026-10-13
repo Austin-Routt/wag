@@ -44,6 +44,9 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	if gs.Terminated {
 		return nil, fmt.Errorf("game is already terminated: %s", gs.TerminationReason)
 	}
+	if gs.Pending != nil && !gs.moderating {
+		return nil, fmt.Errorf("a move by %s awaits the moderator", gs.Pending.PlayerID)
+	}
 
 	player := gs.ActivePlayer()
 
@@ -117,11 +120,38 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		return gs.rejectInvalid(player, action, fmt.Sprintf("Q2: %s has already been raised about %s",
 			validated.AnswersCQID, validated.TargetArgID)), nil
 	}
+	if s := gs.NASCQ.GetScheme(validated.SchemeID); gs.Config.RequireEvidence && s != nil && s.Evidence == "required" &&
+		len(nonEmpty(action.Evidence)) == 0 {
+		return gs.rejectInvalid(player, action, fmt.Sprintf("E1: an argument from %s must cite a source: %s",
+			s.Name, s.EvidenceNoteEN)), nil
+	}
+
+	// Moderated play: a valid move is held for the moderator. It is tried
+	// first, so the moderator only sees moves the game would accept.
+	if gs.Config.Moderated && !gs.moderating {
+		r, err := gs.Simulate(action)
+		if err != nil {
+			return nil, err
+		}
+		if !r.Accepted {
+			if r.ScoreDelta == gs.Config.Scoring.InvalidActionPenalty && r.ScoreDelta != 0 {
+				return gs.rejectInvalid(player, action, r.Error), nil
+			}
+			return &TurnResult{Error: r.Error}, nil
+		}
+		gs.Pending = &PendingMove{PlayerID: player.ID, Action: action, SubmittedAt: gs.now()}
+		return &TurnResult{Pending: true}, nil
+	}
 
 	// ---------------------------------------------------------------
-	// Phase 3: Weight assignment (Trusted mode = scheme base_weight)
+	// Phase 3: Weight assignment (Trusted mode = scheme base_weight;
+	// Moderated mode = the moderator's weight, if they set one)
 	// ---------------------------------------------------------------
 	weight := validated.Weight
+	if gs.weightOverride > 0 {
+		weight = gs.weightOverride
+		validated.Weight = weight
+	}
 
 	// ---------------------------------------------------------------
 	// Phase 4: Snapshot labels, apply mutation, validate acyclicity
@@ -165,6 +195,16 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	if dup := gs.duplicateArgument(argIDs); dup != "" {
 		gs.Adapter.Restore(checkpoint)
 		return gs.rejectInvalid(player, action, fmt.Sprintf("G1: this argument is already in the graph as %s", dup)), nil
+	}
+
+	// The player's own wording of the argument, and the sources they cite.
+	if len(argIDs) > 0 && validated.Type != "question" {
+		if t := strings.TrimSpace(action.Text); t != "" {
+			gs.Adapter.SetArgumentMeta(argIDs[0], "text", t)
+		}
+		if ev := nonEmpty(action.Evidence); len(ev) > 0 {
+			gs.Adapter.SetArgumentMeta(argIDs[0], "evidence", ev)
+		}
 	}
 
 	// The opening argument of a debate states its claim, which is at issue
@@ -335,6 +375,11 @@ func (gs *GameState) applyAction(
 			return nil, nil, err
 		}
 		return []string{id}, nil, nil
+	case va.TargetArgID == "" && va.Type == "support" && va.CarneadesSchemeID == carneades.FreeSchemeID:
+		if argIDs, err = gs.Adapter.AddFreeArgument(ownerID, nascq.FreePremises(va.VariableBindings),
+			va.VariableBindings["C"], weight); err != nil {
+			return nil, nil, err
+		}
 	case va.TargetArgID == "" && va.Type == "support":
 		nAssumptions := gs.Adapter.AssumptionCount()
 		if argIDs, err = gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID, va.VariableBindings, weight); err != nil {
@@ -352,6 +397,7 @@ func (gs *GameState) applyAction(
 			LocusStmtID:    va.LocusStmtID,
 			Positive:       va.IsDefence(),
 			AnswerVariable: va.AnswerVariable,
+			FreePremises:   nascq.FreePremises(va.VariableBindings),
 			Standard:       caes.PE,
 		})
 		if err != nil {
@@ -441,6 +487,17 @@ func (gs *GameState) duplicateArgument(moveArgs []string) string {
 		}
 	}
 	return ""
+}
+
+// nonEmpty returns the non-blank strings of list, trimmed.
+func nonEmpty(list []string) []string {
+	var out []string
+	for _, x := range list {
+		if x = strings.TrimSpace(x); x != "" {
+			out = append(out, x)
+		}
+	}
+	return out
 }
 
 func appendNew(list []string, id string) []string {

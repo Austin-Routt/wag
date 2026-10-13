@@ -34,6 +34,11 @@ type GraphQuerier interface {
 	// argument's own bindings substituted, or "" if none does. The statement
 	// need not exist yet.
 	ExceptionMatching(argID, pattern string) string
+
+	// PremiseIDs returns the statement IDs of the argument's premises, in
+	// order (for questions about any premise, such as those asked of the
+	// user-defined scheme).
+	PremiseIDs(argID string) []string
 }
 
 // attackTypes are the CAES operations an attack can perform.
@@ -236,8 +241,16 @@ func (n *NASCQ) validateScheme(action ProposedAction) (*ValidatedAction, error) 
 		answerVar = scheme.AnswerVariable
 	}
 	missing := []string{}
+	if scheme.Free { // the user-defined scheme: a conclusion and at least one premise
+		if len(FreePremises(action.VariableBindings)) == 0 {
+			missing = append(missing, "P1")
+		}
+		if strings.TrimSpace(action.VariableBindings["C"]) == "" && answerVar == "" {
+			missing = append(missing, "C")
+		}
+	}
 	for varName := range scheme.Variables {
-		if _, ok := action.VariableBindings[varName]; !ok && varName != answerVar {
+		if _, ok := action.VariableBindings[varName]; !ok && varName != answerVar && !scheme.Free {
 			missing = append(missing, varName)
 		}
 	}
@@ -248,6 +261,9 @@ func (n *NASCQ) validateScheme(action ProposedAction) (*ValidatedAction, error) 
 
 	// S6: Template instantiation
 	instPremises, instConclusion := instantiateTemplates(scheme, action.VariableBindings)
+	if scheme.Free {
+		instPremises = FreePremises(action.VariableBindings)
+	}
 	return &ValidatedAction{
 		CarneadesSchemeID: scheme.CarneadesID,
 		InstPremises:      instPremises,

@@ -135,6 +135,18 @@ type GameConfig struct {
 	// play). Questions are tracked, but not enforced, when it is 0.
 	AnswerWithin int
 
+	// AllowOther offers the user-defined scheme "Other" (free premises and
+	// conclusion, generic critical questions; nascq.EnableOther).
+	AllowOther bool
+	// RequireEvidence rejects (E1) an argument made with a scheme whose
+	// evidence is "required" unless the move cites a source.
+	RequireEvidence bool
+	// Moderated holds every move for a moderator, who approves it (and may
+	// set its weight) or rejects it, and who can accept or reject
+	// statements (GameState.Moderate, GameState.Decide). Agents cannot play
+	// the moderator: the runner and the CLI do not support it.
+	Moderated bool
+
 	// PresumptionWeight is the weight of the presumption that makes a move's
 	// premises hold until attacked (see carneades.AddPresumption). Any argued
 	// undermining (scheme weights are 0.55-0.70) outweighs it, and the mover
@@ -218,6 +230,24 @@ type Move struct {
 	Scorable bool
 	TimedOut bool // a void late move, recorded as an abstention
 	Resigned bool
+
+	// Moderation is the moderator's verdict on a held move ("approved",
+	// "rejected"), with their note.
+	Moderation string
+	// Decision and DecisionStmt record a moderator's decision on a statement
+	// (Action.Type "decide", PlayerID ModeratorID).
+	Decision     string
+	DecisionStmt string
+}
+
+// ModeratorID is the PlayerID of the moderator's records in the history.
+const ModeratorID = "moderator"
+
+// PendingMove is a move held for the moderator.
+type PendingMove struct {
+	PlayerID    string               `json:"player"`
+	Action      nascq.ProposedAction `json:"action"`
+	SubmittedAt time.Time            `json:"submitted_at"`
 }
 
 // -------------------------------------------------------------------------
@@ -237,6 +267,7 @@ type TurnResult struct {
 
 	ScoreDeltas map[string]float64 // every player's score change (see Move.ScoreDeltas)
 	TimedOut    bool               // the move came too late and was void
+	Pending     bool               // the move is held for the moderator (GameConfig.Moderated)
 	Outcome     *Outcome           // the result, once the game has ended
 }
 
@@ -281,6 +312,13 @@ type GameState struct {
 	// Loser is the player who forfeited the game (resigned, left a question
 	// unanswered or ran out of time), if any.
 	Loser string
+
+	// Pending is the move held for the moderator, if any: no other move can
+	// be made until the moderator approves or rejects it.
+	Pending *PendingMove
+
+	moderating     bool    // a held move is being applied
+	weightOverride float64 // > 0: the weight the moderator gave the move being applied
 
 	clock         func() time.Time
 	StartedAt     time.Time // when the game began (SetClock resets it)
@@ -334,6 +372,9 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 	}
 	gs.bridge = &graphBridge{gs: gs}
 	gs.SetClock(nil)
+	if config.AllowOther {
+		n.EnableOther()
+	}
 	if config.Objective == ObjectiveClaim && config.Claim != "" {
 		if id, err := adapter.MakeIssue(config.Claim, config.ClaimStandard); err == nil {
 			gs.Claim = id
@@ -444,6 +485,21 @@ func (b *graphBridge) PremiseExists(argID, premiseStmtID string) bool {
 // target_premise_pattern designates (see carneades.Adapter.PremiseMatching).
 func (b *graphBridge) PremiseMatching(argID, pattern string) string {
 	return b.gs.Adapter.PremiseMatching(argID, pattern)
+}
+
+// PremiseIDs returns the statement IDs of the argument's premises, in order.
+func (b *graphBridge) PremiseIDs(argID string) []string {
+	arg := b.gs.Adapter.Graph.Arguments[argID]
+	if arg == nil {
+		return nil
+	}
+	out := make([]string, 0, len(arg.Premises))
+	for _, p := range arg.Premises {
+		if p.Stmt != nil {
+			out = append(out, p.Stmt.Id)
+		}
+	}
+	return out
 }
 
 // ExceptionMatching returns the exception of the argument that an exception

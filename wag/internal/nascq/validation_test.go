@@ -49,6 +49,8 @@ func (m *mockGraph) PremiseMatching(argID, pattern string) string {
 	return ""
 }
 
+func (m *mockGraph) PremiseIDs(argID string) []string { return m.premises[argID] }
+
 // ExceptionMatching mimics the adapter: the pattern with its placeholders
 // left as they are (the mock has no bindings).
 func (m *mockGraph) ExceptionMatching(argID, pattern string) string {

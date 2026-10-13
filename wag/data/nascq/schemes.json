@@ -4,13 +4,28 @@
     "name": "Practical Reasoning",
     "semantic_type": "action",
     "thesis_independent": false,
-    "base_weight": 0.70,
+    "base_weight": 0.7,
     "variables": {
-      "A":  { "type": "action", "description": "Action to be performed" },
-      "S1": { "type": "state",  "description": "Current circumstances" },
-      "S2": { "type": "state",  "description": "Future state after action" },
-      "G":  { "type": "goal",   "description": "Goal to be realized" },
-      "V":  { "type": "value",  "description": "Value promoted by the goal" }
+      "A": {
+        "type": "action",
+        "description": "Action to be performed"
+      },
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after action"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized"
+      },
+      "V": {
+        "type": "value",
+        "description": "Value promoted by the goal"
+      }
     },
     "premise_templates_en": [
       "In the current circumstances {S1}",
@@ -18,9 +33,24 @@
       "Goal {G} would be realized in {S2}",
       "Goal {G} would promote value {V}"
     ],
-    "conclusion_template_en": "Action {A} should be performed"
+    "conclusion_template_en": "Action {A} should be performed",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state that realizes a goal, which promotes a value.",
+    "cues_en": [
+      "should",
+      "ought to",
+      "we must",
+      "in order to",
+      "so that",
+      "goal",
+      "aim",
+      "achieve",
+      "promote",
+      "policy",
+      "plan to"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
   },
-
   "AS:consequences": {
     "carneades_id": "positive_consequences",
     "name": "Argument from Positive Consequences",
@@ -28,62 +58,136 @@
     "thesis_independent": false,
     "base_weight": 0.65,
     "variables": {
-      "A": { "type": "action", "description": "Action" },
-      "G": { "type": "event",  "description": "Good consequence" }
+      "A": {
+        "type": "action",
+        "description": "Action"
+      },
+      "G": {
+        "type": "event",
+        "description": "Good consequence"
+      }
     },
     "premise_templates_en": [
       "Action {A} brings about {G}",
       "{G} is a good outcome"
     ],
-    "conclusion_template_en": "Action {A} should be performed"
+    "conclusion_template_en": "Action {A} should be performed",
+    "description_en": "An action should be performed because it brings about good consequences.",
+    "cues_en": [
+      "consequence",
+      "consequences",
+      "would lead to",
+      "will lead to",
+      "leads to",
+      "result in",
+      "results in",
+      "benefit",
+      "benefits",
+      "good outcome",
+      "because it would"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
   },
-
   "AS:values": {
     "carneades_id": "positive_value",
     "name": "Argument from Values",
     "semantic_type": "value",
     "thesis_independent": false,
-    "base_weight": 0.60,
+    "base_weight": 0.6,
     "variables": {
-      "V": { "type": "value",  "description": "Value being invoked" },
-      "A": { "type": "entity", "description": "Agent or judger" },
-      "G": { "type": "goal",   "description": "Goal affected" }
+      "V": {
+        "type": "value",
+        "description": "Value being invoked"
+      },
+      "A": {
+        "type": "entity",
+        "description": "Agent or judger"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal affected"
+      }
     },
     "premise_templates_en": [
       "Agent {A} judges {V} as a positive value",
       "Value {V} positively affects goal {G} for agent {A}"
     ],
-    "conclusion_template_en": "There is reason to retain goal {G} because of value {V}"
+    "conclusion_template_en": "There is reason to retain goal {G} because of value {V}",
+    "description_en": "A goal is worth keeping because it promotes a value the agent holds.",
+    "cues_en": [
+      "value",
+      "values",
+      "freedom",
+      "fairness",
+      "justice",
+      "equality",
+      "dignity",
+      "important to",
+      "matters",
+      "principle",
+      "right thing"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
   },
-
   "AS:sign": {
     "carneades_id": "sign",
     "name": "Argument from Sign",
     "semantic_type": "causality",
     "thesis_independent": false,
-    "base_weight": 0.60,
+    "base_weight": 0.6,
     "variables": {
-      "A": { "type": "event", "description": "Observable sign or indicator" },
-      "B": { "type": "event", "description": "Indicated condition" }
+      "A": {
+        "type": "event",
+        "description": "Observable sign or indicator"
+      },
+      "B": {
+        "type": "event",
+        "description": "Indicated condition"
+      }
     },
     "premise_templates_en": [
       "{A} is observed to be the case",
       "{B} is indicated when {A} is true"
     ],
     "conclusion_template_en": "{B} is true in the current situation",
-    "answer_variable": "B"
+    "answer_variable": "B",
+    "description_en": "Something is probably true because an observed sign usually indicates it.",
+    "cues_en": [
+      "sign",
+      "signs",
+      "indicates",
+      "indication",
+      "suggests",
+      "symptom",
+      "evidence of",
+      "shows that",
+      "points to",
+      "observed"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "where the sign was observed"
   },
-
   "AS:expert_opinion": {
     "carneades_id": "credible_source",
     "name": "Argument from Expert Opinion",
     "semantic_type": "truth",
     "thesis_independent": true,
-    "base_weight": 0.70,
+    "base_weight": 0.7,
     "variables": {
-      "W": { "type": "entity",      "description": "Expert or credible source" },
-      "D": { "type": "domain",      "description": "Field of expertise" },
-      "S": { "type": "proposition", "description": "Proposition asserted" }
+      "W": {
+        "type": "entity",
+        "description": "Expert or credible source"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Field of expertise"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted"
+      }
     },
     "premise_templates_en": [
       "{W} is a credible source for domain {D}",
@@ -91,9 +195,27 @@
       "{S} is in the domain of {D}"
     ],
     "conclusion_template_en": "{S}",
-    "answer_variable": "S"
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because an expert in its field asserts it.",
+    "cues_en": [
+      "expert",
+      "experts",
+      "scientist",
+      "scientists",
+      "according to",
+      "study",
+      "studies",
+      "research",
+      "professor",
+      "doctor",
+      "dr",
+      "researchers",
+      "ipcc",
+      "peer reviewed"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where the expert asserts it (a citation or a link)"
   },
-
   "AS:position_to_know": {
     "carneades_id": "position_to_know",
     "name": "Argument from Position to Know",
@@ -101,9 +223,18 @@
     "thesis_independent": true,
     "base_weight": 0.65,
     "variables": {
-      "W": { "type": "entity",      "description": "Knowledgeable source" },
-      "D": { "type": "domain",      "description": "Domain of knowledge" },
-      "S": { "type": "proposition", "description": "Proposition asserted" }
+      "W": {
+        "type": "entity",
+        "description": "Knowledgeable source"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Domain of knowledge"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted"
+      }
     },
     "premise_templates_en": [
       "{W} is in a position to know about {D}",
@@ -111,9 +242,25 @@
       "{S} is in the domain of {D}"
     ],
     "conclusion_template_en": "{S}",
-    "answer_variable": "S"
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because someone in a position to know asserts it.",
+    "cues_en": [
+      "witness",
+      "saw",
+      "eyewitness",
+      "insider",
+      "told me",
+      "reported",
+      "was there",
+      "first hand",
+      "firsthand",
+      "knows",
+      "in a position to know",
+      "official"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where they assert it (a citation or a link)"
   },
-
   "AS:analogy": {
     "carneades_id": "analogy",
     "name": "Argument from Analogy",
@@ -121,14 +268,36 @@
     "thesis_independent": true,
     "base_weight": 0.55,
     "variables": {
-      "A": { "type": "proposition", "description": "Proposition claimed to hold" },
-      "C": { "type": "case",        "description": "Similar case" }
+      "A": {
+        "type": "proposition",
+        "description": "Proposition claimed to hold"
+      },
+      "C": {
+        "type": "case",
+        "description": "Similar case"
+      }
     },
     "premise_templates_en": [
       "{C} is a similar case",
       "{A} is true in case {C}"
     ],
     "conclusion_template_en": "{A}",
-    "answer_variable": "A"
+    "answer_variable": "A",
+    "description_en": "A claim holds here because it holds in a similar case.",
+    "cues_en": [
+      "like",
+      "similar",
+      "similarly",
+      "just as",
+      "analogous",
+      "analogy",
+      "same as",
+      "compare",
+      "as in",
+      "in the case of",
+      "precedent"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "the similar case"
   }
 }

@@ -27,6 +27,8 @@ type View struct {
 	Side              string          `json:"side,omitempty"`      // the active player's side: "pro" or "con"
 	Questions         []QuestionView  `json:"questions,omitempty"` // open questions
 	Outcome           *Outcome        `json:"outcome,omitempty"`   // once the game is over
+	Moderated         bool            `json:"moderated,omitempty"`
+	Pending           *PendingMove    `json:"pending,omitempty"` // the move held for the moderator
 	ActivePlayer      string          `json:"active_player"`
 	Players           []PlayerView    `json:"players"`
 	Statements        []StatementView `json:"statements"`
@@ -59,10 +61,11 @@ type QuestionView struct {
 
 // StatementView is a statement of an argument on the board.
 type StatementView struct {
-	ID    string `json:"id"`
-	Text  string `json:"text"`
-	Label string `json:"label"` // "in", "out" or "undecided"
-	Issue string `json:"issue,omitempty"`
+	ID       string `json:"id"`
+	Text     string `json:"text"`
+	Label    string `json:"label"` // "in", "out" or "undecided"
+	Issue    string `json:"issue,omitempty"`
+	Decision string `json:"decision,omitempty"` // the moderator's: "accepted" or "rejected"
 }
 
 // ArgumentView is an argument a player put forward.
@@ -74,6 +77,8 @@ type ArgumentView struct {
 	Conclusion string   `json:"conclusion"`
 	Undercuts  []string `json:"undercuts,omitempty"` // for an undercutter: the arguments it undercuts
 	Weight     float64  `json:"weight"`              // evaluated weight (0 if undercut or a premise is not in)
+	Text       string   `json:"text,omitempty"`      // the argument in the player's own words
+	Evidence   []string `json:"evidence,omitempty"`  // the sources the player cites
 }
 
 // IssueView is an issue: competing positions resolved by a proof standard.
@@ -114,6 +119,8 @@ func (gs *GameState) BuildView() *View {
 		Objective:         ObjectivePoints,
 		Side:              gs.Side(gs.ActivePlayer().ID),
 		ActivePlayer:      gs.ActivePlayer().ID,
+		Moderated:         gs.Config.Moderated,
+		Pending:           gs.Pending,
 		LastRejection:     gs.LastRejection,
 		Terminated:        gs.Terminated,
 		TerminationReason: gs.TerminationReason,
@@ -154,6 +161,8 @@ func (gs *GameState) BuildView() *View {
 		}
 		av := ArgumentView{ID: id, Conclusion: arg.Conclusion.Id, Weight: arg.Weight}
 		av.Owner, _ = arg.Metadata["owner"].(string)
+		av.Text, _ = arg.Metadata["text"].(string)
+		av.Evidence, _ = arg.Metadata["evidence"].([]string)
 		if arg.Scheme != nil {
 			av.Scheme = arg.Scheme.Id
 			if nid := gs.NASCQ.FindNASCQSchemeID(arg.Scheme.Id); nid != "" {
@@ -185,6 +194,9 @@ func (gs *GameState) BuildView() *View {
 			continue
 		}
 		sv := StatementView{ID: id, Text: gs.Say(id), Label: strings.ToLower(s.Label.String())}
+		if d := gs.Adapter.Decision(id); d != carneades.DecisionUndecided {
+			sv.Decision = d
+		}
 		if s.Issue != nil {
 			sv.Issue = s.Issue.Id
 		}

@@ -97,70 +97,85 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 			}
 
 			// The locus decides what the answers are about; a premise or
-			// exception the target does not have cannot be asked about.
+			// exception the target does not have cannot be asked about. A
+			// premise locus without a pattern is about any premise: one set
+			// of templates per premise.
 			locus := n.LocusOf(cqID, nascqSchemeID)
-			stmtID := ""
+			stmtIDs := []string{""}
 			switch locus.Kind {
 			case "":
 				continue // no locus (Lint reports it)
 			case LocusPremise:
-				if stmtID = graph.PremiseMatching(argID, locus.Pattern); stmtID == "" {
-					continue
+				if locus.Pattern == "" {
+					stmtIDs = graph.PremiseIDs(argID)
+				} else {
+					stmtIDs = []string{graph.PremiseMatching(argID, locus.Pattern)}
 				}
 			case LocusException:
-				if stmtID = graph.ExceptionMatching(argID, locus.Pattern); stmtID == "" {
+				stmtIDs = []string{graph.ExceptionMatching(argID, locus.Pattern)}
+			}
+			for _, stmtID := range stmtIDs {
+				if stmtID == "" && (locus.Kind == LocusPremise || locus.Kind == LocusException) {
 					continue
 				}
-			}
-			premiseID := ""
-			if locus.Kind == LocusPremise {
-				premiseID = stmtID
-			}
-			attackType := locus.AttackType()
-
-			// A question alone (no scheme) about a premise or the inference
-			// (Q1 of Validate).
-			if locus.Kind == LocusPremise || locus.Kind == LocusArgument {
-				actions = append(actions, ActionTemplate{
-					Type:            "question",
-					AnswersCQID:     cqID,
-					CQName:          cq.Name,
-					TargetArgID:     argID,
-					TargetPremiseID: premiseID,
-					Locus:           locus,
-					LocusStmtID:     stmtID,
-				})
-			}
-
-			// Each backup scheme can back up either answer: the negative one
-			// (an attack) and the positive one (a defence, a support with a
-			// target).
-			for _, bs := range n.GetBackupSchemes(cqID) {
-				for _, typ := range []string{"attack", "support"} {
-					tmpl := ActionTemplate{
-						Type:                 typ,
-						SchemeID:             bs.ID,
-						SchemeName:           bs.Name,
-						AnswersCQID:          cqID,
-						CQName:               cq.Name,
-						TargetArgID:          argID,
-						Variables:            bs.Variables,
-						PremiseTemplatesEN:   bs.PremiseTemplatesEN,
-						ConclusionTemplateEN: bs.ConclusionTemplateEN,
-						TargetPremiseID:      premiseID,
-						Locus:                locus,
-						LocusStmtID:          stmtID,
-						AnswerVariable:       bs.AnswerVariable,
-					}
-					if typ == "attack" {
-						tmpl.AttackType, tmpl.CaesAttackType = attackType, attackType
-					}
-					actions = append(actions, tmpl)
-				}
+				actions = append(actions, n.answerTemplates(argID, cq, locus, stmtID)...)
 			}
 		}
 	}
 
+	return actions
+}
+
+// answerTemplates returns the templates of the moves about one locus of an
+// argument: the question alone (for a premise or the inference), and an
+// attack and a defence with each scheme that can back an answer.
+func (n *NASCQ) answerTemplates(argID string, cq *CQNode, locus Locus, stmtID string) []ActionTemplate {
+	var actions []ActionTemplate
+	premiseID := ""
+	if locus.Kind == LocusPremise {
+		premiseID = stmtID
+	}
+
+	// A question alone (no scheme) about a premise or the inference (Q1 of
+	// Validate).
+	if locus.Kind == LocusPremise || locus.Kind == LocusArgument {
+		actions = append(actions, ActionTemplate{
+			Type:            "question",
+			AnswersCQID:     cq.ID,
+			CQName:          cq.Name,
+			TargetArgID:     argID,
+			TargetPremiseID: premiseID,
+			Locus:           locus,
+			LocusStmtID:     stmtID,
+		})
+	}
+
+	// Each backup scheme can back up either answer: the negative one (an
+	// attack) and the positive one (a defence, a support with a target).
+	attackType := locus.AttackType()
+	for _, bs := range n.GetBackupSchemes(cq.ID) {
+		for _, typ := range []string{"attack", "support"} {
+			tmpl := ActionTemplate{
+				Type:                 typ,
+				SchemeID:             bs.ID,
+				SchemeName:           bs.Name,
+				AnswersCQID:          cq.ID,
+				CQName:               cq.Name,
+				TargetArgID:          argID,
+				Variables:            bs.Variables,
+				PremiseTemplatesEN:   bs.PremiseTemplatesEN,
+				ConclusionTemplateEN: bs.ConclusionTemplateEN,
+				TargetPremiseID:      premiseID,
+				Locus:                locus,
+				LocusStmtID:          stmtID,
+				AnswerVariable:       bs.AnswerVariable,
+			}
+			if typ == "attack" {
+				tmpl.AttackType, tmpl.CaesAttackType = attackType, attackType
+			}
+			actions = append(actions, tmpl)
+		}
+	}
 	return actions
 }
 

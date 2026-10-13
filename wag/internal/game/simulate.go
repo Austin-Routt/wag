@@ -22,6 +22,11 @@ func (gs *GameState) SimulateThen(action nascq.ProposedAction, inspect func(*Gam
 	snap := gs.takeSnapshot()
 	cp := gs.Adapter.Checkpoint()
 
+	// A simulated move is played, not held for the moderator.
+	moderated := gs.Config.Moderated
+	gs.Config.Moderated = false
+	defer func() { gs.Config.Moderated = moderated }()
+
 	result, err := gs.ExecuteTurn(action)
 	if inspect != nil {
 		inspect(gs)

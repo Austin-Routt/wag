@@ -78,6 +78,23 @@ type ASNode struct {
 	// (should_be_performed(A)); its answering argument concludes the answer
 	// and leaves its own conclusion as the unstated link (an enthymeme).
 	AnswerVariable string `json:"answer_variable,omitempty"`
+
+	// Free marks the user-defined scheme ("Other", see EnableOther): the
+	// player writes the premises (P1, P2, ...) and the conclusion (C) in
+	// their own words; there is no Carneades scheme behind it.
+	Free bool `json:"free,omitempty"`
+
+	// DescriptionEN says in one sentence what the scheme is for, for players.
+	DescriptionEN string `json:"description_en,omitempty"`
+	// CuesEN are words and phrases that typically signal the scheme in a
+	// natural-language argument ("according to", "expert"); Suggest ranks
+	// schemes by them.
+	CuesEN []string `json:"cues_en,omitempty"`
+	// Evidence is "required" when an argument made with the scheme must cite
+	// its source (GameConfig.RequireEvidence enforces it), "recommended", or
+	// "". EvidenceNoteEN says what to cite.
+	Evidence       string `json:"evidence,omitempty"`
+	EvidenceNoteEN string `json:"evidence_note_en,omitempty"`
 }
 
 // CaesMapping specifies how a CQ-directed attack translates into a CAES
@@ -185,6 +202,15 @@ type ProposedAction struct {
 	SchemeID         string            `json:"scheme_id"`         // NASCQ scheme ID (e.g., "AS:expert_opinion")
 	AnswersCQID      string            `json:"answers_cq_id"`     // CQ being answered (empty for direct support)
 	VariableBindings map[string]string `json:"variable_bindings"` // {VarName: "user text"}
+
+	// Text is the argument as the player first put it, in their own words,
+	// before breaking it down into the scheme's variables. It is kept with
+	// the argument (for display and for argument mining) and plays no part
+	// in the evaluation.
+	Text string `json:"text,omitempty"`
+	// Evidence lists the sources the player cites for the argument
+	// (citations or URLs).
+	Evidence []string `json:"evidence,omitempty"`
 }
 
 // ValidatedAction is the output of NASCQ validation. It contains
@@ -207,6 +233,23 @@ type ValidatedAction struct {
 	// AnswerVariable is the backing scheme's AnswerVariable on a move with a
 	// target: the adapter binds it to the answer (S2 does not require it).
 	AnswerVariable string `json:"answer_variable,omitempty"`
+
+	// Free marks the user-defined scheme ("Other", see EnableOther): the
+	// player writes the premises (P1, P2, ...) and the conclusion (C) in
+	// their own words; there is no Carneades scheme behind it.
+	Free bool `json:"free,omitempty"`
+
+	// DescriptionEN says in one sentence what the scheme is for, for players.
+	DescriptionEN string `json:"description_en,omitempty"`
+	// CuesEN are words and phrases that typically signal the scheme in a
+	// natural-language argument ("according to", "expert"); Suggest ranks
+	// schemes by them.
+	CuesEN []string `json:"cues_en,omitempty"`
+	// Evidence is "required" when an argument made with the scheme must cite
+	// its source (GameConfig.RequireEvidence enforces it), "recommended", or
+	// "". EvidenceNoteEN says what to cite.
+	Evidence       string `json:"evidence,omitempty"`
+	EvidenceNoteEN string `json:"evidence_note_en,omitempty"`
 }
 
 // IsDefence reports whether the move answers in the target's favour.
