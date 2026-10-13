@@ -156,8 +156,10 @@ func TestLanguageTemplatesFollowArgumentOrder(t *testing.T) {
 	if got := arg.Conclusion.Text; got != "liberty is a reason for retaining commitment to goal free_speech." {
 		t.Errorf("conclusion text %q", got)
 	}
-	r, _ = gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:analogy",
-		VariableBindings: map[string]string{"A": "tax_works", "C": "sweden"}})
+	if r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:analogy",
+		VariableBindings: map[string]string{"A": "tax_works", "C": "sweden"}}); !r.Accepted {
+		t.Fatalf("analogy support rejected: %s", r.Error)
+	}
 	if s := gs.Adapter.Graph.Statements["more_on_point(tax_works,sweden)"]; s == nil ||
 		s.Text != "tax_works is false in another case which is more on point than case sweden." {
 		t.Errorf("more_on_point text: %+v", s)

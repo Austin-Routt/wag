@@ -29,6 +29,7 @@ import (
 	"encoding/hex"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // TextToAtom converts arbitrary user text into a valid Prolog atom.
@@ -82,11 +83,8 @@ func TextToAtom(s string) string {
 	}
 
 	// A digit cannot start an atom.
-	for _, r := range out {
-		if unicode.IsDigit(r) {
-			out = "x_" + out
-		}
-		break
+	if first, _ := utf8.DecodeRuneInString(out); unicode.IsDigit(first) {
+		out = "x_" + out
 	}
 
 	// "true" and "false" are parsed as Bool(true)/Bool(false), not Atom.
