@@ -37,7 +37,8 @@ func TestLintFindsDataErrors(t *testing.T) {
 	cqs["CQ:likelihood"]["caes_mapping"] = map[string]interface{}{"positive_answer_type": "support", "negative_answer_type": "support"}
 	s, _ := json.Marshal(schemes)
 	c, _ := json.Marshal(cqs)
-	edges := strings.Replace(string(data.EdgesJSON), `"ask_edges": [`, `"ask_edges": [ { "cq": "CQ:evidence", "scheme": "AS:consequences" },`, 1)
+	edges := strings.Replace(string(data.EdgesJSON), `"ask_edges": [`, `"ask_edges": [ { "cq": "CQ:evidence", "scheme": "AS:consequences" },
+	  { "cq": "CQ:other_goals", "scheme": "AS:values", "locus": "exception", "pattern": "biased({A})" },`, 1)
 	yaml := strings.Replace(string(data.CoreYAML), `good/1: "%s is good."`, `good/1: "%s is good for %s."`, 1)
 
 	issues, err := LintData([]byte(yaml), s, c, []byte(edges))
@@ -56,10 +57,11 @@ func TestLintFindsDataErrors(t *testing.T) {
 		`AS:analogy: base_weight 1.5 is not in (0, 1]`,
 		`AS:analogy: template "{Z} holds" names undeclared variable "Z"`,
 		`AS:consequences: Carneades scheme positive_consequences has variable G`,
-		`CQ:possibility: asked of AS:practical_reasoning, whose Carneades scheme has no feasible/1`,
-		`CQ:likelihood: caes_mapping`,
+		`CQ:possibility: asked of AS:practical_reasoning: premise locus feasible/1 is not a premise or assumption of Carneades scheme practical_reasoning1`,
+		`CQ:likelihood asked of AS:consequences: no locus`,
 		`duplicate ask edge CQ:evidence -> AS:consequences`,
 		`good/1 has 2 %s for 1 arguments`,
+		`CQ:other_goals: asked of AS:values: exception locus biased/1 is not an exception of Carneades scheme positive_value`,
 	} {
 		if !strings.Contains(joined, want) {
 			t.Errorf("missing lint error %q in:\n%s", want, joined)

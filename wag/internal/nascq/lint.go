@@ -39,9 +39,9 @@ func Placeholders(s string) []string {
 //
 // Errors: an edge to a missing node or a duplicate edge; a scheme without
 // carneades_id, or with a base weight outside (0, 1], or a template naming an
-// undeclared variable; a CQ whose caes_mapping has no attack type, an
-// undermining CQ without target_premise_pattern (it is never enumerated), or
-// a pattern naming a variable that a scheme it is asked of does not declare.
+// undeclared variable; an ask edge without a locus (named on the edge or
+// implied by the CQ's caes_mapping), a premise or exception locus without a
+// pattern, or a pattern naming a variable the scheme does not declare.
 //
 // Warnings: a scheme no CQ is asked of (arguments made with it, including
 // attacks, can never be challenged); a CQ asked of no scheme; a CQ whose
@@ -121,14 +121,6 @@ func (n *NASCQ) Lint() []LintIssue {
 	}
 	for _, id := range SortedStringKeys(n.Questions) {
 		q := n.Questions[id]
-		at := AttackTypeOf(q)
-		if at == "" {
-			add(true, id, "caes_mapping %+v has no attack type (rebuttal, undercutter, undermining)", q.CaesMapping)
-		}
-		pattern := q.CaesMapping.TargetPremisePattern
-		if at == "undermining" && pattern == "" {
-			add(true, id, "undermining without target_premise_pattern: no premise to attack, so it is never offered")
-		}
 		schemes := askedOf[id]
 		sort.Strings(schemes)
 		if len(schemes) == 0 {
@@ -139,9 +131,22 @@ func (n *NASCQ) Lint() []LintIssue {
 			if s == nil {
 				continue
 			}
-			for _, v := range Placeholders(pattern) {
+			where := id + " asked of " + sid
+			l := n.LocusOf(id, sid)
+			switch l.Kind {
+			case LocusPremise, LocusException:
+				if l.Pattern == "" {
+					add(true, where, "a %s locus needs a pattern naming the %s", l.Kind, l.Kind)
+				}
+			case LocusConclusion, LocusArgument:
+			case "":
+				add(true, where, "no locus: the ask edge names none and caes_mapping %+v implies none", q.CaesMapping)
+			default:
+				add(true, where, "unknown locus %q (premise, exception, conclusion, argument)", l.Kind)
+			}
+			for _, v := range Placeholders(l.Pattern) {
 				if _, ok := s.Variables[v]; !ok {
-					add(true, id, "target_premise_pattern %q names %q, not a variable of %s", pattern, v, sid)
+					add(true, where, "pattern %q names %q, not a variable of the scheme", l.Pattern, v)
 				}
 			}
 			for _, v := range Placeholders(q.QuestionTemplateEN) {

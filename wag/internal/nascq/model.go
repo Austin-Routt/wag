@@ -113,6 +113,56 @@ type Edge struct {
 	CQ          string `json:"cq,omitempty"`     // CQ node ID (plan format)
 	Scheme      string `json:"scheme,omitempty"` // AS node ID (plan format)
 	Description string `json:"description,omitempty"`
+
+	// Locus and Pattern (ask edges only) say which part of the scheme the
+	// question is about; see Locus. Without them the CQ's caes_mapping
+	// decides (NASCQ.LocusOf).
+	Locus   string `json:"locus,omitempty"`
+	Pattern string `json:"pattern,omitempty"`
+}
+
+// Locus kinds: the part of an argument a critical question is about.
+//
+// Gordon, Prakken and Walton (2007) model the critical questions of a scheme
+// as its premises, assumptions and exceptions, and the Carneades scheme files
+// declare exactly these; Pyon and Ri (2022, §6) build on that model: the
+// positive answer to a critical question is a premise of the scheme. A
+// critical question asked of a scheme is therefore about
+//
+//   - a premise or assumption P (LocusPremise): the positive answer is P, the
+//     negative answer ¬P undermines the argument;
+//   - an exception E (LocusException): the negative answer is E, which
+//     undercuts the argument through the scheme's exception argument, the
+//     positive answer is ¬E;
+//   - the conclusion C (LocusConclusion): the negative answer rebuts C, the
+//     positive answer supports C;
+//   - the inference as a whole, when no formula of the scheme states the
+//     question (LocusArgument): the negative answer undercuts the argument,
+//     the positive answer denies the undercutter.
+const (
+	LocusPremise    = "premise"
+	LocusException  = "exception"
+	LocusConclusion = "conclusion"
+	LocusArgument   = "argument"
+)
+
+// Locus is where a critical question applies to the arguments of one scheme.
+type Locus struct {
+	Kind    string `json:"kind"`              // LocusPremise, LocusException, LocusConclusion or LocusArgument
+	Pattern string `json:"pattern,omitempty"` // the premise or exception, with {Var} placeholders
+}
+
+// AttackType is the CAES attack that a negative answer about this locus makes.
+func (l Locus) AttackType() string {
+	switch l.Kind {
+	case LocusPremise:
+		return "undermining"
+	case LocusConclusion:
+		return "rebuttal"
+	case LocusException, LocusArgument:
+		return "undercutter"
+	}
+	return ""
 }
 
 // ProposedAction represents a player's intended move before validation.

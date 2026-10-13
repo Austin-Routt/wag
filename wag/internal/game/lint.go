@@ -18,10 +18,10 @@ import (
 //   - errors: a NASCQ scheme whose carneades_id is not a scheme of the YAML;
 //     NASCQ and Carneades variables that differ (a support move binds the
 //     NASCQ variables, and InstantiateScheme needs exactly the Carneades
-//     ones); an undermining CQ whose target_premise_pattern matches no premise
-//     or assumption of a scheme it is asked of (it can never be answered
-//     there); a Language template whose number of %s differs from its
-//     predicate's arity;
+//     ones); a premise locus that names no premise or assumption of the
+//     Carneades scheme, or an exception locus that names none of its
+//     exceptions (the question could never be answered there); a Language
+//     template whose number of %s differs from its predicate's arity;
 //   - warnings: a predicate used by a scheme with no Language template (its
 //     statements show as Prolog terms, and Carneades prints "Functor not
 //     defined" for each).
@@ -71,32 +71,44 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		}
 	}
 
-	for _, qid := range nascq.SortedStringKeys(n.Questions) {
-		q := n.Questions[qid]
-		if nascq.AttackTypeOf(q) != "undermining" || q.CaesMapping.TargetPremisePattern == "" {
-			continue
-		}
-		pred, arity, ok := predicateOf(q.CaesMapping.TargetPremisePattern)
-		if !ok {
-			add(true, qid, "target_premise_pattern %q is not a predicate pattern", q.CaesMapping.TargetPremisePattern)
-			continue
-		}
-		for _, sid := range nascq.SortedStringKeys(n.Schemes) {
-			asked := false
-			for _, c := range n.GetAskCQs(sid) {
-				asked = asked || c.ID == qid
+	// Every premise or exception locus names a formula of the Carneades scheme.
+	caesExceptions := map[string][]string{}
+	for _, s := range theory.ArgSchemes {
+		caesExceptions[s.Id] = s.Exceptions
+	}
+	for _, sid := range nascq.SortedStringKeys(n.Schemes) {
+		for _, q := range n.GetAskCQs(sid) {
+			l := n.LocusOf(q.ID, sid)
+			if _, known := caesVariables[n.Schemes[sid].CarneadesID]; !known {
+				continue // the unknown carneades_id is reported above
 			}
-			if !asked {
+			var formulas []string
+			switch l.Kind {
+			case nascq.LocusPremise:
+				formulas = caesSchemes[n.Schemes[sid].CarneadesID]
+			case nascq.LocusException:
+				formulas = caesExceptions[n.Schemes[sid].CarneadesID]
+			default:
+				continue
+			}
+			pred, arity, ok := predicateOf(l.Pattern)
+			if !ok {
+				add(true, q.ID, "pattern %q is not a predicate pattern", l.Pattern)
 				continue
 			}
 			found := false
-			for _, f := range caesSchemes[n.Schemes[sid].CarneadesID] {
+			for _, f := range formulas {
 				if p, a, ok := predicateOf(f); ok && p == pred && a == arity {
 					found = true
 				}
 			}
 			if !found {
-				add(true, qid, "asked of %s, whose Carneades scheme has no %s/%d premise or assumption to undermine", sid, pred, arity)
+				what := "a premise or assumption"
+				if l.Kind == nascq.LocusException {
+					what = "an exception"
+				}
+				add(true, q.ID, "asked of %s: %s locus %s/%d is not %s of Carneades scheme %s",
+					sid, l.Kind, pred, arity, what, n.Schemes[sid].CarneadesID)
 			}
 		}
 	}

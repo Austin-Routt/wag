@@ -31,6 +31,9 @@ type NASCQ struct {
 
 	reverseSchemeIndex map[string]string // CarneadesID → NASCQ scheme ID
 
+	// loci holds the loci named on ask edges, by cqID + "|" + schemeID.
+	loci map[string]Locus
+
 	// Raw edges stored for validation and export.
 	AskEdges    []Edge
 	BackupEdges []Edge
@@ -283,10 +286,14 @@ func (n *NASCQ) loadEdges(data []byte) error {
 func (n *NASCQ) buildIndexes() {
 	// Build ask index: scheme_id → []cq_id
 	// Ask edges go CQ → AS, meaning "this CQ can be asked of this scheme."
+	n.loci = make(map[string]Locus)
 	for _, e := range n.AskEdges {
 		cqID, schemeID := n.resolveAskEdge(e)
 		if cqID != "" && schemeID != "" {
 			n.askIndex[schemeID] = append(n.askIndex[schemeID], cqID)
+			if e.Locus != "" {
+				n.loci[cqID+"|"+schemeID] = Locus{Kind: e.Locus, Pattern: e.Pattern}
+			}
 		}
 	}
 
@@ -388,6 +395,27 @@ func (n *NASCQ) GetBackupSchemes(cqID string) []*ASNode {
 		}
 	}
 	return result
+}
+
+// LocusOf returns where the critical question applies to arguments of the
+// NASCQ scheme: the locus named on their ask edge, or else the one implied by
+// the CQ's caes_mapping (an undermining is about the premise its
+// target_premise_pattern names, an undercutter about the whole inference, a
+// rebuttal about the conclusion). The zero Locus means none can be derived.
+func (n *NASCQ) LocusOf(cqID, schemeID string) Locus {
+	if l, ok := n.loci[cqID+"|"+schemeID]; ok {
+		return l
+	}
+	cq := n.Questions[cqID]
+	switch AttackTypeOf(cq) {
+	case "undermining":
+		return Locus{Kind: LocusPremise, Pattern: cq.CaesMapping.TargetPremisePattern}
+	case "undercutter":
+		return Locus{Kind: LocusArgument}
+	case "rebuttal":
+		return Locus{Kind: LocusConclusion}
+	}
+	return Locus{}
 }
 
 // GetScheme returns an AS-node by its NASCQ ID, or nil if not found.
