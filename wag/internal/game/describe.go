@@ -283,3 +283,16 @@ func (gs *GameState) DescribeMove(m Move) string {
 	}
 	return fmt.Sprintf("%s argues %s with %s: %s", who, m.ArgIDs[0], scheme, concl)
 }
+
+// VariableOrder returns the template's variables in the order a player fills
+// them in (see variableOrder): without the answer variable.
+func VariableOrder(tmpl nascq.ActionTemplate) []string { return variableOrder(tmpl) }
+
+// StandardName is the abbreviation of a proof standard (PE, CCE, BRD).
+func StandardName(s caes.Standard) string { return standardName(s) }
+
+// AnswerText is the statement a targeted move from the template argues for,
+// in English (see Effect).
+func (gs *GameState) AnswerText(tmpl nascq.ActionTemplate) string {
+	return gs.answerText(tmpl, gs.Adapter.Graph.Arguments[tmpl.TargetArgID])
+}

@@ -200,3 +200,31 @@ func (a *Adapter) unassume(s *caes.Statement) {
 	}
 	a.Graph.Assumptions = kept
 }
+
+// AddFreeArgumentOn adds an argument of the user-defined scheme for the
+// statement stmtID or, if against, for its opposing position (a rebuttal),
+// with premises in free text (or IDs of statements on the board). It returns
+// the argument's ID.
+func (a *Adapter) AddFreeArgumentOn(owner string, premises []string, stmtID string, against bool, weight float64) ([]string, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	s := a.Graph.Statements[stmtID]
+	if s == nil {
+		return nil, fmt.Errorf("statement %q not found", stmtID)
+	}
+	if against {
+		var err error
+		if s, err = a.opposingPosition(s, caes.PE); err != nil {
+			return nil, err
+		}
+	}
+	return a.addFreeArgument(owner, premises, s, weight)
+}
+
+// AddFreeStatement returns the ID of the statement for a piece of free text,
+// creating it if needed (see FreeStatementID).
+func (a *Adapter) AddFreeStatement(text string) string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return a.freeStatement(text).Id
+}

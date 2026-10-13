@@ -66,6 +66,7 @@ func (a *Adapter) Restore(cp *Checkpoint) {
 			delete(a.Graph.Arguments, id)
 		}
 	}
+	a.argSeq = 0 // rescan: argument IDs are free again
 	for id, und := range cp.args {
 		if arg := a.Graph.Arguments[id]; arg != nil {
 			arg.Undercutter = und

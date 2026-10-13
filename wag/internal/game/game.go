@@ -160,6 +160,10 @@ type GameConfig struct {
 // profile.
 const DefaultPresumptionWeight = 0.01
 
+// EffectivePresumptionWeight is the weight of the presumptions that make
+// premises hold until attacked: PresumptionWeight, or the default.
+func (c GameConfig) EffectivePresumptionWeight() float64 { return c.presumptionWeight() }
+
 func (c GameConfig) presumptionWeight() float64 {
 	if c.PresumptionWeight > 0 {
 		return c.PresumptionWeight
@@ -256,19 +260,19 @@ type PendingMove struct {
 
 // TurnResult communicates the outcome of ExecuteTurn to the caller.
 type TurnResult struct {
-	Accepted          bool     // true if the move was valid and applied
-	Abstained         bool     // true if the player abstained
-	ArgIDs            []string // IDs of arguments created
-	Presumptions      []string // IDs of the presumption arguments created for the move's premises
-	ScoreDelta        float64  // points awarded this turn
-	Error             string   // non-empty if the move was rejected
-	Terminated        bool     // true if the game ended after this turn
-	TerminationReason string   // why the game ended
+	Accepted          bool     `json:"accepted"`                     // true if the move was valid and applied
+	Abstained         bool     `json:"abstained,omitempty"`          // true if the player abstained
+	ArgIDs            []string `json:"arg_ids,omitempty"`            // IDs of arguments created
+	Presumptions      []string `json:"presumptions,omitempty"`       // IDs of the presumption arguments created for the move's premises
+	ScoreDelta        float64  `json:"score_delta"`                  // points awarded this turn
+	Error             string   `json:"error,omitempty"`              // non-empty if the move was rejected
+	Terminated        bool     `json:"terminated,omitempty"`         // true if the game ended after this turn
+	TerminationReason string   `json:"termination_reason,omitempty"` // why the game ended
 
-	ScoreDeltas map[string]float64 // every player's score change (see Move.ScoreDeltas)
-	TimedOut    bool               // the move came too late and was void
-	Pending     bool               // the move is held for the moderator (GameConfig.Moderated)
-	Outcome     *Outcome           // the result, once the game has ended
+	ScoreDeltas map[string]float64 `json:"score_deltas,omitempty"` // every player's score change (see Move.ScoreDeltas)
+	TimedOut    bool               `json:"timed_out,omitempty"`    // the move came too late and was void
+	Pending     bool               `json:"pending,omitempty"`      // the move is held for the moderator (GameConfig.Moderated)
+	Outcome     *Outcome           `json:"outcome,omitempty"`      // the result, once the game has ended
 }
 
 // -------------------------------------------------------------------------
@@ -486,6 +490,9 @@ func (b *graphBridge) PremiseExists(argID, premiseStmtID string) bool {
 func (b *graphBridge) PremiseMatching(argID, pattern string) string {
 	return b.gs.Adapter.PremiseMatching(argID, pattern)
 }
+
+// Bridge returns the graph querier that NASCQ validation needs for this game.
+func (gs *GameState) Bridge() nascq.GraphQuerier { return gs.bridge }
 
 // PremiseIDs returns the statement IDs of the argument's premises, in order.
 func (b *graphBridge) PremiseIDs(argID string) []string {

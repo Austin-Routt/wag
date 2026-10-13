@@ -40,8 +40,15 @@ func TestSimulateRestoresTheGameExactly(t *testing.T) {
 		for move := 0; !gs.Terminated && move < 16; move++ {
 			obs := gs.BuildObservation()
 			before := snapshotOf(gs)
+			// A third of the templates per move, and at most about 60, keeps
+			// this quick: with every CQ asked of every scheme, a CQ about any
+			// premise gives a set of templates per premise.
+			step := len(obs.AvailableActions) / 60
+			if step < 3 {
+				step = 3
+			}
 			for i, tmpl := range obs.AvailableActions {
-				if i%3 != move%3 { // a third of the templates per move keeps this quick
+				if i%step != move%step {
 					continue
 				}
 				b := map[string]string{}

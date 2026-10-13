@@ -160,6 +160,7 @@ func (a *Adapter) RemoveArgument(argID string) error {
 
 	// Remove from graph map.
 	delete(a.Graph.Arguments, argID)
+	a.argSeq = 0
 
 	return nil
 }
@@ -179,6 +180,7 @@ func (a *Adapter) RemoveArguments(argIDs []string) error {
 			a.detachArgumentFromStatement(arg, arg.Conclusion)
 		}
 		delete(a.Graph.Arguments, argID)
+		a.argSeq = 0
 	}
 	return nil
 }

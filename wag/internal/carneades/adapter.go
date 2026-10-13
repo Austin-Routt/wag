@@ -51,6 +51,10 @@ type Adapter struct {
 	mu        sync.Mutex
 	Graph     *caes.ArgGraph          // The underlying Carneades argument graph.
 	schemeMap map[string]*caes.Scheme // Local cache: scheme ID → *Scheme for fast lookup.
+
+	// argSeq is the number of the last argument ID nextArgID issued or
+	// found; 0 means unknown (rescan). Removing arguments resets it.
+	argSeq int
 }
 
 // ---------------------------------------------------------------------------
@@ -222,17 +226,29 @@ func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
 // This matches the genArgId strategy inside InstantiateScheme (caes.go).
 //
 // IMPORTANT: Caller must hold a.mu.
+//
+// The highest number is found by a scan only once after arguments were
+// removed (Restore, RemoveArguments); after that a counter continues from it,
+// skipping IDs that InstantiateScheme took. Scanning every time made building
+// a graph of n arguments quadratic (an imported Kialo debate has thousands).
 func (a *Adapter) nextArgID() string {
-	max := 0
-	re := regexp.MustCompile(`^a(\d+)$`)
-	for id := range a.Graph.Arguments {
-		if m := re.FindStringSubmatch(id); m != nil {
-			if n, err := strconv.Atoi(m[1]); err == nil && n > max {
-				max = n
+	if a.argSeq == 0 {
+		re := regexp.MustCompile(`^a(\d+)$`)
+		for id := range a.Graph.Arguments {
+			if m := re.FindStringSubmatch(id); m != nil {
+				if n, err := strconv.Atoi(m[1]); err == nil && n > a.argSeq {
+					a.argSeq = n
+				}
 			}
 		}
 	}
-	return fmt.Sprintf("a%d", max+1)
+	for {
+		a.argSeq++
+		id := "a" + strconv.Itoa(a.argSeq)
+		if _, taken := a.Graph.Arguments[id]; !taken {
+			return id
+		}
+	}
 }
 
 // makeWeightedScheme returns a copy of the scheme identified by schemeID,

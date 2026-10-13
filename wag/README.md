@@ -17,12 +17,26 @@ central claim, solo belief revision) are combinations of a few settings.
 | `internal/carneades` | Adapter over the Carneades argument graph: moves as graph operations, checkpoints, labelling. |
 | `internal/nascq` | NASCQ loading, move validation (S0–S8, Q1), action enumeration, data lint. |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
+| `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments. |
+| `internal/server` | HTTP server and browser interface (`web/`, embedded): play, moderate, browse the NASCQ, import Kialo. |
 | `cmd/wag-cli` | Command-line game, data lint and tournaments. |
+| `cmd/wag-server` | The browser prototype: `go run ./cmd/wag-server` opens it at http://127.0.0.1:8080. |
+
+## In the browser
+
+```sh
+go run ./cmd/wag-server                                  # serves http://127.0.0.1:8080 and opens it
+go run ./cmd/wag-server --kialo-dir <visualizer>/data    # also offer the captured Kialo discussions
+```
+
+On Windows, double-click `run-wag-server.bat` (needs Go), or run a prebuilt
+`wag-server.exe` (`GOOS=windows GOARCH=amd64 go build ./cmd/wag-server`).
+`../docs/prototype.md` explains what to check, step by step.
 
 ## Commands
 
 ```sh
-go test ./...                      # all tests (about a minute); -short for a quick run
+go test ./...                      # all tests (one to two minutes); -short for a quick run
 go test -race -short ./...
 go test -run '^$' -fuzz FuzzTextToAtom -fuzztime 30s ./internal/carneades/
 
@@ -85,5 +99,12 @@ The rulebook is `../docs/game-rules.md`; in brief:
   target score, a clock, a round limit or everyone passing, as the mode
   says.
 
-`../docs/review-2026-10-13.md` and `../docs/review-2026-10-13-part2.md`
-explain the design, what is still missing and the balance measurements.
+Options: `AllowOther` (the user-defined "Other" scheme, for arguments no
+Walton scheme fits), `RequireEvidence` (schemes marked `evidence: required`
+need a source), `Moderated` (a moderator approves each move and can accept or
+reject statements).
+
+`../docs/review-2026-10-13.md`, `../docs/review-2026-10-13-part2.md` and
+`../docs/review-2026-10-13-part3.md` explain the design, what is still missing
+and the balance measurements. `../docs/walton-audit/` audits the Walton scheme
+collection for the NASCQ expansion.
