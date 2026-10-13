@@ -14,13 +14,13 @@
 //   - User-supplied English text is sanitized into Prolog quoted atoms
 //     before being passed to terms.ReadString.
 //   - Statement IDs are normalized via terms.Normalize to match the
-//     canonical form used by GroundedLabelling's init method (caes.go
-//     line 1716-1721 in the source).
+//     canonical form used by GroundedLabelling's init method (Labelling.init
+//     in caes.go re-keys the statement map by terms.Normalize).
 //   - Argument IDs follow the "aN" convention (a1, a2, ...) matching
-//     the genArgId logic in InstantiateScheme (caes.go line 2035-2046).
+//     the genArgId logic in InstantiateScheme (caes.go).
 //   - Argument weight is set via ConstantWeighingFunction on a per-argument
 //     Scheme copy. NEVER set arg.Weight directly — it is computed on demand
-//     by GetWeight (caes.go line 1909-1918).
+//     by Argument.GetWeight (caes.go).
 //
 // Locking contract: All public methods acquire a.mu. Internal helpers
 // (findOrCreateStatement, createArgument, nextArgID, etc.) do NOT
@@ -152,7 +152,7 @@ func generateStatementIDFromText(text string) string {
 //
 // The normalized ID is used as BOTH the map key and Statement.Id to ensure
 // consistency with GroundedLabelling's init method which normalizes map keys
-// (caes.go line 1716-1721).
+// (Labelling.init in caes.go).
 //
 // IMPORTANT: Caller must hold a.mu.
 func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
@@ -219,7 +219,7 @@ func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
 
 // nextArgID returns an unused argument ID of the form "aN" (e.g., "a1", "a2").
 // It scans all existing argument IDs and picks the next available numeric suffix.
-// This matches the genArgId strategy inside InstantiateScheme (caes.go line 2035-2046).
+// This matches the genArgId strategy inside InstantiateScheme (caes.go).
 //
 // IMPORTANT: Caller must hold a.mu.
 func (a *Adapter) nextArgID() string {
@@ -238,7 +238,7 @@ func (a *Adapter) nextArgID() string {
 // makeWeightedScheme returns a copy of the scheme identified by schemeID,
 // with its Weight function replaced by ConstantWeighingFunction(weight).
 //
-// ConstantWeighingFunction(w) (caes weighing.go line 7002-7011) returns:
+// ConstantWeighingFunction(w) (caes weighing.go) returns:
 //   - 0.0 if ANY premise is not In
 //   - w   if ALL premises are In
 //
@@ -351,10 +351,10 @@ func (a *Adapter) AddStatement(id, text string) *caes.Statement {
 }
 
 // AddAssumption marks a statement ID as assumed true. Assumed statements are
-// labeled In at the start of GroundedLabelling (caes.go line 1723-1728).
+// labeled In at the start of GroundedLabelling (Labelling.init in caes.go).
 //
 // Uses ArgGraph.AddAssumption which writes to BOTH the Assumptions slice
-// AND the internal assums map (caes.go line 2211-2213). The ID is normalized
+// AND the internal assums map (ArgGraph.AddAssumption in caes.go). The ID is normalized
 // to match how GroundedLabelling's init normalizes assumption IDs.
 func (a *Adapter) AddAssumption(stmtID string) {
 	a.mu.Lock()
@@ -402,12 +402,12 @@ func (a *Adapter) AddArgumentDirect(
 // Evaluate recomputes the grounded labelling and applies it to the graph.
 // After this call, every Statement.Label and Argument.Weight is updated.
 //
-// GroundedLabelling (caes.go line 1944-1974) is a fixpoint iteration:
+// GroundedLabelling (caes.go) is a fixpoint iteration:
 //  1. Init: assumptions → In; everything else → Undecided.
 //  2. Loop: unsupported → Out; supported non-issues → In; ready issues → Resolve.
 //  3. Stop when no labels change (fixpoint reached).
 //
-// ApplyLabelling (caes.go line 1758-1765) writes labels and weights
+// ApplyLabelling (caes.go) writes labels and weights
 // back to the Statement and Argument structs.
 func (a *Adapter) Evaluate() (caes.Labelling, error) {
 	a.mu.Lock()
@@ -634,7 +634,7 @@ func (a *Adapter) IsAcyclic() bool {
 
 // AddSupport creates a supporting argument using Carneades' InstantiateScheme.
 //
-// InstantiateScheme (caes.go line 2034-2200) performs:
+// InstantiateScheme (caes.go) performs:
 //  1. Looks up the scheme by ID in Theory.schemeIndex (then BasicSchemes fallback).
 //  2. Binds each scheme variable to the corresponding parameter value.
 //  3. Creates Statement nodes for each premise, assumption, and conclusion.
@@ -702,7 +702,7 @@ func (a *Adapter) AddSupport(
 	}
 
 	// InstantiateScheme mutates the graph in place. It prints errors to stderr
-	// rather than returning them (caes.go line 2056-2068). We detect failure
+	// rather than returning them (see InstantiateScheme in caes.go). We detect failure
 	// by checking if any new arguments were created.
 	a.Graph.InstantiateScheme(carneadesSchemeID, params)
 
@@ -773,7 +773,7 @@ func (a *Adapter) AddSupport(
 // target is already at issue, the other position of that issue. Rebutting a
 // rebuttal's conclusion ¬p therefore argues for p again.
 //
-// After evaluation, the Issue's Resolve method (caes.go line 1865-1903)
+// After evaluation, the Issue's Resolve method (caes.go)
 // compares the strongest argument weights for each position. With PE,
 // the position with strictly greater max-weight wins.
 //
@@ -906,11 +906,11 @@ func (a *Adapter) opposingPosition(target *caes.Statement, proofStandard caes.St
 //  2. Setting targetArg.Undercutter to point at that statement.
 //  3. Creating a new argument concluding the undercutter statement.
 //
-// When the undercutter statement is labeled In, GetWeight (caes.go line 1909-1918)
+// When the undercutter statement is labeled In, GetWeight (caes.go)
 // returns 0.0 for the target argument, effectively defeating it.
 //
 // BUG FIX (critical): InstantiateScheme auto-generates an undercutter statement
-// for every scheme instantiation (caes.go line 2136-2148). The undercutter's ID
+// for every scheme instantiation (see InstantiateScheme in caes.go). The undercutter's ID
 // uses a pseudo-argument-ID, so it may be "undercut(a3)" even though the actual
 // argument is "a5". If we blindly create "undercut(a5)" and overwrite
 // targetArg.Undercutter, we orphan the original undercutter and all its

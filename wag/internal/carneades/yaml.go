@@ -11,7 +11,7 @@ package carneades
 // The original plan proposed YAML Export/Import for snapshots. After source
 // code review, this approach has a critical flaw: the YAML Export function
 // does NOT export the Theory section (language, schemes, weighing functions).
-// See carneades-4 source, yaml.go lines 6219-6275 — the Theory export is
+// See the exporter in carneades-4's encoding/yaml/yaml.go — the Theory export is
 // entirely commented out. After import, all argument Scheme pointers are
 // relinked to BasicSchemes or whatever the YAML file defines, losing our
 // ConstantWeighingFunction overrides.
@@ -60,7 +60,7 @@ import (
 //   - weighing_functions: custom weighing function definitions
 //
 // After import, Theory.InitSchemeIndex() is called automatically (by the
-// YAML Import function, caes yaml.go line 4462) to populate the unexported
+// YAML Import function in encoding/yaml/yaml.go) to populate the unexported
 // schemeIndex map used by InstantiateScheme.
 //
 // The adapter's local schemeMap cache is then built from Theory.ArgSchemes.
