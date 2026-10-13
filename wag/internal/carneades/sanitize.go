@@ -11,93 +11,91 @@ package carneades
 // → bi_0 which creates an Atom), but the warnings are ugly and confusing.
 //
 // This file replaces that approach with clean Prolog atom generation:
-//   "Dr. Marie Curie"  → dr__marie_curie
+//   "Dr. Marie Curie"  → dr_marie_curie
 //   "climate change"   → climate_change
 //   "123 test"         → x_123_test  (atoms can't start with digits)
+//   "Steuer für Öl"    → steuer_für_öl
+//   "税金"              → 税金
 //   ""                 → x_empty
 //
-// These parse as valid Prolog atoms (lowercase, no spaces, no special chars)
-// with zero warnings from the term parser.
+// These parse as valid Prolog atoms with zero warnings from the term parser.
 //
-// The original human-readable text is preserved in Statement.Text via the
-// Theory's Language templates or via direct assignment in the adapter.
+// The conversion is lossy: case, spacing and punctuation are dropped, so
+// "Carbon-Tax" and "carbon tax" name the same thing (which is usually what the
+// player means), and Statement.Text shows the atom, not the original words.
 
 import (
-	"regexp"
+	"crypto/sha1"
+	"encoding/hex"
 	"strings"
 	"unicode"
 )
 
-// nonAlphanumeric matches any character that is not a letter, digit, or underscore.
-var nonAlphanumeric = regexp.MustCompile(`[^a-zA-Z0-9_]`)
-
-// multiUnderscore collapses runs of underscores into a single one.
-var multiUnderscore = regexp.MustCompile(`_+`)
-
 // TextToAtom converts arbitrary user text into a valid Prolog atom.
 //
-// Rules for valid Prolog atoms (matching the carneades-4 term parser):
-//   - Must start with a lowercase letter (a-z). If the first character is
-//     uppercase (A-Z), the parser treats it as a Variable. If it starts
-//     with a digit, the parser treats it as an Int or Float.
-//   - May contain lowercase/uppercase letters, digits, and underscores.
-//   - No spaces, no special characters.
+// Rules for valid Prolog atoms (matching the carneades-4 term parser, which
+// scans identifiers with Go's text/scanner: a letter or underscore, then
+// letters, digits and underscores, in any script):
+//   - An identifier whose first byte is A-Z is a Variable; anything else is
+//     an Atom. Lowercasing prevents the Variable reading.
+//   - A digit cannot start an identifier (it would be read as a number).
+//   - "true" and "false" are read as booleans.
 //
 // Conversion steps:
-//  1. Trim whitespace.
-//  2. Lowercase the entire string (prevents Variable interpretation).
-//  3. Replace non-alphanumeric characters with underscores.
-//  4. Collapse multiple underscores into one.
-//  5. Strip leading/trailing underscores.
-//  6. If the result starts with a digit, prefix with "x_".
-//  7. If the result is empty, return "x_empty".
-//  8. If the result is "true" or "false" (Prolog built-ins), prefix with "val_".
+//  1. Trim whitespace and lowercase.
+//  2. Keep letters and digits of every script; turn each run of other
+//     characters (spaces, punctuation, symbols, underscores) into one "_".
+//  3. Strip leading/trailing underscores.
+//  4. If the result starts with a digit, prefix with "x_".
+//  5. If the result is "true" or "false", prefix with "val_".
+//  6. An empty or blank input gives "x_empty". An input with no letter or
+//     digit at all (e.g. "€" or "?!") gives "x_" and a hash of the input, so
+//     different such inputs stay different.
 //
-// Examples:
-//
-//	TextToAtom("Dr. Marie Curie")     → "dr__marie_curie"
-//	TextToAtom("climate change")      → "climate_change"
-//	TextToAtom("123 test")            → "x_123_test"
-//	TextToAtom("true")                → "val_true"
-//	TextToAtom("")                    → "x_empty"
-//	TextToAtom("it's a test!")        → "it_s_a_test"
+// Letters and digits used to be restricted to ASCII, so every word in another
+// script was dropped: "税金" (tax) and "補助金" (subsidy) both became
+// "x_empty" and named the same statement. ASCII input converts exactly as
+// before.
 func TextToAtom(s string) string {
-	// Step 1: Trim whitespace.
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return "x_empty"
 	}
 
-	// Step 2: Lowercase.
-	s = strings.ToLower(s)
-
-	// Step 3: Replace non-alphanumeric chars with underscore.
-	s = nonAlphanumeric.ReplaceAllString(s, "_")
-
-	// Step 4: Collapse multiple underscores.
-	s = multiUnderscore.ReplaceAllString(s, "_")
-
-	// Step 5: Strip leading/trailing underscores.
-	s = strings.Trim(s, "_")
-
-	if s == "" {
-		return "x_empty"
+	var b strings.Builder
+	sep := false
+	for _, r := range strings.ToLower(s) {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			if sep && b.Len() > 0 {
+				b.WriteByte('_')
+			}
+			sep = false
+			b.WriteRune(r)
+		} else {
+			sep = true
+		}
+	}
+	out := b.String()
+	if out == "" {
+		h := sha1.Sum([]byte(s))
+		return "x_" + hex.EncodeToString(h[:4])
 	}
 
-	// Step 6: Prefix if starts with digit.
-	if unicode.IsDigit(rune(s[0])) {
-		s = "x_" + s
+	// A digit cannot start an atom.
+	for _, r := range out {
+		if unicode.IsDigit(r) {
+			out = "x_" + out
+		}
+		break
 	}
 
-	// Step 7: Check for Prolog built-in atoms that bi_0 handles specially.
 	// "true" and "false" are parsed as Bool(true)/Bool(false), not Atom.
 	// This would cause subtle bugs because Bool.String() returns "true"/"false"
 	// which look like atoms but behave differently in matching/substitution.
-	if s == "true" || s == "false" {
-		s = "val_" + s
+	if out == "true" || out == "false" {
+		out = "val_" + out
 	}
-
-	return s
+	return out
 }
 
 // SanitizeBinding converts user-supplied text into a form suitable for
@@ -106,7 +104,6 @@ func TextToAtom(s string) string {
 // It returns a clean Prolog atom that:
 //   - Parses without warnings from the term parser
 //   - Is deterministic (same input → same output)
-//   - Is collision-resistant (different inputs → different outputs in practice)
 //   - Does NOT start with uppercase (avoids Variable interpretation)
 //
 // This function replaces the quoteForProlog approach from Block 1.
