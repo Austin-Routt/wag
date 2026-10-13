@@ -77,7 +77,7 @@ func TestMalformedMovesFailValidation(t *testing.T) {
 		{"unknown type", nascq.ProposedAction{Type: "bogus", SchemeID: "AS:sign", VariableBindings: sign}, "S0"},
 		{"attack without target", nascq.ProposedAction{Type: "attack", AnswersCQID: "CQ:likelihood", SchemeID: "AS:sign", VariableBindings: sign}, "S0"},
 		{"attack without CQ or type", nascq.ProposedAction{Type: "attack", TargetArgID: main, SchemeID: "AS:sign", VariableBindings: sign}, "S0"},
-		{"support with a CQ", nascq.ProposedAction{Type: "support", AnswersCQID: "CQ:possibility", TargetArgID: main, SchemeID: "AS:sign", VariableBindings: sign}, "S0"},
+		{"defence without a target", nascq.ProposedAction{Type: "support", AnswersCQID: "CQ:possibility", SchemeID: "AS:sign", VariableBindings: sign}, "S0"},
 		{"CQ against a presumption", nascq.ProposedAction{Type: "attack", AnswersCQID: "CQ:side_effect", TargetArgID: presumption, SchemeID: "AS:sign", VariableBindings: sign}, "S3"},
 		{"wrong attack type for the CQ", nascq.ProposedAction{Type: "attack", AttackType: "rebuttal", AnswersCQID: "CQ:side_effect", TargetArgID: main, SchemeID: "AS:sign", VariableBindings: sign}, "S3"},
 		{"undermining without a premise", nascq.ProposedAction{Type: "attack", AttackType: "undermining", TargetArgID: main, SchemeID: "AS:sign", VariableBindings: sign}, "S8"},

@@ -77,8 +77,13 @@ func TestCoreDataLoading(t *testing.T) {
 	if stats.SchemeCount != 7 {
 		t.Errorf("NASCQ scheme count = %d, want 7", stats.SchemeCount)
 	}
-	if stats.QuestionCount != 7 {
-		t.Errorf("NASCQ CQ count = %d, want 7", stats.QuestionCount)
+	if stats.QuestionCount != 20 {
+		t.Errorf("NASCQ CQ count = %d, want 20", stats.QuestionCount)
+	}
+	for id := range gs.NASCQ.Schemes {
+		if len(gs.NASCQ.GetAskCQs(id)) == 0 {
+			t.Errorf("no critical question is asked of %s", id)
+		}
 	}
 	if stats.ThesisIndependentCount != 3 {
 		t.Errorf("thesis-independent count = %d, want 3", stats.ThesisIndependentCount)
@@ -262,9 +267,13 @@ func TestCoreUndercutterViaCQ(t *testing.T) {
 }
 
 // =========================================================================
-// Test 4: Rebuttal attack via CQ:other_means using AS:consequences
+// Test 4: The critical questions of practical reasoning, by locus
 // =========================================================================
 
+// "Are there goals other than G that should have priority?" is about the
+// conclusion: answered with an argument from values, it rebuts. "Are there
+// alternative actions?" is about the exception realize_more_effectively(G,A):
+// answered with an argument from consequences, it undercuts.
 func TestCoreRebuttalViaCQ(t *testing.T) {
 	gs := makeCoreGame(t)
 
@@ -281,55 +290,63 @@ func TestCoreRebuttalViaCQ(t *testing.T) {
 		t.Fatalf("Turn 1 rejected: %s", r1.Error)
 	}
 	targetArgID := r1.ArgIDs[0]
-	t.Logf("Turn 1: Alice created %s", targetArgID)
+	target := gs.Adapter.Graph.Arguments[targetArgID]
 
-	// Turn 2: Bob rebuts via CQ:other_means using AS:consequences.
-	// "Solar subsidies bring about emission reduction, and that's good."
-	rebuttal := nascq.ProposedAction{
+	// Turn 2: Bob rebuts through CQ:other_goals with AS:values.
+	r2, _ := gs.ExecuteTurn(nascq.ProposedAction{
 		Type:        "attack",
 		AttackType:  "rebuttal",
+		SchemeID:    "AS:values",
+		AnswersCQID: "CQ:other_goals",
+		TargetArgID: targetArgID,
+		VariableBindings: map[string]string{
+			"V": "economic_freedom", "A": "carbon_tax", "G": "low_prices",
+		},
+	})
+	if !r2.Accepted {
+		t.Fatalf("Turn 2 rejected: %s", r2.Error)
+	}
+	rebuttal := gs.Adapter.Graph.Arguments[r2.ArgIDs[0]]
+	if want := "¬" + target.Conclusion.Id; rebuttal.Conclusion.Id != want {
+		t.Fatalf("rebuttal concludes %s, want %s", rebuttal.Conclusion.Id, want)
+	}
+	if target.Conclusion.Issue == nil || target.Conclusion.Issue != rebuttal.Conclusion.Issue {
+		t.Fatal("the rebuttal did not make the conclusion an issue")
+	}
+	// Under PE Alice's 0.70 beats Bob's 0.60.
+	if target.Conclusion.Label != caes.In || rebuttal.Conclusion.Label != caes.Out {
+		t.Fatalf("conclusion %v, rebuttal %v; want In and Out (0.70 > 0.60 under PE)",
+			target.Conclusion.Label, rebuttal.Conclusion.Label)
+	}
+
+	// Turn 3: Alice abstains. Turn 4: Bob undercuts through CQ:other_means
+	// with AS:consequences: its answer is the exception, which holds.
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	r4, _ := gs.ExecuteTurn(nascq.ProposedAction{
+		Type:        "attack",
 		SchemeID:    "AS:consequences",
 		AnswersCQID: "CQ:other_means",
 		TargetArgID: targetArgID,
 		VariableBindings: map[string]string{
-			"A": "solar_subsidies",
-			"G": "green_energy_adoption",
+			"A": "solar_subsidies", "G": "green_energy_adoption",
 		},
+	})
+	if !r4.Accepted {
+		t.Fatalf("Turn 4 rejected: %s", r4.Error)
 	}
-	r2, err := gs.ExecuteTurn(rebuttal)
-	if err != nil {
-		t.Fatalf("Turn 2 error: %v", err)
+	if got := gs.MoveHistory[len(gs.MoveHistory)-1].Action.AttackType; got != "undercutter" {
+		t.Fatalf("CQ:other_means recorded as %q, want undercutter", got)
 	}
-	if !r2.Accepted {
-		t.Fatalf("Turn 2 rejected: %s", r2.Error)
+	exc := gs.Adapter.Graph.Arguments[r4.ArgIDs[0]].Conclusion
+	if exc.Id != "realize_more_effectively(reduce_emissions,carbon_tax)" || exc.Label != caes.In {
+		t.Fatalf("other means answer concludes %s (%v), want the exception, In", exc.Id, exc.Label)
 	}
-	t.Logf("Turn 2: Bob rebutted with %v, score=%.2f", r2.ArgIDs, r2.ScoreDelta)
-
-	// After rebuttal: Issue created. Alice's conclusion has weight 0.70,
-	// Bob's rebuttal ¬conclusion has weight 0.65. Under PE, 0.70 > 0.65,
-	// so Alice's conclusion should STILL be In.
-	targetArg := gs.Adapter.Graph.Arguments[targetArgID]
-	if targetArg.Conclusion.Label != caes.In {
-		t.Logf("NOTE: conclusion label=%v (Alice's 0.70 should beat Bob's 0.65 under PE)",
-			targetArg.Conclusion.Label)
-		// This might be Out if the Issue resolution works differently than expected.
-		// Log all statements for debugging.
-		for id, s := range gs.Adapter.Graph.Statements {
-			t.Logf("  %q: label=%v", id, s.Label)
-		}
-	} else {
-		t.Logf("Correct: Alice's conclusion stays In (0.70 > 0.65 under PE)")
+	if target.Weight != 0 || target.Conclusion.Label != caes.Out {
+		t.Fatalf("undercut argument: weight %v, conclusion %v; want 0 and Out", target.Weight, target.Conclusion.Label)
 	}
-
-	// Verify an Issue was created.
-	if len(gs.Adapter.Graph.Issues) == 0 {
-		t.Error("expected at least one Issue after rebuttal")
+	if errs := gs.CheckInvariants(); len(errs) > 0 {
+		t.Fatal(errs)
 	}
-
-	// Verify both players scored.
-	alice := gs.PlayerByID("Alice")
-	bob := gs.PlayerByID("Bob")
-	t.Logf("Scores: Alice=%.2f, Bob=%.2f", alice.Score, bob.Score)
 }
 
 // =========================================================================

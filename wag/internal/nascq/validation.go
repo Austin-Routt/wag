@@ -28,6 +28,12 @@ type GraphQuerier interface {
 	// target_premise_pattern (e.g. "possible({A})") designates, with the
 	// argument's own variable bindings substituted, or "" if none does.
 	PremiseMatching(argID, pattern string) string
+
+	// ExceptionMatching returns the ID of the exception of argID that an
+	// exception pattern (e.g. "side_effects({A},{S1})") designates, with the
+	// argument's own bindings substituted, or "" if none does. The statement
+	// need not exist yet.
+	ExceptionMatching(argID, pattern string) string
 }
 
 // attackTypes are the CAES operations an attack can perform.
@@ -138,21 +144,30 @@ func instantiateTemplates(scheme *ASNode, bindings map[string]string) (premises 
 // The graph parameter can be nil for direct support actions (no target),
 // but is required for attack actions (S3, S7, S8 need graph inspection).
 //
+// A move is a plain support (no target: a new argument), an attack (a
+// negative answer to a critical question about the target, or a direct
+// rebuttal, undercutter or undermining) or a defence (a support with a target:
+// a positive answer to a critical question, or a direct backing of a premise
+// or of the conclusion). The returned ValidatedAction carries the locus the
+// move is about and, for a premise or exception, its statement.
+//
 // Checks performed (from WAG plan §13, SRD §7.5):
 //
-//	S0: Move shape — a support has no target or CQ; an attack has a target and
-//	    answers a CQ or names an attack type (rebuttal, undercutter, undermining)
+//	S0: Move shape — an attack has a target and answers a CQ or names an
+//	    attack type (rebuttal, undercutter, undermining); a defence that answers
+//	    a CQ or names a premise has a target
 //	S1: Scheme existence — the NASCQ scheme ID must exist
-//	S2: Variable completeness — all scheme variables must have bindings
-//	S3: CQ applicability — the CQ must be askable of the target's scheme (a
-//	    target made with no NASCQ scheme admits no CQ), and an attack type the
-//	    mover names must be the one the CQ maps to
+//	S2: Variable completeness — all scheme variables must have bindings,
+//	    except, on a move with a target, the scheme's answer variable
+//	S3: CQ applicability — the target was made with a NASCQ scheme, the CQ is
+//	    asked of that scheme and has a locus there (NASCQ.LocusOf), and an
+//	    attack type the mover names is the one the locus implies
 //	S5: Backup edge validity — if CQ-directed, the scheme must be a valid backup for the CQ
 //	S6: Template instantiation — substitute variables into English templates
 //	S7: Target argument exists — if attacking, the target must exist in the graph
-//	S8: Target premise — an undermining names a premise of the target, or its
-//	    CQ's target_premise_pattern designates one; the resolved premise is
-//	    returned in the ValidatedAction
+//	S8: Locus statement — a premise locus names a premise of the target (the
+//	    mover's TargetPremiseID, or the locus pattern with the target's
+//	    bindings); an exception locus designates an exception of the target
 //
 // S4 (semantic types) is not a move check: S5 admits only schemes with an
 // explicit backup edge, which the NASCQ author wired, or thesis-independent
@@ -162,9 +177,8 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 	// S0: Move shape
 	switch action.Type {
 	case "support":
-		if action.TargetArgID != "" || action.AnswersCQID != "" {
-			return nil, fmt.Errorf("S0: a support move takes no target or critical question " +
-				"(answering a critical question in the target's favour is not implemented)")
+		if action.TargetArgID == "" && (action.AnswersCQID != "" || action.TargetPremiseID != "") {
+			return nil, fmt.Errorf("S0: a defence needs a target argument")
 		}
 	case "attack":
 		if action.TargetArgID == "" {
@@ -190,10 +204,15 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 			action.SchemeID, avail)
 	}
 
-	// S2: Variable completeness
+	// S2: Variable completeness. On a move with a target, the scheme's answer
+	// variable is bound to the answer, not by the mover.
+	answerVar := ""
+	if action.TargetArgID != "" {
+		answerVar = scheme.AnswerVariable
+	}
 	missing := []string{}
 	for varName := range scheme.Variables {
-		if _, ok := action.VariableBindings[varName]; !ok {
+		if _, ok := action.VariableBindings[varName]; !ok && varName != answerVar {
 			missing = append(missing, varName)
 		}
 	}
@@ -202,40 +221,72 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 		return nil, fmt.Errorf("S2: missing variable binding(s): %v", missing)
 	}
 
-	// S7: Target argument exists (checked early so S3 can use it)
-	if action.TargetArgID != "" {
-		if graph == nil {
-			return nil, fmt.Errorf("S7: graph querier required for attack actions")
-		}
-		if !graph.ArgumentExists(action.TargetArgID) {
-			return nil, fmt.Errorf("S7: target argument %q not found in graph",
-				action.TargetArgID)
-		}
+	// S6: Template instantiation
+	instPremises, instConclusion := instantiateTemplates(scheme, action.VariableBindings)
+	va := &ValidatedAction{
+		CarneadesSchemeID: scheme.CarneadesID,
+		InstPremises:      instPremises,
+		InstConclusion:    instConclusion,
+		Weight:            scheme.BaseWeight,
+		AnswerVariable:    answerVar,
+	}
+	if action.TargetArgID == "" { // a plain support: a new argument
+		va.ProposedAction = action
+		return va, nil
 	}
 
-	// S3: CQ applicability (if CQ-directed)
-	if action.AnswersCQID != "" {
+	// S7: Target argument exists
+	if graph == nil {
+		return nil, fmt.Errorf("S7: graph querier required for moves with a target")
+	}
+	if !graph.ArgumentExists(action.TargetArgID) {
+		return nil, fmt.Errorf("S7: target argument %q not found in graph", action.TargetArgID)
+	}
+
+	// S3: the target was made with a NASCQ scheme, and the CQ, if any, is
+	// asked of that scheme. The locus says what the move is about.
+	caesSchemeID := graph.ArgumentSchemeID(action.TargetArgID)
+	targetScheme := n.FindNASCQSchemeID(caesSchemeID)
+	if targetScheme == "" {
+		if _, ok := n.Schemes[caesSchemeID]; ok {
+			targetScheme = caesSchemeID
+		}
+	}
+	if targetScheme == "" {
+		return nil, fmt.Errorf("S3: target %q was not made with a NASCQ scheme, so no critical question applies to it",
+			action.TargetArgID)
+	}
+	var locus Locus
+	switch {
+	case action.AnswersCQID != "":
 		if _, ok := n.Questions[action.AnswersCQID]; !ok {
 			return nil, fmt.Errorf("S3: unknown CQ %q", action.AnswersCQID)
 		}
-		if action.TargetArgID != "" && graph != nil {
-			caesSchemeID := graph.ArgumentSchemeID(action.TargetArgID)
-			nascqSchemeID := n.FindNASCQSchemeID(caesSchemeID)
-			if nascqSchemeID == "" {
-				if _, ok := n.Schemes[caesSchemeID]; ok {
-					nascqSchemeID = caesSchemeID
-				}
-			}
-			if nascqSchemeID == "" {
-				return nil, fmt.Errorf("S3: target %q was not made with a NASCQ scheme, so no critical question applies to it",
-					action.TargetArgID)
-			}
-			askCQs := n.askIndex[nascqSchemeID]
-			if !containsStr(askCQs, action.AnswersCQID) {
-				return nil, fmt.Errorf("S3: CQ %q is not applicable to scheme %q (ask CQs: %v)",
-					action.AnswersCQID, nascqSchemeID, askCQs)
-			}
+		if askCQs := n.askIndex[targetScheme]; !containsStr(askCQs, action.AnswersCQID) {
+			return nil, fmt.Errorf("S3: CQ %q is not applicable to scheme %q (ask CQs: %v)",
+				action.AnswersCQID, targetScheme, askCQs)
 		}
+		if locus = n.LocusOf(action.AnswersCQID, targetScheme); locus.Kind == "" {
+			return nil, fmt.Errorf("S3: CQ %q has no locus on scheme %q", action.AnswersCQID, targetScheme)
+		}
+	case action.Type == "attack": // a direct attack names its type
+		locus = Locus{Kind: map[string]string{"rebuttal": LocusConclusion, "undercutter": LocusArgument,
+			"undermining": LocusPremise}[action.AttackType]}
+	case action.TargetPremiseID != "": // a direct defence of a premise
+		locus = Locus{Kind: LocusPremise}
+	default: // a direct defence of the conclusion
+		locus = Locus{Kind: LocusConclusion}
+	}
+	if action.Type == "attack" {
+		at := locus.AttackType()
+		if action.AttackType != "" && action.AttackType != at {
+			return nil, fmt.Errorf("S3: CQ %q is answered by an attack of type %q, not %q",
+				action.AnswersCQID, at, action.AttackType)
+		}
+		action.AttackType = at
+		va.CaesAttackType = at
+	} else {
+		action.AttackType = ""
 	}
 
 	// S5: Backup edge validity: an explicit backup edge, or a
@@ -255,63 +306,33 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 		}
 	}
 
-	// S6: Template instantiation
-	instPremises, instConclusion := instantiateTemplates(scheme, action.VariableBindings)
-
-	// S3 (continued): the CAES attack type comes from the CQ's mapping. An
-	// attack type the mover names must agree with it.
-	caesAttackType := ""
-	if action.Type == "attack" {
-		caesAttackType = action.AttackType
-		if action.AnswersCQID != "" {
-			mapped := AttackTypeOf(n.Questions[action.AnswersCQID])
-			if mapped == "" {
-				return nil, fmt.Errorf("S3: CQ %q maps to no attack type", action.AnswersCQID)
-			}
-			if action.AttackType != "" && action.AttackType != mapped {
-				return nil, fmt.Errorf("S3: CQ %q is answered by an attack of type %q, not %q",
-					action.AnswersCQID, mapped, action.AttackType)
-			}
-			caesAttackType = mapped
-		}
-	}
-
-	// S8: Target premise (undermining only). The resolved premise is returned.
-	if caesAttackType == "undermining" {
-		if graph == nil {
-			return nil, fmt.Errorf("S8: graph querier required for undermining")
-		}
+	// S8: the premise or exception the move is about. The mover may name a
+	// premise; otherwise the locus pattern designates it, with the target's
+	// own bindings.
+	switch locus.Kind {
+	case LocusPremise:
 		if action.TargetPremiseID != "" {
 			if !graph.PremiseExists(action.TargetArgID, action.TargetPremiseID) {
 				return nil, fmt.Errorf("S8: premise %q not found in argument %q",
 					action.TargetPremiseID, action.TargetArgID)
 			}
-		} else {
-			pattern := ""
-			if cq := n.Questions[action.AnswersCQID]; cq != nil {
-				pattern = cq.CaesMapping.TargetPremisePattern
-			}
-			if pattern == "" {
-				return nil, fmt.Errorf("S8: name the premise of %q to undermine (target_premise_id)",
-					action.TargetArgID)
-			}
-			action.TargetPremiseID = graph.PremiseMatching(action.TargetArgID, pattern)
-			if action.TargetPremiseID == "" {
-				return nil, fmt.Errorf("S8: argument %q has no premise matching %q",
-					action.TargetArgID, pattern)
-			}
+		} else if locus.Pattern == "" {
+			return nil, fmt.Errorf("S8: name the premise of %q (target_premise_id)", action.TargetArgID)
+		} else if action.TargetPremiseID = graph.PremiseMatching(action.TargetArgID, locus.Pattern); action.TargetPremiseID == "" {
+			return nil, fmt.Errorf("S8: argument %q has no premise matching %q", action.TargetArgID, locus.Pattern)
 		}
+		va.LocusStmtID = action.TargetPremiseID
+	case LocusException:
+		action.TargetPremiseID = ""
+		if va.LocusStmtID = graph.ExceptionMatching(action.TargetArgID, locus.Pattern); va.LocusStmtID == "" {
+			return nil, fmt.Errorf("S8: argument %q has no exception matching %q", action.TargetArgID, locus.Pattern)
+		}
+	default:
+		action.TargetPremiseID = ""
 	}
-	action.AttackType = caesAttackType
-
-	return &ValidatedAction{
-		ProposedAction:    action,
-		CarneadesSchemeID: scheme.CarneadesID,
-		InstPremises:      instPremises,
-		InstConclusion:    instConclusion,
-		CaesAttackType:    caesAttackType,
-		Weight:            scheme.BaseWeight,
-	}, nil
+	va.Locus = locus
+	va.ProposedAction = action
+	return va, nil
 }
 
 // ---------------------------------------------------------------------------

@@ -70,7 +70,8 @@
       "{A} is observed to be the case",
       "{B} is indicated when {A} is true"
     ],
-    "conclusion_template_en": "{B} is true in the current situation"
+    "conclusion_template_en": "{B} is true in the current situation",
+    "answer_variable": "B"
   },
 
   "AS:expert_opinion": {
@@ -89,7 +90,8 @@
       "{W} asserts that {S}",
       "{S} is in the domain of {D}"
     ],
-    "conclusion_template_en": "{S}"
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S"
   },
 
   "AS:position_to_know": {
@@ -108,7 +110,8 @@
       "{W} asserts that {S}",
       "{S} is in the domain of {D}"
     ],
-    "conclusion_template_en": "{S}"
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S"
   },
 
   "AS:analogy": {
@@ -125,6 +128,7 @@
       "{C} is a similar case",
       "{A} is true in case {C}"
     ],
-    "conclusion_template_en": "{A}"
+    "conclusion_template_en": "{A}",
+    "answer_variable": "A"
   }
 }

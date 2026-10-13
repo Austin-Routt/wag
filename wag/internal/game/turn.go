@@ -89,6 +89,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// Phase 4: Snapshot labels, apply mutation, validate acyclicity
 	// ---------------------------------------------------------------
 	labelsBefore := gs.Adapter.StatementLabels()
+	targetStanding := gs.standing(validated.TargetArgID)
 	checkpoint := gs.Adapter.Checkpoint() // a rejected move must leave no trace (review defect #5)
 
 	argIDs, presumptions, err := gs.applyAction(validated, player.ID, weight)
@@ -129,7 +130,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// ---------------------------------------------------------------
 	// Phase 6: Scoring (Phase 1 formula)
 	// ---------------------------------------------------------------
-	scoreDelta := gs.computeScore(argIDs, validated, labelsBefore, labelsAfter)
+	scoreDelta := gs.computeScore(argIDs, validated, labelsBefore, labelsAfter, targetStanding)
 	player.Score += scoreDelta
 	player.ConsecutiveAbstentions = 0
 	gs.roundHadMove = true
@@ -175,6 +176,12 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 // operations and returns the arguments of the move and the presumption
 // arguments made for its premises.
 //
+// A plain support instantiates its scheme with InstantiateScheme. Every move
+// with a target (an attack or a defence) answers a critical question about
+// it: Adapter.AnswerQuestion makes an instance of the backup scheme whose
+// conclusion is the answer, decided by the locus (premise, exception,
+// conclusion or the inference) and the polarity.
+//
 // Premises are presumed, not assumed (review defect #1). Trusted mode used to
 // call AddAssumption on every premise of a move, and Carneades labels an
 // assumption In whatever is argued against it, so an undermining attack could
@@ -184,83 +191,66 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 // possible(A)) are retracted and presumed in the same way. Exception
 // arguments' premises are neither assumed nor presumed: an exception holds
 // only if someone argues for it.
-//
-// For attacks, the premises come from the NASCQ-instantiated English
-// templates: each is converted to a Prolog atom (carneades.TextToAtom), added
-// as a statement and presumed on behalf of the attacker.
 func (gs *GameState) applyAction(
 	va *nascq.ValidatedAction,
 	ownerID string,
 	weight float64,
 ) ([]string, []string, error) {
-	pw := gs.Config.presumptionWeight()
+	var argIDs []string
+	var err error
 	switch {
-	case va.Type == "support":
+	case va.TargetArgID == "" && va.Type == "support":
 		nAssumptions := gs.Adapter.AssumptionCount()
-		argIDs, err := gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID,
-			va.VariableBindings, weight)
-		if err != nil {
+		if argIDs, err = gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID, va.VariableBindings, weight); err != nil {
 			return nil, nil, err
 		}
 		gs.Adapter.RetractAssumptionsSince(nAssumptions)
-		var presumptions []string
-		for _, argID := range argIDs {
-			arg := gs.Adapter.Graph.Arguments[argID]
-			if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
-				continue // exception arguments: their premise holds only if argued for
-			}
-			for _, p := range arg.Premises {
-				if p.Stmt == nil {
-					continue
-				}
-				pid, err := gs.Adapter.AddPresumption(ownerID, p.Stmt.Id, pw)
-				if err != nil {
-					return argIDs, presumptions, err
-				}
-				presumptions = appendNew(presumptions, pid)
-			}
-		}
-		return argIDs, presumptions, nil
-
-	case va.Type == "attack":
-		premiseIDs, presumptions, err := gs.createAttackPremises(va, ownerID, pw)
+	case va.TargetArgID != "":
+		argIDs, err = gs.Adapter.AnswerQuestion(carneades.Answer{
+			Owner:          ownerID,
+			SchemeID:       va.CarneadesSchemeID,
+			Bindings:       va.VariableBindings,
+			Weight:         weight,
+			TargetArgID:    va.TargetArgID,
+			Locus:          va.Locus.Kind,
+			LocusStmtID:    va.LocusStmtID,
+			Positive:       va.IsDefence(),
+			AnswerVariable: va.AnswerVariable,
+			Standard:       caes.PE,
+		})
 		if err != nil {
-			return nil, presumptions, fmt.Errorf("creating attack premises: %w", err)
+			return argIDs, nil, err
 		}
-		var argIDs []string
-		switch va.CaesAttackType {
-		case "undercutter":
-			argIDs, err = gs.Adapter.AddUndercutter(ownerID, va.CarneadesSchemeID,
-				va.TargetArgID, premiseIDs, weight)
-
-		case "rebuttal":
-			// Find the target argument's conclusion ID for the rebuttal.
-			targetArg := gs.Adapter.Graph.Arguments[va.TargetArgID]
-			if targetArg == nil || targetArg.Conclusion == nil {
-				return nil, presumptions, fmt.Errorf("target argument %q has no conclusion", va.TargetArgID)
+		if v := va.AnswerVariable; v != "" { // record what the adapter bound it to
+			b := make(map[string]string, len(va.VariableBindings)+1)
+			for k, x := range va.VariableBindings {
+				b[k] = x
 			}
-			argIDs, err = gs.Adapter.AddRebuttal(ownerID, va.CarneadesSchemeID,
-				targetArg.Conclusion.Id, premiseIDs, weight, caes.PE)
-
-		case "undermining":
-			// Validation resolved the premise: the one the mover named, or the
-			// one the CQ's target_premise_pattern designates. (The first
-			// premise used to be taken, so "Is it possible to do A?" undermined
-			// current_circumstances(S1) instead of possible(A).)
-			if va.TargetPremiseID == "" {
-				return nil, presumptions, fmt.Errorf("no premise to undermine in argument %q", va.TargetArgID)
-			}
-			argIDs, err = gs.Adapter.AddUndermining(ownerID, va.CarneadesSchemeID,
-				va.TargetPremiseID, premiseIDs, weight, caes.PE)
-
-		default:
-			return nil, presumptions, fmt.Errorf("unknown CAES attack type %q", va.CaesAttackType)
+			b[v] = gs.Adapter.Graph.Arguments[argIDs[0]].Conclusion.Id
+			va.VariableBindings = b
 		}
-		return argIDs, presumptions, err
-
 	default:
 		return nil, nil, fmt.Errorf("unknown action type %q", va.Type)
 	}
+
+	var presumptions []string
+	for _, argID := range argIDs {
+		arg := gs.Adapter.Graph.Arguments[argID]
+		if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
+			continue // exception arguments: their premise holds only if argued for
+		}
+		for _, p := range arg.Premises {
+			if p.Stmt == nil {
+				continue
+			}
+			pid, err := gs.Adapter.AddPresumption(ownerID, p.Stmt.Id, gs.Config.presumptionWeight())
+			if err != nil {
+				return argIDs, presumptions, err
+			}
+			presumptions = appendNew(presumptions, pid)
+		}
+	}
+	return argIDs, presumptions, nil
 }
 
 // rejectInvalid penalizes and records an invalid move. An invalid move does
@@ -323,26 +313,6 @@ func appendNew(list []string, id string) []string {
 	return append(list, id)
 }
 
-// createAttackPremises creates Statement nodes in the graph for each of the
-// attack argument's premises (derived from NASCQ template instantiation) and
-// presumes each on behalf of the attacker.
-func (gs *GameState) createAttackPremises(va *nascq.ValidatedAction, ownerID string, weight float64) ([]string, []string, error) {
-	premiseIDs := make([]string, 0, len(va.InstPremises))
-	var presumptions []string
-	for _, premText := range va.InstPremises {
-		// Convert English text to a clean Prolog atom for the statement ID.
-		atomID := carneades.TextToAtom(premText)
-		gs.Adapter.AddStatement(atomID, premText)
-		pid, err := gs.Adapter.AddPresumption(ownerID, atomID, weight)
-		if err != nil {
-			return premiseIDs, presumptions, err
-		}
-		presumptions = appendNew(presumptions, pid)
-		premiseIDs = append(premiseIDs, atomID)
-	}
-	return premiseIDs, presumptions, nil
-}
-
 // -------------------------------------------------------------------------
 // Scoring (Phase 1)
 // -------------------------------------------------------------------------
@@ -362,15 +332,32 @@ func (gs *GameState) computeScore(
 	argIDs []string,
 	va *nascq.ValidatedAction,
 	labelsBefore, labelsAfter map[string]caes.Label,
+	targetStanding bool,
 ) float64 {
 	cfg := gs.Config.Scoring
 	score := 0.0
 
-	// An attack on one's own argument is legal (the SRD lets self-attacks
-	// count against a player's consistency, which is not implemented yet) but
-	// earns nothing: undercutting your own argument used to score 7 + 15.
-	if va.Type == "attack" && va.TargetArgID != "" && gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID {
-		return 0
+	if va.Type == "attack" {
+		// An attack on one's own argument is legal (the SRD lets self-attacks
+		// count against a player's consistency, which is not implemented yet)
+		// but earns nothing: undercutting your own argument used to score
+		// 7 + 15.
+		if gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID {
+			return 0
+		}
+		// Nor does an attack on an argument that was already defeated (its
+		// weight 0 or its conclusion Out): it changes nothing. Undercutting
+		// an argument that was already Out used to score 7 every time.
+		if !targetStanding {
+			return 0
+		}
+	}
+
+	// Proleptic defence (SRD §16.4): a positive answer to a critical question
+	// about one's own argument that nobody has raised yet.
+	if va.IsDefence() && va.AnswersCQID != "" && cfg.ProlepticBonus != 0 &&
+		gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID && !gs.raised(va.TargetArgID, va.AnswersCQID) {
+		score += cfg.ProlepticBonus
 	}
 
 	// Base points for each argument the player put forward. Exception
@@ -399,6 +386,24 @@ func (gs *GameState) computeScore(
 	}
 
 	return score
+}
+
+// standing reports whether the argument is in force: it exists, its weight
+// is above 0 (not undercut, its premises In) and its conclusion is not Out.
+func (gs *GameState) standing(argID string) bool {
+	arg := gs.Adapter.Graph.Arguments[argID]
+	return arg != nil && arg.Weight > 0 && arg.Conclusion != nil && arg.Conclusion.Label != caes.Out
+}
+
+// raised reports whether an accepted move has already answered the critical
+// question about the argument, either way.
+func (gs *GameState) raised(argID, cqID string) bool {
+	for _, m := range gs.MoveHistory {
+		if len(m.ArgIDs) > 0 && m.Action.TargetArgID == argID && m.Action.AnswersCQID == cqID {
+			return true
+		}
+	}
+	return false
 }
 
 // basePoints returns the Phase 1 base points for a given label.

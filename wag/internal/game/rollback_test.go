@@ -19,14 +19,14 @@ func TestRejectedCyclicMoveLeavesNoTrace(t *testing.T) {
 	attack := nascq.ProposedAction{Type: "attack", AttackType: "undercutter", SchemeID: "AS:sign",
 		AnswersCQID: "CQ:side_effect", TargetArgID: main,
 		VariableBindings: map[string]string{"A": "rising_unemployment", "B": "economic_harm"}}
-	va, err := gs.NASCQ.Validate(attack, gs.bridge)
-	if err != nil {
+	if _, err := gs.NASCQ.Validate(attack, gs.bridge); err != nil {
 		t.Fatal(err)
 	}
-	// Make the attack's first premise depend on the attacked conclusion, so the
-	// undercutter closes a cycle: conclusion <- main <- undercutter <- attack <- premise <- conclusion.
-	p0 := carneades.TextToAtom(va.InstPremises[0])
-	gs.Adapter.AddStatement(p0, va.InstPremises[0])
+	// Make the attack's first premise (the sign scheme's finding_true(A))
+	// depend on the attacked conclusion, so the undercutter closes a cycle:
+	// conclusion <- main <- undercutter <- attack <- premise <- conclusion.
+	p0 := "finding_true(" + carneades.SanitizeBinding("rising_unemployment") + ")"
+	gs.Adapter.AddStatement(p0, p0)
 	if _, err := gs.Adapter.AddArgumentDirect("setup", "s", []string{concl}, p0, 0.5); err != nil {
 		t.Fatal(err)
 	}

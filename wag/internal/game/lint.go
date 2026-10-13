@@ -20,7 +20,8 @@ import (
 //     NASCQ variables, and InstantiateScheme needs exactly the Carneades
 //     ones); a premise locus that names no premise or assumption of the
 //     Carneades scheme, or an exception locus that names none of its
-//     exceptions (the question could never be answered there); a Language
+//     exceptions (the question could never be answered there); an
+//     answer_variable that is not what the Carneades scheme concludes; a Language
 //     template whose number of %s differs from its predicate's arity;
 //   - warnings: a predicate used by a scheme with no Language template (its
 //     statements show as Prolog terms, and Carneades prints "Functor not
@@ -68,6 +69,34 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 			if !caesVars[v] {
 				add(true, id, "variable %s is not a variable of Carneades scheme %s", v, ns.CarneadesID)
 			}
+		}
+	}
+
+	// An answer variable is what the Carneades scheme concludes: the variable
+	// itself (S) or a one-place predicate of it (true_in_situation(B)).
+	caesConclusions := map[string][]string{}
+	for _, s := range theory.ArgSchemes {
+		caesConclusions[s.Id] = s.Conclusions
+	}
+	for _, id := range nascq.SortedStringKeys(n.Schemes) {
+		ns := n.Schemes[id]
+		concl, known := caesConclusions[ns.CarneadesID]
+		if ns.AnswerVariable == "" || !known {
+			continue
+		}
+		isVar := func(t terms.Term) bool {
+			v, ok := t.(terms.Variable)
+			return ok && v.Name == ns.AnswerVariable
+		}
+		ok := false
+		if len(concl) == 1 {
+			if t, parsed := terms.ReadString(concl[0]); parsed {
+				c, isCompound := t.(terms.Compound)
+				ok = isVar(t) || isCompound && len(c.Args) == 1 && isVar(c.Args[0])
+			}
+		}
+		if !ok {
+			add(true, id, "answer_variable %s is not what Carneades scheme %s concludes (%v)", ns.AnswerVariable, ns.CarneadesID, concl)
 		}
 	}
 

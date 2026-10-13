@@ -19,6 +19,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 
@@ -39,6 +41,11 @@ type ScoringConfig struct {
 	BasePointsOut        float64 // points when conclusion is Out (default: 0)
 	UndercutterBonus     float64 // flat bonus for flipping target to Out (default: 15)
 	InvalidActionPenalty float64 // penalty for structurally invalid move (default: -5)
+
+	// ProlepticBonus is the SRD's flat bonus (§16.4) for answering a critical
+	// question about one's own argument positively before anyone has raised
+	// it (default: 0; the SRD suggests 5).
+	ProlepticBonus float64
 }
 
 // DefaultScoringConfig returns the Phase 1 scoring parameters from the plan.
@@ -182,9 +189,18 @@ type GameState struct {
 //
 // Player order: players take turns in the order provided. Players[0] goes first.
 func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, playerNames []string) *GameState {
+	// A player's ID is their name, made unique: two players called "A" used
+	// to share an ID, so each one's attacks on the other counted as
+	// self-attacks and every score went to the first.
 	players := make([]*Player, len(playerNames))
+	used := map[string]bool{}
 	for i, name := range playerNames {
-		players[i] = newPlayer(name, name) // use name as both ID and display name
+		id := name
+		for n := 2; used[id]; n++ {
+			id = fmt.Sprintf("%s#%d", name, n)
+		}
+		used[id] = true
+		players[i] = newPlayer(id, name)
 	}
 
 	gs := &GameState{
@@ -267,4 +283,10 @@ func (b *graphBridge) PremiseExists(argID, premiseStmtID string) bool {
 // target_premise_pattern designates (see carneades.Adapter.PremiseMatching).
 func (b *graphBridge) PremiseMatching(argID, pattern string) string {
 	return b.gs.Adapter.PremiseMatching(argID, pattern)
+}
+
+// ExceptionMatching returns the exception of the argument that an exception
+// pattern designates (see carneades.Adapter.ExceptionMatching).
+func (b *graphBridge) ExceptionMatching(argID, pattern string) string {
+	return b.gs.Adapter.ExceptionMatching(argID, pattern)
 }

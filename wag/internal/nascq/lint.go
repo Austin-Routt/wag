@@ -38,8 +38,8 @@ func Placeholders(s string) []string {
 // are sorted by severity (errors first), then by place.
 //
 // Errors: an edge to a missing node or a duplicate edge; a scheme without
-// carneades_id, or with a base weight outside (0, 1], or a template naming an
-// undeclared variable; an ask edge without a locus (named on the edge or
+// carneades_id, or with a base weight outside (0, 1], or a template or
+// answer_variable naming an undeclared variable; an ask edge without a locus (named on the edge or
 // implied by the CQ's caes_mapping), a premise or exception locus without a
 // pattern, or a pattern naming a variable the scheme does not declare.
 //
@@ -101,6 +101,11 @@ func (n *NASCQ) Lint() []LintIssue {
 				if _, ok := s.Variables[v]; !ok {
 					add(true, id, "template %q names undeclared variable %q", tmpl, v)
 				}
+			}
+		}
+		if v := s.AnswerVariable; v != "" {
+			if _, ok := s.Variables[v]; !ok {
+				add(true, id, "answer_variable %q is not a declared variable", v)
 			}
 		}
 		if len(n.askIndex[id]) == 0 {

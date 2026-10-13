@@ -2,6 +2,7 @@ package game
 
 import (
 	"math/rand"
+	"sort"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -190,8 +191,8 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 // GreedyAgent (tries each action, picks highest score delta)
 // -------------------------------------------------------------------------
 
-// GreedyAgent looks one move ahead: it tries every available action template
-// with trialsPerAction sets of random bindings, playing each through
+// GreedyAgent looks one move ahead: it tries the available action templates
+// (up to MaxCandidates of them) with trialsPerAction sets of random bindings, playing each through
 // GameState.Simulate (which restores the game afterwards), and plays the one
 // with the highest score delta; it abstains if no trial is accepted. Ties go
 // to the first in enumeration order, so a seeded agent is reproducible.
@@ -204,7 +205,17 @@ type GreedyAgent struct {
 	seed            int64
 	rng             *rand.Rand
 	trialsPerAction int // how many random binding sets to try per template
+
+	// MaxCandidates caps the templates tried per turn (0: all): when there
+	// are more, a random sample of that many is tried, in enumeration
+	// order. Every argument offers attacks and defences for each of its
+	// critical questions and backup schemes, so the enumeration grows
+	// quickly with the graph.
+	MaxCandidates int
 }
+
+// DefaultGreedyCandidates is NewGreedyAgent's MaxCandidates.
+const DefaultGreedyCandidates = 40
 
 // NewGreedyAgent creates a GreedyAgent with the given seed.
 func NewGreedyAgent(name string, seed int64, trialsPerAction int) *GreedyAgent {
@@ -216,10 +227,26 @@ func NewGreedyAgent(name string, seed int64, trialsPerAction int) *GreedyAgent {
 		seed:            seed,
 		rng:             rand.New(rand.NewSource(seed)),
 		trialsPerAction: trialsPerAction,
+		MaxCandidates:   DefaultGreedyCandidates,
 	}
 }
 
 func (a *GreedyAgent) Name() string { return a.name }
+
+// candidates returns the templates to try: all of them, or a random sample
+// of MaxCandidates in enumeration order.
+func (a *GreedyAgent) candidates(all []nascq.ActionTemplate) []nascq.ActionTemplate {
+	if a.MaxCandidates <= 0 || len(all) <= a.MaxCandidates {
+		return all
+	}
+	idx := a.rng.Perm(len(all))[:a.MaxCandidates]
+	sort.Ints(idx)
+	out := make([]nascq.ActionTemplate, len(idx))
+	for i, j := range idx {
+		out[i] = all[j]
+	}
+	return out
+}
 
 // Seed returns the seed the agent was created with (Seeded).
 func (a *GreedyAgent) Seed() int64 { return a.seed }
@@ -227,7 +254,7 @@ func (a *GreedyAgent) Seed() int64 { return a.seed }
 func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	best := nascq.ProposedAction{Type: "abstain"}
 	bestScore, found := 0.0, false
-	for _, tmpl := range obs.AvailableActions {
+	for _, tmpl := range a.candidates(obs.AvailableActions) {
 		for trial := 0; trial < a.trialsPerAction; trial++ {
 			bindings := make(map[string]string)
 			for _, varName := range carneades.SortedKeys(tmpl.Variables) {

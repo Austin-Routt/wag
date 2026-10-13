@@ -69,6 +69,15 @@ type ASNode struct {
 	Variables            map[string]VariableSpec `json:"variables"`              // variable slots
 	PremiseTemplatesEN   []string                `json:"premise_templates_en"`   // English premise patterns
 	ConclusionTemplateEN string                  `json:"conclusion_template_en"` // English conclusion pattern
+
+	// AnswerVariable is the variable that states the scheme's conclusion
+	// (S of "S is true, since expert W asserts it"). When the scheme backs
+	// the answer to a critical question, it is bound to the answer, so the
+	// argument's premises are about the answer (asserts(W, ¬possible(A))).
+	// A scheme without one concludes something more specific
+	// (should_be_performed(A)); its answering argument concludes the answer
+	// and leaves its own conclusion as the unstated link (an enthymeme).
+	AnswerVariable string `json:"answer_variable,omitempty"`
 }
 
 // CaesMapping specifies how a CQ-directed attack translates into a CAES
@@ -187,6 +196,18 @@ type ValidatedAction struct {
 	CarneadesSchemeID string   `json:"carneades_scheme_id"` // resolved from ASNode.CarneadesID
 	InstPremises      []string `json:"inst_premises"`       // substituted English premises
 	InstConclusion    string   `json:"inst_conclusion"`     // substituted English conclusion
-	CaesAttackType    string   `json:"caes_attack_type"`    // from CQ's caes_mapping
+	CaesAttackType    string   `json:"caes_attack_type"`    // attack type implied by the locus ("" for supports and defences)
 	Weight            float64  `json:"weight"`              // scheme BaseWeight
+
+	// For a move with a target: the part of the target it is about, and the
+	// premise or exception statement for those loci.
+	Locus       Locus  `json:"locus"`
+	LocusStmtID string `json:"locus_stmt_id,omitempty"`
+
+	// AnswerVariable is the backing scheme's AnswerVariable on a move with a
+	// target: the adapter binds it to the answer (S2 does not require it).
+	AnswerVariable string `json:"answer_variable,omitempty"`
 }
+
+// IsDefence reports whether the move answers in the target's favour.
+func (v *ValidatedAction) IsDefence() bool { return v.Type == "support" && v.TargetArgID != "" }

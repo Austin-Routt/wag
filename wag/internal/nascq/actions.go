@@ -27,6 +27,15 @@ type ActionTemplate struct {
 
 	// Resolved from CQ mapping (for attacks)
 	CaesAttackType string
+
+	// For a move with a target: the part of the target it is about (see
+	// Locus) and the premise or exception statement for those loci.
+	Locus       Locus
+	LocusStmtID string
+
+	// AnswerVariable is the scheme's variable bound to the answer (see
+	// ASNode.AnswerVariable): the player need not fill it in.
+	AnswerVariable string
 }
 
 // EnumerateActions returns all structurally valid action templates available
@@ -61,7 +70,7 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 		})
 	}
 
-	// 2. CQ-directed attacks on existing arguments.
+	// 2. Answers to the critical questions about existing arguments.
 	for _, argID := range argIDs {
 		caesSchemeID := graph.ArgumentSchemeID(argID)
 		if caesSchemeID == "" {
@@ -85,40 +94,53 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 				continue
 			}
 
-			attackType := AttackTypeOf(cq)
-			if attackType == "" {
-				continue // the CQ maps to no attack (Lint reports it)
-			}
-			// An undermining attacks the premise the CQ's pattern designates;
-			// if the target has no such premise the CQ cannot be answered.
-			premiseID := ""
-			if attackType == "undermining" {
-				if cq.CaesMapping.TargetPremisePattern == "" {
-					continue // the mover would have to name a premise; not enumerated
+			// The locus decides what the answers are about; a premise or
+			// exception the target does not have cannot be asked about.
+			locus := n.LocusOf(cqID, nascqSchemeID)
+			stmtID := ""
+			switch locus.Kind {
+			case "":
+				continue // no locus (Lint reports it)
+			case LocusPremise:
+				if stmtID = graph.PremiseMatching(argID, locus.Pattern); stmtID == "" {
+					continue
 				}
-				if premiseID = graph.PremiseMatching(argID, cq.CaesMapping.TargetPremisePattern); premiseID == "" {
+			case LocusException:
+				if stmtID = graph.ExceptionMatching(argID, locus.Pattern); stmtID == "" {
 					continue
 				}
 			}
+			premiseID := ""
+			if locus.Kind == LocusPremise {
+				premiseID = stmtID
+			}
+			attackType := locus.AttackType()
 
-			// Get backup schemes for this CQ.
-			backups := n.GetBackupSchemes(cqID)
-			for _, bs := range backups {
-				tmpl := ActionTemplate{
-					Type:                 "attack",
-					AttackType:           attackType,
-					SchemeID:             bs.ID,
-					SchemeName:           bs.Name,
-					AnswersCQID:          cqID,
-					CQName:               cq.Name,
-					TargetArgID:          argID,
-					Variables:            bs.Variables,
-					PremiseTemplatesEN:   bs.PremiseTemplatesEN,
-					ConclusionTemplateEN: bs.ConclusionTemplateEN,
-					CaesAttackType:       attackType,
-					TargetPremiseID:      premiseID,
+			// Each backup scheme can back up either answer: the negative one
+			// (an attack) and the positive one (a defence, a support with a
+			// target).
+			for _, bs := range n.GetBackupSchemes(cqID) {
+				for _, typ := range []string{"attack", "support"} {
+					tmpl := ActionTemplate{
+						Type:                 typ,
+						SchemeID:             bs.ID,
+						SchemeName:           bs.Name,
+						AnswersCQID:          cqID,
+						CQName:               cq.Name,
+						TargetArgID:          argID,
+						Variables:            bs.Variables,
+						PremiseTemplatesEN:   bs.PremiseTemplatesEN,
+						ConclusionTemplateEN: bs.ConclusionTemplateEN,
+						TargetPremiseID:      premiseID,
+						Locus:                locus,
+						LocusStmtID:          stmtID,
+						AnswerVariable:       bs.AnswerVariable,
+					}
+					if typ == "attack" {
+						tmpl.AttackType, tmpl.CaesAttackType = attackType, attackType
+					}
+					actions = append(actions, tmpl)
 				}
-				actions = append(actions, tmpl)
 			}
 		}
 	}

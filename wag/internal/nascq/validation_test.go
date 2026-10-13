@@ -49,6 +49,15 @@ func (m *mockGraph) PremiseMatching(argID, pattern string) string {
 	return ""
 }
 
+// ExceptionMatching mimics the adapter: the pattern with its placeholders
+// left as they are (the mock has no bindings).
+func (m *mockGraph) ExceptionMatching(argID, pattern string) string {
+	if _, ok := m.arguments[argID]; !ok {
+		return ""
+	}
+	return pattern
+}
+
 func newMockGraph() *mockGraph {
 	return &mockGraph{
 		arguments: map[string]string{
