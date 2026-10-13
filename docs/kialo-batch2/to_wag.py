@@ -78,17 +78,33 @@ def words(value):
     return str(value).replace("_", " ").strip()
 
 
-def side_of(item):
+def side_of(item, kialo_relation):
+    """The side that makes the move, and whether it argues for or against
+    its target: from the annotated polarity or role, else the Kialo
+    relation (pro, con)."""
     role = (item.get("role") or {})
     pol = role.get("polarity")
     kind = role.get("kind")
-    if pol in ("for", "against"):
-        return "pro" if pol == "for" else "con", pol
-    if kind in FOR_ROLES:
-        return "pro", "for"
-    if kind in AGAINST_ROLES:
-        return "con", "against"
-    return None, None
+    if pol not in ("for", "against"):
+        if kind in FOR_ROLES:
+            pol = "for"
+        elif kind in AGAINST_ROLES:
+            pol = "against"
+        elif kialo_relation in ("pro", "con"):
+            pol = "for" if kialo_relation == "pro" else "against"
+        else:
+            return None, None
+    side = "pro" if pol == "for" else "con"
+    if kialo_relation in ("pro", "con") and kind in ("action_amendment", "alternative_means", "none", "clarification"):
+        side = kialo_relation  # a proposal of its own, by the side that filed it
+    return side, pol
+
+
+def norm(formula):
+    f = (formula or "").replace(" ", "")
+    if f.startswith("not(") and f.endswith(")"):
+        f = "¬" + f[4:-1]
+    return f
 
 
 def main():
@@ -131,10 +147,11 @@ def main():
         inst = primary(a)
         scheme = (inst.get("scheme") or {})
         wid = scheme.get("walton_id") or "none"
-        side, pol = side_of(a)
+        rel = (it.get("kialo_parents") or [{}])[0].get("relation")
+        side, pol = side_of(a, rel)
         entry = {"claim": cid, "scheme": wid, "role": (a.get("role") or {}).get("kind")}
-        if side is None or scheme.get("fit") in ("fragment", "none") and wid in ("none",):
-            entry["played"] = "no: " + ("no side" if side is None else "no scheme")
+        if side is None or wid == "none":
+            entry["played"] = "no: " + ("no side" if side is None else "no scheme: " + str(scheme.get("fit")))
             report.append(entry)
             continue
         tgt = ((a.get("target") or {}).get("actual") or {})
@@ -153,6 +170,13 @@ def main():
         wag = WALTON_TO_WAG.get(wid)
         bindings = {k: words(v) for k, v in (inst.get("bindings") or {}).items()}
         cq = (a.get("role") or {}).get("cq")
+        conc = norm((inst.get("conclusion") or {}).get("formula"))
+        conc_en = (inst.get("conclusion") or {}).get("en") or literal
+        # An instance whose conclusion is neither the target nor its opposite
+        # (an amended action, an alternative) is an argument of its own.
+        if stmt and conc and conc not in (stmt, "¬" + stmt) and stmt != "¬" + conc and (a.get("role") or {}).get("kind") in (
+                "action_amendment", "alternative_means", "independent_pro", "independent_con", "none", "clarification"):
+            stmt = None
         actions = []
         if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and tclaim in played:
             act = {"type": "attack" if pol == "against" else "support", "target_arg_id": played[tclaim]["arg"],
@@ -166,12 +190,20 @@ def main():
         if stmt:
             actions.append(("other", {"type": "support" if pol == "for" else "attack", "target_stmt_id": stmt, "scheme_id": "AS:other",
                                       "variable_bindings": {"P1": literal}, "text": literal}))
-        if not stmt and wag:
-            actions.append(("new", {"type": "support", "scheme_id": wag, "variable_bindings": bindings, "text": literal}))
+        if not stmt:
+            if wag:
+                actions.append(("new", {"type": "support", "scheme_id": wag, "variable_bindings": bindings, "text": literal}))
+            actions.append(("other-new", {"type": "support", "scheme_id": "AS:other", "text": literal,
+                                          "variable_bindings": {"P1": literal, "C": conc_en}}))
         errors = []
         for how, act in actions:
             r = move(side, act, f"Kialo {cid}: {entry['role']}, {wid}")
             res = r.get("result") or {}
+            fixed = re.findall(r"leave (\w+) out", res.get("error") or "")
+            if not res.get("accepted") and fixed:  # the statement fixes them: as the browser, leave them out
+                act = dict(act, variable_bindings={k: v for k, v in act["variable_bindings"].items() if k not in fixed})
+                r = move(side, act, f"Kialo {cid}: {entry['role']}, {wid}")
+                res = r.get("result") or {}
             if res.get("accepted"):
                 arg = (res.get("arg_ids") or [None])[0]
                 s = state()
@@ -191,7 +223,7 @@ def main():
     summary = {"game": gid, "claim": claim, "claim_label": s["statements"].get(claim, {}).get("label"),
                "played": sum(1 for e in report if not str(e.get("played", "")).startswith("no")),
                "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new")),
-               "with_other": sum(1 for e in report if e.get("played") == "other"),
+               "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "moves": report}
     if args.report:

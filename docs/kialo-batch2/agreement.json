@@ -1,0 +1,367 @@
+{
+ "items": 50,
+ "fields": {
+  "scheme": {
+   "agreement": 0.8,
+   "kappa": 0.773
+  },
+  "fit": {
+   "agreement": 0.82,
+   "kappa": 0.597
+  },
+  "role": {
+   "agreement": 0.86,
+   "kappa": 0.84
+  },
+  "polarity": {
+   "agreement": 0.96,
+   "kappa": 0.923
+  },
+  "target_claim": {
+   "agreement": 0.98,
+   "kappa": 0.978
+  },
+  "target_part": {
+   "agreement": 0.98,
+   "kappa": 0.968
+  },
+  "re_parented": {
+   "agreement": 0.74,
+   "kappa": 0.513
+  },
+  "evidence": {
+   "agreement": 0.96,
+   "kappa": 0.928
+  },
+  "scheme_family": {
+   "agreement": 0.82
+  }
+ },
+ "disagreements": {
+  "scheme": [
+   {
+    "claim": "13292.145",
+    "A": "positive_consequences",
+    "B": "practical_reasoning2"
+   },
+   {
+    "claim": "13292.135",
+    "A": "other",
+    "B": "none"
+   },
+   {
+    "claim": "13292.2",
+    "A": "verbal_classification",
+    "B": "cause_to_effect"
+   },
+   {
+    "claim": "13292.4",
+    "A": "verbal_classification",
+    "B": "cause_to_effect"
+   },
+   {
+    "claim": "13292.8",
+    "A": "definition_to_verbal_classification",
+    "B": "verbal_classification"
+   },
+   {
+    "claim": "13292.46",
+    "A": "rule",
+    "B": "practical_reasoning2"
+   },
+   {
+    "claim": "13292.147",
+    "A": "positive_consequences",
+    "B": "practical_reasoning2"
+   },
+   {
+    "claim": "13292.194",
+    "A": "positive_consequences",
+    "B": "practical_reasoning2"
+   },
+   {
+    "claim": "13292.202",
+    "A": "none",
+    "B": "practical_reasoning2"
+   },
+   {
+    "claim": "13292.235",
+    "A": "positive_consequences",
+    "B": "practical_reasoning2"
+   }
+  ],
+  "fit": [
+   {
+    "claim": "13292.104",
+    "A": "reconstructed",
+    "B": "explicit"
+   },
+   {
+    "claim": "13292.135",
+    "A": "reconstructed",
+    "B": "none"
+   },
+   {
+    "claim": "13292.2",
+    "A": "reconstructed",
+    "B": "explicit"
+   },
+   {
+    "claim": "13292.4",
+    "A": "reconstructed",
+    "B": "explicit"
+   },
+   {
+    "claim": "13292.46",
+    "A": "explicit",
+    "B": "reconstructed"
+   },
+   {
+    "claim": "13292.202",
+    "A": "none",
+    "B": "reconstructed"
+   },
+   {
+    "claim": "13292.224",
+    "A": "reconstructed",
+    "B": "explicit"
+   },
+   {
+    "claim": "13292.233",
+    "A": "reconstructed",
+    "B": "explicit"
+   },
+   {
+    "claim": "13292.29",
+    "A": "reconstructed",
+    "B": "explicit"
+   }
+  ],
+  "role": [
+   {
+    "claim": "13292.33",
+    "A": "premise_attack",
+    "B": "cq_answer"
+   },
+   {
+    "claim": "13292.192",
+    "A": "undercutter",
+    "B": "premise_attack"
+   },
+   {
+    "claim": "13292.182",
+    "A": "undercutter",
+    "B": "cq_answer"
+   },
+   {
+    "claim": "13292.198",
+    "A": "undercutter",
+    "B": "cq_answer"
+   },
+   {
+    "claim": "13292.204",
+    "A": "premise_attack",
+    "B": "cq_answer"
+   },
+   {
+    "claim": "13292.233",
+    "A": "premise_attack",
+    "B": "cq_answer"
+   },
+   {
+    "claim": "13292.29",
+    "A": "independent_con",
+    "B": "rebuttal"
+   }
+  ],
+  "polarity": [
+   {
+    "claim": "13292.46",
+    "A": "none",
+    "B": "for"
+   },
+   {
+    "claim": "13292.190",
+    "A": "none",
+    "B": "for"
+   }
+  ],
+  "target_claim": [
+   {
+    "claim": "13292.29",
+    "A": "13292.1",
+    "B": "13292.115"
+   }
+  ],
+  "target_part": [
+   {
+    "claim": "13292.192",
+    "A": "exception",
+    "B": "premise"
+   }
+  ],
+  "re_parented": [
+   {
+    "claim": "13292.33",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.169",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.218",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.135",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.137",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.2",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.12",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.4",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.8",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.192",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.141",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.224",
+    "A": true,
+    "B": false
+   },
+   {
+    "claim": "13292.233",
+    "A": true,
+    "B": false
+   }
+  ],
+  "evidence": [
+   {
+    "claim": "13292.12",
+    "A": "source",
+    "B": "definition"
+   },
+   {
+    "claim": "13292.194",
+    "A": "source",
+    "B": "definition"
+   }
+  ]
+ },
+ "same_scheme": {
+  "items": 30,
+  "premise_jaccard_mean": 1.0,
+  "binding_word_jaccard_mean": 0.524,
+  "supplied_premises_A_B": [
+   97,
+   92
+  ]
+ },
+ "scheme_counts": {
+  "A": {
+   "none": 6,
+   "negative_consequences": 9,
+   "practical_reasoning2": 8,
+   "positive_consequences": 5,
+   "other": 6,
+   "cause_to_effect": 4,
+   "analogy": 1,
+   "positive_value": 1,
+   "verbal_classification": 2,
+   "definition_to_verbal_classification": 1,
+   "rule": 2,
+   "end_and_means_1": 1,
+   "practical_analogy_positive": 1,
+   "expert_opinion": 2,
+   "practical_necessary_condition": 1
+  },
+  "B": {
+   "none": 6,
+   "negative_consequences": 9,
+   "practical_reasoning2": 14,
+   "positive_consequences": 1,
+   "other": 5,
+   "cause_to_effect": 6,
+   "analogy": 1,
+   "positive_value": 1,
+   "verbal_classification": 1,
+   "end_and_means_1": 1,
+   "practical_analogy_positive": 1,
+   "expert_opinion": 2,
+   "rule": 1,
+   "practical_necessary_condition": 1
+  }
+ },
+ "role_counts": {
+  "A": {
+   "none": 1,
+   "premise_attack": 9,
+   "independent_con": 3,
+   "independent_pro": 8,
+   "rebuttal": 2,
+   "action_amendment": 7,
+   "side_effect": 3,
+   "alternative_means": 3,
+   "premise_backing": 10,
+   "cq_answer": 1,
+   "undercutter": 3
+  },
+  "B": {
+   "none": 1,
+   "premise_attack": 7,
+   "independent_con": 2,
+   "independent_pro": 8,
+   "cq_answer": 6,
+   "rebuttal": 3,
+   "action_amendment": 7,
+   "side_effect": 3,
+   "alternative_means": 3,
+   "premise_backing": 10
+  }
+ },
+ "pilot": {
+  "A": {
+   "scheme_agreement": 0.5,
+   "scheme_kappa": 0.433,
+   "role_agreement": 0.45
+  },
+  "B": {
+   "scheme_agreement": 0.5,
+   "scheme_kappa": 0.437,
+   "role_agreement": 0.5
+  },
+  "items": 20
+ }
+}
