@@ -149,8 +149,9 @@
     "question_template_en": "Is what {W} says based on evidence?",
     "caes_mapping": {
       "positive_answer_type": "support",
-      "negative_answer_type": "undercutter",
-      "target": "argument"
+      "negative_answer_type": "undermining",
+      "target": "premise",
+      "target_premise_pattern": "based_on_evidence(asserts({W},{S}))"
     }
   },
 
@@ -218,5 +219,46 @@
       "negative_answer_type": "undermining",
       "target": "premise"
     }
-  }
+  },
+    "CQ:conflicting_goals": {
+      "name": "Conflicting Goals Question",
+      "semantic_type": "value",
+      "question_template_en": "Does the goal {G} conflict with other goals that should be considered?",
+      "caes_mapping": {
+        "positive_answer_type": "support",
+        "negative_answer_type": "undercutter",
+        "target": "argument"
+      }
+    },
+    "CQ:intervening_actions": {
+      "name": "Intervening Actions Question",
+      "semantic_type": "causality",
+      "question_template_en": "Would something else have to happen, or be done, before {A} could achieve {G}?",
+      "caes_mapping": {
+        "positive_answer_type": "support",
+        "negative_answer_type": "undercutter",
+        "target": "argument"
+      }
+    },
+    "CQ:goal_possible": {
+      "name": "Goal Possibility Question",
+      "semantic_type": "causality",
+      "question_template_en": "Can the goal {G} be achieved at all?",
+      "caes_mapping": {
+        "positive_answer_type": "support",
+        "negative_answer_type": "undermining",
+        "target": "premise",
+        "target_premise_pattern": "possible({G})"
+      }
+    },
+    "CQ:opposite_consequences": {
+      "name": "Opposite Consequences Question",
+      "semantic_type": "action",
+      "question_template_en": "Are there good consequences of doing {A} that outweigh {G}?",
+      "caes_mapping": {
+        "positive_answer_type": "support",
+        "negative_answer_type": "rebuttal",
+        "target": "conclusion"
+      }
+    }
 }

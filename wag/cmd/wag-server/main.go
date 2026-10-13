@@ -14,6 +14,7 @@
 //	--claude     offer Claude seats, played through the Claude API with the
 //	             text protocol (needs ANTHROPIC_API_KEY; moves cost API credits);
 //	             --claude-model (default claude-opus-5-5), --claude-effort (default medium)
+//	--contexts   a JSON file of context presets to offer besides the built-in ones
 //
 // The engine runs in this process; the browser shows the game and sends the
 // moves. Several tabs can show the same game, for example the players and a
@@ -31,6 +32,7 @@ import (
 	"runtime"
 
 	"github.com/yourorg/wag/data"
+	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/server"
 )
 
@@ -42,6 +44,7 @@ func main() {
 	claude := flag.Bool("claude", false, "offer Claude seats, played through the Claude API (needs ANTHROPIC_API_KEY or an `ant auth login` profile; the moves cost API credits)")
 	claudeModel := flag.String("claude-model", "claude-opus-5-5", "the model Claude seats use")
 	claudeEffort := flag.String("claude-effort", "medium", "the effort Claude seats use: low, medium, high, xhigh or max")
+	contextsFile := flag.String("contexts", "", "a JSON file of context presets (as data/contexts.json, or one preset as the browser saves it) to offer besides the built-in ones; a preset with a built-in's id replaces it")
 	flag.Parse()
 
 	d := server.Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON, Contexts: data.ContextsJSON}
@@ -62,6 +65,20 @@ func main() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
+	}
+	if *contextsFile != "" {
+		b, err := os.ReadFile(*contextsFile)
+		if err == nil {
+			var cs []game.Context
+			if cs, err = game.LoadContexts(b); err == nil {
+				srv.AddContexts(cs)
+				fmt.Printf("Context presets added from %s: %d.\n", *contextsFile, len(cs))
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error reading the context presets:", err)
+			os.Exit(1)
+		}
 	}
 	if *claude {
 		srv.SetClaude(server.NewClaude(*claudeModel, *claudeEffort))

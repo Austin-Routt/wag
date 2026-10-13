@@ -36,6 +36,27 @@ type ActionTemplate struct {
 	// AnswerVariable is the scheme's variable bound to the answer (see
 	// ASNode.AnswerVariable): the player need not fill it in.
 	AnswerVariable string
+
+	// TargetStmtID is the statement a move about a statement argues for
+	// (support) or against (attack); Fixed are the values of the scheme's
+	// variables that the statement fixes (see Validate, S9), which the
+	// player need not fill in either.
+	TargetStmtID string
+	Fixed        map[string]string
+}
+
+// Action is the move made from the template with the given bindings.
+func (t ActionTemplate) Action(bindings map[string]string) ProposedAction {
+	return ProposedAction{Type: t.Type, AttackType: t.AttackType, SchemeID: t.SchemeID, AnswersCQID: t.AnswersCQID,
+		TargetArgID: t.TargetArgID, TargetPremiseID: t.TargetPremiseID, TargetStmtID: t.TargetStmtID,
+		VariableBindings: bindings}
+}
+
+// Bound reports whether the game, not the player, binds the variable: the
+// answer variable, or one the statement of the move fixes.
+func (t ActionTemplate) Bound(v string) bool {
+	_, fixed := t.Fixed[v]
+	return v == t.AnswerVariable && v != "" || fixed
 }
 
 // EnumerateActions returns all structurally valid action templates available
@@ -106,6 +127,10 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 			switch locus.Kind {
 			case "":
 				continue // no locus (Lint reports it)
+			case LocusConclusion:
+				if !n.OwnConclusion(graph, argID, nascqSchemeID) {
+					continue
+				}
 			case LocusPremise:
 				if locus.Pattern == "" { // any premise no other question is about
 					covered := n.CoveredPremises(graph, argID, nascqSchemeID)
@@ -125,12 +150,36 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 				if stmtID == "" && (locus.Kind == LocusPremise || locus.Kind == LocusException) {
 					continue
 				}
-				actions = append(actions, n.answerTemplates(argID, cq, locus, stmtID)...)
+				for _, t := range n.answerTemplates(argID, cq, locus, stmtID) {
+					t.Fixed = n.answerFixed(t, graph)
+					actions = append(actions, t)
+				}
 			}
 		}
 	}
 
 	return actions
+}
+
+// answerFixed returns the values an answer from the template must give the
+// variables of its backing scheme's conclusion (S9, fitAnswer): when the
+// scheme concludes the answer's form, the answer fixes them.
+func (n *NASCQ) answerFixed(t ActionTemplate, graph GraphQuerier) map[string]string {
+	s := n.Schemes[t.SchemeID]
+	if t.Type == "question" || s == nil || s.Free || s.AnswerVariable != "" {
+		return nil
+	}
+	va := &ValidatedAction{ProposedAction: ProposedAction{Type: t.Type, TargetArgID: t.TargetArgID, AnswersCQID: t.AnswersCQID},
+		Locus: t.Locus, LocusStmtID: t.LocusStmtID}
+	stmt, _ := n.concluded(va, graph)
+	if stmt == "" {
+		return nil
+	}
+	fixed, err := graph.Fits(s.CarneadesID, stmt, nil)
+	if err != nil || len(fixed) == 0 {
+		return nil
+	}
+	return fixed
 }
 
 // answerTemplates returns the templates of the moves about one locus of an
@@ -159,6 +208,12 @@ func (n *NASCQ) answerTemplates(argID string, cq *CQNode, locus Locus, stmtID st
 
 	// Each backup scheme can back up either answer: the negative one (an
 	// attack) and the positive one (a defence, a support with a target).
+	// The challenge of a premise is a question only: arguments for and
+	// against a premise are moves about the statement
+	// (EnumerateStatementActions).
+	if cq.ID == CQPremiseAcceptable {
+		return actions
+	}
 	attackType := locus.AttackType()
 	for _, bs := range n.GetBackupSchemes(cq.ID) {
 		for _, typ := range []string{"attack", "support"} {
@@ -181,6 +236,62 @@ func (n *NASCQ) answerTemplates(argID string, cq *CQNode, locus Locus, stmtID st
 				tmpl.AttackType, tmpl.CaesAttackType = attackType, attackType
 			}
 			actions = append(actions, tmpl)
+		}
+	}
+	return actions
+}
+
+// EnumerateStatementActions returns the templates of the moves about the
+// given statements: for each statement, an argument for it and one against
+// it with every scheme that can conclude it, or its opposite (S9 of
+// Validate): Other and the schemes with an answer variable conclude any
+// statement; another scheme only one its conclusion unifies with, and the
+// template carries the values that fixes.
+func (n *NASCQ) EnumerateStatementActions(graph GraphQuerier, stmtIDs []string) []ActionTemplate {
+	var actions []ActionTemplate
+	for _, stmtID := range stmtIDs {
+		info := graph.Statement(stmtID)
+		if !info.Exists {
+			continue
+		}
+		for _, typ := range []string{"support", "attack"} {
+			concl := stmtID
+			attackType := ""
+			if typ == "attack" {
+				concl, attackType = info.Opposite, "rebuttal"
+				if info.Premise && !info.Concluded {
+					attackType = "undermining"
+				}
+			}
+			for _, id := range sortedSchemeIDs(n.Schemes) {
+				s := n.Schemes[id]
+				var fixed map[string]string
+				if !s.Free && s.AnswerVariable == "" {
+					if concl == "" {
+						continue
+					}
+					f, err := graph.Fits(s.CarneadesID, concl, nil)
+					if err != nil {
+						continue
+					}
+					fixed = f
+				}
+				actions = append(actions, ActionTemplate{
+					Type:                 typ,
+					AttackType:           attackType,
+					CaesAttackType:       attackType,
+					SchemeID:             s.ID,
+					SchemeName:           s.Name,
+					Variables:            s.Variables,
+					PremiseTemplatesEN:   s.PremiseTemplatesEN,
+					ConclusionTemplateEN: s.ConclusionTemplateEN,
+					Locus:                Locus{Kind: LocusStatement},
+					LocusStmtID:          stmtID,
+					AnswerVariable:       s.AnswerVariable,
+					TargetStmtID:         stmtID,
+					Fixed:                fixed,
+				})
+			}
 		}
 	}
 	return actions

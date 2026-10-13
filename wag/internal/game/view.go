@@ -93,8 +93,10 @@ type IssueView struct {
 // {"type":"resign"}.
 type ActionView struct {
 	// Type is "support" (a new argument, or with a target a defence: a
-	// positive answer), "attack" (a negative answer) or "question" (asked
-	// without an argument: no scheme, no variables).
+	// positive answer; with a target statement, an argument for it),
+	// "attack" (a negative answer; with a target statement, an argument
+	// against it) or "question" (asked without an argument: no scheme, no
+	// variables).
 	Type            string                        `json:"type"`
 	AttackType      string                        `json:"attack_type,omitempty"`
 	Locus           string                        `json:"locus,omitempty"` // what the move is about: premise, exception, conclusion or argument
@@ -104,7 +106,9 @@ type ActionView struct {
 	Question        string                        `json:"question,omitempty"` // the CQ, with the target's bindings
 	TargetArgID     string                        `json:"target_arg_id,omitempty"`
 	TargetPremiseID string                        `json:"target_premise_id,omitempty"`
-	Variables       map[string]nascq.VariableSpec `json:"variables"` // to bind (not the answer variable)
+	TargetStmtID    string                        `json:"target_stmt_id,omitempty"` // the statement argued for (support) or against (attack)
+	Fixed           map[string]string             `json:"fixed,omitempty"`          // values the statement fixes (not to bind)
+	Variables       map[string]nascq.VariableSpec `json:"variables"`                // to bind (not the answer variable, nor the fixed ones)
 	VariableOrder   []string                      `json:"variable_order"`
 	AnswerVariable  string                        `json:"answer_variable,omitempty"` // bound to the answer by the game
 	Premises        []string                      `json:"premises"`                  // English templates with {Var} placeholders
@@ -206,13 +210,13 @@ func (gs *GameState) BuildView() *View {
 	for _, a := range gs.BuildObservation().AvailableActions {
 		vars := map[string]nascq.VariableSpec{}
 		for k, spec := range a.Variables {
-			if k != a.AnswerVariable {
+			if !a.Bound(k) {
 				vars[k] = spec
 			}
 		}
 		av := ActionView{Type: a.Type, AttackType: a.CaesAttackType, Locus: a.Locus.Kind, SchemeID: a.SchemeID,
 			SchemeName: a.SchemeName, AnswersCQID: a.AnswersCQID, TargetArgID: a.TargetArgID,
-			TargetPremiseID: a.TargetPremiseID, Variables: vars, VariableOrder: variableOrder(a),
+			TargetPremiseID: a.TargetPremiseID, TargetStmtID: a.TargetStmtID, Fixed: a.Fixed, Variables: vars, VariableOrder: variableOrder(a),
 			AnswerVariable: a.AnswerVariable, Premises: a.PremiseTemplatesEN, Concludes: gs.Effect(a, nil)}
 		if a.TargetArgID != "" {
 			av.Question = gs.QuestionText(a.AnswersCQID, a.TargetArgID)

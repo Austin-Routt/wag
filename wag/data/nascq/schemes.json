@@ -182,7 +182,7 @@
     "evidence_note_en": "where the sign was observed"
   },
   "AS:expert_opinion": {
-    "carneades_id": "credible_source",
+    "carneades_id": "expert_opinion",
     "name": "Argument from Expert Opinion",
     "semantic_type": "truth",
     "thesis_independent": true,
@@ -205,9 +205,9 @@
       }
     },
     "premise_templates_en": [
-      "{W} is a credible expert on {D}",
-      "{W} says that {S}",
-      "{S} is a matter of {D}"
+      "{W} is an expert in {D}",
+      "{S} is a matter of {D}",
+      "{W} says that {S}"
     ],
     "conclusion_template_en": "{S}",
     "answer_variable": "S",
@@ -319,5 +319,96 @@
     ],
     "evidence": "recommended",
     "evidence_note_en": "the similar case"
+  },
+  "AS:practical_reasoning_goal": {
+    "carneades_id": "practical_reasoning2",
+    "name": "Instrumental Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
+      },
+      "A": {
+        "type": "action",
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after the action",
+        "example_en": "lower emissions"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized",
+        "example_en": "meet the 2030 climate target"
+      }
+    },
+    "premise_templates_en": [
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state in which the agent's goal is realized (goal-based, without values: Walton 2015; the book's practical inference, 22.1). For an argument that also names the value the goal promotes, use Practical Reasoning.",
+    "cues_en": [
+      "in order to",
+      "so that",
+      "so as to",
+      "means to",
+      "the way to",
+      "to achieve",
+      "to reach",
+      "our goal",
+      "the aim"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action would bring about the state"
+  },
+  "AS:negative_consequences": {
+    "carneades_id": "negative_consequences",
+    "name": "Argument from Negative Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "G": {
+        "type": "event",
+        "description": "Bad consequence",
+        "example_en": "higher heating bills for poor households"
+      }
+    },
+    "premise_templates_en": [
+      "Doing {A} brings about {G}",
+      "{G} is bad"
+    ],
+    "conclusion_template_en": "{A} should not be done",
+    "description_en": "An action should not be performed because it brings about bad consequences (the counterpart of positive consequences).",
+    "cues_en": [
+      "bad consequence",
+      "bad consequences",
+      "would cause",
+      "would harm",
+      "harm",
+      "harmful",
+      "danger",
+      "dangerous",
+      "risk",
+      "backfire",
+      "should not",
+      "shouldn't",
+      "downside"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
   }
 }

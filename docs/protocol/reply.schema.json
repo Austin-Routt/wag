@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/austin-routt/wag/docs/protocol/reply.schema.json",
+  "title": "WAG reply (wag-protocol/2)",
+  "description": "The JSON object that ends a player's reply to a WAG prompt. Only `action` is required. A bare move object (protocol 1) is also accepted; see `#/$defs/action`. The server accepts some other spellings of the field names (docs/protocol.md); this schema gives the canonical ones.",
+  "type": "object",
+  "required": ["action"],
+  "properties": {
+    "context": {
+      "description": "What the player observes on the board that matters for this move: one observation per item.",
+      "type": "array", "items": {"type": "string"}
+    },
+    "thoughts": {
+      "description": "The player's reasoning, step by step: one step per item. A stated rationale, not a faithful record of how the move was chosen.",
+      "type": "array", "items": {"type": "string"}
+    },
+    "summary": {
+      "description": "One or two sentences: the situation, the reasoning and the move.",
+      "type": "string"
+    },
+    "expect": {
+      "description": "Labels the player predicts for some statements after the move. The server checks them (trace field expect_check).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stmt", "label"],
+        "properties": {
+          "stmt": {"description": "A statement reference (\"s3\"), a statement ID, or \"claim\".", "type": "string"},
+          "label": {"enum": ["in", "out", "undecided"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "alternatives": {
+      "description": "Moves the player considered and did not make. The server tries up to three of them on the game and undoes them (trace field alternative_outcomes).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {"$ref": "#/$defs/action"},
+          "why_not": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "confidence": {
+      "description": "How likely, from 0 to 1, the player thinks the move helps its side.",
+      "type": "number", "minimum": 0, "maximum": 1
+    },
+    "action": {"$ref": "#/$defs/action"}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "action": {
+      "description": "A move: nascq.ProposedAction.",
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "description": "support: a new argument (no target), a defence (target_arg_id and answers_cq_id), or an argument for a statement (target_stmt_id). attack: a negative answer to a critical question, or an argument against a statement. question: a critical question or a challenge, asked without an argument. abstain: pass. resign.",
+          "enum": ["support", "attack", "question", "abstain", "resign"]
+        },
+        "scheme_id": {"description": "The scheme of the argument, e.g. AS:position_to_know (not for a question).", "type": "string", "pattern": "^AS:"},
+        "target_arg_id": {"description": "The argument a critical question is about, e.g. a1.", "type": "string"},
+        "answers_cq_id": {"description": "The critical question answered or asked, e.g. CQ:possibility; CQ:premise_acceptable is the challenge of a premise.", "type": "string", "pattern": "^CQ:"},
+        "target_premise_id": {"description": "The premise the question is about, when the prompt lists one: a reference (s3) or a statement ID.", "type": "string"},
+        "target_stmt_id": {"description": "The statement a support argues for, or an attack argues against: a reference (s3) or a statement ID. A move with it names no argument, premise or question.", "type": "string"},
+        "attack_type": {"enum": ["rebuttal", "undercutter", "undermining", ""]},
+        "variable_bindings": {
+          "description": "The scheme's parts as short phrases, by variable name. Leave out the answer part and the parts the statement fixes.",
+          "type": "object", "additionalProperties": {"type": "string"}
+        },
+        "text": {"description": "The argument in the player's own words.", "type": "string"},
+        "evidence": {"description": "Sources, one per item.", "type": "array", "items": {"type": "string"}}
+      },
+      "allOf": [
+        {"if": {"properties": {"type": {"const": "question"}}}, "then": {"required": ["target_arg_id", "answers_cq_id"]}},
+        {"if": {"properties": {"type": {"enum": ["support", "attack"]}}}, "then": {"required": ["scheme_id"]}},
+        {"if": {"required": ["target_stmt_id"]}, "then": {"not": {"anyOf": [{"required": ["target_arg_id"]}, {"required": ["answers_cq_id"]}]}}}
+      ]
+    }
+  }
+}

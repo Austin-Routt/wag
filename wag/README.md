@@ -15,7 +15,8 @@ central claim, solo belief revision) are combinations of a few settings.
 |---|---|
 | `data/` | The game data: `schemes/core.yml` (Carneades schemes and their English `language` templates) and `nascq/*.json` (NASCQ schemes, critical questions, edges). Package `data` embeds them. |
 | `internal/carneades` | Adapter over the Carneades argument graph: moves as graph operations, checkpoints, labelling. |
-| `internal/nascq` | NASCQ loading, move validation (S0–S8, Q1), action enumeration, data lint. |
+| `internal/nascq` | NASCQ loading, move validation (S0–S9, Q1), action enumeration (answers to critical questions, and arguments for or against any statement), data lint. |
+| `internal/registry` | Scheme patterns and families: finds schemes that repeat a pattern under another name, and close relatives no family declares (`docs/scheme-registry/README.md`). |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
 | `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments. |
 | `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`) and Claude seats (`llm.go`). |
@@ -51,6 +52,7 @@ go run ./cmd/wag-cli --p1 human --p2 human             # two people at one termi
 go run ./cmd/wag-cli --p1 greedy --p2 random --seed 7  # watch two agents
 go run ./cmd/wag-cli --lint                            # check the data; exit 1 on an error
 go run ./cmd/wag-cli --data ./data --lint              # check data files on disk (no rebuild)
+go run ./cmd/wag-cli --registry data/schemes/core.yml --families data/schemes/families.json  # one pattern, one name
 go run ./cmd/wag-cli --games 50 --p1 greedy --p2 random  # tournament statistics
 go run ./cmd/wag-cli --modes                           # list the game modes
 go run ./cmd/wag-cli --mode debate --p2 human          # debate a claim against a friend

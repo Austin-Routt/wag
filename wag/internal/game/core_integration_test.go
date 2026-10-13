@@ -72,13 +72,13 @@ func TestCoreDataLoading(t *testing.T) {
 		t.Errorf("expected at least 7 Carneades schemes, got %d: %v", len(schemeIDs), schemeIDs)
 	}
 
-	// Verify 7 NASCQ schemes loaded.
+	// Verify the 9 NASCQ schemes loaded.
 	stats := gs.NASCQ.Statistics()
-	if stats.SchemeCount != 7 {
-		t.Errorf("NASCQ scheme count = %d, want 7", stats.SchemeCount)
+	if stats.SchemeCount != 9 {
+		t.Errorf("NASCQ scheme count = %d, want 9", stats.SchemeCount)
 	}
-	if stats.QuestionCount != 20 {
-		t.Errorf("NASCQ CQ count = %d, want 20", stats.QuestionCount)
+	if stats.QuestionCount != 24 {
+		t.Errorf("NASCQ CQ count = %d, want 24", stats.QuestionCount)
 	}
 	for id := range gs.NASCQ.Schemes {
 		if len(gs.NASCQ.GetAskCQs(id)) == 0 {
@@ -320,15 +320,17 @@ func TestCoreRebuttalViaCQ(t *testing.T) {
 	}
 
 	// Turn 3: Alice abstains. Turn 4: Bob undercuts through CQ:other_means
-	// with AS:consequences: its answer is the exception, which holds.
+	// with an expert (positive consequences no longer backs it: a good
+	// consequence of another action does not show it is the better means):
+	// its answer is the exception, which holds.
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
 	r4, _ := gs.ExecuteTurn(nascq.ProposedAction{
 		Type:        "attack",
-		SchemeID:    "AS:consequences",
+		SchemeID:    "AS:expert_opinion",
 		AnswersCQID: "CQ:other_means",
 		TargetArgID: targetArgID,
 		VariableBindings: map[string]string{
-			"A": "solar_subsidies", "G": "green_energy_adoption",
+			"W": "the energy agency", "D": "energy policy",
 		},
 	})
 	if !r4.Accepted {

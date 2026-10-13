@@ -163,7 +163,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// Undercutting one's own argument used to score 7 + 15, and undercutting
 	// an argument that was already Out 7 every time.
 	scorable := validated.Type != "question"
-	if validated.Type == "attack" {
+	if validated.Type == "attack" && validated.TargetArgID != "" {
 		scorable = gs.Adapter.ArgumentOwner(validated.TargetArgID) != player.ID && gs.standing(validated.TargetArgID)
 	}
 	checkpoint := gs.Adapter.Checkpoint() // a rejected move must leave no trace (review defect #5)
@@ -210,7 +210,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// The opening argument of a debate states its claim, which is at issue
 	// from then on.
 	if gs.Config.Objective == ObjectiveClaim && gs.Claim == "" && validated.Type == "support" &&
-		validated.TargetArgID == "" && (gs.Side(player.ID) != "con") {
+		validated.TargetArgID == "" && validated.TargetStmtID == "" && (gs.Side(player.ID) != "con") {
 		claim, err := gs.Adapter.MakeIssue(gs.Adapter.Graph.Arguments[argIDs[0]].Conclusion.Id, gs.Config.ClaimStandard)
 		if err != nil {
 			gs.Adapter.Restore(checkpoint)
@@ -277,10 +277,15 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 			AskedAt:     len(gs.MoveHistory) - 1,
 			TurnsLeft:   gs.Config.AnswerWithin,
 		})
-	case validated.IsDefence() && validated.AnswersCQID != "":
+	case validated.Type == "support" && validated.TargetArgID+validated.TargetStmtID != "":
+		// A defence answers the question it names; any argument for a
+		// premise answers a challenge of that premise, as the claim's
+		// proponent answers "why?" with an argument for it.
+		concl := gs.Adapter.Graph.Arguments[argIDs[0]].Conclusion.Id
 		for i := range gs.Questions {
 			q := &gs.Questions[i]
-			if q.Open() && q.TargetArgID == validated.TargetArgID && q.CQID == validated.AnswersCQID {
+			if q.Open() && (validated.AnswersCQID != "" && q.TargetArgID == validated.TargetArgID && q.CQID == validated.AnswersCQID ||
+				q.LocusStmtID != "" && q.LocusStmtID == concl) {
 				q.AnsweredBy = argIDs[0]
 			}
 		}
@@ -375,18 +380,18 @@ func (gs *GameState) applyAction(
 			return nil, nil, err
 		}
 		return []string{id}, nil, nil
-	case va.TargetArgID == "" && va.Type == "support" && va.CarneadesSchemeID == carneades.FreeSchemeID:
+	case va.TargetArgID == "" && va.TargetStmtID == "" && va.Type == "support" && va.CarneadesSchemeID == carneades.FreeSchemeID:
 		if argIDs, err = gs.Adapter.AddFreeArgument(ownerID, nascq.FreePremises(va.VariableBindings),
 			va.VariableBindings["C"], weight); err != nil {
 			return nil, nil, err
 		}
-	case va.TargetArgID == "" && va.Type == "support":
+	case va.TargetArgID == "" && va.TargetStmtID == "" && va.Type == "support":
 		nAssumptions := gs.Adapter.AssumptionCount()
 		if argIDs, err = gs.Adapter.AddSupport(ownerID, va.CarneadesSchemeID, va.VariableBindings, weight); err != nil {
 			return nil, nil, err
 		}
 		gs.Adapter.RetractAssumptionsSince(nAssumptions)
-	case va.TargetArgID != "":
+	case va.TargetArgID != "" || va.TargetStmtID != "":
 		argIDs, err = gs.Adapter.AnswerQuestion(carneades.Answer{
 			Owner:          ownerID,
 			SchemeID:       va.CarneadesSchemeID,
@@ -395,20 +400,26 @@ func (gs *GameState) applyAction(
 			TargetArgID:    va.TargetArgID,
 			Locus:          va.Locus.Kind,
 			LocusStmtID:    va.LocusStmtID,
-			Positive:       va.IsDefence(),
+			Positive:       va.Type == "support",
 			AnswerVariable: va.AnswerVariable,
+			Fixed:          va.Fixed,
 			FreePremises:   nascq.FreePremises(va.VariableBindings),
 			Standard:       caes.PE,
 		})
 		if err != nil {
 			return argIDs, nil, err
 		}
-		if v := va.AnswerVariable; v != "" { // record what the adapter bound it to
-			b := make(map[string]string, len(va.VariableBindings)+1)
+		if v := va.AnswerVariable; v != "" || len(va.Fixed) > 0 { // record what the adapter bound
+			b := make(map[string]string, len(va.VariableBindings)+len(va.Fixed)+1)
 			for k, x := range va.VariableBindings {
 				b[k] = x
 			}
-			b[v] = gs.Adapter.Graph.Arguments[argIDs[0]].Conclusion.Id
+			for k, x := range va.Fixed {
+				b[k] = x
+			}
+			if v != "" {
+				b[v] = gs.Adapter.Graph.Arguments[argIDs[0]].Conclusion.Id
+			}
 			va.VariableBindings = b
 		}
 	default:

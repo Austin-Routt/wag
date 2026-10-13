@@ -138,10 +138,10 @@ type GameConfig struct {
 	// AllowOther offers the user-defined scheme "Other" (free premises and
 	// conclusion, generic critical questions; nascq.EnableOther).
 	AllowOther bool
-	// AnyPremise lets any premise be questioned or attacked, through the
-	// generic Premise Acceptability Question, not only the premises a
-	// scheme's own critical questions are about (nascq.EnablePremiseQuestion).
-	// The modes turn it on.
+	// AnyPremise lets any premise be challenged ("why should we accept
+	// that?"), not only the premises a scheme's own critical questions are
+	// about (nascq.EnablePremiseQuestion). The modes turn it on. Any
+	// statement can be argued for or against whatever this says.
 	AnyPremise bool
 	// Context names the context preset the game was set up from (Context),
 	// and Weights are the scheme weights it sets (scheme ID, or "*" for
@@ -304,6 +304,10 @@ type GameState struct {
 	NASCQ   *nascq.NASCQ       // structural validation graph
 	bridge  *graphBridge       // implements nascq.GraphQuerier
 
+	// dataWeights are the schemes' base weights as the data gives them,
+	// before a context or the game's own weights changed them (ClaimUnder).
+	dataWeights map[string]float64
+
 	CurrentTurn       int // 1-indexed turn number
 	ActivePlayerIdx   int // index into Players slice
 	MoveHistory       []Move
@@ -393,6 +397,10 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 	}
 	if config.AnyPremise {
 		n.EnablePremiseQuestion()
+	}
+	gs.dataWeights = map[string]float64{}
+	for id, sc := range n.Schemes {
+		gs.dataWeights[id] = sc.BaseWeight
 	}
 	if len(config.Weights) > 0 {
 		gs.applyWeights(config.Weights)
@@ -531,4 +539,25 @@ func (b *graphBridge) PremiseIDs(argID string) []string {
 // pattern designates (see carneades.Adapter.ExceptionMatching).
 func (b *graphBridge) ExceptionMatching(argID, pattern string) string {
 	return b.gs.Adapter.ExceptionMatching(argID, pattern)
+}
+
+// ArgumentConclusion returns the statement ID of the argument's conclusion.
+func (b *graphBridge) ArgumentConclusion(argID string) string {
+	if arg := b.gs.Adapter.Graph.Arguments[argID]; arg != nil && arg.Conclusion != nil {
+		return arg.Conclusion.Id
+	}
+	return ""
+}
+
+// Statement describes a statement for a move about it (see
+// carneades.Adapter.StatementUse).
+func (b *graphBridge) Statement(stmtID string) nascq.StatementInfo {
+	exists, premise, concluded, opposite := b.gs.Adapter.StatementUse(stmtID)
+	return nascq.StatementInfo{Exists: exists, Premise: premise, Concluded: concluded, Opposite: opposite}
+}
+
+// Fits returns the values a scheme's conclusion variables take to conclude
+// a statement (see carneades.Adapter.Fits).
+func (b *graphBridge) Fits(schemeID, stmtID string, given map[string]string) (map[string]string, error) {
+	return b.gs.Adapter.Fits(schemeID, stmtID, given)
 }

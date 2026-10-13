@@ -1,0 +1,970 @@
+{
+ "_note": "Scheme families: a generic scheme with its specializations, variants, subtypes, counterparts and context-specific forms. Scheme IDs are those of the Carneades scheme files (walton.yml; the game's core.yml uses a subset); compendium is the scheme's number in the compendium of Walton, Reed and Macagno (2008, ch. 9). Drafted from the book and the walton.yml category files (2026-10-13), to be reviewed. Checked by `wag-cli --registry <schemes.yml> --families data/schemes/families.json` (package registry).",
+ "families": [
+  {
+   "id": "F01",
+   "name": "Position to know (source-based arguments)",
+   "basis": [
+    "book-p.14: \"Argument from expert opinion is a subtype of the more general argumentation scheme for argument from position to know\" (catalogue)",
+    "walton: category file B/1 \"arguments from position to know\"",
+    "proposed (witness testimony, credible source)"
+   ],
+   "generic": "position_to_know",
+   "members": [
+    {
+     "scheme": "position_to_know",
+     "relation": "generic",
+     "compendium": "1"
+    },
+    {
+     "scheme": "expert_opinion",
+     "relation": "specialization",
+     "compendium": "2",
+     "note": "the source is an expert in the domain"
+    },
+    {
+     "scheme": "credible_source",
+     "relation": "variant",
+     "compendium": "2",
+     "note": "Wyner (2016); \"credible source\" generalizes \"expert\"; WAG AS:expert_opinion"
+    },
+    {
+     "scheme": "witness_testimony",
+     "relation": "specialization",
+     "compendium": "3",
+     "note": "adds a truth-telling (sincerity) premise"
+    },
+    {
+     "scheme": "position_to_know_ad_populum",
+     "relation": "related",
+     "compendium": "4.2",
+     "note": "a group in a special position to know; also in F02"
+    },
+    {
+     "scheme": "expert_opinion_ad_populum",
+     "relation": "related",
+     "compendium": "4.3",
+     "note": "a group of experts; also in F02"
+    }
+   ]
+  },
+  {
+   "id": "F02",
+   "name": "Popular opinion (ad populum)",
+   "basis": [
+    "book-ch9: \"SUBTYPES OF ARGUMENT FROM POPULAR OPINION\" 4.1-4.11 (p. 311); comment on 5: \"a variant on the pop scheme\" (p. 314)",
+    "walton: category file B/4"
+   ],
+   "generic": "popular_opinion",
+   "members": [
+    {
+     "scheme": "popular_opinion",
+     "relation": "generic",
+     "compendium": "4"
+    },
+    {
+     "scheme": "pop_scheme",
+     "relation": "subtype",
+     "compendium": "4.1",
+     "note": "the basic \"pop scheme\" the book's comment refers to"
+    },
+    {
+     "scheme": "position_to_know_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.2"
+    },
+    {
+     "scheme": "expert_opinion_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.3"
+    },
+    {
+     "scheme": "deliberation_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.4"
+    },
+    {
+     "scheme": "moral_justification_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.5"
+    },
+    {
+     "scheme": "moral_justification_ad_populum_excuse",
+     "relation": "subtype",
+     "compendium": "4.6",
+     "note": "excuse subtype of 4.5"
+    },
+    {
+     "scheme": "snob_appeal_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.7"
+    },
+    {
+     "scheme": "appeal_to_vanity_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.8"
+    },
+    {
+     "scheme": "rhetoric_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.9"
+    },
+    {
+     "scheme": "common_folk_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.10"
+    },
+    {
+     "scheme": "common_folks_group_ad_populum",
+     "relation": "subtype",
+     "compendium": "4.11",
+     "note": "group subtype of 4.10"
+    },
+    {
+     "scheme": "popular_practice",
+     "relation": "variant",
+     "compendium": "5",
+     "note": "book: \"a variant on the pop scheme\""
+    }
+   ]
+  },
+  {
+   "id": "F03",
+   "name": "Example, illustration, model",
+   "basis": [
+    "book-ch9: 6 \"ARGUMENT FROM EXAMPLE\" with 6.1-6.4"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "from_example",
+     "relation": "subtype",
+     "compendium": "6.1"
+    },
+    {
+     "scheme": "illustration",
+     "relation": "subtype",
+     "compendium": "6.2"
+    },
+    {
+     "scheme": "from_model",
+     "relation": "subtype",
+     "compendium": "6.3"
+    },
+    {
+     "scheme": "from_antimodel",
+     "relation": "counterpart",
+     "compendium": "6.4",
+     "note": "negative counterpart of 6.3"
+    }
+   ]
+  },
+  {
+   "id": "F04",
+   "name": "Analogy and case-based arguments",
+   "basis": [
+    "book-ch9: 7 followed by 8 \"Practical reasoning from analogy\" (8.1, 8.2)",
+    "walton: category file C/1 \"arguments based on cases\"",
+    "proposed (exeption_to_rule)"
+   ],
+   "generic": "analogy",
+   "members": [
+    {
+     "scheme": "analogy",
+     "relation": "generic",
+     "compendium": "7"
+    },
+    {
+     "scheme": "practical_analogy_positive",
+     "relation": "context-specific",
+     "compendium": "8.1",
+     "note": "practical (right action) form"
+    },
+    {
+     "scheme": "practical_analogy_negative",
+     "relation": "context-specific",
+     "compendium": "8.2",
+     "note": "practical (wrong action) form"
+    },
+    {
+     "scheme": "exception_to_rule",
+     "relation": "related",
+     "compendium": "57",
+     "note": "walton.yml content applies the rule of a similar precedent case (similar_case/1 as in analogy)"
+    }
+   ]
+  },
+  {
+   "id": "F05",
+   "name": "Composition and division (part-whole)",
+   "basis": [
+    "book-ch9: 9 (9.1, 9.2) and 10 (10.1, 10.2)"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "composition_generic",
+     "relation": "generic",
+     "compendium": "9.1",
+     "note": "parts to whole"
+    },
+    {
+     "scheme": "part_in_whole",
+     "relation": "subtype",
+     "compendium": "9.2",
+     "note": "listed under composition; reasons from whole to part"
+    },
+    {
+     "scheme": "division_generic",
+     "relation": "counterpart",
+     "compendium": "10.1",
+     "note": "whole to parts; walton.yml formulas copy composition_generic"
+    },
+    {
+     "scheme": "",
+     "relation": "subtype",
+     "compendium": "10.2",
+     "note": "missing from walton.yml (whole_into_parts in category file A/2 only)"
+    }
+   ]
+  },
+  {
+   "id": "F06",
+   "name": "Oppositions and alternatives (Kienpointner)",
+   "basis": [
+    "book-ch9: 11-13 share one reference (Kienpointner 1992, p. 306)",
+    "walton: category file A/5 lists the oppositions together"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "opposition-descriptive_1",
+     "relation": "variant",
+     "compendium": "11.1a"
+    },
+    {
+     "scheme": "opposition-descriptive_2",
+     "relation": "variant",
+     "compendium": "11.1b"
+    },
+    {
+     "scheme": "opposition-descriptive_3",
+     "relation": "variant",
+     "compendium": "11.1c"
+    },
+    {
+     "scheme": "opposition-normative",
+     "relation": "variant",
+     "compendium": "11.2"
+    },
+    {
+     "scheme": "rhetorical_oppositions_normative",
+     "relation": "variant",
+     "compendium": "12.1"
+    },
+    {
+     "scheme": "rhetorical_oppositions_descriptive",
+     "relation": "variant",
+     "compendium": "12.2"
+    },
+    {
+     "scheme": "alternative_cognitive",
+     "relation": "variant",
+     "compendium": "13.1"
+    },
+    {
+     "scheme": "alternative_normative",
+     "relation": "variant",
+     "compendium": "13.2"
+    },
+    {
+     "scheme": "pragmatic_alternative",
+     "relation": "related",
+     "compendium": "34",
+     "note": "practical form of argument from alternatives (F15)"
+    }
+   ]
+  },
+  {
+   "id": "F07",
+   "name": "Verbal classification and definition",
+   "basis": [
+    "book-ch9: 14-17 consecutive \"verbal classification\" schemes",
+    "walton: category file C/4 \"verbal classification arguments\" (also holds 54-58)"
+   ],
+   "generic": "verbal_classification",
+   "members": [
+    {
+     "scheme": "verbal_classification",
+     "relation": "generic",
+     "compendium": "14"
+    },
+    {
+     "scheme": "definition_to_verbal_classification",
+     "relation": "specialization",
+     "compendium": "15",
+     "note": "classification by a definition"
+    },
+    {
+     "scheme": "verbal_classification_vagueness",
+     "relation": "counterpart",
+     "compendium": "16",
+     "note": "attacks an argument whose classification is too vague"
+    },
+    {
+     "scheme": "verbal_classification_arbitrariness",
+     "relation": "counterpart",
+     "compendium": "17",
+     "note": "attacks an argument whose classification is arbitrary"
+    },
+    {
+     "scheme": "appearance",
+     "relation": "related",
+     "compendium": "59.2",
+     "note": "concludes a classification from appearance"
+    },
+    {
+     "scheme": "rule_physical_world_1",
+     "relation": "related",
+     "compendium": "54.1",
+     "note": "meaning claims (constitutive rules)"
+    },
+    {
+     "scheme": "rule_mental_world",
+     "relation": "related",
+     "compendium": "54.3",
+     "note": "meaning claims (constitutive rules)"
+    }
+   ]
+  },
+  {
+   "id": "F08",
+   "name": "Act and person; group and members (Perelman & Olbrechts-Tyteca)",
+   "basis": [
+    "book-ch9: 18 (18.1, 18.2), 21 (21.1, 21.2)",
+    "proposed: grouped as two part-whole style \"interaction\" pairs"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "interaction_act_person_1",
+     "relation": "variant",
+     "compendium": "18.1"
+    },
+    {
+     "scheme": "interaction_act_person_2",
+     "relation": "variant",
+     "compendium": "18.2"
+    },
+    {
+     "scheme": "group_1",
+     "relation": "variant",
+     "compendium": "21.1",
+     "note": "member to group"
+    },
+    {
+     "scheme": "group_2",
+     "relation": "variant",
+     "compendium": "21.2",
+     "note": "group to member"
+    }
+   ]
+  },
+  {
+   "id": "F09",
+   "name": "Values and sacrifice",
+   "basis": [
+    "book-ch9: 19 (19.1, 19.2)",
+    "proposed: 20 sacrifice (value inferred from sacrifice), 22.4 value-based practical reasoning"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "positive_value",
+     "relation": "variant",
+     "compendium": "19.1"
+    },
+    {
+     "scheme": "negative_value",
+     "relation": "counterpart",
+     "compendium": "19.2"
+    },
+    {
+     "scheme": "sacrifice",
+     "relation": "related",
+     "compendium": "20"
+    },
+    {
+     "scheme": "practical_reasoning1",
+     "relation": "related",
+     "compendium": "22.4",
+     "note": "uses values (also in F10)"
+    }
+   ]
+  },
+  {
+   "id": "F10",
+   "name": "Practical reasoning",
+   "basis": [
+    "book-ch9: 22 with 22.1-22.6 and 23",
+    "book-ch10 p. 347: argument from consequences \"is closely related to practical reasoning\"",
+    "walton: category file A/3"
+   ],
+   "generic": "practical_inference",
+   "members": [
+    {
+     "scheme": "practical_inference",
+     "relation": "generic",
+     "compendium": "22.1"
+    },
+    {
+     "scheme": "practical_necessary_condition",
+     "relation": "specialization",
+     "compendium": "22.2"
+    },
+    {
+     "scheme": "practical_sufficient_condition",
+     "relation": "specialization",
+     "compendium": "22.3"
+    },
+    {
+     "scheme": "practical_reasoning1",
+     "relation": "variant",
+     "compendium": "22.4",
+     "note": "value-based; walton.yml version from Atkinson & Bench-Capon 2007; WAG AS:practical_reasoning"
+    },
+    {
+     "scheme": "practical_reasoning2",
+     "relation": "variant",
+     "compendium": "22.1",
+     "note": "instrumental, Walton 2015 (not in the book)"
+    },
+    {
+     "scheme": "practical_goal",
+     "relation": "variant",
+     "compendium": "22.5",
+     "note": "third-person \"person P has goal G\""
+    },
+    {
+     "scheme": "end_and_means_1",
+     "relation": "variant",
+     "compendium": "22.6.1"
+    },
+    {
+     "scheme": "end_and_means_2",
+     "relation": "variant",
+     "compendium": "22.6.2"
+    },
+    {
+     "scheme": "end_and_means_3",
+     "relation": "variant",
+     "compendium": "22.6.3"
+    },
+    {
+     "scheme": "two_person_practical",
+     "relation": "context-specific",
+     "compendium": "23",
+     "note": "advice dialogue"
+    },
+    {
+     "scheme": "practical_analogy_positive",
+     "relation": "related",
+     "compendium": "8.1",
+     "note": "also F04"
+    },
+    {
+     "scheme": "practical_analogy_negative",
+     "relation": "related",
+     "compendium": "8.2",
+     "note": "also F04"
+    },
+    {
+     "scheme": "negative_practical",
+     "relation": "related",
+     "compendium": "26.2",
+     "note": "practical subspecies of argument from ignorance (F12)"
+    },
+    {
+     "scheme": "waste",
+     "relation": "related",
+     "compendium": "24",
+     "note": "F11"
+    },
+    {
+     "scheme": "sunk_costs",
+     "relation": "related",
+     "compendium": "25",
+     "note": "F11"
+    }
+   ]
+  },
+  {
+   "id": "F11",
+   "name": "Waste and sunk costs",
+   "basis": [
+    "book-ch9: 24 and 25 both cite Walton (2002) \"The Sunk Costs Fallacy or Argument from Waste\""
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "waste",
+     "relation": "variant",
+     "compendium": "24"
+    },
+    {
+     "scheme": "sunk_costs",
+     "relation": "variant",
+     "compendium": "25"
+    }
+   ]
+  },
+  {
+   "id": "F12",
+   "name": "Argument from ignorance",
+   "basis": [
+    "book-ch9: 26 with 26.1, 26.2; 27",
+    "book-p.100: negative practical reasoning is a \"practical subspecies of ad ignorantiam\" (catalogue)",
+    "book-ch10 p. 347: argument from ignorance is a very general scheme"
+   ],
+   "generic": "ignorance",
+   "members": [
+    {
+     "scheme": "ignorance",
+     "relation": "generic",
+     "compendium": "26"
+    },
+    {
+     "scheme": "negative_normal_expectations",
+     "relation": "subtype",
+     "compendium": "26.1"
+    },
+    {
+     "scheme": "negative_practical",
+     "relation": "context-specific",
+     "compendium": "26.2",
+     "note": "practical"
+    },
+    {
+     "scheme": "epistemic_ignorance",
+     "relation": "specialization",
+     "compendium": "27",
+     "note": "knowledge-base (closed-world) form"
+    }
+   ]
+  },
+  {
+   "id": "F13",
+   "name": "Causal reasoning and sign",
+   "basis": [
+    "book-ch9: 28, 29, 30 consecutive",
+    "walton: category file A/5 (cause_to_effect, correlation_to_cause); A/4 (sign)",
+    "proposed"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "cause_to_effect",
+     "relation": "variant",
+     "compendium": "28"
+    },
+    {
+     "scheme": "correlation_to_cause",
+     "relation": "variant",
+     "compendium": "29"
+    },
+    {
+     "scheme": "sign",
+     "relation": "related",
+     "compendium": "30",
+     "note": "WAG AS:sign"
+    },
+    {
+     "scheme": "slippery_slope_inductive_step",
+     "relation": "related",
+     "compendium": "49",
+     "note": "causal chain (F17)"
+    }
+   ]
+  },
+  {
+   "id": "F14",
+   "name": "Abduction and evidence to hypothesis",
+   "basis": [
+    "book-ch9: 31 with 31.1-31.5; 32 with 32.1, 32.2",
+    "walton: category file A/4 \"abductive reasoning\""
+   ],
+   "generic": "abductive_backward",
+   "members": [
+    {
+     "scheme": "abductive_backward",
+     "relation": "generic",
+     "compendium": "31.1",
+     "note": "inference to the best explanation"
+    },
+    {
+     "scheme": "abduction",
+     "relation": "variant",
+     "compendium": "31.1",
+     "note": "upstream Carneades generic abduction"
+    },
+    {
+     "scheme": "abductive_forward",
+     "relation": "variant",
+     "compendium": "31.2"
+    },
+    {
+     "scheme": "abductive_action_to_character",
+     "relation": "specialization",
+     "compendium": "31.3"
+    },
+    {
+     "scheme": "abductive_character_to_action",
+     "relation": "counterpart",
+     "compendium": "31.4",
+     "note": "predictive direction of 31.3"
+    },
+    {
+     "scheme": "retroductive",
+     "relation": "specialization",
+     "compendium": "31.5"
+    },
+    {
+     "scheme": "evidence_hypothesis_verification",
+     "relation": "related",
+     "compendium": "32.1"
+    },
+    {
+     "scheme": "evidence_hypothesis_falsification",
+     "relation": "counterpart",
+     "compendium": "32.2",
+     "note": "of 32.1"
+    }
+   ]
+  },
+  {
+   "id": "F15",
+   "name": "Consequences, alternatives, threat and fear",
+   "basis": [
+    "book-ch9: 33 with 33.1-33.4; 34-37 all cite Scare Tactics (2000)",
+    "book-p.104: the prudential scheme is a subtype of negative consequences; p.106: disjunctive ad baculum threat is a subspecies of the disjunctive practical scheme (catalogue)",
+    "book-ch10 p. 347: consequences is closely related to practical reasoning; slippery slope often fits under consequences"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "positive_consequences",
+     "relation": "variant",
+     "compendium": "33.1",
+     "note": "WAG AS:consequences"
+    },
+    {
+     "scheme": "negative_consequences",
+     "relation": "counterpart",
+     "compendium": "33.2"
+    },
+    {
+     "scheme": "",
+     "relation": "subtype",
+     "compendium": "33.3",
+     "note": "missing from walton.yml (only in category file A/3:511)"
+    },
+    {
+     "scheme": "negative_consequences_prudential",
+     "relation": "subtype",
+     "compendium": "33.4",
+     "note": "of 33.2"
+    },
+    {
+     "scheme": "pragmatic_alternative",
+     "relation": "related",
+     "compendium": "34"
+    },
+    {
+     "scheme": "threat",
+     "relation": "related",
+     "compendium": "35"
+    },
+    {
+     "scheme": "ad_baculum",
+     "relation": "subtype",
+     "compendium": "35.1",
+     "note": "of 34/35 (threat in disjunctive form)"
+    },
+    {
+     "scheme": "fear",
+     "relation": "related",
+     "compendium": "36"
+    },
+    {
+     "scheme": "danger",
+     "relation": "related",
+     "compendium": "37"
+    },
+    {
+     "scheme": "slippery_slope_base_case",
+     "relation": "related",
+     "compendium": "49",
+     "note": "F17"
+    }
+   ]
+  },
+  {
+   "id": "F16",
+   "name": "Appeals to pity",
+   "basis": [
+    "book-ch9: 38, 39 both cite Appeal to Pity (1997)"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "help",
+     "relation": "variant",
+     "compendium": "38"
+    },
+    {
+     "scheme": "distress",
+     "relation": "variant",
+     "compendium": "39"
+    }
+   ]
+  },
+  {
+   "id": "F17",
+   "name": "Slippery slope and gradualism",
+   "basis": [
+    "book-ch9: 48-53 consecutive",
+    "book-ch10 p. 347: slippery slope arguments often fit under consequences, some under precedent"
+   ],
+   "generic": "slippery_slope_base_case",
+   "members": [
+    {
+     "scheme": "slippery_slope_base_case",
+     "relation": "generic",
+     "compendium": "49",
+     "note": "causal slippery slope, recursive two-scheme encoding"
+    },
+    {
+     "scheme": "slippery_slope_inductive_step",
+     "relation": "generic",
+     "compendium": "49",
+     "note": "causal slippery slope, recursive two-scheme encoding"
+    },
+    {
+     "scheme": "",
+     "relation": "subtype",
+     "compendium": "50",
+     "note": "precedent slippery slope: missing everywhere"
+    },
+    {
+     "scheme": "sorites_slippery_slope",
+     "relation": "subtype",
+     "compendium": "51"
+    },
+    {
+     "scheme": "verbal_slippery_slope",
+     "relation": "subtype",
+     "compendium": "52"
+    },
+    {
+     "scheme": "",
+     "relation": "subtype",
+     "compendium": "53",
+     "note": "full slippery slope: missing from walton.yml (full_slippery_slope in category file A/5 only)"
+    },
+    {
+     "scheme": "gradualism",
+     "relation": "counterpart",
+     "compendium": "48",
+     "note": "positive step-by-step form"
+    }
+   ]
+  },
+  {
+   "id": "F18",
+   "name": "Commitment",
+   "basis": [
+    "book-ch9: 40 (two versions), 44",
+    "book-ch10 p. 347: argument from commitment is a very common scheme with a cluster of closely related schemes",
+    "walton: category file B/2"
+   ],
+   "generic": "commitment1",
+   "members": [
+    {
+     "scheme": "commitment1",
+     "relation": "variant",
+     "compendium": "40-v1"
+    },
+    {
+     "scheme": "commitment2",
+     "relation": "variant",
+     "compendium": "40-v2"
+    },
+    {
+     "scheme": "inconsistent_commitment",
+     "relation": "related",
+     "compendium": "44"
+    },
+    {
+     "scheme": "pragmatic_inconsistency",
+     "relation": "related",
+     "compendium": "43",
+     "note": "also F19"
+    },
+    {
+     "scheme": "circumstantial_ad_hominem",
+     "relation": "related",
+     "compendium": "45",
+     "note": "also F19"
+    }
+   ]
+  },
+  {
+   "id": "F19",
+   "name": "Ethotic and ad hominem",
+   "basis": [
+    "book-ch9 intro p. 308: only the basic ad hominem types are included, the subschemes are in ch. 10",
+    "book-ch9: 41-47 consecutive",
+    "walton: category file B/3 \"attacking personal credibility\""
+   ],
+   "generic": "ad_hominem",
+   "members": [
+    {
+     "scheme": "ethotic1",
+     "relation": "counterpart",
+     "compendium": "41",
+     "note": "positive ethotic argument"
+    },
+    {
+     "scheme": "ethotic2",
+     "relation": "variant",
+     "compendium": "41",
+     "note": "negative ethotic argument (ad hominem is its attacking form)"
+    },
+    {
+     "scheme": "ad_hominem",
+     "relation": "generic",
+     "compendium": "42"
+    },
+    {
+     "scheme": "pragmatic_inconsistency",
+     "relation": "related",
+     "compendium": "43",
+     "note": "basis of the circumstantial attack"
+    },
+    {
+     "scheme": "inconsistent_commitment",
+     "relation": "related",
+     "compendium": "44"
+    },
+    {
+     "scheme": "circumstantial_ad_hominem",
+     "relation": "subtype",
+     "compendium": "45"
+    },
+    {
+     "scheme": "bias",
+     "relation": "related",
+     "compendium": "46"
+    },
+    {
+     "scheme": "bias_ad_hominem",
+     "relation": "subtype",
+     "compendium": "47"
+    }
+   ]
+  },
+  {
+   "id": "F20",
+   "name": "Rules, exceptions and excuses",
+   "basis": [
+    "book-ch9: 54-58 consecutive",
+    "walton: category files C/2 \"defeasible rule-based arguments\" and C/4"
+   ],
+   "generic": "rule",
+   "members": [
+    {
+     "scheme": "rule_physical_world_1",
+     "relation": "variant",
+     "compendium": "54.1",
+     "note": "constitutive rule"
+    },
+    {
+     "scheme": "rule_physical_world_2",
+     "relation": "variant",
+     "compendium": "54.2",
+     "note": "constitutive rule"
+    },
+    {
+     "scheme": "rule_mental_world",
+     "relation": "variant",
+     "compendium": "54.3",
+     "note": "constitutive rule"
+    },
+    {
+     "scheme": "established_rule",
+     "relation": "specialization",
+     "compendium": "55.1"
+    },
+    {
+     "scheme": "rule",
+     "relation": "generic",
+     "compendium": "55.2"
+    },
+    {
+     "scheme": "regulative_rule",
+     "relation": "specialization",
+     "compendium": "55.3",
+     "note": "regulative rule"
+    },
+    {
+     "scheme": "exceptional",
+     "relation": "counterpart",
+     "compendium": "56",
+     "note": "waives the rule"
+    },
+    {
+     "scheme": "exception_to_rule",
+     "relation": "counterpart",
+     "compendium": "57",
+     "note": "walton.yml content: precedent case"
+    },
+    {
+     "scheme": "plea_for_excuse",
+     "relation": "counterpart",
+     "compendium": "58"
+    },
+    {
+     "scheme": "defeasible_modus_ponens",
+     "relation": "related",
+     "note": "generic defeasible rule application, upstream Carneades"
+    }
+   ]
+  },
+  {
+   "id": "F21",
+   "name": "Perception, appearance and memory (Pollock)",
+   "basis": [
+    "book-ch9: 59 (59.1, 59.2), 60"
+   ],
+   "generic": "",
+   "members": [
+    {
+     "scheme": "perception",
+     "relation": "variant",
+     "compendium": "59.1"
+    },
+    {
+     "scheme": "appearance",
+     "relation": "subtype",
+     "compendium": "59.2",
+     "note": "printed under 59"
+    },
+    {
+     "scheme": "memory",
+     "relation": "variant",
+     "compendium": "60"
+    }
+   ]
+  }
+ ]
+}

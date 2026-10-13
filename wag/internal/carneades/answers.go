@@ -26,15 +26,20 @@ type Answer struct {
 	Bindings map[string]string // values for the scheme's variables (sanitized here)
 	Weight   float64           // constant weight of the answering argument
 
-	TargetArgID string // the argument the question is about
-	Locus       string // LocusPremise, LocusException, LocusConclusion or LocusArgument
-	LocusStmtID string // the premise or exception statement, for those loci
+	TargetArgID string // the argument the question is about ("" for LocusStatement)
+	Locus       string // LocusPremise, LocusException, LocusConclusion, LocusArgument or LocusStatement
+	LocusStmtID string // the premise, exception or statement, for those loci
 	Positive    bool   // true: answer in the target's favour (defence); false: attack
 
 	// AnswerVariable, if not empty, is the scheme variable that states its
 	// conclusion; it is bound to the answer (whatever Bindings says), so the
 	// premises are about the answer.
 	AnswerVariable string
+
+	// Fixed are values of scheme variables that are terms already, used as
+	// they are: those that make the scheme's conclusion the statement a
+	// direct move is about (nascq.ValidatedAction.Fixed).
+	Fixed map[string]string
 
 	// FreePremises, for SchemeID FreeSchemeID (the user-defined scheme), are
 	// the answering argument's premises in free text.
@@ -55,6 +60,8 @@ type Answer struct {
 //	conclusion C ¬C: rebuts                        C: supports the conclusion
 //	argument     the undercutter: undercuts        ¬undercutter: the undercutter
 //	                                               becomes an issue
+//	statement S  ¬S: an argument against S         S: an argument for S
+//	(no target argument)
 //
 // (¬X stands for the opposing position of X; see opposingPosition.)
 //
@@ -66,12 +73,21 @@ func (a *Adapter) AnswerQuestion(ans Answer) ([]string, error) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 	target := a.Graph.Arguments[ans.TargetArgID]
-	if target == nil || target.Conclusion == nil {
+	if ans.Locus != LocusStatement && (target == nil || target.Conclusion == nil) {
 		return nil, fmt.Errorf("target argument %q not found", ans.TargetArgID)
 	}
 	var concl *caes.Statement
 	var err error
 	switch ans.Locus {
+	case LocusStatement:
+		s := a.Graph.Statements[ans.LocusStmtID]
+		if s == nil {
+			return nil, fmt.Errorf("statement %q not found", ans.LocusStmtID)
+		}
+		concl = s
+		if !ans.Positive {
+			concl, err = a.opposingPosition(s, ans.Standard)
+		}
 	case LocusPremise:
 		p := a.Graph.Statements[ans.LocusStmtID]
 		if p == nil || !hasPremise(target, p) {
@@ -110,15 +126,18 @@ func (a *Adapter) AnswerQuestion(ans Answer) ([]string, error) {
 	if ans.SchemeID == FreeSchemeID {
 		return a.addFreeArgument(ans.Owner, ans.FreePremises, concl, ans.Weight)
 	}
-	bindings := ans.Bindings
-	if ans.AnswerVariable != "" {
-		bindings = make(map[string]string, len(ans.Bindings)+1)
-		for k, v := range ans.Bindings {
-			bindings[k] = v
-		}
-		bindings[ans.AnswerVariable] = StatementTerm(concl.Id)
+	bindings := make(map[string]string, len(ans.Bindings)+len(ans.Fixed)+1)
+	termVars := map[string]bool{}
+	for k, v := range ans.Bindings {
+		bindings[k] = v
 	}
-	return a.addSchemeArgument(ans.Owner, ans.SchemeID, bindings, ans.AnswerVariable, concl, ans.Weight)
+	for k, v := range ans.Fixed {
+		bindings[k], termVars[k] = v, true
+	}
+	if ans.AnswerVariable != "" {
+		bindings[ans.AnswerVariable], termVars[ans.AnswerVariable] = StatementTerm(concl.Id), true
+	}
+	return a.addSchemeArgument(ans.Owner, ans.SchemeID, bindings, termVars, concl, ans.Weight)
 }
 
 // StatementTerm returns a statement ID as a term that can be the value of a
@@ -146,15 +165,15 @@ func (a *Adapter) AddSchemeArgument(owner, schemeID string, bindings map[string]
 	if strings.TrimSpace(conclusionID) == "" {
 		return nil, fmt.Errorf("empty conclusion")
 	}
-	return a.addSchemeArgument(owner, schemeID, bindings, "", a.findOrCreateStatement(conclusionID), weight)
+	return a.addSchemeArgument(owner, schemeID, bindings, nil, a.findOrCreateStatement(conclusionID), weight)
 }
 
 // addSchemeArgument is AddSchemeArgument with the conclusion statement given.
-// The value of the variable termVar is a term (see StatementTerm), used as it
-// is; the other values are sanitized into atoms.
+// The values of the variables in termVars are terms (see StatementTerm),
+// used as they are; the other values are sanitized into atoms.
 //
 // IMPORTANT: Caller must hold a.mu.
-func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]string, termVar string, conclusion *caes.Statement, weight float64) ([]string, error) {
+func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]string, termVars map[string]bool, conclusion *caes.Statement, weight float64) ([]string, error) {
 	scheme := a.schemeMap[schemeID]
 	if scheme == nil {
 		return nil, fmt.Errorf("scheme %q not found in theory", schemeID)
@@ -167,7 +186,7 @@ func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]
 			return nil, fmt.Errorf("missing binding for variable %s of scheme %s", v, schemeID)
 		}
 		params[i] = val
-		if v != termVar {
+		if !termVars[v] {
 			params[i] = SanitizeBinding(val)
 		}
 		t, ok := terms.ReadString(params[i])
@@ -209,6 +228,9 @@ func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]
 	a.Graph.Arguments[id] = arg
 	conclusion.Args = append(conclusion.Args, arg)
 	created := []string{id}
+	if err := a.joinOpposites(conclusion); err != nil {
+		return created, err
+	}
 
 	if len(scheme.Exceptions) > 0 {
 		a.ensureUndercutter(arg)
@@ -393,6 +415,8 @@ func (a *Adapter) MakeIssue(stmtID string, standard caes.Standard) (string, erro
 		if _, err := a.opposingPosition(s, standard); err != nil {
 			return "", err
 		}
+	} else {
+		s.Issue.Standard = standard // the claim's standard, whoever made it an issue first
 	}
 	return s.Id, nil
 }

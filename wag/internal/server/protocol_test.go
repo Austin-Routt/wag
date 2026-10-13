@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"strings"
@@ -112,5 +113,76 @@ func TestClaudeSeat(t *testing.T) {
 	call(t, ts, "GET", "/api/games/"+st.ID+"/export", nil, &exp)
 	if len(exp.LLM) != 1 || len(exp.LLM[0].Turns) != 2 || exp.LLM[0].Turns[0].Rejected == "" {
 		t.Fatalf("export of Claude's replies: %+v", exp.LLM)
+	}
+}
+
+// Protocol 2: the reply is an envelope around the move, statements can be
+// named by reference, and each decision is traced with its predictions
+// checked and its alternatives tried.
+func TestReplyEnvelopeAndTraces(t *testing.T) {
+	ts := newTestServer(t)
+	var st State
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{"Ann", "llm"}, {"Bob", "llm"}}}, &st)
+	play := func(reply string) map[string]interface{} {
+		t.Helper()
+		var mr struct {
+			Result map[string]interface{} `json:"result"`
+		}
+		call(t, ts, "POST", "/api/games/"+st.ID+"/reply", map[string]string{"reply": reply}, &mr)
+		return mr.Result
+	}
+	r := play(`{"action":{"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"tax meat","S1":"meat is cheap","S2":"less meat is eaten","G":"lower emissions","V":"a stable climate"}},"summary":"Opening."}`)
+	if r["accepted"] != true {
+		t.Fatalf("opening: %+v", r)
+	}
+	resp, err := http.Get(ts.URL + "/api/games/" + st.ID + "/prompt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	b, _ := io.ReadAll(resp.Body)
+	prompt := string(b)
+	for _, want := range []string{"wag-protocol/2", "[s1]", "### For or against a statement", "### Challenges", "linked: AS:sign (causality)", "thesis-independent scheme: AS:analogy", "attack argues:", `"thoughts"`} {
+		if !strings.Contains(prompt, want) {
+			t.Errorf("the prompt lacks %q", want)
+		}
+	}
+	// s1 is the claim; s2 is the first premise of a1. Bob argues against
+	// it, predicts the claim goes out, and names an alternative.
+	r = play("Thinking...\n```json\n" + `{"context":["a1 rests on the circumstances"],"thoughts":["if the circumstances fall, a1 falls"],
+		"summary":"Undermine the circumstances.","expect":[{"stmt":"claim","label":"out"},{"stmt":"s2","label":"in"}],
+		"alternatives":[{"action":{"type":"question","target_arg_id":"a1","answers_cq_id":"CQ:premise_acceptable","target_premise_id":"s2"},"why_not":"a question is weaker"}],
+		"confidence":0.7,
+		"action":{"type":"against","statement":"s2","scheme":"position_to_know","bindings":{"W":"a butcher","D":"meat prices"}}}` + "\n```")
+	if r["accepted"] != true {
+		t.Fatalf("argument against s2: %+v", r)
+	}
+	var traces []Trace
+	resp, err = http.Get(ts.URL + "/api/games/" + st.ID + "/traces")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, line := range strings.Split(strings.TrimSpace(func() string { b, _ := io.ReadAll(resp.Body); return string(b) }()), "\n") {
+		var tr Trace
+		if err := json.Unmarshal([]byte(line), &tr); err != nil {
+			t.Fatal(err)
+		}
+		traces = append(traces, tr)
+	}
+	if len(traces) != 2 {
+		t.Fatalf("%d traces", len(traces))
+	}
+	tr := traces[1]
+	if tr.Player != "Bob" || tr.Protocol != ProtocolVersion || tr.PromptSHA256 == "" || tr.Move != 1 || tr.Reasoning == nil ||
+		tr.Reasoning.Summary != "Undermine the circumstances." || *tr.Reasoning.Confidence != 0.7 {
+		t.Fatalf("trace: %+v", tr)
+	}
+	if !strings.HasPrefix(tr.Action.TargetStmtID, "current_circumstances(") || tr.Action.Type != "attack" {
+		t.Fatalf("the reference was not resolved: %+v", tr.Action)
+	}
+	if len(tr.ExpectCheck) != 2 || !tr.ExpectCheck[0].OK || tr.ExpectCheck[1].OK || tr.ExpectCheck[1].Actual != "out" {
+		t.Fatalf("expectations: %+v", tr.ExpectCheck)
+	}
+	if len(tr.AlternativeOutcomes) != 1 || !tr.AlternativeOutcomes[0].Legal || tr.ClaimBefore != "in" || tr.ClaimAfter != "out" {
+		t.Fatalf("alternatives %+v, claim %s → %s", tr.AlternativeOutcomes, tr.ClaimBefore, tr.ClaimAfter)
 	}
 }

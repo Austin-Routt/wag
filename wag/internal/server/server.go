@@ -10,7 +10,9 @@
 package server
 
 import (
+	"crypto/sha256"
 	"embed"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -43,6 +45,17 @@ type Data struct {
 	Contexts                  []byte // context presets (contexts.json); none if empty
 }
 
+// Hash identifies the scheme data (schemes, questions, edges): a game can be
+// replayed exactly only with the data it was played with.
+func (d Data) Hash() string {
+	h := sha256.New()
+	for _, b := range [][]byte{d.YAML, d.Schemes, d.CQs, d.Edges} {
+		h.Write(b)
+		h.Write([]byte{0})
+	}
+	return hex.EncodeToString(h.Sum(nil))[:16]
+}
+
 // Server holds the games in memory.
 type Server struct {
 	mu       sync.Mutex
@@ -71,6 +84,14 @@ func (s Seat) aiKind() string {
 // SetClaude offers Claude seats, played through the Claude API.
 func (s *Server) SetClaude(c *Claude) { s.claude = c; s.meta = nil }
 
+// AddContexts adds context presets (from a file given to the server); one
+// with the ID of a built-in preset replaces it.
+func (s *Server) AddContexts(cs []game.Context) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.contexts, s.meta = game.MergeContexts(s.contexts, cs), nil
+}
+
 // Session is one game.
 type Session struct {
 	ID      string
@@ -87,6 +108,12 @@ type Session struct {
 	Notes   []Note          // testers' remarks
 	Events  []Event         // every request that tried to change the game
 	LLM     []LLMRecord     // what Claude seats replied, move by move
+	Traces  []Trace         // every decision of every seat (traces.go)
+	// contexts are the server's context presets, for the verdicts under
+	// each (State.Verdicts).
+	contexts []game.Context
+	// dataHash identifies the scheme data the game is played with.
+	dataHash string
 	// thinking: a Claude seat is waiting for the model; the game takes no
 	// other move meanwhile.
 	thinking bool
@@ -307,24 +334,27 @@ func (s *Server) handleSuggest(w http.ResponseWriter, r *http.Request) {
 // NewGameRequest configures a game: a mode preset, the seats, and the
 // settings that change the preset.
 type NewGameRequest struct {
-	Title           string   `json:"title"`
-	Mode            string   `json:"mode"`
-	Seats           []Seat   `json:"seats"`
-	Scoring         string   `json:"scoring,omitempty"`
-	MaxRounds       *int     `json:"max_rounds,omitempty"`
-	TargetScore     *float64 `json:"target_score,omitempty"`
-	TimeLimitSec    *int     `json:"time_limit_sec,omitempty"`
-	MoveTimeSec     *int     `json:"move_time_sec,omitempty"`
-	AnswerWithin    *int     `json:"answer_within,omitempty"`
-	Claim           string   `json:"claim,omitempty"`
-	Standard        string   `json:"standard,omitempty"`
-	ConcedeOnPass   *bool    `json:"concede_on_pass,omitempty"`
-	AllowOther      bool     `json:"allow_other"`
-	AnyPremise      *bool    `json:"any_premise,omitempty"` // default: on
-	Context         string   `json:"context,omitempty"`     // a context preset: its scheme weights apply
-	Moderated       bool     `json:"moderated"`
-	RequireEvidence bool     `json:"require_evidence"`
-	Seed            int64    `json:"seed,omitempty"`
+	Title         string   `json:"title"`
+	Mode          string   `json:"mode"`
+	Seats         []Seat   `json:"seats"`
+	Scoring       string   `json:"scoring,omitempty"`
+	MaxRounds     *int     `json:"max_rounds,omitempty"`
+	TargetScore   *float64 `json:"target_score,omitempty"`
+	TimeLimitSec  *int     `json:"time_limit_sec,omitempty"`
+	MoveTimeSec   *int     `json:"move_time_sec,omitempty"`
+	AnswerWithin  *int     `json:"answer_within,omitempty"`
+	Claim         string   `json:"claim,omitempty"`
+	Standard      string   `json:"standard,omitempty"`
+	ConcedeOnPass *bool    `json:"concede_on_pass,omitempty"`
+	AllowOther    bool     `json:"allow_other"`
+	AnyPremise    *bool    `json:"any_premise,omitempty"` // default: on
+	Context       string   `json:"context,omitempty"`     // a context preset: its scheme weights apply
+	// Weights change the scheme weights for this game, on top of the
+	// context's (scheme ID, or "*" for every scheme, to a weight in (0, 1]).
+	Weights         map[string]float64 `json:"weights,omitempty"`
+	Moderated       bool               `json:"moderated"`
+	RequireEvidence bool               `json:"require_evidence"`
+	Seed            int64              `json:"seed,omitempty"`
 }
 
 func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, error) {
@@ -382,6 +412,21 @@ func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, err
 		if !found {
 			return cfg, fmt.Errorf("unknown context %q", req.Context)
 		}
+	}
+	if len(req.Weights) > 0 {
+		if err := game.CheckWeights(req.Weights); err != nil {
+			return cfg, err
+		}
+		w := map[string]float64{}
+		if _, all := req.Weights["*"]; !all { // a "*" of the game's own replaces the context's weights
+			for k, v := range cfg.Weights {
+				w[k] = v
+			}
+		}
+		for k, v := range req.Weights {
+			w[k] = v
+		}
+		cfg.Weights = w
 	}
 	return cfg, nil
 }
@@ -445,6 +490,10 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			httpError(w, err, http.StatusInternalServerError)
 			return
 		}
+		if u := gs.UnknownSchemes(req.Weights); len(u) > 0 {
+			httpError(w, fmt.Errorf("weights for unknown schemes: %s", strings.Join(u, ", ")), http.StatusBadRequest)
+			return
+		}
 		title := strings.TrimSpace(req.Title)
 		if title == "" {
 			title = "WAG — " + cfg.Mode
@@ -467,7 +516,7 @@ func (s *Server) add(gs *game.GameState, seats []Seat, title, source string, see
 	if seed == 0 {
 		seed = time.Now().UnixNano()
 	}
-	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed}
+	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed, contexts: s.contexts, dataHash: s.data.Hash()}
 	for i, seat := range seats {
 		var a game.Agent
 		switch seat.Kind {
@@ -510,6 +559,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 	case "move":
 		var req struct {
 			Action nascq.ProposedAction `json:"action"`
+			Why    string               `json:"why"` // the player's note on the move, for the trace
 		}
 		if !readJSON(w, r, &req) {
 			return
@@ -519,7 +569,9 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		player := ss.GS.ActivePlayer().ID
-		res, err := ss.GS.ExecuteTurn(req.Action)
+		t := ss.newTrace(ss.Seats[ss.GS.ActivePlayerIdx].Kind)
+		t.Why = strings.TrimSpace(req.Why)
+		res, err := ss.play(req.Action, t, nil)
 		ss.event("move", player, short(req.Action), res, err)
 		s.reply(w, ss, res, err)
 	case "note":
@@ -556,13 +608,18 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		player := ss.GS.ActivePlayer().ID
-		action, err := ParseReply(req.Reply)
+		t := ss.newTrace(ss.Seats[ss.GS.ActivePlayerIdx].Kind).withPrompt(ss.Prompt())
+		t.Reply = req.Reply
+		rep, err := ParseReplyFull(req.Reply)
 		if err != nil {
+			t.Result.Error = err.Error()
+			ss.addTrace(t)
 			ss.event("reply", player, "", nil, err)
 			httpError(w, err, http.StatusBadRequest)
 			return
 		}
-		res, err := ss.GS.ExecuteTurn(action)
+		res, err := ss.play(rep.Action, t, rep)
+		action := t.Action
 		ss.event("reply", player, short(action), res, err)
 		if err != nil {
 			httpError(w, err, http.StatusConflict)
@@ -578,6 +635,13 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		writeJSON(w, moves(ss.GS, target))
+	case "stmt":
+		id := r.URL.Query().Get("id")
+		if ss.GS.Adapter.Graph.Statements[id] == nil {
+			httpError(w, fmt.Errorf("no statement %q", id), http.StatusNotFound)
+			return
+		}
+		writeJSON(w, stmtMoves(ss.GS, id))
 	case "preview":
 		var req struct {
 			Action nascq.ProposedAction `json:"action"`
@@ -639,7 +703,9 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		s.reply(w, ss, res, err)
 	case "export":
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=wag-game-%s.json", ss.ID))
-		writeJSON(w, ss.export())
+		writeJSON(w, ss.export(s.contexts))
+	case "traces":
+		ss.writeTraces(w)
 	default:
 		httpError(w, fmt.Errorf("unknown action %q", action), http.StatusNotFound)
 	}
@@ -670,8 +736,11 @@ func (ss *Session) aiMove() (*game.TurnResult, error) {
 	if a == nil {
 		return nil, fmt.Errorf("it is %s's turn, a human", gs.ActivePlayer().ID)
 	}
+	seat := ss.Seats[gs.ActivePlayerIdx].Kind
 	for try := 0; try < 5; try++ {
-		r, err := gs.ExecuteTurn(a.ChooseAction(gs.BuildObservation()))
+		t := ss.newTrace(seat)
+		t.Attempt = try + 1
+		r, err := ss.play(a.ChooseAction(gs.BuildObservation()), t, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -679,7 +748,9 @@ func (ss *Session) aiMove() (*game.TurnResult, error) {
 			return r, nil
 		}
 	}
-	return gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	t := ss.newTrace(seat)
+	t.Attempt = 6
+	return ss.play(nascq.ProposedAction{Type: "abstain"}, t, nil)
 }
 
 // Preview is what a move would do, tried on the game and undone.
@@ -717,7 +788,7 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 		p.Error = err.Error()
 		return p
 	}
-	tmpl := nascq.ActionTemplate{Type: a.Type, TargetArgID: a.TargetArgID, AnswersCQID: a.AnswersCQID}
+	tmpl := nascq.ActionTemplate{Type: a.Type, TargetArgID: a.TargetArgID, AnswersCQID: a.AnswersCQID, TargetStmtID: a.TargetStmtID}
 	if va, err := gs.NASCQ.Validate(a, gs.Bridge()); err == nil {
 		tmpl.Locus, tmpl.LocusStmtID, tmpl.CaesAttackType = va.Locus, va.LocusStmtID, va.CaesAttackType
 		if sc := gs.NASCQ.GetScheme(a.SchemeID); sc != nil {
@@ -774,7 +845,7 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 	for i := range p.Changes {
 		p.Changes[i].Text = texts[p.Changes[i].Stmt]
 	}
-	if a.TargetArgID == "" && p.Conclusion != "" {
+	if a.TargetArgID == "" && a.TargetStmtID == "" && p.Conclusion != "" {
 		p.Effect = strings.TrimSuffix(p.Conclusion, ".")
 	}
 	return p
@@ -798,7 +869,7 @@ func (ss *Session) describeAction(a nascq.ProposedAction) string {
 // export is the whole game for saving: configuration, history with the
 // players' own words, and the arguments made with the user-defined scheme
 // (material for mining new schemes).
-func (ss *Session) export() map[string]interface{} {
+func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 	st := ss.buildState()
 	var mined []map[string]interface{}
 	for _, id := range sortedStrings(keys(st.Arguments)) {
@@ -820,10 +891,10 @@ func (ss *Session) export() map[string]interface{} {
 		req = &r
 	}
 	return map[string]interface{}{
-		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(),
+		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
 		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
 		"history": ss.GS.MoveHistory, "state": st, "other_arguments": mined, "import": ss.Import,
-		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM,
+		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM, "traces": ss.tracesWithoutPrompts(), "verdicts": ss.verdicts(contexts),
 	}
 }
 

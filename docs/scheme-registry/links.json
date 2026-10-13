@@ -1,0 +1,7964 @@
+{
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13.",
+ "entries": [
+  {
+   "number": "1",
+   "name": "Argument From Position To Know",
+   "book_pages": "309",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F01"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "position_to_know",
+     "match": "exact",
+     "reason": "Same title and source (Legal Argumentation and Evidence 2002, p. 46); same three-part structure.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "the book's \"domain S containing proposition A\" is split into two formulas",
+       "walton": [
+        {
+         "formula": "position_to_know(W,D)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable S; the \"(false)\" reading needs S instantiated with a negated statement",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "position_to_know(W,D)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "only \"honest\" is encoded; \"reliable\" has no separate formula",
+       "walton": [
+        {
+         "formula": "dishonest(W)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "2",
+   "name": "Argument From Expert Opinion",
+   "book_pages": "310",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F01"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5",
+    "CQ6"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "expert_opinion",
+     "match": "exact",
+     "reason": "Same title and source (Appeal to Expert Opinion 1997, pp. 211-225); premises and all six CQs have formulas.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "expert(W,D)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable S",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "Expertise Question",
+       "walton": [
+        {
+         "formula": "expert(W,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "Field Question",
+       "walton": [
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "Opinion Question",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "note": "Trustworthiness Question",
+       "walton": [
+        {
+         "formula": "untrustworthy(W)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "note": "Consistency Question",
+       "walton": [
+        {
+         "formula": "inconsistent_with_other_experts(S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ6",
+       "note": "Backup Evidence Question; the argument is a nested term",
+       "walton": [
+        {
+         "formula": "based_on_evidence(asserts(W,S))",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "credible_source",
+     "match": "partial",
+     "reason": "Other source (Wyner 2016, from upstream Carneades): the same three-premise structure with \"credible source\" in place of \"expert\"; WAG AS:expert_opinion uses this id.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "credible source, not expert",
+       "walton": [
+        {
+         "formula": "credible_source(W,D)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable S",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "credible_source(W,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "in_domain(S,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "biased(W)",
+         "locus": "exception"
+        },
+        {
+         "formula": "dishonest(W)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "other_credible_sources_disagree(S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ6",
+       "note": "no backup-evidence formula (WAG asks it at the argument)",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "3",
+   "name": "Argument From Witness Testimony",
+   "book_pages": "310-311",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F01"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "witness_testimony",
+     "match": "exact",
+     "reason": "Same title and sources (Walton, Prakken & Reed 2003, p. 35; Witness Testimony Evidence); three premises and all five CQs have formulas.",
+     "premise_map": [
+      {
+       "compendium_label": "Position to Know Premise",
+       "walton": [
+        {
+         "formula": "position_to_know(W,D)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in_domain(D,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Truth Telling Premise",
+       "note": "sincerity encoded as \"W believes S to be true\" (with asserts(W,S))",
+       "walton": [
+        {
+         "formula": "believes(W,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Statement Premise",
+       "walton": [
+        {
+         "formula": "asserts(W,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable S; the book says \"may be plausibly taken to be true\"",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "internally_consistent(S)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "inconsistent_with_known_facts(S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "inconsistent_with_other_witnesses(S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "biased(W)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "implausible(S)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "4",
+   "name": "Argument From Popular Opinion",
+   "book_pages": "311",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "popular_opinion",
+     "match": "exact",
+     "reason": "Same title and the same three references; both premises and both CQs have formulas.",
+     "premise_map": [
+      {
+       "compendium_label": "General Acceptance Premise",
+       "note": "predicate name says \"true\", template says \"generally accepted as true\"",
+       "walton": [
+        {
+         "formula": "generally_true(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Presumption Premise",
+       "walton": [
+        {
+         "formula": "favor(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "reason_in_favor(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "generally_accepted(A) is listed under the misspelled key \"assumption:\" and is dropped at load",
+       "walton": [
+        {
+         "formula": "generally_true(A)",
+         "locus": "premise"
+        },
+        {
+         "formula": "generally_accepted(A)",
+         "locus": "assumption (misspelled key \"assumption:\", dropped at load)"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "doubting_general(A)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "4.1",
+   "name": "Pop Scheme",
+   "book_pages": "311",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 1,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "pop_scheme",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 311.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "reference_group_accepted(G,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the book's \"A is true (false)/or: you should accept (reject) A\" becomes two conclusions",
+      "walton": [
+       {
+        "formula": "true(A)",
+        "locus": "conclusion"
+       },
+       {
+        "formula": "should_accept(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.2",
+   "name": "Position-to-Know Ad Populum Argument",
+   "book_pages": "311",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F01",
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "position_to_know_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 311.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_accepted(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "position_to_know_group(G,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausibly_true(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.3",
+   "name": "Expert Opinion Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F01",
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "expert_opinion_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_accepted(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "expert_in_knowledge(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "therefore_true(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.4",
+   "name": "Deliberation Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "deliberation_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_accepted(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "deliberate(G,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausibly_true(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.5",
+   "name": "Moral Justification Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "moral_justification_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "good_group(G,P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "walton.yml names the group G in premise 2; the book says \"a group with good qualities\"",
+       "walton": [
+        {
+         "formula": "goal_good_group(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_accept(P)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.6",
+   "name": "Moral Justification (Excuse Subtype) Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "moral_justification_ad_populum_excuse",
+     "match": "partial",
+     "reason": "Same title, but the book's conclusion is listed among the premises and conclusions: is empty.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_does(G,X,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "acceptable_norm(X,A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "group_member(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "no conclusion; the book's conclusion is the premise morally_acceptable_action(X,A) (template \"Therefore, my doing ...\")",
+      "walton": []
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.7",
+   "name": "Snob Appeal Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 4,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "snob_appeal_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "property_or_object(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "elite_group(G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "goal_prestige",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "accept_property_object(A,P,O,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_accept(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.8",
+   "name": "Appeal to Vanity Ad Populum Argument",
+   "book_pages": "312",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "appeal_to_vanity_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "admired_people(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "group_action(X,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "carry_out_action/1 is shared with practical_inference",
+      "walton": [
+       {
+        "formula": "carry_out_action(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.9",
+   "name": "Rhetoric of Belonging Ad Populum Argument",
+   "book_pages": "313",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rhetoric_ad_populum",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 312 (the book prints it on p. 313).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_accepted(G,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "valued_to_be_member(G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "out_group_not_accept(A,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_accept(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.10",
+   "name": "Common Folks Ad Populum Argument",
+   "book_pages": "313",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 1,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "common_folk_ad_populum",
+     "match": "partial",
+     "reason": "Same title, but premise and conclusion are swapped and both are 0-ary atoms.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "note": "listed as the CONCLUSION in walton.yml (0-ary)",
+       "walton": [
+        {
+         "formula": "background",
+         "locus": "conclusion"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "listed as the PREMISE in walton.yml (0-ary); its template is the book's conclusion",
+      "walton": [
+       {
+        "formula": "being_credible",
+        "locus": "premise"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "4.11",
+   "name": "Common Folks (Group Subtype) Ad Populum Argument",
+   "book_pages": "313",
+   "parent": "4",
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "common_folks_group_ad_populum",
+     "match": "exact",
+     "reason": "Same title (without \"Ad Populum Argument\" word order); source cites the 2008 book, p. 312 (printed on p. 313).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_background(G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "respondent_member(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "0-ary atom; the speaker is not a variable",
+      "walton": [
+       {
+        "formula": "accept_saying",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "5",
+   "name": "Argument From Popular Practice",
+   "book_pages": "314",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F02"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "popular_practise",
+     "match": "exact",
+     "reason": "Same title (spelled \"Practise\") and source (Fundamentals 2006, p. 93).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "popular_practise(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "note": "only the consequent of the printed conditional (\"that gives a reason to think that A is acceptable\")",
+       "walton": [
+        {
+         "formula": "to_think_acceptable(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "acceptable_in_case(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "no separate formula for the evidence of majority acceptance",
+       "walton": [
+        {
+         "formula": "popular_practise(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "have_grounds_think(A)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "6",
+   "name": "Argument From Example",
+   "book_pages": "314",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F03"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "6.1",
+   "name": "Argument from Example",
+   "book_pages": "314",
+   "parent": "6",
+   "heading_only": false,
+   "family": [
+    "F03"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "from_example",
+     "match": "partial",
+     "reason": "Same title, but the premise and the conclusion are swapped: walton.yml concludes the particular case from the generalization.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "note": "this formula is the CONCLUSION in walton.yml",
+       "walton": [
+        {
+         "formula": "has_properties(A,P1,P2)",
+         "locus": "conclusion"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "this formula is the PREMISE in walton.yml; its template is the book's conclusion (\"Therefore, generally, if ...\")",
+      "walton": [
+       {
+        "formula": "both_properties(A,P1,P2)",
+        "locus": "premise"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the book's premise, but the conclusion in walton.yml",
+       "walton": [
+        {
+         "formula": "has_properties(A,P1,P2)",
+         "locus": "conclusion"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "inference question; no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "typical_example(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "note": "no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "impair_general(A)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "6.2",
+   "name": "Argument from Illustration",
+   "book_pages": "315",
+   "parent": "6",
+   "heading_only": false,
+   "family": [
+    "F03"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "illustration",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "usually_properties(X,P1,P2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "same_properties(Y,P1,P2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the book says \"The rule is valid.\"; walton.yml says \"The rule is valid for Y.\"",
+      "walton": [
+       {
+        "formula": "valid_rule(Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "6.3",
+   "name": "Argument from Model",
+   "book_pages": "315",
+   "parent": "6",
+   "heading_only": false,
+   "family": [
+    "F03"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "from_model",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "prestigious_individual(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "carry_out_act (A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "only the consequent of the printed conditional; template starts \"Then X worth being imitated by B.\"",
+       "walton": [
+        {
+         "formula": "worth_imitated(X,B)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_do(B,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "6.4",
+   "name": "Argument from Anti-Model",
+   "book_pages": "315",
+   "parent": "6",
+   "heading_only": false,
+   "family": [
+    "F03"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "from_antimodel",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "¬prestigious_individual(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "carry_out_act(A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "want_to_be_different(B,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "¬should_do(B,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "7",
+   "name": "Argument From Analogy",
+   "book_pages": "315",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F04"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "analogy",
+     "match": "exact",
+     "reason": "Same title and source (Fundamentals 2006, pp. 96-97); both premises and all three CQs have formulas. The current case C2 is implicit.",
+     "premise_map": [
+      {
+       "compendium_label": "Similarity Premise",
+       "note": "\"Case C is similar to the current case\"",
+       "walton": [
+        {
+         "formula": "similar_case(C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Base Premise",
+       "walton": [
+        {
+         "formula": "in_case(A,C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable A; \"in case C2\" is implicit (the current case)",
+      "walton": [
+       {
+        "formula": "A",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "relevant_differences(C)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "in_case(A,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "walton.yml asks for a case \"more on point\" in which A is false; the book asks for another case C3 also similar to C1",
+       "walton": [
+        {
+         "formula": "more_on_point(A,C)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "8",
+   "name": "Practical Reasoning From Analogy",
+   "book_pages": "316",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F04",
+    "F10"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "8.1",
+   "name": "Positive Schema",
+   "book_pages": "316",
+   "parent": "8",
+   "heading_only": false,
+   "family": [
+    "F04",
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_analogy_positive",
+     "match": "exact",
+     "reason": "Same title and source (Informal Logic 1989, p. 257).",
+     "premise_map": [
+      {
+       "compendium_label": "Base Premise",
+       "walton": [
+        {
+         "formula": "right_to_do(A1,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Similarity Premise",
+       "note": "arguments in the order S1, S2 (book: \"S2 is similar to S1\")",
+       "walton": [
+        {
+         "formula": "similar_to(A1,A2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "carry_out_right(A2,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "8.2",
+   "name": "Negative Schema",
+   "book_pages": "316",
+   "parent": "8",
+   "heading_only": false,
+   "family": [
+    "F04",
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_analogy_negative",
+     "match": "exact",
+     "reason": "Same title and source (Informal Logic 1989, p. 257).",
+     "premise_map": [
+      {
+       "compendium_label": "Base Premise",
+       "walton": [
+        {
+         "formula": "wrong_to_do(A1,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Similarity Premise",
+       "walton": [
+        {
+         "formula": "similar_to(A1,A2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "carry_out_wrong(A2,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "9",
+   "name": "Argument From Composition",
+   "book_pages": "316",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "9.1",
+   "name": "Generic Composition",
+   "book_pages": "316",
+   "parent": "9",
+   "heading_only": false,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "composition_generic",
+     "match": "exact",
+     "reason": "Same title and source (Informal Logic 1989, p. 130).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "all_parts_propert(A,P)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "has_property(A,P)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "intended locus (assumption), but its template \"Every part that composes A has property P\" restates the premise; the heredity condition the CQ asks about is not expressed",
+       "walton": [
+        {
+         "formula": "all_parts_has(A,P)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "9.2",
+   "name": "Inclusion of the Part in the Whole",
+   "book_pages": "316",
+   "parent": "9",
+   "heading_only": false,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "part_in_whole",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "species_of(Y,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "species_property(X,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the book's parenthetical alternative (\"is less A than X ...\") is the exception smaller_part_property(Y,A,X)",
+      "walton": [
+       {
+        "formula": "part_propert(Y,A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "10",
+   "name": "Argument From Division",
+   "book_pages": "317",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "10.1",
+   "name": "Generic Division",
+   "book_pages": "317",
+   "parent": "10",
+   "heading_only": false,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "division_generic",
+     "match": "partial",
+     "reason": "Same title and source (Argument: The Logic of Fallacies 1982, pp. 206-208), but the formulas are a copy of composition_generic: parts to whole, not whole to parts.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "note": "this formula is the CONCLUSION in walton.yml",
+       "walton": [
+        {
+         "formula": "has_property(A,P)",
+         "locus": "conclusion"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "this formula is the PREMISE in walton.yml",
+      "walton": [
+       {
+        "formula": "all_parts_propert(A,P)",
+        "locus": "premise"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the assumption restates the premise; divisional heredity is not expressed",
+       "walton": [
+        {
+         "formula": "all_parts_has(A,P)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "10.2",
+   "name": "Division of the Whole into its Parts",
+   "book_pages": "317",
+   "parent": "10",
+   "heading_only": false,
+   "family": [
+    "F05"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "11",
+   "name": "Argument From Oppositions",
+   "book_pages": "317-318",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "11.1a",
+   "name": "Descriptive Schemes (first scheme)",
+   "book_pages": "317",
+   "parent": "11",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "opposition-descriptive_1",
+     "match": "exact",
+     "reason": "Title \"Descriptive Scheme 1\"; source cites the 2008 book, p. 317.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "presents_predicate(A,P,P')",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "presents(A,P)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "cannot_present_sametime(A,P')",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "11.1b",
+   "name": "Descriptive Schemes (second scheme)",
+   "book_pages": "317",
+   "parent": "11",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "opposition-descriptive_2",
+     "match": "exact",
+     "reason": "Title \"Descriptive Scheme 2\"; source cites the 2008 book, p. 317.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "not_presents_predicate(A,P,P')",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "¬presents(A,P)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "must_present_sametime(A,P')",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "11.1c",
+   "name": "Descriptive Schemes (third scheme)",
+   "book_pages": "318",
+   "parent": "11",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "opposition-descriptive_3",
+     "match": "exact",
+     "reason": "Third descriptive scheme (title wrongly repeats \"Descriptive Scheme 2\"); source cites the 2008 book, p. 318.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "must_present_complementary_contrary(A,P,P')",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "¬presents(A,P)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "must_present_sametime(A,P')",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "11.2",
+   "name": "Normative Schemes",
+   "book_pages": "318",
+   "parent": "11",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "opposition-normative",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 318. It reproduces the book's minor-premise misprint (W').",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "uses the descriptive scheme's predicate with three arguments; the unused template cannot_opposite_evaluation/3 matches this premise",
+       "walton": [
+        {
+         "formula": "cannot_present_sametime(A,X,X')",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "note": "X', as in the book's misprint",
+       "walton": [
+        {
+         "formula": "recieves_evaluation(A,X')",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "cannot_recieve_evaluation(A,X')",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "12",
+   "name": "Rhetorical Argument From Oppositions",
+   "book_pages": "318",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "12.1",
+   "name": "Normative Schemes",
+   "book_pages": "318",
+   "parent": "12",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rhetorical_oppositions_normative",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 318.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "if_treatment_required(X,A,A',X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "treatment_required(X,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "contrary_treatment_required(X',A')",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "12.2",
+   "name": "Descriptive Schemes",
+   "book_pages": "318",
+   "parent": "12",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rhetorical_oppositions_descriptive",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 318.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "relation_converse_relation(A,R,B,R')",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "relation_with(A,R,B)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "converse_relation(B,R',A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "13",
+   "name": "Argument From Alternatives",
+   "book_pages": "318-319",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "13.1",
+   "name": "Cognitive Schemes",
+   "book_pages": "318",
+   "parent": "13",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "alternative_cognitive",
+     "match": "exact",
+     "reason": "Same title and reference (Kienpointner 1992, p. 306).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "can_be_case(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "plausibly_not_case(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausibly_case(B)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "13.2",
+   "name": "Normative Schemes",
+   "book_pages": "318",
+   "parent": "13",
+   "heading_only": false,
+   "family": [
+    "F06"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "alternative_normative",
+     "match": "exact",
+     "reason": "Same title and reference (Kienpointner 1992, p. 306).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "can_be_required(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "is_required(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "not_required(B)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "14",
+   "name": "Argument From Verbal Classification",
+   "book_pages": "319",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F07"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "verbal_classification",
+     "match": "exact",
+     "reason": "Same title (upstream Carneades, no source); same two-premise structure, with classes in place of properties.",
+     "premise_map": [
+      {
+       "compendium_label": "Individual Premise",
+       "note": "\"O is an instance of class F\"",
+       "walton": [
+        {
+         "formula": "instance(O,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Classification Premise",
+       "walton": [
+        {
+         "formula": "subclass(F,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "instance(O,G)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "instance(O,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "no exception for doubtful word usage",
+       "walton": [
+        {
+         "formula": "subclass(F,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "15",
+   "name": "Argument From Definition To Verbal Classification",
+   "book_pages": "319",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F07"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "definition_to_verbal_classification",
+     "match": "exact",
+     "reason": "Same title (upstream Carneades; walton.yml cites Fundamentals 2006, p. 129; the book prints no reference for 15).",
+     "premise_map": [
+      {
+       "compendium_label": "Definition Premise",
+       "walton": [
+        {
+         "formula": "satisfies_definition(O,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Classification Premise",
+       "walton": [
+        {
+         "formula": "classified_as(D,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "instance(O,G)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "inadequate_definition(D,G)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "stipulative or biased definition: no separate formula",
+       "walton": [
+        {
+         "formula": "classified_as(D,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "16",
+   "name": "Argument From Vagueness Of A Verbal Classification",
+   "book_pages": "319-320",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F07"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "verbal_classification_vagueness",
+     "match": "exact",
+     "reason": "Content and source (Argumentation Schemes for Presumptive Reasoning 1996, pp. 102-103) match 16; the title is wrongly \"Argument From Definition to Verbal Classification\".",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "vague_defined_property(A,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "the book says the argument α occurs in the context; walton.yml passes the property F",
+       "walton": [
+        {
+         "formula": "property_precion_needed(F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "property_vagueness(F,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "vaguness_recejted(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "property_precion_needed(F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "property_vagueness(F,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "partial: \"property F doesn't need to be certain for the sake of the argument\"",
+       "walton": [
+        {
+         "formula": "certainity_no_need(A,F)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "17",
+   "name": "Argument From Arbitrariness Of A Verbal Classification",
+   "book_pages": "320",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F07"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "verbal_classification_arbitrariness",
+     "match": "exact",
+     "reason": "Same title and source (Argumentation Schemes for Presumptive Reasoning 1996, pp. 104-105).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "arbitrary_defined_property(A,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "unparsable; dropped at instantiation",
+       "walton": [
+        {
+         "formula": "needed_nonarbitrary((A,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "arbitrary_property(F,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "arbitrary_rejected(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "dropped at instantiation",
+       "walton": [
+        {
+         "formula": "needed_nonarbitrary((A,F)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "arbitrary_property(F,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "18",
+   "name": "Argumentation From Interaction Of Act And Person",
+   "book_pages": "321",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "18.1",
+   "name": "Variant 1",
+   "book_pages": "321",
+   "parent": "18",
+   "heading_only": false,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "interaction_act_person_1",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "person_act(A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "act_value(X,V)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "person_value(A,V)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "18.2",
+   "name": "Variant 2",
+   "book_pages": "321",
+   "parent": "18",
+   "heading_only": false,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "interaction_act_person_2",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "person_judgment_value(A,V1)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "person_value_depending(V1,X,V2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "person_acts_value(A,X,V2)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "19",
+   "name": "Argumentation From Values",
+   "book_pages": "321-322",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F09"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "19.1",
+   "name": "Variant 1: Positive Value",
+   "book_pages": "321",
+   "parent": "19",
+   "heading_only": false,
+   "family": [
+    "F09"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "positive_value",
+     "match": "exact",
+     "reason": "Same title and the same two Bench-Capon references.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "judged_positive_value(V,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "positive_affects(V,G,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "reason_retaining_goal(V,G)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "19.2",
+   "name": "Variant 2: Negative Value",
+   "book_pages": "321",
+   "parent": "19",
+   "heading_only": false,
+   "family": [
+    "F09"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "negative_value",
+     "match": "partial",
+     "reason": "Same title and references, but the conclusion is the positive variant's \"reason for retaining commitment\".",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "judged_negative_value(V,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "template ends \"if value is bad, it supports commitment to goal\" (book: \"it goes against commitment to goal G\")",
+       "walton": [
+        {
+         "formula": "negative_affects(V,G,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"V is a reason for retracting commitment to goal G\"",
+      "walton": [
+       {
+        "formula": "reason_retaining_goal(V,G)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "20",
+   "name": "Argumentation From Sacrifice",
+   "book_pages": "322",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F09"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "sacrifice",
+     "match": "exact",
+     "reason": "Same title (\"Argumentation From Sacrifice\") and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "sacrifice_made(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "X undeclared, where the value V belongs",
+       "walton": [
+        {
+         "formula": "great_sacrifice(S,A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "great_sacrifice_made(S,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "template \"%s has a great value.\" drops V",
+      "walton": [
+       {
+        "formula": "sacrifice_value(A,V)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "21",
+   "name": "Argumentation From The Group And Its Members",
+   "book_pages": "322",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "21.1",
+   "name": "Argumentation from the Group and Its Members: Variant 1",
+   "book_pages": "322",
+   "parent": "21",
+   "heading_only": false,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "group_1",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "member_quality(M,G,Q)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "member_group_quality(M,Q,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "has(G,Q)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "21.2",
+   "name": "Argumentation from the Group and Its Members: Variant 2",
+   "book_pages": "322",
+   "parent": "21",
+   "heading_only": false,
+   "family": [
+    "F08"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "group_2",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "group_quality(G,Q)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "group_member(M,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "group_member_quality(G,Q,M)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "is/2 template \"% is %s.\" is malformed",
+      "walton": [
+       {
+        "formula": "is(M,Q)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "22",
+   "name": "Practical Reasoning",
+   "book_pages": "323-325",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F09",
+    "F10"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "22.1",
+   "name": "Practical Inference",
+   "book_pages": "323",
+   "parent": "22",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_inference",
+     "match": "exact",
+     "reason": "Same title and the same four references as printed after 22.4.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "have_goal(G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "action_realize_goal(A,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "template \"Therefore, you should carry out action A.\" (book: \"I ought (practically speaking) to carry out this action A\")",
+      "walton": [
+       {
+        "formula": "carry_out_action(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "other_goals_conflict(G)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "one exception covers CQ2 and CQ3",
+       "walton": [
+        {
+         "formula": "more_efficient_alternative_actions(A,G)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "more_efficient_alternative_actions(A,G)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "possible_action(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "note": "narrower: only consequences incompatible with G",
+       "walton": [
+        {
+         "formula": "incompatible_consequences(A,G)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "practical_reasoning2",
+     "match": "partial",
+     "reason": "Later version from another source (Walton 2015, Goal-Based Reasoning for Argumentation): instrumental practical reasoning with circumstances S1/S2.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "goal G realized in the resulting state",
+       "walton": [
+        {
+         "formula": "would_be_realized(G,S2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "would_bring_about(A,S1,S2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "incompatible_goal(G)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "realize_more_effectively(G,A)",
+         "locus": "exception"
+        },
+        {
+         "formula": "bring_about_more_effectively(S2,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "realize_more_effectively(G,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "possible(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "side_effects(A,S1)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "22.2",
+   "name": "Necessary Condition Schema",
+   "book_pages": "323-324",
+   "parent": "22",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 5,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "22.3",
+   "walton_links": [
+    {
+     "id": "practical_necessary_condition",
+     "match": "exact",
+     "reason": "Same title and references; all five premises have formulas.",
+     "premise_map": [
+      {
+       "compendium_label": "Goal Premise",
+       "walton": [
+        {
+         "formula": "goal_is_action(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Alternatives Premise",
+       "note": "the set [B0..Bn] is collapsed to the selected member X",
+       "walton": [
+        {
+         "formula": "alternative_action(X,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Selection Premise",
+       "walton": [
+        {
+         "formula": "necessary_action(X,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Practicality Premise",
+       "walton": [
+        {
+         "formula": "practicality_action(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Side Effects Premise",
+       "walton": [
+        {
+         "formula": "more_acceptable_bringing(A,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "bringing_about_action(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "Alternative Means Question",
+       "walton": [
+        {
+         "formula": "alternative_means(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "Acceptable/Best Option Question",
+       "walton": [
+        {
+         "formula": "acceptable_action(X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "Possibility Question; the agent a is P",
+       "walton": [
+        {
+         "formula": "possible_agent(X,P)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "note": "Negative Side Effects Question",
+       "walton": [
+        {
+         "formula": "side_effect_action(P,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "note": "Conflicting Goals Question; A2 is the other goal",
+       "walton": [
+        {
+         "formula": "conflict_goals(P,A2,A)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "22.3",
+   "name": "Sufficient Condition Schema",
+   "book_pages": "323-324",
+   "parent": "22",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 5,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_sufficient_condition",
+     "match": "exact",
+     "reason": "Same title and references; identical to practical_necessary_condition except sufficient_action(X,A).",
+     "premise_map": [
+      {
+       "compendium_label": "Goal Premise",
+       "walton": [
+        {
+         "formula": "goal_is_action(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Alternatives Premise",
+       "note": "template says \"is necessary\", as in the book's misprint",
+       "walton": [
+        {
+         "formula": "alternative_action(X,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Selection Premise",
+       "walton": [
+        {
+         "formula": "sufficient_action(X,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Practicality Premise",
+       "walton": [
+        {
+         "formula": "practicality_action(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Side Effects Premise",
+       "walton": [
+        {
+         "formula": "more_acceptable_bringing(A,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "bringing_about_action(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "alternative_means(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "acceptable_action(X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "possible_agent(X,P)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "side_effect_action(P,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "conflict_goals(P,A2,A)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "22.4",
+   "name": "Value-Based Practical Reasoning",
+   "book_pages": "324",
+   "parent": "22",
+   "heading_only": false,
+   "family": [
+    "F09",
+    "F10"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5",
+    "CQ6",
+    "CQ7"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_reasoning1",
+     "match": "partial",
+     "reason": "Same name (\"Value-Based Practical Reasoning\") but another source and structure (Atkinson & Bench-Capon 2007, action-based alternating transition systems). WAG AS:practical_reasoning uses this id.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "note": "approximate: the book's \"I have a goal G\" has no premise; worthy_goal(G) is an assumption",
+       "walton": [
+        {
+         "formula": "worthy_goal(G)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "would_promote_value(G,V)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "necessary/sufficient condition replaced by \"A in S1 brings about S2, in which G is realized\"",
+       "walton": [
+        {
+         "formula": "would_bring_about(A,S1,S2)",
+         "locus": "premise"
+        },
+        {
+         "formula": "would_be_realized(G,S2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "no formula (WAG asks it at the conclusion)",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "would_promote_value(G,V)",
+         "locus": "premise"
+        },
+        {
+         "formula": "legitimate_value(V)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "realize_more_effectively(G,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "realize_more_effectively(G,A)",
+         "locus": "exception"
+        },
+        {
+         "formula": "bring_about_more_effectively(S2,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "walton": [
+        {
+         "formula": "promote_more_effectively(V,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ6",
+       "walton": [
+        {
+         "formula": "possible(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ7",
+       "note": "template \"...would have side-effects which demote some value\"",
+       "walton": [
+        {
+         "formula": "side_effects(A,S1)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "22.5",
+   "name": "Argument from Goal",
+   "book_pages": "325",
+   "parent": "22",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "practical_goal",
+     "match": "exact",
+     "reason": "Same title (\"Argument From Goal\") and source (Verheij 2003, p. 169).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "contributing_action(X,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "person_goal(P,G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_do(P,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "22.6",
+   "name": "Argumentation from Ends and Means",
+   "book_pages": "325",
+   "parent": "22",
+   "heading_only": true,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "22.6.1",
+   "name": "Variant 1",
+   "book_pages": "325",
+   "parent": "22.6",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "end_and_means_1",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "means_to_end(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "good(Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "good(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "22.6.2",
+   "name": "Variant 2",
+   "book_pages": "325",
+   "parent": "22.6",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "end_and_means_2",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "means_end(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "more_important_ends",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "ends_important(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "22.6.3",
+   "name": "Variant 3",
+   "book_pages": "325",
+   "parent": "22.6",
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "end_and_means_3",
+     "match": "exact",
+     "reason": "Same title and Perelman reference.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "means_to_end(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "easy_to_achive(X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "good(Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "23",
+   "name": "Two-Person Practical Reasoning",
+   "book_pages": "325-326",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F10"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4",
+    "CQ5"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "two_person_practical",
+     "match": "exact",
+     "reason": "Same title and source (Appeal to Expert Opinion 1997, p. 163).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "tells_intend(A,X,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "situation_necessiy(B,Y,X,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_carry_out(A,Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "goals_higher_priority(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "arguments in the wrong order (see defects)",
+       "walton": [
+        {
+         "formula": "alternative_means(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "arguments in the wrong order (see defects)",
+       "walton": [
+        {
+         "formula": "side_effect_other_act(B,A)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "possible_action(Y)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ5",
+       "note": "no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "24",
+   "name": "Argument From Waste",
+   "book_pages": "326",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F10",
+    "F11"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "waste",
+     "match": "exact",
+     "reason": "Same title and both references.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "stop_realize_wasted(A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "waste_bad_thing(A,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "ought_to_continue(A,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "posible(X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "25",
+   "name": "Argument From Sunk Costs",
+   "book_pages": "326-327",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F10",
+    "F11"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "sunk_costs",
+     "match": "partial",
+     "reason": "Same title and source (Argumentation 16, 2002, p. 489; from upstream Carneades), but a different structure: costs already incurred instead of the t1/t2 pre-commitment.",
+     "premise_map": [
+      {
+       "compendium_label": "Time definitions",
+       "note": "no counterpart",
+       "walton": []
+      },
+      {
+       "compendium_label": "Premise 1",
+       "note": "no counterpart (choice at t2 between A and not-A)",
+       "walton": []
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "approximate: past investment C in A instead of pre-commitment",
+       "walton": [
+        {
+         "formula": "sunk_costs(A,C)",
+         "locus": "premise"
+        },
+        {
+         "formula": "too_high_to_waste(C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "26",
+   "name": "Argument From Ignorance",
+   "book_pages": "327-328",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F12"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "ignorance",
+     "match": "exact",
+     "reason": "Same title; source A Pragmatic Theory of Fallacy 1995, p. 150 (one of the two printed references).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "would_be_known(S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "¬known(S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "¬S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "uninvestigated(S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "burden of proof: no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "note": "standard of proof: no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "26.1",
+   "name": "Negative Reasoning from Normal Expectations",
+   "book_pages": "327",
+   "parent": "26",
+   "heading_only": false,
+   "family": [
+    "F12"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "26",
+   "walton_links": [
+    {
+     "id": "negative_normal_expectations",
+     "match": "exact",
+     "reason": "Same title; walton.yml gives it the references printed after 26.2.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "normal_true(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "case_not_true(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "0-ary: every instance concludes the same statement",
+      "walton": [
+       {
+        "formula": "not_normal",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "26.2",
+   "name": "Negative Practical Reasoning",
+   "book_pages": "327",
+   "parent": "26",
+   "heading_only": false,
+   "family": [
+    "F10",
+    "F12"
+   ],
+   "n_premises": 5,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "26",
+   "walton_links": [
+    {
+     "id": "negative_practical",
+     "match": "exact",
+     "reason": "Same title; walton.yml gives it the references printed after 26.2.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "not_know_true(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "presumption(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "consequences_presumption(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "other_consequences_presumption(A,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 5",
+       "walton": [
+        {
+         "formula": "more_serious_consequences(B,C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "act_on_presumption(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "0-ary assumption",
+       "walton": [
+        {
+         "formula": "sufficient_evidence",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "27",
+   "name": "Epistemic Argument From Ignorance",
+   "book_pages": "328",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F12"
+   ],
+   "n_premises": 5,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "epistemic_ignorence",
+     "match": "partial",
+     "reason": "Same title (\"Ignorence\") and source; premises 1-4 and the conclusion have formulas, premise 5 has none.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "true_propositions_contained(D,K)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "special_proposition(A,K)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "special_in(A,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "special_not_in(A,K)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 5",
+       "note": "missing; the unused template true_false/2 (\"For all %s in %s, it is either true or false.\") matches it",
+       "walton": []
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausible_false(D,A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "28",
+   "name": "Argument From Cause To Effect",
+   "book_pages": "328",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F13"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "cause_to_effect",
+     "match": "exact",
+     "reason": "Same title (upstream Carneades, no source in walton.yml).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "has_occurred(E1)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "will_occur(E2)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "no separate evidence formula",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "interference(E1)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "29",
+   "name": "Argument From Correlation To Cause",
+   "book_pages": "328-329",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F13"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "correlation_to_cause",
+     "match": "exact",
+     "reason": "Same title and source (A Pragmatic Theory of Fallacy 1995, p. 142).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "correlated(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "causes(E1,E2)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "correlated(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "explanatory_theory(E1,E2)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "causes_both(E1,E2)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "30",
+   "name": "Argument From Sign",
+   "book_pages": "329",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F13"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "sign",
+     "match": "exact",
+     "reason": "Same title and source (Fundamentals 2006, pp. 113-114). WAG AS:sign uses this id.",
+     "premise_map": [
+      {
+       "compendium_label": "Specific Premise",
+       "walton": [
+        {
+         "formula": "finding_true(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "General Premise",
+       "walton": [
+        {
+         "formula": "indicated_true(B,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "true_in_situation(B)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "strong_correlation(A,B)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "0-ary exception",
+       "walton": [
+        {
+         "formula": "more_reliable",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "31",
+   "name": "Abductive Argumentation Scheme",
+   "book_pages": "329-331",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "31.1",
+   "name": "Backward Argumentation Scheme",
+   "book_pages": "329",
+   "parent": "31",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "31.2",
+   "walton_links": [
+    {
+     "id": "abductive_backward",
+     "match": "partial",
+     "reason": "Same title; source cites the 2008 book, p. 329. Premise 3 (the best account) has no formula.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "note": "extra argument A, no /2 template",
+       "walton": [
+        {
+         "formula": "data_set(D,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "A1 stands for the set of accounts",
+       "walton": [
+        {
+         "formula": "data_account (A1,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "missing; the unused template succesful_account/2 (\"%s , is the account that explains %s most successfully.\") matches it",
+       "walton": []
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausible_hypothesis(A1)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "sufficient_account(A1,D)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      },
+      {
+       "cq": "CQ4",
+       "walton": []
+      }
+     ]
+    },
+    {
+     "id": "abduction",
+     "match": "partial",
+     "reason": "Generic abduction from upstream Carneades (no meta block): an observation explained by a theory containing the hypothesis.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "observed(S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "explanation(T,S)",
+         "locus": "premise"
+        },
+        {
+         "formula": "in(T,H)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "best-explanation premise is an exception instead",
+       "walton": []
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "H",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "more_coherent_explanation(T,S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      },
+      {
+       "cq": "CQ4",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "31.2",
+   "name": "Forward Argumentation Scheme",
+   "book_pages": "329-330",
+   "parent": "31",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "abductive_forward",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, pp. 329-330.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "data_set(D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "diagram_set(G,D,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "the strongest diagram Gi is represented by its conclusion C1",
+       "walton": [
+        {
+         "formula": "succesful_diagram(C1)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausible_conclusion(C1)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the printed CQs speak of Ai (31.1)",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      },
+      {
+       "cq": "CQ4",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "31.3",
+   "name": "Abductive Scheme for Argument from Action to Character",
+   "book_pages": "330",
+   "parent": "31",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "abductive_action_to_character",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 330.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "action_character(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "character_quality(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the quality is not a variable",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "quality_defined(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "name says \"not fit\", template says \"...fit the definition of quality\"",
+       "walton": [
+        {
+         "formula": "not_fit_action(A)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "31.4",
+   "name": "Scheme for Argument from Character to Action (Predictive)",
+   "book_pages": "330",
+   "parent": "31",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "abductive_character_to_action",
+     "match": "exact",
+     "reason": "Same title; source cites the 2008 book, p. 330.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "character(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "character_action(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "character_defined(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "partial",
+       "walton": [
+        {
+         "formula": "not_character_action(A)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "31.5",
+   "name": "Retroductive Scheme for Identifying an Agent from a Past Action",
+   "book_pages": "331",
+   "parent": "31",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "retroductive",
+     "match": "exact",
+     "reason": "Same title (source empty in walton.yml).",
+     "premise_map": [
+      {
+       "compendium_label": "Factual Premise",
+       "walton": [
+        {
+         "formula": "agent_event(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Character Premise",
+       "walton": [
+        {
+         "formula": "event_quality(Q)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Agent Trait Premise",
+       "walton": [
+        {
+         "formula": "agent_quality(A,Q)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "event_question(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "note": "takes the agent A, not the quality Q",
+       "walton": [
+        {
+         "formula": "quality_defined(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      },
+      {
+       "cq": "CQ4",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "reference_class",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "32",
+   "name": "Argument From Evidence To A Hypothesis",
+   "book_pages": "331-332",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 0,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "32.1",
+   "name": "Argument from Verification",
+   "book_pages": "331",
+   "parent": "32",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "32",
+   "walton_links": [
+    {
+     "id": "evidence_hypothesis_verification",
+     "match": "exact",
+     "reason": "Same title and source (Argumentation Schemes for Presumptive Reasoning 1996, pp. 67-70).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "hypothesis_event(H,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "event_true(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "H",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "hypothesis_event(H,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "event_true(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "approximate",
+       "walton": [
+        {
+         "formula": "sufficient_correlation(H,A)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "32.2",
+   "name": "Argument from Falsification",
+   "book_pages": "331-332",
+   "parent": "32",
+   "heading_only": false,
+   "family": [
+    "F14"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "32",
+   "walton_links": [
+    {
+     "id": "evidence_hypothesis_falsification",
+     "match": "partial",
+     "reason": "Same title and source, but it concludes ¬A (the event) instead of the negation of the hypothesis H.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "hypothesis_event(H,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "event_false(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"A is false\", where the book's A is the hypothesis, i.e. walton.yml's H",
+      "walton": [
+       {
+        "formula": "¬A",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "hypothesis_event(H,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "event_false(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "arguments reversed relative to 32.1",
+       "walton": [
+        {
+         "formula": "sufficient_correlation(A,H)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "33",
+   "name": "Argument From Consequences",
+   "book_pages": "332-333",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 0,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "33.1",
+   "name": "Argument from Positive Consequences",
+   "book_pages": "332",
+   "parent": "33",
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 1,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "33",
+   "walton_links": [
+    {
+     "id": "positive_consequences",
+     "match": "exact",
+     "reason": "Same title (upstream Carneades; source A Pragmatic Theory of Fallacy 1995, pp. 155-156). WAG AS:consequences uses this id.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "note": "the good consequence is named G",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        },
+        {
+         "formula": "good(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "no separate evidence formula",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "counter-argument (negative consequences); no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "33.2",
+   "name": "Argument from Negative Consequences",
+   "book_pages": "332",
+   "parent": "33",
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 1,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "33",
+   "walton_links": [
+    {
+     "id": "negative_consequences",
+     "match": "exact",
+     "reason": "Same title (upstream Carneades; source A Pragmatic Theory of Fallacy 1995, pp. 155-156).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        },
+        {
+         "formula": "bad(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "¬should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "33.3",
+   "name": "Reasoning from Negative Consequences",
+   "book_pages": "332",
+   "parent": "33",
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "33",
+   "walton_links": [
+    {
+     "id": "negative_consequences",
+     "match": "partial",
+     "reason": "No dedicated walton.yml scheme; negative_consequences (33.2) has the same shape (A brings about G; G is bad; so not A) without the first-person agent.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "\"bad\" rather than \"bad from the point of view of my goals\"",
+       "walton": [
+        {
+         "formula": "bad(G)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "¬should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "brings_about(A,G)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "33.4",
+   "name": "Argument from Negative Consequences (Prudential Inference)",
+   "book_pages": "332",
+   "parent": "33",
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "33",
+   "walton_links": [
+    {
+     "id": "negative_consequences_prudential",
+     "match": "exact",
+     "reason": "Same title and references.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "not_doing(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "bad_consequence(X,C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "prudential(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "strongly_occur(X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "other_consequences(X)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "34",
+   "name": "Pragmatic Argument From Alternatives",
+   "book_pages": "333",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F06",
+    "F15"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "pragmatic_alternative",
+     "match": "exact",
+     "reason": "Same title and source (Scare Tactics 2000, p. 142).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "alternatives(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "undesirable(B)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "do_other(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "35",
+   "name": "Argument From Threat",
+   "book_pages": "333",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "treat",
+     "match": "exact",
+     "reason": "Same scheme (\"Treat\" for \"Threat\"); source A Pragmatic Theory of Fallacy 1995, p. 157.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "note": "B is not passed",
+       "walton": [
+        {
+         "formula": "cited_bad_consequences(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "the action X is passed where the threatened consequence B belongs",
+       "walton": [
+        {
+         "formula": "position_to_know(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "arguments reversed",
+       "walton": [
+        {
+         "formula": "assert_bad(X,C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "not_bring_about(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "35.1",
+   "name": "Argument from Disjunctive Ad Baculum Threat",
+   "book_pages": "333",
+   "parent": "35",
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "ad_baculum",
+     "match": "exact",
+     "reason": "Same title (\"Treat\" for \"Threat\") and source (Scare Tactics 2000, p. 140).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "alternative_bad(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "undesirable(Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "do_other(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "36",
+   "name": "Argument From Fear Appeal",
+   "book_pages": "333-334",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 4,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "fear",
+     "match": "exact",
+     "reason": "Same title and source (Scare Tactics 2000, p. 22).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "not_do_appear(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "bad_for_you(Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "the \"Therefore\" template mirrors the book's Premise 3",
+       "walton": [
+        {
+         "formula": "prevent(Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "only_way_prevent(Y,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "ought_to_bring_about(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "37",
+   "name": "Argument From Danger Appeal",
+   "book_pages": "334",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F15"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "danger",
+     "match": "exact",
+     "reason": "Same title and source (Scare Tactics 2000, p. 173).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "occur(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "danger(Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "takes the danger Y, not the action X",
+      "walton": [
+       {
+        "formula": "should_not(Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "38",
+   "name": "Argument From Need For Help",
+   "book_pages": "334",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F16"
+   ],
+   "n_premises": 4,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "help",
+     "match": "exact",
+     "reason": "Same title and source (Appeal to Pity 1997, pp. 104, 155).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "note": "arguments reversed relative to the template (see defects)",
+       "walton": [
+        {
+         "formula": "help_needed(A,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "situation_help(A,X,B)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "can_carry_out(B,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "not_too_costly(B,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "carry_out(B,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "action_will_help(X,A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "restates premise can_carry_out(B,X)",
+       "walton": [
+        {
+         "formula": "possible_carry_out(B,X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "the opposite of premise not_too_costly(B,X)",
+       "walton": [
+        {
+         "formula": "greater_side_effects(X)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "39",
+   "name": "Argument From Distress",
+   "book_pages": "334-335",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F16"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "distress",
+     "match": "exact",
+     "reason": "Same title and source (Appeal to Pity; walton.yml prints the year 1991, the book 1997).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "distress(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "relieve(B,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "bring_relive(B,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "restates premise distress(A)",
+       "walton": [
+        {
+         "formula": "really_distress(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "relieve(B,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "possible_bring_about(B,X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "walton": [
+        {
+         "formula": "great_side_effects(B,X)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "40",
+   "name": "Argument From Commitment",
+   "book_pages": "335",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F18"
+   ],
+   "n_premises": 0,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "40-v1",
+   "name": "Version 1",
+   "book_pages": "335",
+   "parent": "40",
+   "heading_only": false,
+   "family": [
+    "F18"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "40",
+   "walton_links": [
+    {
+     "id": "commitment1",
+     "match": "exact",
+     "reason": "Same title (\"Version 1\") and both references.",
+     "premise_map": [
+      {
+       "compendium_label": "Commitment Evidence Premise",
+       "walton": [
+        {
+         "formula": "committed(A,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Linkage of Commitments Premise",
+       "walton": [
+        {
+         "formula": "also_committed(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "misspelled predicate without template; the unused template committed_to/2 is the intended one",
+      "walton": [
+       {
+        "formula": "commined_to(A,Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "commitment_support_evidence(A,X)",
+         "locus": "assumption"
+        },
+        {
+         "formula": "commitment_contrary_evidence(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "exception to the linkage rule: no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "40-v2",
+   "name": "Version 2",
+   "book_pages": "335",
+   "parent": "40",
+   "heading_only": false,
+   "family": [
+    "F18"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": "40",
+   "walton_links": [
+    {
+     "id": "commitment2",
+     "match": "exact",
+     "reason": "Same title (\"Version 2\") and both references.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "also_committed_questioned(A,X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "dialog_committed(A,X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "commitment_arises(A,Y)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "commitment_support_evidence(A,X)",
+         "locus": "assumption"
+        },
+        {
+         "formula": "commitment_contrary_evidence(A,X)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "41",
+   "name": "Ethotic Argument",
+   "book_pages": "336",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F19"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "ethotic1",
+     "match": "exact",
+     "reason": "Positive reading of 41 (good character -> more plausible); same source (A Pragmatic Theory of Fallacy 1995, p. 152); upstream Carneades.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "the general conditional is the scheme itself; no formula",
+       "walton": []
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "good_moral_character(P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "(what x says)",
+       "walton": [
+        {
+         "formula": "asserts(P,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"should be accepted as more plausible\"",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "good_moral_character(P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "character_is_relevant(S)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "weight of presumption: no formula",
+       "walton": []
+      }
+     ]
+    },
+    {
+     "id": "ethotic2",
+     "match": "exact",
+     "reason": "Negative reading of 41 (bad character -> less plausible); same source; upstream Carneades.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": []
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "bad_moral_character(P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "(what x says)",
+       "walton": [
+        {
+         "formula": "asserts(P,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"rejected as less plausible\"; walton.yml concludes that S is false",
+      "walton": [
+       {
+        "formula": "¬S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "bad_moral_character(P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "character_is_relevant(S)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "42",
+   "name": "Generic Ad Hominem",
+   "book_pages": "336",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F19"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "ad_hominem",
+     "match": "exact",
+     "reason": "Same title and source (Fundamentals 2006, p. 123).",
+     "premise_map": [
+      {
+       "compendium_label": "Character Attack Premise",
+       "walton": [
+        {
+         "formula": "bad_character(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "bad_not_accepted(A,S)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "attack_well_supported",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "character_revelant",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "note": "approximate: other evidence supports S more than the character issue",
+       "walton": [
+        {
+         "formula": "stronger_than_character(S)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "43",
+   "name": "Pragmatic Inconsistency",
+   "book_pages": "336-337",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F18",
+    "F19"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "pragmatic_inconsistency",
+     "match": "exact",
+     "reason": "Same title and source (Ad Hominem Arguments 1998, pp. 218, 251).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "note": "first premise",
+       "walton": [
+        {
+         "formula": "advocates_conclusion(A,S,X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise",
+       "note": "second premise; the second argument should be the arguer A",
+       "walton": [
+        {
+         "formula": "opposite_action(A,S,¬X)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "arguement_not_accepted(A,S)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "strong_advocate(A,S,X)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "descriptions_opposite(A,S)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "44",
+   "name": "Argument From Inconsistent Commitment",
+   "book_pages": "337",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F18",
+    "F19"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "inconsistent_commitment",
+     "match": "exact",
+     "reason": "Same title and source (Fundamentals 2006, pp. 120-121).",
+     "premise_map": [
+      {
+       "compendium_label": "Initial Commitment Premise",
+       "walton": [
+        {
+         "formula": "initial_commitment(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Opposed Commitment Premise",
+       "walton": [
+        {
+         "formula": "opposed_commitment(A,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "inconsistent_commitment(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "initial_commitment(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "opposed_commitment(A,S)",
+         "locus": "premise"
+        },
+        {
+         "formula": "evidence_not_commited(A,S)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "45",
+   "name": "Circumstantial Ad Hominem",
+   "book_pages": "337-338",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F18",
+    "F19"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3",
+    "CQ4"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "circumstantial_ad_hominem",
+     "match": "exact",
+     "reason": "Same title and both references.",
+     "premise_map": [
+      {
+       "compendium_label": "Argument Premise",
+       "walton": [
+        {
+         "formula": "advocates_conclusion(A,S,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Inconsistent Commitment Premise",
+       "note": "takes the argument S, not the proposition C",
+       "walton": [
+        {
+         "formula": "commited_opposite(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Credibility Questioning Premise",
+       "walton": [
+        {
+         "formula": "credibility_questioned(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "plausibility_decreased(A,S)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "commited_opposite(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "character_issue(A)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ4",
+       "note": "about the form of the conclusion; no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "46",
+   "name": "Argument From Bias",
+   "book_pages": "338",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F19"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "bias",
+     "match": "exact",
+     "reason": "Same title and source (A Pragmatic Theory of Fallacy 1995, p. 153).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "X is not linked to the arguer A",
+       "walton": [
+        {
+         "formula": "not_taken_both(X,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "biased(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "arguer_not_taken_both(A,C)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "type of dialogue: no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "biased(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "47",
+   "name": "Bias Ad Hominem",
+   "book_pages": "338-339",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F19"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "bias_ad_hominem",
+     "match": "exact",
+     "reason": "Same title and source (Ad Hominem Arguments 1998, p. 255).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "proponent_biased(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "biased_not_take_part(A,D,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "the \"Therefore\" template mirrors the book's Premise 3",
+       "walton": [
+        {
+         "formula": "morally_bad(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "not_given_credibility(S)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "proponent_biased(A,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": [
+        {
+         "formula": "biased_not_take_part(A,D,S)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "48",
+   "name": "Argument From Gradualism",
+   "book_pages": "339",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F17"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "gradualism",
+     "match": "exact",
+     "reason": "Same title and source (Argumentation Schemes for Presumptive Reasoning 1996, p. 96).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "true_acceptable(P1)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "fixed length: two intermediate propositions",
+       "walton": [
+        {
+         "formula": "sequence(P1,P2,P3,P4)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "template copies the book's \"If %s than %s\"",
+       "walton": [
+        {
+         "formula": "must_proper(P1,P4)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "true_acceptable(P4)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "49",
+   "name": "Slippery Slope Argument",
+   "book_pages": "339-340",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F13",
+    "F15",
+    "F17"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "slippery_slope_base_case",
+     "match": "partial",
+     "reason": "Upstream Carneades recursive encoding (title \"Slippery Slope Argument\"; source Slippery Slope Arguments, printed year 1999, pp. 93, 95): base case of the chain.",
+     "premise_map": [
+      {
+       "compendium_label": "First Step Premise",
+       "note": "no formula",
+       "walton": []
+      },
+      {
+       "compendium_label": "Recursive Premise",
+       "note": "first link",
+       "walton": [
+        {
+         "formula": "would_realize(A,E)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Bad Outcome Premise",
+       "note": "propagated back by slippery_slope_inductive_step",
+       "walton": [
+        {
+         "formula": "horrible_costs(E)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"A0 should not be brought about\"; walton.yml: \"Performing action A would have negative consequences\"",
+      "walton": [
+       {
+        "formula": "negative_consequences(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "would_realize(A,E)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "note": "weakest link: each link is a premise",
+       "walton": [
+        {
+         "formula": "would_realize(A,E)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slippery_slope_inductive_step",
+     "match": "partial",
+     "reason": "Upstream Carneades recursive encoding: inductive step that propagates horrible costs backwards along causal links.",
+     "premise_map": [
+      {
+       "compendium_label": "First Step Premise",
+       "note": "no formula",
+       "walton": []
+      },
+      {
+       "compendium_label": "Recursive Premise",
+       "note": "one link of the chain",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Bad Outcome Premise",
+       "walton": [
+        {
+         "formula": "horrible_costs(E2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "intermediate conclusion",
+      "walton": [
+       {
+        "formula": "horrible_costs(E1)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "50",
+   "name": "Precedent Slippery Slope Argument",
+   "book_pages": "340",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F17"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "51",
+   "name": "Sorites Slippery Slope Argument",
+   "book_pages": "340-341",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F17"
+   ],
+   "n_premises": 3,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "sorites_slippery_slope",
+     "match": "exact",
+     "reason": "Same title and source (\"The Argument of the Beard\", Informal Logic 18, 1996; walton.yml prints p. 151, the book p. 251).",
+     "premise_map": [
+      {
+       "compendium_label": "Initial Base Premise",
+       "walton": [
+        {
+         "formula": "beyond_contetion(A2,P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "General Inductive Premise",
+       "walton": [
+        {
+         "formula": "all_has(A2,P,A1)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Reapplication Sequence",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "reapplication_sequence",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "A occurs only in the conclusion",
+      "walton": [
+       {
+        "formula": "may_have(A,P)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "52",
+   "name": "Verbal Slippery Slope Argument",
+   "book_pages": "341",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F17"
+   ],
+   "n_premises": 4,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "verbal_slippery_slope",
+     "match": "exact",
+     "reason": "Same scheme (\"Verbal Slippery Slope\"); source A Pragmatic Theory of Fallacy 1995, p. 160.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "individual_property(A1,P)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "F undeclared, where P belongs",
+       "walton": [
+        {
+         "formula": "individuals_propoerty(A1,F,A2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "vague_property(P,A1,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 4",
+       "walton": [
+        {
+         "formula": "individual_property_false(A,P)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "not_has_propery(A1,P)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "53",
+   "name": "Full Slippery Slope Argument",
+   "book_pages": "341",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F17"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "54",
+   "name": "Argument For Constitutive-Rule Claims",
+   "book_pages": "342",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F07",
+    "F20"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "54.1",
+   "name": "Physical World Premise Version 1",
+   "book_pages": "342",
+   "parent": "54",
+   "heading_only": false,
+   "family": [
+    "F07",
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "Rebuttal Factor 1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rule_physical_world_1",
+     "match": "exact",
+     "reason": "Same title (\"Physical Worl Premise Version 1\"); source cites the 2008 book, p. 342.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "is(W,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Warrant",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "synonymous",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "means_same(W,D)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "Rebuttal Factor 1",
+       "note": "0-ary exception",
+       "walton": [
+        {
+         "formula": "not_necessarily_true",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "54.2",
+   "name": "Physical World Premise Version 2",
+   "book_pages": "342",
+   "parent": "54",
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "Rebuttal Factor 1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rule_physical_world_2",
+     "match": "exact",
+     "reason": "Same title (\"Physical Worl Premise Version 2\"); source cites the 2008 book, p. 342.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "oficcial_rulebook(I,D,W)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Warrant",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "correctly_report",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "counts_as(D,W)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "Rebuttal Factor 1",
+       "note": "0-ary exception",
+       "walton": [
+        {
+         "formula": "rule_changed",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "54.3",
+   "name": "Mental World Premise",
+   "book_pages": "342",
+   "parent": "54",
+   "heading_only": false,
+   "family": [
+    "F07",
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "Rebuttal Factor 1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rule_mental_world",
+     "match": "exact",
+     "reason": "Content and source (Grennan 1997, p. 196) match 54.3; walton.yml has an empty title.",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "same_meaning(L,W,D)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Warrant",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "speakers_correct",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "means_same(W,D)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "Rebuttal Factor 1",
+       "walton": [
+        {
+         "formula": "without_correcting(W)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "55",
+   "name": "Argument From Rules",
+   "book_pages": "343",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "55.1",
+   "name": "From Established Rule",
+   "book_pages": "343",
+   "parent": "55",
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "established_rule",
+     "match": "exact",
+     "reason": "Same title and source (A Pragmatic Theory of Fallacy 1995, p. 147); upstream Carneades encodes it as generic rule application (rule R with conclusion C applies and is valid), so the obligation \"a must carry out A\" is the bound conclusion C.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "the rule R with conclusion C",
+       "walton": [
+        {
+         "formula": "has_conclusion(R,C)",
+         "locus": "premise"
+        },
+        {
+         "formula": "valid(R)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "applicable(R)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "bare variable; book: \"a must carry out A\"",
+      "walton": [
+       {
+        "formula": "C",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "applicable(R)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "conflicting rules: no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "note": "exceptional case: no formula",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "55.2",
+   "name": "From Rules",
+   "book_pages": "343",
+   "parent": "55",
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "rule",
+     "match": "exact",
+     "reason": "Same title (\"From Rules\") and source (Schellens & De Jong 2004, p. 311).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "evaluation(A,E,C)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "case(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "evaluation_justified(E,C)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
+  },
+  {
+   "number": "55.3",
+   "name": "Regulative-Rule Premise Obligation Claim",
+   "book_pages": "343-344",
+   "parent": "55",
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "Rebuttal Factor 1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "regulative_rule",
+     "match": "exact",
+     "reason": "Same title and source (Grennan 1997, p. 169).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "obligatory(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Warrant",
+       "note": "0-ary",
+       "walton": [
+        {
+         "formula": "do_obligator",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the agent A occurs only in the conclusion",
+      "walton": [
+       {
+        "formula": "must_do(A,X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "Rebuttal Factor 1",
+       "note": "0-ary; does not name the agent",
+       "walton": [
+        {
+         "formula": "excuse",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "56",
+   "name": "Argument For An Exceptional Case",
+   "book_pages": "344",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "exeptional",
+     "match": "exact",
+     "reason": "Same title (\"Exceptional Case\"); source A Pragmatic Theory of Fallacy 1995 (walton.yml prints p. 148, the book p. 147 and also Erlbaum 1996, p. 93).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "X is not linked to the case A",
+       "walton": [
+        {
+         "formula": "rule_can_waived(X)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "walton": [
+        {
+         "formula": "case_exception(A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "rule_waived(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the same formula is a premise and an assumption",
+       "walton": [
+        {
+         "formula": "case_exception(A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "57",
+   "name": "Argument From Precedent",
+   "book_pages": "344",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F04",
+    "F20"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "exeption_to_rule",
+     "match": "partial",
+     "reason": "Name only (uncertain). README: Walton renamed \"Argument From Precedent\" to \"Argument From Exception to a Rule\". But the content is upstream Carneades \"precedent\" (apply the ratio decidendi of a similar case), not the book's 57 (a legitimate counter-case forces an exception to the rule). Same source (A Pragmatic Theory of Fallacy 1995, p. 148).",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "note": "approximate: a rule with a conclusion, attached to case C",
+       "walton": [
+        {
+         "formula": "rule_of_case(R,C)",
+         "locus": "premise"
+        },
+        {
+         "formula": "has_conclusion(R,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "note": "approximate: a similar case, not a counter-case",
+       "walton": [
+        {
+         "formula": "similar_case(C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "book: \"an exception to the rule must be recognized, and the rule appropriately modified or qualified\"",
+      "walton": [
+       {
+        "formula": "S",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "approximate",
+       "walton": [
+        {
+         "formula": "inapplicable_rule(R)",
+         "locus": "exception"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "58",
+   "name": "Argument From Plea For Excuse",
+   "book_pages": "345",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F20"
+   ],
+   "n_premises": 3,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "plea_for_excuse",
+     "match": "exact",
+     "reason": "Same title and source (Appeal to Pity 1997, pp. 154-156).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "rule_require(R,T,S)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "pleader_committed(T)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "walton": [
+        {
+         "formula": "special_circumstances(E)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "exempted(S)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "excuse(E)",
+         "locus": "assumption"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "not_excuse(E)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "59",
+   "name": "Argument From Perception",
+   "book_pages": "345-346",
+   "parent": null,
+   "heading_only": true,
+   "family": [
+    "F07",
+    "F21"
+   ],
+   "n_premises": 0,
+   "cq_labels": [],
+   "shares_cqs_printed_under": null,
+   "walton_links": []
+  },
+  {
+   "number": "59.1",
+   "name": "Argument from Perception",
+   "book_pages": "345",
+   "parent": "59",
+   "heading_only": false,
+   "family": [
+    "F21"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "perception",
+     "match": "exact",
+     "reason": "Same title and source (Pollock, Cognitive Carpentry 1995, p. 53).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "image(P,I)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "exemplify(I)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "reasonable_case(I)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "printed under \"Undercutter\"",
+       "walton": [
+        {
+         "formula": "not_indicator(I)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "59.2",
+   "name": "Argument from Appearance",
+   "book_pages": "345-346",
+   "parent": "59",
+   "heading_only": false,
+   "family": [
+    "F07",
+    "F21"
+   ],
+   "n_premises": 1,
+   "cq_labels": [
+    "CQ1",
+    "CQ2"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "appearance",
+     "match": "exact",
+     "reason": "Same title and source (Logique et Analyse 2006, no pages in walton.yml).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise",
+       "walton": [
+        {
+         "formula": "looks_like(O,C)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "\"O is an instance of class C\" (book: \"can be classified under verbal category C\")",
+      "walton": [
+       {
+        "formula": "instance(O,C)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "no formula; the unused template misleading/1 matches it",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "note": "no formula; the unused template another_category/2 matches it",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": "60",
+   "name": "Argument From Memory",
+   "book_pages": "346",
+   "parent": null,
+   "heading_only": false,
+   "family": [
+    "F21"
+   ],
+   "n_premises": 2,
+   "cq_labels": [
+    "CQ1",
+    "CQ2",
+    "CQ3"
+   ],
+   "shares_cqs_printed_under": null,
+   "walton_links": [
+    {
+     "id": "memory",
+     "match": "exact",
+     "reason": "Same title and source (Pollock 1987, pp. 481-518).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "recalls(P,M)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "believe_it(M)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "reasonable_belive(M)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "printed under \"Undercutter\"; no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": []
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

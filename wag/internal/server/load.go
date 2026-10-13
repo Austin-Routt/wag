@@ -23,6 +23,9 @@ type Export struct {
 	History []game.Move     `json:"history"`
 	Import  *kialo.Report   `json:"import"`
 	Notes   []Note          `json:"notes,omitempty"`
+	// DataHash identifies the scheme data the game was played with (Data.Hash);
+	// "" in exports made before 2026-10-13.
+	DataHash string `json:"data_sha256,omitempty"`
 }
 
 // requestOf is the request that starts the exported game: the one recorded
@@ -89,6 +92,10 @@ func (s *Server) load(e *Export) (*Session, error) {
 	}
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
+			if e.DataHash != s.data.Hash() {
+				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
+					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(e.DataHash), s.data.Hash())
+			}
 			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
 		}
 	}
@@ -138,4 +145,11 @@ func outcome(played bool) string {
 		return "played"
 	}
 	return "rejected"
+}
+
+func orUnknown(s string) string {
+	if s == "" {
+		return "not recorded"
+	}
+	return s
 }

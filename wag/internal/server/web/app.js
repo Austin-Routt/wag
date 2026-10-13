@@ -133,7 +133,8 @@ function renderGamebar() {
     ${players}${verdict}${mod}
     <button class="small" id="gamenote" title="Write a note on the game: it goes into the export">Note</button>
     <button class="small" id="newgame">New game</button>
-    <a class="small" href="/api/games/${G.id}/export" target="_blank" title="Download the game as JSON: moves, notes, what you tried, and the build">Export</a>`;
+    <a class="small" href="/api/games/${G.id}/export" target="_blank" title="Download the game as JSON: moves, notes, what you tried, and the build">Export</a>
+    <a class="small" href="/api/games/${G.id}/traces" target="_blank" title="Download every decision as JSON Lines (wag-trace/1): the prompt and reply of language-model seats, the reasons given, predictions checked, alternatives tried">Traces</a>`;
   const vs = bar.querySelector('.viewseg'); if (vs) vs.onclick = e => { const b = e.target.closest('[data-view]'); if (b) { ui.view = b.dataset.view; renderGamebar(); renderPlay(); } };
   $('#gamenote').onclick = () => { ui.view = 'dialogue'; ui.flag = 'game'; renderGamebar(); renderPlay(); };
   $('#newgame').onclick = () => { G = null; ui.gameId = null; location.hash = ''; ui.tab = 'play'; render(); };
@@ -165,6 +166,7 @@ function renderSetup() {
         <div><h3>Context</h3>
           <select id="o_ctx">${(META.contexts || []).map(c => `<option value="${esc(c.id)}" ${s.context === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
           <p class="small muted" id="ctxdesc">${esc(((META.contexts || []).find(c => c.id === s.context) || {}).description || '')}</p>
+          ${weightsEditor(s)}
           <h3>Options</h3>
           <label class="inline"><input type="checkbox" id="o_other" ${s.allow_other ? 'checked' : ''}> Allow the “Other” scheme (your own premises and conclusion)</label>
           <label class="inline"><input type="checkbox" id="o_anyp" ${s.any_premise ? 'checked' : ''}> Any premise can be questioned (not only those a scheme's critical questions are about)</label>
@@ -208,12 +210,41 @@ function renderSetup() {
     if (t.dataset.seat !== undefined) s.seats[+t.dataset.seat][t.dataset.f] = t.value;
   };
   $('#main').onchange = $('#main').oninput;
+  const keepForm = () => { s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.claim = $('#o_claim').value; s.title = $('#o_title').value; };
+  const useContext = c => {
+    s.context = c.id; s.standard = c.standard || 'PE'; s.require_evidence = !!c.require_evidence; s.moderated = !!c.moderated;
+    s.weights = contextWeights(c);
+  };
   const ctx = $('#o_ctx');
   if (ctx) ctx.onchange = () => {
     const c = (META.contexts || []).find(x => x.id === ctx.value); if (!c) return;
-    s.context = c.id; s.standard = c.standard || 'PE'; s.require_evidence = !!c.require_evidence; s.moderated = !!c.moderated;
-    s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.claim = $('#o_claim').value; s.title = $('#o_title').value;
-    renderSetup();
+    useContext(c); keepForm(); renderSetup();
+  };
+  $('#wtable').oninput = e => { const t = e.target.closest('[data-w]'); if (t) { s.weights[t.dataset.w] = +t.value; $('#wstate').textContent = weightsState(s); } };
+  $('#wreset').onclick = () => { const c = (META.contexts || []).find(x => x.id === s.context); if (c) { s.weights = contextWeights(c); keepForm(); renderSetup(); } };
+  $('#wsave').onclick = () => {
+    const name = prompt('Name of the preset (e.g. "Medical ethics board")', ''); if (!name) return;
+    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'preset';
+    const preset = { id, name, description: prompt('Describe the audience and the discussion it suits (optional)', '') || '', standard: $('#o_std').value,
+      require_evidence: $('#o_ev').checked, moderated: $('#o_mod').checked, weights: { ...s.weights } };
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(preset, null, 2)], { type: 'application/json' }));
+    a.download = `wag-preset-${id}.json`; a.click(); URL.revokeObjectURL(a.href);
+    toast('Saved. Load it here, or start the server with --contexts on the file to offer it to everyone.', 7000);
+  };
+  $('#wload').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const j = JSON.parse(await f.text());
+      const list = Array.isArray(j.contexts) ? j.contexts : [j];
+      for (const c of list) {
+        if (!c.id || typeof c.weights !== 'object') throw new Error('not a preset: it needs an id and weights');
+        for (const [k, v] of Object.entries(c.weights)) if (!(v > 0 && v <= 1)) throw new Error(`${c.id}: ${k} weighs ${v} (want 0 < w <= 1)`);
+        c.local = !(META.contexts || []).some(x => x.id === c.id && !x.local);
+        META.contexts = [...(META.contexts || []).filter(x => x.id !== c.id), c];
+      }
+      useContext(list[0]); keepForm(); renderSetup(); toast(`Loaded ${list.length} preset(s).`);
+    } catch (err) { toast(err.message, 7000); }
   };
   $('#addseat').onclick = () => { s.seats.push({ name: `Player${s.seats.length + 1}`, kind: 'human' }); renderSetup(); };
   $('#start').onclick = async () => {
@@ -221,8 +252,10 @@ function renderSetup() {
     s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.moderated = $('#o_mod').checked; s.require_evidence = $('#o_ev').checked;
     s.claim = $('#o_claim').value; s.standard = $('#o_std').value; s.title = $('#o_title').value;
     s.max_rounds = $('#o_rounds').value; s.answer_within = $('#o_within').value; s.scoring = $('#o_scoring').value;
+    const known = (META.contexts || []).find(c => c.id === s.context && !c.local);
     const req = {
-      title: s.title, mode: s.mode, seats: s.seats, allow_other: s.allow_other, any_premise: s.any_premise, moderated: s.moderated, context: s.context,
+      title: s.title, mode: s.mode, seats: s.seats, allow_other: s.allow_other, any_premise: s.any_premise, moderated: s.moderated,
+      context: known ? s.context : undefined, weights: { ...s.weights },
       require_evidence: s.require_evidence, claim: s.claim, standard: s.standard, scoring: s.scoring || undefined,
       max_rounds: num('#o_rounds'), answer_within: num('#o_within'),
     };
@@ -256,6 +289,32 @@ function renderSetup() {
     };
   });
 }
+// contextWeights are the weight of every scheme under a context preset: its
+// own, its "*", or the scheme's default.
+function contextWeights(c) {
+  const w = {};
+  for (const sc of META.schemes) w[sc.id] = (c.weights || {})[sc.id] ?? (c.weights || {})['*'] ?? sc.base_weight;
+  return w;
+}
+function weightsState(s) {
+  const c = (META.contexts || []).find(x => x.id === s.context);
+  const base = c ? contextWeights(c) : {};
+  const changed = Object.keys(s.weights).filter(k => Math.abs(s.weights[k] - base[k]) > 1e-9).length;
+  return changed ? `${changed} changed from the preset` : 'as the preset sets them';
+}
+// weightsEditor lets the players set how much each scheme weighs for this
+// game, starting from the context preset, and save or load presets.
+function weightsEditor(s) {
+  if (!s.weights) { const c = (META.contexts || []).find(x => x.id === s.context); s.weights = c ? contextWeights(c) : contextWeights({}); }
+  const rows = META.schemes.map(sc => `<tr><td>${esc(sc.name)}</td><td class="muted small">${esc(sc.semantic_type)}</td>
+    <td><input type="number" data-w="${esc(sc.id)}" min="0.05" max="1" step="0.05" value="${(+s.weights[sc.id]).toFixed(2)}" style="width:5em"></td></tr>`).join('');
+  return `<details class="weights"><summary>Scheme weights: <span id="wstate">${weightsState(s)}</span></summary>
+    <p class="small muted">How much an audience gives each kind of argument (Carneades reads a weight as the audience's assessment). They decide issues under the proof standard. They are relative to the discussion and the people in it: set them for this game, or save them as a preset.</p>
+    <table class="wtable" id="wtable">${rows}</table>
+    <p class="small"><button class="small" id="wreset">Reset to the preset</button> <button class="small" id="wsave">Save as a preset…</button>
+    <label class="small inline">Load a preset… <input type="file" id="wload" accept=".json,application/json"></label></p></details>`;
+}
+
 function afterImport(r) {
   const p = r.report;
   toast(`Imported “${p.title}”: ${p.arguments} arguments (${p.pros} pros, ${p.cons} cons; ${p.voted} with votes), ${p.cycles} left out as cycles.`, 8000);
@@ -290,6 +349,7 @@ function renderPlay() {
 // ---------------------------------------------------------------------------
 const KIND = {
   argue: ['argues', 'pro'], attack: ['attacks', 'con'], defend: ['defends', 'pro'], question: ['asks', 'q'],
+  for: ['argues for a statement', 'pro'], against: ['argues against a statement', 'con'],
   pass: ['passes', ''], resign: ['resigns', ''], decide: ['rules', 'mod'], rejected: ['tried a move that was rejected', 'rej'], timeout: ['ran out of time', ''],
 };
 function deltasText(d) {
@@ -303,13 +363,13 @@ function claimHead() {
   return `<div class="panel claimhead ${c.label}">
     <div class="small muted">The claim · ${turn}</div>
     <div class="claimtext">${lbl(c.label)} ${rich(c.text)}</div>
-    <div class="small muted">${esc(c.explain)}</div></div>`;
+    <div class="small muted">${esc(c.explain)}</div>${stmtActs(G.claim)}</div>`;
 }
 function renderDialogue() {
   const box = $('#dialogue'); if (!box) return;
   const depth = [];
   const items = G.log.map((l, i) => {
-    const t = l.target && G.arguments[l.target];
+    const t = (l.target || l.parent) && G.arguments[l.target || l.parent];
     const parent = t && t.move >= 0 && t.move < i ? t.move : -1;
     depth[i] = parent >= 0 ? Math.min(depth[parent] + 1, 5) : 0;
     return entryCard(l, i, depth[i], parent);
@@ -325,6 +385,7 @@ function entryCard(l, i, depth, parent) {
   const [verb, cls] = KIND[l.kind] || [l.kind, ''];
   const main = l.args && l.args.length ? G.arguments[l.args[0]] : null;
   const t = l.target ? G.arguments[l.target] : null;
+  const pa = l.parent ? G.arguments[l.parent] : null;
   const head = `<div class="ehead"><span class="num">#${i + 1}</span><span class="muted">round ${l.round}</span><b>${esc(l.player === 'moderator' ? 'The moderator' : l.player)}</b> <span class="kind ${cls}">${esc(verb)}</span>
     <span class="grow"></span><span class="small muted">${deltasText(l.deltas)}</span></div>`;
   let body = '';
@@ -334,10 +395,11 @@ function entryCard(l, i, depth, parent) {
     body = l.kind === 'decide' ? `<div>${esc(l.text)}</div>` : '';
   } else {
     if (t) body += `<div class="replyto">↳ ${l.cq_name ? `the <b>${esc(l.cq_name.replace(/ Question$/, ''))}</b> question` : 'a direct reply'} about <button class="link" data-entry="${parent}">${esc(t.owner)}'s ${esc(t.id)}</button>${l.about ? ` (${esc(l.about)})` : ''}</div>`;
+    if (l.stmt) body += `<div class="replyto">↳ ${l.kind === 'for' ? 'for' : 'against'} “${rich(l.stmt_text.replace(/\.$/, ''))}”${pa ? `, part of <button class="link" data-entry="${parent}">${esc(pa.owner)}'s ${esc(pa.id)}</button>` : ''}</div>`;
     if (l.question) body += `<div class="qline"><span class="tag">Q</span> ${esc(l.question)}</div>`;
     if (l.answer) {
       const st = main ? G.statements[main.conclusion] : null;
-      body += `<div class="aline"><span class="tag">${l.kind === 'argue' ? 'Claim' : 'A'}</span> ${rich(l.answer)} ${st ? lbl(st.label) : ''}</div>`;
+      body += `<div class="aline"><span class="tag">${{ argue: 'Claim', for: 'For', against: 'Against' }[l.kind] || 'A'}</span> ${rich(l.answer)} ${st ? lbl(st.label) : ''}</div>`;
     }
     if (l.nl) body += `<div class="nl">“${rich(l.nl)}” <span class="muted small">— ${esc(l.player)}'s words</span></div>`;
     if (main && l.kind !== 'question') {
@@ -358,14 +420,38 @@ function entryCard(l, i, depth, parent) {
   return `<li class="entry ${cls} ${l.accepted ? '' : 'rej'}" style="--depth:${depth}" id="entry${i}">${head}${body}${eff}${notes}${ui.flag === i ? noteForm('move:' + (i + 1)) : ''}${actions}${respond}</li>`;
 }
 function argParts(a) {
-  const prem = a.premises.map((p, k) => { const ps = G.statements[p]; return `<li><span class="dot ${ps ? ps.label : ''}"></span>${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}</li>`; }).join('');
+  const prem = a.premises.map((p, k) => { const ps = G.statements[p]; return `<li><span class="dot ${ps ? ps.label : ''}"></span>${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}${stmtActs(p, a.id)}</li>`; }).join('');
   const exIn = (a.exceptions || []).map((e, k) => [e, (a.exception_texts || [])[k]]).filter(([e]) => G.statements[e] && G.statements[e].label === 'in');
   const ev = (a.evidence || []).map(x => /^https?:\/\//.test(x) ? `<a href="${esc(x)}" target="_blank" rel="noopener">${esc(x)}</a>` : esc(x)).join('; ');
-  return `<div class="parts"><div class="small"><b>C</b> = ${rich(stmtText(a.conclusion))}</div><ol>${prem}</ol>
+  return `<div class="parts"><div class="small"><b>C</b> = ${rich(stmtText(a.conclusion))}${stmtActs(a.conclusion)}</div><ol>${prem}</ol>
     ${exIn.map(([e, tx]) => `<div class="warn small">⚡ exception that holds: ${rich(tx || stmtText(e))}</div>`).join('')}
     ${ev ? `<div class="ev">Sources: ${ev}</div>` : ''}
     <div class="small muted">${esc(a.scheme_name)} · weight ${a.base_weight.toFixed(2)} · by ${esc(a.owner)}</div></div>`;
 }
+// stmtActs are the moves about a statement: argue for it, argue against it,
+// and, for a premise of argument arg, challenge it.
+function stmtActs(id, arg) {
+  if (!G.can_move || !(G.board_statements || []).includes(id) && !(G.board_statements || []).includes(id.replace(/^¬/, ''))) return '';
+  const a = arg && G.arguments[arg];
+  const ch = a && a.owner !== G.active && (a.cqs || []).some(c => c.locus === 'premise' && (c.stmts || []).includes(id));
+  return `<span class="sacts"><button class="link small" data-sact="for" data-stmt="${esc(id)}" title="Argue for it with a scheme that can conclude it">for</button>
+    <button class="link small" data-sact="against" data-stmt="${esc(id)}" title="Argue against it">against</button>${ch ? `
+    <button class="link small" data-sact="challenge" data-stmt="${esc(id)}" data-arg="${esc(arg)}" title="Ask why it should be accepted: ${esc(a.owner)} must then argue for it">challenge</button>` : ''}</span>`;
+}
+
+// startStmt opens the composer on a move about a statement.
+async function startStmt(dir, stmt, arg) {
+  if (dir === 'challenge') {
+    const a = G.arguments[arg]; const c = a && a.cqs.find(x => x.locus === 'premise' && (x.stmts || []).includes(stmt));
+    if (!c) return toast('No question can be asked about it.');
+    ui.c = newComposer('question'); ui.c.target = arg; ui.c.wantCQ = c.cq; ui.c.wantStmt = stmt;
+  } else {
+    ui.c = newComposer('stmt'); ui.c.stmt = stmt; ui.c.dir = dir;
+  }
+  renderComposer();
+  $('#composer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function noteHTML(n) {
   return `<div class="note ${esc(n.kind)}"><span class="tag">${esc(n.kind)}</span> ${esc(n.text)} <span class="muted small">— ${esc(n.by || 'tester')}, round ${n.round}</span></div>`;
 }
@@ -393,6 +479,7 @@ function dialogueClick(e) {
   if ((b = x('[data-entry]'))) { const el = $('#entry' + b.dataset.entry); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1200); } return; }
   if ((b = x('[data-board]'))) { ui.view = 'board'; renderGamebar(); renderPlay(); return focusOn(b.dataset.board); }
   if ((b = x('[data-act]'))) return startTargeted(b.dataset.act, b.dataset.arg, b.dataset.cqid);
+  if ((b = x('[data-sact]'))) return startStmt(b.dataset.sact, b.dataset.stmt, b.dataset.arg);
   if ((b = x('[data-cq]'))) { const k = { arg: b.dataset.arg, cq: b.dataset.cq }; ui.openCQ = ui.openCQ && ui.openCQ.arg === k.arg && ui.openCQ.cq === k.cq ? null : k; return renderDialogue(); }
 }
 
@@ -470,6 +557,7 @@ function renderBoard() {
       <div class="focus-text">${rich(s.text)}</div>
       <div class="explain">${esc(s.explain)}</div>
       <div class="badges">${badges.join('')}</div>${modbtns}
+      ${G.can_move ? `<div class="row small">Argue ${stmtActs(s.id, s.premise_of.find(a => G.arguments[a] && G.arguments[a].owner !== G.active))}</div>` : ''}
       ${parents || exOf ? `<ul class="parents">${parents}${exOf}</ul>` : ''}
     </div>
     <div class="columns">
@@ -490,7 +578,7 @@ function argCard(id, side) {
   const a = G.arguments[id]; if (!a) return '';
   const status = a.in_force ? '<span class="lbl in">in force</span>' : `<span class="lbl out" title="${esc(a.why_out)}">out of force</span>`;
   const answers = a.answers ? `<div class="answers">${a.answers.positive ? 'Defends' : 'Attacks'} <button class="link" data-focus="${esc(G.arguments[a.answers.target]?.conclusion)}">${esc(a.answers.target)}</button> on the ${esc(a.answers.cq_name)} (${esc(a.answers.locus)})</div>` : '';
-  const premises = a.premises.map((p, k) => { const ps = G.statements[p]; return `<div class="premise" data-focus="${esc(p)}"><span class="dot ${ps ? ps.label : ''}"></span><span class="ptxt">${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}</span></div>`; }).join('');
+  const premises = a.premises.map((p, k) => { const ps = G.statements[p]; return `<div class="premise" data-focus="${esc(p)}"><span class="dot ${ps ? ps.label : ''}"></span><span class="ptxt">${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}</span>${stmtActs(p, a.id)}</div>`; }).join('');
   const exIn = (a.exceptions || []).filter(e => G.statements[e]?.label === 'in');
   const warn = !a.in_force && a.why_out ? `<div class="warn">✗ ${esc(a.why_out)}</div>` : '';
   const exc = exIn.map(e => {
@@ -538,6 +626,8 @@ function cqPanel(a, cqid) {
 function boardClick(e) {
   const act = e.target.closest('[data-act]');
   if (act) { startTargeted(act.dataset.act, act.dataset.arg, act.dataset.cqid); return; }
+  const sa = e.target.closest('[data-sact]');
+  if (sa) { startStmt(sa.dataset.sact, sa.dataset.stmt, sa.dataset.arg); return; }
   const cq = e.target.closest('[data-cq]');
   if (cq) { const k = { arg: cq.dataset.arg, cq: cq.dataset.cq }; ui.openCQ = ui.openCQ && ui.openCQ.arg === k.arg && ui.openCQ.cq === k.cq ? null : k; renderBoard(); return; }
   const ga = e.target.closest('[data-goarg]');
@@ -577,7 +667,8 @@ function renderSide() {
 function outcomePanel() {
   const o = G.outcome || {};
   const win = o.winner ? `<b>${esc(o.winner)}</b> wins` : (o.draw ? 'A draw' : (G.players.length === 1 ? 'Solo game' : 'No winner'));
-  return `<div class="panel outcome"><h2>Game over</h2><p>${win}. ${esc(o.reason || '')}</p>${o.claim ? `<p>Claim: ${esc(stmtText(o.claim))} — ${lbl((o.verdict || 'out').toLowerCase())}</p>` : ''}</div>`;
+  const vs = (G.verdicts || []).length > 1 ? `<p class="small">The same dispute under other weights: ${G.verdicts.map(v => `${esc(v.context === 'this game' ? 'this game' : v.name)} ${lbl(v.claim)}`).join(' · ')}</p>` : '';
+  return `<div class="panel outcome"><h2>Game over</h2><p>${win}. ${esc(o.reason || '')}</p>${o.claim ? `<p>Claim: ${esc(stmtText(o.claim))} — ${lbl((o.verdict || 'out').toLowerCase())}</p>` : ''}${vs}</div>`;
 }
 
 function pendingPanel() {
@@ -634,7 +725,7 @@ function renderComposer() {
   }
   if (G.seat_kind === 'llm' && !ui.manual) return composeLLM(box);
   const c = ui.c || (ui.c = newComposer('argue'));
-  const kinds = [['argue', 'New argument'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Ask'], ['pass', 'Pass'], ['resign', 'Resign']];
+  const kinds = [['argue', 'New argument'], ['stmt', 'For / against'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Ask'], ['pass', 'Pass'], ['resign', 'Resign']];
   const owes = (G.questions || []).filter(q => q.owner === G.active);
   box.innerHTML = `<div class="who">${esc(G.active)} to move${me && me.side ? ` <span class="pill ${me.side}">${me.side}</span>` : ''}</div>
     ${G.last_rejection ? `<div class="warn">Last move rejected: ${esc(G.last_rejection)}</div>` : ''}
@@ -647,6 +738,7 @@ function renderComposer() {
   box.querySelector('.seg').onclick = e => { const b = e.target.closest('[data-kind]'); if (!b) return; ui.c = newComposer(b.dataset.kind); renderComposer(); };
   const body = $('#cbody');
   if (c.kind === 'argue') return composeArgue(body, c);
+  if (c.kind === 'stmt') return composeStmt(body, c);
   if (c.kind === 'pass') return composeSimple(body, 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
   if (c.kind === 'resign') return composeSimple(body, 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
   return composeTargeted(body, c);
@@ -654,9 +746,10 @@ function renderComposer() {
 
 const KIND_HELP = {
   argue: 'Put forward a new argument: say it in your own words, pick the scheme it fits, fill in its parts.',
+  stmt: 'Argue for or against any statement on the board (the claim, a premise, a conclusion), as for the claim. Only schemes that can conclude it are offered.',
   attack: 'Answer one of an argument’s critical questions against it, backed by an argument of your own.',
   defend: 'Answer one of an argument’s critical questions in its favour, backed by an argument of your own.',
-  question: 'Ask a critical question without answering it: the argument stops counting until its author answers.',
+  question: 'Ask a critical question, or challenge a premise, without arguing: the argument stops counting until its author answers.',
   pass: 'Pass the turn.', resign: 'Give up the game.',
 };
 
@@ -724,8 +817,9 @@ function schemeCard(sc, cq) {
     <div class="small">${esc(sc.description_en || '')}</div>${tmpl}${why}${ev}</div>`;
 }
 
-function varInputs(sc, c, answerVar) {
+function varInputs(sc, c, answerVar, fixedText) {
   if (!sc) return '';
+  fixedText = fixedText || {};
   if (sc.free) {
     let h = '';
     for (let i = 1; i <= c.nP; i++) h += `<label>Premise ${i}</label><input type="text" data-var="P${i}" value="${esc(c.vars['P' + i] || '')}" placeholder="In your own words" list="stmtlist">`;
@@ -735,6 +829,7 @@ function varInputs(sc, c, answerVar) {
   }
   return sc.variable_order.filter(v => v !== answerVar).map(v => {
     const spec = sc.variables[v];
+    if (fixedText[v]) return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" disabled value="${esc(fixedText[v])}" title="The statement fixes it">`;
     return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}">`;
   }).join('');
 }
@@ -755,6 +850,7 @@ function composeArgue(body, c) {
     ${sc ? schemeCard(sc) : ''}
     ${sc ? '<label>3. Fill in its parts: short phrases, as in the examples</label>' + varInputs(sc, c, '') : ''}
     ${sc ? evidenceInput(sc, c) : ''}
+    ${whyInput(c)}
     <div id="preview"></div>
     <p><button class="primary" id="play1" disabled>Put forward this argument</button></p>`;
   wireComposer(body, c, () => buildArgue(c));
@@ -766,6 +862,13 @@ function composeArgue(body, c) {
   body.querySelector('#sugg').onclick = e => { const b = e.target.closest('[data-pick]'); if (b) { c.scheme = b.dataset.pick; renderComposer(); } };
 }
 
+// whyInput is the player's optional note on why they make the move; it is
+// kept with the move's trace, as a human's counterpart of a language
+// model's stated reasons.
+function whyInput(c) {
+  return `<label class="small muted">Why this move? (optional: kept with the move, for studying the game)</label><input type="text" id="why" value="${esc(c.why || '')}" placeholder="e.g. the tax is not feasible this year, so the argument falls">`;
+}
+
 function evidenceInput(sc, c) {
   const req = sc.evidence === 'required' && G.config.require_evidence;
   return `<label>Sources ${req ? '<span class="req">(required)</span>' : '(optional)'}: one per line</label><textarea id="ev" placeholder="${esc(sc.evidence_note_en || 'A citation or a link')}">${esc(c.evidence)}</textarea>`;
@@ -774,6 +877,62 @@ function evidenceInput(sc, c) {
 function buildArgue(c) {
   if (!c.scheme) return null;
   return { type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
+}
+
+// stmtOptions fetches (once per game version) the moves about a statement.
+async function stmtOptions(stmt) {
+  const key = G.id + '|' + G.version + '|s|' + stmt;
+  ui.opts = ui.opts || {};
+  if (!ui.opts[key]) ui.opts[key] = await api(`/api/games/${G.id}/stmt?id=${encodeURIComponent(stmt)}`);
+  return ui.opts[key];
+}
+
+// composeStmt is the composer of an argument for or against a statement.
+function composeStmt(body, c) {
+  const list = G.board_statements || [];
+  if (!list.length) { body.innerHTML = '<p class="muted">Nothing on the board yet: put forward an argument first.</p>'; return; }
+  if (!list.includes(c.stmt)) { const pos = (c.stmt || '').replace(/^¬/, ''); c.stmt = list.includes(pos) ? pos : list.includes(G.claim) ? G.claim : list[0]; }
+  c.dir = c.dir || 'for';
+  const key = G.id + '|' + G.version + '|s|' + c.stmt;
+  if (!(ui.opts && ui.opts[key])) {
+    body.innerHTML = '<p class="muted">Loading the schemes that fit…</p>';
+    stmtOptions(c.stmt).then(() => { if (ui.c === c) renderComposer(); }).catch(e => toast(e.message));
+    return;
+  }
+  const sm = ui.opts[key];
+  const opts = c.dir === 'for' ? sm.for : sm.against;
+  const schemes = opts.map(o => o.scheme).filter(i => !SCHEME[i].free || G.config.allow_other);
+  if (!schemes.includes(c.scheme)) c.scheme = '';
+  const o = opts.find(x => x.scheme === c.scheme);
+  const sc = SCHEME[c.scheme];
+  const label = id => (id === G.claim ? 'The claim: ' : '') + short(stmtText(id), 90);
+  const ch = (sm.challenges || []).filter(x => x.owner !== G.active);
+  body.innerHTML = `
+    <label>1. The statement</label>
+    <select id="stmt">${list.map(id => `<option value="${esc(id)}" ${id === c.stmt ? 'selected' : ''}>${esc(label(id))}</option>`).join('')}</select>
+    <div class="seg small" id="dir"><button data-dir="for" class="${c.dir === 'for' ? 'on' : ''}">For it</button><button data-dir="against" class="${c.dir === 'against' ? 'on' : ''}">Against it</button></div>
+    <div class="answerbox">You argue that <b>${rich((c.dir === 'for' ? sm.text : sm.opposite_text || '').replace(/\.$/, ''))}</b>.
+      ${ch.length ? `<div class="small">Or, without an argument: ${ch.map(x => `<button class="link" data-chal="${esc(x.arg)}|${esc(x.cq)}">${esc(x.name === 'Challenge' ? 'challenge it' : 'ask the ' + x.name.replace(/ Question$/, ''))} (${esc(x.owner)}'s ${esc(x.arg)})</button>`).join(', ')}: ${esc(ch[0].owner)} must then argue for it.</div>` : ''}</div>
+    <label>2. The scheme (only those whose conclusion can be this statement)</label>
+    <select id="scheme">${schemeOptions(schemes, c.scheme)}</select>
+    ${sc ? schemeCard(sc) : ''}
+    ${sc ? `<label>3. In your own words (optional)</label><textarea id="nl">${esc(c.text)}</textarea>` : ''}
+    ${sc ? '<label>4. Fill in its other parts' + (sc.answer_variable ? ` (<span class="var">${esc(sc.answer_variable)}</span> is the statement, filled in for you)` : o && o.fixed ? ' (the statement fixes ' + Object.keys(o.fixed).map(v => `<span class="var">${esc(v)}</span>`).join(', ') + ')' : '') + '</label>' + varInputs(sc, c, sc.answer_variable, o && o.fixed_text) : ''}
+    ${sc ? evidenceInput(sc, c) : ''}
+    ${whyInput(c)}
+    <div id="preview"></div>
+    <p><button class="primary" id="play1" disabled>Argue ${c.dir === 'for' ? 'for' : 'against'} it</button></p>`;
+  $('#stmt').onchange = e => { c.stmt = e.target.value; c.scheme = ''; c.vars = {}; renderComposer(); };
+  $('#dir').onclick = e => { const b = e.target.closest('[data-dir]'); if (b) { c.dir = b.dataset.dir; c.scheme = ''; c.vars = {}; renderComposer(); } };
+  body.querySelectorAll('[data-chal]').forEach(b => b.onclick = () => { const [arg, cq] = b.dataset.chal.split('|'); ui.c = newComposer('question'); ui.c.target = arg; ui.c.wantCQ = cq; ui.c.wantStmt = c.stmt; renderComposer(); });
+  wireComposer(body, c, () => buildStmt(c, o));
+}
+
+function buildStmt(c, o) {
+  if (!c.scheme) return null;
+  const vars = { ...c.vars };
+  for (const v of Object.keys((o && o.fixed) || {})) delete vars[v];
+  return { type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
 }
 
 // moveOptions fetches (once per game version) the critical questions the
@@ -805,7 +964,7 @@ function composeTargeted(body, c) {
     $('#target').onchange = e => { c.target = e.target.value; c.opt = ''; renderComposer(); };
     return;
   }
-  if (c.wantCQ) { const w = opts.find(x => x.cq === c.wantCQ); if (w) c.opt = optKey(w); c.wantCQ = ''; }
+  if (c.wantCQ) { const w = opts.find(x => x.cq === c.wantCQ && (!c.wantStmt || x.stmt === c.wantStmt)) || opts.find(x => x.cq === c.wantCQ); if (w) c.opt = optKey(w); c.wantCQ = c.wantStmt = ''; }
   if (!opts.some(o => optKey(o) === c.opt)) c.opt = optKey(opts[0]);
   const o = opts.find(x => optKey(x) === c.opt);
   const q = CQ[o.cq];
@@ -828,13 +987,21 @@ function composeTargeted(body, c) {
       <select id="scheme">${schemeOptions(schemes, c.scheme)}</select>
       ${sc ? schemeCard(sc, o.cq) : ''}
       ${sc ? `<label>4. In your own words (optional)</label><textarea id="nl">${esc(c.text)}</textarea>` : ''}
-      ${sc ? '<label>5. Fill in its other parts' + (sc.answer_variable ? ` (<span class="var">${esc(sc.answer_variable)}</span> is your answer, filled in for you)` : '') + '</label>' + varInputs(sc, c, sc.answer_variable) : ''}
+      ${sc ? '<label>5. Fill in its other parts' + (sc.answer_variable ? ` (<span class="var">${esc(sc.answer_variable)}</span> is your answer, filled in for you)` : fixedOf(o, kind, c.scheme) ? ' (the answer fixes ' + Object.keys(fixedOf(o, kind, c.scheme)).map(v => `<span class="var">${esc(v)}</span>`).join(', ') + ')' : '') + '</label>' + varInputs(sc, c, sc.answer_variable, fixedOf(o, kind, c.scheme)) : ''}
       ${sc ? evidenceInput(sc, c) : ''}`}
+    ${whyInput(c)}
     <div id="preview"></div>
     <p><button class="primary" id="play1" disabled>${{ attack: 'Attack', defend: 'Defend', question: 'Ask' }[kind]}</button></p>`;
   $('#target').onchange = e => { c.target = e.target.value; c.opt = ''; renderComposer(); };
   $('#opt').onchange = e => { c.opt = e.target.value; renderComposer(); };
   wireComposer(body, c, () => buildTargeted(c, o));
+}
+
+// fixedOf are the parts an answer of the given kind with the scheme fixes
+// (variable -> words), or null.
+function fixedOf(o, kind, scheme) {
+  const f = o && o.fixed && o.fixed[kind === 'defend' ? 'support' : kind];
+  return f && f[scheme] ? f[scheme] : null;
 }
 
 function questionOf(a, cqid) { const x = a.cqs.find(y => y.cq === cqid); return x ? x.question : CQ[cqid].question_template_en; }
@@ -843,13 +1010,16 @@ function buildTargeted(c, o) {
   const base = { answers_cq_id: o.cq, target_arg_id: c.target, target_premise_id: o.locus === 'premise' ? o.stmt : '' };
   if (c.kind === 'question') return { type: 'question', ...base };
   if (!c.scheme) return null;
-  return { type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
+  const vars = { ...c.vars };
+  for (const v of Object.keys(fixedOf(o, c.kind, c.scheme) || {})) delete vars[v];
+  return { type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
 }
 
 function wireComposer(body, c, build) {
   const sel = $('#scheme', body);
   if (sel) sel.onchange = e => { c.scheme = e.target.value; c.vars = {}; renderComposer(); };
   const nl = $('#nl', body); if (nl) nl.oninput = () => { c.text = nl.value; };
+  const why = $('#why', body); if (why) why.oninput = () => { c.why = why.value; };
   const ev = $('#ev', body); if (ev) ev.oninput = () => { c.evidence = ev.value; schedulePreview(c, build); };
   body.querySelectorAll('[data-var]').forEach(inp => inp.oninput = () => { c.vars[inp.dataset.var] = inp.value; schedulePreview(c, build); });
   const addp = $('#addp', body); if (addp) addp.onclick = () => { c.nP++; renderComposer(); };
@@ -872,7 +1042,7 @@ function schedulePreview(c, build, delay = 350) {
     box.innerHTML = `<div class="preview ${p.ok ? 'ok' : 'bad'}">
       ${p.conclusion ? `<div>You argue that <b>C</b>: ${rich(p.conclusion)}</div>` : ''}
       ${p.premises && p.premises.length ? '<div class="small">because</div><ol>' + p.premises.map(x => `<li>${rich(x)}</li>`).join('') + '</ol>' : ''}
-      ${p.effect && a.target_arg_id ? `<div>∴ <b>${rich(p.effect)}</b></div>` : ''}
+      ${p.effect && (a.target_arg_id || a.target_stmt_id) ? `<div>∴ <b>${rich(p.effect)}</b></div>` : ''}
       ${p.ok ? `<div class="small" style="margin-top:6px">${changes ? 'What changes:' : 'Legal move.'}</div>${changes}${deltas}` : `<div class="warn">${esc(p.error)}</div>`}</div>`;
     btn.disabled = !p.ok;
   }, delay);
@@ -882,7 +1052,7 @@ async function submit(action) {
   if (ui.busy) return;
   ui.busy = true;
   try {
-    const r = await api(`/api/games/${G.id}/move`, { action });
+    const r = await api(`/api/games/${G.id}/move`, { action, why: (ui.c && ui.c.why) || '' });
     const res = r.result || {};
     if (res.pending) toast('Sent to the moderator.');
     else if (!res.accepted) toast('Rejected: ' + (res.error || ''), 6000);

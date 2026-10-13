@@ -1,0 +1,140 @@
+walton-check walton.proposals.yml
+
+== 1. import ==
+strict YAML decode (unknown or duplicate keys): 0 error(s)
+stderr during import: ""
+schemes: 111, language keys: 394
+
+== 2. Carneades validator ==
+before instantiation: 0 problem(s)
+after instantiating every scheme: 0 problem(s)
+
+== 3. InstantiateScheme ==
+  1 popular_opinion                            PASS  args=1/1 premises+assumptions=3 exceptions=1
+  2 pop_scheme                                 PASS  args=2/2 premises+assumptions=1 exceptions=0
+  3 position_to_know_ad_populum                PASS  args=1/1 premises+assumptions=2 exceptions=0
+  4 expert_opinion_ad_populum                  PASS  args=1/1 premises+assumptions=2 exceptions=0
+  5 deliberation_ad_populum                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+  6 moral_justification_ad_populum             PASS  args=1/1 premises+assumptions=2 exceptions=0
+  7 moral_justification_ad_populum_excuse      PASS  args=1/1 premises+assumptions=3 exceptions=0
+  8 snob_appeal_ad_populum                     PASS  args=1/1 premises+assumptions=4 exceptions=0
+  9 appeal_to_vanity_ad_populum                PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 10 rhetoric_ad_populum                        PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 11 common_folk_ad_populum                     PASS  args=1/1 premises+assumptions=1 exceptions=0
+ 12 common_folks_group_ad_populum              PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 13 popular_practice                           PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 14 from_example                               PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 15 illustration                               PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 16 from_model                                 PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 17 from_antimodel                             PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 18 practical_analogy_positive                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 19 practical_analogy_negative                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 20 composition_generic                        PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 21 part_in_whole                              PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 22 division_generic                           PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 23 opposition-descriptive_1                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 24 opposition-descriptive_2                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 25 opposition-descriptive_3                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 26 opposition-normative                       PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 27 rhetorical_oppositions_normative           PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 28 rhetorical_oppositions_descriptive         PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 29 alternative_cognitive                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 30 alternative_normative                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 31 verbal_classification_vagueness            PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 32 verbal_classification_arbitrariness        PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 33 interaction_act_person_1                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 34 interaction_act_person_2                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 35 positive_value                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 36 negative_value                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 37 sacrifice                                  PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 38 group_1                                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 39 group_2                                    PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 40 practical_inference                        PASS  args=1/1 premises+assumptions=4 exceptions=3
+ 41 practical_necessary_condition              PASS  args=1/1 premises+assumptions=8 exceptions=3
+ 42 practical_sufficient_condition             PASS  args=1/1 premises+assumptions=8 exceptions=3
+ 43 practical_goal                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 44 end_and_means_1                            PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 45 end_and_means_2                            PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 46 end_and_means_3                            PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 47 two_person_practical                       PASS  args=1/1 premises+assumptions=3 exceptions=3
+ 48 waste                                      PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 49 negative_normal_expectations               PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 50 negative_practical                         PASS  args=1/1 premises+assumptions=6 exceptions=0
+ 51 epistemic_ignorance                        PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 52 sign                                       PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 53 abductive_backward                         PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 54 abductive_forward                          PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 55 abductive_action_to_character              PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 56 abductive_character_to_action              PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 57 retroductive                               PASS  args=1/1 premises+assumptions=5 exceptions=0
+ 58 evidence_hypothesis_verification           PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 59 evidence_hypothesis_falsification          PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 60 negative_consequences_prudential           PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 61 pragmatic_alternative                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 62 threat                                     PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 63 ad_baculum                                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 64 fear                                       PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 65 danger                                     PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 66 help                                       PASS  args=1/1 premises+assumptions=6 exceptions=1
+ 67 distress                                   PASS  args=1/1 premises+assumptions=4 exceptions=1
+ 68 commitment1                                PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 69 commitment2                                PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 70 ad_hominem                                 PASS  args=1/1 premises+assumptions=4 exceptions=1
+ 71 pragmatic_inconsistency                    PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 72 inconsistent_commitment                    PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 73 circumstantial_ad_hominem                  PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 74 bias                                       PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 75 bias_ad_hominem                            PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 76 gradualism                                 PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 77 sorites_slippery_slope                     PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 78 verbal_slippery_slope                      PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 79 rule_physical_world_1                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 80 rule_physical_world_2                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 81 rule_mental_world                          PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 82 rule                                       PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 83 regulative_rule                            PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 84 exceptional                                PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 85 plea_for_excuse                            PASS  args=1/1 premises+assumptions=4 exceptions=1
+ 86 perception                                 PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 87 memory                                     PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 88 abduction                                  PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 89 analogy                                    PASS  args=1/1 premises+assumptions=2 exceptions=2
+ 90 appearance                                 PASS  args=1/1 premises+assumptions=1 exceptions=0
+ 91 cause_to_effect                            PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 92 correlation_to_cause                       PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 93 credible_source                            PASS  args=1/1 premises+assumptions=3 exceptions=3
+ 94 definition_to_verbal_classification        PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 95 defeasible_modus_ponens                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 96 established_rule                           PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 97 ethotic1                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 98 ethotic2                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 99 expert_opinion                             PASS  args=1/1 premises+assumptions=4 exceptions=2
+100 ignorance                                  PASS  args=1/1 premises+assumptions=2 exceptions=1
+101 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+102 position_to_know                           PASS  args=1/1 premises+assumptions=3 exceptions=1
+103 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+104 practical_reasoning1                       PASS  args=1/1 premises+assumptions=7 exceptions=4
+105 practical_reasoning2                       PASS  args=1/1 premises+assumptions=5 exceptions=5
+106 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2
+107 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+108 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
+109 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+110 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+111 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
+schemes failing instantiation: 0 of 111
+
+== 4. language ==
+0 problem(s)
+
+declared variables used in no formula (informational): 0
+
+== per scheme (checks 2-4) ==
+schemes passing every check: 111 of 111
+problems not tied to one scheme (language keys etc.): 0
+
+== GATE ==
+1_import       PASS
+2_validator    PASS
+3_instantiate  PASS
+4_language     PASS
+GATE: PASS

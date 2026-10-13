@@ -31,7 +31,7 @@ func TestViewActionsAreLegalMoves(t *testing.T) {
 				bind[name] = "x"
 			}
 			act := nascq.ProposedAction{Type: a.Type, AttackType: a.AttackType, SchemeID: a.SchemeID, AnswersCQID: a.AnswersCQID,
-				TargetArgID: a.TargetArgID, TargetPremiseID: a.TargetPremiseID, VariableBindings: bind}
+				TargetArgID: a.TargetArgID, TargetPremiseID: a.TargetPremiseID, TargetStmtID: a.TargetStmtID, VariableBindings: bind}
 			if _, err := gs.NASCQ.Validate(act, gs.bridge); err != nil {
 				t.Fatalf("offered action %+v is not legal: %v", a, err)
 			}

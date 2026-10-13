@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/austin-routt/wag/docs/protocol/trace.schema.json",
+  "title": "WAG decision trace (wag-trace/1)",
+  "description": "One line of GET /api/games/{id}/traces, and one item of the export's `traces`: a decision of a seat, accepted or rejected.",
+  "type": "object",
+  "required": ["format", "game", "seq", "move", "round", "player", "seat", "attempt", "time", "action", "result"],
+  "properties": {
+    "format": {"const": "wag-trace/1"},
+    "game": {"type": "string"},
+    "seq": {"description": "Index among the game's traces.", "type": "integer", "minimum": 0},
+    "move": {"description": "Index of the move in the history; -1 if no move was recorded (a rejected move).", "type": "integer", "minimum": -1},
+    "round": {"type": "integer"},
+    "player": {"type": "string"},
+    "side": {"enum": ["pro", "con"]},
+    "seat": {"enum": ["human", "llm", "claude", "random", "greedy"]},
+    "model": {"type": "string"},
+    "attempt": {"description": "1 for the first try at a turn; retries after a rejection count up.", "type": "integer", "minimum": 1},
+    "time": {"type": "string", "format": "date-time"},
+    "protocol": {"description": "The text protocol of the prompt (language-model seats).", "type": "string"},
+    "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "prompt": {"description": "The prompt a language-model seat was given; on a retry, the message that said why the move was rejected.", "type": "string"},
+    "reply": {"description": "The raw reply of a language-model seat.", "type": "string"},
+    "reasoning": {
+      "description": "What the reply said of its reasoning (reply.schema.json without the action).",
+      "type": "object",
+      "properties": {
+        "context": {"type": "array", "items": {"type": "string"}},
+        "thoughts": {"type": "array", "items": {"type": "string"}},
+        "summary": {"type": "string"},
+        "expect": {"type": "array"},
+        "alternatives": {"type": "array"},
+        "confidence": {"type": "number"},
+        "bare": {"description": "The reply was a move object alone (protocol 1).", "type": "boolean"}
+      }
+    },
+    "why": {"description": "A human player's note on the move.", "type": "string"},
+    "action": {"description": "The move, with references resolved; for a played move, as validated (attack type and answer filled in).", "type": "object"},
+    "result": {
+      "type": "object",
+      "properties": {
+        "accepted": {"type": "boolean"},
+        "abstained": {"type": "boolean"},
+        "pending": {"type": "boolean"},
+        "error": {"type": "string"},
+        "arg_ids": {"type": "array", "items": {"type": "string"}},
+        "score_delta": {"type": "number"}
+      },
+      "required": ["accepted"]
+    },
+    "claim_before": {"enum": ["in", "out", "undecided"]},
+    "claim_after": {"enum": ["in", "out", "undecided"]},
+    "effects": {"type": "array", "items": {"type": "string"}},
+    "expect_check": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stmt", "predicted", "actual", "ok"],
+        "properties": {
+          "stmt": {"type": "string"},
+          "predicted": {"type": "string"},
+          "actual": {"description": "The label after the move, or \"absent\".", "type": "string"},
+          "ok": {"type": "boolean"}
+        }
+      }
+    },
+    "alternative_outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "legal", "score_delta"],
+        "properties": {
+          "action": {"type": "object"},
+          "legal": {"type": "boolean"},
+          "error": {"type": "string"},
+          "claim_after": {"type": "string"},
+          "score_delta": {"type": "number"}
+        }
+      }
+    }
+  }
+}

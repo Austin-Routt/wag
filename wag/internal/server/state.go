@@ -17,27 +17,33 @@ import (
 // argument's critical questions with what happened to each, the players, the
 // log, and the moves the player to move can make.
 type State struct {
-	ID        string        `json:"id"`
-	Version   int           `json:"version"`
-	Title     string        `json:"title"`
-	Source    string        `json:"source,omitempty"`
-	Config    ConfigView    `json:"config"`
-	Round     int           `json:"round"`
-	Active    string        `json:"active"`    // the player to move
-	ActiveAI  string        `json:"active_ai"` // "" for a human seat, else the agent kind
-	Players   []PlayerState `json:"players"`
-	Claim     string        `json:"claim,omitempty"`
-	Verdict   string        `json:"verdict,omitempty"`
-	Over      bool          `json:"over"`
-	Outcome   *game.Outcome `json:"outcome,omitempty"`
+	ID       string        `json:"id"`
+	Version  int           `json:"version"`
+	Title    string        `json:"title"`
+	Source   string        `json:"source,omitempty"`
+	Config   ConfigView    `json:"config"`
+	Round    int           `json:"round"`
+	Active   string        `json:"active"`    // the player to move
+	ActiveAI string        `json:"active_ai"` // "" for a human seat, else the agent kind
+	Players  []PlayerState `json:"players"`
+	Claim    string        `json:"claim,omitempty"`
+	Verdict  string        `json:"verdict,omitempty"`
+	Over     bool          `json:"over"`
+	Outcome  *game.Outcome `json:"outcome,omitempty"`
+	// Verdicts, once the game is over: the claim under each context
+	// preset's weights (Session.verdicts).
+	Verdicts  []Verdict     `json:"verdicts,omitempty"`
 	Pending   *PendingState `json:"pending,omitempty"`
 	Rejection string        `json:"last_rejection,omitempty"`
 
 	Statements map[string]*StmtState `json:"statements"`
 	Arguments  map[string]*ArgState  `json:"arguments"`
 	Roots      []string              `json:"roots"` // statements to start reading from: the claim first
-	Questions  []QuestionState       `json:"questions"`
-	Log        []LogEntry            `json:"log"`
+	// BoardStatements are the statements a move can argue for or against
+	// (game.GameState.BoardStatements).
+	BoardStatements []string        `json:"board_statements"`
+	Questions       []QuestionState `json:"questions"`
+	Log             []LogEntry      `json:"log"`
 	// CanMove: a human player is to move (the moves about an argument come
 	// from /api/games/{id}/moves?target=...).
 	CanMove bool `json:"can_move"`
@@ -51,21 +57,24 @@ type State struct {
 
 // ConfigView is the game's configuration, for display.
 type ConfigView struct {
-	Mode            string  `json:"mode"`
-	Objective       string  `json:"objective"`
-	Scoring         string  `json:"scoring"`
-	MaxRounds       int     `json:"max_rounds"`
-	TargetScore     float64 `json:"target_score,omitempty"`
-	TimeLimit       string  `json:"time_limit,omitempty"`
-	MoveTimeLimit   string  `json:"move_time_limit,omitempty"`
-	AnswerWithin    int     `json:"answer_within,omitempty"`
-	Standard        string  `json:"claim_standard,omitempty"`
-	ConcedeOnPass   bool    `json:"concede_on_pass,omitempty"`
-	AllowOther      bool    `json:"allow_other,omitempty"`
-	AnyPremise      bool    `json:"any_premise,omitempty"`
-	Context         string  `json:"context,omitempty"`
-	Moderated       bool    `json:"moderated,omitempty"`
-	RequireEvidence bool    `json:"require_evidence,omitempty"`
+	Mode          string  `json:"mode"`
+	Objective     string  `json:"objective"`
+	Scoring       string  `json:"scoring"`
+	MaxRounds     int     `json:"max_rounds"`
+	TargetScore   float64 `json:"target_score,omitempty"`
+	TimeLimit     string  `json:"time_limit,omitempty"`
+	MoveTimeLimit string  `json:"move_time_limit,omitempty"`
+	AnswerWithin  int     `json:"answer_within,omitempty"`
+	Standard      string  `json:"claim_standard,omitempty"`
+	ConcedeOnPass bool    `json:"concede_on_pass,omitempty"`
+	AllowOther    bool    `json:"allow_other,omitempty"`
+	AnyPremise    bool    `json:"any_premise,omitempty"`
+	Context       string  `json:"context,omitempty"`
+	// Weights are the scheme weights the game set (the context's and its
+	// own); the others keep the data's.
+	Weights         map[string]float64 `json:"weights,omitempty"`
+	Moderated       bool               `json:"moderated,omitempty"`
+	RequireEvidence bool               `json:"require_evidence,omitempty"`
 }
 
 // PlayerState is a seat.
@@ -186,8 +195,11 @@ type LogEntry struct {
 	NL       string             `json:"nl,omitempty"` // the player's own words
 
 	// The move in parts, for the dialogue view.
-	Kind     string   `json:"kind"`               // argue, attack, defend, question, pass, resign, decide, rejected, timeout
-	Target   string   `json:"target,omitempty"`   // the argument the move answers or questions
+	Kind     string   `json:"kind"`             // argue, attack, defend, for, against, question, pass, resign, decide, rejected, timeout
+	Target   string   `json:"target,omitempty"` // the argument the move answers or questions
+	Stmt     string   `json:"stmt,omitempty"`   // the statement a move for or against a statement is about
+	StmtText string   `json:"stmt_text,omitempty"`
+	Parent   string   `json:"parent,omitempty"`   // for such a move: the earliest argument the statement is part of
 	CQ       string   `json:"cq,omitempty"`       // the critical question
 	CQName   string   `json:"cq_name,omitempty"`  // its name
 	Question string   `json:"question,omitempty"` // its text, about the target
@@ -216,6 +228,10 @@ type MoveOption struct {
 	AttackType  string   `json:"attack_type"`
 	AttackText  string   `json:"attack_text"`
 	DefenceText string   `json:"defence_text"`
+	// Fixed: for an answer ("attack" or "support") with a scheme whose
+	// conclusion has the answer's form, the parts the answer fixes (scheme
+	// -> variable -> the value as the board reads it).
+	Fixed map[string]map[string]map[string]string `json:"fixed,omitempty"`
 }
 
 // buildState renders a session.
@@ -232,7 +248,7 @@ func (s *Session) buildState() *State {
 	c := gs.Config
 	st.Config = ConfigView{Mode: c.Mode, Objective: c.Objective, Scoring: c.Scoring.Model, MaxRounds: c.MaxTurns,
 		TargetScore: c.TargetScore, AnswerWithin: c.AnswerWithin, ConcedeOnPass: c.ConcedeOnPass,
-		AllowOther: c.AllowOther, AnyPremise: c.AnyPremise, Context: c.Context, Moderated: c.Moderated, RequireEvidence: c.RequireEvidence}
+		AllowOther: c.AllowOther, AnyPremise: c.AnyPremise, Context: c.Context, Weights: c.Weights, Moderated: c.Moderated, RequireEvidence: c.RequireEvidence}
 	if st.Config.Objective == "" {
 		st.Config.Objective = game.ObjectivePoints
 	}
@@ -252,6 +268,7 @@ func (s *Session) buildState() *State {
 	st.Verdict = o.Verdict
 	if gs.Terminated {
 		st.Outcome = o
+		st.Verdicts = s.verdicts(s.contexts)
 	}
 	for i, p := range gs.Players {
 		st.Players = append(st.Players, PlayerState{ID: p.ID, Kind: s.Seats[i].Kind, Score: p.Score, Side: gs.Side(p.ID), Resigned: p.Resigned})
@@ -480,6 +497,7 @@ func (s *Session) buildState() *State {
 		}
 	}
 	st.Roots = append(st.Roots, roots...)
+	st.BoardStatements = append([]string{}, gs.BoardStatements()...)
 
 	for _, q := range gs.Questions {
 		if q.Open() {
@@ -530,12 +548,97 @@ func moves(gs *game.GameState, target string) []MoveOption {
 			opt.Question = true
 		default:
 			opt.Schemes = appendNew(opt.Schemes, t.SchemeID)
+			if len(t.Fixed) > 0 {
+				if opt.Fixed == nil {
+					opt.Fixed = map[string]map[string]map[string]string{}
+				}
+				if opt.Fixed[t.Type] == nil {
+					opt.Fixed[t.Type] = map[string]map[string]string{}
+				}
+				words := map[string]string{}
+				for v, val := range t.Fixed {
+					words[v] = gs.SayValue(val)
+				}
+				opt.Fixed[t.Type][t.SchemeID] = words
+			}
 		}
 	}
 	if ms.Targets[target] == nil {
 		return []MoveOption{}
 	}
 	return ms.Targets[target]
+}
+
+// StmtMoves are the moves about one statement: arguments for and against it,
+// with the schemes that can conclude it (or its opposite), and the
+// challenges that can be put to it as a premise of an argument.
+type StmtMoves struct {
+	Stmt         string       `json:"stmt"`
+	Text         string       `json:"text"`
+	Opposite     string       `json:"opposite,omitempty"`
+	OppositeText string       `json:"opposite_text,omitempty"`
+	For          []StmtScheme `json:"for"`
+	Against      []StmtScheme `json:"against"`
+	Challenges   []Challenge  `json:"challenges"`
+}
+
+// StmtScheme is a scheme that can argue for or against a statement, with the
+// values the statement fixes (variable -> term, and as the board reads it).
+type StmtScheme struct {
+	Scheme    string            `json:"scheme"`
+	Fixed     map[string]string `json:"fixed,omitempty"`
+	FixedText map[string]string `json:"fixed_text,omitempty"`
+}
+
+// Challenge is a critical question (the generic challenge, or one of the
+// scheme's own) that can be asked about the statement as a premise of an
+// argument.
+type Challenge struct {
+	Arg      string `json:"arg"`
+	Owner    string `json:"owner"`
+	CQ       string `json:"cq"`
+	Name     string `json:"name"`
+	Question string `json:"question"`
+}
+
+// stmtMoves lists the moves about a statement.
+func stmtMoves(gs *game.GameState, stmtID string) *StmtMoves {
+	sm := &StmtMoves{Stmt: stmtID, Text: gs.Say(stmtID), For: []StmtScheme{}, Against: []StmtScheme{}, Challenges: []Challenge{}}
+	if info := gs.Bridge().Statement(stmtID); info.Opposite != "" {
+		sm.Opposite, sm.OppositeText = info.Opposite, gs.Say(info.Opposite)
+	}
+	for _, t := range gs.NASCQ.EnumerateStatementActions(gs.Bridge(), []string{stmtID}) {
+		ss := StmtScheme{Scheme: t.SchemeID, Fixed: t.Fixed}
+		for v, val := range t.Fixed {
+			if ss.FixedText == nil {
+				ss.FixedText = map[string]string{}
+			}
+			ss.FixedText[v] = gs.SayValue(val)
+		}
+		if t.Type == "support" {
+			sm.For = append(sm.For, ss)
+		} else {
+			sm.Against = append(sm.Against, ss)
+		}
+	}
+	var argIDs []string
+	for id, arg := range gs.Adapter.Graph.Arguments {
+		if carneades.IsAttackable(arg) {
+			for _, p := range arg.Premises {
+				if p.Stmt != nil && p.Stmt.Id == stmtID {
+					argIDs = append(argIDs, id)
+				}
+			}
+		}
+	}
+	carneades.SortArgumentIDs(argIDs)
+	for _, t := range gs.NASCQ.EnumerateActions(gs.Bridge(), argIDs) {
+		if t.Type == "question" && t.LocusStmtID == stmtID {
+			sm.Challenges = append(sm.Challenges, Challenge{Arg: t.TargetArgID, Owner: ownerOf(gs.Adapter.Graph.Arguments[t.TargetArgID]),
+				CQ: t.AnswersCQID, Name: t.CQName, Question: gs.QuestionAbout(t.AnswersCQID, t.TargetArgID, stmtID)})
+		}
+	}
+	return sm
 }
 
 // explain says in a sentence why a statement has its label.
@@ -705,6 +808,10 @@ func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) Log
 		if e.Reason != "" {
 			e.Text += ": " + e.Reason
 		}
+	case a.TargetStmtID != "":
+		e.Kind = map[string]string{"support": "for", "attack": "against"}[a.Type]
+		e.Stmt, e.StmtText = a.TargetStmtID, gs.Say(a.TargetStmtID)
+		e.Parent = partOf(gs, a.TargetStmtID, m.ArgIDs)
 	case a.Type == "question":
 		e.Kind = "question"
 	case a.Type == "attack":
@@ -732,6 +839,32 @@ func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) Log
 		e.Effects = effects(gs, m, madeBy)
 	}
 	return e
+}
+
+// partOf returns the earliest argument made by a move, other than those in
+// mine, that has the statement as its conclusion or a premise.
+func partOf(gs *game.GameState, stmtID string, mine []string) string {
+	skip := map[string]bool{}
+	for _, id := range mine {
+		skip[id] = true
+	}
+	for _, m := range gs.MoveHistory {
+		for _, id := range m.ArgIDs {
+			arg := gs.Adapter.Graph.Arguments[id]
+			if arg == nil || skip[id] || carneades.ArgumentRole(arg) != carneades.RoleMain {
+				continue
+			}
+			if arg.Conclusion != nil && arg.Conclusion.Id == stmtID {
+				return id
+			}
+			for _, p := range arg.Premises {
+				if p.Stmt != nil && p.Stmt.Id == stmtID {
+					return id
+				}
+			}
+		}
+	}
+	return ""
 }
 
 func aboutWords(locus string) string {

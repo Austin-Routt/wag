@@ -546,6 +546,34 @@ func (a *Adapter) GroundedLabels() map[string]caes.Label {
 	return out
 }
 
+// LabelsWeighted returns the grounded labelling the graph would get if some
+// arguments weighed otherwise: reweigh gives an argument's weight, or false to
+// keep its own. The graph is not changed.
+func (a *Adapter) LabelsWeighted(reweigh func(arg *caes.Argument) (float64, bool)) map[string]caes.Label {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	saved := map[*caes.Argument]*caes.Scheme{}
+	for _, arg := range a.Graph.Arguments {
+		if w, ok := reweigh(arg); ok && arg.Scheme != nil {
+			saved[arg] = arg.Scheme
+			sc := *arg.Scheme
+			sc.Weight = caes.ConstantWeighingFunction(w)
+			arg.Scheme = &sc
+		}
+	}
+	defer func() {
+		for arg, sc := range saved {
+			arg.Scheme = sc
+		}
+	}()
+	l := a.Graph.GroundedLabelling()
+	out := make(map[string]caes.Label, len(a.Graph.Statements))
+	for id, s := range a.Graph.Statements {
+		out[id] = l[s]
+	}
+	return out
+}
+
 // IsAcyclic performs DFS cycle detection on the argument graph.
 // WAG enforces acyclic argument graphs as a game rule. Carneades itself
 // handles cycles gracefully (labeling cycle participants as Undecided),
@@ -773,6 +801,11 @@ func (a *Adapter) AddSupport(
 		return nil, fmt.Errorf("InstantiateScheme for scheme %q created no arguments; "+
 			"check that bindings parse correctly and scheme has conclusions",
 			carneadesSchemeID)
+	}
+	for _, id := range mains {
+		if err := a.joinOpposites(a.Graph.Arguments[id].Conclusion); err != nil {
+			return created, err
+		}
 	}
 	return created, nil
 }

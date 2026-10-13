@@ -84,9 +84,16 @@ func (n *NASCQ) EnableOther() {
 	n.buildIndexes()
 }
 
+// premiseQuestion is the challenge of a premise: "why should we accept
+// that?". Asked, it shifts the burden of proof to the argument's proponent,
+// who answers with any argument for the premise. Arguing for or against a
+// premise is a move about the statement (ProposedAction.TargetStmtID), so the
+// challenge is enumerated as a question only; an answer through it (an
+// attack or a defence naming it, as in games recorded before moves about
+// statements) is still valid.
 func premiseQuestion() *CQNode {
-	return &CQNode{ID: CQPremiseAcceptable, Name: "Premise Acceptability Question", SemanticType: TypeTruth,
-		QuestionTemplateEN: "Is this premise acceptable: true, or supported by evidence?",
+	return &CQNode{ID: CQPremiseAcceptable, Name: "Challenge", SemanticType: TypeTruth,
+		QuestionTemplateEN: "Why should we accept this premise?",
 		CaesMapping:        CaesMapping{PositiveAnswerType: "support", NegativeAnswerType: "undermining", Target: "premise"}}
 }
 
@@ -99,17 +106,17 @@ func (n *NASCQ) hasAsk(cqID, schemeID string) bool {
 	return false
 }
 
-// EnablePremiseQuestion lets any premise of any argument be questioned or
-// attacked, not only those a scheme's own critical questions are about. In
+// EnablePremiseQuestion lets any premise of any argument be challenged, not
+// only those a scheme's own critical questions are about. In
 // a dialogue a premise can always be challenged ("why should I accept
 // that?"); Walton's critical questions point at the typical weak spots,
 // which are often exceptions and the conclusion. Practical reasoning, for
 // instance, has five critical questions and only one of them (possibility)
 // is about one of its premises.
 //
-// The generic Premise Acceptability Question is asked of every scheme, about
-// any premise that none of the scheme's own critical questions is about
-// (EnumerateActions); the thesis-independent schemes back its answers.
+// The challenge (premiseQuestion) is asked of every scheme, about any
+// premise that none of the scheme's own critical questions is about
+// (EnumerateActions).
 // Calling it again does nothing.
 func (n *NASCQ) EnablePremiseQuestion() {
 	if _, ok := n.Questions[CQPremiseAcceptable]; !ok {

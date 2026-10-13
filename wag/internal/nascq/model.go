@@ -166,11 +166,16 @@ type Edge struct {
 //   - the inference as a whole, when no formula of the scheme states the
 //     question (LocusArgument): the negative answer undercuts the argument,
 //     the positive answer denies the undercutter.
+//
+// A move about a statement rather than an argument (an argument for or
+// against any statement on the board, ProposedAction.TargetStmtID) has the
+// locus LocusStatement.
 const (
 	LocusPremise    = "premise"
 	LocusException  = "exception"
 	LocusConclusion = "conclusion"
 	LocusArgument   = "argument"
+	LocusStatement  = "statement"
 )
 
 // Locus is where a critical question applies to the arguments of one scheme.
@@ -204,6 +209,13 @@ type ProposedAction struct {
 	AnswersCQID      string            `json:"answers_cq_id"`     // CQ being answered (empty for direct support)
 	VariableBindings map[string]string `json:"variable_bindings"` // {VarName: "user text"}
 
+	// TargetStmtID names a statement on the board (the claim, or a premise,
+	// conclusion or exception of an argument) that the move argues for
+	// (support) or against (attack), as one argues for or against the claim.
+	// Such a move names no target argument and no critical question; its
+	// scheme must be able to conclude the statement, or its opposite (S9).
+	TargetStmtID string `json:"target_stmt_id,omitempty"`
+
 	// Text is the argument as the player first put it, in their own words,
 	// before breaking it down into the scheme's variables. It is kept with
 	// the argument (for display and for argument mining) and plays no part
@@ -235,6 +247,12 @@ type ValidatedAction struct {
 	// target: the adapter binds it to the answer (S2 does not require it).
 	AnswerVariable string `json:"answer_variable,omitempty"`
 
+	// Fixed holds, for a direct move or a move about a statement made with a
+	// scheme that has no answer variable, the values (terms) that the
+	// variables of the scheme's conclusion take for it to conclude the
+	// statement the move is about (S9). The mover need not give them.
+	Fixed map[string]string `json:"fixed,omitempty"`
+
 	// Free marks the user-defined scheme ("Other", see EnableOther): the
 	// player writes the premises (P1, P2, ...) and the conclusion (C) in
 	// their own words; there is no Carneades scheme behind it.
@@ -255,3 +273,10 @@ type ValidatedAction struct {
 
 // IsDefence reports whether the move answers in the target's favour.
 func (v *ValidatedAction) IsDefence() bool { return v.Type == "support" && v.TargetArgID != "" }
+
+// Direct reports whether the move is about a part of an argument or a
+// statement without answering a critical question: a direct attack or
+// defence, or an argument for or against a statement.
+func (v *ValidatedAction) Direct() bool {
+	return v.AnswersCQID == "" && (v.TargetArgID != "" || v.TargetStmtID != "") && v.Type != "question"
+}

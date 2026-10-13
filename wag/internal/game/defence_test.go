@@ -64,7 +64,7 @@ func TestDefenceInDepth(t *testing.T) {
 	// premise of a1 stands again.
 	a2 := play(t, gs, answer("attack", "CQ:trustworthiness", "AS:position_to_know", b1,
 		map[string]string{"W": "journalist", "D": "media"}))
-	if c := gs.Adapter.Graph.Arguments[a2].Conclusion.Id; c != "biased(dr_no)" {
+	if c := gs.Adapter.Graph.Arguments[a2].Conclusion.Id; c != "untrustworthy(dr_no)" {
 		t.Fatalf("trustworthiness answer concludes %s", c)
 	}
 	if gs.Adapter.Graph.Arguments[b1].Weight != 0 || label(possibleTax) != caes.In || label(shouldTax) != caes.In {
@@ -77,9 +77,9 @@ func TestDefenceInDepth(t *testing.T) {
 	// are back.
 	play(t, gs, answer("attack", "CQ:position", "AS:expert_opinion", a2,
 		map[string]string{"W": "press_council", "D": "media"}))
-	if label("biased(dr_no)") != caes.Out || label(possibleTax) != caes.Out || label(shouldTax) != caes.Out {
+	if label("untrustworthy(dr_no)") != caes.Out || label(possibleTax) != caes.Out || label(shouldTax) != caes.Out {
 		t.Fatalf("after the counter-undermining: biased %v, possible %v, should %v; want Out, Out, Out",
-			label("biased(dr_no)"), label(possibleTax), label(shouldTax))
+			label("untrustworthy(dr_no)"), label(possibleTax), label(shouldTax))
 	}
 
 	// 5. Alice defends a1's premise directly: a positive answer to the
@@ -97,8 +97,8 @@ func TestDefenceInDepth(t *testing.T) {
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
 	play(t, gs, answer("support", "CQ:position", "AS:expert_opinion", a2,
 		map[string]string{"W": "media_scholar", "D": "media"}))
-	if label("biased(dr_no)") != caes.Out {
-		t.Fatalf("biased is %v after a tied defence, want Out", label("biased(dr_no)"))
+	if label("untrustworthy(dr_no)") != caes.Out {
+		t.Fatalf("biased is %v after a tied defence, want Out", label("untrustworthy(dr_no)"))
 	}
 	t.Logf("scores: Alice %.1f, Bob %.1f", gs.Players[0].Score, gs.Players[1].Score)
 }
@@ -129,10 +129,10 @@ func TestExceptionDefence(t *testing.T) {
 				bindings = map[string]string{"C": "earlier_audit"}
 			}
 			d := play(t, gs, answer("support", "CQ:trustworthiness", c.defender, b1, bindings))
-			if got := gs.Adapter.Graph.Arguments[d].Conclusion.Id; got != "¬biased(dr_x)" {
+			if got := gs.Adapter.Graph.Arguments[d].Conclusion.Id; got != "¬untrustworthy(dr_x)" {
 				t.Fatalf("the denial concludes %s", got)
 			}
-			biased := gs.Adapter.Graph.Statements["biased(dr_x)"].Label
+			biased := gs.Adapter.Graph.Statements["untrustworthy(dr_x)"].Label
 			wantConcl := caes.In
 			if c.wantBiased == caes.In {
 				wantConcl = caes.Out

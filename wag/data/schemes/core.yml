@@ -45,11 +45,18 @@ language:
   ¬promote_more_effectively/2: "No other action would promote %s more effectively than %s."
   side_effects/2: "Doing %s in the situation %s would have bad side effects."
   ¬side_effects/2: "Doing %s in the situation %s would have no bad side effects."
-  # --- positive_consequences ---
+  # --- practical_reasoning2 (also uses the predicates above) ---
+  intervening_actions/2: "Something else would have to happen, or be done, before %s could achieve %s."
+  ¬intervening_actions/2: "Nothing else would have to happen, or be done, before %s could achieve %s."
+  incompatible_goal/1: "The goal %s conflicts with other goals that matter more."
+  ¬incompatible_goal/1: "The goal %s conflicts with no goal that matters more."
+  # --- positive_consequences, negative_consequences ---
   brings_about/2: "Doing %s brings about %s."
   ¬brings_about/2: "Doing %s does not bring about %s."
   good/1: "%s is good."
   ¬good/1: "%s is not good."
+  bad/1: "%s is bad."
+  ¬bad/1: "%s is not bad."
   # --- positive_value ---
   judged_positive_value/2: "%s is a positive value for %s."
   ¬judged_positive_value/2: "%s is not a positive value for %s."
@@ -79,6 +86,15 @@ language:
   ¬dishonest/1: "%s is honest."
   other_credible_sources_disagree/1: "Other credible sources dispute %s."
   ¬other_credible_sources_disagree/1: "No other credible source disputes %s."
+  # --- expert_opinion (also asserts/2, in_domain/2) ---
+  expert/2: "%s is an expert in %s."
+  ¬expert/2: "%s is not an expert in %s."
+  untrustworthy/1: "%s is not a trustworthy source."
+  ¬untrustworthy/1: "%s is a trustworthy source."
+  inconsistent_with_other_experts/1: "Other experts disagree that %s."
+  ¬inconsistent_with_other_experts/1: "Other experts agree that %s."
+  based_on_evidence/1: "%s, and this is based on evidence."
+  ¬based_on_evidence/1: "%s, but this is not based on evidence."
   # --- position_to_know ---
   position_to_know/2: "%s is in a position to know about %s."
   ¬position_to_know/2: "%s is not in a position to know about %s."
@@ -115,6 +131,29 @@ argument_schemes:
       - promote_more_effectively(V,A)
       - side_effects(A,S1)
 
+  # As in walton.yml (Walton 2015): the goal-based scheme, without values
+  # (the book's 22.1, practical inference).
+  - id: practical_reasoning2
+    meta:
+      title: Argument from Instrumental Practical Reasoning
+      source: "Walton (2015), Goal-Based Reasoning for Argumentation"
+    variables: [A,S1,S2,G]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - current_circumstances(S1)
+      - would_bring_about(A,S1,S2)
+      - would_be_realized(G,S2)
+    assumptions:
+      - possible(A)
+      - possible(G)
+    exceptions:
+      - bring_about_more_effectively(S2,A)
+      - realize_more_effectively(G,A)
+      - intervening_actions(A,G)
+      - side_effects(A,S1)
+      - incompatible_goal(G)
+
   - id: positive_consequences
     meta:
       title: Argument from Positive Consequences
@@ -125,6 +164,20 @@ argument_schemes:
     premises:
       - brings_about(A,G)
       - good(G)
+
+  # As in walton.yml (the book's 33.2): the counterpart of positive
+  # consequences; it concludes the opposite of should_be_performed(A), so it
+  # argues against what should be done.
+  - id: negative_consequences
+    meta:
+      title: Argument from Negative Consequences
+      source: "Walton (1995)"
+    variables: [A,G]
+    conclusions:
+      - ¬should_be_performed(A)
+    premises:
+      - brings_about(A,G)
+      - bad(G)
 
   - id: positive_value
     meta:
@@ -150,6 +203,27 @@ argument_schemes:
     assumptions:
       - strong_correlation(A,B)
 
+  # As in walton.yml (Walton 1997, the book's scheme 2): the game's Argument
+  # from Expert Opinion. Its six critical questions are its three premises,
+  # its assumption and its two exceptions.
+  - id: expert_opinion
+    meta:
+      title: Argument from Expert Opinion
+      source: "Walton (1997), Appeal to Expert Opinion, pp. 211-225"
+    variables: [W,D,S]
+    premises:
+      - expert(W,D)
+      - in_domain(S,D)
+      - asserts(W,S)
+    exceptions:
+      - untrustworthy(W)
+      - inconsistent_with_other_experts(S)
+    assumptions:
+      - based_on_evidence(asserts(W,S))
+    conclusions:
+      - S
+
+  # Wyner's variant (2016), kept for games recorded before 2026-10-13.
   - id: credible_source
     meta:
       title: Argument from Credible Source

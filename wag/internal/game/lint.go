@@ -100,6 +100,45 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		}
 	}
 
+	// A backup scheme without an answer variable should conclude the answer
+	// it backs: otherwise an answering argument concludes the answer in place
+	// of what its scheme concludes (its premises support the scheme's
+	// conclusion, not the answer).
+	for _, b := range n.BackupEdges {
+		bs := n.Schemes[b.Scheme]
+		if bs == nil || bs.AnswerVariable != "" || bs.Free {
+			continue
+		}
+		bc := caesConclusions[bs.CarneadesID]
+		if len(bc) != 1 {
+			continue
+		}
+		for _, e := range n.AskEdges {
+			if e.CQ != b.CQ {
+				continue
+			}
+			ts := n.Schemes[e.Scheme]
+			if ts == nil {
+				continue
+			}
+			l := n.LocusOf(e.CQ, e.Scheme)
+			var answer string
+			switch l.Kind {
+			case nascq.LocusPremise, nascq.LocusException:
+				answer = placeholderVars(l.Pattern)
+			case nascq.LocusConclusion:
+				if c := caesConclusions[ts.CarneadesID]; len(c) == 1 {
+					answer = renameVars(c[0], "T")
+				}
+			}
+			if answer == "" || unifiesEitherWay(bc[0], answer) {
+				continue
+			}
+			add(false, b.Scheme, "backs %s on %s, but concludes %s, not its answer (%s or its opposite): an answering argument concludes the answer instead",
+				b.CQ, e.Scheme, bc[0], answer)
+		}
+	}
+
 	// Every premise or exception locus names a formula of the Carneades scheme.
 	caesExceptions := map[string][]string{}
 	for _, s := range theory.ArgSchemes {
@@ -145,8 +184,14 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 	used := map[string]bool{}
 	for _, s := range theory.ArgSchemes {
 		for _, f := range append(append(append(append([]string{}, s.Premises...), s.Assumptions...), s.Exceptions...), s.Conclusions...) {
-			if p, a, ok := predicateOf(f); ok && a > 0 {
+			// A negation ¬p(...) reads through the "¬p/n" template, or the
+			// generic "it is not the case that"; it needs p's.
+			neg := strings.HasPrefix(f, "¬")
+			if p, a, ok := predicateOf(strings.TrimPrefix(f, "¬")); ok && a > 0 {
 				used[fmt.Sprintf("%s/%d", p, a)] = true
+				if neg {
+					used[fmt.Sprintf("¬%s/%d", p, a)] = true
+				}
 			}
 		}
 	}
@@ -197,4 +242,66 @@ func placeholderToVar(s string) string {
 		s = strings.ReplaceAll(s, "{"+v+"}", "V_"+v)
 	}
 	return s
+}
+
+// placeholderVars turns a NASCQ pattern's {X} placeholders into variables
+// QX (distinct from any scheme's variable names).
+func placeholderVars(pattern string) string {
+	var b strings.Builder
+	for i := 0; i < len(pattern); i++ {
+		if pattern[i] == '{' {
+			if j := strings.IndexByte(pattern[i:], '}'); j > 0 {
+				b.WriteString("Q" + pattern[i+1:i+j])
+				i += j
+				continue
+			}
+		}
+		b.WriteByte(pattern[i])
+	}
+	return b.String()
+}
+
+// renameVars prefixes the variables of a formula, so that two schemes'
+// formulas share none.
+func renameVars(formula, prefix string) string {
+	t, ok := terms.ReadString(formula)
+	if !ok {
+		return formula
+	}
+	var walk func(terms.Term) terms.Term
+	walk = func(t terms.Term) terms.Term {
+		switch x := t.(type) {
+		case terms.Variable:
+			return terms.NewVariable(prefix + x.Name)
+		case terms.Compound:
+			args := make([]terms.Term, len(x.Args))
+			for i, a := range x.Args {
+				args[i] = walk(a)
+			}
+			return terms.Compound{Functor: x.Functor, Args: args}
+		}
+		return t
+	}
+	return walk(t).String()
+}
+
+// unifiesEitherWay reports whether a scheme's conclusion can be the answer
+// or its negation.
+func unifiesEitherWay(conclusion, answer string) bool {
+	c, ok := terms.ReadString(conclusion)
+	if !ok {
+		return true // reported elsewhere
+	}
+	neg := "¬" + answer
+	if rest, isNeg := strings.CutPrefix(answer, "¬"); isNeg {
+		neg = rest
+	}
+	for _, a := range []string{answer, neg} {
+		if t, ok := terms.ReadString(a); ok {
+			if _, ok := terms.Unify(c, t, nil); ok {
+				return true
+			}
+		}
+	}
+	return false
 }

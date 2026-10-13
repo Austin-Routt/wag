@@ -306,6 +306,10 @@ func moveKind(m Move) string {
 		return "resign"
 	case a.Type == "question":
 		return "question/" + a.AnswersCQID
+	case a.TargetStmtID != "" && a.Type == "attack":
+		return "against/" + a.SchemeID
+	case a.TargetStmtID != "":
+		return "for/" + a.SchemeID
 	case a.Type == "attack":
 		return "attack/" + a.AttackType + "/" + a.SchemeID
 	case a.TargetArgID != "":

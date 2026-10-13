@@ -1,0 +1,366 @@
+# WAG: the Waltonian Argumentation Game. It is your move. (wag-protocol/2)
+
+You are Bob. You argue AGAINST the claim: you win unless the claim is IN when the game ends. Mode: debate. Round 5 of 20. Scores: Ann 7.0; Bob 20.5;
+
+## How the game works
+- Every argument is an instance of an argumentation scheme (Walton): you fill in the scheme's parts with short phrases, and the scheme's sentences (listed under "The schemes") are built from them. Its premises hold until someone challenges or attacks them.
+- Each scheme has critical questions. To ATTACK an argument, answer one of its questions against it; to DEFEND one, answer a question in its favour. Either way you back the answer with an argument of a scheme the question allows; the answer itself is filled in for you.
+- You may ASK a question about a premise or the inference without answering it, or CHALLENGE a premise ("why should we accept that?"): the argument stops counting until its author answers, with any argument for the premise.
+- You may argue FOR or AGAINST any statement on the board, as for the claim, with a scheme whose conclusion can be that statement.
+- Or put forward a NEW argument, PASS or RESIGN.
+- After every move the Carneades engine labels each statement IN, OUT or UNDECIDED. An argument is in force when all its premises are IN and no exception or undercutter against it is IN. A statement that is at issue (argued for and against) is decided by the strongest argument in force on each side, not by their sum: under PE (preponderance) the stronger side wins and a tie leaves both OUT; under CCE it must also lead by more than 0.5; under BRD, also the other side must weigh under 0.3.
+- Make your parts true and relevant to the discussion, in plain words: the other player can challenge any of them. Cite sources when a scheme asks for them.
+- The debate is about the claim: pro wins if it is IN when the game ends, con otherwise; the scores do not decide it. The game ends after round 20, when a side resigns, or when a side passes while the verdict is against it.
+- Scores are live: they count what stands now, so points for an argument go when it falls.
+
+## The claim
+[s1] ‘Make the city's buses fare-free’ should be done. It is now OUT. At issue under PE: for it a26 (0.65), against it a37 (0.70); it does not win.
+
+## The arguments on the board
+
+a1 — Ann's Practical Reasoning, weight 0.70, OUT OF FORCE: undercut: Argument a1 does not apply.
+  C: [s1] ‘Make the city's buses fare-free’ should be done. [OUT]
+  premise [s2] The current situation is ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ [IN]
+  premise [s3] Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would lead to ‘no resident is priced out of riding the bus’ [IN]
+  premise [s4] The goal ‘affordable access to jobs, school and services for all residents’ would be achieved in ‘no resident is priced out of riding the bus’ [IN]
+  premise [s5] Achieving ‘affordable access to jobs, school and services for all residents’ would promote the value ‘fairness’ [IN]
+  premise [s6] ‘Fairness’ is a legitimate value [IN]
+  premise [s7] ‘Affordable access to jobs, school and services for all residents’ is a worthy goal [IN]
+  premise [s8] ‘Make the city's buses fare-free’ is possible [IN]
+  exception that holds: Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects
+  In Ann's words: “Fares weigh most on low-income residents, who depend on buses. Making buses fare-free means no one is priced out, so everyone can reach jobs, school and services, which is fair.”
+  Sources: US Bureau of Transportation Statistics, Transportation Economic Trends, 'Household Spending on Transportation': the lowest-income fifth of households spends a far larger share of after-tax income on transportation than higher-income households.
+
+a13 — Bob's Argument from Expert Opinion, weight 0.70, in force
+  It answers the Side Effects Question against a1.
+  C: [s9] Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects. [IN]
+  premise [s10] ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ is an expert in ‘public transit operations and fare policy’ [IN]
+  premise [s11] C is a matter of ‘public transit operations and fare policy’ [IN]
+  premise [s12] ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that C [IN]
+  premise [s13] “‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that C”, and this is based on evidence [IN]
+  In Bob's words: “When larger US bus systems such as Austin's went fare-free, they lost fare revenue and saw crowding, disruptive riders and schedule problems; the National Academies' transit research program found fare-free works mainly for small systems.”
+  Sources: Volinski, J. (2012), TCRP Synthesis 101: Implementation and Outcomes of Fare-Free Transit Systems, Transportation Research Board, Washington DC.
+
+a21 — Bob's Argument from Position to Know, weight 0.65, in force
+  It answers the Opinion Question for a13.
+  C: [s12] ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”. [IN]
+  premise [s14] ‘Joel Volinski, author of TCRP Synthesis 101’ is in a position to know about ‘the findings of TCRP Synthesis 101 on fare-free transit’ [IN]
+  premise [s15] ‘Joel Volinski, author of TCRP Synthesis 101’ says that C [IN]
+  premise [s16] C is a matter of ‘the findings of TCRP Synthesis 101 on fare-free transit’ [IN]
+  In Bob's words: “The report's author found that the larger urban systems that went fare-free saw crowding, disruptive riders, poorer on-time performance and lost revenue, and concluded fare-free is unlikely to suit larger systems.”
+  Sources: Volinski, J. (2012), TCRP Synthesis 101: Implementation and Outcomes of Fare-Free Transit Systems, Transportation Research Board: case studies of Austin, Denver and Trenton, and the report's conclusions on larger systems.
+
+a26 — Ann's Argument from Positive Consequences, weight 0.65, in force
+  C: [s1] ‘Make the city's buses fare-free’ should be done. [OUT]
+  premise [s17] Doing ‘make the city's buses fare-free’ brings about ‘more residents ride the bus’ [IN]
+  premise [s18] ‘More residents ride the bus’ is good [IN]
+  In Ann's words: “Fare-free buses bring more riders: Tallinn's public transport use rose about 14% after it dropped fares, and Kansas City's zero-fare buses held riders better than comparable systems.”
+  Sources: Cats, O., Susilo, Y. O. and Reimal, T. (2017), 'The prospects of fare-free public transport: evidence from Tallinn', Transportation 44: 1083-1104.
+
+a30 — Ann's Argument from Expert Opinion, weight 0.70, in force
+  It answers the Challenge for a26.
+  C: [s18] ‘More residents ride the bus’ is good. [IN]
+  premise [s19] ‘The US Federal Transit Administration (FTA)’ is an expert in ‘public transportation policy’ [IN]
+  premise [s20] C is a matter of ‘public transportation policy’ [IN]
+  premise [s21] ‘The US Federal Transit Administration (FTA)’ says that C [IN]
+  premise [s22] “‘The US Federal Transit Administration (FTA)’ says that C”, and this is based on evidence [IN]
+  In Ann's words: “More people riding the bus is good: it gives residents without cars access to jobs and services, and trips moved from cars to buses cut congestion and greenhouse gas emissions per passenger.”
+  Sources: US Federal Transit Administration, 'Transit's Role in Environmental Sustainability' (transit.dot.gov): public transportation reduces emissions and congestion compared with driving alone.
+
+a37 — Bob's Argument from Expert Opinion, weight 0.70, in force
+  C: [¬s1] ‘Make the city's buses fare-free’ should not be done. [IN]
+  premise [s23] ‘Joel Volinski, author of the TCRP study of US fare-free transit’ is an expert in ‘fare-free transit policy’ [IN]
+  premise [s24] C is a matter of ‘fare-free transit policy’ [IN]
+  premise [s25] ‘Joel Volinski, author of the TCRP study of US fare-free transit’ says that C [IN]
+  premise [s26] “‘Joel Volinski, author of the TCRP study of US fare-free transit’ says that C”, and this is based on evidence [IN]
+  In Bob's words: “The national review of US fare-free programs found that fare-free suits small and college-town systems but is unlikely to suit larger city systems, where it brought crowding, disruptive riders, slower service and lost revenue.”
+  Sources: Volinski, J. (2012), TCRP Synthesis 101: Implementation and Outcomes of Fare-Free Transit Systems, Transportation Research Board: conclusions on larger systems.
+
+a44 — Ann's Argument from Values, weight 0.60, in force
+  It answers the Other Goals Question for a1.
+  C: [s1] ‘Make the city's buses fare-free’ should be done. [OUT]
+  premise [s27] ‘Fairness’ is a positive value for ‘most of the city's residents’ [IN]
+  premise [s28] ‘Fairness’ supports the goal ‘affordable access to jobs, school and services for all residents’ for ‘most of the city's residents’ [IN]
+  In Ann's words: “No goal should come before making sure no resident is priced out of reaching work, school and care; fair access for poor and rich alike is a value most residents share, and it outweighs the cost of lost fares.”
+
+## What happened
+1. Ann argues: ‘Make the city's buses fare-free’ should be done. [Practical Reasoning, a1]
+   → The claim is now IN (it was undecided).
+2. Bob answers the Side Effects Question against Ann's a1: Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects. [Argument from Expert Opinion, a13]
+   → The claim is now OUT (it was in).
+   → a1 (Ann's) no longer holds.
+3. Ann asks Bob about a13: Did ‘the Transit Cooperative Research Program (TCRP) of the National Academies’ really say that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”?
+   → The claim is now IN (it was out).
+   → a1 (Ann's) holds again.
+   → a13 (Bob's) no longer holds.
+4. Bob answers the Opinion Question for a13: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”. [Argument from Position to Know, a21]
+   → The claim is now OUT (it was in).
+   → a1 (Ann's) no longer holds.
+   → a13 (Bob's) holds again.
+5. Ann argues for “‘Make the city's buses fare-free’ should be done”: ‘Make the city's buses fare-free’ should be done. [Argument from Positive Consequences, a26]
+   → The claim is now IN (it was out).
+6. Bob asks Ann about a26: Why should we accept that “‘More residents ride the bus’ is good”?
+   → The claim is now OUT (it was in).
+   → a26 (Ann's) no longer holds.
+7. Ann answers the Challenge for a26: ‘More residents ride the bus’ is good. [Argument from Expert Opinion, a30]
+   → The claim is now IN (it was out).
+   → a26 (Ann's) holds again.
+8. Bob argues against “‘Make the city's buses fare-free’ should be done”: ‘Make the city's buses fare-free’ should not be done. [Argument from Expert Opinion, a37]
+   → The claim is now OUT (it was in).
+9. Ann answers the Other Goals Question for a1: ‘Make the city's buses fare-free’ should be done. [Argument from Values, a44]
+
+## Your legal moves
+
+### Critical questions: answer (attack or defend) or ask
+Attack (answer against the argument): {"type":"attack","target_arg_id":…,"answers_cq_id":…,"target_premise_id":… (if listed),"scheme_id":…,"variable_bindings":{…}}; defend (answer in its favour): the same with "type":"support"; ask: {"type":"question","target_arg_id":…,"answers_cq_id":…,"target_premise_id":…}. Under each question: the statement an attack or a defence would argue for (filled in for you), and the schemes the NASCQ links to the question, with their semantic type (the kind of claim they support). Every question can also be answered with a thesis-independent scheme: AS:analogy (truth), AS:expert_opinion (truth), AS:position_to_know (truth).
+
+a44 (Ann's Argument from Values): C [s1] ‘Make the city's buses fare-free’ should be done.
+- CQ:legitimate_value Legitimate Value (value), about a premise [s27] (target_premise_id "s27"); can be asked alone
+    Q: Is ‘fairness’ really a positive value for ‘most of the city's residents’?
+    attack argues: ‘Fairness’ is not a positive value for ‘most of the city's residents’
+    defence argues: ‘Fairness’ is a positive value for ‘most of the city's residents’
+    linked: AS:values (value)
+- CQ:value_effect Value Effect (value), about a premise [s28] (target_premise_id "s28"); can be asked alone
+    Q: Does ‘fairness’ really support the goal ‘affordable access to jobs, school and services for all residents’ for ‘most of the city's residents’?
+    attack argues: ‘Fairness’ does not support the goal ‘affordable access to jobs, school and services for all residents’ for ‘most of the city's residents’
+    defence argues: ‘Fairness’ supports the goal ‘affordable access to jobs, school and services for all residents’ for ‘most of the city's residents’
+
+a37 (Bob's Argument from Expert Opinion): C [¬s1] ‘Make the city's buses fare-free’ should not be done.
+- CQ:expertise Expertise (source), about a premise [s23] (target_premise_id "s23"); can be asked alone
+    Q: How credible is ‘Joel Volinski, author of the TCRP study of US fare-free transit’ as an expert on ‘fare-free transit policy’?
+    attack argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ is not an expert in ‘fare-free transit policy’
+    defence argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ is an expert in ‘fare-free transit policy’
+- CQ:field Field (property), about a premise [s24] (target_premise_id "s24"); can be asked alone
+    Q: Is “‘make the city's buses fare-free’ should not be done” really a matter of ‘fare-free transit policy’?
+    attack argues: “‘Make the city's buses fare-free’ should not be done” is not a matter of ‘fare-free transit policy’
+    defence argues: “‘Make the city's buses fare-free’ should not be done” is a matter of ‘fare-free transit policy’
+- CQ:opinion Opinion (truth), about a premise [s25] (target_premise_id "s25"); can be asked alone
+    Q: Did ‘Joel Volinski, author of the TCRP study of US fare-free transit’ really say that “‘make the city's buses fare-free’ should not be done”?
+    attack argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ does not say that “‘make the city's buses fare-free’ should not be done”
+    defence argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ says that “‘make the city's buses fare-free’ should not be done”
+- CQ:trustworthiness Trustworthiness (source), about an exception; cannot be asked alone: argue it
+    Q: Is ‘Joel Volinski, author of the TCRP study of US fare-free transit’ honest and unbiased?
+    attack argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ is not a trustworthy source
+    defence argues: ‘Joel Volinski, author of the TCRP study of US fare-free transit’ is a trustworthy source
+- CQ:consistency Consistency (truth), about an exception; cannot be asked alone: argue it
+    Q: Do other credible sources agree that “‘make the city's buses fare-free’ should not be done”?
+    attack argues: Other experts disagree that “‘make the city's buses fare-free’ should not be done”
+    defence argues: Other experts agree that “‘make the city's buses fare-free’ should not be done”
+- CQ:backup_evidence Backup Evidence (truth), about a premise [s26] (target_premise_id "s26"); can be asked alone
+    Q: Is what ‘Joel Volinski, author of the TCRP study of US fare-free transit’ says based on evidence?
+    attack argues: “‘Joel Volinski, author of the TCRP study of US fare-free transit’ says that [‘make the city's buses fare-free’ should not be …]”, but this is not based on evidence
+    defence argues: “‘Joel Volinski, author of the TCRP study of US fare-free transit’ says that [‘make the city's buses fare-free’ should not be …]”, and this is based on evidence
+
+a30 (Ann's Argument from Expert Opinion): C [s18] ‘More residents ride the bus’ is good.
+- CQ:expertise Expertise (source), about a premise [s19] (target_premise_id "s19"); can be asked alone
+    Q: How credible is ‘the US Federal Transit Administration (FTA)’ as an expert on ‘public transportation policy’?
+    attack argues: ‘The US Federal Transit Administration (FTA)’ is not an expert in ‘public transportation policy’
+    defence argues: ‘The US Federal Transit Administration (FTA)’ is an expert in ‘public transportation policy’
+- CQ:field Field (property), about a premise [s20] (target_premise_id "s20"); can be asked alone
+    Q: Is “‘more residents ride the bus’ is good” really a matter of ‘public transportation policy’?
+    attack argues: “‘More residents ride the bus’ is good” is not a matter of ‘public transportation policy’
+    defence argues: “‘More residents ride the bus’ is good” is a matter of ‘public transportation policy’
+- CQ:opinion Opinion (truth), about a premise [s21] (target_premise_id "s21"); can be asked alone
+    Q: Did ‘the US Federal Transit Administration (FTA)’ really say that “‘more residents ride the bus’ is good”?
+    attack argues: ‘The US Federal Transit Administration (FTA)’ does not say that “‘more residents ride the bus’ is good”
+    defence argues: ‘The US Federal Transit Administration (FTA)’ says that “‘more residents ride the bus’ is good”
+- CQ:trustworthiness Trustworthiness (source), about an exception; cannot be asked alone: argue it
+    Q: Is ‘the US Federal Transit Administration (FTA)’ honest and unbiased?
+    attack argues: ‘The US Federal Transit Administration (FTA)’ is not a trustworthy source
+    defence argues: ‘The US Federal Transit Administration (FTA)’ is a trustworthy source
+- CQ:consistency Consistency (truth), about an exception; cannot be asked alone: argue it
+    Q: Do other credible sources agree that “‘more residents ride the bus’ is good”?
+    attack argues: Other experts disagree that “‘more residents ride the bus’ is good”
+    defence argues: Other experts agree that “‘more residents ride the bus’ is good”
+- CQ:backup_evidence Backup Evidence (truth), about a premise [s22] (target_premise_id "s22"); can be asked alone
+    Q: Is what ‘the US Federal Transit Administration (FTA)’ says based on evidence?
+    attack argues: “‘The US Federal Transit Administration (FTA)’ says that [‘more residents ride the bus’ is good]”, but this is not based on evidence
+    defence argues: “‘The US Federal Transit Administration (FTA)’ says that [‘more residents ride the bus’ is good]”, and this is based on evidence
+
+a26 (Ann's Argument from Positive Consequences): C [s1] ‘Make the city's buses fare-free’ should be done.
+- CQ:evidence Evidence (truth), about the inference; can be asked alone
+    Q: Is there enough evidence that doing ‘make the city's buses fare-free’ brings about ‘more residents ride the bus’?
+    attack argues: a26's reasons do not support its conclusion
+    defence argues: a26's reasons do support its conclusion
+- CQ:side_effect Side Effects (causality), about the conclusion; cannot be asked alone: argue it
+    Q: Would doing ‘make the city's buses fare-free’ have bad side effects?
+    attack argues: ‘Make the city's buses fare-free’ should not be done
+    defence argues: ‘Make the city's buses fare-free’ should be done
+    linked: AS:sign (causality)
+- CQ:likelihood Likelihood (truth), about a premise [s17] (target_premise_id "s17"); can be asked alone
+    Q: How likely is it that the claimed link actually holds?
+    attack argues: Doing ‘make the city's buses fare-free’ does not bring about ‘more residents ride the bus’
+    defence argues: Doing ‘make the city's buses fare-free’ brings about ‘more residents ride the bus’
+
+a21 (Bob's Argument from Position to Know): C [s12] ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”.
+- CQ:position Position to Know (source), about a premise [s14] (target_premise_id "s14"); can be asked alone
+    Q: Is ‘Joel Volinski, author of TCRP Synthesis 101’ really in a position to know about ‘the findings of TCRP Synthesis 101 on fare-free transit’?
+    attack argues: ‘Joel Volinski, author of TCRP Synthesis 101’ is not in a position to know about ‘the findings of TCRP Synthesis 101 on fare-free transit’
+    defence argues: ‘Joel Volinski, author of TCRP Synthesis 101’ is in a position to know about ‘the findings of TCRP Synthesis 101 on fare-free transit’
+- CQ:opinion Opinion (truth), about a premise [s15] (target_premise_id "s15"); can be asked alone
+    Q: Did ‘Joel Volinski, author of TCRP Synthesis 101’ really say that “‘the Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]”?
+    attack argues: ‘Joel Volinski, author of TCRP Synthesis 101’ does not say that “‘the Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]”
+    defence argues: ‘Joel Volinski, author of TCRP Synthesis 101’ says that “‘the Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]”
+- CQ:field Field (property), about a premise [s16] (target_premise_id "s16"); can be asked alone
+    Q: Is “‘the Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]” really a matter of ‘the findings of TCRP Synthesis 101 on fare-free transit’?
+    attack argues: “‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]” is not a matter of ‘the findings of TCRP Synthesis 101 on fare-free transit’
+    defence argues: “‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]” is a matter of ‘the findings of TCRP Synthesis 101 on fare-free transit’
+- CQ:trustworthiness Trustworthiness (source), about an exception; cannot be asked alone: argue it
+    Q: Is ‘Joel Volinski, author of TCRP Synthesis 101’ honest and unbiased?
+    attack argues: ‘Joel Volinski, author of TCRP Synthesis 101’ is dishonest
+    defence argues: ‘Joel Volinski, author of TCRP Synthesis 101’ is honest
+
+a13 (Bob's Argument from Expert Opinion): C [s9] Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects.
+- CQ:expertise Expertise (source), about a premise [s10] (target_premise_id "s10"); can be asked alone
+    Q: How credible is ‘the Transit Cooperative Research Program (TCRP) of the National Academies’ as an expert on ‘public transit operations and fare policy’?
+    attack argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ is not an expert in ‘public transit operations and fare policy’
+    defence argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ is an expert in ‘public transit operations and fare policy’
+- CQ:field Field (property), about a premise [s11] (target_premise_id "s11"); can be asked alone
+    Q: Is “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects” really a matter of ‘public transit operations and fare policy’?
+    attack argues: “Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects” is not a matter of ‘public transit operations and fare policy’
+    defence argues: “Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects” is a matter of ‘public transit operations and fare policy’
+- CQ:opinion Opinion (truth), about a premise [s12] (target_premise_id "s12"); can be asked alone
+    Q: Did ‘the Transit Cooperative Research Program (TCRP) of the National Academies’ really say that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”?
+    attack argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ does not say that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”
+    defence argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”
+- CQ:trustworthiness Trustworthiness (source), about an exception; cannot be asked alone: argue it
+    Q: Is ‘the Transit Cooperative Research Program (TCRP) of the National Academies’ honest and unbiased?
+    attack argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ is not a trustworthy source
+    defence argues: ‘The Transit Cooperative Research Program (TCRP) of the National Academies’ is a trustworthy source
+- CQ:consistency Consistency (truth), about an exception; cannot be asked alone: argue it
+    Q: Do other credible sources agree that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”?
+    attack argues: Other experts disagree that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”
+    defence argues: Other experts agree that “doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects”
+- CQ:backup_evidence Backup Evidence (truth), about a premise [s13] (target_premise_id "s13"); can be asked alone
+    Q: Is what ‘the Transit Cooperative Research Program (TCRP) of the National Academies’ says based on evidence?
+    attack argues: “‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]”, but this is not based on evidence
+    defence argues: “‘The Transit Cooperative Research Program (TCRP) of the National Academies’ says that [doing ‘make the city's buses fare-free’ in the …]”, and this is based on evidence
+
+a1 (Ann's Practical Reasoning): C [s1] ‘Make the city's buses fare-free’ should be done.
+- CQ:other_goals Other Goals (value), about the conclusion; cannot be asked alone: argue it
+    Q: Are there goals other than ‘affordable access to jobs, school and services for all residents’ that should come first?
+    attack argues: ‘Make the city's buses fare-free’ should not be done
+    defence argues: ‘Make the city's buses fare-free’ should be done
+    linked: AS:values (value)
+- CQ:other_means Other Means (action), about an exception; cannot be asked alone: argue it
+    Q: Could an action other than ‘make the city's buses fare-free’ also achieve ‘affordable access to jobs, school and services for all residents’?
+    attack argues: Another action would achieve ‘affordable access to jobs, school and services for all residents’ more effectively than ‘make the city's buses fare-free’
+    defence argues: No other action would achieve ‘affordable access to jobs, school and services for all residents’ more effectively than ‘make the city's buses fare-free’
+- CQ:side_effect Side Effects (causality), about an exception [s9]; cannot be asked alone: argue it
+    Q: Would doing ‘make the city's buses fare-free’ have bad side effects?
+    attack argues: Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have bad side effects
+    defence argues: Doing ‘make the city's buses fare-free’ in the situation ‘bus fares are a heavy cost for the city's low-income residents, who rely on buses most’ would have no bad side effects
+    linked: AS:sign (causality)
+- CQ:possibility Possibility (causality), about a premise [s8] (target_premise_id "s8"); can be asked alone
+    Q: Is ‘make the city's buses fare-free’ actually possible?
+    attack argues: ‘Make the city's buses fare-free’ is not possible
+    defence argues: ‘Make the city's buses fare-free’ is possible
+    linked: AS:sign (causality)
+- CQ:best_means Best Means (action), about an exception; cannot be asked alone: argue it
+    Q: Is ‘make the city's buses fare-free’ the best way to achieve ‘affordable access to jobs, school and services for all residents’?
+    attack argues: Another action would lead to ‘no resident is priced out of riding the bus’ more effectively than ‘make the city's buses fare-free’
+    defence argues: No other action would lead to ‘no resident is priced out of riding the bus’ more effectively than ‘make the city's buses fare-free’
+
+### Challenges
+Ask why a premise should be accepted (a question: no scheme): {"type":"question","target_arg_id":…,"answers_cq_id":"CQ:premise_acceptable","target_premise_id":…}. The premises no critical question is about:
+- a26: [s18]
+- a1: [s2] [s3] [s4] [s5] [s6] [s7]
+
+### For or against a statement
+Argue for: {"type":"support","target_stmt_id":"s3","scheme_id":…,"variable_bindings":{…}}; against: the same with "type":"attack". Any statement with a reference above ([s3], or [¬s3] for an opposite) can be argued for or against. AS:analogy, AS:expert_opinion, AS:position_to_know, AS:sign conclude any statement: their answer part becomes the statement (or its opposite), filled in for you. The other schemes only where listed here, with the parts the statement fixes (leave those out):
+- [s1] (the claim) for it: AS:consequences (A = ‘make the city's buses fare-free’), AS:practical_reasoning (A = ‘make the city's buses fare-free’), AS:practical_reasoning_goal (A = ‘make the city's buses fare-free’); against it: AS:negative_consequences (A = ‘make the city's buses fare-free’)
+
+### New argument
+Any scheme, with no target: {"type":"support","scheme_id":…,"variable_bindings":{…}}. In a debate, pro's first argument states the claim.
+
+### Pass or resign
+{"type":"abstain"} passes (in a debate, passing while the verdict is against your side concedes); {"type":"resign"} gives up.
+
+## The schemes
+
+AS:analogy — Argument from Analogy (truth, weight 0.55), can back an answer to any question
+  A claim holds here because it holds in a similar case.
+  parts: C = Similar case (case, e.g. "Sweden's carbon tax"); A = Proposition claimed to hold (proposition, e.g. "a carbon tax cuts emissions"), filled in for you when the argument answers a question or is about a statement
+  reads: {C} is a similar case; {A} is true in the case of {C}; therefore {A}
+  unless (exceptions the other side may argue): The case of {C} differs in relevant ways; {A} is false in a case more on point than {C}
+  sources: recommended: the similar case
+  typical wording: like, similar, similarly, just as, analogous, analogy, same as, compare, as in, in the case of, precedent
+
+AS:consequences — Argument from Positive Consequences (action, weight 0.65)
+  An action should be performed because it brings about good consequences.
+  parts: A = Action (action, e.g. "introduce a carbon tax"); G = Good consequence (event, e.g. "cleaner air")
+  reads: Doing {A} brings about {G}; {G} is good; therefore {A} should be done
+  sources: recommended: a source showing the action brings about the consequence
+  typical wording: consequence, consequences, would lead to, will lead to, leads to, result in, results in, benefit, benefits, good outcome, because it would
+
+AS:expert_opinion — Argument from Expert Opinion (truth, weight 0.70), can back an answer to any question
+  A claim is plausible because an expert in its field asserts it.
+  parts: W = Expert or credible source (entity, e.g. "the IPCC"); D = Field of expertise (domain, e.g. "climate science"); S = Proposition asserted (proposition, e.g. "human activity is warming the planet"), filled in for you when the argument answers a question or is about a statement
+  reads: {W} is an expert in {D}; {S} is a matter of {D}; {W} says that {S}; therefore {S}
+  also assumed: {W} says that {S}, and this is based on evidence
+  unless (exceptions the other side may argue): {W} is not a trustworthy source; Other experts disagree that {S}
+  sources: recommended: where the expert asserts it (a citation or a link)
+  typical wording: expert, experts, scientist, scientists, according to, study, studies, research, professor, doctor, dr, researchers, ipcc, peer reviewed
+
+AS:negative_consequences — Argument from Negative Consequences (action, weight 0.65)
+  An action should not be performed because it brings about bad consequences (the counterpart of positive consequences).
+  parts: A = Action (action, e.g. "introduce a carbon tax"); G = Bad consequence (event, e.g. "higher heating bills for poor households")
+  reads: Doing {A} brings about {G}; {G} is bad; therefore {A} should not be done
+  sources: recommended: a source showing the action brings about the consequence
+  typical wording: bad consequence, bad consequences, would cause, would harm, harm, harmful, danger, dangerous, risk, backfire, should not, shouldn't, downside
+
+AS:position_to_know — Argument from Position to Know (truth, weight 0.65), can back an answer to any question
+  A claim is plausible because someone in a position to know asserts it.
+  parts: W = Knowledgeable source (entity, e.g. "a local resident"); D = Domain of knowledge (domain, e.g. "what happens in the village"); S = Proposition asserted (proposition, e.g. "the road floods every spring"), filled in for you when the argument answers a question or is about a statement
+  reads: {W} is in a position to know about {D}; {W} says that {S}; {S} is a matter of {D}; therefore {S}
+  unless (exceptions the other side may argue): {W} is dishonest
+  sources: recommended: where they assert it (a citation or a link)
+  typical wording: witness, saw, eyewitness, insider, told me, reported, was there, first hand, firsthand, knows, in a position to know, official
+
+AS:practical_reasoning — Practical Reasoning (action, weight 0.70)
+  An agent should do an action because, in the current circumstances, it brings about a state that realizes a goal, which promotes a value.
+  parts: S1 = Current circumstances (state, e.g. "emissions are rising"); A = Action to be performed (action, e.g. "introduce a carbon tax"); S2 = Future state after action (state, e.g. "lower emissions"); G = Goal to be realized (goal, e.g. "a stable climate"); V = Value promoted by the goal (value, e.g. "public health")
+  reads: The current situation is {S1}; Doing {A} in the situation {S1} would lead to {S2}; The goal {G} would be achieved in {S2}; Achieving {G} would promote the value {V}; therefore {A} should be done
+  also assumed: {V} is a legitimate value; {G} is a worthy goal; {A} is possible
+  unless (exceptions the other side may argue): Another action would lead to {S2} more effectively than {A}; Another action would achieve {G} more effectively than {A}; Another action would promote {V} more effectively than {A}; Doing {A} in the situation {S1} would have bad side effects
+  typical wording: should, ought to, we must, in order to, so that, goal, aim, achieve, promote, policy, plan to
+
+AS:practical_reasoning_goal — Instrumental Practical Reasoning (action, weight 0.65)
+  An agent should do an action because, in the current circumstances, it brings about a state in which the agent's goal is realized (goal-based, without values: Walton 2015; the book's practical inference, 22.1). For an argument that also names the value the goal promotes, use Practical Reasoning.
+  parts: S1 = Current circumstances (state, e.g. "emissions are rising"); A = Action to be performed (action, e.g. "introduce a carbon tax"); S2 = Future state after the action (state, e.g. "lower emissions"); G = Goal to be realized (goal, e.g. "meet the 2030 climate target")
+  reads: The current situation is {S1}; Doing {A} in the situation {S1} would lead to {S2}; The goal {G} would be achieved in {S2}; therefore {A} should be done
+  also assumed: {A} is possible; {G} is possible
+  unless (exceptions the other side may argue): Another action would lead to {S2} more effectively than {A}; Another action would achieve {G} more effectively than {A}; Something else would have to happen, or be done, before {A} could achieve {G}; Doing {A} in the situation {S1} would have bad side effects; The goal {G} conflicts with other goals that matter more
+  sources: recommended: a source showing the action would bring about the state
+  typical wording: in order to, so that, so as to, means to, the way to, to achieve, to reach, our goal, the aim
+
+AS:sign — Argument from Sign (causality, weight 0.60)
+  Something is probably true because an observed sign usually indicates it.
+  parts: A = Observable sign or indicator (event, e.g. "wet streets"); B = Indicated condition (event, e.g. "it rained"), filled in for you when the argument answers a question or is about a statement
+  reads: {A} is observed; {B} is indicated when {A} holds; therefore {B} holds in the current situation
+  also assumed: {A} and {B} are strongly correlated
+  sources: recommended: where the sign was observed
+  typical wording: sign, signs, indicates, indication, suggests, symptom, evidence of, shows that, points to, observed
+
+AS:values — Argument from Values (value, weight 0.60)
+  A goal is worth keeping because it promotes a value the agent holds.
+  parts: V = Value being invoked (value, e.g. "fairness"); A = Agent or judger (entity, e.g. "most voters"); G = Goal affected (goal, e.g. "equal pay")
+  reads: {V} is a positive value for {A}; {V} supports the goal {G} for {A}; therefore {V} is a reason to keep the goal {G}
+  typical wording: value, values, freedom, fairness, justice, equality, dignity, important to, matters, principle, right thing
+
+## Your reply
+Think it through, then end your reply with one JSON object. An example; use the arguments, questions and references of this game:
+{
+  "context": ["what you observe on the board that matters for this move", "…"],
+  "thoughts": ["your reasoning, step by step", "…"],
+  "summary": "one or two sentences: the situation, your reasoning and your move",
+  "expect": [{"stmt": "s1", "label": "out"}],
+  "alternatives": [{"action": {"type": "question", "target_arg_id": "a1", "answers_cq_id": "CQ:premise_acceptable", "target_premise_id": "s2"}, "why_not": "…"}],
+  "confidence": 0.6,
+  "action": {"type": "attack", "target_stmt_id": "s2", "scheme_id": "AS:position_to_know", "variable_bindings": {"W": "…", "D": "…"}, "text": "your argument in a sentence or two, as the other player will read it", "evidence": ["a source, if any"]}
+}
+- "action" is your move; it is the only required field. "type": "support" (a new argument; with a target and a question, a defence; with target_stmt_id, an argument for the statement), "attack", "question", "abstain" (pass) or "resign".
+- Leave out of variable_bindings the answer part and the parts a statement fixes: the game fills them in.
+- Statements can be given by reference ("s3", "¬s3") or by ID. "text" is your argument in your own words; "evidence" lists your sources. Both are shown to the other player.
+- "expect": the labels you predict for some statements ("claim" for the claim) after your move; they are checked. "alternatives": moves you considered and why you did not make them. "confidence": how likely, from 0 to 1, the move helps your side. These three are optional; they are recorded with the move, to study and improve the game.
+- A bare move object, as in protocol 1, is still accepted.

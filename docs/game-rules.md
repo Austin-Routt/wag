@@ -38,16 +38,47 @@ Arguments are instances of the schemes in `data/schemes/core.yml`. The NASCQ
 | conclusion C | other goals | argues ¬C: rebuts | argues C: supports |
 | argument | evidence | argues `undercut(a)`: undercuts | argues ¬`undercut(a)`: the undercutter becomes an issue |
 
-**Any premise** (`GameConfig.AnyPremise`, on in every mode). A scheme's own
-critical questions often point at its exceptions and its conclusion; practical
-reasoning's five touch only one premise (possibility). With this option, the
-generic Premise Acceptability Question ("Is it true that “P”?") is asked of
-every premise that none of the scheme's own questions is about. It has the
-premise locus, so it can be asked alone or answered either way, and the
-thesis-independent schemes back its answers. A defeasible argument "can be
-attacked by an attack on a premise, by a counterargument with an opposite
-conclusion, or by an argument attacking the inference rule" (Walton, Reed &
-Macagno 2008, p. 32).
+**Any statement can be argued for or against.** A premise, a conclusion,
+an exception someone raised, and the claim are all statements. A move about
+a statement (`target_stmt_id`) argues for it, or for its opposite, as one
+argues for or against the claim. A defeasible argument "can be attacked by
+an attack on a premise, by a counterargument with an opposite conclusion,
+or by an argument attacking the inference rule" (Walton, Reed & Macagno
+2008, p. 32).
+
+**The scheme must fit the statement (S9).** The scheme of such a move, and of
+a direct attack or defence of an argument's part, must be able to conclude
+the statement, or its opposite:
+
+- Other, and the schemes whose conclusion is a statement variable (expert
+  opinion, position to know, sign, analogy), conclude any statement. The
+  variable is bound to it.
+- Any other scheme fits a statement its conclusion unifies with, and the
+  statement fixes the variables of its conclusion:
+  - practical reasoning or positive consequences can argue for
+    `should_be_performed(carbon_tax)` with A = carbon tax, and the player
+    may not give another A;
+  - negative consequences, which concludes `¬should_be_performed(A)`, can
+    argue against it;
+  - neither can conclude `possible(carbon_tax)`.
+
+  The same holds for an answer to a critical question whose backing scheme
+  concludes the answer's form: its premises must be about the same action.
+
+**Challenge** (`GameConfig.AnyPremise`, on in every mode). A scheme's own
+critical questions often point at its exceptions and its conclusion;
+practical reasoning's five touch only one premise (possibility). With this
+option, any premise that none of the scheme's own questions is about can be
+challenged ("Why should we accept that “P”?", `CQ:premise_acceptable`).
+
+- A challenge is a question: it shifts the burden of proof (below), and any
+  argument for the premise answers it.
+- To argue against the premise instead, argue against the statement.
+
+**Arguments that answer a question.** A scheme without an answer variable
+that backs a question's answer concludes the answer in place of its own
+conclusion. The scheme's questions about its conclusion then do not apply to
+that argument (`nascq.OwnConclusion`); its other questions do.
 
 The answering argument is a full instance of the backup scheme: it has its own
 premises and exceptions, and its own critical questions. Each answer
@@ -75,13 +106,14 @@ move again.
 | Move | JSON | What it does |
 |---|---|---|
 | Argue | `{"type":"support","scheme_id":…,"variable_bindings":{…}}` | A new argument. Its premises are presumed: they hold until attacked or questioned. |
-| Attack | `{"type":"attack","answers_cq_id":…,"target_arg_id":…,"scheme_id":…,…}` | A negative answer to a CQ about the target, backed by a scheme (see the table). Without a CQ, it is a direct rebuttal, undercutter or undermining (`attack_type`). |
+| Attack | `{"type":"attack","answers_cq_id":…,"target_arg_id":…,"scheme_id":…,…}` | A negative answer to a CQ about the target, backed by a scheme (see the table). Without a CQ, it is a direct rebuttal, undercutter or undermining (`attack_type`), with a scheme that fits (S9). |
 | Defend | `{"type":"support","answers_cq_id":…,"target_arg_id":…,"scheme_id":…,…}` | A positive answer to a CQ about the target. Without a CQ, it directly backs a premise (`target_premise_id`) or the conclusion. |
-| Question | `{"type":"question","answers_cq_id":…,"target_arg_id":…}` | Asks the CQ without arguing. See below. |
+| For / against a statement | `{"type":"support" or "attack","target_stmt_id":…,"scheme_id":…,…}` | An argument for the statement, or for its opposite, with a scheme that can conclude it (S9). An argument for a challenged premise answers the challenge. |
+| Question | `{"type":"question","answers_cq_id":…,"target_arg_id":…}` | Asks the CQ without arguing, or challenges a premise (`CQ:premise_acceptable`). See below. |
 | Pass | `{"type":"abstain"}` | Passes the turn. |
 | Resign | `{"type":"resign"}` | Concedes the game. With three or more players on points, the others play on. |
 
-**Validity checks.** NASCQ checks S0 to S8 and Q1 (`nascq.Validate`). The game
+**Validity checks.** NASCQ checks S0 to S9 and Q1 (`nascq.Validate`). The game
 then adds three rules:
 
 - G1: a move may not restate an argument already in the graph;

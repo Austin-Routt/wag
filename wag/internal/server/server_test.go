@@ -73,11 +73,11 @@ func TestStaticAndMeta(t *testing.T) {
 		CQs     []CQMeta `json:"cqs"`
 	}
 	call(t, ts, "GET", "/api/meta", nil, &meta)
-	if len(meta.Schemes) != 8 || len(meta.CQs) != 23 {
+	if len(meta.Schemes) != 10 || len(meta.CQs) != 27 { // 9 Walton schemes and Other; 24 questions, the challenge and Other's two
 		t.Fatalf("%d schemes, %d questions", len(meta.Schemes), len(meta.CQs))
 	}
 	for _, s := range meta.Schemes {
-		if s.ID == "AS:expert_opinion" && (len(s.Asked) != 6 || s.Carneades == nil || s.Carneades.ID != "credible_source") {
+		if s.ID == "AS:expert_opinion" && (len(s.Asked) != 6 || s.Carneades == nil || s.Carneades.ID != "expert_opinion") {
 			t.Fatalf("expert opinion meta: %+v", s)
 		}
 	}
@@ -271,8 +271,17 @@ func TestLoadReplaysAnExport(t *testing.T) {
 		t.Fatalf("replayed %d moves to round %d (%s to move), exported %d to round %d (%s)",
 			len(st.Log), st.Round, st.Active, len(exp.State.Log), exp.State.Round, exp.State.Active)
 	}
+	// The game was recorded when the game's expert opinion was Wyner's
+	// credible_source; it is walton.yml's expert_opinion since 2026-10-13,
+	// so the statements only that scheme made are not replayed (they were
+	// unargued premises and exceptions; no label depends on them).
+	retired := map[string]bool{"credible_source": true, "biased": true, "dishonest": true, "other_credible_sources_disagree": true}
 	for id, s := range exp.State.Statements {
-		if got := st.Statements[id]; got == nil || got.Label != s.Label {
+		got := st.Statements[id]
+		if pred, _, _ := strings.Cut(strings.TrimPrefix(id, "¬"), "("); got == nil && retired[pred] {
+			continue
+		}
+		if got == nil || got.Label != s.Label {
 			t.Errorf("%s: replayed %+v, exported %s", id, got, s.Label)
 		}
 	}
@@ -332,5 +341,32 @@ func TestContext(t *testing.T) {
 	}
 	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Context: "nonsense"}, nil); code != http.StatusBadRequest {
 		t.Fatalf("unknown context: %d", code)
+	}
+}
+
+// A game can set its own scheme weights on top of a context's; weights for
+// unknown schemes, or out of (0, 1], are refused; when the game ends, the
+// state says how the claim would stand under each preset's weights.
+func TestCustomWeights(t *testing.T) {
+	ts := newTestServer(t)
+	var st State
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Context: "policy", Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}},
+		Weights: map[string]float64{"AS:sign": 0.9}}, &st)
+	if st.Config.Weights["AS:sign"] != 0.9 || st.Config.Weights["AS:practical_reasoning"] != 0.7 {
+		t.Fatalf("weights: %v", st.Config.Weights)
+	}
+	for _, w := range []map[string]float64{{"AS:nope": 0.5}, {"AS:sign": 1.5}, {"AS:sign": 0}} {
+		if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Weights: w}, nil); code != http.StatusBadRequest {
+			t.Errorf("weights %v: %d", w, code)
+		}
+	}
+	mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": map[string]interface{}{"type": "support", "scheme_id": "AS:consequences",
+		"variable_bindings": map[string]string{"A": "tax meat", "G": "cleaner rivers"}}})
+	if mr.Result["accepted"] != true {
+		t.Fatalf("opening: %+v", mr.Result)
+	}
+	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": map[string]interface{}{"type": "resign"}})
+	if !mr.State.Over || len(mr.State.Verdicts) < 2 || mr.State.Verdicts[0].Context != "this game" {
+		t.Fatalf("verdicts: %+v", mr.State.Verdicts)
 	}
 }

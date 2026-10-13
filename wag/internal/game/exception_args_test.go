@@ -39,8 +39,18 @@ func TestExceptionArgumentsAreNotMovesAndNotTargets(t *testing.T) {
 		t.Fatalf("main argument %s: role %q owner %q", main, carneades.ArgumentRole(gs.Adapter.Graph.Arguments[main]), gs.Adapter.ArgumentOwner(main))
 	}
 	attacks := 0
+	ofMain := map[string]bool{gs.Adapter.Graph.Arguments[main].Conclusion.Id: true}
+	for _, p := range gs.Adapter.Graph.Arguments[main].Premises {
+		ofMain[p.Stmt.Id] = true
+	}
 	for _, a := range gs.BuildObservation().AvailableActions {
 		if a.Type != "attack" {
+			continue
+		}
+		if a.TargetStmtID != "" { // an argument against a statement: one of the main argument's
+			if !ofMain[a.TargetStmtID] {
+				t.Errorf("attack template on statement %s, not part of the main argument %s", a.TargetStmtID, main)
+			}
 			continue
 		}
 		attacks++

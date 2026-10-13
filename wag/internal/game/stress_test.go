@@ -55,8 +55,8 @@ func TestAgentActionEnumeration(t *testing.T) {
 	t.Logf("Before any moves: %d support templates, %d attack templates",
 		supportCount, attackCount)
 
-	if supportCount != 7 { // one per scheme
-		t.Errorf("expected 7 support templates (one per scheme), got %d", supportCount)
+	if supportCount != 9 { // one per scheme
+		t.Errorf("expected 9 support templates (one per scheme), got %d", supportCount)
 	}
 	if attackCount != 0 {
 		t.Errorf("expected 0 attack templates (no arguments yet), got %d", attackCount)

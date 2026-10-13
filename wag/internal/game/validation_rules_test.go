@@ -22,9 +22,7 @@ func templatesOn(gs *GameState, argID string) []nascq.ActionTemplate {
 }
 
 func fromTemplate(tmpl nascq.ActionTemplate, bindings map[string]string) nascq.ProposedAction {
-	return nascq.ProposedAction{Type: tmpl.Type, AttackType: tmpl.AttackType, SchemeID: tmpl.SchemeID,
-		AnswersCQID: tmpl.AnswersCQID, TargetArgID: tmpl.TargetArgID, TargetPremiseID: tmpl.TargetPremiseID,
-		VariableBindings: bindings}
+	return tmpl.Action(bindings)
 }
 
 // "Is it actually possible to perform action A?" undermines possible(A), as

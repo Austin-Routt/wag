@@ -241,26 +241,18 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 
 // fill makes an action of the template with random variable bindings, drawn
 // in sorted variable order so that the draws do not depend on map iteration
-// order. The answer variable is left to the game.
+// order. The variables the game binds (Bound) are left to it.
 func fill(rng *rand.Rand, tmpl nascq.ActionTemplate, words vocabulary) nascq.ProposedAction {
 	var bindings map[string]string
 	if len(tmpl.Variables) > 0 {
 		bindings = make(map[string]string, len(tmpl.Variables))
 		for _, varName := range carneades.SortedKeys(tmpl.Variables) {
-			if varName != tmpl.AnswerVariable {
+			if !tmpl.Bound(varName) {
 				bindings[varName] = words.word(rng, tmpl.Variables[varName].Type)
 			}
 		}
 	}
-	return nascq.ProposedAction{
-		Type:             tmpl.Type,
-		AttackType:       tmpl.AttackType,
-		SchemeID:         tmpl.SchemeID,
-		AnswersCQID:      tmpl.AnswersCQID,
-		TargetArgID:      tmpl.TargetArgID,
-		TargetPremiseID:  tmpl.TargetPremiseID,
-		VariableBindings: bindings,
-	}
+	return tmpl.Action(bindings)
 }
 
 // dueAnswers returns the templates that answer an open question about one of
@@ -437,8 +429,11 @@ func (gs *GameState) BuildObservation() *Observation {
 	}
 	carneades.SortArgumentIDs(argIDs) // the order of the enumerated actions must not depend on map order
 
-	// Enumerate available action templates.
+	// Enumerate available action templates: the answers to critical
+	// questions, and the arguments for and against the statements on the
+	// board.
 	actions := gs.NASCQ.EnumerateActions(gs.bridge, argIDs)
+	actions = append(actions, gs.NASCQ.EnumerateStatementActions(gs.bridge, gs.BoardStatements())...)
 
 	// Collect scores.
 	scores := make(map[string]float64, len(gs.Players))

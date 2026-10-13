@@ -1,6 +1,7 @@
 package nascq
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -60,6 +61,43 @@ func (m *mockGraph) ExceptionMatching(argID, pattern string) string {
 	return pattern
 }
 
+// ArgumentConclusion: the mock's practical reasoning arguments conclude
+// should_be_performed(<id>), the others c(<id>).
+func (m *mockGraph) ArgumentConclusion(argID string) string {
+	switch m.arguments[argID] {
+	case "":
+		return ""
+	case "practical_reasoning1":
+		return "should_be_performed(" + argID + ")"
+	}
+	return "c(" + argID + ")"
+}
+
+// Statement: the mock's statements are its premises and conclusions.
+func (m *mockGraph) Statement(stmtID string) StatementInfo {
+	info := StatementInfo{Opposite: "¬" + stmtID}
+	for id, ps := range m.premises {
+		for _, p := range ps {
+			if p == stmtID {
+				info.Exists, info.Premise = true, true
+			}
+		}
+		if m.ArgumentConclusion(id) == stmtID {
+			info.Exists, info.Concluded = true, true
+		}
+	}
+	return info
+}
+
+// Fits: a scheme of the mock concludes should_be_performed(A) (practical
+// reasoning) or nothing it knows of.
+func (m *mockGraph) Fits(schemeID, stmtID string, given map[string]string) (map[string]string, error) {
+	if a, ok := strings.CutPrefix(stmtID, "should_be_performed("); ok && schemeID == "practical_reasoning1" {
+		return map[string]string{"A": strings.TrimSuffix(a, ")")}, nil
+	}
+	return nil, fmt.Errorf("its conclusion does not unify with %s", stmtID)
+}
+
 func newMockGraph() *mockGraph {
 	return &mockGraph{
 		arguments: map[string]string{
@@ -106,6 +144,7 @@ const valSchemesJSON = `{
     "semantic_type": "truth",
     "thesis_independent": true,
     "base_weight": 0.70,
+    "answer_variable": "Proposition",
     "variables": {
       "Expert":      { "type": "entity",      "description": "The expert" },
       "Domain":      { "type": "domain",      "description": "Field of expertise" },

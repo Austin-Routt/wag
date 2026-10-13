@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -39,6 +40,17 @@ func (gs *GameState) SayIn(argID, stmtID string) string {
 		words = withSelf(words, a.Conclusion.Id)
 	}
 	return sentence(gs.say(stmtID, words, 0))
+}
+
+// SayValue renders the value of a scheme variable (a term) as a part of a
+// statement reads: the player's words in single quotes, a statement in
+// double quotes.
+func (gs *GameState) SayValue(v string) string {
+	t, ok := terms.ReadString(v)
+	if !ok {
+		return "‘" + v + "’"
+	}
+	return gs.sayArg(t, gs.words(), 0)
 }
 
 // selfKey marks, in a words map, the statement that reads "C".
@@ -299,9 +311,45 @@ func ownerOf(arg *caes.Argument) string {
 	return o
 }
 
+// BoardStatements returns the statements that a move about a statement can
+// argue for or against, sorted: the claim, and the conclusions and premises
+// of the arguments that moves made. Undercutters, the premises of exception
+// arguments, and ¬S when S is listed too (an argument against ¬S is one for
+// S) are left out.
+func (gs *GameState) BoardStatements() []string {
+	set := map[string]bool{}
+	if gs.Claim != "" {
+		set[gs.Claim] = true
+	}
+	for _, arg := range gs.Adapter.Graph.Arguments {
+		if r := carneades.ArgumentRole(arg); r != carneades.RoleMain && r != "" {
+			continue
+		}
+		if c := arg.Conclusion; c != nil && !c.IsUndercutter {
+			set[c.Id] = true
+		}
+		for _, p := range arg.Premises {
+			if p.Stmt != nil && !p.Stmt.IsUndercutter {
+				set[p.Stmt.Id] = true
+			}
+		}
+	}
+	out := make([]string, 0, len(set))
+	for id := range set {
+		if rest, neg := strings.CutPrefix(id, "¬"); !neg || !set[rest] {
+			out = append(out, id)
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
 // Effect says in English what a move made from the template would establish
 // about its target (or, for a plain support, what it concludes).
 func (gs *GameState) Effect(tmpl nascq.ActionTemplate, bindings map[string]string) string {
+	if tmpl.TargetStmtID != "" {
+		return gs.answerText(tmpl, nil) + "."
+	}
 	if tmpl.TargetArgID == "" {
 		return nascq.InstantiateTemplate(tmpl.ConclusionTemplateEN, bindings)
 	}
@@ -332,7 +380,7 @@ func (gs *GameState) Effect(tmpl nascq.ActionTemplate, bindings map[string]strin
 func (gs *GameState) answerText(tmpl nascq.ActionTemplate, target *caes.Argument) string {
 	attack := tmpl.Type == "attack"
 	switch tmpl.Locus.Kind {
-	case nascq.LocusPremise:
+	case nascq.LocusStatement, nascq.LocusPremise:
 		if attack {
 			return gs.sayPlain(negation(tmpl.LocusStmtID))
 		}
@@ -417,9 +465,15 @@ func (gs *GameState) DescribeMove(m Move) string {
 		target = ownerOf(t) + "'s " + target
 	}
 	switch {
+	case a.TargetStmtID != "":
+		dir := map[string]string{"support": "for", "attack": "against"}[a.Type]
+		return fmt.Sprintf("%s argues %s “%s”: %s %s", who, dir, gs.sayPlain(a.TargetStmtID), concl, tag)
 	case a.Type == "question":
-		return fmt.Sprintf("%s asks %s about %s: %s", who, ownerOf(gs.Adapter.Graph.Arguments[a.TargetArgID]),
-			a.TargetArgID, gs.QuestionText(a.AnswersCQID, a.TargetArgID))
+		q := gs.QuestionText(a.AnswersCQID, a.TargetArgID)
+		if a.TargetPremiseID != "" {
+			q = gs.QuestionAbout(a.AnswersCQID, a.TargetArgID, a.TargetPremiseID)
+		}
+		return fmt.Sprintf("%s asks %s about %s: %s", who, ownerOf(gs.Adapter.Graph.Arguments[a.TargetArgID]), a.TargetArgID, q)
 	case a.Type == "attack" && cq != "":
 		return fmt.Sprintf("%s answers %s against %s: %s %s", who, cq, target, concl, tag)
 	case a.Type == "attack":

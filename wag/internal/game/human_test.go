@@ -18,7 +18,7 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 	var out bytes.Buffer
 	alice := NewHumanAgent("Alice", strings.NewReader(strings.Join([]string{
 		"1",                                                                                       // support
-		"5",                                                                                       // Practical Reasoning (schemes are listed by NASCQ ID)
+		"6",                                                                                       // Practical Reasoning (schemes are listed by NASCQ ID)
 		"status quo", "carbon tax", "lower emissions", "reduce emissions", "environmental health", // S1 A S2 G V
 	}, "\n")+"\n"), &out)
 	act := alice.ChooseAction(gs.BuildObservation())

@@ -114,3 +114,37 @@ func TestContexts(t *testing.T) {
 		}
 	}
 }
+
+// The same dispute under other weights: ClaimUnder re-weighs the arguments
+// made with schemes, without changing the game.
+func TestClaimUnder(t *testing.T) {
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs.Config.MaxTurns = 0
+	gs.Config.Objective = ObjectiveClaim
+	play(t, gs, prSupportAction()) // practical reasoning, 0.70
+	// A rebuttal-like argument against the claim from an expert (0.70): a tie
+	// under PE leaves the claim out; weigh the expert lower and it is in.
+	play(t, gs, nascq.ProposedAction{Type: "attack", TargetStmtID: "should_be_performed(carbon_tax)", SchemeID: "AS:expert_opinion",
+		VariableBindings: map[string]string{"W": "an economist", "D": "taxation"}})
+	before := gs.Adapter.StatementLabels()
+	cases := map[string]map[string]float64{
+		"out": {"AS:expert_opinion": 0.7},
+		"in":  {"AS:expert_opinion": 0.4},
+	}
+	for want, w := range cases {
+		if got := gs.ClaimUnder(w); got != want {
+			t.Errorf("under %v the claim is %s, want %s", w, got, want)
+		}
+	}
+	if got := gs.ClaimUnder(map[string]float64{"*": 0.5, "AS:practical_reasoning": 0.9}); got != "in" {
+		t.Errorf("practical reasoning weighed 0.9 against 0.5: %s", got)
+	}
+	for id, l := range gs.Adapter.StatementLabels() {
+		if before[id] != l {
+			t.Fatalf("ClaimUnder changed %s", id)
+		}
+	}
+	if u := gs.UnknownSchemes(map[string]float64{"*": 1, "AS:sign": 1, "AS:nope": 1}); len(u) != 1 || u[0] != "AS:nope" {
+		t.Fatalf("unknown schemes: %v", u)
+	}
+}

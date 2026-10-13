@@ -10,15 +10,27 @@
     { "cq": "CQ:side_effect",       "scheme": "AS:consequences", "locus": "conclusion" },
     { "cq": "CQ:likelihood",        "scheme": "AS:consequences", "locus": "premise", "pattern": "brings_about({A},{G})" },
 
+    { "cq": "CQ:conflicting_goals",    "scheme": "AS:practical_reasoning_goal", "locus": "exception", "pattern": "incompatible_goal({G})" },
+    { "cq": "CQ:other_means",          "scheme": "AS:practical_reasoning_goal", "locus": "exception", "pattern": "realize_more_effectively({G},{A})" },
+    { "cq": "CQ:best_means",           "scheme": "AS:practical_reasoning_goal", "locus": "exception", "pattern": "bring_about_more_effectively({S2},{A})" },
+    { "cq": "CQ:possibility",          "scheme": "AS:practical_reasoning_goal", "locus": "premise",   "pattern": "possible({A})" },
+    { "cq": "CQ:goal_possible",        "scheme": "AS:practical_reasoning_goal", "locus": "premise",   "pattern": "possible({G})" },
+    { "cq": "CQ:intervening_actions",  "scheme": "AS:practical_reasoning_goal", "locus": "exception", "pattern": "intervening_actions({A},{G})" },
+    { "cq": "CQ:side_effect",          "scheme": "AS:practical_reasoning_goal", "locus": "exception", "pattern": "side_effects({A},{S1})" },
+
+    { "cq": "CQ:likelihood",           "scheme": "AS:negative_consequences", "locus": "premise", "pattern": "brings_about({A},{G})" },
+    { "cq": "CQ:evidence",             "scheme": "AS:negative_consequences", "locus": "argument" },
+    { "cq": "CQ:opposite_consequences", "scheme": "AS:negative_consequences", "locus": "conclusion" },
+
     { "cq": "CQ:likelihood",        "scheme": "AS:sign", "locus": "premise", "pattern": "strong_correlation({A},{B})" },
     { "cq": "CQ:other_event",       "scheme": "AS:sign", "locus": "argument" },
 
-    { "cq": "CQ:expertise",         "scheme": "AS:expert_opinion", "locus": "premise",   "pattern": "credible_source({W},{D})" },
+    { "cq": "CQ:expertise",         "scheme": "AS:expert_opinion", "locus": "premise",   "pattern": "expert({W},{D})" },
     { "cq": "CQ:field",             "scheme": "AS:expert_opinion", "locus": "premise",   "pattern": "in_domain({S},{D})" },
     { "cq": "CQ:opinion",           "scheme": "AS:expert_opinion", "locus": "premise",   "pattern": "asserts({W},{S})" },
-    { "cq": "CQ:trustworthiness",   "scheme": "AS:expert_opinion", "locus": "exception", "pattern": "biased({W})" },
-    { "cq": "CQ:consistency",       "scheme": "AS:expert_opinion", "locus": "exception", "pattern": "other_credible_sources_disagree({S})" },
-    { "cq": "CQ:backup_evidence",   "scheme": "AS:expert_opinion", "locus": "argument" },
+    { "cq": "CQ:trustworthiness",   "scheme": "AS:expert_opinion", "locus": "exception", "pattern": "untrustworthy({W})" },
+    { "cq": "CQ:consistency",       "scheme": "AS:expert_opinion", "locus": "exception", "pattern": "inconsistent_with_other_experts({S})" },
+    { "cq": "CQ:backup_evidence",   "scheme": "AS:expert_opinion", "locus": "premise",   "pattern": "based_on_evidence(asserts({W},{S}))" },
 
     { "cq": "CQ:position",          "scheme": "AS:position_to_know", "locus": "premise",   "pattern": "position_to_know({W},{D})" },
     { "cq": "CQ:opinion",           "scheme": "AS:position_to_know", "locus": "premise",   "pattern": "asserts({W},{S})" },
@@ -35,8 +47,9 @@
   "backup_edges": [
     { "scheme": "AS:values",        "cq": "CQ:other_goals" },
     { "scheme": "AS:values",        "cq": "CQ:legitimate_value" },
-    { "scheme": "AS:consequences",  "cq": "CQ:other_means" },
     { "scheme": "AS:sign",          "cq": "CQ:side_effect" },
-    { "scheme": "AS:sign",          "cq": "CQ:possibility" }
+    { "scheme": "AS:sign",          "cq": "CQ:possibility" },
+    { "scheme": "AS:sign",          "cq": "CQ:goal_possible" },
+    { "scheme": "AS:consequences",  "cq": "CQ:opposite_consequences" }
   ]
 }

@@ -269,3 +269,14 @@ button.ghost:hover { border-color: var(--line); color: var(--ink); }
 .noteform input[type=text] { flex: 1; min-width: 12em; }
 .kindhelp { margin: 4px 0 8px; }
 .entry .parts .dot { margin-right: 6px; vertical-align: 1px; }
+
+/* Moves about a statement: for, against, challenge */
+.sacts { margin-left: 6px; white-space: nowrap; opacity: .55; }
+.sacts .link { padding: 0 3px; }
+li:hover > .sacts, div:hover > .sacts, .premise:hover .sacts, .claimhead .sacts, .focus-card .sacts { opacity: 1; }
+@media (hover: none) { .sacts { opacity: 1; } }
+
+/* The weights editor on the setup screen */
+details.weights { margin: 6px 0 10px; }
+details.weights summary { cursor: pointer; font-size: 13px; }
+.wtable td { padding: 2px 8px 2px 0; font-size: 13px; }

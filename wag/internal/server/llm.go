@@ -100,7 +100,8 @@ type LLMRecord struct {
 func (s *Server) claudeTurn(ss *Session) (*game.TurnResult, error) {
 	s.mu.Lock()
 	rec := LLMRecord{Player: ss.GS.ActivePlayer().ID, Model: s.claude.Model, Round: ss.GS.CurrentTurn}
-	msgs := []anthropic.BetaMessageParam{anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(ss.Prompt()))}
+	prompt := ss.Prompt()
+	msgs := []anthropic.BetaMessageParam{anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(prompt))}
 	s.mu.Unlock()
 	keep := func(err error) {
 		if err != nil {
@@ -118,13 +119,21 @@ func (s *Server) claudeTurn(ss *Session) (*game.TurnResult, error) {
 		}
 		turn := Turn{Reply: reply}
 		msgs = append(msgs, assistant)
-		action, perr := ParseReply(reply)
-		turn.Action = action
+		s.mu.Lock()
+		t := ss.newTrace("claude").withPrompt(prompt)
+		s.mu.Unlock()
+		t.Model, t.Attempt, t.Reply = s.claude.Model, attempt+1, reply
+		rep, perr := ParseReplyFull(reply)
 		if perr != nil {
 			turn.Rejected = perr.Error()
-		} else {
+			t.Result.Error = perr.Error()
 			s.mu.Lock()
-			res, err := ss.GS.ExecuteTurn(action)
+			ss.addTrace(t)
+			s.mu.Unlock()
+		} else {
+			turn.Action = rep.Action
+			s.mu.Lock()
+			res, err := ss.play(rep.Action, t, rep)
 			s.mu.Unlock()
 			if err != nil {
 				rec.Turns = append(rec.Turns, turn)
@@ -139,11 +148,13 @@ func (s *Server) claudeTurn(ss *Session) (*game.TurnResult, error) {
 			turn.Rejected = res.Error
 		}
 		rec.Turns = append(rec.Turns, turn)
-		msgs = append(msgs, anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
-			"That move was rejected: "+turn.Rejected+"\n\nThe game is as before. Reply with a legal move: one JSON object at the end.")))
+		prompt = "That move was rejected: " + turn.Rejected + "\n\nThe game is as before. Reply with a legal move: one JSON object at the end."
+		msgs = append(msgs, anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(prompt)))
 	}
 	s.mu.Lock()
-	res, err := ss.GS.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	t := ss.newTrace("claude")
+	t.Model, t.Attempt = s.claude.Model, 5
+	res, err := ss.play(nascq.ProposedAction{Type: "abstain"}, t, nil)
 	s.mu.Unlock()
 	keep(err)
 	return res, err

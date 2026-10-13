@@ -47,8 +47,10 @@ import (
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 
 	"github.com/yourorg/wag/data"
+	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/nascq"
+	"github.com/yourorg/wag/internal/registry"
 )
 
 func main() {
@@ -77,10 +79,18 @@ func main() {
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
 	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
 	lint := flag.Bool("lint", false, "check the data, print the findings and exit (status 1 on an error)")
+	registryFile := flag.String("registry", "", "check that the schemes of this Carneades scheme file (YAML) are distinct patterns and their families declared; print the findings and exit")
+	familiesFile := flag.String("families", "", "with --registry: the scheme families file (JSON)")
+	strict := flag.Bool("strict", false, "with --registry: every family member must be in the file, and every scheme in a family")
+	closeShare := flag.Float64("close", registry.CloseShare, "with --registry: the share of formulas in common from which two schemes with the same conclusion are reported as close")
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	alternate := flag.Bool("alternate", false, "with --games: swap the seats every other game, as colours alternate in chess")
 	flag.Parse()
 
+	if *registryFile != "" {
+		registry.CloseShare = *closeShare
+		os.Exit(runRegistry(*registryFile, *familiesFile, *strict))
+	}
 	if *listModes {
 		for _, m := range game.Modes() {
 			fmt.Printf("  %-9s %s\n", m.Name, m.Description)
@@ -422,6 +432,58 @@ func loadData(dir string) (dataFiles, error) {
 		*x.dst = b
 	}
 	return f, nil
+}
+
+// runRegistry checks a scheme file with the registry (see package registry)
+// and returns the exit status: 1 on an error.
+func runRegistry(file, families string, strict bool) int {
+	b, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		return 1
+	}
+	ad, err := carneades.NewAdapterFromYAML(b)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error loading the schemes:", err)
+		return 1
+	}
+	var fam *registry.Families
+	if families != "" {
+		fb, err := os.ReadFile(families)
+		if err == nil {
+			fam, err = registry.LoadFamilies(fb)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error:", err)
+			return 1
+		}
+	}
+	ps, rels, findings := registry.Check(ad.Graph.Theory.ArgSchemes, fam, strict)
+	kinds := map[string]int{}
+	for _, r := range rels {
+		kinds[r.Kind]++
+	}
+	fmt.Printf("%d schemes, %d distinct patterns; related pairs: %v\n", len(ps), distinct(ps), kinds)
+	errors := 0
+	for _, f := range findings {
+		fmt.Println(f)
+		if f.Error {
+			errors++
+		}
+	}
+	fmt.Printf("%d error(s), %d warning(s)\n", errors, len(findings)-errors)
+	if errors > 0 {
+		return 1
+	}
+	return 0
+}
+
+func distinct(ps []registry.Pattern) int {
+	seen := map[string]bool{}
+	for _, p := range ps {
+		seen[p.Canonical] = true
+	}
+	return len(seen)
 }
 
 // runLint prints the data's lint findings and returns the exit status.

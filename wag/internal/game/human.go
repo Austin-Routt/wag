@@ -66,7 +66,7 @@ func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 
 	has := map[string]bool{}
 	for _, tmpl := range obs.AvailableActions {
-		if tmpl.TargetArgID != "" {
+		if tmpl.TargetArgID != "" { // the wizard offers the moves about arguments
 			has[tmpl.Type] = true
 		}
 	}
@@ -109,7 +109,7 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 	seen := make(map[string]bool)
 	var schemes []nascq.ActionTemplate
 	for _, tmpl := range obs.AvailableActions {
-		if tmpl.Type == "support" && tmpl.TargetArgID == "" && !seen[tmpl.SchemeID] {
+		if tmpl.Type == "support" && tmpl.TargetArgID == "" && tmpl.TargetStmtID == "" && !seen[tmpl.SchemeID] {
 			seen[tmpl.SchemeID] = true
 			schemes = append(schemes, tmpl)
 		}
@@ -265,9 +265,7 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 // preview shows the move before it is submitted: its argument as it would
 // read on the board, and what it establishes.
 func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings map[string]string) {
-	act := nascq.ProposedAction{Type: tmpl.Type, AttackType: tmpl.AttackType, SchemeID: tmpl.SchemeID, AnswersCQID: tmpl.AnswersCQID,
-		TargetArgID: tmpl.TargetArgID, TargetPremiseID: tmpl.TargetPremiseID, VariableBindings: bindings}
-	rd, err := gs.Read(act)
+	rd, err := gs.Read(tmpl.Action(bindings))
 	if err != nil {
 		h.printf("\n  This move would be rejected: %v\n", err)
 		return
@@ -283,9 +281,13 @@ func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings 
 
 // variableOrder returns the template's variables in the order its premise and
 // conclusion templates first use them, then any others in sorted order;
-// without the answer variable, which the game binds.
+// without the variables the game binds (the answer variable, and those the
+// statement of a move about a statement fixes).
 func variableOrder(tmpl nascq.ActionTemplate) []string {
 	seen := map[string]bool{tmpl.AnswerVariable: true}
+	for v := range tmpl.Fixed {
+		seen[v] = true
+	}
 	var out []string
 	for _, t := range append(append([]string{}, tmpl.PremiseTemplatesEN...), tmpl.ConclusionTemplateEN) {
 		for _, v := range nascq.Placeholders(t) {
@@ -311,7 +313,7 @@ func variableOrder(tmpl nascq.ActionTemplate) []string {
 // has no words of its own for the premise, names it.
 func (gs *GameState) QuestionAbout(cqID, targetArgID, stmtID string) string {
 	if cqID == nascq.CQPremiseAcceptable && stmtID != "" {
-		return "Is it true that “" + strings.TrimSuffix(gs.SayIn(targetArgID, stmtID), ".") + "”?"
+		return "Why should we accept that “" + strings.TrimSuffix(gs.SayIn(targetArgID, stmtID), ".") + "”?"
 	}
 	return gs.QuestionText(cqID, targetArgID)
 }
