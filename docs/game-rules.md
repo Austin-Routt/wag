@@ -38,6 +38,17 @@ Arguments are instances of the schemes in `data/schemes/core.yml`. The NASCQ
 | conclusion C | other goals | argues ¬C: rebuts | argues C: supports |
 | argument | evidence | argues `undercut(a)`: undercuts | argues ¬`undercut(a)`: the undercutter becomes an issue |
 
+**Any premise** (`GameConfig.AnyPremise`, on in every mode). A scheme's own
+critical questions often point at its exceptions and its conclusion; practical
+reasoning's five touch only one premise (possibility). With this option, the
+generic Premise Acceptability Question ("Is it true that “P”?") is asked of
+every premise that none of the scheme's own questions is about. It has the
+premise locus, so it can be asked alone or answered either way, and the
+thesis-independent schemes back its answers. A defeasible argument "can be
+attacked by an attack on a premise, by a counterargument with an opposite
+conclusion, or by an argument attacking the inference rule" (Walton, Reed &
+Macagno 2008, p. 32).
+
 The answering argument is a full instance of the backup scheme: it has its own
 premises and exceptions, and its own critical questions. Each answer
 therefore protects the part above it until someone knocks it out, at any
@@ -179,16 +190,24 @@ In tournaments (`--games`), `--alternate` swaps the seats every other game.
 
 ## 7. Agents and programs
 
+- The rule bots fill a move's parts with the words already used on the board
+  for that kind of part, or with neutral placeholders ("an expert", "the
+  subject at hand"); sources are always placeholders. They test the rules;
+  they do not understand the topic.
 - `RandomAgent` plays a random legal move, and always answers the questions it
   owes in cq play.
 - `GreedyAgent` tries up to 40 sampled templates, every answer it owes, and
   passing, each through `SimulateThen`. It plays the one that leaves it best
-  placed (`game.Value`):
+  placed (`game.Value`), choosing at random (seeded) between equally good
+  moves:
   - a won game is worth 10⁶, a lost one −10⁶;
   - otherwise its lead in score;
   - plus 100 while the verdict favours its side.
 - `HumanAgent` is the CLI wizard: Argue, Attack, Defend, Question, Pass and
   Resign.
+- Language models play through the text protocol (`docs/protocol.md`): a
+  prompt in English, a free-text reply ending in one JSON move. In the browser
+  a seat can be a language model (copy and paste) or Claude (the API).
 - `JSONAgent` (`--p1 json`) exchanges one `game.View` line for one action line.
   The View includes:
   - the mode, objective, claim, verdict and side;
