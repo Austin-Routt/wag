@@ -8,8 +8,8 @@ import (
 // returned, and puts the game back exactly as it was: the graph (through an
 // adapter checkpoint, then a fresh evaluation, so labels and argument
 // weights are as before), every player's score, abstention count and scheme
-// usage, the turn, the history and the termination state. Agents that look
-// ahead (GreedyAgent, or a planner) use it to try moves.
+// usage, the turn, the history, the termination state and LastRejection.
+// Agents that look ahead (GreedyAgent, or a planner) use it to try moves.
 func (gs *GameState) Simulate(action nascq.ProposedAction) (*TurnResult, error) {
 	type playerState struct {
 		score      float64
@@ -26,7 +26,7 @@ func (gs *GameState) Simulate(action nascq.ProposedAction) (*TurnResult, error) 
 	}
 	turn, active, history := gs.CurrentTurn, gs.ActivePlayerIdx, len(gs.MoveHistory)
 	allAbstain, roundHadMove := gs.ConsecAllAbstain, gs.roundHadMove
-	terminated, reason := gs.Terminated, gs.TerminationReason
+	terminated, reason, rejection := gs.Terminated, gs.TerminationReason, gs.LastRejection
 	cp := gs.Adapter.Checkpoint()
 
 	result, err := gs.ExecuteTurn(action)
@@ -38,6 +38,6 @@ func (gs *GameState) Simulate(action nascq.ProposedAction) (*TurnResult, error) 
 	}
 	gs.CurrentTurn, gs.ActivePlayerIdx, gs.MoveHistory = turn, active, gs.MoveHistory[:history]
 	gs.ConsecAllAbstain, gs.roundHadMove = allAbstain, roundHadMove
-	gs.Terminated, gs.TerminationReason = terminated, reason
+	gs.Terminated, gs.TerminationReason, gs.LastRejection = terminated, reason, rejection
 	return result, err
 }

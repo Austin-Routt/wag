@@ -11,9 +11,9 @@ import (
 
 // snapshotOf renders everything Simulate must restore.
 func snapshotOf(gs *GameState) string {
-	s := fmt.Sprintf("%s|turn %d|active %d|abstain %d %v|term %v %q|digest %s|hist %d\n",
+	s := fmt.Sprintf("%s|turn %d|active %d|abstain %d %v|term %v %q|digest %s|hist %d|rejection %q\n",
 		gs.Adapter.Fingerprint(), gs.CurrentTurn, gs.ActivePlayerIdx, gs.ConsecAllAbstain, gs.roundHadMove,
-		gs.Terminated, gs.TerminationReason, gs.MoveDigest(), len(gs.MoveHistory))
+		gs.Terminated, gs.TerminationReason, gs.MoveDigest(), len(gs.MoveHistory), gs.LastRejection)
 	for _, p := range gs.Players {
 		s += fmt.Sprintf("%s %.6f %d %v\n", p.ID, p.Score, p.ConsecutiveAbstentions, p.SchemeUsageCounts)
 	}

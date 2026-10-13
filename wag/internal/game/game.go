@@ -168,6 +168,11 @@ type GameState struct {
 	roundHadMove      bool // a move was accepted in the current round
 	Terminated        bool
 	TerminationReason string
+
+	// LastRejection is why the last move was rejected, or "" if it was
+	// accepted. The player is still to move after a rejection, so an agent
+	// can read it (it is part of the JSON View) and try again.
+	LastRejection string
 }
 
 // NewGame creates a game state from the given configuration, adapter, NASCQ,

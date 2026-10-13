@@ -6,8 +6,8 @@
 //
 // Flags:
 //
-//	--p1      Player 1 type: "human", "random", or "greedy" (default: "human")
-//	--p2      Player 2 type: "human", "random", or "greedy" (default: "random")
+//	--p1      Player 1 type: "human", "random", "greedy" or "json" (default: "human")
+//	--p2      Player 2 type: "human", "random", "greedy" or "json" (default: "random")
 //	--turns   Maximum turns per game (default: 10)
 //	--seed    Random seed for AI agents (default: 42)
 //	--name1   Player 1 name (default: "Player1")
@@ -16,11 +16,17 @@
 //	          (default: the data built into the binary)
 //	--lint    Check the data (see game.LintData), print the findings, and exit:
 //	          status 1 if there is an error
+//
+// A "json" player is a program on the other end of standard input and output
+// (game.JSONAgent): it gets the game as one JSON line (game.View) whenever it
+// is to move and answers with one JSON line (nascq.ProposedAction). With a
+// json player, everything else the CLI prints goes to standard error.
 package main
 
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -33,8 +39,8 @@ func main() {
 	// ---------------------------------------------------------------
 	// Flag parsing
 	// ---------------------------------------------------------------
-	p1Type := flag.String("p1", "human", "Player 1 type: human, random, greedy")
-	p2Type := flag.String("p2", "random", "Player 2 type: human, random, greedy")
+	p1Type := flag.String("p1", "human", "Player 1 type: human, random, greedy, json")
+	p2Type := flag.String("p2", "random", "Player 2 type: human, random, greedy, json")
 	maxTurns := flag.Int("turns", 10, "Maximum turns (rounds)")
 	seed := flag.Int64("seed", 42, "Random seed for AI agents")
 	name1 := flag.String("name1", "Player1", "Player 1 display name")
@@ -55,6 +61,17 @@ func main() {
 	// ---------------------------------------------------------------
 	// Create agents
 	// ---------------------------------------------------------------
+	// One program may play both json players (each View names the active
+	// player), and two humans may share a terminal, but a human's prompts
+	// would corrupt a json player's stream.
+	types := map[string]bool{*p1Type: true, *p2Type: true}
+	if types["json"] {
+		if types["human"] {
+			fmt.Fprintln(os.Stderr, "Error: a json player and a human player cannot share standard input and output")
+			os.Exit(1)
+		}
+		say = os.Stderr // standard output carries the JSON
+	}
 	agent1, err := makeAgent(*p1Type, *name1, *seed)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating player 1: %v\n", err)
@@ -67,11 +84,11 @@ func main() {
 	}
 	agents := []game.Agent{agent1, agent2}
 
-	fmt.Println("╔══════════════════════════════════════════════════╗")
-	fmt.Println("║     WAG — Waltonian Argumentation Game          ║")
-	fmt.Println("╚══════════════════════════════════════════════════╝")
-	fmt.Printf("  %s (%s) vs %s (%s)\n", *name1, *p1Type, *name2, *p2Type)
-	fmt.Printf("  Max turns: %d  |  Seed: %d\n\n", *maxTurns, *seed)
+	fmt.Fprintln(say, "╔══════════════════════════════════════════════════╗")
+	fmt.Fprintln(say, "║     WAG — Waltonian Argumentation Game          ║")
+	fmt.Fprintln(say, "╚══════════════════════════════════════════════════╝")
+	fmt.Fprintf(say, "  %s (%s) vs %s (%s)\n", *name1, *p1Type, *name2, *p2Type)
+	fmt.Fprintf(say, "  Max turns: %d  |  Seed: %d\n\n", *maxTurns, *seed)
 
 	// ---------------------------------------------------------------
 	// Create game environment
@@ -130,7 +147,7 @@ func main() {
 			retries++
 			_, isHuman := agent.(*game.HumanAgent)
 			if isHuman {
-				fmt.Printf("\n  ✗ Move rejected: %s\n  Try again.\n", result.Error)
+				fmt.Fprintf(say, "\n  ✗ Move rejected: %s\n  Try again.\n", result.Error)
 				// Humans always get to retry. Rebuild observation
 				// (score changed from penalty).
 				obs = gs.BuildObservation()
@@ -141,7 +158,7 @@ func main() {
 			if retries >= maxRetries {
 				abstain := nascq.ProposedAction{Type: "abstain"}
 				result, _ = gs.ExecuteTurn(abstain)
-				fmt.Printf("  %s forced to abstain after %d invalid attempts.\n",
+				fmt.Fprintf(say, "  %s forced to abstain after %d invalid attempts.\n",
 					agent.Name(), retries)
 				if result != nil && result.Terminated {
 					goto gameOver
@@ -157,19 +174,19 @@ gameOver:
 	// ---------------------------------------------------------------
 	// Final results
 	// ---------------------------------------------------------------
-	fmt.Println("\n╔══════════════════════════════════════════════════╗")
-	fmt.Println("║                   GAME OVER                     ║")
-	fmt.Println("╚══════════════════════════════════════════════════╝")
+	fmt.Fprintln(say, "\n╔══════════════════════════════════════════════════╗")
+	fmt.Fprintln(say, "║                   GAME OVER                     ║")
+	fmt.Fprintln(say, "╚══════════════════════════════════════════════════╝")
 
 	if gs.TerminationReason != "" {
-		fmt.Printf("  Reason: %s\n", gs.TerminationReason)
+		fmt.Fprintf(say, "  Reason: %s\n", gs.TerminationReason)
 	}
 
-	fmt.Println("\n  Final Scores:")
+	fmt.Fprintln(say, "\n  Final Scores:")
 	bestScore := -1e9
 	winner := ""
 	for _, p := range gs.Players {
-		fmt.Printf("    %s: %.2f\n", p.Name, p.Score)
+		fmt.Fprintf(say, "    %s: %.2f\n", p.Name, p.Score)
 		if p.Score > bestScore {
 			bestScore = p.Score
 			winner = p.Name
@@ -184,16 +201,16 @@ gameOver:
 		}
 	}
 	if tieCount > 1 {
-		fmt.Println("\n  Result: TIE!")
+		fmt.Fprintln(say, "\n  Result: TIE!")
 	} else {
-		fmt.Printf("\n  Winner: %s!\n", winner)
+		fmt.Fprintf(say, "\n  Winner: %s!\n", winner)
 	}
 
-	fmt.Printf("\n  Graph: %d statements, %d arguments, %d issues\n",
+	fmt.Fprintf(say, "\n  Graph: %d statements, %d arguments, %d issues\n",
 		len(gs.Adapter.Graph.Statements),
 		len(gs.Adapter.Graph.Arguments),
 		len(gs.Adapter.Graph.Issues))
-	fmt.Printf("  Moves: %d total\n\n", len(gs.MoveHistory))
+	fmt.Fprintf(say, "  Moves: %d total\n\n", len(gs.MoveHistory))
 
 	_ = obs // suppress unused warning
 }
@@ -207,8 +224,10 @@ func makeAgent(agentType, name string, seed int64) (game.Agent, error) {
 		return game.NewRandomAgent(name, seed, 0.15, 0.55), nil
 	case "greedy":
 		return game.NewGreedyAgent(name, seed, 3), nil
+	case "json":
+		return game.NewJSONAgent(name, os.Stdin, os.Stdout), nil
 	default:
-		return nil, fmt.Errorf("unknown agent type %q (use human, random, or greedy)", agentType)
+		return nil, fmt.Errorf("unknown agent type %q (use human, random, greedy or json)", agentType)
 	}
 }
 
@@ -217,26 +236,29 @@ func displayResult(result *game.TurnResult, agent game.Agent, gs *game.GameState
 	// Don't print for human agents — they already see the state via ChooseAction.
 	if _, isHuman := agent.(*game.HumanAgent); isHuman {
 		if result.Abstained {
-			fmt.Println("\n  You chose to abstain.")
+			fmt.Fprintln(say, "\n  You chose to abstain.")
 		} else {
-			fmt.Printf("\n  ✓ Move accepted! Arguments created: %v\n", result.ArgIDs)
-			fmt.Printf("    Score delta: %+.2f\n", result.ScoreDelta)
+			fmt.Fprintf(say, "\n  ✓ Move accepted! Arguments created: %v\n", result.ArgIDs)
+			fmt.Fprintf(say, "    Score delta: %+.2f\n", result.ScoreDelta)
 		}
 		return
 	}
 
 	// For AI agents, print a one-line summary.
 	if result.Abstained {
-		fmt.Printf("  %s abstains.\n", agent.Name())
+		fmt.Fprintf(say, "  %s abstains.\n", agent.Name())
 	} else {
-		fmt.Printf("  %s plays → args=%v  score=%+.2f\n",
+		fmt.Fprintf(say, "  %s plays → args=%v  score=%+.2f\n",
 			agent.Name(), result.ArgIDs, result.ScoreDelta)
 	}
 
 	if result.Terminated {
-		fmt.Printf("  Game over: %s\n", result.TerminationReason)
+		fmt.Fprintf(say, "  Game over: %s\n", result.TerminationReason)
 	}
 }
+
+// say receives the CLI's human-readable output.
+var say io.Writer = os.Stdout
 
 // dataFiles holds the game data: the Carneades YAML and the NASCQ files.
 type dataFiles struct{ yaml, schemes, cqs, edges []byte }

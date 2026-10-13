@@ -30,6 +30,17 @@ import (
 // Returns a TurnResult indicating whether the move was accepted, the score
 // delta, any arguments created, and whether the game has terminated.
 func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, error) {
+	r, err := gs.executeTurn(action)
+	if err == nil {
+		gs.LastRejection = ""
+		if !r.Accepted {
+			gs.LastRejection = r.Error
+		}
+	}
+	return r, err
+}
+
+func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, error) {
 	if gs.Terminated {
 		return nil, fmt.Errorf("game is already terminated: %s", gs.TerminationReason)
 	}
