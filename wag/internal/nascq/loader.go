@@ -29,9 +29,7 @@ type NASCQ struct {
 	// These implicitly back up ALL CQs — no explicit edges needed.
 	thesisIndep []string
 
-
 	reverseSchemeIndex map[string]string // CarneadesID → NASCQ scheme ID
-
 
 	// Raw edges stored for validation and export.
 	AskEdges    []Edge
@@ -440,19 +438,19 @@ func (n *NASCQ) ValidateBipartite() []string {
 
 // Statistics returns a summary of the NASCQ graph contents.
 type Statistics struct {
-	SchemeCount          int `json:"scheme_count"`
-	QuestionCount        int `json:"question_count"`
-	AskEdgeCount         int `json:"ask_edge_count"`
-	BackupEdgeCount      int `json:"backup_edge_count"`
+	SchemeCount            int `json:"scheme_count"`
+	QuestionCount          int `json:"question_count"`
+	AskEdgeCount           int `json:"ask_edge_count"`
+	BackupEdgeCount        int `json:"backup_edge_count"`
 	ThesisIndependentCount int `json:"thesis_independent_count"`
 }
 
 func (n *NASCQ) Statistics() Statistics {
 	return Statistics{
-		SchemeCount:          len(n.Schemes),
-		QuestionCount:        len(n.Questions),
-		AskEdgeCount:         len(n.AskEdges),
-		BackupEdgeCount:      len(n.BackupEdges),
+		SchemeCount:            len(n.Schemes),
+		QuestionCount:          len(n.Questions),
+		AskEdgeCount:           len(n.AskEdges),
+		BackupEdgeCount:        len(n.BackupEdges),
 		ThesisIndependentCount: len(n.thesisIndep),
 	}
 }

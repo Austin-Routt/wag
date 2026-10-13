@@ -54,12 +54,13 @@ var multiUnderscore = regexp.MustCompile(`_+`)
 //  8. If the result is "true" or "false" (Prolog built-ins), prefix with "val_".
 //
 // Examples:
-//   TextToAtom("Dr. Marie Curie")     → "dr__marie_curie"
-//   TextToAtom("climate change")      → "climate_change"
-//   TextToAtom("123 test")            → "x_123_test"
-//   TextToAtom("true")                → "val_true"
-//   TextToAtom("")                    → "x_empty"
-//   TextToAtom("it's a test!")        → "it_s_a_test"
+//
+//	TextToAtom("Dr. Marie Curie")     → "dr__marie_curie"
+//	TextToAtom("climate change")      → "climate_change"
+//	TextToAtom("123 test")            → "x_123_test"
+//	TextToAtom("true")                → "val_true"
+//	TextToAtom("")                    → "x_empty"
+//	TextToAtom("it's a test!")        → "it_s_a_test"
 func TextToAtom(s string) string {
 	// Step 1: Trim whitespace.
 	s = strings.TrimSpace(s)

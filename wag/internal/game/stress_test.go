@@ -10,10 +10,10 @@ package game
 //   go test ./internal/game/ -v -run TestAgent
 
 import (
-    "fmt"
-    "testing"
-    "github.com/yourorg/wag/internal/carneades"
-    "github.com/yourorg/wag/internal/nascq"
+	"fmt"
+	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/nascq"
+	"testing"
 )
 
 // =========================================================================

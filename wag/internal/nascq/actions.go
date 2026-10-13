@@ -21,8 +21,8 @@ type ActionTemplate struct {
 	TargetPremiseID string
 
 	// What the player needs to fill in
-	Variables          map[string]VariableSpec
-	PremiseTemplatesEN []string
+	Variables            map[string]VariableSpec
+	PremiseTemplatesEN   []string
 	ConclusionTemplateEN string
 
 	// Resolved from CQ mapping (for attacks)
@@ -34,12 +34,12 @@ type ActionTemplate struct {
 // the AI agent's decision-making.
 //
 // The enumeration includes:
-//   1. Direct support with every scheme (no target needed)
-//   2. For each argument in the graph:
-//      a. Find the argument's NASCQ scheme (via reverse index)
-//      b. Get the ask-CQs for that scheme
-//      c. For each CQ, get backup schemes
-//      d. Generate attack templates for each (target, CQ, backup) triple
+//  1. Direct support with every scheme (no target needed)
+//  2. For each argument in the graph:
+//     a. Find the argument's NASCQ scheme (via reverse index)
+//     b. Get the ask-CQs for that scheme
+//     c. For each CQ, get backup schemes
+//     d. Generate attack templates for each (target, CQ, backup) triple
 //
 // Variable bindings are NOT included — the player/agent fills those in.
 func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTemplate {
@@ -101,7 +101,7 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 					SchemeID:             bs.ID,
 					SchemeName:           bs.Name,
 					AnswersCQID:          cqID,
-					CQName:              cq.Name,
+					CQName:               cq.Name,
 					TargetArgID:          argID,
 					Variables:            bs.Variables,
 					PremiseTemplatesEN:   bs.PremiseTemplatesEN,

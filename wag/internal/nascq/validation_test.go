@@ -311,8 +311,8 @@ func TestFindNASCQSchemeID(t *testing.T) {
 func TestValidateS1SchemeExists(t *testing.T) {
 	n := loadValNASCQ(t)
 	action := ProposedAction{
-		Type:     "support",
-		SchemeID: "AS:nonexistent",
+		Type:             "support",
+		SchemeID:         "AS:nonexistent",
 		VariableBindings: map[string]string{},
 	}
 	_, err := n.Validate(action, nil)
@@ -436,7 +436,7 @@ func TestValidateS4SemanticMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatal("S4: semantic type mismatch should fail")
 	}
-// S5 now runs before S4. Since AS:values has no backup edge to
+	// S5 now runs before S4. Since AS:values has no backup edge to
 	// CQ:side_effects, S5 catches it first. This is correct — S4 only
 	// applies to schemes that pass S5 but have mismatched types.
 	if !strings.Contains(err.Error(), "S5") && !strings.Contains(err.Error(), "S4") {

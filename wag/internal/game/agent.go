@@ -31,11 +31,11 @@ type Agent interface {
 // Observation is the RL-style observation passed to agents on each turn.
 // It contains everything an agent needs to make a decision.
 type Observation struct {
-	GameState        *GameState              // full game state (read-only by convention)
-	AvailableActions []nascq.ActionTemplate  // structurally valid action skeletons
-	ActivePlayer     *Player                 // whose turn it is
+	GameState        *GameState             // full game state (read-only by convention)
+	AvailableActions []nascq.ActionTemplate // structurally valid action skeletons
+	ActivePlayer     *Player                // whose turn it is
 	TurnNumber       int
-	Scores           map[string]float64      // playerID → score
+	Scores           map[string]float64 // playerID → score
 }
 
 // -------------------------------------------------------------------------
@@ -114,11 +114,11 @@ func randomWord(rng *rand.Rand, varType string) string {
 // This agent is designed for stress testing: if it can play hundreds of
 // games without panics, the engine is robust.
 type RandomAgent struct {
-	name          string
-	seed          int64
-	rng           *rand.Rand
-	abstainProb   float64 // probability of abstaining (0.0-1.0)
-	supportBias   float64 // probability of choosing support over attack (0.0-1.0)
+	name        string
+	seed        int64
+	rng         *rand.Rand
+	abstainProb float64 // probability of abstaining (0.0-1.0)
+	supportBias float64 // probability of choosing support over attack (0.0-1.0)
 }
 
 // NewRandomAgent creates a RandomAgent with the given random seed.
@@ -197,9 +197,9 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 // This is a simple 1-ply lookahead. For stress testing purposes, it
 // exercises the rollback mechanism heavily.
 type GreedyAgent struct {
-	name        string
-	seed        int64
-	rng         *rand.Rand
+	name            string
+	seed            int64
+	rng             *rand.Rand
 	trialsPerAction int // how many random binding sets to try per template
 }
 

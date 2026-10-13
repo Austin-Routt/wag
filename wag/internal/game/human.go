@@ -152,8 +152,8 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 
 	// --- Step 1: Choose target argument ---
 	type targetInfo struct {
-		argID    string
-		display  string // "conclusion (label) — scheme by owner"
+		argID   string
+		display string // "conclusion (label) — scheme by owner"
 	}
 
 	seenTarget := make(map[string]bool)
@@ -283,12 +283,12 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 	bindings := h.fillVariables(selected.Variables)
 
 	return nascq.ProposedAction{
-		Type:            "attack",
-		AttackType:      selected.AttackType,
-		SchemeID:        selected.SchemeID,
-		AnswersCQID:     selected.AnswersCQID,
-		TargetArgID:     selected.TargetArgID,
-		TargetPremiseID: selected.TargetPremiseID,
+		Type:             "attack",
+		AttackType:       selected.AttackType,
+		SchemeID:         selected.SchemeID,
+		AnswersCQID:      selected.AnswersCQID,
+		TargetArgID:      selected.TargetArgID,
+		TargetPremiseID:  selected.TargetPremiseID,
 		VariableBindings: bindings,
 	}
 }

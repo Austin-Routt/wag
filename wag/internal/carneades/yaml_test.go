@@ -145,8 +145,8 @@ func TestAddSupportWithYAMLScheme(t *testing.T) {
 	// Use SanitizeBinding for the variable values — this is how the game
 	// layer will prepare user input.
 	bindings := map[string]string{
-		"E": SanitizeBinding("climate data"),    // → "climate_data"
-		"C": SanitizeBinding("global warming"),  // → "global_warming"
+		"E": SanitizeBinding("climate data"),   // → "climate_data"
+		"C": SanitizeBinding("global warming"), // → "global_warming"
 	}
 
 	argIDs, err := a.AddSupport("player1", "simple_support", bindings, 0.8)
@@ -215,8 +215,8 @@ func TestAddSupportNoParseWarnings(t *testing.T) {
 	}
 
 	bindings := map[string]string{
-		"E": SanitizeBinding("Dr. Smith's research"),  // → "dr__smith_s_research"
-		"C": SanitizeBinding("vaccine safety"),         // → "vaccine_safety"
+		"E": SanitizeBinding("Dr. Smith's research"), // → "dr__smith_s_research"
+		"C": SanitizeBinding("vaccine safety"),       // → "vaccine_safety"
 	}
 
 	argIDs, err := a.AddSupport("player1", "simple_support", bindings, 0.9)

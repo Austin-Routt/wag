@@ -225,9 +225,9 @@ func makeTestAdapter(t *testing.T) *carneades.Adapter {
 
 	// Scheme matching NASCQ AS:cause_to_effect (carneades_id: "cause_to_effect")
 	s2 := &caes.Scheme{
-		Id:        "cause_to_effect",
-		Variables: []string{"Cause", "Effect"},
-		Premises:  []string{"causes(Cause,Effect)"},
+		Id:          "cause_to_effect",
+		Variables:   []string{"Cause", "Effect"},
+		Premises:    []string{"causes(Cause,Effect)"},
 		Conclusions: []string{"will_occur(Effect)"},
 		Assumptions: []string{"causes(Cause,Effect)"},
 	}

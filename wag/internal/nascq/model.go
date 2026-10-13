@@ -61,13 +61,13 @@ type VariableSpec struct {
 //   - The UI needs the English version; the engine needs the Prolog version
 type ASNode struct {
 	ID                   string                  `json:"id"`
-	CarneadesID          string                  `json:"carneades_id"`          // links to Scheme.Id in Carneades YAML
-	Name                 string                  `json:"name"`                  // human-readable scheme name
-	SemanticType         SemanticType            `json:"semantic_type"`         // conclusion semantic category
-	ThesisIndependent    bool                    `json:"thesis_independent"`    // if true, backs ALL CQs
-	BaseWeight           float64                 `json:"base_weight"`           // default weight for Trusted mode
-	Variables            map[string]VariableSpec `json:"variables"`             // variable slots
-	PremiseTemplatesEN   []string                `json:"premise_templates_en"`  // English premise patterns
+	CarneadesID          string                  `json:"carneades_id"`           // links to Scheme.Id in Carneades YAML
+	Name                 string                  `json:"name"`                   // human-readable scheme name
+	SemanticType         SemanticType            `json:"semantic_type"`          // conclusion semantic category
+	ThesisIndependent    bool                    `json:"thesis_independent"`     // if true, backs ALL CQs
+	BaseWeight           float64                 `json:"base_weight"`            // default weight for Trusted mode
+	Variables            map[string]VariableSpec `json:"variables"`              // variable slots
+	PremiseTemplatesEN   []string                `json:"premise_templates_en"`   // English premise patterns
 	ConclusionTemplateEN string                  `json:"conclusion_template_en"` // English conclusion pattern
 }
 
@@ -95,10 +95,10 @@ type CaesMapping struct {
 //   - Which schemes can provide answers (via backup edges)
 type CQNode struct {
 	ID                 string       `json:"id"`
-	Name               string       `json:"name"`                // human-readable CQ name
-	SemanticType       SemanticType `json:"semantic_type"`       // answer semantic category
+	Name               string       `json:"name"`                 // human-readable CQ name
+	SemanticType       SemanticType `json:"semantic_type"`        // answer semantic category
 	QuestionTemplateEN string       `json:"question_template_en"` // English question pattern
-	CaesMapping        CaesMapping  `json:"caes_mapping"`        // how to translate to CAES operations
+	CaesMapping        CaesMapping  `json:"caes_mapping"`         // how to translate to CAES operations
 }
 
 // Edge represents a connection between an AS-node and a CQ-node.
@@ -106,11 +106,11 @@ type CQNode struct {
 //   - "ask": CQ → AS (this CQ challenges arguments using this scheme)
 //   - "backup": AS → CQ (this scheme can support an answer to this CQ)
 type Edge struct {
-	ID          string `json:"id,omitempty"`   // optional edge identifier
-	From        string `json:"from,omitempty"` // source node ID (Python prototype format)
-	To          string `json:"to,omitempty"`   // target node ID (Python prototype format)
-	Type        string `json:"type,omitempty"` // "ask" or "backup" (Python prototype format)
-	CQ          string `json:"cq,omitempty"`   // CQ node ID (plan format)
+	ID          string `json:"id,omitempty"`     // optional edge identifier
+	From        string `json:"from,omitempty"`   // source node ID (Python prototype format)
+	To          string `json:"to,omitempty"`     // target node ID (Python prototype format)
+	Type        string `json:"type,omitempty"`   // "ask" or "backup" (Python prototype format)
+	CQ          string `json:"cq,omitempty"`     // CQ node ID (plan format)
 	Scheme      string `json:"scheme,omitempty"` // AS node ID (plan format)
 	Description string `json:"description,omitempty"`
 }
@@ -119,13 +119,13 @@ type Edge struct {
 // The NASCQ layer validates this against its structural rules (S1–S8)
 // and produces a ValidatedAction if all checks pass.
 type ProposedAction struct {
-	Type             string            `json:"type"`               // "support" or "attack"
-	AttackType       string            `json:"attack_type"`        // "rebuttal", "undercutter", "undermining" (attacks only)
-	TargetArgID      string            `json:"target_arg_id"`      // ID of argument being attacked
-	TargetPremiseID  string            `json:"target_premise_id"`  // for undermining: which premise
-	SchemeID         string            `json:"scheme_id"`          // NASCQ scheme ID (e.g., "AS:expert_opinion")
-	AnswersCQID      string            `json:"answers_cq_id"`      // CQ being answered (empty for direct support)
-	VariableBindings map[string]string `json:"variable_bindings"`  // {VarName: "user text"}
+	Type             string            `json:"type"`              // "support" or "attack"
+	AttackType       string            `json:"attack_type"`       // "rebuttal", "undercutter", "undermining" (attacks only)
+	TargetArgID      string            `json:"target_arg_id"`     // ID of argument being attacked
+	TargetPremiseID  string            `json:"target_premise_id"` // for undermining: which premise
+	SchemeID         string            `json:"scheme_id"`         // NASCQ scheme ID (e.g., "AS:expert_opinion")
+	AnswersCQID      string            `json:"answers_cq_id"`     // CQ being answered (empty for direct support)
+	VariableBindings map[string]string `json:"variable_bindings"` // {VarName: "user text"}
 }
 
 // ValidatedAction is the output of NASCQ validation. It contains

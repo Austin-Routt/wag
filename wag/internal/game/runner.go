@@ -19,7 +19,7 @@ type GameResult struct {
 	StatementCount int
 	ArgumentCount  int
 	IssueCount     int
-	Panicked       bool   // true if the game panicked (recovered)
+	Panicked       bool // true if the game panicked (recovered)
 	PanicMessage   string
 
 	// Provenance: with these, a game can be replayed and checked.
@@ -192,19 +192,19 @@ done:
 
 // BatchResult aggregates statistics across multiple game runs.
 type BatchResult struct {
-	GamesPlayed    int
-	Panics         int
-	PanicMessages  []string
-	Wins           map[string]int // playerName → win count
-	Ties           int
-	TotalMoves     int
-	TotalAbstains  int
-	TotalInvalid   int
-	AvgTurns       float64
-	AvgStatements  float64
-	AvgArguments   float64
-	MaxStatements  int
-	MaxArguments   int
+	GamesPlayed   int
+	Panics        int
+	PanicMessages []string
+	Wins          map[string]int // playerName → win count
+	Ties          int
+	TotalMoves    int
+	TotalAbstains int
+	TotalInvalid  int
+	AvgTurns      float64
+	AvgStatements float64
+	AvgArguments  float64
+	MaxStatements int
+	MaxArguments  int
 }
 
 // RunBatch plays multiple games and collects aggregate statistics.

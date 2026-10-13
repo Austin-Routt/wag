@@ -180,8 +180,6 @@ func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
 		return stmt
 	}
 
-
-
 	// Attempt to parse as a Prolog term for canonical representation.
 	if t, ok := terms.ReadString(idOrText); ok {
 		// Use the canonical term string as the ID.
@@ -428,8 +426,11 @@ func (a *Adapter) Evaluate() (caes.Labelling, error) {
 // but this check is a WAG constraint enforced at the adapter layer.
 //
 // The bipartite graph has two node types:
+//
 //   - Statement → Argument (via stmt.Args: stmt is conclusion of arg)
+//
 //   - Argument → Statement (via arg.Premises[i].Stmt: arg depends on premise)
+//
 //   - Argument → Statement (via arg.Undercutter: arg depends on undercutter)
 //
 //   - Statement → Argument (via its issue: the arguments for the other positions)

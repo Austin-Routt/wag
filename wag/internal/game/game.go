@@ -120,10 +120,10 @@ type Move struct {
 	PlayerID     string
 	Action       nascq.ProposedAction
 	Abstained    bool
-	ArgIDs       []string            // argument IDs created (empty if abstained)
-	Presumptions []string            // presumption arguments created for the move's premises
-	Weight       float64             // scheme base_weight used
-	ScoreDelta   float64             // points awarded this turn
+	ArgIDs       []string              // argument IDs created (empty if abstained)
+	Presumptions []string              // presumption arguments created for the move's premises
+	Weight       float64               // scheme base_weight used
+	ScoreDelta   float64               // points awarded this turn
 	LabelsBefore map[string]caes.Label // statement labels before the move
 	LabelsAfter  map[string]caes.Label // statement labels after the move
 }
@@ -159,13 +159,13 @@ type GameState struct {
 
 	Adapter *carneades.Adapter // argument graph + evaluation engine
 	NASCQ   *nascq.NASCQ       // structural validation graph
-	bridge  *graphBridge        // implements nascq.GraphQuerier
+	bridge  *graphBridge       // implements nascq.GraphQuerier
 
-	CurrentTurn     int  // 1-indexed turn number
-	ActivePlayerIdx int  // index into Players slice
-	MoveHistory     []Move
-	ConsecAllAbstain int  // consecutive ROUNDS where all players abstained
-	Terminated      bool
+	CurrentTurn       int // 1-indexed turn number
+	ActivePlayerIdx   int // index into Players slice
+	MoveHistory       []Move
+	ConsecAllAbstain  int // consecutive ROUNDS where all players abstained
+	Terminated        bool
 	TerminationReason string
 }
 

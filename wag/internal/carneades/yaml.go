@@ -138,11 +138,12 @@ func ensureMapsInitialized(ag *caes.ArgGraph) {
 //     become unsupported and label Out after the next Evaluate().
 //
 // Usage in the turn pipeline:
-//   argIDs, err := adapter.AddUndercutter(...)
-//   if !adapter.IsAcyclic() {
-//       adapter.RemoveArgument(argIDs[0])
-//       return error("creates cycle")
-//   }
+//
+//	argIDs, err := adapter.AddUndercutter(...)
+//	if !adapter.IsAcyclic() {
+//	    adapter.RemoveArgument(argIDs[0])
+//	    return error("creates cycle")
+//	}
 func (a *Adapter) RemoveArgument(argID string) error {
 	a.mu.Lock()
 	defer a.mu.Unlock()
