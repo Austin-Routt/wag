@@ -12,12 +12,17 @@
 //	--seed    Random seed for AI agents (default: 42)
 //	--name1   Player 1 name (default: "Player1")
 //	--name2   Player 2 name (default: "Player2")
+//	--data    Directory with schemes/core.yml and nascq/{schemes,critical_questions,edges}.json
+//	          (default: the data built into the binary)
+//	--lint    Check the data (see game.LintData), print the findings, and exit:
+//	          status 1 if there is an error
 package main
 
 import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/game"
@@ -34,7 +39,18 @@ func main() {
 	seed := flag.Int64("seed", 42, "Random seed for AI agents")
 	name1 := flag.String("name1", "Player1", "Player 1 display name")
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
+	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
+	lint := flag.Bool("lint", false, "check the data, print the findings and exit (status 1 on an error)")
 	flag.Parse()
+
+	files, err := loadData(*dataDir)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading data: %v\n", err)
+		os.Exit(1)
+	}
+	if *lint {
+		os.Exit(runLint(files))
+	}
 
 	// ---------------------------------------------------------------
 	// Create agents
@@ -66,10 +82,10 @@ func main() {
 			AbstentionThreshold: 3,
 			Scoring:             game.DefaultScoringConfig(),
 		},
-		YAMLBytes:   data.CoreYAML,
-		SchemesJSON: data.SchemesJSON,
-		CQsJSON:     data.CQsJSON,
-		EdgesJSON:   data.EdgesJSON,
+		YAMLBytes:   files.yaml,
+		SchemesJSON: files.schemes,
+		CQsJSON:     files.cqs,
+		EdgesJSON:   files.edges,
 		PlayerNames: []string{*name1, *name2},
 	})
 
@@ -220,4 +236,52 @@ func displayResult(result *game.TurnResult, agent game.Agent, gs *game.GameState
 	if result.Terminated {
 		fmt.Printf("  Game over: %s\n", result.TerminationReason)
 	}
+}
+
+// dataFiles holds the game data: the Carneades YAML and the NASCQ files.
+type dataFiles struct{ yaml, schemes, cqs, edges []byte }
+
+// loadData reads the data from dir, or returns the built-in data if dir is "".
+func loadData(dir string) (dataFiles, error) {
+	if dir == "" {
+		return dataFiles{data.CoreYAML, data.SchemesJSON, data.CQsJSON, data.EdgesJSON}, nil
+	}
+	var f dataFiles
+	for _, x := range []struct {
+		dst  *[]byte
+		path string
+	}{
+		{&f.yaml, "schemes/core.yml"},
+		{&f.schemes, "nascq/schemes.json"},
+		{&f.cqs, "nascq/critical_questions.json"},
+		{&f.edges, "nascq/edges.json"},
+	} {
+		b, err := os.ReadFile(filepath.Join(dir, x.path))
+		if err != nil {
+			return f, err
+		}
+		*x.dst = b
+	}
+	return f, nil
+}
+
+// runLint prints the data's lint findings and returns the exit status.
+func runLint(f dataFiles) int {
+	issues, err := game.LintData(f.yaml, f.schemes, f.cqs, f.edges)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading data: %v\n", err)
+		return 1
+	}
+	errors := 0
+	for _, i := range issues {
+		fmt.Println(i)
+		if i.Error {
+			errors++
+		}
+	}
+	fmt.Printf("%d error(s), %d warning(s)\n", errors, len(issues)-errors)
+	if errors > 0 {
+		return 1
+	}
+	return 0
 }
