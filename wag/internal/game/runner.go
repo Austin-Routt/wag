@@ -14,8 +14,10 @@ type GameResult struct {
 	AbstainCount   int
 	InvalidCount   int // rejected moves (retried)
 	Scores         map[string]float64
-	Winner         string // playerID with highest score, or "tie"
-	Reason         string // termination reason
+	Winner         string         // playerID with highest score, or "tie"
+	WinnerSeat     int            // index of the winner in turn order, or -1 for a tie
+	MoveKinds      map[string]int // accepted moves by kind: "support/<scheme>" or "attack/<attack type>/<scheme>"
+	Reason         string         // termination reason
 	StatementCount int
 	ArgumentCount  int
 	IssueCount     int
@@ -62,6 +64,8 @@ func RunGame(
 	result = &GameResult{
 		Scores:     make(map[string]float64),
 		AgentSeeds: make(map[string]int64),
+		MoveKinds:  make(map[string]int),
+		WinnerSeat: -1,
 	}
 	result.YAMLSHA256, result.NASCQSHA256 = InputHashes(yamlBytes, schemesJSON, cqsJSON, edgesJSON)
 	for _, a := range agents {
@@ -135,6 +139,7 @@ func RunGame(
 					result.AbstainCount++
 				} else {
 					result.MoveCount++
+					result.MoveKinds[moveKind(gs.MoveHistory[len(gs.MoveHistory)-1].Action)]++
 				}
 				break
 			}
@@ -169,11 +174,12 @@ done:
 
 	// Scores and winner.
 	bestScore := -1e9
-	for _, p := range gs.Players {
+	for i, p := range gs.Players {
 		result.Scores[p.ID] = p.Score
 		if p.Score > bestScore {
 			bestScore = p.Score
 			result.Winner = p.ID
+			result.WinnerSeat = i
 		}
 	}
 	// Check for tie.
@@ -185,6 +191,7 @@ done:
 	}
 	if tieCount > 1 {
 		result.Winner = "tie"
+		result.WinnerSeat = -1
 	}
 
 	return
@@ -205,6 +212,9 @@ type BatchResult struct {
 	AvgArguments  float64
 	MaxStatements int
 	MaxArguments  int
+	SeatWins      map[int]int        // wins by seat (index in turn order): a first- or last-mover advantage shows here
+	AvgScores     map[string]float64 // playerName → mean final score
+	MoveKinds     map[string]int     // accepted moves by kind, over all games (see GameResult.MoveKinds)
 }
 
 // RunBatch plays multiple games and collects aggregate statistics.
@@ -218,7 +228,10 @@ func RunBatch(
 	agentFactory func(gameIndex int) []Agent,
 ) *BatchResult {
 	br := &BatchResult{
-		Wins: make(map[string]int),
+		Wins:      make(map[string]int),
+		SeatWins:  make(map[int]int),
+		AvgScores: make(map[string]float64),
+		MoveKinds: make(map[string]int),
 	}
 
 	totalTurns := 0
@@ -240,6 +253,13 @@ func RunBatch(
 			br.Ties++
 		} else {
 			br.Wins[result.Winner]++
+			br.SeatWins[result.WinnerSeat]++
+		}
+		for name, sc := range result.Scores {
+			br.AvgScores[name] += sc
+		}
+		for k, n := range result.MoveKinds {
+			br.MoveKinds[k] += n
 		}
 
 		br.TotalMoves += result.MoveCount
@@ -262,7 +282,18 @@ func RunBatch(
 		br.AvgTurns = float64(totalTurns) / float64(completed)
 		br.AvgStatements = float64(totalStmts) / float64(completed)
 		br.AvgArguments = float64(totalArgs) / float64(completed)
+		for name := range br.AvgScores {
+			br.AvgScores[name] /= float64(completed)
+		}
 	}
 
 	return br
+}
+
+// moveKind classifies an accepted move for the batch statistics.
+func moveKind(a nascq.ProposedAction) string {
+	if a.Type == "attack" {
+		return "attack/" + a.AttackType + "/" + a.SchemeID
+	}
+	return a.Type + "/" + a.SchemeID
 }

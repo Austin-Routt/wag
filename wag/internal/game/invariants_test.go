@@ -111,3 +111,23 @@ func TestInvariantsHoldInRandomPlay(t *testing.T) {
 		})
 	}
 }
+
+// The batch statistics add up: wins by seat plus ties is the number of games,
+// the move kinds count every accepted move.
+func TestBatchStatisticsAddUp(t *testing.T) {
+	br := RunBatch(6, DefaultGameConfig(), DefaultRunnerConfig(), data.CoreYAML, data.SchemesJSON, data.CQsJSON, data.EdgesJSON,
+		func(i int) []Agent {
+			return []Agent{NewRandomAgent("A", int64(i), 0.1, 0.5), NewRandomAgent("B", int64(i+99), 0.1, 0.5)}
+		})
+	seats, kinds := br.Ties, 0
+	for _, n := range br.SeatWins {
+		seats += n
+	}
+	for _, n := range br.MoveKinds {
+		kinds += n
+	}
+	if br.Panics != 0 || seats != br.GamesPlayed || kinds != br.TotalMoves || len(br.AvgScores) != 2 {
+		t.Fatalf("panics %d, seat wins + ties %d of %d games, move kinds %d of %d moves, %d mean scores",
+			br.Panics, seats, br.GamesPlayed, kinds, br.TotalMoves, len(br.AvgScores))
+	}
+}

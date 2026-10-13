@@ -16,6 +16,8 @@
 //	          (default: the data built into the binary)
 //	--lint    Check the data (see game.LintData), print the findings, and exit:
 //	          status 1 if there is an error
+//	--games   Play N games between two AI players (random/greedy) and print the
+//	          statistics: wins by player and by seat, mean scores, the moves played
 //
 // A "json" player is a program on the other end of standard input and output
 // (game.JSONAgent): it gets the game as one JSON line (game.View) whenever it
@@ -29,6 +31,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/game"
@@ -47,6 +50,7 @@ func main() {
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
 	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
 	lint := flag.Bool("lint", false, "check the data, print the findings and exit (status 1 on an error)")
+	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	flag.Parse()
 
 	files, err := loadData(*dataDir)
@@ -56,6 +60,9 @@ func main() {
 	}
 	if *lint {
 		os.Exit(runLint(files))
+	}
+	if *games > 0 {
+		os.Exit(runGames(files, *games, *maxTurns, *seed, *p1Type, *p2Type, *name1, *name2))
 	}
 
 	// ---------------------------------------------------------------
@@ -303,6 +310,50 @@ func runLint(f dataFiles) int {
 	}
 	fmt.Printf("%d error(s), %d warning(s)\n", errors, len(issues)-errors)
 	if errors > 0 {
+		return 1
+	}
+	return 0
+}
+
+// runGames plays n games between two AI players, with seeds derived from
+// seed, prints the batch statistics and returns the exit status.
+func runGames(f dataFiles, n, maxTurns int, seed int64, p1, p2, name1, name2 string) int {
+	for _, typ := range []string{p1, p2} {
+		if typ != "random" && typ != "greedy" {
+			fmt.Fprintf(os.Stderr, "Error: --games needs AI players (random or greedy), not %q\n", typ)
+			return 1
+		}
+	}
+	if name1 == name2 {
+		name2 += "'"
+	}
+	cfg := game.GameConfig{MaxTurns: maxTurns, AbstentionThreshold: 3, Scoring: game.DefaultScoringConfig()}
+	br := game.RunBatch(n, cfg, game.DefaultRunnerConfig(), f.yaml, f.schemes, f.cqs, f.edges, func(i int) []game.Agent {
+		a1, _ := makeAgent(p1, name1, seed+int64(2*i))
+		a2, _ := makeAgent(p2, name2, seed+int64(2*i+1))
+		return []game.Agent{a1, a2}
+	})
+	fmt.Printf("%d games (%d panicked), %d turns at most\n", br.GamesPlayed, br.Panics, maxTurns)
+	for _, name := range []string{name1, name2} {
+		fmt.Printf("  %-12s wins %4d   mean score %7.2f\n", name, br.Wins[name], br.AvgScores[name])
+	}
+	fmt.Printf("  ties %d; wins by seat: first %d, second %d\n", br.Ties, br.SeatWins[0], br.SeatWins[1])
+	fmt.Printf("  moves %d, abstentions %d, rejected %d; mean %.1f arguments per game\n",
+		br.TotalMoves, br.TotalAbstains, br.TotalInvalid, br.AvgArguments)
+	kinds := make([]string, 0, len(br.MoveKinds))
+	for k := range br.MoveKinds {
+		kinds = append(kinds, k)
+	}
+	sort.Slice(kinds, func(i, j int) bool {
+		return br.MoveKinds[kinds[i]] > br.MoveKinds[kinds[j]] || br.MoveKinds[kinds[i]] == br.MoveKinds[kinds[j]] && kinds[i] < kinds[j]
+	})
+	for _, k := range kinds {
+		fmt.Printf("  %6d  %s\n", br.MoveKinds[k], k)
+	}
+	if br.Panics > 0 {
+		for _, m := range br.PanicMessages {
+			fmt.Printf("  panic: %s\n", m)
+		}
 		return 1
 	}
 	return 0
