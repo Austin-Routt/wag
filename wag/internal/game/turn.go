@@ -116,7 +116,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	if err != nil {
 		return gs.rejectInvalid(player, action, err.Error()), nil
 	}
-	if validated.Type == "question" && gs.raised(validated.TargetArgID, validated.AnswersCQID) {
+	if validated.Type == "question" && gs.raised(validated.TargetArgID, validated.AnswersCQID, validated.LocusStmtID) {
 		return gs.rejectInvalid(player, action, fmt.Sprintf("Q2: %s has already been raised about %s",
 			validated.AnswersCQID, validated.TargetArgID)), nil
 	}
@@ -549,7 +549,7 @@ func (gs *GameState) computeScore(
 	// Proleptic defence (SRD §16.4): a positive answer to a critical question
 	// about one's own argument that nobody has raised yet.
 	if va.IsDefence() && va.AnswersCQID != "" && cfg.ProlepticBonus != 0 &&
-		gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID && !gs.raised(va.TargetArgID, va.AnswersCQID) {
+		gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID && !gs.raised(va.TargetArgID, va.AnswersCQID, va.LocusStmtID) {
 		flat += cfg.ProlepticBonus
 	}
 
@@ -591,10 +591,12 @@ func (gs *GameState) standing(argID string) bool {
 }
 
 // raised reports whether an accepted move has already raised the critical
-// question about the argument: asked it, or answered it either way.
-func (gs *GameState) raised(argID, cqID string) bool {
+// question about the argument, and about the same premise for a question
+// asked of any premise (the challenge): asked it, or answered it either way.
+func (gs *GameState) raised(argID, cqID, premiseID string) bool {
 	for _, m := range gs.MoveHistory {
-		if len(m.ArgIDs) > 0 && m.Action.TargetArgID == argID && m.Action.AnswersCQID == cqID {
+		if len(m.ArgIDs) > 0 && m.Action.TargetArgID == argID && m.Action.AnswersCQID == cqID &&
+			(premiseID == "" || m.Action.TargetPremiseID == "" || m.Action.TargetPremiseID == premiseID) {
 			return true
 		}
 	}

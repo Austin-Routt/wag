@@ -93,7 +93,73 @@ Samples are in `docs/protocol/samples/`: game B's traces without prompts, and th
 
 ## 3. Converting Kialo by hand: batch 2
 
-*(See below: filled in from the double annotation.)*
+Agreed: the conversion is done by hand, and its accuracy has to be shown, not assumed. Batch 2 does what the audit asked (§7.7). Everything is in `docs/kialo-batch2/`.
+
+**What was done.**
+1. **The claims.** 50 claims: the pilot's 20 and the next 30 of discussion 13292.
+2. **The guidelines, version 2.** The audit's separate fields:
+   - the literal claim;
+   - the scheme and its fit;
+   - premises marked explicit, inferred or supplied;
+   - role, actual target, evidence, typed challenges.
+
+   `walton.yml` and the compendium are the authorities.
+3. **Two independent annotators.** Each coded every claim, as `walton.yml` formulas with real variables. Each checked its own file mechanically.
+4. **Agreement**, measured per field.
+5. **Adjudication.** Every disagreement was resolved with a stated reason, under seven written rules that fix the guideline gaps the annotators reported.
+   - The result is `gold.json`, with a shared vocabulary of 102 atoms, so the same thing is the same statement everywhere.
+   - A validator checks it: 276 formulas against `walton.yml`, every target against its claim.
+6. **Played as a WAG game.** `to_wag.py` plays the gold annotations through the server, each move through the game's validation.
+
+**Agreement between the two annotators (50 claims).**
+
+| Field | Agreement | Cohen's κ |
+|---|---|---|
+| Scheme | 0.80 | 0.77 |
+| Scheme, same family | 0.82 | |
+| Fit | 0.82 | 0.60 |
+| Role | 0.86 | 0.84 |
+| Polarity | 0.96 | 0.92 |
+| Actual target (claim / part) | 0.98 / 0.98 | 0.98 / 0.97 |
+| Re-parented | 0.74 | 0.51 |
+| Evidence | 0.96 | 0.93 |
+
+Where the scheme agreed (30 claims), the premises agreed exactly, because both instantiated `walton.yml`'s formulas. The wording of the values did not (word overlap 0.52), hence the shared vocabulary. Against the first pilot, each annotator agrees with the pilot on the scheme for half of the 20 shared claims (κ 0.43), and on the role for 45–50%.
+
+**How to read these numbers.**
+- **Upper bound.** They are an upper bound. Both annotators are the same kind of model, briefed alike, so their errors correlate; this measures how determinate the guidelines are, not how two people would agree.
+- **Conventions drive the coding.** The drop to 0.50 against the pilot shows how much the conventions decide: version 2 and the new schemes changed many codings, not new readings of the text.
+- **Systematic disagreements.** They fell into four kinds, each a gap in the guidelines:
+  - re-parenting was ill-defined (13 claims);
+  - "answer to a critical question" against "direct attack on a premise" (6);
+  - practical reasoning against positive consequences for a proposal with a purpose (6), the audit's open P2/P3;
+  - which of several instances is primary.
+- **Version 3.** The adjudication gives a concrete rule for each (`guidelines.md` §5).
+- **Next: a human calibration.** You code about 15 claims blind, and we compare.
+
+**What the gold says about the game.**
+- **Coverage.**
+  - 26 of the 50 primary instances use schemes the game has: negative consequences 9, goal-based practical reasoning 8, positive consequences 5, expert opinion 2, analogy 1, values 1.
+  - 12 use `walton.yml` schemes it lacks: cause to effect (17 instances in all), verbal classification 3, rule 2, and four others once.
+  - 5 are Other and 7 have no scheme (bare denials, amendments).
+- **Candidate patterns** (counted across both annotators and the adjudication):
+  - **Mitigation by substitution** (4 claims). "Iron supplements exist", so the harm need not happen. It denies `brings_about(A,G)`; no scheme covers it, and it is the best candidate for a new scheme.
+  - **Weighing consequences** (2).
+  - **Absent exposure** (1).
+  - **Hypothetical causal steps** (11 instances): `cause_to_effect` asserts the cause has occurred, so a policy needs a modal variant (audit N8).
+- **When to approve a pattern.** On the question from part 4, a pattern earns a scheme when at least three independent instances share a stable structure. Mitigation is there; batch 3 should confirm its critical questions (access, adequacy, cost).
+
+**Playing it.**
+- **What played.** 44 of the 49 claims below the thesis are played:
+  - 17 with their own scheme;
+  - 3 bare denials as challenges (audit P5);
+  - 24 with Other, because the game lacks the scheme, or because of the N9 rule (a good consequence of another action does not show it is the better means). Two claims answer "Side Effects" with negative consequences, which the game does not allow; that is audit N4, your call.
+  - The five not played each have a reason in `wag-report.json`. For example, a premise of a causal argument the game cannot build.
+- **Bugs found.** The conversion found two engine bugs, both fixed:
+  - Q2 refused challenging a second premise of the same argument;
+  - (earlier) answer arguments' conclusion questions.
+- **The verdict.** The thesis ends OUT: a tie under PE, 0.65 against 0.65, the strongest pro (positive consequences) against the strongest con (negative consequences). With the policy preset's weights it would be IN. That is your point 6 in one discussion.
+- **To read it,** load `wag-game.json` in the browser (*Load an exported game*): the discussion as a WAG game, move by move.
 
 ## 4. `walton.yml` as the authority
 

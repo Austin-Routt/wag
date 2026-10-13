@@ -139,17 +139,40 @@ def main():
             call(base, f"/api/games/{gid}/move", {"action": {"type": "abstain"}, "why": "keeps the Kialo order"})
         return call(base, f"/api/games/{gid}/move", {"action": action, "why": why})
 
-    for it in items["items"]:
+    # A claim that answers a sibling played later waits for it (one more pass).
+    order = [it for it in items["items"] if it["kialo_claim_id"] != thesis_id and it["kialo_claim_id"] in ann]
+    later = {}
+    for n, it in enumerate(order):
+        later[it["kialo_claim_id"]] = n
+    queue, deferred = [], []
+    for n, it in enumerate(order):
+        t = str((((ann[it["kialo_claim_id"]].get("target") or {}).get("actual")) or {}).get("claim") or "")
+        (deferred if later.get(t, -1) > n else queue).append(it)
+    for it in queue + deferred:
         cid = it["kialo_claim_id"]
         a = ann.get(cid)
-        if cid == thesis_id or a is None:
-            continue
         inst = primary(a)
         scheme = (inst.get("scheme") or {})
         wid = scheme.get("walton_id") or "none"
         rel = (it.get("kialo_parents") or [{}])[0].get("relation")
         side, pol = side_of(a, rel)
         entry = {"claim": cid, "scheme": wid, "role": (a.get("role") or {}).get("kind")}
+        tgt0 = ((a.get("target") or {}).get("actual") or {})
+        if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and str(tgt0.get("claim")) in played:
+            # A bare denial of a premise is a challenge (audit P5): the
+            # premise's author must argue for it.
+            arg, f = played[str(tgt0["claim"])]["arg"], (tgt0.get("formula") or "").replace(" ", "")
+            cq = "CQ:premise_acceptable"
+            for o in call(base, f"/api/games/{gid}/moves?target={arg}") or []:
+                if isinstance(o, dict) and o.get("locus") == "premise" and o.get("stmt") == f and o.get("question"):
+                    cq = o["cq"]
+                    break
+            r = move(side, {"type": "question", "target_arg_id": arg, "answers_cq_id": cq, "target_premise_id": f},
+                     f"Kialo {cid}: a bare denial, played as a challenge")
+            res = r.get("result") or {}
+            entry["played"] = "challenge" if res.get("accepted") else "no: challenge: " + str(res.get("error"))
+            report.append(entry)
+            continue
         if side is None or wid == "none":
             entry["played"] = "no: " + ("no side" if side is None else "no scheme: " + str(scheme.get("fit")))
             report.append(entry)
@@ -164,7 +187,7 @@ def main():
             if tpart.startswith("conclusion"):
                 stmt = played[tclaim]["conclusion"]
             elif tpart.startswith("premise") or tpart.startswith("exception"):
-                f = tpart.split(":", 1)[1].strip() if ":" in tpart else ""
+                f = tgt.get("formula") or (tpart.split(":", 1)[1].strip() if ":" in tpart else "")
                 stmt = f.replace(" ", "") or None
         literal = " ".join(a.get("literal") or [it["text"]])[:300]
         wag = WALTON_TO_WAG.get(wid)
@@ -181,8 +204,10 @@ def main():
         if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and tclaim in played:
             act = {"type": "attack" if pol == "against" else "support", "target_arg_id": played[tclaim]["arg"],
                    "answers_cq_id": cq, "scheme_id": wag, "variable_bindings": bindings, "text": literal}
-            if tpart.startswith("premise:"):
-                act["target_premise_id"] = tpart.split(":", 1)[1].strip().replace(" ", "")
+            if tpart.startswith("premise"):
+                f = tgt.get("formula") or (tpart.split(":", 1)[1] if ":" in tpart else "")
+                if f:
+                    act["target_premise_id"] = f.strip().replace(" ", "")
             actions.append(("cq", act))
         if stmt and wag:
             actions.append(("statement", {"type": "support" if pol == "for" else "attack", "target_stmt_id": stmt, "scheme_id": wag,
@@ -223,6 +248,7 @@ def main():
     summary = {"game": gid, "claim": claim, "claim_label": s["statements"].get(claim, {}).get("label"),
                "played": sum(1 for e in report if not str(e.get("played", "")).startswith("no")),
                "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new")),
+               "as_challenges": sum(1 for e in report if e.get("played") == "challenge"),
                "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "moves": report}

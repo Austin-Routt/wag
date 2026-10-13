@@ -1,0 +1,380 @@
+{
+ "game": "1",
+ "claim": "should_be_performed(tax_meat)",
+ "claim_label": "out",
+ "played": 44,
+ "with_their_scheme": 17,
+ "as_challenges": 3,
+ "with_other": 24,
+ "not_played": 5,
+ "moves": [
+  {
+   "claim": "13292.7",
+   "scheme": "negative_consequences",
+   "role": "independent_con",
+   "played": "statement",
+   "arg": "a1"
+  },
+  {
+   "claim": "13292.9",
+   "scheme": "negative_consequences",
+   "role": "independent_con",
+   "played": "statement",
+   "arg": "a4"
+  },
+  {
+   "claim": "13292.108",
+   "scheme": "practical_reasoning2",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a7"
+  },
+  {
+   "claim": "13292.115",
+   "scheme": "positive_consequences",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a18"
+  },
+  {
+   "claim": "13292.118",
+   "scheme": "practical_reasoning2",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a21"
+  },
+  {
+   "claim": "13292.25",
+   "scheme": "other",
+   "role": "premise_attack",
+   "played": "other",
+   "arg": "a31"
+  },
+  {
+   "claim": "13292.33",
+   "scheme": "other",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a33"
+  },
+  {
+   "claim": "13292.180",
+   "scheme": "negative_consequences",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a35"
+  },
+  {
+   "claim": "13292.36",
+   "scheme": "negative_consequences",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a38"
+  },
+  {
+   "claim": "13292.127",
+   "scheme": "negative_consequences",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a41"
+  },
+  {
+   "claim": "13292.14",
+   "scheme": "cause_to_effect",
+   "role": "rebuttal",
+   "played": "other-new",
+   "arg": "a44"
+  },
+  {
+   "claim": "13292.61",
+   "scheme": "analogy",
+   "role": "rebuttal",
+   "played": "new",
+   "arg": "a46"
+  },
+  {
+   "claim": "13292.145",
+   "scheme": "positive_consequences",
+   "role": "action_amendment",
+   "played": "new",
+   "arg": "a51"
+  },
+  {
+   "claim": "13292.174",
+   "scheme": "negative_consequences",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a54",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:negative_consequences\" cannot back up CQ \"CQ:side_effect\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Argument from Negative Consequences cannot conclude the opposite of side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.104",
+   "scheme": "practical_reasoning2",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a56",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:practical_reasoning_goal\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Instrumental Practical Reasoning cannot conclude the opposite of realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.169",
+   "scheme": "none",
+   "role": "premise_attack",
+   "played": "challenge"
+  },
+  {
+   "claim": "13292.218",
+   "scheme": "practical_reasoning2",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a59",
+   "fallback_after": [
+    "statement: S9: Instrumental Practical Reasoning cannot conclude would_be_realized(meat_price_reflects_real_costs,higher_meat_price): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.11",
+   "scheme": "practical_reasoning2",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a61",
+   "fallback_after": [
+    "statement: S9: Instrumental Practical Reasoning cannot conclude current_circumstances(meat_price_below_real_costs): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.43",
+   "scheme": "positive_value",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a63",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:values\" cannot back up CQ \"CQ:opposite_consequences\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Argument from Values cannot conclude the opposite of ¬should_be_performed(tax_meat): its conclusion has the form reason_retaining_goal(V,G)"
+   ]
+  },
+  {
+   "claim": "13292.121",
+   "scheme": "negative_consequences",
+   "role": "side_effect",
+   "played": "statement",
+   "arg": "a65"
+  },
+  {
+   "claim": "13292.135",
+   "scheme": "none",
+   "role": "premise_attack",
+   "played": "challenge"
+  },
+  {
+   "claim": "13292.137",
+   "scheme": "none",
+   "role": "premise_attack",
+   "played": "no: challenge: Q2: CQ:premise_acceptable has already been raised about a7"
+  },
+  {
+   "claim": "13292.2",
+   "scheme": "verbal_classification",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a69"
+  },
+  {
+   "claim": "13292.6",
+   "scheme": "practical_reasoning2",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a71",
+   "fallback_after": [
+    "statement: S9: Instrumental Practical Reasoning cannot conclude would_be_realized(environmental_harm_from_meat_reduced,reduced_meat_consumption): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.12",
+   "scheme": "cause_to_effect",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a73"
+  },
+  {
+   "claim": "13292.4",
+   "scheme": "verbal_classification",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a75"
+  },
+  {
+   "claim": "13292.8",
+   "scheme": "verbal_classification",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a77"
+  },
+  {
+   "claim": "13292.46",
+   "scheme": "rule",
+   "role": "action_amendment",
+   "played": "other-new",
+   "arg": "a79"
+  },
+  {
+   "claim": "13292.192",
+   "scheme": "cause_to_effect",
+   "role": "premise_attack",
+   "played": "no: other: S7: statement \"would_be_realized(deforestation_slowed,reduced_meat_consumption)\" is not on the board"
+  },
+  {
+   "claim": "13292.3",
+   "scheme": "end_and_means_1",
+   "role": "premise_backing",
+   "played": "other",
+   "arg": "a81"
+  },
+  {
+   "claim": "13292.30",
+   "scheme": "practical_analogy_positive",
+   "role": "independent_pro",
+   "played": "other-new",
+   "arg": "a83"
+  },
+  {
+   "claim": "13292.141",
+   "scheme": "cause_to_effect",
+   "role": "cq_answer",
+   "played": "no: other: S7: statement \"instance(meat_production,significant_ghg_source)\" is not on the board"
+  },
+  {
+   "claim": "13292.147",
+   "scheme": "positive_consequences",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a85",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:consequences\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Argument from Positive Consequences cannot conclude the opposite of realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.182",
+   "scheme": "other",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a87"
+  },
+  {
+   "claim": "13292.190",
+   "scheme": "practical_reasoning2",
+   "role": "action_amendment",
+   "played": "new",
+   "arg": "a89"
+  },
+  {
+   "claim": "13292.194",
+   "scheme": "positive_consequences",
+   "role": "action_amendment",
+   "played": "new",
+   "arg": "a100"
+  },
+  {
+   "claim": "13292.198",
+   "scheme": "other",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a103"
+  },
+  {
+   "claim": "13292.202",
+   "scheme": "none",
+   "role": "action_amendment",
+   "played": "no: no scheme: none"
+  },
+  {
+   "claim": "13292.204",
+   "scheme": "other",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a105"
+  },
+  {
+   "claim": "13292.208",
+   "scheme": "none",
+   "role": "premise_attack",
+   "played": "no: challenge: S8: premise \"current_circumstances(farming_industry_not_meat_is_problem)\" not found in argument \"a56\""
+  },
+  {
+   "claim": "13292.224",
+   "scheme": "expert_opinion",
+   "role": "premise_backing",
+   "played": "statement",
+   "arg": "a107"
+  },
+  {
+   "claim": "13292.233",
+   "scheme": "expert_opinion",
+   "role": "cq_answer",
+   "played": "cq",
+   "arg": "a114"
+  },
+  {
+   "claim": "13292.235",
+   "scheme": "positive_consequences",
+   "role": "action_amendment",
+   "played": "new",
+   "arg": "a121"
+  },
+  {
+   "claim": "13292.29",
+   "scheme": "rule",
+   "role": "rebuttal",
+   "played": "other",
+   "arg": "a124"
+  },
+  {
+   "claim": "13292.45",
+   "scheme": "practical_necessary_condition",
+   "role": "action_amendment",
+   "played": "other-new",
+   "arg": "a126"
+  },
+  {
+   "claim": "13292.5",
+   "scheme": "negative_consequences",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a128",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:negative_consequences\" cannot back up CQ \"CQ:side_effect\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Argument from Negative Consequences cannot conclude the opposite of side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.56",
+   "scheme": "negative_consequences",
+   "role": "independent_pro",
+   "played": "statement",
+   "arg": "a130"
+  },
+  {
+   "claim": "13292.123",
+   "scheme": "practical_reasoning2",
+   "role": "cq_answer",
+   "played": "other",
+   "arg": "a133",
+   "fallback_after": [
+    "cq: S5: scheme \"AS:practical_reasoning_goal\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
+    "statement: S9: Instrumental Practical Reasoning cannot conclude the opposite of realize_more_effectively(meat_price_reflects_real_costs,tax_meat): its conclusion has the form should_be_performed(A)"
+   ]
+  },
+  {
+   "claim": "13292.13",
+   "scheme": "none",
+   "role": "premise_attack",
+   "played": "challenge"
+  }
+ ]
+}

@@ -139,3 +139,29 @@ One JSON file: `{"annotator": "A" | "B", "items": [ … ]}`, one item per claim 
 ```
 
 Formulas use `walton.yml` predicates, with the values in place of the variables. Write each value as a short snake_case atom (`tax_meat`); the English in `en` uses the `language` templates. `scheme.walton_id` is `"other"` or `"none"` when no scheme applies. `role.cq` names the question (a WAG ID such as `CQ:likelihood` if one exists, else the compendium label) when the role is `cq_answer`.
+
+## 5. Version 3: changes after the batch-2 adjudication (2026-10-13)
+
+The two annotators and the adjudicator found these gaps. Batch 3 applies them; `gold.json` already does (rules R1–R7 of the adjudication).
+
+1. **Re-parenting.** `re_parented` is true exactly when the actual target claim is not the Kialo parent. Attacking a premise or exception of the parent's own argument is recorded in `target.actual.part` and `formula`, not as re-parenting. The tooling computes it.
+2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target premise or exception is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the target's primary instance. Further Kialo parents go in `target.other_kialo_parents`.
+3. **CQ answer or direct attack.**
+   - `cq_answer` exactly when the targeted formula is one that a critical question of the target's scheme is about.
+   - The batch ships a table of (scheme, formula) → (compendium CQ, game CQ), from `docs/scheme-registry/links.json` and `edges.json`.
+   - Otherwise the role is `premise_attack`, `premise_backing` or `undercutter`.
+   - `side_effect` and `alternative_means` become values of `role.move`, a finer label beside the kind.
+   - A question about the conclusion (opposite consequences, side effects of a consequences argument) is a `cq_answer` too.
+4. **Pros of a policy.**
+   - Use practical reasoning only when S2 is a state distinct from the action, and the annotator supplies at most one of: S1, A→S2, S2→G.
+   - A proposal with a purpose is `positive_consequences`.
+   - A bare proposal is `none` with role `action_amendment`.
+5. **The primary instance** is the one whose conclusion reaches the target. Causal facts that back an evaluative premise make the classification primary and the causal chain secondary.
+6. **Fit.**
+   - `explicit` when every premise-role formula is explicit.
+   - A `fragment` binds only the variables of the formulas it states; the others are null.
+7. **Exceptions and assumptions** are listed under `premises` with their `role` (exception, assumption).
+8. **Polarity** is the stance on the target's conclusion; there is no "none". A link that explains a term is `definition` evidence.
+9. **The shared vocabulary** (`lexicon.json`) is issued with the batch. One atom per entity or proposition; the action is always `tax_meat`.
+10. **Challenge types** add possibility and conflicting goals.
+11. **Causal steps of an un-enacted policy.** Use `cause_to_effect` only if nothing better fits, with fit `reconstructed` and the note "hypothetical cause (needs a modal causal scheme, audit N8)".

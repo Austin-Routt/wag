@@ -221,3 +221,30 @@ func TestAnswerFixesTheSchemesConclusion(t *testing.T) {
 		t.Fatalf("a3's premise: %s", p)
 	}
 }
+
+// Q2 refuses a question raised again about the same argument, but two
+// premises of one argument can each be challenged.
+func TestChallengeEachPremise(t *testing.T) {
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs.Config.MaxTurns, gs.Config.AnyPremise = 0, true
+	gs.NASCQ.EnablePremiseQuestion()
+	a1 := play(t, gs, prSupportAction())
+	ask := func(premise string) *TurnResult {
+		r, err := gs.ExecuteTurn(nascq.ProposedAction{Type: "question", AnswersCQID: nascq.CQPremiseAcceptable, TargetArgID: a1, TargetPremiseID: premise})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return r
+	}
+	if r := ask("current_circumstances(current_state)"); !r.Accepted {
+		t.Fatalf("first challenge: %+v", r)
+	}
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	if r := ask("worthy_goal(reduce_emissions)"); !r.Accepted {
+		t.Fatalf("a challenge of another premise: %+v", r)
+	}
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	if r := ask("current_circumstances(current_state)"); r.Accepted || !strings.Contains(r.Error, "Q2") {
+		t.Fatalf("the same challenge again: %+v", r)
+	}
+}
