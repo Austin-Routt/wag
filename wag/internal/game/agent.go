@@ -190,12 +190,15 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 // GreedyAgent (tries each action, picks highest score delta)
 // -------------------------------------------------------------------------
 
-// GreedyAgent evaluates each available action template by simulating it
-// with random bindings, then picks the one that produces the highest
-// score delta. Uses RemoveArgument for rollback after each trial.
+// GreedyAgent looks one move ahead: it tries every available action template
+// with trialsPerAction sets of random bindings, playing each through
+// GameState.Simulate (which restores the game afterwards), and plays the one
+// with the highest score delta; it abstains if no trial is accepted. Ties go
+// to the first in enumeration order, so a seeded agent is reproducible.
 //
-// This is a simple 1-ply lookahead. For stress testing purposes, it
-// exercises the rollback mechanism heavily.
+// It used to score templates by a fixed estimate (base weight × 10, +15 for
+// an undercutter) without trying them, so it preferred undercutters whether
+// or not they would succeed or score.
 type GreedyAgent struct {
 	name            string
 	seed            int64
@@ -222,22 +225,14 @@ func (a *GreedyAgent) Name() string { return a.name }
 func (a *GreedyAgent) Seed() int64 { return a.seed }
 
 func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
-	if len(obs.AvailableActions) == 0 {
-		return nascq.ProposedAction{Type: "abstain"}
-	}
-
-	// For each action template, generate random bindings and evaluate.
-	bestScore := -1000.0
-	var bestAction nascq.ProposedAction
-	found := false
-
+	best := nascq.ProposedAction{Type: "abstain"}
+	bestScore, found := 0.0, false
 	for _, tmpl := range obs.AvailableActions {
 		for trial := 0; trial < a.trialsPerAction; trial++ {
 			bindings := make(map[string]string)
 			for _, varName := range carneades.SortedKeys(tmpl.Variables) {
 				bindings[varName] = randomWord(a.rng, tmpl.Variables[varName].Type)
 			}
-
 			action := nascq.ProposedAction{
 				Type:             tmpl.Type,
 				AttackType:       tmpl.AttackType,
@@ -247,34 +242,16 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 				TargetPremiseID:  tmpl.TargetPremiseID,
 				VariableBindings: bindings,
 			}
-
-			// Validate structurally (cheap check before simulation).
-			_, err := obs.GameState.NASCQ.Validate(action, obs.GameState.bridge)
-			if err != nil {
-				continue // invalid, skip
+			r, err := obs.GameState.Simulate(action)
+			if err != nil || r == nil || !r.Accepted {
+				continue
 			}
-
-			// Use the validated weight as a heuristic score estimate.
-			// Full simulation would require snapshot/rollback which is
-			// too expensive for a simple heuristic agent.
-			scheme := obs.GameState.NASCQ.GetScheme(tmpl.SchemeID)
-			score := scheme.BaseWeight * 10.0 // rough estimate
-			if tmpl.Type == "attack" && tmpl.CaesAttackType == "undercutter" {
-				score += 15.0 // anticipate undercutter bonus
-			}
-
-			if score > bestScore {
-				bestScore = score
-				bestAction = action
-				found = true
+			if !found || r.ScoreDelta > bestScore {
+				best, bestScore, found = action, r.ScoreDelta, true
 			}
 		}
 	}
-
-	if !found {
-		return nascq.ProposedAction{Type: "abstain"}
-	}
-	return bestAction
+	return best
 }
 
 // -------------------------------------------------------------------------
