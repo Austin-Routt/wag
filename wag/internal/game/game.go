@@ -164,7 +164,8 @@ type GameState struct {
 	CurrentTurn       int // 1-indexed turn number
 	ActivePlayerIdx   int // index into Players slice
 	MoveHistory       []Move
-	ConsecAllAbstain  int // consecutive ROUNDS where all players abstained
+	ConsecAllAbstain  int  // consecutive ROUNDS where all players abstained
+	roundHadMove      bool // a move was accepted in the current round
 	Terminated        bool
 	TerminationReason string
 }

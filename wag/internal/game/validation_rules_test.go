@@ -116,3 +116,28 @@ func TestEnumeratedUnderminingTemplatesAreValid(t *testing.T) {
 		}
 	}
 }
+
+// A round in which every player abstained ends the game at the threshold even
+// when a rejected move came before an abstention (the round check used to read
+// the last len(Players) history records, which include rejected moves).
+func TestAllAbstainRoundCountsDespiteRejectedMoves(t *testing.T) {
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs.Config.AbstentionThreshold = 1
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})                             // Alice
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:nonexistent"}) // Bob, rejected
+	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})                     // Bob
+	if !r.Terminated || gs.ConsecAllAbstain != 1 {
+		t.Fatalf("all abstained a round: terminated=%v ConsecAllAbstain=%d", r.Terminated, gs.ConsecAllAbstain)
+	}
+
+	// A round with a move resets the count.
+	gs = newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs.Config.AbstentionThreshold = 2
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	gs.ExecuteTurn(prSupportAction())
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	if gs.ConsecAllAbstain != 0 || gs.Terminated {
+		t.Fatalf("after a round with a move: ConsecAllAbstain=%d terminated=%v", gs.ConsecAllAbstain, gs.Terminated)
+	}
+}

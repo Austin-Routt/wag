@@ -126,6 +126,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	scoreDelta := gs.computeScore(argIDs, validated, labelsBefore, labelsAfter)
 	player.Score += scoreDelta
 	player.ConsecutiveAbstentions = 0
+	gs.roundHadMove = true
 	player.SchemeUsageCounts[action.SchemeID]++
 
 	// ---------------------------------------------------------------
@@ -362,26 +363,17 @@ func (gs *GameState) advanceTurn() {
 		gs.ActivePlayerIdx = 0
 		gs.CurrentTurn++
 
-		// Check if ALL players abstained this round.
-		roundStart := len(gs.MoveHistory) - len(gs.Players)
-		if roundStart < 0 {
-			roundStart = 0
-		}
-		allAbstained := true
-		count := 0
-		for i := roundStart; i < len(gs.MoveHistory); i++ {
-			if !gs.MoveHistory[i].Abstained {
-				allAbstained = false
-				break
-			}
-			count++
-		}
-		// Only count as all-abstain if we had a full round of moves.
-		if allAbstained && count >= len(gs.Players) {
-			gs.ConsecAllAbstain++
-		} else {
+		// Every turn ends with an accepted move or an abstention (a rejected
+		// move does not end the turn), so all players abstained this round
+		// exactly when no move was accepted in it. The history cannot be used
+		// for this: it also records rejected moves, so a rejected move followed
+		// by an abstention hid an all-abstain round.
+		if gs.roundHadMove {
 			gs.ConsecAllAbstain = 0
+		} else {
+			gs.ConsecAllAbstain++
 		}
+		gs.roundHadMove = false
 	}
 }
 
