@@ -1,0 +1,2329 @@
+{
+ "_readme": "DRAFT. CQ texts and the scheme list come from the SPR (ea361093-SPR.md), unverified against the book. Every locus is a draft, needs review.",
+ "schemes": {
+  "popular_opinion": {
+   "as_number": 4,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What evidence supports the claim that A is generally accepted as true?",
+     "provenance": "SPR Deepseek section 2 AS4",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "generally_true(A)",
+     "status": "existing",
+     "note": "the intended assumption generally_accepted(A) is under the misspelled key 'assumption:' and is dropped at load; generally_true/1 and generally_accepted/1 say the same thing",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "generally_true({A})"
+    },
+    {
+     "cq": 2,
+     "text": "Even if A is generally accepted, are there good reasons to doubt that it is true?",
+     "provenance": "SPR Deepseek section 2 AS4",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "doubting_general(A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "doubting_general({A})"
+    }
+   ]
+  },
+  "pop_scheme": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "position_to_know_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "expert_opinion_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "deliberation_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "moral_justification_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "moral_justification_ad_populum_excuse": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "snob_appeal_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "appeal_to_vanity_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "rhetoric_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "common_folk_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "common_folks_group_ad_populum": {
+   "as_number": 4,
+   "cqs": []
+  },
+  "popular_practise": {
+   "as_number": 5,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What actions or other indications show that a large majority accepts A?",
+     "provenance": "SPR Deepseek section 2 AS5",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "popular_practise(A)",
+     "status": "existing",
+     "note": "template has 2 %s for arity 1",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "popular_practise({A})",
+     "repair_needed": "template has 2 %s for arity 1"
+    },
+    {
+     "cq": 2,
+     "text": "Even if a large majority accepts A, what grounds are there for thinking they are justified?",
+     "provenance": "SPR Deepseek section 2 AS5",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "have_grounds_think(A)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "have_grounds_think({A})"
+    }
+   ]
+  },
+  "from_example": {
+   "as_number": 6,
+   "cqs": []
+  },
+  "illustration": {
+   "as_number": 6,
+   "cqs": []
+  },
+  "from_model": {
+   "as_number": 6,
+   "cqs": []
+  },
+  "from_antimodel": {
+   "as_number": 6,
+   "cqs": []
+  },
+  "practical_analogy_positive": {
+   "as_number": 8,
+   "cqs": []
+  },
+  "practical_analogy_negative": {
+   "as_number": 8,
+   "cqs": []
+  },
+  "composition_generic": {
+   "as_number": 9,
+   "cqs": []
+  },
+  "part_in_whole": {
+   "as_number": 9,
+   "cqs": []
+  },
+  "division_generic": {
+   "as_number": 10,
+   "cqs": []
+  },
+  "opposition-descriptive_1": {
+   "as_number": 11,
+   "cqs": []
+  },
+  "opposition-descriptive_2": {
+   "as_number": 11,
+   "cqs": []
+  },
+  "opposition-descriptive_3": {
+   "as_number": 11,
+   "cqs": []
+  },
+  "opposition-normative": {
+   "as_number": 11,
+   "cqs": []
+  },
+  "rhetorical_oppositions_normative": {
+   "as_number": 12,
+   "cqs": []
+  },
+  "rhetorical_oppositions_descriptive": {
+   "as_number": 12,
+   "cqs": []
+  },
+  "alternative_cognitive": {
+   "as_number": 13,
+   "cqs": []
+  },
+  "alternative_normative": {
+   "as_number": 13,
+   "cqs": []
+  },
+  "verbal_classification_vagueness": {
+   "as_number": 16,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Does the context of dialogue require a particular level of precision?",
+     "provenance": "SPR Deepseek section 2 AS16",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "property_precion_needed(F)",
+     "status": "existing",
+     "note": "F is not a declared variable of the scheme (declares P instead)",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "property_precion_needed({F})",
+     "repair_needed": "F undeclared (scheme declares P)"
+    },
+    {
+     "cq": 2,
+     "text": "Is the property F too vague to meet that level of precision?",
+     "provenance": "SPR Deepseek section 2 AS16",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "property_vagueness(F,A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "property_vagueness({F},{A})",
+     "repair_needed": "F undeclared"
+    },
+    {
+     "cq": 3,
+     "text": "Why is this vagueness a problem in the dialogue in which the argument was advanced?",
+     "provenance": "SPR Deepseek section 2 AS16",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "vague_defined_property(A,F)",
+     "status": "existing",
+     "note": "maps to the warrant premise; could instead be an argument-locus question",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "vague_defined_property({A},{F})",
+     "repair_needed": "F undeclared"
+    }
+   ]
+  },
+  "verbal_classification_arbitrariness": {
+   "as_number": 17,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Does the context of dialogue require a nonarbitrary definition?",
+     "provenance": "SPR Deepseek section 2 AS17",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "needed_nonarbitrary(A,F)",
+     "status": "existing",
+     "note": "written needed_nonarbitrary((A,F) in walton.yml: unparsable, silently dropped until fixed",
+     "review": "draft, needs review",
+     "formula_kind": "premise (written needed_nonarbitrary((A,F) (unparsable))",
+     "nascq_pattern_draft": "needed_nonarbitrary({A},{F})",
+     "repair_needed": "written needed_nonarbitrary((A,F)"
+    },
+    {
+     "cq": 2,
+     "text": "Is the property F defined arbitrarily?",
+     "provenance": "SPR Deepseek section 2 AS17",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "arbitrary_property(F,A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "arbitrary_property({F},{A})"
+    },
+    {
+     "cq": 3,
+     "text": "Why is the arbitrariness a problem in this dialogue?",
+     "provenance": "SPR Deepseek section 2 AS17",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "arbitrary_defined_property(A,F)",
+     "status": "existing",
+     "note": "warrant premise",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "arbitrary_defined_property({A},{F})"
+    }
+   ]
+  },
+  "interaction_act_person_1": {
+   "as_number": 18,
+   "cqs": []
+  },
+  "interaction_act_person_2": {
+   "as_number": 18,
+   "cqs": []
+  },
+  "positive_value": {
+   "as_number": 19,
+   "cqs": []
+  },
+  "negative_value": {
+   "as_number": 19,
+   "cqs": []
+  },
+  "sacrifice": {
+   "as_number": 20,
+   "cqs": []
+  },
+  "group_1": {
+   "as_number": 21,
+   "cqs": []
+  },
+  "group_2": {
+   "as_number": 21,
+   "cqs": []
+  },
+  "practical_inference": {
+   "as_number": 22,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there alternative means of realizing the goal?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs); SPR Claude (Opus 4.8) section 6 I.3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "more_efficient_alternative_actions(A,G)",
+     "status": "existing",
+     "note": "CQ1 and CQ2 share one exception; consider alternative_means(G,A) for CQ1 (predicate exists in the collection)",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "more_efficient_alternative_actions({A},{G})"
+    },
+    {
+     "cq": 2,
+     "text": "Is A the best (most efficient) alternative?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs); SPR Claude (Opus 4.8) section 6 I.3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "more_efficient_alternative_actions(A,G)",
+     "status": "existing",
+     "note": "shared with CQ1",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "more_efficient_alternative_actions({A},{G})"
+    },
+    {
+     "cq": 3,
+     "text": "Are there conflicting goals of higher priority?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs); SPR Claude (Opus 4.8) section 6 I.3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "other_goals_conflict(G)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "other_goals_conflict({G})"
+    },
+    {
+     "cq": 4,
+     "text": "Is it possible to bring about A in the given circumstances?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs); SPR Claude (Opus 4.8) section 6 I.3",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "possible_action(A)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "possible_action({A})"
+    },
+    {
+     "cq": 5,
+     "text": "Would bringing about A have known bad side effects (consequences)?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs); SPR Claude (Opus 4.8) section 6 I.3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "incompatible_consequences(A,G)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "incompatible_consequences({A},{G})"
+    }
+   ]
+  },
+  "practical_necessary_condition": {
+   "as_number": 22,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there alternative means of realizing the goal?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "alternative_means(A,X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "alternative_means({A},{X})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the selected means the best alternative?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "necessary_action(X,A)",
+     "status": "existing",
+     "note": "the premise states the means was selected as the most acceptable",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "necessary_action({X},{A})"
+    },
+    {
+     "cq": 3,
+     "text": "Are there conflicting goals of higher priority?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "conflict_goals(P,A2,A)",
+     "status": "existing",
+     "note": "no conflict_goals/3 template (language has /2 with 3 %s); P and A2 are bound by no premise",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "conflict_goals({P},{A2},{A})",
+     "repair_needed": "no conflict_goals/3 template; P, A2 unbound"
+    },
+    {
+     "cq": 4,
+     "text": "Is it possible to bring about the means?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "practicality_action(X)",
+     "status": "existing",
+     "note": "possible_agent(X,P) is a related assumption",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "practicality_action({X})"
+    },
+    {
+     "cq": 5,
+     "text": "Would the means have known bad side effects?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "side_effect_action(P,X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "side_effect_action({P},{X})"
+    }
+   ]
+  },
+  "practical_sufficient_condition": {
+   "as_number": 22,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there alternative means of realizing the goal?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "alternative_means(A,X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "alternative_means({A},{X})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the selected means the best alternative?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "sufficient_action(X,A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "sufficient_action({X},{A})"
+    },
+    {
+     "cq": 3,
+     "text": "Are there conflicting goals of higher priority?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "conflict_goals(P,A2,A)",
+     "status": "existing",
+     "note": "as for the necessary-condition schema",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "conflict_goals({P},{A2},{A})",
+     "repair_needed": "no conflict_goals/3 template; P, A2 unbound"
+    },
+    {
+     "cq": 4,
+     "text": "Is it possible to bring about the means?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "practicality_action(X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "practicality_action({X})"
+    },
+    {
+     "cq": 5,
+     "text": "Would the means have known bad side effects?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "side_effect_action(P,X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "side_effect_action({P},{X})"
+    }
+   ]
+  },
+  "practical_goal": {
+   "as_number": null,
+   "cqs": []
+  },
+  "end_and_means_1": {
+   "as_number": null,
+   "cqs": []
+  },
+  "end_and_means_2": {
+   "as_number": null,
+   "cqs": []
+  },
+  "end_and_means_3": {
+   "as_number": null,
+   "cqs": []
+  },
+  "two_person_practical": {
+   "as_number": 23,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there other goals that conflict?",
+     "provenance": "SPR Deepseek section 2 AS23",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "goals_higher_priority(A,X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "goals_higher_priority({A},{X})"
+    },
+    {
+     "cq": 2,
+     "text": "Are there alternative means?",
+     "provenance": "SPR Deepseek section 2 AS23",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "alternative_means(A,X)",
+     "status": "existing",
+     "note": "argument order looks wrong: template is 'alternative means of realizing %s other than %s' (goal, means), here (agent, goal)",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "alternative_means({A},{X})",
+     "repair_needed": "argument order"
+    },
+    {
+     "cq": 3,
+     "text": "Are there side effects?",
+     "provenance": "SPR Deepseek section 2 AS23",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "side_effect_other_act(B,A)",
+     "status": "existing",
+     "note": "arguments look wrong (template: 'Carrying out %s have known side effects ... %s other goals')",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "side_effect_other_act({B},{A})",
+     "repair_needed": "argument order"
+    },
+    {
+     "cq": 4,
+     "text": "Is it possible?",
+     "provenance": "SPR Deepseek section 2 AS23",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "possible_action(Y)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "possible_action({Y})"
+    },
+    {
+     "cq": 5,
+     "text": "Are additional actions required?",
+     "provenance": "SPR Deepseek section 2 AS23",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "intervening_actions(Y,X)",
+     "status": "new",
+     "note": "predicate exists in practical_reasoning2",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "intervening_actions({Y},{X})"
+    }
+   ]
+  },
+  "waste": {
+   "as_number": 24,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is bringing about the goal possible?",
+     "provenance": "SPR Deepseek section 2 AS24-25",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "posible(X)",
+     "status": "existing",
+     "note": "assumption; predicate misspelled 'posible'",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "posible({X})",
+     "repair_needed": "misspelled predicate"
+    },
+    {
+     "cq": 2,
+     "text": "Has the agent reassessed costs and benefits from the current point forward?",
+     "provenance": "SPR Deepseek section 2 AS24-25",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "future_losses_outweigh(X)",
+     "status": "new",
+     "note": "predicate exists in sunk_costs",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "future_losses_outweigh({X})"
+    }
+   ]
+  },
+  "negative_normal_expectations": {
+   "as_number": 26,
+   "cqs": []
+  },
+  "negative_practical": {
+   "as_number": 26,
+   "cqs": []
+  },
+  "epistemic_ignorence": {
+   "as_number": 27,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How far along has the search for evidence progressed?",
+     "provenance": "SPR Deepseek section 2 AS26-27 ('for epistemic form')",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "sufficient_search(D)",
+     "status": "new",
+     "note": "cf. 0-ary sufficient_evidence in negative_practical",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "sufficient_search({D})"
+    },
+    {
+     "cq": 2,
+     "text": "Which side has the burden of proof in the dialogue?",
+     "provenance": "SPR Deepseek section 2 AS26-27",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    },
+    {
+     "cq": 3,
+     "text": "How strong does the proof need to be for that party to succeed?",
+     "provenance": "SPR Deepseek section 2 AS26-27",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "a proof-standard question; Carneades sets proof standards per issue, not per scheme",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "sign": {
+   "as_number": 30,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What is the strength of the correlation between the sign and the event signified?",
+     "provenance": "SPR Deepseek section 2 AS30",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "strong_correlation(A,B)",
+     "status": "existing",
+     "note": "assumption; matches current NASCQ CQ:likelihood",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "strong_correlation({A},{B})"
+    },
+    {
+     "cq": 2,
+     "text": "Are there other events that would more reliably account for the sign?",
+     "provenance": "SPR Deepseek section 2 AS30",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "more_reliable",
+     "status": "existing",
+     "note": "0-ary atom: one statement shared by every sign argument; needs an argument (e.g. more_reliable(A)) -- current NASCQ uses locus argument because core.yml dropped this exception",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "more_reliable",
+     "repair_needed": "0-ary atom"
+    }
+   ]
+  },
+  "abductive_backward": {
+   "as_number": 31,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How satisfactory is the explanation itself, apart from the alternatives available so far?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "sufficient_account(A1,D)",
+     "status": "existing",
+     "note": "assumption; its template is almost the CQ verbatim",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "sufficient_account({A1},{D})"
+    },
+    {
+     "cq": 2,
+     "text": "How much better an explanation is it than the alternatives?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "succesful_account(A1,D)",
+     "status": "new",
+     "note": "orphan predicate succesful_account/2 already in the language",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "succesful_account({A1},{D})"
+    },
+    {
+     "cq": 3,
+     "text": "How far has the dialogue progressed (how thorough was the investigation)?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "sufficient_search(D)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "sufficient_search({D})"
+    },
+    {
+     "cq": 4,
+     "text": "Would it be better to continue the dialogue instead of concluding now?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "alternatively a new exception (burden on questioner)",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "abductive_forward": {
+   "as_number": 31,
+   "cqs": []
+  },
+  "abductive_action_to_character": {
+   "as_number": 31,
+   "cqs": []
+  },
+  "abductive_character_to_action": {
+   "as_number": 31,
+   "cqs": []
+  },
+  "retroductive": {
+   "as_number": 31,
+   "cqs": []
+  },
+  "evidence_hypothesis_verification": {
+   "as_number": 32,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is it the case that if A (the hypothesis) is true then B is true?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "hypothesis_event(H,A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "hypothesis_event({H},{A})"
+    },
+    {
+     "cq": 2,
+     "text": "Has B been observed (to be true)?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "event_true(A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "event_true({A})"
+    },
+    {
+     "cq": 3,
+     "text": "Could there be some reason why B is true other than the hypothesis?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "other_explanation(A,H)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "other_explanation({A},{H})"
+    }
+   ]
+  },
+  "evidence_hypothesis_falsification": {
+   "as_number": 32,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is it the case that if the hypothesis is true then B is true?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "hypothesis_event(H,A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "hypothesis_event({H},{A})"
+    },
+    {
+     "cq": 2,
+     "text": "Has B been observed to be false?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "event_false(A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "event_false({A})"
+    },
+    {
+     "cq": 3,
+     "text": "Could there be another reason for the observation?",
+     "provenance": "SPR Deepseek section 2 AS32",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "other_explanation(A,H)",
+     "status": "new",
+     "note": "the scheme concludes ¬A (a premise restated) instead of ¬H; fix first",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "other_explanation({A},{H})"
+    }
+   ]
+  },
+  "negative_consequences_prudential": {
+   "as_number": 33,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How strong is the likelihood that the cited consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33 (prudential version per SPR Muse section 12 #33)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "strongly_occur(X)",
+     "status": "existing",
+     "note": "assumption; no language template at /1",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "strongly_occur({X})",
+     "repair_needed": "no strongly_occur/1 template"
+    },
+    {
+     "cq": 2,
+     "text": "What evidence supports the claim that the consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    },
+    {
+     "cq": 3,
+     "text": "Are there consequences of the opposite value that ought to be taken into account?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "other_consequences(X)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "other_consequences({X})"
+    }
+   ]
+  },
+  "pragmatic_alternative": {
+   "as_number": 34,
+   "cqs": []
+  },
+  "treat": {
+   "as_number": 35,
+   "cqs": []
+  },
+  "ad_baculum": {
+   "as_number": 35,
+   "cqs": []
+  },
+  "fear": {
+   "as_number": 36,
+   "cqs": []
+  },
+  "danger": {
+   "as_number": 37,
+   "cqs": []
+  },
+  "help": {
+   "as_number": 38,
+   "cqs": []
+  },
+  "distress": {
+   "as_number": 39,
+   "cqs": []
+  },
+  "commitment1": {
+   "as_number": 40,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What evidence supports the claim that a is committed to A, and is there contrary evidence?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "commitment_support_evidence(A,X)",
+     "status": "existing",
+     "note": "assumption; the contrary-evidence half is the exception commitment_contrary_evidence(A,X)",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "commitment_support_evidence({A},{X})"
+    },
+    {
+     "cq": 2,
+     "text": "Is there an exception, in this case, to the rule that commitment to A implies commitment to B?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "commitment_rule_exception(X,Y)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "commitment_rule_exception({X},{Y})"
+    }
+   ]
+  },
+  "commitment2": {
+   "as_number": 40,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What evidence supports the claim that a is committed to A, and is there contrary evidence?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "commitment_support_evidence(A,X)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "commitment_support_evidence({A},{X})"
+    },
+    {
+     "cq": 2,
+     "text": "Is there an exception to the rule that commitment to A implies commitment to B?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "commitment_rule_exception(X,Y)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "commitment_rule_exception({X},{Y})"
+    }
+   ]
+  },
+  "ad_hominem": {
+   "as_number": 42,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How well supported by evidence is the allegation made in the character attack?",
+     "provenance": "SPR Deepseek section 2 AS42",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "attack_well_supported",
+     "status": "existing",
+     "note": "assumption; 0-ary atom shared by every instance, needs arguments",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "attack_well_supported",
+     "repair_needed": "0-ary atom"
+    },
+    {
+     "cq": 2,
+     "text": "Is character relevant in the type of dialogue in which the argument was used?",
+     "provenance": "SPR Deepseek section 2 AS42",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "character_revelant",
+     "status": "existing",
+     "note": "assumption; 0-ary atom, misspelled",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "character_revelant",
+     "repair_needed": "0-ary atom, misspelled"
+    },
+    {
+     "cq": 3,
+     "text": "Is the conclusion an absolute rejection, or only that the argument deserves less weight?",
+     "provenance": "SPR Deepseek section 2 AS42",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "stronger_than_character(S)",
+     "status": "existing",
+     "note": "loose fit; could be a conclusion-locus question",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "stronger_than_character({S})"
+    }
+   ]
+  },
+  "pragmatic_inconsistency": {
+   "as_number": 43,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Did a strongly advocate the conclusion?",
+     "provenance": "SPR Deepseek section 2 AS43",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "strong_advocate(A,S,X)",
+     "status": "existing",
+     "note": "assumption; key 'strong_advocate' has no /3 template",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "strong_advocate({A},{S},{X})",
+     "repair_needed": "no strong_advocate/3 template"
+    },
+    {
+     "cq": 2,
+     "text": "Does the description of a's actions imply commitment to the opposite?",
+     "provenance": "SPR Deepseek section 2 AS43",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "descriptions_opposite(A,S)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "descriptions_opposite({A},{S})"
+    },
+    {
+     "cq": 3,
+     "text": "Why is the pragmatic inconsistency relevant to the issue?",
+     "provenance": "SPR Deepseek section 2 AS43",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "inconsistency_relevant(A,S)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "inconsistency_relevant({A},{S})"
+    }
+   ]
+  },
+  "inconsistent_commitment": {
+   "as_number": 44,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What is the evidence for each commitment?",
+     "provenance": "SPR Deepseek section 2 AS44",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "initial_commitment(A,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "initial_commitment({A},{S})"
+    },
+    {
+     "cq": 2,
+     "text": "Does the evidence prove that the commitments conflict?",
+     "provenance": "SPR Deepseek section 2 AS44",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "opposed_commitment(A,S)",
+     "status": "existing",
+     "note": "exception evidence_not_commited(A,S) covers the rebuttal side",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "opposed_commitment({A},{S})"
+    }
+   ]
+  },
+  "circumstantial_ad_hominem": {
+   "as_number": 45,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is there an identifiable pair of practically inconsistent commitments?",
+     "provenance": "SPR Deepseek section 2 AS45",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "commited_opposite(A,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "commited_opposite({A},{S})"
+    },
+    {
+     "cq": 2,
+     "text": "Can the apparent conflict be resolved or explained?",
+     "provenance": "SPR Deepseek section 2 AS45",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "conflict_explained(A,S)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "conflict_explained({A},{S})"
+    },
+    {
+     "cq": 3,
+     "text": "Is character relevant in this dialogue?",
+     "provenance": "SPR Deepseek section 2 AS45",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "character_issue(A)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "character_issue({A})"
+    },
+    {
+     "cq": 4,
+     "text": "Is the conclusion only that a's credibility is weaker, or the stronger claim that the conclusion is false?",
+     "provenance": "SPR Deepseek section 2 AS45",
+     "burden": "n/a",
+     "locus": "conclusion",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "bias": {
+   "as_number": 46,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What type of dialogue are the participants engaged in?",
+     "provenance": "SPR Deepseek section 2 AS46",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "balance_required(A,C)",
+     "status": "new",
+     "note": "or an argument-locus question",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "balance_required({A},{C})"
+    },
+    {
+     "cq": 2,
+     "text": "What evidence is there that the arguer is biased?",
+     "provenance": "SPR Deepseek section 2 AS46",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "biased(A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "biased({A})"
+    }
+   ]
+  },
+  "bias_ad_hominem": {
+   "as_number": 47,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What evidence is there of bias?",
+     "provenance": "SPR Deepseek section 2 AS47",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "proponent_biased(A,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "proponent_biased({A},{S})"
+    },
+    {
+     "cq": 2,
+     "text": "Is it a bad bias (failure to take part honestly) or a normal bias?",
+     "provenance": "SPR Deepseek section 2 AS47",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "biased_not_take_part(A,D,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "biased_not_take_part({A},{D},{S})"
+    }
+   ]
+  },
+  "gradualism": {
+   "as_number": 48,
+   "cqs": []
+  },
+  "sorites_slippery_slope": {
+   "as_number": 51,
+   "cqs": []
+  },
+  "verbal_slippery_slope": {
+   "as_number": 52,
+   "cqs": []
+  },
+  "rule_physical_world_1": {
+   "as_number": 54,
+   "cqs": []
+  },
+  "rule_physical_world_2": {
+   "as_number": 54,
+   "cqs": []
+  },
+  "rule_mental_world": {
+   "as_number": 54,
+   "cqs": []
+  },
+  "rule": {
+   "as_number": 55,
+   "cqs": []
+  },
+  "regulative_rule": {
+   "as_number": 55,
+   "cqs": []
+  },
+  "exeptional": {
+   "as_number": 56,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is the case a recognized type of exception?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "case_exception(A)",
+     "status": "existing",
+     "note": "case_exception(A) is both premise and assumption in walton.yml",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "case_exception({A})"
+    },
+    {
+     "cq": 2,
+     "text": "What evidence shows that the rule does not apply (that the case has the characteristics of the exception)?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "case_exception(A)",
+     "status": "existing",
+     "note": "shared with CQ1",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "case_exception({A})"
+    },
+    {
+     "cq": 3,
+     "text": "If it is a borderline case, are there comparable cases supporting it?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "comparable_cases(A)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "comparable_cases({A})"
+    }
+   ]
+  },
+  "plea_for_excuse": {
+   "as_number": 58,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Does the excuse fall under a recognized category of excuses?",
+     "provenance": "SPR Deepseek section 2 2.6 AS58",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "excuse(E)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "excuse({E})"
+    },
+    {
+     "cq": 2,
+     "text": "What is special about the circumstances?",
+     "provenance": "SPR Deepseek section 2 2.6 AS58",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "special_circumstances(E)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "special_circumstances({E})"
+    },
+    {
+     "cq": 3,
+     "text": "Would granting the excuse set a precedent for future cases?",
+     "provenance": "SPR Deepseek section 2 2.6 AS58",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "not_excuse(E)",
+     "status": "existing",
+     "note": "its template mentions 'pose a problem in future cases'",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "not_excuse({E})"
+    }
+   ]
+  },
+  "perception": {
+   "as_number": 59,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are the circumstances such that the percept is not a reliable indicator?",
+     "provenance": "SPR Deepseek section 2 2.6 AS59",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "not_indicator(I)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "not_indicator({I})"
+    }
+   ]
+  },
+  "memory": {
+   "as_number": 60,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Was the memory originally based on false beliefs?",
+     "provenance": "SPR Deepseek section 2 2.6 AS60; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "false_origin(M)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "false_origin({M})"
+    },
+    {
+     "cq": 2,
+     "text": "Was M originally believed for good reasons?",
+     "provenance": "SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "not_well_founded(M)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "not_well_founded({M})"
+    },
+    {
+     "cq": 3,
+     "text": "Does the agent now doubt M?",
+     "provenance": "SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "doubted(P,M)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "doubted({P},{M})"
+    }
+   ]
+  },
+  "abduction": {
+   "as_number": null,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How satisfactory is the explanation itself, apart from the alternatives?",
+     "provenance": "SPR Deepseek section 2 AS31 (applied to the generic upstream scheme)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "explanation(T,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "explanation({T},{S})"
+    },
+    {
+     "cq": 2,
+     "text": "How much better an explanation is it than the alternatives?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "more_coherent_explanation(T,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "more_coherent_explanation({T},{S})"
+    },
+    {
+     "cq": 3,
+     "text": "How thorough has the investigation been?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "sufficient_search(S)",
+     "status": "new",
+     "note": "",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "sufficient_search({S})"
+    },
+    {
+     "cq": 4,
+     "text": "Would it be better to continue the dialogue?",
+     "provenance": "SPR Deepseek section 2 AS31",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "analogy": {
+   "as_number": 7,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there differences between C1 and C2 that would tend to undermine the force of the similarity cited?",
+     "provenance": "SPR Deepseek section 2 AS7; SPR Muse sections 5-6",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "relevant_differences(C)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "relevant_differences({C})"
+    },
+    {
+     "cq": 2,
+     "text": "Is A true (false) in C1?",
+     "provenance": "SPR Deepseek section 2 AS7; SPR Muse sections 5-6",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "in_case(A,C)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "in_case({A},{C})"
+    },
+    {
+     "cq": 3,
+     "text": "Is there some other case C3 that is also similar to C2, but in which A is false (true)?",
+     "provenance": "SPR Deepseek section 2 AS7; SPR Muse sections 5-6",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "more_on_point(A,C)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "more_on_point({A},{C})"
+    }
+   ]
+  },
+  "appearance": {
+   "as_number": 59,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is the appearance misleading in these circumstances?",
+     "provenance": "SPR Claude (Opus 4.8) section 6 II.1 (partly derived from YAML orphan templates)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "misleading(C)",
+     "status": "new",
+     "note": "orphan predicate misleading/1 already in the language",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "misleading({C})"
+    },
+    {
+     "cq": 2,
+     "text": "Is it more justifiable to classify the object under another category?",
+     "provenance": "SPR Claude (Opus 4.8) section 6 II.1 (partly derived from YAML orphan templates)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "another_category(C,C2)",
+     "status": "new",
+     "note": "orphan predicate another_category/2; needs a new variable",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "another_category({C},{C2})"
+    }
+   ]
+  },
+  "cause_to_effect": {
+   "as_number": 28,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How strong is the causal generalization?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "causes(E1,E2)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "causes({E1},{E2})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the evidence cited strong enough to warrant the causal generalization?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "causes(E1,E2)",
+     "status": "existing",
+     "note": "shared with CQ1; could be an argument-locus question",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "causes({E1},{E2})"
+    },
+    {
+     "cq": 3,
+     "text": "Are there other causal factors that could interfere with the effect?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "interference(E1)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "interference({E1})"
+    }
+   ]
+  },
+  "correlation_to_cause": {
+   "as_number": 29,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is there really a correlation between A and B?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "correlated(E1,E2)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "correlated({E1},{E2})"
+    },
+    {
+     "cq": 2,
+     "text": "Is there reason to think the correlation is more than a coincidence?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "explanatory_theory(E1,E2)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "explanatory_theory({E1},{E2})"
+    },
+    {
+     "cq": 3,
+     "text": "Could some third factor C be causing both A and B?",
+     "provenance": "SPR Deepseek section 2 AS28-29",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "causes_both(E1,E2)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "causes_both({E1},{E2})"
+    }
+   ]
+  },
+  "credible_source": {
+   "as_number": null,
+   "cqs": []
+  },
+  "definition_to_verbal_classification": {
+   "as_number": 15,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is the definition adequate?",
+     "provenance": "SPR Deepseek section 2 AS15",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inadequate_definition(D,G)",
+     "status": "existing",
+     "note": "the book may put this burden on the proponent; the YAML makes it an exception",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "inadequate_definition({D},{G})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the classification based on a biased or stipulative definition?",
+     "provenance": "SPR Deepseek section 2 AS15",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "classified_as(D,G)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "classified_as({D},{G})"
+    }
+   ]
+  },
+  "defeasible_modus_ponens": {
+   "as_number": null,
+   "cqs": []
+  },
+  "established_rule": {
+   "as_number": 55,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Does the rule really require (include) the conclusion/action?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "has_conclusion(R,C)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "has_conclusion({R},{C})"
+    },
+    {
+     "cq": 2,
+     "text": "Are there other rules that conflict with or override this one?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "overridden_rule(R)",
+     "status": "new",
+     "note": "alternatively a conclusion (rebuttal) locus",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "overridden_rule({R})"
+    },
+    {
+     "cq": 3,
+     "text": "Is this an exceptional case?",
+     "provenance": "SPR Deepseek section 2 AS55-57",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inapplicable_rule(R)",
+     "status": "new",
+     "note": "predicate exists in exeption_to_rule",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "inapplicable_rule({R})"
+    }
+   ]
+  },
+  "ethotic1": {
+   "as_number": 41,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is a a person of good moral character?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "good_moral_character(P)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "good_moral_character({P})"
+    },
+    {
+     "cq": 2,
+     "text": "Is character relevant in the dialogue?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "character_is_relevant(S)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "character_is_relevant({S})"
+    },
+    {
+     "cq": 3,
+     "text": "Is the weight of presumption claimed strongly enough warranted by the evidence?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "ethotic2": {
+   "as_number": 41,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is a a person of bad moral character?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "bad_moral_character(P)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "bad_moral_character({P})"
+    },
+    {
+     "cq": 2,
+     "text": "Is character relevant in the dialogue?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "character_is_relevant(S)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "character_is_relevant({S})"
+    },
+    {
+     "cq": 3,
+     "text": "Is the weight of presumption claimed strongly enough warranted by the evidence?",
+     "provenance": "SPR Deepseek section 2 AS40-41",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "expert_opinion": {
+   "as_number": 2,
+   "cqs": [
+    {
+     "cq": "Expertise",
+     "text": "How credible is E as an expert source?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1; SPR Muse sections 5-6",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "expert(W,D)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "expert({W},{D})"
+    },
+    {
+     "cq": "Field",
+     "text": "Is E an expert in the field that A is in?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "in_domain(S,D)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "in_domain({S},{D})"
+    },
+    {
+     "cq": "Opinion",
+     "text": "What did E assert that implies A?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "asserts(W,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "asserts({W},{S})"
+    },
+    {
+     "cq": "Trustworthiness",
+     "text": "Is E personally reliable as a source (biased, honest, conscientious)?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "untrustworthy(W)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "untrustworthy({W})"
+    },
+    {
+     "cq": "Consistency",
+     "text": "Is A consistent with what other experts assert?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inconsistent_with_other_experts(S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "inconsistent_with_other_experts({S})"
+    },
+    {
+     "cq": "Backup Evidence",
+     "text": "Is E's assertion based on evidence?",
+     "provenance": "SPR Deepseek section 2 AS2; SPR Claude (Opus 4.8) section 6 II.1",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "based_on_evidence(asserts(W,S))",
+     "status": "existing",
+     "note": "assumption with a nested term; NASCQ pattern would be based_on_evidence(asserts({W},{S})); its template uses %v, which WAG lint counts as 0 %s",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "based_on_evidence(asserts({W},{S}))",
+     "repair_needed": "template uses %v (WAG lint error)"
+    }
+   ]
+  },
+  "ignorance": {
+   "as_number": 26,
+   "cqs": []
+  },
+  "negative_consequences": {
+   "as_number": 33,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How strong is the likelihood that the cited consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "brings_about(A,G)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "brings_about({A},{G})"
+    },
+    {
+     "cq": 2,
+     "text": "What evidence supports the claim that the consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    },
+    {
+     "cq": 3,
+     "text": "Are there consequences of the opposite value that ought to be taken into account?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "n/a",
+     "locus": "conclusion",
+     "formula": null,
+     "status": "none",
+     "note": "",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "position_to_know": {
+   "as_number": 1,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is the source in a position to know whether the claim is true (false)?",
+     "provenance": "SPR Deepseek section 2 AS1; SPR Claude (Opus 4.8) section 6 II.1; SPR Muse section 12 #1",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "position_to_know(W,D)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "position_to_know({W},{D})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the source an honest (trustworthy, reliable) source?",
+     "provenance": "SPR Deepseek section 2 AS1; SPR Claude (Opus 4.8) section 6 II.1; SPR Muse section 12 #1",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "dishonest(W)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "dishonest({W})"
+    },
+    {
+     "cq": 3,
+     "text": "Did the source assert that the claim is true (false)?",
+     "provenance": "SPR Deepseek section 2 AS1; SPR Claude (Opus 4.8) section 6 II.1; SPR Muse section 12 #1",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "asserts(W,S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "asserts({W},{S})"
+    }
+   ]
+  },
+  "positive_consequences": {
+   "as_number": 33,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "How strong is the likelihood that the cited consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "brings_about(A,G)",
+     "status": "existing",
+     "note": "matches current NASCQ CQ:likelihood",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "brings_about({A},{G})"
+    },
+    {
+     "cq": 2,
+     "text": "What evidence supports the claim that the consequences will occur?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "n/a",
+     "locus": "argument",
+     "formula": null,
+     "status": "none",
+     "note": "matches current NASCQ CQ:evidence",
+     "review": "draft, needs review"
+    },
+    {
+     "cq": 3,
+     "text": "Are there consequences of the opposite value that ought to be taken into account?",
+     "provenance": "SPR Deepseek section 2 AS33",
+     "burden": "n/a",
+     "locus": "conclusion",
+     "formula": null,
+     "status": "none",
+     "note": "matches current NASCQ CQ:side_effect on AS:consequences",
+     "review": "draft, needs review"
+    }
+   ]
+  },
+  "practical_reasoning1": {
+   "as_number": 22,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Are there alternative means of realizing the goal?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs) (value-based subtype)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "realize_more_effectively(G,A)",
+     "status": "existing",
+     "note": "matches current NASCQ CQ:other_means",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "realize_more_effectively({G},{A})"
+    },
+    {
+     "cq": 2,
+     "text": "Is A the best alternative?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs) (value-based subtype)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "bring_about_more_effectively(S2,A)",
+     "status": "existing",
+     "note": "matches current NASCQ CQ:best_means; template has a broken '% m' verb in walton.yml (fixed in WAG core.yml)",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "bring_about_more_effectively({S2},{A})",
+     "repair_needed": "template '% more' (fixed in WAG core.yml)"
+    },
+    {
+     "cq": 3,
+     "text": "Are there conflicting goals of higher priority?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs) (value-based subtype)",
+     "burden": "n/a",
+     "locus": "conclusion",
+     "formula": null,
+     "status": "none",
+     "note": "matches current NASCQ CQ:other_goals (rebuttal)",
+     "review": "draft, needs review"
+    },
+    {
+     "cq": 4,
+     "text": "Is it possible to bring about A?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs) (value-based subtype)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "possible(A)",
+     "status": "existing",
+     "note": "assumption; matches current NASCQ CQ:possibility",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "possible({A})"
+    },
+    {
+     "cq": 5,
+     "text": "Would A have known bad side effects?",
+     "provenance": "SPR Deepseek section 2 AS22 (group-level CQs) (value-based subtype)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "side_effects(A,S1)",
+     "status": "existing",
+     "note": "matches current NASCQ CQ:side_effect",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "side_effects({A},{S1})"
+    }
+   ]
+  },
+  "practical_reasoning2": {
+   "as_number": null,
+   "cqs": []
+  },
+  "exeption_to_rule": {
+   "as_number": 57,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Does the existing rule really apply?",
+     "provenance": "SPR Deepseek section 2 AS55-57 (AS57 Precedent)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inapplicable_rule(R)",
+     "status": "existing",
+     "note": "low confidence: the scheme content is the Carneades 'precedent', not the book's AS57",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "inapplicable_rule({R})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the cited case legitimate, or only an apparent violation of the rule?",
+     "provenance": "SPR Deepseek section 2 AS55-57 (AS57 Precedent)",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "legitimate_case(C)",
+     "status": "new",
+     "note": "low confidence",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "legitimate_case({C})"
+    },
+    {
+     "cq": 3,
+     "text": "Can the cited case be handled under an existing exception category?",
+     "provenance": "SPR Deepseek section 2 AS55-57 (AS57 Precedent)",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "existing_exception_category(C)",
+     "status": "new",
+     "note": "low confidence",
+     "review": "draft, needs review",
+     "nascq_pattern_draft": "existing_exception_category({C})"
+    }
+   ]
+  },
+  "slippery_slope_base_case": {
+   "as_number": 49,
+   "cqs": []
+  },
+  "slippery_slope_inductive_step": {
+   "as_number": 49,
+   "cqs": []
+  },
+  "sunk_costs": {
+   "as_number": 25,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is bringing about A possible?",
+     "provenance": "SPR Deepseek section 2 AS24-25",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "feasible(A)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "feasible({A})"
+    },
+    {
+     "cq": 2,
+     "text": "Has the agent reassessed costs and benefits from the current point forward?",
+     "provenance": "SPR Deepseek section 2 AS24-25",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "future_losses_outweigh(A)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "future_losses_outweigh({A})"
+    }
+   ]
+  },
+  "verbal_classification": {
+   "as_number": 14,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "What evidence is there that a definitely has property F, as opposed to evidence indicating room for doubt?",
+     "provenance": "SPR Deepseek section 2 AS14",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "instance(O,F)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "instance({O},{F})"
+    },
+    {
+     "cq": 2,
+     "text": "Is the verbal classification in the classification premise doubtful (e.g. based on a stipulative or biased definition)?",
+     "provenance": "SPR Deepseek section 2 AS14",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "subclass(F,G)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "premise",
+     "nascq_pattern_draft": "subclass({F},{G})"
+    }
+   ]
+  },
+  "witness_testimony": {
+   "as_number": 3,
+   "cqs": [
+    {
+     "cq": 1,
+     "text": "Is what the witness said internally consistent?",
+     "provenance": "SPR Deepseek section 2 AS3",
+     "burden": "proponent",
+     "locus": "premise",
+     "formula": "internally_consistent(S)",
+     "status": "existing",
+     "note": "assumption",
+     "review": "draft, needs review",
+     "formula_kind": "assumption",
+     "nascq_pattern_draft": "internally_consistent({S})"
+    },
+    {
+     "cq": 2,
+     "text": "Is it consistent with the known facts of the case?",
+     "provenance": "SPR Deepseek section 2 AS3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inconsistent_with_known_facts(S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "inconsistent_with_known_facts({S})"
+    },
+    {
+     "cq": 3,
+     "text": "Is it consistent with what other witnesses have testified?",
+     "provenance": "SPR Deepseek section 2 AS3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "inconsistent_with_other_witnesses(S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "inconsistent_with_other_witnesses({S})"
+    },
+    {
+     "cq": 4,
+     "text": "Is there some kind of bias that can be attributed to the account given by the witness?",
+     "provenance": "SPR Deepseek section 2 AS3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "biased(W)",
+     "status": "existing",
+     "note": "biased/1 has two different templates in walton.yml (duplicate key)",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "biased({W})",
+     "repair_needed": "duplicate biased/1 key with different templates"
+    },
+    {
+     "cq": 5,
+     "text": "How plausible is the statement A asserted by the witness?",
+     "provenance": "SPR Deepseek section 2 AS3",
+     "burden": "questioner",
+     "locus": "exception",
+     "formula": "implausible(S)",
+     "status": "existing",
+     "note": "",
+     "review": "draft, needs review",
+     "formula_kind": "exception",
+     "nascq_pattern_draft": "implausible({S})"
+    }
+   ]
+  }
+ },
+ "outside_walton_yml": {
+  "full_slippery_slope (A_reasoning/5_casual-reasoning.yml only)": [
+   {
+    "cq": 1,
+    "text": "How strong is the evidence for each step?",
+    "provenance": "SPR Deepseek section 2 AS48-53 (Full Slip)",
+    "burden": "proponent",
+    "locus": "premise",
+    "formula": "leads_to_next(C0,C1,C2)",
+    "status": "existing in category file",
+    "note": "",
+    "review": "draft, needs review"
+   },
+   {
+    "cq": 2,
+    "text": "How strong must the argument be to fulfil its burden of proof?",
+    "provenance": "SPR Deepseek section 2 AS48-53",
+    "burden": "n/a",
+    "locus": "argument",
+    "formula": null,
+    "status": "none",
+    "note": "",
+    "review": "draft, needs review"
+   },
+   {
+    "cq": 3,
+    "text": "Will people really accept the next step?",
+    "provenance": "SPR Deepseek section 2 AS48-53",
+    "burden": "proponent",
+    "locus": "premise",
+    "formula": "led_to_step",
+    "status": "existing in category file",
+    "note": "0-ary assumption",
+    "review": "draft, needs review"
+   }
+  ],
+  "precedent slippery slope (AS50, missing)": [
+   {
+    "cq": 1,
+    "text": "Would the precedent really be set?",
+    "provenance": "SPR Deepseek section 2 AS48-53 (Precedent Slip)",
+    "burden": "proponent",
+    "locus": "premise",
+    "formula": null,
+    "status": "new",
+    "note": "",
+    "review": "draft, needs review"
+   },
+   {
+    "cq": 2,
+    "text": "What evidence is there for the intervening precedents?",
+    "provenance": "SPR Deepseek section 2 AS48-53",
+    "burden": "proponent",
+    "locus": "premise",
+    "formula": null,
+    "status": "new",
+    "note": "",
+    "review": "draft, needs review"
+   },
+   {
+    "cq": 3,
+    "text": "Is the final outcome as intolerable as portrayed?",
+    "provenance": "SPR Deepseek section 2 AS48-53",
+    "burden": "proponent",
+    "locus": "premise",
+    "formula": null,
+    "status": "new",
+    "note": "",
+    "review": "draft, needs review"
+   }
+  ]
+ }
+}

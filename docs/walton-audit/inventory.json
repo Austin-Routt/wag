@@ -1,0 +1,3616 @@
+[
+ {
+  "file": "walton.yml",
+  "line": 405,
+  "id": "popular_opinion",
+  "title": "Argument From Popular Opinion",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation. New York: Cambridge University Press, 2006, p. 91. Douglas Walton, lnformal Logic. New York: Cambridge University Press, 1989, p. 89. Douglas Walton, Appeal to Popular Opinion. University Park: Pennsylvania State University Press, 1999, pp. 223-226.",
+  "variables": [
+   "A"
+  ],
+  "conclusions": [
+   "reason_in_favor(A)"
+  ],
+  "premises": [
+   "generally_true(A)",
+   "favor(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "doubting_general(A)"
+  ],
+  "ignored_keys": {
+   "assumption": [
+    "generally_accepted(A)"
+   ]
+  },
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 423,
+  "id": "pop_scheme",
+  "title": "Pop Scheme",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 311.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "true(A)",
+   "should_accept(A)"
+  ],
+  "premises": [
+   "reference_group_accepted(G,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 1,
+   "expected_premises": 1,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 436,
+  "id": "position_to_know_ad_populum",
+  "title": "Position to Know Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 311.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "plausibly_true(A)"
+  ],
+  "premises": [
+   "group_accepted(G,A)",
+   "position_to_know_group(G,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [
+    "Functor not defined in the language: position_to_know_group/2"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: position_to_know_group/2"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 449,
+  "id": "expert_opinion_ad_populum",
+  "title": "Expert Opinion Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "therefore_true(A)"
+  ],
+  "premises": [
+   "group_accepted(G,A)",
+   "expert_in_knowledge(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 462,
+  "id": "deliberation_ad_populum",
+  "title": "Deliberation Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "plausibly_true(A)"
+  ],
+  "premises": [
+   "group_accepted(G,A)",
+   "deliberate(G,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 475,
+  "id": "moral_justification_ad_populum",
+  "title": "Moral Justification Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "G",
+   "P"
+  ],
+  "conclusions": [
+   "should_accept(P)"
+  ],
+  "premises": [
+   "good_group(G,P)",
+   "goal_good_group(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 488,
+  "id": "moral_justification_ad_populum_excuse",
+  "title": "Moral Justification Ad Populum Argument Excuse Subtype",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "G",
+   "X",
+   "A"
+  ],
+  "conclusions": [],
+  "premises": [
+   "morally_acceptable_action(X,A)",
+   "group_does(G,X,A)",
+   "acceptable_norm(X,A,G)",
+   "group_member(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 502,
+  "id": "snob_appeal_ad_populum",
+  "title": "Snob Appeal Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "A",
+   "G",
+   "O",
+   "P"
+  ],
+  "conclusions": [
+   "should_accept(A)"
+  ],
+  "premises": [
+   "property_or_object(G,A)",
+   "elite_group(G)",
+   "goal_prestige",
+   "accept_property_object(A,P,O,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: goal_prestige/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 517,
+  "id": "appeal_to_vanity_ad_populum",
+  "title": "Appeal to Vanity Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "G",
+   "A",
+   "X"
+  ],
+  "conclusions": [
+   "carry_out_action(X)"
+  ],
+  "premises": [
+   "admired_people(G,A)",
+   "group_action(X,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 530,
+  "id": "rhetoric_ad_populum",
+  "title": "Rhetoric of Belonging Ad Populum Argument",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 312.",
+  "variables": [
+   "G",
+   "A"
+  ],
+  "conclusions": [
+   "should_accept(A)"
+  ],
+  "premises": [
+   "group_accepted(G,A)",
+   "valued_to_be_member(G)",
+   "out_group_not_accept(A,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 544,
+  "id": "common_folk_ad_populum",
+  "title": "Common Folks Ad Populum Argument",
+  "source": "Argumentation Schemes. Cambridge University Press, p. 312. Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008).",
+  "variables": [],
+  "conclusions": [
+   "background"
+  ],
+  "premises": [
+   "being_credible"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 1,
+   "expected_premises": 1,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: being_credible/0",
+    "predicate not declared in the language: background/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 556,
+  "id": "common_folks_group_ad_populum",
+  "title": "Common Folks Ad Populum Group Subtype",
+  "source": "Argumentation Schemes. Cambridge University Press, p. 312. Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008).",
+  "variables": [
+   "G"
+  ],
+  "conclusions": [
+   "accept_saying"
+  ],
+  "premises": [
+   "group_background(G)",
+   "respondent_member(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: accept_saying/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 569,
+  "id": "popular_practise",
+  "title": "Argument From Popular Practise",
+  "source": "Douglas Walton , Fundamentals of Critical Argumentation. New York: Cambridge University Press, 2006, p. 93.",
+  "variables": [
+   "A"
+  ],
+  "conclusions": [
+   "acceptable_in_case(A)"
+  ],
+  "premises": [
+   "popular_practise(A)",
+   "to_think_acceptable(A)"
+  ],
+  "assumptions": [
+   "have_grounds_think(A)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 584,
+  "id": "from_example",
+  "title": "Argument From Example",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 357-368.",
+  "variables": [
+   "A",
+   "P1",
+   "P2"
+  ],
+  "conclusions": [
+   "has_properties(A,P1,P2)"
+  ],
+  "premises": [
+   "both_properties(A,P1,P2)"
+  ],
+  "assumptions": [
+   "typical_example(A)"
+  ],
+  "exceptions": [
+   "impair_general(A)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 600,
+  "id": "illustration",
+  "title": "Argument From Illustration",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 357-368.",
+  "variables": [
+   "X",
+   "Y",
+   "P1",
+   "P2"
+  ],
+  "conclusions": [
+   "valid_rule(Y)"
+  ],
+  "premises": [
+   "usually_properties(X,P1,P2)",
+   "same_properties(Y,P1,P2)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 613,
+  "id": "from_model",
+  "title": "Argument From Model",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 357-368.",
+  "variables": [
+   "A",
+   "B",
+   "X"
+  ],
+  "conclusions": [
+   "should_do(B,X)"
+  ],
+  "premises": [
+   "prestigious_individual(A,B)",
+   "carry_out_act (A,X)",
+   "worth_imitated(X,B)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 627,
+  "id": "from_antimodel",
+  "title": "Argument From Anti-Model",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 357-368.",
+  "variables": [
+   "A",
+   "B",
+   "X"
+  ],
+  "conclusions": [
+   "¬should_do(B,X)"
+  ],
+  "premises": [
+   "¬prestigious_individual(A,B)",
+   "carry_out_act(A,X)",
+   "want_to_be_different(B,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 641,
+  "id": "practical_analogy_positive",
+  "title": "Practical Reasoning From Analogy - Positive Schema",
+  "source": "Douglas Walton, lnformal Logic New York: Cambridge University Press, 1989. p.257.",
+  "variables": [
+   "A1",
+   "A2",
+   "X"
+  ],
+  "conclusions": [
+   "carry_out_right(A2,X)"
+  ],
+  "premises": [
+   "right_to_do(A1,X)",
+   "similar_to(A1,A2)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 653,
+  "id": "practical_analogy_negative",
+  "title": "Practical Reasoning From Analogy - Negative Schema",
+  "source": "Douglas Walton, lnformal Logic New York: Cambridge University Press, 1989. p.257.",
+  "variables": [
+   "A1",
+   "A2",
+   "X"
+  ],
+  "conclusions": [
+   "carry_out_wrong(A2,X)"
+  ],
+  "premises": [
+   "wrong_to_do(A1,X)",
+   "similar_to(A1,A2)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 665,
+  "id": "composition_generic",
+  "title": "Argument From Composition - Generic",
+  "source": "Douglas Walton, Informal Iogic, New York: Cambridge University Press, 1989, p.130.",
+  "variables": [
+   "A",
+   "P"
+  ],
+  "conclusions": [
+   "has_property(A,P)"
+  ],
+  "premises": [
+   "all_parts_propert(A,P)"
+  ],
+  "assumptions": [
+   "all_parts_has(A,P)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 678,
+  "id": "part_in_whole",
+  "title": "Argument From Composition - Inclusion of The Part in the Whole",
+  "source": "Ch. Perelman and L.Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp.231-233,234-241.",
+  "variables": [
+   "Y",
+   "X",
+   "P"
+  ],
+  "conclusions": [
+   "part_propert(Y,A)"
+  ],
+  "premises": [
+   "species_of(Y,X)",
+   "species_property(X,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "smaller_part_property(Y,A,X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [
+    "part_propert(k0_y,A)",
+    "smaller_part_property(k0_y,A,k1_x)",
+    "species_property(k1_x,A)"
+   ],
+   "validator_problems": [
+    "variable not declared in the scheme: A",
+    "variable not declared in the scheme: A",
+    "variable not declared in the scheme: A",
+    "variable declared but not used: P"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 693,
+  "id": "division_generic",
+  "title": "Argument From Division - Generic Division",
+  "source": "Douglas Walton, Argument: The Logic of Fallacies, Toronto: McGraw-Hill Ryerson, 1982, pp.206-208.",
+  "variables": [
+   "A",
+   "P"
+  ],
+  "conclusions": [
+   "has_property(A,P)"
+  ],
+  "premises": [
+   "all_parts_propert(A,P)"
+  ],
+  "assumptions": [
+   "all_parts_has(A,P)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 706,
+  "id": "opposition-descriptive_1",
+  "title": "Argument From Opposition - Descriptive Scheme 1",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 317.",
+  "variables": [
+   "P",
+   "P'",
+   "A"
+  ],
+  "conclusions": [
+   "cannot_present_sametime(A,P')"
+  ],
+  "premises": [
+   "presents_predicate(A,P,P')",
+   "presents(A,P)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:27 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20",
+    "Could not parse term: presents_predicate(A,P,P')",
+    "*** Parse Error before[ <input>:1:30 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25",
+    "Could not parse term: cannot_present_sametime(A,P')"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: P'",
+    "not a term: presents_predicate(A,P,P')",
+    "not a term: cannot_present_sametime(A,P')",
+    "variable declared but not used: P'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 719,
+  "id": "opposition-descriptive_2",
+  "title": "Argument From Opposition - Descriptive Scheme 2",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 317.",
+  "variables": [
+   "P",
+   "P'",
+   "A"
+  ],
+  "conclusions": [
+   "must_present_sametime(A,P')"
+  ],
+  "premises": [
+   "not_presents_predicate(A,P,P')",
+   "¬presents(A,P)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:31 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24",
+    "Could not parse term: not_presents_predicate(A,P,P')",
+    "*** Parse Error before[ <input>:1:28 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23",
+    "Could not parse term: must_present_sametime(A,P')"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: P'",
+    "not a term: not_presents_predicate(A,P,P')",
+    "not a term: must_present_sametime(A,P')",
+    "variable declared but not used: P'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 732,
+  "id": "opposition-descriptive_3",
+  "title": "Argument From Opposition - Descriptive Scheme 2",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 318.",
+  "variables": [
+   "P",
+   "P'",
+   "A"
+  ],
+  "conclusions": [
+   "must_present_sametime(A,P')"
+  ],
+  "premises": [
+   "must_present_complementary_contrary(A,P,P')",
+   "¬presents(A,P)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:44 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37",
+    "Could not parse term: must_present_complementary_contrary(A,P,P')",
+    "*** Parse Error before[ <input>:1:28 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23",
+    "Could not parse term: must_present_sametime(A,P')"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: P'",
+    "not a term: must_present_complementary_contrary(A,P,P')",
+    "not a term: must_present_sametime(A,P')",
+    "variable declared but not used: P'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 745,
+  "id": "opposition-normative",
+  "title": "Argument From Opposition - Normative Scheme",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 318.",
+  "variables": [
+   "A",
+   "X",
+   "X'"
+  ],
+  "conclusions": [
+   "cannot_recieve_evaluation(A,X')"
+  ],
+  "premises": [
+   "cannot_present_sametime(A,X,X')",
+   "recieves_evaluation(A,X')"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:32 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25",
+    "Could not parse term: cannot_present_sametime(A,X,X')",
+    "*** Parse Error before[ <input>:1:26 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:21",
+    "Could not parse term: recieves_evaluation(A,X')",
+    "*** Parse Error before[ <input>:1:32 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27",
+    "Could not parse term: cannot_recieve_evaluation(A,X')"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: X'",
+    "not a term: cannot_present_sametime(A,X,X')",
+    "not a term: recieves_evaluation(A,X')",
+    "not a term: cannot_recieve_evaluation(A,X')",
+    "variable declared but not used: A",
+    "variable declared but not used: X",
+    "variable declared but not used: X'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 758,
+  "id": "rhetorical_oppositions_normative",
+  "title": "Rhetorical Argument From Opposition - Normative Schemes",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 318.",
+  "variables": [
+   "X",
+   "X'",
+   "A",
+   "A'"
+  ],
+  "conclusions": [
+   "contrary_treatment_required(X',A')"
+  ],
+  "premises": [
+   "if_treatment_required(X,A,A',X)",
+   "treatment_required(X,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:32 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:32 ]: invalid char literal",
+    "*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23",
+    "Could not parse term: if_treatment_required(X,A,A',X)",
+    "*** Parse Error before[ <input>:1:33 ]: invalid char literal",
+    "*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29",
+    "Could not parse term: contrary_treatment_required(X',A')"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: X'",
+    "not a variable: A'",
+    "not a term: if_treatment_required(X,A,A',X)",
+    "not a term: contrary_treatment_required(X',A')",
+    "variable declared but not used: X'",
+    "variable declared but not used: A'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 771,
+  "id": "rhetorical_oppositions_descriptive",
+  "title": "Rhetorical Argument From Opposition - Descriptive Schemes",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 318.",
+  "variables": [
+   "A",
+   "B",
+   "R",
+   "R'"
+  ],
+  "conclusions": [
+   "converse_relation(B,R',A)"
+  ],
+  "premises": [
+   "relation_converse_relation(A,R,B,R')",
+   "relation_with(A,R,B)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 0,
+   "premises_in_argument": 0,
+   "expected_premises": 2,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:37 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28",
+    "Could not parse term: relation_converse_relation(A,R,B,R')",
+    "*** Parse Error before[ <input>:1:26 ]: literal not terminated",
+    "*** Parse Error before[ <input>:1:26 ]: invalid char literal",
+    "*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19",
+    "Could not parse term: converse_relation(B,R',A)"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a variable: R'",
+    "not a term: relation_converse_relation(A,R,B,R')",
+    "not a term: converse_relation(B,R',A)",
+    "variable declared but not used: R'"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 784,
+  "id": "alternative_cognitive",
+  "title": "Argument From Alternatives - Cognitive Schemes",
+  "source": "Manfred Kienpointner, Alltagslogik, Struktur rmd Funktion von Argumentationmustern. Stuttgart-Bad Cannstatt: Frommann-Holzboog, 1992, p.306.",
+  "variables": [
+   "A",
+   "B"
+  ],
+  "conclusions": [
+   "plausibly_case(B)"
+  ],
+  "premises": [
+   "can_be_case(A,B)",
+   "plausibly_not_case(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 798,
+  "id": "alternative_normative",
+  "title": "Argument From Alternatives - Normative Schemes",
+  "source": "Manfred Kienpointner, Alltagslogik, Struktur rmd Funktion von Argumentationmustern. Stuttgart-Bad Cannstatt: Frommann-Holzboog, 1992, p.306.",
+  "variables": [
+   "A",
+   "B"
+  ],
+  "conclusions": [
+   "not_required(B)"
+  ],
+  "premises": [
+   "can_be_required(A,B)",
+   "is_required(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 811,
+  "id": "verbal_classification_vagueness",
+  "title": "Argument From Definition to Verbal Classification",
+  "source": "Douglas Walton, Argumentation Schmes for Presumptive Reasoning. Mahwah, NJ.: Erlbaum, 1996, pp.102-103.",
+  "variables": [
+   "A",
+   "P"
+  ],
+  "conclusions": [
+   "vaguness_recejted(A)"
+  ],
+  "premises": [
+   "vague_defined_property(A,F)",
+   "property_precion_needed(F)",
+   "property_vagueness(F,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "certainity_no_need(A,F)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [
+    "certainity_no_need(k0_a,F)",
+    "property_precion_needed(F)",
+    "property_vagueness(F,k0_a)",
+    "vague_defined_property(k0_a,F)"
+   ],
+   "validator_problems": [
+    "variable not declared in the scheme: F",
+    "variable not declared in the scheme: F",
+    "variable not declared in the scheme: F",
+    "variable not declared in the scheme: F",
+    "variable declared but not used: P"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 827,
+  "id": "verbal_classification_arbitrariness",
+  "title": "Argument From Arbitrariness of a Verbal Classification",
+  "source": "Douglas Walton, Argumentation Schmes for Presumptive Reasoning. Mahwah, NJ.: Erlbaum, 1996, pp.104-105.",
+  "variables": [
+   "A",
+   "F"
+  ],
+  "conclusions": [
+   "arbitrary_rejected(A)"
+  ],
+  "premises": [
+   "arbitrary_defined_property(A,F)",
+   "needed_nonarbitrary((A,F)",
+   "arbitrary_property(F,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 3,
+   "stderr": [
+    "*** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22",
+    "Could not parse term: needed_nonarbitrary((A,F)"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "not a term: needed_nonarbitrary((A,F)"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 841,
+  "id": "interaction_act_person_1",
+  "title": "Argument From Interaction of Act and Person - Variant 1",
+  "source": "Ch. Perelman, L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 296-305.",
+  "variables": [
+   "X",
+   "A",
+   "V"
+  ],
+  "conclusions": [
+   "person_value(A,V)"
+  ],
+  "premises": [
+   "person_act(A,X)",
+   "act_value(X,V)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 854,
+  "id": "interaction_act_person_2",
+  "title": "Argument From Interaction of Act and Person - Variant 2",
+  "source": "Ch. Perelman, L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 296-305.",
+  "variables": [
+   "A",
+   "X",
+   "V1",
+   "V2"
+  ],
+  "conclusions": [
+   "person_acts_value(A,X,V2)"
+  ],
+  "premises": [
+   "person_judgment_value(A,V1)",
+   "person_value_depending(V1,X,V2)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 867,
+  "id": "positive_value",
+  "title": "Argument From Values - Variant 1: Positive Value",
+  "source": "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp.429­448. Trevor Bench-Capon, \"Agreeing to Differ: Modelling Persuasive Dialogue between Parties without a Consensus about Values.\" lnformal Logic 22 (2003a), pp. 231 -245.",
+  "variables": [
+   "V",
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "reason_retaining_goal(V,G)"
+  ],
+  "premises": [
+   "judged_positive_value(V,A)",
+   "positive_affects(V,G,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 882,
+  "id": "negative_value",
+  "title": "Argument From Values - Variant 2: Negative Value",
+  "source": "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp.429­448. Trevor Bench-Capon, \"Agreeing to Differ: Modelling Persuasive Dialogue between Parties without a Consensus about Values.\" lnformal Logic 22 (2003a), pp. 231 -245.",
+  "variables": [
+   "V",
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "reason_retaining_goal(V,G)"
+  ],
+  "premises": [
+   "judged_negative_value(V,A)",
+   "negative_affects(V,G,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 897,
+  "id": "sacrifice",
+  "title": "Argumentation From Sacrifice",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Trtalise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 248-254.",
+  "variables": [
+   "A",
+   "S",
+   "V"
+  ],
+  "conclusions": [
+   "sacrifice_value(A,V)"
+  ],
+  "premises": [
+   "sacrifice_made(A,S)",
+   "great_sacrifice(S,A,X)",
+   "great_sacrifice_made(S,A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [
+    "great_sacrifice(k1_s,k0_a,X)"
+   ],
+   "validator_problems": [
+    "variable not declared in the scheme: X",
+    "variable not used in premises or deletions: V",
+    "variable declared but not used: V"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 911,
+  "id": "group_1",
+  "title": "Argument From A Group and Its Members - Variant 1",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 321-326.",
+  "variables": [
+   "G",
+   "Q",
+   "M"
+  ],
+  "conclusions": [
+   "has(G,Q)"
+  ],
+  "premises": [
+   "member_quality(M,G,Q)",
+   "member_group_quality(M,Q,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 925,
+  "id": "group_2",
+  "title": "Argument From A Group and Its Members - Variant 2",
+  "source": "Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 321-326.",
+  "variables": [
+   "G",
+   "Q",
+   "M"
+  ],
+  "conclusions": [
+   "is(M,Q)"
+  ],
+  "premises": [
+   "group_quality(G,Q)",
+   "group_member(M,G)",
+   "group_member_quality(G,Q,M)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 939,
+  "id": "practical_inference",
+  "title": "Practical Reasoning - Practical Inference",
+  "source": "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "carry_out_action(A)"
+  ],
+  "premises": [
+   "have_goal(G)",
+   "action_realize_goal(A,G)"
+  ],
+  "assumptions": [
+   "possible_action(A)",
+   "possible_goal(G)"
+  ],
+  "exceptions": [
+   "other_goals_conflict(G)",
+   "more_efficient_alternative_actions(A,G)",
+   "incompatible_consequences(A,G)"
+  ],
+  "carneades": {
+   "arguments_created": 4,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 963,
+  "id": "practical_necessary_condition",
+  "title": "Practical Reasoning - Necessary Condition Schema",
+  "source": "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.",
+  "variables": [
+   "X",
+   "A",
+   "A2",
+   "P"
+  ],
+  "conclusions": [
+   "bringing_about_action(X)"
+  ],
+  "premises": [
+   "goal_is_action(A)",
+   "alternative_action(X,A)",
+   "necessary_action(X,A)",
+   "practicality_action(X)",
+   "more_acceptable_bringing(A,X)"
+  ],
+  "assumptions": [
+   "possible_action(A)",
+   "acceptable_action(X)",
+   "possible_agent(X,P)"
+  ],
+  "exceptions": [
+   "alternative_means(A,X)",
+   "side_effect_action(P,X)",
+   "conflict_goals(P,A2,A)"
+  ],
+  "carneades": {
+   "arguments_created": 4,
+   "premises_in_argument": 8,
+   "expected_premises": 8,
+   "stderr": [
+    "Functor not defined in the language: conflict_goals/3"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "variable not used in premises or deletions: P",
+    "variable not used in premises or deletions: P",
+    "predicate not declared in the language: conflict_goals/3",
+    "variable not used in premises or deletions: P",
+    "variable not used in premises or deletions: A2",
+    "variable declared but not used: A2",
+    "variable declared but not used: P"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 991,
+  "id": "practical_sufficient_condition",
+  "title": "Practical Reasoning - Sufficient Condition Schema",
+  "source": "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.",
+  "variables": [
+   "X",
+   "A",
+   "A2",
+   "P"
+  ],
+  "conclusions": [
+   "bringing_about_action(X)"
+  ],
+  "premises": [
+   "goal_is_action(A)",
+   "alternative_action(X,A)",
+   "sufficient_action(X,A)",
+   "practicality_action(X)",
+   "more_acceptable_bringing(A,X)"
+  ],
+  "assumptions": [
+   "possible_action(A)",
+   "acceptable_action(X)",
+   "possible_agent(X,P)"
+  ],
+  "exceptions": [
+   "alternative_means(A,X)",
+   "side_effect_action(P,X)",
+   "conflict_goals(P,A2,A)"
+  ],
+  "carneades": {
+   "arguments_created": 4,
+   "premises_in_argument": 8,
+   "expected_premises": 8,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "variable not used in premises or deletions: P",
+    "variable not used in premises or deletions: P",
+    "predicate not declared in the language: conflict_goals/3",
+    "variable not used in premises or deletions: P",
+    "variable not used in premises or deletions: A2",
+    "variable declared but not used: A2",
+    "variable declared but not used: P"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1019,
+  "id": "practical_goal",
+  "title": "Practical Reasoning - Argument From Goal",
+  "source": "Bart Verheij, \"Dialectical Argumentation with Argumentation Schemes: An Approach to Legal Logic.\" Artificial lntelligence and Law 11 (2003), p. 169.",
+  "variables": [
+   "P",
+   "X",
+   "G"
+  ],
+  "conclusions": [
+   "should_do(P,X)"
+  ],
+  "premises": [
+   "contributing_action(X,G)",
+   "person_goal(P,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1033,
+  "id": "end_and_means_1",
+  "title": "Practical Reasoning - Argument From Ends and Means 1",
+  "source": "Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Trtatise on Argumentation Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278.",
+  "variables": [
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "good(X)"
+  ],
+  "premises": [
+   "means_to_end(X,Y)",
+   "good(Y)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1046,
+  "id": "end_and_means_2",
+  "title": "Practical Reasoning - Argument From Ends and Means 2",
+  "source": "Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Trtatise on Argumentation Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278.",
+  "variables": [
+   "X"
+  ],
+  "conclusions": [
+   "ends_important(X)"
+  ],
+  "premises": [
+   "means_end(X)",
+   "more_important_ends"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [
+    "Functor not defined in the language: means_end/1"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: means_end/1",
+    "predicate not declared in the language: more_important_ends/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1059,
+  "id": "end_and_means_3",
+  "title": "Practical Reasoning - Argument From Ends and Means 3",
+  "source": "Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Trtatise on Argumentation Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278.",
+  "variables": [
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "good(Y)"
+  ],
+  "premises": [
+   "means_to_end(X,Y)",
+   "easy_to_achive(X)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1072,
+  "id": "two_person_practical",
+  "title": "Two Person Practical Reasoning",
+  "source": "Douglas Walton, Appeal to Expert Opinion. University Park: Pennsylvania State University Press. 1997 p. 163.",
+  "variables": [
+   "A",
+   "B",
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "should_carry_out(A,Y)"
+  ],
+  "premises": [
+   "tells_intend(A,X,B)",
+   "situation_necessiy(B,Y,X,A)"
+  ],
+  "assumptions": [
+   "possible_action(Y)"
+  ],
+  "exceptions": [
+   "alternative_means(A,X)",
+   "goals_higher_priority(A,X)",
+   "side_effect_other_act(B,A)"
+  ],
+  "carneades": {
+   "arguments_created": 4,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1091,
+  "id": "waste",
+  "title": "Argument From Waste",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, Tuscaloosa and London: University of Alabama Press, 1995, p. 157. Douglas Walton \"The Sunk Cost Fallacy or Argument from Waste\" Argumentation 16 (2002), p.488.",
+  "variables": [
+   "A",
+   "X"
+  ],
+  "conclusions": [
+   "ought_to_continue(A,X)"
+  ],
+  "premises": [
+   "stop_realize_wasted(A,X)",
+   "waste_bad_thing(A,X)"
+  ],
+  "assumptions": [
+   "posible(X)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [
+    "Functor not defined in the language: waste_bad_thing/2",
+    "Functor not defined in the language: ought_to_continue/2"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: waste_bad_thing/2",
+    "predicate not declared in the language: ought_to_continue/2"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1107,
+  "id": "negative_normal_expectations",
+  "title": "Negative Reasoning from Normal Expectations",
+  "source": "Douglas Walton, Arguments from lgnorance. University Park: Pennsylvania State University Press, 1996, pp. 84,86. Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995. p. 150.",
+  "variables": [
+   "A"
+  ],
+  "conclusions": [
+   "not_normal"
+  ],
+  "premises": [
+   "normal_true(A)",
+   "case_not_true(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: not_normal/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1123,
+  "id": "negative_practical",
+  "title": "Negative Practical Reasoning",
+  "source": "Douglas Walton, Arguments from lgnorance. University Park: Pennsylvania State University Press, 1996, pp. 84,86. Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995. p. 150.",
+  "variables": [
+   "A",
+   "B",
+   "C"
+  ],
+  "conclusions": [
+   "act_on_presumption(A)"
+  ],
+  "premises": [
+   "not_know_true(A)",
+   "presumption(A)",
+   "consequences_presumption(A,B)",
+   "other_consequences_presumption(A,C)",
+   "more_serious_consequences(B,C)"
+  ],
+  "assumptions": [
+   "sufficient_evidence"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 6,
+   "expected_premises": 6,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: sufficient_evidence/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1143,
+  "id": "epistemic_ignorence",
+  "title": "Epistemic Argument From Ignorence",
+  "source": "Douglas Walton , \"Nonfallacious Arguments from Ignorance.\" American Philosophical Quaerterly 29 (1992), p. 386.",
+  "variables": [
+   "A",
+   "D",
+   "K"
+  ],
+  "conclusions": [
+   "plausible_false(D,A)"
+  ],
+  "premises": [
+   "true_propositions_contained(D,K)",
+   "special_proposition(A,K)",
+   "special_in(A,D)",
+   "special_not_in(A,K)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1158,
+  "id": "sign",
+  "title": "Argument From Sign",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation. New York: Cambridge University Press, 2006, pp. 113-114.",
+  "variables": [
+   "A",
+   "B"
+  ],
+  "conclusions": [
+   "true_in_situation(B)"
+  ],
+  "premises": [
+   "finding_true(A)",
+   "indicated_true(B,A)"
+  ],
+  "assumptions": [
+   "strong_correlation(A,B)"
+  ],
+  "exceptions": [
+   "more_reliable"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: more_reliable/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1175,
+  "id": "abductive_backward",
+  "title": "Abductive Argumentation Scheme - Backward Argumentation Scheme",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 329.",
+  "variables": [
+   "A",
+   "A1",
+   "D"
+  ],
+  "conclusions": [
+   "plausible_hypothesis(A1)"
+  ],
+  "premises": [
+   "data_set(D,A)",
+   "data_account (A1,D)"
+  ],
+  "assumptions": [
+   "sufficient_account(A1,D)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [
+    "Functor not defined in the language: data_set/2"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: data_set/2"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1191,
+  "id": "abductive_forward",
+  "title": "Abductive Argumentation Scheme - Forward Argumentation Scheme",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 329-330.",
+  "variables": [
+   "D",
+   "G",
+   "C",
+   "C1"
+  ],
+  "conclusions": [
+   "plausible_conclusion(C1)"
+  ],
+  "premises": [
+   "data_set(D)",
+   "diagram_set(G,D,C)",
+   "succesful_diagram(C1)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1205,
+  "id": "abductive_action_to_character",
+  "title": "Abductive Argumentation Scheme - From Action to Character.",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 330.",
+  "variables": [
+   "A"
+  ],
+  "conclusions": [
+   "character_quality(A)"
+  ],
+  "premises": [
+   "action_character(A)"
+  ],
+  "assumptions": [
+   "quality_defined(A)",
+   "not_fit_action(A)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1220,
+  "id": "abductive_character_to_action",
+  "title": "Abductive Argumentation Scheme - From Character to Action (Predictive)",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 330.",
+  "variables": [
+   "A"
+  ],
+  "conclusions": [
+   "character_action(A)"
+  ],
+  "premises": [
+   "character(A)"
+  ],
+  "assumptions": [
+   "character_defined(A)"
+  ],
+  "exceptions": [
+   "not_character_action(A)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1236,
+  "id": "retroductive",
+  "title": "Retroductive Scheme for Identifying an Agent from Past Action",
+  "source": "",
+  "variables": [
+   "A",
+   "Q"
+  ],
+  "conclusions": [
+   "event_question(A)"
+  ],
+  "premises": [
+   "agent_event(A)",
+   "event_quality(Q)",
+   "agent_quality(A,Q)"
+  ],
+  "assumptions": [
+   "quality_defined(A)",
+   "reference_class"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 5,
+   "expected_premises": 5,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: reference_class/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1252,
+  "id": "evidence_hypothesis_verification",
+  "title": "Argument From Evidence to Hypothesis - Argument From Verification",
+  "source": "Douglas Walton, Argumentation Schemes for Presumptive Reasoning. Mahwah, N.J.: Erlbaum, 1996, pp. 67-70.",
+  "variables": [
+   "H",
+   "A"
+  ],
+  "conclusions": [
+   "H"
+  ],
+  "premises": [
+   "hypothesis_event(H,A)",
+   "event_true(A)"
+  ],
+  "assumptions": [
+   "sufficient_correlation(H,A)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1266,
+  "id": "evidence_hypothesis_falsification",
+  "title": "Argument From Evidence to Hypothesis - Argument From Falsification",
+  "source": "Douglas Walton, Argumentation Schemes for Presumptive Reasoning. Mahwah, N.J.: Erlbaum, 1996, pp. 67-70.",
+  "variables": [
+   "H",
+   "A"
+  ],
+  "conclusions": [
+   "¬A"
+  ],
+  "premises": [
+   "hypothesis_event(H,A)",
+   "event_false(A)"
+  ],
+  "assumptions": [
+   "sufficient_correlation(A,H)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1280,
+  "id": "negative_consequences_prudential",
+  "title": "Argument From Negative Consequences - Prudential Inference",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995. pp. 155- 156. Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.",
+  "variables": [
+   "X",
+   "C"
+  ],
+  "conclusions": [
+   "prudential(X)"
+  ],
+  "premises": [
+   "not_doing(X)",
+   "bad_consequence(X,C)"
+  ],
+  "assumptions": [
+   "strongly_occur(X)"
+  ],
+  "exceptions": [
+   "other_consequences(X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [
+    "Functor not defined in the language: strongly_occur/1",
+    "Functor not defined in the language: prudential/1",
+    "Functor not defined in the language: other_consequences/1"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: strongly_occur/1",
+    "predicate not declared in the language: other_consequences/1",
+    "predicate not declared in the language: prudential/1"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1298,
+  "id": "pragmatic_alternative",
+  "title": "Pragmatic Argument From Alternatives",
+  "source": "Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 142.",
+  "variables": [
+   "A",
+   "B"
+  ],
+  "conclusions": [
+   "do_other(A)"
+  ],
+  "premises": [
+   "alternatives(A,B)",
+   "undesirable(B)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1310,
+  "id": "treat",
+  "title": "Argument From Treat",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, p. 157.",
+  "variables": [
+   "X",
+   "C"
+  ],
+  "conclusions": [
+   "not_bring_about(X)"
+  ],
+  "premises": [
+   "cited_bad_consequences(X)",
+   "position_to_know(X)",
+   "assert_bad(X,C)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1324,
+  "id": "ad_baculum",
+  "title": "Argument From Disjunctive Ad Baculum Treat",
+  "source": "Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 140.",
+  "variables": [
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "do_other(X)"
+  ],
+  "premises": [
+   "alternative_bad(X,Y)",
+   "undesirable(Y)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1336,
+  "id": "fear",
+  "title": "Argument From Fear Appeal",
+  "source": "Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 22.",
+  "variables": [
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "ought_to_bring_about(X)"
+  ],
+  "premises": [
+   "not_do_appear(X,Y)",
+   "bad_for_you(Y)",
+   "prevent(Y)",
+   "only_way_prevent(Y,X)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1350,
+  "id": "danger",
+  "title": "Argument From Danger Appeal",
+  "source": "Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 173.",
+  "variables": [
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "should_not(Y)"
+  ],
+  "premises": [
+   "occur(X,Y)",
+   "danger(Y)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [
+    "Functor not defined in the language: should_not/1"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: should_not/1"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1362,
+  "id": "help",
+  "title": "Argument From Need For Help",
+  "source": "Douglas Walton, Appeal to Pity. Albany: State University of New York Press, 1997, pp. 104,155.",
+  "variables": [
+   "A",
+   "B",
+   "X"
+  ],
+  "conclusions": [
+   "carry_out(B,X)"
+  ],
+  "premises": [
+   "help_needed(A,B)",
+   "situation_help(A,X,B)",
+   "can_carry_out(B,X)",
+   "not_too_costly(B,X)"
+  ],
+  "assumptions": [
+   "possible_carry_out(B,X)",
+   "action_will_help(X,A)"
+  ],
+  "exceptions": [
+   "greater_side_effects(X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 6,
+   "expected_premises": 6,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1381,
+  "id": "distress",
+  "title": "Argument From Distress",
+  "source": "Douglas Walton, Appeal to Pity. Albany: State University of New York Press, 1991, pp. 105,155.",
+  "variables": [
+   "B",
+   "X",
+   "A"
+  ],
+  "conclusions": [
+   "bring_relive(B,X)"
+  ],
+  "premises": [
+   "distress(A)",
+   "relieve(B,X)"
+  ],
+  "assumptions": [
+   "really_distress(A)",
+   "possible_bring_about(B,X)"
+  ],
+  "exceptions": [
+   "great_side_effects(B,X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1398,
+  "id": "commitment1",
+  "title": "Argument From Commitment - Version 1",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation. Cambridge: Cambridge University Press, 2006, pp. 117- 118. Douglas Walton, \"The Sunk Costs Fallacy or Argument from Waste.\" Argumentation 16 (2002), p. 490.",
+  "variables": [
+   "A",
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "commined_to(A,Y)"
+  ],
+  "premises": [
+   "committed(A,X)",
+   "also_committed(X,Y)"
+  ],
+  "assumptions": [
+   "commitment_support_evidence(A,X)"
+  ],
+  "exceptions": [
+   "commitment_contrary_evidence(A,X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [
+    "Functor not defined in the language: commined_to/2"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: commined_to/2"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1417,
+  "id": "commitment2",
+  "title": "Argument From Commitment - Version 2",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation. Cambridge: Cambridge University Press, 2006, pp. 117- 118. Douglas Walton, \"The Sunk Costs Fallacy or Argument from Waste.\" Argumentation 16 (2002), p. 490.",
+  "variables": [
+   "A",
+   "X",
+   "Y"
+  ],
+  "conclusions": [
+   "commitment_arises(A,Y)"
+  ],
+  "premises": [
+   "also_committed_questioned(A,X,Y)",
+   "dialog_committed(A,X)"
+  ],
+  "assumptions": [
+   "commitment_support_evidence(A,X)"
+  ],
+  "exceptions": [
+   "commitment_contrary_evidence(A,X)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1436,
+  "id": "ad_hominem",
+  "title": "Generic Ad Hominem",
+  "source": "Douglas Walton , Fundamentals of Critical Argumentation. Cambridge: Cambridge University Press, 2006, p. 123.",
+  "variables": [
+   "A",
+   "S"
+  ],
+  "conclusions": [
+   "bad_not_accepted(A,S)"
+  ],
+  "premises": [
+   "bad_character(A)"
+  ],
+  "assumptions": [
+   "attack_well_supported",
+   "character_revelant"
+  ],
+  "exceptions": [
+   "stronger_than_character(S)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: attack_well_supported/0",
+    "predicate not declared in the language: character_revelant/0",
+    "variable not used in premises or deletions: S",
+    "variable not used in premises or deletions: S",
+    "variable declared but not used: S"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1453,
+  "id": "pragmatic_inconsistency",
+  "title": "Pragmatic Inconsistency",
+  "source": "Douglas Walton , Ad Hominem Arguments. Tuscaloosa: University of Alabama Press, 1998, pp. 218, 251.",
+  "variables": [
+   "A",
+   "S",
+   "X"
+  ],
+  "conclusions": [
+   "arguement_not_accepted(A,S)"
+  ],
+  "premises": [
+   "advocates_conclusion(A,S,X)",
+   "opposite_action(A,S,¬X)"
+  ],
+  "assumptions": [
+   "strong_advocate(A,S,X)",
+   "descriptions_opposite(A,S)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [
+    "Functor not defined in the language: strong_advocate/3"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: strong_advocate/3"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1469,
+  "id": "inconsistent_commitment",
+  "title": "Argument From Inconsistent Commitment",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation. Cambridge: Cambridge University Press, 2006, pp. 120-121.",
+  "variables": [
+   "A",
+   "S"
+  ],
+  "conclusions": [
+   "inconsistent_commitment(A)"
+  ],
+  "premises": [
+   "initial_commitment(A,S)",
+   "opposed_commitment(A,S)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "evidence_not_commited(A,S)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1484,
+  "id": "circumstantial_ad_hominem",
+  "title": "Circumstantial Ad Hominem",
+  "source": "Douglas Walton, Ad Hominem Arguments. Tuscaloosa: University of Alabama Press, 1998, pp. 255-256. Douglas Walton, Fundamentals of Critical Argumentation. Cambridge: Cambridge University Press, 2006, pp. 125-126.",
+  "variables": [
+   "A",
+   "S",
+   "C"
+  ],
+  "conclusions": [
+   "plausibility_decreased(A,S)"
+  ],
+  "premises": [
+   "advocates_conclusion(A,S,C)",
+   "commited_opposite(A,S)",
+   "credibility_questioned(A)"
+  ],
+  "assumptions": [
+   "character_issue(A)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1502,
+  "id": "bias",
+  "title": "Argument From Bias",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London : University of Alabama Press, 1995, p. 153.",
+  "variables": [
+   "A",
+   "X",
+   "C"
+  ],
+  "conclusions": [
+   "arguer_not_taken_both(A,C)"
+  ],
+  "premises": [
+   "not_taken_both(X,C)",
+   "biased(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1515,
+  "id": "bias_ad_hominem",
+  "title": "Bias Ad Hominem",
+  "source": "Douglas Walton, Ad Hominem Arguments. Tuscaloosa: University of Alabama Press, 1998, p.255.",
+  "variables": [
+   "A",
+   "S",
+   "D"
+  ],
+  "conclusions": [
+   "not_given_credibility(S)"
+  ],
+  "premises": [
+   "proponent_biased(A,S)",
+   "biased_not_take_part(A,D,S)",
+   "morally_bad(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1530,
+  "id": "gradualism",
+  "title": "Argument From Gradualism",
+  "source": "Douglas Walton, Argumentation Schemes for Presumptive Reasoning. Mahwah, N.J.: Erlbaum, 1996, p. 96.",
+  "variables": [
+   "P1",
+   "P2",
+   "P3",
+   "P4"
+  ],
+  "conclusions": [
+   "true_acceptable(P4)"
+  ],
+  "premises": [
+   "true_acceptable(P1)",
+   "sequence(P1,P2,P3,P4)",
+   "must_proper(P1,P4)"
+  ],
+  "assumptions": [
+   "proper_sequence"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: proper_sequence/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1546,
+  "id": "sorites_slippery_slope",
+  "title": "Sorites Slippery Slope Argument",
+  "source": "Douglas Walton, \"The Argument of the Beard.\" lnformal Logic 18 (1996), p. 151.",
+  "variables": [
+   "A",
+   "P",
+   "A1",
+   "A2"
+  ],
+  "conclusions": [
+   "may_have(A,P)"
+  ],
+  "premises": [
+   "beyond_contetion(A2,P)",
+   "all_has(A2,P,A1)",
+   "reapplication_sequence"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: reapplication_sequence/0",
+    "variable not used in premises or deletions: A",
+    "variable declared but not used: A"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1559,
+  "id": "verbal_slippery_slope",
+  "title": "Verbal Slippery Slope",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, p. 160.",
+  "variables": [
+   "A1",
+   "A2",
+   "A",
+   "P"
+  ],
+  "conclusions": [
+   "not_has_propery(A1,P)"
+  ],
+  "premises": [
+   "individual_property(A1,P)",
+   "individuals_propoerty(A1,F,A2)",
+   "vague_property(P,A1,A)",
+   "individual_property_false(A,P)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [
+    "individuals_propoerty(k0_a1,F,k1_a2)"
+   ],
+   "validator_problems": [
+    "variable not declared in the scheme: F"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1574,
+  "id": "rule_physical_world_1",
+  "title": "Argument For Constitutive Rule Claims - Physical Worl Premise Version 1",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 342.",
+  "variables": [
+   "W",
+   "D"
+  ],
+  "conclusions": [
+   "means_same(W,D)"
+  ],
+  "premises": [
+   "is(W,D)",
+   "synonymous"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "not_necessarily_true"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: synonymous/0",
+    "predicate not declared in the language: not_necessarily_true/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1589,
+  "id": "rule_physical_world_2",
+  "title": "Argument For Constitutive Rule Claims - Physical Worl Premise Version 2",
+  "source": "Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, p. 342.",
+  "variables": [
+   "I",
+   "D",
+   "W"
+  ],
+  "conclusions": [
+   "counts_as(D,W)"
+  ],
+  "premises": [
+   "oficcial_rulebook(I,D,W)",
+   "correctly_report"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "rule_changed"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [
+    "Functor not defined in the language: oficcial_rulebook/3"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: oficcial_rulebook/3",
+    "predicate not declared in the language: correctly_report/0",
+    "predicate not declared in the language: rule_changed/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1604,
+  "id": "rule_mental_world",
+  "title": "",
+  "source": "Wayrw Grennan, Informal Logic, Montreal: McGill-Queen's University Press, 1997, p. 196.",
+  "variables": [
+   "W",
+   "D",
+   "L"
+  ],
+  "conclusions": [
+   "means_same(W,D)"
+  ],
+  "premises": [
+   "same_meaning(L,W,D)",
+   "speakers_correct"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "without_correcting(W)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [
+    "Functor not defined in the language: same_meaning/3"
+   ],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: same_meaning/3",
+    "predicate not declared in the language: speakers_correct/0"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1618,
+  "id": "rule",
+  "title": "Argument From Rules - From Rules",
+  "source": "Peter Jan Schellens and Menno De Jong, \"Argumentation Schemes in Persuasive Brochures. \"Argumentation 18, 2004, p. 311.",
+  "variables": [
+   "E",
+   "A",
+   "C"
+  ],
+  "conclusions": [
+   "evaluation_justified(E,C)"
+  ],
+  "premises": [
+   "evaluation(A,E,C)",
+   "case(A)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1631,
+  "id": "regulative_rule",
+  "title": "Argumentation From Rules - Regulative Rule Premise Obligation Claim",
+  "source": "Wayne Grennan, Informal Logic. Montreal: McGill-Queen's University Press, 1997, p. 169.",
+  "variables": [
+   "A",
+   "X"
+  ],
+  "conclusions": [
+   "must_do(A,X)"
+  ],
+  "premises": [
+   "obligatory(X)",
+   "do_obligator"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "excuse"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": [
+    "predicate not declared in the language: do_obligator/0",
+    "predicate not declared in the language: excuse/0",
+    "variable not used in premises or deletions: A",
+    "variable declared but not used: A"
+   ]
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1645,
+  "id": "exeptional",
+  "title": "Argument For An Exceptional Case",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, p. 148.",
+  "variables": [
+   "A",
+   "X"
+  ],
+  "conclusions": [
+   "rule_waived(A)"
+  ],
+  "premises": [
+   "rule_can_waived(X)",
+   "case_exception(A)"
+  ],
+  "assumptions": [
+   "case_exception(A)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1660,
+  "id": "plea_for_excuse",
+  "title": "Argument From Plea For Excuse",
+  "source": "Douglas Walton, Appeal to Pity. Albany: State University of New York Press, 1997, pp. 154-156.",
+  "variables": [
+   "S",
+   "R",
+   "T",
+   "E"
+  ],
+  "conclusions": [
+   "exempted(S)"
+  ],
+  "premises": [
+   "rule_require(R,T,S)",
+   "pleader_committed(T)",
+   "special_circumstances(E)"
+  ],
+  "assumptions": [
+   "excuse(E)"
+  ],
+  "exceptions": [
+   "not_excuse(E)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1678,
+  "id": "perception",
+  "title": "Argument From Perception",
+  "source": "John Pollock, Cognitive Carpentry. Cambridge, Mass.: MIT Press, 1995, p. 53.",
+  "variables": [
+   "P",
+   "I"
+  ],
+  "conclusions": [
+   "reasonable_case(I)"
+  ],
+  "premises": [
+   "image(P,I)",
+   "exemplify(I)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "not_indicator(I)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1692,
+  "id": "memory",
+  "title": "Argument From Memory",
+  "source": "J.L. Pollock, \"Defeasible Reasoning.\" Cognitive Science 11 (1987), pp. 481-518.",
+  "variables": [
+   "P",
+   "M"
+  ],
+  "conclusions": [
+   "reasonable_belive(M)"
+  ],
+  "premises": [
+   "recalls(P,M)",
+   "believe_it(M)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1703,
+  "id": "abduction",
+  "title": null,
+  "source": null,
+  "variables": [
+   "S",
+   "T",
+   "H"
+  ],
+  "conclusions": [
+   "H"
+  ],
+  "premises": [
+   "observed(S)",
+   "explanation(T,S)",
+   "in(T,H)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "more_coherent_explanation(T,S)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1713,
+  "id": "analogy",
+  "title": "Argument from Analogy",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation, Cambridge University Press, New York 2006, p. 96-97.",
+  "variables": [
+   "A",
+   "C"
+  ],
+  "conclusions": [
+   "A"
+  ],
+  "premises": [
+   "similar_case(C)",
+   "in_case(A,C)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "relevant_differences(C)",
+   "more_on_point(A,C)"
+  ],
+  "carneades": {
+   "arguments_created": 3,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1728,
+  "id": "appearance",
+  "title": "Argument from Appearance",
+  "source": "Douglas Walton, ‘Argument from Appearance: A New Argumentation Scheme’, 2006.",
+  "variables": [
+   "O",
+   "C"
+  ],
+  "conclusions": [
+   "instance(O,C)"
+  ],
+  "premises": [
+   "looks_like(O,C)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 1,
+   "expected_premises": 1,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1738,
+  "id": "cause_to_effect",
+  "title": "Argument from Cause to Effect",
+  "source": null,
+  "variables": [
+   "E1",
+   "E2"
+  ],
+  "conclusions": [
+   "will_occur(E2)"
+  ],
+  "premises": [
+   "has_occurred(E1)",
+   "causes(E1,E2)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "interference(E1)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1750,
+  "id": "correlation_to_cause",
+  "title": "Argument from Correlation to Cause",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 142.",
+  "variables": [
+   "E1",
+   "E2"
+  ],
+  "conclusions": [
+   "causes(E1,E2)"
+  ],
+  "premises": [
+   "correlated(E1,E2)"
+  ],
+  "assumptions": [
+   "explanatory_theory(E1,E2)"
+  ],
+  "exceptions": [
+   "causes_both(E1,E2)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1766,
+  "id": "credible_source",
+  "title": "Argument from Credible Source",
+  "source": "Wyner, A., A functional perspective on argumentation schemes. Argument and Computation, vol. 7, pp. 113-133. 2016.",
+  "variables": [
+   "W",
+   "D",
+   "S"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "credible_source(W,D)",
+   "asserts(W,S)",
+   "in_domain(S,D)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "biased(W)",
+   "dishonest(W)",
+   "other_credible_sources_disagree(S)"
+  ],
+  "carneades": {
+   "arguments_created": 4,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1783,
+  "id": "definition_to_verbal_classification",
+  "title": "Argument from Definition to Verbal Classification",
+  "source": "Douglas Walton, Fundamentals of Critical Argumentation, Cambridge University Press, New York 2006, p. 129.",
+  "variables": [
+   "O",
+   "G",
+   "D"
+  ],
+  "conclusions": [
+   "instance(O,G)"
+  ],
+  "premises": [
+   "satisfies_definition(O,D)",
+   "classified_as(D,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "inadequate_definition(D,G)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1798,
+  "id": "defeasible_modus_ponens",
+  "title": "Defeasible Modus Ponens",
+  "source": null,
+  "variables": [
+   "A",
+   "B"
+  ],
+  "conclusions": [
+   "B"
+  ],
+  "premises": [
+   "implies(A,B)",
+   "A"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1807,
+  "id": "established_rule",
+  "title": "Argument from an Established Rule",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 147.",
+  "variables": [
+   "C",
+   "R"
+  ],
+  "conclusions": [
+   "C"
+  ],
+  "premises": [
+   "has_conclusion(R,C)",
+   "applicable(R)"
+  ],
+  "assumptions": [
+   "valid(R)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1821,
+  "id": "ethotic1",
+  "title": "Positive Argument from Ethos",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 152.",
+  "variables": [
+   "P",
+   "S"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "asserts(P,S)",
+   "good_moral_character(P)"
+  ],
+  "assumptions": [
+   "character_is_relevant(S)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1835,
+  "id": "ethotic2",
+  "title": "Negative Argument from Ethos",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 152.",
+  "variables": [
+   "P",
+   "S"
+  ],
+  "conclusions": [
+   "¬S"
+  ],
+  "premises": [
+   "asserts(P,S)",
+   "bad_moral_character(P)"
+  ],
+  "assumptions": [
+   "character_is_relevant(S)"
+  ],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1849,
+  "id": "expert_opinion",
+  "title": "Argument from Expert Opinion",
+  "source": "Douglas Walton, Appeal to Expert Opinion, The Pennsylvania University Press, University Park, Albany, 1997, p.211-225.",
+  "variables": [
+   "W",
+   "D",
+   "S"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "expert(W,D)",
+   "in_domain(S,D)",
+   "asserts(W,S)"
+  ],
+  "assumptions": [
+   "based_on_evidence(asserts(W,S))"
+  ],
+  "exceptions": [
+   "untrustworthy(W)",
+   "inconsistent_with_other_experts(S)"
+  ],
+  "carneades": {
+   "arguments_created": 3,
+   "premises_in_argument": 4,
+   "expected_premises": 4,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1868,
+  "id": "ignorance",
+  "title": "Argument from Ignorance",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 150",
+  "variables": [
+   "S"
+  ],
+  "conclusions": [
+   "¬S"
+  ],
+  "premises": [
+   "would_be_known(S)",
+   "¬known(S)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "uninvestigated(S)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1884,
+  "id": "negative_consequences",
+  "title": "Argument from Negative Consequences",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "¬should_be_performed(A)"
+  ],
+  "premises": [
+   "brings_about(A,G)",
+   "bad(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1898,
+  "id": "position_to_know",
+  "title": "Argument from Position to Know",
+  "source": "Douglas Walton, Legal Argumentation and Evidence, The Pennsylvania State University Press, University Park, 2002, p.46.",
+  "variables": [
+   "W",
+   "D",
+   "S"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "position_to_know(W,D)",
+   "asserts(W,S)",
+   "in_domain(S,D)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "dishonest(W)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1913,
+  "id": "positive_consequences",
+  "title": "Argument from Positive Consequences",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156.",
+  "variables": [
+   "A",
+   "G"
+  ],
+  "conclusions": [
+   "should_be_performed(A)"
+  ],
+  "premises": [
+   "brings_about(A,G)",
+   "good(G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1927,
+  "id": "practical_reasoning1",
+  "title": "Argument from Value-Based Practical Reasoning",
+  "source": "Atkinson, K., and Bench-Capon, T. J. M. Practical reasoning as presumptive argumentation using action based alternating transition systems. Artificial Intelligence 171, 10-15 (2007), 855–874.",
+  "variables": [
+   "A",
+   "S1",
+   "S2",
+   "G",
+   "V"
+  ],
+  "conclusions": [
+   "should_be_performed(A)"
+  ],
+  "premises": [
+   "current_circumstances(S1)",
+   "would_bring_about(A,S1,S2)",
+   "would_be_realized(G,S2)",
+   "would_promote_value(G,V)"
+  ],
+  "assumptions": [
+   "legitimate_value(V)",
+   "worthy_goal(G)",
+   "possible(A)"
+  ],
+  "exceptions": [
+   "bring_about_more_effectively(S2,A)",
+   "realize_more_effectively(G,A)",
+   "promote_more_effectively(V,A)",
+   "side_effects(A,S1)"
+  ],
+  "carneades": {
+   "arguments_created": 5,
+   "premises_in_argument": 7,
+   "expected_premises": 7,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1953,
+  "id": "practical_reasoning2",
+  "title": "Argument from Instrumental Practical Reasoning",
+  "source": "Walton, Douglas (2015). Goal-Based Reasoning for Argumentation. Cambridge University Press.",
+  "variables": [
+   "A",
+   "S1",
+   "S2",
+   "G"
+  ],
+  "conclusions": [
+   "should_be_performed(A)"
+  ],
+  "premises": [
+   "current_circumstances(S1)",
+   "would_bring_about(A,S1,S2)",
+   "would_be_realized(G,S2)"
+  ],
+  "assumptions": [
+   "possible(A)",
+   "possible(G)"
+  ],
+  "exceptions": [
+   "bring_about_more_effectively(S2,A)",
+   "realize_more_effectively(G,A)",
+   "intervening_actions(A,G)",
+   "side_effects(A,S1)",
+   "incompatible_goal(G)"
+  ],
+  "carneades": {
+   "arguments_created": 6,
+   "premises_in_argument": 5,
+   "expected_premises": 5,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1976,
+  "id": "exeption_to_rule",
+  "title": "Argument From Exception to a Rule",
+  "source": "Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 148",
+  "variables": [
+   "S",
+   "C",
+   "R"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "similar_case(C)",
+   "rule_of_case(R,C)",
+   "has_conclusion(R,S)"
+  ],
+  "assumptions": [],
+  "exceptions": [
+   "relevant_differences(R,C)",
+   "inapplicable_rule(R)"
+  ],
+  "carneades": {
+   "arguments_created": 3,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 1993,
+  "id": "slippery_slope_base_case",
+  "title": "Slippery Slope Argument",
+  "source": "Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
+  "variables": [
+   "A",
+   "E"
+  ],
+  "conclusions": [
+   "negative_consequences(A)"
+  ],
+  "premises": [
+   "would_realize(A,E)",
+   "horrible_costs(E)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 2005,
+  "id": "slippery_slope_inductive_step",
+  "title": "Slippery Slope Argument",
+  "source": "Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
+  "variables": [
+   "E1",
+   "E2"
+  ],
+  "conclusions": [
+   "horrible_costs(E1)"
+  ],
+  "premises": [
+   "causes(E1,E2)",
+   "horrible_costs(E2)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 2017,
+  "id": "sunk_costs",
+  "title": "Argument from Sunk Costs",
+  "source": "Douglas Walton, ‘The Sunk Costs Fallacy or Argument from Waste’, Argumentation, 16, 2002, p. 489",
+  "variables": [
+   "A",
+   "C"
+  ],
+  "conclusions": [
+   "should_be_performed(A)"
+  ],
+  "premises": [
+   "sunk_costs(A,C)",
+   "too_high_to_waste(C)"
+  ],
+  "assumptions": [
+   "feasible(A)"
+  ],
+  "exceptions": [
+   "future_losses_outweigh(A)"
+  ],
+  "carneades": {
+   "arguments_created": 2,
+   "premises_in_argument": 3,
+   "expected_premises": 3,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 2034,
+  "id": "verbal_classification",
+  "title": "Argument from Verbal Classification",
+  "source": null,
+  "variables": [
+   "O",
+   "F",
+   "G"
+  ],
+  "conclusions": [
+   "instance(O,G)"
+  ],
+  "premises": [
+   "instance(O,F)",
+   "subclass(F,G)"
+  ],
+  "assumptions": [],
+  "exceptions": [],
+  "carneades": {
+   "arguments_created": 1,
+   "premises_in_argument": 2,
+   "expected_premises": 2,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ },
+ {
+  "file": "walton.yml",
+  "line": 2044,
+  "id": "witness_testimony",
+  "title": "Argument from Witness Testimony",
+  "source": "Douglas Walton, Henry Prakken, Chris Reed, Argumentation Schemes and Generalisations in Reasoning about Evidence, Proceedings of the 9th International Conference on Artificial Intelligence and Law, Edinburgh, 2003. New York: ACM Press 2003, pp. 35. Douglas Walton, Witness Testimony Evidence, Cambridge University Press, 2008.",
+  "variables": [
+   "W",
+   "D",
+   "S"
+  ],
+  "conclusions": [
+   "S"
+  ],
+  "premises": [
+   "position_to_know(W,D)",
+   "in_domain(D,S)",
+   "believes(W,S)",
+   "asserts(W,S)"
+  ],
+  "assumptions": [
+   "internally_consistent(S)"
+  ],
+  "exceptions": [
+   "inconsistent_with_known_facts(S)",
+   "inconsistent_with_other_witnesses(S)",
+   "biased(W)",
+   "implausible(S)"
+  ],
+  "carneades": {
+   "arguments_created": 5,
+   "premises_in_argument": 5,
+   "expected_premises": 5,
+   "stderr": [],
+   "non_ground_statements": [],
+   "validator_problems": []
+  }
+ }
+]

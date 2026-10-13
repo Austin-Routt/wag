@@ -1,0 +1,4056 @@
+[
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 869,
+  "scheme": null,
+  "detail": "unquoted title containing ': ' (title: Argument From Values - Variant 1: Positive Value): YAML fails with 'mapping values are not allowed in this context' and the whole file does not load"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 884,
+  "scheme": null,
+  "detail": "unquoted title containing ': ' (title: Argument From Values - Variant 2: Negative Value): YAML fails with 'mapping values are not allowed in this context' and the whole file does not load"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 10,
+  "scheme": null,
+  "detail": "language key 'accept_saying' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "accept_saying"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 17,
+  "scheme": null,
+  "detail": "action_fit_quality/1: template has 0 %s for 1 arguments: 'Description of action actually fit the quality.'",
+  "key": "action_fit_quality/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 42,
+  "scheme": null,
+  "detail": "language key 'attack_well_supported' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "attack_well_supported"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 43,
+  "scheme": null,
+  "detail": "language key 'background' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "background"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 50,
+  "scheme": null,
+  "detail": "based_on_evidence/1: template has 0 %s for 1 arguments: 'The assertion %v is based on evidence.'",
+  "key": "based_on_evidence/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 51,
+  "scheme": null,
+  "detail": "language key 'being_credible' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "being_credible"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 56,
+  "scheme": null,
+  "detail": "duplicate language key biased/1 (lines 55, 56); YAML keeps only the last one, and the templates differ: '%s is biased.' | 'Arguer %s is biased.'"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 60,
+  "scheme": null,
+  "detail": "bring_about_more_effectively/2: template has 1 %s for 2 arguments: 'There exists an action that would bring about % more effectively than %s.'",
+  "key": "bring_about_more_effectively/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 60,
+  "scheme": null,
+  "detail": "bring_about_more_effectively/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): 'There exists an action that would bring about % more effectively than %s.'",
+  "key": "bring_about_more_effectively/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 87,
+  "scheme": null,
+  "detail": "language key 'character_revelant' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "character_revelant"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 88,
+  "scheme": null,
+  "detail": "cited_bad_consequences/1: template has 2 %s for 1 arguments: 'If you bring about %s, some cited bad consequences, %s, will follow.'",
+  "key": "cited_bad_consequences/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 97,
+  "scheme": null,
+  "detail": "conflict_goals/2: template has 3 %s for 2 arguments: '%s has some other goals %s that conflict with %s.'",
+  "key": "conflict_goals/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 102,
+  "scheme": null,
+  "detail": "language key 'correctly_report' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "correctly_report"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 118,
+  "scheme": null,
+  "detail": "language key 'do_obligator' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "do_obligator"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 132,
+  "scheme": null,
+  "detail": "language key 'excuse' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "excuse"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 139,
+  "scheme": null,
+  "detail": "favor/1: template has 2 %s for 1 arguments: 'If %s is generally accepted as truei that gives a reason in favor of %s.'",
+  "key": "favor/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 147,
+  "scheme": null,
+  "detail": "language key 'goal_prestige' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "goal_prestige"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 150,
+  "scheme": null,
+  "detail": "duplicate language key good/1 (lines 149, 150); YAML keeps only the last one"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 200,
+  "scheme": null,
+  "detail": "is/2: template has 1 %s for 2 arguments: '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 200,
+  "scheme": null,
+  "detail": "is/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 208,
+  "scheme": null,
+  "detail": "language key 'means_end' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "means_end"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 219,
+  "scheme": null,
+  "detail": "language key 'more_important_ends' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "more_important_ends"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 221,
+  "scheme": null,
+  "detail": "language key 'more_reliable' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "more_reliable"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 242,
+  "scheme": null,
+  "detail": "language key 'not_necessarily_true' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "not_necessarily_true"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 243,
+  "scheme": null,
+  "detail": "language key 'not_normal' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "not_normal"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 245,
+  "scheme": null,
+  "detail": "not_required/1: template has 0 %s for 1 arguments: '%is not required.'",
+  "key": "not_required/1"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 245,
+  "scheme": null,
+  "detail": "not_required/1: template contains malformed fmt verb(s) ['%i'], so Go's Sprintf prints e.g. %!i(string=...): '%is not required.'",
+  "key": "not_required/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 251,
+  "scheme": null,
+  "detail": "language key 'oficcial_rulebook' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (3 %s in it)",
+  "key": "oficcial_rulebook"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 255,
+  "scheme": null,
+  "detail": "language key 'other_consequences' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "other_consequences"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 256,
+  "scheme": null,
+  "detail": "other_consequences_presumption/2: template has 3 %s for 2 arguments: 'If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow.'",
+  "key": "other_consequences_presumption/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 260,
+  "scheme": null,
+  "detail": "language key 'ought_to_continue' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "ought_to_continue"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 277,
+  "scheme": null,
+  "detail": "popular_practise/1: template has 2 %s for 1 arguments: '%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s.'",
+  "key": "popular_practise/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 281,
+  "scheme": null,
+  "detail": "position_to_know_group/1: template has 2 %s for 1 arguments: 'Group %s is in a special position to know that %s is true.'",
+  "key": "position_to_know_group/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 297,
+  "scheme": null,
+  "detail": "language key 'proper_sequence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "proper_sequence"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 302,
+  "scheme": null,
+  "detail": "language key 'prudential' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "prudential"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 306,
+  "scheme": null,
+  "detail": "language key 'reapplication_sequence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "reapplication_sequence"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 313,
+  "scheme": null,
+  "detail": "language key 'reference_class' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "reference_class"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 323,
+  "scheme": null,
+  "detail": "language key 'rule_changed' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "rule_changed"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 328,
+  "scheme": null,
+  "detail": "sacrifice_value/2: template has 1 %s for 2 arguments: '%s has a great value.'",
+  "key": "sacrifice_value/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 329,
+  "scheme": null,
+  "detail": "same_meaning/2: template has 3 %s for 2 arguments: 'Speakers of %s believe that %s means the same as %s.'",
+  "key": "same_meaning/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 337,
+  "scheme": null,
+  "detail": "language key 'should_not' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "should_not"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 346,
+  "scheme": null,
+  "detail": "language key 'speakers_correct' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "speakers_correct"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 350,
+  "scheme": null,
+  "detail": "special_proposition/2: template has 1 %s for 2 arguments: 'A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.'",
+  "key": "special_proposition/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 354,
+  "scheme": null,
+  "detail": "language key 'strong_advocate' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (3 %s in it)",
+  "key": "strong_advocate"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 357,
+  "scheme": null,
+  "detail": "language key 'strongly_occur' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "strongly_occur"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 364,
+  "scheme": null,
+  "detail": "language key 'sufficient_evidence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "sufficient_evidence"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 366,
+  "scheme": null,
+  "detail": "language key 'synonymous' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "synonymous"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 372,
+  "scheme": null,
+  "detail": "predicate 'true' is read as the boolean constant by the Carneades term parser (validator: 'not a predicate symbol')"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "walton.yml",
+  "line": 390,
+  "scheme": null,
+  "detail": "language key 'waste_bad_thing' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "waste_bad_thing"
+ },
+ {
+  "category": "structure",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 418,
+  "scheme": "popular_opinion",
+  "detail": "unknown scheme key 'assumption' (typo for 'assumptions'?): yaml.v2 silently ignores it, so ['generally_accepted(A)'] is dropped"
+ },
+ {
+  "category": "conclusion",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 430,
+  "scheme": "pop_scheme",
+  "detail": "2 conclusions ['true(A)', 'should_accept(A)']: Carneades builds one argument per conclusion sharing one undercutter; the NASCQ model (one conclusion template) cannot represent this"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 447,
+  "scheme": "position_to_know_ad_populum",
+  "detail": "premises 'position_to_know_group(G,A)': no language template for position_to_know_group/2 (the language has position_to_know_group/1)",
+  "predicate": "position_to_know_group/2"
+ },
+ {
+  "category": "conclusion",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 495,
+  "scheme": "moral_justification_ad_populum_excuse",
+  "detail": "no conclusions: InstantiateScheme creates no argument at all (it only adds premise statements)"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 497,
+  "scheme": "moral_justification_ad_populum_excuse",
+  "detail": "premises 'morally_acceptable_action(X,A)' has a 'Therefore, ...' template ('Therefore, my doing %s or accepting %s is morally justified as an acceptable action or policy.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 514,
+  "scheme": "snob_appeal_ad_populum",
+  "detail": "premises 'goal_prestige' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "goal_prestige/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 514,
+  "scheme": "snob_appeal_ad_populum",
+  "detail": "premises 'goal_prestige': no language template for goal_prestige/0 (the language has goal_prestige)",
+  "predicate": "goal_prestige/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 554,
+  "scheme": "common_folk_ad_populum",
+  "detail": "premises 'being_credible' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "being_credible/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 554,
+  "scheme": "common_folk_ad_populum",
+  "detail": "premises 'being_credible': no language template for being_credible/0 (the language has being_credible)",
+  "predicate": "being_credible/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 552,
+  "scheme": "common_folk_ad_populum",
+  "detail": "conclusions 'background' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "background/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 552,
+  "scheme": "common_folk_ad_populum",
+  "detail": "conclusions 'background': no language template for background/0 (the language has background)",
+  "predicate": "background/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 564,
+  "scheme": "common_folks_group_ad_populum",
+  "detail": "conclusions 'accept_saying' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "accept_saying/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 564,
+  "scheme": "common_folks_group_ad_populum",
+  "detail": "conclusions 'accept_saying': no language template for accept_saying/0 (the language has accept_saying)",
+  "predicate": "accept_saying/0"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 594,
+  "scheme": "from_example",
+  "detail": "premises 'both_properties(A,P1,P2)' has a 'Therefore, ...' template ('Therefore, generally, if %s has property %s then it also has property %s.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "formula",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 624,
+  "scheme": "from_model",
+  "detail": "premises 'carry_out_act (A,X)' has a space before '(' (the Carneades parser tolerates it)"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 691,
+  "scheme": "part_in_whole",
+  "detail": "list item 'smaller_part_property(Y,A,X)' has no space after '-'"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 684,
+  "scheme": "part_in_whole",
+  "detail": "variable P is declared but never used"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 684,
+  "scheme": "part_in_whole",
+  "detail": "variable A is used (conclusions, exceptions, premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain A)"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 712,
+  "scheme": "opposition-descriptive_1",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 725,
+  "scheme": "opposition-descriptive_2",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 732,
+  "scheme": "opposition-descriptive_3",
+  "detail": "'- id:opposition-descriptive_3' has no space after the colon: YAML reads it as a plain string, and the next line's 'meta:' then fails ('mapping values are not allowed in this context'); the whole file does not load"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 738,
+  "scheme": "opposition-descriptive_3",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 751,
+  "scheme": "opposition-normative",
+  "detail": "variable \"X'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 755,
+  "scheme": "opposition-normative",
+  "detail": "premises \"cannot_present_sametime(A,X,X')\": no language template for cannot_present_sametime/3 (the language has cannot_present_sametime/2)",
+  "predicate": "cannot_present_sametime/3"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 764,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable \"X'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 764,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable \"A'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 764,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable X' occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 777,
+  "scheme": "rhetorical_oppositions_descriptive",
+  "detail": "variable \"R'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 817,
+  "scheme": "verbal_classification_vagueness",
+  "detail": "variable P is declared but never used"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 817,
+  "scheme": "verbal_classification_vagueness",
+  "detail": "variable F is used (exceptions, premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain F)"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 838,
+  "scheme": "verbal_classification_arbitrariness",
+  "detail": "premises 'needed_nonarbitrary((A,F)' does not parse (expected a name at 20 in 'needed_nonarbitrary((A,F)'): Carneades prints 'Could not parse term' and silently drops it at instantiation"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 903,
+  "scheme": "sacrifice",
+  "detail": "variable X is used (premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain X)"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 903,
+  "scheme": "sacrifice",
+  "detail": "variable V occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 985,
+  "scheme": "practical_necessary_condition",
+  "detail": "exceptions 'conflict_goals(P,A2,A)': no language template for conflict_goals/3 (the language has conflict_goals/2)",
+  "predicate": "conflict_goals/3"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 973,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable P occurs only in assumptions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 973,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable A2 occurs only in exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1013,
+  "scheme": "practical_sufficient_condition",
+  "detail": "exceptions 'conflict_goals(P,A2,A)': no language template for conflict_goals/3 (the language has conflict_goals/2)",
+  "predicate": "conflict_goals/3"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1001,
+  "scheme": "practical_sufficient_condition",
+  "detail": "variable P occurs only in assumptions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1001,
+  "scheme": "practical_sufficient_condition",
+  "detail": "variable A2 occurs only in exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1056,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'means_end(X)': no language template for means_end/1 (the language has means_end)",
+  "predicate": "means_end/1"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1057,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'more_important_ends' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "more_important_ends/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1057,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'more_important_ends': no language template for more_important_ends/0 (the language has more_important_ends)",
+  "predicate": "more_important_ends/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1103,
+  "scheme": "waste",
+  "detail": "premises 'waste_bad_thing(A,X)': no language template for waste_bad_thing/2 (the language has waste_bad_thing)",
+  "predicate": "waste_bad_thing/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1100,
+  "scheme": "waste",
+  "detail": "conclusions 'ought_to_continue(A,X)': no language template for ought_to_continue/2 (the language has ought_to_continue)",
+  "predicate": "ought_to_continue/2"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1118,
+  "scheme": "negative_normal_expectations",
+  "detail": "conclusions 'not_normal' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "not_normal/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1118,
+  "scheme": "negative_normal_expectations",
+  "detail": "conclusions 'not_normal': no language template for not_normal/0 (the language has not_normal)",
+  "predicate": "not_normal/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1141,
+  "scheme": "negative_practical",
+  "detail": "assumptions 'sufficient_evidence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "sufficient_evidence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1141,
+  "scheme": "negative_practical",
+  "detail": "assumptions 'sufficient_evidence': no language template for sufficient_evidence/0 (the language has sufficient_evidence)",
+  "predicate": "sufficient_evidence/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1171,
+  "scheme": "sign",
+  "detail": "exceptions 'more_reliable' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "more_reliable/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1171,
+  "scheme": "sign",
+  "detail": "exceptions 'more_reliable': no language template for more_reliable/0 (the language has more_reliable)",
+  "predicate": "more_reliable/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1186,
+  "scheme": "abductive_backward",
+  "detail": "premises 'data_set(D,A)': no language template for data_set/2 (the language has data_set/1)",
+  "predicate": "data_set/2"
+ },
+ {
+  "category": "formula",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1187,
+  "scheme": "abductive_backward",
+  "detail": "premises 'data_account (A1,D)' has a space before '(' (the Carneades parser tolerates it)"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1239,
+  "scheme": "retroductive",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1250,
+  "scheme": "retroductive",
+  "detail": "assumptions 'reference_class' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "reference_class/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1250,
+  "scheme": "retroductive",
+  "detail": "assumptions 'reference_class': no language template for reference_class/0 (the language has reference_class)",
+  "predicate": "reference_class/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1296,
+  "scheme": "negative_consequences_prudential",
+  "detail": "assumptions 'strongly_occur(X)': no language template for strongly_occur/1 (the language has strongly_occur)",
+  "predicate": "strongly_occur/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1294,
+  "scheme": "negative_consequences_prudential",
+  "detail": "exceptions 'other_consequences(X)': no language template for other_consequences/1 (the language has other_consequences)",
+  "predicate": "other_consequences/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1289,
+  "scheme": "negative_consequences_prudential",
+  "detail": "conclusions 'prudential(X)': no language template for prudential/1 (the language has prudential)",
+  "predicate": "prudential/1"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1347,
+  "scheme": "fear",
+  "detail": "premises 'prevent(Y)' has a 'Therefore, ...' template ('Therefore, you ought to prevent %s if possible.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1357,
+  "scheme": "danger",
+  "detail": "conclusions 'should_not(Y)': no language template for should_not/1 (the language has should_not)",
+  "predicate": "should_not/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1408,
+  "scheme": "commitment1",
+  "detail": "conclusions 'commined_to(A,Y)': no language template for commined_to/2",
+  "predicate": "commined_to/2"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1450,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'attack_well_supported' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "attack_well_supported/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1450,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'attack_well_supported': no language template for attack_well_supported/0 (the language has attack_well_supported)",
+  "predicate": "attack_well_supported/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1451,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'character_revelant' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "character_revelant/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1451,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'character_revelant': no language template for character_revelant/0 (the language has character_revelant)",
+  "predicate": "character_revelant/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1442,
+  "scheme": "ad_hominem",
+  "detail": "variable S occurs only in conclusions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1466,
+  "scheme": "pragmatic_inconsistency",
+  "detail": "assumptions 'strong_advocate(A,S,X)': no language template for strong_advocate/3 (the language has strong_advocate)",
+  "predicate": "strong_advocate/3"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1527,
+  "scheme": "bias_ad_hominem",
+  "detail": "premises 'morally_bad(A)' has a 'Therefore, ...' template ('Therefore, %s is a morally bad person.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1544,
+  "scheme": "gradualism",
+  "detail": "assumptions 'proper_sequence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "proper_sequence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1544,
+  "scheme": "gradualism",
+  "detail": "assumptions 'proper_sequence': no language template for proper_sequence/0 (the language has proper_sequence)",
+  "predicate": "proper_sequence/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1557,
+  "scheme": "sorites_slippery_slope",
+  "detail": "premises 'reapplication_sequence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "reapplication_sequence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1557,
+  "scheme": "sorites_slippery_slope",
+  "detail": "premises 'reapplication_sequence': no language template for reapplication_sequence/0 (the language has reapplication_sequence)",
+  "predicate": "reapplication_sequence/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1551,
+  "scheme": "sorites_slippery_slope",
+  "detail": "variable A occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1565,
+  "scheme": "verbal_slippery_slope",
+  "detail": "variable F is used (premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain F)"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1585,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1585,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous': no language template for synonymous/0 (the language has synonymous)",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 1587,
+  "scheme": "rule_physical_world_1",
+  "detail": "list item 'not_necessarily_true' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1587,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1587,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true': no language template for not_necessarily_true/0 (the language has not_necessarily_true)",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1599,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'oficcial_rulebook(I,D,W)': no language template for oficcial_rulebook/3 (the language has oficcial_rulebook)",
+  "predicate": "oficcial_rulebook/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1600,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1600,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report': no language template for correctly_report/0 (the language has correctly_report)",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "walton.yml",
+  "line": 1602,
+  "scheme": "rule_physical_world_2",
+  "detail": "list item 'rule_changed' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1602,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1602,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed': no language template for rule_changed/0 (the language has rule_changed)",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1606,
+  "scheme": "rule_mental_world",
+  "detail": "empty or missing title"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1613,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'same_meaning(L,W,D)': no language template for same_meaning/3 (the language has same_meaning/2)",
+  "predicate": "same_meaning/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1614,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1614,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct': no language template for speakers_correct/0 (the language has speakers_correct)",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1641,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1641,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator': no language template for do_obligator/0 (the language has do_obligator)",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 1643,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1643,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse': no language template for excuse/0 (the language has excuse/1, excuse)",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1636,
+  "scheme": "regulative_rule",
+  "detail": "variable A occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "formula",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1658,
+  "scheme": "exeptional",
+  "detail": "'case_exception(A)' appears both as premises and assumptions"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1703,
+  "scheme": "abduction",
+  "detail": "no meta block (no title, no source)"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1738,
+  "scheme": "cause_to_effect",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1798,
+  "scheme": "defeasible_modus_ponens",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1804,
+  "scheme": "defeasible_modus_ponens",
+  "detail": "premises is a bare variable 'A'"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 2034,
+  "scheme": "verbal_classification",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/1_deductive-reasoning.yml",
+  "line": 8,
+  "scheme": null,
+  "detail": "is/2: template has 1 %s for 2 arguments: '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "A_reasoning/1_deductive-reasoning.yml",
+  "line": 8,
+  "scheme": null,
+  "detail": "is/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "A_reasoning/2_inductive-reasoning.yml",
+  "line": 57,
+  "scheme": "part_in_whole",
+  "detail": "list item 'smaller_part_property(Y,A,X)' has no space after '-'"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 15,
+  "scheme": null,
+  "detail": "bring_about_more_effectively/2: template has 1 %s for 2 arguments: 'There exists an action that would bring about % more effectively than %s.'",
+  "key": "bring_about_more_effectively/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 15,
+  "scheme": null,
+  "detail": "bring_about_more_effectively/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): 'There exists an action that would bring about % more effectively than %s.'",
+  "key": "bring_about_more_effectively/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 24,
+  "scheme": null,
+  "detail": "cited_bad_consequences/1: template has 2 %s for 1 arguments: 'If you bring about %s, some cited bad consequences, %s, will follow.'",
+  "key": "cited_bad_consequences/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 25,
+  "scheme": null,
+  "detail": "conflict_goals/2: template has 3 %s for 2 arguments: '%s has some other goals %s that conflict with %s.'",
+  "key": "conflict_goals/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 26,
+  "scheme": null,
+  "detail": "language key 'contributing_action' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "contributing_action"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 49,
+  "scheme": null,
+  "detail": "language key 'means_end' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "means_end"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 53,
+  "scheme": null,
+  "detail": "language key 'more_important_ends' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "more_important_ends"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 58,
+  "scheme": null,
+  "detail": "not_required/1: template has 0 %s for 1 arguments: '%is not required.'",
+  "key": "not_required/1"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 58,
+  "scheme": null,
+  "detail": "not_required/1: template contains malformed fmt verb(s) ['%i'], so Go's Sprintf prints e.g. %!i(string=...): '%is not required.'",
+  "key": "not_required/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 62,
+  "scheme": null,
+  "detail": "language key 'other_consequences' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "other_consequences"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 65,
+  "scheme": null,
+  "detail": "language key 'ought_to_continue' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "ought_to_continue"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 79,
+  "scheme": null,
+  "detail": "language key 'prudential' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "prudential"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 84,
+  "scheme": null,
+  "detail": "sacrifice_value/2: template has 1 %s for 2 arguments: '%s has a great value.'",
+  "key": "sacrifice_value/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 88,
+  "scheme": null,
+  "detail": "language key 'should_not' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "should_not"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 95,
+  "scheme": null,
+  "detail": "language key 'strongly_occur' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "strongly_occur"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 101,
+  "scheme": null,
+  "detail": "language key 'waste_bad_thing' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (2 %s in it)",
+  "key": "waste_bad_thing"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 217,
+  "scheme": "sacrifice",
+  "detail": "variable X is used (premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain X)"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 217,
+  "scheme": "sacrifice",
+  "detail": "variable V occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 271,
+  "scheme": "practical_necessary_condition",
+  "detail": "exceptions 'conflict_goals(P,A2,A)': no language template for conflict_goals/3 (the language has conflict_goals/2)",
+  "predicate": "conflict_goals/3"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 259,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable P occurs only in assumptions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 259,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable A2 occurs only in exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 299,
+  "scheme": "practical_necessary_condition",
+  "detail": "exceptions 'conflict_goals(P,A2,A)': no language template for conflict_goals/3 (the language has conflict_goals/2)",
+  "predicate": "conflict_goals/3"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 287,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable P occurs only in assumptions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 287,
+  "scheme": "practical_necessary_condition",
+  "detail": "variable A2 occurs only in exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 316,
+  "scheme": "practical_goal",
+  "detail": "premises 'contributing_action(X,G)': no language template for contributing_action/2 (the language has contributing_action)",
+  "predicate": "contributing_action/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 342,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'means_end(X)': no language template for means_end/1 (the language has means_end)",
+  "predicate": "means_end/1"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 343,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'more_important_ends' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "more_important_ends/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 343,
+  "scheme": "end_and_means_2",
+  "detail": "premises 'more_important_ends': no language template for more_important_ends/0 (the language has more_important_ends)",
+  "predicate": "more_important_ends/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 389,
+  "scheme": "waste",
+  "detail": "premises 'waste_bad_thing(A,X)': no language template for waste_bad_thing/2 (the language has waste_bad_thing)",
+  "predicate": "waste_bad_thing/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 386,
+  "scheme": "waste",
+  "detail": "conclusions 'ought_to_continue(A,X)': no language template for ought_to_continue/2 (the language has ought_to_continue)",
+  "predicate": "ought_to_continue/2"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 404,
+  "scheme": "negative_consequences_prudential",
+  "detail": "premises '(X)' does not parse (expected a name at 0 in '(X)'): Carneades prints 'Could not parse term' and silently drops it at instantiation"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 409,
+  "scheme": "negative_consequences_prudential",
+  "detail": "assumptions 'strongly_occur(X)': no language template for strongly_occur/1 (the language has strongly_occur)",
+  "predicate": "strongly_occur/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 407,
+  "scheme": "negative_consequences_prudential",
+  "detail": "exceptions 'other_consequences(X)': no language template for other_consequences/1 (the language has other_consequences)",
+  "predicate": "other_consequences/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 402,
+  "scheme": "negative_consequences_prudential",
+  "detail": "conclusions 'prudential(X)': no language template for prudential/1 (the language has prudential)",
+  "predicate": "prudential/1"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 460,
+  "scheme": "fear",
+  "detail": "premises 'prevent(Y)' has a 'Therefore, ...' template ('Therefore, you ought to prevent %s if possible.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 470,
+  "scheme": "danger",
+  "detail": "conclusions 'should_not(Y)': no language template for should_not/1 (the language has should_not)",
+  "predicate": "should_not/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 509,
+  "scheme": "distress",
+  "detail": "assumptions 'possible_bring_about(B,X)': no language template for possible_bring_about/2",
+  "predicate": "possible_bring_about/2"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 518,
+  "scheme": "negative_consequences",
+  "detail": "variable A is used (conclusions, premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain A)"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 518,
+  "scheme": "negative_consequences",
+  "detail": "variable B is used (premises) but not declared: InstantiateScheme leaves it unbound, so the instantiated statements are non-ground (contain B)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 3,
+  "scheme": null,
+  "detail": "action_fit_quality/1: template has 0 %s for 1 arguments: 'Description of action actually fit the quality.'",
+  "key": "action_fit_quality/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 23,
+  "scheme": null,
+  "detail": "language key 'more_reliable' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "more_reliable"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 30,
+  "scheme": null,
+  "detail": "language key 'reference_class' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "reference_class"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 53,
+  "scheme": "sign",
+  "detail": "exceptions 'more_reliable' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "more_reliable/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 53,
+  "scheme": "sign",
+  "detail": "exceptions 'more_reliable': no language template for more_reliable/0 (the language has more_reliable)",
+  "predicate": "more_reliable/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 68,
+  "scheme": "abductive_backward",
+  "detail": "premises 'data_set(D,A)': no language template for data_set/2 (the language has data_set/1)",
+  "predicate": "data_set/2"
+ },
+ {
+  "category": "formula",
+  "severity": "cosmetic",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 69,
+  "scheme": "abductive_backward",
+  "detail": "premises 'data_account (A1,D)' has a space before '(' (the Carneades parser tolerates it)"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 121,
+  "scheme": "retroductive",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 132,
+  "scheme": "retroductive",
+  "detail": "assumptions 'reference_class' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "reference_class/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 132,
+  "scheme": "retroductive",
+  "detail": "assumptions 'reference_class': no language template for reference_class/0 (the language has reference_class)",
+  "predicate": "reference_class/0"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "A_reasoning/4_abductive-reasoning.yml",
+  "line": 162,
+  "scheme": "abduction",
+  "detail": "no meta block (no title, no source)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 2,
+  "scheme": null,
+  "detail": "language key 'accept_all_steps' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "accept_all_steps"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 18,
+  "scheme": null,
+  "detail": "language key 'led_to_step' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "led_to_step"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 69,
+  "scheme": "opposition-descriptive_1",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 82,
+  "scheme": "opposition_descriptive_2",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 89,
+  "scheme": "opposition_descriptive_3",
+  "detail": "'- id:opposition_descriptive_3' has no space after the colon: YAML reads it as a plain string, and the next line's 'meta:' then fails ('mapping values are not allowed in this context'); the whole file does not load"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 95,
+  "scheme": "opposition_descriptive_3",
+  "detail": "variable \"P'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 100,
+  "scheme": "opposition_descriptive_3",
+  "detail": "premises 'Â¬presents(A,P)' does not parse (expected a name at 0 in 'Â¬presents(A,P)'): Carneades prints 'Could not parse term' and silently drops it at instantiation"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 108,
+  "scheme": "opposition-normative",
+  "detail": "variable \"X'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 112,
+  "scheme": "opposition-normative",
+  "detail": "premises \"cannot_present_sametime(A,X,X')\": no language template for cannot_present_sametime/3 (the language has cannot_present_sametime/2)",
+  "predicate": "cannot_present_sametime/3"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 121,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable \"X'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 121,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable \"A'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 121,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "variable X' occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "variables",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 134,
+  "scheme": "rhetorical_oppositions_descriptive",
+  "detail": "variable \"R'\" is not a Prolog variable for the Carneades term parser (the prime starts a quoted atom): every formula that uses it fails to parse and is silently dropped by InstantiateScheme"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 170,
+  "scheme": "full_slippery_slope",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 178,
+  "scheme": "full_slippery_slope",
+  "detail": "premises 'accept_all_steps' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "accept_all_steps/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 178,
+  "scheme": "full_slippery_slope",
+  "detail": "premises 'accept_all_steps': no language template for accept_all_steps/0 (the language has accept_all_steps)",
+  "predicate": "accept_all_steps/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 180,
+  "scheme": "full_slippery_slope",
+  "detail": "assumptions 'led_to_step' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "led_to_step/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 180,
+  "scheme": "full_slippery_slope",
+  "detail": "assumptions 'led_to_step': no language template for led_to_step/0 (the language has led_to_step)",
+  "predicate": "led_to_step/0"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": 182,
+  "scheme": "cause_to_effect",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "structure",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 1,
+  "scheme": null,
+  "detail": "top-level key 'langugage:' (typo for 'language:'): yaml.v2 ignores unknown keys, so this file loads with an EMPTY language and every statement is printed as a Prolog term"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 4,
+  "scheme": null,
+  "detail": "based_on_evidence/1: template has 0 %s for 1 arguments: 'The assertion %v is based on evidence.'",
+  "key": "based_on_evidence/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 27,
+  "scheme": null,
+  "detail": "language key 'not_normal' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "not_normal"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 28,
+  "scheme": null,
+  "detail": "other_consequences_presumption/2: template has 3 %s for 2 arguments: 'If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow.'",
+  "key": "other_consequences_presumption/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 33,
+  "scheme": null,
+  "detail": "position_to_know_group/1: template has 2 %s for 1 arguments: 'Group %s is in a special position to know that %s is true.'",
+  "key": "position_to_know_group/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 40,
+  "scheme": null,
+  "detail": "language key 'sufficient_evidence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "sufficient_evidence"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 99,
+  "scheme": "position_to_know_ad_populum",
+  "detail": "premises 'position_to_know_group(G,A)': no language template for position_to_know_group/2 (the language has position_to_know_group/1)",
+  "predicate": "position_to_know_group/2"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 125,
+  "scheme": "negative_normal_expectations",
+  "detail": "conclusions 'not_normal' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "not_normal/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 125,
+  "scheme": "negative_normal_expectations",
+  "detail": "conclusions 'not_normal': no language template for not_normal/0 (the language has not_normal)",
+  "predicate": "not_normal/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 148,
+  "scheme": "negative_practical",
+  "detail": "assumptions 'sufficient_evidence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "sufficient_evidence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+  "line": 148,
+  "scheme": "negative_practical",
+  "detail": "assumptions 'sufficient_evidence': no language template for sufficient_evidence/0 (the language has sufficient_evidence)",
+  "predicate": "sufficient_evidence/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "B_source-based-arguments/2_argumen-from-commitment.yml",
+  "line": 78,
+  "scheme": null,
+  "detail": "unquoted title containing ': ' (title: Argument From Values - Variant 1: Positive Value): YAML fails with 'mapping values are not allowed in this context' and the whole file does not load"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "B_source-based-arguments/2_argumen-from-commitment.yml",
+  "line": 93,
+  "scheme": null,
+  "detail": "unquoted title containing ': ' (title: Argument From Values - Variant 2: Negative Value): YAML fails with 'mapping values are not allowed in this context' and the whole file does not load"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 5,
+  "scheme": null,
+  "detail": "language key 'attack_well_supported' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "attack_well_supported"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 11,
+  "scheme": null,
+  "detail": "language key 'character_revelant' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "character_revelant"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 21,
+  "scheme": null,
+  "detail": "language key 'strong_advocate' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (3 %s in it)",
+  "key": "strong_advocate"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 39,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'attack_well_supported' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "attack_well_supported/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 39,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'attack_well_supported': no language template for attack_well_supported/0 (the language has attack_well_supported)",
+  "predicate": "attack_well_supported/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 40,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'character_revelant' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "character_revelant/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 40,
+  "scheme": "ad_hominem",
+  "detail": "assumptions 'character_revelant': no language template for character_revelant/0 (the language has character_revelant)",
+  "predicate": "character_revelant/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 31,
+  "scheme": "ad_hominem",
+  "detail": "variable S occurs only in conclusions, exceptions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 55,
+  "scheme": "pragmatic_inconsistency",
+  "detail": "assumptions 'strong_advocate(A,S,X)': no language template for strong_advocate/3 (the language has strong_advocate)",
+  "predicate": "strong_advocate/3"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "B_source-based-arguments/3_attacking-personal-credibility.yml",
+  "line": 101,
+  "scheme": "bias_ad_hominem",
+  "detail": "premises 'morally_bad(A)' has a 'Therefore, ...' template ('Therefore, %s is a morally bad person.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 3,
+  "scheme": null,
+  "detail": "language key 'accept_saying' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "accept_saying"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 8,
+  "scheme": null,
+  "detail": "language key 'background' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "background"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 10,
+  "scheme": null,
+  "detail": "language key 'being_credible' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "being_credible"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 16,
+  "scheme": null,
+  "detail": "favor/1: template has 2 %s for 1 arguments: 'If %s is generally accepted as true that gives a reason in favor of %s.'",
+  "key": "favor/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 20,
+  "scheme": null,
+  "detail": "language key 'goal_prestige' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "goal_prestige"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 32,
+  "scheme": null,
+  "detail": "popular_practise/1: template has 2 %s for 1 arguments: '%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s.'",
+  "key": "popular_practise/1"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 39,
+  "scheme": null,
+  "detail": "predicate 'true' is read as the boolean constant by the Carneades term parser (validator: 'not a predicate symbol')"
+ },
+ {
+  "category": "structure",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 56,
+  "scheme": "popular_opinion",
+  "detail": "unknown scheme key 'assumption' (typo for 'assumptions'?): yaml.v2 silently ignores it, so ['generally_accepted(A)'] is dropped"
+ },
+ {
+  "category": "conclusion",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 68,
+  "scheme": "pop_scheme",
+  "detail": "2 conclusions ['true(A)', 'should_accept(A)']: Carneades builds one argument per conclusion sharing one undercutter; the NASCQ model (one conclusion template) cannot represent this"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 126,
+  "scheme": "snob_appeal_ad_populum",
+  "detail": "premises 'goal_prestige' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "goal_prestige/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 126,
+  "scheme": "snob_appeal_ad_populum",
+  "detail": "premises 'goal_prestige': no language template for goal_prestige/0 (the language has goal_prestige)",
+  "predicate": "goal_prestige/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 166,
+  "scheme": "common_folk_ad_populum",
+  "detail": "premises 'being_credible' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "being_credible/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 166,
+  "scheme": "common_folk_ad_populum",
+  "detail": "premises 'being_credible': no language template for being_credible/0 (the language has being_credible)",
+  "predicate": "being_credible/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 164,
+  "scheme": "common_folk_ad_populum",
+  "detail": "conclusions 'background' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "background/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 164,
+  "scheme": "common_folk_ad_populum",
+  "detail": "conclusions 'background': no language template for background/0 (the language has background)",
+  "predicate": "background/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 176,
+  "scheme": "common_folks_group_ad_populum",
+  "detail": "conclusions 'accept_saying' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "accept_saying/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": 176,
+  "scheme": "common_folks_group_ad_populum",
+  "detail": "conclusions 'accept_saying': no language template for accept_saying/0 (the language has accept_saying)",
+  "predicate": "accept_saying/0"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "C_applying-rules-to-cases/1_arguments-based-on-cases.yml",
+  "line": 62,
+  "scheme": "from_example",
+  "detail": "premises 'both_properties(A,P1,P2)' has a 'Therefore, ...' template ('Therefore, generally, if %s has property %s then it also has property %s.'): it reads as a conclusion, so premise and conclusion look swapped or misplaced"
+ },
+ {
+  "category": "formula",
+  "severity": "cosmetic",
+  "file": "C_applying-rules-to-cases/1_arguments-based-on-cases.yml",
+  "line": 92,
+  "scheme": "from_model",
+  "detail": "premises 'carry_out_act (A,X)' has a space before '(' (the Carneades parser tolerates it)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 4,
+  "scheme": null,
+  "detail": "language key 'correctly_report' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "correctly_report"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 6,
+  "scheme": null,
+  "detail": "language key 'do_obligator' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "do_obligator"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 10,
+  "scheme": null,
+  "detail": "language key 'excuse' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "excuse"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 13,
+  "scheme": null,
+  "detail": "is/2: template has 1 %s for 2 arguments: '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 13,
+  "scheme": null,
+  "detail": "is/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 18,
+  "scheme": null,
+  "detail": "language key 'not_necessarily_true' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "not_necessarily_true"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 20,
+  "scheme": null,
+  "detail": "language key 'oficcial_rulebook' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (3 %s in it)",
+  "key": "oficcial_rulebook"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 23,
+  "scheme": null,
+  "detail": "language key 'rule_changed' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "rule_changed"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 26,
+  "scheme": null,
+  "detail": "same_meaning/2: template has 3 %s for 2 arguments: 'Speakers of %s believe that %s means the same as %s.'",
+  "key": "same_meaning/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 27,
+  "scheme": null,
+  "detail": "language key 'speakers_correct' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "speakers_correct"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 29,
+  "scheme": null,
+  "detail": "language key 'synonymous' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "synonymous"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 44,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 44,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous': no language template for synonymous/0 (the language has synonymous)",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 46,
+  "scheme": "rule_physical_world_1",
+  "detail": "list item 'not_necessarily_true' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 46,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 46,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true': no language template for not_necessarily_true/0 (the language has not_necessarily_true)",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 58,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'oficcial_rulebook(I,D,W)': no language template for oficcial_rulebook/3 (the language has oficcial_rulebook)",
+  "predicate": "oficcial_rulebook/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 59,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 59,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report': no language template for correctly_report/0 (the language has correctly_report)",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 61,
+  "scheme": "rule_physical_world_2",
+  "detail": "list item 'rule_changed' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 61,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 61,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed': no language template for rule_changed/0 (the language has rule_changed)",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 65,
+  "scheme": "rule_mental_world",
+  "detail": "empty or missing title"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 72,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'same_meaning(L,W,D)': no language template for same_meaning/3 (the language has same_meaning/2)",
+  "predicate": "same_meaning/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 73,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 73,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct': no language template for speakers_correct/0 (the language has speakers_correct)",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 100,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 100,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator': no language template for do_obligator/0 (the language has do_obligator)",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 102,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 102,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse': no language template for excuse/0 (the language has excuse/1, excuse)",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 95,
+  "scheme": "regulative_rule",
+  "detail": "variable A occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "formula",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 117,
+  "scheme": "exeptional",
+  "detail": "'case_exception(A)' appears both as premises and assumptions"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 137,
+  "scheme": "defeasible_modus_ponens",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+  "line": 143,
+  "scheme": "defeasible_modus_ponens",
+  "detail": "premises is a bare variable 'A'"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 6,
+  "scheme": null,
+  "detail": "language key 'proper_sequence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "proper_sequence"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 7,
+  "scheme": null,
+  "detail": "language key 'reapplication_sequence' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "reapplication_sequence"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 26,
+  "scheme": "gradualism",
+  "detail": "assumptions 'proper_sequence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "proper_sequence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 26,
+  "scheme": "gradualism",
+  "detail": "assumptions 'proper_sequence': no language template for proper_sequence/0 (the language has proper_sequence)",
+  "predicate": "proper_sequence/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 39,
+  "scheme": "sorites_slippery_slope",
+  "detail": "premises 'reapplication_sequence' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "reapplication_sequence/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 39,
+  "scheme": "sorites_slippery_slope",
+  "detail": "premises 'reapplication_sequence': no language template for reapplication_sequence/0 (the language has reapplication_sequence)",
+  "predicate": "reapplication_sequence/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+  "line": 33,
+  "scheme": "sorites_slippery_slope",
+  "detail": "variable A occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 5,
+  "scheme": null,
+  "detail": "language key 'correctly_report' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "correctly_report"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 7,
+  "scheme": null,
+  "detail": "language key 'do_obligator' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "do_obligator"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 11,
+  "scheme": null,
+  "detail": "language key 'excuse' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (1 %s in it)",
+  "key": "excuse"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 15,
+  "scheme": null,
+  "detail": "is/2: template has 1 %s for 2 arguments: '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 15,
+  "scheme": null,
+  "detail": "is/2: template contains malformed fmt verb(s) ['% '], so Go's Sprintf prints e.g. %!i(string=...): '% is %s.'",
+  "key": "is/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 20,
+  "scheme": null,
+  "detail": "language key 'not_necessarily_true' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "not_necessarily_true"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 22,
+  "scheme": null,
+  "detail": "language key 'oficcial_rulebook' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (3 %s in it)",
+  "key": "oficcial_rulebook"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 25,
+  "scheme": null,
+  "detail": "language key 'rule_changed' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "rule_changed"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 28,
+  "scheme": null,
+  "detail": "same_meaning/2: template has 3 %s for 2 arguments: 'Speakers of %s believe that %s means the same as %s.'",
+  "key": "same_meaning/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 30,
+  "scheme": null,
+  "detail": "language key 'speakers_correct' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "speakers_correct"
+ },
+ {
+  "category": "language",
+  "severity": "lint-error",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 33,
+  "scheme": null,
+  "detail": "language key 'synonymous' has no /arity: Carneades looks templates up as predicate/arity, so this template is never used (0 %s in it)",
+  "key": "synonymous"
+ },
+ {
+  "category": "metadata",
+  "severity": "cosmetic",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 37,
+  "scheme": "verbal_classification",
+  "detail": "empty or missing source"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 58,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 58,
+  "scheme": "rule_physical_world_1",
+  "detail": "premises 'synonymous': no language template for synonymous/0 (the language has synonymous)",
+  "predicate": "synonymous/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 60,
+  "scheme": "rule_physical_world_1",
+  "detail": "list item 'not_necessarily_true' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 60,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 60,
+  "scheme": "rule_physical_world_1",
+  "detail": "exceptions 'not_necessarily_true': no language template for not_necessarily_true/0 (the language has not_necessarily_true)",
+  "predicate": "not_necessarily_true/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 72,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'oficcial_rulebook(I,D,W)': no language template for oficcial_rulebook/3 (the language has oficcial_rulebook)",
+  "predicate": "oficcial_rulebook/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 73,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 73,
+  "scheme": "rule_physical_world_2",
+  "detail": "premises 'correctly_report': no language template for correctly_report/0 (the language has correctly_report)",
+  "predicate": "correctly_report/0"
+ },
+ {
+  "category": "structure",
+  "severity": "load-blocking",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 75,
+  "scheme": "rule_physical_world_2",
+  "detail": "list item 'rule_changed' has no space after '-'"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 75,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 75,
+  "scheme": "rule_physical_world_2",
+  "detail": "exceptions 'rule_changed': no language template for rule_changed/0 (the language has rule_changed)",
+  "predicate": "rule_changed/0"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 79,
+  "scheme": "rule_mental_world",
+  "detail": "empty or missing title"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 86,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'same_meaning(L,W,D)': no language template for same_meaning/3 (the language has same_meaning/2)",
+  "predicate": "same_meaning/3"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 87,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 87,
+  "scheme": "rule_mental_world",
+  "detail": "premises 'speakers_correct': no language template for speakers_correct/0 (the language has speakers_correct)",
+  "predicate": "speakers_correct/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 114,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 114,
+  "scheme": "regulative_rule",
+  "detail": "premises 'do_obligator': no language template for do_obligator/0 (the language has do_obligator)",
+  "predicate": "do_obligator/0"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 116,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse' is a 0-ary atom: after instantiation it is the SAME statement for every argument of this scheme (answering it once answers it for all), and it can have no language template under the keys used in this file",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 116,
+  "scheme": "regulative_rule",
+  "detail": "exceptions 'excuse': no language template for excuse/0 (the language has excuse/1, excuse)",
+  "predicate": "excuse/0"
+ },
+ {
+  "category": "variables",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 109,
+  "scheme": "regulative_rule",
+  "detail": "variable A occurs only in conclusions, never in a premise: nothing in the argument's premises constrains it"
+ },
+ {
+  "category": "formula",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 131,
+  "scheme": "exeptional",
+  "detail": "'case_exception(A)' appears both as premises and assumptions"
+ },
+ {
+  "category": "identity",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 511,
+  "scheme": "negative_consequences",
+  "detail": "scheme id negative_consequences defined 2 times (lines [157, 511]): Theory.InitSchemeIndex keeps the LAST definition, so InstantiateScheme never uses the earlier one"
+ },
+ {
+  "category": "identity",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 277,
+  "scheme": "practical_necessary_condition",
+  "detail": "scheme id practical_necessary_condition defined 2 times (lines [249, 277]): Theory.InitSchemeIndex keeps the LAST definition, so InstantiateScheme never uses the earlier one"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 732,
+  "scheme": "opposition-descriptive_2, opposition-descriptive_3",
+  "detail": "same title 'Argument From Opposition - Descriptive Scheme 2' used by ['opposition-descriptive_2', 'opposition-descriptive_3']"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 1783,
+  "scheme": "verbal_classification_vagueness, definition_to_verbal_classification",
+  "detail": "same title 'Argument From Definition to Verbal Classification' used by ['verbal_classification_vagueness', 'definition_to_verbal_classification']"
+ },
+ {
+  "category": "metadata",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": 2005,
+  "scheme": "slippery_slope_base_case, slippery_slope_inductive_step",
+  "detail": "same title 'Slippery Slope Argument' used by ['slippery_slope_base_case', 'slippery_slope_inductive_step']"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 17,
+  "scheme": null,
+  "detail": "language entry action_fit_quality/1 is used by no scheme (orphan): 'Description of action actually fit the quality.'",
+  "key": "action_fit_quality/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 33,
+  "scheme": null,
+  "detail": "language entry another_category/2 is used by no scheme (orphan): ' The object may look like it can be classified under %s but it is more justifiable to classify it under another category %s.'",
+  "key": "another_category/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 59,
+  "scheme": null,
+  "detail": "language entry bribed/1 is used by no scheme (orphan): '%s was bribed.'",
+  "key": "bribed/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 67,
+  "scheme": null,
+  "detail": "language entry cannot_opposite_evaluation/3 is used by no scheme (orphan): 'If %s receives the evaluation %s. It cannot receive the opposite evaluation %s at the same time and in the same respect.'",
+  "key": "cannot_opposite_evaluation/3"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 90,
+  "scheme": null,
+  "detail": "language entry classified_under/1 is used by no scheme (orphan): 'Therefore, this object can be classified under verbal category %s.'",
+  "key": "classified_under/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 96,
+  "scheme": null,
+  "detail": "language entry committed_to/2 is used by no scheme (orphan): 'In this case, %s is committed to %s.'",
+  "key": "committed_to/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 97,
+  "scheme": null,
+  "detail": "language entry conflict_goals/2 is used by no scheme (orphan): '%s has some other goals %s that conflict with %s.'",
+  "key": "conflict_goals/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 111,
+  "scheme": null,
+  "detail": "language entry defeasibly_implies/2 is used by no scheme (orphan): 'If %s is true then presumably %s is also true.'",
+  "key": "defeasibly_implies/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 143,
+  "scheme": null,
+  "detail": "language entry generally_accepted/1 is used by no scheme (orphan): '%s generally accepted as true.'",
+  "key": "generally_accepted/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 213,
+  "scheme": null,
+  "detail": "language entry misleading/1 is used by no scheme (orphan): 'Appearence of the objects looking like it could be classified under %s is misleading for some reasons.'",
+  "key": "misleading/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 228,
+  "scheme": null,
+  "detail": "language entry needed_nonarbitrary/2 is used by no scheme (orphan): ' %s occurs in a context of dialogue that requires a nonarbitrary definition for a key property %s that occurs in argument.'",
+  "key": "needed_nonarbitrary/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 281,
+  "scheme": null,
+  "detail": "language entry position_to_know_group/1 is used by no scheme (orphan): 'Group %s is in a special position to know that %s is true.'",
+  "key": "position_to_know_group/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 283,
+  "scheme": null,
+  "detail": "language entry positive_consequences/1 is used by no scheme (orphan): 'Performing action %s would have positive consequences.'",
+  "key": "positive_consequences/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 329,
+  "scheme": null,
+  "detail": "language entry same_meaning/2 is used by no scheme (orphan): 'Speakers of %s believe that %s means the same as %s.'",
+  "key": "same_meaning/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 359,
+  "scheme": null,
+  "detail": "language entry succesful_account/2 is used by no scheme (orphan): '%s , is the account that explains %s most successfully.'",
+  "key": "succesful_account/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 374,
+  "scheme": null,
+  "detail": "language entry true_false/2 is used by no scheme (orphan): 'For all %s in %s, it is either true or false.'",
+  "key": "true_false/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 377,
+  "scheme": null,
+  "detail": "language entry trustworthy/1 is used by no scheme (orphan): '%s is trustworthy.'",
+  "key": "trustworthy/1"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 395,
+  "scheme": null,
+  "detail": "language entry would_achieve/2 is used by no scheme (orphan): 'Performing action %s would achieve goal %s.'",
+  "key": "would_achieve/2"
+ },
+ {
+  "category": "language",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 399,
+  "scheme": null,
+  "detail": "language entry would_demote_value/2 is used by no scheme (orphan): 'Achieving the goal %s would demote the value %s.'",
+  "key": "would_demote_value/2"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate cannot_present_sametime is used with several arities: ['cannot_present_sametime/2', 'cannot_present_sametime/3'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate data_set is used with several arities: ['data_set/1', 'data_set/2'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate excuse is used with several arities: ['excuse/0', 'excuse/1'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate group_member is used with several arities: ['group_member/1', 'group_member/2'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate position_to_know is used with several arities: ['position_to_know/1', 'position_to_know/2'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "language",
+  "severity": "lint-warning",
+  "file": "walton.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "predicate relevant_differences is used with several arities: ['relevant_differences/1', 'relevant_differences/2'] (different statements, easy to confuse)"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 706,
+  "scheme": "opposition-descriptive_1",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 719,
+  "scheme": "opposition-descriptive_2",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 732,
+  "scheme": "opposition-descriptive_3",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 745,
+  "scheme": "opposition-normative",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 758,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 771,
+  "scheme": "rhetorical_oppositions_descriptive",
+  "detail": "InstantiateScheme creates NO argument: every conclusion failed to parse"
+ },
+ {
+  "category": "formula",
+  "severity": "instantiation",
+  "file": "walton.yml",
+  "line": 827,
+  "scheme": "verbal_classification_arbitrariness",
+  "detail": "instantiated argument has 2 of 3 premises+assumptions: the rest were dropped as unparsable"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1645,
+  "scheme": null,
+  "detail": "scheme id 'exeptional' -> 'exceptional' (1 line(s): 1645)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1976,
+  "scheme": null,
+  "detail": "scheme id 'exeption_to_rule' -> 'exception_to_rule' (1 line(s): 1976)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1143,
+  "scheme": null,
+  "detail": "scheme id 'epistemic_ignorence' -> 'epistemic_ignorance' (1 line(s): 1143)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1145,
+  "scheme": null,
+  "detail": "title 'Ignorence' -> 'Ignorance' (1 line(s): 1145)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 277,
+  "scheme": null,
+  "detail": "scheme id and predicate 'popular_practise' -> 'popular_practice' (3 line(s): 277, 569, 579)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 571,
+  "scheme": null,
+  "detail": "title 'Popular Practise' -> 'Popular Practice' (1 line(s): 571)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1310,
+  "scheme": null,
+  "detail": "scheme id 'id: treat' -> 'threat' (1 line(s): 1310)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1312,
+  "scheme": null,
+  "detail": "title 'From Treat' -> 'From Threat' (1 line(s): 1312)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1326,
+  "scheme": null,
+  "detail": "title 'Ad Baculum Treat' -> 'Ad Baculum Threat' (1 line(s): 1326)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1576,
+  "scheme": null,
+  "detail": "title 'Physical Worl' -> 'Physical World' (2 line(s): 1576, 1591)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 899,
+  "scheme": null,
+  "detail": "title 'Argumentation From Sacrifice' -> 'Argument From Sacrifice' (1 line(s): 899)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1633,
+  "scheme": null,
+  "detail": "title 'Argumentation From Rules' -> 'Argument From Rules' (1 line(s): 1633)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 544,
+  "scheme": null,
+  "detail": "scheme id 'common_folk_ad_populum' -> 'common_folks_ad_populum (cf. common_folks_group_ad_populum)' (1 line(s): 544)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 706,
+  "scheme": null,
+  "detail": "scheme id 'opposition-descriptive' -> 'opposition_descriptive (category file uses underscores)' (3 line(s): 706, 719, 732)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 745,
+  "scheme": null,
+  "detail": "scheme id 'opposition-normative' -> 'opposition_normative' (1 line(s): 745)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1408,
+  "scheme": null,
+  "detail": "predicate (conclusion of commitment1; no template) 'commined_to' -> 'committed_to' (1 line(s): 1408)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 38,
+  "scheme": null,
+  "detail": "predicate 'arguement_not_accepted' -> 'argument_not_accepted' (2 line(s): 38, 1461)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 80,
+  "scheme": null,
+  "detail": "predicate 'certainity_no_need' -> 'certainty_no_need' (2 line(s): 80, 825)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 54,
+  "scheme": null,
+  "detail": "predicate 'beyond_contetion' -> 'beyond_contention' (2 line(s): 54, 1555)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 91,
+  "scheme": null,
+  "detail": "predicate 'commited_opposite' -> 'committed_opposite' (2 line(s): 91, 1497)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 130,
+  "scheme": null,
+  "detail": "predicate 'evidence_not_commited' -> 'evidence_not_committed' (2 line(s): 130, 1482)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 121,
+  "scheme": null,
+  "detail": "predicate 'easy_to_achive' -> 'easy_to_achieve' (2 line(s): 121, 1070)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 194,
+  "scheme": null,
+  "detail": "predicate 'individuals_propoerty' -> 'individuals_property' (2 line(s): 194, 1570)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 239,
+  "scheme": null,
+  "detail": "predicate 'not_has_propery' -> 'not_has_property' (2 line(s): 239, 1567)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 26,
+  "scheme": null,
+  "detail": "predicate 'all_parts_propert' -> 'all_parts_property' (3 line(s): 26, 674, 702)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 262,
+  "scheme": null,
+  "detail": "predicate 'part_propert' -> 'part_property' (4 line(s): 262, 345, 686, 691)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 251,
+  "scheme": null,
+  "detail": "predicate 'oficcial_rulebook' -> 'official_rulebook' (2 line(s): 251, 1599)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1105,
+  "scheme": null,
+  "detail": "predicate 'posible(' -> 'possible(' (1 line(s): 1105)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 299,
+  "scheme": null,
+  "detail": "predicate 'property_precion_needed' -> 'property_precision_needed' (2 line(s): 299, 822)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 309,
+  "scheme": null,
+  "detail": "predicate 'reasonable_belive' -> 'reasonable_believe' (2 line(s): 309, 1699)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 312,
+  "scheme": null,
+  "detail": "predicate 'recieves_evaluation' -> 'receives_evaluation' (2 line(s): 312, 756)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 69,
+  "scheme": null,
+  "detail": "predicate 'cannot_recieve_evaluation' -> 'cannot_receive_evaluation' (2 line(s): 69, 753)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 359,
+  "scheme": null,
+  "detail": "predicate 'succesful_' -> 'successful_' (3 line(s): 359, 360, 1203)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 344,
+  "scheme": null,
+  "detail": "predicate 'situation_necessiy' -> 'situation_necessity' (2 line(s): 344, 1083)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 385,
+  "scheme": null,
+  "detail": "predicate 'vaguness_recejted' -> 'vagueness_rejected' (2 line(s): 385, 819)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 87,
+  "scheme": null,
+  "detail": "predicate 'character_revelant' -> 'character_relevant' (2 line(s): 87, 1451)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 61,
+  "scheme": null,
+  "detail": "predicate 'bring_relive' -> 'bring_relief' (2 line(s): 61, 1388)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 42,
+  "scheme": null,
+  "detail": "template 'Allegration' -> 'Allegation' (1 line(s): 42)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 28,
+  "scheme": null,
+  "detail": "template 'commiued' -> 'committed' (1 line(s): 28)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 195,
+  "scheme": null,
+  "detail": "template 'vinue' -> 'virtue' (1 line(s): 195)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 139,
+  "scheme": null,
+  "detail": "template 'truei' -> 'true' (1 line(s): 139)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 40,
+  "scheme": null,
+  "detail": "template 'wil l' -> 'will' (1 line(s): 40)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 151,
+  "scheme": null,
+  "detail": "template 'represen ts' -> 'represents' (1 line(s): 151)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 256,
+  "scheme": null,
+  "detail": "template 'presum ption' -> 'presumption' (1 line(s): 256)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 231,
+  "scheme": null,
+  "detail": "template 'thte' -> 'the' (1 line(s): 231)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 231,
+  "scheme": null,
+  "detail": "template 'would he true' -> 'would be true' (1 line(s): 231)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 102,
+  "scheme": null,
+  "detail": "template 'Oflicial rulelebooks' -> 'Official rulebooks' (1 line(s): 102)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 218,
+  "scheme": null,
+  "detail": "template 'brin about' -> 'bring about' (1 line(s): 218)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 218,
+  "scheme": null,
+  "detail": "template 'effecient' -> 'efficient' (1 line(s): 218)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 361,
+  "scheme": null,
+  "detail": "template 'availablle' -> 'available' (1 line(s): 361)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 378,
+  "scheme": null,
+  "detail": "template 'generalzation' -> 'generalization' (1 line(s): 378)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 213,
+  "scheme": null,
+  "detail": "template 'Appearence' -> 'Appearance' (1 line(s): 213)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 85,
+  "scheme": null,
+  "detail": "template 'depent' -> 'depend' (1 line(s): 85)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 325,
+  "scheme": null,
+  "detail": "template 'type o f' -> 'type of' (1 line(s): 325)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 344,
+  "scheme": null,
+  "detail": "template 'caryying' -> 'carrying' (1 line(s): 344)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 410,
+  "scheme": null,
+  "detail": "source 'lnformal' -> 'Informal (OCR l/I)' (6 line(s): 410, 645, 657, 874, 889, 1550)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 669,
+  "scheme": null,
+  "detail": "source 'Informal Iogic' -> 'Informal Logic' (1 line(s): 669)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1111,
+  "scheme": null,
+  "detail": "source 'lgnorance' -> 'Ignorance' (2 line(s): 1111, 1127)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 815,
+  "scheme": null,
+  "detail": "source 'Schmes' -> 'Schemes' (2 line(s): 815, 831)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 901,
+  "scheme": null,
+  "detail": "source 'Trtalise' -> 'Treatise' (1 line(s): 901)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1037,
+  "scheme": null,
+  "detail": "source 'Trtatise' -> 'Treatise' (3 line(s): 1037, 1050, 1063)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 788,
+  "scheme": null,
+  "detail": "source 'rmd Funktion' -> 'und Funktion' (2 line(s): 788, 802)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1148,
+  "scheme": null,
+  "detail": "source 'Quaerterly' -> 'Quarterly' (1 line(s): 1148)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1608,
+  "scheme": null,
+  "detail": "source 'Wayrw Grennan' -> 'Wayne Grennan' (1 line(s): 1608)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "walton.yml",
+  "line": 1024,
+  "scheme": null,
+  "detail": "source 'lntelligence' -> 'Intelligence' (1 line(s): 1024)"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "A_reasoning/5_casual-reasoning.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "file name: casual -> causal"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "B_source-based-arguments/2_argumen-from-commitment.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "file name: argumen -> argument"
+ },
+ {
+  "category": "typo",
+  "severity": "cosmetic",
+  "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+  "line": null,
+  "scheme": null,
+  "detail": "file name: argumen -> argument, acceptence -> acceptance"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 693,
+  "scheme": "division_generic",
+  "detail": "identical to composition_generic (same premise all_parts_propert(A,P), assumption all_parts_has(A,P), conclusion has_property(A,P)); Division should go from the whole to its parts. The real 'Division of the Whole into its Parts' (whole_into_parts) exists only in A_reasoning/2_inductive-reasoning.yml",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1266,
+  "scheme": "evidence_hypothesis_falsification",
+  "detail": "concludes ¬A, which restates the premise event_false(A); defeasible modus tollens should conclude ¬H. Also sufficient_correlation(A,H) here vs sufficient_correlation(H,A) in evidence_hypothesis_verification (different statements). The SPR (Claude sections) flags the same error",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 2044,
+  "scheme": "witness_testimony",
+  "detail": "premise in_domain(D,S) reverses the argument order used everywhere else (in_domain(S,D) in position_to_know, expert_opinion, credible_source), so it never matches those statements; inherited unchanged from upstream Carneades walton.yml",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 544,
+  "scheme": "common_folk_ad_populum",
+  "detail": "premise and conclusion are swapped: premise being_credible's template is 'Therefore, you ought to take what I say as being more credible...' and conclusion background's template is the premise 'The speaker is an ordinary person...'; both are 0-ary with no usable template",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 488,
+  "scheme": "moral_justification_ad_populum_excuse",
+  "detail": "the conclusion morally_acceptable_action(X,A) ('Therefore, my doing ... is morally justified') was moved into the premises and conclusions is empty, so Carneades builds no argument; B_source-based-arguments/4_argumen-from-popular-acceptence.yml:100 has it right",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1398,
+  "scheme": "commitment1",
+  "detail": "conclusion commined_to(A,Y) is a typo for committed_to(A,Y) (which has a template and is what the category file uses); as written it has no template",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 678,
+  "scheme": "part_in_whole",
+  "detail": "declares [Y,X,P] but uses A; the category file A_reasoning/2_inductive-reasoning.yml:44 declares [Y,X,A] correctly (regression in walton.yml)",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 745,
+  "scheme": "opposition-normative",
+  "detail": "premise recieves_evaluation(A,X') and conclusion cannot_recieve_evaluation(A,X') are about the same evaluation X' (receives X', therefore cannot receive X'); the premise should be about X. cannot_present_sametime is used with 3 arguments here but has a /2 template",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 758,
+  "scheme": "rhetorical_oppositions_normative",
+  "detail": "if_treatment_required(X,A,A',X) repeats X where the contrary treatment X' belongs; the SPR (Claude) flags this too",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 897,
+  "scheme": "sacrifice",
+  "detail": "great_sacrifice(S,A,X) uses undeclared X where the value V belongs; V then occurs only in the conclusion",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1559,
+  "scheme": "verbal_slippery_slope",
+  "detail": "individuals_propoerty(A1,F,A2) uses undeclared F where the property P belongs",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 811,
+  "scheme": "verbal_classification_vagueness",
+  "detail": "declares [A,P] but uses F throughout; title is 'Argument From Definition to Verbal Classification' (same as definition_to_verbal_classification) instead of '... Vagueness of a Verbal Classification'",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1645,
+  "scheme": "exeptional",
+  "detail": "case_exception(A) is both a premise and an assumption; rule_can_waived(X) uses X, which no other formula shares, so the conditional premise is not linked to the case A",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1976,
+  "scheme": "exeption_to_rule",
+  "detail": "identical to upstream Carneades 'precedent' (similar case, ratio decidendi) except id and title; the README says Walton renamed Argument from Precedent to Argument from Exception to a Rule, but the content was not changed to match; check against the book",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1502,
+  "scheme": "bias",
+  "detail": "the conditional premise not_taken_both(X,C) uses X, not the biased arguer A, so it is not linked to biased(A)",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 963,
+  "scheme": "practical_necessary_condition",
+  "detail": "exception conflict_goals(P,A2,A) and side_effect_action(P,X): P and A2 occur in no premise, so they are free parameters of every argument; the same holds for practical_sufficient_condition",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1072,
+  "scheme": "two_person_practical",
+  "detail": "exceptions alternative_means(A,X) and side_effect_other_act(B,A) do not fit their templates' argument order ('alternative means of realizing %s other than %s'; 'Carrying out %s ... %s other goals')",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1631,
+  "scheme": "regulative_rule",
+  "detail": "the agent A occurs only in the conclusion must_do(A,X); exception 'excuse' is 0-ary although the template 'excuse' ('%s has an adequate excuse...') expects an argument",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1280,
+  "scheme": "negative_consequences_prudential",
+  "detail": "assumption strongly_occur(X) has one argument but its template 'If you don't do %s consequences %s may strongly appear' expects two (X and C)",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 423,
+  "scheme": "pop_scheme",
+  "detail": "two conclusions true(A) and should_accept(A); split into two schemes or pick one for NASCQ",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 436,
+  "scheme": "position_to_know_ad_populum",
+  "detail": "position_to_know_group(G,A) has 2 arguments but the language key is position_to_know_group/1 (with 2 %s)",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1175,
+  "scheme": "abductive_backward",
+  "detail": "data_set(D,A) has 2 arguments here but data_set(D) has 1 in abductive_forward and the language has only data_set/1",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "walton.yml",
+  "line": 1310,
+  "scheme": "treat",
+  "detail": "premise position_to_know(X) reuses the name of the position-to-know predicate for 'I am in position to bring about %s' (position_to_know/1 vs /2)",
+  "source": "manual review"
+ },
+ {
+  "category": "structure",
+  "severity": "instantiation",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 404,
+  "scheme": "negative_consequences_prudential",
+  "detail": "premise '(X)' has no predicate (walton.yml has not_doing(X))",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 277,
+  "scheme": "practical_necessary_condition",
+  "detail": "the second practical_necessary_condition (line 277) uses sufficient_action(X,A): it is the sufficient-condition schema under a copy-pasted id; walton.yml names it practical_sufficient_condition",
+  "source": "manual review"
+ },
+ {
+  "category": "content",
+  "severity": "content",
+  "file": "A_reasoning/3_practical-reasoning.yml",
+  "line": 511,
+  "scheme": "negative_consequences",
+  "detail": "second negative_consequences (line 511) is a different scheme ('Reasoning From Negative Consequences': agent_bring_about(A,B), bad_for_goals(B), conclusion not_bring_about(A), no variables declared) that shadows the first (line 157); it is not in walton.yml",
+  "source": "manual review"
+ },
+ {
+  "category": "structure",
+  "severity": "lint-warning",
+  "file": "C_applying-rules-to-cases/4_verbal_classification_arguments.yml",
+  "line": 47,
+  "scheme": null,
+  "detail": "7 schemes (rule_physical_world_1, rule_physical_world_2, rule_mental_world, rule, regulative_rule, exeptional, plea_for_excuse) appear in both C/2_defeasible-rule-based-arguments.yml and C/4_verbal_classification_arguments.yml",
+  "source": "manual review"
+ }
+]

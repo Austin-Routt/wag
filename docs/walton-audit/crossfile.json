@@ -1,0 +1,590 @@
+{
+ "in_category_not_master": [
+  {
+   "id": "full_slippery_slope",
+   "files": [
+    "A_reasoning/5_casual-reasoning.yml:167"
+   ],
+   "title": "Full Slippery Slope Argument"
+  },
+  {
+   "id": "opposition_descriptive_2",
+   "files": [
+    "A_reasoning/5_casual-reasoning.yml:76"
+   ],
+   "title": "Argument From Opposition - Descriptive Scheme 2"
+  },
+  {
+   "id": "opposition_descriptive_3",
+   "files": [
+    "A_reasoning/5_casual-reasoning.yml:89"
+   ],
+   "title": "Argument From Opposition - Descriptive Scheme 2"
+  },
+  {
+   "id": "whole_into_parts",
+   "files": [
+    "A_reasoning/2_inductive-reasoning.yml:59"
+   ],
+   "title": "Argument From Division - Division of the Whole into its Parts"
+  }
+ ],
+ "in_master_not_category": [
+  {
+   "id": "opposition-descriptive_2",
+   "line": 719,
+   "title": "Argument From Opposition - Descriptive Scheme 2"
+  },
+  {
+   "id": "opposition-descriptive_3",
+   "line": 732,
+   "title": "Argument From Opposition - Descriptive Scheme 2"
+  },
+  {
+   "id": "verbal_classification_vagueness",
+   "line": 811,
+   "title": "Argument From Definition to Verbal Classification"
+  },
+  {
+   "id": "verbal_classification_arbitrariness",
+   "line": 827,
+   "title": "Argument From Arbitrariness of a Verbal Classification"
+  },
+  {
+   "id": "practical_sufficient_condition",
+   "line": 991,
+   "title": "Practical Reasoning - Sufficient Condition Schema"
+  },
+  {
+   "id": "verbal_slippery_slope",
+   "line": 1559,
+   "title": "Verbal Slippery Slope"
+  }
+ ],
+ "differences": [
+  {
+   "id": "commitment1",
+   "master_line": 1398,
+   "file": "B_source-based-arguments/2_argumen-from-commitment.yml",
+   "line": 23,
+   "diffs": {
+    "conclusions": {
+     "walton.yml": [
+      "commined_to(A,Y)"
+     ],
+     "B_source-based-arguments/2_argumen-from-commitment.yml": [
+      "committed_to(A,Y)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "moral_justification_ad_populum_excuse",
+   "master_line": 488,
+   "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+   "line": 100,
+   "diffs": {
+    "premises": {
+     "walton.yml": [
+      "morally_acceptable_action(X,A)",
+      "group_does(G,X,A)",
+      "acceptable_norm(X,A,G)",
+      "group_member(G)"
+     ],
+     "B_source-based-arguments/4_argumen-from-popular-acceptence.yml": [
+      "group_does(G,X,A)",
+      "acceptable_norm(X,A,G)",
+      "group_member(G)"
+     ]
+    },
+    "conclusions": {
+     "walton.yml": [],
+     "B_source-based-arguments/4_argumen-from-popular-acceptence.yml": [
+      "morally_acceptable_action(X,A)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "negative_consequences",
+   "master_line": 1884,
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 511,
+   "diffs": {
+    "variables": {
+     "walton.yml": [
+      "A",
+      "G"
+     ],
+     "A_reasoning/3_practical-reasoning.yml": []
+    },
+    "premises": {
+     "walton.yml": [
+      "brings_about(A,G)",
+      "bad(G)"
+     ],
+     "A_reasoning/3_practical-reasoning.yml": [
+      "agent_bring_about(A,B)",
+      "bad_for_goals(B)"
+     ]
+    },
+    "conclusions": {
+     "walton.yml": [
+      "¬should_be_performed(A)"
+     ],
+     "A_reasoning/3_practical-reasoning.yml": [
+      "not_bring_about(A)"
+     ]
+    },
+    "title": {
+     "walton.yml": "Argument from Negative Consequences",
+     "A_reasoning/3_practical-reasoning.yml": "Argument From Consequences - Reasoning From Negative Consequences"
+    }
+   }
+  },
+  {
+   "id": "negative_consequences_prudential",
+   "master_line": 1280,
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 393,
+   "diffs": {
+    "premises": {
+     "walton.yml": [
+      "not_doing(X)",
+      "bad_consequence(X,C)"
+     ],
+     "A_reasoning/3_practical-reasoning.yml": [
+      "(X)",
+      "bad_consequence(X,C)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "part_in_whole",
+   "master_line": 678,
+   "file": "A_reasoning/2_inductive-reasoning.yml",
+   "line": 44,
+   "diffs": {
+    "variables": {
+     "walton.yml": [
+      "Y",
+      "X",
+      "P"
+     ],
+     "A_reasoning/2_inductive-reasoning.yml": [
+      "Y",
+      "X",
+      "A"
+     ]
+    }
+   }
+  },
+  {
+   "id": "practical_necessary_condition",
+   "master_line": 963,
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 277,
+   "diffs": {
+    "premises": {
+     "walton.yml": [
+      "goal_is_action(A)",
+      "alternative_action(X,A)",
+      "necessary_action(X,A)",
+      "practicality_action(X)",
+      "more_acceptable_bringing(A,X)"
+     ],
+     "A_reasoning/3_practical-reasoning.yml": [
+      "goal_is_action(A)",
+      "alternative_action(X,A)",
+      "sufficient_action(X,A)",
+      "practicality_action(X)",
+      "more_acceptable_bringing(A,X)"
+     ]
+    }
+   }
+  }
+ ],
+ "language_differences": [
+  {
+   "file": "A_reasoning/2_inductive-reasoning.yml",
+   "line": 8,
+   "key": "part_is/2",
+   "category": "%s, is %s.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/2_inductive-reasoning.yml",
+   "line": 10,
+   "key": "part_whole/5",
+   "category": "%s is %s only if %s, or %s.., or ...%s is.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/2_inductive-reasoning.yml",
+   "line": 14,
+   "key": "whole_is/2",
+   "category": "%s is %s.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/2_inductive-reasoning.yml",
+   "line": 15,
+   "key": "whole_of/4",
+   "category": "%s is the whole of %s, %s,..,%s.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 5,
+   "key": "agent_bring_about/2",
+   "category": "If an agent bring about %s, then %s will occur.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 13,
+   "key": "bad_for_goals/1",
+   "category": "%s is a bad outcome, from the point ohiew of my goals.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 26,
+   "key": "contributing_action",
+   "category": "Doing act %s contributes to goal %s.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 40,
+   "key": "great_side_effects/2",
+   "category": "There will be greater negative side effects of %s 's carrying out %s.",
+   "walton.yml": "There will be too great negative side effects of %s bringing about %s."
+  },
+  {
+   "file": "A_reasoning/3_practical-reasoning.yml",
+   "line": 55,
+   "key": "not_bring_about/1",
+   "category": "Therefore, practically speaking, I should not  bring about %s.",
+   "walton.yml": "Therefore, you had better not bring about %s"
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 2,
+   "key": "accept_all_steps",
+   "category": "There is a climate of social opinion such that once people come to accept each step as plausible, then they will also be led to accept the next step.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 15,
+   "key": "initial_presumption/1",
+   "category": "Case %s, is tentatively acceptable as an initial presumption.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 17,
+   "key": "leads_to_next/3",
+   "category": "There exists a series of cases %s, %s,..., %s where each leads to the next by a combination of causal, precedent, and/or analogical steps.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 18,
+   "key": "led_to_step",
+   "category": "People will be led to accept the next step once they come to accept each step as plausible.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 22,
+   "key": "not_acceptable_step/1",
+   "category": "%s is not acceptable, contrary to the presumption of the initial premise.",
+   "walton.yml": null
+  },
+  {
+   "file": "A_reasoning/5_casual-reasoning.yml",
+   "line": 27,
+   "key": "person_value/2",
+   "category": "Person %s is %s.",
+   "walton.yml": " Person %s is %s."
+  },
+  {
+   "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+   "line": 7,
+   "key": "biased/1",
+   "category": "%s is biased.",
+   "walton.yml": "Arguer %s is biased."
+  },
+  {
+   "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+   "line": 39,
+   "key": "special_proposition/2",
+   "category": "%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.",
+   "walton.yml": "A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."
+  },
+  {
+   "file": "B_source-based-arguments/1_arguments-from-position-to-know.yml",
+   "line": 40,
+   "key": "sufficient_evidence",
+   "category": "Search for the evidence progress is sufficient.",
+   "walton.yml": "search for the evidence progress is sufficient."
+  },
+  {
+   "file": "B_source-based-arguments/4_argumen-from-popular-acceptence.yml",
+   "line": 16,
+   "key": "favor/1",
+   "category": "If %s is generally accepted as true that gives a reason in favor of %s.",
+   "walton.yml": "If %s is generally accepted as truei that gives a reason in favor of %s."
+  },
+  {
+   "file": "C_applying-rules-to-cases/1_arguments-based-on-cases.yml",
+   "line": 11,
+   "key": "impair_general/1",
+   "category": "Special circumstances of example %s impair its generalizability",
+   "walton.yml": "Special circumstances of example %s impair its generalizability."
+  },
+  {
+   "file": "C_applying-rules-to-cases/1_arguments-based-on-cases.yml",
+   "line": 26,
+   "key": "typical_example/1",
+   "category": " Example %s is an typical example of the kinds of cases the generalzation covers.",
+   "walton.yml": "Example %s is an typical example of the kinds of cases the generalzation covers."
+  },
+  {
+   "file": "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+   "line": 10,
+   "key": "excuse",
+   "category": "There is an adequate excuse or an overriding duty.",
+   "walton.yml": "%s has an adequate excuse or an overriding duty."
+  },
+  {
+   "file": "C_applying-rules-to-cases/3_chained-arguments-connecting-rules-and-cases.yml",
+   "line": 8,
+   "key": "sequence/4",
+   "category": "There is an intervening sequence of propositions, %s, %s, ...,%s, %s such that the conditionals must be in proper order.",
+   "walton.yml": "There is an intervening sequence of propositions, %s, %s,...,%s, %s such that the conditionals must be in proper order."
+  }
+ ],
+ "in_several_category_files": [
+  {
+   "id": "exeptional",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "plea_for_excuse",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "regulative_rule",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "rule",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "rule_mental_world",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "rule_physical_world_1",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  },
+  {
+   "id": "rule_physical_world_2",
+   "files": [
+    "C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml",
+    "C_applying-rules-to-cases/4_verbal_classification_arguments.yml"
+   ]
+  }
+ ],
+ "upstream": [
+  {
+   "upstream_id": "abduction",
+   "walton_id": "abduction",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "analogy",
+   "walton_id": "analogy",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "appearance",
+   "walton_id": "appearance",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "cause_to_effect",
+   "walton_id": "cause_to_effect",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "correlation_to_cause",
+   "walton_id": "correlation_to_cause",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "credible_source",
+   "walton_id": "credible_source",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "definition_to_verbal_classification",
+   "walton_id": "definition_to_verbal_classification",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "defeasible_modus_ponens",
+   "walton_id": "defeasible_modus_ponens",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "established_rule",
+   "walton_id": "established_rule",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "ethotic1",
+   "walton_id": "ethotic1",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "ethotic2",
+   "walton_id": "ethotic2",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "expert_opinion",
+   "walton_id": "expert_opinion",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "ignorance",
+   "walton_id": "ignorance",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "negative_consequences",
+   "walton_id": "negative_consequences",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "position_to_know",
+   "walton_id": "position_to_know",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "positive_consequences",
+   "walton_id": "positive_consequences",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "practical_reasoning1",
+   "walton_id": "practical_reasoning1",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "practical_reasoning2",
+   "walton_id": "practical_reasoning2",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "precedent",
+   "walton_id": "exeption_to_rule",
+   "status": "differs",
+   "diffs": {
+    "title": {
+     "upstream": "Argument from Precedent",
+     "walton.yml": "Argument From Exception to a Rule"
+    }
+   }
+  },
+  {
+   "upstream_id": "slippery_slope_base_case",
+   "walton_id": "slippery_slope_base_case",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "slippery_slope_inductive_step",
+   "walton_id": "slippery_slope_inductive_step",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "sunk_costs",
+   "walton_id": "sunk_costs",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "verbal_classification",
+   "walton_id": "verbal_classification",
+   "status": "identical",
+   "diffs": {}
+  },
+  {
+   "upstream_id": "witness_testimony",
+   "walton_id": "witness_testimony",
+   "status": "identical",
+   "diffs": {}
+  }
+ ],
+ "upstream_language_changed": [
+  {
+   "key": "biased/1",
+   "upstream": "%s is biased.",
+   "walton.yml": "Arguer %s is biased."
+  },
+  {
+   "key": "bring_about_more_effectively/2",
+   "upstream": "There exists an action that would bring about %s more effectively than %s.",
+   "walton.yml": "There exists an action that would bring about % more effectively than %s."
+  },
+  {
+   "key": "other_credible_sources_disagree/1",
+   "upstream": "Other credible sources disagree with %s.",
+   "walton.yml": "Other credible source disagree with %s."
+  }
+ ]
+}

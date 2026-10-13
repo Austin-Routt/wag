@@ -1,0 +1,859 @@
+{
+ "book_list_from_spr": [
+  {
+   "as": 1,
+   "name": "Argument from Position to Know",
+   "spr_pages": "p. 13, 309",
+   "walton_ids": [
+    "position_to_know"
+   ],
+   "present": [
+    "position_to_know"
+   ],
+   "note": ""
+  },
+  {
+   "as": 2,
+   "name": "Argument from Expert Opinion",
+   "spr_pages": "p. 14, 19-20, 310, 381-382",
+   "walton_ids": [
+    "expert_opinion"
+   ],
+   "present": [
+    "expert_opinion"
+   ],
+   "note": "WAG's AS:expert_opinion currently points at credible_source (Wyner 2016), not at this scheme"
+  },
+  {
+   "as": 3,
+   "name": "Argument from Witness Testimony",
+   "spr_pages": "p. 90, 310",
+   "walton_ids": [
+    "witness_testimony"
+   ],
+   "present": [
+    "witness_testimony"
+   ],
+   "note": ""
+  },
+  {
+   "as": 4,
+   "name": "Argument from Popular Opinion (+ subtypes 4.1-4.10/4.11)",
+   "spr_pages": "p. 123-124, 311-313",
+   "walton_ids": [
+    "popular_opinion",
+    "pop_scheme",
+    "position_to_know_ad_populum",
+    "expert_opinion_ad_populum",
+    "deliberation_ad_populum",
+    "moral_justification_ad_populum",
+    "moral_justification_ad_populum_excuse",
+    "snob_appeal_ad_populum",
+    "appeal_to_vanity_ad_populum",
+    "rhetoric_ad_populum",
+    "common_folk_ad_populum",
+    "common_folks_group_ad_populum"
+   ],
+   "present": [
+    "popular_opinion",
+    "pop_scheme",
+    "position_to_know_ad_populum",
+    "expert_opinion_ad_populum",
+    "deliberation_ad_populum",
+    "moral_justification_ad_populum",
+    "moral_justification_ad_populum_excuse",
+    "snob_appeal_ad_populum",
+    "appeal_to_vanity_ad_populum",
+    "rhetoric_ad_populum",
+    "common_folk_ad_populum",
+    "common_folks_group_ad_populum"
+   ],
+   "note": "Deepseek lists 10 subtypes, Muse says 4.1-4.11; the group subtype of Common Folks is presumably the 11th"
+  },
+  {
+   "as": 5,
+   "name": "Argument from Popular Practice",
+   "spr_pages": "p. 131, 314",
+   "walton_ids": [
+    "popular_practise"
+   ],
+   "present": [
+    "popular_practise"
+   ],
+   "note": ""
+  },
+  {
+   "as": 6,
+   "name": "Example, Illustration, Model, Anti-Model",
+   "spr_pages": "",
+   "walton_ids": [
+    "from_example",
+    "illustration",
+    "from_model",
+    "from_antimodel"
+   ],
+   "present": [
+    "from_example",
+    "illustration",
+    "from_model",
+    "from_antimodel"
+   ],
+   "note": "numbered only in Muse section 12"
+  },
+  {
+   "as": 7,
+   "name": "Argument from Analogy",
+   "spr_pages": "p. 56, 315",
+   "walton_ids": [
+    "analogy"
+   ],
+   "present": [
+    "analogy"
+   ],
+   "note": ""
+  },
+  {
+   "as": 8,
+   "name": "Practical Reasoning from Analogy",
+   "spr_pages": "p. 74, 316",
+   "walton_ids": [
+    "practical_analogy_positive",
+    "practical_analogy_negative"
+   ],
+   "present": [
+    "practical_analogy_positive",
+    "practical_analogy_negative"
+   ],
+   "note": ""
+  },
+  {
+   "as": 9,
+   "name": "Composition",
+   "spr_pages": "",
+   "walton_ids": [
+    "composition_generic",
+    "part_in_whole"
+   ],
+   "present": [
+    "composition_generic",
+    "part_in_whole"
+   ],
+   "note": ""
+  },
+  {
+   "as": 10,
+   "name": "Division (generic; whole into parts)",
+   "spr_pages": "",
+   "walton_ids": [
+    "division_generic"
+   ],
+   "present": [
+    "division_generic"
+   ],
+   "note": "division_generic is a verbatim copy of composition_generic (same premises/conclusion); 'Division of the Whole into its Parts' exists only in A_reasoning/2_inductive-reasoning.yml (whole_into_parts) and was dropped from walton.yml"
+  },
+  {
+   "as": 11,
+   "name": "Oppositions (descriptive, normative)",
+   "spr_pages": "",
+   "walton_ids": [
+    "opposition-descriptive_1",
+    "opposition-descriptive_2",
+    "opposition-descriptive_3",
+    "opposition-normative"
+   ],
+   "present": [
+    "opposition-descriptive_1",
+    "opposition-descriptive_2",
+    "opposition-descriptive_3",
+    "opposition-normative"
+   ],
+   "note": "all four fail to instantiate (primed variables)"
+  },
+  {
+   "as": 12,
+   "name": "Rhetorical Oppositions",
+   "spr_pages": "",
+   "walton_ids": [
+    "rhetorical_oppositions_normative",
+    "rhetorical_oppositions_descriptive"
+   ],
+   "present": [
+    "rhetorical_oppositions_normative",
+    "rhetorical_oppositions_descriptive"
+   ],
+   "note": "both fail to instantiate (primed variables)"
+  },
+  {
+   "as": 13,
+   "name": "Alternatives",
+   "spr_pages": "",
+   "walton_ids": [
+    "alternative_cognitive",
+    "alternative_normative"
+   ],
+   "present": [
+    "alternative_cognitive",
+    "alternative_normative"
+   ],
+   "note": ""
+  },
+  {
+   "as": 14,
+   "name": "Verbal Classification",
+   "spr_pages": "p. 66-70, 319-321",
+   "walton_ids": [
+    "verbal_classification"
+   ],
+   "present": [
+    "verbal_classification"
+   ],
+   "note": ""
+  },
+  {
+   "as": 15,
+   "name": "Definition to Verbal Classification",
+   "spr_pages": "p. 66-70, 319-321",
+   "walton_ids": [
+    "definition_to_verbal_classification"
+   ],
+   "present": [
+    "definition_to_verbal_classification"
+   ],
+   "note": ""
+  },
+  {
+   "as": 16,
+   "name": "Vagueness of Verbal Classification",
+   "spr_pages": "p. 66-70, 319-321",
+   "walton_ids": [
+    "verbal_classification_vagueness"
+   ],
+   "present": [
+    "verbal_classification_vagueness"
+   ],
+   "note": "walton.yml titles it 'Argument From Definition to Verbal Classification'"
+  },
+  {
+   "as": 17,
+   "name": "Arbitrariness of Verbal Classification",
+   "spr_pages": "p. 66-70, 319-321",
+   "walton_ids": [
+    "verbal_classification_arbitrariness"
+   ],
+   "present": [
+    "verbal_classification_arbitrariness"
+   ],
+   "note": ""
+  },
+  {
+   "as": 18,
+   "name": "Interaction of Act and Person",
+   "spr_pages": "",
+   "walton_ids": [
+    "interaction_act_person_1",
+    "interaction_act_person_2"
+   ],
+   "present": [
+    "interaction_act_person_1",
+    "interaction_act_person_2"
+   ],
+   "note": ""
+  },
+  {
+   "as": 19,
+   "name": "Values (positive, negative)",
+   "spr_pages": "",
+   "walton_ids": [
+    "positive_value",
+    "negative_value"
+   ],
+   "present": [
+    "positive_value",
+    "negative_value"
+   ],
+   "note": ""
+  },
+  {
+   "as": 20,
+   "name": "Sacrifice",
+   "spr_pages": "",
+   "walton_ids": [
+    "sacrifice"
+   ],
+   "present": [
+    "sacrifice"
+   ],
+   "note": ""
+  },
+  {
+   "as": 21,
+   "name": "Group and its Members",
+   "spr_pages": "",
+   "walton_ids": [
+    "group_1",
+    "group_2"
+   ],
+   "present": [
+    "group_1",
+    "group_2"
+   ],
+   "note": ""
+  },
+  {
+   "as": 22,
+   "name": "Practical Reasoning (+ necessary/sufficient condition, value-based)",
+   "spr_pages": "p. 94-96, 323-325",
+   "walton_ids": [
+    "practical_inference",
+    "practical_necessary_condition",
+    "practical_sufficient_condition",
+    "practical_reasoning1"
+   ],
+   "present": [
+    "practical_inference",
+    "practical_necessary_condition",
+    "practical_sufficient_condition",
+    "practical_reasoning1"
+   ],
+   "note": ""
+  },
+  {
+   "as": 23,
+   "name": "Two-Person Practical Reasoning",
+   "spr_pages": "p. 97, 325-326",
+   "walton_ids": [
+    "two_person_practical"
+   ],
+   "present": [
+    "two_person_practical"
+   ],
+   "note": ""
+  },
+  {
+   "as": 24,
+   "name": "Waste",
+   "spr_pages": "p. 10-11, 326-327",
+   "walton_ids": [
+    "waste"
+   ],
+   "present": [
+    "waste"
+   ],
+   "note": ""
+  },
+  {
+   "as": 25,
+   "name": "Sunk Costs",
+   "spr_pages": "p. 10-11, 326-327",
+   "walton_ids": [
+    "sunk_costs"
+   ],
+   "present": [
+    "sunk_costs"
+   ],
+   "note": ""
+  },
+  {
+   "as": 26,
+   "name": "Ignorance (+ normal-expectations and negative-practical variants)",
+   "spr_pages": "p. 98-100, 327-328",
+   "walton_ids": [
+    "ignorance",
+    "negative_normal_expectations",
+    "negative_practical"
+   ],
+   "present": [
+    "ignorance",
+    "negative_normal_expectations",
+    "negative_practical"
+   ],
+   "note": "variants placed here by Muse section 12"
+  },
+  {
+   "as": 27,
+   "name": "Epistemic Argument from Ignorance",
+   "spr_pages": "p. 98-100, 327-328",
+   "walton_ids": [
+    "epistemic_ignorence"
+   ],
+   "present": [
+    "epistemic_ignorence"
+   ],
+   "note": ""
+  },
+  {
+   "as": 28,
+   "name": "Cause to Effect",
+   "spr_pages": "p. 168-175, 328-329",
+   "walton_ids": [
+    "cause_to_effect"
+   ],
+   "present": [
+    "cause_to_effect"
+   ],
+   "note": ""
+  },
+  {
+   "as": 29,
+   "name": "Correlation to Cause",
+   "spr_pages": "p. 168-175, 328-329",
+   "walton_ids": [
+    "correlation_to_cause"
+   ],
+   "present": [
+    "correlation_to_cause"
+   ],
+   "note": ""
+  },
+  {
+   "as": 30,
+   "name": "Sign",
+   "spr_pages": "p. 9-10, 329",
+   "walton_ids": [
+    "sign"
+   ],
+   "present": [
+    "sign"
+   ],
+   "note": ""
+  },
+  {
+   "as": 31,
+   "name": "Abductive (backward, forward, action/character, retroductive)",
+   "spr_pages": "p. 171, 329-331",
+   "walton_ids": [
+    "abductive_backward",
+    "abductive_forward",
+    "abductive_action_to_character",
+    "abductive_character_to_action",
+    "retroductive"
+   ],
+   "present": [
+    "abductive_backward",
+    "abductive_forward",
+    "abductive_action_to_character",
+    "abductive_character_to_action",
+    "retroductive"
+   ],
+   "note": ""
+  },
+  {
+   "as": 32,
+   "name": "Evidence to Hypothesis (verification, falsification)",
+   "spr_pages": "p. 331-332",
+   "walton_ids": [
+    "evidence_hypothesis_verification",
+    "evidence_hypothesis_falsification"
+   ],
+   "present": [
+    "evidence_hypothesis_verification",
+    "evidence_hypothesis_falsification"
+   ],
+   "note": "falsification concludes the wrong variable (see defects)"
+  },
+  {
+   "as": 33,
+   "name": "Consequences (positive, negative, prudential)",
+   "spr_pages": "p. 100-102, 332-333",
+   "walton_ids": [
+    "positive_consequences",
+    "negative_consequences",
+    "negative_consequences_prudential"
+   ],
+   "present": [
+    "positive_consequences",
+    "negative_consequences",
+    "negative_consequences_prudential"
+   ],
+   "note": ""
+  },
+  {
+   "as": 34,
+   "name": "Pragmatic Alternatives",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "pragmatic_alternative"
+   ],
+   "present": [
+    "pragmatic_alternative"
+   ],
+   "note": ""
+  },
+  {
+   "as": 35,
+   "name": "Threat (+ disjunctive ad baculum)",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "treat",
+    "ad_baculum"
+   ],
+   "present": [
+    "treat",
+    "ad_baculum"
+   ],
+   "note": "spelled 'Treat' in id and titles"
+  },
+  {
+   "as": 36,
+   "name": "Fear Appeal",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "fear"
+   ],
+   "present": [
+    "fear"
+   ],
+   "note": ""
+  },
+  {
+   "as": 37,
+   "name": "Danger Appeal",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "danger"
+   ],
+   "present": [
+    "danger"
+   ],
+   "note": ""
+  },
+  {
+   "as": 38,
+   "name": "Need for Help",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "help"
+   ],
+   "present": [
+    "help"
+   ],
+   "note": ""
+  },
+  {
+   "as": 39,
+   "name": "Distress",
+   "spr_pages": "p. 102-110, 333-335",
+   "walton_ids": [
+    "distress"
+   ],
+   "present": [
+    "distress"
+   ],
+   "note": ""
+  },
+  {
+   "as": 40,
+   "name": "Commitment",
+   "spr_pages": "p. 132-136, 335-336",
+   "walton_ids": [
+    "commitment1",
+    "commitment2"
+   ],
+   "present": [
+    "commitment1",
+    "commitment2"
+   ],
+   "note": ""
+  },
+  {
+   "as": 41,
+   "name": "Ethotic",
+   "spr_pages": "p. 132-136, 335-336",
+   "walton_ids": [
+    "ethotic1",
+    "ethotic2"
+   ],
+   "present": [
+    "ethotic1",
+    "ethotic2"
+   ],
+   "note": ""
+  },
+  {
+   "as": 42,
+   "name": "Generic Ad Hominem",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "ad_hominem"
+   ],
+   "present": [
+    "ad_hominem"
+   ],
+   "note": "SPR also names ad hominem subtypes (p. 358-359) that the collection lacks"
+  },
+  {
+   "as": 43,
+   "name": "Pragmatic Inconsistency",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "pragmatic_inconsistency"
+   ],
+   "present": [
+    "pragmatic_inconsistency"
+   ],
+   "note": ""
+  },
+  {
+   "as": 44,
+   "name": "Inconsistent Commitment",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "inconsistent_commitment"
+   ],
+   "present": [
+    "inconsistent_commitment"
+   ],
+   "note": ""
+  },
+  {
+   "as": 45,
+   "name": "Circumstantial Ad Hominem",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "circumstantial_ad_hominem"
+   ],
+   "present": [
+    "circumstantial_ad_hominem"
+   ],
+   "note": ""
+  },
+  {
+   "as": 46,
+   "name": "Bias",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "bias"
+   ],
+   "present": [
+    "bias"
+   ],
+   "note": ""
+  },
+  {
+   "as": 47,
+   "name": "Bias Ad Hominem",
+   "spr_pages": "p. 140-159, 336-339",
+   "walton_ids": [
+    "bias_ad_hominem"
+   ],
+   "present": [
+    "bias_ad_hominem"
+   ],
+   "note": ""
+  },
+  {
+   "as": 48,
+   "name": "Gradualism",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [
+    "gradualism"
+   ],
+   "present": [
+    "gradualism"
+   ],
+   "note": ""
+  },
+  {
+   "as": 49,
+   "name": "Slippery Slope (causal)",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [
+    "slippery_slope_base_case",
+    "slippery_slope_inductive_step"
+   ],
+   "present": [
+    "slippery_slope_base_case",
+    "slippery_slope_inductive_step"
+   ],
+   "note": ""
+  },
+  {
+   "as": 50,
+   "name": "Precedent Slippery Slope",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [],
+   "present": [],
+   "note": "MISSING from the whole collection"
+  },
+  {
+   "as": 51,
+   "name": "Sorites Slippery Slope",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [
+    "sorites_slippery_slope"
+   ],
+   "present": [
+    "sorites_slippery_slope"
+   ],
+   "note": ""
+  },
+  {
+   "as": 52,
+   "name": "Verbal Slippery Slope",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [
+    "verbal_slippery_slope"
+   ],
+   "present": [
+    "verbal_slippery_slope"
+   ],
+   "note": ""
+  },
+  {
+   "as": 53,
+   "name": "Full Slippery Slope",
+   "spr_pages": "p. 114-117, 339-341",
+   "walton_ids": [],
+   "present": [],
+   "note": "MISSING from walton.yml; present only as full_slippery_slope in A_reasoning/5_casual-reasoning.yml"
+  },
+  {
+   "as": 54,
+   "name": "Constitutive-Rule Claims",
+   "spr_pages": "",
+   "walton_ids": [
+    "rule_physical_world_1",
+    "rule_physical_world_2",
+    "rule_mental_world"
+   ],
+   "present": [
+    "rule_physical_world_1",
+    "rule_physical_world_2",
+    "rule_mental_world"
+   ],
+   "note": ""
+  },
+  {
+   "as": 55,
+   "name": "Rules (established rule, simple rule, regulative)",
+   "spr_pages": "p. 70-74, 343-344",
+   "walton_ids": [
+    "established_rule",
+    "rule",
+    "regulative_rule"
+   ],
+   "present": [
+    "established_rule",
+    "rule",
+    "regulative_rule"
+   ],
+   "note": ""
+  },
+  {
+   "as": 56,
+   "name": "Exceptional Case",
+   "spr_pages": "p. 70-74, 343-344",
+   "walton_ids": [
+    "exeptional"
+   ],
+   "present": [
+    "exeptional"
+   ],
+   "note": ""
+  },
+  {
+   "as": 57,
+   "name": "Precedent",
+   "spr_pages": "p. 70-74, 343-344",
+   "walton_ids": [
+    "exeption_to_rule"
+   ],
+   "present": [
+    "exeption_to_rule"
+   ],
+   "note": "README: Walton renamed 'Argument From Precedent' to 'Argument From Exception To A Rule'; but exeption_to_rule is upstream Carneades 'precedent' with only id/title changed, and its content (similar case, ratio decidendi) does not match the SPR's AS57 (legitimate counter-case => modify the rule). Uncertain."
+  },
+  {
+   "as": 58,
+   "name": "Plea for Excuse",
+   "spr_pages": "",
+   "walton_ids": [
+    "plea_for_excuse"
+   ],
+   "present": [
+    "plea_for_excuse"
+   ],
+   "note": ""
+  },
+  {
+   "as": 59,
+   "name": "Perception (+ appearance)",
+   "spr_pages": "",
+   "walton_ids": [
+    "perception",
+    "appearance"
+   ],
+   "present": [
+    "perception",
+    "appearance"
+   ],
+   "note": ""
+  },
+  {
+   "as": 60,
+   "name": "Memory",
+   "spr_pages": "",
+   "walton_ids": [
+    "memory"
+   ],
+   "present": [
+    "memory"
+   ],
+   "note": ""
+  }
+ ],
+ "walton_ids_not_in_spr_list": {
+  "credible_source": "Wyner (2016), from upstream Carneades; not in the SPR's 60-scheme list",
+  "practical_reasoning2": "Walton (2015) Goal-Based Reasoning; not in the SPR's 60-scheme list (published after the book)",
+  "defeasible_modus_ponens": "generic DMP from upstream Carneades; the SPR (Claude section) lists it, but that list is derived from the YAML",
+  "abduction": "generic abduction from upstream Carneades; not separately numbered in the SPR (AS31 is the book's abductive scheme)",
+  "practical_goal": "Verheij (2003); not in the SPR's numbered list (Claude section lists it, YAML-derived) -- may be book material, unverified",
+  "end_and_means_1": "Perelman & Olbrechts-Tyteca; not in the SPR's numbered list (Claude section lists it, YAML-derived)",
+  "end_and_means_2": "Perelman & Olbrechts-Tyteca; not in the SPR's numbered list (Claude section lists it, YAML-derived)",
+  "end_and_means_3": "Perelman & Olbrechts-Tyteca; not in the SPR's numbered list (Claude section lists it, YAML-derived)"
+ },
+ "unmapped": [],
+ "missing_from_walton_yml": [
+  {
+   "scheme": "Division of the Whole into its Parts (AS10 subtype)",
+   "status": "present only in A_reasoning/2_inductive-reasoning.yml as whole_into_parts",
+   "provenance": "SPR Muse section 12; SPR Claude (Opus 4.8) section 6 I.2"
+  },
+  {
+   "scheme": "Full Slippery Slope (AS53)",
+   "status": "present only in A_reasoning/5_casual-reasoning.yml as full_slippery_slope",
+   "provenance": "SPR Deepseek section 2 AS48-53"
+  },
+  {
+   "scheme": "Precedent Slippery Slope (AS50)",
+   "status": "nowhere in the collection",
+   "provenance": "SPR Deepseek section 2 AS48-53; SPR Muse section 12 #50"
+  },
+  {
+   "scheme": "Argument from Precedent in the book's sense (AS57)",
+   "status": "only a renamed Carneades 'precedent' scheme with different content",
+   "provenance": "SPR Deepseek section 2 AS55-57; SPR Muse section 12 #57"
+  },
+  {
+   "scheme": "Ad hominem subtypes: negative ethotic from veracity / prudence / perception / cognitive skills / morals; double standard; universal circumstantial; group circumstantial; guilt by association; situationally disqualifying; poisoning the well",
+   "status": "nowhere in the collection",
+   "provenance": "SPR Deepseek section 2 2.4 ('Subtypes explicit in text (p. 358-359)')"
+  },
+  {
+   "scheme": "Argument from a Random Sample to a Population",
+   "status": "nowhere (mentioned as canonical inductive form, not numbered)",
+   "provenance": "SPR Claude (Opus 4.8) section 6 I.2"
+  },
+  {
+   "scheme": "Deductive forms (modus ponens, disjunctive syllogism, hypothetical syllogism, reductio)",
+   "status": "nowhere (only defeasible_modus_ponens)",
+   "provenance": "SPR Claude (Opus 4.8) section 6 I.1"
+  },
+  {
+   "scheme": "Argument from Effect to Cause",
+   "status": "nowhere (called a 'related book scheme')",
+   "provenance": "SPR Claude (Opus 4.8) section 6 I.4"
+  }
+ ]
+}
