@@ -141,3 +141,25 @@ func TestAllAbstainRoundCountsDespiteRejectedMoves(t *testing.T) {
 		t.Fatalf("after a round with a move: ConsecAllAbstain=%d terminated=%v", gs.ConsecAllAbstain, gs.Terminated)
 	}
 }
+
+// The Language templates put each argument where the predicate's argument
+// order puts it: judged_positive_value(V,A), reason_retaining_goal(V,G) and
+// more_on_point(A,C) rendered their arguments the wrong way round.
+func TestLanguageTemplatesFollowArgumentOrder(t *testing.T) {
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:values",
+		VariableBindings: map[string]string{"V": "liberty", "A": "citizens", "G": "free_speech"}})
+	arg := gs.Adapter.Graph.Arguments[r.ArgIDs[0]]
+	if got := arg.Premises[0].Stmt.Text; got != "Value liberty is positive as judged by agent citizens." {
+		t.Errorf("premise text %q", got)
+	}
+	if got := arg.Conclusion.Text; got != "liberty is a reason for retaining commitment to goal free_speech." {
+		t.Errorf("conclusion text %q", got)
+	}
+	r, _ = gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:analogy",
+		VariableBindings: map[string]string{"A": "tax_works", "C": "sweden"}})
+	if s := gs.Adapter.Graph.Statements["more_on_point(tax_works,sweden)"]; s == nil ||
+		s.Text != "tax_works is false in another case which is more on point than case sweden." {
+		t.Errorf("more_on_point text: %+v", s)
+	}
+}

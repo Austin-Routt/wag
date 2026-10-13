@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/nascq"
 )
@@ -65,10 +66,10 @@ func main() {
 			AbstentionThreshold: 3,
 			Scoring:             game.DefaultScoringConfig(),
 		},
-		YAMLBytes:   []byte(embeddedYAML),
-		SchemesJSON: []byte(embeddedSchemesJSON),
-		CQsJSON:     []byte(embeddedCQsJSON),
-		EdgesJSON:   []byte(embeddedEdgesJSON),
+		YAMLBytes:   data.CoreYAML,
+		SchemesJSON: data.SchemesJSON,
+		CQsJSON:     data.CQsJSON,
+		EdgesJSON:   data.EdgesJSON,
 		PlayerNames: []string{*name1, *name2},
 	})
 

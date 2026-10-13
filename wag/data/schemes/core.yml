@@ -32,9 +32,9 @@ language:
   brings_about/2: "The action %s brings about %s."
   good/1: "%s is good."
   # --- positive_value ---
-  judged_positive_value/2: "Agent %s judges %s as a positive value."
+  judged_positive_value/2: "Value %s is positive as judged by agent %s."
   positive_affects/3: "Value %s positively affects goal %s for agent %s."
-  reason_retaining_goal/2: "There is reason to retain goal %s because of value %s."
+  reason_retaining_goal/2: "%s is a reason for retaining commitment to goal %s."
   # --- sign ---
   finding_true/1: "%s is observed to be the case."
   indicated_true/2: "%s is indicated when %s is true."
@@ -53,7 +53,7 @@ language:
   similar_case/1: "%s is a similar case."
   in_case/2: "%s is true in case %s."
   relevant_differences/1: "There are relevant differences in case %s."
-  more_on_point/2: "There is a case more on point than %s regarding %s."
+  more_on_point/2: "%s is false in another case which is more on point than case %s."
 
 argument_schemes:
   - id: practical_reasoning1
