@@ -15,7 +15,6 @@ package game
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
@@ -154,63 +153,63 @@ func RenderState(gs *GameState) string {
 	}
 	fmt.Fprintf(&b, "\n══════════════════════════════════════════════\n")
 
-	// Arguments in the graph.
-	if len(gs.Adapter.Graph.Arguments) == 0 {
+	// Arguments in the graph: every argument a player put forward (attacks
+	// included), with its premises and their labels. Exception and
+	// presumption arguments are structure, shown through the labels.
+	undercuts := map[*caes.Statement][]string{} // undercutter statement -> the arguments it undercuts
+	for _, id := range sortedArgIDs(gs) {
+		if u := gs.Adapter.Graph.Arguments[id].Undercutter; u != nil {
+			undercuts[u] = append(undercuts[u], id)
+		}
+	}
+	shown := 0
+	for _, argID := range sortedArgIDs(gs) {
+		arg := gs.Adapter.Graph.Arguments[argID]
+		role := carneades.ArgumentRole(arg)
+		if arg.Conclusion == nil || role == carneades.RoleException || role == carneades.RolePresumption ||
+			(role == "" && arg.Conclusion.IsUndercutter) {
+			continue
+		}
+		if shown == 0 {
+			fmt.Fprintf(&b, "\n  Arguments in play:\n")
+		}
+		shown++
+
+		conclusionText := statementText(arg.Conclusion)
+		if targets := undercuts[arg.Conclusion]; arg.Conclusion.IsUndercutter && len(targets) > 0 {
+			conclusionText = "undercuts " + strings.Join(targets, ", ")
+		}
+		owner := "system"
+		if o, ok := arg.Metadata["owner"].(string); ok {
+			owner = o
+		}
+		schemeID := ""
+		if arg.Scheme != nil {
+			schemeID = arg.Scheme.Id
+		}
+
+		fmt.Fprintf(&b, "    [%s] %s\n", argID, conclusionText)
+		fmt.Fprintf(&b, "         Label: %-10s  Scheme: %-25s  Owner: %s\n",
+			labelString(arg.Conclusion.Label), schemeID, owner)
+		for _, p := range arg.Premises {
+			if p.Stmt != nil {
+				fmt.Fprintf(&b, "           ← %-9s %s\n", labelString(p.Stmt.Label), statementText(p.Stmt))
+			}
+		}
+	}
+	if shown == 0 {
 		fmt.Fprintf(&b, "\n  Arguments: (none yet)\n")
-	} else {
-		fmt.Fprintf(&b, "\n  Arguments in play:\n")
-
-		// Sort argument IDs for stable display order.
-		argIDs := make([]string, 0, len(gs.Adapter.Graph.Arguments))
-		for id := range gs.Adapter.Graph.Arguments {
-			argIDs = append(argIDs, id)
-		}
-		sort.Strings(argIDs)
-
-		for _, argID := range argIDs {
-			arg := gs.Adapter.Graph.Arguments[argID]
-			if arg == nil {
-				continue
-			}
-
-			// Skip undercutter-conclusion arguments in display
-			// (they're internal mechanics, not player-facing claims).
-			if arg.Conclusion != nil && arg.Conclusion.IsUndercutter {
-				continue
-			}
-			if carneades.ArgumentRole(arg) == carneades.RolePresumption {
-				continue // a premise's presumption, shown through the premise's label
-			}
-
-			conclusionText := "(nil)"
-			label := "?"
-			if arg.Conclusion != nil {
-				conclusionText = arg.Conclusion.Id
-				if arg.Conclusion.Text != "" && arg.Conclusion.Text != arg.Conclusion.Id {
-					conclusionText = arg.Conclusion.Text
-				}
-				label = labelString(arg.Conclusion.Label)
-			}
-
-			owner := "system"
-			if arg.Metadata != nil {
-				if o, ok := arg.Metadata["owner"].(string); ok {
-					owner = o
-				}
-			}
-
-			schemeID := ""
-			if arg.Scheme != nil {
-				schemeID = arg.Scheme.Id
-			}
-
-			fmt.Fprintf(&b, "    [%s] %s\n", argID, conclusionText)
-			fmt.Fprintf(&b, "         Label: %-10s  Scheme: %-25s  Owner: %s\n",
-				label, schemeID, owner)
-		}
 	}
 
 	return b.String()
+}
+
+// statementText is the statement's text, or its ID if it has none.
+func statementText(s *caes.Statement) string {
+	if s.Text != "" {
+		return s.Text
+	}
+	return s.Id
 }
 
 // labelString returns a human-friendly label with visual indicator.

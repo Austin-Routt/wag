@@ -435,10 +435,8 @@ func (a *Adapter) PremiseMatching(argID, pattern string) string {
 		return ""
 	}
 	inst := pattern
-	if arg.Scheme != nil && len(arg.Scheme.Variables) == len(arg.Parameters) {
-		for i, v := range arg.Scheme.Variables {
-			inst = strings.ReplaceAll(inst, "{"+v+"}", arg.Parameters[i])
-		}
+	for v, val := range argumentBindings(arg) {
+		inst = strings.ReplaceAll(inst, "{"+v+"}", val)
 	}
 	if !strings.Contains(inst, "{") {
 		if t, ok := terms.ReadString(inst); ok {
@@ -470,6 +468,26 @@ func (a *Adapter) PremiseMatching(argID, pattern string) string {
 		}
 	}
 	return match
+}
+
+// ArgumentBindings returns the values an argument made by instantiating a
+// scheme bound to the scheme's variables (variable name -> term), or nil for
+// an argument made otherwise (attacks, presumptions, exceptions).
+func (a *Adapter) ArgumentBindings(argID string) map[string]string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return argumentBindings(a.Graph.Arguments[argID])
+}
+
+func argumentBindings(arg *caes.Argument) map[string]string {
+	if arg == nil || arg.Scheme == nil || len(arg.Parameters) == 0 || len(arg.Scheme.Variables) != len(arg.Parameters) {
+		return nil
+	}
+	b := make(map[string]string, len(arg.Parameters))
+	for i, v := range arg.Scheme.Variables {
+		b[v] = arg.Parameters[i]
+	}
+	return b
 }
 
 // patternPredicate returns the predicate and arity of a premise pattern such

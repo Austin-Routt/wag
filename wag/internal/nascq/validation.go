@@ -88,6 +88,13 @@ func (n *NASCQ) FindNASCQSchemeID(carneadesSchemeID string) string {
 // Template instantiation
 // ---------------------------------------------------------------------------
 
+// InstantiateTemplate replaces {VarName} placeholders in a template string
+// with the corresponding values from the bindings map; placeholders without
+// a binding are left as they are.
+func InstantiateTemplate(template string, bindings map[string]string) string {
+	return instantiateTemplate(template, bindings)
+}
+
 // instantiateTemplate replaces {VarName} placeholders in a template string
 // with the corresponding values from the bindings map.
 //

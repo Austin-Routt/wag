@@ -94,22 +94,12 @@ func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 
 func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction {
 	// Collect unique support schemes.
-	type schemeOption struct {
-		id   string
-		name string
-		vars map[string]nascq.VariableSpec
-	}
-
 	seen := make(map[string]bool)
-	var schemes []schemeOption
+	var schemes []nascq.ActionTemplate
 	for _, tmpl := range obs.AvailableActions {
 		if tmpl.Type == "support" && !seen[tmpl.SchemeID] {
 			seen[tmpl.SchemeID] = true
-			schemes = append(schemes, schemeOption{
-				id:   tmpl.SchemeID,
-				name: tmpl.SchemeName,
-				vars: tmpl.Variables,
-			})
+			schemes = append(schemes, tmpl)
 		}
 	}
 
@@ -120,19 +110,20 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 
 	h.print("\n  Choose a scheme:\n")
 	for i, s := range schemes {
-		varNames := sortedKeys(s.vars)
+		varNames := variableOrder(s)
 		h.printf("    [%d] %s  (%d vars: %s)\n",
-			i+1, s.name, len(s.vars), strings.Join(varNames, ", "))
+			i+1, s.SchemeName, len(s.Variables), strings.Join(varNames, ", "))
 	}
 
 	idx := h.readChoice(1, len(schemes)) - 1
 	selected := schemes[idx]
 
-	bindings := h.fillVariables(selected.vars)
+	bindings := h.fillVariables(selected)
+	h.preview(selected, bindings, "therefore: "+nascq.InstantiateTemplate(selected.ConclusionTemplateEN, bindings))
 
 	return nascq.ProposedAction{
 		Type:             "support",
-		SchemeID:         selected.id,
+		SchemeID:         selected.SchemeID,
 		VariableBindings: bindings,
 	}
 }
@@ -232,11 +223,10 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 
 	h.print("\n  Choose critical question:\n")
 	for i, cq := range cqs {
-		// Show the CQ question text from the NASCQ.
-		cqNode := obs.GameState.NASCQ.GetCQ(cq.id)
+		// Show the CQ's question, with the target's own bindings filled in.
 		question := cq.name
-		if cqNode != nil && cqNode.QuestionTemplateEN != "" {
-			question = fmt.Sprintf("%s — %s", cq.name, cqNode.QuestionTemplateEN)
+		if text := obs.GameState.QuestionText(cq.id, selectedTarget.argID); text != "" {
+			question = fmt.Sprintf("%s — %s", cq.name, text)
 		}
 		h.printf("    [%d] %s\n", i+1, question)
 	}
@@ -280,7 +270,8 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 	selected := backups[schemeIdx].tmpl
 
 	// --- Step 4: Fill variables ---
-	bindings := h.fillVariables(selected.Variables)
+	bindings := h.fillVariables(selected)
+	h.preview(selected, bindings, "therefore: "+attackEffect(obs.GameState, selected))
 
 	return nascq.ProposedAction{
 		Type:             "attack",
@@ -297,9 +288,12 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 // Variable filling
 // -------------------------------------------------------------------------
 
-func (h *HumanAgent) fillVariables(vars map[string]nascq.VariableSpec) map[string]string {
+// fillVariables asks for the template's variables in the order the premise
+// and conclusion templates first use them.
+func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string {
+	vars := tmpl.Variables
 	bindings := make(map[string]string, len(vars))
-	names := sortedKeys(vars)
+	names := variableOrder(tmpl)
 
 	h.print("\n  Fill in the variables:\n")
 	for _, name := range names {
@@ -318,6 +312,67 @@ func (h *HumanAgent) fillVariables(vars map[string]nascq.VariableSpec) map[strin
 	}
 
 	return bindings
+}
+
+// preview shows the move before it is submitted: the instantiated premises
+// and what follows from them.
+func (h *HumanAgent) preview(tmpl nascq.ActionTemplate, bindings map[string]string, effect string) {
+	h.print("\n  You argue:\n")
+	for _, p := range tmpl.PremiseTemplatesEN {
+		h.printf("      %s\n", nascq.InstantiateTemplate(p, bindings))
+	}
+	h.printf("    %s\n", effect)
+}
+
+// attackEffect says what an attack template concludes against its target.
+func attackEffect(gs *GameState, tmpl nascq.ActionTemplate) string {
+	target := gs.Adapter.Graph.Arguments[tmpl.TargetArgID]
+	if target == nil || target.Conclusion == nil {
+		return "(target not found)"
+	}
+	switch tmpl.CaesAttackType {
+	case "rebuttal":
+		return "it is not the case that: " + statementText(target.Conclusion)
+	case "undercutter":
+		return fmt.Sprintf("argument %s does not support \"%s\" here", tmpl.TargetArgID, statementText(target.Conclusion))
+	case "undermining":
+		if p := gs.Adapter.Graph.Statements[tmpl.TargetPremiseID]; p != nil {
+			return "it is not the case that: " + statementText(p)
+		}
+	}
+	return tmpl.CaesAttackType + " of " + tmpl.TargetArgID
+}
+
+// variableOrder returns the template's variables in the order its premise and
+// conclusion templates first use them, then any others in sorted order.
+func variableOrder(tmpl nascq.ActionTemplate) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, t := range append(append([]string{}, tmpl.PremiseTemplatesEN...), tmpl.ConclusionTemplateEN) {
+		for _, v := range nascq.Placeholders(t) {
+			if _, ok := tmpl.Variables[v]; ok && !seen[v] {
+				seen[v] = true
+				out = append(out, v)
+			}
+		}
+	}
+	for _, v := range sortedKeys(tmpl.Variables) {
+		if !seen[v] {
+			out = append(out, v)
+		}
+	}
+	return out
+}
+
+// QuestionText is the critical question's text with the target argument's
+// own bindings in place of its {Var} placeholders, as far as the target has
+// them (an attack argument has none).
+func (gs *GameState) QuestionText(cqID, targetArgID string) string {
+	cq := gs.NASCQ.GetCQ(cqID)
+	if cq == nil {
+		return ""
+	}
+	return nascq.InstantiateTemplate(cq.QuestionTemplateEN, gs.Adapter.ArgumentBindings(targetArgID))
 }
 
 // -------------------------------------------------------------------------
