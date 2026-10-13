@@ -23,10 +23,13 @@ import (
 //   - Labelling: the applied labels equal a fresh grounded labelling, every
 //     time it is computed (Carneades walks a Go map, so a graph that breaks an
 //     invariant above can label differently from run to run).
-//   - Roles: main and presumption arguments are owned by a player; exception
-//     arguments are not; presumptions have no premises.
+//   - Roles: main, presumption and question arguments are owned by a player;
+//     exception arguments are not; presumptions and questions have no
+//     premises.
 //   - Scores: each player's score is the sum of the score deltas recorded for
-//     them in the move history.
+//     them in the move history and, under ScoringLive, their live score.
+//   - Questions: each has its question argument, owned by the asker, and
+//     its answer, if any, is in the graph; the claim of a debate is at issue.
 func (gs *GameState) CheckInvariants() []error {
 	var errs []error
 	fail := func(format string, args ...interface{}) { errs = append(errs, fmt.Errorf(format, args...)) }
@@ -64,9 +67,9 @@ func (gs *GameState) CheckInvariants() []error {
 			if !players[owner] {
 				fail("argument %s: main argument owned by %q, not a player", id, owner)
 			}
-		case carneades.RolePresumption:
+		case carneades.RolePresumption, carneades.RoleQuestion:
 			if !players[owner] || len(arg.Premises) != 0 {
-				fail("argument %s: presumption with owner %q and %d premises", id, owner, len(arg.Premises))
+				fail("argument %s: %s with owner %q and %d premises", id, carneades.ArgumentRole(arg), owner, len(arg.Premises))
 			}
 		case carneades.RoleException:
 			if owner != "" {
@@ -125,11 +128,40 @@ func (gs *GameState) CheckInvariants() []error {
 
 	sum := map[string]float64{}
 	for _, m := range gs.MoveHistory {
-		sum[m.PlayerID] += m.ScoreDelta
+		for id, d := range m.ScoreDeltas {
+			sum[id] += d
+		}
+		if d := m.ScoreDeltas[m.PlayerID]; d != m.ScoreDelta {
+			fail("move by %s in round %d: ScoreDelta %.4f, ScoreDeltas %.4f", m.PlayerID, m.TurnNumber, m.ScoreDelta, d)
+		}
+	}
+	var live map[string]float64
+	if gs.Config.live() {
+		live = gs.LiveScores()
 	}
 	for _, p := range gs.Players {
 		if d := p.Score - sum[p.ID]; d > 1e-9 || d < -1e-9 {
 			fail("player %s: score %.4f but recorded deltas sum to %.4f", p.ID, p.Score, sum[p.ID])
+		}
+		if live != nil {
+			if d := p.Score - live[p.ID]; d > 1e-9 || d < -1e-9 {
+				fail("player %s: score %.4f but live score %.4f", p.ID, p.Score, live[p.ID])
+			}
+		}
+	}
+
+	for i, q := range gs.Questions {
+		arg := ag.Arguments[q.ArgID]
+		if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleQuestion || arg.Metadata["owner"] != q.Asker {
+			fail("question %d (%s about %s): no question argument %s by %s", i, q.CQID, q.TargetArgID, q.ArgID, q.Asker)
+		}
+		if q.AnsweredBy != "" && ag.Arguments[q.AnsweredBy] == nil {
+			fail("question %d: answered by %s, which is not in the graph", i, q.AnsweredBy)
+		}
+	}
+	if gs.Claim != "" {
+		if c := ag.Statements[gs.Claim]; c == nil || c.Issue == nil {
+			fail("the claim %s is not at issue", gs.Claim)
 		}
 	}
 	return errs

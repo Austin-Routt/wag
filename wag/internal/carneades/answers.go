@@ -320,3 +320,72 @@ func (a *Adapter) ExceptionMatching(argID, pattern string) string {
 	}
 	return match
 }
+
+// QuestionSchemeID is the scheme ID of question arguments (RaiseQuestion). It
+// maps to no NASCQ scheme, so question arguments are never targets.
+const QuestionSchemeID = "wag_question"
+
+// RaiseQuestion asks a critical question about a premise of an argument, or
+// about its inference, without arguing for an answer, and returns the ID of
+// the argument that stands for the question.
+//
+// Asking shifts the burden of proof to the argument's proponent, as asking
+// about an assumption does in Carneades (Gordon, Prakken and Walton 2007): the
+// question is a premise-less argument for the negative answer, owned by the
+// asker, with the weight of a presumption. For a premise P it argues ¬P, so
+// P (presumed with the same weight) is tied and Out until the proponent backs
+// it; for the inference it argues the undercutter, so the argument is out of
+// force until the proponent answers (¬undercut, which any scheme outweighs).
+// An exception is not asked about this way: the one who raises it bears its
+// burden, so it is attacked with an argument.
+func (a *Adapter) RaiseQuestion(asker, targetArgID, locus, locusStmtID string, weight float64, standard caes.Standard) (string, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	target := a.Graph.Arguments[targetArgID]
+	if target == nil || target.Conclusion == nil {
+		return "", fmt.Errorf("target argument %q not found", targetArgID)
+	}
+	var concl *caes.Statement
+	switch locus {
+	case LocusPremise:
+		p := a.Graph.Statements[locusStmtID]
+		if p == nil || !hasPremise(target, p) {
+			return "", fmt.Errorf("%q is not a premise of %s", locusStmtID, target.Id)
+		}
+		var err error
+		if concl, err = a.opposingPosition(p, standard); err != nil {
+			return "", err
+		}
+	case LocusArgument:
+		concl = a.ensureUndercutter(target)
+	default:
+		return "", fmt.Errorf("a question about the %s is asked with an argument (attack), not alone", locus)
+	}
+	id := a.nextArgID()
+	arg := &caes.Argument{
+		Id:         id,
+		Metadata:   caes.Metadata{"owner": asker, RoleKey: RoleQuestion, "target": targetArgID, "created_at": time.Now().UTC().Format(time.RFC3339)},
+		Scheme:     &caes.Scheme{Id: QuestionSchemeID, Weight: caes.ConstantWeighingFunction(weight)},
+		Conclusion: concl,
+	}
+	a.Graph.Arguments[id] = arg
+	concl.Args = append(concl.Args, arg)
+	return id, nil
+}
+
+// MakeIssue makes the statement (created if needed) and its opposing position
+// ¬statement the positions of an issue with the given proof standard, unless
+// it is already a position of one, and returns the statement's ID. A
+// debate's central claim is at issue from the start, so the claim standard
+// applies to it even before anyone rebuts it.
+func (a *Adapter) MakeIssue(stmtID string, standard caes.Standard) (string, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	s := a.findOrCreateStatement(stmtID)
+	if s.Issue == nil {
+		if _, err := a.opposingPosition(s, standard); err != nil {
+			return "", err
+		}
+	}
+	return s.Id, nil
+}

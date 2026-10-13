@@ -146,16 +146,18 @@ func instantiateTemplates(scheme *ASNode, bindings map[string]string) (premises 
 //
 // A move is a plain support (no target: a new argument), an attack (a
 // negative answer to a critical question about the target, or a direct
-// rebuttal, undercutter or undermining) or a defence (a support with a target:
+// rebuttal, undercutter or undermining), a defence (a support with a target:
 // a positive answer to a critical question, or a direct backing of a premise
-// or of the conclusion). The returned ValidatedAction carries the locus the
+// or of the conclusion) or a question (a critical question asked without an
+// answer, which the target's proponent must answer). The returned ValidatedAction carries the locus the
 // move is about and, for a premise or exception, its statement.
 //
 // Checks performed (from WAG plan §13, SRD §7.5):
 //
 //	S0: Move shape — an attack has a target and answers a CQ or names an
 //	    attack type (rebuttal, undercutter, undermining); a defence that answers
-//	    a CQ or names a premise has a target
+//	    a CQ or names a premise has a target; a question names a target and a
+//	    CQ (and no scheme: S1, S2, S5 and S6 do not apply to it)
 //	S1: Scheme existence — the NASCQ scheme ID must exist
 //	S2: Variable completeness — all scheme variables must have bindings,
 //	    except, on a move with a target, the scheme's answer variable
@@ -165,6 +167,8 @@ func instantiateTemplates(scheme *ASNode, bindings map[string]string) (premises 
 //	S5: Backup edge validity — if CQ-directed, the scheme must be a valid backup for the CQ
 //	S6: Template instantiation — substitute variables into English templates
 //	S7: Target argument exists — if attacking, the target must exist in the graph
+//	Q1: Question locus — a question alone can be about a premise or the
+//	    inference only; an exception or a counterclaim must be argued
 //	S8: Locus statement — a premise locus names a premise of the target (the
 //	    mover's TargetPremiseID, or the locus pattern with the target's
 //	    bindings); an exception locus designates an exception of the target
@@ -188,10 +192,31 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 			return nil, fmt.Errorf("S0: an attack must answer a critical question or name an attack type "+
 				"(rebuttal, undercutter, undermining); got %q", action.AttackType)
 		}
+	case "question":
+		if action.TargetArgID == "" || action.AnswersCQID == "" {
+			return nil, fmt.Errorf("S0: a question names a target argument and a critical question")
+		}
+		action.SchemeID, action.VariableBindings, action.AttackType = "", nil, ""
 	default:
-		return nil, fmt.Errorf("S0: unknown action type %q (want support or attack)", action.Type)
+		return nil, fmt.Errorf("S0: unknown action type %q (want support, attack or question)", action.Type)
 	}
 
+	va := &ValidatedAction{}
+	if action.Type != "question" {
+		var err error
+		if va, err = n.validateScheme(action); err != nil {
+			return nil, err
+		}
+		if action.TargetArgID == "" { // a plain support: a new argument
+			va.ProposedAction = action
+			return va, nil
+		}
+	}
+	return n.validateTarget(action, va, graph)
+}
+
+// validateScheme performs S1, S2 and S6 for a move made with a scheme.
+func (n *NASCQ) validateScheme(action ProposedAction) (*ValidatedAction, error) {
 	// S1: Scheme existence
 	scheme, ok := n.Schemes[action.SchemeID]
 	if !ok {
@@ -223,18 +248,18 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 
 	// S6: Template instantiation
 	instPremises, instConclusion := instantiateTemplates(scheme, action.VariableBindings)
-	va := &ValidatedAction{
+	return &ValidatedAction{
 		CarneadesSchemeID: scheme.CarneadesID,
 		InstPremises:      instPremises,
 		InstConclusion:    instConclusion,
 		Weight:            scheme.BaseWeight,
 		AnswerVariable:    answerVar,
-	}
-	if action.TargetArgID == "" { // a plain support: a new argument
-		va.ProposedAction = action
-		return va, nil
-	}
+	}, nil
+}
 
+// validateTarget performs the checks of a move with a target (S7, S3, Q1,
+// S5, S8) and completes va.
+func (n *NASCQ) validateTarget(action ProposedAction, va *ValidatedAction, graph GraphQuerier) (*ValidatedAction, error) {
 	// S7: Target argument exists
 	if graph == nil {
 		return nil, fmt.Errorf("S7: graph querier required for moves with a target")
@@ -289,9 +314,18 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 		action.AttackType = ""
 	}
 
+	// Q1: a question alone shifts the burden of proof to the proponent, so
+	// it can be about a premise (presumed until questioned) or the inference.
+	// An exception, or a counterclaim to the conclusion, is the asker's to
+	// prove: it is raised by an attack.
+	if action.Type == "question" && locus.Kind != LocusPremise && locus.Kind != LocusArgument {
+		return nil, fmt.Errorf("Q1: CQ %q is about the %s of %q: raise it with an argument (attack), not a question alone",
+			action.AnswersCQID, locus.Kind, action.TargetArgID)
+	}
+
 	// S5: Backup edge validity: an explicit backup edge, or a
 	// thesis-independent scheme (which backs every CQ).
-	if action.AnswersCQID != "" {
+	if action.AnswersCQID != "" && action.Type != "question" {
 		backed := false
 		for _, bs := range n.GetBackupSchemes(action.AnswersCQID) {
 			if bs.ID == action.SchemeID {

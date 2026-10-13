@@ -22,6 +22,9 @@ const (
 	// RolePresumption is a premise-less argument that makes a move's premise
 	// hold until it is attacked (see AddPresumption).
 	RolePresumption = "presumption"
+	// RoleQuestion is a premise-less argument that stands for a critical
+	// question asked without an argument (see RaiseQuestion).
+	RoleQuestion = "question"
 )
 
 // ArgumentRole returns the role recorded for an argument: RoleMain,
@@ -36,10 +39,11 @@ func ArgumentRole(arg *caes.Argument) string {
 }
 
 // IsAttackable reports whether players may target the argument with a
-// critical question: everything except exception and presumption arguments.
+// critical question: everything except exception, presumption and question
+// arguments.
 func IsAttackable(arg *caes.Argument) bool {
 	switch ArgumentRole(arg) {
-	case RoleException, RolePresumption:
+	case RoleException, RolePresumption, RoleQuestion:
 		return false
 	}
 	return arg != nil && !(arg.Conclusion != nil && arg.Conclusion.IsUndercutter && ArgumentRole(arg) == "")

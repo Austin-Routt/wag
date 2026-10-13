@@ -20,6 +20,7 @@ package game
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -31,11 +32,32 @@ import (
 // Configuration
 // -------------------------------------------------------------------------
 
-// ScoringConfig holds the Phase 1 scoring parameters.
+// Scoring models (ScoringConfig.Model).
+const (
+	// ScoringMove awards a move's points once, when it is made, from the
+	// labels right after it: BasePoints[label of its conclusion] × weight,
+	// plus the flat bonuses (the SRD's snapshot scoring). A later move that
+	// defeats the argument does not take the points back.
+	ScoringMove = "move"
+	// ScoringLive recomputes every score after every move from the current
+	// labels (the SRD's delta scoring): a player has, for each statement
+	// they argued for, BasePoints[its label] × the weight of their best
+	// argument for it that is in force, plus UndercutterBonus for each
+	// argument their undercutters currently defeat, plus the flat points
+	// (penalties and proleptic bonuses). Arguments that are defeated lose
+	// their points, so the last mover does not keep points they no longer
+	// deserve, and arguing the same statement again earns nothing more.
+	ScoringLive = "live"
+)
+
+// ScoringConfig holds the scoring parameters.
 //
-// Phase 1 formula: score_delta = BasePoints[label] × weight + flat_bonus
-// Phase 2 adds multipliers and retroactive delta scoring (not implemented here).
+// Formula: score_delta = BasePoints[label] × weight + flat_bonus, awarded
+// once (ScoringMove) or kept up to date (ScoringLive).
 type ScoringConfig struct {
+	// Model is ScoringMove (the default, also for "") or ScoringLive.
+	Model string
+
 	BasePointsIn         float64 // points when conclusion is In (default: 10)
 	BasePointsUndecided  float64 // points when conclusion is Undecided (default: 2)
 	BasePointsOut        float64 // points when conclusion is Out (default: 0)
@@ -59,11 +81,59 @@ func DefaultScoringConfig() ScoringConfig {
 	}
 }
 
-// GameConfig holds all parameters for a game instance.
+// Objectives (GameConfig.Objective).
+const (
+	// ObjectivePoints: the highest score wins (a draw if tied).
+	ObjectivePoints = "points"
+	// ObjectiveClaim: a debate about a central claim. Even seats argue for
+	// it (pro, who bears the burden of proof), odd seats against it (con).
+	// Pro wins if the claim is In at the end, con otherwise; a single player
+	// argues both sides and gets the verdict only (solo belief revision).
+	ObjectiveClaim = "claim"
+)
+
+// GameConfig holds all parameters for a game instance. The termination
+// conditions combine: the game ends at the first one met (see
+// checkTermination). ModeConfig returns the presets.
 type GameConfig struct {
-	MaxTurns            int           // 0 = unlimited
+	// Mode is the name of the preset this configuration came from, for
+	// display only.
+	Mode string
+
+	MaxTurns            int           // maximum number of rounds (every player moves once a round); 0 = unlimited
 	AbstentionThreshold int           // consecutive all-abstain rounds to trigger end (default: 2)
 	Scoring             ScoringConfig // scoring parameters
+
+	// Objective is ObjectivePoints (the default, also for "") or
+	// ObjectiveClaim.
+	Objective string
+	// Claim is the central claim of ObjectiveClaim, as a statement ID; ""
+	// makes it the conclusion of pro's first argument.
+	Claim string
+	// ClaimStandard is the proof standard of the claim (the zero value is
+	// PE): it is at issue from the start, so pro's arguments must meet it.
+	// Carneades' CCE needs the best pro argument to outweigh the best con
+	// argument by more than 0.5, and BRD also needs the con side below 0.3.
+	ClaimStandard caes.Standard
+	// ConcedeOnPass (ObjectiveClaim): a side that passes while the verdict
+	// is against it concedes, as in persuasion dialogues (pro retracts a
+	// claim it cannot carry; con concedes one it cannot shake).
+	ConcedeOnPass bool
+
+	// TargetScore > 0 ends the game when a player's score reaches it.
+	TargetScore float64
+	// TimeLimit > 0 ends the game when that much time has passed since it
+	// began (the move made after it is not applied).
+	TimeLimit time.Duration
+	// MoveTimeLimit > 0 voids a move made later than that after the turn
+	// began: the turn passes (an abstention), or with MoveTimeoutLoses the
+	// player loses.
+	MoveTimeLimit    time.Duration
+	MoveTimeoutLoses bool
+	// AnswerWithin > 0: a player who leaves a question about their argument
+	// unanswered for that many of their own turns loses (critical-question
+	// play). Questions are tracked, but not enforced, when it is 0.
+	AnswerWithin int
 
 	// PresumptionWeight is the weight of the presumption that makes a move's
 	// premises hold until attacked (see carneades.AddPresumption). Any argued
@@ -105,6 +175,12 @@ type Player struct {
 	Score                  float64
 	SchemeUsageCounts      map[string]int // NASCQ scheme ID → times used
 	ConsecutiveAbstentions int
+
+	// Flat is the sum of the player's flat points (invalid-move penalties
+	// and proleptic bonuses), which ScoringLive adds to the live score.
+	Flat float64
+	// Resigned players no longer move.
+	Resigned bool
 }
 
 // newPlayer creates a Player with initialized maps.
@@ -133,6 +209,15 @@ type Move struct {
 	ScoreDelta   float64               // points awarded this turn
 	LabelsBefore map[string]caes.Label // statement labels before the move
 	LabelsAfter  map[string]caes.Label // statement labels after the move
+
+	// ScoreDeltas is every player's score change through this move: the
+	// mover's only under ScoringMove; anyone's under ScoringLive.
+	ScoreDeltas map[string]float64
+	// Scorable: the move's arguments can earn points (it is not an attack on
+	// the mover's own argument or on one already defeated).
+	Scorable bool
+	TimedOut bool // a void late move, recorded as an abstention
+	Resigned bool
 }
 
 // -------------------------------------------------------------------------
@@ -149,6 +234,10 @@ type TurnResult struct {
 	Error             string   // non-empty if the move was rejected
 	Terminated        bool     // true if the game ended after this turn
 	TerminationReason string   // why the game ended
+
+	ScoreDeltas map[string]float64 // every player's score change (see Move.ScoreDeltas)
+	TimedOut    bool               // the move came too late and was void
+	Outcome     *Outcome           // the result, once the game has ended
 }
 
 // -------------------------------------------------------------------------
@@ -175,12 +264,45 @@ type GameState struct {
 	roundHadMove      bool // a move was accepted in the current round
 	Terminated        bool
 	TerminationReason string
+	// Truncated: the game was cut off by a limit (rounds or time) rather
+	// than ended by play (gym's truncation).
+	Truncated bool
 
 	// LastRejection is why the last move was rejected, or "" if it was
 	// accepted. The player is still to move after a rejection, so an agent
 	// can read it (it is part of the JSON View) and try again.
 	LastRejection string
+
+	// Claim is the central claim of ObjectiveClaim, once set.
+	Claim string
+	// Questions are the critical questions asked without an argument
+	// (question moves), answered or not, in the order asked.
+	Questions []OpenQuestion
+	// Loser is the player who forfeited the game (resigned, left a question
+	// unanswered or ran out of time), if any.
+	Loser string
+
+	clock         func() time.Time
+	StartedAt     time.Time // when the game began (SetClock resets it)
+	TurnStartedAt time.Time // when the current turn began
 }
+
+// OpenQuestion is a critical question asked without an argument: the
+// target's proponent must answer it (a defence with the same question).
+type OpenQuestion struct {
+	ArgID       string // the question argument (carneades.RoleQuestion)
+	TargetArgID string
+	CQID        string
+	LocusStmtID string // the premise asked about; "" for the inference
+	Asker       string
+	Owner       string // the proponent of the target, who must answer
+	AskedAt     int    // index of the question move in MoveHistory
+	AnsweredBy  string // the argument that answered it; "" while open
+	TurnsLeft   int    // the owner's turns left to answer (GameConfig.AnswerWithin)
+}
+
+// Open reports whether the question still awaits an answer.
+func (q OpenQuestion) Open() bool { return q.AnsweredBy == "" }
 
 // NewGame creates a game state from the given configuration, adapter, NASCQ,
 // and player names. The adapter should already have schemes loaded (via YAML
@@ -211,7 +333,46 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 		CurrentTurn: 1,
 	}
 	gs.bridge = &graphBridge{gs: gs}
+	gs.SetClock(nil)
+	if config.Objective == ObjectiveClaim && config.Claim != "" {
+		if id, err := adapter.MakeIssue(config.Claim, config.ClaimStandard); err == nil {
+			gs.Claim = id
+			adapter.Evaluate()
+		}
+	}
 	return gs
+}
+
+// SetClock sets the game's time source (nil: time.Now) and restarts the game
+// and turn clocks from it. Tests inject a fake clock.
+func (gs *GameState) SetClock(now func() time.Time) {
+	if now == nil {
+		now = time.Now
+	}
+	gs.clock = now
+	gs.StartedAt = now()
+	gs.TurnStartedAt = gs.StartedAt
+}
+
+func (gs *GameState) now() time.Time { return gs.clock() }
+
+func (c GameConfig) live() bool { return c.Scoring.Model == ScoringLive }
+
+// Side returns "pro" or "con" for a player of an ObjectiveClaim game with two
+// or more players (even seats are pro), and "" otherwise.
+func (gs *GameState) Side(playerID string) string {
+	if gs.Config.Objective != ObjectiveClaim || len(gs.Players) < 2 {
+		return ""
+	}
+	for i, p := range gs.Players {
+		if p.ID == playerID {
+			if i%2 == 0 {
+				return "pro"
+			}
+			return "con"
+		}
+	}
+	return ""
 }
 
 // ActivePlayer returns the player whose turn it currently is.

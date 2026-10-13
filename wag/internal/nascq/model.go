@@ -178,7 +178,7 @@ func (l Locus) AttackType() string {
 // The NASCQ layer validates this against its structural rules (S1–S8)
 // and produces a ValidatedAction if all checks pass.
 type ProposedAction struct {
-	Type             string            `json:"type"`              // "support" or "attack"
+	Type             string            `json:"type"`              // "support", "attack", "question", "abstain" or "resign"
 	AttackType       string            `json:"attack_type"`       // "rebuttal", "undercutter", "undermining" (attacks only)
 	TargetArgID      string            `json:"target_arg_id"`     // ID of argument being attacked
 	TargetPremiseID  string            `json:"target_premise_id"` // for undermining: which premise

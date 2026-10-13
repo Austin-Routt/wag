@@ -9,7 +9,7 @@ import "sort"
 // player-supplied (human input or agent-generated).
 type ActionTemplate struct {
 	// Action structure
-	Type        string // "support" or "attack"
+	Type        string // "support", "attack" or "question"
 	AttackType  string // "rebuttal", "undercutter", "undermining" (attacks only)
 	SchemeID    string // NASCQ scheme ID
 	SchemeName  string // human-readable name
@@ -48,9 +48,11 @@ type ActionTemplate struct {
 //     a. Find the argument's NASCQ scheme (via reverse index)
 //     b. Get the ask-CQs for that scheme
 //     c. For each CQ, get backup schemes
-//     d. Generate attack templates for each (target, CQ, backup) triple;
-//     an undermining template carries the premise its CQ's pattern
-//     designates, and is left out if the target has no such premise
+//     d. Generate a question template for each (target, CQ) about a premise
+//     or the inference, and an attack and a defence template for each
+//     (target, CQ, backup) triple; a template about a premise or an
+//     exception carries the statement its CQ's pattern designates, and is
+//     left out if the target has no such premise
 //
 // Variable bindings are NOT included — the player/agent fills those in.
 func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTemplate {
@@ -115,6 +117,20 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 				premiseID = stmtID
 			}
 			attackType := locus.AttackType()
+
+			// A question alone (no scheme) about a premise or the inference
+			// (Q1 of Validate).
+			if locus.Kind == LocusPremise || locus.Kind == LocusArgument {
+				actions = append(actions, ActionTemplate{
+					Type:            "question",
+					AnswersCQID:     cqID,
+					CQName:          cq.Name,
+					TargetArgID:     argID,
+					TargetPremiseID: premiseID,
+					Locus:           locus,
+					LocusStmtID:     stmtID,
+				})
+			}
 
 			// Each backup scheme can back up either answer: the negative one
 			// (an attack) and the positive one (a defence, a support with a

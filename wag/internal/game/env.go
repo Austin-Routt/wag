@@ -92,10 +92,7 @@ func (e *Env) Step(action nascq.ProposedAction) (*StepResult, error) {
 
 	obs := e.gs.BuildObservation()
 
-	truncated := false
-	if result.Terminated && strings.Contains(result.TerminationReason, "max turns") {
-		truncated = true
-	}
+	truncated := result.Terminated && e.gs.Truncated
 
 	info := map[string]interface{}{
 		"accepted":  result.Accepted,
@@ -108,6 +105,7 @@ func (e *Env) Step(action nascq.ProposedAction) (*StepResult, error) {
 	}
 	if result.Terminated {
 		info["termination_reason"] = result.TerminationReason
+		info["outcome"] = result.Outcome
 	}
 
 	return &StepResult{
