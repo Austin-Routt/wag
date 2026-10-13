@@ -420,6 +420,22 @@ func (a *Adapter) Evaluate() (caes.Labelling, error) {
 	return l, nil
 }
 
+// GroundedLabels computes a fresh grounded labelling without applying it and
+// returns it by statement ID. Comparing it with the applied labels (or with
+// another call) checks that the labelling is a function of the graph alone:
+// Carneades walks its statement map in Go's random order, so a graph that
+// breaks one of its invariants can label differently from call to call.
+func (a *Adapter) GroundedLabels() map[string]caes.Label {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	l := a.Graph.GroundedLabelling()
+	out := make(map[string]caes.Label, len(a.Graph.Statements))
+	for id, s := range a.Graph.Statements {
+		out[id] = l[s]
+	}
+	return out
+}
+
 // IsAcyclic performs DFS cycle detection on the argument graph.
 // WAG enforces acyclic argument graphs as a game rule. Carneades itself
 // handles cycles gracefully (labeling cycle participants as Undecided),
@@ -657,12 +673,11 @@ func (a *Adapter) AddSupport(
 
 // AddRebuttal creates a rebuttal attack against a statement's conclusion.
 //
-// Semantics: a rebuttal argues for the negation of the target conclusion.
-// In Carneades, this is modeled by:
-//  1. Creating a negated statement ¬targetConclusionID.
-//  2. Creating or reusing an Issue that groups [target, ¬target] with the
-//     given proof standard (PE, CCE, or BRD).
-//  3. Creating a new argument concluding the negated statement.
+// Semantics: a rebuttal argues for the position opposing the target
+// conclusion (see opposingPosition): its negation ¬target, made a position of
+// a new Issue [target, ¬target] with the given proof standard; or, when the
+// target is already at issue, the other position of that issue. Rebutting a
+// rebuttal's conclusion ¬p therefore argues for p again.
 //
 // After evaluation, the Issue's Resolve method (caes.go line 1865-1903)
 // compares the strongest argument weights for each position. With PE,
@@ -693,29 +708,22 @@ func (a *Adapter) AddRebuttal(
 	if target == nil {
 		return nil, fmt.Errorf("target statement %q not found", targetConclusionID)
 	}
+	return a.argueAgainst(ownerID, carneadesSchemeID, target, premiseIDs, weight, proofStandard)
+}
 
-	// Create the negated statement using Carneades' ¬ prefix convention.
-	negID := "¬" + target.Id
-	negStmt := a.findOrCreateStatement(negID)
-	if negStmt.Text == "" {
-		negStmt.Text = "It is not the case that: " + target.Text
-	}
-
-	// Create or reuse an Issue grouping the original and negated statements.
-	issueID := "issue:" + target.Id
-	if _, ok := a.Graph.Issues[issueID]; !ok {
-		issue := &caes.Issue{
-			Id:        issueID,
-			Metadata:  caes.NewMetadata(),
-			Positions: []*caes.Statement{target, negStmt},
-			Standard:  proofStandard,
-		}
-		a.Graph.Issues[issueID] = issue
-		target.Issue = issue
-		negStmt.Issue = issue
-	}
-
-	// Resolve premise statements.
+// argueAgainst creates an argument from premiseIDs for the position opposing
+// target. It is the common part of AddRebuttal and AddUndermining.
+//
+// IMPORTANT: Caller must hold a.mu.
+func (a *Adapter) argueAgainst(
+	ownerID string,
+	carneadesSchemeID string,
+	target *caes.Statement,
+	premiseIDs []string,
+	weight float64,
+	proofStandard caes.Standard,
+) ([]string, error) {
+	// Resolve the premises before changing the graph.
 	premises := make([]*caes.Statement, 0, len(premiseIDs))
 	for _, pid := range premiseIDs {
 		ps := a.Graph.Statements[terms.Normalize(pid)]
@@ -724,12 +732,76 @@ func (a *Adapter) AddRebuttal(
 		}
 		premises = append(premises, ps)
 	}
-
-	argID, err := a.createArgument(ownerID, carneadesSchemeID, premises, negStmt, weight)
+	opposing, err := a.opposingPosition(target, proofStandard)
+	if err != nil {
+		return nil, err
+	}
+	argID, err := a.createArgument(ownerID, carneadesSchemeID, premises, opposing, weight)
 	if err != nil {
 		return nil, err
 	}
 	return []string{argID}, nil
+}
+
+// opposingPosition returns the statement that an attack on target argues for,
+// making sure that the two are the positions of one issue:
+//
+//   - a target already at issue: the other position of its issue (so the
+//     opposing position of ¬p, the conclusion of a rebuttal, is p);
+//   - otherwise its complement, ¬target (or p for a target ¬p), with a new
+//     issue [p, ¬p] under proofStandard.
+//
+// Carneades resolves an issue from each position's Issue pointer and assumes
+// that every statement is a position of at most one issue. Creating ¬¬p and a
+// second issue [¬p, ¬¬p] for a rebuttal of a rebuttal broke that assumption:
+// ¬p was a position of two issues, and its label depended on Go's map order
+// (in 21 of 30 runs ¬p and ¬¬p were both In, in the other 9 p stayed Out
+// although the counter-rebuttal outweighed the rebuttal).
+//
+// IMPORTANT: Caller must hold a.mu.
+func (a *Adapter) opposingPosition(target *caes.Statement, proofStandard caes.Standard) (*caes.Statement, error) {
+	if is := target.Issue; is != nil {
+		if len(is.Positions) != 2 {
+			return nil, fmt.Errorf("statement %q is one of %d positions of issue %q; argue for one of the other positions instead",
+				target.Id, len(is.Positions), is.Id)
+		}
+		if is.Positions[0] == target {
+			return is.Positions[1], nil
+		}
+		return is.Positions[0], nil
+	}
+	pos, neg := target, (*caes.Statement)(nil)
+	if strings.HasPrefix(target.Id, "¬") {
+		neg = target
+		pos = a.findOrCreateStatement(strings.TrimPrefix(target.Id, "¬"))
+	} else {
+		negID := "¬" + target.Id
+		_, existed := a.Graph.Statements[negID]
+		neg = a.findOrCreateStatement(negID)
+		if !existed {
+			neg.Text = "It is not the case that: " + target.Text
+		}
+	}
+	if pos.Issue != nil || neg.Issue != nil {
+		return nil, fmt.Errorf("the complement of %q is already a position of another issue", target.Id)
+	}
+	issueID := "issue:" + pos.Id
+	if _, exists := a.Graph.Issues[issueID]; exists {
+		return nil, fmt.Errorf("issue %q already exists without %q as a position", issueID, target.Id)
+	}
+	issue := &caes.Issue{
+		Id:        issueID,
+		Metadata:  caes.NewMetadata(),
+		Positions: []*caes.Statement{pos, neg},
+		Standard:  proofStandard,
+	}
+	a.Graph.Issues[issueID] = issue
+	pos.Issue = issue
+	neg.Issue = issue
+	if target == pos {
+		return neg, nil
+	}
+	return pos, nil
 }
 
 // AddUndercutter creates an undercutter attack against an argument.
@@ -810,10 +882,8 @@ func (a *Adapter) AddUndercutter(
 //
 // Semantics: undermining argues that a premise of an existing argument is false.
 // This is structurally identical to a rebuttal, but targets a premise rather
-// than a conclusion. In Carneades:
-//  1. Create a negated premise ¬targetPremiseID.
-//  2. Create or reuse an Issue grouping [premise, ¬premise].
-//  3. Create a new argument concluding the negated premise.
+// than a conclusion: the new argument concludes the position opposing the
+// premise (¬premise, at issue with the premise; see opposingPosition).
 //
 // If the negated premise wins the Issue resolution, the original premise
 // becomes Out. Any argument that uses that premise will then have its weight
@@ -846,41 +916,5 @@ func (a *Adapter) AddUndermining(
 	if target == nil {
 		return nil, fmt.Errorf("target premise %q not found", targetPremiseID)
 	}
-
-	// Create negated premise using Carneades' ¬ prefix convention.
-	negID := "¬" + target.Id
-	negStmt := a.findOrCreateStatement(negID)
-	if negStmt.Text == "" {
-		negStmt.Text = "It is not the case that: " + target.Text
-	}
-
-	// Create or reuse Issue.
-	issueID := "issue:" + target.Id
-	if _, ok := a.Graph.Issues[issueID]; !ok {
-		issue := &caes.Issue{
-			Id:        issueID,
-			Metadata:  caes.NewMetadata(),
-			Positions: []*caes.Statement{target, negStmt},
-			Standard:  proofStandard,
-		}
-		a.Graph.Issues[issueID] = issue
-		target.Issue = issue
-		negStmt.Issue = issue
-	}
-
-	// Resolve premise statements.
-	premises := make([]*caes.Statement, 0, len(premiseIDs))
-	for _, pid := range premiseIDs {
-		ps := a.Graph.Statements[terms.Normalize(pid)]
-		if ps == nil {
-			return nil, fmt.Errorf("premise statement %q not found", pid)
-		}
-		premises = append(premises, ps)
-	}
-
-	argID, err := a.createArgument(ownerID, carneadesSchemeID, premises, negStmt, weight)
-	if err != nil {
-		return nil, err
-	}
-	return []string{argID}, nil
+	return a.argueAgainst(ownerID, carneadesSchemeID, target, premiseIDs, weight, proofStandard)
 }
