@@ -74,7 +74,7 @@ var wordPool = map[string][]string{
 	},
 	"entity": {
 		"government", "ipcc", "world_bank",
-		"epa", "who", "eu_commission",
+		"epa", "world_health_org", "eu_commission",
 		"harvard_study", "nasa", "un_panel",
 	},
 	"domain": {
@@ -141,6 +141,12 @@ func (a *RandomAgent) Name() string { return a.name }
 func (a *RandomAgent) Seed() int64 { return a.seed }
 
 func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
+	// In critical-question play, a question left unanswered loses: answer
+	// one.
+	if answers := dueAnswers(obs); len(answers) > 0 && obs.GameState.Config.AnswerWithin > 0 {
+		return fill(a.rng, answers[a.rng.Intn(len(answers))])
+	}
+
 	// Randomly abstain.
 	if a.rng.Float64() < a.abstainProb {
 		return nascq.ProposedAction{Type: "abstain"}
@@ -150,12 +156,13 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 		return nascq.ProposedAction{Type: "abstain"}
 	}
 
-	// Filter by type preference.
+	// Filter by type preference: arguments and defences, or attacks and
+	// questions.
 	var candidates []nascq.ActionTemplate
 	for _, tmpl := range obs.AvailableActions {
 		if tmpl.Type == "support" && a.rng.Float64() < a.supportBias {
 			candidates = append(candidates, tmpl)
-		} else if tmpl.Type == "attack" && a.rng.Float64() >= a.supportBias {
+		} else if tmpl.Type != "support" && a.rng.Float64() >= a.supportBias {
 			candidates = append(candidates, tmpl)
 		}
 	}
@@ -165,16 +172,23 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	}
 
 	// Pick a random action template.
-	tmpl := candidates[a.rng.Intn(len(candidates))]
+	return fill(a.rng, candidates[a.rng.Intn(len(candidates))])
+}
 
-	// Fill in random variable bindings, in sorted variable order so that the
-	// random draws do not depend on map iteration order.
-	bindings := make(map[string]string)
-	for _, varName := range carneades.SortedKeys(tmpl.Variables) {
-		bindings[varName] = randomWord(a.rng, tmpl.Variables[varName].Type)
+// fill makes an action of the template with random variable bindings, drawn
+// in sorted variable order so that the draws do not depend on map iteration
+// order. The answer variable is left to the game.
+func fill(rng *rand.Rand, tmpl nascq.ActionTemplate) nascq.ProposedAction {
+	var bindings map[string]string
+	if len(tmpl.Variables) > 0 {
+		bindings = make(map[string]string, len(tmpl.Variables))
+		for _, varName := range carneades.SortedKeys(tmpl.Variables) {
+			if varName != tmpl.AnswerVariable {
+				bindings[varName] = randomWord(rng, tmpl.Variables[varName].Type)
+			}
+		}
 	}
-
-	action := nascq.ProposedAction{
+	return nascq.ProposedAction{
 		Type:             tmpl.Type,
 		AttackType:       tmpl.AttackType,
 		SchemeID:         tmpl.SchemeID,
@@ -183,8 +197,23 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 		TargetPremiseID:  tmpl.TargetPremiseID,
 		VariableBindings: bindings,
 	}
+}
 
-	return action
+// dueAnswers returns the templates that answer an open question about one of
+// the active player's arguments.
+func dueAnswers(obs *Observation) []nascq.ActionTemplate {
+	var out []nascq.ActionTemplate
+	for _, q := range obs.GameState.Questions {
+		if !q.Open() || q.Owner != obs.ActivePlayer.ID {
+			continue
+		}
+		for _, t := range obs.AvailableActions {
+			if t.Type == "support" && t.TargetArgID == q.TargetArgID && t.AnswersCQID == q.CQID {
+				out = append(out, t)
+			}
+		}
+	}
+	return out
 }
 
 // -------------------------------------------------------------------------
@@ -192,14 +221,16 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 // -------------------------------------------------------------------------
 
 // GreedyAgent looks one move ahead: it tries the available action templates
-// (up to MaxCandidates of them) with trialsPerAction sets of random bindings, playing each through
-// GameState.Simulate (which restores the game afterwards), and plays the one
-// with the highest score delta; it abstains if no trial is accepted. Ties go
-// to the first in enumeration order, so a seeded agent is reproducible.
+// (up to MaxCandidates of them, plus every answer to a question it owes)
+// with trialsPerAction sets of random bindings, and passing, each through
+// GameState.SimulateThen (which restores the game afterwards), and plays the
+// one that leaves it best placed (Value). Ties go to the first in
+// enumeration order, passing last, so a seeded agent is reproducible.
 //
 // It used to score templates by a fixed estimate (base weight × 10, +15 for
 // an undercutter) without trying them, so it preferred undercutters whether
-// or not they would succeed or score.
+// or not they would succeed or score; then by the mover's score delta, which
+// under live scoring misses what a move takes from the others.
 type GreedyAgent struct {
 	name            string
 	seed            int64
@@ -252,33 +283,66 @@ func (a *GreedyAgent) candidates(all []nascq.ActionTemplate) []nascq.ActionTempl
 func (a *GreedyAgent) Seed() int64 { return a.seed }
 
 func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
-	best := nascq.ProposedAction{Type: "abstain"}
-	bestScore, found := 0.0, false
-	for _, tmpl := range a.candidates(obs.AvailableActions) {
-		for trial := 0; trial < a.trialsPerAction; trial++ {
-			bindings := make(map[string]string)
-			for _, varName := range carneades.SortedKeys(tmpl.Variables) {
-				bindings[varName] = randomWord(a.rng, tmpl.Variables[varName].Type)
-			}
-			action := nascq.ProposedAction{
-				Type:             tmpl.Type,
-				AttackType:       tmpl.AttackType,
-				SchemeID:         tmpl.SchemeID,
-				AnswersCQID:      tmpl.AnswersCQID,
-				TargetArgID:      tmpl.TargetArgID,
-				TargetPremiseID:  tmpl.TargetPremiseID,
-				VariableBindings: bindings,
-			}
-			r, err := obs.GameState.Simulate(action)
-			if err != nil || r == nil || !r.Accepted {
-				continue
-			}
-			if !found || r.ScoreDelta > bestScore {
-				best, bestScore, found = action, r.ScoreDelta, true
-			}
+	me := obs.ActivePlayer.ID
+	gs := obs.GameState
+	var best nascq.ProposedAction
+	bestValue, found := 0.0, false
+	try := func(action nascq.ProposedAction) {
+		value := 0.0
+		r, err := gs.SimulateThen(action, func(after *GameState) { value = Value(after, me) })
+		if err != nil || r == nil || !r.Accepted {
+			return
+		}
+		if !found || value > bestValue {
+			best, bestValue, found = action, value, true
 		}
 	}
+	tmpls := a.candidates(obs.AvailableActions)
+	if due := dueAnswers(obs); len(due) > 0 {
+		tmpls = append(append([]nascq.ActionTemplate{}, due...), tmpls...)
+	}
+	for _, tmpl := range tmpls {
+		trials := a.trialsPerAction
+		if len(tmpl.Variables) == 0 {
+			trials = 1 // a question: nothing to vary
+		}
+		for trial := 0; trial < trials; trial++ {
+			try(fill(a.rng, tmpl))
+		}
+	}
+	try(nascq.ProposedAction{Type: "abstain"})
+	if !found {
+		return nascq.ProposedAction{Type: "abstain"}
+	}
 	return best
+}
+
+// Value is how well placed the player is: a won game is worth 1e6 and a lost
+// one -1e6; otherwise their lead in score over the best of the others, plus
+// 100 in a debate while the verdict favours their side.
+func Value(gs *GameState, playerID string) float64 {
+	if gs.Terminated {
+		o := gs.Outcome()
+		switch {
+		case o.Winner == playerID:
+			return 1e6
+		case o.Winner != "" || o.Loser == playerID:
+			return -1e6
+		}
+	}
+	mine, others, seen := 0.0, 0.0, false
+	for _, p := range gs.Players {
+		if p.ID == playerID {
+			mine = p.Score
+		} else if !seen || p.Score > others {
+			others, seen = p.Score, true
+		}
+	}
+	v := mine - others
+	if gs.Config.Objective == ObjectiveClaim && len(gs.Players) > 1 && gs.verdictFavours(playerID) {
+		v += 100
+	}
+	return v
 }
 
 // -------------------------------------------------------------------------

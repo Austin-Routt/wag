@@ -19,7 +19,14 @@ import (
 // nascq.ProposedAction (which has JSON tags), filling in the variables of one
 // of the actions.
 type View struct {
-	Turn              int             `json:"turn"`
+	Turn              int             `json:"turn"` // the round: every player moves once a round
+	Mode              string          `json:"mode,omitempty"`
+	Objective         string          `json:"objective"`           // "points" or "claim"
+	Claim             string          `json:"claim,omitempty"`     // the debate's claim, once made
+	Verdict           string          `json:"verdict,omitempty"`   // the claim's label so far
+	Side              string          `json:"side,omitempty"`      // the active player's side: "pro" or "con"
+	Questions         []QuestionView  `json:"questions,omitempty"` // open questions
+	Outcome           *Outcome        `json:"outcome,omitempty"`   // once the game is over
 	ActivePlayer      string          `json:"active_player"`
 	Players           []PlayerView    `json:"players"`
 	Statements        []StatementView `json:"statements"`
@@ -33,8 +40,21 @@ type View struct {
 
 // PlayerView is a player and their score.
 type PlayerView struct {
-	ID    string  `json:"id"`
-	Score float64 `json:"score"`
+	ID       string  `json:"id"`
+	Score    float64 `json:"score"`
+	Side     string  `json:"side,omitempty"`
+	Resigned bool    `json:"resigned,omitempty"`
+}
+
+// QuestionView is an open question: Owner must answer it with a defence
+// (type "support", the same target and answers_cq_id).
+type QuestionView struct {
+	Asker       string `json:"asker"`
+	Owner       string `json:"owner"`
+	TargetArgID string `json:"target_arg_id"`
+	CQID        string `json:"answers_cq_id"`
+	Question    string `json:"question"`
+	TurnsLeft   int    `json:"turns_left,omitempty"` // with answer_within: the owner's turns left to answer
 }
 
 // StatementView is a statement of an argument on the board.
@@ -63,19 +83,26 @@ type IssueView struct {
 	Standard  string   `json:"standard"`
 }
 
-// ActionView is one legal move, to be completed with variable bindings.
+// ActionView is one legal move, to be completed with variable bindings. Moves
+// that need none are always legal too: {"type":"abstain"} and
+// {"type":"resign"}.
 type ActionView struct {
-	Type            string                        `json:"type"` // "support" or "attack"
+	// Type is "support" (a new argument, or with a target a defence: a
+	// positive answer), "attack" (a negative answer) or "question" (asked
+	// without an argument: no scheme, no variables).
+	Type            string                        `json:"type"`
 	AttackType      string                        `json:"attack_type,omitempty"`
-	SchemeID        string                        `json:"scheme_id"`
-	SchemeName      string                        `json:"scheme_name"`
+	Locus           string                        `json:"locus,omitempty"` // what the move is about: premise, exception, conclusion or argument
+	SchemeID        string                        `json:"scheme_id,omitempty"`
+	SchemeName      string                        `json:"scheme_name,omitempty"`
 	AnswersCQID     string                        `json:"answers_cq_id,omitempty"`
 	Question        string                        `json:"question,omitempty"` // the CQ, with the target's bindings
 	TargetArgID     string                        `json:"target_arg_id,omitempty"`
 	TargetPremiseID string                        `json:"target_premise_id,omitempty"`
-	Variables       map[string]nascq.VariableSpec `json:"variables"`
+	Variables       map[string]nascq.VariableSpec `json:"variables"` // to bind (not the answer variable)
 	VariableOrder   []string                      `json:"variable_order"`
-	Premises        []string                      `json:"premises"` // English templates with {Var} placeholders
+	AnswerVariable  string                        `json:"answer_variable,omitempty"` // bound to the answer by the game
+	Premises        []string                      `json:"premises"`                  // English templates with {Var} placeholders
 	Concludes       string                        `json:"concludes"`
 }
 
@@ -83,13 +110,33 @@ type ActionView struct {
 func (gs *GameState) BuildView() *View {
 	v := &View{
 		Turn:              gs.CurrentTurn,
+		Mode:              gs.Config.Mode,
+		Objective:         ObjectivePoints,
+		Side:              gs.Side(gs.ActivePlayer().ID),
 		ActivePlayer:      gs.ActivePlayer().ID,
 		LastRejection:     gs.LastRejection,
 		Terminated:        gs.Terminated,
 		TerminationReason: gs.TerminationReason,
 	}
+	if gs.Config.Objective == ObjectiveClaim {
+		v.Objective, v.Claim = ObjectiveClaim, gs.Claim
+		v.Verdict = gs.Outcome().Verdict
+	}
+	if gs.Terminated {
+		v.Outcome = gs.Outcome()
+	}
 	for _, p := range gs.Players {
-		v.Players = append(v.Players, PlayerView{ID: p.ID, Score: p.Score})
+		v.Players = append(v.Players, PlayerView{ID: p.ID, Score: p.Score, Side: gs.Side(p.ID), Resigned: p.Resigned})
+	}
+	for _, q := range gs.Questions {
+		if q.Open() {
+			qv := QuestionView{Asker: q.Asker, Owner: q.Owner, TargetArgID: q.TargetArgID, CQID: q.CQID,
+				Question: gs.QuestionText(q.CQID, q.TargetArgID)}
+			if gs.Config.AnswerWithin > 0 {
+				qv.TurnsLeft = q.TurnsLeft
+			}
+			v.Questions = append(v.Questions, qv)
+		}
 	}
 
 	ag := gs.Adapter.Graph
@@ -99,12 +146,10 @@ func (gs *GameState) BuildView() *View {
 			undercuts[u] = append(undercuts[u], id)
 		}
 	}
-	onBoard := map[*caes.Statement]bool{}
+	shown := map[*caes.Statement]bool{}
 	for _, id := range sortedArgIDs(gs) {
 		arg := ag.Arguments[id]
-		role := carneades.ArgumentRole(arg)
-		if arg.Conclusion == nil || role == carneades.RoleException || role == carneades.RolePresumption ||
-			(role == "" && arg.Conclusion.IsUndercutter) {
+		if !onBoard(arg) {
 			continue
 		}
 		av := ArgumentView{ID: id, Conclusion: arg.Conclusion.Id, Weight: arg.Weight}
@@ -117,12 +162,12 @@ func (gs *GameState) BuildView() *View {
 		}
 		for _, p := range arg.Premises {
 			av.Premises = append(av.Premises, p.Stmt.Id)
-			onBoard[p.Stmt] = true
+			shown[p.Stmt] = true
 		}
 		if arg.Conclusion.IsUndercutter {
 			av.Undercuts = undercuts[arg.Conclusion]
 		}
-		onBoard[arg.Conclusion] = true
+		shown[arg.Conclusion] = true
 		v.Arguments = append(v.Arguments, av)
 	}
 	for _, id := range carneades.SortedKeys(ag.Issues) {
@@ -130,16 +175,16 @@ func (gs *GameState) BuildView() *View {
 		iv := IssueView{ID: id, Standard: standardName(is.Standard)}
 		for _, p := range is.Positions {
 			iv.Positions = append(iv.Positions, p.Id)
-			onBoard[p] = true
+			shown[p] = true
 		}
 		v.Issues = append(v.Issues, iv)
 	}
 	for _, id := range carneades.SortedKeys(ag.Statements) {
 		s := ag.Statements[id]
-		if !onBoard[s] {
+		if !shown[s] {
 			continue
 		}
-		sv := StatementView{ID: id, Text: statementText(s), Label: strings.ToLower(s.Label.String())}
+		sv := StatementView{ID: id, Text: gs.Say(id), Label: strings.ToLower(s.Label.String())}
 		if s.Issue != nil {
 			sv.Issue = s.Issue.Id
 		}
@@ -147,13 +192,18 @@ func (gs *GameState) BuildView() *View {
 	}
 
 	for _, a := range gs.BuildObservation().AvailableActions {
-		av := ActionView{Type: a.Type, AttackType: a.CaesAttackType, SchemeID: a.SchemeID, SchemeName: a.SchemeName,
-			AnswersCQID: a.AnswersCQID, TargetArgID: a.TargetArgID, TargetPremiseID: a.TargetPremiseID,
-			Variables: a.Variables, VariableOrder: variableOrder(a), Premises: a.PremiseTemplatesEN,
-			Concludes: a.ConclusionTemplateEN}
-		if a.Type == "attack" {
+		vars := map[string]nascq.VariableSpec{}
+		for k, spec := range a.Variables {
+			if k != a.AnswerVariable {
+				vars[k] = spec
+			}
+		}
+		av := ActionView{Type: a.Type, AttackType: a.CaesAttackType, Locus: a.Locus.Kind, SchemeID: a.SchemeID,
+			SchemeName: a.SchemeName, AnswersCQID: a.AnswersCQID, TargetArgID: a.TargetArgID,
+			TargetPremiseID: a.TargetPremiseID, Variables: vars, VariableOrder: variableOrder(a),
+			AnswerVariable: a.AnswerVariable, Premises: a.PremiseTemplatesEN, Concludes: gs.Effect(a, nil)}
+		if a.TargetArgID != "" {
 			av.Question = gs.QuestionText(a.AnswersCQID, a.TargetArgID)
-			av.Concludes = attackEffect(gs, a)
 		}
 		v.Actions = append(v.Actions, av)
 	}
@@ -179,7 +229,11 @@ func standardName(s caes.Standard) string {
 //	{"type":"support","scheme_id":"AS:sign","variable_bindings":{"A":"smoke","B":"fire"}}
 //	{"type":"attack","scheme_id":"AS:sign","answers_cq_id":"CQ:possibility","target_arg_id":"a1",
 //	 "variable_bindings":{"A":"no_majority","B":"cannot_pass"}}
+//	{"type":"support","scheme_id":"AS:expert_opinion","answers_cq_id":"CQ:possibility","target_arg_id":"a1",
+//	 "variable_bindings":{"W":"treasury","D":"fiscal policy"}}
+//	{"type":"question","answers_cq_id":"CQ:possibility","target_arg_id":"a1"}
 //	{"type":"abstain"}
+//	{"type":"resign"}
 //
 // A rejected move is followed by a new View whose last_rejection says why. A
 // line that is not an action is reported the same way; end of input abstains.

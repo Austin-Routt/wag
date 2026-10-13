@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -14,8 +15,9 @@ type GameResult struct {
 	AbstainCount   int
 	InvalidCount   int // rejected moves (retried)
 	Scores         map[string]float64
-	Winner         string         // playerID with highest score, or "tie"
+	Winner         string         // the winner's player ID (Outcome), or "tie" if there is none
 	WinnerSeat     int            // index of the winner in turn order, or -1 for a tie
+	Verdict        string         // ObjectiveClaim: the claim's final label
 	MoveKinds      map[string]int // accepted moves by kind: "support/<scheme>" or "attack/<attack type>/<scheme>"
 	Reason         string         // termination reason
 	StatementCount int
@@ -139,8 +141,12 @@ func RunGame(
 					result.AbstainCount++
 				} else {
 					result.MoveCount++
-					result.MoveKinds[moveKind(gs.MoveHistory[len(gs.MoveHistory)-1].Action)]++
+					result.MoveKinds[moveKind(gs.MoveHistory[len(gs.MoveHistory)-1])]++
 				}
+				break
+			}
+			if tr.Terminated { // the game clock ran out, or a late move lost
+				turnResult = tr
 				break
 			}
 
@@ -167,31 +173,25 @@ done:
 		result.TurnsPlayed = len(gs.MoveHistory)
 	}
 	result.Reason = gs.TerminationReason
+	if !gs.Terminated && result.Reason == "" {
+		result.Reason = fmt.Sprintf("runner stopped after %d turns", iteration)
+	}
 	result.StatementCount = len(gs.Adapter.Graph.Statements)
 	result.ArgumentCount = len(gs.Adapter.Graph.Arguments)
 	result.IssueCount = len(gs.Adapter.Graph.Issues)
 	result.MoveDigest = gs.MoveDigest()
 
-	// Scores and winner.
-	bestScore := -1e9
-	for i, p := range gs.Players {
-		result.Scores[p.ID] = p.Score
-		if p.Score > bestScore {
-			bestScore = p.Score
-			result.Winner = p.ID
-			result.WinnerSeat = i
-		}
-	}
-	// Check for tie.
-	tieCount := 0
+	// Scores and winner, by the game's objective (Outcome).
+	o := gs.Outcome()
+	result.Verdict = o.Verdict
 	for _, p := range gs.Players {
-		if p.Score == bestScore {
-			tieCount++
-		}
+		result.Scores[p.ID] = p.Score
 	}
-	if tieCount > 1 {
-		result.Winner = "tie"
-		result.WinnerSeat = -1
+	result.Winner, result.WinnerSeat = "tie", -1
+	for i, p := range gs.Players {
+		if p.ID == o.Winner {
+			result.Winner, result.WinnerSeat = p.ID, i
+		}
 	}
 
 	return
@@ -215,6 +215,8 @@ type BatchResult struct {
 	SeatWins      map[int]int        // wins by seat (index in turn order): a first- or last-mover advantage shows here
 	AvgScores     map[string]float64 // playerName → mean final score
 	MoveKinds     map[string]int     // accepted moves by kind, over all games (see GameResult.MoveKinds)
+	Verdicts      map[string]int     // ObjectiveClaim: final verdicts ("In", "Out", ...)
+	Reasons       map[string]int     // why the games ended
 }
 
 // RunBatch plays multiple games and collects aggregate statistics.
@@ -232,6 +234,8 @@ func RunBatch(
 		SeatWins:  make(map[int]int),
 		AvgScores: make(map[string]float64),
 		MoveKinds: make(map[string]int),
+		Verdicts:  make(map[string]int),
+		Reasons:   make(map[string]int),
 	}
 
 	totalTurns := 0
@@ -261,6 +265,10 @@ func RunBatch(
 		for k, n := range result.MoveKinds {
 			br.MoveKinds[k] += n
 		}
+		if result.Verdict != "" {
+			br.Verdicts[result.Verdict]++
+		}
+		br.Reasons[reasonKind(result.Reason)]++
 
 		br.TotalMoves += result.MoveCount
 		br.TotalAbstains += result.AbstainCount
@@ -291,9 +299,29 @@ func RunBatch(
 }
 
 // moveKind classifies an accepted move for the batch statistics.
-func moveKind(a nascq.ProposedAction) string {
-	if a.Type == "attack" {
+func moveKind(m Move) string {
+	a := m.Action
+	switch {
+	case m.Resigned:
+		return "resign"
+	case a.Type == "question":
+		return "question/" + a.AnswersCQID
+	case a.Type == "attack":
 		return "attack/" + a.AttackType + "/" + a.SchemeID
+	case a.TargetArgID != "":
+		return "defence/" + a.SchemeID
 	}
 	return a.Type + "/" + a.SchemeID
+}
+
+// reasonKind is a termination reason without the players' names and numbers,
+// for counting.
+func reasonKind(r string) string {
+	for _, k := range []string{"resigned", "unanswered", "ran out of time", "time limit", "target score",
+		"max rounds", "abstained", "burden of proof", "conceded", "runner stopped", "error"} {
+		if strings.Contains(r, k) {
+			return k
+		}
+	}
+	return r
 }

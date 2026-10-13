@@ -137,23 +137,61 @@ func (e *Env) Render() string {
 func RenderState(gs *GameState) string {
 	var b strings.Builder
 
-	// Header.
+	// Header: the round (every player moves once a round), the mode, the
+	// claim of a debate and its verdict so far, the scores.
 	active := gs.ActivePlayer()
 	fmt.Fprintf(&b, "\n══════════════════════════════════════════════\n")
-	fmt.Fprintf(&b, "  Turn %d | %s's turn\n", gs.CurrentTurn, active.Name)
+	mode := ""
+	if gs.Config.Mode != "" {
+		mode = " | " + gs.Config.Mode
+	}
+	side := ""
+	if sd := gs.Side(active.ID); sd != "" {
+		side = " (" + sd + ")"
+	}
+	fmt.Fprintf(&b, "  Round %d%s | %s's turn%s\n", gs.CurrentTurn, mode, active.Name, side)
+	if gs.Config.Objective == ObjectiveClaim {
+		if gs.Claim == "" {
+			fmt.Fprintf(&b, "  Claim: (pro's first argument will state it)\n")
+		} else {
+			fmt.Fprintf(&b, "  Claim: %s — %s\n", gs.Say(gs.Claim), labelString(gs.Adapter.Graph.Statements[gs.Claim].Label))
+		}
+	}
 	fmt.Fprintf(&b, "  Scores:")
 	for _, p := range gs.Players {
 		marker := " "
 		if p.ID == active.ID {
 			marker = "►"
 		}
-		fmt.Fprintf(&b, "  %s%s: %.2f", marker, p.Name, p.Score)
+		gone := ""
+		if p.Resigned {
+			gone = " (resigned)"
+		}
+		fmt.Fprintf(&b, "  %s%s: %.2f%s", marker, p.Name, p.Score, gone)
 	}
 	fmt.Fprintf(&b, "\n══════════════════════════════════════════════\n")
 
+	open := 0
+	for _, q := range gs.Questions {
+		if !q.Open() {
+			continue
+		}
+		if open == 0 {
+			fmt.Fprintf(&b, "\n  Open questions:\n")
+		}
+		open++
+		due := ""
+		if gs.Config.AnswerWithin > 0 {
+			due = fmt.Sprintf("  (%s must answer within %d turn(s))", q.Owner, q.TurnsLeft)
+		}
+		fmt.Fprintf(&b, "    ? %s asks %s about %s: %s%s\n", q.Asker, q.Owner, q.TargetArgID,
+			gs.QuestionText(q.CQID, q.TargetArgID), due)
+	}
+
 	// Arguments in the graph: every argument a player put forward (attacks
-	// included), with its premises and their labels. Exception and
-	// presumption arguments are structure, shown through the labels.
+	// included), with its premises and their labels. Exception, presumption
+	// and question arguments are structure, shown through the labels and the
+	// open questions.
 	undercuts := map[*caes.Statement][]string{} // undercutter statement -> the arguments it undercuts
 	for _, id := range sortedArgIDs(gs) {
 		if u := gs.Adapter.Graph.Arguments[id].Undercutter; u != nil {
@@ -163,9 +201,7 @@ func RenderState(gs *GameState) string {
 	shown := 0
 	for _, argID := range sortedArgIDs(gs) {
 		arg := gs.Adapter.Graph.Arguments[argID]
-		role := carneades.ArgumentRole(arg)
-		if arg.Conclusion == nil || role == carneades.RoleException || role == carneades.RolePresumption ||
-			(role == "" && arg.Conclusion.IsUndercutter) {
+		if !onBoard(arg) {
 			continue
 		}
 		if shown == 0 {
@@ -173,25 +209,20 @@ func RenderState(gs *GameState) string {
 		}
 		shown++
 
-		conclusionText := statementText(arg.Conclusion)
+		conclusionText := gs.Say(arg.Conclusion.Id)
 		if targets := undercuts[arg.Conclusion]; arg.Conclusion.IsUndercutter && len(targets) > 0 {
-			conclusionText = "undercuts " + strings.Join(targets, ", ")
+			conclusionText = "Undercuts " + strings.Join(targets, ", ") + ": the inference does not hold."
 		}
-		owner := "system"
-		if o, ok := arg.Metadata["owner"].(string); ok {
-			owner = o
+		force := "in force"
+		if arg.Weight == 0 {
+			force = "out of force"
 		}
-		schemeID := ""
-		if arg.Scheme != nil {
-			schemeID = arg.Scheme.Id
-		}
-
 		fmt.Fprintf(&b, "    [%s] %s\n", argID, conclusionText)
-		fmt.Fprintf(&b, "         Label: %-10s  Scheme: %-25s  Owner: %s\n",
-			labelString(arg.Conclusion.Label), schemeID, owner)
+		fmt.Fprintf(&b, "         %-9s | %s | %s | %s\n",
+			labelString(arg.Conclusion.Label), gs.SchemeName(arg), ownerOf(arg), force)
 		for _, p := range arg.Premises {
 			if p.Stmt != nil {
-				fmt.Fprintf(&b, "           ← %-9s %s\n", labelString(p.Stmt.Label), statementText(p.Stmt))
+				fmt.Fprintf(&b, "           ← %-9s %s\n", labelString(p.Stmt.Label), gs.Say(p.Stmt.Id))
 			}
 		}
 	}
@@ -202,12 +233,13 @@ func RenderState(gs *GameState) string {
 	return b.String()
 }
 
-// statementText is the statement's text, or its ID if it has none.
-func statementText(s *caes.Statement) string {
-	if s.Text != "" {
-		return s.Text
-	}
-	return s.Id
+// onBoard reports whether an argument is shown on the board: one a player
+// put forward, not the structure of a scheme (exception arguments,
+// presumptions) or a question.
+func onBoard(arg *caes.Argument) bool {
+	role := carneades.ArgumentRole(arg)
+	return arg != nil && arg.Conclusion != nil && role != carneades.RoleException && role != carneades.RolePresumption &&
+		role != carneades.RoleQuestion && !(role == "" && arg.Conclusion.IsUndercutter)
 }
 
 // labelString returns a human-friendly label with visual indicator.

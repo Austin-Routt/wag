@@ -5,10 +5,11 @@ package game
 // game loop as AI agents.
 //
 // The wizard guides the player step-by-step:
-//   1. Show game state (arguments, scores, turn)
-//   2. Choose action type (support / attack / abstain)
-//   3. If support: select scheme → fill variables
-//   4. If attack: select target → select CQ → select backup scheme → fill variables
+//   1. Show game state (arguments, scores, round, open questions)
+//   2. Choose what to do (argue / attack / defend / question / pass / resign)
+//   3. To argue: select scheme → fill variables
+//   4. To attack or defend: select target → select CQ → select backup scheme
+//      → fill variables; to question: select target → select CQ
 //   5. Return ProposedAction
 //
 // IO is injectable (io.Reader / io.Writer) for testability. Pass os.Stdin
@@ -22,6 +23,8 @@ import (
 	"strings"
 
 	"github.com/yourorg/wag/internal/nascq"
+
+	"github.com/carneades/carneades-4/src/engine/terms"
 )
 
 // HumanAgent implements Agent via interactive CLI prompts.
@@ -50,39 +53,48 @@ func (h *HumanAgent) Name() string { return h.name }
 // ChooseAction displays the game state and walks the player through
 // constructing a valid move via numbered menus.
 func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
-	// Display current state.
-	h.print(RenderState(obs.GameState))
+	gs := obs.GameState
+	h.print(RenderState(gs))
 
-	// Count available attack targets.
-	hasAttacks := false
-	for _, tmpl := range obs.AvailableActions {
-		if tmpl.Type == "attack" {
-			hasAttacks = true
-			break
+	// The questions this player must answer come first.
+	for _, q := range gs.Questions {
+		if q.Open() && q.Owner == obs.ActivePlayer.ID {
+			h.printf("\n  ! %s asks you about %s: %s\n    Answer it: Defend → %s → %s.\n",
+				q.Asker, q.TargetArgID, gs.QuestionText(q.CQID, q.TargetArgID), q.TargetArgID, gs.NASCQ.GetCQ(q.CQID).Name)
 		}
 	}
 
-	// Action type menu.
-	h.print("\n  What would you like to do?\n")
-	h.print("    [1] Support — make a new argument\n")
-	if hasAttacks {
-		h.print("    [2] Attack  — challenge an existing argument\n")
-	} else {
-		h.print("    [2] Attack  — (no arguments to attack yet)\n")
+	has := map[string]bool{}
+	for _, tmpl := range obs.AvailableActions {
+		if tmpl.TargetArgID != "" {
+			has[tmpl.Type] = true
+		}
 	}
-	h.print("    [3] Abstain — pass your turn\n")
+	none := func(typ string) string {
+		if has[typ] {
+			return ""
+		}
+		return " (nothing to do yet)"
+	}
+	h.print("\n  What would you like to do?\n")
+	h.print("    [1] Argue    — put forward a new argument\n")
+	h.printf("    [2] Attack   — answer a critical question against an argument%s\n", none("attack"))
+	h.printf("    [3] Defend   — answer a critical question in an argument's favour%s\n", none("support"))
+	h.printf("    [4] Question — ask a critical question; its proponent must answer%s\n", none("question"))
+	h.print("    [5] Pass\n")
+	h.print("    [6] Resign\n")
 
-	choice := h.readChoice(1, 3)
-
-	switch choice {
+	switch h.readChoice(1, 6) {
 	case 1:
 		return h.chooseSupportAction(obs)
 	case 2:
-		if !hasAttacks {
-			h.print("\n  No arguments to attack. Switching to support.\n")
-			return h.chooseSupportAction(obs)
-		}
-		return h.chooseAttackAction(obs)
+		return h.chooseTargeted(obs, "attack")
+	case 3:
+		return h.chooseTargeted(obs, "support")
+	case 4:
+		return h.chooseTargeted(obs, "question")
+	case 6:
+		return nascq.ProposedAction{Type: "resign"}
 	default:
 		return nascq.ProposedAction{Type: "abstain"}
 	}
@@ -97,7 +109,7 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 	seen := make(map[string]bool)
 	var schemes []nascq.ActionTemplate
 	for _, tmpl := range obs.AvailableActions {
-		if tmpl.Type == "support" && !seen[tmpl.SchemeID] {
+		if tmpl.Type == "support" && tmpl.TargetArgID == "" && !seen[tmpl.SchemeID] {
 			seen[tmpl.SchemeID] = true
 			schemes = append(schemes, tmpl)
 		}
@@ -119,7 +131,7 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 	selected := schemes[idx]
 
 	bindings := h.fillVariables(selected)
-	h.preview(selected, bindings, "therefore: "+nascq.InstantiateTemplate(selected.ConclusionTemplateEN, bindings))
+	h.preview(obs.GameState, selected, bindings)
 
 	return nascq.ProposedAction{
 		Type:             "support",
@@ -129,152 +141,88 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 }
 
 // -------------------------------------------------------------------------
-// Attack wizard (3-level: target → CQ → backup scheme)
+// Targeted wizard: target → critical question → backup scheme → variables
 // -------------------------------------------------------------------------
 
-func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
-	// Collect attack templates.
-	var attacks []nascq.ActionTemplate
+// chooseTargeted builds a move about an existing argument: an attack, a
+// defence (typ "support") or a question (which has no scheme).
+func (h *HumanAgent) chooseTargeted(obs *Observation, typ string) nascq.ProposedAction {
+	gs := obs.GameState
+	var tmpls []nascq.ActionTemplate
 	for _, tmpl := range obs.AvailableActions {
-		if tmpl.Type == "attack" {
-			attacks = append(attacks, tmpl)
+		if tmpl.Type == typ && tmpl.TargetArgID != "" {
+			tmpls = append(tmpls, tmpl)
 		}
 	}
-
-	// --- Step 1: Choose target argument ---
-	type targetInfo struct {
-		argID   string
-		display string // "conclusion (label) — scheme by owner"
+	if len(tmpls) == 0 {
+		h.print("\n  There is nothing to do that way yet: argue instead.\n")
+		return h.chooseSupportAction(obs)
 	}
 
-	seenTarget := make(map[string]bool)
-	var targets []targetInfo
-	for _, tmpl := range attacks {
-		if seenTarget[tmpl.TargetArgID] {
-			continue
+	// --- Step 1: the argument ---
+	var targets []string
+	seen := map[string]bool{}
+	for _, tmpl := range tmpls {
+		if !seen[tmpl.TargetArgID] {
+			seen[tmpl.TargetArgID] = true
+			targets = append(targets, tmpl.TargetArgID)
 		}
-		seenTarget[tmpl.TargetArgID] = true
+	}
+	h.print("\n  Which argument?\n")
+	for i, id := range targets {
+		arg := gs.Adapter.Graph.Arguments[id]
+		h.printf("    [%d] %s: %s (%s) — %s by %s\n", i+1, id, gs.Say(arg.Conclusion.Id),
+			strings.TrimSpace(labelString(arg.Conclusion.Label)), gs.SchemeName(arg), ownerOf(arg))
+	}
+	target := targets[h.readChoice(1, len(targets))-1]
 
-		arg := obs.GameState.Adapter.Graph.Arguments[tmpl.TargetArgID]
-		if arg == nil {
-			continue
+	// --- Step 2: the critical question ---
+	var cqs []nascq.ActionTemplate
+	seen = map[string]bool{}
+	for _, tmpl := range tmpls {
+		if tmpl.TargetArgID == target && !seen[tmpl.AnswersCQID] {
+			seen[tmpl.AnswersCQID] = true
+			cqs = append(cqs, tmpl)
 		}
-
-		conclusionText := tmpl.TargetArgID
-		label := "?"
-		if arg.Conclusion != nil {
-			conclusionText = arg.Conclusion.Id
-			if arg.Conclusion.Text != "" && arg.Conclusion.Text != arg.Conclusion.Id {
-				conclusionText = arg.Conclusion.Text
+	}
+	h.print("\n  Which critical question?\n")
+	for i, c := range cqs {
+		asked := ""
+		for _, q := range gs.Questions {
+			if q.Open() && q.TargetArgID == target && q.CQID == c.AnswersCQID {
+				asked = fmt.Sprintf("  [asked by %s]", q.Asker)
 			}
-			label = arg.Conclusion.Label.String()
 		}
-
-		owner := "?"
-		if arg.Metadata != nil {
-			if o, ok := arg.Metadata["owner"].(string); ok {
-				owner = o
-			}
-		}
-
-		schemeID := "?"
-		if arg.Scheme != nil {
-			schemeID = arg.Scheme.Id
-		}
-
-		targets = append(targets, targetInfo{
-			argID:   tmpl.TargetArgID,
-			display: fmt.Sprintf("%s (%s) — %s by %s", conclusionText, label, schemeID, owner),
-		})
+		h.printf("    [%d] %s — %s (about the %s)%s\n", i+1, c.CQName, gs.QuestionText(c.AnswersCQID, target), c.Locus.Kind, asked)
+	}
+	cq := cqs[h.readChoice(1, len(cqs))-1]
+	if typ == "question" {
+		h.printf("\n  %s\n", gs.Effect(cq, nil))
+		return nascq.ProposedAction{Type: "question", AnswersCQID: cq.AnswersCQID, TargetArgID: target}
 	}
 
-	if len(targets) == 0 {
-		h.print("\n  No valid attack targets.\n")
-		return nascq.ProposedAction{Type: "abstain"}
-	}
-
-	h.print("\n  Choose target argument to challenge:\n")
-	for i, t := range targets {
-		h.printf("    [%d] %s: %s\n", i+1, t.argID, t.display)
-	}
-
-	targetIdx := h.readChoice(1, len(targets)) - 1
-	selectedTarget := targets[targetIdx]
-
-	// --- Step 2: Choose critical question ---
-	type cqOption struct {
-		id   string
-		name string
-	}
-
-	seenCQ := make(map[string]bool)
-	var cqs []cqOption
-	for _, tmpl := range attacks {
-		if tmpl.TargetArgID == selectedTarget.argID && tmpl.AnswersCQID != "" && !seenCQ[tmpl.AnswersCQID] {
-			seenCQ[tmpl.AnswersCQID] = true
-			cqs = append(cqs, cqOption{id: tmpl.AnswersCQID, name: tmpl.CQName})
+	// --- Step 3: the scheme backing the answer ---
+	var backups []nascq.ActionTemplate
+	for _, tmpl := range tmpls {
+		if tmpl.TargetArgID == target && tmpl.AnswersCQID == cq.AnswersCQID {
+			backups = append(backups, tmpl)
 		}
 	}
-
-	if len(cqs) == 0 {
-		h.print("\n  No critical questions for this argument.\n")
-		return nascq.ProposedAction{Type: "abstain"}
-	}
-
-	h.print("\n  Choose critical question:\n")
-	for i, cq := range cqs {
-		// Show the CQ's question, with the target's own bindings filled in.
-		question := cq.name
-		if text := obs.GameState.QuestionText(cq.id, selectedTarget.argID); text != "" {
-			question = fmt.Sprintf("%s — %s", cq.name, text)
-		}
-		h.printf("    [%d] %s\n", i+1, question)
-	}
-
-	cqIdx := h.readChoice(1, len(cqs)) - 1
-	selectedCQ := cqs[cqIdx]
-
-	// --- Step 3: Choose backup scheme ---
-	type backupOption struct {
-		tmpl nascq.ActionTemplate
-	}
-
-	seenScheme := make(map[string]bool)
-	var backups []backupOption
-	for _, tmpl := range attacks {
-		if tmpl.TargetArgID == selectedTarget.argID &&
-			tmpl.AnswersCQID == selectedCQ.id &&
-			!seenScheme[tmpl.SchemeID] {
-			seenScheme[tmpl.SchemeID] = true
-			backups = append(backups, backupOption{tmpl: tmpl})
-		}
-	}
-
-	if len(backups) == 0 {
-		h.print("\n  No backup schemes available for this CQ.\n")
-		return nascq.ProposedAction{Type: "abstain"}
-	}
-
-	h.print("\n  Choose backup scheme:\n")
-	for i, opt := range backups {
+	h.printf("\n  Answer with which scheme? The answer: %s\n", gs.Effect(cq, nil))
+	for i, b := range backups {
 		weight := 0.0
-		scheme := obs.GameState.NASCQ.GetScheme(opt.tmpl.SchemeID)
-		if scheme != nil {
+		if scheme := gs.NASCQ.GetScheme(b.SchemeID); scheme != nil {
 			weight = scheme.BaseWeight
 		}
-		h.printf("    [%d] %s  (weight: %.2f, attack: %s)\n",
-			i+1, opt.tmpl.SchemeName, weight, opt.tmpl.CaesAttackType)
+		h.printf("    [%d] %s  (weight %.2f)\n", i+1, b.SchemeName, weight)
 	}
+	selected := backups[h.readChoice(1, len(backups))-1]
 
-	schemeIdx := h.readChoice(1, len(backups)) - 1
-	selected := backups[schemeIdx].tmpl
-
-	// --- Step 4: Fill variables ---
+	// --- Step 4: the variables ---
 	bindings := h.fillVariables(selected)
-	h.preview(selected, bindings, "therefore: "+attackEffect(obs.GameState, selected))
-
+	h.preview(gs, selected, bindings)
 	return nascq.ProposedAction{
-		Type:             "attack",
+		Type:             typ,
 		AttackType:       selected.AttackType,
 		SchemeID:         selected.SchemeID,
 		AnswersCQID:      selected.AnswersCQID,
@@ -289,7 +237,8 @@ func (h *HumanAgent) chooseAttackAction(obs *Observation) nascq.ProposedAction {
 // -------------------------------------------------------------------------
 
 // fillVariables asks for the template's variables in the order the premise
-// and conclusion templates first use them.
+// and conclusion templates first use them (not the answer variable, which
+// the game binds to the answer).
 func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string {
 	vars := tmpl.Variables
 	bindings := make(map[string]string, len(vars))
@@ -305,9 +254,8 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 			value = strings.ToLower(name)
 			h.printf("    (using default: %q)\n", value)
 		}
-		// Do NOT sanitize here — the adapter handles sanitization downstream.
-		// For support: AddSupport calls SanitizeBinding on each value.
-		// For attacks: createAttackPremises calls TextToAtom on English templates.
+		// Not sanitized here: the adapter turns each value into an atom,
+		// and the board shows the words typed (GameState.Say).
 		bindings[name] = value
 	}
 
@@ -316,37 +264,28 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 
 // preview shows the move before it is submitted: the instantiated premises
 // and what follows from them.
-func (h *HumanAgent) preview(tmpl nascq.ActionTemplate, bindings map[string]string, effect string) {
-	h.print("\n  You argue:\n")
-	for _, p := range tmpl.PremiseTemplatesEN {
-		h.printf("      %s\n", nascq.InstantiateTemplate(p, bindings))
-	}
-	h.printf("    %s\n", effect)
-}
-
-// attackEffect says what an attack template concludes against its target.
-func attackEffect(gs *GameState, tmpl nascq.ActionTemplate) string {
-	target := gs.Adapter.Graph.Arguments[tmpl.TargetArgID]
-	if target == nil || target.Conclusion == nil {
-		return "(target not found)"
-	}
-	switch tmpl.CaesAttackType {
-	case "rebuttal":
-		return "it is not the case that: " + statementText(target.Conclusion)
-	case "undercutter":
-		return fmt.Sprintf("argument %s does not support \"%s\" here", tmpl.TargetArgID, statementText(target.Conclusion))
-	case "undermining":
-		if p := gs.Adapter.Graph.Statements[tmpl.TargetPremiseID]; p != nil {
-			return "it is not the case that: " + statementText(p)
+func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings map[string]string) {
+	shown := bindings
+	if tmpl.AnswerVariable != "" {
+		shown = map[string]string{tmpl.AnswerVariable: "“" + lowerFirst(gs.answerText(tmpl, gs.Adapter.Graph.Arguments[tmpl.TargetArgID])) + "”"}
+		for k, v := range bindings {
+			if k != tmpl.AnswerVariable {
+				shown[k] = v
+			}
 		}
 	}
-	return tmpl.CaesAttackType + " of " + tmpl.TargetArgID
+	h.print("\n  You argue:\n")
+	for _, p := range tmpl.PremiseTemplatesEN {
+		h.printf("      %s\n", nascq.InstantiateTemplate(p, shown))
+	}
+	h.printf("    therefore: %s\n", gs.Effect(tmpl, bindings))
 }
 
 // variableOrder returns the template's variables in the order its premise and
-// conclusion templates first use them, then any others in sorted order.
+// conclusion templates first use them, then any others in sorted order;
+// without the answer variable, which the game binds.
 func variableOrder(tmpl nascq.ActionTemplate) []string {
-	seen := map[string]bool{}
+	seen := map[string]bool{tmpl.AnswerVariable: true}
 	var out []string
 	for _, t := range append(append([]string{}, tmpl.PremiseTemplatesEN...), tmpl.ConclusionTemplateEN) {
 		for _, v := range nascq.Placeholders(t) {
@@ -366,13 +305,22 @@ func variableOrder(tmpl nascq.ActionTemplate) []string {
 
 // QuestionText is the critical question's text with the target argument's
 // own bindings in place of its {Var} placeholders, as far as the target has
-// them (an attack argument has none).
+// them (a question argument has none), in the words players typed.
 func (gs *GameState) QuestionText(cqID, targetArgID string) string {
 	cq := gs.NASCQ.GetCQ(cqID)
 	if cq == nil {
 		return ""
 	}
-	return nascq.InstantiateTemplate(cq.QuestionTemplateEN, gs.Adapter.ArgumentBindings(targetArgID))
+	words := gs.words()
+	b := gs.Adapter.ArgumentBindings(targetArgID)
+	for k, v := range b {
+		if w, ok := words[v]; ok {
+			b[k] = w
+		} else if t, ok := terms.ReadString(v); ok {
+			b[k] = gs.sayTerm(t, words, true)
+		}
+	}
+	return nascq.InstantiateTemplate(cq.QuestionTemplateEN, b)
 }
 
 // -------------------------------------------------------------------------

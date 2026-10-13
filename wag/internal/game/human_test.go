@@ -10,7 +10,9 @@ import (
 
 // Two humans play through the CLI wizard: Alice supports practical reasoning
 // (variables asked in the order the premises use them), Bob asks her the
-// possibility question (shown with her bindings) and undermines possible(A).
+// possibility question (shown with her words) and undermines possible(A)
+// with an argument from sign, whose answer variable B the game binds to the
+// answer (so he is asked for A only).
 func TestHumanWizardSupportThenUndermining(t *testing.T) {
 	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
 	var out bytes.Buffer
@@ -32,18 +34,19 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 
 	out.Reset()
 	bob := NewHumanAgent("Bob", strings.NewReader(strings.Join([]string{
-		"2",                                                 // attack
-		"1",                                                 // the only target, Alice's argument
-		"4",                                                 // the possibility question
-		"1",                                                 // Argument from Sign
-		"no parliamentary majority", "the bill cannot pass", // A B
+		"2",                         // attack
+		"1",                         // the only target, Alice's argument
+		"4",                         // the possibility question
+		"1",                         // Argument from Sign
+		"no parliamentary majority", // A (B is the answer)
 	}, "\n")+"\n"), &out)
 	act = bob.ChooseAction(gs.BuildObservation())
 	shown := out.String()
 	for _, want := range []string{
-		"Is it actually possible to perform action carbon_tax?",
-		"therefore: it is not the case that: Action carbon_tax is possible.",
+		"Is it actually possible to perform action carbon tax?",
+		"therefore: It is not the case that action carbon tax is possible (against a premise of a1).",
 		"no parliamentary majority is observed to be the case",
+		"“it is not the case that action carbon tax is possible” is indicated when no parliamentary majority is true",
 	} {
 		if !strings.Contains(shown, want) {
 			t.Errorf("wizard output lacks %q:\n%s", want, shown)
@@ -54,7 +57,7 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 		t.Fatalf("Bob's attack: %+v", r)
 	}
 	board := RenderState(gs)
-	for _, want := range []string{"[" + r.ArgIDs[0] + "]", "Out ✗     Action carbon_tax is possible."} {
+	for _, want := range []string{"[" + r.ArgIDs[0] + "]", "Out ✗     Action carbon tax is possible."} {
 		if !strings.Contains(board, want) {
 			t.Errorf("board lacks %q:\n%s", want, board)
 		}

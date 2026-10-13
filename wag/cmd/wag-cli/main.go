@@ -6,9 +6,12 @@
 //
 // Flags:
 //
+//	--mode    Game mode (default: "classic"); --modes lists them: classic, infinite,
+//	          target, timed, speed, cq, debate, solo (see game.ModeConfig)
 //	--p1      Player 1 type: "human", "random", "greedy" or "json" (default: "human")
-//	--p2      Player 2 type: "human", "random", "greedy" or "json" (default: "random")
-//	--turns   Maximum turns per game (default: 10)
+//	--p2      Player 2 type: "human", "random", "greedy", "json" or "none" (default:
+//	          "random"; "none", and the solo mode, make a one-player game)
+//	--turns   Maximum rounds (default: the mode's)
 //	--seed    Random seed for AI agents (default: 42)
 //	--name1   Player 1 name (default: "Player1")
 //	--name2   Player 2 name (default: "Player2")
@@ -18,6 +21,12 @@
 //	          status 1 if there is an error
 //	--games   Play N games between two AI players (random/greedy) and print the
 //	          statistics: wins by player and by seat, mean scores, the moves played
+//
+// The mode's settings can be changed one by one: --scoring move|live,
+// --target N, --time 10m, --move-time 60s, --timeout-loses, --answer-within N,
+// --objective points|claim, --claim STATEMENT, --standard PE|CCE|BRD,
+// --concede. Self-play is two seats of the same AI type (--p1 greedy --p2
+// greedy); solo play is one player arguing both sides.
 //
 // A "json" player is a program on the other end of standard input and output
 // (game.JSONAgent): it gets the game as one JSON line (game.View) whenever it
@@ -32,6 +41,9 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
+
+	caes "github.com/carneades/carneades-4/src/engine/caes"
 
 	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/game"
@@ -43,8 +55,20 @@ func main() {
 	// Flag parsing
 	// ---------------------------------------------------------------
 	p1Type := flag.String("p1", "human", "Player 1 type: human, random, greedy, json")
-	p2Type := flag.String("p2", "random", "Player 2 type: human, random, greedy, json")
-	maxTurns := flag.Int("turns", 10, "Maximum turns (rounds)")
+	p2Type := flag.String("p2", "random", "Player 2 type: human, random, greedy, json, none (one player)")
+	mode := flag.String("mode", "classic", "game mode (see --modes)")
+	listModes := flag.Bool("modes", false, "list the game modes and exit")
+	maxTurns := flag.Int("turns", 10, "maximum rounds (0: no limit; default: the mode's)")
+	scoring := flag.String("scoring", "", "scoring model: move or live (default: the mode's)")
+	target := flag.Float64("target", 0, "target score: the first to reach it wins")
+	timeLimit := flag.Duration("time", 0, "game clock, e.g. 10m")
+	moveTime := flag.Duration("move-time", 0, "move clock, e.g. 60s: a later move passes the turn")
+	timeoutLoses := flag.Bool("timeout-loses", false, "a move later than the move clock loses the game")
+	answerWithin := flag.Int("answer-within", 0, "a question about your argument left unanswered for this many of your turns loses")
+	objective := flag.String("objective", "", "points or claim (default: the mode's)")
+	claim := flag.String("claim", "", "the central claim of a debate, as a statement such as should_be_performed(carbon_tax)")
+	standard := flag.String("standard", "", "proof standard of the claim: PE, CCE or BRD")
+	concede := flag.Bool("concede", false, "a debater who passes while the verdict is against them concedes")
 	seed := flag.Int64("seed", 42, "Random seed for AI agents")
 	name1 := flag.String("name1", "Player1", "Player 1 display name")
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
@@ -53,6 +77,12 @@ func main() {
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	flag.Parse()
 
+	if *listModes {
+		for _, m := range game.Modes() {
+			fmt.Printf("  %-9s %s\n", m.Name, m.Description)
+		}
+		return
+	}
 	files, err := loadData(*dataDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading data: %v\n", err)
@@ -61,8 +91,62 @@ func main() {
 	if *lint {
 		os.Exit(runLint(files))
 	}
+
+	cfg, err := game.ModeConfig(*mode)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+	set := map[string]bool{}
+	flag.Visit(func(f *flag.Flag) { set[f.Name] = true })
+	if set["turns"] {
+		cfg.MaxTurns = *maxTurns
+	}
+	if set["scoring"] {
+		cfg.Scoring.Model = *scoring
+	}
+	if set["target"] {
+		cfg.TargetScore = *target
+	}
+	if set["time"] {
+		cfg.TimeLimit = *timeLimit
+	}
+	if set["move-time"] {
+		cfg.MoveTimeLimit = *moveTime
+	}
+	if set["timeout-loses"] {
+		cfg.MoveTimeoutLoses = *timeoutLoses
+	}
+	if set["answer-within"] {
+		cfg.AnswerWithin = *answerWithin
+	}
+	if set["objective"] {
+		cfg.Objective = *objective
+	}
+	if set["claim"] {
+		cfg.Objective, cfg.Claim = game.ObjectiveClaim, *claim
+	}
+	if set["concede"] {
+		cfg.ConcedeOnPass = *concede
+	}
+	if set["standard"] {
+		std, ok := map[string]caes.Standard{"PE": caes.PE, "CCE": caes.CCE, "BRD": caes.BRD}[strings.ToUpper(*standard)]
+		if !ok {
+			fmt.Fprintf(os.Stderr, "Error: unknown proof standard %q (PE, CCE or BRD)\n", *standard)
+			os.Exit(1)
+		}
+		cfg.ClaimStandard = std
+	}
+	if msg := checkConfig(cfg); msg != "" {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", msg)
+		os.Exit(1)
+	}
+	if *mode == "solo" {
+		*p2Type = "none"
+	}
+
 	if *games > 0 {
-		os.Exit(runGames(files, *games, *maxTurns, *seed, *p1Type, *p2Type, *name1, *name2))
+		os.Exit(runGames(files, cfg, *games, *seed, *p1Type, *p2Type, *name1, *name2))
 	}
 
 	// ---------------------------------------------------------------
@@ -72,6 +156,10 @@ func main() {
 	// player), and two humans may share a terminal, but a human's prompts
 	// would corrupt a json player's stream.
 	types := map[string]bool{*p1Type: true, *p2Type: true}
+	if *p1Type == "none" {
+		fmt.Fprintln(os.Stderr, "Error: player 1 cannot be none")
+		os.Exit(1)
+	}
 	if types["json"] {
 		if types["human"] {
 			fmt.Fprintln(os.Stderr, "Error: a json player and a human player cannot share standard input and output")
@@ -84,33 +172,37 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error creating player 1: %v\n", err)
 		os.Exit(1)
 	}
-	agent2, err := makeAgent(*p2Type, *name2, *seed+1)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating player 2: %v\n", err)
-		os.Exit(1)
+	agents := []game.Agent{agent1}
+	names := []string{*name1}
+	if *p2Type != "none" {
+		agent2, err := makeAgent(*p2Type, *name2, *seed+1)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error creating player 2: %v\n", err)
+			os.Exit(1)
+		}
+		agents, names = append(agents, agent2), append(names, *name2)
 	}
-	agents := []game.Agent{agent1, agent2}
 
 	fmt.Fprintln(say, "╔══════════════════════════════════════════════════╗")
 	fmt.Fprintln(say, "║     WAG — Waltonian Argumentation Game          ║")
 	fmt.Fprintln(say, "╚══════════════════════════════════════════════════╝")
-	fmt.Fprintf(say, "  %s (%s) vs %s (%s)\n", *name1, *p1Type, *name2, *p2Type)
-	fmt.Fprintf(say, "  Max turns: %d  |  Seed: %d\n\n", *maxTurns, *seed)
+	if len(agents) == 1 {
+		fmt.Fprintf(say, "  %s (%s), alone\n", *name1, *p1Type)
+	} else {
+		fmt.Fprintf(say, "  %s (%s) vs %s (%s)\n", *name1, *p1Type, *name2, *p2Type)
+	}
+	fmt.Fprintf(say, "  Mode: %s  |  %s  |  Seed: %d\n\n", cfg.Mode, describeConfig(cfg), *seed)
 
 	// ---------------------------------------------------------------
 	// Create game environment
 	// ---------------------------------------------------------------
 	env := game.NewEnv(game.EnvConfig{
-		Game: game.GameConfig{
-			MaxTurns:            *maxTurns,
-			AbstentionThreshold: 3,
-			Scoring:             game.DefaultScoringConfig(),
-		},
+		Game:        cfg,
 		YAMLBytes:   files.yaml,
 		SchemesJSON: files.schemes,
 		CQsJSON:     files.cqs,
 		EdgesJSON:   files.edges,
-		PlayerNames: []string{*name1, *name2},
+		PlayerNames: names,
 	})
 
 	obs, err := env.Reset()
@@ -142,7 +234,7 @@ func main() {
 				goto gameOver
 			}
 
-			if result.Accepted {
+			if result.Accepted || result.Terminated {
 				displayResult(result, agent, gs)
 				if result.Terminated {
 					goto gameOver
@@ -190,27 +282,22 @@ gameOver:
 	}
 
 	fmt.Fprintln(say, "\n  Final Scores:")
-	bestScore := -1e9
-	winner := ""
 	for _, p := range gs.Players {
 		fmt.Fprintf(say, "    %s: %.2f\n", p.Name, p.Score)
-		if p.Score > bestScore {
-			bestScore = p.Score
-			winner = p.Name
-		}
 	}
-
-	// Check tie.
-	tieCount := 0
-	for _, p := range gs.Players {
-		if p.Score == bestScore {
-			tieCount++
+	o := gs.Outcome()
+	if o.Claim != "" || cfg.Objective == game.ObjectiveClaim {
+		claimText := "(never made)"
+		if o.Claim != "" {
+			claimText = gs.Say(o.Claim)
 		}
+		fmt.Fprintf(say, "\n  Claim: %s\n  Verdict: %s\n", claimText, o.Verdict)
 	}
-	if tieCount > 1 {
+	switch {
+	case o.Winner != "":
+		fmt.Fprintf(say, "\n  Winner: %s!\n", gs.PlayerByID(o.Winner).Name)
+	case len(gs.Players) > 1:
 		fmt.Fprintln(say, "\n  Result: TIE!")
-	} else {
-		fmt.Fprintf(say, "\n  Winner: %s!\n", winner)
 	}
 
 	fmt.Fprintf(say, "\n  Graph: %d statements, %d arguments, %d issues\n",
@@ -238,27 +325,60 @@ func makeAgent(agentType, name string, seed int64) (game.Agent, error) {
 	}
 }
 
+// checkConfig returns what is wrong with a configuration, or "".
+func checkConfig(c game.GameConfig) string {
+	switch {
+	case c.Scoring.Model != "" && c.Scoring.Model != game.ScoringMove && c.Scoring.Model != game.ScoringLive:
+		return fmt.Sprintf("unknown scoring model %q (move or live)", c.Scoring.Model)
+	case c.Objective != "" && c.Objective != game.ObjectivePoints && c.Objective != game.ObjectiveClaim:
+		return fmt.Sprintf("unknown objective %q (points or claim)", c.Objective)
+	case c.MaxTurns < 0 || c.TargetScore < 0 || c.TimeLimit < 0 || c.MoveTimeLimit < 0 || c.AnswerWithin < 0:
+		return "limits cannot be negative"
+	}
+	return ""
+}
+
+// describeConfig summarizes the termination conditions and scoring.
+func describeConfig(c game.GameConfig) string {
+	var parts []string
+	if c.Objective == game.ObjectiveClaim {
+		std := map[caes.Standard]string{caes.PE: "PE", caes.CCE: "CCE", caes.BRD: "BRD"}[c.ClaimStandard]
+		parts = append(parts, "debate on a claim ("+std+")")
+	}
+	if c.MaxTurns > 0 {
+		parts = append(parts, fmt.Sprintf("%d rounds", c.MaxTurns))
+	} else {
+		parts = append(parts, "no round limit")
+	}
+	if c.TargetScore > 0 {
+		parts = append(parts, fmt.Sprintf("target %.0f", c.TargetScore))
+	}
+	if c.TimeLimit > 0 {
+		parts = append(parts, "game clock "+c.TimeLimit.String())
+	}
+	if c.MoveTimeLimit > 0 {
+		parts = append(parts, "move clock "+c.MoveTimeLimit.String())
+	}
+	if c.AnswerWithin > 0 {
+		parts = append(parts, fmt.Sprintf("questions must be answered within %d turn(s)", c.AnswerWithin))
+	}
+	model := c.Scoring.Model
+	if model == "" {
+		model = game.ScoringMove
+	}
+	parts = append(parts, model+" scoring")
+	return strings.Join(parts, ", ")
+}
+
 // displayResult prints a brief summary after each accepted move.
 func displayResult(result *game.TurnResult, agent game.Agent, gs *game.GameState) {
-	// Don't print for human agents — they already see the state via ChooseAction.
-	if _, isHuman := agent.(*game.HumanAgent); isHuman {
-		if result.Abstained {
-			fmt.Fprintln(say, "\n  You chose to abstain.")
-		} else {
-			fmt.Fprintf(say, "\n  ✓ Move accepted! Arguments created: %v\n", result.ArgIDs)
-			fmt.Fprintf(say, "    Score delta: %+.2f\n", result.ScoreDelta)
+	if n := len(gs.MoveHistory); n > 0 && (result.Accepted || result.TimedOut) {
+		line := gs.DescribeMove(gs.MoveHistory[n-1])
+		if result.ScoreDelta != 0 {
+			line += fmt.Sprintf("  (%+.2f)", result.ScoreDelta)
 		}
-		return
+		fmt.Fprintf(say, "  %s\n", line)
 	}
-
-	// For AI agents, print a one-line summary.
-	if result.Abstained {
-		fmt.Fprintf(say, "  %s abstains.\n", agent.Name())
-	} else {
-		fmt.Fprintf(say, "  %s plays → args=%v  score=%+.2f\n",
-			agent.Name(), result.ArgIDs, result.ScoreDelta)
-	}
-
 	if result.Terminated {
 		fmt.Fprintf(say, "  Game over: %s\n", result.TerminationReason)
 	}
@@ -315,11 +435,12 @@ func runLint(f dataFiles) int {
 	return 0
 }
 
-// runGames plays n games between two AI players, with seeds derived from
-// seed, prints the batch statistics and returns the exit status.
-func runGames(f dataFiles, n, maxTurns int, seed int64, p1, p2, name1, name2 string) int {
+// runGames plays n games between AI players (one, for "none" as the second
+// type), with seeds derived from seed, prints the batch statistics and
+// returns the exit status.
+func runGames(f dataFiles, cfg game.GameConfig, n int, seed int64, p1, p2, name1, name2 string) int {
 	for _, typ := range []string{p1, p2} {
-		if typ != "random" && typ != "greedy" {
+		if typ != "random" && typ != "greedy" && !(typ == p2 && typ == "none") {
 			fmt.Fprintf(os.Stderr, "Error: --games needs AI players (random or greedy), not %q\n", typ)
 			return 1
 		}
@@ -327,19 +448,28 @@ func runGames(f dataFiles, n, maxTurns int, seed int64, p1, p2, name1, name2 str
 	if name1 == name2 {
 		name2 += "'"
 	}
-	cfg := game.GameConfig{MaxTurns: maxTurns, AbstentionThreshold: 3, Scoring: game.DefaultScoringConfig()}
+	if cfg.TimeLimit > 0 || cfg.MoveTimeLimit > 0 {
+		fmt.Fprintln(os.Stderr, "Note: the clocks run in real time; AI players are fast, so they rarely matter")
+	}
 	br := game.RunBatch(n, cfg, game.DefaultRunnerConfig(), f.yaml, f.schemes, f.cqs, f.edges, func(i int) []game.Agent {
 		a1, _ := makeAgent(p1, name1, seed+int64(2*i))
+		if p2 == "none" {
+			return []game.Agent{a1}
+		}
 		a2, _ := makeAgent(p2, name2, seed+int64(2*i+1))
 		return []game.Agent{a1, a2}
 	})
-	fmt.Printf("%d games (%d panicked), %d turns at most\n", br.GamesPlayed, br.Panics, maxTurns)
+	maxTurns := cfg.MaxTurns
+	fmt.Printf("%d games (%d panicked), mode %s: %s; %d rounds at most (0: no limit)\n",
+		br.GamesPlayed, br.Panics, cfg.Mode, describeConfig(cfg), maxTurns)
 	for _, name := range []string{name1, name2} {
 		fmt.Printf("  %-12s wins %4d   mean score %7.2f\n", name, br.Wins[name], br.AvgScores[name])
 	}
 	fmt.Printf("  ties %d; wins by seat: first %d, second %d\n", br.Ties, br.SeatWins[0], br.SeatWins[1])
-	fmt.Printf("  moves %d, abstentions %d, rejected %d; mean %.1f arguments per game\n",
-		br.TotalMoves, br.TotalAbstains, br.TotalInvalid, br.AvgArguments)
+	fmt.Printf("  moves %d, abstentions %d, rejected %d; mean %.1f rounds and %.1f arguments per game\n",
+		br.TotalMoves, br.TotalAbstains, br.TotalInvalid, br.AvgTurns, br.AvgArguments)
+	printCounts("ended by", br.Reasons)
+	printCounts("verdict", br.Verdicts)
 	kinds := make([]string, 0, len(br.MoveKinds))
 	for k := range br.MoveKinds {
 		kinds = append(kinds, k)
@@ -357,4 +487,16 @@ func runGames(f dataFiles, n, maxTurns int, seed int64, p1, p2, name1, name2 str
 		return 1
 	}
 	return 0
+}
+
+// printCounts prints the counts of a statistic, most frequent first.
+func printCounts(what string, m map[string]int) {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool { return m[keys[i]] > m[keys[j]] || m[keys[i]] == m[keys[j]] && keys[i] < keys[j] })
+	for _, k := range keys {
+		fmt.Printf("  %s %-16s %d\n", what, k, m[k])
+	}
 }

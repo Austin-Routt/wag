@@ -170,8 +170,8 @@ func TestEnvRender(t *testing.T) {
 	if !strings.Contains(output, "Alice") {
 		t.Error("Render should mention player names")
 	}
-	if !strings.Contains(output, "Turn 1") {
-		t.Error("Render should mention turn number")
+	if !strings.Contains(output, "Round 1") {
+		t.Error("Render should mention the round")
 	}
 	t.Logf("Render output:\n%s", output)
 }

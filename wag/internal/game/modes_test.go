@@ -371,3 +371,147 @@ func TestModeConfig(t *testing.T) {
 		t.Error("unknown mode accepted")
 	}
 }
+
+// Random play keeps every invariant in every mode, with one player in solo
+// and two or three otherwise; the clocks of the timed modes run on a fake
+// clock that moves 10 to 69 seconds a move.
+func TestInvariantsHoldInEveryMode(t *testing.T) {
+	games := 6
+	if testing.Short() {
+		games = 2
+	}
+	for _, m := range Modes() {
+		t.Run(m.Name, func(t *testing.T) {
+			for i := 0; i < games; i++ {
+				names := []string{"A", "B"}
+				if m.Name == "solo" {
+					names = names[:1]
+				} else if i%2 == 1 {
+					names = append(names, "C")
+				}
+				gs := modeGame(t, m.Name, names...)
+				if gs.Config.MaxTurns == 0 {
+					gs.Config.MaxTurns = 25
+				}
+				clock := newFakeClock()
+				setClock(gs, clock)
+				var agents []Agent
+				for j, n := range names {
+					agents = append(agents, NewRandomAgent(n, int64(100*i+j), 0.05, 0.4))
+				}
+				for it := 0; !gs.Terminated && it < 500; it++ {
+					clock.wait(time.Duration(10+(it*37)%60) * time.Second)
+					act := agents[gs.ActivePlayerIdx].ChooseAction(gs.BuildObservation())
+					before := gs.Adapter.Fingerprint()
+					r, err := gs.ExecuteTurn(act)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if !r.Accepted && !r.Terminated {
+						if gs.Adapter.Fingerprint() != before {
+							t.Fatalf("rejected %+v changed the graph", act)
+						}
+						gs.ExecuteTurn(abstain)
+					}
+					if errs := gs.CheckInvariants(); len(errs) > 0 {
+						t.Fatalf("game %d, after %+v: %v", i, act, errs)
+					}
+				}
+				if !gs.Terminated {
+					t.Fatalf("game %d did not end", i)
+				}
+				o := gs.Outcome()
+				if (o.Winner == "") != (o.Draw || len(names) == 1 || o.WinningSide != "" && o.Winner == "") {
+					t.Fatalf("game %d: outcome %+v", i, o)
+				}
+				t.Logf("game %d: %s; winner %q, verdict %q, %d moves", i, o.Reason, o.Winner, o.Verdict, len(gs.MoveHistory))
+			}
+		})
+	}
+}
+
+// The greedy agent answers the questions it owes in critical-question play
+// (not answering loses), and so does the random agent.
+func TestAgentsAnswerTheirQuestions(t *testing.T) {
+	for _, agent := range []Agent{NewGreedyAgent("Alice", 1, 1), NewRandomAgent("Alice", 1, 0.9, 0.5)} {
+		gs := modeGame(t, "cq", "Alice", "Bob")
+		a1 := play(t, gs, prSupportAction())
+		play(t, gs, question("CQ:possibility", a1))
+		act := agent.ChooseAction(gs.BuildObservation())
+		if act.Type != "support" || act.TargetArgID != a1 || act.AnswersCQID != "CQ:possibility" {
+			t.Fatalf("%T chose %+v", agent, act)
+		}
+		r, _ := gs.ExecuteTurn(act)
+		if !r.Accepted || gs.Terminated || gs.Questions[0].Open() {
+			t.Fatalf("%T's answer: %+v", agent, r)
+		}
+	}
+}
+
+// The wizard plays every kind of move: a defence, a question and a
+// resignation.
+func TestHumanWizardDefendQuestionResign(t *testing.T) {
+	gs := modeGame(t, "cq", "Alice", "Bob")
+	a1 := play(t, gs, prSupportAction())
+	var out strings.Builder
+	bob := NewHumanAgent("Bob", strings.NewReader("4\n1\n1\n"), &out) // question → a1 → possibility, the only question about a premise
+	act := bob.ChooseAction(gs.BuildObservation())
+	if act.Type != "question" || act.TargetArgID != a1 || act.AnswersCQID != "CQ:possibility" {
+		t.Fatalf("question: %+v\n%s", act, out.String())
+	}
+	play(t, gs, act)
+
+	out.Reset()
+	alice := NewHumanAgent("Alice", strings.NewReader("3\n1\n4\n3\ndr yes\npolitics\n"), &out) // defend → a1 → possibility → expert
+	act = alice.ChooseAction(gs.BuildObservation())
+	shown := out.String()
+	for _, want := range []string{
+		"! Bob asks you about " + a1 + ": Is it actually possible to perform action carbon tax?",
+		"[asked by Bob]",
+		"The answer: Action carbon tax is possible (backing a premise of " + a1 + ").",
+		"dr yes asserts that “action carbon tax is possible”",
+	} {
+		if !strings.Contains(shown, want) {
+			t.Errorf("wizard output lacks %q:\n%s", want, shown)
+		}
+	}
+	if act.Type != "support" || act.SchemeID != "AS:expert_opinion" || act.AnswersCQID != "CQ:possibility" || act.VariableBindings["S"] != "" {
+		t.Fatalf("defence: %+v", act)
+	}
+	play(t, gs, act)
+	if gs.Questions[0].Open() {
+		t.Fatal("the defence did not answer the question")
+	}
+
+	bob = NewHumanAgent("Bob", strings.NewReader("6\n"), &out)
+	if act = bob.ChooseAction(gs.BuildObservation()); act.Type != "resign" {
+		t.Fatalf("resign: %+v", act)
+	}
+}
+
+// Statements read in the players' words, nested statements quoted.
+func TestSay(t *testing.T) {
+	gs := modeGame(t, "classic", "Alice", "Bob")
+	a1 := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:practical_reasoning",
+		VariableBindings: map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions",
+			"G": "clean air", "V": "health"}})
+	play(t, gs, answer("attack", "CQ:possibility", "AS:expert_opinion", a1, map[string]string{"W": "Dr. No", "D": "politics"}))
+	for id, want := range map[string]string{
+		"possible(carbon_tax)":                     "Action carbon tax is possible.",
+		"¬possible(carbon_tax)":                    "It is not the case that action carbon tax is possible.",
+		"asserts(dr_no,not(possible(carbon_tax)))": "Dr. No asserts that “it is not the case that action carbon tax is possible” is true.",
+		"undercut(a1)":                             "Argument a1 does not apply.",
+	} {
+		id := id
+		if gs.Adapter.Graph.Statements[id] == nil {
+			for sid := range gs.Adapter.Graph.Statements {
+				if strings.HasPrefix(sid, "asserts(") {
+					id = sid
+				}
+			}
+		}
+		if got := gs.Say(id); got != want && !strings.HasPrefix(id, "asserts(") || strings.HasPrefix(id, "asserts(") && !strings.Contains(got, "asserts that “it is not the case that action carbon tax is possible”") {
+			t.Errorf("Say(%s) = %q, want %q", id, got, want)
+		}
+	}
+}

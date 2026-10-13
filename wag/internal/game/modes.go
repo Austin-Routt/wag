@@ -84,20 +84,20 @@ func ModeConfig(name string) (GameConfig, error) {
 // Outcome is the result of a game: final once it has ended, provisional
 // (who would win if it ended now) before.
 type Outcome struct {
-	Over   bool
-	Reason string
+	Over   bool   `json:"over"`
+	Reason string `json:"reason,omitempty"`
 	// Winner is the winning player's ID; "" for a draw, or when nobody can
 	// win (a solo game, whose result is the verdict).
-	Winner string
-	Draw   bool
+	Winner string `json:"winner,omitempty"`
+	Draw   bool   `json:"draw,omitempty"`
 	// Claim, Verdict and WinningSide are set for ObjectiveClaim: the claim,
 	// its label ("In", "Out", "Undecided"; "Out" while no claim is made) and
 	// "pro" or "con".
-	Claim       string
-	Verdict     string
-	WinningSide string
-	Loser       string // the player who forfeited, if any
-	Scores      map[string]float64
+	Claim       string             `json:"claim,omitempty"`
+	Verdict     string             `json:"verdict,omitempty"`
+	WinningSide string             `json:"winning_side,omitempty"`
+	Loser       string             `json:"loser,omitempty"` // the player who forfeited, if any
+	Scores      map[string]float64 `json:"scores"`
 }
 
 // Outcome returns the game's result.
