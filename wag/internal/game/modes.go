@@ -23,7 +23,7 @@ type ModeInfo struct {
 func Modes() []ModeInfo {
 	return []ModeInfo{
 		{"classic", "points, scored once per move; 20 rounds or two all-pass rounds"},
-		{"infinite", "points, live scoring; no round limit: ends when a player resigns or all pass twice"},
+		{"infinite", "points, live scoring (here and below: no undercut bonus); no round limit: ends when a player resigns or all pass twice"},
 		{"target", "points, live scoring; the first to reach the target score (default 50) wins"},
 		{"timed", "points, live scoring; ends when the game clock (default 10m) runs out"},
 		{"speed", "points, live scoring; a move later than the move clock (default 60s) passes the turn"},
@@ -37,7 +37,12 @@ func Modes() []ModeInfo {
 func ModeConfig(name string) (GameConfig, error) {
 	c := DefaultGameConfig()
 	c.Mode = name
-	live := func() { c.Scoring.Model = ScoringLive }
+	// Live scoring counts a defeat already (the defeated argument loses its
+	// points), so it drops the undercutter bonus, which the SRD designed for
+	// snapshot scoring. With it, greedy self-play in the target mode ended in
+	// two rounds, won by the second seat every time; without it, 8.4 rounds
+	// and 7 to 5 (docs/review-2026-10-13-part2.md, section 6).
+	live := func() { c.Scoring.Model, c.Scoring.UndercutterBonus = ScoringLive, 0 }
 	switch name {
 	case "classic", "":
 		c.Mode = "classic"

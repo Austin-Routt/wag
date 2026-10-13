@@ -263,8 +263,8 @@ func (gs *GameState) endTurn(player *Player) {
 	current := len(gs.MoveHistory) - 1
 	for i := range gs.Questions {
 		q := &gs.Questions[i]
-		if !q.Open() || q.Owner != player.ID || q.AskedAt == current {
-			continue
+		if !q.Open() || q.Owner != player.ID || q.AskedAt == current || player.Resigned {
+			continue // a resigned player owes nothing more
 		}
 		q.TurnsLeft--
 		if gs.Config.AnswerWithin > 0 && q.TurnsLeft <= 0 && gs.Loser == "" {

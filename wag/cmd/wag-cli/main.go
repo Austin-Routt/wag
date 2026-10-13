@@ -20,12 +20,13 @@
 //	--lint    Check the data (see game.LintData), print the findings, and exit:
 //	          status 1 if there is an error
 //	--games   Play N games between two AI players (random/greedy) and print the
-//	          statistics: wins by player and by seat, mean scores, the moves played
+//	          statistics: wins by player and by seat, mean scores, the moves played,
+//	          why the games ended; --alternate swaps the seats every other game
 //
 // The mode's settings can be changed one by one: --scoring move|live,
 // --target N, --time 10m, --move-time 60s, --timeout-loses, --answer-within N,
 // --objective points|claim, --claim STATEMENT, --standard PE|CCE|BRD,
-// --concede. Self-play is two seats of the same AI type (--p1 greedy --p2
+// --concede, --undercut-bonus N, --proleptic-bonus N. Self-play is two seats of the same AI type (--p1 greedy --p2
 // greedy); solo play is one player arguing both sides.
 //
 // A "json" player is a program on the other end of standard input and output
@@ -69,12 +70,15 @@ func main() {
 	claim := flag.String("claim", "", "the central claim of a debate, as a statement such as should_be_performed(carbon_tax)")
 	standard := flag.String("standard", "", "proof standard of the claim: PE, CCE or BRD")
 	concede := flag.Bool("concede", false, "a debater who passes while the verdict is against them concedes")
+	undercutBonus := flag.Float64("undercut-bonus", 15, "flat points for an undercut that defeats its target")
+	prolepticBonus := flag.Float64("proleptic-bonus", 0, "flat points for answering a question about your own argument before anyone asks it")
 	seed := flag.Int64("seed", 42, "Random seed for AI agents")
 	name1 := flag.String("name1", "Player1", "Player 1 display name")
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
 	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
 	lint := flag.Bool("lint", false, "check the data, print the findings and exit (status 1 on an error)")
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
+	alternate := flag.Bool("alternate", false, "with --games: swap the seats every other game, as colours alternate in chess")
 	flag.Parse()
 
 	if *listModes {
@@ -129,6 +133,12 @@ func main() {
 	if set["concede"] {
 		cfg.ConcedeOnPass = *concede
 	}
+	if set["undercut-bonus"] {
+		cfg.Scoring.UndercutterBonus = *undercutBonus
+	}
+	if set["proleptic-bonus"] {
+		cfg.Scoring.ProlepticBonus = *prolepticBonus
+	}
 	if set["standard"] {
 		std, ok := map[string]caes.Standard{"PE": caes.PE, "CCE": caes.CCE, "BRD": caes.BRD}[strings.ToUpper(*standard)]
 		if !ok {
@@ -146,7 +156,7 @@ func main() {
 	}
 
 	if *games > 0 {
-		os.Exit(runGames(files, cfg, *games, *seed, *p1Type, *p2Type, *name1, *name2))
+		os.Exit(runGames(files, cfg, *games, *seed, *p1Type, *p2Type, *name1, *name2, *alternate))
 	}
 
 	// ---------------------------------------------------------------
@@ -438,7 +448,7 @@ func runLint(f dataFiles) int {
 // runGames plays n games between AI players (one, for "none" as the second
 // type), with seeds derived from seed, prints the batch statistics and
 // returns the exit status.
-func runGames(f dataFiles, cfg game.GameConfig, n int, seed int64, p1, p2, name1, name2 string) int {
+func runGames(f dataFiles, cfg game.GameConfig, n int, seed int64, p1, p2, name1, name2 string, alternate bool) int {
 	for _, typ := range []string{p1, p2} {
 		if typ != "random" && typ != "greedy" && !(typ == p2 && typ == "none") {
 			fmt.Fprintf(os.Stderr, "Error: --games needs AI players (random or greedy), not %q\n", typ)
@@ -457,15 +467,22 @@ func runGames(f dataFiles, cfg game.GameConfig, n int, seed int64, p1, p2, name1
 			return []game.Agent{a1}
 		}
 		a2, _ := makeAgent(p2, name2, seed+int64(2*i+1))
+		if alternate && i%2 == 1 {
+			return []game.Agent{a2, a1}
+		}
 		return []game.Agent{a1, a2}
 	})
 	maxTurns := cfg.MaxTurns
 	fmt.Printf("%d games (%d panicked), mode %s: %s; %d rounds at most (0: no limit)\n",
 		br.GamesPlayed, br.Panics, cfg.Mode, describeConfig(cfg), maxTurns)
-	for _, name := range []string{name1, name2} {
-		fmt.Printf("  %-12s wins %4d   mean score %7.2f\n", name, br.Wins[name], br.AvgScores[name])
+	if p2 == "none" {
+		fmt.Printf("  %-12s mean score %7.2f\n", name1, br.AvgScores[name1])
+	} else {
+		for _, name := range []string{name1, name2} {
+			fmt.Printf("  %-12s wins %4d   mean score %7.2f\n", name, br.Wins[name], br.AvgScores[name])
+		}
+		fmt.Printf("  ties %d; wins by seat: first %d, second %d\n", br.Ties, br.SeatWins[0], br.SeatWins[1])
 	}
-	fmt.Printf("  ties %d; wins by seat: first %d, second %d\n", br.Ties, br.SeatWins[0], br.SeatWins[1])
 	fmt.Printf("  moves %d, abstentions %d, rejected %d; mean %.1f rounds and %.1f arguments per game\n",
 		br.TotalMoves, br.TotalAbstains, br.TotalInvalid, br.AvgTurns, br.AvgArguments)
 	printCounts("ended by", br.Reasons)

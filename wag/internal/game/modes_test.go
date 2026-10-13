@@ -318,10 +318,17 @@ func TestLiveScoring(t *testing.T) {
 	}
 	gs.ExecuteTurn(abstain)
 	play(t, gs, answer("attack", "CQ:trustworthiness", "AS:position_to_know", b1, map[string]string{"W": "journalist", "D": "media"}))
-	// Alice: a1 (7) + her defence of possible (7) + the bias (6.5) + the undercut (15).
-	if alice.Score != 35.5 || bob.Score != 0 {
-		t.Fatalf("after the undercut: Alice %v, Bob %v; want 35.5, 0", alice.Score, bob.Score)
+	// Alice: a1 (7) + her defence of possible (7) + the bias (6.5); the
+	// live presets give no undercut bonus.
+	if alice.Score != 20.5 || bob.Score != 0 {
+		t.Fatalf("after the undercut: Alice %v, Bob %v; want 20.5, 0", alice.Score, bob.Score)
 	}
+	// With the bonus, the undercut is worth 15 while it holds.
+	gs.Config.Scoring.UndercutterBonus = 15
+	if s := gs.LiveScores()["Alice"]; s != 35.5 {
+		t.Fatalf("with the undercut bonus: Alice %v, want 35.5", s)
+	}
+	gs.Config.Scoring.UndercutterBonus = 0
 	// A second, weaker argument for a statement she already argued for adds
 	// nothing.
 	before := alice.Score
@@ -513,5 +520,18 @@ func TestSay(t *testing.T) {
 		if got := gs.Say(id); got != want && !strings.HasPrefix(id, "asserts(") || strings.HasPrefix(id, "asserts(") && !strings.Contains(got, "asserts that “it is not the case that action carbon tax is possible”") {
 			t.Errorf("Say(%s) = %q, want %q", id, got, want)
 		}
+	}
+}
+
+// A player who resigns while owing an answer leaves the game; the others
+// play on.
+func TestResignWhileOwingAnAnswer(t *testing.T) {
+	gs := modeGame(t, "cq", "Alice", "Bob", "Carol")
+	a1 := play(t, gs, prSupportAction())
+	play(t, gs, question("CQ:possibility", a1))
+	gs.ExecuteTurn(abstain) // Carol
+	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "resign"})
+	if r.Terminated || gs.Loser != "" || gs.ActivePlayer().ID != "Bob" {
+		t.Fatalf("Alice resigned owing an answer: terminated %v (%s), active %s", r.Terminated, r.TerminationReason, gs.ActivePlayer().ID)
 	}
 }
