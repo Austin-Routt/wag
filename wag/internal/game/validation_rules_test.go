@@ -163,3 +163,57 @@ func TestLanguageTemplatesFollowArgumentOrder(t *testing.T) {
 		t.Errorf("more_on_point text: %+v", s)
 	}
 }
+
+// Undercutting one's own argument is legal but scores nothing (it scored
+// 7 + 15). The same attack on an opponent's argument still scores.
+func TestSelfAttackScoresNothing(t *testing.T) {
+	expert := func(target string) nascq.ProposedAction {
+		return nascq.ProposedAction{Type: "attack", SchemeID: "AS:expert_opinion", AnswersCQID: "CQ:side_effect",
+			TargetArgID: target, VariableBindings: map[string]string{"W": "imf", "D": "economics", "S": "tax_hurts_poor"}}
+	}
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	r, _ := gs.ExecuteTurn(prSupportAction())
+	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+	self, _ := gs.ExecuteTurn(expert(r.ArgIDs[0]))
+	if !self.Accepted || self.ScoreDelta != 0 {
+		t.Fatalf("self-attack: accepted=%v delta=%v, want accepted and 0", self.Accepted, self.ScoreDelta)
+	}
+
+	gs = newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	r, _ = gs.ExecuteTurn(prSupportAction())
+	other, _ := gs.ExecuteTurn(expert(r.ArgIDs[0]))
+	if other.ScoreDelta != 22 {
+		t.Fatalf("attack on the opponent scored %v, want 7 + 15", other.ScoreDelta)
+	}
+}
+
+// Restating an argument already in the graph is an invalid move: rejected,
+// penalized, recorded, and the graph is unchanged. Repeating a support used
+// to score 7 every turn.
+func TestDuplicateArgumentIsRejected(t *testing.T) {
+	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	r, _ := gs.ExecuteTurn(prSupportAction())
+	for _, mover := range []string{"Bob", "Alice"} {
+		if gs.ActivePlayer().ID != mover {
+			gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+		}
+		before := gs.Adapter.Fingerprint()
+		score := gs.ActivePlayer().Score
+		dup, _ := gs.ExecuteTurn(prSupportAction())
+		if dup.Accepted || !strings.HasPrefix(dup.Error, "G1") || !strings.Contains(dup.Error, r.ArgIDs[0]) {
+			t.Fatalf("%s restating %s: %+v", mover, r.ArgIDs[0], dup)
+		}
+		if gs.Adapter.Fingerprint() != before || gs.ActivePlayer().Score != score+gs.Config.Scoring.InvalidActionPenalty {
+			t.Fatalf("%s: the graph changed or the move was not penalized", mover)
+		}
+	}
+	// The same claim from different premises is a new argument.
+	other := prSupportAction()
+	other.VariableBindings["V"] = "public_health"
+	if res, _ := gs.ExecuteTurn(other); !res.Accepted {
+		t.Fatalf("a different argument for the same claim was rejected: %s", res.Error)
+	}
+	if errs := gs.CheckInvariants(); len(errs) > 0 {
+		t.Fatal(errs)
+	}
+}

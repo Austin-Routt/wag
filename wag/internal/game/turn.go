@@ -2,6 +2,8 @@ package game
 
 import (
 	"fmt"
+	"sort"
+	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -64,22 +66,7 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// ---------------------------------------------------------------
 	validated, err := gs.NASCQ.Validate(action, gs.bridge)
 	if err != nil {
-		// Invalid action: penalize and record.
-		player.Score += gs.Config.Scoring.InvalidActionPenalty
-
-		gs.MoveHistory = append(gs.MoveHistory, Move{
-			TurnNumber: gs.CurrentTurn,
-			PlayerID:   player.ID,
-			Action:     action,
-			ScoreDelta: gs.Config.Scoring.InvalidActionPenalty,
-		})
-
-		// Invalid actions don't consume a turn — the player can try again.
-		// For CLI Phase 1, we return the error so the caller can prompt again.
-		return &TurnResult{
-			Accepted: false,
-			Error:    err.Error(),
-		}, nil
+		return gs.rejectInvalid(player, action, err.Error()), nil
 	}
 
 	// ---------------------------------------------------------------
@@ -112,6 +99,14 @@ func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, erro
 			Accepted: false,
 			Error:    "move creates a cycle in the argument graph",
 		}, nil
+	}
+
+	// G1: a move must not restate an argument already in the graph (same
+	// scheme, conclusion and premises, whoever made it). Repeating a support
+	// move used to score it again every turn.
+	if dup := gs.duplicateArgument(argIDs); dup != "" {
+		gs.Adapter.Restore(checkpoint)
+		return gs.rejectInvalid(player, action, fmt.Sprintf("G1: this argument is already in the graph as %s", dup)), nil
 	}
 
 	// ---------------------------------------------------------------
@@ -257,6 +252,57 @@ func (gs *GameState) applyAction(
 	}
 }
 
+// rejectInvalid penalizes and records an invalid move. An invalid move does
+// not end the turn: the player can try again.
+func (gs *GameState) rejectInvalid(player *Player, action nascq.ProposedAction, msg string) *TurnResult {
+	player.Score += gs.Config.Scoring.InvalidActionPenalty
+	gs.MoveHistory = append(gs.MoveHistory, Move{
+		TurnNumber: gs.CurrentTurn,
+		PlayerID:   player.ID,
+		Action:     action,
+		ScoreDelta: gs.Config.Scoring.InvalidActionPenalty,
+	})
+	return &TurnResult{Accepted: false, Error: msg}
+}
+
+// duplicateArgument returns the ID of an argument that was in the graph before
+// the move and that one of the move's arguments restates: a main argument with
+// the same scheme, conclusion and premises. It returns "" if there is none.
+func (gs *GameState) duplicateArgument(moveArgs []string) string {
+	key := func(arg *caes.Argument) string {
+		prem := make([]string, 0, len(arg.Premises))
+		for _, p := range arg.Premises {
+			if p.Stmt != nil {
+				prem = append(prem, p.Stmt.Id)
+			}
+		}
+		sort.Strings(prem)
+		scheme := ""
+		if arg.Scheme != nil {
+			scheme = arg.Scheme.Id
+		}
+		return scheme + "|" + arg.Conclusion.Id + "|" + strings.Join(prem, ",")
+	}
+	isNew := make(map[string]bool, len(moveArgs))
+	keys := map[string]bool{}
+	for _, id := range moveArgs {
+		isNew[id] = true
+		if arg := gs.Adapter.Graph.Arguments[id]; arg != nil && arg.Conclusion != nil && carneades.ArgumentRole(arg) == carneades.RoleMain {
+			keys[key(arg)] = true
+		}
+	}
+	for _, id := range sortedArgIDs(gs) {
+		arg := gs.Adapter.Graph.Arguments[id]
+		if isNew[id] || arg.Conclusion == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
+			continue
+		}
+		if keys[key(arg)] {
+			return id
+		}
+	}
+	return ""
+}
+
 func appendNew(list []string, id string) []string {
 	for _, x := range list {
 		if x == id {
@@ -308,6 +354,13 @@ func (gs *GameState) computeScore(
 ) float64 {
 	cfg := gs.Config.Scoring
 	score := 0.0
+
+	// An attack on one's own argument is legal (the SRD lets self-attacks
+	// count against a player's consistency, which is not implemented yet) but
+	// earns nothing: undercutting your own argument used to score 7 + 15.
+	if va.Type == "attack" && va.TargetArgID != "" && gs.Adapter.ArgumentOwner(va.TargetArgID) == gs.ActivePlayer().ID {
+		return 0
+	}
 
 	// Base points for each argument the player put forward. Exception
 	// arguments (part of the scheme) and presumptions earn nothing: an
