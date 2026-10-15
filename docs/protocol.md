@@ -127,24 +127,26 @@ The move:
 
 ## What is recorded
 
-Every decision of every seat (human, language model, Claude, rule bot), accepted or rejected, is a **trace**. They are served as JSON Lines by `GET /api/games/{id}/traces` (*Traces* in the top bar) and included in the export without the prompts. `protocol/trace.schema.json` describes them. A trace holds:
+A game's **trace file** (`wag-trace/2`) is a stream of events, one JSON object a line. It is served by `GET /api/games/{id}/traces` (*Traces* in the top bar) and written for every game by `wag-llm play` (`docs/llm.md`). `protocol/trace.schema.json` describes it. The events, in the order they happened (`order`), each with an `id`:
 
-- **Who.** The player, side, seat kind and model; the attempt number.
-- **The input.** For a language model, the prompt, its SHA-256 and the protocol version; on a retry, the message that said why the move was rejected.
-- **The output.**
-  - The raw reply.
-  - What it said of its reasoning: `context`, `thoughts`, `summary`, `expect`, `alternatives`, `confidence`.
-  - For a human, the optional *Why this move?* note.
-- **The move and its result.**
-  - The move as validated: references resolved, attack type and answer filled in.
-  - Accepted or why not; the arguments made; the score change.
-- **What it did.**
-  - The claim's label before and after.
-  - The effects ("a1 (Alice's) no longer holds").
-  - Each prediction against the actual label.
-  - What each named alternative would have done: legal or not, the claim's label after, the score change. These come from trying it on the game and undoing it.
+1. **`game_start`** (`g`): what is needed to set the game up again.
+   - The new-game request and the resulting configuration; the seats.
+   - The model seats' profiles: provider, model, parameters. Keys are never in a profile.
+   - The rule bots' seed; the scheme data's hash (`data_sha256`); the protocol version; the build (commit, SDK versions); the system prompt of model seats.
+2. **`call`** (`c0`, `c1`, …): one call of a model seat to its provider.
+   - The request as sent: the system prompt, the **whole conversation** so far (the board, and on a retry the rejected reply and the reason), and the generation parameters.
+   - The answer: its text, finish reason, the model (version) that served it, response and request IDs, token usage (a count the provider does not report is absent, not zero).
+   - Or the error, classified: rate limit (with the delay asked for), authentication, invalid request, server, timeout, blocked, empty.
+   - The latency, and how long the call waited first. A call retried after a rate limit is one event per try (`n`).
+3. **`decision`** (`d0`, `d1`, …): one decision of a seat (human, language model, model seat, rule bot), accepted or rejected.
+   - **Who.** The player, side, seat kind; for a model seat its profile, provider, model and the model that answered; the turn (moves made before it: the attempts at one move share it) and the attempt number.
+   - **The input.** For a language model, the board as the turn began, its SHA-256 and the protocol version; on a retry, the `feedback` it was given. A model seat's decision has the call it came from as `parent`.
+   - **The output.** The raw reply; what it said of its reasoning (`context`, `thoughts`, `summary`, `expect`, `alternatives`, `confidence`); for a human, the optional *Why this move?* note.
+   - **The move and its result.** The move as validated (references resolved, attack type and answer filled in); accepted or why not; the arguments made; the score change.
+   - **What it did.** The claim's label before and after; the effects ("a1 (Alice's) no longer holds"); each prediction against the actual label; what each named alternative would have done (legal or not, the claim's label after, the score change), from trying it on the game and undoing it.
+4. **`game_end`** (`e`), once the game is over: the outcome (winner, verdict, reason, scores), every statement's final label, and the verdict under each context preset's weights.
 
-The export also keeps the testers' notes, every request that tried to change the game, and, when the game ends, how the claim would stand under each context preset's weights.
+The export keeps the decisions without their prompts, the testers' notes, every request that tried to change the game, and the verdicts. `wag-llm replay` plays a trace file again with the recorded answers and checks that the game sends the same requests and makes the same decisions.
 
 ## Debugging and training: what to record, and what not to trust
 

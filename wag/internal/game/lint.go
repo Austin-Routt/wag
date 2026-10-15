@@ -100,19 +100,20 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		}
 	}
 
-	// A backup scheme without an answer variable should conclude the answer
-	// it backs: otherwise an answering argument concludes the answer in place
-	// of what its scheme concludes (its premises support the scheme's
-	// conclusion, not the answer).
+	// A backup scheme without an answer variable backs only the answers its
+	// conclusion can be (S9, nascq.fitAnswer), unless its edge declares a
+	// bridge: an edge on which it can back none is an error (every answer
+	// would be rejected), and one where it can back some is reported.
 	for _, b := range n.BackupEdges {
 		bs := n.Schemes[b.Scheme]
-		if bs == nil || bs.AnswerVariable != "" || bs.Free {
+		if bs == nil || bs.AnswerVariable != "" || bs.Free || b.Bridge != "" {
 			continue
 		}
 		bc := caesConclusions[bs.CarneadesID]
 		if len(bc) != 1 {
 			continue
 		}
+		var fits, not []string
 		for _, e := range n.AskEdges {
 			if e.CQ != b.CQ {
 				continue
@@ -130,12 +131,34 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 				if c := caesConclusions[ts.CarneadesID]; len(c) == 1 {
 					answer = renameVars(c[0], "T")
 				}
-			}
-			if answer == "" || unifiesEitherWay(bc[0], answer) {
+			case nascq.LocusArgument:
+				not = append(not, e.Scheme+" (the answer is that its inference fails)")
 				continue
 			}
-			add(false, b.Scheme, "backs %s on %s, but concludes %s, not its answer (%s or its opposite): an answering argument concludes the answer instead",
-				b.CQ, e.Scheme, bc[0], answer)
+			if answer == "" || unifiesEitherWay(bc[0], answer) {
+				fits = append(fits, e.Scheme)
+				continue
+			}
+			not = append(not, fmt.Sprintf("%s (the answer is %s or its opposite)", e.Scheme, answer))
+		}
+		switch {
+		case len(not) == 0:
+		case len(fits) == 0:
+			add(true, b.Scheme, "backs %s, but its conclusion %s is none of its answers: %s. S9 rejects every such answer; remove the edge, or declare its bridge",
+				b.CQ, bc[0], strings.Join(not, "; "))
+		default:
+			add(false, b.Scheme, "backs %s on %s, but not on %s: its conclusion %s is not the answer there (S9 rejects it)",
+				b.CQ, strings.Join(fits, ", "), strings.Join(not, "; "), bc[0])
+		}
+	}
+	for _, id := range nascq.SortedStringKeys(n.Schemes) {
+		if s := n.Schemes[id]; s.ThesisIndependent && s.AnswerVariable == "" && !s.Free {
+			add(false, id, "is thesis-independent but has no answer variable: it can back only the answers its conclusion can be")
+		}
+	}
+	for _, id := range nascq.SortedStringKeys(n.Questions) {
+		if q := n.Questions[id]; id != nascq.CQPremiseAcceptable && q.AnswerEN == nil {
+			add(false, id, "has no answer_en: which literal answer (yes, no) is against the argument")
 		}
 	}
 

@@ -1,0 +1,11 @@
+{
+ "format": "wag-id-migrations/1",
+ "note": "Scheme IDs of the upstream walton.yml renamed in this cleaned copy (CHANGELOG.md, \"Id map\"). A file that uses an old ID (an annotation, a saved game) reads as if it used the new one. Predicates renamed with them are in the CHANGELOG.",
+ "schemes": {
+  "popular_practise": "popular_practice",
+  "epistemic_ignorence": "epistemic_ignorance",
+  "treat": "threat",
+  "exeptional": "exceptional",
+  "exeption_to_rule": "exception_to_rule"
+ }
+}

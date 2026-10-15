@@ -1,4 +1,4 @@
-walton-check walton-clean/walton.clean.yml
+walton-check walton.yml
 
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)

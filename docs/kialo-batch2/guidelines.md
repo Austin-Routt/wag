@@ -15,7 +15,7 @@ Two annotators code the same items independently. Do not look at the other annot
 | `walton.yml` | The scheme definitions: for each scheme, its `variables`, `premises`, `assumptions`, `exceptions` and `conclusions` as formulas, and English templates under `language`. Use these IDs and formulas. This is the cleaned file: syntax and typos fixed, scheme content unchanged. |
 | `compendium.md` / `compendium.json` | The book's 60 schemes and 68 subtypes, with their premises, conclusions and critical questions as printed. Each links to the `walton.yml` scheme that formalizes it (`walton_links`), with a map from each CQ to the formula that expresses it. |
 | `families.json` | Scheme families: a generic scheme with its specializations, variants, subtypes, counterparts and context-specific forms. Use it to choose the most specific scheme the text supports. |
-| `schemes.json`, `critical_questions.json`, `edges.json`, `core.yml` | What the game (WAG) can play today. There are nine schemes, mapped to `walton.yml` by `carneades_id`, with their critical questions and the scheme→question (ask) and question→scheme (backup) links. |
+| `schemes.json`, `critical_questions.json`, `edges.json`, `core.yml` | What the game (WAG) can play today. There are nine NASCQ schemes (`core.yml` has a tenth, `credible_source`, kept for old games), mapped to `walton.yml` by `carneades_id`, with their critical questions and the scheme→question (ask) and question→scheme (backup) links. |
 
 WAG's schemes and their `walton.yml` IDs:
 

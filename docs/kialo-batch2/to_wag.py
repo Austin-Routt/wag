@@ -20,6 +20,26 @@ A move the game rejects is retried with Other (the claim's literal text as
 its premise), and the report says why. When the same side moves twice, the
 other passes. The game's export (--export) can be loaded in the browser
 ("Load an exported game") to look at the annotated discussion.
+
+Each claim's entry in the report keeps what the annotation intended
+(`intended`: scheme, role, target, question) apart from what was played
+(`executed`), and says how they relate (`integration`):
+
+  - as_intended: played with its scheme, in the role the annotation gives
+    (or, for a bare denial, as the challenge the guidelines prescribe);
+  - coverage_gap: its scheme is not one the game has, so it was played with
+    Other: the game lacks the scheme, the annotation is not at fault;
+  - fragment: the claim states a premise of its target's argument (fit
+    "fragment": the scheme is the target's, not the claim's), so it is
+    played as the claim's own support of that premise, with Other;
+  - failed: the game has its scheme, but rejected the intended move, and the
+    claim was played with Other or not at all: a failed test of the scheme,
+    of its questions or of the annotation, even when the Other move is legal;
+  - duplicate: a challenge of a premise another claim already challenged;
+  - cascade: its target was itself not played as intended, so the premise
+    or statement it is about is not on the board;
+  - not_played: a clarification, a claim with no scheme and no target, or
+    no side.
 """
 
 import argparse
@@ -139,6 +159,14 @@ def main():
             call(base, f"/api/games/{gid}/move", {"action": {"type": "abstain"}, "why": "keeps the Kialo order"})
         return call(base, f"/api/games/{gid}/move", {"action": action, "why": why})
 
+    def played_with_other(claim_id):
+        """Whether the claim was played with Other where its annotation
+        meant a scheme: its premises are not on the board."""
+        for e in report:
+            if e["claim"] == claim_id:
+                return e.get("played") in ("other", "other-new") and e.get("integration") != "fragment"
+        return False
+
     # A claim that answers a sibling played later waits for it (one more pass).
     order = [it for it in items["items"] if it["kialo_claim_id"] != thesis_id and it["kialo_claim_id"] in ann]
     later = {}
@@ -158,6 +186,11 @@ def main():
         side, pol = side_of(a, rel)
         entry = {"claim": cid, "scheme": wid, "role": (a.get("role") or {}).get("kind")}
         tgt0 = ((a.get("target") or {}).get("actual") or {})
+        entry["intended"] = {"walton_id": wid, "wag_id": WALTON_TO_WAG.get(wid), "fit": scheme.get("fit"),
+                             "role": (a.get("role") or {}).get("kind"), "cq": (a.get("role") or {}).get("cq"),
+                             "polarity": pol, "target_claim": tgt0.get("claim"), "target_part": tgt0.get("part"),
+                             "target_formula": tgt0.get("formula"),
+                             "conclusion": (inst.get("conclusion") or {}).get("formula")}
         if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and str(tgt0.get("claim")) in played:
             # A bare denial of a premise is a challenge (audit P5): the
             # premise's author must argue for it.
@@ -171,10 +204,16 @@ def main():
                      f"Kialo {cid}: a bare denial, played as a challenge")
             res = r.get("result") or {}
             entry["played"] = "challenge" if res.get("accepted") else "no: challenge: " + str(res.get("error"))
+            entry["executed"] = {"how": "challenge", "cq": cq, "target_arg": arg, "premise": f, "accepted": bool(res.get("accepted")),
+                                 "error": res.get("error")}
+            err = str(res.get("error") or "")
+            entry["integration"] = ("as_intended" if res.get("accepted") else "duplicate" if err.startswith("Q2")
+                                    else "cascade" if played_with_other(str(tgt0["claim"])) else "failed")
             report.append(entry)
             continue
         if side is None or wid == "none":
             entry["played"] = "no: " + ("no side" if side is None else "no scheme: " + str(scheme.get("fit")))
+            entry["executed"], entry["integration"] = None, "not_played"
             report.append(entry)
             continue
         tgt = ((a.get("target") or {}).get("actual") or {})
@@ -201,6 +240,11 @@ def main():
                 "action_amendment", "alternative_means", "independent_pro", "independent_con", "none", "clarification"):
             stmt = None
         actions = []
+        # A fragment that states a premise of its target's argument carries the
+        # target's scheme, not one of its own: it supports the premise.
+        fragment = scheme.get("fit") == "fragment" and stmt and tpart.startswith("premise")
+        if fragment:
+            wag = None
         if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and tclaim in played:
             act = {"type": "attack" if pol == "against" else "support", "target_arg_id": played[tclaim]["arg"],
                    "answers_cq_id": cq, "scheme_id": wag, "variable_bindings": bindings, "text": literal}
@@ -236,12 +280,32 @@ def main():
                 played[cid] = {"arg": arg, "conclusion": concl}
                 entry["played"] = how
                 entry["arg"] = arg
+                entry["executed"] = {"how": how, "scheme_id": act.get("scheme_id"), "cq": act.get("answers_cq_id"),
+                                     "target_arg": act.get("target_arg_id"), "target_stmt": act.get("target_stmt_id"),
+                                     "type": act.get("type"), "arg": arg, "conclusion": concl}
                 break
             errors.append(f"{how}: {res.get('error')}")
         else:
             entry["played"] = "no: " + ("; ".join(errors) if errors else f"its target ({tclaim}, {tpart}) is not on the board")
-        if errors and entry.get("played") in ("statement", "other", "new", "cq"):
+            entry["executed"] = None
+        if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new"):
             entry["fallback_after"] = errors
+        how = entry.get("played")
+        if fragment and how == "other":
+            entry["integration"] = "fragment"
+        elif how in ("cq", "statement", "new"):
+            # Played with its scheme; as intended if in the intended role:
+            # a CQ answer as a CQ answer, anything else as a move about a
+            # statement or a new argument.
+            intended_cq = entry["intended"]["role"] == "cq_answer" and str(cq or "").startswith("CQ:")
+            entry["integration"] = "as_intended" if intended_cq == (how == "cq") else "failed"
+        elif how in ("other", "other-new"):
+            entry["integration"] = "coverage_gap" if not wag else "failed"
+        else:
+            entry["integration"] = "failed" if wag else "not_played"
+        if entry["integration"] in ("failed", "not_played") and played_with_other(tclaim) and \
+                any("S8" in x or "S7" in x for x in errors):
+            entry["integration"] = "cascade"
         report.append(entry)
 
     s = state()
@@ -251,6 +315,9 @@ def main():
                "as_challenges": sum(1 for e in report if e.get("played") == "challenge"),
                "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
+               "integration": {k: sum(1 for e in report if e.get("integration") == k)
+                               for k in ("as_intended", "fragment", "coverage_gap", "failed", "duplicate", "cascade", "not_played")},
+               "data_sha256": call(base, f"/api/games/{gid}/export").get("data_sha256"),
                "moves": report}
     if args.report:
         json.dump(summary, open(args.report, "w"), indent=1, ensure_ascii=False)

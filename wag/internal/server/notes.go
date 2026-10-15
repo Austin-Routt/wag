@@ -68,8 +68,8 @@ func (ss *Session) addNote(target, kind, text, by string) (Note, error) {
 	return n, nil
 }
 
-// buildInfo says which build of WAG made an export: the commit, and whether
-// the working tree had changes.
+// buildInfo says which build of WAG made an export or a trace: the commit,
+// whether the working tree had changes, and the model SDKs' versions.
 func buildInfo() map[string]string {
 	out := map[string]string{}
 	if bi, ok := debug.ReadBuildInfo(); ok {
@@ -84,6 +84,12 @@ func buildInfo() map[string]string {
 				out["modified"] = s.Value
 			case "GOOS", "GOARCH":
 				out[strings.ToLower(s.Key)] = s.Value
+			}
+		}
+		for _, d := range bi.Deps {
+			switch d.Path {
+			case "google.golang.org/genai", "github.com/anthropics/anthropic-sdk-go":
+				out[d.Path] = d.Version
 			}
 		}
 	}

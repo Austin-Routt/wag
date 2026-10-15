@@ -139,7 +139,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
   - Claude's replies;
   - every decision's trace;
   - the verdicts under each preset.
-- **Traces** downloads every decision as JSON Lines (`wag-trace/1`, `docs/protocol.md`). For a language model, it includes the prompt and its reply, the reasons it gave, its predictions checked, and its alternatives tried.
+- **Traces** downloads the game's trace file (`wag-trace/2`, `docs/protocol.md`): the game's setup, every call a model seat made (the whole conversation, the answer, usage, latency), and every decision. For a language model, a decision has the prompt and its reply, the reasons it gave, its predictions checked, and its alternatives tried.
 - **Load an exported game** (on *New game*) replays an export move by move, so a game can be looked at again, continued, or turned into a test.
 
 ## 3. Known limits of the prototype

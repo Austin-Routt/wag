@@ -18,3 +18,8 @@ vendor/
 *~
 Thumbs.db
 .DS_Store
+# The commands, built in wag/ (docs/llm.md)
+/wag/wag-cli
+/wag/wag-server
+/wag/wag-llm
+/wag/runs/

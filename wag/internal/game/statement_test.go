@@ -130,22 +130,44 @@ func TestChallengeAnsweredByAnArgumentForThePremise(t *testing.T) {
 	}
 }
 
-// An argument that answers a critical question concludes the answer: a
-// consequences argument backing "is there a better means?" concludes that
-// another action is better, so the consequences scheme's question about its
-// conclusion (side effects of doing it) does not apply to it. The playtest
-// of 2026-10-13 showed the prompt offering it, with the answers reversed.
-// (The shipped data no longer links consequences to that question, after the
-// audit's N9: a good consequence of another action does not show it is the
-// better means. The edge is added back here to keep the rule tested.)
+// A scheme whose conclusion is not the answer cannot back it (S9): a
+// consequences argument's premises support "do A", not "another action is
+// better". The audit of 2026-10-13 (§4) found the old rule, where the
+// backup edge stood for the missing link, let such an argument conclude an
+// answer its premises do not support.
+//
+// With a bridge the edge declares, it can, and then it concludes the
+// answer: the consequences scheme's question about its conclusion (side
+// effects of doing it) does not apply to it. The playtest of 2026-10-13
+// showed the prompt offering it, with the answers reversed.
 func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
-	edges := strings.Replace(string(data.EdgesJSON), `"backup_edges": [`, `"backup_edges": [ { "scheme": "AS:consequences", "cq": "CQ:other_means" },`, 1)
-	gs := newShippedGame(t, []byte(edges), "Alice", "Bob")
+	add := func(edge string) []byte {
+		return []byte(strings.Replace(string(data.EdgesJSON), `"backup_edges": [`, `"backup_edges": [ `+edge+`,`, 1))
+	}
+	gs := newShippedGame(t, add(`{ "scheme": "AS:consequences", "cq": "CQ:other_means" }`), "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	a1 := play(t, gs, prSupportAction())
-	a2 := play(t, gs, answer("attack", "CQ:other_means", "AS:consequences", a1, map[string]string{"A": "subsidize insulation", "G": "lower emissions"}))
+	bad := answer("attack", "CQ:other_means", "AS:consequences", a1, map[string]string{"A": "subsidize insulation", "G": "lower emissions"})
+	if r, err := gs.ExecuteTurn(bad); err != nil || r.Accepted || !strings.Contains(r.Error, "S9") {
+		t.Fatalf("an answer its scheme cannot conclude: %+v %v", r, err)
+	}
+	for _, tmpl := range gs.NASCQ.EnumerateActions(gs.Bridge(), []string{a1}) {
+		if tmpl.AnswersCQID == "CQ:other_means" && tmpl.SchemeID == "AS:consequences" {
+			t.Fatalf("offered %+v", tmpl)
+		}
+	}
+
+	gs = newShippedGame(t, add(`{ "scheme": "AS:consequences", "cq": "CQ:other_means", "bridge": "test: a good consequence of another action shows it achieves the goal" }`), "Alice", "Bob")
+	gs.Config.MaxTurns = 0
+	if again := play(t, gs, prSupportAction()); again != a1 {
+		t.Fatalf("the new game's first argument is %s, not %s", again, a1)
+	}
+	a2 := play(t, gs, bad)
 	if c := gs.Adapter.Graph.Arguments[a2].Conclusion.Id; !strings.HasPrefix(c, "realize_more_effectively(") {
 		t.Fatalf("the answer concludes %s", c)
+	}
+	if b := gs.MoveHistory[len(gs.MoveHistory)-1].Bridge; !strings.HasPrefix(b, "test:") {
+		t.Fatalf("the move does not record its bridge: %q", b)
 	}
 	for _, tmpl := range gs.NASCQ.EnumerateActions(gs.Bridge(), []string{a2}) {
 		if tmpl.Locus.Kind == nascq.LocusConclusion {

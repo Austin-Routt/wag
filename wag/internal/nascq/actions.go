@@ -151,6 +151,9 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 					continue
 				}
 				for _, t := range n.answerTemplates(argID, cq, locus, stmtID) {
+					if !n.canAnswer(t, graph) {
+						continue // S9 would reject it
+					}
 					t.Fixed = n.answerFixed(t, graph)
 					actions = append(actions, t)
 				}
@@ -159,6 +162,25 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 	}
 
 	return actions
+}
+
+// canAnswer reports whether the template's scheme can conclude its answer
+// (S9, fitAnswer): a question, Other and the schemes with an answer
+// variable always can; another scheme an answer of its conclusion's form,
+// or any answer through a bridge its backup edge declares.
+func (n *NASCQ) canAnswer(t ActionTemplate, graph GraphQuerier) bool {
+	s := n.Schemes[t.SchemeID]
+	if t.Type == "question" || s == nil || s.Free || s.AnswerVariable != "" || n.BridgeOf(s.ID, t.AnswersCQID) != "" {
+		return true
+	}
+	va := &ValidatedAction{ProposedAction: ProposedAction{Type: t.Type, TargetArgID: t.TargetArgID, AnswersCQID: t.AnswersCQID},
+		Locus: t.Locus, LocusStmtID: t.LocusStmtID}
+	stmt, _ := n.concluded(va, graph)
+	if stmt == "" {
+		return false
+	}
+	_, err := graph.Fits(s.CarneadesID, stmt, nil)
+	return err == nil
 }
 
 // answerFixed returns the values an answer from the template must give the

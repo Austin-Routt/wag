@@ -246,6 +246,9 @@ type Move struct {
 	Resigned bool
 	// Rejection is why an invalid move was rejected.
 	Rejection string `json:",omitempty"`
+	// Bridge is the declared bridge an answer was made through, when its
+	// scheme's conclusion is not the answer (nascq.Edge.Bridge).
+	Bridge string `json:",omitempty"`
 
 	// Moderation is the moderator's verdict on a held move ("approved",
 	// "rejected"), with their note.

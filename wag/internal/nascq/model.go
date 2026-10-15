@@ -76,8 +76,8 @@ type ASNode struct {
 	// the answer to a critical question, it is bound to the answer, so the
 	// argument's premises are about the answer (asserts(W, ¬possible(A))).
 	// A scheme without one concludes something more specific
-	// (should_be_performed(A)); its answering argument concludes the answer
-	// and leaves its own conclusion as the unstated link (an enthymeme).
+	// (should_be_performed(A)): it backs only answers of that form (S9),
+	// unless its backup edge declares a bridge (Edge.Bridge).
 	AnswerVariable string `json:"answer_variable,omitempty"`
 
 	// Free marks the user-defined scheme ("Other", see EnableOther): the
@@ -126,6 +126,17 @@ type CQNode struct {
 	SemanticType       SemanticType `json:"semantic_type"`        // answer semantic category
 	QuestionTemplateEN string       `json:"question_template_en"` // English question pattern
 	CaesMapping        CaesMapping  `json:"caes_mapping"`         // how to translate to CAES operations
+	// AnswerEN is the literal answer to the question that counts against
+	// the argument, and the one in its favour ("yes" to "would it have bad
+	// side effects?" is against it; "no" to "is it possible?"): what the
+	// answer's support or attack means in the question's words.
+	AnswerEN *AnswerWords `json:"answer_en,omitempty"`
+}
+
+// AnswerWords are a critical question's literal answers.
+type AnswerWords struct {
+	Against string `json:"against"`
+	For     string `json:"for"`
 }
 
 // Edge represents a connection between an AS-node and a CQ-node.
@@ -146,6 +157,13 @@ type Edge struct {
 	// decides (NASCQ.LocusOf).
 	Locus   string `json:"locus,omitempty"`
 	Pattern string `json:"pattern,omitempty"`
+
+	// Bridge (backup edges only), if not empty, declares that the scheme
+	// backs answers to the question that are not of its conclusion's form,
+	// and says why its conclusion supports such an answer: an enthymeme,
+	// stated so that it can be reviewed. Without it, a scheme without an
+	// answer variable backs only answers its conclusion can be (S9).
+	Bridge string `json:"bridge,omitempty"`
 }
 
 // Locus kinds: the part of an argument a critical question is about.
@@ -252,6 +270,10 @@ type ValidatedAction struct {
 	// variables of the scheme's conclusion take for it to conclude the
 	// statement the move is about (S9). The mover need not give them.
 	Fixed map[string]string `json:"fixed,omitempty"`
+
+	// Bridge is the backup edge's declared bridge, when the answer is not of
+	// the backing scheme's conclusion form (Edge.Bridge): the move records it.
+	Bridge string `json:"bridge,omitempty"`
 
 	// Free marks the user-defined scheme ("Other", see EnableOther): the
 	// player writes the premises (P1, P2, ...) and the conclusion (C) in

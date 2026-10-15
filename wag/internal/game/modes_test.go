@@ -270,9 +270,9 @@ func TestDebateClaimStandard(t *testing.T) {
 	if gs.Adapter.Graph.Statements[gs.Claim].Label != caes.In {
 		t.Fatal("an unopposed 0.70 argument does not meet CCE")
 	}
-	play(t, gs, answer("attack", "CQ:other_goals", "AS:analogy", a1, map[string]string{"C": "spain"}))
+	play(t, gs, answer("attack", "CQ:other_goals", "AS:position_to_know", a1, map[string]string{"W": "the treasury", "D": "public budgets"}))
 	if l := gs.Adapter.Graph.Statements[gs.Claim].Label; l != caes.Out {
-		t.Fatalf("claim %v after a 0.55 rebuttal under CCE, want Out", l)
+		t.Fatalf("claim %v after a 0.65 rebuttal under CCE, want Out", l)
 	}
 	if o := gs.Outcome(); o.WinningSide != "con" {
 		t.Fatalf("provisional outcome %+v", o)
@@ -469,7 +469,7 @@ func TestHumanWizardDefendQuestionResign(t *testing.T) {
 	play(t, gs, act)
 
 	out.Reset()
-	alice := NewHumanAgent("Alice", strings.NewReader("3\n1\n4\n3\ndr yes\npolitics\n"), &out) // defend → a1 → possibility → expert
+	alice := NewHumanAgent("Alice", strings.NewReader("3\n1\n4\n2\ndr yes\npolitics\n"), &out) // defend → a1 → possibility → expert
 	act = alice.ChooseAction(gs.BuildObservation())
 	shown := out.String()
 	for _, want := range []string{

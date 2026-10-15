@@ -1,0 +1,32 @@
+walton-check walton.yml (the original)
+
+== 1. import ==
+YAML error: yaml: line 733: mapping values are not allowed in this context
+import error: yaml: line 733: mapping values are not allowed in this context
+strict YAML decode (unknown or duplicate keys): 1 error(s)
+  yaml: line 733: mapping values are not allowed in this context
+stderr during import: ""
+schemes: 0, language keys: 0
+
+== 2. Carneades validator ==
+before instantiation: 0 problem(s)
+after instantiating every scheme: 0 problem(s)
+
+== 3. InstantiateScheme ==
+schemes failing instantiation: 0 of 0
+
+== 4. language ==
+0 problem(s)
+
+declared variables used in no formula (informational): 0
+
+== per scheme (checks 2-4) ==
+schemes passing every check: 0 of 0
+problems not tied to one scheme (language keys etc.): 0
+
+== GATE ==
+1_import       FAIL
+2_validator    FAIL
+3_instantiate  FAIL
+4_language     FAIL
+GATE: FAIL

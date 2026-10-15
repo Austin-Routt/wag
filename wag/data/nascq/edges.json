@@ -45,8 +45,6 @@
     { "cq": "CQ:value_effect",      "scheme": "AS:values", "locus": "premise", "pattern": "positive_affects({V},{G},{A})" }
   ],
   "backup_edges": [
-    { "scheme": "AS:values",        "cq": "CQ:other_goals" },
-    { "scheme": "AS:values",        "cq": "CQ:legitimate_value" },
     { "scheme": "AS:sign",          "cq": "CQ:side_effect" },
     { "scheme": "AS:sign",          "cq": "CQ:possibility" },
     { "scheme": "AS:sign",          "cq": "CQ:goal_possible" },

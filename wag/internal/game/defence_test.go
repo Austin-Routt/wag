@@ -109,11 +109,12 @@ func TestDefenceInDepth(t *testing.T) {
 func TestExceptionDefence(t *testing.T) {
 	for _, c := range []struct {
 		name, defender string
+		weight         float64 // the defender's weight, if not its scheme's
 		wantBiased     caes.Label
 	}{
-		{"stronger denial", "AS:expert_opinion", caes.Out}, // 0.70 > 0.65
-		{"equal denial", "AS:position_to_know", caes.Out},  // 0.65 = 0.65: a tie
-		{"weaker denial", "AS:analogy", caes.In},           // 0.55 < 0.65
+		{"stronger denial", "AS:expert_opinion", 0, caes.Out}, // 0.70 > 0.65
+		{"equal denial", "AS:position_to_know", 0, caes.Out},  // 0.65 = 0.65: a tie
+		{"weaker denial", "AS:expert_opinion", 0.55, caes.In}, // 0.55 < 0.65
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
@@ -125,8 +126,8 @@ func TestExceptionDefence(t *testing.T) {
 				t.Fatal("the undercut argument's conclusion is not Out")
 			}
 			bindings := map[string]string{"W": "auditor", "D": "media"}
-			if c.defender == "AS:analogy" {
-				bindings = map[string]string{"C": "earlier_audit"}
+			if c.weight != 0 {
+				gs.applyWeights(map[string]float64{c.defender: c.weight})
 			}
 			d := play(t, gs, answer("support", "CQ:trustworthiness", c.defender, b1, bindings))
 			if got := gs.Adapter.Graph.Arguments[d].Conclusion.Id; got != "¬untrustworthy(dr_x)" {

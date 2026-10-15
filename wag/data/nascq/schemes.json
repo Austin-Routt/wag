@@ -283,7 +283,7 @@
     "carneades_id": "analogy",
     "name": "Argument from Analogy",
     "semantic_type": "truth",
-    "thesis_independent": true,
+    "thesis_independent": false,
     "base_weight": 0.55,
     "variables": {
       "A": {

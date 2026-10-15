@@ -1,0 +1,729 @@
+walton-check check/walton.syntax-only.yml
+
+== 1. import ==
+strict YAML decode (unknown or duplicate keys): 3 error(s)
+  line 56: key "biased/1" already set in map
+  line 150: key "good/1" already set in map
+  line 418: field assumption not found in type main.strictScheme
+stderr during import: "*** Parse Error before[ <input>:1:30 ]: literal not terminated\n*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:32 ]: literal not terminated\n*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27\n*** Parse Error before[ <input>:1:33 ]: invalid char literal\n*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29\n*** Parse Error before[ <input>:1:26 ]: literal not terminated\n*** Parse Error before[ <input>:1:26 ]: invalid char literal\n*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19\n"
+schemes: 111, language keys: 392
+
+== 2. Carneades validator ==
+before instantiation: 138 problem(s)
+  [argument scheme] abductive_backward: predicate not declared in the language: data_set/2
+  [argument scheme] ad_hominem: predicate not declared in the language: attack_well_supported/0
+  [argument scheme] ad_hominem: predicate not declared in the language: character_revelant/0
+  [argument scheme] ad_hominem: variable declared but not used: S
+  [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] commitment1: predicate not declared in the language: commined_to/2
+  [argument scheme] common_folk_ad_populum: predicate not declared in the language: background/0
+  [argument scheme] common_folk_ad_populum: predicate not declared in the language: being_credible/0
+  [argument scheme] common_folks_group_ad_populum: predicate not declared in the language: accept_saying/0
+  [argument scheme] danger: predicate not declared in the language: should_not/1
+  [argument scheme] end_and_means_2: predicate not declared in the language: means_end/1
+  [argument scheme] end_and_means_2: predicate not declared in the language: more_important_ends/0
+  [argument scheme] gradualism: predicate not declared in the language: proper_sequence/0
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: other_consequences/1
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: prudential/1
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: strongly_occur/1
+  [argument scheme] negative_normal_expectations: predicate not declared in the language: not_normal/0
+  [argument scheme] negative_practical: predicate not declared in the language: sufficient_evidence/0
+  [argument scheme] opposition-descriptive_1: not a term: cannot_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_1: not a term: presents_predicate(A,P,P')
+  [argument scheme] opposition-descriptive_1: not a variable: P'
+  [argument scheme] opposition-descriptive_1: variable declared but not used: P'
+  [argument scheme] opposition-descriptive_2: not a term: must_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_2: not a term: not_presents_predicate(A,P,P')
+  [argument scheme] opposition-descriptive_2: not a variable: P'
+  [argument scheme] opposition-descriptive_2: variable declared but not used: P'
+  [argument scheme] opposition-descriptive_3: not a term: must_present_complementary_contrary(A,P,P')
+  [argument scheme] opposition-descriptive_3: not a term: must_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_3: not a variable: P'
+  [argument scheme] opposition-descriptive_3: variable declared but not used: P'
+  [argument scheme] opposition-normative: not a term: cannot_present_sametime(A,X,X')
+  [argument scheme] opposition-normative: not a term: cannot_recieve_evaluation(A,X')
+  [argument scheme] opposition-normative: not a term: recieves_evaluation(A,X')
+  [argument scheme] opposition-normative: not a variable: X'
+  [argument scheme] opposition-normative: variable declared but not used: A
+  [argument scheme] opposition-normative: variable declared but not used: X
+  [argument scheme] opposition-normative: variable declared but not used: X'
+  [argument scheme] part_in_whole: variable declared but not used: P
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] position_to_know_ad_populum: predicate not declared in the language: position_to_know_group/2
+  [argument scheme] practical_necessary_condition: predicate not declared in the language: conflict_goals/3
+  [argument scheme] practical_necessary_condition: variable declared but not used: A2
+  [argument scheme] practical_necessary_condition: variable declared but not used: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: A2
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: predicate not declared in the language: conflict_goals/3
+  [argument scheme] practical_sufficient_condition: variable declared but not used: A2
+  [argument scheme] practical_sufficient_condition: variable declared but not used: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: A2
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] pragmatic_inconsistency: predicate not declared in the language: strong_advocate/3
+  [argument scheme] regulative_rule: predicate not declared in the language: do_obligator/0
+  [argument scheme] regulative_rule: predicate not declared in the language: excuse/0
+  [argument scheme] regulative_rule: variable declared but not used: A
+  [argument scheme] regulative_rule: variable not used in premises or deletions: A
+  [argument scheme] retroductive: predicate not declared in the language: reference_class/0
+  [argument scheme] rhetorical_oppositions_descriptive: not a term: converse_relation(B,R',A)
+  [argument scheme] rhetorical_oppositions_descriptive: not a term: relation_converse_relation(A,R,B,R')
+  [argument scheme] rhetorical_oppositions_descriptive: not a variable: R'
+  [argument scheme] rhetorical_oppositions_descriptive: variable declared but not used: R'
+  [argument scheme] rhetorical_oppositions_normative: not a term: contrary_treatment_required(X',A')
+  [argument scheme] rhetorical_oppositions_normative: not a term: if_treatment_required(X,A,A',X)
+  [argument scheme] rhetorical_oppositions_normative: not a variable: A'
+  [argument scheme] rhetorical_oppositions_normative: not a variable: X'
+  [argument scheme] rhetorical_oppositions_normative: variable declared but not used: A'
+  [argument scheme] rhetorical_oppositions_normative: variable declared but not used: X'
+  [argument scheme] rule_mental_world: predicate not declared in the language: same_meaning/3
+  [argument scheme] rule_mental_world: predicate not declared in the language: speakers_correct/0
+  [argument scheme] rule_physical_world_1: predicate not declared in the language: not_necessarily_true/0
+  [argument scheme] rule_physical_world_1: predicate not declared in the language: synonymous/0
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: correctly_report/0
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: oficcial_rulebook/3
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: rule_changed/0
+  [argument scheme] sacrifice: variable declared but not used: V
+  [argument scheme] sacrifice: variable not declared in the scheme: X
+  [argument scheme] sacrifice: variable not used in premises or deletions: V
+  [argument scheme] sign: predicate not declared in the language: more_reliable/0
+  [argument scheme] snob_appeal_ad_populum: predicate not declared in the language: goal_prestige/0
+  [argument scheme] sorites_slippery_slope: predicate not declared in the language: reapplication_sequence/0
+  [argument scheme] sorites_slippery_slope: variable declared but not used: A
+  [argument scheme] sorites_slippery_slope: variable not used in premises or deletions: A
+  [argument scheme] verbal_classification_arbitrariness: not a term: needed_nonarbitrary((A,F)
+  [argument scheme] verbal_classification_vagueness: variable declared but not used: P
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_slippery_slope: variable not declared in the scheme: F
+  [argument scheme] waste: predicate not declared in the language: ought_to_continue/2
+  [argument scheme] waste: predicate not declared in the language: waste_bad_thing/2
+  [language] : does not have the form predicate/arity: accept_saying
+  [language] : does not have the form predicate/arity: attack_well_supported
+  [language] : does not have the form predicate/arity: background
+  [language] : does not have the form predicate/arity: being_credible
+  [language] : does not have the form predicate/arity: character_revelant
+  [language] : does not have the form predicate/arity: correctly_report
+  [language] : does not have the form predicate/arity: do_obligator
+  [language] : does not have the form predicate/arity: excuse
+  [language] : does not have the form predicate/arity: goal_prestige
+  [language] : does not have the form predicate/arity: means_end
+  [language] : does not have the form predicate/arity: more_important_ends
+  [language] : does not have the form predicate/arity: more_reliable
+  [language] : does not have the form predicate/arity: not_necessarily_true
+  [language] : does not have the form predicate/arity: not_normal
+  [language] : does not have the form predicate/arity: oficcial_rulebook
+  [language] : does not have the form predicate/arity: other_consequences
+  [language] : does not have the form predicate/arity: ought_to_continue
+  [language] : does not have the form predicate/arity: proper_sequence
+  [language] : does not have the form predicate/arity: prudential
+  [language] : does not have the form predicate/arity: reapplication_sequence
+  [language] : does not have the form predicate/arity: reference_class
+  [language] : does not have the form predicate/arity: rule_changed
+  [language] : does not have the form predicate/arity: should_not
+  [language] : does not have the form predicate/arity: speakers_correct
+  [language] : does not have the form predicate/arity: strong_advocate
+  [language] : does not have the form predicate/arity: strongly_occur
+  [language] : does not have the form predicate/arity: sufficient_evidence
+  [language] : does not have the form predicate/arity: synonymous
+  [language] : does not have the form predicate/arity: waste_bad_thing
+  [language] action_fit_quality/1: format string has incorrect number of placeholders (verbs): 1
+  [language] cited_bad_consequences/1: format string has incorrect number of placeholders (verbs): 1
+  [language] conflict_goals/2: format string has incorrect number of placeholders (verbs): 2
+  [language] favor/1: format string has incorrect number of placeholders (verbs): 1
+  [language] other_consequences_presumption/2: format string has incorrect number of placeholders (verbs): 2
+  [language] popular_practise/1: format string has incorrect number of placeholders (verbs): 1
+  [language] position_to_know_group/1: format string has incorrect number of placeholders (verbs): 1
+  [language] sacrifice_value/2: format string has incorrect number of placeholders (verbs): 2
+  [language] same_meaning/2: format string has incorrect number of placeholders (verbs): 2
+  [language] special_proposition/2: format string has incorrect number of placeholders (verbs): 2
+  [language] true/1: not a predicate symbol: true
+  stderr during validation: *** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:27 ]: literal not terminated
+*** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20
+*** Parse Error before[ <input>:1:30 ]: literal not terminated
+*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:31 ]: literal not terminated
+*** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:44 ]: literal not terminated
+*** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:21
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:33 ]: invalid char literal
+*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:37 ]: literal not terminated
+*** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: invalid char literal
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
+*** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
+
+after instantiating every scheme: 147 problem(s)
+  [argument scheme] abductive_backward: predicate not declared in the language: data_set/2
+  [argument scheme] ad_hominem: predicate not declared in the language: attack_well_supported/0
+  [argument scheme] ad_hominem: predicate not declared in the language: character_revelant/0
+  [argument scheme] ad_hominem: variable declared but not used: S
+  [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] commitment1: predicate not declared in the language: commined_to/2
+  [argument scheme] common_folk_ad_populum: predicate not declared in the language: background/0
+  [argument scheme] common_folk_ad_populum: predicate not declared in the language: being_credible/0
+  [argument scheme] common_folks_group_ad_populum: predicate not declared in the language: accept_saying/0
+  [argument scheme] danger: predicate not declared in the language: should_not/1
+  [argument scheme] end_and_means_2: predicate not declared in the language: means_end/1
+  [argument scheme] end_and_means_2: predicate not declared in the language: more_important_ends/0
+  [argument scheme] gradualism: predicate not declared in the language: proper_sequence/0
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: other_consequences/1
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: prudential/1
+  [argument scheme] negative_consequences_prudential: predicate not declared in the language: strongly_occur/1
+  [argument scheme] negative_normal_expectations: predicate not declared in the language: not_normal/0
+  [argument scheme] negative_practical: predicate not declared in the language: sufficient_evidence/0
+  [argument scheme] opposition-descriptive_1: not a term: cannot_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_1: not a term: presents_predicate(A,P,P')
+  [argument scheme] opposition-descriptive_1: not a variable: P'
+  [argument scheme] opposition-descriptive_1: variable declared but not used: P'
+  [argument scheme] opposition-descriptive_2: not a term: must_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_2: not a term: not_presents_predicate(A,P,P')
+  [argument scheme] opposition-descriptive_2: not a variable: P'
+  [argument scheme] opposition-descriptive_2: variable declared but not used: P'
+  [argument scheme] opposition-descriptive_3: not a term: must_present_complementary_contrary(A,P,P')
+  [argument scheme] opposition-descriptive_3: not a term: must_present_sametime(A,P')
+  [argument scheme] opposition-descriptive_3: not a variable: P'
+  [argument scheme] opposition-descriptive_3: variable declared but not used: P'
+  [argument scheme] opposition-normative: not a term: cannot_present_sametime(A,X,X')
+  [argument scheme] opposition-normative: not a term: cannot_recieve_evaluation(A,X')
+  [argument scheme] opposition-normative: not a term: recieves_evaluation(A,X')
+  [argument scheme] opposition-normative: not a variable: X'
+  [argument scheme] opposition-normative: variable declared but not used: A
+  [argument scheme] opposition-normative: variable declared but not used: X
+  [argument scheme] opposition-normative: variable declared but not used: X'
+  [argument scheme] part_in_whole: variable declared but not used: P
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] position_to_know_ad_populum: predicate not declared in the language: position_to_know_group/2
+  [argument scheme] practical_necessary_condition: predicate not declared in the language: conflict_goals/3
+  [argument scheme] practical_necessary_condition: variable declared but not used: A2
+  [argument scheme] practical_necessary_condition: variable declared but not used: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: A2
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_necessary_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: predicate not declared in the language: conflict_goals/3
+  [argument scheme] practical_sufficient_condition: variable declared but not used: A2
+  [argument scheme] practical_sufficient_condition: variable declared but not used: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: A2
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
+  [argument scheme] pragmatic_inconsistency: predicate not declared in the language: strong_advocate/3
+  [argument scheme] regulative_rule: predicate not declared in the language: do_obligator/0
+  [argument scheme] regulative_rule: predicate not declared in the language: excuse/0
+  [argument scheme] regulative_rule: variable declared but not used: A
+  [argument scheme] regulative_rule: variable not used in premises or deletions: A
+  [argument scheme] retroductive: predicate not declared in the language: reference_class/0
+  [argument scheme] rhetorical_oppositions_descriptive: not a term: converse_relation(B,R',A)
+  [argument scheme] rhetorical_oppositions_descriptive: not a term: relation_converse_relation(A,R,B,R')
+  [argument scheme] rhetorical_oppositions_descriptive: not a variable: R'
+  [argument scheme] rhetorical_oppositions_descriptive: variable declared but not used: R'
+  [argument scheme] rhetorical_oppositions_normative: not a term: contrary_treatment_required(X',A')
+  [argument scheme] rhetorical_oppositions_normative: not a term: if_treatment_required(X,A,A',X)
+  [argument scheme] rhetorical_oppositions_normative: not a variable: A'
+  [argument scheme] rhetorical_oppositions_normative: not a variable: X'
+  [argument scheme] rhetorical_oppositions_normative: variable declared but not used: A'
+  [argument scheme] rhetorical_oppositions_normative: variable declared but not used: X'
+  [argument scheme] rule_mental_world: predicate not declared in the language: same_meaning/3
+  [argument scheme] rule_mental_world: predicate not declared in the language: speakers_correct/0
+  [argument scheme] rule_physical_world_1: predicate not declared in the language: not_necessarily_true/0
+  [argument scheme] rule_physical_world_1: predicate not declared in the language: synonymous/0
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: correctly_report/0
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: oficcial_rulebook/3
+  [argument scheme] rule_physical_world_2: predicate not declared in the language: rule_changed/0
+  [argument scheme] sacrifice: variable declared but not used: V
+  [argument scheme] sacrifice: variable not declared in the scheme: X
+  [argument scheme] sacrifice: variable not used in premises or deletions: V
+  [argument scheme] sign: predicate not declared in the language: more_reliable/0
+  [argument scheme] snob_appeal_ad_populum: predicate not declared in the language: goal_prestige/0
+  [argument scheme] sorites_slippery_slope: predicate not declared in the language: reapplication_sequence/0
+  [argument scheme] sorites_slippery_slope: variable declared but not used: A
+  [argument scheme] sorites_slippery_slope: variable not used in premises or deletions: A
+  [argument scheme] verbal_classification_arbitrariness: not a term: needed_nonarbitrary((A,F)
+  [argument scheme] verbal_classification_vagueness: variable declared but not used: P
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_classification_vagueness: variable not declared in the scheme: F
+  [argument scheme] verbal_slippery_slope: variable not declared in the scheme: F
+  [argument scheme] waste: predicate not declared in the language: ought_to_continue/2
+  [argument scheme] waste: predicate not declared in the language: waste_bad_thing/2
+  [language] : does not have the form predicate/arity: accept_saying
+  [language] : does not have the form predicate/arity: attack_well_supported
+  [language] : does not have the form predicate/arity: background
+  [language] : does not have the form predicate/arity: being_credible
+  [language] : does not have the form predicate/arity: character_revelant
+  [language] : does not have the form predicate/arity: correctly_report
+  [language] : does not have the form predicate/arity: do_obligator
+  [language] : does not have the form predicate/arity: excuse
+  [language] : does not have the form predicate/arity: goal_prestige
+  [language] : does not have the form predicate/arity: means_end
+  [language] : does not have the form predicate/arity: more_important_ends
+  [language] : does not have the form predicate/arity: more_reliable
+  [language] : does not have the form predicate/arity: not_necessarily_true
+  [language] : does not have the form predicate/arity: not_normal
+  [language] : does not have the form predicate/arity: oficcial_rulebook
+  [language] : does not have the form predicate/arity: other_consequences
+  [language] : does not have the form predicate/arity: ought_to_continue
+  [language] : does not have the form predicate/arity: proper_sequence
+  [language] : does not have the form predicate/arity: prudential
+  [language] : does not have the form predicate/arity: reapplication_sequence
+  [language] : does not have the form predicate/arity: reference_class
+  [language] : does not have the form predicate/arity: rule_changed
+  [language] : does not have the form predicate/arity: should_not
+  [language] : does not have the form predicate/arity: speakers_correct
+  [language] : does not have the form predicate/arity: strong_advocate
+  [language] : does not have the form predicate/arity: strongly_occur
+  [language] : does not have the form predicate/arity: sufficient_evidence
+  [language] : does not have the form predicate/arity: synonymous
+  [language] : does not have the form predicate/arity: waste_bad_thing
+  [language] action_fit_quality/1: format string has incorrect number of placeholders (verbs): 1
+  [language] cited_bad_consequences/1: format string has incorrect number of placeholders (verbs): 1
+  [language] conflict_goals/2: format string has incorrect number of placeholders (verbs): 2
+  [language] favor/1: format string has incorrect number of placeholders (verbs): 1
+  [language] other_consequences_presumption/2: format string has incorrect number of placeholders (verbs): 2
+  [language] popular_practise/1: format string has incorrect number of placeholders (verbs): 1
+  [language] position_to_know_group/1: format string has incorrect number of placeholders (verbs): 1
+  [language] sacrifice_value/2: format string has incorrect number of placeholders (verbs): 2
+  [language] same_meaning/2: format string has incorrect number of placeholders (verbs): 2
+  [language] special_proposition/2: format string has incorrect number of placeholders (verbs): 2
+  [language] true/1: not a predicate symbol: true
+  [statement] : key not a ground atomic formula: certainity_no_need(k31_a,F)
+  [statement] : key not a ground atomic formula: great_sacrifice(k37_s,k37_a,X)
+  [statement] : key not a ground atomic formula: individuals_propoerty(k78_a1,F,k78_a2)
+  [statement] : key not a ground atomic formula: part_propert(k21_y,A)
+  [statement] : key not a ground atomic formula: property_precion_needed(F)
+  [statement] : key not a ground atomic formula: property_vagueness(F,k31_a)
+  [statement] : key not a ground atomic formula: smaller_part_property(k21_y,A,k21_x)
+  [statement] : key not a ground atomic formula: species_property(k21_x,A)
+  [statement] : key not a ground atomic formula: vague_defined_property(k31_a,F)
+  stderr during validation: *** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:27 ]: literal not terminated
+*** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20
+*** Parse Error before[ <input>:1:30 ]: literal not terminated
+*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:31 ]: literal not terminated
+*** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:44 ]: literal not terminated
+*** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:21
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:33 ]: invalid char literal
+*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
+*** Parse Error before[ <input>:1:3 ]: invalid char literal
+*** Parse Error before[ <input>:1:37 ]: literal not terminated
+*** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: invalid char literal
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
+*** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
+
+
+== 3. InstantiateScheme ==
+  1 popular_opinion                            FAIL  args=1/1 premises+assumptions=2 exceptions=1
+      - premise statement "favor(k1_a)" renders with a format error: "If k1_a is generally accepted as truei that gives a reason in favor of %!s(MISSING)."
+  2 pop_scheme                                 PASS  args=2/2 premises+assumptions=1 exceptions=0
+  3 position_to_know_ad_populum                FAIL  args=1/1 premises+assumptions=2 exceptions=0
+      - stderr: Functor not defined in the language: position_to_know_group/2 |
+  4 expert_opinion_ad_populum                  PASS  args=1/1 premises+assumptions=2 exceptions=0
+  5 deliberation_ad_populum                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+  6 moral_justification_ad_populum             PASS  args=1/1 premises+assumptions=2 exceptions=0
+  7 moral_justification_ad_populum_excuse      FAIL  args=0/0 premises+assumptions=4 exceptions=0
+      - no argument built
+  8 snob_appeal_ad_populum                     PASS  args=1/1 premises+assumptions=4 exceptions=0
+  9 appeal_to_vanity_ad_populum                PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 10 rhetoric_ad_populum                        PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 11 common_folk_ad_populum                     PASS  args=1/1 premises+assumptions=1 exceptions=0
+ 12 common_folks_group_ad_populum              PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 13 popular_practise                           FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - premise statement "popular_practise(k13_a)" renders with a format error: "k13_a is a popular practice among those who are familiar with what is acceptable or not in regard to %!s(MISSING)."
+ 14 from_example                               PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 15 illustration                               PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 16 from_model                                 PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 17 from_antimodel                             PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 18 practical_analogy_positive                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 19 practical_analogy_negative                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 20 composition_generic                        PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 21 part_in_whole                              FAIL  args=1/1 premises+assumptions=2 exceptions=1
+      - conclusion statement "part_propert(k21_y,A)" is not ground
+      - premise statement "species_property(k21_x,A)" is not ground
+      - exception statement "smaller_part_property(k21_y,A,k21_x)" is not ground
+ 22 division_generic                           PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 23 opposition-descriptive_1                   FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:27 ]: literal not terminated | *** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20 | Could not parse term: presents_predicate(A,P,P') | *** Parse Error before[ <input>:1:30 ]: literal not terminated | *** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25 | Could not parse term: cannot_present_sametime(A,P') |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "presents_predicate(A,P,P')" does not parse
+      - conclusion "cannot_present_sametime(A,P')" does not parse
+ 24 opposition-descriptive_2                   FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:31 ]: literal not terminated | *** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24 | Could not parse term: not_presents_predicate(A,P,P') | *** Parse Error before[ <input>:1:28 ]: literal not terminated | *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23 | Could not parse term: must_present_sametime(A,P') |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "not_presents_predicate(A,P,P')" does not parse
+      - conclusion "must_present_sametime(A,P')" does not parse
+ 25 opposition-descriptive_3                   FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:44 ]: literal not terminated | *** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37 | Could not parse term: must_present_complementary_contrary(A,P,P') | *** Parse Error before[ <input>:1:28 ]: literal not terminated | *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23 | Could not parse term: must_present_sametime(A,P') |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "must_present_complementary_contrary(A,P,P')" does not parse
+      - conclusion "must_present_sametime(A,P')" does not parse
+ 26 opposition-normative                       FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:32 ]: literal not terminated | *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25 | Could not parse term: cannot_present_sametime(A,X,X') | *** Parse Error before[ <input>:1:26 ]: literal not terminated | *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:21 | Could not parse term: recieves_evaluation(A,X') | *** Parse Error before[ <input>:1:32 ]: literal not terminated | *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27 | Could not parse term: cannot_recieve_evaluation(A,X') |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "cannot_present_sametime(A,X,X')" does not parse
+      - premise/assumption "recieves_evaluation(A,X')" does not parse
+      - conclusion "cannot_recieve_evaluation(A,X')" does not parse
+ 27 rhetorical_oppositions_normative           FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:32 ]: literal not terminated | *** Parse Error before[ <input>:1:32 ]: invalid char literal | *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23 | Could not parse term: if_treatment_required(X,A,A',X) | *** Parse Error before[ <input>:1:33 ]: invalid char literal | *** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29 | Could not parse term: contrary_treatment_required(X',A') |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "if_treatment_required(X,A,A',X)" does not parse
+      - conclusion "contrary_treatment_required(X',A')" does not parse
+ 28 rhetorical_oppositions_descriptive         FAIL  args=0/1 premises+assumptions=2 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:37 ]: literal not terminated | *** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28 | Could not parse term: relation_converse_relation(A,R,B,R') | *** Parse Error before[ <input>:1:26 ]: literal not terminated | *** Parse Error before[ <input>:1:26 ]: invalid char literal | *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19 | Could not parse term: converse_relation(B,R',A) |
+      - no argument built
+      - 0 arguments built for 1 conclusions
+      - premise/assumption "relation_converse_relation(A,R,B,R')" does not parse
+      - conclusion "converse_relation(B,R',A)" does not parse
+ 29 alternative_cognitive                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 30 alternative_normative                      FAIL  args=1/1 premises+assumptions=2 exceptions=0
+      - conclusion statement "not_required(k30_b)" renders with a format error: "%!i(string=k30_b)s not required."
+ 31 verbal_classification_vagueness            FAIL  args=1/1 premises+assumptions=3 exceptions=1
+      - premise statement "vague_defined_property(k31_a,F)" is not ground
+      - premise statement "property_precion_needed(F)" is not ground
+      - premise statement "property_vagueness(F,k31_a)" is not ground
+      - exception statement "certainity_no_need(k31_a,F)" is not ground
+ 32 verbal_classification_arbitrariness        FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - stderr: *** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22 | Could not parse term: needed_nonarbitrary((A,F) |
+      - premise/assumption "needed_nonarbitrary((A,F)" does not parse
+      - a30: 2 premises, scheme has 3 premises+assumptions
+ 33 interaction_act_person_1                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 34 interaction_act_person_2                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 35 positive_value                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 36 negative_value                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 37 sacrifice                                  FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - conclusion statement "sacrifice_value(k37_a,k37_v)" renders with a format error: "k37_a has a great value.%!(EXTRA string=k37_v)"
+      - premise statement "great_sacrifice(k37_s,k37_a,X)" is not ground
+ 38 group_1                                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 39 group_2                                    FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - conclusion statement "is(k39_m,k39_q)" renders with a format error: "%!i(string=k39_m)s k39_q."
+ 40 practical_inference                        PASS  args=1/1 premises+assumptions=4 exceptions=3
+ 41 practical_necessary_condition              FAIL  args=1/1 premises+assumptions=8 exceptions=3
+      - stderr: Functor not defined in the language: conflict_goals/3 |
+ 42 practical_sufficient_condition             FAIL  args=1/1 premises+assumptions=8 exceptions=3
+      - stderr: Functor not defined in the language: conflict_goals/3 |
+ 43 practical_goal                             PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 44 end_and_means_1                            PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 45 end_and_means_2                            FAIL  args=1/1 premises+assumptions=2 exceptions=0
+      - stderr: Functor not defined in the language: means_end/1 |
+ 46 end_and_means_3                            PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 47 two_person_practical                       PASS  args=1/1 premises+assumptions=3 exceptions=3
+ 48 waste                                      FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - stderr: Functor not defined in the language: waste_bad_thing/2 | Functor not defined in the language: ought_to_continue/2 |
+ 49 negative_normal_expectations               PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 50 negative_practical                         FAIL  args=1/1 premises+assumptions=6 exceptions=0
+      - premise statement "other_consequences_presumption(k50_a,k50_c)" renders with a format error: "If I act on the presum ption that k50_a is not true, and A k50_c true, consequences %!s(MISSING) will follow."
+ 51 epistemic_ignorence                        FAIL  args=1/1 premises+assumptions=4 exceptions=0
+      - premise statement "special_proposition(k51_a,k51_k)" renders with a format error: "A is a special type of proposition such that if it were true, it would normally or usually be expected to be in k51_a.%!(EXTRA string=k51_k)"
+ 52 sign                                       PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 53 abductive_backward                         FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - stderr: Functor not defined in the language: data_set/2 |
+ 54 abductive_forward                          PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 55 abductive_action_to_character              PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 56 abductive_character_to_action              PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 57 retroductive                               PASS  args=1/1 premises+assumptions=5 exceptions=0
+ 58 evidence_hypothesis_verification           PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 59 evidence_hypothesis_falsification          PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 60 negative_consequences_prudential           FAIL  args=1/1 premises+assumptions=3 exceptions=1
+      - stderr: Functor not defined in the language: strongly_occur/1 | Functor not defined in the language: prudential/1 | Functor not defined in the language: other_consequences/1 |
+ 61 pragmatic_alternative                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 62 treat                                      FAIL  args=1/1 premises+assumptions=3 exceptions=0
+      - premise statement "cited_bad_consequences(k62_x)" renders with a format error: "If you bring about k62_x, some cited bad consequences, %!s(MISSING), will follow."
+ 63 ad_baculum                                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 64 fear                                       PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 65 danger                                     FAIL  args=1/1 premises+assumptions=2 exceptions=0
+      - stderr: Functor not defined in the language: should_not/1 |
+ 66 help                                       PASS  args=1/1 premises+assumptions=6 exceptions=1
+ 67 distress                                   PASS  args=1/1 premises+assumptions=4 exceptions=1
+ 68 commitment1                                FAIL  args=1/1 premises+assumptions=3 exceptions=1
+      - stderr: Functor not defined in the language: commined_to/2 |
+ 69 commitment2                                PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 70 ad_hominem                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 71 pragmatic_inconsistency                    FAIL  args=1/1 premises+assumptions=4 exceptions=0
+      - stderr: Functor not defined in the language: strong_advocate/3 |
+ 72 inconsistent_commitment                    PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 73 circumstantial_ad_hominem                  PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 74 bias                                       PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 75 bias_ad_hominem                            PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 76 gradualism                                 PASS  args=1/1 premises+assumptions=4 exceptions=0
+ 77 sorites_slippery_slope                     PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 78 verbal_slippery_slope                      FAIL  args=1/1 premises+assumptions=4 exceptions=0
+      - premise statement "individuals_propoerty(k78_a1,F,k78_a2)" is not ground
+ 79 rule_physical_world_1                      FAIL  args=1/1 premises+assumptions=2 exceptions=1
+      - premise statement "is(k79_w,k79_d)" renders with a format error: "%!i(string=k79_w)s k79_d."
+ 80 rule_physical_world_2                      FAIL  args=1/1 premises+assumptions=2 exceptions=1
+      - stderr: Functor not defined in the language: oficcial_rulebook/3 |
+ 81 rule_mental_world                          FAIL  args=1/1 premises+assumptions=2 exceptions=1
+      - stderr: Functor not defined in the language: same_meaning/3 |
+ 82 rule                                       PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 83 regulative_rule                            PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 84 exeptional                                 PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 85 plea_for_excuse                            PASS  args=1/1 premises+assumptions=4 exceptions=1
+ 86 perception                                 PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 87 memory                                     PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 88 abduction                                  PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 89 analogy                                    PASS  args=1/1 premises+assumptions=2 exceptions=2
+ 90 appearance                                 PASS  args=1/1 premises+assumptions=1 exceptions=0
+ 91 cause_to_effect                            PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 92 correlation_to_cause                       PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 93 credible_source                            PASS  args=1/1 premises+assumptions=3 exceptions=3
+ 94 definition_to_verbal_classification        PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 95 defeasible_modus_ponens                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 96 established_rule                           PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 97 ethotic1                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 98 ethotic2                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+ 99 expert_opinion                             PASS  args=1/1 premises+assumptions=4 exceptions=2
+100 ignorance                                  PASS  args=1/1 premises+assumptions=2 exceptions=1
+101 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+102 position_to_know                           PASS  args=1/1 premises+assumptions=3 exceptions=1
+103 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+104 practical_reasoning1                       FAIL  args=1/1 premises+assumptions=7 exceptions=4
+      - exception statement "bring_about_more_effectively(k104_s2,k104_a)" renders with a format error: "There exists an action that would bring about %!m(string=k104_s2)ore effectively than k104_a."
+105 practical_reasoning2                       FAIL  args=1/1 premises+assumptions=5 exceptions=5
+      - exception statement "bring_about_more_effectively(k105_s2,k105_a)" renders with a format error: "There exists an action that would bring about %!m(string=k105_s2)ore effectively than k105_a."
+106 exeption_to_rule                           PASS  args=1/1 premises+assumptions=3 exceptions=2
+107 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+108 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
+109 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+110 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+111 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
+schemes failing instantiation: 34 of 111
+
+== 4. language ==
+93 problem(s)
+  key "accept_saying" has no /arity
+  key "action_fit_quality/1": template has 0 %s and 0 % for arity 1: "Description of action actually fit the quality."
+  key "attack_well_supported" has no /arity
+  key "background" has no /arity
+  key "based_on_evidence/1": template has 0 %s and 1 % for arity 1: "The assertion %v is based on evidence."
+  key "being_credible" has no /arity
+  key "bring_about_more_effectively/2": template has 1 %s and 2 % for arity 2: "There exists an action that would bring about % more effectively than %s."
+  key "character_revelant" has no /arity
+  key "cited_bad_consequences/1": template has 2 %s and 2 % for arity 1: "If you bring about %s, some cited bad consequences, %s, will follow."
+  key "conflict_goals/2": template has 3 %s and 3 % for arity 2: "%s has some other goals %s that conflict with %s."
+  key "correctly_report" has no /arity
+  key "do_obligator" has no /arity
+  key "excuse" has no /arity
+  key "favor/1": template has 2 %s and 2 % for arity 1: "If %s is generally accepted as truei that gives a reason in favor of %s."
+  key "goal_prestige" has no /arity
+  key "is/2": template has 1 %s and 2 % for arity 2: "% is %s."
+  key "means_end" has no /arity
+  key "more_important_ends" has no /arity
+  key "more_reliable" has no /arity
+  key "not_necessarily_true" has no /arity
+  key "not_normal" has no /arity
+  key "not_required/1": template has 0 %s and 1 % for arity 1: "%is not required."
+  key "oficcial_rulebook" has no /arity
+  key "other_consequences" has no /arity
+  key "other_consequences_presumption/2": template has 3 %s and 3 % for arity 2: "If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow."
+  key "ought_to_continue" has no /arity
+  key "popular_practise/1": template has 2 %s and 2 % for arity 1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s."
+  key "position_to_know_group/1": template has 2 %s and 2 % for arity 1: "Group %s is in a special position to know that %s is true."
+  key "proper_sequence" has no /arity
+  key "prudential" has no /arity
+  key "reapplication_sequence" has no /arity
+  key "reference_class" has no /arity
+  key "rule_changed" has no /arity
+  key "sacrifice_value/2": template has 1 %s and 1 % for arity 2: "%s has a great value."
+  key "same_meaning/2": template has 3 %s and 3 % for arity 2: "Speakers of %s believe that %s means the same as %s."
+  key "should_not" has no /arity
+  key "speakers_correct" has no /arity
+  key "special_proposition/2": template has 1 %s and 1 % for arity 2: "A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."
+  key "strong_advocate" has no /arity
+  key "strongly_occur" has no /arity
+  key "sufficient_evidence" has no /arity
+  key "synonymous" has no /arity
+  key "true/1": "true" is not a predicate symbol
+  key "waste_bad_thing" has no /arity
+  position_to_know_ad_populum: premise "position_to_know_group(G,A)": no language template position_to_know_group/2
+  snob_appeal_ad_populum: premise "goal_prestige": no language template goal_prestige/0
+  common_folk_ad_populum: premise "being_credible": no language template being_credible/0
+  common_folk_ad_populum: conclusion "background": no language template background/0
+  common_folks_group_ad_populum: conclusion "accept_saying": no language template accept_saying/0
+  opposition-descriptive_1: premise "presents_predicate(A,P,P')" does not parse
+  opposition-descriptive_1: conclusion "cannot_present_sametime(A,P')" does not parse
+  opposition-descriptive_2: premise "not_presents_predicate(A,P,P')" does not parse
+  opposition-descriptive_2: conclusion "must_present_sametime(A,P')" does not parse
+  opposition-descriptive_3: premise "must_present_complementary_contrary(A,P,P')" does not parse
+  opposition-descriptive_3: conclusion "must_present_sametime(A,P')" does not parse
+  opposition-normative: premise "cannot_present_sametime(A,X,X')" does not parse
+  opposition-normative: premise "recieves_evaluation(A,X')" does not parse
+  opposition-normative: conclusion "cannot_recieve_evaluation(A,X')" does not parse
+  rhetorical_oppositions_normative: premise "if_treatment_required(X,A,A',X)" does not parse
+  rhetorical_oppositions_normative: conclusion "contrary_treatment_required(X',A')" does not parse
+  rhetorical_oppositions_descriptive: premise "relation_converse_relation(A,R,B,R')" does not parse
+  rhetorical_oppositions_descriptive: conclusion "converse_relation(B,R',A)" does not parse
+  verbal_classification_arbitrariness: premise "needed_nonarbitrary((A,F)" does not parse
+  practical_necessary_condition: exception "conflict_goals(P,A2,A)": no language template conflict_goals/3
+  practical_sufficient_condition: exception "conflict_goals(P,A2,A)": no language template conflict_goals/3
+  end_and_means_2: premise "means_end(X)": no language template means_end/1
+  end_and_means_2: premise "more_important_ends": no language template more_important_ends/0
+  waste: premise "waste_bad_thing(A,X)": no language template waste_bad_thing/2
+  waste: conclusion "ought_to_continue(A,X)": no language template ought_to_continue/2
+  negative_normal_expectations: conclusion "not_normal": no language template not_normal/0
+  negative_practical: assumption "sufficient_evidence": no language template sufficient_evidence/0
+  sign: exception "more_reliable": no language template more_reliable/0
+  abductive_backward: premise "data_set(D,A)": no language template data_set/2
+  retroductive: assumption "reference_class": no language template reference_class/0
+  negative_consequences_prudential: assumption "strongly_occur(X)": no language template strongly_occur/1
+  negative_consequences_prudential: exception "other_consequences(X)": no language template other_consequences/1
+  negative_consequences_prudential: conclusion "prudential(X)": no language template prudential/1
+  danger: conclusion "should_not(Y)": no language template should_not/1
+  commitment1: conclusion "commined_to(A,Y)": no language template commined_to/2
+  ad_hominem: assumption "attack_well_supported": no language template attack_well_supported/0
+  ad_hominem: assumption "character_revelant": no language template character_revelant/0
+  pragmatic_inconsistency: assumption "strong_advocate(A,S,X)": no language template strong_advocate/3
+  gradualism: assumption "proper_sequence": no language template proper_sequence/0
+  sorites_slippery_slope: premise "reapplication_sequence": no language template reapplication_sequence/0
+  rule_physical_world_1: premise "synonymous": no language template synonymous/0
+  rule_physical_world_1: exception "not_necessarily_true": no language template not_necessarily_true/0
+  rule_physical_world_2: premise "oficcial_rulebook(I,D,W)": no language template oficcial_rulebook/3
+  rule_physical_world_2: premise "correctly_report": no language template correctly_report/0
+  rule_physical_world_2: exception "rule_changed": no language template rule_changed/0
+  rule_mental_world: premise "same_meaning(L,W,D)": no language template same_meaning/3
+  rule_mental_world: premise "speakers_correct": no language template speakers_correct/0
+  regulative_rule: premise "do_obligator": no language template do_obligator/0
+  regulative_rule: exception "excuse": no language template excuse/0
+
+declared variables used in no formula (informational): 11
+  part_in_whole: P
+  opposition-descriptive_1: P'
+  opposition-descriptive_2: P'
+  opposition-descriptive_3: P'
+  opposition-normative: A
+  opposition-normative: X
+  opposition-normative: X'
+  rhetorical_oppositions_normative: X'
+  rhetorical_oppositions_normative: A'
+  rhetorical_oppositions_descriptive: R'
+  verbal_classification_vagueness: P
+
+== per scheme (checks 2-4) ==
+schemes passing every check: 67 of 111
+  FAIL abductive_backward (3 problem(s))
+  FAIL ad_hominem (6 problem(s))
+  FAIL alternative_normative (1 problem(s))
+  FAIL commitment1 (3 problem(s))
+  FAIL common_folk_ad_populum (4 problem(s))
+  FAIL common_folks_group_ad_populum (2 problem(s))
+  FAIL danger (3 problem(s))
+  FAIL end_and_means_2 (5 problem(s))
+  FAIL epistemic_ignorence (1 problem(s))
+  FAIL gradualism (2 problem(s))
+  FAIL group_2 (1 problem(s))
+  FAIL moral_justification_ad_populum_excuse (1 problem(s))
+  FAIL negative_consequences_prudential (7 problem(s))
+  FAIL negative_normal_expectations (2 problem(s))
+  FAIL negative_practical (3 problem(s))
+  FAIL opposition-descriptive_1 (11 problem(s))
+  FAIL opposition-descriptive_2 (11 problem(s))
+  FAIL opposition-descriptive_3 (11 problem(s))
+  FAIL opposition-normative (16 problem(s))
+  FAIL part_in_whole (5 problem(s))
+  FAIL popular_opinion (1 problem(s))
+  FAIL popular_practise (1 problem(s))
+  FAIL position_to_know_ad_populum (3 problem(s))
+  FAIL practical_necessary_condition (7 problem(s))
+  FAIL practical_reasoning1 (1 problem(s))
+  FAIL practical_reasoning2 (1 problem(s))
+  FAIL practical_sufficient_condition (7 problem(s))
+  FAIL pragmatic_inconsistency (3 problem(s))
+  FAIL regulative_rule (6 problem(s))
+  FAIL retroductive (2 problem(s))
+  FAIL rhetorical_oppositions_descriptive (11 problem(s))
+  FAIL rhetorical_oppositions_normative (13 problem(s))
+  FAIL rule_mental_world (5 problem(s))
+  FAIL rule_physical_world_1 (5 problem(s))
+  FAIL rule_physical_world_2 (7 problem(s))
+  FAIL sacrifice (5 problem(s))
+  FAIL sign (2 problem(s))
+  FAIL snob_appeal_ad_populum (2 problem(s))
+  FAIL sorites_slippery_slope (4 problem(s))
+  FAIL treat (1 problem(s))
+  FAIL verbal_classification_arbitrariness (5 problem(s))
+  FAIL verbal_classification_vagueness (6 problem(s))
+  FAIL verbal_slippery_slope (2 problem(s))
+  FAIL waste (5 problem(s))
+problems not tied to one scheme (language keys etc.): 93
+
+== GATE ==
+1_import       FAIL
+2_validator    FAIL
+3_instantiate  FAIL
+4_language     FAIL
+GATE: FAIL

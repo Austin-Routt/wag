@@ -1,15 +1,15 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
-	"github.com/anthropics/anthropic-sdk-go"
-
+	"github.com/yourorg/wag/internal/llm"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -51,7 +51,7 @@ func TestParseReply(t *testing.T) {
 func TestPromptAndReply(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{"Ann", "llm"}, {"Bob", "human"}}}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "Ann", Kind: "llm"}, {Name: "Bob", Kind: "human"}}}, &st)
 	if st.SeatKind != "llm" || !st.CanMove {
 		t.Fatalf("an llm seat is a seat that moves through the API: %+v", st)
 	}
@@ -78,42 +78,119 @@ func TestPromptAndReply(t *testing.T) {
 	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/reply", map[string]string{"reply": "I give up."}, nil); code != http.StatusBadRequest {
 		t.Fatalf("a reply without a move: %d", code)
 	}
-	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{"Ann", "claude"}, {"Bob", "human"}}}, nil); code != http.StatusBadRequest {
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "Ann", Kind: "claude"}, {Name: "Bob", Kind: "human"}}}, nil); code != http.StatusBadRequest {
 		t.Fatalf("a Claude seat on a server without Claude: %d", code)
 	}
 }
 
-// A Claude seat asks the model, plays its move, and sends a rejected move
-// back with the reason; its replies go into the export.
-func TestClaudeSeat(t *testing.T) {
+// A model seat asks its model, plays its move, and sends a rejected move
+// back with the reason, in the same conversation; its replies go into the
+// export, and every call and decision into the trace file, with the
+// conversation each call sent. A rate limit is retried and traced.
+func TestModelSeat(t *testing.T) {
 	srv, ts := newTestServerWith(t)
+	mock := &llm.Mock{}
 	calls := 0
-	srv.SetClaude(&Claude{Model: "fake", Effort: "low", askFn: func(_ context.Context, msgs []anthropic.BetaMessageParam) (string, anthropic.BetaMessageParam, error) {
+	mock.Fn = func(req llm.Request) (*llm.Response, error) {
 		calls++
-		if calls == 1 {
-			return `{"type":"support","scheme_id":"AS:nonexistent"}`, anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("x")), nil
+		switch calls {
+		case 1:
+			return nil, &llm.Error{Provider: "mock", Kind: llm.KindRateLimit, Status: 429, RetryAfter: time.Millisecond}
+		case 2:
+			return &llm.Response{Text: `{"type":"support","scheme_id":"AS:nonexistent"}`, Model: "mock-1", FinishReason: "stop"}, nil
 		}
-		if len(msgs) != 3 {
-			t.Errorf("the retry does not carry the rejection: %d messages", len(msgs))
+		if len(req.Messages) != 3 || req.Messages[1].Role != "assistant" || !strings.HasPrefix(req.Messages[2].Content, "That move was rejected") {
+			t.Errorf("the retry does not carry the conversation: %+v", req.Messages)
 		}
-		return `Fine. {"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"cleaner rivers"}}`, anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("x")), nil
-	}})
+		in := 900
+		return &llm.Response{Text: `Fine. {"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"cleaner rivers"}}`,
+			Model: "mock-1", FinishReason: "stop", Usage: llm.Usage{InputTokens: &in}}, nil
+	}
+	srv.AddModel(llm.WithProvider(llm.Profile{Name: "test-model", Provider: "mock", Params: llm.Params{Model: "mock-1"}}, mock))
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{"Claude", "claude"}, {"Bob", "human"}}}, &st)
-	if st.ActiveAI != "claude" || st.CanMove {
-		t.Fatalf("Claude's seat: %+v", st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "Pro", Kind: "model", Model: "test-model"}, {Name: "Bob", Kind: "human"}}}, &st)
+	if st.ActiveAI != "model" || st.CanMove {
+		t.Fatalf("the model's seat: %+v", st)
 	}
 	mr := post(t, ts, "/api/games/"+st.ID+"/ai", map[string]interface{}{})
-	if mr.Result["accepted"] != true || len(mr.State.Arguments) != 1 || calls != 2 {
-		t.Fatalf("Claude's move: %+v after %d calls", mr.Result, calls)
+	if mr.Result["accepted"] != true || len(mr.State.Arguments) != 1 || calls != 3 {
+		t.Fatalf("the model's move: %+v after %d calls", mr.Result, calls)
 	}
 	var exp struct {
 		LLM []LLMRecord `json:"llm"`
 	}
 	call(t, ts, "GET", "/api/games/"+st.ID+"/export", nil, &exp)
-	if len(exp.LLM) != 1 || len(exp.LLM[0].Turns) != 2 || exp.LLM[0].Turns[0].Rejected == "" {
-		t.Fatalf("export of Claude's replies: %+v", exp.LLM)
+	if len(exp.LLM) != 1 || len(exp.LLM[0].Turns) != 2 || exp.LLM[0].Turns[0].Rejected == "" || exp.LLM[0].Profile != "test-model" {
+		t.Fatalf("export of the model's replies: %+v", exp.LLM)
 	}
+
+	events := traceEvents(t, ts, st.ID)
+	var types []string
+	for _, e := range events {
+		types = append(types, e["type"].(string)+":"+e["id"].(string))
+	}
+	if got := strings.Join(types, " "); got != "game_start:g call:c0 call:c1 decision:d0 call:c2 decision:d1" {
+		t.Fatalf("events: %s", got)
+	}
+	start := events[0]
+	if start["data_sha256"] == "" || start["protocol"] != ProtocolVersion || len(start["profiles"].([]any)) != 1 {
+		t.Fatalf("game_start: %v", start)
+	}
+	c0, c1, d0, c2, d1 := events[1], events[2], events[3], events[4], events[5]
+	if c0["error"].(map[string]any)["kind"] != "rate_limit" || c1["n"] != 2.0 || c1["error"] != nil {
+		t.Fatalf("the retried call: %v / %v", c0, c1)
+	}
+	if d0["parent"] != "c1" || d1["parent"] != "c2" || d0["turn"] != d1["turn"] || d1["attempt"] != 2.0 {
+		t.Fatalf("decisions: %v / %v", d0, d1)
+	}
+	if d0["prompt"] != d1["prompt"] || d0["prompt"] == "" || d1["feedback"] == "" || d1["served_model"] != "mock-1" {
+		t.Fatal("every attempt keeps the board it started from; a retry says what it was told")
+	}
+	req := c2["request"].(map[string]any)
+	if len(req["messages"].([]any)) != 3 || req["system"] != modelSystem || req["model"] != "mock-1" {
+		t.Fatalf("the call's request: %v", req)
+	}
+	if c2["response"].(map[string]any)["usage"].(map[string]any)["input_tokens"] != 900.0 {
+		t.Fatalf("usage: %v", c2["response"])
+	}
+
+	// The "claude" seat kind is the profile named claude.
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "C", Kind: "claude"}, {Name: "B", Kind: "human"}}}, nil); code != http.StatusBadRequest {
+		t.Fatalf("claude without the profile: %d", code)
+	}
+	srv.AddModel(llm.WithProvider(llm.Profile{Name: "claude", Provider: "mock", Params: llm.Params{Model: "m"}}, &llm.Mock{}))
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "C", Kind: "claude"}, {Name: "B", Kind: "human"}}}, &st); code != http.StatusOK {
+		t.Fatalf("claude with the profile: %d", code)
+	}
+	if mr := post(t, ts, "/api/games/"+st.ID+"/ai", map[string]interface{}{}); mr.Result["abstained"] != true {
+		t.Fatalf("the mock passes: %+v", mr.Result)
+	}
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "C", Kind: "model", Model: "nope"}, {Name: "B", Kind: "human"}}}, nil); code != http.StatusBadRequest {
+		t.Fatalf("an unknown profile: %d", code)
+	}
+}
+
+// traceEvents reads a game's trace file.
+func traceEvents(t *testing.T, ts *httptest.Server, id string) []map[string]any {
+	t.Helper()
+	resp, err := http.Get(ts.URL + "/api/games/" + id + "/traces")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	var out []map[string]any
+	dec := json.NewDecoder(resp.Body)
+	for dec.More() {
+		var e map[string]any
+		if err := dec.Decode(&e); err != nil {
+			t.Fatal(err)
+		}
+		if e["format"] != TraceFormat {
+			t.Fatalf("format %v", e["format"])
+		}
+		out = append(out, e)
+	}
+	return out
 }
 
 // Protocol 2: the reply is an envelope around the move, statements can be
@@ -122,7 +199,7 @@ func TestClaudeSeat(t *testing.T) {
 func TestReplyEnvelopeAndTraces(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{"Ann", "llm"}, {"Bob", "llm"}}}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Seats: []Seat{{Name: "Ann", Kind: "llm"}, {Name: "Bob", Kind: "llm"}}}, &st)
 	play := func(reply string) map[string]interface{} {
 		t.Helper()
 		var mr struct {
@@ -141,7 +218,7 @@ func TestReplyEnvelopeAndTraces(t *testing.T) {
 	}
 	b, _ := io.ReadAll(resp.Body)
 	prompt := string(b)
-	for _, want := range []string{"wag-protocol/2", "[s1]", "### For or against a statement", "### Challenges", "linked: AS:sign (causality)", "thesis-independent scheme: AS:analogy", "attack argues:", `"thoughts"`} {
+	for _, want := range []string{"wag-protocol/2", "[s1]", "### For or against a statement", "### Challenges", "linked: AS:sign (causality)", "thesis-independent scheme: AS:expert_opinion", "attack argues:", `(an attack answers "no", a defence "yes")`, `"thoughts"`} {
 		if !strings.Contains(prompt, want) {
 			t.Errorf("the prompt lacks %q", want)
 		}
@@ -166,7 +243,9 @@ func TestReplyEnvelopeAndTraces(t *testing.T) {
 		if err := json.Unmarshal([]byte(line), &tr); err != nil {
 			t.Fatal(err)
 		}
-		traces = append(traces, tr)
+		if tr.Type == "decision" {
+			traces = append(traces, tr)
+		}
 	}
 	if len(traces) != 2 {
 		t.Fatalf("%d traces", len(traces))

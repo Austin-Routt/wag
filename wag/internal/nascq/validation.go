@@ -345,8 +345,7 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 // should_be_performed(carbon_tax), with A = carbon_tax, but not for
 // possible(carbon_tax).
 //
-// An answer to a critical question is not checked here: the NASCQ's backup
-// edges (S5) say which schemes can answer it.
+// An answer to a critical question is checked by fitAnswer.
 func (n *NASCQ) fit(va *ValidatedAction, scheme *ASNode, graph GraphQuerier) error {
 	if scheme.Free || scheme.AnswerVariable != "" {
 		return nil
@@ -365,23 +364,39 @@ func (n *NASCQ) fit(va *ValidatedAction, scheme *ASNode, graph GraphQuerier) err
 }
 
 // fitAnswer performs S9 for an answer to a critical question backed by a
-// scheme without an answer variable. If the scheme's conclusion can be the
-// answer (positive consequences answering with "A should be done"), the
-// answer fixes its variables, as for a direct move, and the mover's values
-// must agree: premises about one action may not conclude that another
-// should be done. If it cannot (consequences backing "is there a better
-// means?"), the NASCQ's backup edge (S5) stands for the link, and the
-// argument concludes the answer in place of what the scheme would conclude.
+// scheme without an answer variable: the answering argument concludes the
+// answer, so the scheme's conclusion must be the answer, as for a direct
+// move. Its conclusion fixes the values of its variables, and the mover's
+// values must agree: positive consequences can answer "would doing A also
+// have good consequences?" with "A should be done", about the same A, and
+// premises about one action may not conclude that another should be done.
+//
+// A scheme whose conclusion cannot be the answer cannot back it (its
+// premises would support its own conclusion, not the answer: a value
+// argument's "V is a reason to keep G" does not show that another goal
+// comes first), unless the NASCQ's backup edge declares a bridge (Edge.Bridge):
+// then the argument concludes the answer in place of the scheme's
+// conclusion, and the move records the bridge. The schemes with an answer
+// variable conclude any answer: the answer is in their premises (the expert
+// asserts the answer itself).
 func (n *NASCQ) fitAnswer(va *ValidatedAction, scheme *ASNode, graph GraphQuerier) error {
 	if scheme.Free || scheme.AnswerVariable != "" {
 		return nil
 	}
 	stmt, what := n.concluded(va, graph)
+	var err error
 	if stmt == "" {
-		return nil
+		err = fmt.Errorf("its conclusion is a statement, not an inference's failure")
+	} else {
+		_, err = graph.Fits(scheme.CarneadesID, stmt, nil)
 	}
-	if _, err := graph.Fits(scheme.CarneadesID, stmt, nil); err != nil {
-		return nil // the answer is not of the scheme's form
+	if err != nil {
+		if b := n.BridgeOf(scheme.ID, va.AnswersCQID); b != "" {
+			va.Bridge = b
+			return nil
+		}
+		return fmt.Errorf("S9: %s cannot conclude the answer, %s (%v); answer with Other, or with a scheme whose conclusion is any statement (%s)",
+			scheme.Name, what, err, strings.Join(n.answerSchemes(), ", "))
 	}
 	fixed, err := graph.Fits(scheme.CarneadesID, stmt, va.VariableBindings)
 	if err != nil {

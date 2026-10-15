@@ -79,6 +79,7 @@ func main() {
 	name2 := flag.String("name2", "Player2", "Player 2 display name")
 	dataDir := flag.String("data", "", "directory with schemes/core.yml and nascq/*.json (default: built-in data)")
 	lint := flag.Bool("lint", false, "check the data, print the findings and exit (status 1 on an error)")
+	edges := flag.Bool("edges", false, "play every answer the NASCQ allows to every critical question, on a sample argument, and print what each does as a Markdown table (status 1 if one does not do what its locus says)")
 	registryFile := flag.String("registry", "", "check that the schemes of this Carneades scheme file (YAML) are distinct patterns and their families declared; print the findings and exit")
 	familiesFile := flag.String("families", "", "with --registry: the scheme families file (JSON)")
 	strict := flag.Bool("strict", false, "with --registry: every family member must be in the file, and every scheme in a family")
@@ -104,6 +105,9 @@ func main() {
 	}
 	if *lint {
 		os.Exit(runLint(files))
+	}
+	if *edges {
+		os.Exit(runEdges(files))
 	}
 
 	cfg, err := game.ModeConfig(*mode)
@@ -484,6 +488,40 @@ func distinct(ps []registry.Pattern) int {
 		seen[p.Canonical] = true
 	}
 	return len(seen)
+}
+
+// runEdges prints the table of game.EdgeCases and returns the exit status.
+func runEdges(f dataFiles) int {
+	cases, err := game.EdgeCases(func() (*game.GameState, error) {
+		ad, err := carneades.NewAdapterFromYAML(f.yaml)
+		if err != nil {
+			return nil, err
+		}
+		n, err := nascq.LoadFromBytes(f.schemes, f.cqs, f.edges)
+		if err != nil {
+			return nil, err
+		}
+		return game.NewGame(game.DefaultGameConfig(), ad, n, []string{"Pro", "Con"}), nil
+	})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		return 1
+	}
+	bad, offered := 0, 0
+	for _, c := range cases {
+		if c.Offered {
+			offered++
+			if c.Error != "" {
+				bad++
+			}
+		}
+	}
+	fmt.Printf("# How each critical question can be answered\n\nMade by `wag-cli --edges` from the game's data: for every critical question asked of a scheme (an ask edge), an argument of the scheme with the example values of its variables, then every answer the NASCQ allows (each backing scheme, against and for), each played on that game and undone. *Concludes* is what the answering argument concludes; *Check* says whether that is what the question's locus and the answer's polarity call for. A backing scheme that is linked but not offered is one whose conclusion cannot be the answer (S9).\n\n%d answers offered, %d not as their locus says; %d linked but not offered.\n", offered, bad, len(cases)-offered)
+	fmt.Print(game.EdgeTable(cases))
+	if bad > 0 {
+		return 1
+	}
+	return 0
 }
 
 // runLint prints the data's lint findings and returns the exit status.

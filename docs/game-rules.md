@@ -27,7 +27,7 @@ Arguments are instances of the schemes in `data/schemes/core.yml`. The NASCQ
 - which critical questions (CQs) can be asked of an argument made with a scheme
   (ask edges);
 - which schemes can back an answer to a CQ (backup edges; thesis-independent
-  schemes back every CQ);
+  schemes, expert opinion and position to know, back every CQ);
 - which part of the argument each CQ is about: its **locus**, given on the ask
   edge.
 
@@ -46,9 +46,9 @@ an attack on a premise, by a counterargument with an opposite conclusion,
 or by an argument attacking the inference rule" (Walton, Reed & Macagno
 2008, p. 32).
 
-**The scheme must fit the statement (S9).** The scheme of such a move, and of
-a direct attack or defence of an argument's part, must be able to conclude
-the statement, or its opposite:
+**The scheme must fit the statement (S9).** The scheme of such a move, of
+a direct attack or defence of an argument's part, and of an answer to a
+critical question, must be able to conclude the statement, or its opposite:
 
 - Other, and the schemes whose conclusion is a statement variable (expert
   opinion, position to know, sign, analogy), conclude any statement. The
@@ -75,10 +75,34 @@ challenged ("Why should we accept that “P”?", `CQ:premise_acceptable`).
   argument for the premise answers it.
 - To argue against the premise instead, argue against the statement.
 
-**Arguments that answer a question.** A scheme without an answer variable
-that backs a question's answer concludes the answer in place of its own
-conclusion. The scheme's questions about its conclusion then do not apply to
-that argument (`nascq.OwnConclusion`); its other questions do.
+**Arguments that answer a question.** The answering argument concludes the
+answer, so its scheme must be able to conclude it (S9).
+- A scheme with an answer variable has the answer in its premises: the
+  expert asserts the answer itself.
+- A scheme without one backs only the answers its conclusion can be. Positive
+  consequences can answer "would doing A also have good consequences, to
+  weigh against G?" (asked of a negative-consequences argument) against it,
+  with "A should be done", about the same A. It cannot answer it in its
+  favour.
+- A backup edge may declare a **bridge** (`"bridge": "why"`): then the scheme
+  backs answers of another form, its argument concludes the answer in place
+  of its own conclusion, and the move records the bridge. The scheme's
+  questions about its conclusion then do not apply to that argument
+  (`nascq.OwnConclusion`); its other questions do.
+- The shipped data declares no bridge. The audit of 2026-10-13 (§4) showed
+  why: until then an edge stood for the link silently. Value arguments
+  backing "are there other goals that should come first?" and "is V really a
+  positive value?" concluded answers their premises do not support; those
+  edges are gone.
+- `wag-cli --lint` reports a backup edge whose scheme can conclude none of its
+  question's answers. `wag-cli --edges` plays every answer the NASCQ offers to
+  every question and prints what each concludes:
+  `docs/scheme-registry/nascq-edges.md`.
+
+**The literal answer.** Each question says which literal answer counts
+against the argument (`answer_en` in `critical_questions.json`). "Would doing A
+have bad side effects?" is answered "yes" by an attack. "Is A possible?" is
+answered "no" by one. The browser's buttons and the prompt say which.
 
 The answering argument is a full instance of the backup scheme: it has its own
 premises and exceptions, and its own critical questions. Each answer
@@ -92,11 +116,17 @@ as `answer_variable`:
 - A of analogy;
 - B of sign.
 
+Analogy is not thesis-independent since 2026-10-15: its formula has one
+proposition for the source case and the target (`in_case(A,C)` ⇒ `A`), so
+as the answer to any question it would say the answer held in another case.
+It still argues for or against a statement; the audit's N12 (a source and a
+target case) is pending.
+
 The game binds this variable to the answer, so the premises are about the
 answer (`asserts(W, not(possible(A)))`) and the player does not fill it in.
 The other schemes conclude something more specific, such as
-`should_be_performed(A)`. Their answering argument concludes the answer and
-leaves their own conclusion as the unstated link (an enthymeme).
+`should_be_performed(A)`, and back only answers of that form, unless their
+backup edge declares a bridge (above).
 
 ## 2. Moves
 

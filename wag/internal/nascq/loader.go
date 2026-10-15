@@ -375,6 +375,21 @@ func (n *NASCQ) GetAskCQs(schemeID string) []*CQNode {
 //   - All thesis-dependent schemes with explicit backup edges to this CQ
 //   - ALL thesis-independent schemes (they back every CQ by definition)
 func (n *NASCQ) GetBackupSchemes(cqID string) []*ASNode {
+	return n.backupSchemes(cqID)
+}
+
+// BridgeOf returns the bridge the backup edge from the scheme to the
+// question declares (Edge.Bridge); "" if none.
+func (n *NASCQ) BridgeOf(schemeID, cqID string) string {
+	for _, e := range n.BackupEdges {
+		if e.Scheme == schemeID && e.CQ == cqID {
+			return e.Bridge
+		}
+	}
+	return ""
+}
+
+func (n *NASCQ) backupSchemes(cqID string) []*ASNode {
 	// Explicit backup edges (thesis-dependent).
 	depIDs := n.backupIndex[cqID]
 	seen := make(map[string]bool, len(depIDs)+len(n.thesisIndep))

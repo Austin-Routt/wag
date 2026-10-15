@@ -10,6 +10,7 @@
 package server
 
 import (
+	"context"
 	"crypto/sha256"
 	"embed"
 	"encoding/hex"
@@ -31,6 +32,7 @@ import (
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/kialo"
+	"github.com/yourorg/wag/internal/llm"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -61,7 +63,8 @@ type Server struct {
 	mu       sync.Mutex
 	data     Data
 	kialoDir string
-	claude   *Claude // nil: no Claude seats
+	models   map[string]*llm.Client // the model profiles seats can use, by name
+	ctx      context.Context        // the server's lifetime: model calls stop when it ends
 	contexts []game.Context
 	sessions map[string]*Session
 	next     int
@@ -71,18 +74,28 @@ type Server struct {
 // Seat is a player and who plays it.
 type Seat struct {
 	Name string `json:"name"`
-	Kind string `json:"kind"` // human; llm (any language model, through the prompt and a pasted reply); random, greedy (rule bots); claude (the Claude API)
+	// Kind is human; llm (any language model, through the prompt and a
+	// pasted reply); random, greedy (rule bots); model (a language model
+	// through an API: the profile named by Model); claude (the profile
+	// "claude", as --claude sets it up).
+	Kind  string `json:"kind"`
+	Model string `json:"model,omitempty"`
 }
 
+// aiKind is the kind of player the server moves for: random, greedy, or
+// model (a model seat, claude included); "" for a seat a person moves.
 func (s Seat) aiKind() string {
-	if s.Kind == "random" || s.Kind == "greedy" || s.Kind == "claude" {
+	switch s.Kind {
+	case "random", "greedy":
 		return s.Kind
+	case "model", "claude":
+		return "model"
 	}
 	return ""
 }
 
-// SetClaude offers Claude seats, played through the Claude API.
-func (s *Server) SetClaude(c *Claude) { s.claude = c; s.meta = nil }
+// SetContext ties the model calls to ctx: they stop when it is done.
+func (s *Server) SetContext(ctx context.Context) { s.ctx = ctx }
 
 // AddContexts adds context presets (from a file given to the server); one
 // with the ID of a built-in preset replaces it.
@@ -107,14 +120,17 @@ type Session struct {
 	Seed    int64           // the AI seats' seed
 	Notes   []Note          // testers' remarks
 	Events  []Event         // every request that tried to change the game
-	LLM     []LLMRecord     // what Claude seats replied, move by move
+	LLM     []LLMRecord     // what model seats replied, move by move
 	Traces  []Trace         // every decision of every seat (traces.go)
+	Calls   []Call          // every call of a model seat to its provider (traces.go)
+	// order counts the traced events (decisions and calls), which share it.
+	order int
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
 	contexts []game.Context
 	// dataHash identifies the scheme data the game is played with.
 	dataHash string
-	// thinking: a Claude seat is waiting for the model; the game takes no
+	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
 }
@@ -122,7 +138,7 @@ type Session struct {
 // New makes a server for the data; kialoDir, if not empty, is a directory
 // of captured Kialo discussions (<dir>/<id>/graph.json) offered for import.
 func New(d Data, kialoDir string) (*Server, error) {
-	s := &Server{data: d, kialoDir: kialoDir, sessions: map[string]*Session{}}
+	s := &Server{data: d, kialoDir: kialoDir, sessions: map[string]*Session{}, models: map[string]*llm.Client{}, ctx: context.Background()}
 	if _, err := s.newState(game.DefaultGameConfig(), []string{"x"}); err != nil {
 		return nil, fmt.Errorf("the game data does not load: %v", err)
 	}
@@ -307,7 +323,8 @@ func (s *Server) buildMeta() ([]byte, error) {
 		"schemes":  schemes,
 		"cqs":      cqs,
 		"kialo":    s.kialoDir != "",
-		"claude":   claudeMeta(s.claude),
+		"claude":   s.claudeMeta(),
+		"models":   s.modelMeta(),
 		"contexts": s.contexts,
 	})
 }
@@ -459,18 +476,18 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if len(req.Seats) == 0 {
-			req.Seats = []Seat{{"Alice", "human"}, {"Bob", "greedy"}}
+			req.Seats = []Seat{{Name: "Alice", Kind: "human"}, {Name: "Bob", Kind: "greedy"}}
 		}
 		for _, seat := range req.Seats {
 			switch seat.Kind {
 			case "human", "llm", "random", "greedy":
-			case "claude":
-				if s.claude == nil {
-					httpError(w, fmt.Errorf("this server has no Claude seats: start it with --claude"), http.StatusBadRequest)
+			case "claude", "model":
+				if _, err := s.model(seat); err != nil {
+					httpError(w, err, http.StatusBadRequest)
 					return
 				}
 			default:
-				httpError(w, fmt.Errorf("unknown seat kind %q (human, llm, random, greedy, claude)", seat.Kind), http.StatusBadRequest)
+				httpError(w, fmt.Errorf("unknown seat kind %q (human, llm, random, greedy, model, claude)", seat.Kind), http.StatusBadRequest)
 				return
 			}
 		}
@@ -655,9 +672,10 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		player := ss.GS.ActivePlayer().ID
-		if ss.Seats[ss.GS.ActivePlayerIdx].Kind == "claude" {
-			if s.claude == nil {
-				httpError(w, fmt.Errorf("this server has no Claude seats: start it with --claude"), http.StatusConflict)
+		if seat := ss.Seats[ss.GS.ActivePlayerIdx]; seat.aiKind() == "model" {
+			c, err := s.model(seat)
+			if err != nil {
+				httpError(w, err, http.StatusConflict)
 				return
 			}
 			if ss.GS.Terminated || ss.GS.Pending != nil {
@@ -667,10 +685,10 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			ss.thinking = true
 			ss.Version++ // pollers see the seat thinking
 			s.mu.Unlock()
-			res, err := s.claudeTurn(ss)
+			res, err := s.modelTurn(ss, c)
 			s.mu.Lock()
 			ss.thinking = false
-			ss.event("ai", player, "claude", res, err)
+			ss.event("ai", player, c.Profile.Name, res, err)
 			s.reply(w, ss, res, err)
 			return
 		}
@@ -705,7 +723,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=wag-game-%s.json", ss.ID))
 		writeJSON(w, ss.export(s.contexts))
 	case "traces":
-		ss.writeTraces(w)
+		s.writeTraces(w, ss)
 	default:
 		httpError(w, fmt.Errorf("unknown action %q", action), http.StatusNotFound)
 	}
@@ -972,7 +990,7 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.mu.Lock()
-	ss := s.add(gs, []Seat{{kialo.ProPlayer, "human"}, {kialo.ConPlayer, "human"}}, rep.Title, "kialo:"+rep.Discussion, rand.Int63())
+	ss := s.add(gs, []Seat{{Name: kialo.ProPlayer, Kind: "human"}, {Name: kialo.ConPlayer, Kind: "human"}}, rep.Title, "kialo:"+rep.Discussion, rand.Int63())
 	ss.Import = rep
 	st := ss.buildState()
 	s.mu.Unlock()
@@ -1074,9 +1092,10 @@ func (s *Server) handleLoad(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, ss.buildState())
 }
 
-func claudeMeta(c *Claude) interface{} {
+func (s *Server) claudeMeta() interface{} {
+	c := s.models["claude"]
 	if c == nil {
 		return nil
 	}
-	return map[string]string{"model": c.Model, "effort": c.Effort}
+	return map[string]string{"model": c.Profile.Model, "effort": c.Profile.Effort}
 }

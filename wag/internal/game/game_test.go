@@ -193,9 +193,9 @@ const testEdgesJSON = `{
     { "cq": "CQ:legitimate_value",   "scheme": "AS:values" }
   ],
   "backup_edges": [
-    { "scheme": "AS:cause_to_effect", "cq": "CQ:side_effects" },
+    { "scheme": "AS:cause_to_effect", "cq": "CQ:side_effects", "bridge": "an effect of the action that is bad is a side effect" },
     { "scheme": "AS:values",          "cq": "CQ:other_goals" },
-    { "scheme": "AS:cause_to_effect", "cq": "CQ:interference" },
+    { "scheme": "AS:cause_to_effect", "cq": "CQ:interference", "bridge": "another cause of the effect interferes with the causal link" },
     { "scheme": "AS:values",          "cq": "CQ:legitimate_value" }
   ]
 }`

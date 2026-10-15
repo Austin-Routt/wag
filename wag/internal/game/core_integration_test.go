@@ -85,8 +85,8 @@ func TestCoreDataLoading(t *testing.T) {
 			t.Errorf("no critical question is asked of %s", id)
 		}
 	}
-	if stats.ThesisIndependentCount != 3 {
-		t.Errorf("thesis-independent count = %d, want 3", stats.ThesisIndependentCount)
+	if stats.ThesisIndependentCount != 2 { // expert opinion, position to know (not analogy: audit 2026-10-13 §5.2)
+		t.Errorf("thesis-independent count = %d, want 2", stats.ThesisIndependentCount)
 	}
 
 	// Verify every NASCQ carneades_id maps to an actual Carneades scheme.
@@ -292,15 +292,17 @@ func TestCoreRebuttalViaCQ(t *testing.T) {
 	targetArgID := r1.ArgIDs[0]
 	target := gs.Adapter.Graph.Arguments[targetArgID]
 
-	// Turn 2: Bob rebuts through CQ:other_goals with AS:values.
+	// Turn 2: Bob rebuts through CQ:other_goals with a source in a position
+	// to know (a value argument no longer backs it: "V is a reason to keep
+	// G" does not show another goal comes first).
 	r2, _ := gs.ExecuteTurn(nascq.ProposedAction{
 		Type:        "attack",
 		AttackType:  "rebuttal",
-		SchemeID:    "AS:values",
+		SchemeID:    "AS:position_to_know",
 		AnswersCQID: "CQ:other_goals",
 		TargetArgID: targetArgID,
 		VariableBindings: map[string]string{
-			"V": "economic_freedom", "A": "carbon_tax", "G": "low_prices",
+			"W": "the_treasury", "D": "public_budgets",
 		},
 	})
 	if !r2.Accepted {
@@ -313,9 +315,9 @@ func TestCoreRebuttalViaCQ(t *testing.T) {
 	if target.Conclusion.Issue == nil || target.Conclusion.Issue != rebuttal.Conclusion.Issue {
 		t.Fatal("the rebuttal did not make the conclusion an issue")
 	}
-	// Under PE Alice's 0.70 beats Bob's 0.60.
+	// Under PE Alice's 0.70 beats Bob's 0.65.
 	if target.Conclusion.Label != caes.In || rebuttal.Conclusion.Label != caes.Out {
-		t.Fatalf("conclusion %v, rebuttal %v; want In and Out (0.70 > 0.60 under PE)",
+		t.Fatalf("conclusion %v, rebuttal %v; want In and Out (0.70 > 0.65 under PE)",
 			target.Conclusion.Label, rebuttal.Conclusion.Label)
 	}
 

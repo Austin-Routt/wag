@@ -3,6 +3,7 @@
     "name": "Other Goals Question",
     "semantic_type": "value",
     "question_template_en": "Are there goals other than {G} that should come first?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "rebuttal",
@@ -14,6 +15,7 @@
     "name": "Other Means Question",
     "semantic_type": "action",
     "question_template_en": "Could an action other than {A} also achieve {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -25,6 +27,7 @@
     "name": "Side Effects Question",
     "semantic_type": "causality",
     "question_template_en": "Would doing {A} have bad side effects?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -36,6 +39,7 @@
     "name": "Possibility Question",
     "semantic_type": "causality",
     "question_template_en": "Is {A} actually possible?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -48,6 +52,7 @@
     "name": "Best Means Question",
     "semantic_type": "action",
     "question_template_en": "Is {A} the best way to achieve {G}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -59,6 +64,7 @@
     "name": "Evidence Question",
     "semantic_type": "truth",
     "question_template_en": "Is there enough evidence that doing {A} brings about {G}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -70,6 +76,7 @@
     "name": "Likelihood Question",
     "semantic_type": "truth",
     "question_template_en": "How likely is it that the claimed link actually holds?",
+    "answer_en": {"against": "unlikely", "for": "likely"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -81,6 +88,7 @@
     "name": "Other Event Question",
     "semantic_type": "causality",
     "question_template_en": "Could something other than {B} better explain why {A} is observed?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -92,6 +100,7 @@
     "name": "Expertise Question",
     "semantic_type": "source",
     "question_template_en": "How credible is {W} as an expert on {D}?",
+    "answer_en": {"against": "not credible", "for": "credible"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -103,6 +112,7 @@
     "name": "Field Question",
     "semantic_type": "property",
     "question_template_en": "Is {S} really a matter of {D}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -114,6 +124,7 @@
     "name": "Opinion Question",
     "semantic_type": "truth",
     "question_template_en": "Did {W} really say that {S}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -125,6 +136,7 @@
     "name": "Trustworthiness Question",
     "semantic_type": "source",
     "question_template_en": "Is {W} honest and unbiased?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -136,6 +148,7 @@
     "name": "Consistency Question",
     "semantic_type": "truth",
     "question_template_en": "Do other credible sources agree that {S}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -147,6 +160,7 @@
     "name": "Backup Evidence Question",
     "semantic_type": "truth",
     "question_template_en": "Is what {W} says based on evidence?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -159,6 +173,7 @@
     "name": "Position to Know Question",
     "semantic_type": "source",
     "question_template_en": "Is {W} really in a position to know about {D}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -170,6 +185,7 @@
     "name": "Difference Question",
     "semantic_type": "property",
     "question_template_en": "Does the case of {C} differ from this one in relevant ways?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -181,6 +197,7 @@
     "name": "Truth Question",
     "semantic_type": "truth",
     "question_template_en": "Is {A} really true in the case of {C}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -192,6 +209,7 @@
     "name": "Other Case Question",
     "semantic_type": "property",
     "question_template_en": "Is there a case more on point than {C} in which {A} is false?",
+    "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undercutter",
@@ -203,6 +221,7 @@
     "name": "Legitimate Value Question",
     "semantic_type": "value",
     "question_template_en": "Is {V} really a positive value for {A}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -214,6 +233,7 @@
     "name": "Value Effect Question",
     "semantic_type": "value",
     "question_template_en": "Does {V} really support the goal {G} for {A}?",
+    "answer_en": {"against": "no", "for": "yes"},
     "caes_mapping": {
       "positive_answer_type": "support",
       "negative_answer_type": "undermining",
@@ -224,6 +244,7 @@
       "name": "Conflicting Goals Question",
       "semantic_type": "value",
       "question_template_en": "Does the goal {G} conflict with other goals that should be considered?",
+      "answer_en": {"against": "yes", "for": "no"},
       "caes_mapping": {
         "positive_answer_type": "support",
         "negative_answer_type": "undercutter",
@@ -234,6 +255,7 @@
       "name": "Intervening Actions Question",
       "semantic_type": "causality",
       "question_template_en": "Would something else have to happen, or be done, before {A} could achieve {G}?",
+      "answer_en": {"against": "yes", "for": "no"},
       "caes_mapping": {
         "positive_answer_type": "support",
         "negative_answer_type": "undercutter",
@@ -244,6 +266,7 @@
       "name": "Goal Possibility Question",
       "semantic_type": "causality",
       "question_template_en": "Can the goal {G} be achieved at all?",
+      "answer_en": {"against": "no", "for": "yes"},
       "caes_mapping": {
         "positive_answer_type": "support",
         "negative_answer_type": "undermining",
@@ -254,7 +277,8 @@
     "CQ:opposite_consequences": {
       "name": "Opposite Consequences Question",
       "semantic_type": "action",
-      "question_template_en": "Are there good consequences of doing {A} that outweigh {G}?",
+      "question_template_en": "Would doing {A} also have good consequences, to weigh against {G}?",
+      "answer_en": {"against": "yes", "for": "no"},
       "caes_mapping": {
         "positive_answer_type": "support",
         "negative_answer_type": "rebuttal",

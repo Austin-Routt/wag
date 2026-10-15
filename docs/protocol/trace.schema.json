@@ -1,80 +1,672 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/austin-routt/wag/docs/protocol/trace.schema.json",
-  "title": "WAG decision trace (wag-trace/1)",
-  "description": "One line of GET /api/games/{id}/traces, and one item of the export's `traces`: a decision of a seat, accepted or rejected.",
-  "type": "object",
-  "required": ["format", "game", "seq", "move", "round", "player", "seat", "attempt", "time", "action", "result"],
-  "properties": {
-    "format": {"const": "wag-trace/1"},
-    "game": {"type": "string"},
-    "seq": {"description": "Index among the game's traces.", "type": "integer", "minimum": 0},
-    "move": {"description": "Index of the move in the history; -1 if no move was recorded (a rejected move).", "type": "integer", "minimum": -1},
-    "round": {"type": "integer"},
-    "player": {"type": "string"},
-    "side": {"enum": ["pro", "con"]},
-    "seat": {"enum": ["human", "llm", "claude", "random", "greedy"]},
-    "model": {"type": "string"},
-    "attempt": {"description": "1 for the first try at a turn; retries after a rejection count up.", "type": "integer", "minimum": 1},
-    "time": {"type": "string", "format": "date-time"},
-    "protocol": {"description": "The text protocol of the prompt (language-model seats).", "type": "string"},
-    "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "prompt": {"description": "The prompt a language-model seat was given; on a retry, the message that said why the move was rejected.", "type": "string"},
-    "reply": {"description": "The raw reply of a language-model seat.", "type": "string"},
-    "reasoning": {
-      "description": "What the reply said of its reasoning (reply.schema.json without the action).",
-      "type": "object",
-      "properties": {
-        "context": {"type": "array", "items": {"type": "string"}},
-        "thoughts": {"type": "array", "items": {"type": "string"}},
-        "summary": {"type": "string"},
-        "expect": {"type": "array"},
-        "alternatives": {"type": "array"},
-        "confidence": {"type": "number"},
-        "bare": {"description": "The reply was a move object alone (protocol 1).", "type": "boolean"}
-      }
+  "title": "WAG trace event (wag-trace/2)",
+  "description": "One line of GET /api/games/{id}/traces (and of wag-llm play's .trace.jsonl files): game_start, then the calls and decisions in the order they happened, then game_end once the game is over. The export's `traces` are the decision events without their prompts.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/game_start"
     },
-    "why": {"description": "A human player's note on the move.", "type": "string"},
-    "action": {"description": "The move, with references resolved; for a played move, as validated (attack type and answer filled in).", "type": "object"},
-    "result": {
-      "type": "object",
-      "properties": {
-        "accepted": {"type": "boolean"},
-        "abstained": {"type": "boolean"},
-        "pending": {"type": "boolean"},
-        "error": {"type": "string"},
-        "arg_ids": {"type": "array", "items": {"type": "string"}},
-        "score_delta": {"type": "number"}
-      },
-      "required": ["accepted"]
+    {
+      "$ref": "#/$defs/call"
     },
-    "claim_before": {"enum": ["in", "out", "undecided"]},
-    "claim_after": {"enum": ["in", "out", "undecided"]},
-    "effects": {"type": "array", "items": {"type": "string"}},
-    "expect_check": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["stmt", "predicted", "actual", "ok"],
-        "properties": {
-          "stmt": {"type": "string"},
-          "predicted": {"type": "string"},
-          "actual": {"description": "The label after the move, or \"absent\".", "type": "string"},
-          "ok": {"type": "boolean"}
+    {
+      "$ref": "#/$defs/decision"
+    },
+    {
+      "$ref": "#/$defs/game_end"
+    }
+  ],
+  "$defs": {
+    "game_start": {
+      "type": "object",
+      "description": "The first event: everything needed to set the game up again (wag-llm replay).",
+      "required": [
+        "format",
+        "type",
+        "id",
+        "game",
+        "protocol",
+        "data_sha256",
+        "seed",
+        "config",
+        "seats",
+        "build"
+      ],
+      "properties": {
+        "format": {
+          "const": "wag-trace/2"
+        },
+        "type": {
+          "const": "game_start"
+        },
+        "id": {
+          "const": "g"
+        },
+        "order": {
+          "const": 0
+        },
+        "game": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "title": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "data_sha256": {
+          "description": "The scheme data the game is played with.",
+          "type": "string"
+        },
+        "seed": {
+          "description": "The rule bots' seed.",
+          "type": "integer"
+        },
+        "request": {
+          "description": "The new-game request (absent for an imported or loaded game).",
+          "type": "object"
+        },
+        "config": {
+          "type": "object"
+        },
+        "seats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "profiles": {
+          "description": "The model seats' profiles: provider, model, parameters. Keys are never in profiles.",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "system_prompt": {
+          "type": "string"
+        },
+        "build": {
+          "type": "object"
+        },
+        "contexts": {
+          "type": "array"
+        },
+        "players": {
+          "type": "array"
         }
       }
     },
-    "alternative_outcomes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["action", "legal", "score_delta"],
-        "properties": {
-          "action": {"type": "object"},
-          "legal": {"type": "boolean"},
-          "error": {"type": "string"},
-          "claim_after": {"type": "string"},
-          "score_delta": {"type": "number"}
+    "call": {
+      "type": "object",
+      "description": "One call of a model seat to its provider: the request as sent and the answer or the error. A call retried after a rate limit or a server error is one event per try (n).",
+      "required": [
+        "format",
+        "type",
+        "id",
+        "order",
+        "game",
+        "player",
+        "turn",
+        "attempt",
+        "profile",
+        "provider",
+        "n",
+        "start",
+        "latency_ns",
+        "request"
+      ],
+      "properties": {
+        "format": {
+          "const": "wag-trace/2"
+        },
+        "type": {
+          "const": "call"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^c[0-9]+$"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "game": {
+          "type": "string"
+        },
+        "player": {
+          "type": "string"
+        },
+        "turn": {
+          "description": "As the decisions' turn.",
+          "type": "integer"
+        },
+        "attempt": {
+          "description": "The decision attempt the call is for.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "profile": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "n": {
+          "description": "1 for the first try of this request; 2… for the retries.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "waited_ns": {
+          "description": "How long it waited before it was sent (min_interval, or a retry's delay).",
+          "type": "integer"
+        },
+        "latency_ns": {
+          "type": "integer"
+        },
+        "request": {
+          "type": "object",
+          "required": [
+            "messages",
+            "model"
+          ],
+          "properties": {
+            "system": {
+              "type": "string"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "role",
+                  "content"
+                ],
+                "properties": {
+                  "role": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ]
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "model": {
+              "type": "string"
+            },
+            "temperature": {
+              "type": "number"
+            },
+            "top_p": {
+              "type": "number"
+            },
+            "top_k": {
+              "type": "integer"
+            },
+            "max_output_tokens": {
+              "type": "integer"
+            },
+            "seed": {
+              "type": "integer"
+            },
+            "effort": {
+              "type": "string"
+            },
+            "thinking_budget": {
+              "type": "integer"
+            },
+            "output": {
+              "enum": [
+                "",
+                "text",
+                "json",
+                "schema"
+              ]
+            },
+            "schema": {},
+            "extra": {
+              "type": "object"
+            }
+          }
+        },
+        "response": {
+          "type": "object",
+          "required": [
+            "text",
+            "usage"
+          ],
+          "properties": {
+            "text": {
+              "description": "The answer's text (a reasoning block some engines put before it is not kept).",
+              "type": "string"
+            },
+            "finish_reason": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "response_id": {
+              "type": "string"
+            },
+            "request_id": {
+              "type": "string"
+            },
+            "usage": {
+              "type": "object",
+              "description": "Token counts as the provider reports them; a missing count was not reported (unknown, not zero).",
+              "properties": {
+                "input_tokens": {
+                  "type": "integer"
+                },
+                "output_tokens": {
+                  "type": "integer"
+                },
+                "reasoning_tokens": {
+                  "type": "integer"
+                },
+                "cached_tokens": {
+                  "type": "integer"
+                },
+                "total_tokens": {
+                  "type": "integer"
+                }
+              }
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "required": [
+            "provider",
+            "kind",
+            "message"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "auth",
+                "rate_limit",
+                "invalid_request",
+                "not_found",
+                "server",
+                "timeout",
+                "canceled",
+                "network",
+                "blocked",
+                "empty",
+                "bad_reply",
+                "config"
+              ]
+            },
+            "status": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string"
+            },
+            "retry_after": {
+              "description": "Nanoseconds the provider asked to wait.",
+              "type": "integer"
+            },
+            "request_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "format",
+        "type",
+        "id",
+        "order",
+        "game",
+        "seq",
+        "turn",
+        "move",
+        "round",
+        "player",
+        "seat",
+        "attempt",
+        "time",
+        "action",
+        "result"
+      ],
+      "properties": {
+        "format": {
+          "const": "wag-trace/2"
+        },
+        "type": {
+          "const": "decision"
+        },
+        "id": {
+          "description": "dN: N is its index among the game's decisions.",
+          "type": "string",
+          "pattern": "^d[0-9]+$"
+        },
+        "parent": {
+          "description": "For a model seat, the call (cN) whose answer this decision is.",
+          "type": "string"
+        },
+        "order": {
+          "description": "Its place in the trace file, shared with the calls.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "game": {
+          "type": "string"
+        },
+        "seq": {
+          "description": "Index among the game's decisions.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "move": {
+          "description": "Index of the move in the history; -1 if no move was recorded (a rejected move).",
+          "type": "integer",
+          "minimum": -1
+        },
+        "round": {
+          "type": "integer"
+        },
+        "player": {
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "pro",
+            "con"
+          ]
+        },
+        "seat": {
+          "enum": [
+            "human",
+            "llm",
+            "model",
+            "claude",
+            "random",
+            "greedy"
+          ]
+        },
+        "model": {
+          "description": "The model the profile asks for.",
+          "type": "string"
+        },
+        "attempt": {
+          "description": "1 for the first try at a turn; retries after a rejection count up.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "protocol": {
+          "description": "The text protocol of the prompt (language-model seats).",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prompt": {
+          "description": "The board a language-model seat was given when the turn began; the same on every attempt at the turn.",
+          "type": "string"
+        },
+        "reply": {
+          "description": "The raw reply of a language-model seat.",
+          "type": "string"
+        },
+        "reasoning": {
+          "description": "What the reply said of its reasoning (reply.schema.json without the action): the model's own account, which need not be how it chose (docs/protocol.md).",
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "thoughts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "summary": {
+              "type": "string"
+            },
+            "expect": {
+              "type": "array"
+            },
+            "alternatives": {
+              "type": "array"
+            },
+            "confidence": {
+              "type": "number"
+            },
+            "bare": {
+              "description": "The reply was a move object alone (protocol 1).",
+              "type": "boolean"
+            }
+          }
+        },
+        "why": {
+          "description": "A human player's note on the move.",
+          "type": "string"
+        },
+        "action": {
+          "description": "The move, with references resolved; for a played move, as validated (attack type and answer filled in).",
+          "type": "object"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "accepted": {
+              "type": "boolean"
+            },
+            "abstained": {
+              "type": "boolean"
+            },
+            "pending": {
+              "type": "boolean"
+            },
+            "error": {
+              "type": "string"
+            },
+            "arg_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "score_delta": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "accepted"
+          ]
+        },
+        "claim_before": {
+          "enum": [
+            "in",
+            "out",
+            "undecided"
+          ]
+        },
+        "claim_after": {
+          "enum": [
+            "in",
+            "out",
+            "undecided"
+          ]
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expect_check": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "stmt",
+              "predicted",
+              "actual",
+              "ok"
+            ],
+            "properties": {
+              "stmt": {
+                "type": "string"
+              },
+              "predicted": {
+                "type": "string"
+              },
+              "actual": {
+                "description": "The label after the move, or \"absent\".",
+                "type": "string"
+              },
+              "ok": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "alternative_outcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "action",
+              "legal",
+              "score_delta"
+            ],
+            "properties": {
+              "action": {
+                "type": "object"
+              },
+              "legal": {
+                "type": "boolean"
+              },
+              "error": {
+                "type": "string"
+              },
+              "claim_after": {
+                "type": "string"
+              },
+              "score_delta": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "turn": {
+          "description": "How many moves were made before this decision: the attempts at one move share it.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "profile": {
+          "description": "A model seat's profile (llm.Profile).",
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "served_model": {
+          "description": "The model (version) the provider says answered.",
+          "type": "string"
+        },
+        "feedback": {
+          "description": "On a retry, what the seat was told: why its previous move was rejected. The call event (parent) has the whole conversation.",
+          "type": "string"
+        }
+      }
+    },
+    "game_end": {
+      "type": "object",
+      "description": "The last event, once the game is over.",
+      "required": [
+        "format",
+        "type",
+        "id",
+        "game",
+        "moves",
+        "outcome",
+        "labels"
+      ],
+      "properties": {
+        "format": {
+          "const": "wag-trace/2"
+        },
+        "type": {
+          "const": "game_end"
+        },
+        "id": {
+          "const": "e"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "game": {
+          "type": "string"
+        },
+        "moves": {
+          "type": "integer"
+        },
+        "outcome": {
+          "type": "object"
+        },
+        "labels": {
+          "description": "Every statement's label at the end.",
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "in",
+              "out",
+              "undecided"
+            ]
+          }
+        },
+        "verdicts": {
+          "type": "array"
         }
       }
     }

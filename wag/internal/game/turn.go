@@ -244,6 +244,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		LabelsBefore: labelsBefore,
 		LabelsAfter:  labelsAfter,
 		Scorable:     scorable,
+		Bridge:       validated.Bridge,
 	})
 	if gs.Config.live() {
 		deltas = gs.rescore()

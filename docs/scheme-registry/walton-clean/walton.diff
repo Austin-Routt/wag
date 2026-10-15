@@ -1,5 +1,5 @@
---- uploads2/walton/walton-argumentation-schemes-for-carneades-4-master/walton.yml	2020-02-29 08:30:58.000000000 +0000
-+++ walton-clean/walton.clean.yml	2026-10-13 16:46:43.035951140 +0000
+--- walton.yml (original)
++++ walton.yml (cleaned)
 @@ -7,14 +7,14 @@
         Argumentation Schemes. Cambridge University Press.
  language: 

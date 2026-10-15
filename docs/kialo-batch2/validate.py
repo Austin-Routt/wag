@@ -1,26 +1,36 @@
-"""Validate gold.json and lexicon.json.
+"""Validate gold.json and lexicon.json (or another annotation file).
 
-    python3 -I validate.py RESOURCES/
+    python3 -I validate.py [ANNOTATIONS.json]
 
-RESOURCES holds walton.yml (docs/scheme-registry/walton-clean/), the game's
-schemes.json, critical_questions.json and edges.json (wag/data/nascq/), and
-compendium.json (the transcription of the book's compendium, kept outside the
-repository; links.json in docs/scheme-registry/ has its links). Run it from
-this directory."""
-import json, re, sys
+Everything it reads is in the repository: walton.yml
+(docs/scheme-registry/walton-clean/), the compendium links
+(docs/scheme-registry/links.json: which walton.yml formula each of the
+book's critical questions is about; labels only, no book text), and the
+game's schemes.json, critical_questions.json and edges.json (wag/data/nascq/).
+Paths are relative to this file, so it runs from any directory.
+
+ANNOTATIONS defaults to gold.json. A file that is not the adjudicated gold
+(an annotator's, or a model's from wag-llm annotate) is checked the same way,
+except for the adjudication records."""
+import json, os, re, sys
 import yaml
 
-DOC = ''
-RES = (sys.argv[1].rstrip('/') + '/') if len(sys.argv) > 1 else 'resources/'
-gold = json.load(open(DOC + 'gold.json'))
+DOC = os.path.dirname(os.path.abspath(__file__)) + '/'
+REPO = os.path.normpath(DOC + '../..') + '/'
+ANN = sys.argv[1] if len(sys.argv) > 1 else DOC + 'gold.json'
+gold = json.load(open(ANN))
+IS_GOLD = gold.get('annotator') == 'gold'
 lex = json.load(open(DOC + 'lexicon.json'))
 items = json.load(open(DOC + 'items.json'))['items']
-W = {s['id']: s for s in yaml.safe_load(open(RES + 'walton.yml'))['argument_schemes']}
-comp = json.load(open(RES + 'compendium.json'))
-edges = json.load(open(RES + 'edges.json'))['ask_edges']
-cqs = json.load(open(RES + 'critical_questions.json'))
-WAG2W = {k: v['carneades_id'] for k, v in json.load(open(RES + 'schemes.json')).items()}
-WAG2W['AS:expert_opinion'] = 'expert_opinion'   # guidelines §1: the game now uses the book's scheme
+W = {s['id']: s for s in yaml.safe_load(open(REPO + 'docs/scheme-registry/walton-clean/walton.yml'))['argument_schemes']}
+# Upstream IDs renamed in the cleaned file read as their new ones.
+for old, new in json.load(open(REPO + 'docs/scheme-registry/walton-clean/id-migrations.json'))['schemes'].items():
+    W[old] = W[new]
+comp = json.load(open(REPO + 'docs/scheme-registry/links.json'))['entries']
+NASCQ = REPO + 'wag/data/nascq/'
+edges = json.load(open(NASCQ + 'edges.json'))['ask_edges']
+cqs = json.load(open(NASCQ + 'critical_questions.json'))
+WAG2W = {k: v['carneades_id'] for k, v in json.load(open(NASCQ + 'schemes.json')).items()}
 errors, warns = [], []
 def err(m): errors.append(m)
 
@@ -52,7 +62,6 @@ def subst(f, b):
 # 1. 50 items, in items.json order
 ids = [i['kialo_claim_id'] for i in items]
 gids = [i['kialo_claim_id'] for i in gold['items']]
-if gold.get('annotator') != 'gold': err('annotator is not gold')
 if gids != ids: err('items not in items.json order or count differs: %d' % len(gids))
 G = {i['kialo_claim_id']: i for i in gold['items']}
 kp = {i['kialo_claim_id']: i['kialo_parents'] for i in items}
@@ -75,18 +84,15 @@ for e in edges:
         wid = WAG2W[e['scheme']]
         pred = parse(e['pattern'])[1]
         cq_pred.setdefault(wid, {}).setdefault(pred, set()).add(('game', e['cq'], e['locus']))
-# expert_opinion: the game's CQs by name (its patterns are credible_source's)
-for lab, pred in [('CQ:expertise', 'expert'), ('CQ:field', 'in_domain'), ('CQ:opinion', 'asserts'), ('CQ:trustworthiness', 'untrustworthy'), ('CQ:consistency', 'inconsistent_with_other_experts')]:
-    cq_pred.setdefault('expert_opinion', {}).setdefault(pred, set()).add(('game', lab, 'x'))
-
 counts = {'instances': 0, 'checked_formulas': 0}
 for it in gold['items']:
     cid = it['kialo_claim_id']
-    for k in ('literal', 'instances', 'role', 'target', 'evidence', 'challenges', 'notes', 'adjudication'):
+    for k in ('literal', 'instances', 'role', 'target', 'evidence', 'challenges', 'notes') + (('adjudication',) if IS_GOLD else ()):
         if k not in it: err(f'{cid}: missing {k}')
-    ad = it['adjudication']
-    if not isinstance(ad.get('changed_fields'), list) or not ad.get('reason'): err(f'{cid}: bad adjudication')
-    if ad['changed_fields'] == [] and ad['reason'] != 'agreed': err(f'{cid}: empty changes but reason != agreed')
+    if IS_GOLD:
+        ad = it['adjudication']
+        if not isinstance(ad.get('changed_fields'), list) or not ad.get('reason'): err(f'{cid}: bad adjudication')
+        if ad['changed_fields'] == [] and ad['reason'] != 'agreed': err(f'{cid}: empty changes but reason != agreed')
     # 2. schemes and bindings; formulas follow walton.yml
     for ins in it['instances']:
         counts['instances'] += 1

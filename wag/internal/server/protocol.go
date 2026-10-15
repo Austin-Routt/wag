@@ -50,6 +50,9 @@ func (ss *Session) Prompt() string {
 	ref := func(id string) string { return refs.ref(id) }
 
 	w("# WAG: the Waltonian Argumentation Game. It is your move. (%s)\n\n", ProtocolVersion)
+	if t := strings.TrimSpace(ss.Title); t != "" && !strings.HasPrefix(t, "WAG — ") {
+		w("Topic: %s\n\n", t)
+	}
 	w("You are %s. ", me.ID)
 	switch side := gs.Side(me.ID); {
 	case side == "pro":
@@ -191,6 +194,14 @@ func (ss *Session) Prompt() string {
 	return b.String()
 }
 
+// answerWords says which literal answer to a question attacks the argument.
+func answerWords(q *nascq.CQNode) string {
+	if q == nil || q.AnswerEN == nil {
+		return ""
+	}
+	return fmt.Sprintf(" (an attack answers %q, a defence %q)", q.AnswerEN.Against, q.AnswerEN.For)
+}
+
 // promptQuestions lists the critical questions the player can answer or
 // ask, argument by argument, and the challenges of premises.
 func (ss *Session) promptQuestions(w func(string, ...interface{}), st *State, shown []string, me string, refs *refs) {
@@ -232,7 +243,7 @@ func (ss *Session) promptQuestions(w func(string, ...interface{}), st *State, sh
 			} else {
 				l += "; cannot be asked alone: argue it"
 			}
-			l += fmt.Sprintf("\n    Q: %s\n    attack argues: %s\n    defence argues: %s", gs.QuestionAbout(o.CQ, t, o.Stmt), o.AttackText, o.DefenceText)
+			l += fmt.Sprintf("\n    Q: %s%s\n    attack argues: %s\n    defence argues: %s", gs.QuestionAbout(o.CQ, t, o.Stmt), answerWords(q), o.AttackText, o.DefenceText)
 			if b := ss.backers(o.CQ, o.Schemes); b != "" {
 				l += "\n    linked: " + b
 			}

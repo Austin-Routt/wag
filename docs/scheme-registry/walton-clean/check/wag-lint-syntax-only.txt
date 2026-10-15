@@ -1,0 +1,105 @@
+*** Parse Error before[ <input>:1:30 ]: literal not terminated
+*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
+*** Parse Error before[ <input>:1:33 ]: invalid char literal
+*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: invalid char literal
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
+*** Parse Error before[ <input>:1:27 ]: literal not terminated
+*** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20
+*** Parse Error before[ <input>:1:30 ]: literal not terminated
+*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:31 ]: literal not terminated
+*** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:44 ]: literal not terminated
+*** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37
+*** Parse Error before[ <input>:1:28 ]: literal not terminated
+*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:21
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
+*** Parse Error before[ <input>:1:32 ]: literal not terminated
+*** Parse Error before[ <input>:1:32 ]: invalid char literal
+*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23
+*** Parse Error before[ <input>:1:33 ]: invalid char literal
+*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
+*** Parse Error before[ <input>:1:37 ]: literal not terminated
+*** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28
+*** Parse Error before[ <input>:1:26 ]: literal not terminated
+*** Parse Error before[ <input>:1:26 ]: invalid char literal
+*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
+*** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
+error: language: key "accept_saying" is not predicate/arity
+error: language: action_fit_quality/1 has 0 %s for 1 arguments: "Description of action actually fit the quality."
+error: language: key "attack_well_supported" is not predicate/arity
+error: language: key "background" is not predicate/arity
+error: language: based_on_evidence/1 has 0 %s for 1 arguments: "The assertion %v is based on evidence."
+error: language: key "being_credible" is not predicate/arity
+error: language: bring_about_more_effectively/2 has 1 %s for 2 arguments: "There exists an action that would bring about % more effectively than %s."
+error: language: key "character_revelant" is not predicate/arity
+error: language: cited_bad_consequences/1 has 2 %s for 1 arguments: "If you bring about %s, some cited bad consequences, %s, will follow."
+error: language: conflict_goals/2 has 3 %s for 2 arguments: "%s has some other goals %s that conflict with %s."
+error: language: key "correctly_report" is not predicate/arity
+error: language: key "do_obligator" is not predicate/arity
+error: language: key "excuse" is not predicate/arity
+error: language: favor/1 has 2 %s for 1 arguments: "If %s is generally accepted as truei that gives a reason in favor of %s."
+error: language: key "goal_prestige" is not predicate/arity
+error: language: is/2 has 1 %s for 2 arguments: "% is %s."
+error: language: key "means_end" is not predicate/arity
+error: language: key "more_important_ends" is not predicate/arity
+error: language: key "more_reliable" is not predicate/arity
+error: language: key "not_necessarily_true" is not predicate/arity
+error: language: key "not_normal" is not predicate/arity
+error: language: not_required/1 has 0 %s for 1 arguments: "%is not required."
+error: language: key "oficcial_rulebook" is not predicate/arity
+error: language: key "other_consequences" is not predicate/arity
+error: language: other_consequences_presumption/2 has 3 %s for 2 arguments: "If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow."
+error: language: key "ought_to_continue" is not predicate/arity
+error: language: popular_practise/1 has 2 %s for 1 arguments: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s."
+error: language: position_to_know_group/1 has 2 %s for 1 arguments: "Group %s is in a special position to know that %s is true."
+error: language: key "proper_sequence" is not predicate/arity
+error: language: key "prudential" is not predicate/arity
+error: language: key "reapplication_sequence" is not predicate/arity
+error: language: key "reference_class" is not predicate/arity
+error: language: key "rule_changed" is not predicate/arity
+error: language: sacrifice_value/2 has 1 %s for 2 arguments: "%s has a great value."
+error: language: same_meaning/2 has 3 %s for 2 arguments: "Speakers of %s believe that %s means the same as %s."
+error: language: key "should_not" is not predicate/arity
+error: language: key "speakers_correct" is not predicate/arity
+error: language: special_proposition/2 has 1 %s for 2 arguments: "A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."
+error: language: key "strong_advocate" is not predicate/arity
+error: language: key "strongly_occur" is not predicate/arity
+error: language: key "sufficient_evidence" is not predicate/arity
+error: language: key "synonymous" is not predicate/arity
+error: language: key "waste_bad_thing" is not predicate/arity
+warning: language: no template for commined_to/2
+warning: language: no template for conflict_goals/3
+warning: language: no template for data_set/2
+warning: language: no template for means_end/1
+warning: language: no template for oficcial_rulebook/3
+warning: language: no template for other_consequences/1
+warning: language: no template for ought_to_continue/2
+warning: language: no template for position_to_know_group/2
+warning: language: no template for prudential/1
+warning: language: no template for same_meaning/3
+warning: language: no template for should_not/1
+warning: language: no template for strong_advocate/3
+warning: language: no template for strongly_occur/1
+warning: language: no template for waste_bad_thing/2
+warning: language: no template for ¬known/1
+warning: language: no template for ¬presents/2
+warning: language: no template for ¬prestigious_individual/2
+warning: language: no template for ¬should_be_performed/1
+warning: language: no template for ¬should_do/2
+43 error(s), 19 warning(s)

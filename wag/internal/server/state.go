@@ -47,11 +47,11 @@ type State struct {
 	// CanMove: a human player is to move (the moves about an argument come
 	// from /api/games/{id}/moves?target=...).
 	CanMove bool `json:"can_move"`
-	// Thinking: a Claude seat is waiting for the model.
+	// Thinking: a model seat is waiting for its model.
 	Thinking bool `json:"thinking,omitempty"`
 	// Notes are the testers' remarks on the game.
 	Notes []Note `json:"notes"`
-	// SeatKind is the kind of the seat to move (human, llm, random, greedy, claude).
+	// SeatKind is the kind of the seat to move (human, llm, random, greedy, model, claude).
 	SeatKind string `json:"seat_kind,omitempty"`
 }
 
@@ -80,7 +80,8 @@ type ConfigView struct {
 // PlayerState is a seat.
 type PlayerState struct {
 	ID       string  `json:"id"`
-	Kind     string  `json:"kind"` // human, random, greedy
+	Kind     string  `json:"kind"`            // human, llm, random, greedy, model, claude
+	Model    string  `json:"model,omitempty"` // a model seat's profile
 	Score    float64 `json:"score"`
 	Side     string  `json:"side,omitempty"`
 	Resigned bool    `json:"resigned,omitempty"`
@@ -271,7 +272,7 @@ func (s *Session) buildState() *State {
 		st.Verdicts = s.verdicts(s.contexts)
 	}
 	for i, p := range gs.Players {
-		st.Players = append(st.Players, PlayerState{ID: p.ID, Kind: s.Seats[i].Kind, Score: p.Score, Side: gs.Side(p.ID), Resigned: p.Resigned})
+		st.Players = append(st.Players, PlayerState{ID: p.ID, Kind: s.Seats[i].Kind, Model: s.Seats[i].Model, Score: p.Score, Side: gs.Side(p.ID), Resigned: p.Resigned})
 	}
 	if p := gs.Pending; p != nil {
 		st.Pending = &PendingState{Player: p.PlayerID, Action: p.Action, Description: s.describeAction(p.Action)}

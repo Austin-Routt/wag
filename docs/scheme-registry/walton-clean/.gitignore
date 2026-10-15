@@ -1,0 +1,8 @@
+# Made by check/run.sh, not kept: the binary, intermediate files, JSON reports and dumps.
+check/walton-check
+check/walton.clean.yml
+check/walton.syntax-only.yml
+check/*.json
+tools/dump-*.json
+tools/proposals-changes.json
+tools/__pycache__/

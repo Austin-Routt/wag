@@ -12,8 +12,12 @@ const plain = s => String(s ?? '').replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)
 const rich = s => esc(s).replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
 let META = null;           // schemes, critical questions, modes
-const SEATS = [['human', 'Human (this browser)'], ['llm', 'Language model (copy and paste)'], ['claude', 'Claude (API)'],
+const SEATS = [['human', 'Human (this browser)'], ['llm', 'Language model (copy and paste)'],
   ['greedy', 'Rule bot: greedy'], ['random', 'Rule bot: random']];
+// seatOptions: the seat kinds, with one per model profile the server offers
+// (value model:NAME); a seat's value in the select.
+const seatOptions = () => [...SEATS.slice(0, 2), ...(META.models || []).map(m => [`model:${m.name}`, `${m.name} (${m.provider} API)`]), ...SEATS.slice(2)];
+const seatValue = x => x.kind === 'model' ? `model:${x.model}` : x.kind === 'claude' ? 'model:claude' : x.kind;
 let SCHEME = {}, CQ = {};  // by ID
 let G = null;              // the current game's State
 const ui = {
@@ -93,12 +97,12 @@ async function poll() {
 function scheduleAI() {
   clearTimeout(ui.aiTimer);
   if (!G || G.over || G.pending || !G.active_ai || !ui.autoplay || G.thinking) return;
-  ui.aiTimer = setTimeout(aiStep, G.active_ai === 'claude' ? 300 : 900);
+  ui.aiTimer = setTimeout(aiStep, G.active_ai === 'model' ? 300 : 900);
 }
 async function aiStep() {
   if (!G || ui.busy || G.thinking) return;
-  ui.busy = G.active_ai !== 'claude'; // a Claude move takes a while: keep polling meanwhile
-  if (G.active_ai === 'claude') { G.thinking = true; renderPlay(); }
+  ui.busy = G.active_ai !== 'model'; // a model's move takes a while: keep polling meanwhile
+  if (G.active_ai === 'model') { G.thinking = true; renderPlay(); }
   try { const r = await api(`/api/games/${G.id}/ai`, {}); setState(r.state); }
   catch (e) { toast(e.message, 8000); poll(); }
   finally { ui.busy = false; }
@@ -120,7 +124,7 @@ function renderGamebar() {
   if (!G) { bar.innerHTML = ''; return; }
   const players = G.players.map(p => {
     const cls = ['pill', p.id === G.active && !G.over ? 'active' : '', p.side].join(' ');
-    const kind = p.kind === 'human' ? '' : ` <span class="muted">(${esc({ llm: 'language model', claude: 'Claude', greedy: 'rule bot', random: 'rule bot' }[p.kind] || p.kind)})</span>`;
+    const kind = p.kind === 'human' ? '' : ` <span class="muted">(${esc({ llm: 'language model', claude: 'Claude', model: p.model, greedy: 'rule bot', random: 'rule bot' }[p.kind] || p.kind)})</span>`;
     return `<span class="${cls}" title="${esc(p.side || '')}">${esc(p.id)}${kind} <b>${p.score.toFixed(1)}</b>${p.resigned ? ' ✗' : ''}</span>`;
   }).join('');
   const verdict = G.config.objective === 'claim'
@@ -153,7 +157,7 @@ function renderSetup() {
   const modes = META.modes.map(m => `<div class="mode ${m.Name === s.mode ? 'on' : ''}" data-mode="${m.Name}"><b>${esc(m.Name)}</b><span class="small muted">${esc(m.Description)}</span></div>`).join('');
   const seats = s.seats.map((x, i) => `<div class="seat">
       <input type="text" data-seat="${i}" data-f="name" value="${esc(x.name)}" placeholder="Name">
-      <select data-seat="${i}" data-f="kind">${SEATS.filter(([k]) => k !== 'claude' || META.claude).map(([k, l]) => `<option value="${k}" ${x.kind === k ? 'selected' : ''}>${l}</option>`).join('')}</select>
+      <select data-seat="${i}" data-f="kind">${seatOptions().map(([k, l]) => `<option value="${esc(k)}" ${seatValue(x) === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
       <button class="small" data-del="${i}" title="Remove">✕</button></div>`).join('');
   $('#main').innerHTML = `<div class="setup">
     <div class="panel"><h2>New game</h2>
@@ -162,7 +166,7 @@ function renderSetup() {
         <div><h3>Players</h3><div class="seats">${seats}</div>
           <button class="small" id="addseat" ${s.mode === 'solo' ? 'disabled' : ''}>Add a player</button>
           <p class="small muted">Debates: even seats argue for the claim (pro), odd seats against it (con). Human seats play in this browser; other tabs can watch or moderate.</p>
-          <p class="small muted"><b>Language model</b>: you copy the seat's prompt into any chatbot and paste its reply back. <b>Rule bots</b> play legal moves with placeholder words: they test the rules, they do not understand the topic.${META.claude ? ` <b>Claude</b> plays through the Claude API (${esc(META.claude.model)}, effort ${esc(META.claude.effort)}); each move costs API credits.` : ' Start the server with <span class="mono">--claude</span> to add Claude seats.'}</p></div>
+          <p class="small muted"><b>Language model</b>: you copy the seat's prompt into any chatbot and paste its reply back. <b>Rule bots</b> play legal moves with placeholder words: they test the rules, they do not understand the topic.${(META.models || []).length ? ` <b>Model seats</b> (${(META.models).map(m => esc(m.name + ': ' + m.model)).join(', ')}) play through their provider's API, with the same prompt a language-model seat gets; calls may cost credits, and every call is in the game's traces.` : ' Start the server with <span class="mono">--model</span> (for example <span class="mono">--model gemini:gemini-2.5-flash</span>) or <span class="mono">--claude</span> to add seats played by a model through its API.'}</p></div>
         <div><h3>Context</h3>
           <select id="o_ctx">${(META.contexts || []).map(c => `<option value="${esc(c.id)}" ${s.context === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
           <p class="small muted" id="ctxdesc">${esc(((META.contexts || []).find(c => c.id === s.context) || {}).description || '')}</p>
@@ -207,7 +211,11 @@ function renderSetup() {
   };
   $('#main').oninput = e => {
     const t = e.target;
-    if (t.dataset.seat !== undefined) s.seats[+t.dataset.seat][t.dataset.f] = t.value;
+    if (t.dataset.seat !== undefined) {
+      const seat = s.seats[+t.dataset.seat];
+      if (t.dataset.f === 'kind' && t.value.startsWith('model:')) { seat.kind = 'model'; seat.model = t.value.slice(6); }
+      else { seat[t.dataset.f] = t.value; if (t.dataset.f === 'kind') delete seat.model; }
+    }
   };
   $('#main').onchange = $('#main').oninput;
   const keepForm = () => { s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.claim = $('#o_claim').value; s.title = $('#o_title').value; };
@@ -615,11 +623,12 @@ function cqPanel(a, cqid) {
     c.attacks ? 'attacked by ' + c.attacks.map(x => `<button class="link" data-goarg="${esc(x)}">${esc(x)}</button>`).join(', ') : '',
     c.defences ? 'defended by ' + c.defences.map(x => `<button class="link" data-goarg="${esc(x)}">${esc(x)}</button>`).join(', ') : ''].filter(Boolean).join('; ');
   const can = k => k !== 'question' || c.locus === 'premise' || c.locus === 'argument';
+  const says = (CQ[cqid] && CQ[cqid].answer_en) || { against: 'no', for: 'yes' };
   const btn = (k, label, tip) => `<button class="small" data-act="${k}" data-arg="${esc(a.id)}" data-cqid="${esc(cqid)}" ${G.can_move && can(k) ? '' : 'disabled'} title="${can(k) ? tip : 'Raise an exception or a counterclaim with an argument: whoever raises it must prove it'}">${label}</button>`;
   const about = { premise: 'a premise: its author must defend it', exception: 'an exception: whoever raises it must argue it', conclusion: 'the conclusion: a counterargument', argument: 'the inference: do the reasons support the conclusion?' }[c.locus] || c.locus;
   return `<div class="cqpanel"><b>${esc(c.name)}</b> <span class="muted small">— about ${esc(about)}</span><div>${esc(c.question)}</div>
     ${stmts ? `<ul class="small">${stmts}</ul>` : ''}${hist ? `<div class="small muted">${hist}</div>` : ''}
-    <div class="row">${btn('attack', 'Attack: answer no', 'Answer the question against the argument, with an argument of your own')}${btn('defend', 'Defend: answer yes', 'Answer the question in favour of the argument, with an argument of your own')}${btn('question', 'Just ask', 'Ask without answering: the argument stops counting until its author answers')}</div>
+    <div class="row">${btn('attack', `Attack: answer “${esc(says.against)}”`, 'Answer the question against the argument, with an argument of your own')}${btn('defend', `Defend: answer “${esc(says.for)}”`, 'Answer the question in favour of the argument, with an argument of your own')}${btn('question', 'Just ask', 'Ask without answering: the argument stops counting until its author answers')}</div>
     ${G.can_move ? '' : '<div class="small muted">Wait for your turn to act on it.</div>'}</div>`;
 }
 
@@ -713,9 +722,9 @@ function renderComposer() {
   const me = G.players.find(p => p.id === G.active);
   if (G.pending) { box.innerHTML = `<h2>${esc(G.active)}</h2><p class="muted">The move waits for the moderator.</p>`; return; }
   if (G.active_ai) {
-    const claude = G.active_ai === 'claude';
-    box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(${claude ? 'Claude' : 'rule bot, ' + esc(G.active_ai)})</span> is to move</div>
-      <p class="small muted">${claude ? (G.thinking ? '<b>Thinking…</b> Claude reads the same prompt a language-model seat gets (the rules, the board, the legal questions and the schemes) and replies with a move. Its replies are kept in the export.' : 'Claude reads the same prompt a language-model seat gets and replies with a move; each move costs API credits.')
+    const model = G.active_ai === 'model', name = me && (me.kind === 'claude' ? 'claude' : me.model);
+    box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(${model ? 'model ' + esc(name || '') : 'rule bot, ' + esc(G.active_ai)})</span> is to move</div>
+      <p class="small muted">${model ? (G.thinking ? '<b>Thinking…</b> The model reads the same prompt a language-model seat gets (the rules, the board, the legal questions and the schemes) and replies with a move. Every call and reply is in the game\'s traces.' : 'The model reads the same prompt a language-model seat gets and replies with a move; calls may cost credits.')
         : 'A rule bot plays legal moves with placeholder words (“an expert”, “the subject at hand”) or words already on the board. It tests the rules; it does not understand the topic.'}</p>
       <label class="inline"><input type="checkbox" id="autoplay" ${ui.autoplay ? 'checked' : ''}> Play automatically</label>
       <p><button id="aistep" ${G.thinking ? 'disabled' : ''}>Let it move now</button></p>`;
@@ -1156,7 +1165,7 @@ function renderRules() {
   <p><b>Moves:</b> New argument · Attack (answer a question against an argument) · Defend (answer it in the argument's favour) · Ask (a question without an answer: the proponent must answer) · Pass · Resign.</p>
   <p><b>Any premise can be challenged.</b> Walton's critical questions point at the typical weak spots of a scheme, which are often its exceptions and its conclusion; practical reasoning, for example, has five, and only one (possibility) is about one of its premises. With the option <i>Any premise can be questioned</i> (on by default), the generic <i>Premise Acceptability</i> question is asked of every premise that no question of the scheme is about.</p>
   <p><b>How to read the English.</b> The players' own words appear in ‘single quotes’; a statement inside another statement in “double quotes”, and one nested deeper in [brackets], shortened. On an argument, its conclusion is called C, so its premises read “‘The IPCC’ says that C” rather than repeating it.</p>
-  <p><b>Who plays.</b> A seat is a person in this browser; a <i>language model</i> (you copy the seat's prompt into any chatbot and paste its reply back: the text protocol, <span class="mono">docs/protocol.md</span>); Claude through the API (when the server runs with <span class="mono">--claude</span>); or a <i>rule bot</i>, which plays legal moves with placeholder words and tests the rules, not the arguments.</p>
+  <p><b>Who plays.</b> A seat is a person in this browser; a <i>language model</i> (you copy the seat's prompt into any chatbot and paste its reply back: the text protocol, <span class="mono">docs/protocol.md</span>); a model through its provider's API (Gemini, Claude, OpenAI, DeepSeek, a local server: when the server runs with <span class="mono">--model</span>, <span class="mono">--models</span> or <span class="mono">--claude</span>; docs/llm.md); or a <i>rule bot</i>, which plays legal moves with placeholder words and tests the rules, not the arguments.</p>
   <p><b>Options:</b> the <i>Other</i> scheme lets players write premises and a conclusion freely when no listed scheme fits (it has generic questions, and its arguments are exported for mining new schemes); a <i>moderator</i> approves or rejects each move, may set its weight, and may accept or reject statements (Gordon &amp; Walton 2006); <i>evidence</i> can be required for schemes such as expert opinion.</p>
   <p><b>Winning</b> depends on the mode: points (once per move, or kept live), a debate on a claim (pro carries the burden of proof; the verdict decides), a critical-question duel (an unanswered question loses), solo belief revision, and more. See <span class="mono">docs/game-rules.md</span>.</p>
   </div>`;

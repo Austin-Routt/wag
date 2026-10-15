@@ -1,0 +1,5 @@
+# Modified by the WAG project (2026-10-13) from walton.yml of
+# github.com/basakkurtuldu/walton-argumentation-schemes-for-carneades-4
+# (Mozilla Public License 2.0, see LICENSE in this directory): syntax,
+# typos, variable declarations and language templates fixed so that
+# Carneades 4 loads every scheme; CHANGELOG.md lists every edit.

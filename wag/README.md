@@ -19,8 +19,10 @@ central claim, solo belief revision) are combinations of a few settings.
 | `internal/registry` | Scheme patterns and families: finds schemes that repeat a pattern under another name, and close relatives no family declares (`docs/scheme-registry/README.md`). |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
 | `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments. |
-| `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`) and Claude seats (`llm.go`). |
-| `cmd/wag-cli` | Command-line game, data lint and tournaments. |
+| `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`), model seats (`llm.go`) and their traces (`traces.go`). |
+| `internal/llm` | The provider-neutral interface to language models: Gemini (Google's GenAI SDK), Claude (Anthropic's SDK), OpenAI-compatible endpoints (OpenAI, DeepSeek, LM Studio, llama.cpp, SGLang, vLLM, Ollama), an external command, a mock; profiles, retries, rate spacing, replay (`../docs/llm.md`). |
+| `cmd/wag-cli` | Command-line game, data lint, the table of every scheme–question link (`--edges`), and tournaments. |
+| `cmd/wag-llm` | Language models play WAG headless and annotate Kialo claims, with full traces; replay a trace; sum up runs (`../docs/llm.md`). |
 | `cmd/wag-server` | The browser prototype: `go run ./cmd/wag-server` opens it at http://127.0.0.1:8080. |
 
 ## In the browser
@@ -29,12 +31,14 @@ central claim, solo belief revision) are combinations of a few settings.
 go run ./cmd/wag-server                                  # serves http://127.0.0.1:8080 and opens it
 go run ./cmd/wag-server --kialo-dir <visualizer>/data    # also offer the captured Kialo discussions
 go run ./cmd/wag-server --claude                         # also offer Claude seats (ANTHROPIC_API_KEY; costs API credits)
+go run ./cmd/wag-server --model gemini:gemini-2.5-flash,min_interval=7s   # a Gemini seat (GEMINI_API_KEY)
 ```
 
-Building from source needs Go 1.24 or later (the Anthropic SDK requires it).
+Building from source needs Go 1.24 or later (the Anthropic and Google SDKs require it).
 A seat can be a person, a language model through the text protocol
 (`../docs/protocol.md`: copy the prompt into any chatbot, paste the reply
-back), Claude through the API, or a rule bot (legal moves, placeholder words).
+back), a model through its API (Gemini, Claude, OpenAI, DeepSeek, a local
+server: `../docs/llm.md`), or a rule bot (legal moves, placeholder words).
 
 On Windows, double-click `run-wag-server.bat` (needs Go), or run a prebuilt
 `wag-server.exe` (`GOOS=windows GOARCH=amd64 go build ./cmd/wag-server`).

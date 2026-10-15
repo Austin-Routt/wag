@@ -88,7 +88,7 @@ func TestStaticAndMeta(t *testing.T) {
 func TestGameFlow(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "cq", Seats: []Seat{{"Alice", "human"}, {"Bob", "human"}}, AllowOther: true}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "cq", Seats: []Seat{{Name: "Alice", Kind: "human"}, {Name: "Bob", Kind: "human"}}, AllowOther: true}, &st)
 	if st.ID == "" || st.Active != "Alice" || !st.CanMove {
 		t.Fatalf("new game: %+v", st)
 	}
@@ -176,7 +176,7 @@ func itoa(n int) string { b, _ := json.Marshal(n); return string(b) }
 func TestAIAndModeration(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{"Bot", "greedy"}, {"Ann", "human"}}, Moderated: true, Seed: 1}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Bot", Kind: "greedy"}, {Name: "Ann", Kind: "human"}}, Moderated: true, Seed: 1}, &st)
 	if st.ActiveAI != "greedy" || st.CanMove {
 		t.Fatalf("AI seat: %+v", st)
 	}
@@ -228,7 +228,7 @@ func TestKialoImportEndpoint(t *testing.T) {
 func TestCrossSiteRequestsRefused(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{"Bot", "greedy"}, {"Ann", "human"}}, Seed: 1}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Bot", Kind: "greedy"}, {Name: "Ann", Kind: "human"}}, Seed: 1}, &st)
 	if code := call(t, ts, "GET", "/api/games/"+st.ID+"/ai", nil, nil); code != http.StatusMethodNotAllowed {
 		t.Fatalf("GET /ai: %d", code)
 	}
@@ -302,7 +302,7 @@ func TestLoadReplaysAnExport(t *testing.T) {
 func TestNotes(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}}}, &st)
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}}, &st)
 	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/note", map[string]string{"target": "move:1", "kind": "confusing", "text": "What does this mean?", "by": "Ann"}, nil); code != 200 {
 		t.Fatalf("note: %d", code)
 	}
@@ -330,7 +330,7 @@ func TestContext(t *testing.T) {
 	}
 	var st State
 	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Context: "scientific", Standard: "CCE",
-		Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}}}, &st)
+		Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}}, &st)
 	if st.Config.Context != "scientific" {
 		t.Fatalf("config: %+v", st.Config)
 	}
@@ -350,7 +350,7 @@ func TestContext(t *testing.T) {
 func TestCustomWeights(t *testing.T) {
 	ts := newTestServer(t)
 	var st State
-	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Context: "policy", Seats: []Seat{{"Ann", "human"}, {"Bob", "human"}},
+	call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Context: "policy", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}},
 		Weights: map[string]float64{"AS:sign": 0.9}}, &st)
 	if st.Config.Weights["AS:sign"] != 0.9 || st.Config.Weights["AS:practical_reasoning"] != 0.7 {
 		t.Fatalf("weights: %v", st.Config.Weights)
