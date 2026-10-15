@@ -59,7 +59,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 | Scheme sources | Split | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | One verified catalogue; critical questions and examples for most schemes | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
-| Dialogue types | Reference written | Every game is a persuasion dialogue: `debate` is the one-sided form | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
+| Dialogue types | Reference written | Every game with a central claim is a persuasion dialogue: `debate` is the one-sided form; the points modes match no type | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
 | Carneades 4 | Working | A fork with validator and evaluation fixes, shared with the Kialo project | | [`CARNEADES_FORK.md`](CARNEADES_FORK.md) |
 
 ## 3. Current issues
@@ -85,7 +85,7 @@ In order of importance. Each issue links to the document that explains it.
    - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
    - WAG itself has no licence.
    - All three need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
-7. **Every game is a persuasion dialogue, in Walton's terms.**
+7. **Every game with a central claim is a persuasion dialogue, in Walton's terms.**
    - WAG has no commitment stores, no retraction rules and no stages, and these are the base of every type in Walton's account.
    - The points modes match no dialogue type.
    - The second aim needs a protocol for each type and an annotation scheme for types and shifts. That is Track D, after the scheme catalogue.

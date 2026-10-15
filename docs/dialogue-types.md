@@ -9,7 +9,7 @@ This document is one place that says:
 It is written from two sources, both read in full:
 
 - **ND:** Douglas Walton, *The New Dialectic: Conversational Contexts of Argument* (University of Toronto Press, 1998). This is the primary source. Page numbers below are its pages.
-- **A20:** Andrew Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice: Douglas Walton and Mathematics* (arXiv:2011.13845, 2020). It is a survey. Its tables reproduce Walton & Krabbe 1995 and Walton 1997.
+- **A20:** Andrew Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice: Douglas Walton and Mathematics* (arXiv:2011.13845, 2020). It is a survey. Its Table 1 reproduces Walton & Krabbe 1995 and its Table 2 Walton 1997; its Table 3 is Aberdein's own, adapted from his 2007 paper.
 
 **How it is written:**
 - **Paraphrase only.** No sentence of either source is reproduced. The PDF of ND is not part of WAG: it was deleted from the repository on 2026-10-15 ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)), and readers need their own copy.
@@ -89,7 +89,20 @@ The grid derives the types. This table describes them. It is Walton's table from
 | Debate | Adversarial | Persuade a third party | Air the strongest arguments on both sides | Spreading information |
 | Pedagogical | One party's ignorance | Teaching and learning | Transfer knowledge | The table's entry is unclear |
 
-ND's own descriptions (§4 below) differ in places. For example, ND starts deliberation from a practical problem, a need to act, rather than from contemplating consequences (p. 150).
+ND's own descriptions (§4 below) differ in places. For example, ND starts deliberation from a practical problem, a need to act, rather than from contemplating consequences (p. 151).
+
+**A third matrix: Aberdein's own (A20 Table 3).** It describes six dialogue types as they occur in mathematics, adapted from Aberdein's 2007 paper. It drops eristic, splits information-seeking into a pedagogical and an "oracular" form, and gives each side's goal separately. In our words:
+
+| Type | Initial situation | Main goal | Proponent's goal | Respondent's goal |
+|---|---|---|---|---|
+| Inquiry | Open-mindedness | Prove or disprove a conjecture | Contribute to the main goal | Obtain knowledge |
+| Persuasion | A difference of opinion | Resolve it, with rigour | Persuade the respondent | Persuade the proponent |
+| Pedagogical information-seeking | The respondent lacks information | Transfer knowledge | Spread knowledge of results and methods | Obtain knowledge |
+| Oracular information-seeking | The proponent lacks information | Transfer knowledge | Obtain information | Inscrutable: the answerer is a black box |
+| Deliberation | Open-mindedness | Reach a provisional conclusion | Contribute to the main goal | Obtain warranted belief |
+| Negotiation | A difference of opinion | Exchange resources for a provisional conclusion | Contribute to the main goal | Maximise the value of the exchange |
+
+It is a matrix for one field, built for a different question: what counts as a proof. It does not replace the grid.
 
 ### 2.4 Other labels, and how ND treats them
 
@@ -100,11 +113,11 @@ Several other names for kinds of dialogue appear in ND and in Walton's other lis
 | **Debate** | Persuading a third party by airing the strongest arguments on both sides (Walton 1997) | **Mixed discourse:** persuasion and eristic (after Woods & Walton 1982 and Walton 1989a), and usually negotiation too | p. 223 |
 | **Pedagogical** | Teaching and learning (Walton 1997) | **A subtype of information-seeking.** It conveys a body of knowledge, not just information, and examines the teacher's claims along the way. Aristotle's *didactic* arguments belong here. | pp. 235–7 |
 | **Action-producing** and **action-directed** | A dialogue meant to get something done | **Used in passing, not defined.** "Action-producing" is one of the five models mixed in Question Period, after Walton 1992: its second stated aim is to press for action. "Action-directed" describes deliberation. In the bicycle-path case, the action-directed exchange about the road is then called a deliberation. Question Period's stated aims suggest information-seeking, an action-directed kind of deliberation, or both. | pp. 199–200, 223 |
-| **Advocacy** and **advocacy dialogue** | Arguing one side as strongly as possible, often for an interest | **A stance found inside types, not a type** (§2.5). ND calls a sales pitch "some kind of advocacy dialogue", then finds it mixed. It says itself that bias and advocacy remain to be investigated. | pp. 121–5, 209, 215–7, 227–32 |
+| **Advocacy** and **advocacy dialogue** | Arguing one side as strongly as possible, often for an interest | **Left open.** ND calls a sales pitch "some kind of advocacy dialogue", then finds it mixed, and asks what advocacy argumentation exactly is. It says bias and advocacy remain to be investigated. WAG's reading (§2.5): a stance found inside types, not a type. | pp. 121–5, 209, 215–7, 227–32 |
 | **Commercial advertisement** | An offer to sell | **Closest to one phase of a negotiation:** an offer | pp. 122–5 |
 | **Advocacy advertisement** | An advertisement for a point of view on an issue | **An argument in a persuasion dialogue** | pp. 124–5 |
 | **Sales talk** | Buying a car from a salesman | **Mixed, with shifts:** information-seeking, then persuasion, then negotiation. The buyers may be deliberating. | pp. 227–32 |
-| **Legal trial** | | **Mixed:** adversarial persuasion before a judge or jury, with expert testimony, impeachment of witnesses and plea bargaining | pp. 232–5 |
+| **Legal trial** | | **Mixed:** it resembles persuasion before a judge or jury, under its own rules, with expert testimony and impeachment of witnesses; plea bargaining is a shift to negotiation | pp. 232–5 |
 | **Question Period** | Questions to the government in the Canadian House of Commons | **Mixed:** five models | pp. 219–26 |
 | **Oracular information-seeking** | The answerer is a black box | Not in ND. A variant of information-seeking (A20 Table 3). | — |
 
@@ -126,14 +139,14 @@ Advocacy and action are two separate questions that cut across the types:
 
 | Type | Advocacy | What a commitment is | Does it produce action? |
 |---|---|---|---|
-| **Persuasion** | **Yes, built in.** Each side argues its own thesis as strongly as the rules allow. Neither must bring evidence for the other side (pp. 122, 231–2). This normal bias becomes a bad one only if pushed so far that it kills the openness and balance the dialogue needs (p. 122). | Accepting a proposition as true or plausible: an opinion (pp. 38–9, 108) | **No, not directly.** Its product is acceptance of the thesis. But the thesis can be practical, such as "buying this car would be a good idea": a persuasion dialogue can be about whether a course of action is advisable (p. 229). Kialo's policy debates are of this kind. |
+| **Persuasion** | **Yes, built in.** Each side argues its own thesis as strongly as the rules allow. Neither must bring evidence for the other side (pp. 122, 231–2). This normal bias becomes a bad one only if pushed so far that it kills the openness and balance the dialogue needs (p. 122). | Accepting a proposition as true or plausible: an opinion (pp. 38–9, 108) | **No, not directly.** Its product is acceptance of the thesis. But the thesis can be practical, such as "buying this car would be a good idea": a persuasion dialogue can be about whether a course of action is advisable (p. 229). A parliamentary debate on a bill is supposed to be persuasion, or deliberation insofar as a decision to act is involved (p. 224). Kialo's policy debates argue about action without deciding it, so they are persuasion of this kind. |
 | **Negotiation** | **Yes, for interests.** Negotiation is interest-based, where persuasion is oriented to the truth of the matter (p. 121). | A readiness to do something. Offers, promises and threats express it; an offer is a pledge (pp. 108, 125). | **Yes.** A deal is an agreement about what each side will do or give. |
-| **Deliberation** | **Partly.** Each party argues for its proposal, but the goal is shared (pp. 150–2). Where the basic goals conflict, it becomes a hybrid with persuasion (ch. 6 note 1). | Towards a course of action, as in negotiation (p. 108) | **Yes.** A decision on what to do, held tentatively (pp. 162–3). |
-| **Inquiry** | **No.** Each step builds only on what is established, and one-sided presentation is out of place (pp. 70, 232). | Established propositions, never retracted | **No.** Its product is knowledge. |
-| **Information-seeking** | **Not from the answerer.** A biased source is a defect: the salesman is a biased expert (p. 228). An expert consultant owes completeness that a salesman does not (p. 231). | A direct answer commits the answerer to the question's presuppositions (p. 140) | **Indirectly.** It serves the questioner's task or decision (pp. 32, 125). |
+| **Deliberation** | **Partly.** Each party argues for its proposal, but the goal is shared (pp. 151–3). Where the basic goals conflict, it becomes a hybrid with persuasion (ch. 6 note 1). | Towards a course of action, as in negotiation (p. 108) | **Yes.** A decision on what to do, held tentatively (pp. 162–3). |
+| **Inquiry** | **No.** Each step builds only on what is established, and one-sided presentation is out of place (pp. 70, 232). | Established propositions, retracted only as a very serious step (p. 70) | **No.** Its product is knowledge. |
+| **Information-seeking** | **Not from the answerer.** A biased source is a defect: the salesman is a biased expert (p. 228). An expert consultant owes completeness that a salesman does not (p. 231). | A direct answer commits the answerer to the question's presuppositions (p. 140) | **Indirectly.** It serves the questioner's task or decision (pp. 32, 126). |
 | **Eristic** | **Extreme:** winning at any cost (p. 33) | — | **No.** Its product is the release of emotion. |
 
-**In short:**
+**In short.** These two conclusions are WAG's reading of ND, not ND's own statements. ND names "action-producing dialogue" among the five models of Question Period (p. 223), and speaks of "advocacy dialogue" while leaving its nature open (pp. 215–7).
 - **"Action-producing" is a goal, not a type.** In the grid it is the middle row, a practical settlement: negotiation, where the parties trade, and deliberation, where they decide together.
 - **"Advocacy" is a stance, not a type.** It is proper in persuasion and negotiation, and out of place in inquiry, information-seeking and expert consultation.
 - **ND separates two kinds of advocacy.** Advocacy of a point of view is normal in persuasion. Advocacy for a hidden interest is covert negotiation, which is what the bias ad hominem alleges (pp. 121–2).
@@ -143,7 +156,8 @@ Advocacy and action are two separate questions that cut across the types:
 - **ND has no table of the types.** It has the list on p. 31 and a description of each type in chs. 1–7. Its five figures show other things: two on inquiry (a Kripke tree; circular reasoning excluded), a profile of dialogue, the eristic subtypes, and a shift point.
 - **The two tables in circulation come from Walton's other works, through A20:**
   - **The grid** (§2.2, Walton & Krabbe 1995): it *derives* the six from two factors. It is the closest thing to a definitive matrix of the main types.
-  - **The descriptive table** (§2.3, Walton 1997): it *describes* each type. The lists vary between publications: the 1995 grid and the 1998 book have six main types, and the 1997 table has eight.
+  - **The descriptive table** (§2.3, Walton 1997): it *describes* each type. The lists vary between publications: the 1995 grid and the 1998 book have six main types, and the 1997 table has eight. This is not a change of mind. Walton had classed debate as mixed persuasion and eristic in 1982 and 1989 (ND p. 223), and still listed it as a type in 1997.
+  - **A20 adds a third matrix of its own,** for mathematics (§2.3).
 - **Later lists vary again.** For example, later work adds a "discovery" dialogue, after McBurney and Parsons. We have not reviewed those works.
 - **WAG's working definition is therefore:**
   - the six main types of ND p. 31, placed by the grid;
@@ -161,31 +175,31 @@ Advocacy and action are two separate questions that cut across the types:
 
 | Concept | What it is | ND |
 |---|---|---|
-| **Initial situation** | What prompts the dialogue: a conflict of opinions, an open problem, a lack of information, a conflict of interests, a practical need, or a grievance | pp. 30–1, 248 |
+| **Initial situation** | What every dialogue starts from (p. 248). ND gives it type by type: a conflict of opinions (p. 63), a set of goods both sides want (p. 101), information one party lacks (p. 126), a need to act (p. 151), unspoken grievances (p. 184). "An open problem", for inquiry, is the grid's term (§2.2). | pp. 63, 101, 126, 151, 184, 248 |
 | **Issue** | What the dialogue is about. In persuasion, a pair of opposed propositions. | p. 38 |
-| **Collective and individual goals** | What the dialogue as a whole aims at, and what each party aims at. The two can differ: in a persuasion dialogue each party wants to convince, and together they aim to resolve the conflict. | p. 30; A20 Table 2 |
+| **Collective and individual goals** | What the dialogue as a whole aims at, and what each party aims at. The two can differ: in a persuasion dialogue each party wants to convince the other, while the dialogue as a whole tests the strength of the arguments on both sides. | pp. 30, 37–8; A20 Table 2 |
 | **Obligations** | Duties that follow from the goals. When a dialogue aims at proof, the chief obligation is the burden of proof. | pp. 30–1 |
 | **Burden of proof** | A weight of presumption, set (ideally) at the opening so that the dialogue can end in reasonable time. Globally, each party must prove its thesis. Locally, whoever asserts must back the assertion when challenged. | pp. 30–1, 250–1 |
-| **Commitment store** | Each party's set of propositions. Speech acts add to it and take from it; asserting adds. | p. 31; ch. 2 §3 |
+| **Commitment store** | Each party's set of propositions, after Hamblin. Speech acts add to it and take from it; asserting adds. | pp. 31, 40 |
 | **Assertions and concessions** | Assertions carry a duty to defend them if asked. Concessions are accepted for the sake of argument, a weaker commitment. | pp. 54–5 (Walton & Krabbe 1995, via ND) |
 | **Light side and dark side** | Commitments on record, and commitments a party holds without having stated them, possibly without knowing it. Enthymemes rest on the dark side, and a good persuasion dialogue brings it to light. | pp. 51–5, 57–62 |
-| **Retraction** | Taking a commitment back. Fairly free in persuasion, with limits; excluded in inquiry. | pp. 45–6, 70 |
-| **Stages** | Opening, confrontation, argumentation, closing. This is the critical discussion's scheme; each type has its own version. | pp. 47, 257 |
-| **Dialectical relevance** | A move is relevant if it serves the dialogue's goal at its stage. Two narrower notions: *topical* relevance (the same subject) and, in persuasion, *probative* relevance (usable to prove the thesis). | pp. 34–5, 63–6, 252–5 |
+| **Retraction** | Taking a commitment back. Fairly free in persuasion, with limits. In inquiry the aim is to minimise it, ideally to eliminate it; retraction there is a very serious step. | pp. 45–6, 70 |
+| **Stages** | Every type has four stages: opening, confrontation, argumentation, closing (p. 257). The critical discussion lists them as confrontation, opening, argumentation, conclusion (p. 47). Some types also have stages of their own: inquiry (p. 33), deliberation (pp. 161–3), the quarrel (pp. 183–6). | pp. 33, 47, 161–3, 183–6, 257 |
+| **Dialectical relevance** | A move is relevant if it serves the dialogue's goal at its stage. *Globally*, it helps settle the dialogue's issue; *locally*, it fits the move next to it, as an answer fits its question (pp. 34–5). In persuasion, *probative* relevance: usable to prove the thesis or cast doubt on it (p. 64). *Topical* relevance, being about the same subject, is a different, semantic notion: a move can be topically relevant and still dialectically irrelevant (pp. 64, 252–3). | pp. 34–5, 63–6, 252–5 |
 | **Profile of dialogue** | A short, normative sequence of moves and replies. A real exchange is judged against it, for example a loaded question and the replies open to it. | pp. 64, 96, 138–42 |
-| **Evidential priority** | The premises must be more secure than the conclusion they support. Required in inquiry. | pp. 81, 250 |
+| **Evidential priority** | The premises must be more secure than the conclusion they support. Required in inquiry. | pp. 77–8, 246–7, 250 |
 | **Dialectical shift** | A change from one type to another during a conversation, licit or illicit | ch. 8 |
 | **Speech event** | The rules an institution adds to a type: a trial, Question Period, a sales meeting | p. 225 |
 | **Fallacy and blunder** | A fallacy is a technique misused to block the dialogue's goal, usually as a tactic. A blunder is an error without that tactical character. | pp. 257–61, 273 |
 
 ## 4. The six types at a glance
 
-**What each type starts from and aims at.** The first four columns are from ND's own descriptions (ch. 1 §9 and chs. 2–7). The side benefit, a gain the dialogue can bring even if it fails at its main goal, is from Walton 1997 (A20 Table 2).
+**What each type starts from and aims at.** The first four columns are from ND's own descriptions (ch. 1 §9 and chs. 2–7). The benefit column is Walton 1997's (A20 Table 2): the benefits a dialogue of that type can bring.
 
 | Type | Initial situation | Collective goal | Each party's goal | Side benefit |
 |---|---|---|---|---|
-| **Persuasion** | A conflict of opinions | Resolve the conflict | Persuade the other | Both understand the positions better (the maieutic function) |
-| **Inquiry** | An open question, unproven | Prove or disprove a proposition, or show that it cannot be settled yet | Contribute findings | Knowledge |
+| **Persuasion** | A conflict of opinions | Test the strength of the arguments on both sides (p. 37). Only the critical discussion must also resolve the conflict (p. 48). | Persuade the other | Both understand the positions better (the maieutic function) |
+| **Inquiry** | A proposition not yet proven or disproven | Prove or disprove a proposition, or show that it cannot be settled yet | Contribute findings | Knowledge |
 | **Negotiation** | A conflict of interests over goods or services | A deal both can accept | Get as much as possible of what one values | Harmony |
 | **Information-seeking** | One party lacks information the other has | Transfer the information | Obtain it (questioner); give it (answerer) | Help with the questioner's task |
 | **Deliberation** | A practical problem: a need to act | Agree on a course of action | Promote one's goals; find the prudent course | Clearer priorities |
@@ -196,15 +210,15 @@ Advocacy and action are two separate questions that cut across the types:
 | Type | Roles | Attitude | Commitments and retraction | What each side owes | How it closes | Typical schemes |
 |---|---|---|---|---|---|---|
 | **Persuasion** | Proponent and respondent. Symmetric in a dispute. | Adversarial, within rules; open to being convinced | Allowed, with limits | Both sides must prove in a *dispute*. Only the proponent must prove when the other merely doubts. | One side gives up its thesis or its doubt. Or it ends unresolved, which still has maieutic value. | Any; the premises come from the other's commitments |
-| **Inquiry** | Fellow investigators | Cooperative | Excluded: build only on what is established | A high standard of proof; evidential priority | Proven, disproven, or shown not provable now; the results are published | Evidence and testing; abduction while discovering; expert testimony; cause and effect |
+| **Inquiry** | Fellow investigators | Cooperative | Minimised, ideally none: build only on what is established | A high standard of proof; evidential priority | Proven, disproven, or shown not provable now; the results are published | Evidence and testing; abduction while discovering; expert testimony; cause and effect |
 | **Negotiation** | Bargainers, often with a mediator | Self-interested, within limits | Concessions are bargaining chips; commitments are pledges | A duty to respond: an unanswered attack counts as conceded, an ignored offer as rejected (Donohue) | A deal, or a deadlock | Practical reasoning about interests; offers, concessions, promises, threats |
 | **Information-seeking** | Questioner and answerer: asymmetric | Cooperative: the answerer is presumed willing | A direct answer commits the answerer to the question's presuppositions | The answerer gives honest, helpful answers. The questioner asks clear questions and persists. | The information is obtained, or is shown to be unavailable | Position to know, expert opinion, witness testimony |
 | **Deliberation** | Co-deliberators: symmetric | Cooperative, with shared goals | Allowed: closing is tentative, and deliberation reopens when the facts change | Caution (tutiorism) where harm is possible | A course of action is chosen, often under time pressure | Practical reasoning, consequences, values, the dilemma, slippery slope |
-| **Eristic** | Antagonists | Closed: neither side will admit defeat | Hardly arises | None that is honoured | The emotions are spent, or the quarrel is broken off | Ad hominem, above all "you too" (tu quoque); straw man |
+| **Eristic** | Antagonists | Closed: neither side will admit defeat | Hardly arises | Few, but some: the parties must take turns (pp. 181, 196) | The parties make up and the relationship is strengthened, or it breaks apart (p. 186) | Ad hominem, above all "you too" (tu quoque); straw man |
 
 ## 5. Each type
 
-### 5.1 Persuasion (ND ch. 2, pp. 36–68)
+### 5.1 Persuasion (ND ch. 2, pp. 37–68)
 
 - **The issue.** A conflict of opinions between a proponent and a respondent. It comes in two forms (p. 38):
   - **A dispute:** each side holds a thesis, one the opposite of the other, and each must prove its own.
@@ -230,9 +244,9 @@ Advocacy and action are two separate questions that cut across the types:
 
   An RPD can be embedded in a PPD, to settle a point sharply and then return.
 - **The maieutic function** (pp. 57–9). A persuasion dialogue can be worthwhile even when unresolved, because it brings dark-side commitments to light: each side comes to understand its own position and the other's.
-- **Enthymemes** (pp. 60–3). An unstated premise may be attributed to an arguer if it is one of their commitments, dark side included, and it makes the argument work.
+- **Enthymemes** (pp. 60–3). An unstated premise is attributed by the arguer's commitments, dark side included, not by whatever premise would make the argument valid; ND rejects that gap-filling (p. 61). After Walton & Krabbe 1995, the attribution becomes conditional: it holds if the arguer would accept the premise when pressed to state their commitments exactly, as in a rigorous dialogue embedded in a permissive one (p. 62).
 - **Relevance** (pp. 63–6):
-  - *Probative* relevance: a proposition is relevant if it can be used to prove the thesis from the respondent's commitments.
+  - *Probative* relevance: a proposition is relevant only if it can serve to prove the other proposition, or to cast doubt on it, by the schemes proper to the type (p. 64).
   - *Premissary* relevance (Blair, via ND).
   - Seven factors, listed on pp. 65–6, decide whether a move is relevant.
 - **Circular reasoning** is sometimes fallacious here, but more tolerable than in inquiry (p. 76).
@@ -241,7 +255,7 @@ Advocacy and action are two separate questions that cut across the types:
 
 - **The goal** (p. 70): prove that a proposition is true or false, or show that the evidence cannot yet settle it.
 - **Cumulative** (pp. 70–5):
-  - **No retraction:** what is established stays established. This is the sharpest contrast with persuasion.
+  - **Retraction minimised, ideally eliminated:** what is established is meant to stay established. Retraction still happens, but it is a very serious step (pp. 70, 84). This is a key contrast with persuasion.
   - **Premises firmly established** before anything is built on them.
   - **No circular reasoning.** ND models the inquiry as a Kripke tree of growing knowledge.
 - **Three stages** (p. 33):
@@ -249,7 +263,7 @@ Advocacy and action are two separate questions that cut across the types:
   2. analyse it and draw what can be proved;
   3. present the results to a wider audience.
 
-  The order in which results are found is not the order in which they are presented. Aristotle's demonstration is the order of presentation.
+  The order in which results are found is not the order in which they are presented. Aristotle's demonstration may correspond most closely to the presentation (p. 33).
 - **Relevance depends on the stage** (pp. 97–8):
   - **Discovery:** guessing and abduction are proper while hypotheses are formed.
   - **Argumentation:** only established premises count.
@@ -259,7 +273,7 @@ Advocacy and action are two separate questions that cut across the types:
   - everyday, common-sense inquiry.
 - **Argument and explanation** are different moves (pp. 85–7).
 
-### 5.3 Negotiation (ND ch. 4, pp. 100–24)
+### 5.3 Negotiation (ND ch. 4, pp. 100–25)
 
 - **The situation and the method** (pp. 100–2):
   - **Situation:** goods, services or other things both parties want, with different priorities.
@@ -286,13 +300,16 @@ Advocacy and action are two separate questions that cut across the types:
   - **In persuasion:** the same threat is an *ad baculum* fallacy, because it closes off the free exchange the dialogue needs (pp. 262–3).
 - **Shifts from negotiation** (pp. 116–21):
   - **The cement case** (from Fisher & Ury). Bargaining over how deep a foundation must be turns to asking for objective standards. This is a shift to information-seeking that serves the negotiation.
-  - **Deadlock** can be broken by such a shift, or by a mediator.
+  - **Deadlock** (pp. 119–21) has three ways out in ND:
+    - a shift, such as the cement case's, though at times no shift is needed or wanted;
+    - Fisher & Ury's neutral third party who decides, which may not satisfy either side's real commitments;
+    - ND's own preference: each side looks inward, refines its commitments and priorities, and compromises.
 - **Bias.** The *bias* form of ad hominem accuses the other party of covertly negotiating for its own interests while claiming to discuss: an alleged illicit shift (pp. 121–2).
-- **Advertising** mixes negotiation with other types (pp. 122–4).
+- **Advertising** (pp. 122–5). A commercial advertisement is like one phase of a negotiation, an offer; an advocacy advertisement is an argument in persuasion. ND leaves the classification an open question (§2.4).
 
-### 5.4 Information-seeking (ND ch. 5, pp. 125–49)
+### 5.4 Information-seeking (ND ch. 5, pp. 126–50)
 
-- **The situation** (pp. 125–7). One party has, or seems to have, information the other wants.
+- **The situation** (pp. 126–7). One party has, or seems to have, information the other wants.
   - The roles are **asymmetric**: one asks, the other answers.
   - There are two presumptions: the answerer is willing to answer, and the questioner wants the information enough to persist.
 - **Subtypes:**
@@ -306,24 +323,24 @@ Advocacy and action are two separate questions that cut across the types:
   - **Kinds of question** are classified on pp. 136–9.
   - **Presupposition, in ND's pragmatic sense:** a proposition the respondent becomes committed to by giving *any* direct answer (p. 140).
   - **Direct and indirect answers:** a direct answer gives exactly what was asked; an indirect answer gives part of it.
-  - **The fallacy of many questions:** every direct answer concedes something damaging. The respondent's proper reply is to challenge the question itself.
+  - **The fallacy of many questions:** every direct answer concedes something damaging, so the respondent's proper reply is to challenge the question itself. Whether it is a fallacy depends on the context: if the respondent has already conceded the presupposition, the same question is legitimate (pp. 138–40, 264, 273).
 - **Expert consultation** (pp. 143–5):
   - **The expert's duty:** the best advice, in clear language, with its limits admitted (p. 32).
   - **The seeker's duty:** clear, specific questions.
   - **What makes an expert:** five marks, after P. E. Johnson 1983 (via ND p. 143).
 - **Peirastic and exetastic arguments** (pp. 145–7). Probing and examining an expert's opinion is a short persuasion dialogue inside the consultation, as in cross-examination.
 
-### 5.5 Deliberation (ND ch. 6, pp. 150–76)
+### 5.5 Deliberation (ND ch. 6, pp. 151–77)
 
-- **The situation** (pp. 150–2). A practical problem: the need to act, or to decide not to.
+- **The situation** (pp. 151–2). A practical problem: the need to act, or to decide not to.
   - **Its question** is "how": how can we do this, how should we proceed.
   - **The basic case:** two parties reasoning together, in symmetric roles.
   - **Alone:** one person deliberating plays both sides, with a devil's advocate (p. 152).
-  - **The typical setting:** a town hall meeting. Citizens propose solutions, split into factions behind them, and aim to agree on one they will carry out together (p. 150).
+  - **The typical setting:** a town hall meeting. Citizens propose solutions, split into factions behind them, and aim to agree on one they will carry out together (p. 151).
   - **Choosing between two:** in many cases two courses of action conflict and one must be chosen (p. 151).
 - **Practical reasoning** (pp. 153–7). The full inference has five premises:
   1. a goal;
-  2. the alternative means to it, each necessary or each sufficient;
+  2. the alternative means to it: at least one of them necessary, or each of them sufficient (two schemas);
   3. the one selected;
   4. that nothing prevents it;
   5. that the goal is worth its side effects.
@@ -336,16 +353,21 @@ Advocacy and action are two separate questions that cut across the types:
 - **Burden of proof.** ND contrasts two kinds of caution (p. 163):
   - **Science** waits for proof before accepting a result.
   - **Deliberation** errs on the side of safety where harm is possible, even unproven (*tutiorism*).
-- **Eleven dynamic aspects** of practical reasoning (pp. 164–6): setting goals, feedback, plasticity (goals can change), criticism, and others.
+- **Eleven dynamic aspects** of practical reasoning (pp. 164–6). Examples:
+  - setting goals, which in the simplest case stay fixed;
+  - feedback;
+  - plasticity, the flexibility to switch means and retract commitments when a line of action runs into trouble;
+  - goals that may be modified as deliberation proceeds;
+  - criticism.
 - **Public deliberation** (pp. 169–73). The town hall meeting, and Yankelovich's stages of public judgment (via ND p. 171).
 - **Mixed with persuasion** (ch. 6 note 1). Deliberation where the parties' *basic goals conflict* is a hybrid of persuasion and deliberation.
 - **Shifts into deliberation:**
   - **Information-seeking is often joined to deliberation.** The means premise rests on facts, so deliberation often calls for it (pp. 163–4).
   - **Ad consequentiam.** Arguing that a thesis is false because accepting it would have bad consequences is a shift from a dispute about truth into deliberation, and illicit there (p. 176).
 
-### 5.6 Eristic (ND ch. 7, pp. 177–97)
+### 5.6 Eristic (ND ch. 7, pp. 178–97)
 
-- **The quarrel is the paradigm** (pp. 33–4, 177–86).
+- **The quarrel is the paradigm** (pp. 33–4, 178–86).
   - **How it starts:** it grows from grievances that politeness kept unspoken (p. 184). A trivial incident sets it off, and it erupts rather than being agreed on (pp. 183–5).
   - **Each party's aim:** to hit out at the other.
   - **What it can do for both:** release emotion (catharsis), and sometimes strengthen the relationship afterwards.
@@ -374,7 +396,7 @@ Advocacy and action are two separate questions that cut across the types:
 
 | Distinction | One side | The other side | ND |
 |---|---|---|---|
-| **What changes** | *External:* the type changes | *Internal:* the type stays; the issue changes (a shift of issue) | p. 200 |
+| **What changes** | *External:* the type changes | *Internal:* the type stays. A shift of issue is one kind of internal shift; Walton & Krabbe 1995 classify several. | p. 200 |
 | **How it is marked** | *A clean break:* one dialogue closes, another opens | *Sandwiched:* a short dialogue of another type, then back | pp. 198–9 |
 | **How fast** | *Sharp* (déplacement) | *Gradual* (glissement) | p. 201 |
 | **How the two relate** | *Functionally joined* (embedded): the second helps the first | *Interruption:* unrelated, a pause in the first. Or, worst, *displacement:* the second takes over and blocks the first's goals. | pp. 200–1, 215–6 |
@@ -386,13 +408,13 @@ A shift is judged afterwards, by the first dialogue's goals and standards (pp. 2
 1. What was the original type, and what is the new one? Where in the profile of dialogue did the shift happen? A gradual shift is a stretch, not a point (p. 215).
 2. Does the new dialogue support the original goals, or at least let them move forward? Or does it block them? (p. 201)
 3. Did both parties agree to the shift, or was it unilateral, even forced? (pp. 201, 216)
-4. Was it announced properly, or concealed? A shift that one party conceals, as a tactic against the other, is the illicit kind that fallacies are made of (p. 216). For example, an infomercial looks like a talk show or a news item while it sells (pp. 206–12). The evidence comes from the context, and is often seen only afterwards (pp. 214–5).
+4. Was it announced properly, or concealed? A shift that one party conceals, as a tactic against the other, is the illicit kind that fallacies are made of (p. 216). For example, an infomercial looks like a talk show or a news item while it sells (pp. 206–12). The judgment looks back to the type the parties were supposed to be in, as the opening format or their agreement shows (pp. 205, 214–5). In many cases the shift is far less visible than in an infomercial, and short excerpts lack the context to judge it (pp. 216–7).
 
 **Two rules of thumb from ND:**
 - **Relevance can carry across a shift that is functionally joined, not across an interruption** (pp. 200–1):
   - In the cement case, the facts found matter to the bargaining.
   - In the bicycle-path case, the choice of road has nothing to do with the argument about houses.
-- **A shift into a quarrel is risky every time, and usually illegitimate** (p. 202).
+- **A shift into a quarrel is always a danger, and often illicit** (p. 202).
 
 ### 6.3 Examples from ND
 
@@ -403,24 +425,26 @@ A shift is judged afterwards, by the first dialogue's goals and standards (pp. 2
 | Negotiation → critical discussion | Divorce mediation: bargaining over custody turns to who can best look after the child | Licit; mediators encourage it | p. 202 |
 | Negotiation → quarrel | A 1989 airline strike: the dispute turns into attacks on the chief executive's character | Illicit | p. 202 |
 | Mediation → quarrel | Custody disputes sliding into mutual blame (Jacobs & Jackson, via ND) | Illicit; gradual | p. 201 |
-| Information-seeking → persuasion | An interviewer provokes; an expert's opinion is probed (peirastic) | Can be licit | pp. 145–7, 199 |
-| Critical discussion → deliberation | A historical thesis is attacked because asserting it would help the enemy (ad consequentiam) | Illicit | p. 176 |
+| Information-seeking → persuasion | An interviewer provokes the interviewee; an expert's opinion is probed (peirastic) | Licit; probing an expert is not only licit but highly constructive | pp. 132, 145–8, 199, 204 |
+| Critical discussion → deliberation | Questioning a historical thesis is discouraged because it would comfort the enemy (ad consequentiam) | Illicit | pp. 176–7 |
 | Discussion → negotiation, alleged | The bias ad hominem: "they are only arguing for their own interests" | The charge is that the shift is illicit | pp. 121–2 |
 | Information or entertainment → sales | Infomercials, magazine-style catalogues, sponsored school videos | Illicit when concealed | pp. 206–14 |
-| Trial → negotiation | Plea bargaining | Licit; institutional | p. 234 |
+| Trial → negotiation | Plea bargaining, an alternative to the trial | No verdict in ND; agreed by both sides, so licit by the test of §6.2 | pp. 234–5 |
 
 ### 6.4 Mixed discourse (ND ch. 9)
 
 - **Question Period** in the Canadian House of Commons mixes five models: information-seeking, action-producing, eristic, critical discussion and negotiation (p. 223). What it is supposed to be (asking for information, pressing for action) differs from what it mostly is (adversarial, often quarrelsome).
-- **Political debate** is persuasion mixed with eristic, and usually with negotiation (p. 223). An argument in it can only be judged conditionally:
+- **Political debate** is persuasion mixed with eristic, and usually with negotiation, with deliberation and information-seeking embedded in it (pp. 206, 223–4). A debate on a bill is supposed to be persuasion, or deliberation insofar as a decision to act is involved (p. 224). An argument in it can only be judged conditionally (pp. 224–5):
   - fallacious *if* the exchange is taken as a critical discussion;
-  - acceptable as partisan adversarial exchange (pp. 224–6).
+  - the speaker may answer that the debate is partly eristic, partisan by design.
 - **The speech event** adds an institution's own rules to the mixture (p. 225).
 - **Sales talk** moves through phases (pp. 227–32): questions about the products, the seller's questions about the buyer's needs, then negotiation on price.
-- **A legal trial** (pp. 232–5) is adversarial persuasion before a judge or jury. Within it:
-  - expert testimony;
-  - impeachment, which discredits a witness: a legitimate ad hominem (p. 233);
-  - plea bargaining, a negotiation (p. 234).
+- **A legal trial** (pp. 232–5) resembles persuasion: the prosecution must prove guilt, and the defence need only raise doubt. But it has its own rules of evidence and procedure, and no exact one-to-one match with persuasion (p. 234). Within it:
+  - expert testimony, a subjoined expert consultation;
+  - impeachment, which discredits a witness: a legitimate ad hominem, within limits (pp. 233–4);
+  - an appeal to pity, proper at sentencing but not before guilt is decided (p. 234).
+
+  Plea bargaining is an alternative to the trial: a shift to negotiation (pp. 234–5).
 - **Teaching** (pp. 235–7) is information-seeking with examining subdialogues.
 
 ## 7. Arguments whose standing depends on the type
@@ -430,18 +454,18 @@ This is ND's pragmatic view of fallacy in practice. The scheme ids are those of 
 | Argument | Proper in | Suspect or fallacious in | Why | ND | `walton.yml` |
 |---|---|---|---|---|---|
 | Threat; appeal to force (ad baculum) | Negotiation, indirect threats especially | Persuasion, critical discussion | It closes off the free exchange those types need | pp. 23, 113–6, 262–3 | `threat`, `ad_baculum` |
-| Appeal to fear or danger | Deliberation, when the danger is real (tutiorism) | Persuasion about a factual claim, when it replaces evidence | It brings a practical frame into a dispute about truth | pp. 163, 262–3 | `fear`, `danger` |
-| Ad hominem: abusive or ethotic | The impeachment of a witness at trial; persuasion where the person's credibility is the point | Critical discussion, where it attacks the person instead of the argument; the main move of a quarrel | Relevance turns on whether credibility is at issue | pp. 193, 196, 233, 266 | `ad_hominem`, `ethotic1`, `ethotic2` |
-| Circumstantial ad hominem; inconsistent commitment | Persuasion: it uses the other's own commitments against them | When the inconsistency is not real, or not relevant to the issue | It depends on a commitment store | pp. 266–7 | `circumstantial_ad_hominem`, `inconsistent_commitment`, `pragmatic_inconsistency` |
+| Appeal to fear or danger | Our extrapolation, not ND's statement: deliberation, where caution about possible harm is a principle even when the danger is uncertain (tutiorism, p. 163) | Critical discussion: threatening, or appealing to force or to fear, breaks its rules (pp. 262–3) | ND leaves open whether such appeals are a kind of ad baculum | pp. 163, 262–3 | `fear`, `danger` |
+| Ad hominem: abusive or ethotic | The impeachment of a witness at trial; a critical discussion, where it can be reasonable; the quarrel, whose goal it suits | Scientific inquiry, where facts can be established; a critical discussion that it turns into a quarrel | Relevance turns on the type, and on whether credibility is at issue | pp. 193, 196, 233, 261–2, 266, 270 | `ad_hominem`, `ethotic1`, `ethotic2` |
+| Circumstantial ad hominem; inconsistent commitment | Persuasion; also negotiation, where arguing from the other's commitments is central and generally not fallacious (p. 121) | When the alleged commitment is not really in the arguer's commitment set (p. 247) | It depends on a commitment store | pp. 121, 247, 266–7 | `circumstantial_ad_hominem`, `inconsistent_commitment`, `pragmatic_inconsistency` |
 | Bias ad hominem | Any type, when the other party really is negotiating covertly | Persuasion, when the charge is unfounded | It alleges a hidden shift to negotiation | pp. 121–2 | `bias`, `bias_ad_hominem` |
 | Expert opinion (ad verecundiam) | Expert consultation; public inquiries, which rely on expert testimony; as evidence in persuasion and deliberation | Where objective evidence is available and required, as in scientific inquiry; when used to stop critical questions | Presumptive: fit where knowledge is lacking and a position must be taken | pp. 32–3, 143–7, 265–8 | `expert_opinion` |
-| Argument from ignorance | Deliberation, where one must act without full knowledge; under a set burden of proof | Inquiry, where the lack of disproof is not proof | Presumptive, and tied to the burden of proof | pp. 267, 270 | `ignorance`, `epistemic_ignorance` |
+| Argument from ignorance | Deliberation, where one must act without full knowledge; persuasion on political and moral issues, where facts do not settle the dispute; under a set burden of proof | Inquiry, where the lack of disproof is not proof | Presumptive, and tied to the burden of proof | pp. 267, 270 | `ignorance`, `epistemic_ignorance` |
 | Argument from consequences | Deliberation | A dispute about whether something is true (ad consequentiam) | It answers "what should we do?", not "is it so?" | pp. 157–60, 176 | `positive_consequences`, `negative_consequences` |
 | Circular reasoning | Sometimes tolerable in persuasion | Always excluded in inquiry | Inquiry is cumulative and needs evidential priority | pp. 74–6, 258 | — |
-| Loaded or many questions | — | Information-seeking and persuasion, when a direct answer traps the respondent | Presuppositions become commitments | pp. 140–2, 221 | — |
-| Popular opinion; pity (ad populum, ad misericordiam) | Not settled in ND in general. An appeal to pity can be proper at a trial's sentencing stage, once guilt is admitted (p. 234). `walton.yml` has a deliberation variant of popular opinion (`deliberation_ad_populum`). The catalogue will draft the rest from the scheme book. | Where emotion disguises the lack of good premises; pity before guilt is decided | Emotional appeals, judged by the type and the stage | pp. 21–2, 123, 234, 248 | `popular_opinion` and its variants, `help`, `distress` |
+| Loaded or many questions | When the presupposition is already the respondent's commitment, as in cross-examining someone who has admitted it (p. 264) | Information-seeking and persuasion, when a direct answer traps the respondent | Presuppositions become commitments | pp. 140–2, 221, 264 | — |
+| Popular opinion; pity (ad populum, ad misericordiam) | Not wrong in principle. Appealing to popular opinion is normal in democratic politics (p. 22). Pity can justify an appeal for donations to medical research (p. 22), and is proper at a trial's sentencing stage (p. 234). `walton.yml` has a deliberation variant of popular opinion (`deliberation_ad_populum`). | Where emotion disguises the lack of good premises; pity before guilt is decided | Emotional appeals, judged by the type and the stage | pp. 21–2, 123, 234, 248, 283 (ch. 9 n. 9) | `popular_opinion` and its variants, `help`, `distress` |
 | Straw man | — | Everywhere a fair account of the other's position matters; characteristic of quarrels | It misrepresents the other's commitments | pp. 27, 193, 196, 272 | — |
-| Leaving out evidence for the other side ("suppressed evidence") | Persuasion and advocacy, such as a sales pitch: neither side must argue the other's case | Inquiry, information-seeking and expert consultation, which owe completeness | The duty to present all the evidence depends on the type | pp. 230–2 | — |
+| Leaving out evidence for the other side ("suppressed evidence") | Persuasion and advocacy, such as a sales pitch: neither side must argue the other's case | Expert consultation clearly owes completeness (p. 231); inquiry and information-seeking may (p. 232) | The duty to present all the evidence depends on the type | pp. 230–2 | — |
 
 ## 8. Recognising the type in real text
 
@@ -490,7 +514,7 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 
 - **The supposed type and the enacted type can differ.** The setting or the participants' agreement fixes what they are *supposed* to be doing. What they actually *do* can be something else: Question Period is supposed to seek information and press for action, and is largely eristic (p. 223). Record both.
 - **Mixtures are normal.** Allow more than one type per segment.
-- **Shifts are often visible only afterwards,** and whether a shift was licit needs the whole context (pp. 214–5).
+- **Shifts are judged afterwards,** against the type the parties were supposed to be in (pp. 205, 214–5). In many cases the shift is hard to see, and short excerpts lack the context to judge it (pp. 216–7).
 - **Cues are evidence, not definitions.** One insult does not make a quarrel; one offer does not make a negotiation.
 - **No coding manual or agreement figures.** ND gives neither, so reliability is ours to measure.
 
@@ -500,11 +524,11 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 
 | ND | WAG today |
 |---|---|
-| **The dialogue type** | Implicit. Every game is a persuasion dialogue. |
+| **The dialogue type** | Implicit. Every game with a central claim (`debate`, `solo`) is a persuasion dialogue; the points modes match no type. |
 | **The modes** | **`debate`** is the simpler one-sided persuasion: pro bears the burden, and con may merely doubt (p. 38). There is no *dispute* variant, where con must prove the opposite. **The points modes** match no type. **`solo`** is one-person deliberation with a devil's advocate when the claim is practical (p. 152), and a one-person inquiry when it is factual. |
-| **Commitment stores** | None. Every premise of a move is presumed, with the scheme's weight. Rule 1 of §5.1 (premises the respondent accepts) is not enforced. |
+| **Commitment stores** | None. Every premise of a move is presumed, with a small fixed weight (`PresumptionWeight`, 0.01 by default); the scheme's weight goes to the argument. Rule 1 of §5.1 (premises the respondent accepts) is not enforced. |
 | **Assertions and concessions; the dark side** | None |
-| **Retraction** | None. The exceptions: in `debate` a losing side that passes concedes (`ConcedeOnPass`), and the Carneades adapter can withdraw assumptions (`RetractAssumptionsSince`). |
+| **Retraction** | None by a player. In `debate`, a losing side that passes concedes (`ConcedeOnPass`). The adapter's `RetractAssumptionsSince` is internal bookkeeping, not a move. |
 | **Burden and standard of proof** | On pro in `debate`. Each preset sets a proof standard: preponderance, clear and convincing, beyond reasonable doubt. |
 | **Stages** | None. No opening (agreeing the issue and rules), no confrontation, no closing beyond the end conditions. |
 | **Schemes and critical questions** | 9 schemes and 24 CQs in the game; 111 schemes in `walton.yml`. This is ND's relevance factor 4, and where WAG is strongest. |
@@ -520,7 +544,7 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 | Type | Playing it needs | Finding it in data needs | Fit to the current engine |
 |---|---|---|---|
 | **Persuasion** | Commitment stores, retraction rules, rule 1, a *dispute* variant; then permissive and rigorous variants and the maieutic outcome | Kialo has it in quantity | High: what WAG already plays |
-| **Deliberation** | A practical problem and shared goals at the opening; symmetric roles; one proposal (the simplest case), then several; a tentative joint decision; caution where harm is possible | Kialo's practical theses, read as a persuasion–deliberation hybrid; meeting and town-hall transcripts | High: Carneades issues can have several positions |
+| **Deliberation** | A practical problem and shared goals at the opening; symmetric roles; one proposal (the simplest case), then several; a tentative joint decision; caution where harm is possible | Kialo's practical theses carry deliberation's arguments, but they are persuasion about action (p. 229), not a deliberation; meeting and town-hall transcripts are the real source | High: Carneades issues can have several positions |
 | **Inquiry** | One team; no retraction; established premises (sources); no circularity (already true); stages; outcome proven, disproven or open | Few public sources: review and replication threads, inquiry reports | High: mostly settings and rules |
 | **Information-seeking** | Asymmetric roles. An answerer seat that holds the knowledge: a person, a document, a model, a database. Questions with presuppositions, direct and indirect answers, challenges to a question. | Question-answer corpora and interviews; the Kialo `clarification` role | Medium: the question move exists, the answerer seat does not |
 | **Negotiation** | A new core beside the argument graph: issues with options, private interests, offers, acceptance, deadlock. Arguments about offers (practical reasoning, promises, threats) use the schemes. | Bargaining corpora; mediation transcripts | Low: a new subsystem |
@@ -563,7 +587,7 @@ shift:               # an event between segments
   from: persuasion
   to: eristic
   at: 13292.41
-  kind: external                   # or internal: a shift of issue
+  kind: external                   # or internal: the same type, e.g. a shift of issue
   pace: gradual                    # or sharp
   agreed: false
   announced: false

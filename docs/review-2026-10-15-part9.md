@@ -43,16 +43,16 @@ The book was read in full: ten chapters and the notes. Page numbers below are it
 | Part 8 said | *The New Dialectic* says | Verdict |
 |---|---|---|
 | Six types, from Walton & Krabbe's grid of initial situation and goal | The same six main types, with subtypes (p. 31) | **Holds** |
-| "Not definitive"; Walton's lists "grew to eight" | The eight are Walton 1997. The 1998 book keeps six main types: debate is mixed persuasion and eristic (p. 223), and teaching is a subtype of information-seeking (pp. 235–7). The book does not say whether the six are exhaustive. | **Corrected.** Wrong chronology: six, then eight in 1997, then six again, with the rest as subtypes and mixtures. |
+| "Not definitive"; Walton's lists "grew to eight" | The eight are in Walton's 1997 table (A20 points to similar tables from 1990 and 1995). The 1998 book keeps six main types: debate is mixed persuasion and eristic, as Walton had already said in 1982 and 1989 (p. 223), and teaching is a subtype of information-seeking (pp. 235–7). The book does not say whether the six are exhaustive. | **Corrected.** The lists differ by presentation, not by a change of view. *(Part 10: an earlier version called it "wrong chronology: six, then eight, then six again", which the sources do not show.)* |
 | Types combine by nesting, shifts and mixing | Yes. Chapters 8 and 9 give the vocabulary: external and internal shifts, sharp and gradual, functionally joined or an interruption, licit or illicit, mixed discourse. | **Holds, much extended** (reference §6) |
-| "A public debate is persuasion addressed to an audience" | That is the 1997 "debate". In 1998, political debate is mixed discourse (p. 223). | **Corrected** |
+| "A public debate is persuasion addressed to an audience" | That is the 1997 table's "debate". The 1998 book calls political debate mixed discourse (p. 223). | **Corrected** |
 | Classify the dialogue, not the thesis; the thesis does not fix the type | Agreed. The same practical question can be a town-hall deliberation or a partisan debate. Where basic goals conflict, it is a persuasion–deliberation hybrid (ch. 6, note 1). | **Holds** |
-| Every WAG game is persuasion | Yes, and more exactly: `debate` is the simpler one-sided form, where only pro must prove and con may merely doubt (p. 38). WAG has no *dispute* form. | **Holds, sharper** |
+| Every WAG game is persuasion | Every game with a central claim (`debate`, `solo`) is; the points modes match no type. `debate` is the simpler one-sided form, where only pro must prove and con may merely doubt (p. 38). WAG has no *dispute* form. | **Holds, sharper** *(part 10: "every game" narrowed to the claim modes)* |
 | "Policy deliberation" is not a deliberation, because the game has one fixed proposal and a winner, and deliberation weighs several options with no side owning a thesis | The conclusion holds; the reason does not. In the simplest case deliberation *is* one proposal argued for and against (p. 162, note 4). What the preset lacks is a practical problem, shared goals, symmetric roles and a tentative joint decision. | **Corrected.** The preset is renamed. |
-| Kialo is "debate" | A public persuasion dialogue. On a practical thesis it is a persuasion–deliberation hybrid. Its moderation strips out most eristic. | **Corrected** |
+| Kialo is "debate" | The book says nothing about Kialo. It allows a persuasion dialogue about whether an action is advisable (p. 229), and makes a hybrid of deliberation only where basic goals conflict (ch. 6, note 1). | **Corrected.** Our reading: public persuasion, on a practical thesis about action. *(Part 10: an earlier version said "a persuasion–deliberation hybrid", and put our reading in the book's column.)* |
 | Negotiation and eristic: not as modes | The owner's new objective replaces this. Also, negotiation does use schemes: offers are backed by practical reasoning, promises and threats (ch. 4). | **Superseded.** Eristic stays a detection exercise. *(Updated in part 10: detection first, then a playable quarrel, last.)* |
 | Flag schemes that are improper in the game's type ("proper in") | This is the book's central thesis: a fallacy is a technique misused against the goal of its dialogue (ch. 10). | **Holds, strengthened.** Reference §7 has the table to draft from. |
-| WAG has no commitment store | Commitment is the basic idea behind every type (p. 31). Retraction is what most separates persuasion (fairly free) from inquiry (none). | **Holds, and matters more.** It comes first in D2. |
+| WAG has no commitment store | Commitment is the basic idea behind every type (p. 31). Retraction is a key contrast between persuasion (fairly free) and inquiry (minimised, ideally eliminated; p. 70). | **Holds, and matters more.** It comes first in D2. |
 | Type per discussion; not per claim | Still right for Kialo. But finding types in other data needs typed segments and shifts. | **Extended** (D3) |
 
 ## 2. What the book adds to the paper
@@ -63,7 +63,7 @@ The paper gave the map. The book gives the rules and the tests.
 |---|---|---|
 | **Commitment** | Assertions and concessions; light and dark side; retraction, and its limits by type (pp. 43–62, 70) | Commitment stores (D2a) |
 | **Persuasion** | Four minimal rules (p. 43). A dispute against one-sided doubt (p. 38). The critical discussion and how it differs (pp. 46–9). Permissive and rigorous forms, one embeddable in the other (pp. 53–7). The maieutic function (pp. 57–9). Enthymemes (pp. 60–3). | D2a; the `debate` mode's place |
-| **Inquiry** | Cumulative, with no retraction; evidential priority; no circularity; three stages; relevance by stage (pp. 33, 69–99) | D2c |
+| **Inquiry** | Cumulative, with retraction minimised; evidential priority; no circularity; three stages; relevance by stage (pp. 33, 69–99) | D2c |
 | **Negotiation** | Four subtypes; interests as dark-side commitments; Donohue's response rules; threats and their place; shifts out of deadlock (ch. 4) | D2e |
 | **Information-seeking** | Asymmetric roles; presuppositions as commitments; direct and indirect answers; expert consultation and probing it (ch. 5) | D2d |
 | **Deliberation** | The practical problem; the full practical inference; the simplest case is pro and contra; tentative closing; caution where harm is possible (tutiorism); joined to information-seeking (ch. 6) | D2b |
@@ -118,7 +118,7 @@ The existing engine (schemes, critical questions, Carneades) stays the argument 
 - **Segments and shifts:** moderate.
 - **Whether a shift was licit:** hardest, because it needs the whole context. Walton evaluates conditionally: *if* the speakers can be taken as having a critical discussion, *then* an argument commits a given fallacy, and the speaker can answer that the exchange was partly eristic (pp. 224–5). The annotation should allow such conditional verdicts.
 
-**The data limit is real.** Kialo gives persuasion and the persuasion–deliberation hybrid, with almost no negotiation, quarrels or inquiry. Plan §8 lists candidate corpora per type; none has been checked here for licence or fit.
+**The data limit is real.** Kialo gives persuasion, much of it about action, with almost no negotiation, quarrels or inquiry. Plan §8 lists candidate corpora per type; none has been checked here for licence or fit.
 
 ### 3.3 What it is not
 

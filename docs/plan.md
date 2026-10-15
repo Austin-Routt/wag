@@ -103,7 +103,7 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 
 The current guidelines are version 2 with the version 3 changes appended as a list of edits. They allow two answers in places and contradict each other in one. Version 4 is one document, in the order an annotator decides:
 0. **Once per discussion, by a person:**
-   - the setting, and the dialogue type, both supposed and enacted ([`dialogue-types.md`](dialogue-types.md) §9.3). A Kialo discussion is public persuasion addressed to readers; on a practical thesis it is a persuasion–deliberation hybrid;
+   - the setting, and the dialogue type, both supposed and enacted ([`dialogue-types.md`](dialogue-types.md) §9.3). A Kialo discussion is public persuasion addressed to readers; on a practical thesis, it is persuasion about whether an action is advisable (ND p. 229), using deliberation's arguments but deciding nothing jointly;
    - the thesis's kind: practical, factual, evaluative or classificatory.
 1. **Does the claim give a reason?** If not, what is it?
    - a thesis or proposal: record its conclusion form and scheme family;
@@ -273,7 +273,7 @@ Set by the owner on 2026-10-15: schemes, critical questions and the Kialo gold f
 3. **After the Kialo gold (phase 3):**
    1. D1 (a) and (c);
    2. D2a to D2f, in the order shown;
-   3. D3 and D4, starting from Kialo's own data (persuasion, and its hybrid with deliberation), then other corpora.
+   3. D3 and D4, starting from Kialo's own data (persuasion, much of it about action), then other corpora.
 4. **Last:** D2g, then D2h, the playable quarrel.
 
 The scheme catalogue stays the first priority, because every type that argues uses it.
@@ -285,7 +285,7 @@ None of these has been checked here for licence or fit.
 | Type | Candidates |
 |---|---|
 | Persuasion | Kialo (in hand); ChangeMyView (Tan et al., 2016) |
-| Deliberation | Kialo's practical theses (a hybrid); meeting and town-hall transcripts; DeliData (Karadzhov et al., 2023), group problem-solving that is close to inquiry |
+| Deliberation | Meeting and town-hall transcripts (Kialo's practical theses carry deliberation's arguments, but are persuasion about action); DeliData (Karadzhov et al., 2023), group problem-solving that is close to inquiry |
 | Inquiry | Peer-review and replication discussions; public inquiry reports |
 | Information-seeking | QuAC (Choi et al., 2018); interview transcripts |
 | Negotiation | Deal or No Deal (Lewis et al., 2017); CraigslistBargain (He et al., 2018); CaSiNo (Chawla et al., 2021) |

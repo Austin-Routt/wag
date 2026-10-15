@@ -1,11 +1,11 @@
 # Part 8 (2026-10-15): dialogue types, and claims merged by their text
 
 > **Corrected after reading the primary source** (part 9, the same day). §1 below was written from Aberdein's survey alone. The owner then added Walton's *The New Dialectic* (1998), and checking §1 against it changed five points. Each is fixed in place and marked *(corrected in part 9)*:
-> 1. **"Eight types"** is Walton's 1997 list. In the 1998 book the main types are six: debate is mixed persuasion and eristic, and teaching is a kind of information-seeking.
-> 2. **"A public debate is persuasion addressed to an audience"** is the 1997 view. The 1998 book calls political debate mixed discourse.
+> 1. **"Eight types"** is the list in Walton's 1997 table. The 1998 book keeps six main types: debate is mixed persuasion and eristic, and teaching is a kind of information-seeking. *(Refined in part 10: this is not a change of mind. Walton had already classed debate as mixed in 1982 and 1989, and A20 points to similar tables from 1990 and 1995.)*
+> 2. **"A public debate is persuasion addressed to an audience"** is the 1997 table's "debate". The 1998 book calls political debate mixed discourse.
 > 3. **Deliberation** does not need several options or the absence of a thesis. In the simplest case it reduces to one side for and one side against a proposed course of action. What it needs is a practical problem, shared goals, symmetric roles and a tentative joint decision.
-> 4. **Kialo** policy debates are a persuasion–deliberation hybrid, not plain "debate".
-> 5. **"Negotiation and eristic: not as modes"** is superseded by the owner's objective: every type, playable and findable.
+> 4. **Kialo** policy debates are public persuasion about whether an action is advisable, not "debate" in the 1997 sense. *(Refined in part 10: earlier this said "a persuasion–deliberation hybrid". ND makes a hybrid of deliberation with conflicting basic goals; Kialo decides nothing jointly, so the book's p. 229 reading fits better.)*
+> 5. **"Negotiation and eristic: not as modes"** is superseded by the owner's objective: every type, playable and findable. *(Part 10: the playable quarrel comes last.)*
 >
 > The full account is [`dialogue-types.md`](dialogue-types.md); the work it leads to is [plan §8](plan.md#8-track-d-dialogue-types).
 
@@ -53,12 +53,12 @@ The paper reviews two of Walton's ideas, applied to mathematics: dialogue types 
 
 ### 1.2 Is one of six definitive? Can there be combinations?
 
-**Not definitive.** The six are a systematic core, not a complete list. *(Corrected in part 9: an earlier version said Walton's lists "grew to eight". The eight are from 1997; the 1998 book returns to six main types and treats the rest as subtypes or mixtures.)*
+**Not definitive.** The six are a systematic core, not a complete list. *(Corrected in part 9: an earlier version said Walton's lists "grew to eight". The eight are in a 1997 table; the 1998 book keeps six main types and treats the rest as subtypes or mixtures. Walton had already classed debate as mixed in 1982 and 1989, so the lists differ by presentation, not by a change of view.)*
 
 **Combinations, yes, in three senses:**
 1. **Nesting.** A persuasion dialogue can sit inside an inquiry, or an information-seeking exchange inside a persuasion.
 2. **Shifts over time.** The type of a dialogue can change as it goes.
-3. **Mixed settings.** A public debate is persuasion addressed to an audience. *(Corrected in part 9: that is the 1997 "debate" type. In the 1998 book, political debate is mixed discourse, persuasion and eristic, usually with negotiation.)*
+3. **Mixed settings.** A public debate is persuasion addressed to an audience. *(Corrected in part 9: that is the "debate" of Walton's 1997 table. In the 1998 book, as in Walton's work from 1982 on, political debate is mixed discourse: persuasion and eristic, usually with negotiation.)*
 
 So one label per game is a simplification. The model that fits the literature:
 - a *main* type for the whole dialogue;
@@ -88,11 +88,11 @@ The thesis's kind only narrows the types that make sense.
 | `cq` mode | the same, with points; an unanswered question loses | points | persuasion with strict duties to answer (a rigorous variant) |
 | `solo` mode | one player argues both sides | the verdict; no winner | nearest to **inquiry** by one inquirer |
 | `classic`, `infinite`, `target`, `timed`, `speed` | no shared thesis; each player scores their own arguments that stand | points | **none.** A competitive exercise that rewards arguments, not settling anything. |
-| Kialo import | a public pro and con tree; readers vote on impact | persuade the audience | **public persuasion**. On a practical thesis, a persuasion–deliberation hybrid (*corrected in part 9*; was "debate"). |
+| Kialo import | a public pro and con tree; readers vote on impact | persuade the audience | **public persuasion**. On a practical thesis, persuasion about whether an action is advisable (ND p. 229) (*corrected in parts 9 and 10*; was "debate"). |
 
 **Two context presets name types the game does not play:**
 - **"Policy deliberation"** is described as "a deliberation dialogue". But the game is adversarial, with a winner, and pro alone bears the burden. That is persuasion about a practical proposition.
-  - *(Corrected in part 9.)* An earlier version said a deliberation must weigh several options with no side owning a thesis. That is not Walton's 1998 account. A deliberation starts from a practical problem and shared goals. The parties are symmetric co-deliberators, and in the simplest case it reduces to one side for and one side against a proposed course of action (p. 162). It ends in a tentative joint decision.
+  - *(Corrected in part 9.)* An earlier version said a deliberation must weigh several options with no side owning a thesis. That overstates Walton's 1998 account: deliberation typically compares alternatives (pp. 154–5), but need not have several on the table. A deliberation starts from a practical problem and shared goals. The parties are symmetric co-deliberators, and in the simplest case it reduces to one side for and one side against a proposed course of action (p. 162). It ends in a tentative joint decision.
   - The preset is now named "Policy question".
 - **"Scientific inquiry"** is described as "an inquiry". But the game is adversarial, with a winner, under a higher proof standard. An inquiry is cooperative: both parties try to prove or disprove the claim. The preset is now named "Scientific question" (part 9).
 
@@ -118,7 +118,7 @@ Yes, as a setting separate from the domain preset, and only where it changes rul
 
   The `solo` mode is a start.
 - **Information-seeking.** Already partly present: the question move, and requiring evidence. It is not worth a mode of its own.
-- **Negotiation and eristic: not as modes.** *(Superseded in part 9: the owner's objective is every type, playable and findable. Negotiation becomes a mode with its own bargaining core, and eristic a detection exercise; see [plan §8](plan.md#8-track-d-dialogue-types).)*
+- **Negotiation and eristic: not as modes.** *(Superseded in part 9: the owner's objective is every type, playable and findable. Negotiation becomes a mode with its own bargaining core, and eristic a detection exercise; see [plan §8](plan.md#8-track-d-dialogue-types). Updated in part 10: then a playable quarrel, last.)*
   - Negotiation is about resources and offers, not argumentation schemes. *(In part: its offers are backed and attacked with schemes, such as practical reasoning, threats and promises.)*
   - Eristic is worth *detecting* (a personal attack in a persuasion), not playing.
 
