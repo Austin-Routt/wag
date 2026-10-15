@@ -5,6 +5,10 @@ rem because WAG builds against ..\carneades-4.
 rem Extra flags pass through, for example:
 rem   run-wag-server.bat --addr 127.0.0.1:9090
 rem   run-wag-server.bat --kialo-dir C:\path\to\kialo_visualizer\data
+rem   run-wag-server.bat --store D:\research\WAG
+rem Models and annotation are in the browser (Models and Annotate tabs); your
+rem data (players, games with models, annotation runs) goes to %USERPROFILE%\WAG
+rem unless you give --store.
 cd /d "%~dp0"
 where go >nul 2>nul
 if errorlevel 1 (

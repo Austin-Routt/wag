@@ -17,6 +17,9 @@
 //	             providers: gemini, anthropic, openai, deepseek, lmstudio, llamacpp,
 //	             sglang, vllm, ollama, openai-compatible, command, mock (wag-llm providers)
 //	--models     a JSON file of such profiles (docs/llm.md)
+//	--store      the data folder (default: WAG in your home folder, e.g.
+//	             C:\Users\you\WAG): the players and keys added in the dashboard's
+//	             Models tab, games with a model seat, annotation runs, datasets
 //	--claude     offer Claude seats (the profile "claude", through the Claude API;
 //	             needs ANTHROPIC_API_KEY; moves cost API credits);
 //	             --claude-model (default claude-opus-5-5), --claude-effort (default medium)
@@ -36,6 +39,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 
 	"github.com/yourorg/wag/internal/game"
@@ -54,6 +58,8 @@ func main() {
 	var modelSpecs llm.Specs
 	flag.Var(&modelSpecs, "model", "offer seats played by a language model: [NAME=]PROVIDER:MODEL[,option=value…] (repeatable; keys in environment variables)")
 	modelsFile := flag.String("models", "", "a JSON file of model profiles to offer as seats")
+	home, _ := os.UserHomeDir()
+	storeDir := flag.String("store", filepath.Join(home, "WAG"), "the data folder: dashboard players and remembered keys, games with model seats, annotation runs, datasets")
 	contextsFile := flag.String("contexts", "", "a JSON file of context presets (as data/contexts.json, or one preset as the browser saves it) to offer besides the built-in ones; a preset with a built-in's id replaces it")
 	flag.Parse()
 
@@ -80,6 +86,13 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Error reading the context presets:", err)
 			os.Exit(1)
 		}
+	}
+	if *storeDir != "" {
+		if err := srv.SetStore(*storeDir); err != nil {
+			fmt.Fprintln(os.Stderr, "Error with the data folder:", err)
+			os.Exit(1)
+		}
+		fmt.Println("Your data folder (games with model seats, annotation runs, players):", srv.Store())
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()

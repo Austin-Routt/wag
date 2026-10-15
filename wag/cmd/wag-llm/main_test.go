@@ -55,18 +55,16 @@ func TestPlayAndReplay(t *testing.T) {
 	}
 }
 
-// annotate writes the annotations in the annotators' format, retries a
-// reply that is not JSON once, traces every call, and resumes.
+// annotate writes a run's folder: the annotations, every call, the report;
+// a reply that is not an annotation is retried once; a second run on the
+// folder continues it.
 func TestAnnotate(t *testing.T) {
 	dir := t.TempDir()
-	items := filepath.Join(dir, "items.json")
-	os.WriteFile(items, []byte(`{"discussion": {"thesis_claim_id": "1.1"}, "items": [
+	data := filepath.Join(dir, "my-discussion")
+	os.MkdirAll(data, 0o755)
+	os.WriteFile(filepath.Join(data, "items.json"), []byte(`{"discussion": {"thesis_claim_id": "1.1"}, "items": [
 		{"kialo_claim_id": "1.2", "text": "Meat is bad for the climate."},
 		{"kialo_claim_id": "1.3", "text": "Taxes hurt the poor."}]}`), 0o644)
-	guide := filepath.Join(dir, "guidelines.md")
-	os.WriteFile(guide, []byte("# Guidelines\nAnnotate."), 0o644)
-	ctxFile := filepath.Join(dir, "walton.yml")
-	os.WriteFile(ctxFile, []byte("argument_schemes: []"), 0o644)
 	// The mock's script starts again with each run.
 	first, second := filepath.Join(dir, "p1.json"), filepath.Join(dir, "p2.json")
 	os.WriteFile(first, []byte(`[{"name": "ann", "provider": "mock", "model": "m", "replies": [
@@ -74,24 +72,35 @@ func TestAnnotate(t *testing.T) {
 	os.WriteFile(second, []byte(`[{"name": "ann", "provider": "mock", "model": "m", "replies": [
 		"I am not sure.",
 		"{\"instances\": [{\"primary\": true, \"scheme\": {\"walton_id\": \"none\", \"fit\": \"none\"}}]}"]}]`), 0o644)
-	out := filepath.Join(dir, "out")
-	args := []string{"--items", items, "--guidelines", guide, "--context", ctxFile, "--out", out}
-	if err := annotate(context.Background(), append(args, "--models", first, "--limit", "1")); err != nil {
+	out := filepath.Join(dir, "run")
+	if err := annotateCmd(context.Background(), []string{"--models", first, "--dataset", data, "--out", out, "--limit", "1"}); err != nil {
 		t.Fatal(err)
 	}
-	if err := annotate(context.Background(), append(args, "--models", second)); err != nil { // resumes with 1.3
+	// The second run continues: the run has 1 claim (--limit 1 made it), so
+	// widen it by starting a new folder for the rest.
+	out2 := filepath.Join(dir, "run2")
+	if err := annotateCmd(context.Background(), []string{"--models", second, "--dataset", data, "--out", out2}); err != nil {
 		t.Fatal(err)
 	}
-	b, _ := os.ReadFile(filepath.Join(out, "annotator-ann.json"))
-	if !strings.Contains(string(b), `"kialo_claim_id": "1.2"`) || !strings.Contains(string(b), `"kialo_claim_id": "1.3"`) {
-		t.Fatalf("annotations: %s", b)
+	b, _ := os.ReadFile(filepath.Join(out, "annotations", "ann.json"))
+	b2, _ := os.ReadFile(filepath.Join(out2, "annotations", "ann.json"))
+	if !strings.Contains(string(b), `"kialo_claim_id": "1.2"`) || !strings.Contains(string(b2), `"kialo_claim_id": "1.2"`) {
+		t.Fatalf("annotations: %s / %s", b, b2)
 	}
-	calls, _ := os.ReadFile(filepath.Join(out, "calls.jsonl"))
-	if n := strings.Count(string(calls), "\n"); n != 3 {
-		t.Fatalf("%d calls traced, want 3 (1.2; 1.3 and its retry)", n)
+	calls, _ := os.ReadFile(filepath.Join(out2, "calls.jsonl"))
+	if n := strings.Count(string(calls), "\n"); n != 3 { // 1.2 and its retry; 1.3
+		t.Fatalf("%d calls traced, want 3", n)
 	}
-	run, _ := os.ReadFile(filepath.Join(out, "run.json"))
-	if !strings.Contains(string(run), `"annotated": 2`) || !strings.Contains(string(run), "system_prompt_sha256") {
-		t.Fatalf("run.json: %s", run)
+	for _, f := range []string{"run.json", "report.json", "README.txt"} {
+		if _, err := os.Stat(filepath.Join(out2, f)); err != nil {
+			t.Fatal(err)
+		}
+	}
+	// Continuing a finished run makes no call.
+	if err := annotateCmd(context.Background(), []string{"--models", second, "--out", out2}); err != nil {
+		t.Fatal(err)
+	}
+	if again, _ := os.ReadFile(filepath.Join(out2, "calls.jsonl")); len(again) != len(calls) {
+		t.Fatal("a finished run called again")
 	}
 }

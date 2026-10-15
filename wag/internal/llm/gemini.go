@@ -21,7 +21,7 @@ func newGemini(p Profile) (*Gemini, error) {
 	key, _ := p.key()
 	if key == "" {
 		return nil, &Error{Provider: "gemini", Kind: KindAuth,
-			Message: "no API key: set " + strings.Join(p.KeyEnv(), " or ") + " in the environment (from Google AI Studio)"}
+			Message: "no API key: enter one in the dashboard (Models), or set " + strings.Join(p.KeyEnv(), " or ") + " in the environment (keys come from Google AI Studio)"}
 	}
 	cc := &genai.ClientConfig{APIKey: key, Backend: genai.BackendGeminiAPI}
 	if p.BaseURL != "" {
@@ -194,6 +194,9 @@ func geminiError(err error) *Error {
 		ae = *pae
 	}
 	e := &Error{Provider: "gemini", Kind: kindOfStatus(ae.Code), Status: ae.Code, Message: strings.TrimSpace(ae.Status + " " + ae.Message), Err: err}
+	if ae.Code == 400 && strings.Contains(strings.ToLower(ae.Message), "api key") {
+		e.Kind = KindAuth // Gemini answers a wrong key with 400 INVALID_ARGUMENT (API_KEY_INVALID)
+	}
 	for _, d := range ae.Details {
 		if t, _ := d["@type"].(string); strings.HasSuffix(t, "google.rpc.RetryInfo") {
 			if s, _ := d["retryDelay"].(string); s != "" {

@@ -115,6 +115,8 @@ function render() {
   renderGamebar();
   if (ui.tab === 'nascq') return renderNASCQ();
   if (ui.tab === 'rules') return renderRules();
+  if (ui.tab === 'models') return renderModels();
+  if (ui.tab === 'annotate') return renderAnnotate();
   if (!G) return renderSetup();
   renderPlay();
 }
@@ -138,7 +140,8 @@ function renderGamebar() {
     <button class="small" id="gamenote" title="Write a note on the game: it goes into the export">Note</button>
     <button class="small" id="newgame">New game</button>
     <a class="small" href="/api/games/${G.id}/export" target="_blank" title="Download the game as JSON: moves, notes, what you tried, and the build">Export</a>
-    <a class="small" href="/api/games/${G.id}/traces" target="_blank" title="Download every decision as JSON Lines (wag-trace/1): the prompt and reply of language-model seats, the reasons given, predictions checked, alternatives tried">Traces</a>`;
+    <a class="small" href="/api/games/${G.id}/traces" target="_blank" title="Download the game's trace file (wag-trace/2): every model call with the whole conversation, every decision, the reasons given, predictions checked, alternatives tried">Traces</a>
+    ${G.saved_rel ? `<button class="small ghost" data-open="${esc(G.saved_rel)}" title="Saved after every move in ${esc(G.saved_to)}: trace.jsonl and export.json. Click to open the folder.">Saved ✓</button>` : ''}`;
   const vs = bar.querySelector('.viewseg'); if (vs) vs.onclick = e => { const b = e.target.closest('[data-view]'); if (b) { ui.view = b.dataset.view; renderGamebar(); renderPlay(); } };
   $('#gamenote').onclick = () => { ui.view = 'dialogue'; ui.flag = 'game'; renderGamebar(); renderPlay(); };
   $('#newgame').onclick = () => { G = null; ui.gameId = null; location.hash = ''; ui.tab = 'play'; render(); };
@@ -166,7 +169,7 @@ function renderSetup() {
         <div><h3>Players</h3><div class="seats">${seats}</div>
           <button class="small" id="addseat" ${s.mode === 'solo' ? 'disabled' : ''}>Add a player</button>
           <p class="small muted">Debates: even seats argue for the claim (pro), odd seats against it (con). Human seats play in this browser; other tabs can watch or moderate.</p>
-          <p class="small muted"><b>Language model</b>: you copy the seat's prompt into any chatbot and paste its reply back. <b>Rule bots</b> play legal moves with placeholder words: they test the rules, they do not understand the topic.${(META.models || []).length ? ` <b>Model seats</b> (${(META.models).map(m => esc(m.name + ': ' + m.model)).join(', ')}) play through their provider's API, with the same prompt a language-model seat gets; calls may cost credits, and every call is in the game's traces.` : ' Start the server with <span class="mono">--model</span> (for example <span class="mono">--model gemini:gemini-2.5-flash</span>) or <span class="mono">--claude</span> to add seats played by a model through its API.'}</p></div>
+          <p class="small muted"><b>Language model</b>: you copy the seat's prompt into any chatbot and paste its reply back. <b>Rule bots</b> play legal moves with placeholder words: they test the rules, they do not understand the topic.${(META.models || []).length ? ` <b>Model seats</b> (${(META.models).map(m => esc(m.name + ': ' + m.model)).join(', ')}) play through their provider's API, with the same prompt a language-model seat gets; calls may cost credits, and every call is in the game's traces.` : ' To have a model play, add it as a player in the <b>Models</b> tab (choose the service, paste your key, pick a model).'}</p></div>
         <div><h3>Context</h3>
           <select id="o_ctx">${(META.contexts || []).map(c => `<option value="${esc(c.id)}" ${s.context === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
           <p class="small muted" id="ctxdesc">${esc(((META.contexts || []).find(c => c.id === s.context) || {}).description || '')}</p>

@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -327,6 +328,11 @@ func (s *Server) gameStart(ss *Session) GameStart {
 func (s *Server) writeTraces(w http.ResponseWriter, ss *Session) {
 	w.Header().Set("Content-Type", "application/x-ndjson; charset=utf-8")
 	w.Header().Set("Content-Disposition", "attachment; filename=wag-traces-"+ss.ID+".jsonl")
+	s.encodeTraces(w, ss)
+}
+
+// encodeTraces writes the game's trace file to w. Caller holds s.mu.
+func (s *Server) encodeTraces(w io.Writer, ss *Session) {
 	enc := json.NewEncoder(w)
 	enc.SetEscapeHTML(false)
 	_ = enc.Encode(s.gameStart(ss))

@@ -333,3 +333,20 @@ func TestStripThink(t *testing.T) {
 		}
 	}
 }
+
+// Gemini answers a wrong key with HTTP 400: it is an auth error.
+func TestGeminiWrongKey(t *testing.T) {
+	f := newFake(t, func(w http.ResponseWriter, n int) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		io.WriteString(w, `{"error":{"code":400,"message":"API key not valid. Please pass a valid API key.","status":"INVALID_ARGUMENT"}}`)
+	})
+	c, _ := NewClient(Profile{Name: "g", Provider: "gemini", BaseURL: f.URL, APIKey: "wrong", Params: Params{Model: "m"}})
+	_, err := c.Complete(context.Background(), c.Request("", []Message{{Role: "user", Content: "hi"}}), nil)
+	if e, ok := err.(*Error); !ok || e.Kind != KindAuth || len(f.reqs) != 1 {
+		t.Fatalf("%v, %d requests", err, len(f.reqs))
+	}
+	if f.reqs[0].Header.Get("X-Goog-Api-Key") != "wrong" {
+		t.Fatal("the dashboard's key is not used")
+	}
+}

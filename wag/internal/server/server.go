@@ -29,6 +29,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/yourorg/wag/internal/annotate"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/kialo"
@@ -65,10 +66,18 @@ type Server struct {
 	kialoDir string
 	models   map[string]*llm.Client // the model profiles seats can use, by name
 	ctx      context.Context        // the server's lifetime: model calls stop when it ends
-	contexts []game.Context
-	sessions map[string]*Session
-	next     int
-	meta     []byte
+	// The workbench (workbench.go): the data folder, the keys typed in the
+	// dashboard, the players added there (and why one cannot play), the
+	// annotation runs.
+	store     string
+	keys      *keyStore
+	players   []llm.Profile
+	playerErr map[string]string
+	runs      map[string]*annotate.Run
+	contexts  []game.Context
+	sessions  map[string]*Session
+	next      int
+	meta      []byte
 }
 
 // Seat is a player and who plays it.
@@ -125,6 +134,8 @@ type Session struct {
 	Calls   []Call          // every call of a model seat to its provider (traces.go)
 	// order counts the traced events (decisions and calls), which share it.
 	order int
+	// SavedTo is the folder a game with a model seat is saved in.
+	SavedTo string
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
 	contexts []game.Context
@@ -138,7 +149,8 @@ type Session struct {
 // New makes a server for the data; kialoDir, if not empty, is a directory
 // of captured Kialo discussions (<dir>/<id>/graph.json) offered for import.
 func New(d Data, kialoDir string) (*Server, error) {
-	s := &Server{data: d, kialoDir: kialoDir, sessions: map[string]*Session{}, models: map[string]*llm.Client{}, ctx: context.Background()}
+	s := &Server{data: d, kialoDir: kialoDir, sessions: map[string]*Session{}, models: map[string]*llm.Client{}, ctx: context.Background(),
+		keys: &keyStore{keys: map[string]string{}, remembered: map[string]bool{}}, playerErr: map[string]string{}, runs: map[string]*annotate.Run{}}
 	if _, err := s.newState(game.DefaultGameConfig(), []string{"x"}); err != nil {
 		return nil, fmt.Errorf("the game data does not load: %v", err)
 	}
@@ -174,6 +186,10 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/load", s.handleLoad)
 	mux.HandleFunc("/api/kialo", s.handleKialoList)
 	mux.HandleFunc("/api/kialo/import", s.handleKialoImport)
+	mux.HandleFunc("/api/llm/", s.handleLLM)
+	mux.HandleFunc("/api/store", s.handleStore)
+	mux.HandleFunc("/api/store/", s.handleStore)
+	mux.HandleFunc("/api/annotate/", s.handleAnnotate)
 	sub, _ := fs.Sub(webFiles, "web")
 	mux.Handle("/", http.FileServer(http.FS(sub)))
 	return mux
@@ -737,6 +753,7 @@ func (s *Server) reply(w http.ResponseWriter, ss *Session, res *game.TurnResult,
 		return
 	}
 	ss.Version++
+	s.autosave(ss)
 	writeJSON(w, map[string]interface{}{"result": res, "state": ss.buildState()})
 }
 

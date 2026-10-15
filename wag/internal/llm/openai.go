@@ -33,7 +33,7 @@ func newOpenAI(p Profile) (*OpenAI, error) {
 	}
 	key, _ := p.key()
 	if ep.NeedsKey && key == "" {
-		return nil, &Error{Provider: p.Provider, Kind: KindAuth, Message: "no API key: set " + strings.Join(p.KeyEnv(), " or ") + " in the environment"}
+		return nil, &Error{Provider: p.Provider, Kind: KindAuth, Message: "no API key: enter one in the dashboard (Models), or set " + strings.Join(p.KeyEnv(), " or ") + " in the environment"}
 	}
 	mt := ep.MaxTokens
 	if mt == "" {

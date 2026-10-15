@@ -280,3 +280,30 @@ li:hover > .sacts, div:hover > .sacts, .premise:hover .sacts, .claimhead .sacts,
 details.weights { margin: 6px 0 10px; }
 details.weights summary { cursor: pointer; font-size: 13px; }
 .wtable td { padding: 2px 8px 2px 0; font-size: 13px; }
+
+/* ---- The workbench: Models and Annotate ---- */
+.workbench .row, .annotate .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+.workbench .row input[type=text], .workbench .row input[type=password] { flex: 1; min-width: 12em; width: auto; }
+.workbench input[type=password] { border: 1px solid var(--line); background: var(--panel); border-radius: 7px; padding: 6px 8px; }
+.workbench h3, .annotate h3 { margin: 14px 0 6px; }
+.workbench label.small, .annotate label.small { display: block; margin: 6px 0; }
+.workbench .list .pill { margin-left: 6px; }
+.pill.on { border-color: var(--in); background: var(--in-soft); }
+.folder { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; padding: 6px 8px; background: var(--soft); border-radius: 7px; }
+.folder .mono { word-break: break-all; }
+.modellist { max-height: 260px; overflow: auto; border: 1px solid var(--line); border-radius: 7px; padding: 4px; margin: 6px 0; }
+.modelrow { display: block; padding: 4px 6px; border-radius: 6px; cursor: pointer; }
+.modelrow.on { background: var(--accent-soft); }
+.annotate { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 12px; padding: 12px; }
+.annotate .side .panel + .panel, .annotate .mainpane .panel + .panel, .annotate .mainpane .panel + div { margin-top: 12px; }
+.grid-claims { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; margin-top: 12px; }
+.claims { max-height: 70vh; overflow: auto; }
+.claimtext { font-size: 15px; margin: 4px 0 6px; }
+.anncards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin: 8px 0; }
+.anncard { border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--soft); }
+.anncard h4 { margin: 0 0 4px; }
+.anncard ul { margin: 2px 0 4px 16px; padding: 0; }
+tr.differs td { background: var(--und-soft); }
+.review { background: var(--q-soft); }
+.verdict { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 6px; }
+@media (max-width: 900px) { .annotate, .grid-claims { grid-template-columns: 1fr; } }

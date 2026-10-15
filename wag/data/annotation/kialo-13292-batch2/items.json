@@ -1,0 +1,2826 @@
+{
+ "discussion": {
+  "id": "13292",
+  "title": "Should Governments Put A Tax On Meat?",
+  "thesis_claim_id": "13292.1",
+  "thesis": "Governments should put a tax on meat."
+ },
+ "note": "Active Kialo edges only. Items are ordered top-down (parents before children). in_pilot: annotated in the first pilot (do not consult it). Impact votes: counts per level 0-4; they prioritise review, they are not evidence.",
+ "items": [
+  {
+   "kialo_claim_id": "13292.1",
+   "in_pilot": true,
+   "depth": 0,
+   "text": "Governments should put a tax on meat.",
+   "kialo_parents": [],
+   "ancestors": [],
+   "siblings": [],
+   "children": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "impact_votes": null
+  },
+  {
+   "kialo_claim_id": "13292.13",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "Taxes on meat would not resolve the problems associated with its production and consumption.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "con",
+     "location_id": "13292.72"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.14",
+     "relation": "con",
+     "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\"
+    },
+    {
+     "claim_id": "13292.61",
+     "relation": "con",
+     "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.htm"
+    },
+    {
+     "claim_id": "13292.145",
+     "relation": "con",
+     "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats."
+    },
+    {
+     "claim_id": "13292.174",
+     "relation": "pro",
+     "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    },
+    {
+     "claim_id": "13292.104",
+     "relation": "pro",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so th"
+    }
+   ],
+   "impact_votes": [
+    1,
+    1,
+    0,
+    0,
+    2
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.7",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "con",
+     "location_id": "13292.67"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.25",
+     "relation": "con",
+     "text": "The additional burden could be as small as changing one's food consumption pattern."
+    },
+    {
+     "claim_id": "13292.33",
+     "relation": "con",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.36",
+     "relation": "pro",
+     "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security."
+    },
+    {
+     "claim_id": "13292.127",
+     "relation": "pro",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    }
+   ],
+   "impact_votes": [
+    2,
+    1,
+    2,
+    3,
+    2
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.9",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "con",
+     "location_id": "13292.69"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.43",
+     "relation": "con",
+     "text": "Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare."
+    },
+    {
+     "claim_id": "13292.12",
+     "relation": "pro",
+     "text": "Adding a tax on meat would make the prices of imported meat cheaper [due to dumping and predatory pricing](https://www.investopedia.com/articles/economics/09/free-market-dumping.asp) pushing out domes"
+    }
+   ],
+   "impact_votes": [
+    2,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.108",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "Meat production and consumption are bad for the environment.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "pro",
+     "location_id": "13292.107"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals curren"
+    },
+    {
+     "claim_id": "13292.6",
+     "relation": "pro",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.135",
+     "relation": "con",
+     "text": "Meat produces significantly less environmental harm than other sources of pollution."
+    },
+    {
+     "claim_id": "13292.137",
+     "relation": "con",
+     "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%2"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.115",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "A tax on meat would combat unhealthy meat consumption.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "pro",
+     "location_id": "13292.114"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.8",
+     "relation": "pro",
+     "text": "North American citizens consume [more meat](https://www.elementascience.org/articles/10.12952/journal.elementa.000116/) than dietary guidelines recommend."
+    },
+    {
+     "claim_id": "13292.121",
+     "relation": "con",
+     "text": "Taxing meat could also result in an unhealthy underconsumption of meat."
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.118",
+   "in_pilot": true,
+   "depth": 1,
+   "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.1",
+     "relation": "pro",
+     "location_id": "13292.117"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.11",
+     "relation": "pro",
+     "text": "The price of meat does not reflect its true cost due to [subsidies](https://www.perc.org/2011/02/14/big-meat-and-big-government/)."
+    },
+    {
+     "claim_id": "13292.169",
+     "relation": "con",
+     "text": "Taxing meat would be an ineffective means to achieve this objective."
+    },
+    {
+     "claim_id": "13292.218",
+     "relation": "pro",
+     "text": "It would factor in [externalities](https://en.wikipedia.org/wiki/Externality) – such as costs to society due to climate change caused from its greenhouse gas emissions or its water pollution and infec"
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.25",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "The additional burden could be as small as changing one's food consumption pattern.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "location_id": "13292.75"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.33",
+     "relation": "con",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.36",
+     "relation": "pro",
+     "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security."
+    },
+    {
+     "claim_id": "13292.127",
+     "relation": "pro",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    1,
+    0,
+    2,
+    2
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.33",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.7",
+     "relation": "con",
+     "location_id": "13292.80"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.25",
+     "relation": "con",
+     "text": "The additional burden could be as small as changing one's food consumption pattern."
+    },
+    {
+     "claim_id": "13292.36",
+     "relation": "pro",
+     "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security."
+    },
+    {
+     "claim_id": "13292.127",
+     "relation": "pro",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.56",
+     "relation": "pro",
+     "text": "Such a tax would negatively affect the protein intake of millions of people and open the market to [the inevitable push by governments](https://www.mindbodygreen.com/articles/bug-protein-sustainabilit"
+    }
+   ],
+   "impact_votes": [
+    0,
+    1,
+    1,
+    1,
+    2
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.180",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia directly because of this.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.7",
+     "relation": "pro",
+     "location_id": "13292.179"
+    },
+    {
+     "claim_id": "13292.121",
+     "relation": "pro",
+     "location_id": "13292.227"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.25",
+     "relation": "con",
+     "text": "The additional burden could be as small as changing one's food consumption pattern."
+    },
+    {
+     "claim_id": "13292.33",
+     "relation": "con",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.36",
+     "relation": "pro",
+     "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security."
+    },
+    {
+     "claim_id": "13292.127",
+     "relation": "pro",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.182",
+     "relation": "con",
+     "text": "Individuals could merely just purchase iron supplements."
+    },
+    {
+     "claim_id": "13292.198",
+     "relation": "con",
+     "text": "They can be substituted [with iron-rich plant foods](https://www.medicalnewstoday.com/articles/323902). Various beans and lentils contain lots of iron and are healthy."
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    1,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.36",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.7",
+     "relation": "pro",
+     "location_id": "13292.40"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.25",
+     "relation": "con",
+     "text": "The additional burden could be as small as changing one's food consumption pattern."
+    },
+    {
+     "claim_id": "13292.33",
+     "relation": "con",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.127",
+     "relation": "pro",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.24",
+     "relation": "con",
+     "text": "Governments can give tax credits or food stamps to those who cannot afford food because of the taxes."
+    }
+   ],
+   "impact_votes": [
+    0,
+    1,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.127",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.7",
+     "relation": "pro",
+     "location_id": "13292.126"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.25",
+     "relation": "con",
+     "text": "The additional burden could be as small as changing one's food consumption pattern."
+    },
+    {
+     "claim_id": "13292.33",
+     "relation": "con",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.36",
+     "relation": "pro",
+     "text": "In poor communities, people need the easiest access to all types of food. Taxes would add costs to food production and decrease the country's food security."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.202",
+     "relation": "con",
+     "text": "There can be exceptions and/or indiscriminate meat taxes could be implemented only in non-third-world countries."
+    },
+    {
+     "claim_id": "13292.204",
+     "relation": "con",
+     "text": "In places and regions where people would starve due to higher food costs, meat is not consumed often or at all – meat is mostly unaffordable to those people. Diets there are e.g. composed, mainly or o"
+    },
+    {
+     "claim_id": "13292.206",
+     "relation": "pro",
+     "text": "In some low-income countries, nutritious plant-based foods [are not available or affordable year-round according to one review](https://www.annualreviews.org/doi/10.1146/annurev-resource-111820-032340"
+    }
+   ],
+   "impact_votes": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.14",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "location_id": "13292.34"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.61",
+     "relation": "con",
+     "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.htm"
+    },
+    {
+     "claim_id": "13292.145",
+     "relation": "con",
+     "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats."
+    },
+    {
+     "claim_id": "13292.174",
+     "relation": "pro",
+     "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    },
+    {
+     "claim_id": "13292.104",
+     "relation": "pro",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so th"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.61",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.html?utm_term=.278c1ec80729) significantly reduced its consumption.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "location_id": "13292.98"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.14",
+     "relation": "con",
+     "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\"
+    },
+    {
+     "claim_id": "13292.145",
+     "relation": "con",
+     "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats."
+    },
+    {
+     "claim_id": "13292.174",
+     "relation": "pro",
+     "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    },
+    {
+     "claim_id": "13292.104",
+     "relation": "pro",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so th"
+    }
+   ],
+   "children": [],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.145",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.13",
+     "relation": "con",
+     "location_id": "13292.144"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "con",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.14",
+     "relation": "con",
+     "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\"
+    },
+    {
+     "claim_id": "13292.61",
+     "relation": "con",
+     "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.htm"
+    },
+    {
+     "claim_id": "13292.174",
+     "relation": "pro",
+     "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    },
+    {
+     "claim_id": "13292.104",
+     "relation": "pro",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so th"
+    }
+   ],
+   "children": [],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.174",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.13",
+     "relation": "pro",
+     "location_id": "13292.173"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "pro",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.14",
+     "relation": "con",
+     "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\"
+    },
+    {
+     "claim_id": "13292.61",
+     "relation": "con",
+     "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.htm"
+    },
+    {
+     "claim_id": "13292.145",
+     "relation": "con",
+     "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats."
+    },
+    {
+     "claim_id": "13292.104",
+     "relation": "pro",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so th"
+    }
+   ],
+   "children": [],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.104",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so the appropriate solution is to regulate this industry rather than penalize those who wish to consume meat.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.13",
+     "relation": "pro",
+     "location_id": "13292.175"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "pro",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.14",
+     "relation": "con",
+     "text": "[Tariffs decrease consumption of goods](https://www.investopedia.com/articles/economics/08/tariff-trade-barrier-basics.asp), which would help decrease consumption of meats \\(due to their higher price\\"
+    },
+    {
+     "claim_id": "13292.61",
+     "relation": "con",
+     "text": "A [tax for tobacco](https://www.washingtonpost.com/national/health-science/cigarette-taxes-are-the-best-way-to-cut-smoking-scaring-big-tobacco/2017/10/21/fbf51d04-9f05-11e7-8ea1-ed975285475e_story.htm"
+    },
+    {
+     "claim_id": "13292.145",
+     "relation": "con",
+     "text": "Governments should put a tax on meat and use some of those tax revenues to encourage research into developing synthetic meats."
+    },
+    {
+     "claim_id": "13292.174",
+     "relation": "pro",
+     "text": "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.208",
+     "relation": "con",
+     "text": "Non-cultured meat production [is inherently problematic](https://en.wikipedia.org/wiki/Environmental_impacts_of_animal_agriculture) with the contemporary human population size; even when neglecting et"
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.169",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "Taxing meat would be an ineffective means to achieve this objective.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.118",
+     "relation": "con",
+     "location_id": "13292.168"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.118",
+     "relation_of_child": "con",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.11",
+     "relation": "pro",
+     "text": "The price of meat does not reflect its true cost due to [subsidies](https://www.perc.org/2011/02/14/big-meat-and-big-government/)."
+    },
+    {
+     "claim_id": "13292.218",
+     "relation": "pro",
+     "text": "It would factor in [externalities](https://en.wikipedia.org/wiki/Externality) – such as costs to society due to climate change caused from its greenhouse gas emissions or its water pollution and infec"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.171",
+     "relation": "pro",
+     "text": "Meat eaters likely outnumber meat farmers, and hence it would be easier to remove subsidies than to tax meat since the latter would directly affect more voters."
+    }
+   ],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.218",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "It would factor in [externalities](https://en.wikipedia.org/wiki/Externality) – such as costs to society due to climate change caused from its greenhouse gas emissions or its water pollution and infectious disease risks and so on.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "location_id": "13292.217"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.118",
+     "relation_of_child": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.11",
+     "relation": "pro",
+     "text": "The price of meat does not reflect its true cost due to [subsidies](https://www.perc.org/2011/02/14/big-meat-and-big-government/)."
+    },
+    {
+     "claim_id": "13292.169",
+     "relation": "con",
+     "text": "Taxing meat would be an ineffective means to achieve this objective."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.224",
+     "relation": "pro",
+     "text": "[A 2020 scientific analysis](https://www.nature.com/articles/s41467-020-19474-6) of external costs of foods using life-cycle assessment and meta-analytical approaches found that external greenhouse ga"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.11",
+   "in_pilot": true,
+   "depth": 2,
+   "text": "The price of meat does not reflect its true cost due to [subsidies](https://www.perc.org/2011/02/14/big-meat-and-big-government/).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.118",
+     "relation": "pro",
+     "location_id": "13292.119"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.118",
+     "relation_of_child": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.169",
+     "relation": "con",
+     "text": "Taxing meat would be an ineffective means to achieve this objective."
+    },
+    {
+     "claim_id": "13292.218",
+     "relation": "pro",
+     "text": "It would factor in [externalities](https://en.wikipedia.org/wiki/Externality) – such as costs to society due to climate change caused from its greenhouse gas emissions or its water pollution and infec"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.123",
+     "relation": "con",
+     "text": "To both tax and subsidise a good is an incoherent policy; instead, distortions caused by subsidies should be removed by abolishing those subsidies \\(or at least exempting meat from them\\)."
+    },
+    {
+     "claim_id": "13292.167",
+     "relation": "pro",
+     "text": "Subsidies reduce the cost of meat production, which reduces the pressure on meat prices."
+    }
+   ],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.43",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.9",
+     "relation": "con",
+     "location_id": "13292.85"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.9",
+     "relation_of_child": "con",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.12",
+     "relation": "pro",
+     "text": "Adding a tax on meat would make the prices of imported meat cheaper [due to dumping and predatory pricing](https://www.investopedia.com/articles/economics/09/free-market-dumping.asp) pushing out domes"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.121",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Taxing meat could also result in an unhealthy underconsumption of meat.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.115",
+     "relation": "con",
+     "location_id": "13292.120"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "con",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.8",
+     "relation": "pro",
+     "text": "North American citizens consume [more meat](https://www.elementascience.org/articles/10.12952/journal.elementa.000116/) than dietary guidelines recommend."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.139",
+     "relation": "pro",
+     "text": "Taxing meat would cause people to eat less meat, which might impact their required protein intake."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    },
+    {
+     "claim_id": "13292.233",
+     "relation": "con",
+     "text": "Meta-analyses and reviews of studies and trials have shown again and again that meat reduction and vegetarianism results not in a decrease of health, but in [better health, lower mortality and longer "
+    },
+    {
+     "claim_id": "13292.235",
+     "relation": "con",
+     "text": "Instead of simplistic strategies and projections in which only meat is taxed, there can and likely would also be ancillary and planned targeted accompanying measures to prevent that."
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.135",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Meat produces significantly less environmental harm than other sources of pollution.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.108",
+     "relation": "con",
+     "location_id": "13292.134"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "con",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals curren"
+    },
+    {
+     "claim_id": "13292.6",
+     "relation": "pro",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.137",
+     "relation": "con",
+     "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%2"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.157",
+     "relation": "pro",
+     "text": "Fossil fuels are responsible for over 75% of climate change."
+    },
+    {
+     "claim_id": "13292.159",
+     "relation": "con",
+     "text": "While meat might not contribute significantly to climate change as a whole, it is the largest contributor in agriculture."
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.137",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%20antibiotics.)",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.108",
+     "relation": "con",
+     "location_id": "13292.136"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "con",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals curren"
+    },
+    {
+     "claim_id": "13292.6",
+     "relation": "pro",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.135",
+     "relation": "con",
+     "text": "Meat produces significantly less environmental harm than other sources of pollution."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.17",
+     "relation": "pro",
+     "text": "Meat as a whole food from pasture systems is carbon neutral or negative. It is just about the [most sustainable](https://holisticmanagement.org/feature-story/diet-best-planet/) food source we have."
+    },
+    {
+     "claim_id": "13292.161",
+     "relation": "con",
+     "text": "With how urgent the environmental crisis is, it would be better to reduce meat consumption in addition to making it more environmentally friendly."
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.2",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "location_id": "13292.111"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals curren"
+    },
+    {
+     "claim_id": "13292.6",
+     "relation": "pro",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.135",
+     "relation": "con",
+     "text": "Meat produces significantly less environmental harm than other sources of pollution."
+    },
+    {
+     "claim_id": "13292.137",
+     "relation": "con",
+     "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%2"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.46",
+     "relation": "pro",
+     "text": "The tax should be linked directly to the environmental impact. For example, [beef production](https://www.huffingtonpost.co.uk/entry/beef-environmental-impact_n_5599370?guccounter=1) releases five tim"
+    },
+    {
+     "claim_id": "13292.141",
+     "relation": "pro",
+     "text": "The energy consumed in producing meat, starting from birthing and feeding animals to slaughter and processing, far exceeds the energy needed to grow an equivalent amount of nutrients gained from veget"
+    },
+    {
+     "claim_id": "13292.147",
+     "relation": "con",
+     "text": "Rationing meat via [personal carbon budgets/allowances \\(credits\\)](https://en.wikipedia.org/wiki/Personal_carbon_trading#Research_and_development) where everybody in a country can consume a small amo"
+    },
+    {
+     "claim_id": "13292.190",
+     "relation": "con",
+     "text": "Most of these sources of greenhouse gasses comes from [beef production](https://theconversation.com/food-production-generates-more-than-a-third-of-manmade-greenhouse-gas-emissions-a-new-framework-tell"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.6",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "location_id": "13292.110"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals curren"
+    },
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.135",
+     "relation": "con",
+     "text": "Meat produces significantly less environmental harm than other sources of pollution."
+    },
+    {
+     "claim_id": "13292.137",
+     "relation": "con",
+     "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%2"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.192",
+     "relation": "con",
+     "text": "Deforestation may still occur for crop production, and declining demand of meat would require increasing crop production to balance supply and demand."
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.12",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Adding a tax on meat would make the prices of imported meat cheaper [due to dumping and predatory pricing](https://www.investopedia.com/articles/economics/09/free-market-dumping.asp) pushing out domestic industries from the market.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.9",
+     "relation": "pro",
+     "location_id": "13292.113"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.9",
+     "relation_of_child": "pro",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.43",
+     "relation": "con",
+     "text": "Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.45",
+     "relation": "con",
+     "text": "In which case, importation standards have to be maintained at a higher level; this is manageable."
+    },
+    {
+     "claim_id": "13292.131",
+     "relation": "pro",
+     "text": "This would be detrimental, as foreign production conditions may not be as high or well-regulated."
+    },
+    {
+     "claim_id": "13292.194",
+     "relation": "con",
+     "text": "Measures such as [eco-tariffs](https://en.wikipedia.org/wiki/Eco-tariff) and import-related policy can solve this issue. Imported meat would need to verifiably meet environmental and animal welfare st"
+    }
+   ],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.4",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals currently being raised for food.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.108",
+     "relation": "pro",
+     "location_id": "13292.109"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.6",
+     "relation": "pro",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.135",
+     "relation": "con",
+     "text": "Meat produces significantly less environmental harm than other sources of pollution."
+    },
+    {
+     "claim_id": "13292.137",
+     "relation": "con",
+     "text": "Meat can be produced in an [environmentally friendly manner.](https://www.ecoandbeyond.co/articles/sustainable-meat/#:~:text=Meat%20produced%20by%20farms%20which,of%20chemicals%2C%20pesticides%20and%2"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.30",
+     "relation": "pro",
+     "text": "Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., [carbon tax](https://www.carbontax.org/where-carbon-is-taxed/), [oil tax](http://www.ey.com/gl/en/services/tax/global-o"
+    },
+    {
+     "claim_id": "13292.5",
+     "relation": "con",
+     "text": "Regenerative agriculture produces both meat and [environmental benefits](http://www.worldwatch.org/regenerative-animal-farming) but would be deterred by a meat tax."
+    }
+   ],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.8",
+   "in_pilot": false,
+   "depth": 2,
+   "text": "North American citizens consume [more meat](https://www.elementascience.org/articles/10.12952/journal.elementa.000116/) than dietary guidelines recommend.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.115",
+     "relation": "pro",
+     "location_id": "13292.116"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.121",
+     "relation": "con",
+     "text": "Taxing meat could also result in an unhealthy underconsumption of meat."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.3",
+     "relation": "pro",
+     "text": "Curbing meat consumption would [reduce health care costs](https://www.theatlantic.com/business/archive/2016/03/the-economic-case-for-worldwide-vegetarianism/475524/)."
+    },
+    {
+     "claim_id": "13292.29",
+     "relation": "con",
+     "text": "Eating meat is a personal choice. Individuals are at liberty to do as they wish, and the state should have nothing to do with it."
+    }
+   ],
+   "impact_votes": []
+  },
+  {
+   "kialo_claim_id": "13292.46",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "The tax should be linked directly to the environmental impact. For example, [beef production](https://www.huffingtonpost.co.uk/entry/beef-environmental-impact_n_5599370?guccounter=1) releases five times the amount of greenhouse gas emissions, requires 28 times more land, 11 times more water, and six times as much reactive nitrogen as the average of the other categories of meat. Beef should have a higher tax than wild game such as venison.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "location_id": "13292.47"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.2",
+     "relation_of_child": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.141",
+     "relation": "pro",
+     "text": "The energy consumed in producing meat, starting from birthing and feeding animals to slaughter and processing, far exceeds the energy needed to grow an equivalent amount of nutrients gained from veget"
+    },
+    {
+     "claim_id": "13292.147",
+     "relation": "con",
+     "text": "Rationing meat via [personal carbon budgets/allowances \\(credits\\)](https://en.wikipedia.org/wiki/Personal_carbon_trading#Research_and_development) where everybody in a country can consume a small amo"
+    },
+    {
+     "claim_id": "13292.190",
+     "relation": "con",
+     "text": "Most of these sources of greenhouse gasses comes from [beef production](https://theconversation.com/food-production-generates-more-than-a-third-of-manmade-greenhouse-gas-emissions-a-new-framework-tell"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.220",
+     "relation": "pro",
+     "text": "The amount of globally needed agricultural land would be reduced [by almost half](https://ourworldindata.org/land-use-diets) if no beef or mutton would be eaten."
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    3
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.192",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Deforestation may still occur for crop production, and declining demand of meat would require increasing crop production to balance supply and demand.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.6",
+     "relation": "con",
+     "location_id": "13292.191"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.6",
+     "relation_of_child": "con",
+     "text": "Reduced demand for meat would slow or reverse the process of [deforestation](https://www.worldwildlife.org/threats/deforestation)."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [],
+   "children": [
+    {
+     "claim_id": "13292.200",
+     "relation": "con",
+     "text": "The claim only argued it would \"slow or reverse the process\". That is most likely since [roughly half of cereal crops are grown for animal feeds](https://ourworldindata.org/grapher/cereal-distribution"
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.3",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Curbing meat consumption would [reduce health care costs](https://www.theatlantic.com/business/archive/2016/03/the-economic-case-for-worldwide-vegetarianism/475524/).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.8",
+     "relation": "pro",
+     "location_id": "13292.15"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.8",
+     "relation_of_child": "pro",
+     "text": "North American citizens consume [more meat](https://www.elementascience.org/articles/10.12952/journal.elementa.000116/) than dietary guidelines recommend."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.29",
+     "relation": "con",
+     "text": "Eating meat is a personal choice. Individuals are at liberty to do as they wish, and the state should have nothing to do with it."
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.30",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., [carbon tax](https://www.carbontax.org/where-carbon-is-taxed/), [oil tax](http://www.ey.com/gl/en/services/tax/global-oil-and-gas-tax-guide---country-list) etc.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.4",
+     "relation": "pro",
+     "location_id": "13292.77"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.4",
+     "relation_of_child": "pro",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals currently being raised for food."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.5",
+     "relation": "con",
+     "text": "Regenerative agriculture produces both meat and [environmental benefits](http://www.worldwatch.org/regenerative-animal-farming) but would be deterred by a meat tax."
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.141",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "The energy consumed in producing meat, starting from birthing and feeding animals to slaughter and processing, far exceeds the energy needed to grow an equivalent amount of nutrients gained from vegetarian or vegan sources.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.2",
+     "relation": "pro",
+     "location_id": "13292.140"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.2",
+     "relation_of_child": "pro",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.46",
+     "relation": "pro",
+     "text": "The tax should be linked directly to the environmental impact. For example, [beef production](https://www.huffingtonpost.co.uk/entry/beef-environmental-impact_n_5599370?guccounter=1) releases five tim"
+    },
+    {
+     "claim_id": "13292.147",
+     "relation": "con",
+     "text": "Rationing meat via [personal carbon budgets/allowances \\(credits\\)](https://en.wikipedia.org/wiki/Personal_carbon_trading#Research_and_development) where everybody in a country can consume a small amo"
+    },
+    {
+     "claim_id": "13292.190",
+     "relation": "con",
+     "text": "Most of these sources of greenhouse gasses comes from [beef production](https://theconversation.com/food-production-generates-more-than-a-third-of-manmade-greenhouse-gas-emissions-a-new-framework-tell"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.147",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Rationing meat via [personal carbon budgets/allowances \\(credits\\)](https://en.wikipedia.org/wiki/Personal_carbon_trading#Research_and_development) where everybody in a country can consume a small amount of meat but larger amounts cost extra and very large amounts are not allowed or extremely expensive, would help reduce carbon emissions.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.2",
+     "relation": "con",
+     "location_id": "13292.146"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.2",
+     "relation_of_child": "con",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.46",
+     "relation": "pro",
+     "text": "The tax should be linked directly to the environmental impact. For example, [beef production](https://www.huffingtonpost.co.uk/entry/beef-environmental-impact_n_5599370?guccounter=1) releases five tim"
+    },
+    {
+     "claim_id": "13292.141",
+     "relation": "pro",
+     "text": "The energy consumed in producing meat, starting from birthing and feeding animals to slaughter and processing, far exceeds the energy needed to grow an equivalent amount of nutrients gained from veget"
+    },
+    {
+     "claim_id": "13292.190",
+     "relation": "con",
+     "text": "Most of these sources of greenhouse gasses comes from [beef production](https://theconversation.com/food-production-generates-more-than-a-third-of-manmade-greenhouse-gas-emissions-a-new-framework-tell"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.149",
+     "relation": "con",
+     "text": "This could be more difficult to implement than a plain meat tax since it would require systems to be set up to evaluate each product or category, which would likely cost more than it would bring in."
+    },
+    {
+     "claim_id": "13292.151",
+     "relation": "pro",
+     "text": "Unlike a meat tax, this would allow poor people and people with low incomes to consume meat sometimes without such being very expensive while nevertheless limiting their meat intake and gradually redu"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.182",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Individuals could merely just purchase iron supplements.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.180",
+     "relation": "con",
+     "location_id": "13292.181"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.180",
+     "relation_of_child": "con",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia directly because of this."
+    },
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.198",
+     "relation": "con",
+     "text": "They can be substituted [with iron-rich plant foods](https://www.medicalnewstoday.com/articles/323902). Various beans and lentils contain lots of iron and are healthy."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.184",
+     "relation": "con",
+     "text": "The usage of supplements is not always the best method to [replace sources of vitamins and minerals in a diet due to bioavailability](https://english.elpais.com/science-tech/2023-11-26/the-limits-of-n"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.190",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Most of these sources of greenhouse gasses comes from [beef production](https://theconversation.com/food-production-generates-more-than-a-third-of-manmade-greenhouse-gas-emissions-a-new-framework-tells-us-how-much-comes-from-crops-countries-and-regions-167623); other sources of meat, such as pork, poultry, and mutton produce significantly less of these gasses, so it may be beneficial to merely tax the largest culprits rather than all sources.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.2",
+     "relation": "con",
+     "location_id": "13292.189"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.2",
+     "relation_of_child": "con",
+     "text": "Meat production creates significant [greenhouse gas emissions](https://www.skepticalscience.com/how-much-meat-contribute-to-gw.html) which contribute to climate change."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.46",
+     "relation": "pro",
+     "text": "The tax should be linked directly to the environmental impact. For example, [beef production](https://www.huffingtonpost.co.uk/entry/beef-environmental-impact_n_5599370?guccounter=1) releases five tim"
+    },
+    {
+     "claim_id": "13292.141",
+     "relation": "pro",
+     "text": "The energy consumed in producing meat, starting from birthing and feeding animals to slaughter and processing, far exceeds the energy needed to grow an equivalent amount of nutrients gained from veget"
+    },
+    {
+     "claim_id": "13292.147",
+     "relation": "con",
+     "text": "Rationing meat via [personal carbon budgets/allowances \\(credits\\)](https://en.wikipedia.org/wiki/Personal_carbon_trading#Research_and_development) where everybody in a country can consume a small amo"
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.196",
+     "relation": "con",
+     "text": "These meats still have other issues regarding animal welfare and pollution."
+    },
+    {
+     "claim_id": "13292.216",
+     "relation": "con",
+     "text": "Mutton [has the 2nd highest greenhouse gas footprint](https://www.bbc.com/future/article/20221214-what-is-the-lowest-carbon-protein) after beef, so it is not much better, if at all."
+    }
+   ],
+   "impact_votes": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.194",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Measures such as [eco-tariffs](https://en.wikipedia.org/wiki/Eco-tariff) and import-related policy can solve this issue. Imported meat would need to verifiably meet environmental and animal welfare standards and/or needs to pass a sufficiently high tax barrier.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.12",
+     "relation": "con",
+     "location_id": "13292.193"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.12",
+     "relation_of_child": "con",
+     "text": "Adding a tax on meat would make the prices of imported meat cheaper [due to dumping and predatory pricing](https://www.investopedia.com/articles/economics/09/free-market-dumping.asp) pushing out domestic industries from the market."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation_of_child": "pro",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.45",
+     "relation": "con",
+     "text": "In which case, importation standards have to be maintained at a higher level; this is manageable."
+    },
+    {
+     "claim_id": "13292.131",
+     "relation": "pro",
+     "text": "This would be detrimental, as foreign production conditions may not be as high or well-regulated."
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.198",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "They can be substituted [with iron-rich plant foods](https://www.medicalnewstoday.com/articles/323902). Various beans and lentils contain lots of iron and are healthy.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.180",
+     "relation": "con",
+     "location_id": "13292.197"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.180",
+     "relation_of_child": "con",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia directly because of this."
+    },
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.182",
+     "relation": "con",
+     "text": "Individuals could merely just purchase iron supplements."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.210",
+     "relation": "pro",
+     "text": "They are well suited to replace meats, partly due to their consistency. For example, red lentils with a chopped carrot can be used in place of sauce bolognese \\(or meat substitutes\\) or white beans \\("
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.202",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "There can be exceptions and/or indiscriminate meat taxes could be implemented only in non-third-world countries.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.127",
+     "relation": "con",
+     "location_id": "13292.201"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.127",
+     "relation_of_child": "con",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.204",
+     "relation": "con",
+     "text": "In places and regions where people would starve due to higher food costs, meat is not consumed often or at all – meat is mostly unaffordable to those people. Diets there are e.g. composed, mainly or o"
+    },
+    {
+     "claim_id": "13292.206",
+     "relation": "pro",
+     "text": "In some low-income countries, nutritious plant-based foods [are not available or affordable year-round according to one review](https://www.annualreviews.org/doi/10.1146/annurev-resource-111820-032340"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.204",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "In places and regions where people would starve due to higher food costs, meat is not consumed often or at all – meat is mostly unaffordable to those people. Diets there are e.g. composed, mainly or often only, of [maize, flour, or rice](https://ourworldindata.org/diet-affordability)(Let’s start with the most basic requirement: getting enough calories. These calories could come in any form, but the cheapest option in most countries is starchy foods and cereals. Living on this ‘energy sufficient’ diet would mean eating only maize flour or rice for every meal, a diet that is severely lacking all other important nutrients. When you look at people’s diets you see that in poor countries, people get most of their calories from starchy foods.).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.127",
+     "relation": "con",
+     "location_id": "13292.203"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.127",
+     "relation_of_child": "con",
+     "text": "Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption."
+    },
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "pro",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.202",
+     "relation": "con",
+     "text": "There can be exceptions and/or indiscriminate meat taxes could be implemented only in non-third-world countries."
+    },
+    {
+     "claim_id": "13292.206",
+     "relation": "pro",
+     "text": "In some low-income countries, nutritious plant-based foods [are not available or affordable year-round according to one review](https://www.annualreviews.org/doi/10.1146/annurev-resource-111820-032340"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.208",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Non-cultured meat production [is inherently problematic](https://en.wikipedia.org/wiki/Environmental_impacts_of_animal_agriculture) with the contemporary human population size; even when neglecting ethical animal welfare issues, it is just the magnitude of the problem that slightly–moderately varies.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.104",
+     "relation": "con",
+     "location_id": "13292.207"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.104",
+     "relation_of_child": "con",
+     "text": "Meat is not inherently problematic. What is problematic is the [animal farming industry](https://www.theguardian.com/commentisfree/2018/aug/25/veganism-intensively-farmed-meat-dairy-soya-maize), so the appropriate solution is to regulate this industry rather than penalize those who wish to consume meat."
+    },
+    {
+     "claim_id": "13292.13",
+     "relation_of_child": "pro",
+     "text": "Taxes on meat would not resolve the problems associated with its production and consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.224",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "[A 2020 scientific analysis](https://www.nature.com/articles/s41467-020-19474-6) of external costs of foods using life-cycle assessment and meta-analytical approaches found that external greenhouse gas costs are typically highest for animal-based products. Based on the results, it concluded there is an \"urgency for policy measures that close the gap between current market prices and the true costs of food\".",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.218",
+     "relation": "pro",
+     "location_id": "13292.223"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.218",
+     "relation_of_child": "pro",
+     "text": "It would factor in [externalities](https://en.wikipedia.org/wiki/Externality) – such as costs to society due to climate change caused from its greenhouse gas emissions or its water pollution and infectious disease risks and so on."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation_of_child": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.233",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Meta-analyses and reviews of studies and trials have shown again and again that meat reduction and vegetarianism results not in a decrease of health, but in [better health, lower mortality and longer lifespans](https://en.wikipedia.org/wiki/Environmental_impacts_of_animal_agriculture#Meat_reduction_and_health), especially when high intakes [of red meat](https://www.sciencedirect.com/science/article/pii/S0963996920303665) [and/or processed meats](https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-021-01922-9) are reduced.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.121",
+     "relation": "con",
+     "location_id": "13292.232"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.121",
+     "relation_of_child": "con",
+     "text": "Taxing meat could also result in an unhealthy underconsumption of meat."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "con",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.139",
+     "relation": "pro",
+     "text": "Taxing meat would cause people to eat less meat, which might impact their required protein intake."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    },
+    {
+     "claim_id": "13292.235",
+     "relation": "con",
+     "text": "Instead of simplistic strategies and projections in which only meat is taxed, there can and likely would also be ancillary and planned targeted accompanying measures to prevent that."
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.235",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Instead of simplistic strategies and projections in which only meat is taxed, there can and likely would also be ancillary and planned targeted accompanying measures to prevent that.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.121",
+     "relation": "con",
+     "location_id": "13292.234"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.121",
+     "relation_of_child": "con",
+     "text": "Taxing meat could also result in an unhealthy underconsumption of meat."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "con",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.139",
+     "relation": "pro",
+     "text": "Taxing meat would cause people to eat less meat, which might impact their required protein intake."
+    },
+    {
+     "claim_id": "13292.180",
+     "relation": "pro",
+     "text": "Meat is the [easiest source of organic iron](https://health.clevelandclinic.org/how-to-add-more-iron-to-your-diet/) for one's diet. Any financial restrictions will only increase cases for anemia direc"
+    },
+    {
+     "claim_id": "13292.233",
+     "relation": "con",
+     "text": "Meta-analyses and reviews of studies and trials have shown again and again that meat reduction and vegetarianism results not in a decrease of health, but in [better health, lower mortality and longer "
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.241",
+     "relation": "pro",
+     "text": "These could be health literacy regarding [supplementation and optimal alternatives](https://en.wikipedia.org/wiki/Environmental_impacts_of_animal_agriculture#Meat_reduction_and_health) to gain suffici"
+    }
+   ],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.29",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Eating meat is a personal choice. Individuals are at liberty to do as they wish, and the state should have nothing to do with it.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.8",
+     "relation": "con",
+     "location_id": "13292.76"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.8",
+     "relation_of_child": "con",
+     "text": "North American citizens consume [more meat](https://www.elementascience.org/articles/10.12952/journal.elementa.000116/) than dietary guidelines recommend."
+    },
+    {
+     "claim_id": "13292.115",
+     "relation_of_child": "pro",
+     "text": "A tax on meat would combat unhealthy meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.3",
+     "relation": "pro",
+     "text": "Curbing meat consumption would [reduce health care costs](https://www.theatlantic.com/business/archive/2016/03/the-economic-case-for-worldwide-vegetarianism/475524/)."
+    }
+   ],
+   "children": [
+    {
+     "claim_id": "13292.55",
+     "relation": "con",
+     "text": "This only matters until a majority of society believes that the consequence of use outweighs the personal choice benefit. Many countries tax tobacco and alcohol more than other consumer products due t"
+    }
+   ],
+   "impact_votes": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.45",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "In which case, importation standards have to be maintained at a higher level; this is manageable.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.12",
+     "relation": "con",
+     "location_id": "13292.87"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.12",
+     "relation_of_child": "con",
+     "text": "Adding a tax on meat would make the prices of imported meat cheaper [due to dumping and predatory pricing](https://www.investopedia.com/articles/economics/09/free-market-dumping.asp) pushing out domestic industries from the market."
+    },
+    {
+     "claim_id": "13292.9",
+     "relation_of_child": "pro",
+     "text": "A tax on meat could actually reduce tax revenues by harming the trillion-dollar meat industry, which pays substantial taxes."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.131",
+     "relation": "pro",
+     "text": "This would be detrimental, as foreign production conditions may not be as high or well-regulated."
+    },
+    {
+     "claim_id": "13292.194",
+     "relation": "con",
+     "text": "Measures such as [eco-tariffs](https://en.wikipedia.org/wiki/Eco-tariff) and import-related policy can solve this issue. Imported meat would need to verifiably meet environmental and animal welfare st"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.5",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Regenerative agriculture produces both meat and [environmental benefits](http://www.worldwatch.org/regenerative-animal-farming) but would be deterred by a meat tax.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.4",
+     "relation": "con",
+     "location_id": "13292.50"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.4",
+     "relation_of_child": "con",
+     "text": "Global soil health is being [devastated by grain and soy monocultures](https://www.theguardian.com/commentisfree/2017/may/16/meat-eaters-soil-degradation-over-grazing) used to feed most animals currently being raised for food."
+    },
+    {
+     "claim_id": "13292.108",
+     "relation_of_child": "pro",
+     "text": "Meat production and consumption are bad for the environment."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.30",
+     "relation": "pro",
+     "text": "Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., [carbon tax](https://www.carbontax.org/where-carbon-is-taxed/), [oil tax](http://www.ey.com/gl/en/services/tax/global-o"
+    }
+   ],
+   "children": [],
+   "impact_votes": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.56",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "Such a tax would negatively affect the protein intake of millions of people and open the market to [the inevitable push by governments](https://www.mindbodygreen.com/articles/bug-protein-sustainability) to incentivize the consumption of insects as a protein alternative.",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.33",
+     "relation": "pro",
+     "location_id": "13292.129"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.33",
+     "relation_of_child": "pro",
+     "text": "Other sources of protein are currently cheaper than meat, providing alternatives to this added burden."
+    },
+    {
+     "claim_id": "13292.7",
+     "relation_of_child": "con",
+     "text": "A [sin tax](https://www.investopedia.com/terms/s/sin_tax.asp) on meat would make food more expensive, despite many people not being able to afford it."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "con",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [],
+   "children": [
+    {
+     "claim_id": "13292.58",
+     "relation": "con",
+     "text": "[Insects](https://naakbar.com/blogs/articles/why-you-should-eat-insect-cricket-versus-beef) are a protein source that takes up much less resources \\(and water and feed\\) to produce than the meat we tr"
+    },
+    {
+     "claim_id": "13292.186",
+     "relation": "con",
+     "text": "This would take an extensive amount of time, as bug cultivation does not have enough established infrastructure to viably support the population of a US state, let alone a country or several others."
+    },
+    {
+     "claim_id": "13292.226",
+     "relation": "con",
+     "text": "There are many far more appropriate and accepted types of novel and established protein sources other than insects. [These include](https://en.wikipedia.org/wiki/Environmental_impacts_of_animal_agricu"
+    },
+    {
+     "claim_id": "13292.239",
+     "relation": "con",
+     "text": "Insects as protein could be useful for animal feeds \\(some pets and livestock\\)."
+    }
+   ],
+   "impact_votes": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "kialo_claim_id": "13292.123",
+   "in_pilot": false,
+   "depth": 3,
+   "text": "To both tax and subsidise a good is an incoherent policy; instead, distortions caused by subsidies should be removed by abolishing those subsidies \\(or at least exempting meat from them\\).",
+   "kialo_parents": [
+    {
+     "claim_id": "13292.11",
+     "relation": "con",
+     "location_id": "13292.122"
+    }
+   ],
+   "ancestors": [
+    {
+     "claim_id": "13292.11",
+     "relation_of_child": "con",
+     "text": "The price of meat does not reflect its true cost due to [subsidies](https://www.perc.org/2011/02/14/big-meat-and-big-government/)."
+    },
+    {
+     "claim_id": "13292.118",
+     "relation_of_child": "pro",
+     "text": "Taxing meat would raise the consumer price to reflect the real costs of meat consumption."
+    },
+    {
+     "claim_id": "13292.1",
+     "relation_of_child": "pro",
+     "text": "Governments should put a tax on meat."
+    }
+   ],
+   "siblings": [
+    {
+     "claim_id": "13292.167",
+     "relation": "pro",
+     "text": "Subsidies reduce the cost of meat production, which reduces the pressure on meat prices."
+    }
+   ],
+   "children": [],
+   "impact_votes": []
+  }
+ ]
+}

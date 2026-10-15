@@ -1,4 +1,4 @@
-# Language models in WAG: providers, profiles, traces, datasets
+# Language models in WAG: the dashboard, providers, traces, annotation
 
 WAG's seats can be played by a language model through its API: Gemini, Claude, OpenAI, DeepSeek, or a model served locally (LM Studio, llama.cpp, SGLang, vLLM, Ollama). Another harness, such as Guidance or DSPy, plugs in as an external command.
 
@@ -6,7 +6,49 @@ Every seat gets the same prompt (`docs/protocol.md`), and the game's own parser 
 
 The code is in `wag/internal/llm`, an interface with one adapter per provider. The game does not import any provider's types.
 
-## Quick start with Gemini
+## The dashboard: the easy way, on Windows too
+
+Everything below can be done in the browser, with no command line and no environment variables.
+
+1. **Start WAG.**
+   - On Windows, double-click `wag/run-wag-server.bat` (it needs Go), or `wag-server.exe`.
+   - Anywhere else: `go run ./cmd/wag-server` in `wag/`.
+
+   The browser opens at http://127.0.0.1:8080.
+2. **Connect a model, in the Models tab.**
+   1. Choose the service (Google Gemini, Anthropic Claude, OpenAI, DeepSeek, a local server, …).
+   2. Paste your API key. Tick *Remember on this computer* if it should survive a restart.
+   3. Click *Find models*, search, and pick one.
+   4. *Test it*, then *Add player*.
+3. **Play.** In *Play → New game*, every player is a seat: against you, a rule bot, or another model.
+4. **Annotate.** In the *Annotate* tab:
+   1. Choose a dataset: the built-in Kialo batch (50 claims, with a gold annotation), a captured Kialo discussion (*New dataset from a Kialo discussion*), or your own folder.
+   2. Tick one or more annotators, and optionally a reviewer.
+   3. Create the run. Then either:
+      - *Annotate the next claim*, to look at each claim as it comes;
+      - or *Annotate all the rest*, which runs in the server, so you can close the page.
+   4. *Review the disagreements* has the reviewer compare the annotations, field by field.
+   5. Open a claim: the annotations side by side, the fields they differ on, the problems the check finds. Give your verdict. The reviewer and the gold stay hidden until you choose to see them.
+   6. The agreement table compares the annotators with each other, with the gold, and with the reviewer.
+
+**Keys.**
+- A key typed in the dashboard goes to the WAG server on your computer and stays there: in memory until it stops, or in `keys.json` in your data folder if you tick *Remember*. That file is not encrypted; *Forget it* deletes it.
+- The dashboard never shows a key again (only its last four characters). No game, trace, run or player file contains it.
+- The model and annotation pages answer only requests from this computer.
+
+**Where everything goes: your data folder.** It is `WAG` in your home folder (for example `C:\Users\you\WAG`), unless you start the server with `--store DIR`. The dashboard shows it, with an *Open folder* button.
+
+| In the data folder | What |
+|---|---|
+| `players.json` | The players you added (service, model, settings; no keys). |
+| `keys.json` | The keys you asked to remember (only then). |
+| `games/DATE_gameN/` | Every game with a model seat, saved after each move: `trace.jsonl` (the trace file, below) and `export.json` (loads in the browser). The game bar's *Saved ✓* opens it. |
+| `annotation/RUN/` | One folder per annotation run; its `README.txt` says what each file is. `run.json` holds the settings, the models and the inputs' hashes. `annotations/NAME.json` holds each annotator's annotations, in the guidelines' format, which `validate.py` and `agreement.py` read. `calls.jsonl` holds every call. `review/model-NAME.json` holds the reviewer's decisions, `review/human.json` your verdicts, and `report.json` validation and agreement. |
+| `datasets/NAME/` | Your datasets: `items.json` (claims in the batch-2 format), and optionally `guidelines.md`, `gold.json`, `lexicon.json`. |
+
+The command line below (`wag-llm`) does the same, writing to the folders you give it.
+
+## The command line: quick start with Gemini
 
 1. **Make a key.** Create an API key in Google AI Studio.
 2. **Put the key in your shell's environment, nowhere else.** Never in a file of the repository, a profile, a command-line flag or a chat.

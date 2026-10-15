@@ -23,6 +23,10 @@ type Profile struct {
 	// (the provider's usual one if empty). The key itself is never written
 	// in a profile.
 	APIKeyEnv string `json:"api_key_env,omitempty"`
+	// APIKey is a key given another way than the environment (typed in the
+	// dashboard). It is never written out: not to a profiles file, a trace,
+	// an export or a run's record (json:"-").
+	APIKey string `json:"-"`
 	// Command runs the "command" provider: the program and its arguments.
 	Command []string `json:"command,omitempty"`
 	// System replaces the seat's system prompt (to try other wordings).
@@ -171,9 +175,12 @@ func (p *Profile) KeyEnv() []string {
 	return nil
 }
 
-// key returns the profile's key from the environment, and the variable it
-// came from.
+// key returns the profile's key (APIKey, else from the environment), and
+// the variable it came from ("" for APIKey).
 func (p *Profile) key() (string, string) {
+	if k := strings.TrimSpace(p.APIKey); k != "" {
+		return k, ""
+	}
 	for _, v := range p.KeyEnv() {
 		if k := strings.TrimSpace(os.Getenv(v)); k != "" {
 			return k, v
@@ -327,4 +334,18 @@ func ParseSpec(spec string) (Profile, error) {
 		}
 	}
 	return p, p.Check()
+}
+
+// DefaultBaseURL is the endpoint a provider uses when a profile gives none
+// ("" for the SDK providers, which know their own).
+func DefaultBaseURL(provider string) string { return endpoints[provider].BaseURL }
+
+// NeedsKey reports whether the provider needs an API key (local servers do
+// not; the "anthropic" provider can also use an `ant auth login` profile).
+func NeedsKey(provider string) bool {
+	switch provider {
+	case "gemini", "anthropic":
+		return true
+	}
+	return endpoints[provider].NeedsKey
 }

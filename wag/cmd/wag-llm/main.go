@@ -9,7 +9,7 @@
 //	wag-llm play --model SPEC… --pro SEAT --con SEAT --out DIR [options]
 //	wag-llm replay TRACE.jsonl [--data DIR]
 //	wag-llm report DIR
-//	wag-llm annotate --model SPEC --out DIR [--items items.json] [--limit N]
+//	wag-llm annotate --model SPEC… [--reviewer NAME] --out DIR [--dataset ID|DIR] [--limit N]
 //
 // A SPEC is a model profile on the command line,
 // [NAME=]PROVIDER:MODEL[,option=value…], for example
@@ -26,8 +26,9 @@
 // a line of summary.jsonl. replay plays a trace file again with the
 // recorded answers, and says whether the game sent the same requests and
 // made the same decisions. report sums up summary.jsonl by model and side.
-// annotate has a model annotate the Kialo claims of docs/kialo-batch2 under
-// its guidelines (run it from the wag directory, or give the paths).
+// annotate has models annotate a dataset's claims (the built-in Kialo batch,
+// or a folder), and a reviewer model review their disagreements; the run's
+// folder holds everything. The dashboard does the same (wag-server, Annotate).
 package main
 
 import (
@@ -74,7 +75,7 @@ func main() {
 	case "report":
 		err = report(os.Args[2:])
 	case "annotate":
-		err = annotate(ctx, os.Args[2:])
+		err = annotateCmd(ctx, os.Args[2:])
 	default:
 		usage()
 	}

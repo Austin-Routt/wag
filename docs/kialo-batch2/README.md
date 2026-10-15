@@ -56,14 +56,22 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 Played with Other is therefore not one thing. It covers coverage gaps, fragments and failures, and only the failures count against the scheme–question links.
 
-## Annotating with a model
+## Annotating with models
 
-`wag-llm annotate` (`docs/llm.md`) has any model annotate these claims under these guidelines, one claim per call, top-down. It writes `annotator-NAME.json` in the annotators' format, every call in `calls.jsonl`, and the hashes of everything the model saw in `run.json`. Run it from the `wag` directory:
+The dashboard's *Annotate* tab (`docs/llm.md`) has models annotate these claims under these guidelines, one claim per call, top-down, several models in parallel. A reviewer model compares their annotations, and you give your verdicts, claim by claim. The dataset is built into WAG (`wag/data/annotation/kialo-13292-batch2`, a copy of this folder, kept equal by a test).
+
+Each run is a folder in your data folder (`annotation/RUN/`). Its `annotations/NAME.json` files are in the annotators' format, so the scripts here read them:
 
 ```sh
-./wag-llm annotate --model gemini:gemini-2.5-flash,output=json,min_interval=12s --out runs/annotate-flash
-python3 -I ../docs/kialo-batch2/validate.py runs/annotate-flash/annotator-gemini_gemini-2.5-flash.json
-python3 -I ../docs/kialo-batch2/agreement.py runs/annotate-flash/annotator-gemini_gemini-2.5-flash.json ../docs/kialo-batch2/gold.json
+python3 -I validate.py ~/WAG/annotation/RUN/annotations/NAME.json
+python3 -I agreement.py ~/WAG/annotation/RUN/annotations/NAME.json gold.json
 ```
 
-Each call sends the guidelines, `walton.yml`, the lexicon and the game's NASCQ files: about 130,000 characters (35,000–40,000 tokens). Use `--context` to send less, and `--limit` to try a few claims first. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).
+The dashboard computes the same agreement figures itself; `report.json` has them, and the Go code reproduces `agreement.py`'s on the two annotators here. The command line does the same as the dashboard:
+
+```sh
+./wag-llm annotate --model a=gemini:gemini-2.5-flash,output=json,min_interval=12s --model b=lmstudio:qwen3-8b,output=json \
+    --reviewer a --limit 5 --out runs/batch2-try
+```
+
+Each call sends the guidelines, `walton.yml`, the lexicon and the game's NASCQ files: about 130,000 characters (35,000–40,000 tokens). On a free tier, start with a few claims. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).

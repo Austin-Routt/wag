@@ -48,7 +48,7 @@ func (p *Profile) Notice() string {
 	case "gemini":
 		return "On the Gemini API's unpaid (free) tier, Google may use the prompts and answers to improve its products, " +
 			"and people may review them (Gemini API Additional Terms): send only public, non-confidential material. " +
-			"Free-tier rate limits are low: set min_interval (e.g. 6s for 10 requests a minute)."
+			"Free-tier rate limits are low: space the calls (Seconds between calls in the dashboard, min_interval in a profile; 7 s stays under about 8 requests a minute)."
 	case "command":
 		return "The command provider runs " + strings.Join(p.Command, " ") + " for every call."
 	}

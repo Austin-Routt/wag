@@ -1,6 +1,7 @@
 package kialo
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/yourorg/wag/data"
@@ -95,5 +96,45 @@ func TestWeight(t *testing.T) {
 		if got := Weight(c.votes); got != c.want {
 			t.Errorf("Weight(%v) = %v, want %v", c.votes, got, c.want)
 		}
+	}
+}
+
+// A discussion as an annotation dataset: top-down, with each claim's
+// context, in the format of docs/kialo-batch2/items.json.
+func TestItems(t *testing.T) {
+	d, _ := Parse([]byte(sample))
+	b, n, err := d.Items(0, 0)
+	if err != nil || n != 4 {
+		t.Fatalf("%v %d", err, n)
+	}
+	var f struct {
+		Discussion map[string]string `json:"discussion"`
+		Items      []struct {
+			ID        string `json:"kialo_claim_id"`
+			Depth     int    `json:"depth"`
+			Parents   []map[string]string
+			Ancestors []map[string]string `json:"ancestors"`
+			Siblings  []map[string]string `json:"siblings"`
+			Children  []map[string]string `json:"children"`
+		} `json:"items"`
+	}
+	if err := json.Unmarshal(b, &f); err != nil {
+		t.Fatal(err)
+	}
+	if f.Discussion["thesis_claim_id"] != "1.1" || f.Items[0].ID != "1.1" || f.Items[3].ID != "1.4" || f.Items[3].Depth != 2 {
+		t.Fatalf("%s", b)
+	}
+	d4 := f.Items[3]
+	if len(d4.Ancestors) != 2 || d4.Ancestors[0]["claim_id"] != "1.3" || d4.Ancestors[0]["relation_of_child"] != "con" || d4.Ancestors[1]["claim_id"] != "1.1" {
+		t.Fatalf("ancestors %v", d4.Ancestors)
+	}
+	if len(f.Items[1].Siblings) != 1 || f.Items[1].Siblings[0]["claim_id"] != "1.3" || len(f.Items[0].Children) != 2 {
+		t.Fatalf("siblings %v children %v", f.Items[1].Siblings, f.Items[0].Children)
+	}
+	if _, n, _ := d.Items(1, 0); n != 3 {
+		t.Fatalf("depth 1: %d claims", n)
+	}
+	if _, n, _ := d.Items(0, 2); n != 2 {
+		t.Fatalf("limit 2: %d claims", n)
 	}
 }

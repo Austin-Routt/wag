@@ -34,6 +34,12 @@ go run ./cmd/wag-server --claude                         # also offer Claude sea
 go run ./cmd/wag-server --model gemini:gemini-2.5-flash,min_interval=7s   # a Gemini seat (GEMINI_API_KEY)
 ```
 
+The **Models** tab connects a model service with a key typed in the browser,
+finds a model and adds it as a player (a seat in any game); the **Annotate**
+tab has players annotate Kialo claims, a reviewer compare them, and you give
+your verdicts. Everything is saved in your data folder (`~/WAG`, or
+`--store DIR`): `../docs/llm.md`, "The dashboard".
+
 Building from source needs Go 1.24 or later (the Anthropic and Google SDKs require it).
 A seat can be a person, a language model through the text protocol
 (`../docs/protocol.md`: copy the prompt into any chatbot, paste the reply

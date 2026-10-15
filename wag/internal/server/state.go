@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -51,6 +52,10 @@ type State struct {
 	Thinking bool `json:"thinking,omitempty"`
 	// Notes are the testers' remarks on the game.
 	Notes []Note `json:"notes"`
+	// SavedTo is the folder the game is saved in (games with a model seat,
+	// on a server with a data folder).
+	SavedTo  string `json:"saved_to,omitempty"`
+	SavedRel string `json:"saved_rel,omitempty"` // the same, relative to the data folder
 	// SeatKind is the kind of the seat to move (human, llm, random, greedy, model, claude).
 	SeatKind string `json:"seat_kind,omitempty"`
 }
@@ -518,6 +523,10 @@ func (s *Session) buildState() *State {
 	st.Notes = append([]Note{}, s.Notes...)
 	if i := gs.ActivePlayerIdx; i >= 0 && i < len(s.Seats) {
 		st.SeatKind = s.Seats[i].Kind
+	}
+	st.SavedTo = s.SavedTo
+	if s.SavedTo != "" {
+		st.SavedRel = "games/" + filepath.Base(s.SavedTo)
 	}
 	return st
 }

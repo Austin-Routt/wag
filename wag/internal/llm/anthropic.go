@@ -23,7 +23,7 @@ func newAnthropic(p Profile) (*Anthropic, error) {
 	// The SDK retries on its own by default; WAG retries (Client), so that
 	// every attempt is traced.
 	opts := []option.RequestOption{option.WithMaxRetries(0)}
-	if p.APIKeyEnv != "" { // else the SDK's own: ANTHROPIC_API_KEY, or an `ant auth login` profile
+	if p.APIKey != "" || p.APIKeyEnv != "" { // else the SDK's own: ANTHROPIC_API_KEY, or an `ant auth login` profile
 		key, _ := p.key()
 		if key == "" {
 			return nil, &Error{Provider: "anthropic", Kind: KindAuth, Message: "no API key: set " + p.APIKeyEnv + " in the environment"}

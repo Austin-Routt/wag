@@ -1,0 +1,9 @@
+{
+ "id": "kialo-13292-batch2",
+ "name": "Kialo 13292 — Should governments put a tax on meat? (batch 2, 50 claims)",
+ "description": "The 50 claims of docs/kialo-batch2, with their Kialo context, the version 3 guidelines, the shared vocabulary, and the adjudicated annotation (gold.json) to score against. The adjudicator was a language model; no person has reviewed it yet.",
+ "items": "items.json",
+ "guidelines": "guidelines.md",
+ "gold": "gold.json",
+ "resources": ["../walton.yml", "lexicon.json"]
+}

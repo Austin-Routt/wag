@@ -4,7 +4,7 @@
 // their own copies, and they had drifted apart).
 package data
 
-import _ "embed"
+import "embed"
 
 // CoreYAML is the Carneades-4 scheme file (schemes/core.yml).
 //
@@ -31,3 +31,12 @@ var EdgesJSON []byte
 //
 //go:embed contexts.json
 var ContextsJSON []byte
+
+// Annotation holds the annotation datasets the dashboard and wag-llm offer
+// (annotation/<id>/dataset.json, its items, guidelines, gold) and the
+// scheme collection annotators are given (annotation/walton.yml). They are
+// copies of docs/kialo-batch2 and docs/scheme-registry/walton-clean/walton.yml;
+// a test keeps them equal.
+//
+//go:embed annotation
+var Annotation embed.FS

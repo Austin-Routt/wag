@@ -197,6 +197,15 @@ Each is a change of scheme content. I propose; you decide.
    - conclusion `would_occur(E2)`.
 
    This is for policies not yet enacted; `cause_to_effect` stays for observed causes. It would cover 13 secondary instances in the gold set.
+
+   *Added 2026-10-15, after your principle that Walton's text and the Walton–Carneades collection are the standard.* The collection already has causal schemes:
+   - `cause_to_effect` (the book's 28), `correlation_to_cause` (29) and `sign` (30);
+   - the abductive schemes (31);
+   - the slippery-slope schemes, whose steps are `causes(E1,E2)` (49, 51, 52).
+
+   The book's scheme 28 is already modal. Its minor premise has A that "occurs (might occur)", and its conclusion has B that "will (might) occur". The collection's formula keeps only the first reading: `has_occurred(E1)`, `causes(E1,E2)` ⇒ `will_occur(E2)`. So N8 is not a new scheme. It is the book's scheme 28, formalized with the "might" the collection dropped.
+
+   The book's CQ1 (how strong is the causal generalization) and CQ2 (the evidence for it) are questions about `causes(E1,E2)`. Only CQ3 (interference) has a formula in the collection.
 3. **Two bridge schemes, for the six failures.**
    - `bad_side_effect`: `brings_about(A,G)`, `bad(G)`, `not_the_goal(G,A)` ⇒ `side_effects(A,S)`.
    - `better_means`: `brings_about(A2,G)`, `better_means(A2,A,G)` ⇒ `realize_more_effectively(G,A)`.
@@ -210,7 +219,7 @@ Each is a change of scheme content. I propose; you decide.
 1. **A model as a third annotator, now.**
    ```sh
    ./wag-llm annotate --model gemini:gemini-2.5-flash,output=json,min_interval=12s --out runs/annotate-flash
-   python3 -I ../docs/kialo-batch2/agreement.py runs/annotate-flash/annotator-gemini_gemini-2.5-flash.json ../docs/kialo-batch2/gold.json
+   python3 -I ../docs/kialo-batch2/agreement.py runs/annotate-flash/annotations/gemini_gemini-2.5-flash.json ../docs/kialo-batch2/gold.json
    ```
    - Every call is traced, and `run.json` records the hash of everything the model saw.
    - Field-by-field agreement with gold shows where the guidelines are clear. Disagreements are where a person should look first.
