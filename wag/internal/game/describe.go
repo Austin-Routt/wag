@@ -248,9 +248,9 @@ func shorten(s string, n int) string {
 }
 
 // freeText returns the text of a free-text statement (of the user-defined
-// scheme, or imported), whose ID is a hash of its text; "" for others.
+// scheme, or an imported claim); "" for others.
 func (gs *GameState) freeText(id string) string {
-	if !strings.HasPrefix(id, "text_") && !strings.HasPrefix(id, "stmt_") {
+	if !carneades.IsTextID(id) {
 		return ""
 	}
 	if s := gs.Adapter.Graph.Statements[id]; s != nil {

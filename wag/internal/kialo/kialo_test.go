@@ -2,6 +2,7 @@ package kialo
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/yourorg/wag/data"
@@ -67,7 +68,7 @@ func TestImport(t *testing.T) {
 	if thesis.Label != caes.In || gs.Say(gs.Claim) != "We should do it." {
 		t.Fatalf("thesis %q is %v", gs.Say(gs.Claim), thesis.Label)
 	}
-	if l := ad.Graph.Statements[ad.FreeStatementID("It is expensive.")].Label; l != caes.Out {
+	if l := ad.Graph.Statements[ClaimStatementID("1.3")].Label; l != caes.Out {
 		t.Fatalf("the defeated con is %v", l)
 	}
 	if errs := gs.CheckInvariants(); len(errs) > 0 {
@@ -82,7 +83,7 @@ func TestImport(t *testing.T) {
 	}
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"}) // Pro
 	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "question", AnswersCQID: nascq.CQPremiseAcceptable, TargetArgID: pro,
-		TargetPremiseID: ad.FreeStatementID("It helps people.")})
+		TargetPremiseID: ClaimStatementID("1.2")})
 	if !r.Accepted {
 		t.Fatalf("question on an imported argument: %+v", r)
 	}
@@ -136,5 +137,66 @@ func TestItems(t *testing.T) {
 	}
 	if _, n, _ := d.Items(0, 2); n != 2 {
 		t.Fatalf("limit 2: %d claims", n)
+	}
+}
+
+// Two claims with the same text are two claims. Here 2.2 and 2.4 both say
+// "It is cheap.": 2.2 is a pro of the thesis, 2.3 a con of 2.2, and 2.4 a
+// pro of 2.3. Merged by their text, 2.4 would support the con of itself: a
+// loop, and the import refused. Keyed by claim, it is an ordinary game.
+const sameText = `{
+ "id": "2", "displayTitle": "Same words", "thesis_claim_id": "2.1",
+ "claims": {
+  "2.1": {"id": "2.1", "text": "We should do it."},
+  "2.2": {"id": "2.2", "text": "It is cheap."},
+  "2.3": {"id": "2.3", "text": "Cheap things break."},
+  "2.4": {"id": "2.4", "text": "it is  cheap"},
+  "2.5": {"id": "2.5", "text": "It is cheap."}
+ },
+ "edges": [
+  {"location_id": "2.11", "from_claim_id": "2.1", "to_claim_id": "2.2", "relation": "support", "active": true},
+  {"location_id": "2.12", "from_claim_id": "2.2", "to_claim_id": "2.3", "relation": "attack", "active": true},
+  {"location_id": "2.13", "from_claim_id": "2.3", "to_claim_id": "2.4", "relation": "support", "active": true},
+  {"location_id": "2.14", "from_claim_id": "2.1", "to_claim_id": "2.5", "relation": "attack", "active": true}
+ ]
+}`
+
+func TestSameTextClaimsStayApart(t *testing.T) {
+	build := func(keys string) (*Report, error) {
+		d, err := Parse([]byte(sameText))
+		if err != nil {
+			t.Fatal(err)
+		}
+		rels, rep := d.Plan(0)
+		if keys != "" {
+			rep.Keys = keys
+		}
+		ad, _ := carneades.NewAdapterFromYAML(data.CoreYAML)
+		n, _ := nascq.LoadFromBytes(data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+		gs, err := Build(d, rels, rep, Config(), ad, n)
+		if err != nil {
+			return rep, err
+		}
+		for _, id := range []string{"2.2", "2.4", "2.5"} {
+			if s := ad.Graph.Statements[ClaimStatementID(id)]; s == nil || s.Metadata["claim"] != id {
+				t.Fatalf("no statement for claim %s", id)
+			}
+		}
+		if got := gs.Say(ClaimStatementID("2.4")); got != "It is  cheap." { // its own text, not its ID
+			t.Fatalf("2.4 reads %q", got)
+		}
+		if errs := gs.CheckInvariants(); len(errs) > 0 {
+			t.Fatal(errs)
+		}
+		return rep, nil
+	}
+	rep, err := build("")
+	if err != nil || rep.Arguments != 4 || rep.Keys != KeysByClaim {
+		t.Fatalf("keyed by claim: %v, %+v", err, rep)
+	}
+	// An export from before the fix is rebuilt as it was played: merged by
+	// text, which here closes a loop.
+	if _, err := build(KeysByText); err == nil || !strings.Contains(err.Error(), "cycle") {
+		t.Fatalf("keyed by text: %v", err)
 	}
 }

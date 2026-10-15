@@ -20,7 +20,7 @@ central claim, solo belief revision) are combinations of a few settings.
 | `internal/nascq` | NASCQ loading, move validation (S0–S9, Q1), action enumeration (answers to critical questions, and arguments for or against any statement), data lint. |
 | `internal/registry` | Scheme patterns and families: finds schemes that repeat a pattern under another name, and close relatives no family declares (`docs/scheme-registry/README.md`). |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
-| `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments. |
+| `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments, one statement per claim (keyed by claim ID, so two claims with the same words stay apart). |
 | `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`), model seats (`llm.go`) and their traces (`traces.go`). |
 | `internal/llm` | The provider-neutral interface to language models: Gemini (Google's GenAI SDK), Claude (Anthropic's SDK), OpenAI-compatible endpoints (OpenAI, DeepSeek, LM Studio, llama.cpp, SGLang, vLLM, Ollama), an external command, a mock; profiles, retries, rate spacing, replay (`../docs/llm.md`). |
 | `cmd/wag-cli` | Command-line game, data lint, the table of every scheme–question link (`--edges`), and tournaments. |
@@ -66,6 +66,7 @@ go run ./cmd/wag-cli --lint                            # check the data; exit 1 
 go run ./cmd/wag-cli --data ./data --lint              # check data files on disk (no rebuild)
 go run ./cmd/wag-cli --registry data/schemes/core.yml --families data/schemes/families.json  # one pattern, one name
 go run ./cmd/wag-cli --games 50 --p1 greedy --p2 random  # tournament statistics
+go run ./cmd/wag-cli --kialo-check <visualizer>/data   # import every captured Kialo discussion; report claims that share a text
 go run ./cmd/wag-cli --modes                           # list the game modes
 go run ./cmd/wag-cli --mode debate --p2 human          # debate a claim against a friend
 go run ./cmd/wag-cli --mode cq --p1 greedy --p2 random # critical-question duel

@@ -25,29 +25,35 @@ func Config() game.GameConfig {
 	return c
 }
 
-// Build makes the game: one Other argument per relation, owned by the side
-// its claim argues for, with Weight from its impact votes, its premise (the
-// claim) presumed, and the thesis as the debate's claim, at issue. Players
+// Build makes the game: one statement per claim, keyed by its claim ID
+// (rep.Keys); one Other argument per relation, owned by the side its claim
+// argues for, with Weight from its impact votes, its premise (the claim)
+// presumed; and the thesis as the debate's claim, at issue. Players
 // continue from there. The imported arguments are not moves: nobody scored
 // them.
 func Build(d *Discussion, rels []Relation, rep *Report, cfg game.GameConfig, ad *carneades.Adapter, n *nascq.NASCQ) (*game.GameState, error) {
 	gs := game.NewGame(cfg, ad, n, []string{ProPlayer, ConPlayer})
-	thesis := ad.AddFreeStatement(d.Claims[d.ThesisClaimID].Text)
-	stmt := map[string]string{d.ThesisClaimID: thesis}
+	stmt := map[string]string{}
 	statementOf := func(claimID string) string {
 		if id, ok := stmt[claimID]; ok {
 			return id
 		}
-		id := ad.AddFreeStatement(d.Claims[claimID].Text)
+		var id string
+		if rep.Keys == KeysByText {
+			id = ad.AddFreeStatement(d.Claims[claimID].Text)
+		} else {
+			id = ad.AddClaimStatement(claimID, d.Claims[claimID].Text)
+		}
 		stmt[claimID] = id
 		return id
 	}
+	thesis := statementOf(d.ThesisClaimID)
 	owner := map[string]string{"pro": ProPlayer, "con": ConPlayer}
 	for _, r := range rels {
 		parent := statementOf(r.From)
 		child := statementOf(r.To)
 		if parent == child {
-			continue // the same text pro or con itself
+			continue // KeysByText: the same text pro or con itself
 		}
 		ids, err := ad.AddFreeArgumentOn(owner[r.Side], []string{child}, parent, r.Relation == "attack", r.Weight)
 		if err != nil {

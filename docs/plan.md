@@ -1,6 +1,6 @@
 # The plan: one verified scheme catalogue, then annotation on it
 
-Status: proposed on 2026-10-15, not started. The owner decides the open questions in §7 before work begins. Why this plan, from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md). Where the project stands: [`README.md`](../README.md).
+Status: proposed on 2026-10-15, not started. The owner decides the open questions in §7 before work begins. Why this plan, from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md). What Walton's dialogue types and Walton and Macagno's classification add to it: [`review-2026-10-15-part8.md`](review-2026-10-15-part8.md). Where the project stands: [`README.md`](../README.md).
 
 ## 1. Principles
 
@@ -38,6 +38,9 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | contrasts: "this, not X, when …", for each close relative | the registry's families and signatures, new text | drafted, then verified |
 | examples: two or three short claims coded in full (Kialo claims with their ids where possible), and one near miss | new | drafted, then verified |
 | discrepancies between book and `walton.yml`, and the decision | the audit, `links.json` partial links | drafted, then decided |
+| place in Walton and Macagno's classification: source-dependent or not; practical or epistemic; discovering a rule or applying one | Walton & Macagno 2015 (part 8 §1.7) | drafted, then verified |
+| "specialises": the scheme this one is a domain version of, if any | new | drafted, then verified |
+| proper in: the dialogue types where the scheme is a legitimate move (a threat is, in a negotiation, and is not, in a persuasion) | the book, Walton's pragmatic theory of fallacy | drafted, then verified |
 | status and history of each field | | |
 
 ### Where the sources stand today
@@ -78,6 +81,8 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
    A model drafts every field; a person verifies them against the book.
 3. **Tier 2: the rest,** in the order the data asks for them: the schemes that annotators propose as near misses, and the "other" candidates.
 
+**The index's top level is Walton and Macagno's tree.** Our families sit under it, and the few schemes it leaves out (some linguistic ones) are placed by hand. **`defeasible_modus_ponens`** is in tier 1 as the general form "other" falls back to (§3). **A derived scheme must pass Hansen's definition:** a pattern of sentential forms with variables, at least one schematic constant, and a conclusion.
+
 **Effort.**
 - **Drafting:** a few working sessions with a model.
 - **Verification:** about 20–30 minutes a scheme for a person with the book. That is 8–12 hours for tier 1, and 35–55 hours for everything.
@@ -92,12 +97,20 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 ### The guidelines: one document, a procedure
 
 The current guidelines are version 2 with the version 3 changes appended as a list of edits. They allow two answers in places and contradict each other in one. Version 4 is one document, in the order an annotator decides:
+0. **Once per discussion, by a person:**
+   - the main dialogue type (a Kialo discussion is a public debate: persuasion addressed to readers);
+   - the thesis's kind: practical, factual, evaluative or classificatory.
 1. **Does the claim give a reason?** If not, what is it?
    - a thesis or proposal: record its conclusion form and scheme family;
    - a bare premise of another argument: a fragment of that argument;
    - a clarification, a question, a meta-comment.
 2. **What does it target?** The parent's conclusion, a premise, the inference, or another claim (re-parented).
-3. **Which family, then which scheme?** Use the catalogue's contrasts. Choose the primary instance by a stated rule.
+3. **Which family, then which scheme?** Walk Walton and Macagno's distinctions first:
+   - Does the argument rest on a source?
+   - If not, is it about what to do, or about what is so?
+   - If about what is so, does it find a rule or entity, or apply one to a case?
+
+   Then use the catalogue's contrasts. Choose the primary instance by a stated rule.
 4. **What does the text state, and what is supplied?** This decides the fit.
 5. **Role, polarity, critical question.** Which CQ comes from the catalogue, by its label.
 6. **Evidence.**
@@ -111,12 +124,18 @@ Each step has examples from the catalogue. Where two answers are equally right, 
   - *fragment*: a stated premise of another argument;
   - *not an argument*: a clarification, question or meta-comment.
 - **The thesis gets an explicit implied argument.** "The practical reasoning for the thesis" is a node that bare pros complete and that claims like 13292.13 can target. Nothing unstated is filled in.
-- **"Other" must justify itself.** It names the two or three closest catalogue schemes and why each fails, and proposes:
-  - a pattern with variables;
-  - a conclusion form;
-  - the critical questions the pattern would face.
+- **"Other" must justify itself.**
+  - It is coded as a defeasible modus ponens with its rule written out ("as a rule, if P then Q"). It then has two critical questions: what backs the rule, and is this case an exception.
+  - It names the two or three closest catalogue schemes and why each fails, and proposes:
+    - a pattern with variables;
+    - a conclusion form;
+    - the critical questions the pattern would face.
 
-  Proposals go to a candidates file. A candidate seen in at least three claims of at least two discussions goes to a person, who rejects it, merges it into an existing scheme, or adds it as a derived scheme.
+  Proposals go to a candidates file. A candidate seen in at least three claims of at least two discussions goes to a person, who decides one of four outcomes:
+  - reject it;
+  - merge it into an existing scheme;
+  - record it as a domain version of one;
+  - add it as a derived scheme.
 
 ### The prompt and the answer
 
@@ -166,6 +185,14 @@ Each step has examples from the catalogue. Where two answers are equally right, 
   - The game's 24 critical questions, already in our own words, are checked against the catalogue's.
 - **Derived schemes join the game** once they are verified, with their ask and backup edges linted like the rest.
 - **Model players use the same catalogue** for the schemes they may play.
+- **Dialogue types** (part 8 §1.5):
+  - **Make the type explicit.**
+    - Record it in game settings and exports; every current mode is persuasion.
+    - Split the context presets into dialogue type and domain. Today "Policy deliberation" and "Scientific inquiry" name types the game does not play.
+    - Flag schemes that are not proper in the game's type.
+  - **Then a deliberation mode:** an open question with several options as the positions of one issue; outcome: the options that stand.
+  - **Later:** an inquiry mode (cooperative, shared outcome), and commitment stores.
+- **"Other" in the game as a defeasible modus ponens,** so that its arguments can be asked for backing and exceptions.
 
 ## 7. Decisions the owner needs to make
 
@@ -183,3 +210,4 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 3. **Who verifies the catalogue,** and whether tier 1 above is the right first set.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
+6. **Dialogue types:** whether the game should go beyond persuasion, and in which order: deliberation first is the recommendation (part 8 §1.9).

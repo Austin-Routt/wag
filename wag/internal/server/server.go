@@ -1001,7 +1001,7 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
-	gs, rep, err := s.kialoGame(b, depth)
+	gs, rep, err := s.kialoGame(b, depth, kialo.KeysByClaim)
 	if err != nil {
 		httpError(w, err, http.StatusBadRequest)
 		return
@@ -1015,13 +1015,15 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 }
 
 // kialoGame builds the game of a Kialo discussion (graph.json), down to depth
-// (0: all of it).
-func (s *Server) kialoGame(b []byte, depth int) (*game.GameState, *kialo.Report, error) {
+// (0: all of it), with its claims keyed as keys says (kialo.KeysByClaim, or
+// KeysByText to replay a game imported that way).
+func (s *Server) kialoGame(b []byte, depth int, keys string) (*game.GameState, *kialo.Report, error) {
 	d, err := kialo.Parse(b)
 	if err != nil {
 		return nil, nil, err
 	}
 	rels, rep := d.Plan(depth)
+	rep.Keys = keys
 	ad, err := carneades.NewAdapterFromYAML(s.data.YAML)
 	if err != nil {
 		return nil, nil, err

@@ -19,6 +19,10 @@
 //	          (default: the data built into the binary)
 //	--lint    Check the data (see game.LintData), print the findings, and exit:
 //	          status 1 if there is an error
+//	--kialo-check DIR
+//	          Import every Kialo discussion of DIR (<id>/graph.json, as the Kialo
+//	          research visualizer captures them) and report, for each, the claims
+//	          that share a text and whether it imports; status 1 if one does not
 //	--games   Play N games between two AI players (random/greedy) and print the
 //	          statistics: wins by player and by seat, mean scores, the moves played,
 //	          why the games ended; --alternate swaps the seats every other game
@@ -86,6 +90,7 @@ func main() {
 	closeShare := flag.Float64("close", registry.CloseShare, "with --registry: the share of formulas in common from which two schemes with the same conclusion are reported as close")
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	alternate := flag.Bool("alternate", false, "with --games: swap the seats every other game, as colours alternate in chess")
+	kialoCheck := flag.String("kialo-check", "", "import every <id>/graph.json of this folder (Kialo research visualizer data) and report, for each discussion, the claims that share a text and whether it imports; status 1 if one does not")
 	flag.Parse()
 
 	if *registryFile != "" {
@@ -105,6 +110,9 @@ func main() {
 	}
 	if *lint {
 		os.Exit(runLint(files))
+	}
+	if *kialoCheck != "" {
+		os.Exit(runKialoCheck(files, *kialoCheck))
 	}
 	if *edges {
 		os.Exit(runEdges(files))

@@ -50,7 +50,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 | Browser dashboard (`wag-server`) | Prototype, used on Windows | **Play:** dialogue and board views. **Models:** type a key, find a model, add it as a player. **Annotate:** runs, model review, your verdicts. Everything is saved in a data folder (`~/WAG`). | A catalogue browser; causes for verdicts | [`docs/prototype.md`](docs/prototype.md), [`docs/llm.md`](docs/llm.md) |
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |
-| Kialo import | Working | A captured discussion becomes a game, or an annotation dataset | | [`wag/README.md`](wag/README.md) |
+| Kialo import | Working | A captured discussion becomes a game (one statement per claim, keyed by claim ID), or an annotation dataset; `wag-cli --kialo-check` imports a whole folder | | [`wag/README.md`](wag/README.md), [part 8 §2](docs/review-2026-10-15-part8.md#2-claims-merged-by-their-text) |
 | Scheme sources | Split | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | One verified catalogue; critical questions and examples for most schemes | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
@@ -78,13 +78,19 @@ In order of importance. Each issue links to the document that explains it.
    - `docs/book-catalogue/` transcribes the book's schemes and critical questions as printed.
    - WAG itself has no licence.
    - Both need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
-7. **Smaller known gaps.**
+7. **Every game is a persuasion dialogue, in Walton's terms.**
+   - Two context presets are named after types the game does not play: "Policy deliberation" and "Scientific inquiry".
+   - The points modes match no dialogue type.
+   - Deliberation, which policy theses call for, needs issues with several options.
+   - See [part 8 §1](docs/review-2026-10-15-part8.md#1-dialogue-types).
+8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
    - 3 book schemes have no `walton.yml` scheme, and 6 `walton.yml` schemes are not in the book.
    - 13 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
-**Fixed on 2026-10-15** (part 7 §1):
+**Fixed on 2026-10-15** (part 7 §1, part 8 §2):
+- the Kialo import kept apart claims with the same words: it had merged them into one statement, and refused the game when the merge closed a loop;
 - the Annotate page no longer jumps to the top while a run works;
 - the review works with one annotator;
 - a used-up daily quota stops a run with a plain message, instead of retrying;
@@ -102,7 +108,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 2. Annotation version 4 | Annotations that follow the catalogue | **Guidelines** as one decision procedure, with "none" split and the thesis given its conclusion form. **"Other"** with a structured proposal. **Prompts:** first candidates from an index, then the full entries. Formulas written by code; constrained JSON. | Code and guidelines; measured against version 3 |
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
-| 5. Back to the game | Play what the data shows | The NASCQ generated from the catalogue; derived schemes join once verified | Code |
+| 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. **Dialogue types:** the game's type made explicit, context presets split into type and domain, then a deliberation mode. | Code |
 
 **The next three actions:**
 1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book text, a licence, who verifies, paid model access.
@@ -128,6 +134,7 @@ cd wag
 go run ./cmd/wag-server            # the dashboard; --store DIR for another data folder
 go run ./cmd/wag-cli               # a game in the terminal
 go run ./cmd/wag-llm --help        # headless model games and annotation runs
+go run ./cmd/wag-cli --kialo-check DIR   # import every captured Kialo discussion in DIR; report problems
 go test ./...                      # all tests
 GOOS=windows GOARCH=amd64 go build ./cmd/wag-server   # the Windows executable
 ```
@@ -150,6 +157,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/review-2026-10-15-part7.md`](docs/review-2026-10-15-part7.md) | The first real model annotation run, reviewed; why "none"; what the model is given; whether the data is enough |
+| [`docs/review-2026-10-15-part8.md`](docs/review-2026-10-15-part8.md) | Walton's dialogue types, and what they mean for the game and the annotation; Walton and Macagno's classification; the Kialo claim-merge bug, fixed |
 
 **The game**
 
@@ -200,6 +208,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`part 5`](docs/review-2026-10-13-part5.md) | Six points: statements, protocol 2, the registry, the compendium, an audit of the pilot |
 | [`part 6`](docs/review-2026-10-15-part6.md) | A third-party audit reviewed, the model layer, the evidence for the schemes |
 | [`part 7`](docs/review-2026-10-15-part7.md) | The first real annotation run |
+| [`part 8`](docs/review-2026-10-15-part8.md) | Dialogue types (Aberdein 2020); Kialo claims keyed by ID |
 
 ## 7. Repository layout
 

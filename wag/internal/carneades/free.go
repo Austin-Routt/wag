@@ -32,9 +32,14 @@ func (a *Adapter) freeStatementID(text string) string {
 	if _, ok := a.Graph.Statements[t]; ok {
 		return t
 	}
-	norm := strings.TrimSuffix(strings.ToLower(strings.Join(strings.Fields(t), " ")), ".")
-	h := sha1.Sum([]byte(norm))
+	h := sha1.Sum([]byte(NormalText(t)))
 	return "text_" + hex.EncodeToString(h[:8])
+}
+
+// NormalText is text as free-text statements compare it: lowercased, its
+// spaces collapsed, a final period dropped.
+func NormalText(text string) string {
+	return strings.TrimSuffix(strings.ToLower(strings.Join(strings.Fields(text), " ")), ".")
 }
 
 // freeStatement returns the statement for a piece of free text, creating it
@@ -219,6 +224,44 @@ func (a *Adapter) AddFreeArgumentOn(owner string, premises []string, stmtID stri
 		}
 	}
 	return a.addFreeArgument(owner, premises, s, weight)
+}
+
+// ClaimPrefix starts the ID of an imported claim's statement (see
+// AddClaimStatement).
+const ClaimPrefix = "claim_"
+
+// ClaimStatementID is the ID of the statement of the imported claim with
+// the given ID (a Kialo claim ID such as "13292.7" gives "claim_13292_7").
+func ClaimStatementID(claimID string) string {
+	return ClaimPrefix + strings.Map(func(r rune) rune {
+		if r < 128 && (r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9') {
+			return r
+		}
+		return '_'
+	}, claimID)
+}
+
+// AddClaimStatement returns the ID of the statement of an imported claim,
+// creating it with the claim's text and the claim's ID in its metadata
+// (key "claim"). A claim is keyed by its ID, not by its words: two claims
+// that say the same thing in different places stay two statements, unlike
+// free text, which is one statement per wording (FreeStatementID).
+func (a *Adapter) AddClaimStatement(claimID, text string) string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	id := ClaimStatementID(claimID)
+	if _, ok := a.Graph.Statements[id]; !ok {
+		s := &caes.Statement{Id: id, Text: strings.TrimSpace(text), Metadata: caes.NewMetadata()}
+		s.Metadata["claim"] = claimID
+		a.Graph.Statements[id] = s
+	}
+	return id
+}
+
+// IsTextID reports whether a statement ID stands for text, not a formula:
+// free text, or an imported claim. Such a statement reads as its text.
+func IsTextID(id string) bool {
+	return strings.HasPrefix(id, "text_") || strings.HasPrefix(id, "stmt_") || strings.HasPrefix(id, ClaimPrefix)
 }
 
 // AddFreeStatement returns the ID of the statement for a piece of free text,

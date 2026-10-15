@@ -15,6 +15,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/yourorg/wag/internal/carneades"
 )
 
 // Discussion is the part of a captured Kialo discussion the import needs.
@@ -71,7 +73,7 @@ type Relation struct {
 // claim, or that would close a cycle (a claim reused under its own
 // descendant), which WAG's graphs may not have.
 func (d *Discussion) Plan(maxDepth int) ([]Relation, *Report) {
-	rep := &Report{Discussion: d.ID, Title: d.Title, Claims: len(d.Claims), Depth: maxDepth}
+	rep := &Report{Discussion: d.ID, Title: d.Title, Claims: len(d.Claims), Depth: maxDepth, Keys: KeysByClaim}
 	children := map[string][]Edge{}
 	for _, e := range d.Edges {
 		if !e.Active {
@@ -213,4 +215,21 @@ type Report struct {
 	BeyondDepth   int    `json:"beyond_depth"`    // relations below the depth limit
 	Arguments     int    `json:"arguments"`       // arguments created
 	Depth         int    `json:"depth,omitempty"` // the depth limit (0: none)
+	// Keys says how claims became statements: KeysByClaim, or KeysByText
+	// for a game exported before 2026-10-15 (no keys recorded), which is
+	// rebuilt as it was played.
+	Keys string `json:"keys,omitempty"`
 }
+
+// How claims become statements.
+const (
+	// KeysByClaim: one statement per claim, keyed by its claim ID.
+	KeysByClaim = "claim"
+	// KeysByText: one statement per wording, so that claims with the same
+	// text were merged, and the merge could close a loop that made the
+	// import fail. Only to replay games imported that way.
+	KeysByText = "text"
+)
+
+// ClaimStatementID is the ID of a claim's statement in an imported game.
+func ClaimStatementID(claimID string) string { return carneades.ClaimStatementID(claimID) }

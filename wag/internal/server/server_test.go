@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -220,6 +221,78 @@ func TestKialoImportEndpoint(t *testing.T) {
 	}
 	if code := call(t, ts, "POST", "/api/kialo/import", `{"nope":1}`, nil); code != 400 {
 		t.Fatalf("bad import: %d", code)
+	}
+}
+
+// A Kialo game keys its claims by claim ID: two claims that say the same
+// thing are two statements, and a move on one replays from the export. An
+// export made before that (no "keys") is rebuilt with claims merged by
+// text, as it was played.
+func TestKialoClaimsKeyedByID(t *testing.T) {
+	dir := t.TempDir()
+	graph := `{"id":"9","displayTitle":"Q?","thesis_claim_id":"9.1","claims":{"9.1":{"id":"9.1","text":"Yes."},
+	 "9.2":{"id":"9.2","text":"Because."},"9.3":{"id":"9.3","text":"because"}},
+	 "edges":[{"location_id":"9.4","from_claim_id":"9.1","to_claim_id":"9.2","relation":"support","vote_vector":[0,0,0,0,3],"active":true},
+	  {"location_id":"9.5","from_claim_id":"9.1","to_claim_id":"9.3","relation":"attack","vote_vector":[3,0,0,0,0],"active":true}]}`
+	if err := os.MkdirAll(filepath.Join(dir, "9"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "9", "graph.json"), []byte(graph), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s, err := New(Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON, Contexts: data.ContextsJSON}, dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ts := httptest.NewServer(s.Handler())
+	defer ts.Close()
+	var r struct {
+		State  State
+		Report map[string]interface{}
+	}
+	if code := call(t, ts, "POST", "/api/kialo/import", graph, &r); code != 200 {
+		t.Fatalf("import: %d", code)
+	}
+	if r.State.Statements["claim_9_2"] == nil || r.State.Statements["claim_9_3"] == nil || len(r.State.Arguments) != 2 || r.Report["keys"] != "claim" {
+		t.Fatalf("imported: %d arguments, report %v", len(r.State.Arguments), r.Report)
+	}
+	var pro string
+	for id, a := range r.State.Arguments {
+		if len(a.Premises) == 1 && a.Premises[0] == "claim_9_2" {
+			pro = id
+		}
+	}
+	post(t, ts, "/api/games/"+r.State.ID+"/move", map[string]interface{}{"action": map[string]interface{}{"type": "abstain"}}) // Pro: the thesis is In
+	mr := post(t, ts, "/api/games/"+r.State.ID+"/move", map[string]interface{}{"action": map[string]interface{}{"type": "question",
+		"answers_cq_id": nascq.CQPremiseAcceptable, "target_arg_id": pro, "target_premise_id": "claim_9_2"}})
+	if mr.Result["accepted"] != true {
+		t.Fatalf("question on claim 9.2: %+v", mr.Result)
+	}
+	var exp map[string]interface{}
+	call(t, ts, "GET", "/api/games/"+r.State.ID+"/export", nil, &exp)
+	b, _ := json.Marshal(exp)
+	var st State
+	if code := call(t, ts, "POST", "/api/load", string(b), &st); code != 200 || len(st.Log) != 2 || st.Statements["claim_9_3"] == nil {
+		t.Fatalf("load: %d, %d moves", code, len(st.Log))
+	}
+	delete(exp["import"].(map[string]interface{}), "keys")
+	exp["history"] = []interface{}{} // its moves would name the merged statement
+	b, _ = json.Marshal(exp)
+	var old State
+	if code := call(t, ts, "POST", "/api/load", string(b), &old); code != 200 {
+		t.Fatalf("load an old export: %d", code)
+	}
+	texts := 0
+	for id := range old.Statements {
+		if strings.HasPrefix(id, "text_") {
+			texts++
+		}
+		if strings.HasPrefix(id, "claim_") {
+			t.Fatalf("an old export rebuilt with %s", id)
+		}
+	}
+	if texts != 2 { // "Yes." and the one "Because." of both claims
+		t.Fatalf("%d text statements in the old export", texts)
 	}
 }
 
