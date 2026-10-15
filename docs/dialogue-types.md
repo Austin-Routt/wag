@@ -158,7 +158,7 @@ Advocacy and action are two separate questions that cut across the types:
   - **The grid** (§2.2, Walton & Krabbe 1995): it *derives* the six from two factors. It is the closest thing to a definitive matrix of the main types.
   - **The descriptive table** (§2.3, Walton 1997): it *describes* each type. The lists vary between publications: the 1995 grid and the 1998 book have six main types, and the 1997 table has eight. This is not a change of mind. Walton had classed debate as mixed persuasion and eristic in 1982 and 1989 (ND p. 223), and still listed it as a type in 1997.
   - **A20 adds a third matrix of its own,** for mathematics (§2.3).
-- **Later lists vary again.** For example, later work adds a "discovery" dialogue, after McBurney and Parsons. We have not reviewed those works.
+- **Later lists vary again.** For example, later work adds a "discovery" dialogue, after McBurney and Parsons. §2.7 places these later types, and the proposals for the grid's empty cells.
 - **WAG's working definition is therefore:**
   - the six main types of ND p. 31, placed by the grid;
   - described from ND (§4–5);
@@ -170,6 +170,65 @@ Advocacy and action are two separate questions that cut across the types:
     - **Main types:** a closed list of six. A new main type would need a new pair of initial situation and goal; none has been needed.
     - **Subtypes:** an open list.
     - **Mixtures:** "mixed" is recorded as several typed segments, not as a seventh type.
+
+### 2.7 The grid's dimensions, the empty cells, and later types
+
+Proposals to fill the grid's three empty cells are only as good as their reading of its two dimensions. One such analysis is reviewed in [part 11](review-2026-10-15-part11.md).
+
+**What the dimensions measure.**
+- **The rows are three kinds of change, not three degrees of one goal.**
+  - **A stable agreement** changes what the parties *accept as true*. In persuasion a commitment is an opinion (p. 108).
+  - **A practical settlement** changes what they will *do*. In negotiation and deliberation, commitment is to a course of action (p. 108).
+  - **A provisional accommodation** changes how they *stand toward each other*. A quarrel ends with the relationship strengthened or broken (p. 186).
+  - **The same grouping elsewhere.** Cohen, Salas and Riedel (2002) group the six types the same way, as belief-, action- and affect-oriented. This is confirmed from search summaries of their report; we could not open the report itself.
+- **The columns are three states of knowledge and opposition:**
+  - **Conflict:** the parties hold opposed commitments.
+  - **Open problem:** no one holds prior commitments; the not-knowing is shared, and symmetric.
+  - **An unsatisfactory spread of information:** one side knows what the other does not; asymmetric.
+
+  A20 explains the empty cells on this reading.
+- **One label is loose.** Information-seeking does not aim at *agreement* between the parties; it aims to transfer information (p. 126; A20 Table 2). Its "stable resolution" is the questioner's lack being remedied.
+- **The grid classifies by the dialogue's collective goal.** Under that definition its empty cells are principled: a goal that only one party pursues does not make a dialogue type.
+- **The grid omits other dimensions that also separate the types:**
+  - whether the roles are symmetric;
+  - whether the parties cooperate;
+  - whether retraction is allowed, and who must prove what (§4);
+  - whether a third party is the audience or the judge: a debate, a trial, Kialo's readers, WAG's moderator.
+- **The dimensions narrow the type; they do not decide it.** A conflict about what to do is a negotiation when it is over interests. It is a hybrid of persuasion and deliberation when it is over basic goals or values (ch. 6 note 1).
+
+**Candidates for the empty cells.**
+
+| Cell: aim × situation | Candidate | Source and status | In WAG |
+|---|---|---|---|
+| Action × asymmetric | **Advice-solicitation**, including expert consultation: seeking advice in order to act | **ND's own subtype of information-seeking** (pp. 31–2). The grid leaves the cell empty because the decision belongs to the advice-seeker, not to the dialogue. It is information-seeking that serves the seeker's deliberation, and ND says deliberation is often joined to information-seeking (pp. 163–4). Read by aim, the cell is filled. | Part of D2d. Annotate as information-seeking, subtype advice-solicitation, aim: action. |
+| Relationship × open problem | **Team forming, mutual identification, bonding** | Attributed to Cohen, Salas and Riedel (2002) by the analysis in part 11; we could not confirm the labels. Under the grid's definitions the cell is incoherent: with no prior commitments, there is nothing to accommodate (A20). Read by aim, it is talk whose aim is the relationship itself, among people who are not in conflict. It is often not argumentation. | No game. Annotated by its dimensions; a candidate type if it recurs. |
+| Relationship × asymmetric | **Exhortation, seduction, conversion** | Same attribution, also unconfirmed. These overlap what ND treats as persuasion or negotiation carried by emotional appeals: advertisements and infomercials (pp. 122–5, 206–14). Conversion changes belief, which is persuasion's aim. | No game. Annotated by its dimensions. |
+| — | "Relationship management under information asymmetry" | The analysis's own label; not published | Not adopted |
+
+**Types proposed after ND.** We have not reviewed these; the sources are listed in §10.
+
+| Type | What it is | Source | In ND's terms | In WAG |
+|---|---|---|---|---|
+| **Discovery** | Finding a hypothesis, or a way to an answer, not fixed at the outset | McBurney & Parsons 2001; Walton's later lists | Close to the inquiry's discovery stage, where guesswork and abduction are proper (pp. 97–8) | Annotated as inquiry at its discovery stage, until data sets it apart |
+| **Examination** | Questioning someone to test what they know, often an expert | Walton 2006; Dunne, Doutre & Bench-Capon 2005 | Peirastic and exetastic dialogue: persuasion embedded in expert consultation (pp. 145–8) | The expert-opinion critical questions, in D2d |
+| **Adjudication** | A neutral third party rules on competing claims | Prakken 2008 | Close to the trial (pp. 232–5); Gordon's Pleadings Game (p. 277) | The moderator of the legal preset already plays this role; annotation gets a third-party field |
+
+**What WAG does with this.**
+- **The six main types stay the canonical, playable types.** No candidate becomes a main type.
+- **Annotation records the dimensions as well as the type** (§9.3):
+  - the aim: belief, action or relationship;
+  - the situation: conflict, open problem, or asymmetric information;
+  - any third party: none, audience or adjudicator.
+
+  Separate judgements are easier to agree on, and to measure, than one label. A dialogue in an empty cell is recorded as it is, not forced into a type. A shift shows as a change of aim or situation.
+- **A new type needs evidence, as a new scheme does.** Suppose dialogues recur in one empty cell, or in one pattern no type covers: at least three dialogues from at least two sources. A person then reviews them as a candidate type, with their dimensions and examples.
+- **Example: a Kialo discussion.**
+  - **Aim:** belief. Readers are asked to accept a practical thesis, and nothing is decided.
+  - **Situation:** conflict.
+  - **Third party:** an audience.
+  - **Type:** persuasion about action (p. 229).
+
+  Recorded this way, the confusion with deliberation that parts 8–10 corrected cannot arise.
 
 ## 3. Concepts every type shares
 
@@ -568,6 +627,9 @@ The existing engine is the argument layer for the types that argue. Persuasion i
 ```yaml
 dialogue:            # one per discussion or transcript
   setting: kialo     # the speech event: kialo, parliament, court, sale, interview, meeting, chat…
+  aim: belief                      # belief, action, relationship: what the dialogue seeks to change (§2.7)
+  situation: conflict              # conflict, open_problem (shared), asymmetric_information
+  third_party: audience            # none, audience, adjudicator
   type_supposed: persuasion        # what the setting or the parties set up
   type_enacted: [persuasion]       # what happens; more than one if mixed
   subtype: null
@@ -582,6 +644,8 @@ segment:             # a stretch of turns, or a Kialo subtree
   id: s3
   span: ["13292.40", "13292.55"]
   type: information_seeking
+  aim: belief                      # a segment can differ from its dialogue
+  situation: asymmetric_information
   relation: embedded               # embedded (functionally joined), interruption, displacement, overlap
 shift:               # an event between segments
   from: persuasion
@@ -621,7 +685,8 @@ Two links tie the catalogues together:
 2. **Negotiation's outcome:** what scores, each side's gain, the joint gain, or fairness? The subtypes need different answers.
 3. **Dark-side commitments for model players:** give each seat a hidden position at the opening, so that the maieutic function can be measured?
 4. **Corpora beyond Kialo:** which ones, under which licences ([plan §8](plan.md#8-track-d-dialogue-types), D4).
-5. **The order** (decided 2026-10-15). Schemes, critical questions and the Kialo gold come first. Track D follows the gold, with the quarrel last ([plan §8](plan.md#8-track-d-dialogue-types)).
+5. **The dimensions** (§2.7). Recording aim, situation and third party with the type is recommended, and is in the plan's step 0 and D3. It costs three fields per discussion, the same for every Kialo discussion.
+6. **The order** (decided 2026-10-15). Schemes, critical questions and the Kialo gold come first. Track D follows the gold, with the quarrel last ([plan §8](plan.md#8-track-d-dialogue-types)).
 
 ## 10. Further reading
 
@@ -639,3 +704,8 @@ We have not reviewed these here. Read them before building the protocols they co
 | T. Gordon, *The Pleadings Game* (Kluwer, 1995) | Cited by ND; the forerunner of Carneades |
 | D. Walton & F. Macagno, "A classification system for argumentation schemes", *Argument & Computation* (2015) | The scheme tree already adopted in the plan (part 8 §1.7) |
 | Inference Anchoring Theory (Budzynska, Reed and colleagues) and the AIFdb corpora | Annotating dialogue moves together with argument structure, with public corpora of debates |
+| M. S. Cohen, E. Salas & S. L. Riedel, *Critical Thinking: Challenges, Possibilities, and Purpose*, Technical Report 02-1 (Cognitive Technologies, 2002) | The six types grouped by aim (belief, action, affect), and a 3 × 3 alternative to the grid (§2.7). Not read: the host was out of reach from this environment. |
+| P. McBurney & S. Parsons, "Chance discovery using dialectical argumentation" (2001); D. Walton, *Methods of Argumentation* (Cambridge UP, 2013) | Discovery dialogue, and Walton's later list of types |
+| D. Walton, "Examination dialogue: an argumentation framework for critically questioning an expert opinion", *Journal of Pragmatics* 38 (2006); P. Dunne, S. Doutre & T. Bench-Capon, "Discovering inconsistency through examination dialogues" (IJCAI 2005) | Examination dialogue |
+| H. Prakken, "A formal model of adjudication dialogues", *Artificial Intelligence and Law* 16 (2008) | Adjudication: a neutral third party rules; WAG's moderator |
+| D. Walton, "Types of dialogue and burdens of proof" (COMMA 2010) | The burden of proof in each type |

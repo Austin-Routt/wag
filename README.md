@@ -117,7 +117,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
 | 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. | Code |
-| Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
+| Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification by dimensions and type, with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
 **The next three actions:**
 1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF still in the history and the book text, a licence, who verifies, paid model access, and Track D's open choices.
@@ -167,6 +167,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/review-2026-10-15-part7.md`](docs/review-2026-10-15-part7.md) | The first real model annotation run, reviewed; why "none"; what the model is given; whether the data is enough |
 | [`docs/dialogue-types.md`](docs/dialogue-types.md) | **The reference on dialogue types:** what each type is, how types mix and shift, which arguments are proper in which type, how to recognise them, and what WAG needs to play and find them |
+| [`docs/review-2026-10-15-part11.md`](docs/review-2026-10-15-part11.md) | An outside analysis of the grid and its empty cells, reviewed; dimensions (aim, situation, third party) recorded with the type; later types placed |
 | [`docs/review-2026-10-15-part10.md`](docs/review-2026-10-15-part10.md) | A second check of the dialogue-type documents; whether there is a definitive grid of the types; advocacy and action-producing dialogue; the quarrel last; the book PDF deleted |
 | [`docs/review-2026-10-15-part9.md`](docs/review-2026-10-15-part9.md) | *The New Dialectic* read in full: part 8 corrected; whether every type can be played and found; Track D; the book PDF |
 | [`docs/review-2026-10-15-part8.md`](docs/review-2026-10-15-part8.md) | Walton's dialogue types from Aberdein's survey (corrected by part 9); Walton and Macagno's classification; the Kialo claim-merge bug, fixed |
@@ -223,6 +224,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`part 8`](docs/review-2026-10-15-part8.md) | Dialogue types (Aberdein 2020); Kialo claims keyed by ID |
 | [`part 9`](docs/review-2026-10-15-part9.md) | *The New Dialectic* (Walton 1998); dialogue types as a second aim |
 | [`part 10`](docs/review-2026-10-15-part10.md) | A second check; the grid, advocacy and action; the quarrel last; the book PDF deleted |
+| [`part 11`](docs/review-2026-10-15-part11.md) | The grid's dimensions and empty cells; candidate and later types |
 
 ## 7. Repository layout
 
