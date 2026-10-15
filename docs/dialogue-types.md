@@ -70,13 +70,13 @@ The grid is Walton & Krabbe 1995 p. 80, via A20 Table 1. It sorts dialogues by t
 | A practical settlement: a decision to act or not | negotiation | deliberation | — |
 | A provisional accommodation | eristic | — | — |
 
-Six cells are filled and three are empty. The grid is not in ND; it is the only principled derivation of the six (§2.6). A20 explains the empty cells:
+Six cells are filled and three are empty. The grid is not in ND. Of the sources here, it is the one that derives the six from principles rather than listing them (§2.6). A20 explains the empty cells:
 - With an open problem, nobody has prior commitments to air, so an accommodation makes no sense.
 - When one party simply lacks information, only a stable agreement makes sense.
 
 ### 2.3 The descriptive table (Walton 1997, via A20 Table 2)
 
-The grid derives the types. This table describes them. It is Walton's table from a 1997 paper, as A20 reproduces it, in our words. Similar tables are in Walton 1990 and Walton & Krabbe 1995 (via A20).
+The grid derives the types. This table describes them. It is Walton's table from a 1997 paper, as A20 reproduces it, in our words. ND p. 31 points to comparable accounts in Walton 1989 and 1990, and A20 to Walton & Krabbe 1995 p. 66; we have not seen those.
 
 | Type | Initial situation | Each party's goal | Collective goal | Benefit |
 |---|---|---|---|---|
@@ -99,7 +99,7 @@ Several other names for kinds of dialogue appear in ND and in Walton's other lis
 |---|---|---|---|
 | **Debate** | Persuading a third party by airing the strongest arguments on both sides (Walton 1997) | **Mixed discourse:** persuasion and eristic (after Woods & Walton 1982 and Walton 1989a), and usually negotiation too | p. 223 |
 | **Pedagogical** | Teaching and learning (Walton 1997) | **A subtype of information-seeking.** It conveys a body of knowledge, not just information, and examines the teacher's claims along the way. Aristotle's *didactic* arguments belong here. | pp. 235–7 |
-| **Action-producing** and **action-directed** | A dialogue meant to get something done | **Used in passing, not defined.** "Action-producing" is one of the five models mixed in Question Period, after Walton 1992: its second stated aim is to press for action. "Action-directed" describes deliberation: in the bicycle-path case, the action-directed exchange about the road is then called a deliberation, and Question Period is said to be, in part, an action-directed deliberation. | pp. 199–200, 223 |
+| **Action-producing** and **action-directed** | A dialogue meant to get something done | **Used in passing, not defined.** "Action-producing" is one of the five models mixed in Question Period, after Walton 1992: its second stated aim is to press for action. "Action-directed" describes deliberation. In the bicycle-path case, the action-directed exchange about the road is then called a deliberation. Question Period's stated aims suggest information-seeking, an action-directed kind of deliberation, or both. | pp. 199–200, 223 |
 | **Advocacy** and **advocacy dialogue** | Arguing one side as strongly as possible, often for an interest | **A stance found inside types, not a type** (§2.5). ND calls a sales pitch "some kind of advocacy dialogue", then finds it mixed. It says itself that bias and advocacy remain to be investigated. | pp. 121–5, 209, 215–7, 227–32 |
 | **Commercial advertisement** | An offer to sell | **Closest to one phase of a negotiation:** an offer | pp. 122–5 |
 | **Advocacy advertisement** | An advertisement for a point of view on an issue | **An argument in a persuasion dialogue** | pp. 124–5 |
@@ -136,14 +136,14 @@ Advocacy and action are two separate questions that cut across the types:
 **In short:**
 - **"Action-producing" is a goal, not a type.** In the grid it is the middle row, a practical settlement: negotiation, where the parties trade, and deliberation, where they decide together.
 - **"Advocacy" is a stance, not a type.** It is proper in persuasion and negotiation, and out of place in inquiry, information-seeking and expert consultation.
-- **ND warns that the two get confused.** Advocacy of a point of view is normal in persuasion. Advocacy for a hidden interest is covert negotiation, which is what the bias ad hominem alleges (pp. 121–2).
+- **ND separates two kinds of advocacy.** Advocacy of a point of view is normal in persuasion. Advocacy for a hidden interest is covert negotiation, which is what the bias ad hominem alleges (pp. 121–2).
 
 ### 2.6 Is there a definitive matrix, and is the list closed?
 
-- **ND has no table of the types.** It has the list on p. 31 and a description of each type in chs. 1–7. Its figures show other things: a Kripke tree, a profile of dialogue, the eristic subtypes, a shift point.
+- **ND has no table of the types.** It has the list on p. 31 and a description of each type in chs. 1–7. Its five figures show other things: two on inquiry (a Kripke tree; circular reasoning excluded), a profile of dialogue, the eristic subtypes, and a shift point.
 - **The two tables in circulation come from Walton's other works, through A20:**
   - **The grid** (§2.2, Walton & Krabbe 1995): it *derives* the six from two factors. It is the closest thing to a definitive matrix of the main types.
-  - **The descriptive table** (§2.3, Walton 1997 and earlier): it *describes* each type. Its rows vary between publications: six main types in 1995 and 1998, eight in 1997.
+  - **The descriptive table** (§2.3, Walton 1997): it *describes* each type. The lists vary between publications: the 1995 grid and the 1998 book have six main types, and the 1997 table has eight.
 - **Later lists vary again.** For example, later work adds a "discovery" dialogue, after McBurney and Parsons. We have not reviewed those works.
 - **WAG's working definition is therefore:**
   - the six main types of ND p. 31, placed by the grid;
@@ -439,7 +439,7 @@ This is ND's pragmatic view of fallacy in practice. The scheme ids are those of 
 | Argument from consequences | Deliberation | A dispute about whether something is true (ad consequentiam) | It answers "what should we do?", not "is it so?" | pp. 157–60, 176 | `positive_consequences`, `negative_consequences` |
 | Circular reasoning | Sometimes tolerable in persuasion | Always excluded in inquiry | Inquiry is cumulative and needs evidential priority | pp. 74–6, 258 | — |
 | Loaded or many questions | — | Information-seeking and persuasion, when a direct answer traps the respondent | Presuppositions become commitments | pp. 140–2, 221 | — |
-| Popular opinion; pity (ad populum, ad misericordiam) | Not settled in ND. `walton.yml` has a deliberation variant (`deliberation_ad_populum`); the catalogue will draft this from the scheme book | Where emotion disguises the lack of good premises | Emotional appeals, judged by the type | pp. 21–2, 123, 248 | `popular_opinion` and its variants, `help`, `distress` |
+| Popular opinion; pity (ad populum, ad misericordiam) | Not settled in ND in general. An appeal to pity can be proper at a trial's sentencing stage, once guilt is admitted (p. 234). `walton.yml` has a deliberation variant of popular opinion (`deliberation_ad_populum`). The catalogue will draft the rest from the scheme book. | Where emotion disguises the lack of good premises; pity before guilt is decided | Emotional appeals, judged by the type and the stage | pp. 21–2, 123, 234, 248 | `popular_opinion` and its variants, `help`, `distress` |
 | Straw man | — | Everywhere a fair account of the other's position matters; characteristic of quarrels | It misrepresents the other's commitments | pp. 27, 193, 196, 272 | — |
 | Leaving out evidence for the other side ("suppressed evidence") | Persuasion and advocacy, such as a sales pitch: neither side must argue the other's case | Inquiry, information-seeking and expert consultation, which owe completeness | The duty to present all the evidence depends on the type | pp. 230–2 | — |
 
