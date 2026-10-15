@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/yourorg/wag/internal/llm"
 )
@@ -128,5 +129,69 @@ func TestRun(t *testing.T) {
 	_ = r3.Annotate(context.Background(), nil)
 	if p := r3.Status().Progress[0]; p.Failed != 1 || !strings.Contains(p.LastError, "bad key") {
 		t.Fatalf("refused key: %+v", p)
+	}
+}
+
+// One annotator: the reviewer checks each annotation (there is nothing to
+// disagree with), and the report is written when a pass ends. A quota used
+// up stops the annotator at once, and says so first.
+func TestRunOneAnnotator(t *testing.T) {
+	ds, _ := Builtin()
+	d := ds[0]
+	items := d.IDs()[1:4]
+	gold := func(id string) string { b, _ := json.Marshal(d.Gold[id]); return string(b) }
+	copier := &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+		return &llm.Response{Text: gold(lastClaim(req))}, nil
+	}}
+	var seen []string
+	reviewer := &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+		id := lastClaim(req)
+		seen = append(seen, id)
+		if strings.Contains(req.Messages[0].Content, "Annotation B") || !strings.Contains(req.System, "with one annotation") {
+			t.Errorf("the reviewer of one annotation is asked: %.200s", req.Messages[0].Content)
+		}
+		return &llm.Response{Text: `{"kialo_claim_id": "` + id + `", "fields": {"scheme": {"choice": "A", "why": "fits"}}, "confidence": 0.9}`}, nil
+	}}
+	pa := llm.Profile{Name: "solo", Provider: "mock", Params: llm.Params{Model: "m1"}}
+	pr := llm.Profile{Name: "judge", Provider: "mock", Params: llm.Params{Model: "m3"}}
+	dir := filepath.Join(t.TempDir(), "run")
+	r, err := New(dir, d, Settings{Annotators: []llm.Profile{pa}, Reviewer: &pr, Items: items},
+		map[string]*llm.Client{"solo": llm.WithProvider(pa, copier), "judge": llm.WithProvider(pr, reviewer)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := r.Annotate(context.Background(), items[:2]); err != nil {
+		t.Fatal(err)
+	}
+	var rep Report
+	b, _ := os.ReadFile(filepath.Join(dir, "report.json"))
+	if err := json.Unmarshal(b, &rep); err != nil || rep.Annotators[0].Annotated != 2 {
+		t.Fatalf("the report after annotating: %v %s", err, b)
+	}
+	if st := r.Status(); st.Reviewable != 2 || st.Annotated2 != 0 {
+		t.Fatalf("status %+v", st)
+	}
+	if err := r.Review(context.Background(), nil, true); err != nil { // "only disagreements" means all, with one annotator
+		t.Fatal(err)
+	}
+	if len(seen) != 2 {
+		t.Fatalf("reviewed %v", seen)
+	}
+	b, _ = os.ReadFile(filepath.Join(dir, "report.json"))
+	if err := json.Unmarshal(b, &rep); err != nil || rep.Reviewer.Reviewed != 2 || rep.Reviewer.Chosen["scheme"]["solo"] != 2 {
+		t.Fatalf("the report after reviewing: %v %s", err, b)
+	}
+
+	calls := 0
+	quota := &llm.Mock{Fn: func(llm.Request) (*llm.Response, error) {
+		calls++
+		return nil, &llm.Error{Provider: "gemini", Kind: llm.KindRateLimit, Status: 429, Message: "RESOURCE_EXHAUSTED … limit: 20", RetryAfter: 7 * time.Hour}
+	}}
+	c := llm.WithProvider(pa, quota)
+	c.Sleep = llm.NoWait
+	r2, _ := New(filepath.Join(t.TempDir(), "run2"), d, Settings{Annotators: []llm.Profile{pa}, Items: items}, map[string]*llm.Client{"solo": c})
+	_ = r2.Annotate(context.Background(), nil)
+	if p := r2.Status().Progress[0]; calls != 1 || p.Failed != 1 || !strings.HasPrefix(p.LastError, "quota used up: gemini asks to wait 7h0m0s") {
+		t.Fatalf("%d calls, %+v", calls, p)
 	}
 }

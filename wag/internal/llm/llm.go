@@ -143,10 +143,23 @@ func (e *Error) Unwrap() error { return e.Err }
 // Retryable reports whether the same request may succeed later.
 func (e *Error) Retryable() bool {
 	switch e.Kind {
-	case KindRateLimit, KindServer, KindTimeout, KindNetwork:
+	case KindRateLimit:
+		return !e.Exhausted()
+	case KindServer, KindTimeout, KindNetwork:
 		return true
 	}
 	return false
+}
+
+// MaxRetryWait is the longest wait a retry is worth. Per-minute limits clear
+// within a minute; a provider that asks for longer has a quota used up (a
+// daily one, say), and the next call would fail too.
+const MaxRetryWait = 2 * time.Minute
+
+// Exhausted reports whether the error is a quota used up for longer than
+// MaxRetryWait: the provider asks to wait that long before the next call.
+func (e *Error) Exhausted() bool {
+	return e.Kind == KindRateLimit && e.RetryAfter > MaxRetryWait
 }
 
 // AsError returns err as an *Error of the provider: as it is if it is one,

@@ -86,7 +86,7 @@ async function renderModels() {
           <label class="small">Model<input type="text" id="pmodel" value="${esc(WB.chosen)}" placeholder="e.g. gemini-2.5-flash"></label>
           <label class="small">Player name<input type="text" id="pname" value="${esc(WB.pname || '')}" placeholder="(the model's name)"></label>
           <label class="small">Temperature<input type="number" id="ptemp" step="0.1" min="0" max="2" placeholder="the model's default"></label>
-          <label class="small">Seconds between calls<input type="number" id="pinterval" min="0" step="1" value="${WB.svc === 'gemini' ? 7 : 0}" title="Free tiers allow few requests a minute: 7 seconds stays under about 8 a minute"></label>
+          <label class="small">Seconds between calls<input type="number" id="pinterval" min="0" step="1" value="${WB.svc === 'gemini' ? 13 : 0}" title="Free tiers allow few requests a minute: Gemini 2.5 Flash's allows 5 a minute (and 20 a day), so 13 seconds"></label>
           <label class="small" title="${esc(effortHelp)}">Thinking / effort<input type="text" id="peffort" placeholder="${esc(effortHelp)}"></label>
           <label class="small">Answer format<select id="poutput"><option value="json">JSON (recommended)</option><option value="">Free text with JSON at the end</option></select></label>
         </div>
@@ -180,10 +180,59 @@ async function runLoad() {
   if (WB.item) WB.view = await api(`/api/annotate/runs/${WB.run}/item/${WB.item}`);
 }
 
+// annPoll follows a working run: every 2 s it reloads the run and, if
+// anything changed, redraws only the run list and the run's pane (the form
+// on the left keeps what you typed or chose).
 function annPoll() {
   clearTimeout(WB.timer);
   if (ui.tab !== 'annotate' || !WB.status || !WB.status.busy) return;
-  WB.timer = setTimeout(async () => { try { await runLoad(); } catch (e) { /* keep polling */ } renderAnnotate(true); }, 2000);
+  WB.timer = setTimeout(async () => {
+    const was = JSON.stringify([WB.status, WB.view, WB.report]);
+    try { await runLoad(); } catch (e) { /* keep polling */ }
+    if (ui.tab !== 'annotate') return;
+    if (JSON.stringify([WB.status, WB.view, WB.report]) === was) return annPoll();
+    refreshRun();
+  }, 2000);
+}
+
+// keepPlace runs draw, which rewrites some of the page, and puts back the
+// reader's place: the scroll of the page and of its scrolling lists, and
+// which <details> are open.
+function keepPlace(draw) {
+  const main = $('#main'), sel = '.claims, .netwrap, .modellist, .log';
+  const pos = [...main.querySelectorAll(sel)].map(e => [e.scrollTop, e.scrollLeft]);
+  const open = new Set([...main.querySelectorAll('details[open] > summary')].map(x => x.textContent));
+  const x = window.scrollX, y = window.scrollY;
+  draw();
+  [...main.querySelectorAll(sel)].forEach((e, i) => { if (pos[i]) [e.scrollTop, e.scrollLeft] = pos[i]; });
+  for (const m of main.querySelectorAll('details > summary')) if (open.has(m.textContent)) m.parentElement.open = true;
+  window.scrollTo(x, y);
+}
+
+// refreshRun redraws what a working run changes, keeping the reader's place
+// and a verdict note being typed.
+function refreshRun() {
+  const main = $('#main'), pane = main.querySelector('.mainpane'), list = main.querySelector('.runlist');
+  if (!pane || !list) return renderAnnotate(true);
+  const note = $('#vnote'), typed = note ? note.value : null, focused = note && document.activeElement === note;
+  const range = note ? [note.selectionStart, note.selectionEnd] : null;
+  keepPlace(() => { list.innerHTML = runList(); pane.innerHTML = WB.status ? runPane() : ''; });
+  const n2 = $('#vnote');
+  if (n2 && typed !== null) { n2.value = typed; if (focused) { n2.focus(); n2.setSelectionRange(...range); } }
+  annPoll();
+}
+
+function selfReview() {
+  const f = WB.form;
+  return f.reviewer && f.annotators.includes(f.reviewer) ? '<p class="small warn">The reviewer is also an annotator: a model checking its own work tends to agree with itself. Choose another model if you can.</p>' : '';
+}
+
+function runList() {
+  return WB.runs.map(x => {
+    const st = x.status; if (!st) return `<button disabled>${esc(x.id)}: ${esc(x.error)}</button>`;
+    const done = (st.progress || []).filter(p => p.role === 'annotator').map(p => `${p.done}/${p.total}`).join(' · ');
+    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}</span></button>`;
+  }).join('') || '<p class="small muted">None yet.</p>';
 }
 
 async function renderAnnotate(noLoad) {
@@ -193,15 +242,10 @@ async function renderAnnotate(noLoad) {
   }
   const ready = readyPlayers();
   const ds = WB.datasets.find(d => d.id === WB.form.dataset) || {};
-  const runs = WB.runs.map(x => {
-    const st = x.status; if (!st) return `<button disabled>${esc(x.id)}: ${esc(x.error)}</button>`;
-    const done = (st.progress || []).filter(p => p.role === 'annotator').map(p => `${p.done}/${p.total}`).join(' · ');
-    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}</span></button>`;
-  }).join('');
-  main.innerHTML = `<div class="annotate">
+  const html = `<div class="annotate">
     <div class="side">
       <div class="panel"><h2>Annotate</h2>
-        <p class="small muted">Models annotate claims as instances of Walton's schemes, under the guidelines, each claim in its own call; a model reviews where they disagree; you give your verdict, claim by claim. Every run is a folder in your data folder, under <span class="mono">annotation</span>.</p>
+        <p class="small muted">Models annotate claims as instances of Walton's schemes, under the guidelines, each claim in its own call; a model reviews where they disagree (or, with one annotator, checks each annotation); you give your verdict, claim by claim. Every run is a folder in your data folder, under <span class="mono">annotation</span>.</p>
         <h3>New run</h3>
         <label class="small">Dataset<select id="fdataset">${WB.datasets.map(d => `<option value="${esc(d.id)}" ${d.id === WB.form.dataset ? 'selected' : ''}>${esc(d.name)}</option>`).join('')}</select></label>
         <p class="small muted">${esc(ds.description || '')} ${ds.items || 0} claims${ds.has_gold ? ', with a gold annotation to score against' : ''}. ${ds.source && ds.source !== 'built in' ? 'Folder: <span class="mono">' + esc(ds.source) + '</span>' : ''}</p>
@@ -220,13 +264,16 @@ async function renderAnnotate(noLoad) {
           : '<p class="small warn">No player is ready: add one in the Models tab.</p>'}
         <label class="small">Reviewer (optional)<select id="freviewer"><option value="">— none —</option>${ready.map(p => `<option value="${esc(p.name)}" ${WB.form.reviewer === p.name ? 'selected' : ''}>${esc(p.name)} (${esc(runsOn(p))})</option>`).join('')}</select></label>
         <label class="small">Claims: the first<input type="number" id="fcount" min="1" max="${ds.items || 1}" value="${WB.form.count}"> of ${ds.items || 0}</label>
-        <p class="small muted">Each call sends the guidelines and the scheme collection: about 35,000–40,000 tokens. On a free tier, start with a few claims.</p>
+        <div id="selfreview">${selfReview()}</div>
+        <p class="small muted">Each call sends the guidelines and the scheme collection: about 40,000 tokens. Each claim is one call per annotator, and one more if the reviewer reviews it. Free tiers have daily limits (Gemini 2.5 Flash: 20 requests a day): start with a few claims.</p>
         <button class="primary" id="newrun" ${ready.length ? '' : 'disabled'}>Create the run</button>
       </div>
-      <div class="panel"><h3>Runs</h3><div class="list">${runs || '<p class="small muted">None yet.</p>'}</div></div>
+      <div class="panel"><h3>Runs</h3><div class="list runlist">${runList()}</div></div>
     </div>
     <div class="mainpane">${WB.status ? runPane() : '<div class="panel"><p class="muted">Create a run, or open one.</p></div>'}</div>
   </div>`;
+  if (noLoad) keepPlace(() => { main.innerHTML = html; });
+  else main.innerHTML = html;
   wireAnnotate();
   annPoll();
 }
@@ -236,7 +283,7 @@ function runPane() {
   const ann = st.settings.annotators.map(a => a.name);
   const prog = (st.progress || []).map(p => `<tr><td><b>${esc(p.name)}</b> <span class="muted small">${esc(p.role)}</span></td><td>${p.done}${p.total ? ' / ' + p.total : ''}</td><td>${p.failed || ''}</td>
     <td class="small">${p.calls} calls, ${p.input_tokens.toLocaleString()} tokens in, ${p.output_tokens.toLocaleString()} out</td>
-    <td class="small">${p.running ? `working on ${esc(p.current || '')}` : ''} ${p.last_error ? `<span class="warn">${esc(short(p.last_error, 160))}</span>` : ''}</td></tr>`).join('');
+    <td class="small">${p.running ? `working on ${esc(p.current || '')}` : ''} ${p.last_error ? `<span class="warn" title="${esc(p.last_error)}">${esc(short(p.last_error, 220))}</span>` : ''}</td></tr>`).join('');
   const fmt = f => f ? `${f.agreement.toFixed(2)}${f.kappa != null ? ` <span class="muted">κ ${f.kappa.toFixed(2)}</span>` : ''}` : '';
   const fields = ['scheme', 'fit', 'role', 'polarity', 'target_claim', 'target_part', 're_parented', 'evidence'];
   const agreeRows = [];
@@ -259,10 +306,14 @@ function runPane() {
       <div class="row">
         <button id="next" ${st.busy || !st.next_item ? 'disabled' : ''} title="Every annotator annotates the next claim; then look at it">Annotate the next claim${st.next_item ? ' (' + esc(st.next_item) + ')' : ''}</button>
         <button class="primary" id="startall" ${st.busy || !st.next_item ? 'disabled' : ''} title="Runs in the server: you can close this page">Annotate all the rest</button>
-        <button id="review" ${st.busy || !st.settings.reviewer || st.annotated_by_two === 0 ? 'disabled' : ''} title="The reviewer reviews the claims whose annotations differ">Review the disagreements</button>
-        <button id="reviewall" ${st.busy || !st.settings.reviewer || st.annotated_by_two === 0 ? 'disabled' : ''}>Review all</button>
+        ${ann.length > 1 ? `<button id="review" ${st.busy || !st.settings.reviewer || !st.reviewable ? 'disabled' : ''} title="The reviewer compares the annotations of the claims where they differ">Review the disagreements</button>
+        <button id="reviewall" ${st.busy || !st.settings.reviewer || !st.reviewable ? 'disabled' : ''} title="The reviewer compares the annotations of every claim annotated by two or more">Review all</button>`
+        : `<button id="reviewall" ${st.busy || !st.settings.reviewer || !st.reviewable ? 'disabled' : ''} title="With one annotator, the reviewer checks each annotation, field by field">Have the reviewer check each annotation</button>`}
         <button id="stop" ${st.busy ? '' : 'disabled'}>Stop</button>
       </div>
+      ${!st.settings.reviewer ? '<p class="small muted">This run has no reviewer: choose one when you create a run.</p>'
+        : !st.reviewable ? `<p class="small muted">Nothing to review yet: the reviewer needs claims annotated${ann.length > 1 ? ' by two annotators or more' : ''}.</p>` : ''}
+      ${st.settings.reviewer && ann.includes(st.settings.reviewer.name) ? `<p class="small warn">The reviewer (${esc(st.settings.reviewer.name)}) is also an annotator: a model checking its own work tends to agree with itself.</p>` : ''}
       ${st.busy ? `<p class="small"><b>${esc(st.busy)}…</b> This goes on in the server, in the background: you can close this page and come back.</p>` : ''}
       <table><tr><th>Who</th><th>Done</th><th>Failed</th><th>Cost</th><th></th></tr>${prog}</table>
     </div>
@@ -372,6 +423,7 @@ function wireAnnotate() {
     if (t.id === 'freviewer') WB.form.reviewer = t.value;
     if (t.id === 'fcount') WB.form.count = t.value;
     if (t.dataset.ann) { const n = t.dataset.ann; WB.form.annotators = t.checked ? [...WB.form.annotators, n] : WB.form.annotators.filter(x => x !== n); }
+    if ((t.id === 'freviewer' || t.dataset.ann) && $('#selfreview')) $('#selfreview').innerHTML = selfReview();
     if (t.id === 'reveal') { WB.reveal = t.checked; renderAnnotate(true); }
   };
 }

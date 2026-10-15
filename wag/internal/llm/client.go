@@ -161,8 +161,8 @@ func (c *Client) Complete(ctx context.Context, req Request, report func(Attempt)
 		if delay <= 0 {
 			delay = time.Duration(1<<uint(n)) * time.Second // 2s, 4s, 8s…
 		}
-		if delay > 2*time.Minute {
-			delay = 2 * time.Minute
+		if delay > MaxRetryWait {
+			delay = MaxRetryWait
 		}
 	}
 }

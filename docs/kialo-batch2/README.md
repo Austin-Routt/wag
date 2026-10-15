@@ -1,8 +1,8 @@
 # Kialo batch 2: double annotation of "Should Governments Put A Tax On Meat?"
 
-The second round of hand-formalizing Kialo claims as Walton scheme instances, as the audit of the first pilot recommended (§7.7):
+The second round of formalizing Kialo claims as Walton scheme instances, as the audit of the first pilot recommended (§7.7):
 - the pilot's 20 claims and 30 more;
-- coded independently by two annotators;
+- coded independently by two annotators. Both annotators and the adjudicator were runs of one language model with the same guidelines; no person has coded or reviewed these claims yet (`../review-2026-10-15-part7.md`);
 - agreement measured field by field;
 - disagreements adjudicated;
 - the result played as a WAG game.

@@ -389,6 +389,7 @@ func (r *Run) Annotate(ctx context.Context, items []string) error {
 		return err
 	}
 	defer r.end()
+	defer func() { _, _ = r.Report() }() // the folder is complete even if no one asks for the report
 	if len(items) == 0 {
 		items = r.Settings.Items
 	}
@@ -409,6 +410,16 @@ func (r *Run) Annotate(ctx context.Context, items []string) error {
 	}
 	wg.Wait()
 	return ctx.Err()
+}
+
+// failure says why a call failed, first in plain words if a quota is used
+// up (the provider's own message is long, and says it last).
+func failure(e *llm.Error, err error) string {
+	if e != nil && e.Exhausted() {
+		return fmt.Sprintf("quota used up: %s asks to wait %s before the next call, so this stopped; carry on after that. %v",
+			e.Provider, e.RetryAfter.Round(time.Minute), err)
+	}
+	return err.Error()
 }
 
 func (r *Run) fail(name, item, msg string) {
@@ -457,9 +468,10 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 			if ctx.Err() != nil {
 				return
 			}
-			r.fail(name, id, err.Error())
-			if e, ok := err.(*llm.Error); ok && !e.Retryable() && e.Kind != llm.KindBadReply {
-				return // a refused key or model will not pass on the next claim
+			e, _ := err.(*llm.Error)
+			r.fail(name, id, failure(e, err))
+			if e != nil && !e.Retryable() && e.Kind != llm.KindBadReply {
+				return // a refused key or model, or a quota used up, will not pass on the next claim
 			}
 			continue
 		}
@@ -516,6 +528,7 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		return err
 	}
 	defer r.end()
+	defer func() { _, _ = r.Report() }()
 	if len(items) == 0 {
 		items = r.Settings.Items
 	}
@@ -525,10 +538,12 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 	r.mu.Lock()
 	for _, id := range items {
 		names, anns := r.annotationsOf(id)
-		if len(names) < 2 || r.reviews[id] != nil && r.reviews[id].Error == "" {
+		if len(names) < r.toReview() || r.reviews[id] != nil && r.reviews[id].Error == "" {
 			continue
 		}
-		if onlyDisagreements && len(Disagrees(anns)) == 0 {
+		// With one annotator there is nothing to disagree with: the
+		// reviewer checks every annotation.
+		if onlyDisagreements && len(r.Settings.Annotators) > 1 && len(Disagrees(anns)) == 0 {
 			continue
 		}
 		todo = append(todo, id)
@@ -548,9 +563,13 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		}
 		p.Current = id
 		r.mu.Unlock()
-		rv := r.reviewOne(ctx, rp.Name, c, system, r.Dataset.Item(id), names, anns)
+		rv, err := r.reviewOne(ctx, rp.Name, c, system, r.Dataset.Item(id), names, anns)
 		if ctx.Err() != nil {
 			return ctx.Err()
+		}
+		e, _ := err.(*llm.Error)
+		if err != nil {
+			rv.Error = failure(e, err)
 		}
 		r.mu.Lock()
 		r.reviews[id] = rv
@@ -560,6 +579,9 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		r.recount()
 		_ = r.saveReviews()
 		r.mu.Unlock()
+		if e != nil && !e.Retryable() {
+			return err // a refused key or model, or a quota used up, will not pass on the next claim
+		}
 	}
 	return nil
 }
@@ -590,7 +612,9 @@ func (r *Run) annotationsOf(id string) ([]string, []Annotation) {
 	return names, anns
 }
 
-func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system string, it *Item, names []string, anns map[string]Annotation) *Review {
+// reviewOne asks the reviewer about one claim. A reply it cannot read is
+// recorded in the review's Error; the error returned is the call's.
+func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system string, it *Item, names []string, anns map[string]Annotation) (*Review, error) {
 	rv := &Review{Item: it.ID, Reviewer: name, Letters: map[string]string{}}
 	for i, n := range names {
 		rv.Letters[string(Letters[i])] = n
@@ -599,12 +623,12 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 		func(a llm.Attempt) { r.logCall("reviewer", name, it.ID, 1, a) })
 	if err != nil {
 		rv.Error = err.Error()
-		return rv
+		return rv, err
 	}
 	obj, err := jsonObject(resp.Text)
 	if err != nil {
 		rv.Error, rv.Raw = "the review cannot be read: "+err.Error(), resp.Text
-		return rv
+		return rv, nil
 	}
 	var parsed struct {
 		Fields      map[string]FieldChoice `json:"fields"`
@@ -616,7 +640,7 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 	b, _ := json.Marshal(obj)
 	if err := json.Unmarshal(b, &parsed); err != nil {
 		rv.Error, rv.Raw = "the review cannot be read: "+err.Error(), resp.Text
-		return rv
+		return rv, nil
 	}
 	rv.Fields, rv.Adjudicated, rv.Confidence, rv.NeedsHuman, rv.Notes = parsed.Fields, parsed.Adjudicated, parsed.Confidence, parsed.NeedsHuman, parsed.Notes
 	for f, ch := range rv.Fields {
@@ -626,7 +650,16 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 	if rv.Adjudicated != nil {
 		rv.Adjudicated["kialo_claim_id"] = it.ID
 	}
-	return rv
+	return rv, nil
+}
+
+// toReview is how many annotations a claim needs to be reviewed: two to
+// compare, or the one of a run with one annotator, to check.
+func (r *Run) toReview() int {
+	if len(r.Settings.Annotators) == 1 {
+		return 1
+	}
+	return 2
 }
 
 // saveReviews writes the reviewer's file. Caller holds r.mu.
@@ -694,6 +727,7 @@ type Status struct {
 	Files      []string    `json:"files"`
 	Disagreed  int         `json:"disagreed"` // claims whose annotations differ on a field
 	Annotated2 int         `json:"annotated_by_two"`
+	Reviewable int         `json:"reviewable"` // claims with enough annotations to review (Run.Review)
 }
 
 // progressList lists the annotators' progress in their order, then the
@@ -749,6 +783,9 @@ func (r *Run) Status() Status {
 			if len(Disagrees(anns)) > 0 {
 				s.Disagreed++
 			}
+		}
+		if len(names) >= r.toReview() {
+			s.Reviewable++
 		}
 	}
 	s.Files = r.files()

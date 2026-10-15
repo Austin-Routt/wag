@@ -178,6 +178,10 @@ func LoadCollection(b []byte) (*Collection, error) {
 
 var variable = regexp.MustCompile(`\b[A-Z][A-Z0-9]*\b`)
 
+// compact drops the spaces of a formula: "f(a, b)" and "f(a,b)" are the
+// same formula.
+func compact(formula string) string { return strings.Join(strings.Fields(formula), "") }
+
 func subst(formula string, b map[string]string) string {
 	return variable.ReplaceAllStringFunc(formula, func(v string) string {
 		if x, ok := b[v]; ok {
@@ -259,13 +263,13 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 		expected := map[string]int{}
 		for role, fs := range map[string][]string{"premise": sc.Premises, "assumption": sc.Assumptions, "exception": sc.Exceptions} {
 			for _, f := range fs {
-				expected[role+" "+subst(f, binds)]++
+				expected[role+" "+compact(subst(f, binds))]++
 			}
 		}
 		ps, _ := in["premises"].([]any)
 		for _, y := range ps {
 			pm, _ := y.(map[string]any)
-			k := fmt.Sprintf("%v %v", pm["role"], pm["formula"])
+			k := fmt.Sprintf("%v %v", pm["role"], compact(fmt.Sprint(pm["formula"])))
 			if expected[k] > 0 {
 				expected[k]--
 			} else if fit != "fragment" {
@@ -281,7 +285,7 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 		}
 		if len(sc.Conclusions) > 0 {
 			cm, _ := in["conclusion"].(map[string]any)
-			if got, want := fmt.Sprint(cm["formula"]), subst(sc.Conclusions[0], binds); fit != "fragment" && got != want {
+			if got, want := compact(fmt.Sprint(cm["formula"])), compact(subst(sc.Conclusions[0], binds)); fit != "fragment" && got != want {
 				add("%s concludes %s, not %s", wid, got, want)
 			}
 		}

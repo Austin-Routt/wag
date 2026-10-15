@@ -1,5 +1,7 @@
 # WAG — Waltonian Argumentation Game
 
+The project's overview, status, issues and plan are in the central [`README.md`](../README.md).
+
 A turn-based argumentation game: players put forward arguments built from
 Walton's argumentation schemes, and attack, defend and question each other's
 arguments through their critical questions, to any depth. A NASCQ graph
@@ -31,7 +33,7 @@ central claim, solo belief revision) are combinations of a few settings.
 go run ./cmd/wag-server                                  # serves http://127.0.0.1:8080 and opens it
 go run ./cmd/wag-server --kialo-dir <visualizer>/data    # also offer the captured Kialo discussions
 go run ./cmd/wag-server --claude                         # also offer Claude seats (ANTHROPIC_API_KEY; costs API credits)
-go run ./cmd/wag-server --model gemini:gemini-2.5-flash,min_interval=7s   # a Gemini seat (GEMINI_API_KEY)
+go run ./cmd/wag-server --model gemini:gemini-2.5-flash,min_interval=13s  # a Gemini seat (GEMINI_API_KEY)
 ```
 
 The **Models** tab connects a model service with a key typed in the browser,

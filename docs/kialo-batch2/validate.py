@@ -56,6 +56,10 @@ def atoms(f):
         out += atoms(a) if ('(' in a or a.startswith('¬')) else [a]
     return out
 
+def nows(f):
+    """A formula without spaces: 'f(a, b)' and 'f(a,b)' are the same formula."""
+    return re.sub(r'\s+', '', f or '')
+
 def subst(f, b):
     return re.sub(r'\b[A-Z][A-Z0-9]*\b', lambda m: b.get(m.group(0), m.group(0)), f)
 
@@ -107,10 +111,10 @@ for it in gold['items']:
         if set(ins['bindings']) != set(sch['variables']): err(f'{cid}: {wid} binds {sorted(ins["bindings"])} not {sch["variables"]}')
         exp = []
         for role, key in (('premise', 'premises'), ('assumption', 'assumptions'), ('exception', 'exceptions')):
-            exp += [(role, subst(f, ins['bindings'])) for f in sch.get(key) or []]
-        got = [(p['role'], p['formula']) for p in ins['premises']]
+            exp += [(role, nows(subst(f, ins['bindings']))) for f in sch.get(key) or []]
+        got = [(p['role'], nows(p['formula'])) for p in ins['premises']]
         if sorted(exp) != sorted(got): err(f'{cid}: {wid} premises differ from walton.yml: {set(exp) ^ set(got)}')
-        if ins['conclusion']['formula'] != subst(sch['conclusions'][0], ins['bindings']): err(f'{cid}: {wid} conclusion differs')
+        if nows(ins['conclusion'].get('formula')) != nows(subst(sch['conclusions'][0], ins['bindings'])): err(f'{cid}: {wid} conclusion differs')
         counts['checked_formulas'] += len(got) + 1
         # R4: hypothetical cause
         if wid == 'cause_to_effect':
@@ -136,8 +140,8 @@ for it in gold['items']:
             if part in ('premise', 'exception'):
                 tp = primary(G[tc])
                 roles = {'premise': ('premise', 'assumption'), 'exception': ('exception',)}[part]
-                forms = [p['formula'] for p in tp['premises'] if p['role'] in roles]
-                if f not in forms: err(f'{cid}: target {part} {f} is not a {part} of {tc} primary instance'); continue
+                forms = [nows(p['formula']) for p in tp['premises'] if p['role'] in roles]
+                if nows(f) not in forms: err(f'{cid}: target {part} {f} is not a {part} of {tc} primary instance'); continue
                 twid = tp['scheme']['walton_id']
                 pred = parse(f)[1]
                 avail = cq_pred.get(twid, {}).get(pred, set())
@@ -156,7 +160,8 @@ for it in gold['items']:
     # 4. atoms
     fs = []
     for ins in it['instances']:
-        fs += list(ins['bindings'].values()) + [p['formula'] for p in ins['premises']] + [ins['conclusion']['formula']]
+        fs += [v for v in ins['bindings'].values() if v] + [p['formula'] for p in ins['premises']]
+        if (ins.get('conclusion') or {}).get('formula'): fs.append(ins['conclusion']['formula'])  # none/other may have no formula
     if a and a.get('formula'): fs.append(a['formula'])
     fs += [o['formula'] for o in t.get('other_kialo_parents') or [] if o.get('formula')]
     fs += [c['formula'] for c in it['challenges'] if c.get('formula')]

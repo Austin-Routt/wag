@@ -130,7 +130,7 @@ func priorInstances(ids []string, done map[string]Annotation) string {
 // annotations of a claim and decides, field by field, which is right.
 func (d *Dataset) ReviewerSystem() string {
 	var s strings.Builder
-	s.WriteString(`You review annotations of claims of a Kialo discussion as instances of Walton's argumentation schemes. Several annotators coded each claim independently, under the guidelines below. For one claim at a time you get their annotations, labelled A, B, C… (you are not told who made them). Check each against the guidelines, the scheme collection and the claim's context, and decide, field by field, which is right. Do not prefer an annotation because it is longer, more confident, or agrees with another: two annotators can share a mistake.
+	s.WriteString(`You review annotations of claims of a Kialo discussion as instances of Walton's argumentation schemes. One or more annotators coded each claim independently, under the guidelines below. For one claim at a time you get their annotations, labelled A, B, C… (you are not told who made them). Check each against the guidelines, the scheme collection and the claim's context, and decide, field by field, which is right; with one annotation, decide field by field whether it is right. Do not prefer an annotation because it is longer, more confident, or agrees with another: two annotators can share a mistake.
 
 Answer with exactly one JSON object, and nothing else:
 {"kialo_claim_id": "…",

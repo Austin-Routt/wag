@@ -101,6 +101,32 @@ func TestGeminiRequestAndResponse(t *testing.T) {
 	}
 }
 
+// A daily quota used up (the API asks for hours) is not retried: one
+// attempt, and the error says it is exhausted.
+func TestGeminiQuotaExhausted(t *testing.T) {
+	f := newFake(t, func(w http.ResponseWriter, n int) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(429)
+		io.WriteString(w, `{"error":{"code":429,"message":"Quota exceeded for metric: generate_content_free_tier_requests, limit: 20","status":"RESOURCE_EXHAUSTED",
+			"details":[{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"26560s"}]}}`)
+	})
+	t.Setenv("GEMINI_API_KEY", "k")
+	c, err := NewClient(Profile{Name: "g", Provider: "gemini", BaseURL: f.URL, Params: Params{Model: "m"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	c.Sleep = NoWait
+	var attempts []Attempt
+	_, err = c.Complete(context.Background(), c.Request("", []Message{{Role: "user", Content: "hi"}}), func(a Attempt) { attempts = append(attempts, a) })
+	e, ok := err.(*Error)
+	if !ok || e.Kind != KindRateLimit || !e.Exhausted() || e.Retryable() || len(attempts) != 1 {
+		t.Fatalf("%v, %d attempts", err, len(attempts))
+	}
+	if (&Error{Kind: KindRateLimit, RetryAfter: 30 * time.Second}).Exhausted() {
+		t.Fatal("a per-minute limit is not a quota used up")
+	}
+}
+
 // A rate limit is retried after the delay the API asks for; the trace has
 // both attempts.
 func TestGeminiRateLimitRetry(t *testing.T) {

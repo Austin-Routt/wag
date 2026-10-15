@@ -2,7 +2,9 @@ package annotate
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/yourorg/wag/data"
@@ -56,5 +58,13 @@ func TestGoldChecks(t *testing.T) {
 		"conclusion": map[string]any{"formula": "true_in_situation(B)"}}}, "role": map[string]any{"kind": "guess"}}
 	if p := c.Check(bad, d); len(p) < 4 {
 		t.Fatalf("a bad annotation: %v", p)
+	}
+	// Spaces in a formula do not make it another formula (a model wrote
+	// "brings_about(tax_meat, x)").
+	var spaced Annotation
+	b, _ := json.Marshal(d.Gold["13292.7"])
+	_ = json.Unmarshal([]byte(strings.ReplaceAll(string(b), ",", ", ")), &spaced)
+	if p := c.Check(spaced, d); len(p) > 0 {
+		t.Fatalf("spaces after commas: %v", p)
 	}
 }

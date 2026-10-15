@@ -27,7 +27,8 @@ Everything below can be done in the browser, with no command line and no environ
    3. Create the run. Then either:
       - *Annotate the next claim*, to look at each claim as it comes;
       - or *Annotate all the rest*, which runs in the server, so you can close the page.
-   4. *Review the disagreements* has the reviewer compare the annotations, field by field.
+   4. *Review the disagreements* has the reviewer compare the annotations, field by field. With one annotator there is nothing to compare: the button is *Have the reviewer check each annotation*, and the reviewer judges each field of the one annotation, giving its own where it disagrees. Choose a reviewer other than the annotators if you can: a model checking its own work tends to agree with itself.
+   - **Calls and limits.** Each claim costs one call per annotator, plus one if it is reviewed. Each call sends about 41,000 tokens (the guidelines and the scheme collection), and Gemini 2.5 Flash also spends about 850–7,600 thinking tokens on it (in our first run). On the free tier (5 requests a minute, 20 a day, in October 2026), 50 claims with one annotator take three days. When the provider says a quota is used up for longer than two minutes, the run stops that annotator at once and says how long to wait; *Annotate all the rest* carries on later.
    5. Open a claim: the annotations side by side, the fields they differ on, the problems the check finds. Give your verdict. The reviewer and the gold stay hidden until you choose to see them.
    6. The agreement table compares the annotators with each other, with the gold, and with the reviewer.
 
@@ -70,13 +71,13 @@ The command line below (`wag-llm`) does the same, writing to the folders you giv
    The model name here is an example: use one that `models` lists.
 5. **Play in the browser.** A Gemini seat appears in *New game → Players*.
    ```sh
-   ./wag-server --model flash=gemini:gemini-2.5-flash,min_interval=7s,output=json
+   ./wag-server --model flash=gemini:gemini-2.5-flash,min_interval=13s,output=json
    ```
 6. **Play headless, collecting traces.**
    ```sh
-   ./wag-llm play --model flash=gemini:gemini-2.5-flash,min_interval=7s,output=json \
+   ./wag-llm play --model flash=gemini:gemini-2.5-flash,min_interval=13s,output=json \
        --pro flash --con greedy --games 5 --swap --out runs/flash-vs-greedy
-   ./wag-llm play --model flash=gemini:gemini-2.5-flash,min_interval=7s,output=json \
+   ./wag-llm play --model flash=gemini:gemini-2.5-flash,min_interval=13s,output=json \
        --pro flash --con flash --games 3 --title "Should governments tax meat?" --out runs/flash-self
    ./wag-llm report runs/flash-vs-greedy             # wins and rejected moves by seat and side
    ./wag-llm replay runs/flash-self/<file>.trace.jsonl
@@ -89,11 +90,12 @@ On the Gemini API's unpaid tier, Google may use prompts and answers to improve i
 
 WAG's prompts hold the rules, the board, the schemes, and the topic and arguments of the game. Kialo discussions are public; your own unpublished material may not be. A paid (billed) project is under different terms. Check your project's status and the current terms before you send research material.
 
-Free-tier limits are low and change; AI Studio shows your project's. They are counted per minute (requests and tokens) and per day (requests).
+Free-tier limits are low and change; AI Studio shows your project's. They are counted per minute (requests and tokens) and per day (requests). On 2026-10-15, Gemini 2.5 Flash's free tier allowed 5 requests and 250,000 tokens a minute, and 20 requests a day.
 
-- **Spacing calls.** `min_interval` spaces a profile's calls: `7s` stays under about 8 requests a minute.
-- **Retries.** A rate-limited call is retried after the delay Gemini asks for, up to `retries` times (default 3). Every try is traced.
-- **What a game costs.** A WAG prompt is 4,000–12,000 tokens. A move takes one call, or more after a rejected reply, and a retry resends the conversation so far. A daily quota of a few hundred requests is therefore on the order of ten 20-move games.
+- **Spacing calls.** `min_interval` spaces a profile's calls: `13s` stays under 5 requests a minute. The dashboard proposes 13 seconds for Gemini.
+- **Retries.** A rate-limited call is retried after the delay Gemini asks for, up to `retries` times (default 3). Every try is traced. If Gemini asks for more than two minutes, a daily quota is used up: the call is not retried, and an annotation run stops that annotator.
+- **What a game costs.** A WAG prompt is 4,000–12,000 tokens. A move takes one call, or more after a rejected reply, and a retry resends the conversation so far. Twenty requests a day is one short game; a paid tier or another model is needed for real runs.
+- **Thinking.** Gemini 2.5 Flash thinks before it answers, by default as long as it likes (up to about 7,600 thinking tokens per annotation in our first run). `thinking_budget` in a profile caps it (0 turns it off); whether that costs accuracy has not been measured.
 
 ## Profiles
 
@@ -108,7 +110,7 @@ Or put them in a file and pass `--models profiles.json`:
 ```json
 {"profiles": [
   {"name": "flash", "provider": "gemini", "model": "gemini-2.5-flash",
-   "temperature": 0.7, "output": "json", "min_interval": "7s"},
+   "temperature": 0.7, "output": "json", "min_interval": "13s"},
   {"name": "flash-nothink", "provider": "gemini", "model": "gemini-2.5-flash", "thinking_budget": 0},
   {"name": "claude", "provider": "anthropic", "model": "claude-opus-5-5", "effort": "medium"},
   {"name": "gpt", "provider": "openai", "model": "gpt-5", "effort": "low"},
