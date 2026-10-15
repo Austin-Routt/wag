@@ -1,5 +1,14 @@
 # Part 8 (2026-10-15): dialogue types, and claims merged by their text
 
+> **Corrected after reading the primary source** (part 9, the same day). §1 below was written from Aberdein's survey alone. The owner then added Walton's *The New Dialectic* (1998), and checking §1 against it changed five points. Each is fixed in place and marked *(corrected in part 9)*:
+> 1. **"Eight types"** is Walton's 1997 list. In the 1998 book the main types are six: debate is mixed persuasion and eristic, and teaching is a kind of information-seeking.
+> 2. **"A public debate is persuasion addressed to an audience"** is the 1997 view. The 1998 book calls political debate mixed discourse.
+> 3. **Deliberation** does not need several options or the absence of a thesis. In the simplest case it reduces to one side for and one side against a proposed course of action. What it needs is a practical problem, shared goals, symmetric roles and a tentative joint decision.
+> 4. **Kialo** policy debates are a persuasion–deliberation hybrid, not plain "debate".
+> 5. **"Negotiation and eristic: not as modes"** is superseded by the owner's objective: every type, playable and findable.
+>
+> The full account is [`dialogue-types.md`](dialogue-types.md); the work it leads to is [plan §8](plan.md#8-track-d-dialogue-types).
+
 The owner sent Andrew Aberdein's *Dialogue Types, Argumentation Schemes, and Mathematical Practice: Douglas Walton and Mathematics* (arXiv:2011.13845, 2020). The owner asked two things:
 1. Should WAG classify games and theses by Walton's dialogue types? Is one of six definitive, and can types combine? Should the types be part of annotation and of choosing a game mode? What else in the paper matters?
 2. Is it true that WAG merges different Kialo claims that have the same text, sometimes into a loop that makes it refuse the game, and should claims be keyed by ID?
@@ -33,8 +42,8 @@ The paper reviews two of Walton's ideas, applied to mathematics: dialogue types 
   | Stable agreement | persuasion | inquiry | information-seeking |
   | Practical settlement | negotiation | deliberation | — |
   | Accommodation | eristic (quarrel) | — | — |
-- **The list is not closed.** The paper states, citing Walton 1998, that the types can be subdivided or combined and that the list is not meant to be exhaustive.
-  - Walton's 1997 table (the paper's Table 2) lists eight types: it adds *debate* (persuading a third party) and *pedagogical*. It gives each type's individual goals, collective goal and benefits.
+- **The list is not closed.** The paper states, citing Walton 1998, that the types can be subdivided or combined and that the list is not meant to be exhaustive. *(Corrected in part 9: the 1998 book gives the six with subtypes and treats combinations in its chapters 8–9; it does not itself say whether the list is exhaustive.)*
+  - Walton's 1997 table (the paper's Table 2) lists eight types: it adds *debate* (persuading a third party) and *pedagogical*. It gives each type's individual goals, collective goal and benefits. *(Corrected in part 9: the 1998 book does not keep these two as main types. Political debate is mixed persuasion and eristic (p. 223), and pedagogical dialogue is a subtype of information-seeking (pp. 235–7).)*
   - The paper's own Table 3 adds *oracular* information-seeking, where the one who answers is a black box.
 - **The type can change mid-dialogue (a dialectical shift).**
   - A shift can be productive. Krabbe describes a proof moving from inquiry to persuasion (verification) to information-seeking (teaching).
@@ -44,12 +53,12 @@ The paper reviews two of Walton's ideas, applied to mathematics: dialogue types 
 
 ### 1.2 Is one of six definitive? Can there be combinations?
 
-**Not definitive.** The six are a systematic core, not a complete list, and Walton's own lists grew to eight.
+**Not definitive.** The six are a systematic core, not a complete list. *(Corrected in part 9: an earlier version said Walton's lists "grew to eight". The eight are from 1997; the 1998 book returns to six main types and treats the rest as subtypes or mixtures.)*
 
 **Combinations, yes, in three senses:**
 1. **Nesting.** A persuasion dialogue can sit inside an inquiry, or an information-seeking exchange inside a persuasion.
 2. **Shifts over time.** The type of a dialogue can change as it goes.
-3. **Mixed settings.** A public debate is persuasion addressed to an audience.
+3. **Mixed settings.** A public debate is persuasion addressed to an audience. *(Corrected in part 9: that is the 1997 "debate" type. In the 1998 book, political debate is mixed discourse, persuasion and eristic, usually with negotiation.)*
 
 So one label per game is a simplification. The model that fits the literature:
 - a *main* type for the whole dialogue;
@@ -79,11 +88,13 @@ The thesis's kind only narrows the types that make sense.
 | `cq` mode | the same, with points; an unanswered question loses | points | persuasion with strict duties to answer (a rigorous variant) |
 | `solo` mode | one player argues both sides | the verdict; no winner | nearest to **inquiry** by one inquirer |
 | `classic`, `infinite`, `target`, `timed`, `speed` | no shared thesis; each player scores their own arguments that stand | points | **none.** A competitive exercise that rewards arguments, not settling anything. |
-| Kialo import | a public pro and con tree; readers vote on impact | persuade the audience | **debate** (persuasion of a third party) |
+| Kialo import | a public pro and con tree; readers vote on impact | persuade the audience | **public persuasion**. On a practical thesis, a persuasion–deliberation hybrid (*corrected in part 9*; was "debate"). |
 
 **Two context presets name types the game does not play:**
-- **"Policy deliberation"** is described as "a deliberation dialogue". But the game still has a fixed proposal argued pro and con, with a winner. That is persuasion about a practical proposition. A deliberation starts from an open question ("what should we do about meat?") and weighs several options, with no side owning a thesis.
-- **"Scientific inquiry"** is described as "an inquiry". But the game is adversarial, with a winner, under a higher proof standard. An inquiry is cooperative: both parties try to prove or disprove the claim.
+- **"Policy deliberation"** is described as "a deliberation dialogue". But the game is adversarial, with a winner, and pro alone bears the burden. That is persuasion about a practical proposition.
+  - *(Corrected in part 9.)* An earlier version said a deliberation must weigh several options with no side owning a thesis. That is not Walton's 1998 account. A deliberation starts from a practical problem and shared goals. The parties are symmetric co-deliberators, and in the simplest case it reduces to one side for and one side against a proposed course of action (p. 162). It ends in a tentative joint decision.
+  - The preset is now named "Policy question".
+- **"Scientific inquiry"** is described as "an inquiry". But the game is adversarial, with a winner, under a higher proof standard. An inquiry is cooperative: both parties try to prove or disprove the claim. The preset is now named "Scientific question" (part 9).
 
 The presets mix two dimensions: the dialogue type, and the domain's weights and proof standards.
 
@@ -92,10 +103,12 @@ The presets mix two dimensions: the dialogue type, and the domain's weights and 
 Yes, as a setting separate from the domain preset, and only where it changes rules. A label that changes nothing invites a false sense of fidelity to Walton. By type:
 
 - **Persuasion.** It is what WAG plays now. The setting would make it explicit.
-- **Deliberation.** It is the type policy theses call for, and policy theses dominate Kialo. It needs:
-  - an open question with several options, each a position of one Carneades issue (Carneades allows any number of positions; WAG's adapter handles only two today);
-  - no single side bearing the burden;
-  - an outcome that is the option or options that stand.
+- **Deliberation.** It is the type policy theses call for, and policy theses dominate Kialo. *(Corrected in part 9.)* It needs:
+  - a practical problem and a shared goal agreed at the opening;
+  - symmetric roles;
+  - a joint, tentative decision as the outcome, with caution where harm is possible.
+
+  One proposal argued for and against is the simplest case. Several options, each a position of one Carneades issue, is the general one (Carneades allows any number of positions; WAG's adapter handles only two today).
 
   The practical-reasoning, consequences and values schemes are its natural moves. This is days of work, not hours.
 - **Inquiry.** It needs:
@@ -105,8 +118,8 @@ Yes, as a setting separate from the domain preset, and only where it changes rul
 
   The `solo` mode is a start.
 - **Information-seeking.** Already partly present: the question move, and requiring evidence. It is not worth a mode of its own.
-- **Negotiation and eristic: not as modes.**
-  - Negotiation is about resources and offers, not argumentation schemes.
+- **Negotiation and eristic: not as modes.** *(Superseded in part 9: the owner's objective is every type, playable and findable. Negotiation becomes a mode with its own bargaining core, and eristic a detection exercise; see [plan §8](plan.md#8-track-d-dialogue-types).)*
+  - Negotiation is about resources and offers, not argumentation schemes. *(In part: its offers are backed and attacked with schemes, such as practical reasoning, threats and promises.)*
   - Eristic is worth *detecting* (a personal attack in a persuasion), not playing.
 
 **One rule worth adopting early: scheme appropriateness by type.**
@@ -125,6 +138,8 @@ Yes, as a setting separate from the domain preset, and only where it changes rul
   - `clarification` is information-seeking.
 
   A separate per-claim type would add a field with low agreement and no consumer yet. Map the roles to shift kinds in analysis. Add a per-claim tag only if a research question needs it.
+
+  *(Part 9: that research question now exists. Finding every type in data needs typed segments and shifts, annotated at the level of a stretch of dialogue or a Kialo subtree, not each claim. See [plan §8](plan.md#8-track-d-dialogue-types), D3.)*
 
 ### 1.7 Other ideas in the paper to take up before going on
 
@@ -168,7 +183,7 @@ These concern the schemes, and they improve the catalogue plan ([`plan.md`](plan
 | A deliberation mode (several options, Carneades issues with more than two positions) | After phase 2 | Days |
 | An inquiry mode; commitment stores | Later | Days each |
 
-The catalogue stays the first priority. Dialogue types change the game more than the annotation.
+The catalogue stays the first priority. Dialogue types change the game more than the annotation. *(Superseded in part 9: this table is replaced by [plan §8, Track D](plan.md#8-track-d-dialogue-types).)*
 
 ## 2. Claims merged by their text
 

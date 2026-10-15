@@ -99,7 +99,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 
 ### 2.4 Options
 
-- **Context.** Sets the proof standard of the claim, whether sources are required, and draft scheme weights (`wag/data/contexts.json`): everyday, policy deliberation, scientific inquiry, legal case, equal weights.
+- **Context.** Sets the proof standard of the claim, whether sources are required, and draft scheme weights (`wag/data/contexts.json`): everyday, policy question, scientific question, legal case, equal weights. These are domains, not dialogue types: every game is a persuasion dialogue ([`dialogue-types.md`](dialogue-types.md)).
 - **Scheme weights** (under the context). They start from the preset, and you can change any of them for this game.
   - *Save as a preset…* downloads them, with the standard and options, as a preset file.
   - *Load a preset…* reads one back. Start the server with `--contexts FILE` to offer it to everyone.

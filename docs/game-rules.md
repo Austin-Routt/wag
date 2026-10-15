@@ -250,6 +250,19 @@ In tournaments (`--games`), `--alternate` swaps the seats every other game.
 **Self-play** is two seats played by the same kind of agent
 (`--p1 greedy --p2 greedy`). **Solo** is one seat arguing both sides.
 
+**Dialogue type.** In Walton's terms every mode is a persuasion dialogue, or
+none:
+- `debate` is the one-sided form: pro must prove the claim, and con need only
+  doubt it.
+- `cq` adds a strict duty to answer.
+- `solo` is one person deliberating with a devil's advocate on a practical
+  claim, or a one-person inquiry on a factual one.
+- The points modes match no type.
+
+The context presets are domains (weights and standards), not types. Other
+types are planned: [`dialogue-types.md`](dialogue-types.md) §9,
+[`plan.md`](plan.md) §8.
+
 ## 7. Agents and programs
 
 - The rule bots fill a move's parts with the words already used on the board

@@ -1,6 +1,11 @@
 # The plan: one verified scheme catalogue, then annotation on it
 
-Status: proposed on 2026-10-15, not started. The owner decides the open questions in §7 before work begins. Why this plan, from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md). What Walton's dialogue types and Walton and Macagno's classification add to it: [`review-2026-10-15-part8.md`](review-2026-10-15-part8.md). Where the project stands: [`README.md`](../README.md).
+Status: proposed on 2026-10-15, not started. The owner decides the open questions in §7 before work begins.
+
+- **Why this plan,** from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md).
+- **What Walton and Macagno's classification adds:** [`review-2026-10-15-part8.md`](review-2026-10-15-part8.md).
+- **Dialogue types,** the second objective, are Track D (§8). It rests on the reference [`dialogue-types.md`](dialogue-types.md) and the review [`review-2026-10-15-part9.md`](review-2026-10-15-part9.md).
+- **Where the project stands:** [`README.md`](../README.md).
 
 ## 1. Principles
 
@@ -98,7 +103,7 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 
 The current guidelines are version 2 with the version 3 changes appended as a list of edits. They allow two answers in places and contradict each other in one. Version 4 is one document, in the order an annotator decides:
 0. **Once per discussion, by a person:**
-   - the main dialogue type (a Kialo discussion is a public debate: persuasion addressed to readers);
+   - the setting, and the dialogue type, both supposed and enacted ([`dialogue-types.md`](dialogue-types.md) §9.3). A Kialo discussion is public persuasion addressed to readers; on a practical thesis it is a persuasion–deliberation hybrid;
    - the thesis's kind: practical, factual, evaluative or classificatory.
 1. **Does the claim give a reason?** If not, what is it?
    - a thesis or proposal: record its conclusion form and scheme family;
@@ -185,19 +190,14 @@ Each step has examples from the catalogue. Where two answers are equally right, 
   - The game's 24 critical questions, already in our own words, are checked against the catalogue's.
 - **Derived schemes join the game** once they are verified, with their ask and backup edges linted like the rest.
 - **Model players use the same catalogue** for the schemes they may play.
-- **Dialogue types** (part 8 §1.5):
-  - **Make the type explicit.**
-    - Record it in game settings and exports; every current mode is persuasion.
-    - Split the context presets into dialogue type and domain. Today "Policy deliberation" and "Scientific inquiry" name types the game does not play.
-    - Flag schemes that are not proper in the game's type.
-  - **Then a deliberation mode:** an open question with several options as the positions of one issue; outcome: the options that stand.
-  - **Later:** an inquiry mode (cooperative, shared outcome), and commitment stores.
+- **Dialogue types:** Track D (§8). The presets were renamed on 2026-10-15: "Policy question" and "Scientific question", since the game does not play deliberation or inquiry.
 - **"Other" in the game as a defeasible modus ponens,** so that its arguments can be asked for backing and exceptions.
 
 ## 7. Decisions the owner needs to make
 
 1. **Book text in this public repository.**
-   - `docs/book-catalogue/` transcribes the book's pp. 1–138 as printed: 75 scheme entries and 75 distinct critical questions.
+   - **`docs/The New Dialectic.pdf` is the whole of Walton's 1998 book,** a copyrighted work, added on 2026-10-15. This is the most pressing item ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)).
+   - `docs/book-catalogue/` transcribes the scheme book's pp. 1–138 as printed: 75 scheme entries and 75 distinct critical questions.
    - `docs/walton-audit/cq_drafts.json` quotes 8 critical questions of the compendium.
    - The game's data uses our own wording. `walton.yml` has a few quotations from its upstream authors.
 
@@ -210,4 +210,67 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 3. **Who verifies the catalogue,** and whether tier 1 above is the right first set.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
-6. **Dialogue types:** whether the game should go beyond persuasion, and in which order: deliberation first is the recommendation (part 8 §1.9).
+6. **Dialogue types (Track D, §8).** The owner set the objective on 2026-10-15: every type, playable and findable. What remains to decide:
+   - the order of D2, after the catalogue or alongside it;
+   - eristic as a detection exercise only (recommended);
+   - how a negotiation is scored;
+   - which corpora, under which licences.
+
+## 8. Track D: dialogue types
+
+**The objective,** set by the owner on 2026-10-15:
+- WAG can play a game in any established dialogue type.
+- WAG can find every type in real discourse, negotiation and quarrels included, as it does for schemes.
+
+**Where it is explained:**
+- **What the types are:** [`dialogue-types.md`](dialogue-types.md).
+- **Whether each part is feasible:** [`dialogue-types.md` §9.2](dialogue-types.md#92-can-wag-play-every-type-and-find-every-type-in-data).
+- **Why this track:** [part 9](review-2026-10-15-part9.md).
+
+### Principles
+
+- **Definitions come from the sources.** Walton's *The New Dialectic* (1998) comes first. Walton & Krabbe's *Commitment in Dialogue* (1995) is read before any code on commitments or shifts.
+- **A type is recorded only where it changes something:** a rule in the game, or a field in annotation.
+- **Mixtures are normal.** A dialogue has several typed segments; shifts are events between them.
+- **Persuasion is the base.** Other types come one at a time, each playable end to end and tested before the next.
+- **No game rewards abuse.** Eristic is a detection exercise.
+
+### Steps
+
+| Step | What | Needs | Effort | Done when |
+|---|---|---|---|---|
+| **D0. Reference** | [`dialogue-types.md`](dialogue-types.md): the types, the shared concepts, shifts, the arguments whose standing depends on the type, cues, a data model | — | Done on 2026-10-15 | A person checks its page references against the book |
+| **D1. Record the type** | (a) Game settings and exports carry `dialogue_type` (persuasion for every mode) and the persuasion form (one-sided, or a dispute). (b) Step 0 of the version 4 guidelines: setting, type supposed and enacted, thesis kind, initial situation. (c) A dialogue-type catalogue: one entry per type and subtype, drafted from the reference, then verified. (d) "Proper in" on the scheme entries (§2). | Phase 1's skeleton for (c) and (d); phase 2 for (b) | 1–2 sessions | Exports carry the type; the guidelines have step 0; the six type entries pass a checker |
+| **D2a. Persuasion with commitments** | **Commitment stores** with assert, concede, retract and challenge. **Rules:** rule 1 as an option (premises must be the respondent's commitments, or be defended when challenged); the retraction rules. **A dispute variant:** both sides must prove. **Stages:** an opening that agrees the issue and the standard, and a closing. **Variants:** permissive and rigorous as settings. **Model players** get hidden positions, so that the maieutic outcome can be measured. The text protocol's next version carries all of this. | Walton & Krabbe 1995 read | 1 week | Existing games replay unchanged; each rule has a test; a model game is played under each variant |
+| **D2b. Deliberation** | **Opening:** a practical problem and a shared goal. **Roles:** symmetric. **Proposals:** one in the simplest case, then several, as the positions of a Carneades issue (the adapter handles two today). **Outcome:** a joint, tentative decision. **A caution setting:** a presumption against a proposal with a possible serious harm. | D2a | 1 week | A three-option game between models; a Kialo practical thesis can be opened as a deliberation |
+| **D2c. Inquiry** | **One team. No retraction. Sources required.** **Stages:** data, analysis, presentation. **Outcome:** proven, disproven, or open. **Export:** the result as an ordered proof. | D2a | Days | Two models cooperate to prove a claim, or fail; a retraction is refused with its reason |
+| **D2d. Information-seeking** | **An answerer seat that holds knowledge:** a document, a scenario card, or a model. **Questions** with presuppositions; direct and indirect answers; challenging a presupposition. **Expert consultation,** probed through the expert-opinion critical questions. | D2a | 1 week | A questioner finds the facts on a hidden card; a loaded question is flagged |
+| **D2e. Negotiation** | **The bargaining core:** issues and options, private interests and reservation values. **Moves:** offers, counter-offers, accept, reject; promises and threats. **Duties:** Donohue's response rules. **Arguments for offers** go through the schemes. **Deadlock,** and a shift to information-seeking. Distributive and integrative subtypes first. | D2a; the owner's decision on scoring | 2–3 weeks | Two models reach a deal or fail; the outcome is scored; a threat inside a persuasion game is flagged |
+| **D2f. Shifts and embedding** | **A stack of dialogues:** a subdialogue opened by agreement; its results carried back when it is functionally joined. **A flag** on a move of another type made without an agreed shift. | Two of D2b–e | 1 week | A deliberation embeds an information-seeking subdialogue; an unagreed threat is flagged as an illicit shift |
+| **D2g. Eristic, as detection** | "Spot the shift": on real or recorded dialogues, mark where a quarrel begins and which move started it; scored against a gold | D3's gold | Days | It runs on 20 dialogues with a gold |
+| **D3. Identification** | **Guidelines:** Walton's questions, the cues, the cautions (reference §8). **Model annotators and a reviewer** on dialogues and segments: a new task in the annotation package. **People verify.** **Agreement:** kappa on the type; segment boundaries; shifts found; licit or not. | D1 | 1–2 weeks of code, then data work | Agreement measured on at least 30 dialogues across at least four types; a baseline classifier reported |
+| **D4. Corpora** | At least one source per type (below) | The owner's decision on licences | Ongoing | Each of the six types has a source with at least 20 annotated dialogues |
+
+### Order
+
+1. **D0** is done.
+2. **D1** goes alongside phases 1 and 2. It is cheap.
+3. **D2a** comes after phase 1, or alongside it if a second person codes.
+4. **The rest of D2** comes after phase 2.
+5. **D3 and D4** start with Kialo during phase 3 (persuasion and deliberation), then move to other corpora.
+
+The scheme catalogue stays the first priority, because every type that argues uses it.
+
+### Candidate corpora
+
+None of these has been checked here for licence or fit.
+
+| Type | Candidates |
+|---|---|
+| Persuasion | Kialo (in hand); ChangeMyView (Tan et al., 2016) |
+| Deliberation | Kialo's practical theses (a hybrid); meeting and town-hall transcripts; DeliData (Karadzhov et al., 2023), group problem-solving that is close to inquiry |
+| Inquiry | Peer-review and replication discussions; public inquiry reports |
+| Information-seeking | QuAC (Choi et al., 2018); interview transcripts |
+| Negotiation | Deal or No Deal (Lewis et al., 2017); CraigslistBargain (He et al., 2018); CaSiNo (Chawla et al., 2021) |
+| Eristic | Conversations Gone Awry (Zhang et al., 2018); parliamentary question periods (Hansard) |
+| Mixed | AIFdb's annotated debates (for example the Moral Maze radio debates, and the 2016 US presidential debates); Question Period |

@@ -5,12 +5,15 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 - **The game.** Players put forward arguments built from Walton's argumentation schemes. They attack, defend and question each other's arguments through the schemes' critical questions, to any depth.
 - **What decides the moves.** A network of schemes and critical questions (the NASCQ, after Pyon & Ri 2022) decides which moves are legal. Carneades 4 labels every statement In, Out or Undecided after each move.
 - **Who plays.** A seat can be a person, a rule bot, or a language model.
-- **The research aim.** Ground the game's schemes in real debate: annotate Kialo discussions as scheme instances, with models and people, and grow the scheme network from what the data shows.
+- **The research aims.**
+  1. **Schemes.** Ground the game's schemes in real debate: annotate Kialo discussions as scheme instances, with models and people, and grow the scheme network from what the data shows.
+  2. **Dialogue types** (added 2026-10-15). Play a game in any of Walton's dialogue types: persuasion, inquiry, deliberation, information-seeking, negotiation, and eristic as a detection exercise. Find every type, and the shifts between them, in real discourse. The reference is [`docs/dialogue-types.md`](docs/dialogue-types.md).
 
 **Status on 2026-10-15.**
 - **Working prototype:** the game, the browser dashboard, the model players, and a first annotation pipeline. They are tested and run on Windows.
 - **Weak link:** the scheme knowledge they share. The book, the Carneades collection and the game's data are not yet one verified catalogue.
 - **Annotation so far:** every annotation was made by a language model; no person has checked it.
+- **Dialogue types:** a reference is written. The game plays only persuasion so far.
 
 The next step is therefore not more code. It is to align and verify that catalogue, then annotate against it ([the plan](docs/plan.md)).
 
@@ -54,6 +57,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 | Scheme sources | Split | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | One verified catalogue; critical questions and examples for most schemes | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
+| Dialogue types | Reference written | Every game is a persuasion dialogue: `debate` is the one-sided form | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
 | Carneades 4 | Working | A fork with validator and evaluation fixes, shared with the Kialo project | | [`CARNEADES_FORK.md`](CARNEADES_FORK.md) |
 
 ## 3. Current issues
@@ -74,22 +78,24 @@ In order of importance. Each issue links to the document that explains it.
    - Each annotation call sends about 41,000 tokens, one claim per call.
    - Gemini 2.5 Flash's free tier allows 20 requests a day, so 50 claims take three days for one annotator.
    - See [`docs/llm.md`](docs/llm.md#the-free-tier-privacy-and-limits).
-6. **Book text in this public repository, and no licence.**
-   - `docs/book-catalogue/` transcribes the book's schemes and critical questions as printed.
+6. **Books in this public repository, and no licence.**
+   - **`docs/The New Dialectic.pdf` is the whole of Walton's 1998 book,** a copyrighted work. It should be removed, and preferably purged from the history. See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository).
+   - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
    - WAG itself has no licence.
-   - Both need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
+   - All three need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
 7. **Every game is a persuasion dialogue, in Walton's terms.**
-   - Two context presets are named after types the game does not play: "Policy deliberation" and "Scientific inquiry".
+   - WAG has no commitment stores, no retraction rules and no stages, and these are the base of every type in Walton's account.
    - The points modes match no dialogue type.
-   - Deliberation, which policy theses call for, needs issues with several options.
-   - See [part 8 §1](docs/review-2026-10-15-part8.md#1-dialogue-types).
+   - The second aim needs a protocol for each type and an annotation scheme for types and shifts. That is Track D, after the scheme catalogue.
+   - See [`docs/dialogue-types.md`](docs/dialogue-types.md) §9 and [part 9](docs/review-2026-10-15-part9.md).
 8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
    - 3 book schemes have no `walton.yml` scheme, and 6 `walton.yml` schemes are not in the book.
    - 13 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
-**Fixed on 2026-10-15** (part 7 §1, part 8 §2):
+**Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):
+- the context presets "Policy deliberation" and "Scientific inquiry" are renamed "Policy question" and "Scientific question": the game plays neither a deliberation nor an inquiry;
 - the Kialo import kept apart claims with the same words: it had merged them into one statement, and refused the game when the merge closed a loop;
 - the Annotate page no longer jumps to the top while a run works;
 - the review works with one annotator;
@@ -108,10 +114,11 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 2. Annotation version 4 | Annotations that follow the catalogue | **Guidelines** as one decision procedure, with "none" split and the thesis given its conclusion form. **"Other"** with a structured proposal. **Prompts:** first candidates from an index, then the full entries. Formulas written by code; constrained JSON. | Code and guidelines; measured against version 3 |
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
-| 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. **Dialogue types:** the game's type made explicit, context presets split into type and domain, then a deliberation mode. | Code |
+| 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. | Code |
+| Track D. Dialogue types | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts, and eristic as detection. **D3:** identification with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
 **The next three actions:**
-1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book text, a licence, who verifies, paid model access.
+1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF and the book text, a licence, who verifies, paid model access, and Track D's open choices.
 2. Generate the catalogue skeleton and its checker.
 3. Verify the first set of schemes while the version 4 guidelines are drafted.
 
@@ -157,7 +164,9 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/review-2026-10-15-part7.md`](docs/review-2026-10-15-part7.md) | The first real model annotation run, reviewed; why "none"; what the model is given; whether the data is enough |
-| [`docs/review-2026-10-15-part8.md`](docs/review-2026-10-15-part8.md) | Walton's dialogue types, and what they mean for the game and the annotation; Walton and Macagno's classification; the Kialo claim-merge bug, fixed |
+| [`docs/dialogue-types.md`](docs/dialogue-types.md) | **The reference on dialogue types:** what each type is, how types mix and shift, which arguments are proper in which type, how to recognise them, and what WAG needs to play and find them |
+| [`docs/review-2026-10-15-part9.md`](docs/review-2026-10-15-part9.md) | *The New Dialectic* read in full: part 8 corrected; whether every type can be played and found; Track D; the book PDF |
+| [`docs/review-2026-10-15-part8.md`](docs/review-2026-10-15-part8.md) | Walton's dialogue types from Aberdein's survey (corrected by part 9); Walton and Macagno's classification; the Kialo claim-merge bug, fixed |
 
 **The game**
 
@@ -209,6 +218,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`part 6`](docs/review-2026-10-15-part6.md) | A third-party audit reviewed, the model layer, the evidence for the schemes |
 | [`part 7`](docs/review-2026-10-15-part7.md) | The first real annotation run |
 | [`part 8`](docs/review-2026-10-15-part8.md) | Dialogue types (Aberdein 2020); Kialo claims keyed by ID |
+| [`part 9`](docs/review-2026-10-15-part9.md) | *The New Dialectic* (Walton 1998); dialogue types as a second aim |
 
 ## 7. Repository layout
 
@@ -227,5 +237,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 - **Carneades 4:** MPL-2.0 (`carneades-4/LICENSE`).
 - **The Walton collection for Carneades 4** (`walton.yml`, from `github.com/basakkurtuldu/walton-argumentation-schemes-for-carneades-4`): MPL-2.0 (`docs/scheme-registry/walton-clean/LICENSE`).
 - **Walton, Reed & Macagno, *Argumentation Schemes* (Cambridge UP, 2008):** not included. The repository cites it by scheme and question labels and pages, except `docs/book-catalogue/` (issue 6).
+- **Walton, *The New Dialectic* (University of Toronto Press, 1998):** cited by page in [`docs/dialogue-types.md`](docs/dialogue-types.md), in paraphrase. `docs/The New Dialectic.pdf` should not be in the repository (issue 6).
+- **Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice* (arXiv:2011.13845, 2020):** cited; not included.
 - **Kialo discussions:** public; the datasets keep their claim ids.
 - **WAG's own code and data:** no licence yet (issue 6).
