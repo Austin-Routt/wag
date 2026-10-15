@@ -12,7 +12,7 @@ It is written from two sources, both read in full:
 - **A20:** Andrew Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice: Douglas Walton and Mathematics* (arXiv:2011.13845, 2020). It is a survey. Its tables reproduce Walton & Krabbe 1995 and Walton 1997.
 
 **How it is written:**
-- **Paraphrase only.** No sentence of either source is reproduced. The PDF of ND is not part of WAG; see [part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository).
+- **Paraphrase only.** No sentence of either source is reproduced. The PDF of ND is not part of WAG: it was deleted from the repository on 2026-10-15 ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)), and readers need their own copy.
 - **Unread sources are marked.** Works cited through ND or A20 that we have not read ourselves are marked "via ND" or "via A20". The main one is Walton & Krabbe's *Commitment in Dialogue* (1995).
 - **Disagreements are flagged.** Where the two sources differ, or WAG adds something of its own, the text says so.
 
@@ -64,24 +64,49 @@ The grid is Walton & Krabbe 1995 p. 80, via A20 Table 1. It sorts dialogues by t
 - the *initial situation*: what the dialogue starts from;
 - the *main goal*: what it aims at.
 
-| Main goal ↓ \ Initial situation → | Conflict | Open problem | Lack of information |
+| Main goal ↓ \ Initial situation → | Conflict | Open problem | An unsatisfactory spread of information |
 |---|---|---|---|
 | A stable agreement or resolution | persuasion | inquiry | information-seeking |
 | A practical settlement: a decision to act or not | negotiation | deliberation | — |
 | A provisional accommodation | eristic | — | — |
 
-Six cells are filled and three are empty. A20 explains why:
+Six cells are filled and three are empty. The grid is not in ND; it is the only principled derivation of the six (§2.6). A20 explains the empty cells:
 - With an open problem, nobody has prior commitments to air, so an accommodation makes no sense.
 - When one party simply lacks information, only a stable agreement makes sense.
 
-### 2.3 Other lists, and how ND treats them
+### 2.3 The descriptive table (Walton 1997, via A20 Table 2)
 
-| Proposed type | Source | In ND |
-|---|---|---|
-| **Debate**: persuading a third party by airing the strongest arguments on both sides | Walton 1997, via A20 Table 2 | Political debate is **mixed discourse**: persuasion and eristic (after Woods & Walton 1982 and Walton 1989a), and usually negotiation too (p. 223) |
-| **Pedagogical**: teaching and learning | Walton 1997, via A20 Table 2 | A **subtype of information-seeking** (pp. 235–7). It conveys a body of knowledge, not just information, and examines the teacher's claims along the way. Aristotle's *didactic* arguments belong here (p. 236). |
-| **Action-producing**: pressing for action | Walton 1992, via ND p. 223 | One of the five models mixed in Question Period. It is close to deliberation. |
-| **Oracular information-seeking**: the answerer is a black box | A20 Table 3 | Not in ND. A variant of information-seeking. |
+The grid derives the types. This table describes them. It is Walton's table from a 1997 paper, as A20 reproduces it, in our words. Similar tables are in Walton 1990 and Walton & Krabbe 1995 (via A20).
+
+| Type | Initial situation | Each party's goal | Collective goal | Benefit |
+|---|---|---|---|---|
+| Persuasion | A difference of opinion | Persuade the other | Resolve the difference | Understanding the positions |
+| Inquiry | Ignorance | Contribute findings | Prove or disprove a conjecture | Knowledge |
+| Deliberation | Contemplating future consequences | Promote one's own goals | Act on a thoughtful basis | Working out one's priorities |
+| Negotiation | A conflict of interest | Maximise one's gains | A settlement without undue inequity | Harmony |
+| Information-seeking | One party lacks information | Obtain information | Transfer knowledge | Help in a goal-directed activity |
+| Quarrel (eristic) | A personal conflict | Hit out at and humiliate the opponent | Reveal the deeper conflict | Venting emotions |
+| Debate | Adversarial | Persuade a third party | Air the strongest arguments on both sides | Spreading information |
+| Pedagogical | One party's ignorance | Teaching and learning | Transfer knowledge | The table's entry is unclear |
+
+ND's own descriptions (§4 below) differ in places. For example, ND starts deliberation from a practical problem, a need to act, rather than from contemplating consequences (p. 150).
+
+### 2.4 Other labels, and how ND treats them
+
+Several other names for kinds of dialogue appear in ND and in Walton's other lists. None is a seventh main type in ND.
+
+| Label | What it names | In ND | ND |
+|---|---|---|---|
+| **Debate** | Persuading a third party by airing the strongest arguments on both sides (Walton 1997) | **Mixed discourse:** persuasion and eristic (after Woods & Walton 1982 and Walton 1989a), and usually negotiation too | p. 223 |
+| **Pedagogical** | Teaching and learning (Walton 1997) | **A subtype of information-seeking.** It conveys a body of knowledge, not just information, and examines the teacher's claims along the way. Aristotle's *didactic* arguments belong here. | pp. 235–7 |
+| **Action-producing** and **action-directed** | A dialogue meant to get something done | **Used in passing, not defined.** "Action-producing" is one of the five models mixed in Question Period, after Walton 1992: its second stated aim is to press for action. "Action-directed" describes deliberation: in the bicycle-path case, the action-directed exchange about the road is then called a deliberation, and Question Period is said to be, in part, an action-directed deliberation. | pp. 199–200, 223 |
+| **Advocacy** and **advocacy dialogue** | Arguing one side as strongly as possible, often for an interest | **A stance found inside types, not a type** (§2.5). ND calls a sales pitch "some kind of advocacy dialogue", then finds it mixed. It says itself that bias and advocacy remain to be investigated. | pp. 121–5, 209, 215–7, 227–32 |
+| **Commercial advertisement** | An offer to sell | **Closest to one phase of a negotiation:** an offer | pp. 122–5 |
+| **Advocacy advertisement** | An advertisement for a point of view on an issue | **An argument in a persuasion dialogue** | pp. 124–5 |
+| **Sales talk** | Buying a car from a salesman | **Mixed, with shifts:** information-seeking, then persuasion, then negotiation. The buyers may be deliberating. | pp. 227–32 |
+| **Legal trial** | | **Mixed:** adversarial persuasion before a judge or jury, with expert testimony, impeachment of witnesses and plea bargaining | pp. 232–5 |
+| **Question Period** | Questions to the government in the Canadian House of Commons | **Mixed:** five models | pp. 219–26 |
+| **Oracular information-seeking** | The answerer is a black box | Not in ND. A variant of information-seeking (A20 Table 3). | — |
 
 Aristotle's five kinds of argument, mapped onto the six types (ND pp. 237–43):
 
@@ -93,17 +118,44 @@ Aristotle's five kinds of argument, mapped onto the six types (ND pp. 237–43):
 | contentious | eristic |
 | dialectical | a subspecies of persuasion |
 
-### 2.4 Is the list closed?
+### 2.5 Advocacy and action: what each main type is for
 
-- **ND fixes six main types.** It handles everything else as a subtype or a mixture: debate, teaching, sales talk, a trial, Question Period (ch. 9). ND p. 31 offers the list to orient the reader; it says neither that the six are exhaustive nor that they are not.
-- **A20 says the list is not meant to be exhaustive,** and that the types may be subdivided or combined. It cites ND p. 31 for this:
-  - the subtypes are on that page;
-  - combining is the subject of ND chs. 8–9;
-  - "not exhaustive" is A20's own reading.
-- **For WAG:**
-  - **Main types:** a closed list of six. A new main type would need a new pair of initial situation and goal; none has been needed.
-  - **Subtypes:** an open list.
-  - **Mixtures:** "mixed" is recorded as several typed segments, not as a seventh type.
+Advocacy and action are two separate questions that cut across the types:
+- **Advocacy:** does each side argue for its own side?
+- **Action:** is what the dialogue produces a commitment to *do* something?
+
+| Type | Advocacy | What a commitment is | Does it produce action? |
+|---|---|---|---|
+| **Persuasion** | **Yes, built in.** Each side argues its own thesis as strongly as the rules allow. Neither must bring evidence for the other side (pp. 122, 231–2). This normal bias becomes a bad one only if pushed so far that it kills the openness and balance the dialogue needs (p. 122). | Accepting a proposition as true or plausible: an opinion (pp. 38–9, 108) | **No, not directly.** Its product is acceptance of the thesis. But the thesis can be practical, such as "buying this car would be a good idea": a persuasion dialogue can be about whether a course of action is advisable (p. 229). Kialo's policy debates are of this kind. |
+| **Negotiation** | **Yes, for interests.** Negotiation is interest-based, where persuasion is oriented to the truth of the matter (p. 121). | A readiness to do something. Offers, promises and threats express it; an offer is a pledge (pp. 108, 125). | **Yes.** A deal is an agreement about what each side will do or give. |
+| **Deliberation** | **Partly.** Each party argues for its proposal, but the goal is shared (pp. 150–2). Where the basic goals conflict, it becomes a hybrid with persuasion (ch. 6 note 1). | Towards a course of action, as in negotiation (p. 108) | **Yes.** A decision on what to do, held tentatively (pp. 162–3). |
+| **Inquiry** | **No.** Each step builds only on what is established, and one-sided presentation is out of place (pp. 70, 232). | Established propositions, never retracted | **No.** Its product is knowledge. |
+| **Information-seeking** | **Not from the answerer.** A biased source is a defect: the salesman is a biased expert (p. 228). An expert consultant owes completeness that a salesman does not (p. 231). | A direct answer commits the answerer to the question's presuppositions (p. 140) | **Indirectly.** It serves the questioner's task or decision (pp. 32, 125). |
+| **Eristic** | **Extreme:** winning at any cost (p. 33) | — | **No.** Its product is the release of emotion. |
+
+**In short:**
+- **"Action-producing" is a goal, not a type.** In the grid it is the middle row, a practical settlement: negotiation, where the parties trade, and deliberation, where they decide together.
+- **"Advocacy" is a stance, not a type.** It is proper in persuasion and negotiation, and out of place in inquiry, information-seeking and expert consultation.
+- **ND warns that the two get confused.** Advocacy of a point of view is normal in persuasion. Advocacy for a hidden interest is covert negotiation, which is what the bias ad hominem alleges (pp. 121–2).
+
+### 2.6 Is there a definitive matrix, and is the list closed?
+
+- **ND has no table of the types.** It has the list on p. 31 and a description of each type in chs. 1–7. Its figures show other things: a Kripke tree, a profile of dialogue, the eristic subtypes, a shift point.
+- **The two tables in circulation come from Walton's other works, through A20:**
+  - **The grid** (§2.2, Walton & Krabbe 1995): it *derives* the six from two factors. It is the closest thing to a definitive matrix of the main types.
+  - **The descriptive table** (§2.3, Walton 1997 and earlier): it *describes* each type. Its rows vary between publications: six main types in 1995 and 1998, eight in 1997.
+- **Later lists vary again.** For example, later work adds a "discovery" dialogue, after McBurney and Parsons. We have not reviewed those works.
+- **WAG's working definition is therefore:**
+  - the six main types of ND p. 31, placed by the grid;
+  - described from ND (§4–5);
+  - with the other labels treated as in §2.4, as subtypes, stances, goals or mixtures.
+- **Is the list closed?**
+  - **ND** handles everything beyond the six as a subtype or a mixture (ch. 9). It offers its list to orient the reader, and says neither that the six are exhaustive nor that they are not.
+  - **A20** says the list is not meant to be exhaustive, and that types may be subdivided or combined, citing ND p. 31. The subtypes are on that page; combining is ND chs. 8–9; "not exhaustive" is A20's own reading.
+  - **For WAG:**
+    - **Main types:** a closed list of six. A new main type would need a new pair of initial situation and goal; none has been needed.
+    - **Subtypes:** an open list.
+    - **Mixtures:** "mixed" is recorded as several typed segments, not as a seventh type.
 
 ## 3. Concepts every type shares
 
@@ -128,13 +180,13 @@ Aristotle's five kinds of argument, mapped onto the six types (ND pp. 237–43):
 
 ## 4. The six types at a glance
 
-**What each type starts from and aims at.** The side benefit is the gain a dialogue can bring even if it fails at its main goal (A20 Table 2, after Walton 1997).
+**What each type starts from and aims at.** The first four columns are from ND's own descriptions (ch. 1 §9 and chs. 2–7). The side benefit, a gain the dialogue can bring even if it fails at its main goal, is from Walton 1997 (A20 Table 2).
 
 | Type | Initial situation | Collective goal | Each party's goal | Side benefit |
 |---|---|---|---|---|
 | **Persuasion** | A conflict of opinions | Resolve the conflict | Persuade the other | Both understand the positions better (the maieutic function) |
 | **Inquiry** | An open question, unproven | Prove or disprove a proposition, or show that it cannot be settled yet | Contribute findings | Knowledge |
-| **Negotiation** | A conflict of interests over goods or services | A deal both can accept | Get as much as possible of what one values | A settlement, harmony |
+| **Negotiation** | A conflict of interests over goods or services | A deal both can accept | Get as much as possible of what one values | Harmony |
 | **Information-seeking** | One party lacks information the other has | Transfer the information | Obtain it (questioner); give it (answerer) | Help with the questioner's task |
 | **Deliberation** | A practical problem: a need to act | Agree on a course of action | Promote one's goals; find the prudent course | Clearer priorities |
 | **Eristic (quarrel)** | Unspoken grievances; a personal conflict | Bring the deeper conflict into the open | Hit out at the other, and humiliate them if possible | Emotions released (catharsis) |
@@ -325,16 +377,16 @@ Aristotle's five kinds of argument, mapped onto the six types (ND pp. 237–43):
 | **What changes** | *External:* the type changes | *Internal:* the type stays; the issue changes (a shift of issue) | p. 200 |
 | **How it is marked** | *A clean break:* one dialogue closes, another opens | *Sandwiched:* a short dialogue of another type, then back | pp. 198–9 |
 | **How fast** | *Sharp* (déplacement) | *Gradual* (glissement) | p. 201 |
-| **How the two relate** | *Functionally joined* (embedded): the second helps the first | *Interruption:* unrelated, a pause in the first | pp. 200–1 |
+| **How the two relate** | *Functionally joined* (embedded): the second helps the first | *Interruption:* unrelated, a pause in the first. Or, worst, *displacement:* the second takes over and blocks the first's goals. | pp. 200–1, 215–6 |
 | **Overlap** | | *Mixed:* two types over the same stretch | p. 201 |
 
 ### 6.2 Licit or illicit
 
-A shift is judged afterwards, by the first dialogue's goals and standards (p. 201). The questions to ask:
-1. What was the original type, and what is the new one?
-2. Does the new dialogue support the original goals, or at least let them move forward? Or does it block them?
-3. Did both parties agree to the shift, or was it unilateral, even forced?
-4. Was it open, or concealed? Concealed shifts are the deceptive ones. For example, an infomercial looks like a talk show or a news item while it sells (pp. 206–12). The evidence usually comes from the context, and is often seen only afterwards (pp. 214–5).
+A shift is judged afterwards, by the first dialogue's goals and standards (pp. 201, 216). The questions to ask:
+1. What was the original type, and what is the new one? Where in the profile of dialogue did the shift happen? A gradual shift is a stretch, not a point (p. 215).
+2. Does the new dialogue support the original goals, or at least let them move forward? Or does it block them? (p. 201)
+3. Did both parties agree to the shift, or was it unilateral, even forced? (pp. 201, 216)
+4. Was it announced properly, or concealed? A shift that one party conceals, as a tactic against the other, is the illicit kind that fallacies are made of (p. 216). For example, an infomercial looks like a talk show or a news item while it sells (pp. 206–12). The evidence comes from the context, and is often seen only afterwards (pp. 214–5).
 
 **Two rules of thumb from ND:**
 - **Relevance can carry across a shift that is functionally joined, not across an interruption** (pp. 200–1):
@@ -389,6 +441,7 @@ This is ND's pragmatic view of fallacy in practice. The scheme ids are those of 
 | Loaded or many questions | — | Information-seeking and persuasion, when a direct answer traps the respondent | Presuppositions become commitments | pp. 140–2, 221 | — |
 | Popular opinion; pity (ad populum, ad misericordiam) | Not settled in ND. `walton.yml` has a deliberation variant (`deliberation_ad_populum`); the catalogue will draft this from the scheme book | Where emotion disguises the lack of good premises | Emotional appeals, judged by the type | pp. 21–2, 123, 248 | `popular_opinion` and its variants, `help`, `distress` |
 | Straw man | — | Everywhere a fair account of the other's position matters; characteristic of quarrels | It misrepresents the other's commitments | pp. 27, 193, 196, 272 | — |
+| Leaving out evidence for the other side ("suppressed evidence") | Persuasion and advocacy, such as a sales pitch: neither side must argue the other's case | Inquiry, information-seeking and expert consultation, which owe completeness | The duty to present all the evidence depends on the type | pp. 230–2 | — |
 
 ## 8. Recognising the type in real text
 
@@ -471,7 +524,7 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 | **Inquiry** | One team; no retraction; established premises (sources); no circularity (already true); stages; outcome proven, disproven or open | Few public sources: review and replication threads, inquiry reports | High: mostly settings and rules |
 | **Information-seeking** | Asymmetric roles. An answerer seat that holds the knowledge: a person, a document, a model, a database. Questions with presuppositions, direct and indirect answers, challenges to a question. | Question-answer corpora and interviews; the Kialo `clarification` role | Medium: the question move exists, the answerer seat does not |
 | **Negotiation** | A new core beside the argument graph: issues with options, private interests, offers, acceptance, deadlock. Arguments about offers (practical reasoning, promises, threats) use the schemes. | Bargaining corpora; mediation transcripts | Low: a new subsystem |
-| **Eristic** | A game that rewards personal abuse would be wrong for people to play, and model seats may refuse it. The playable form is *finding* it: mark where a dialogue slides into a quarrel, and which move did it. | Corpora of conversations that derail into personal attack; Question Period transcripts | Medium as a detection exercise |
+| **Eristic** | **Last of all** (the owner's decision, 2026-10-15). First, a detection exercise: mark where a dialogue slides into a quarrel, and which move did it. Then a playable quarrel, under safeguards (plan §8, D2h): scenario cards with fictional grievances; moves for blame, counter-blame and reconciliation; ending when the grievance is aired or the quarrel is broken off; model seats by default. | Corpora of conversations that derail into personal attack; Question Period transcripts | Medium. The quarrel needs few rules but careful limits. |
 | **Shifts and embeddings** | A stack of dialogues: open a subdialogue of another type by agreement; carry its results back when it is functionally joined; flag a move that belongs to another type without an agreed shift | Segment and shift annotation | Medium, once two or more types exist |
 
 ### 9.3 The model to build on (proposed)
@@ -494,15 +547,18 @@ dialogue:            # one per discussion or transcript
   type_supposed: persuasion        # what the setting or the parties set up
   type_enacted: [persuasion]       # what happens; more than one if mixed
   subtype: null
+  parties:                         # optional (§2.5)
+    - role: pro
+      advocates: position          # position (a point of view), interest (a stake in the outcome), none
   issue: "Governments should tax meat."
   thesis_kind: practical           # practical, factual, evaluative, classificatory
   initial_situation: conflict_of_opinions
   evidence: "…"                    # why: cues, quoted ids
 segment:             # a stretch of turns, or a Kialo subtree
   id: s3
-  span: [13292.40, 13292.55]
+  span: ["13292.40", "13292.55"]
   type: information_seeking
-  relation: embedded               # embedded (functionally joined), interruption, overlap
+  relation: embedded               # embedded (functionally joined), interruption, displacement, overlap
 shift:               # an event between segments
   from: persuasion
   to: eristic
@@ -537,11 +593,11 @@ Two links tie the catalogues together:
 
 ### 9.4 Open questions for the owner
 
-1. **Eristic:** detection only (recommended), or also a moderated, staged version for training? Simulated quarrels between models for data would need clear limits, and labels that say they are synthetic.
+1. **The quarrel** (decided 2026-10-15: playable, and last). Still open: its safeguards in detail, and whether people play it or only model seats.
 2. **Negotiation's outcome:** what scores, each side's gain, the joint gain, or fairness? The subtypes need different answers.
 3. **Dark-side commitments for model players:** give each seat a hidden position at the opening, so that the maieutic function can be measured?
 4. **Corpora beyond Kialo:** which ones, under which licences ([plan §8](plan.md#8-track-d-dialogue-types), D4).
-5. **The order:** after the scheme catalogue, or in parallel? The plan recommends this: write the reference now; persuasion with commitments next; the other types after phase 2.
+5. **The order** (decided 2026-10-15). Schemes, critical questions and the Kialo gold come first. Track D follows the gold, with the quarrel last ([plan §8](plan.md#8-track-d-dialogue-types)).
 
 ## 10. Further reading
 

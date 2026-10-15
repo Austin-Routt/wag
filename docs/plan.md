@@ -196,7 +196,7 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 ## 7. Decisions the owner needs to make
 
 1. **Book text in this public repository.**
-   - **`docs/The New Dialectic.pdf` is the whole of Walton's 1998 book,** a copyrighted work, added on 2026-10-15. This is the most pressing item ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)).
+   - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book,** was added and then deleted on 2026-10-15. It is still in the history (commit f891090) until the history is rewritten ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)).
    - `docs/book-catalogue/` transcribes the scheme book's pp. 1–138 as printed: 75 scheme entries and 75 distinct critical questions.
    - `docs/walton-audit/cq_drafts.json` quotes 8 critical questions of the compendium.
    - The game's data uses our own wording. `walton.yml` has a few quotations from its upstream authors.
@@ -210,17 +210,23 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 3. **Who verifies the catalogue,** and whether tier 1 above is the right first set.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
-6. **Dialogue types (Track D, §8).** The owner set the objective on 2026-10-15: every type, playable and findable. What remains to decide:
-   - the order of D2, after the catalogue or alongside it;
-   - eristic as a detection exercise only (recommended);
+6. **Dialogue types (Track D, §8).** Decided by the owner on 2026-10-15:
+   - every type, playable and findable;
+   - a playable quarrel is needed for research, and comes last;
+   - the focus stays on schemes, critical questions and the Kialo gold, so Track D waits for phase 3.
+
+   What remains to decide:
    - how a negotiation is scored;
+   - the quarrel's safeguards, and whether people play it or only model seats;
    - which corpora, under which licences.
 
 ## 8. Track D: dialogue types
 
 **The objective,** set by the owner on 2026-10-15:
-- WAG can play a game in any established dialogue type.
+- WAG can play a game in any established dialogue type, the quarrel included.
 - WAG can find every type in real discourse, negotiation and quarrels included, as it does for schemes.
+
+**Its place.** The project's focus stays on argumentation schemes, critical questions, and a gold standard made from Kialo (phases 1–3, measured as phase 4 describes). Track D comes after them, except for the two small pieces that phases 1 and 2 need anyway (see Order). The playable quarrel is the last step of all.
 
 **Where it is explained:**
 - **What the types are:** [`dialogue-types.md`](dialogue-types.md).
@@ -233,7 +239,11 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 - **A type is recorded only where it changes something:** a rule in the game, or a field in annotation.
 - **Mixtures are normal.** A dialogue has several typed segments; shifts are events between them.
 - **Persuasion is the base.** Other types come one at a time, each playable end to end and tested before the next.
-- **No game rewards abuse.** Eristic is a detection exercise.
+- **The quarrel comes last, with safeguards.** Research needs a playable quarrel: to produce labelled quarrels, to study how other dialogues slide into one, and to test detectors. Detecting quarrels comes first (D2g); the playable quarrel (D2h) is built last, with:
+  - model seats by default, and people only by their own choice;
+  - fictional scenarios, with no real person or group as a target;
+  - limits on content, and a moderator;
+  - every transcript labelled as synthetic.
 
 ### Steps
 
@@ -247,17 +257,24 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 | **D2d. Information-seeking** | **An answerer seat that holds knowledge:** a document, a scenario card, or a model. **Questions** with presuppositions; direct and indirect answers; challenging a presupposition. **Expert consultation,** probed through the expert-opinion critical questions. | D2a | 1 week | A questioner finds the facts on a hidden card; a loaded question is flagged |
 | **D2e. Negotiation** | **The bargaining core:** issues and options, private interests and reservation values. **Moves:** offers, counter-offers, accept, reject; promises and threats. **Duties:** Donohue's response rules. **Arguments for offers** go through the schemes. **Deadlock,** and a shift to information-seeking. Distributive and integrative subtypes first. | D2a; the owner's decision on scoring | 2–3 weeks | Two models reach a deal or fail; the outcome is scored; a threat inside a persuasion game is flagged |
 | **D2f. Shifts and embedding** | **A stack of dialogues:** a subdialogue opened by agreement; its results carried back when it is functionally joined. **A flag** on a move of another type made without an agreed shift. | Two of D2b–e | 1 week | A deliberation embeds an information-seeking subdialogue; an unagreed threat is flagged as an illicit shift |
-| **D2g. Eristic, as detection** | "Spot the shift": on real or recorded dialogues, mark where a quarrel begins and which move started it; scored against a gold | D3's gold | Days | It runs on 20 dialogues with a gold |
+| **D2g. Eristic, detection** | "Spot the shift": on real or recorded dialogues, mark where a quarrel begins and which move started it; scored against a gold | D3's gold | Days | It runs on 20 dialogues with a gold |
+| **D2h. Eristic, playable (last)** | **A quarrel protocol after ND ch. 7.** It opens from a grievance in a scenario card. **Moves:** blame, counter-blame ("you too"), personal attack, straw man, change of topic, concession, reconciliation. **It ends** when the grievance has been aired (catharsis) or the quarrel is broken off. **Subtypes as settings:** natural, staged, group, sophistical. **A research variant:** a persuasion game in which one seat tries to provoke a quarrel and the other tries to keep to the issue. **Output:** transcripts labelled with their segments and shifts. The safeguards are in the principles above. | D2f, D2g, D3 | 1–2 weeks | Two model seats play a staged quarrel from a scenario card; D3's detector finds its shift points; every transcript passes the content limits |
 | **D3. Identification** | **Guidelines:** Walton's questions, the cues, the cautions (reference §8). **Model annotators and a reviewer** on dialogues and segments: a new task in the annotation package. **People verify.** **Agreement:** kappa on the type; segment boundaries; shifts found; licit or not. | D1 | 1–2 weeks of code, then data work | Agreement measured on at least 30 dialogues across at least four types; a baseline classifier reported |
 | **D4. Corpora** | At least one source per type (below) | The owner's decision on licences | Ongoing | Each of the six types has a source with at least 20 annotated dialogues |
 
 ### Order
 
+Set by the owner on 2026-10-15: schemes, critical questions and the Kialo gold first.
+
 1. **D0** is done.
-2. **D1** goes alongside phases 1 and 2. It is cheap.
-3. **D2a** comes after phase 1, or alongside it if a second person codes.
-4. **The rest of D2** comes after phase 2.
-5. **D3 and D4** start with Kialo during phase 3 (persuasion and deliberation), then move to other corpora.
+2. **Only what phases 1 and 2 need anyway:**
+   - **"Proper in" (D1 d)** is a field of the scheme catalogue (phase 1). It is drafted from the reference's §7.
+   - **Step 0 of the guidelines (D1 b)** goes with phase 2. It is a few fields filled once per Kialo discussion.
+3. **After the Kialo gold (phase 3):**
+   1. D1 (a) and (c);
+   2. D2a to D2f, in the order shown;
+   3. D3 and D4, starting from Kialo's own data (persuasion, and its hybrid with deliberation), then other corpora.
+4. **Last:** D2g, then D2h, the playable quarrel.
 
 The scheme catalogue stays the first priority, because every type that argues uses it.
 

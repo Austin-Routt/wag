@@ -7,7 +7,9 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 - **Who plays.** A seat can be a person, a rule bot, or a language model.
 - **The research aims.**
   1. **Schemes.** Ground the game's schemes in real debate: annotate Kialo discussions as scheme instances, with models and people, and grow the scheme network from what the data shows.
-  2. **Dialogue types** (added 2026-10-15). Play a game in any of Walton's dialogue types: persuasion, inquiry, deliberation, information-seeking, negotiation, and eristic as a detection exercise. Find every type, and the shifts between them, in real discourse. The reference is [`docs/dialogue-types.md`](docs/dialogue-types.md).
+  2. **Dialogue types** (added 2026-10-15). Play a game in any of Walton's dialogue types: persuasion, inquiry, deliberation, information-seeking, negotiation, and the quarrel (last). Find every type, and the shifts between them, in real discourse. The reference is [`docs/dialogue-types.md`](docs/dialogue-types.md).
+
+  **The first aim comes first.** The focus is schemes, critical questions and a gold standard made from Kialo. Dialogue types follow once that gold exists ([plan §8](docs/plan.md#8-track-d-dialogue-types)).
 
 **Status on 2026-10-15.**
 - **Working prototype:** the game, the browser dashboard, the model players, and a first annotation pipeline. They are tested and run on Windows.
@@ -79,7 +81,7 @@ In order of importance. Each issue links to the document that explains it.
    - Gemini 2.5 Flash's free tier allows 20 requests a day, so 50 claims take three days for one annotator.
    - See [`docs/llm.md`](docs/llm.md#the-free-tier-privacy-and-limits).
 6. **Books in this public repository, and no licence.**
-   - **`docs/The New Dialectic.pdf` is the whole of Walton's 1998 book,** a copyrighted work. It should be removed, and preferably purged from the history. See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository).
+   - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book, was deleted on 2026-10-15,** but it is still in the history (commit f891090). Purging it means rewriting the history, the owner's decision. See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository) and [part 10](docs/review-2026-10-15-part10.md).
    - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
    - WAG itself has no licence.
    - All three need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
@@ -115,10 +117,10 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
 | 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. | Code |
-| Track D. Dialogue types | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts, and eristic as detection. **D3:** identification with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
+| Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
 **The next three actions:**
-1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF and the book text, a licence, who verifies, paid model access, and Track D's open choices.
+1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF still in the history and the book text, a licence, who verifies, paid model access, and Track D's open choices.
 2. Generate the catalogue skeleton and its checker.
 3. Verify the first set of schemes while the version 4 guidelines are drafted.
 
@@ -165,6 +167,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/review-2026-10-15-part7.md`](docs/review-2026-10-15-part7.md) | The first real model annotation run, reviewed; why "none"; what the model is given; whether the data is enough |
 | [`docs/dialogue-types.md`](docs/dialogue-types.md) | **The reference on dialogue types:** what each type is, how types mix and shift, which arguments are proper in which type, how to recognise them, and what WAG needs to play and find them |
+| [`docs/review-2026-10-15-part10.md`](docs/review-2026-10-15-part10.md) | A second check of the dialogue-type documents; whether there is a definitive grid of the types; advocacy and action-producing dialogue; the quarrel last; the book PDF deleted |
 | [`docs/review-2026-10-15-part9.md`](docs/review-2026-10-15-part9.md) | *The New Dialectic* read in full: part 8 corrected; whether every type can be played and found; Track D; the book PDF |
 | [`docs/review-2026-10-15-part8.md`](docs/review-2026-10-15-part8.md) | Walton's dialogue types from Aberdein's survey (corrected by part 9); Walton and Macagno's classification; the Kialo claim-merge bug, fixed |
 
@@ -219,6 +222,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`part 7`](docs/review-2026-10-15-part7.md) | The first real annotation run |
 | [`part 8`](docs/review-2026-10-15-part8.md) | Dialogue types (Aberdein 2020); Kialo claims keyed by ID |
 | [`part 9`](docs/review-2026-10-15-part9.md) | *The New Dialectic* (Walton 1998); dialogue types as a second aim |
+| [`part 10`](docs/review-2026-10-15-part10.md) | A second check; the grid, advocacy and action; the quarrel last; the book PDF deleted |
 
 ## 7. Repository layout
 
@@ -237,7 +241,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 - **Carneades 4:** MPL-2.0 (`carneades-4/LICENSE`).
 - **The Walton collection for Carneades 4** (`walton.yml`, from `github.com/basakkurtuldu/walton-argumentation-schemes-for-carneades-4`): MPL-2.0 (`docs/scheme-registry/walton-clean/LICENSE`).
 - **Walton, Reed & Macagno, *Argumentation Schemes* (Cambridge UP, 2008):** not included. The repository cites it by scheme and question labels and pages, except `docs/book-catalogue/` (issue 6).
-- **Walton, *The New Dialectic* (University of Toronto Press, 1998):** cited by page in [`docs/dialogue-types.md`](docs/dialogue-types.md), in paraphrase. `docs/The New Dialectic.pdf` should not be in the repository (issue 6).
+- **Walton, *The New Dialectic* (University of Toronto Press, 1998):** cited by page in [`docs/dialogue-types.md`](docs/dialogue-types.md), in paraphrase. Its PDF was deleted from the repository on 2026-10-15; it remains in the history (issue 6).
 - **Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice* (arXiv:2011.13845, 2020):** cited; not included.
 - **Kialo discussions:** public; the datasets keep their claim ids.
 - **WAG's own code and data:** no licence yet (issue 6).

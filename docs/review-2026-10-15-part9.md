@@ -23,7 +23,7 @@ The book was read in full: ten chapters and the notes. Page numbers below are it
    - **Persuasion, deliberation and inquiry** fit the current engine.
    - **Information-seeking** needs a seat that holds knowledge.
    - **Negotiation** needs a new bargaining core beside the argument graph. It is the largest piece.
-   - **Eristic** should be a detection exercise, not a game that rewards abuse.
+   - **Eristic** should be a detection exercise, not a game that rewards abuse. *(Updated in part 10: the owner decided that research needs a playable quarrel. It comes last, under safeguards.)*
    - **Finding the types in data** is an annotation task like the schemes: typed segments and shifts, with agreement measured. Kialo alone will not supply negotiations or quarrels.
 3. **The changes** (§4):
    - a new Track D in the plan, with the scheme catalogue still first;
@@ -36,7 +36,7 @@ The book was read in full: ten chapters and the notes. Page numbers below are it
    - **The first code** is to record the type in exports (D1).
    - **The first new rules** are commitment stores in persuasion (D2a), after reading Walton & Krabbe 1995.
 
-**One urgent issue, outside the question:** `docs/The New Dialectic.pdf` is the whole of a copyrighted book, in a repository that is public. It should come out (§5).
+**One urgent issue, outside the question:** `docs/The New Dialectic.pdf` is the whole of a copyrighted book, in a repository that is public. It should come out (§5). *(Deleted in part 10; still in the history.)*
 
 ## 1. Part 8 checked against the primary source
 
@@ -50,7 +50,7 @@ The book was read in full: ten chapters and the notes. Page numbers below are it
 | Every WAG game is persuasion | Yes, and more exactly: `debate` is the simpler one-sided form, where only pro must prove and con may merely doubt (p. 38). WAG has no *dispute* form. | **Holds, sharper** |
 | "Policy deliberation" is not a deliberation, because the game has one fixed proposal and a winner, and deliberation weighs several options with no side owning a thesis | The conclusion holds; the reason does not. In the simplest case deliberation *is* one proposal argued for and against (p. 162, note 4). What the preset lacks is a practical problem, shared goals, symmetric roles and a tentative joint decision. | **Corrected.** The preset is renamed. |
 | Kialo is "debate" | A public persuasion dialogue. On a practical thesis it is a persuasion–deliberation hybrid. Its moderation strips out most eristic. | **Corrected** |
-| Negotiation and eristic: not as modes | The owner's new objective replaces this. Also, negotiation does use schemes: offers are backed by practical reasoning, promises and threats (ch. 4). | **Superseded.** Eristic stays a detection exercise. |
+| Negotiation and eristic: not as modes | The owner's new objective replaces this. Also, negotiation does use schemes: offers are backed by practical reasoning, promises and threats (ch. 4). | **Superseded.** Eristic stays a detection exercise. *(Updated in part 10: detection first, then a playable quarrel, last.)* |
 | Flag schemes that are improper in the game's type ("proper in") | This is the book's central thesis: a fallacy is a technique misused against the goal of its dialogue (ch. 10). | **Holds, strengthened.** Reference §7 has the table to draft from. |
 | WAG has no commitment store | Commitment is the basic idea behind every type (p. 31). Retraction is what most separates persuasion (fairly free) from inquiry (none). | **Holds, and matters more.** It comes first in D2. |
 | Type per discussion; not per claim | Still right for Kialo. But finding types in other data needs typed segments and shifts. | **Extended** (D3) |
@@ -97,9 +97,9 @@ The existing engine (schemes, critical questions, Carneades) stays the argument 
 | Information-seeking | Medium | A seat that holds knowledge; presuppositions | 1 week |
 | Negotiation | Low | A bargaining core: issues, private interests, offers, deadlock | 2–3 weeks |
 | Shifts and embedding | Medium | A stack of dialogues; carrying results back | 1 week |
-| Eristic | — | A detection exercise only | Days |
+| Eristic | — | A detection exercise only *(part 10: then a playable quarrel, last, under safeguards; 1–2 weeks)* | Days |
 
-**The risk is scope, not possibility.** Six protocols plus shifts is two to three months of focused work. The plan therefore adds one type at a time, each playable and tested before the next. Persuasion comes first, because every game today is persuasion and the commitment store is shared by all the types.
+**The risk is scope, not possibility.** Six protocols plus shifts is two to three months of focused work. The plan therefore adds one type at a time, each playable and tested before the next. Persuasion comes first, because every game today is persuasion, and most of the other types build on its commitment store.
 
 ### 3.2 Finding every type in data
 
@@ -116,7 +116,7 @@ The existing engine (schemes, critical questions, Carneades) stays the argument 
 **What to expect.**
 - **The main type of a dialogue,** where genres differ: probably good agreement.
 - **Segments and shifts:** moderate.
-- **Whether a shift was licit:** hardest, because it needs the whole context. Walton evaluates conditionally ("fallacious if this is a critical discussion"), and the annotation should allow that.
+- **Whether a shift was licit:** hardest, because it needs the whole context. Walton evaluates conditionally: *if* the speakers can be taken as having a critical discussion, *then* an argument commits a given fallacy, and the speaker can answer that the exchange was partly eristic (pp. 224–5). The annotation should allow such conditional verdicts.
 
 **The data limit is real.** Kialo gives persuasion and the persuasion–deliberation hybrid, with almost no negotiation, quarrels or inquiry. Plan §8 lists candidate corpora per type; none has been checked here for licence or fit.
 
@@ -135,7 +135,7 @@ Walton's types are **normative models**, not a partition of real talk. A dialogu
 | `wag/data/contexts.json` | "Policy deliberation" and "Scientific inquiry" renamed "Policy question" and "Scientific question". The descriptions say that the game is still persuasion. The ids (`policy`, `scientific`) and weights are unchanged, so saved games and exports are unaffected (the presets are not part of the data hash). The `game` and `server` tests pass. |
 | [`docs/game-rules.md`](game-rules.md), [`docs/prototype.md`](prototype.md) | One paragraph each: the modes in Walton's terms; the presets are domains |
 
-**No other code changed.** D1, recording the type in settings and exports, is the first code step. It is small, but it belongs with the catalogue skeleton, so that the type and the "proper in" field arrive together.
+**No other code changed.** D1, recording the type in settings and exports, is the first code step. It is small, but it belongs with the catalogue skeleton, so that the type and the "proper in" field arrive together. *(Part 10: the owner put Track D after the Kialo gold. Only "proper in" and the guidelines' step 0 come earlier, with phases 1 and 2.)*
 
 ## 5. The book in the repository
 
@@ -148,7 +148,7 @@ Walton's types are **normative models**, not a partition of real talk. A dialogu
   1. **Delete the file in a new commit.** It leaves the current tree, but stays in the history and in any clone or fork.
   2. **Remove it from the history** (for example with `git filter-repo`), then force-push. GitHub's guide on removing sensitive data also covers cached views. This rewrites every later commit, so only the owner should decide it.
   3. **Make the repository private.** Option 1 or 2 is still advisable.
-- **What we did.** We did not delete it: the owner added it, and the choice of option is theirs. Option 1 can be done on request.
+- **What we did.** We did not delete it: the owner added it, and the choice of option is theirs. Option 1 can be done on request. *(Part 10: the owner chose option 1, and the file was deleted. Removing it from the history remains the owner's decision.)*
 - **Nothing in WAG depends on the file.** The reference cites pages and paraphrases. The text extracted to read it stays outside the repository.
 
 The same decision covers the transcribed scheme-book text already flagged in [plan §7](plan.md#7-decisions-the-owner-needs-to-make), item 1.
