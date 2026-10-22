@@ -22,6 +22,17 @@
   "reason": "template has no %s for arity 1; no scheme uses the predicate, so the arity is set to fit the template instead of inventing an argument"
  },
  {
+  "line": 21,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  agent_bring_about/2: \"Bringing about %s would lead to %s.\"",
+  "reason": "template for the 33.3 scheme added below, in our own words (the category file's repeats the book)"
+ },
+ {
   "line": 26,
   "change": "edit",
   "scheme": "language",
@@ -108,6 +119,17 @@
   "before": "  background: \"The speaker is an ordinary person, that is, share a common background with the audience.\"",
   "after": "  background/0: \"The speaker is an ordinary person, that is, share a common background with the audience.\"",
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses background with 0 argument(s) and the template has 0 %s"
+ },
+ {
+  "line": 46,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  bad_for_goals/1: \"%s would harm the agent's goals.\"",
+  "reason": "template for the 33.3 scheme added below, in our own words (the category file's repeats the book)"
  },
  {
   "line": 50,
@@ -2121,6 +2143,160 @@
   "before": "      - reasonable_belive(M)",
   "after": "      - reasonable_believe(M)",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: negative_consequences_reasoning",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument From Consequences - Reasoning From Negative Consequences",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "             Douglas Walton, A Pragmatic Theory of Fallacy.",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,B]",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - not_bring_about(A)",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - agent_bring_about(A,B)",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad_for_goals(B)",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      ",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
  },
  {
   "line": 1976,

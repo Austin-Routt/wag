@@ -20,6 +20,7 @@ language:
   admired_people/2: "Everybody in this group of admired, popular people %s accepts %s."
   advocates/2: "%s advocates argument %s."
   advocates_conclusion/3: "%s advocates argument %s , which has proposition %s as its conclusion."
+  agent_bring_about/2: "Bringing about %s would lead to %s."
   agent_event/1: "An observed event appears to have been brought about by some agent %s."
   agent_quality/2: "%s has %s."
   all_has/3: "If %s, has %s, then %s has it too."
@@ -45,6 +46,7 @@ language:
   bad/1: "%s is bad."
   bad_character/1: "%s is a person of bad character."
   bad_consequence/2: "But, if you do not do %s, some consequence %s, which will be very bad for you, will occur, or is likely to occur."
+  bad_for_goals/1: "%s would harm the agent's goals."
   bad_for_you/1: "%s is very bad for you."
   bad_moral_character/1: "%s has bad moral character."
   bad_not_accepted/2: "%s 's argument %s should not be accepted."
@@ -1895,6 +1897,20 @@ argument_schemes:
     premises:
       - brings_about(A,G)
       - bad(G)
+      
+  - id: negative_consequences_reasoning
+    meta:
+      title: Argument From Consequences - Reasoning From Negative Consequences
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy.
+             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.
+             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
+    variables: [A,B]
+    conclusions:
+      - not_bring_about(A)
+    premises:
+      - agent_bring_about(A,B)
+      - bad_for_goals(B)
       
   - id: position_to_know
     meta:

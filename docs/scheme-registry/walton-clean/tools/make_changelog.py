@@ -22,7 +22,7 @@ from edits import ID_MAP as _IDS  # noqa: E402
 
 NEW_ID = dict(_IDS)
 assert NEW_ID == {o: n for o, n, _ in ID_MAP}, "id map out of sync with edits.py"
-CATS = ["syntax", "typo", "variable", "template", "repair — needs approval"]
+CATS = ["syntax", "typo", "variable", "template", "repair — needs approval", "addition — owner decision"]
 
 
 def term_preds(f):
@@ -83,9 +83,16 @@ def main(outdir):
     w = L.append
     w("# walton.yml cleanup: changelog")
     w("")
+    nschemes = len(dump["schemes"])
+    added = sorted({r["scheme"] for r in rows if r["category"].startswith("addition") and r["scheme"] != "language"})
+    cleanp = os.path.join(outdir, "check", "walton.clean.yml")
+    nlines = len(open(cleanp, encoding="utf-8").read().split("\n")) if os.path.exists(cleanp) else "?"
     w("Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, "
       "SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` "
-      "(2067 lines, same 111 schemes in the same order, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`). Every edit below is also in `changes.json` and is produced by "
+      f"({nlines} lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): "
+      f"the same 111 schemes in the same order, and {len(added)} added by the owner's decision "
+      f"([below](#added-by-the-owners-decision): {', '.join('`' + a + '`' for a in added)}), {nschemes} in all. "
+      "Every edit below is also in `changes.json` and is produced by "
       "`tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are "
       "those of the original file.")
     w("")
@@ -120,13 +127,13 @@ def main(outdir):
     w("")
     clean = reports.get("clean")
     if clean and not clean["pass"]:
-        w("**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 111 schemes, and check 2 "
-          "passes for 107. The other four fail one validator rule only: every variable must occur in a premise. In "
+        w(f"**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all {nschemes} schemes, and check 2 "
+          f"passes for {nschemes - 4}. The other four fail one validator rule only: every variable must occur in a premise. In "
           "`ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable "
           "occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, "
           "which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning]"
           "(#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all "
-          "111 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not "
+          f"{nschemes} (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not "
           "run the validator.")
         w("")
     w("WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) "
@@ -162,11 +169,12 @@ def main(outdir):
     w(f"| **total** | **{len(rows)}** | **{len(all_lines)}** distinct lines (a line can carry edits of several categories) |")
     w("")
     ndel = sum(1 for r in rows if r["change"] == "delete")
-    nins = sum(1 for r in rows if r["change"] == "insert after")
+    nins = sum(1 for r in rows if r["change"] == "insert after" and not r["category"].startswith("addition"))
+    nadd = sum(1 for r in rows if r["category"].startswith("addition"))
     w(f"Unified diff against the original (`walton.diff`): {minus} lines removed, {plus} added. That is "
       f"{minus - ndel} lines changed in place, {ndel} deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, "
-      f"and the conclusion that was listed as a premise) and {nins} inserted (the templates `cannot_present_sametime/3` "
-      "and `data_set/2`, and that conclusion under `conclusions:`).")
+      f"and the conclusion that was listed as a premise), {nins} inserted (the templates `cannot_present_sametime/3` "
+      f"and `data_set/2`, and that conclusion under `conclusions:`), and {nadd} added by the owner's decision (below).")
     w("")
     kinds = collections.Counter()
     for r in rows:
@@ -181,6 +189,21 @@ def main(outdir):
         kinds[k] += 1
     w("Typo edits by kind: " + ", ".join(f"{k} {v}" for k, v in kinds.most_common()) + ". "
       "The `popular_practise` rename also renames the scheme id (counted under predicate names).")
+    w("")
+
+    # ---- additions ------------------------------------------------------------
+    w("## Added by the owner's decision")
+    w("")
+    w("Content the upstream collection has but its master `walton.yml` lost, brought in by the owner's decision. "
+      "These are not cleaning edits: they add schemes.")
+    w("")
+    w("| scheme | from | decided | why |")
+    w("|---|---|---|---|")
+    w("| `negative_consequences_reasoning` | `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block "
+      "with the id `negative_consequences` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative "
+      "Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids "
+      "the clash; its empty variable list is filled in (`[A,B]`); its two templates are written in our own words, "
+      "because the category file's repeat the book's premises. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------
@@ -294,7 +317,7 @@ def main(outdir):
     w("| `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` (\"%s must not do what is prohibited -obligatory-.\"). This turns the general norm into a claim about A |")
     w("")
     w(f"With these {len(PROPOSALS)} edits (`walton.proposals.yml`), the validator reports 0 problems and the gate "
-      "passes for all 111 schemes (`proposals-check.txt`).")
+      f"passes for all {len(dump['schemes'])} schemes (`proposals-check.txt`).")
     w("")
 
     # ---- semantic concerns ----------------------------------------------------

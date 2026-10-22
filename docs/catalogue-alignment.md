@@ -1,6 +1,6 @@
 # Plan: complete coverage and alignment of the scheme catalogue
 
-**Started 2026-10-22, after tier 1 was drafted.** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 31 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
+**Started 2026-10-22, after tier 1 was drafted.** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 32 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
 
 **The catalogue's own README has the current figures:** [`wag/data/catalogue/README.md`](../wag/data/catalogue/README.md). The figures below were measured on 2026-10-22, from the committed catalogue and the upstream collection.
 
@@ -27,8 +27,8 @@
 
 | Item | State |
 |---|---|
-| Entries | 114: one for each of `walton.yml`'s 111 schemes, and one for each of the 3 compendium schemes it lacks. All 109 compendium schemes are linked to an entry. |
-| Tier 1 | 31 entries, drafted on 2026-10-22, checked by an independent model, not yet verified by a person. |
+| Entries | 115: one for each of `walton.yml`'s 112 schemes, and one for each of the 3 compendium schemes it lacks. All 109 compendium schemes are linked to an entry. |
+| Tier 1 | 32 entries, drafted on 2026-10-22, checked by an independent model, not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
 | Book questions | All 153 printed questions are in some entry. Several book questions target no formula and are not marked as undercutting; the checker lists them. |
 | Questions for assumptions and exceptions | 10 assumptions and exceptions in 9 schemes had no question before tier 1 was drafted. Tier 1 adds `walton/` questions for its five. |
@@ -47,7 +47,7 @@ What matters for alignment:
 
 | Finding | Where | What it means |
 |---|---|---|
-| A second `negative_consequences` block, formalizing compendium 33.3 (reasoning from negative consequences: an agent's act leads to an outcome bad for the agent's goals) | `A_reasoning/3_practical-reasoning.yml` | It is lost from the master, apparently because its id is a duplicate. `families.json` is right that `walton.yml` has no scheme for 33.3; `links.json`'s partial link to `negative_consequences` is a stand-in. |
+| A second `negative_consequences` block, formalizing compendium 33.3 (reasoning from negative consequences: an agent's act leads to an outcome bad for the agent's goals) | `A_reasoning/3_practical-reasoning.yml` | It is lost from the master, apparently because its id is a duplicate. **Brought in on 2026-10-22** as `negative_consequences_reasoning` (C1 below). |
 | A second `practical_necessary_condition` block, which is the sufficient-condition schema | same file | The same duplicate-id defect. The master already has it as `practical_sufficient_condition`, so nothing is lost. |
 | `whole_into_parts` | `A_reasoning/2_inductive-reasoning.yml` | A formalization of compendium 10.2, division of the whole into its parts, which `walton.yml` lacks. |
 | `full_slippery_slope` | `A_reasoning/5_casual-reasoning.yml` | A formalization of compendium 53, the full slippery slope, which `walton.yml` lacks. It has no source, and its formulas need checking (`accept_all_steps` and `led_to_step` have no arguments). |
@@ -61,9 +61,9 @@ What matters for alignment:
 
 ### A. A person verifies tier 1
 
-**The work.** 31 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
+**The work.** 32 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
 
-**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N8, N12, 33.3). Otherwise the verifier would verify entries that are about to change.
+**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N8, N12). Otherwise the verifier would verify entries that are about to change.
 
 ### B. Draft tier 2
 
@@ -87,9 +87,12 @@ What matters for alignment:
 
 Each of these changes `walton.yml`, `links.json` or `families.json`. The catalogue records them as open discrepancies until they are decided.
 
-1. **33.3:**
-   - bring the upstream second `negative_consequences` into `walton.yml` under a new id;
-   - or keep the partial link and drop 33.3 from `families.json`'s claim.
+1. **33.3: decided on 2026-10-22.** The upstream second `negative_consequences` block is in `walton.yml` as `negative_consequences_reasoning`:
+   - variables filled in;
+   - templates in our own words;
+   - recorded in the cleaning's CHANGELOG under "Added by the owner's decision".
+
+   `links.json` links 33.3 to it exactly, `families.json` names it, and the catalogue has it as a tier-1 entry.
 2. **10.2 and 53:** bring `whole_into_parts` and `full_slippery_slope` into `walton.yml`, after checking their formulas; or keep the two entries without a formalization.
 3. **50, the precedent slippery slope:** write a formalization, which must pass Hansen's definition (plan §2); or leave it unformalized.
 4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).
@@ -161,7 +164,7 @@ Two ways to cover them:
 
 ## 4. Order
 
-1. **The owner decides C1 to C5,** which change formulas, before anyone verifies the entries they touch. C6 and C7 can wait.
+1. **The owner decides C2 to C5,** which change formulas, before anyone verifies the entries they touch (C1 was decided on 2026-10-22). C6 and C7 can wait.
 2. **A person verifies tier 1** (A).
 3. **Generate the game's data** for the 9 game schemes from the verified tier 1 (E), and run the game's tests.
 4. **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D).

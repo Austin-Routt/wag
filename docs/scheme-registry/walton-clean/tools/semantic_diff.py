@@ -11,7 +11,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from edits import OPS, ID_MAP  # noqa: E402
+from edits import ADDITIONS, OPS, ID_MAP  # noqa: E402
 
 PRED_MAP = {op["old"]: op["new"] for op in OPS if op["op"] == "rename"}
 PRED_MAP["true"] = "is_true"
@@ -37,6 +37,11 @@ def main(a, b):
     A = json.load(open(a, encoding="utf-8"))
     B = json.load(open(b, encoding="utf-8"))
     sa, sb = A["schemes"], B["schemes"]
+    # Schemes added by the owner's decision (edits.ADDITIONS) are only in the
+    # cleaned file; they are listed, not compared.
+    added_ids = {op["scheme"] for op in ADDITIONS if op.get("scheme")}
+    extra = [y["id"] for y in sb if y["id"] in added_ids]
+    sb = [y for y in sb if y["id"] not in added_ids]
     assert len(sa) == len(sb), (len(sa), len(sb))
     n = 0
     for x, y in zip(sa, sb):
@@ -54,6 +59,8 @@ def main(a, b):
                 n += 1
                 print(f"{nid:40s} {field:12s} {before} -> {after}")
     print(f"{n} scheme-level difference(s) after renames")
+    if extra:
+        print(f"added by the owner's decision (not compared): {', '.join(extra)}")
     la, lb = A["language"], B["language"]
     ka = {norm(k.split("/")[0], {}) + ("/" + k.split("/")[1] if "/" in k else ""): k for k in la}
     added = sorted(set(lb) - set(ka))

@@ -29,15 +29,6 @@ book:
   note: Same title (upstream Carneades; source A Pragmatic Theory of Fallacy 1995,
     pp. 155-156).
   status: generated
-- entry: "33.3"
-  title: Reasoning from Negative Consequences
-  pages: "332"
-  parent: "33"
-  match: partial
-  cqs_printed_under: "33"
-  note: No dedicated walton.yml scheme; negative_consequences (33.2) has the same
-    shape (A brings about G; G is bad; so not A) without the first-person agent.
-  status: generated
 families:
 - family: F15
   name: Consequences, alternatives, threat and fear
@@ -49,19 +40,6 @@ premise_map:
   formulas: [{formula: 'brings_about(A,G)', locus: premise}, {formula: bad(G), locus: premise}]
   status: generated
 - entry: "33.2"
-  label: Conclusion
-  formulas: [{formula: ¬should_be_performed(A), locus: conclusion}]
-  status: generated
-- entry: "33.3"
-  label: Premise 1
-  formulas: [{formula: 'brings_about(A,G)', locus: premise}]
-  status: generated
-- entry: "33.3"
-  label: Premise 2
-  formulas: [{formula: bad(G), locus: premise}]
-  note: '"bad" rather than "bad from the point of view of my goals"'
-  status: generated
-- entry: "33.3"
   label: Conclusion
   formulas: [{formula: ¬should_be_performed(A), locus: conclusion}]
   status: generated
@@ -121,6 +99,9 @@ contrasts:
 - scheme: positive_consequences
   text: ""
   status: todo
+- scheme: negative_consequences_reasoning
+  text: ""
+  status: todo
 - scheme: negative_consequences_prudential
   text: ""
   status: todo
@@ -143,14 +124,7 @@ contrasts:
   text: ""
   status: todo
 examples: []
-discrepancies:
-- kind: partial-link
-  about: "33.3"
-  detail: 'walton.yml formalizes compendium 33.3 only in part: No dedicated walton.yml
-    scheme; negative_consequences (33.2) has the same shape (A brings about G; G is
-    bad; so not A) without the first-person agent.'
-  decision: ""
-  status: generated
+discrepancies: []
 classification:
   source: ""
   reasoning: ""

@@ -9,11 +9,14 @@ sacrifice                                premises     ['sacrifice_made(A,S)', 'g
 sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A)']
 verbal_slippery_slope                    variables    ['A1', 'A2', 'A', 'P'] -> ['A1', 'A2', 'A', 'P', 'F']
 10 scheme-level difference(s) after renames
-language: 392 -> 393 keys; keys only in clean: 35, only in original: 33, same key with a changed template: 26
+added by the owner's decision (not compared): negative_consequences_reasoning
+language: 392 -> 395 keys; keys only in clean: 37, only in original: 33, same key with a changed template: 26
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
+  +  agent_bring_about/2 'Bringing about %s would lead to %s.'
   +  attack_well_supported/0 'Allegation made in character attack premise evidence are well supported.'
   +  background/0 'The speaker is an ordinary person, that is, share a common background with the audience.'
+  +  bad_for_goals/1 "%s would harm the agent's goals."
   +  being_credible/0 'Therefore, you ought to take what I say as being more credible or acceptable.'
   +  cannot_present_sametime/3 '%s cannot present %s and %s at the same time and in the same respect.'
   +  character_relevant/0 'In the type of dialogue in which the argument was used issue of character relevant.'

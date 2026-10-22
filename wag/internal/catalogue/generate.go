@@ -19,7 +19,7 @@ var Tier1 = []string{
 	// practical reasoning
 	"practical_reasoning1", "practical_reasoning2", "practical_goal", "end_and_means_1", "practical_necessary_condition",
 	// consequences and values
-	"positive_consequences", "negative_consequences", "positive_value", "negative_value",
+	"positive_consequences", "negative_consequences", "negative_consequences_reasoning", "positive_value", "negative_value",
 	// causes and signs
 	"cause_to_effect", "correlation_to_cause", "sign",
 	// cases and analogy

@@ -14,7 +14,7 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 **Status on 2026-10-15.**
 - **Working prototype:** the game, the browser dashboard, the model players, and a first annotation pipeline. They are tested and run on Windows.
 - **Weak link:** the scheme knowledge they share. The book, the Carneades collection and the game's data are not yet one verified catalogue. **Its skeleton exists since 2026-10-22:**
-  - 114 entries generated from the sources, with a checker ([`wag/data/catalogue/`](wag/data/catalogue/README.md));
+  - 115 entries generated from the sources, with a checker ([`wag/data/catalogue/`](wag/data/catalogue/README.md));
   - nothing in it is drafted or verified yet.
 - **Annotation so far:** every annotation was made by a language model; no person has checked it.
 - **Dialogue types:** a reference is written. The game plays only persuasion so far.
@@ -35,7 +35,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 ```
   the book: Walton, Reed & Macagno (2008)        walton.yml: the Carneades collection
-  what a scheme says, its critical questions     the formulas (111 schemes)
+  what a scheme says, its critical questions     the formulas (112 schemes)
                        \                          /
                         links.json: the book ↔ walton.yml   (drafted, not verified)
                                     |
@@ -53,13 +53,13 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 | Part | State | What works | What is missing | Read |
 |---|---|---|---|---|
-| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 111 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
+| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 112 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
 | Browser dashboard (`wag-server`) | Prototype, used on Windows | **Play:** dialogue and board views. **Models:** type a key, find a model, add it as a player. **Annotate:** runs, model review, your verdicts. Everything is saved in a data folder (`~/WAG`). | A catalogue browser; causes for verdicts | [`docs/prototype.md`](docs/prototype.md), [`docs/llm.md`](docs/llm.md) |
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |
 | Kialo import | Working | A captured discussion becomes a game (one statement per claim, keyed by claim ID), or an annotation dataset; `wag-cli --kialo-check` imports a whole folder | | [`wag/README.md`](wag/README.md), [part 8 §2](docs/review-2026-10-15-part8.md#2-claims-merged-by-their-text) |
-| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
-| Scheme catalogue | Skeleton (phase 1, step 1) | **Entries:** 114, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 212, with their formulas. **Discrepancies:** 22, from the sources. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Everything people write: summaries, paraphrased questions, contrasts, examples, classification, verification | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`index.md`](wag/data/catalogue/index.md) |
+| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 112 schemes (the upstream 111, and compendium 33.3's formalization, which the upstream master had lost; added by the owner on 2026-10-22); the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
+| Scheme catalogue | Skeleton (phase 1, step 1) | **Entries:** 115, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 212, with their formulas. **Discrepancies:** 22, from the sources. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Everything people write: summaries, paraphrased questions, contrasts, examples, classification, verification | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`index.md`](wag/data/catalogue/index.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
 | Dialogue types | Reference written | Every game with a central claim is a persuasion dialogue: `debate` is the one-sided form; the points modes match no type | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
@@ -98,8 +98,8 @@ In order of importance. Each issue links to the document that explains it.
 8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
    - 3 book schemes have no `walton.yml` scheme, and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. Earlier versions said 6, from an older list.
-   - `families.json` and `links.json` disagree on compendium 33.3 (the catalogue's checker warns).
-   - 13 of the book-to-`walton.yml` links are partial.
+   - Compendium 33.3 (reasoning from negative consequences) had no `walton.yml` scheme. The upstream collection formalizes it in a category file, under an id it already used; the owner brought it in as `negative_consequences_reasoning` on 2026-10-22 ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#added-by-the-owners-decision)).
+   - 12 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
 **Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):

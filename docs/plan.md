@@ -53,8 +53,8 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | Source | What it has | State |
 |---|---|---|
 | The book's compendium (ch. 9) | 109 schemes (128 numbered entries, 19 of them headings only), 153 critical questions | Transcribed outside the repository |
-| `docs/scheme-registry/walton-clean/walton.yml` | 111 schemes with formulas and English; 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
-| `docs/scheme-registry/links.json` | 93 compendium entries linked exactly to `walton.yml` and 13 partly (111 links: 94 exact, 17 partial), 3 without a link; 197 CQ links, 142 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
+| `docs/scheme-registry/walton-clean/walton.yml` | 112 schemes with formulas and English (111 upstream; compendium 33.3's, brought in from an upstream category file on 2026-10-22); 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
+| `docs/scheme-registry/links.json` | 94 compendium entries linked exactly to `walton.yml` and 12 partly (111 links: 95 exact, 16 partial), 3 without a link; 197 CQ links, 142 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
 | `wag/data/nascq/*.json` | 9 schemes, 24 CQs, 35 ask edges, 4 backup edges | The game's data, tested |
 | `wag/data/schemes/families.json` | 21 families | Drafted |
 
@@ -70,10 +70,10 @@ Only one `walton.yml` scheme has no compendium entry: `defeasible_modus_ponens`.
    - every game CQ appears;
    - no paraphrase reproduces the book's sentence.
 
-   **Done on 2026-10-22.** [`wag/data/catalogue/`](../wag/data/catalogue/README.md) holds 114 entries and an index; `wag-cli --catalogue-gen` and `--catalogue-check` make and check them. The README there lists every check and what the skeleton found.
-2. **Tier 1: 31 schemes** (first estimated at about 25), listed in the catalogue's README. These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
+   **Done on 2026-10-22.** [`wag/data/catalogue/`](../wag/data/catalogue/README.md) holds 114 entries and an index (115 since compendium 33.3 has its own scheme); `wag-cli --catalogue-gen` and `--catalogue-check` make and check them. The README there lists every check and what the skeleton found.
+2. **Tier 1: 32 schemes** (first estimated at about 25; 31 until 33.3's scheme joined the consequences on 2026-10-22), listed in the catalogue's README. These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
    - **practical reasoning:** practical reasoning 1 and 2, practical goal, end and means, necessary condition;
-   - **consequences and values:** positive and negative consequences, positive and negative value;
+   - **consequences and values:** positive and negative consequences, reasoning from negative consequences, positive and negative value;
    - **causes and signs:** cause to effect, correlation to cause, sign;
    - **cases and analogy:** analogy, the practical analogies, example;
    - **sources:** expert opinion, position to know, witness testimony, popular opinion;
@@ -208,7 +208,7 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 
    Removing them from the history means rewriting the history and force-pushing, which only the owner should decide. (This is not legal advice.)
 2. **A licence for WAG.** The repository has none, so others may not reuse it. Carneades and `walton.yml` are MPL-2.0.
-3. **Who verifies the catalogue,** and whether tier 1 above is the right first set.
+3. **Who verifies the catalogue,** and whether tier 1 above is the right first set. The other decisions on the catalogue's sources are listed in [catalogue-alignment.md §3 C](catalogue-alignment.md#c-decisions-on-the-sources-the-owner). Decided on 2026-10-22: compendium 33.3's formalization, lost from the upstream master under a duplicate id, is brought into `walton.yml` as `negative_consequences_reasoning`.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
 6. **Dialogue types (Track D, §8).** Decided by the owner on 2026-10-15:

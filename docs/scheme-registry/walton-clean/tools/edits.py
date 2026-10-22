@@ -1,7 +1,9 @@
 """Every edit made to walton.yml, in application order.
 
 Line numbers are those of the ORIGINAL file (2068 lines).  Categories:
-syntax, typo, variable, template, "repair — needs approval".
+syntax, typo, variable, template, "repair — needs approval", and
+"addition — owner decision" (content the owner decided to add, ADDITIONS
+at the end).
 """
 
 SYN = "syntax"
@@ -9,6 +11,7 @@ TYPO = "typo"
 VAR = "variable"
 TPL = "template"
 REP = "repair — needs approval"
+ADD = "addition — owner decision"
 
 # scheme id renames (typos), old -> new
 ID_MAP = {
@@ -310,3 +313,39 @@ OPS = [
     rename("succesful_diagram", "successful_diagram", [360, 1203], TYPO, "misspelled predicate"),
     rename("vaguness_recejted", "vagueness_rejected", [385, 819], TYPO, "misspelled predicate"),
 ]
+
+# ----------------------------------------------------------------------
+# Additions the owner decided. Applied after every edit above, so the
+# renames do not touch them.
+#
+# 2026-10-22: compendium 33.3, Reasoning from Negative Consequences. The
+# category file A_reasoning/3_practical-reasoning.yml formalizes it in a
+# second block with the id negative_consequences (lines 511-524 there);
+# the master has only the first block of that id, so 33.3 had no scheme.
+# It comes in under a new id, with its empty variable list filled in, and
+# with templates in our own words: the category file's own templates
+# repeat the book's premises (and one has a typo).
+_R33 = ("compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file "
+        "A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the "
+        "master; added under a new id by the owner's decision of 2026-10-22")
+_T33 = "template for the 33.3 scheme added below, in our own words (the category file's repeats the book)"
+ADDITIONS = [
+    insert(21, '  agent_bring_about/2: "Bringing about %s would lead to %s."', ADD, _T33),
+    insert(46, '  bad_for_goals/1: "%s would harm the agent\'s goals."', ADD, _T33),
+] + [insert(1897, text, ADD, _R33, scheme="negative_consequences_reasoning") for text in [
+    "  - id: negative_consequences_reasoning",
+    "    meta:",
+    "      title: Argument From Consequences - Reasoning From Negative Consequences",
+    "      source: >",
+    "             Douglas Walton, A Pragmatic Theory of Fallacy.",
+    "             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.",
+    "             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.",
+    "    variables: [A,B]",
+    "    conclusions:",
+    "      - not_bring_about(A)",
+    "    premises:",
+    "      - agent_bring_about(A,B)",
+    "      - bad_for_goals(B)",
+    "      ",
+]]
+OPS += ADDITIONS

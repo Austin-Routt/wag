@@ -11,12 +11,12 @@ Every item that people or models write carries a status. This is phase 1 of [the
 - **Generated:** every entry, from the sources.
 - **Not yet done:** nothing is drafted or verified.
 - **Next steps** (plan §2, order of work):
-  1. A model drafts the 31 tier-1 entries.
+  1. A model drafts the 32 tier-1 entries.
   2. A person verifies them against the book.
 
 | File | What |
 |---|---|
-| `schemes/<id>.yml` | 114 entries: one per `walton.yml` scheme (111), and one per compendium scheme that `walton.yml` lacks (3) |
+| `schemes/<id>.yml` | 115 entries: one per `walton.yml` scheme (112), and one per compendium scheme that `walton.yml` lacks (3) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
 | This README | The format, the statuses, the commands, the checks |
 
@@ -182,12 +182,12 @@ Each is compared with the book's text, normalized: lower case, and every variabl
 
 ## Tier 1
 
-31 schemes, verified first: the 13 schemes of the batch-2 gold, their close relatives for contrasts, and defeasible modus ponens, the form "other" falls back to (plan §2).
+32 schemes, verified first: the 13 schemes of the batch-2 gold, their close relatives for contrasts, and defeasible modus ponens, the form "other" falls back to (plan §2). Reasoning from negative consequences joined on 2026-10-22, when compendium 33.3 got its own scheme.
 
 | Group | Schemes |
 |---|---|
 | Practical reasoning | `practical_reasoning1`, `practical_reasoning2`, `practical_goal`, `end_and_means_1`, `practical_necessary_condition` |
-| Consequences and values | `positive_consequences`, `negative_consequences`, `positive_value`, `negative_value` |
+| Consequences and values | `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, `positive_value`, `negative_value` |
 | Causes and signs | `cause_to_effect`, `correlation_to_cause`, `sign` |
 | Cases and analogy | `analogy`, `practical_analogy_positive`, `practical_analogy_negative`, `from_example` |
 | Sources | `expert_opinion`, `position_to_know`, `witness_testimony`, `popular_opinion` |
@@ -215,4 +215,4 @@ Generated on 2026-10-22.
 - primed variables (`P'`, now `P2`);
 - one stray parenthesis.
 
-**The sources disagree once.** `families.json` lists compendium 33.3 as having no `walton.yml` scheme, while `links.json` links it, partially, to `negative_consequences`. The checker warns; one of the two needs correcting.
+**The sources disagreed once, on compendium 33.3.** `families.json` listed it as having no `walton.yml` scheme, while `links.json` linked it, partially, to `negative_consequences`. `families.json` was right about `walton.yml`: the upstream collection formalizes 33.3 only in a category file, in a second block under the id `negative_consequences`, and its master lost it. On 2026-10-22 the owner decided to bring it in. It is now `negative_consequences_reasoning`, a tier-1 entry; `links.json` links 33.3 to it exactly, and `families.json` names it. The catalogue then had 115 entries, and the generated discrepancies dropped to 21 (16 partial links).

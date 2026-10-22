@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Added by the owner's decision\"); it was linked partly to negative_consequences.",
  "entries": [
   {
    "number": "1",
@@ -5358,25 +5358,25 @@
    "shares_cqs_printed_under": "33",
    "walton_links": [
     {
-     "id": "negative_consequences",
-     "match": "partial",
-     "reason": "No dedicated walton.yml scheme; negative_consequences (33.2) has the same shape (A brings about G; G is bad; so not A) without the first-person agent.",
+     "id": "negative_consequences_reasoning",
+     "match": "exact",
+     "reason": "Same title and references (Walton 1995, pp. 155-156; Walton 2000, p. 123) as the upstream block that formalizes it: a second block with the id negative_consequences in the category file A_reasoning/3_practical-reasoning.yml, missing from the master walton.yml. Added to walton.yml under this id by the owner's decision of 2026-10-22 (walton-clean/CHANGELOG.md).",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
+       "note": "the book's parenthetical (not bringing about A) is not formalized",
        "walton": [
         {
-         "formula": "brings_about(A,G)",
+         "formula": "agent_bring_about(A,B)",
          "locus": "premise"
         }
        ]
       },
       {
        "compendium_label": "Premise 2",
-       "note": "\"bad\" rather than \"bad from the point of view of my goals\"",
        "walton": [
         {
-         "formula": "bad(G)",
+         "formula": "bad_for_goals(B)",
          "locus": "premise"
         }
        ]
@@ -5385,7 +5385,7 @@
      "conclusion_map": {
       "walton": [
        {
-        "formula": "¬should_be_performed(A)",
+        "formula": "not_bring_about(A)",
         "locus": "conclusion"
        }
       ]
@@ -5395,22 +5395,24 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "brings_about(A,G)",
+         "formula": "agent_bring_about(A,B)",
          "locus": "premise"
         }
        ]
       },
       {
        "cq": "CQ2",
+       "note": "no separate evidence formula",
        "walton": [
         {
-         "formula": "brings_about(A,G)",
+         "formula": "agent_bring_about(A,B)",
          "locus": "premise"
         }
        ]
       },
       {
        "cq": "CQ3",
+       "note": "counter-argument (opposite consequences); no formula",
        "walton": []
       }
      ]

@@ -663,10 +663,10 @@
      "compendium": "33.2"
     },
     {
-     "scheme": "",
+     "scheme": "negative_consequences_reasoning",
      "relation": "subtype",
      "compendium": "33.3",
-     "note": "missing from walton.yml (only in category file A/3:511)"
+     "note": "of 33.2, from the agent's own goals; added to walton.yml from category file A/3:511 by the owner's decision of 2026-10-22"
     },
     {
      "scheme": "negative_consequences_prudential",

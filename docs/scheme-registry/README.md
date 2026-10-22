@@ -4,10 +4,10 @@ This directory holds what WAG uses to keep its argumentation schemes accurate an
 
 | File | What |
 |---|---|
-| `walton-clean/walton.yml` | The Walton–Carneades collection (111 schemes; MPL-2.0, see `walton-clean/LICENSE`), cleaned so that Carneades 4 loads every scheme. Syntax, typos, variable declarations and English templates are fixed; scheme content is unchanged. |
-| `walton-clean/CHANGELOG.md`, `changes.json`, `walton.diff` | Every edit (194 on 169 lines), with its reason and category. Four repairs and five renamed IDs need the owner's approval (CHANGELOG, "Repairs that need the owner's approval" and "Id map"); the audit of 2026-10-13 approves them. |
+| `walton-clean/walton.yml` | The Walton–Carneades collection (MPL-2.0, see `walton-clean/LICENSE`), cleaned so that Carneades 4 loads every scheme: the upstream 111 schemes, and one more. Syntax, typos, variable declarations and English templates are fixed; the upstream schemes' content is unchanged. The one more, `negative_consequences_reasoning`, formalizes compendium 33.3: the upstream collection has it only in a category file, under an id the master already used. The owner decided on 2026-10-22 to bring it in (CHANGELOG, "Added by the owner's decision"). |
+| `walton-clean/CHANGELOG.md`, `changes.json`, `walton.diff` | Every edit (194 cleaning edits on 169 lines, and the 16 added lines of the owner's addition), with its reason and category. Four repairs and five renamed IDs need the owner's approval (CHANGELOG, "Repairs that need the owner's approval" and "Id map"); the audit of 2026-10-13 approves them. |
 | `walton-clean/id-migrations.json` | The five renamed scheme IDs, old to new, so that a file using an upstream ID still reads (`validate.py` uses it). |
-| `walton-clean/walton.proposals.yml`, `proposals-check.txt` | The same file with four further proposals that change a premise. With them, all 111 schemes pass the Carneades validator. Not applied. |
+| `walton-clean/walton.proposals.yml`, `proposals-check.txt` | The same file with four further proposals that change a premise. With them, all 112 schemes pass the Carneades validator. Not applied. |
 | `walton-clean/tools/`, `walton-clean/check/` | The cleanup as code: the edits (`tools/edits.py`, `tools/proposals.py`), the checker (`check/main.go`), and `check/run.sh`. Run `sh walton-clean/check/run.sh ORIGINAL` on the upstream `walton.yml` (its SHA-256 is in the CHANGELOG). It rebuilds `walton.yml`, `changes.json`, `walton.proposals.yml`, `walton.diff` and the CHANGELOG, and reruns every check (`clean-check.txt`, `proposals-check.txt`, `check/*.txt`). It reproduces the committed files byte for byte. |
 | `nascq-edges.md` | Every answer the game's NASCQ offers to every critical question, played on a sample argument: what each concludes, its English reading, and whether that is what the question's locus and the answer's polarity call for. It is made by `wag-cli --edges`, and a test keeps it current. This is the table to review the scheme–question links against. |
 | `links.json` | For each of the 128 entries of the book's compendium (Walton, Reed & Macagno 2008, ch. 9: 60 schemes, 68 subtypes), which `walton.yml` scheme formalizes it and how closely. Also maps each premise, the conclusion and each critical question to its formula. Labels only: the book's text is not reproduced. |
@@ -32,7 +32,7 @@ Predicate names carry the meaning. Two schemes with the same shape but different
 
 | File | Result |
 |---|---|
-| `walton-clean/walton.yml` | 111 schemes, 110 distinct patterns. With the families, every related pair is declared. One error: `division_generic` is a copy of `composition_generic`, while the book's division (10.1) runs from the whole to the parts. That is a defect to fix in the collection; the check reports it. |
+| `walton-clean/walton.yml` | 112 schemes, 111 distinct patterns. With the families, every related pair is declared. One error: `division_generic` is a copy of `composition_generic`, while the book's division (10.1) runs from the whole to the parts. That is a defect to fix in the collection; the check reports it. |
 | WAG's `core.yml` | 10 Carneades schemes, 10 patterns. Related pairs, all declared in the families: credible source, expert opinion and position to know (same form); value-based and goal-based practical reasoning (close). The game's NASCQ uses 9 of them: `credible_source` stays in `core.yml` so that games played before 2026-10-13 replay, and no NASCQ scheme maps to it. |
 
 ## Adding a scheme to the game

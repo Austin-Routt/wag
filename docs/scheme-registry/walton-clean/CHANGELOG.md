@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2067 lines, same 111 schemes in the same order, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2084 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, and 1 added by the owner's decision ([below](#added-by-the-owners-decision): `negative_consequences_reasoning`), 112 in all. Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 138 / 147 | 17 / 17 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 111 | 0 of 111 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 112 | 0 of 112 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 67 of 111 | 107 of 111 | 111 of 111 |
+| schemes passing checks 2–4 | – | 67 of 111 | 108 of 112 | 112 of 112 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr; the audit's 137 is the same list without it.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 111 schemes, and check 2 passes for 107. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 111 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 112 schemes, and check 2 passes for 108. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 112 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -34,11 +34,20 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| **total** | **194** | **169** distinct lines (a line can carry edits of several categories) |
+| addition — owner decision | 16 | 3 |
+| **total** | **210** | **172** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 166 lines removed, 165 added. That is 162 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise) and 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`).
+Unified diff against the original (`walton.diff`): 166 lines removed, 181 added. That is 162 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`), and 16 added by the owner's decision (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 20, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
+
+## Added by the owner's decision
+
+Content the upstream collection has but its master `walton.yml` lost, brought in by the owner's decision. These are not cleaning edits: they add schemes.
+
+| scheme | from | decided | why |
+|---|---|---|---|
+| `negative_consequences_reasoning` | `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash; its empty variable list is filled in (`[A,B]`); its two templates are written in our own words, because the category file's repeat the book's premises. |
 
 ## Repairs that need the owner's approval
 
@@ -105,6 +114,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **17** · template · template has no %s for arity 1; no scheme uses the predicate, so the arity is set to fit the template instead of inventing an argument (used by: no scheme)
   - before: `  action_fit_quality/1: "Description of action actually fit the quality."`
   - after: `  action_fit_quality/0: "Description of action actually fit the quality."`
+- **21** [insert after] · addition — owner decision · template for the 33.3 scheme added below, in our own words (the category file's repeats the book) (used by: negative_consequences_reasoning)
+  - before: _(none)_
+  - after: `  agent_bring_about/2: "Bringing about %s would lead to %s."`
 - **26** · typo · misspelled predicate (used by: composition_generic, division_generic)
   - before: `  all_parts_propert/2: "All the parts %s have the property %s."`
   - after: `  all_parts_property/2: "All the parts %s have the property %s."`
@@ -129,6 +141,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **43** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses background with 0 argument(s) and the template has 0 %s (used by: common_folk_ad_populum)
   - before: `  background: "The speaker is an ordinary person, that is, share a common background with the audience."`
   - after: `  background/0: "The speaker is an ordinary person, that is, share a common background with the audience."`
+- **46** [insert after] · addition — owner decision · template for the 33.3 scheme added below, in our own words (the category file's repeats the book) (used by: negative_consequences_reasoning)
+  - before: _(none)_
+  - after: `  bad_for_goals/1: "%s would harm the agent's goals."`
 - **50** · template · '%v' is not a %s verb (WAG lint error) (used by: expert_opinion)
   - before: `  based_on_evidence/1: "The assertion %v is based on evidence."`
   - after: `  based_on_evidence/1: "The assertion %s is based on evidence."`
@@ -820,6 +835,51 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - reasonable_belive(M)`
   - after: `      - reasonable_believe(M)`
 
+### negative_consequences_reasoning
+
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `  - id: negative_consequences_reasoning`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    meta:`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      title: Argument From Consequences - Reasoning From Negative Consequences`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      source: >`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `             Douglas Walton, A Pragmatic Theory of Fallacy.`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    variables: [A,B]`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - not_bring_about(A)`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    premises:`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - agent_bring_about(A,B)`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - bad_for_goals(B)`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      `
+
 ### exeption_to_rule → exception_to_rule
 
 - **1976** · typo · scheme id 'exeption'
@@ -837,7 +897,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 111 schemes (`proposals-check.txt`).
+With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 112 schemes (`proposals-check.txt`).
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 
