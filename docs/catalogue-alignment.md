@@ -1,6 +1,6 @@
 # Plan: complete coverage and alignment of the scheme catalogue
 
-**Started 2026-10-22, while tier 1 was drafted; updated the same day after its independent check ([part 12](review-2026-10-22-part12.md)).** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 33 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
+**Started 2026-10-22, while tier 1 was drafted; updated the same day after its independent check ([part 12](review-2026-10-22-part12.md)), and revised after the owner's review of the goal ([part 13](review-2026-10-22-part13.md)): the game's fields, links, feedback from play and the process (workstreams I to M).** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 33 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
 
 **The catalogue's own README has the current figures:** [`wag/data/catalogue/README.md`](../wag/data/catalogue/README.md). The figures below were measured on 2026-10-22, from the committed catalogue and the upstream collection.
 
@@ -18,7 +18,11 @@
 **Aligned.**
 - **Book and `walton.yml`.** Where they differ, the entry records the difference and the decision. No decision is left open.
 - **Catalogue and `walton.yml`.** The formulas are `walton.yml`'s. A formalization that the upstream collection has but `walton.yml` lost is either brought in or recorded as rejected.
-- **Catalogue and the game.** The NASCQ's schemes and questions are generated from the catalogue, and the game's tests pass unchanged (plan §6).
+- **Catalogue and the game.** The NASCQ (schemes, questions, ask and backup edges, and every field the game uses) and the game's `core.yml` are generated from the catalogue, and the game's tests pass unchanged (plan §6).
+
+**Playable** (added 2026-10-22, the owner's goal: plan, "The goal"). Every scheme and critical question is playable in some context, as plan §6 defines it. The literature gives the first set; data and play refine and complete it. Completeness is measured, not proven:
+- the share of arguments in new data that fit no playable scheme;
+- the share of play reports that a move could not be made.
 - **Catalogue and the other WAG data.**
   - `links.json` and `families.json` are generated from the catalogue, or retired.
   - The annotator's prompt and guidelines take their scheme descriptions from the catalogue (plan §3).
@@ -62,6 +66,8 @@ What matters for alignment:
 ### A. A person verifies tier 1
 
 **The work.** 33 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
+
+**How:** by the rubric for each field, with about one item in ten verified again by someone else, and the agreement reported ([`process.md`](process.md) §2; the rubric is to be written).
 
 **Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N12, and the scheme changes listed in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). Otherwise the verifier would verify entries that are about to change.
 
@@ -155,16 +161,20 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
 
 This is plan §6.
 
-1. Write a generator from verified entries to the NASCQ's `schemes.json`, `critical_questions.json` and `edges.json`:
+1. Write a generator from the entries to the NASCQ's `schemes.json`, `critical_questions.json` and `edges.json`, and to the game's `core.yml`:
    - the question texts from the paraphrases;
    - the loci from the targets: an assumption is asked at the premise, as now;
-   - the patterns from the formulas.
-2. Its first output must reproduce today's NASCQ except where the catalogue records a reason. Known reasons:
+   - the patterns from the formulas;
+   - **every other field from the entry's game fields (I),** and each question's NASCQ question from its choice (J);
+   - `core.yml`'s formulas from the formula layer, so that the game no longer keeps its own copy.
+2. Its first output must reproduce today's NASCQ and `core.yml` except where the catalogue records a reason. Known reasons:
    - two of expert opinion's questions narrow the book's;
    - the game's copy of `sign` lacks the exception `more_reliable`.
 3. The game's tests must pass unchanged.
 
-**Then** the game can take the other verified schemes, family by family, with their ask and backup edges linted as now.
+The generator can be written before tier 1 is verified: reproducing today's data is its test. The game's data is regenerated from verified entries before a release.
+
+**Then** the game can take the other schemes, family by family, with their ask and backup edges linted as now and exercised by scripted play (L).
 
 ### F. Retire the drafted link files
 
@@ -202,15 +212,70 @@ Two ways to cover them:
 - the person verifying reads them with the book open;
 - or the owner transcribes them locally, outside the repository, so that the model check and the copy check can use them.
 
+### I. The game's fields in the catalogue
+
+Added 2026-10-22 ([part 13](review-2026-10-22-part13.md)). The NASCQ fields that the texts do not define get a place in each entry, with a status, a reason and example IDs. Plan §6 lists them in three kinds: derived by a rule, judged with examples, and calibrated by data and play.
+
+1. **Extend the entry format** (`entry.go`) and the generator. The fields of the 9 game schemes are generated from today's NASCQ, with the status `generated`.
+2. **Write the rules** for the derived fields, each with positive and negative examples run as tests, and recorded exceptions (such as analogy's).
+3. **The checker re-derives** the derived fields and reports any difference that has no recorded reason.
+4. **Draft the judged fields** for tier 1, citing coded examples. The calibrated ones start from today's values.
+
+### J. Each book question names its NASCQ question
+
+35 of the catalogue's 222 questions have a game part. For each of the others, choose an existing NASCQ question or a new one, by the criterion in plan §6, and record the choice with a status. This happens with the drafting, scheme by scheme. The checker reports two problems:
+- a NASCQ question whose schemes' questions ask different things;
+- a question with no choice.
+
+### K. Links across schemes
+
+1. **A shared vocabulary.** One file lists the predicates where schemes meet: `should_be_performed`, the causal and value predicates, and the others as found, each with what it means and which schemes use it.
+2. **Rules for backup edges,** over what a scheme concludes and what a question needs, with the generic schemes that can back any statement. Hand-written edges keep a reason and examples.
+3. **How well the schemes connect.** The checker reports how many premise-side formulas some scheme concludes, and how many schemes conclude something nothing uses (10 of 388, and 91 of 102, on 2026-10-22).
+4. **Refined by data and play.** An answer in coded data that no edge allows, or a "could not make the move" report, is a candidate edge.
+
+### L. Feedback from play
+
+As [`process.md`](process.md) §4 describes:
+1. Notes attach to catalogue IDs, in categories that lead to actions, and model players get the same channel.
+2. `wag-cli --play-report` totals the notes, and counts plays, questions asked and answers that succeed, per catalogue item.
+3. Scripted model play exercises every ask and backup edge of each playable scheme.
+4. Human sessions follow a short rubric per move.
+5. Games record the versions of the catalogue and the NASCQ they ran on.
+
+### M. The process and its infrastructure
+
+As [`process.md`](process.md) describes:
+1. **The private workspace** with its session-start hook. Done on 2026-10-22, except the push, which waits for the owner to create the repository.
+2. **CI on every push,** once the owner agrees.
+3. **The decision register,** gathering every open decision, sorted by category and by what it blocks.
+4. **The generated status report.** Documents link to it instead of copying figures.
+5. **The agents' protocol:**
+   - briefs moved into WAG;
+   - `--catalogue-pack` and `--catalogue-apply` (G);
+   - the findings format validated;
+   - the ledger of dispositions;
+   - a `checked by` status;
+   - measured reliability, by seeded faults and a person's sample.
+
 ## 4. Order
 
-1. **The owner decides C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 to C4 were decided on 2026-10-22). C6 and C7 can wait.
-2. **A person verifies tier 1** (A).
-3. **Generate the game's data** for the 9 game schemes from the verified tier 1 (E), and run the game's tests.
-4. **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D).
-5. **Tools** (G) as the batches show the need. The verification view helps most before tier 2's verification starts.
-6. **Retire the drafted link files** (F) when every entry's links are verified.
-7. **Rewrite the English templates** (C7) before any public release of `walton.yml` with WAG.
+Revised on 2026-10-22 ([part 13](review-2026-10-22-part13.md)): the infrastructure first, so that no work is lost or repeated; then the game's fields, so that verification covers them too.
+
+1. **Protect and organize the work** (M):
+   - the workspace pushed;
+   - CI;
+   - the decision register;
+   - the status report;
+   - the briefs and pack builder moved into WAG.
+2. **The owner sorts the register:** first what blocks the game or verification, then the rest. C5 and C8, which change formulas, come before anyone verifies the entries they touch. C1 to C4 were decided on 2026-10-22; C6 and C7 can wait.
+3. **The game's fields and question choices for the 9 game schemes** (I, J), and **the generator** (E): its first output reproduces today's NASCQ and `core.yml`, and the game's tests pass.
+4. **The verification protocol,** then **a person verifies tier 1** (A), game fields included. Model checks are measured at the same time (M).
+5. **Feedback from play** (L), then beta play on the game's schemes by people and models.
+6. **Tier 1's other schemes into the game,** with links by rule (K). **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D). Data and play refine the rules and propose candidates.
+7. **Tools** (G) as the batches show the need. The verification view helps most before tier 2's verification starts.
+8. **Retire the drafted link files** (F) when every entry's links are verified.
+9. **Rewrite the English templates** (C7) before any public release of `walton.yml` with WAG.
 
 ## 5. Done when
 
@@ -218,6 +283,11 @@ Two ways to cover them:
   - no errors and no warnings;
   - every item verified;
   - no discrepancy decision beginning "Open:".
-- The NASCQ is generated from the catalogue and the game's tests pass.
+- The NASCQ and `core.yml` are generated from the catalogue, every game field included, and the game's tests pass.
+- Every scheme is playable in at least one context, or the register says why not yet.
+- Every ask and backup edge has been exercised by scripted play. The play report has no open "wrong" note, and its rates meet the targets the owner sets once the first report exists.
+- The register has no open decision that blocks the game or verification.
 - `links.json` and `families.json` are generated from the catalogue, or gone.
 - Nothing the repository keeps reproduces the book: the catalogue's copy check passes, and `walton.yml`'s English is our own.
+
+Completeness keeps being measured after that, as data and play add schemes (§1, "Playable").

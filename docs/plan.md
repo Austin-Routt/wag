@@ -1,29 +1,42 @@
 # The plan: one verified scheme catalogue, then annotation on it
 
-Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue's skeleton and its checker exist ([`wag/data/catalogue/`](../wag/data/catalogue/README.md)); nothing in it is drafted or verified yet. The owner's open questions are in §7.
+Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue's skeleton and its checker exist ([`wag/data/catalogue/`](../wag/data/catalogue/README.md)); tier 1 is drafted and checked by models, and nothing is verified by a person yet. **Revised on 2026-10-22** after the owner's review of the goal ([part 13](review-2026-10-22-part13.md)). The owner's open questions are in §7.
 
+**The goal,** set by the owner on 2026-10-22:
+- WAG is to become a complete dialogue system, starting with argumentation-based dialogue.
+- Every argumentation scheme and critical question is to be playable in some game context. The context (the dialogue type, the preset, and the NASCQ's fields and links) decides what a scheme can do there (§6).
+- The literature gives the first playable set and its families. Kialo and other data, and play by people and models, refine and complete it.
+- Completeness cannot be proven, only measured as it approaches. Two measures show it:
+  - the share of arguments in new data that fit no playable scheme;
+  - the share of play reports that say a move could not be made (§5, [`process.md`](process.md) §4).
+
+**Related documents:**
 - **Why this plan,** from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md).
 - **What Walton and Macagno's classification adds:** [`review-2026-10-15-part8.md`](review-2026-10-15-part8.md).
 - **Dialogue types,** the second objective, are Track D (§8). It rests on the reference [`dialogue-types.md`](dialogue-types.md) and the review [`review-2026-10-15-part9.md`](review-2026-10-15-part9.md).
+- **How the work is done:** statuses, agents, feedback from play, the decision register, the private workspace, the checks: [`process.md`](process.md).
 - **Where the project stands:** [`README.md`](../README.md).
 
 ## 1. Principles
 
-- **One catalogue, with an authority for each part.** The owner's decision of 2026-10-15:
+- **One catalogue, with an authority for each part.** The owner's decisions of 2026-10-15 and 2026-10-22:
   - The book (Walton, Reed & Macagno, *Argumentation Schemes*, 2008) decides what a scheme says, and its critical questions.
-  - The human-verified Carneades collection (`walton.yml`) decides the formulas.
+  - **The formulas are WAG's own layer,** `walton.yml`. It starts from the upstream Carneades collection, which is its origin, not its authority. Every change is recorded (the cleaning's CHANGELOG) and verified like any other item. Until 2026-10-22 this plan called the upstream collection human-verified and the authority; drafting tier 1 found defects in it, and five schemes have been written for WAG since.
+  - **The game's fields and links** (§2, §6) are decided by logical coherence, consistency and examples of use. Data and play then evaluate, refine and validate them.
   - The game's NASCQ is generated from the catalogue: a selection with game rules added, not a separate source.
-  - Schemes found in Kialo data join as *derived* schemes, with their evidence.
+  - Schemes found in Kialo data or in play join as *derived* schemes, with their evidence.
 - **Every field says who stands behind it:**
-  - *drafted* (by a model);
+  - *drafted* (by a person or a model);
+  - *checked* (by the validators and by models, named);
   - *verified* (by a person, with a date);
   - *disputed* (with the reason).
 
-  Where the book and `walton.yml` disagree (for example the book's modal cause to effect, audit N8, which the owner settled on 2026-10-22 with a second scheme), the entry records both and the decision.
+  How far a model's check counts depends on the field's risk and on the measured reliability of the checks ([`process.md`](process.md) §2–3). Where the book and `walton.yml` disagree (for example the book's modal cause to effect, audit N8, which the owner settled on 2026-10-22 with a second scheme), the entry records both and the decision.
 - **No book text in the public repository.**
   - The catalogue holds our own paraphrases, the book's labels (scheme number, CQ number) and page references.
-  - The book stays the owner's copy, outside the repository, for verification.
+  - The owner's copies of the book texts are kept in the private workspace, `wag-workspace`, for verification and for the copy check ([`process.md`](process.md) §6).
   - This is how `links.json` works already.
+- **One source of truth for each kind of fact.** Documents link to a generated status report instead of copying figures ([`process.md`](process.md) §1, §7).
 - **No new scheme for a one-off pattern.** A derived scheme needs recurring evidence and a person's review.
 - **Measure before and after each change,** on the same claims and the same model (§5).
 
@@ -39,13 +52,14 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | summary: when the scheme applies, in two sentences of our own | new | drafted, then verified |
 | variables, premises, assumptions, exceptions, conclusion: formulas. English readings are rendered from `walton.yml` when needed, not stored: many of its templates repeat the book (§7, item 1). | `walton.yml` | generated |
 | map from the book's premises to the formulas | `links.json` premise maps | generated, then verified |
-| critical questions: book label, our paraphrase, locus (premise, assumption, exception, conclusion, argument), the formula it is about, the game's CQ id if any, what counts as an answer | `links.json` CQ maps (197), the NASCQ (24), new paraphrases | drafted, then verified |
+| critical questions: book label, our paraphrase, locus (premise, assumption, exception, conclusion, argument), the formula it is about, the NASCQ question it becomes (an existing one, or a new one), what counts as an answer | `links.json` CQ maps (197), the NASCQ (24), new paraphrases | drafted, then verified |
+| the game's fields: for the scheme, its kind of claim, whether it can back any statement, its base weight, evidence policy, cues, variable types and English; for each question, what each answer does; the backup edges. Each is derived by a rule, judged with examples, or calibrated by data and play (§6) | the NASCQ (9 schemes), the rules, the examples | drafted, then verified; data and play refine them |
 | contrasts: "this, not X, when …", for each close relative | the registry's families and signatures, new text | drafted, then verified |
 | examples: two or three short claims coded in full (Kialo claims with their ids where possible), and one near miss | new | drafted, then verified |
 | discrepancies between book and `walton.yml`, and the decision | the audit, `links.json` partial links | drafted, then decided |
 | place in Walton and Macagno's classification: source-dependent or not; practical or epistemic; discovering a rule or applying one | Walton & Macagno 2015 (part 8 §1.7) | drafted, then verified |
 | "specialises": the scheme this one is a domain version of, if any | new | drafted, then verified |
-| proper in: the dialogue types where the scheme is a legitimate move (a threat is, in a negotiation, and is not, in a persuasion) | the book, Walton's pragmatic theory of fallacy | drafted, then verified |
+| proper in: the dialogue types where the scheme is a legitimate move (a threat is, in a negotiation, and is not, in a persuasion). It is the evidence for the weights each context gives the scheme (§6), not a mechanism of its own | the book, Walton's pragmatic theory of fallacy | drafted, then verified |
 | status and history of each field | | |
 
 ### Where the sources stand today
@@ -53,7 +67,7 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | Source | What it has | State |
 |---|---|---|
 | The book's compendium (ch. 9) | 109 schemes (128 numbered entries, 19 of them headings only), 153 critical questions | Transcribed outside the repository |
-| `docs/scheme-registry/walton-clean/walton.yml` | 116 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files, and 50's and the modal form of 28, written for WAG, on 2026-10-22); 59 encode some CQs as assumptions or exceptions (54 of the upstream 111) | Cleaned so that Carneades loads it; content unchanged |
+| `docs/scheme-registry/walton-clean/walton.yml` | 116 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files, and 50's and the modal form of 28, written for WAG, on 2026-10-22); 59 encode some CQs as assumptions or exceptions (54 of the upstream 111) | Cleaned so that Carneades loads it; since 2026-10-22 WAG's formula layer, changed only by the owner's recorded decisions |
 | `docs/scheme-registry/links.json` | 96 compendium entries linked exactly to `walton.yml` and 13 partly (115 links: 97 exact, 18 partial; after the owner's decisions of 2026-10-22), none without a link; 203 CQ links, 149 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
 | `wag/data/nascq/*.json` | 9 schemes, 24 CQs, 35 ask edges, 4 backup edges | The game's data, tested |
 | `wag/data/schemes/families.json` | 21 families | Drafted |
@@ -184,16 +198,58 @@ Each step has examples from the catalogue. Where two answers are equally right, 
 | Validity | The share of answers the checker accepts, before and after one repair round. |
 | Several models | At least two providers annotate, and a third reviews. A model never reviews itself. |
 | Cost | Tokens, calls and seconds per claim, from the traces. |
+| Play | Per scheme and per question: how often played, asked, answered with success, and noted as wrong or missing; from exported games and traces ([`process.md`](process.md) §4). |
 
-## 6. Phase 5: back to the game
+## 6. Phase 5: the game takes the catalogue
 
-- **Data from the catalogue.**
-  - The NASCQ's schemes and CQs are generated from the catalogue.
-  - The game's 24 critical questions, already in our own words, are checked against the catalogue's.
-- **Derived schemes join the game** once they are verified, with their ask and backup edges linted like the rest.
-- **Model players use the same catalogue** for the schemes they may play.
-- **Dialogue types:** Track D (§8). The presets were renamed on 2026-10-15: "Policy question" and "Scientific question", since the game does not play deliberation or inquiry.
-- **"Other" in the game as a defeasible modus ponens,** so that its arguments can be asked for backing and exceptions.
+**What makes a scheme playable.** A scheme is playable in a context when:
+1. **Formulas.** Its formulas are in the formula layer, and its entry is at least checked. It is verified before a release.
+2. **Questions.** Each of its questions names the NASCQ question it becomes, with a locus and a pattern.
+3. **Game fields.** They are set, each with a status (below).
+4. **English.** Its English renders every premise, conclusion and question.
+5. **Checks and play.** The lint and the game's tests pass, and scripted play exercises each of its ask and backup edges.
+6. **Weight.** The context gives it a weight. A weight of zero means the move can be made but carries nothing there.
+
+**Contexts.** A context sets:
+- the dialogue type (Track D, §8);
+- the proof standard;
+- whether evidence is required;
+- whether a moderator is expected;
+- the weight an audience gives each scheme.
+
+Today's presets (`data/contexts.json`) set all but the dialogue type. The catalogue's "proper in" field is the evidence for each context's weights.
+
+**Fallacies need no system of their own.** In Walton's account, a fallacy is a bad use of an ordinary scheme, not a scheme of its own: the fallacious appeal to authority misuses argument from expert opinion. The context's weight and the scheme's own critical questions handle it. For example, ad hominem asks whether the person's character bears on the issue.
+
+Some faults are not misused schemes: begging the question, the loaded question, the straw man, equivocation. They are faults of moves and commitments, and need the dialogue's rules: commitment stores and the presuppositions of questions (Track D's D2a and D2d), and a check for circular arguments.
+
+**The game's fields.** These are the NASCQ fields that the texts do not define ([part 13 §1](review-2026-10-22-part13.md#1-what-the-review-found)). Each becomes an item of the catalogue entry, with a status, a reason and example IDs. There are three kinds:
+
+| Kind | Fields | How it is checked |
+|---|---|---|
+| **Derived by a rule** | the Carneades id; the variables; each question's locus and pattern (from its target); what each answer does (from the locus); whether the scheme can back any statement (its conclusion is a bare proposition, unless the formula ties it to a case, as in analogy); the answer variable; the English (from the formula layer) | the checker re-derives them; an exception to a rule is recorded with its reason |
+| **Judged, with examples** | the kind of claim (action, value, causality, truth) of schemes and questions; variable types and examples; cues; the evidence policy; which NASCQ question a book question becomes; backup edges that the rules do not give | each judgment cites coded examples; the lint checks consistency |
+| **Calibrated by data and play** | base weights; each context's weights | measured, then set |
+
+**Which NASCQ question a book question becomes.** The NASCQ's questions already serve several schemes: 9 of its 24 are asked of more than one. Reuse an existing question when the book's question asks the same thing and its answers act the same way, since the NASCQ question fixes that for every scheme that asks it. `CQ:likelihood` serves both consequence schemes and sign on this basis. Otherwise make a new one. Each catalogue question records its choice.
+
+**Links across schemes.** Which scheme can answer which question, and where one scheme's conclusion feeds another, is not in the sources. On 2026-10-22, 10 of `walton.yml`'s 388 premise-side formulas were the conclusion of some specific other scheme ([part 13 §1](review-2026-10-22-part13.md#1-what-the-review-found)).
+- **Rules, not lists.**
+  - Backup edges follow from rules over what a scheme concludes and what a question needs, plus the generic schemes that can back any statement.
+  - Hand-written edges are allowed, each with its reason and examples.
+  - A new scheme gets its links by declaring its predicates and kinds.
+- **A shared vocabulary** of meeting points is kept in one place: `should_be_performed`, the causal predicates, the value predicates, and others as found. The checker reports how well the schemes connect.
+- **Families are modules.** They organize the work and the vocabulary; they drive no mechanics.
+- **Refined by data and play.** An answer in coded data that no edge allows becomes a candidate edge, and so does a "could not make the move" report.
+
+**Order.**
+1. The 9 game schemes' NASCQ is generated from the catalogue, and the first output must reproduce today's.
+2. Tier 1's schemes follow, then the rest family by family, as data and play ask.
+3. Derived schemes join the same way.
+4. Model players use the same catalogue for the schemes they may play.
+5. "Other" is played as a defeasible modus ponens, so that its arguments can be asked for backing and exceptions.
+
+**Dialogue types:** Track D (§8). The presets were renamed on 2026-10-15 to "Policy question" and "Scientific question", since the game does not play deliberation or inquiry.
 
 ## 7. Decisions the owner needs to make
 
@@ -209,6 +265,8 @@ Each step has examples from the catalogue. Where two answers are equally right, 
    - or replace the quotations with labels, page references and paraphrases.
 
    Removing them from the history means rewriting the history and force-pushing, which only the owner should decide. (This is not legal advice.)
+
+   **Since 2026-10-22** the private workspace offers a third way for `docs/book-catalogue/`: move the transcription there, and keep only labels and pages here. The catalogue's checker reads that file by default and would then be given it with `--book`.
 2. **A licence for WAG.** The repository has none, so others may not reuse it. Carneades and `walton.yml` are MPL-2.0.
 3. **Who verifies the catalogue,** and whether tier 1 above is the right first set. The other decisions on the catalogue's sources are listed in [catalogue-alignment.md §3 C](catalogue-alignment.md#c-decisions-on-the-sources-the-owner). Decided on 2026-10-22, all in `walton-clean/CHANGELOG.md` ("Changes decided by the owner"):
    - compendium 33.3's formalization, lost from the upstream master under a duplicate id, is brought into `walton.yml` as `negative_consequences_reasoning`;
@@ -230,6 +288,18 @@ Each step has examples from the catalogue. Where two answers are equally right, 
    - how a negotiation is scored;
    - the quarrel's safeguards, and whether people play it or only model seats;
    - which corpora, under which licences.
+7. **The goal and the authorities.** Decided on 2026-10-22 ([part 13 §3](review-2026-10-22-part13.md#3-the-owners-decisions)):
+   - every scheme and critical question is to be playable in some context; the literature first, then data and play (the goal, above);
+   - the game's fields are decided by coherence, consistency and examples, then refined by data and play;
+   - `walton.yml` is the starting point of WAG's own formula layer, not its authority;
+   - fallacies are handled by the context's weights and the critical questions, with no system of their own;
+   - each book question names the NASCQ question it becomes; families organize the work and are not a mechanism;
+   - links are written as rules, on examples, and kept modular;
+   - feedback from play, verification with measured agreement, independent agents in a defined protocol, a register of open decisions, and a private development workspace ([`process.md`](process.md)).
+
+   What remains to decide:
+   - CI on the public repository ([`process.md`](process.md) §7);
+   - the targets the play report must meet, once the first report exists.
 
 ## 8. Track D: dialogue types
 

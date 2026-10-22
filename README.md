@@ -75,6 +75,7 @@ In order of importance. Each issue links to the document that explains it.
    - It is asked to cite the book's critical questions, which it never sees. In the first run it made one up.
    - See [part 7 §3](docs/review-2026-10-15-part7.md#3-the-questions).
    - **Since 2026-10-22,** the catalogue's skeleton aligns the sources scheme by scheme, and its 33 tier-1 entries are drafted and checked by models (paraphrased questions, descriptions, contrasts, examples, discrepancies). Nothing is verified by a person yet ([plan §2](docs/plan.md#2-phase-1-the-aligned-catalogue)).
+   - **The game needs what no source gives.** The sources define each scheme on its own: only 10 of `walton.yml`'s 388 premise-side formulas are the conclusion of some specific other scheme. Which scheme answers which question, and most of the NASCQ's fields (kinds of claim, weights, cues, what each answer does), are WAG's own design, so far kept in no catalogue field. The plan now gives them one ([plan §6](docs/plan.md#6-phase-5-the-game-takes-the-catalogue), [part 13](docs/review-2026-10-22-part13.md)).
 2. **The guidelines allow two answers in places, contradict each other once, and code four different things as "none".** "None" covers the thesis, bare premises, reasons that fit no scheme, and non-arguments. Most disagreements in the first Gemini run trace to this, not to the model. See [part 7 §2](docs/review-2026-10-15-part7.md#2-the-14-annotations-against-the-gold).
 3. **The gold is one model's reading.**
    - Both batch-2 annotators and the adjudicator were runs of the same language model, and no person has reviewed them.
@@ -120,7 +121,9 @@ In order of importance. Each issue links to the document that explains it.
 
 ## 4. Where it is going
 
-The detail, with the effort and the "done when" of each phase, is in [`docs/plan.md`](docs/plan.md).
+**The goal** (the owner, 2026-10-22): WAG is to become a complete dialogue system, starting with argumentation-based dialogue, in which every argumentation scheme and critical question is playable in some context. The literature gives the first playable set; Kialo and other data, and play by people and models, refine and complete it.
+
+The detail, with the effort and the "done when" of each phase, is in [`docs/plan.md`](docs/plan.md). How the work is done (statuses, agents, feedback from play, the decision register, the private workspace, the checks) is in [`docs/process.md`](docs/process.md).
 
 | Phase | Goal | The work | Who |
 |---|---|---|---|
@@ -128,13 +131,14 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 2. Annotation version 4 | Annotations that follow the catalogue | **Guidelines** as one decision procedure, with "none" split and the thesis given its conclusion form. **"Other"** with a structured proposal. **Prompts:** first candidates from an index, then the full entries. Formulas written by code; constrained JSON. | Code and guidelines; measured against version 3 |
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
-| 5. Back to the game | Play what the data shows | **Catalogue:** the NASCQ generated from it; derived schemes join once verified. | Code |
+| 5. The game takes the catalogue | Every scheme playable in some context | **Game fields** in the catalogue (derived by rule, judged with examples, calibrated by data and play). **The NASCQ and `core.yml` generated** from it. **Links across schemes** by rules. **Feedback from play,** tied to catalogue items. Derived schemes join the same way. | Code, then people and models playing |
 | Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification by dimensions and type, with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
-**The next three actions:**
-1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF still in the history and the book text, a licence, who verifies, paid model access, and Track D's open choices.
-2. The owner decides the scheme changes that the tier-1 entries leave open ([review part 12 §5](docs/review-2026-10-22-part12.md#5-what-is-left-open)), starting with those that change tier-1 formulas.
-3. A person verifies the 33 tier-1 entries against the book (about 10–15 hours) while the version 4 guidelines are drafted ([the alignment plan](docs/catalogue-alignment.md)).
+**The next actions** ([the alignment plan §4](docs/catalogue-alignment.md#4-order), revised 2026-10-22):
+1. **Protect and organize the work:** push the private workspace, CI, the decision register, a generated status report, and the agents' briefs and tools in WAG.
+2. **The owner sorts the open decisions** in the register: those of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make), and the scheme changes the tier-1 entries leave open ([review part 12 §5](docs/review-2026-10-22-part12.md#5-what-is-left-open)), starting with those that block the game or verification.
+3. **The game's fields** for the 9 game schemes, and the generator that reproduces today's NASCQ from the catalogue.
+4. **The verification protocol,** then a person verifies the 33 tier-1 entries (about 10–15 hours), while the version 4 guidelines are drafted.
 
 ## 5. Running it
 
@@ -181,6 +185,8 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) | The plan for complete coverage and alignment of the scheme catalogue: what is left, in which order, and when it is done |
+| [`docs/process.md`](docs/process.md) | How the work is done: one source of truth per fact, statuses, independent agents, feedback from play, the decision register, the private workspace, the checks |
+| [`docs/review-2026-10-22-part13.md`](docs/review-2026-10-22-part13.md) | The owner's review of the goal: what the sources do not define, what the plan lacked, and the decisions of 2026-10-22 |
 | [`docs/review-2026-10-22-part12.md`](docs/review-2026-10-22-part12.md) | Tier 1 of the catalogue drafted and independently checked; the owner's changes to `walton.yml`; the decisions left open |
 | [`docs/review-2026-10-15-part7.md`](docs/review-2026-10-15-part7.md) | The first real model annotation run, reviewed; why "none"; what the model is given; whether the data is enough |
 | [`docs/dialogue-types.md`](docs/dialogue-types.md) | **The reference on dialogue types:** what each type is, how types mix and shift, which arguments are proper in which type, how to recognise them, and what WAG needs to play and find them |
@@ -255,6 +261,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | `docs/` | Everything above; `kialo-batch2/` also holds its data and Python checkers |
 | `carneades-4/` | The Carneades 4 fork ([`CARNEADES_FORK.md`](CARNEADES_FORK.md)) |
 | `tools/` | `sync_carneades_fork.sh` |
+| `.claude/` | The session-start hook for cloud sessions: fetches the Go modules and restores the owner's private workspace, `wag-workspace`, next to WAG ([`docs/process.md`](docs/process.md) §6) |
 
 ## 8. Sources and licences
 
