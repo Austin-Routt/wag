@@ -48,58 +48,148 @@ critical_questions:
     entry: "28"
     label: CQ1
   targets: [{formula: 'causes(E1,E2)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: How reliably do events like E1 bring about events like E2 — always,
+    usually, or only now and then?
+  answer: 'The proponent, once asked. Against: evidence that events like E1 produce
+    E2 rarely, or only under conditions this case lacks, which undermines causes(E1,E2)
+    or leaves it too weak to carry the conclusion. For: evidence that E1 regularly
+    brings about E2 in cases like this one.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 28/CQ2
   book:
     entry: "28"
     label: CQ2
   targets: [{formula: 'causes(E1,E2)', locus: premise}]
-  note: no separate evidence formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's evidence question; walton.yml has no separate formula for the evidence,
+    so it targets the causal premise it would support.
+  paraphrase: On what grounds is E1 said to cause E2, and do those grounds establish
+    it?
+  answer: 'The proponent, once asked. Against: showing that the evidence is missing,
+    anecdotal, a mere correlation, or drawn from cases unlike this one, which undermines
+    causes(E1,E2). For: studies, a known mechanism, or a record of cases that establishes
+    the link.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 28/CQ3
   book:
     entry: "28"
     label: CQ3
   targets: [{formula: interference(E1), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: Is anything present in this case that could stop E1 from bringing about
+    E2?
+  answer: 'The critic, who raises it with an argument. Against: a factor in this case
+    that blocks or offsets the effect, such as a countermeasure or a stronger opposing
+    cause, which undercuts the argument through interference(E1). For: showing that
+    no such factor is present, or that it is too weak to matter.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it to predict that an event E2 will happen in a case because an event
+    E1 happens there, and events like E1 generally bring about events like E2. It
+    reasons forward from a cause taken as known to its effect, which sets it apart
+    from correlation_to_cause, which argues for the causal link itself, and from sign,
+    which infers from an indicator to what it indicates.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: correlation_to_cause
-  text: ""
-  status: todo
+  text: Choose cause_to_effect when the causal link is taken as given and used to
+    predict an effect in a case; choose correlation_to_cause when the point of the
+    argument is to establish the link, from the fact that the two kinds of event go
+    together.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sign
-  text: ""
-  status: todo
+  text: Choose sign when the arguer infers something from an observed indicator without
+    claiming that the one produces the other; choose cause_to_effect when the text
+    claims that E1 brings about E2. Reasoning back from an effect to its cause is
+    sign (or abduction), not cause_to_effect.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_inductive_step
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose slippery_slope_inductive_step when a step is one link of a chain said
+    to lead to a bad end, and the point is not to take the first step; choose cause_to_effect
+    for a causal step whose effect is itself the point. A chain of causal predictions
+    with no bad end and no proposal to reject is a series of cause_to_effect arguments.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Meat production creates significant greenhouse gas emissions which contribute
+    to climate change.
+  kialo: "13292.2"
+  coding: 'Two chained instances, as the gold codes them. First: E1 = meat production;
+    E2 = significant greenhouse-gas emissions. Stated: causes(E1,E2). Supplied: has_occurred(E1)
+    (meat is produced now). Conclusion: will_occur(E2). Second: E1 = those emissions;
+    E2 = climate change being driven. Stated: causes(E1,E2). Supplied: has_occurred(E1).
+    Conclusion: will_occur(E2).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Tariffs decrease consumption of goods, which would help decrease consumption
+    of meats (due to their higher price).
+  kialo: "13292.14"
+  coding: 'E1 = a higher price of meat; E2 = lower meat consumption. Stated: causes(E1,E2)
+    (tariffs, through price, reduce consumption). Supplied: has_occurred(E1). Conclusion:
+    will_occur(E2). The gold also codes the first link (the tax raises the price).
+    The cause is a policy not yet enacted, so has_occurred(E1) is read as "would occur";
+    see the discrepancy on the minor premise.'
+  status: drafted by Claude Code, 2026-10-22
+- text: A tax on meat could actually reduce tax revenues by harming the trillion-dollar
+    meat industry, which pays substantial taxes.
+  kialo: "13292.9"
+  coding: 'Two chained instances. First: E1 = a tax on meat; E2 = harm to the meat
+    industry. Second: E1 = that harm; E2 = lower tax revenue. In each, stated: causes(E1,E2);
+    supplied: has_occurred(E1); conclusion: will_occur(E2). The claim says "could",
+    a weaker link than walton.yml''s will_occur; see the discrepancy on the conclusion.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Towns with more fast-food outlets have higher obesity rates, so fast food
+    is making people obese.
+  coding: 'Near miss: it does not apply a known causal link to a case; it argues for
+    the link from the fact that the two go together. correlation_to_cause (E1 = fast-food
+    outlets, E2 = obesity), open to the question whether something else, such as income,
+    causes both.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: conclusion
+  detail: 'The book''s scheme comes in a strong and a weak form: the effect will occur,
+    or it might. walton.yml has only will_occur(E2). Kialo claims about policies often
+    use the weak form ("could", "may").'
+  decision: 'Open: the owner''s decision on a modal variant in the causal family (audit
+    N8, docs/review-2026-10-13-part5.md §7). Until then, code a "might" claim with
+    this scheme, say so in the coding, and treat the weaker link as a reason to answer
+    CQ1 against it, not as a different scheme.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Minor Premise
+  detail: The book's minor premise says that the cause occurs, or might occur, in
+    the case at hand; walton.yml's has_occurred(E1) reads as an event that has already
+    happened. In a policy debate the cause is usually a proposal not yet enacted.
+  decision: Open, with the conclusion's discrepancy (audit N8). Until then, read has_occurred(E1)
+    as "E1 occurs, or would occur, in this case"; the batch-2 gold marks such steps
+    reconstructed, with the N8 note (docs/kialo-batch2/guidelines.md, item 11).
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: based on cases
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the basic forward causal scheme. Its family (F13)
+    holds schemes that argue for causal links or from signs, not narrower versions
+    of this one.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [inquiry, persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table (docs/dialogue-types.md §7); our extrapolation. As evidence
+    about what will happen, it serves inquiry and persuasion, and deliberation, where
+    options are weighed by their predicted effects (ND pp. 157–60 on arguments from
+    consequences). No type makes it suspect as such; a weak causal link is a reason
+    to question it, not a misuse of the dialogue.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the three questions, the
+    contrasts, the examples, two book-walton discrepancies (N8), the classification,
+    specialises and the dialogue types (an exemplar for DRAFTING.md).

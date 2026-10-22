@@ -93,8 +93,9 @@ func main() {
 	catGen := flag.Bool("catalogue-gen", false, "generate the scheme catalogue's skeleton from walton.yml, links.json, families.json and the NASCQ, keeping what people and models have written; write its index and exit")
 	catCheck := flag.Bool("catalogue-check", false, "check the scheme catalogue against its sources (formulas, book links, critical questions, statuses) and that no text reproduces the book; print the findings and exit (status 1 on an error)")
 	catDir := flag.String("catalogue", "", "with --catalogue-gen or --catalogue-check: the catalogue's directory (default: wag/data/catalogue of the repository)")
-	repoDir := flag.String("repo", "", "with --catalogue-gen or --catalogue-check: the repository's root (default: found from the working directory)")
+	repoDir := flag.String("repo", "", "with the --catalogue commands: the repository's root (default: found from the working directory)")
 	books := flag.String("book", "", "with --catalogue-check: the book's text for the copy check, as comma-separated files (plain text, or JSON with \"text\" keys; default: docs/book-catalogue/catalogue.json if present)")
+	catShow := flag.String("catalogue-show", "", "print a walton.yml scheme's formulas by role, with their English readings (rendered from walton.yml's templates, which often repeat the book: read them, do not copy them), and exit")
 	catBy := flag.String("by", "wag-cli --catalogue-gen", "with --catalogue-gen: who generates, for a new entry's history")
 	kialoCheck := flag.String("kialo-check", "", "import every <id>/graph.json of this folder (Kialo research visualizer data) and report, for each discussion, the claims that share a text and whether it imports; status 1 if one does not")
 	flag.Parse()
@@ -122,6 +123,9 @@ func main() {
 	}
 	if *catCheck {
 		os.Exit(runCatalogueCheck(*repoDir, *catDir, *books))
+	}
+	if *catShow != "" {
+		os.Exit(runCatalogueShow(*repoDir, *catShow))
 	}
 	if *kialoCheck != "" {
 		os.Exit(runKialoCheck(files, *kialoCheck))

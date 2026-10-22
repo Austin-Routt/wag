@@ -109,6 +109,38 @@ func runCatalogueCheck(repo, dir, books string) int {
 	return 0
 }
 
+// runCatalogueShow prints a walton.yml scheme's formulas by role with their
+// English readings, for whoever drafts or verifies its entry.
+func runCatalogueShow(repo, id string) int {
+	repo, _, err := catalogueDirs(repo, "")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	src, err := catalogue.Load(repo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	for _, w := range src.Walton {
+		if w.ID != id {
+			continue
+		}
+		fmt.Printf("%s: %s\nvariables: %s\n", w.ID, w.Meta.Title, strings.Join(w.Variables, ", "))
+		for _, r := range []struct {
+			role string
+			fs   []string
+		}{{"premise", w.Premises}, {"assumption", w.Assumptions}, {"exception", w.Exceptions}, {"conclusion", w.Conclusions}} {
+			for _, f := range r.fs {
+				fmt.Printf("%-10s  %s\n            %s\n", r.role, f, catalogue.English(f, src.Language))
+			}
+		}
+		return 0
+	}
+	fmt.Fprintf(os.Stderr, "no walton.yml scheme %q\n", id)
+	return 1
+}
+
 func fileExists(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil

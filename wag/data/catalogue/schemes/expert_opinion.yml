@@ -66,9 +66,12 @@ critical_questions:
     pattern: expert(W,D)
   targets: [{formula: 'expert(W,D)', locus: premise}]
   note: Expertise Question
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: Does W really have the knowledge of D, and the standing in it, that
+    the argument credits W with?
+  answer: 'The proponent, once asked. Against: evidence that W has no training, record
+    or recognition in D, which undermines expert(W,D). For: W''s qualifications, experience,
+    publications or standing among peers in D.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 2/CQ2
   book:
     entry: "2"
@@ -79,10 +82,14 @@ critical_questions:
     locus: premise
     pattern: in_domain(S,D)
   targets: [{formula: 'in_domain(S,D)', locus: premise}]
-  note: Field Question
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Field Question. The book asks whether W's field is the field of the claim;
+    walton.yml splits that between expert(W,D) and in_domain(S,D), and this question
+    is about the second.
+  paraphrase: Is S a matter that W's field D actually covers?
+  answer: 'The proponent, once asked. Against: showing that S belongs to some other
+    field, or needs knowledge beyond D, which undermines in_domain(S,D). For: showing
+    that settling S calls on the knowledge of D.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 2/CQ3
   book:
     entry: "2"
@@ -93,10 +100,14 @@ critical_questions:
     locus: premise
     pattern: asserts(W,S)
   targets: [{formula: 'asserts(W,S)', locus: premise}]
-  note: Opinion Question
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Opinion Question. The game's text asks only whether W said S; the book's question
+    also covers what W's words imply, and so their interpretation.
+  paraphrase: What exactly did W say, and does it amount to S, or imply it?
+  answer: 'The proponent, once asked. Against: W''s actual words, when they do not
+    say or imply S (a misquotation, a remark out of context, a conclusion W did not
+    draw), which undermines asserts(W,S). For: a quotation or citation of W saying
+    S, or saying something from which S plainly follows.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 2/CQ4
   book:
     entry: "2"
@@ -107,10 +118,16 @@ critical_questions:
     locus: exception
     pattern: untrustworthy(W)
   targets: [{formula: untrustworthy(W), locus: exception}]
-  note: Trustworthiness Question
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Trustworthiness Question. The book puts the burden of this question on the
+    critic (p. 33), as the exception does. The game's text names honesty and bias
+    but not care.
+  paraphrase: Is there reason to doubt W's personal reliability as a source, such
+    as bias, dishonesty or carelessness?
+  answer: 'The critic, who raises it with an argument. Against: evidence that W has
+    a stake in S, has been dishonest, or works carelessly, which undercuts the argument
+    through untrustworthy(W). For: evidence that W has no stake in S and a record
+    of honest, careful work.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 2/CQ5
   book:
     entry: "2"
@@ -121,10 +138,15 @@ critical_questions:
     locus: exception
     pattern: inconsistent_with_other_experts(S)
   targets: [{formula: inconsistent_with_other_experts(S), locus: exception}]
-  note: Consistency Question
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Consistency Question. The book puts the burden on the critic (p. 33). The
+    game's text asks whether other credible sources agree; their silence is not a
+    conflict, so a "no" there is weaker than this question's "no".
+  paraphrase: Does what other experts in D say conflict with S?
+  answer: 'The critic, who raises it with an argument. Against: other experts in D,
+    or the field''s settled view, that contradict S, which undercuts the argument
+    through inconsistent_with_other_experts(S), and may also be put as a rebuttal
+    of S. For: other experts who agree, or the absence of any expert who disagrees.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 2/CQ6
   book:
     entry: "2"
@@ -135,39 +157,114 @@ critical_questions:
     locus: premise
     pattern: based_on_evidence(asserts(W,S))
   targets: [{formula: 'based_on_evidence(asserts(W,S))', locus: assumption}]
-  note: Backup Evidence Question; the argument is a nested term
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Backup Evidence Question; the argument is a nested term. The book treats it
+    as an implicit premise on p. 33, and on p. 92 as an attack on the link between
+    premises and conclusion; walton.yml's assumption follows p. 33.
+  paraphrase: Does W's assertion that S rest on evidence?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: showing that W''s claim rests on no data, study or observation in D (a
+    guess, a personal view), which undermines based_on_evidence(asserts(W,S)). For:
+    the studies, data or observations on which W bases S.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when a claim S is offered because W, who has expert knowledge of the
+    field D that S belongs to, has said that S. The claim borrows its weight from
+    W's command of the field, which sets it apart from position_to_know, where the
+    source's standing comes from access to the facts rather than from expertise.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: position_to_know
-  text: ""
-  status: todo
+  text: Choose expert_opinion when W's authority on S comes from knowledge of a field
+    (training, research, a professional record); choose position_to_know when it comes
+    from access to the facts, such as having been there or holding the records. A
+    specialist reporting what she saw happen speaks from her position to know, not
+    giving expert opinion.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: credible_source
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: 'credible_source is walton.yml''s broader version: any source credible in
+    D, with bias, dishonesty and disagreement among credible sources as exceptions.
+    Choose expert_opinion when the text rests the source''s credibility on expertise;
+    choose credible_source when it rests it on reputation or a track record that is
+    not expertise, such as a reputable newspaper.'
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: A 2020 scientific analysis of external costs of foods using life-cycle assessment
+    and meta-analytical approaches found that external greenhouse gas costs are typically
+    highest for animal-based products. …
+  kialo: "13292.224"
+  coding: 'W = the 2020 study in Nature Communications (its authors); D = the external
+    costs of food; S = external greenhouse-gas costs are highest for animal-based
+    products. Stated: asserts(W,S), and in part based_on_evidence(asserts(W,S)) (life-cycle
+    assessment, meta-analysis). Supplied: expert(W,D), in_domain(S,D). Conclusion:
+    S.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Meta-analyses and reviews of studies and trials have shown again and again
+    that meat reduction and vegetarianism results not in a decrease of health, but
+    in better health, lower mortality and longer lifespans, especially when high intakes
+    of red meat and/or processed meats are reduced.
+  kialo: "13292.233"
+  coding: 'W = the meta-analyses and reviews cited; D = nutritional epidemiology;
+    S = reducing meat improves health and lengthens life. Stated: asserts(W,S). Supplied:
+    expert(W,D), in_domain(S,D). Conclusion: S. W is a body of studies rather than
+    a person, as the gold codes it; expert(W,D) then concerns the studies'' standing
+    in the field.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The building inspector who walked through the flat on Monday says the back
+    stairs have no handrail.
+  coding: 'Near miss: the source has professional standing, but the claim rests on
+    what she saw on her visit, not on knowledge of a field; position_to_know (W =
+    the inspector, D = the state of the flat, S = the back stairs have no handrail).
+    Had she said that the stairs break the building code, it would be expert_opinion.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: conclusion
+  detail: The book lets the expert assert that the proposition is false and concludes
+    that it is false; its ch. 1 version also qualifies the conclusion as plausible.
+    walton.yml has only the positive form, with no qualifier.
+  decision: No change. S can be bound to a negated proposition, so "W says that not-P"
+    is coded with S = ¬P; the plausibility is carried by the argument's weight and
+    proof standard, not by the formula.
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: 'Two of the game''s questions narrow the book''s: CQ:opinion asks only whether
+    W said S (the book also asks what W''s words imply), and CQ:consistency asks whether
+    other credible sources agree (the book asks whether S is consistent with what
+    other experts say).'
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
+    the game''s texts from these paraphrases.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
+  source: dependent
   reasoning: ""
   epistemic: ""
-  group: ""
-  status: todo
+  group: position to know
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: position_to_know
+  note: 'The book presents argument from expert opinion as a subtype of argument from
+    position to know (p. 14): the position is knowledge of a field, which adds the
+    questions about expertise, field and evidence.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [information_seeking, persuasion, deliberation]
+  suspect: [inquiry]
+  note: 'From ND, via docs/dialogue-types.md §7: consulting an expert is information-seeking,
+    and an expert''s opinion is fit evidence in persuasion and deliberation, where
+    a position must be taken without full knowledge (ND pp. 32–3, 143–7, 265–8). It
+    is suspect in scientific inquiry, where objective evidence is available and required,
+    and in any type when it is used to stop critical questions. Public inquiries,
+    which hear expert testimony, are an exception.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the six questions, the
+    contrasts, the examples, two discrepancies, the classification, specialises and
+    the dialogue types (an exemplar for DRAFTING.md).

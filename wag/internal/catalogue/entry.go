@@ -126,8 +126,10 @@ type Target struct {
 // label), the game's, or both.
 type CQ struct {
 	// ID is "<entry>/<label>" for a book question (the entry under which it
-	// is printed), or "game/<NASCQ id>" for a game question that matches no
-	// book question.
+	// is printed), "game/<NASCQ id>" for a game question that matches no
+	// book question, or "walton/<predicate>" for a question that only
+	// walton.yml implies: an assumption or exception that neither the book
+	// nor the game asks about, added by whoever drafts the entry.
 	ID   string  `yaml:"id"`
 	Book *BookCQ `yaml:"book,omitempty"`
 	Game *GameCQ `yaml:"game,omitempty"`
@@ -193,14 +195,32 @@ type Discrepancy struct {
 }
 
 // Classification places the scheme in Walton and Macagno's tree (plan §2):
-// source-dependent or not; then practical or epistemic; then, for epistemic
-// reasoning, discovering a rule or entity or applying one to a case.
+// source-dependent or not; then, for a source-independent scheme, practical
+// or epistemic; then, for epistemic reasoning, discovering a rule or entity
+// or applying one to a case. Group is one of the tree's groups under that
+// heading (Groups). Note says how the scheme was placed when the tree does
+// not list it.
 type Classification struct {
 	Source    string `yaml:"source"`
 	Reasoning string `yaml:"reasoning"`
 	Epistemic string `yaml:"epistemic"`
 	Group     string `yaml:"group"`
+	Note      string `yaml:"note,omitempty"`
 	Status    string `yaml:"status"`
+}
+
+// Heading is the tree's heading the classification falls under: dependent
+// (source-dependent), practical, discovery or application; "" if not
+// placed yet.
+func (c Classification) Heading() string {
+	switch {
+	case c.Source == "dependent":
+		return "dependent"
+	case c.Reasoning == "practical":
+		return "practical"
+	default:
+		return c.Epistemic
+	}
 }
 
 // Specialises names the scheme this one is a domain version of, if any.
@@ -273,7 +293,15 @@ var (
 	SourceValues      = []string{"", "dependent", "independent"}
 	ReasoningValues   = []string{"", "practical", "epistemic"}
 	EpistemicValues   = []string{"", "discovery", "application"}
-	DiscrepancyKinds  = []string{
+	// Groups are the thematic groups of Walton and Macagno's tree (2015, p.
+	// 22; Aberdein 2020, Table 4), by heading.
+	Groups = map[string][]string{
+		"discovery":   {"establishing rules", "finding entities"},
+		"application": {"based on cases", "defeasible rule-based", "chained"},
+		"practical":   {"instrumental", "values", "value-based"},
+		"dependent":   {"position to know", "ad hominem", "popular acceptance"},
+	}
+	DiscrepancyKinds = []string{
 		"partial-link",     // the scheme formalizes the book entry only in part (links.json)
 		"no-formalization", // a book scheme that walton.yml lacks
 		"not-in-book",      // a walton.yml scheme the compendium does not list

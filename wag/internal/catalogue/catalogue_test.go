@@ -163,6 +163,20 @@ func TestCheckFindsFaults(t *testing.T) {
 		{"book entry dropped", "book entry 2 (links.json) is missing", func(e *Entry) { e.Book = nil }},
 		{"family dropped", "family F01 (families.json) is missing", func(e *Entry) { e.Families = nil }},
 		{"bad classification", "classification", func(e *Entry) { e.Class.Reasoning = "deductive" }},
+		{"group outside its heading", "group \"instrumental\" under heading \"dependent\"", func(e *Entry) {
+			e.Class = Classification{Source: "dependent", Group: "instrumental", Status: "drafted by a model, 2026-10-22"}
+		}},
+		{"classification not placed", "but not placed down to a group", func(e *Entry) {
+			e.Class = Classification{Source: "independent", Reasoning: "epistemic", Status: "drafted by a model, 2026-10-22"}
+		}},
+		{"walton question with a bad id", "needs the id walton/<predicate>", func(e *Entry) {
+			e.CQs = append(e.CQs, CQ{ID: "own/1", Paraphrase: "Is W honest?", Status: "drafted by a model, 2026-10-22",
+				Targets: []Target{{Formula: "untrustworthy(W)", Locus: "exception"}}})
+		}},
+		{"walton question on a premise", "targets one assumption or exception", func(e *Entry) {
+			e.CQs = append(e.CQs, CQ{ID: "walton/expert", Paraphrase: "Is W an expert?", Status: "drafted by a model, 2026-10-22",
+				Targets: []Target{{Formula: "expert(W,D)", Locus: "premise"}}})
+		}},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

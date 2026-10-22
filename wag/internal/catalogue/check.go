@@ -314,8 +314,16 @@ func (c *checker) entry(e, want *Entry) {
 				c.err("%s: the id should be %s/%s", where, q.Book.Entry, q.Book.Label)
 			}
 		}
-		if q.Book == nil && q.Game == nil && owned(q.Status) {
-			c.err("%s: neither a book nor a game question", where)
+		if q.Book == nil && q.Game == nil {
+			switch {
+			case owned(q.Status):
+				c.err("%s: neither a book nor a game question", where)
+			case !strings.HasPrefix(q.ID, "walton/"):
+				c.err("%s: a question that neither the book nor the game asks needs the id walton/<predicate>", where)
+			case len(q.Targets) != 1 || (q.Targets[0].Locus != "assumption" && q.Targets[0].Locus != "exception") ||
+				"walton/"+predicate(q.Targets[0].Formula) != q.ID:
+				c.err("%s: a walton/ question targets one assumption or exception, whose predicate the id names", where)
+			}
 		}
 		c.targets(w, hasW, where, q.Targets)
 		if q.Undercuts && len(q.Targets) > 0 {
@@ -413,6 +421,15 @@ func (c *checker) entry(e, want *Entry) {
 	if e.Class.Epistemic != "" && e.Class.Reasoning != "epistemic" {
 		c.err("classification: epistemic %q given for reasoning %q", e.Class.Epistemic, e.Class.Reasoning)
 	}
+	if e.Class.Source == "dependent" && e.Class.Reasoning != "" {
+		c.err("classification: reasoning %q given for a source-dependent scheme; the tree divides only source-independent ones", e.Class.Reasoning)
+	}
+	if h := e.Class.Heading(); e.Class.Group != "" && !in(Groups[h], e.Class.Group) {
+		c.err("classification: group %q under heading %q: want one of %s", e.Class.Group, h, strings.Join(Groups[h], ", "))
+	}
+	if hasText(e.Class.Status) && (e.Class.Heading() == "" || e.Class.Group == "") {
+		c.err("classification: %s, but not placed down to a group", e.Class.Status)
+	}
 	if e.Specialises.Scheme != "" && !c.ids[e.Specialises.Scheme] {
 		c.err("specialises %q: no such entry", e.Specialises.Scheme)
 	}
@@ -482,7 +499,7 @@ func (c *checker) statuses(e *Entry) {
 func (c *checker) copies(e *Entry, opt Options) {
 	texts := []struct{ where, text string }{
 		{"summary", e.Summary.Text}, {"specialises note", e.Specialises.Note},
-		{"dialogue types note", e.DialogueTypes.Note}, {"classification group", e.Class.Group},
+		{"dialogue types note", e.DialogueTypes.Note}, {"classification note", e.Class.Note},
 	}
 	for _, q := range e.CQs {
 		texts = append(texts, struct{ where, text string }{"question " + q.ID + " paraphrase", q.Paraphrase},
@@ -564,6 +581,16 @@ func hasTarget(ts []Target, formula string) bool {
 		}
 	}
 	return false
+}
+
+// predicate is a formula's predicate, or the formula itself if it is a
+// bare variable.
+func predicate(f string) string {
+	f = strings.TrimPrefix(strings.TrimSpace(f), "¬")
+	if i := strings.IndexByte(f, '('); i >= 0 {
+		return f[:i]
+	}
+	return f
 }
 
 func formulasOf(ts []Target) string {
