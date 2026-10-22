@@ -56,9 +56,15 @@ critical_questions:
     locus: premise
     pattern: judged_positive_value(V,A)
   targets: [{formula: 'judged_positive_value(V,A)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The game's question; the book prints no questions for 19. The game's "really
+    a positive value" can also be read as asking whether V is a legitimate value at
+    all, which is practical_reasoning1's assumption legitimate_value(V); the formula
+    asks only whether A judges V positive.
+  paraphrase: Does A in fact regard V as a positive value?
+  answer: 'The proponent, once asked. Against: A''s own statements or conduct showing
+    that A does not hold V, or gives it little weight, which undermines judged_positive_value(V,A).
+    For: A''s stated commitments, policies or record showing that A prizes V.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:value_effect
   game:
     id: CQ:value_effect
@@ -66,41 +72,121 @@ critical_questions:
     locus: premise
     pattern: positive_affects(V,G,A)
   targets: [{formula: 'positive_affects(V,G,A)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The game's question; the book prints no questions for 19.
+  paraphrase: Does V's being positive bear on A's goal G so as to favour it?
+  answer: 'The proponent, once asked. Against: showing that pursuing G does nothing
+    for V, or works against it, which undermines positive_affects(V,G,A). For: showing
+    how pursuing G serves or expresses V for A.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when an agent A holds a value V to be good, and V bears on a goal G
+    of A in its favour, as when a policy aim is defended by the values its supporters
+    care about. It concludes only that V gives A reason to keep its commitment to
+    G, which sets it apart from practical_reasoning1, where a value feeds a recommendation
+    to act, and from positive_consequences, which argues from a result of an action.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: negative_value
-  text: ""
-  status: todo
+  text: The counterpart. Choose positive_value when the value is one the agent holds
+    good and it speaks for the goal; choose negative_value when the agent judges the
+    value bad and it speaks against the goal.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sacrifice
-  text: ""
-  status: todo
+  text: Choose sacrifice when the claim infers how much something is worth from what
+    has been given up for it; choose positive_value when a value already held is the
+    premise and the conclusion is about keeping a goal.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose practical_reasoning1 when the claim argues that an action should be
+    done, from circumstances, a goal the action achieves and a value the goal promotes;
+    choose positive_value when the claim only appeals to a value to support holding
+    on to a goal, with no action, means or circumstances.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_consequences
+  text: Choose positive_consequences when the reason is a good outcome that an action
+    brings about; choose positive_value when the reason is a value the agent holds
+    that favours a goal.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: rule
+  text: Choose rule when the claim applies a principle to a case and concludes what
+    is justified or required; choose positive_value when the value is offered only
+    as a reason to keep a goal. An appeal to liberty that says what the state must
+    not do is rule (13292.29, below).
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Tax revenue is not the primary reason to tax meat; there are other, more pressing
+    issues, such as sustainability or animal welfare.
+  kialo: "13292.43"
+  coding: 'V = sustainability and animal welfare; A = those who propose the meat tax;
+    G = taxing meat. Stated: judged_positive_value(V,A) ("more pressing issues") and
+    positive_affects(V,G,A) (these, not revenue, are why the tax is wanted). Conclusion:
+    reason_retaining_goal(V,G). The agent is not named in the text. As the gold codes
+    it, it answers the opposite-consequences question of 13292.9: lost revenue does
+    not outweigh the values the goal serves.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The school should keep its aim of mixed-ability classes. Its teachers care
+    about fairness, and that aim is how fairness shows in the timetable.
+  coding: 'V = fairness; A = the school''s teachers; G = mixed-ability classes. Stated:
+    judged_positive_value(V,A) and positive_affects(V,G,A). Conclusion: reason_retaining_goal(V,G),
+    stated as "should keep its aim".'
+  status: drafted by Claude Code, 2026-10-22
+- text: Eating meat is a personal choice. Individuals are at liberty to do as they
+    wish, and the state should have nothing to do with it.
+  kialo: "13292.29"
+  coding: 'Near miss: liberty is the value invoked, but the text applies a principle
+    (personal choices belong to the individual) to a case and concludes what the state
+    must not do, rather than giving a reason to keep or drop a goal; rule (E = individuals''
+    liberty over eating meat, A = eating meat is a personal choice, C = the state
+    stays out of it), as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: other
+  about: game
+  detail: The book prints no critical questions for 19; the game's two questions are
+    its own, one premise challenge each. The game describes the scheme as keeping
+    a goal because the goal promotes a value the agent holds, which runs from goal
+    to value, as practical_reasoning1's would_promote_value(G,V) does; the book's
+    premise runs from the value to the commitment, and says only that a positive value
+    supports it.
+  decision: 'Keep the game''s two questions as the scheme''s questions, since they
+    are premise challenges the game would allow anyway. Open: when the NASCQ is generated
+    from the catalogue (plan §6), describe the scheme in the book''s direction (a
+    value favours a goal), not as practical reasoning''s.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: values
+  note: The tree lists argument from values under values. The upstream collection
+    files it with arguments from commitment (B_source-based-arguments/2_argumen-from-commitment.yml),
+    with the same formulas.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing; it and negative_value are the book's two variants of
+    argument from values (19).
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion]
+  suspect: [inquiry]
+  note: 'Not in ND''s table (docs/dialogue-types.md §7); our extrapolation. A value
+    bears on what to aim at, so the scheme belongs where goals are argued over: deliberation,
+    where ND notes that judgments of relative worth are common (p. 155), and persuasion
+    about what to do, which is the setting of the two Bench-Capon papers the book
+    cites for it. It is suspect in inquiry, where it would be offered as a reason
+    to accept a proposition as true, by analogy with ND''s account of ad consequentiam
+    (pp. 176–7).'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the paraphrases and answers of the two game questions
+    (the book prints none), the contrasts (two added: positive_consequences, rule),
+    the examples, one discrepancy on the game, the classification, specialises and
+    the dialogue types.'

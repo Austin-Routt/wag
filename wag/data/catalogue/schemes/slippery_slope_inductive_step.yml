@@ -53,76 +53,198 @@ premise_map:
   status: generated
 - entry: "49"
   label: Conclusion
-  formulas: [{formula: horrible_costs(E1), locus: conclusion}]
-  note: intermediate conclusion
-  status: generated
+  formulas: []
+  note: 'Corrected by Claude Code, 2026-10-22: the generated item mapped the book''s
+    conclusion (A0 is not to be brought about) to horrible_costs(E1), which is an
+    intermediate conclusion the book does not print. The book''s conclusion is drawn
+    by slippery_slope_base_case, in part (negative_consequences(A)).'
+  status: drafted by Claude Code, 2026-10-22
 critical_questions:
 - id: 49/CQ1
   book:
     entry: "49"
     label: CQ1
   targets: [{formula: 'causes(E1,E2)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'The book asks it of the whole sequence. In walton.yml''s encoding every stated
+    link is a premise of its own argument: one inductive step per link after the first,
+    which is the base case''s.'
+  paraphrase: Which of the steps between the first event and the bad outcome, such
+    as the one from E1 to E2, does the arguer actually state?
+  answer: 'The proponent, once asked. Against: showing that the arguer jumps from
+    E1 to E2, or to the bad outcome, without saying how one leads to the other, which
+    undermines causes(E1,E2). For: the stated sequence of events, each a plausible
+    step from the one before.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 49/CQ2
   book:
     entry: "49"
     label: CQ2
-  targets: []
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'causes(E1,E2)', locus: premise}]
+  note: walton.yml has no formula for the sequence as a whole, so a gap is charged
+    to the link that spans it. A premise target rather than undercuts, because a gap
+    makes the link doubtful but would not stop a true link from supporting the conclusion.
+  paraphrase: What missing steps would have to be filled in for the chain through
+    E1 and E2 to the bad outcome to be plausible?
+  answer: 'The proponent, once asked. Against: pointing to a gap, where E2 follows
+    from E1 only if further events occur that the arguer has not shown, which undermines
+    causes(E1,E2). For: supplying the missing events, each stated as an inductive
+    step of its own.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 49/CQ3
   book:
     entry: "49"
     label: CQ3
   targets: [{formula: 'causes(E1,E2)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Weakest link. The book's question tells the critic where to aim and to put
+    the questions proper to that kind of link; for a causal link these are cause_to_effect's
+    (how strong, what evidence, what could interfere).
+  paraphrase: Which link in the chain is the weakest, and does the one event there
+    really lead to the next?
+  answer: 'The proponent, once asked. Against: evidence that at this link E1 would
+    probably not lead to E2 (a check on the way, a point where someone must decide,
+    a low likelihood), which undermines causes(E1,E2); every earlier step depends
+    on it, so a broken link stops the slope. For: evidence that E1 would very likely
+    lead to E2 in the circumstances.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: 'Use it for one link of a causal slippery slope: an event E1 would lead to
+    an event E2, and E2 would entail horrible costs, so E1 would entail them too.
+    It is the repeated half of walton.yml''s two-scheme encoding of the book''s slippery
+    slope (49), carrying the badness of the final outcome back one link at a time
+    to the first event, where slippery_slope_base_case ties it to the action; unlike
+    cause_to_effect, which predicts an effect, it passes an evaluation from the effect
+    back to its cause.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect
-  text: ""
-  status: todo
+  text: Both rest on causes(E1,E2). Choose cause_to_effect when the point is that
+    E2 will happen because E1 has; choose slippery_slope_inductive_step when the point
+    is that E1 is to be feared because it leads on to a horrible E2, as one link of
+    a chain against a first step. A causal chain with no bad end and no first step
+    to reject is a series of cause_to_effect arguments.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: correlation_to_cause
-  text: ""
-  status: todo
+  text: 'Not a close relative: correlation_to_cause argues for a causal link from
+    a correlation. It may back the premise causes(E1,E2) of an inductive step, but
+    it is not a slope.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sign
-  text: ""
-  status: todo
+  text: 'Not a close relative: sign infers what an observed indicator shows, with
+    no claim that one event brings on the other and no evaluation passed along.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_base_case
-  text: ""
-  status: todo
-examples: []
+  text: The two halves of one book scheme. Use slippery_slope_base_case once, for
+    the link from the action to the first event, and slippery_slope_inductive_step
+    for every link between two events after it.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: gradualism
+  text: The book grounds all slippery slopes in argument from gradualism (p. 114).
+    Choose gradualism when the arguer leads the hearer to the last proposition by
+    many small moves, each easy to accept; choose the slope's steps when the series
+    is used to reject the first because of the last.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: If the school lets phones in at lunch, students will soon want them in study
+    hall, then in class, and before long no lesson will go uninterrupted.
+  coding: 'Two inductive steps. First: E1 = phones in class; E2 = no lesson going
+    uninterrupted. Stated: causes(E1,E2). Supplied: horrible_costs(E2), the badness
+    the text implies. Conclusion: horrible_costs(E1). Second: E1 = phones in study
+    hall; E2 = phones in class. Stated: causes(E1,E2). horrible_costs(E2) is the first
+    step''s conclusion. Conclusion: horrible_costs(E1), which the base case uses.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Close the night bus line and late-shift workers will drive home instead; more
+    of them driving tired means more crashes on the ring road, and some of those crashes
+    will kill.
+  coding: 'Two inductive steps. First: E1 = more tired drivers on the ring road; E2
+    = fatal crashes. Stated: causes(E1,E2). Supplied: horrible_costs(E2). Conclusion:
+    horrible_costs(E1). Second: E1 = late-shift workers driving home; E2 = more tired
+    drivers on the ring road. Stated: causes(E1,E2); horrible_costs(E2) from the first
+    step. Conclusion: horrible_costs(E1). The weakest link, for 49/CQ3, is perhaps
+    the first: tired drivers need not mean more crashes.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Tariffs decrease consumption of goods, which would help decrease consumption
+    of meats (due to their higher price).
+  kialo: "13292.14"
+  coding: 'Near miss: a chain of causal steps (a tariff raises the price, the price
+    cuts consumption), but its end is what the arguer wants, and no badness is carried
+    back along it; two cause_to_effect instances, as the gold codes them.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "49"
   detail: 'walton.yml formalizes compendium 49 only in part: Upstream Carneades recursive
     encoding: inductive step that propagates horrible costs backwards along causal
     links.'
-  decision: ""
-  status: generated
+  decision: Keep the link as partial, and keep the split; the base case's decision
+    gives the mapping (a slope with n links is n−1 inductive steps and one base case).
+    This half encodes the links after the first and the propagation of the bad outcome's
+    costs back to the first event.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Recursive Premise
+  detail: In the book each step would plausibly lead to the next, in the circumstances
+    and so far as anyone can tell, and the steps need not be causal. walton.yml's
+    link is causes(E1,E2), the same unqualified causal premise as cause_to_effect's.
+  decision: 'No change for now: read causes(E1,E2) here as "E1 would plausibly lead
+    to E2 in these circumstances", and treat a weak link as a reason to answer 49/CQ3
+    against it. Open, with the modal variant of the causal family (audit N8): whether
+    the slope''s links should use it. Slopes whose steps are precedents or classifications
+    have schemes of their own (50, 51, 52), only two of them in walton.yml.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Conclusion
+  detail: horrible_costs(E1), that each intermediate event would entail horrible costs,
+    has no counterpart in the book, which calls only the last outcome horrible and
+    draws its conclusion about the first step. It is the upstream Carneades device
+    that carries the badness back along the chain.
+  decision: 'No change: the device is what lets a chain of any length be encoded with
+    two schemes. Read horrible_costs(E1) as "E1 would lead on to horrible costs",
+    not as "E1 is itself horrible". The premise map''s Conclusion item is corrected
+    to no formula.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: source
+  detail: walton.yml cites Slippery Slope Arguments (Vale Press, Newport News) as
+    of 1999; the compendium cites the same title and pages (93, 95) from the same
+    publisher as of 1992.
+  decision: 'Open: a verifier should check the year against the book''s reference
+    list; the catalogue cites the book''s reference.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: chained
+  note: Not in the tree; placed with the precedent and sorites slopes under chained,
+    because it is the step that is chained, repeated once per link. Its link is causal,
+    as in cause to effect (based on cases), but what it concludes is an evaluation
+    passed along the chain.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it shares causes(E1,E2) with cause_to_effect but concludes
+    an evaluation, not an occurrence, and is not a narrower version of any scheme.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion]
+  suspect: [inquiry]
+  note: As for slippery_slope_base_case, since it is only ever a link of a slope.
+    Not in ND's table; ND names the slope as an argument used in deliberation (p.
+    161). Persuasion about a policy and the suspicion in inquiry are our extrapolation
+    (the book treats the slope as an attack on a proposed course of action, p. 118;
+    on arguments from consequences in a dispute about truth, ND pp. 176–7).
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary (with the split of the book''s scheme), the paraphrases
+    and answers of the three questions (49/CQ2 now targets the link), the contrasts
+    (one added: gradualism), the examples, the decision on the partial link, two book-walton
+    discrepancies and one on the source, the classification, specialises and the dialogue
+    types; corrected the premise map of the book''s conclusion, which the inductive
+    step does not express.'

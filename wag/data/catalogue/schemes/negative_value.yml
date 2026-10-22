@@ -52,43 +52,116 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when an agent A judges a value V to be bad, and V bears on a goal G
+    of A so as to count against it, as when someone gives up an aim because of the
+    vice it would feed. In the book it concludes that V is a reason for A to give
+    up its commitment to G, which sets it apart from negative_consequences, which
+    argues against an action from a bad result; walton.yml's conclusion says the opposite
+    (see the discrepancies).
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_value
-  text: ""
-  status: todo
+  text: The counterpart. Choose negative_value when the agent judges the value bad
+    and it tells against the goal; choose positive_value when the agent holds the
+    value good and it speaks for the goal. A text that sets a good value against a
+    goal can often be coded either way (V = liberty, positive, against G; or V = interference,
+    negative); prefer the value the text names.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sacrifice
-  text: ""
-  status: todo
+  text: 'Not a close relative: sacrifice infers how much something is worth from what
+    was given up for it, and concludes a value; negative_value takes a value judgment
+    as given and concludes about a goal.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
-  text: ""
-  status: todo
-examples: []
+  text: Choose practical_reasoning1 when the claim argues for an action from circumstances,
+    a goal and a value the goal promotes; choose negative_value when a value the agent
+    judges bad is offered as a reason to drop a goal, with no action or means argued
+    for.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences
+  text: Choose negative_consequences when the reason is a bad outcome that an action
+    would produce; choose negative_value when the reason is a value the agent judges
+    bad and that the goal itself involves.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: I'm giving up on becoming famous online. That kind of fame runs on vanity,
+    and I count vanity a vice.
+  coding: 'V = vanity; A = the speaker; G = becoming famous online. Stated: judged_negative_value(V,A)
+    ("a vice") and negative_affects(V,G,A) (the goal runs on it). Conclusion, as the
+    book has it: V is a reason to drop the commitment to G. walton.yml''s conclusion
+    reads reason_retaining_goal(V,G); until it is corrected, code it so and note that
+    it stands for giving the goal up.'
+  status: drafted by Claude Code, 2026-10-22
+- text: 'The club should stop aiming to beat every rival at any price: the members
+    see win-at-all-costs ruthlessness as a bad thing, and that aim is built on it.'
+  coding: 'V = win-at-all-costs ruthlessness; A = the club''s members; G = beating
+    every rival at any price. Stated: judged_negative_value(V,A) and negative_affects(V,G,A).
+    Conclusion: a reason to drop G (walton.yml''s formula as in the first example).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Taxing meat might force producers to use cheaper and more dangerous means
+    of producing meat.
+  kialo: "13292.174"
+  coding: 'Near miss: what counts against the tax is a bad result it would bring about,
+    not a value the speaker judges bad that the goal involves; negative_consequences
+    (A = a tax on meat, G = more dangerous meat production), as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "19.2"
   detail: 'walton.yml formalizes compendium 19.2 only in part: Same title and references,
     but the conclusion is the positive variant''s "reason for retaining commitment".'
-  decision: ""
-  status: generated
+  decision: Keep the link as partial until walton.yml is corrected. The book's conclusion
+    is that V is a reason to give up the commitment to G; walton.yml's is reason_retaining_goal(V,G),
+    copied from positive_value, which says the opposite. walton.yml should conclude
+    with a predicate of its own (for example reason_retracting_goal(V,G), with a template
+    in our own words); then the link can become exact. Until then, code the book's
+    conclusion with the existing formula and say in the coding that it stands for
+    retraction.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Premise 2
+  detail: In the book, a negative value goes against commitment to the goal. walton.yml's
+    template for negative_affects(V,G,A) ends by saying that a bad value supports
+    commitment to the goal, again copied from the positive variant.
+  decision: 'Correct the template with the conclusion (owner''s decision on walton.yml):
+    negative_affects(V,G,A) should say that V''s being bad counts against A''s goal
+    G. The formula itself can stay; the catalogue reads it in the book''s sense.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: values
+  note: The tree lists argument from values under values. The upstream collection
+    files it with arguments from commitment (B_source-based-arguments/2_argumen-from-commitment.yml),
+    with the same formulas.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing; it and positive_value are the book's two variants of
+    argument from values (19).
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion]
+  suspect: [inquiry]
+  note: 'Not in ND''s table (docs/dialogue-types.md §7); our extrapolation, as for
+    positive_value. A value bears on what to aim at: deliberation, where ND notes
+    that judgments of relative worth are common (p. 155), and persuasion about what
+    to do, the setting of the two Bench-Capon papers the book cites for argument from
+    values. It is suspect in inquiry, where it would be offered as a reason to accept
+    a proposition as true, by analogy with ND''s account of ad consequentiam (pp.
+    176–7).'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the contrasts (one added: negative_consequences), the
+    examples, the decision on the 19.2 partial link (walton.yml''s conclusion is the
+    positive variant''s), one book-walton discrepancy on the premise''s template,
+    the classification, specialises and the dialogue types. The book prints no questions
+    for 19 and the game does not play the scheme, so it has none.'

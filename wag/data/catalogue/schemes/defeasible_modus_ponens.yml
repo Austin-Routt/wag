@@ -25,36 +25,126 @@ families:
 premise_map: []
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when a claim B is drawn from a fact A by a rule that holds as a rule
+    but admits exceptions ("as a rule, if A then B", implies(A,B)), and no more specific
+    scheme of the catalogue captures the pattern. It is the bare form of applying
+    a defeasible rule, with no pattern of its own; WAG's plan makes it the form an
+    "other" annotation falls back to, with its rule written out and two questions,
+    what backs the rule and whether this case is an exception (docs/plan.md §2, §3).
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: rule
-  text: ""
-  status: todo
-examples: []
+  text: Choose rule when the rule applied says what evaluation is justified or what
+    conduct is required in a kind of case (evaluation(A,E,C)); choose defeasible_modus_ponens
+    only when the conditional is of no kind that a catalogue scheme names. Any scheme
+    with a conditional premise fits this general form, so it never wins against a
+    scheme whose premises fit.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: established_rule
+  text: Choose established_rule when the rule is an accepted one, whose validity and
+    applicability can be questioned as such (valid(R), applicable(R)); choose defeasible_modus_ponens
+    for a conditional the arguer puts forward without appeal to its standing as a
+    rule.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Other sources of protein are currently cheaper than meat, providing alternatives
+    to this added burden.
+  kialo: "13292.33"
+  coding: 'The gold codes it "other" (mitigation by substitution); under plan §3 an
+    "other" is written as a defeasible modus ponens. A = protein cheaper than meat
+    is available to those the tax burdens; B = the tax does not make their food unaffordable,
+    ¬brings_about(tax_meat, food_less_affordable_for_poor). Stated: A. Supplied: implies(A,B),
+    the rule "as a rule, a tax on one food does not price people out of eating if
+    a cheaper substitute is at hand". Conclusion: B, against the link of 13292.7.'
+  status: drafted by Claude Code, 2026-10-22
+- text: In places and regions where people would starve due to higher food costs,
+    meat is not consumed often or at all – meat is mostly unaffordable to those people.
+    Diets there are e.g. composed, mainly or often only, of maize, flour, or rice
+    …
+  kialo: "13292.204"
+  coding: 'The gold codes it "other" (absent exposure) and names defeasible_modus_ponens
+    as the only walton.yml scheme that fits. A = the people at risk of starving eat
+    little or no meat; B = a meat tax does not starve them by cutting their access
+    to meat. Stated: A. Supplied: implies(A,B), "as a rule, a tax on a good cannot
+    harm people through that good if they do not consume it", with the gold''s supplied
+    premise that the tax leaves the price of their staples alone. Conclusion: B, against
+    the premise 13292.127 presupposes.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The tax should be linked directly to the environmental impact. For example,
+    beef production releases five times the amount of greenhouse gas emissions … Beef
+    should have a higher tax than wild game such as venison.
+  kialo: "13292.46"
+  coding: 'Near miss: it fits the general form (if a meat''s impact is far greater,
+    its tax should be higher; beef''s is), but a named scheme fits too, so the named
+    scheme is used: rule (A = beef''s impact is far greater, E = beef warrants a higher
+    tax, C = taxing beef above wild game), as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: not-in-book
   about: defeasible_modus_ponens
   detail: 'The compendium (ch. 9) lists no scheme this formalizes. walton.yml cites: '
-  decision: ""
-  status: generated
+  decision: 'Keep it, in tier 1, as the general form "other" falls back to (plan §2,
+    §3). It is not a compendium scheme, but the book''s ch. 11 opens with a section
+    on the defeasible modus ponens form of schemes (p. 364, by the table of contents);
+    that text is not in our OCR (pp. 1–138), and walton.yml cites no source. Open:
+    a verifier with the book should read ch. 11 §1 and cite it as the book''s basis.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: critical questions
+  detail: 'Plan §3 gives an "other" coded as a defeasible modus ponens two critical
+    questions: what backs the rule, and whether this case is an exception. walton.yml''s
+    scheme has no assumption or exception, so neither can be a walton/ question, and
+    no book or game question exists.'
+  decision: 'Open, for the owner: add to walton.yml an exception for the case at hand
+    (for example exception(A,B), with a template in our own words). Until then, ask
+    for the backing of the rule by challenging the premise implies(A,B), and raise
+    an exception as an undercutter.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: implies
+  detail: The template of implies(A,B) reads as a plain conditional, which would make
+    the argument deductive; the scheme's name and its use in WAG's plan make it a
+    defeasible rule.
+  decision: No change to the formula. In coding, write the rule out as a defeasible
+    generalization ("as a rule, if A then B"), as plan §3 asks.
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: defeasible rule-based
+  note: Not in the tree; placed under defeasible rule-based, the group whose name
+    describes it and the name of the upstream category file that holds it (C_applying-rules-to-cases/2_defeasible-rule-based-arguments.yml).
+    The tree lists example, analogy and precedent there; established rule, its nearest
+    listed relative in form, is under based on cases. As the fallback for "other"
+    it can also carry practical conclusions, so the placement is nominal.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the most general form in the catalogue. Many schemes
+    could be read as narrower versions of it; the catalogue does not record that.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: 'Not in ND''s table (docs/dialogue-types.md §7). ND states that the arguments
+    of a persuasion dialogue are generally presumptive and defeasible, acceptable
+    for now unless an exception or critical question defeats them (p. 41), and deliberation
+    proceeds on burden of proof because there is seldom time to settle an issue conclusively
+    (p. 162). Our extrapolation: inquiry draws conclusions only from firmly established
+    premises (pp. 32, 70, 98), so this form serves there only when its rule is established;
+    no type makes the form suspect as such, since its standing is that of the rule
+    it applies.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary (the fallback for "other", plan §2–§3), the contrasts
+    (one added: established_rule), the examples, the decision on the not-in-book discrepancy,
+    two other discrepancies (the plan''s two questions have no formula; implies reads
+    as strict), the classification, specialises and the dialogue types.'

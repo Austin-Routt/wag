@@ -64,101 +64,242 @@ critical_questions:
     entry: "49"
     label: CQ1
   targets: [{formula: 'would_realize(A,E)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'The book asks it of the whole sequence. In walton.yml''s encoding every stated
+    link is a premise of its own argument: the first here, the others in slippery_slope_inductive_step.'
+  paraphrase: Which of the steps leading from A, through E, to the bad outcome does
+    the arguer actually state?
+  answer: 'The proponent, once asked. Against: showing that the arguer jumps from
+    A to the bad outcome, or to E, without saying how one leads to the other, which
+    undermines would_realize(A,E). For: the stated sequence of events, each a plausible
+    step from the one before.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 49/CQ2
   book:
     entry: "49"
     label: CQ2
-  targets: []
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'would_realize(A,E)', locus: premise}]
+  note: 'walton.yml has no formula for the sequence as a whole, so a gap is charged
+    to the link that spans it: here the first link, in slippery_slope_inductive_step
+    a later one. A premise target rather than undercuts, because a gap makes the link
+    doubtful but would not stop a true link from supporting the conclusion.'
+  paraphrase: What missing steps would have to be filled in for the chain from A to
+    the bad outcome to be plausible?
+  answer: 'The proponent, once asked. Against: pointing to a gap, where E follows
+    from A only if further events occur that the arguer has not shown, which undermines
+    would_realize(A,E). For: supplying the missing events, each stated as a step of
+    its own.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 49/CQ3
   book:
     entry: "49"
     label: CQ3
   targets: [{formula: 'would_realize(A,E)', locus: premise}]
-  note: 'weakest link: each link is a premise'
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Weakest link. The book's question tells the critic where to aim and to put
+    the questions proper to that kind of link (for a causal link, those of cause_to_effect).
+    Here it bears on the first link; the weakest link may be a later one, an inductive
+    step.
+  paraphrase: Which link in the chain is the weakest, and does the one event there
+    really lead to the next?
+  answer: 'The proponent, once asked. Against: evidence that A would probably not
+    set off E (a check on the way, a point where someone must decide, a low likelihood),
+    which undermines would_realize(A,E); since every later step hangs on this one,
+    a broken first link stops the slope. For: evidence that A would very likely lead
+    to E in the circumstances.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: 'Use it to argue that an action A would have negative consequences because
+    A would set off an event E that leads, link by link, to an outcome with horrible
+    costs. walton.yml splits the book''s single slippery slope (49) in two: this base
+    case ties the action to the first event of the chain and to that event''s horrible
+    costs, while slippery_slope_inductive_step carries the horrible costs back along
+    each further link from the final outcome to E; the graduated chain is what sets
+    a slope apart from plain negative_consequences.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_consequences
-  text: ""
-  status: todo
+  text: 'Not a close relative: it argues for an action from a good result. A step-by-step
+    chain towards a good end is gradualism, not a slope.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences
-  text: ""
-  status: todo
+  text: ND treats the slippery slope as a subtype of argument from consequences (p.
+    161). Choose the slope when the bad end is reached through a graduated sequence
+    of steps that the first one sets off; choose negative_consequences when the action
+    leads to the bad outcome in one step. A single further step, even an "inevitable"
+    one, is negative_consequences (13292.56, below).
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_reasoning
-  text: ""
-  status: todo
+  text: Choose negative_consequences_reasoning when an agent rejects its own action
+    because the result would harm its goals, in one step; choose the slope when the
+    bad end comes at the far end of a chain.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
-  text: ""
-  status: todo
+  text: 'Not a close relative: the prudential form argues for doing A from the bad
+    result of not doing it; a slope argues against a first step from the bad end of
+    the chain it starts.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: pragmatic_alternative
-  text: ""
-  status: todo
+  text: 'Not a close relative: it argues for an action from an either-or (do A, or
+    a bad outcome follows), with no chain of steps.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: threat
-  text: ""
-  status: todo
+  text: 'Not a close relative: in a threat the speaker undertakes to cause the bad
+    outcome; in a slope each step is said to bring on the next without anyone undertaking
+    it.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: ad_baculum
-  text: ""
-  status: todo
+  text: 'Not a close relative: a threat in either-or form, with a harm the speaker
+    will cause, and no chain of steps.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: fear
-  text: ""
-  status: todo
+  text: Choose fear when the argument plays on the hearer's fear of a dreadful outcome
+    and offers one action as the only escape; choose the slope when it argues, step
+    by step, that a first move leads to the dreadful outcome. A slope painted to frighten
+    may be both.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: danger
-  text: ""
-  status: todo
+  text: Choose danger when the action is said to put the hearer directly at serious
+    risk; choose the slope when the harm lies at the end of a chain of events that
+    the action starts.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_inductive_step
-  text: ""
-  status: todo
+  text: The two halves of one book scheme. Use slippery_slope_inductive_step for each
+    link between two events of the chain, and slippery_slope_base_case once, for the
+    link from the action to the first event; a slope with n links is n−1 inductive
+    steps and one base case.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: precedent_slippery_slope_argument
-  text: ""
-  status: todo
+  text: Choose precedent_slippery_slope_argument (compendium 50, not in walton.yml)
+    when the steps are cases bound together by treating like cases alike, so that
+    one exception to a rule forces the next; choose this causal slope when each step
+    is an event that brings on the next.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sorites_slippery_slope
-  text: ""
-  status: todo
+  text: Choose sorites_slippery_slope when the steps are small differences along a
+    vague term, so that a property passes from a clear case into the grey area; choose
+    this causal slope when the steps are events that bring each other about.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: verbal_slippery_slope
-  text: ""
-  status: todo
+  text: Choose verbal_slippery_slope when the chain runs through neighbouring cases
+    of a vague classification and ends by denying that the first case has the property;
+    choose this causal slope when it runs through events and ends by rejecting an
+    action.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: full_slippery_slope_argument
-  text: ""
-  status: todo
+  text: Choose full_slippery_slope_argument (compendium 53, not in walton.yml) when
+    the steps mix causal, precedent and analogical links and the text relies on a
+    climate of opinion that will carry people from each step to the next; choose this
+    causal slope when the links are events alone.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: gradualism
-  text: ""
-  status: todo
-examples: []
+  text: The book grounds all slippery slopes in argument from gradualism (p. 114).
+    Choose gradualism when the arguer leads the hearer to a conclusion by many small
+    moves, each easy to accept; choose the slope when a series of steps is used to
+    reject the first one because of where it ends.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: If the school lets phones in at lunch, students will soon want them in study
+    hall, then in class, and before long no lesson will go uninterrupted.
+  coding: 'A = allowing phones at lunch; E = phones in study hall. Stated: would_realize(A,E).
+    Supplied: horrible_costs(E), the conclusion of two inductive steps (phones in
+    study hall → phones in class → no lesson uninterrupted), whose final outcome''s
+    badness the text implies. Conclusion: negative_consequences(A); the implied "so
+    don''t allow them" is the book''s conclusion, which walton.yml does not reach
+    (see the discrepancy on the conclusion).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Close the night bus line and late-shift workers will drive home instead; more
+    of them driving tired means more crashes on the ring road, and some of those crashes
+    will kill.
+  coding: 'A = closing the night bus line; E = late-shift workers driving home. Stated:
+    would_realize(A,E). Supplied: horrible_costs(E), from the inductive steps (driving
+    home → more tired drivers on the ring road → fatal crashes). Conclusion: negative_consequences(A).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Such a tax would negatively affect the protein intake of millions of people
+    and open the market to the inevitable push by governments to incentivize the consumption
+    of insects as a protein alternative.
+  kialo: "13292.56"
+  coding: 'Near miss: "inevitable push" sounds like a slope, but only one further
+    step is given, with no graduated chain; negative_consequences (A = a tax on meat,
+    G = a government push for insect protein), as the gold codes its second instance.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "49"
   detail: 'walton.yml formalizes compendium 49 only in part: Upstream Carneades recursive
     encoding (title "Slippery Slope Argument"; source Slippery Slope Arguments, printed
     year 1999, pp. 93, 95): base case of the chain.'
-  decision: ""
-  status: generated
+  decision: 'Keep the link as partial, and keep the split. The book''s one scheme
+    becomes two in walton.yml: this base case (the first link, from the action A0
+    = A to the first event A1 = E, E''s horrible costs, and a conclusion about A)
+    and slippery_slope_inductive_step (each further link Ai → Ai+1, carrying the horrible
+    costs of An back to A1). A slope with n links is coded as n−1 inductive steps
+    and one base case. The premise maps show where each book premise goes. What the
+    split loses is in the book-walton discrepancies below and in the inductive step''s.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: First Step Premise
+  detail: The book's first premise says that A0 has been put forward and looks, at
+    first, like something to do. No formula expresses it.
+  decision: 'No change: it sets the scene (a proposal is on the table) rather than
+    giving a reason. In coding, A is the proposal the slope argues against; record
+    in the notes that it is proposed.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Conclusion
+  detail: The book's conclusion is that A0 is not to be done. walton.yml's base case
+    concludes negative_consequences(A), that A would have negative consequences, and
+    no walton.yml scheme takes that formula as a premise, so an encoded slope never
+    reaches a recommendation.
+  decision: 'Open, for the owner: conclude ¬should_be_performed(A), as negative_consequences
+    does and as the book has it, so that a slope meets the pros of the same action
+    on one issue. Until then, code negative_consequences(A) and say in the coding
+    that it counts against A.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: source
+  detail: walton.yml cites Slippery Slope Arguments (Vale Press, Newport News) as
+    of 1999; the compendium cites the same title and pages (93, 95) from the same
+    publisher as of 1992.
+  decision: 'Open: a verifier should check the year against the book''s reference
+    list; the catalogue cites the book''s reference.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: chained
+  note: Not in the tree; placed with the precedent and sorites slopes under chained,
+    because it belongs to the same family (F17, of which it is the generic) and works
+    by chaining steps. The tree lists no causal slope. The alternative is value-based,
+    with negative consequences, since ND makes the slope a subtype of argument from
+    consequences (p. 161) and the book's conclusion is about an action; the tree,
+    though, puts the other slopes, whose conclusions are also practical, under chained.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: negative_consequences
+  note: ND places the slippery slope under argument from consequences, as the case
+    where the bad results come in a graded series (p. 161). The narrowing adds the
+    chain of steps (carried by slippery_slope_inductive_step) and a horrible end;
+    walton.yml's conclusion, negative_consequences(A), is not negative_consequences'
+    ¬should_be_performed(A) (see the discrepancy on the conclusion).
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion]
+  suspect: [inquiry]
+  note: 'Not in ND''s table (docs/dialogue-types.md §7). ND names it as an argument
+    used in deliberation, a subtype of argument from consequences (p. 161). Our extrapolation:
+    it is proper in persuasion about a policy, where the book treats it as an attack
+    on a proposed course of action (p. 118), and suspect where the issue is whether
+    something is true, as for consequences in general (ND pp. 176–7).'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary (with the split of the book's scheme), the paraphrases
+    and answers of the three questions (49/CQ2 now targets the first link), the fifteen
+    contrasts, the examples, the decision on the partial link, three book-walton discrepancies
+    and one on the source, the classification, specialises and the dialogue types.

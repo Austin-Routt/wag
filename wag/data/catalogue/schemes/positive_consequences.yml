@@ -57,27 +57,48 @@ critical_questions:
     locus: premise
     pattern: brings_about(A,G)
   targets: [{formula: 'brings_about(A,G)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's question also allows for the strength the arguer claims (that G
+    will, may or must follow); the paraphrase asks for the likelihood whatever strength
+    is claimed. The game's CQ:likelihood drops that modality and speaks of "the claimed
+    link".
+  paraphrase: How likely is it that doing A would actually lead to G?
+  answer: 'The proponent, once asked. Against: reasons why G is unlikely to follow
+    from A, or would follow only under conditions this case lacks, which undermines
+    brings_about(A,G). For: a record, a known mechanism or a forecast showing that
+    actions like A reliably produce outcomes like G.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 33/CQ2
   book:
     entry: "33"
     label: CQ2
   targets: [{formula: 'brings_about(A,G)', locus: premise}]
-  note: no separate evidence formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: No separate evidence formula, so the question targets the premise the evidence
+    would support. The game asks its version (game/CQ:evidence) of the inference instead;
+    see the discrepancy on the game's questions.
+  paraphrase: What evidence shows that doing A would lead to G, and is it strong enough
+    for the confidence with which the claim is made?
+  answer: 'The proponent, once asked. Against: showing that the evidence for the link
+    is missing, anecdotal, or weaker than the claim needs (a firm "will" backed only
+    by a "might"), which undermines brings_about(A,G). For: studies, precedents or
+    a known mechanism that support the link as strongly as it is claimed.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 33/CQ3
   book:
     entry: "33"
     label: CQ3
-  targets: []
-  note: counter-argument (negative consequences); no formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: should_be_performed(A), locus: conclusion}]
+  note: Counter-argument from the opposite consequences; no formula of this scheme
+    encodes it, so it targets the conclusion, as the game's CQ:side_effect does. walton.yml
+    encodes the same book question as the exception other_consequences(X) only in
+    negative_consequences_prudential (see the book-walton discrepancy on CQ3). The
+    two arguments are then weighed against each other, as ND describes (p. 159).
+  paraphrase: Would doing A also have consequences of the opposite kind to G that
+    ought to be weighed against it?
+  answer: 'The critic, who raises it with an argument. Against: a bad consequence
+    of A, put forward as an argument from negative_consequences for ¬should_be_performed(A),
+    which rebuts the argument when it outweighs G. For: showing that A has no such
+    consequence, or that G outweighs it.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:evidence
   game:
     id: CQ:evidence
@@ -85,68 +106,216 @@ critical_questions:
     locus: argument
   targets: []
   undercuts: true
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The game's form of 33/CQ2, asked of the inference (locus argument) rather
+    than of the premise brings_about(A,G); see the discrepancy on the game's questions.
+  paraphrase: Does enough evidence back the claim that doing A brings about G?
+  answer: 'The proponent, once asked: the argument is out of force until answered.
+    Against: showing that no study, record or mechanism supports the link, which undercuts
+    the argument. For: evidence that A brings about G.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:side_effect
   game:
     id: CQ:side_effect
     text: Would doing {A} have bad side effects?
     locus: conclusion
   targets: [{formula: should_be_performed(A), locus: conclusion}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'The game''s narrower form of 33/CQ3: it asks only about bad side effects
+    of A, while the book''s question covers any consequences of the opposite kind.'
+  paraphrase: Would doing A also bring about something bad?
+  answer: 'The critic, who raises it with an argument. Against: a bad side effect
+    of A, put forward as an argument from negative_consequences, which rebuts the
+    argument when it outweighs G. For: showing that A has no such effect, or that
+    G outweighs it.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: 'Use it when an action A is recommended because doing it would bring about
+    an outcome G that is good, and the claim offers nothing more: no circumstances,
+    no goal the action serves, no value. It concludes that A should be done, and differs
+    from practical_reasoning1 and 2 in arguing from the worth of a result rather than
+    from a goal, and from cause_to_effect in that its point is the recommendation,
+    not the prediction.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: negative_consequences
-  text: ""
-  status: todo
+  text: The mirror image. Choose positive_consequences when the cited outcome is good
+    and the claim is that A should be done; choose negative_consequences when the
+    outcome is bad and the claim is that A should not be done. Bind A to the action
+    as the issue states it, so that the two meet on one conclusion.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_reasoning
-  text: ""
-  status: todo
+  text: 'Not a close relative: it is the first-person negative form, an agent deciding
+    against its own action because the outcome would harm its goals. A first-person
+    case for doing something because of a good result is still positive_consequences;
+    walton.yml has no first-person positive form.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
-  text: ""
-  status: todo
+  text: 'Not a close relative: the prudential form argues for doing A from the bad
+    outcome of failing to do it, as a warning to someone who was thinking of not doing
+    A. Choose positive_consequences when the reason is a good outcome that doing A
+    brings.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: pragmatic_alternative
-  text: ""
-  status: todo
+  text: 'Choose pragmatic_alternative when the text presents a forced choice: either
+    A is done or a bad outcome B follows, so A must be done. Choose positive_consequences
+    when A is recommended for a good it brings, with no either-or.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: threat
-  text: ""
-  status: todo
+  text: 'Not a close relative: a threat argues against an action from a bad outcome
+    that the speaker undertakes to bring about. Nothing in positive_consequences corresponds
+    to it.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: ad_baculum
-  text: ""
-  status: todo
+  text: 'Not a close relative: the disjunctive threat demands an action on pain of
+    a harm that the speaker will cause. positive_consequences recommends an action
+    for a good it brings, with no one threatening anything.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: fear
-  text: ""
-  status: todo
+  text: 'Not a close relative: the fear appeal argues for doing A as the only way
+    to avert something very bad for the hearer, and works through the hearer''s fear.
+    Choose positive_consequences when the reason is a benefit gained, not a harm averted.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: danger
-  text: ""
-  status: todo
+  text: 'Not a close relative: the danger appeal argues against an action that would
+    put the hearer at serious risk. Its positive counterpart is not a danger appeal
+    but positive_consequences.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_base_case
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: 'Not a close relative: a slippery slope argues against a first step from a
+    horrible outcome at the end of a chain. A chain of steps towards a good end, argued
+    for, is gradualism or a series of cause_to_effect steps feeding positive_consequences.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_reasoning2
+  text: Choose practical_reasoning2 only when the claim or its context states the
+    circumstances S1, a resulting state S2 distinct from the action, and the goal
+    G that S2 realizes; choose positive_consequences when the claim chiefly says that
+    the action brings about a good outcome (batch-2 guidelines §3, adjudication rule
+    4).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_reasoning1
+  text: Choose practical_reasoning1 when, besides circumstances and a goal, the claim
+    names a value V that the goal promotes; choose positive_consequences for a bare
+    good result with no goal or value stated.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect
+  text: Choose cause_to_effect when the claim's point is that the effect will happen;
+    choose positive_consequences when the point is that A should be done because its
+    effect is good. A claim that defends the causal link a consequences argument relies
+    on is cause_to_effect, not a new consequences argument.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_value
+  text: Choose positive_value when the reason given is a value that the agent holds
+    and that favours keeping a goal; choose positive_consequences when the reason
+    is an outcome that the action produces.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: A tax on meat would combat unhealthy meat consumption.
+  kialo: "13292.115"
+  coding: 'A = a tax on meat; G = less unhealthy meat consumption. Stated: brings_about(A,G).
+    Supplied: good(G), plain from "unhealthy". Conclusion: should_be_performed(A),
+    the thesis. "Combat" is goal language, but no circumstances or separate goal are
+    stated, so it is not practical reasoning (the gold''s note).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Rationing meat via personal carbon budgets/allowances (credits) where everybody
+    in a country can consume a small amount of meat … would help reduce carbon emissions.
+  kialo: "13292.147"
+  coding: 'A = rationing meat through personal carbon budgets; G = lower carbon emissions.
+    Stated: brings_about(A,G). Supplied: good(G). Conclusion: should_be_performed(A).
+    A is a rival to the thesis action, so the gold also treats the claim as offering
+    a better means against the thesis''s environmental argument.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Governments should put a tax on meat and use some of those tax revenues to
+    encourage research into developing synthetic meats.
+  kialo: "13292.145"
+  coding: 'A = a meat tax whose revenue partly funds research into synthetic meat;
+    G = faster development of synthetic meat. Stated: the conclusion should_be_performed(A),
+    and its purpose, which is brings_about(A,G). Supplied: good(G). A proposal stated
+    with its purpose is coded this way (adjudication rule 4).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Taxing meat would raise the consumer price to reflect the real costs of meat
+    consumption.
+  kialo: "13292.118"
+  coding: 'Near miss: it separates what the tax changes (a higher price, S2) from
+    the goal that change serves (a price that reflects the real costs, G), and its
+    context states the circumstances (13292.11: subsidies keep the price down); practical_reasoning2
+    (A = the tax, S2 = a higher price, G = a price that reflects real costs), as the
+    gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: Premise
+  detail: The compendium's single premise says that doing A will plausibly have good
+    consequences, without naming them; walton.yml names the consequence G and splits
+    the premise into brings_about(A,G) and good(G). The qualifier "plausibly" is lost;
+    the ch. 3 version (p. 101) has no qualifier.
+  decision: No change. Naming G lets the link and the goodness be questioned apart,
+    and ND's form of the scheme does the same (p. 158). The plausibility is carried
+    by the argument's weight and proof standard, not by the formula.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ1-CQ2
+  detail: The book's first two questions allow the consequences to be claimed with
+    different strengths (will, may, must). brings_about(A,G) has no modality, and
+    Kialo claims often hedge ("could", "would help").
+  decision: 'No change for now. Code a hedged claim with brings_about(A,G), say so
+    in the coding, and treat the weaker link as a reason to answer 33/CQ1 against
+    it. Open: whether the modal variant the owner decides for the causal family (audit
+    N8) should extend to this premise.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ3
+  detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
+    walton.yml has no formula for it here, while it encodes the same question as the
+    exception other_consequences(X) in negative_consequences_prudential.
+  decision: 'The catalogue targets the conclusion: the opposite consequences come
+    as a counter-argument, which rebuts, as in the game. Open: whether walton.yml
+    should give positive_consequences and negative_consequences the exception other_consequences(A),
+    as it does the prudential scheme; that would make the question an undercutter
+    instead.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: 'The game''s three questions differ from the book''s: CQ:likelihood drops
+    the modality and speaks of "the claimed link"; CQ:evidence asks the book''s evidence
+    question of the inference (locus argument), not of the premise brings_about(A,G);
+    CQ:side_effect narrows the opposite-consequences question to bad side effects.'
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
+    the game''s texts from these paraphrases, sit the evidence question on 33/CQ2
+    at the premise, and keep the side-effects question as the game''s form of 33/CQ3.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: value-based
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing in the catalogue. The book prints argument from consequences
+    (33) only as a heading over its forms, and ND calls it a species of practical
+    reasoning (p. 159), but no walton.yml scheme stands for the generic form.
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion, negotiation]
+  suspect: [inquiry]
+  note: 'From ND, via docs/dialogue-types.md §7: arguments from consequences are the
+    characteristic move of deliberation (ND pp. 157–60), and are proper in a critical
+    discussion of whether a policy is good (p. 203). They are fallacious (ad consequentiam)
+    when used in a dispute about whether a thesis is true, as an illicit shift into
+    deliberation (pp. 176–7); persuasion is listed as proper only for theses about
+    what to do. Our extrapolation: inquiry, whose goal is to prove a proposition true
+    or false (p. 32), is where the same misuse threatens; and in negotiation an offer
+    can cite the benefits of accepting it, as ND states for the negative form (p.
+    116).'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the paraphrases and answers of the three book and two
+    game-only questions (33/CQ3 now targets the conclusion), the contrasts (four added:
+    practical_reasoning1 and 2, cause_to_effect, positive_value), the examples, four
+    discrepancies, the classification, specialises and the dialogue types.'
