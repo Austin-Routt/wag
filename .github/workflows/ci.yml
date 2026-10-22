@@ -1,0 +1,84 @@
+# Checks on every push and pull request (docs/process.md §7).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    name: Go tests, lint and the catalogue
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wag
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: wag/go.mod
+          cache-dependency-path: wag/go.sum
+      - name: go vet
+        run: go vet ./...
+      - name: go test
+        run: go test -count=1 ./...
+      - name: Lint the game's data
+        run: go run ./cmd/wag-cli --lint
+      - name: The catalogue is what the generator makes from its sources
+        run: |
+          go run ./cmd/wag-cli --catalogue-gen
+          git diff --exit-code -- data/catalogue || {
+            echo "::error::wag/data/catalogue differs from what --catalogue-gen makes: run it and commit the result"
+            exit 1
+          }
+      - name: Catalogue check
+        # Without --book the copy check reads docs/book-catalogue (pp. 1-138);
+        # the compendium's transcription is private (the owner's workspace).
+        run: go run ./cmd/wag-cli --catalogue-check
+      - name: Registry check
+        # One error is known and waits for a decision: division_generic is a
+        # copy of composition_generic. Any other error fails the build.
+        run: |
+          go run ./cmd/wag-cli --registry ../docs/scheme-registry/walton-clean/walton.yml \
+            --families data/schemes/families.json > registry.txt || true
+          cat registry.txt
+          if grep '^ERROR' registry.txt | grep -v '^ERROR composition_generic = division_generic:'; then
+            echo "::error::the registry check found an error other than the known one"
+            exit 1
+          fi
+
+  data:
+    name: walton.yml rebuild and the batch-2 gold
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: wag/go.mod
+          cache-dependency-path: wag/go.sum
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Validate the batch-2 gold
+        run: python3 -I docs/kialo-batch2/validate.py
+      - name: Fetch the upstream walton.yml the cleaning was written for
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/walton.yml" \
+            https://raw.githubusercontent.com/basakkurtuldu/walton-argumentation-schemes-for-carneades-4/master/walton.yml
+          echo "1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c  $RUNNER_TEMP/walton.yml" | sha256sum -c - || {
+            echo "::error::the upstream walton.yml is not the file the cleaning's edits were written for (docs/scheme-registry/walton-clean/CHANGELOG.md)"
+            exit 1
+          }
+      - name: Rebuild walton.yml and every report, and compare
+        run: |
+          sh docs/scheme-registry/walton-clean/check/run.sh "$RUNNER_TEMP/walton.yml"
+          git status --porcelain
+          test -z "$(git status --porcelain)" || {
+            echo "::error::check/run.sh does not reproduce the committed files: run it and commit the result"
+            git diff --stat
+            exit 1
+          }
