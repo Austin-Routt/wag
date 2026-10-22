@@ -105,7 +105,7 @@ A decision raised in several entries is one decision that lists them all. For ex
 | category | what it is about: `scheme` (a scheme's formulas or questions), `vocabulary` (where schemes meet), `game` (the game's fields, texts, edges), `annotation`, `book` (a reading of the book), `metadata`, `project` |
 | blocks | the work it holds up: `game`, `verification`, `annotation`, `play`, `release` |
 | decider | `owner`, `verifier`, `data`, `play` |
-| priority | 1 holds up the next steps of the order; 2, later work; 3 can wait. Proposed when the register was made; the owner confirms them. |
+| priority | 1 holds up the next steps of the order; 2, later work; 3 can wait. Proposed when the register was made, and confirmed by the owner on 2026-10-22. |
 | status | `open` or `decided`; a decided one records the date, who decided, the decision, and where it is recorded |
 | items, docs | where it is raised: catalogue discrepancies (entry, kind, about) and documents |
 
