@@ -137,7 +137,10 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    - every variable is declared, used, in a premise, and bound in every example;
    - every predicate has a template;
    - every question targets a formula of its scheme, and a `walton/` question an assumption or exception, as in the catalogue;
-   - an example challenges only a premise (`CQ:premise_acceptable`, with the premise as its target), since every premise can be challenged without a question of its own.
+   - a book label (`7/CQ1`) is one the compendium prints for that entry, and no id is given twice;
+   - questions are given only for the proposed and candidate schemes, each under its own heading;
+   - an example challenges only a premise or assumption that no question of its scheme targets (`CQ:premise_acceptable`, with the formula as its target), as the game allows;
+   - an example used as an answer comes from a scheme that concludes a bare proposition.
 
    It also writes the view, `<decisions>.md`. Every formula of every example is rendered in English there, under each question that is pressed against it.
 3. **The minimum set of examples** for each proposed scheme (the check warns when one is missing):

@@ -2,9 +2,10 @@
 # evidence, prepared before walton.yml changes. `wag-cli --proposal` checks it
 # and writes its view, D001-D028-D029.md. How proposals work: process.md §5.
 #
-# Version 2, 2026-10-22: revised after an independent review (the private
-# workspace's verify/p-D001-D028-D029/REPORT.md); the changes are listed in
-# the summary.
+# Version 3, 2026-10-22: revised after two independent reviews (the private
+# workspace's verify/p-D001-D028-D029/ and verify/p-D001-D028-D029-v2/); the
+# changes are listed in the summary. The owner approved it on 2026-10-22,
+# subject to a short independent check of version 3.
 
 decisions: [D001, D028, D029]
 title: The analogy family in two-case form
@@ -22,79 +23,115 @@ summary: |-
   - a claim (P1, P2) or an action (X1, X2) in each case, joined by a
     correspondence premise;
   - similarity between the two cases, as a premise;
-  - a difference that bears on what is carried over, as an exception that
-    names the claim or action, so that it defeats only the argument it is
-    about;
-  - for analogy, the book's counter-case question, as an exception that also
-    names the claim.
+  - a difference between the cases that tells against what the argument
+    concludes, as an exception that names the claim or action: it defeats
+    only the argument it is about, and a difference pointing the other way
+    does not defeat it.
+
+  The book's third question, a case like the source in which the claim
+  failed, is answered by a counter-analogy: an analogy from that case for the
+  opposite claim, which rebuts the conclusion and is weighed against it. It
+  needs no formula of its own (7/CQ3 targets the conclusion), and the
+  practical analogies are treated the same way.
 
   Analogy concludes the target claim. The practical analogies conclude that the
   target action should, or should not, be performed, so that they meet
   practical reasoning and the consequence arguments about the same action, and
   each other.
 
-  **D001's options.** A: keep today's formula. B: add a two-case scheme beside
-  analogy, as part 6 §4 had it, so that old games stay valid. C: replace
-  analogy's formula, keeping its id, title and links. The owner chose C. One
+  **The decisions.** The owner approved D001, D028 and D029 on 2026-10-22 with
+  the changes of the second independent review, which this version makes, and
+  adopted D053 in its revised form, with the sided pairing below. D001's
+  options were A, keep today's formula; B, add a two-case scheme beside
+  analogy, as part 6 §4 had it, so that old games stay valid; C, replace
+  analogy's formula, keeping its id, title and links. The owner chose C: one
   analogy scheme keeps annotators and the registry from choosing between two
-  forms of one argument, one of them with a false premise; old games replay on
-  the data version they record.
+  forms of one argument, one of them with a false premise, and old games
+  replay on the data version they record.
 
   **The binding rule.** P2 says of C2 what P1 says of C1, and X2 is to A2 what
-  X1 was to A1. A recommendation drawn from a finding (road pricing ended the
-  jams there, so London should bring it in) is a chain: analogy to the finding
-  about the target, then consequences or practical reasoning (example 9).
-  Between analogy and the practical analogies, the conclusion decides: a
-  practical analogy concludes that an action should, or should not, be done
-  here; analogy concludes any other claim, evaluative or not (examples 5 and
-  10).
+  X1 was to A1. The book separates an analogy from the conclusion finally
+  drawn from it (p. 48): a recommendation drawn from a finding (road pricing
+  ended the jams there, so London should bring it in) is a chain, analogy to
+  the finding about the target, then consequences or practical reasoning
+  (example 9). Bind A1 and A2 as situations ("the 2019 flood", "Southfield
+  now that its school is threatened") and X1 and X2 as actions, in gerund
+  phrases ("evacuating the low town a day early"). For an imagined source,
+  "was" reads as "would be", and the base premise, like analogy's CQ2, is the
+  audience's considered judgment.
+
+  **Analogy or a practical analogy.** A practical analogy cites the source for
+  a verdict that an action taken there was right or wrong, whatever the word
+  (right, wrong, a mistake, unethical, should not have been done), and
+  concludes that verdict on the corresponding action here. Analogy covers
+  every other claim: findings, predictions, deontic statuses that are not
+  verdicts on doing something (entitled, obliged, permitted), and evaluations
+  of things other than actions (examples 5, 10, 18 and 22). This is a rule
+  for annotation and the catalogue. In play, analogy may conclude any
+  statement, should-claims included, and can be played as an undercutter;
+  how far it reaches as an answer is D057, and whether refutation by
+  parallel argument is analogy played that way or a scheme of its own is
+  D056.
 
   **What is ours, not the book's:**
   - the correspondence premise, which makes the book's shared letter explicit;
     it is challenged like any premise, so it needs no question of its own;
-  - exceptions that name the claim or action;
-  - the counter-case exception, which keeps walton.yml's design: a case closer
-    to the target undercuts; a case merely like the source, the book's CQ3 as
-    printed, is a rebuttal;
-  - the practical analogies' exception and question, for which the book prints
-    none (D028: the owner chose the difference exception; the book calls 8 the
-    practical counterpart of 7);
-  - the negative practical analogy's conclusion, which is weaker than the
-    book's "wrong" (wrong entails not to be done, not conversely);
+  - exceptions that name the claim or action and point one way;
+  - the practical analogies' exceptions and questions, for which the book
+    prints none (D028; the book calls 8 the practical counterpart of 7);
+  - the practical analogies' conclusions, restated in the game's vocabulary:
+    "the right (wrong) thing to do" as "should (not) be performed";
   - the five templates.
 
-  The book's own practical example (p. 74) compares different actions in the
-  two situations, which the two-case form needs X1 and X2 to express.
+  The book describes practical reasoning from analogy as taking the likeness
+  of two situations as a reason to act in a similar way (p. 74), which X1 and
+  X2 express.
 
-  **Polarity.** The two practical analogies are an exact positive/negative
-  pair: their base premises are contraries (right, wrong), their conclusions
-  contradictories, and their one exception is neutral as to polarity (a
-  difference that bears on taking X2 here undercuts either verdict). A closer
-  situation in which the course went the other way is a practical analogy of
-  the opposite sign, which rebuts directly (examples 12 and 19, 14 and 20); it
-  needs no exception. Analogy needs no pair: its "(false)" form is a negated
-  claim in the bindings (example 3).
+  **Polarity (D053).** The two practical analogies are an exact
+  positive/negative pair: their base premises are contraries (right, wrong),
+  their conclusions contradictories, and their exceptions sided
+  (difference_against in the positive, difference_for in the negative), a
+  kind of flip D053 now allows. They share no exception, so when both argue
+  from the same past situation, a difference raised against one leaves the
+  other standing (examples 16 and 18). A situation in which the course went
+  the other way is a practical analogy of the opposite sign, which rebuts
+  directly (examples 12 and 20, 14 and 21). The engine does not enforce
+  declared contraries: both base premises can be accepted at once. Analogy
+  needs no pair: its "(false)" form is a negated claim in the bindings
+  (example 3).
 
-  **Revised after an independent review (version 2):**
-  - the counter-case exception names the claim again,
-    `closer_counter_case(C2,C1,P2)`: as first proposed, one counter-case
-    defeated every analogy between the same two cases (shown in WAG's engine);
-  - the difference exception names the claim or action, `difference_bears_on`;
-  - the practical analogies lose the counter-case exception, which meant
-    opposite things in the two schemes and undercut both; they keep only the
-    difference exception, as the owner chose for D028;
-  - no `walton/corresponds` questions, since the catalogue gives walton/
-    questions only to assumptions and exceptions; the premise is challenged
-    instead (examples 4, 5, 13, 15, 18, 21), and `wag-cli --proposal` now
-    enforces the rule;
-  - new templates: `corresponds/2` no longer says "this one", and
-    `right_to_do/2` and `wrong_to_do/2` are rewritten in our own words;
-  - the binding rule and the conclusion rule above;
-  - example 15 binds X2 to the thesis's action, tax_meat; more examples, and a
-    complete list of effects;
-  - candidates: a fortiori and refutation by parallel argument, which neither
-    form represents, are sketched to test that the vocabulary extends to them
-    (D056); they are not proposed.
+  **Version 3, after the second independent review:**
+  - the difference exceptions are directional and sided: version 2's "bears
+    on" let a difference that favours the claim defeat the analogy, and the
+    practical pair shared it, so a difference raised against one side
+    defeated both (shown in WAG's engine);
+  - no counter-case exception: 7/CQ3 targets the conclusion, as the book reads
+    the question (p. 63);
+  - corresponds/2 reads "In the other case, the counterpart of X is Y";
+  - the choice between analogy and a practical analogy is stated by what the
+    argument cites and concludes, as a rule for annotation; play is D056 and
+    D057;
+  - example 11 is a precedent near miss of our own: Kialo 5637.3148, used
+    there before, rejects a use of a precedent and was coded the wrong way
+    round;
+  - the reading of p. 74 is corrected, and p. 48 cited for the binding rule;
+  - 8.1 and 8.2 get the same match level;
+  - the effects add the annotation engine's copy of walton.yml, the second
+    copies of the guidelines and lexicon, the game's negation templates, D057,
+    and D058 (exception_to_rule reads a rule as a case);
+  - the candidates: a fortiori shares difference_against with analogy, and the
+    parallel refutation binds A to an argument on the board;
+  - the proposal check catches six more faults.
+
+  **Version 2, after the first independent review:**
+  - exceptions name the claim or action: as first proposed, one counter-case
+    defeated every analogy between the same two cases;
+  - the practical analogies' counter-case exception was dropped;
+  - no walton/corresponds questions; the correspondence premise is challenged
+    instead (examples 4, 5, 13, 15, 19, 22), and the check enforces the rule;
+  - templates in our own words; the binding rule; 13292.30 bound to the
+    thesis's action (example 15); more examples; a full list of effects;
+  - candidates sketched: a fortiori and refutation by parallel argument.
 
   **What to judge in the renderings:** whether every line says something true
   and sensible; the five templates; the practical analogies' conclusion,
@@ -110,7 +147,7 @@ schemes:
     variables: [P1, P2, C1, C2]
     premises: ["similar_to(C1,C2)", "in_case(P1,C1)", "corresponds(P1,P2)"]
     assumptions: []
-    exceptions: ["difference_bears_on(C1,C2,P2)", "closer_counter_case(C2,C1,P2)"]
+    exceptions: ["difference_against(C1,C2,P2)"]
     conclusions: [P2]
   - id: practical_analogy_positive
     meta:
@@ -119,7 +156,7 @@ schemes:
     variables: [A1, A2, X1, X2]
     premises: ["right_to_do(A1,X1)", "similar_to(A1,A2)", "corresponds(X1,X2)"]
     assumptions: []
-    exceptions: ["difference_bears_on(A1,A2,X2)"]
+    exceptions: ["difference_against(A1,A2,X2)"]
     conclusions: ["should_be_performed(X2)"]
   - id: practical_analogy_negative
     meta:
@@ -128,50 +165,54 @@ schemes:
     variables: [A1, A2, X1, X2]
     premises: ["wrong_to_do(A1,X1)", "similar_to(A1,A2)", "corresponds(X1,X2)"]
     assumptions: []
-    exceptions: ["difference_bears_on(A1,A2,X2)"]
+    exceptions: ["difference_for(A1,A2,X2)"]
     conclusions: ["¬should_be_performed(X2)"]
 
 language:
-  corresponds/2: "%s is to its own case what %s is to the other."
-  difference_bears_on/3: "%s and %s differ in a way that bears on %s."
-  closer_counter_case/3: "There is a case closer to %s than %s is, in which the counterpart of %s did not hold."
+  corresponds/2: "In the other case, the counterpart of %s is %s."
+  difference_against/3: "%s and %s differ in a way that tells against %s."
+  difference_for/3: "%s and %s differ in a way that tells in favour of %s."
   right_to_do/2: "In %s, %s was the right course."
   wrong_to_do/2: "In %s, %s was the wrong course."
 
 questions:
   analogy:
-    - {id: 7/CQ1, asks: "Do the two cases differ in a way that bears on the claim carried over?", target: "difference_bears_on(C1,C2,P2)"}
+    - {id: 7/CQ1, asks: "Do the two cases differ in a way that tells against the claim carried over?", target: "difference_against(C1,C2,P2)"}
     - {id: 7/CQ2, asks: "Did the claim really hold in the source case?", target: "in_case(P1,C1)"}
-    - {id: 7/CQ3, asks: "Is there a case closer to the target in which the counterpart of the claim did not hold?", target: "closer_counter_case(C2,C1,P2)"}
+    - {id: 7/CQ3, asks: "Is there another case, like the source, in which the counterpart of the claim did not hold? (Answered by a counter-analogy against the conclusion.)", target: "P2"}
   practical_analogy_positive:
-    - {id: walton/difference_bears_on, asks: "Do the two situations differ in a way that bears on taking this course here?", target: "difference_bears_on(A1,A2,X2)"}
+    - {id: walton/difference_against, asks: "Do the two situations differ in a way that tells against taking this course here?", target: "difference_against(A1,A2,X2)"}
   practical_analogy_negative:
-    - {id: walton/difference_bears_on, asks: "Do the two situations differ in a way that bears on taking this course here?", target: "difference_bears_on(A1,A2,X2)"}
+    - {id: walton/difference_for, asks: "Do the two situations differ in a way that tells in favour of taking this course here?", target: "difference_for(A1,A2,X2)"}
 
 candidates:
   note: |-
     Two patterns fit neither proposed form (the first review: Kialo 5637.12201
-    and 2629.18591, and a fortiori examples). Neither is a scheme of the book's
-    compendium; the literature treats each as its own pattern: the argument
-    from the more and the less, and legal interpretation's a fortiori;
-    Govier's logical analogies, Woods and Hudak's parity of reasoning, Juthe's
-    refutation by parallel argument. They are sketched only to test that the
-    proposed vocabulary extends to them without reopening analogy. Whether to
-    add them is D056, through the candidates route (process.md §8).
+    and 2629.18591, and a fortiori examples; the second review found more in
+    Kialo, enough for the candidates route's threshold). Neither is a scheme of
+    the book's compendium; the literature treats each as its own pattern: the
+    argument from the more and the less, and legal interpretation's a
+    fortiori; Govier's logical analogies, Woods and Hudak's parity of
+    reasoning, Juthe's refutation by parallel argument. They are sketched only
+    to test that the proposed vocabulary extends to them without reopening
+    analogy. Whether to add them is D056, through the candidates route
+    (process.md §8).
 
     **A fortiori** concludes a bare claim, as analogy does, so it too could
     answer questions in the game. Its premise is that the target is a stronger
-    case for the claim, not a similar one, and it must not take analogy's
-    difference exception, since a difference is its whole point; its exception
-    is some other difference that tells against the claim. Its negated form
-    is a negated claim in the bindings, as in analogy (example 27).
+    case for the claim, not a similar one. It shares analogy's exception, a
+    difference that tells against the claim: its own difference, which favours
+    the claim, cannot defeat it or an analogy argued beside it. Its negated
+    form is a negated claim in the bindings, as in analogy (example 28).
 
     **Refutation by parallel argument** concludes that an argument on the
-    board is undercut, undercut(A) in WAG's engine, so it is not an answer to a
-    question about a statement: it is the scheme for a direct undercutter, or
-    for the argument locus. Its variable A names a game argument, which
-    walton.yml's formulas never do, so it belongs to the game's layer more than
-    to walton.yml.
+    board is undercut, undercut(A) in WAG's engine, so A names an argument,
+    which walton.yml's formulas never do. In play, analogy can already do
+    this, bound to the attacked argument's undercutter, so D056 chooses
+    between analogy played that way and a scheme of its own. A scheme of its
+    own needs code: the move check would have to bind A to the attacked
+    argument at the inference locus, and the scheme would be used only on the
+    answer path.
   schemes:
     - id: a_fortiori
       meta:
@@ -180,7 +221,7 @@ candidates:
       variables: [P1, P2, C1, C2]
       premises: ["in_case(P1,C1)", "stronger_case(C2,C1,P2)", "corresponds(P1,P2)"]
       assumptions: []
-      exceptions: ["countervailing_difference(C1,C2,P2)"]
+      exceptions: ["difference_against(C1,C2,P2)"]
       conclusions: [P2]
     - id: parallel_argument_refutation
       meta:
@@ -193,7 +234,6 @@ candidates:
       conclusions: ["undercut(A)"]
   language:
     stronger_case/3: "%s is a stronger case than %s for %s."
-    countervailing_difference/3: "Some other difference between %s and %s tells against %s."
     same_form/2: "%s has the same form as %s."
     acceptable_premises/1: "The premises of %s are plainly acceptable."
     unacceptable_conclusion/1: "The conclusion of %s is plainly unacceptable."
@@ -201,21 +241,21 @@ candidates:
     undercut/1: "%s does not support its conclusion."
   questions:
     a_fortiori:
-      - {id: walton/countervailing_difference, asks: "Does some other difference tell against the claim in the target case?", target: "countervailing_difference(C1,C2,P2)"}
+      - {id: walton/difference_against, asks: "Does a difference between the cases, other than the one the argument relies on, tell against the claim here?", target: "difference_against(C1,C2,P2)"}
     parallel_argument_refutation:
       - {id: walton/form_difference, asks: "Does the attacked argument rely on a feature that the parallel argument lacks?", target: "form_difference(A,B)"}
 
 effects:
-  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, with CHANGELOG rows; check/run.sh regenerates changes.json, walton.diff and the check outputs. The three schemes are replaced. Templates added: corresponds/2, difference_bears_on/3, closer_counter_case/3; changed: right_to_do/2, wrong_to_do/2. Unused afterwards: relevant_differences/1, more_on_point/2, carry_out_right/2, carry_out_wrong/2, removed or kept as the cleaning's rule for unused templates says. relevant_differences/2 and similar_case/1 stay, for exception_to_rule; the CHANGELOG's semantic-concerns note on relevant_differences' arities is updated. The gate and the registry check differ from today's only in the three schemes."
-  - "links.json: 7's premise map gains the correspondence premise as ours (no book label); its conclusion map is P2; CQ1 maps to difference_bears_on(C1,C2,P2) and CQ3 to closer_counter_case(C2,C1,P2). 8.1 and 8.2: X1 for x in the base premise, the correspondence premise as ours, should_be_performed(X2) and its negation as the conclusion. Match levels: 7 and 8.1 stay exact, the correspondence premise being a reading of the shared letter; 8.2 becomes partial, since its conclusion is weaker than the book's. The notes saying the current case is implicit go, and the _note history records the change."
-  - "families.json: F04's note on exception_to_rule (similar_case/1 as in analogy) is corrected; if D053 is adopted, the two practical analogies are declared counterparts there."
-  - "Catalogue: the three entries regenerate. Their questions are retargeted (7/CQ1 to the claim-relative difference, 7/CQ3 to the counter-case with the claim); each practical analogy has one walton/ question, walton/difference_bears_on; the correspondence premise has no question, and its premise_map note says it is ours and challengeable. The specialises notes (shares no formula with analogy), the contrasts that name carry_out_right, and the classification notes are rewritten. These examples replace the entries' own, and the catalogue's negative example that claims a chain to its base premise is corrected. N12 and the D028 and D029 discrepancies are done; new discrepancies record what is ours (the correspondence premise; the claim-relative exceptions; the practical analogies' exception and conclusion; 8.2's weaker conclusion), that no scheme concludes right_to_do or wrong_to_do (so a reason for the base premise comes only through Other or a scheme with a bare conclusion), and the form's limits (several sources fold into one; proportional and imagined sources strain it; a fortiori and parallel refutation are D056). from_example's example coding and exception_to_rule's family note are updated. An independent check follows."
-  - "Batch-2 gold, both copies (docs/kialo-batch2 and wag/data/annotation/kialo-13292-batch2): 13292.61 is recoded with P1, P2, C1, C2, P2 bound to the very statement it backs; 13292.30 with A1, A2, X1, X2 and X2 = tax_meat, so that it concludes should_be_performed(tax_meat), the thesis; their challenges and lexicon atoms follow; validate.py must pass. Order: to_wag.py plays the gold against the game's analogy, which keeps A and C until workstream E, so wag-game.json and wag-report.json show 13292.61 failing until then; the report says why, and they are regenerated after E."
-  - "Guidelines §3: the analogy note is rewritten. It gives the binding rule; the conclusion rule between analogy and the practical analogies; for an imagined source case, that CQ2's answer is the audience's considered judgment; and, for the form's limits, to use the near miss or Other rather than force it."
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, with CHANGELOG rows; check/run.sh regenerates changes.json, walton.diff and the check outputs. The three schemes are replaced. Templates added: corresponds/2, difference_against/3, difference_for/3; changed: right_to_do/2, wrong_to_do/2. Unused afterwards: relevant_differences/1, more_on_point/2, carry_out_right/2, carry_out_wrong/2, kept and listed as orphan templates, as the cleaning does. relevant_differences/2 and similar_case/1 stay, for exception_to_rule, whose relevant_differences(R,C) reads a rule as a case (D058). The gate and the registry check differ from today's only in the three schemes. The annotation engine's copy, wag/data/annotation/walton.yml, which a test keeps equal to the cleaned file, is copied."
+  - "links.json: 7's premise map gains the correspondence premise as ours (no book label); its conclusion map is P2; CQ1 maps to difference_against(C1,C2,P2) and CQ3 to the conclusion P2, since a counter-analogy rebuts. 7 stays exact, the correspondence premise being a reading of the shared letter. 8.1 and 8.2: X1 for x in the base premise, the correspondence premise as ours, should_be_performed(X2) and its negation as the conclusion; both become partial, with one note: the book's right (wrong) thing to do is restated as should (not) be performed, and the correspondence premise and the exceptions are ours. The notes saying the current case is implicit go, and the _note history records the change."
+  - "families.json: F04's note on exception_to_rule (similar_case/1 as in analogy) is corrected. The practical analogies are declared counterparts, with right_to_do and wrong_to_do contraries and difference_against and difference_for a sided flip, when D053's check is built."
+  - "Catalogue: the three entries regenerate. Their questions are retargeted (7/CQ1 to the directional difference, 7/CQ3 to the conclusion); the positive practical analogy has walton/difference_against and the negative walton/difference_for; the correspondence premise has no question, and its premise_map note says it is ours and challengeable. 7/CQ2's answer adds that for an imagined source the claim's truth is the audience's considered judgment. The specialises notes (shares no formula with analogy), the contrasts that name carry_out_right, and the classification notes are rewritten. These examples replace the entries' own, and the catalogue's negative example that claims a chain to its base premise is corrected. N12 and the D028 and D029 discrepancies are done; new discrepancies record what is ours, that no scheme concludes right_to_do or wrong_to_do (so a reason for the base premise comes only through Other or a scheme with a bare conclusion), and the form's limits (several sources fold into one; proportional and imagined sources strain it; a fortiori and parallel refutation are D056). from_example's example coding and exception_to_rule's family note are updated."
+  - "The batch-2 gold, guidelines and lexicon, each in two copies that a test keeps identical (docs/kialo-batch2 and wag/data/annotation/kialo-13292-batch2): 13292.61 is recoded with P1, P2, C1, C2, P2 bound to the very statement it backs; 13292.30 with A1, A2, X1, X2 and X2 = tax_meat, so that it concludes should_be_performed(tax_meat), the thesis; their challenges and lexicon atoms follow; validate.py must pass. to_wag.py plays the gold against the game's analogy, which keeps A and C until workstream E, so wag-game.json and wag-report.json are regenerated showing 13292.61 failing until then, with the reason stated, and regenerated again after E."
+  - "Guidelines §3: the analogy note is rewritten. It gives the binding rule with the binding guidance; the choice between analogy and the practical analogies, with examples on both sides; imagined sources; and, for the form's limits, to use the near miss or Other rather than force the form."
   - "Annotation engine: its prompts follow walton.yml and the guidelines without code changes; measure.go flags old runs coded with A and C; agreement on analogy items is not compared across runs made before and after the change."
-  - "The game, when its data is generated from the catalogue (workstream E), not before: AS:analogy gets P1, P2, C1, C2 and answer variable P2, and is thesis-independent again, but with backup edges only to questions at a premise, assumption or exception locus, not to the argument-locus questions (CQ:evidence, CQ:other_event); CQ:truth, CQ:difference and CQ:other_case are reworded and repatterned; no new question for the correspondence premise, which the challenge covers; the premise templates are rewritten. Tests change: the analogy bindings in validation_rules_test.go and server_test.go; the thesis-independent count in core_integration_test.go (2 to 3); audit_test.go's item on analogy. docs/game-rules.md's paragraph on analogy and its answer variables, and the generated nascq-edges.md, are updated. The text protocol and the model prompts are generated from the NASCQ, so they follow; models fill P1, C1 and C2. Exports record the data's hash, and an old game with an analogy move replays with --data on its recorded version. The practical analogies join the game only by a later decision, with weights in contexts.json."
-  - "Docs: the catalogue README's counts, catalogue-alignment.md C5, and the register (D001, D028 and D029 closed)."
-  - "Polarity (D053, as revised): the practical analogies are an exact pair, with right_to_do and wrong_to_do declared contraries and their shared exception declared neutral as to polarity."
+  - "The game, when its data is generated from the catalogue (workstream E), not before: AS:analogy gets P1, P2, C1, C2 and answer variable P2; CQ:truth, CQ:difference and CQ:other_case are reworded and repatterned, CQ:other_case to the conclusion; no question for the correspondence premise, which the challenge covers; the premise templates, and core.yml's negation templates for the new predicates, are written. Its reach as an answer is D057: explicit backup edges to questions at a premise, assumption or exception locus (thesis_independent stays false, and the count of thesis-independent schemes stays 2), or a locus limit on thesis independence (code, lint and tests). In play it may conclude any statement and can be played as an undercutter (D056). Tests change: the analogy bindings in validation_rules_test.go and server_test.go; audit_test.go's item on analogy; core_integration_test.go's count if D057 takes the locus limit. docs/game-rules.md's paragraph on analogy and its answer variables, and the generated nascq-edges.md, are updated, and game-rules.md says that declared contraries are not enforced. The text protocol and the model prompts follow from the NASCQ; models fill P1, C1 and C2. Exports record the data's hash, and an old game with an analogy move replays with --data on its recorded version. The practical analogies join the game only by a later decision, with weights in contexts.json."
+  - "Docs: the catalogue README's counts, catalogue-alignment.md C5, and the register (D001, D028, D029 and D053 decided; D057 and D058 new)."
+  - "Polarity (D053): the practical analogies are an exact pair, with right_to_do and wrong_to_do contraries and difference_against and difference_for a sided flip; they share no exception."
 
 examples:
   # --- analogy (D001) ------------------------------------------------------
@@ -235,7 +275,7 @@ examples:
       - question: 7/CQ2
         text: Smoking fell while advertising bans and smoke-free laws came in; was it the tax that cut consumption?
       - question: 7/CQ3
-        text: A tax on sugary drinks, a closer case since they too are bought by most households every week, left consumption almost unchanged where it was tried.
+        text: A tax on sugary drinks, a case much like the tobacco tax, left consumption almost unchanged where it was tried; by the same reasoning, a meat tax would not cut meat consumption.
     note: The batch-2 gold codes this claim with the current formula, A bound to the target claim and the source claim kept in a note (audit N12).
 
   - scheme: analogy
@@ -308,10 +348,11 @@ examples:
         target: corresponds(P1,P2)
         text: Kialo 5637.344 replies that being freed from the violinist would not justify killing anyone; ending the pregnancy kills, so what is claimed about it is not the counterpart of being unplugged.
     note: >-
-      A moral analogy: it carries a verdict over, but it concludes a claim (no
-      obligation), not that an action should be performed, so by the conclusion
-      rule it is analogy. The imagined source is judged, not observed: CQ2's
-      answer is the audience's considered judgment.
+      A moral analogy, but what it carries over is a deontic status (no
+      obligation), not a verdict that an action was right or wrong, so it is
+      analogy; example 22, a verdict on forcing someone, is a practical
+      analogy. The imagined source is judged, not observed: CQ2's answer is the
+      audience's considered judgment.
 
   - scheme: analogy
     title: Nuclear weapons and transhumanism, the second claim
@@ -391,19 +432,25 @@ examples:
       C2: our smoking ban in pubs
       P1: the ban did not reduce pub takings there
       P2: the ban will not reduce pub takings here
-    note: It concerns a policy, but it concludes a claim about takings, not that the ban should be brought in, so by the conclusion rule it is analogy.
+    note: It concerns a policy, but what it carries over is a finding about takings, not a verdict on the ban, so it is analogy.
 
   - scheme: exception_to_rule
-    title: McFall v. Shimp
-    kialo: "5637.3148"
+    title: A precedent for withholding rent
+    invented: true
     use: near-miss
     near_miss_of: analogy
-    text: The legal right to "Bodily Autonomy" descends from McFall v. Schimp, which established the precedent that the state could not violate one person's liberty by compelling them to perform medical procedures, even in order to save the life of another. While this is frequently used to support abortion, this is faulty, as pregnancy is not caused by the state, and the only medical procedure is abortion, which violates a fetus's life and liberty for the benefit of the mother.
+    text: In the Riverside tenants' case the court held that tenants may withhold rent while the landlord leaves the heating broken; our tenants, whose heating has been off for a month, may do the same.
     bindings:
-      C: McFall v. Shimp
-      R: the state may not compel a person to undergo a medical procedure to save another
-      S: the state may not compel a woman to continue a pregnancy
-    note: A precedent cited for the rule it was decided by is walton.yml's precedent scheme, not analogy.
+      C: the Riverside tenants' case
+      R: tenants may withhold rent while the landlord leaves the heating broken
+      S: our tenants may withhold rent while their heating stays broken
+    note: >-
+      A case cited for the rule it was decided by is walton.yml's precedent
+      scheme, not analogy: the rule, not a likeness of claims, carries the
+      conclusion. Its exception relevant_differences(R,C) reads the rule as a
+      case (D058). Kialo 5637.3148, used here in version 2, reports such a use
+      of a precedent only to reject it, so it is an attack on a precedent
+      argument, not one.
 
   # --- the practical analogies (D028, D029) -------------------------------
   - scheme: practical_analogy_positive
@@ -417,7 +464,7 @@ examples:
       X1: evacuating the low town a day early in 2019
       X2: evacuating the low town a day early now
     attacks:
-      - question: walton/difference_bears_on
+      - question: walton/difference_against
         text: This time the river bridge is closed, so an early evacuation would send people along the flood plain, the very route the water will cover first.
 
   - scheme: practical_analogy_positive
@@ -431,7 +478,7 @@ examples:
       X1: a free first month on the tram
       X2: a free first week on the ferry
     attacks:
-      - question: walton/difference_bears_on
+      - question: walton/difference_against
         text: The ferry is used mostly by tourists, who would fill a free week and leave; the tram's riders were commuters forming a habit.
       - question: CQ:premise_acceptable
         target: corresponds(X1,X2)
@@ -447,7 +494,7 @@ examples:
       A2: this wave
       X1: reopening the schools once the 2009 wave had peaked
       X2: reopening the schools now
-    note: Example 20 concludes the contradictory about the same action from another source; the two rebut each other.
+    note: Example 21 concludes the contradictory about the same action from another source; the two rebut each other.
 
   - scheme: practical_analogy_positive
     title: Carbon and oil taxes elsewhere, and a meat tax
@@ -455,23 +502,40 @@ examples:
     use: argument
     text: Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., carbon tax, oil tax etc.
     bindings:
-      A1: ecological damage from burning fossil fuels
-      A2: ecological damage from meat production
-      X1: governments taxing carbon and oil
-      X2: governments put a tax on meat
+      A1: countries facing the damage done by burning fossil fuels
+      A2: our country facing the damage done by meat production
+      X1: taxing carbon and oil
+      X2: taxing meat
     attacks:
-      - question: walton/difference_bears_on
+      - question: walton/difference_against
         text: Fuel can be replaced by other energy; meat is food, and a tax on food falls hardest on the poor.
       - question: CQ:premise_acceptable
         target: corresponds(X1,X2)
         text: A carbon tax prices the emissions of a fuel where it is burned; a meat tax would price a food that households eat. It is not the counterpart of taxing carbon.
     note: >-
-      X2 is the thesis's own action, tax_meat in the gold ("governments put a
-      tax on meat"), so the conclusion is the thesis's statement: in the game it
-      supports the thesis directly and meets the consequence arguments about
-      the same action. The base premise is supplied, since the text reports
+      X2 is the thesis's own action, tax_meat in the gold (its lexicon label,
+      "governments put a tax on meat", is a sentence; the guidelines ask for
+      an action phrase), so the conclusion is the thesis's statement: in the
+      game it supports the thesis directly and meets the consequence arguments
+      about the same action. The base premise is supplied, since the text reports
       the practice; popular practice is the rival reading. The current formula
       concludes carry_out_right(A2,X), which meets nothing.
+
+  - scheme: practical_analogy_positive
+    title: The 2008 bailout, for
+    invented: true
+    use: argument
+    text: Bailing out the banks in 2008 was right, since it stopped a run that would have ruined ordinary savers. This crisis is like 2008, so the banks should be bailed out again.
+    bindings:
+      A1: the 2008 banking crisis
+      A2: this banking crisis
+      X1: bailing out the banks in 2008
+      X2: bailing out the banks now
+    note: >-
+      With example 18, both sides argue from the same past situation and
+      disagree about its verdict. Their exceptions are sided, so they share
+      none: example 18's attack, a difference in favour of a bailout now,
+      leaves this argument standing (in version 2 it defeated both).
 
   - scheme: from_model
     title: Admired Denmark
@@ -486,23 +550,25 @@ examples:
     note: Followed because it is admired, not because its situation is like ours, so it is argument from model.
 
   - scheme: practical_analogy_negative
-    title: Bailing out banks again
+    title: The 2008 bailout, against
     invented: true
     use: argument
-    text: Bailing out the banks in the last crisis was the wrong thing to do, since it rewarded reckless lending. This crisis is like that one, so a bailout now would be wrong too.
+    text: Bailing out the banks in 2008 was wrong, since it rewarded reckless lenders. This crisis is like 2008, so the banks should not be bailed out.
     bindings:
-      A1: the last banking crisis
-      A2: this crisis
-      X1: bailing out the failing banks then
-      X2: bailing out the failing banks now
+      A1: the 2008 banking crisis
+      A2: this banking crisis
+      X1: bailing out the banks in 2008
+      X2: bailing out the banks now
     attacks:
-      - question: walton/difference_bears_on
-        text: Last time the banks failed through their own reckless lending; this time they are failing because a pandemic shut down the firms they lent to.
+      - question: walton/difference_for
+        text: This crisis came from a pandemic that shut the banks' customers down, not from reckless lending; a bailout now rewards nobody's recklessness.
     note: >-
-      The text gives a reason for the base premise (it rewarded reckless
-      lending). No scheme concludes wrong_to_do, so in the game that reason
-      backs the premise only through Other; this is recorded as a limit, not
-      changed, since a past verdict is not a should_be_performed claim.
+      The attack is a difference that tells in favour of a bailout now, this
+      argument's exception only; example 16 stands. The text gives a reason
+      for the base premise (it rewarded reckless lenders): no scheme concludes
+      wrong_to_do, so in the game that reason backs the premise only through
+      Other. This is recorded as a limit, not changed, since a past verdict is
+      not a should_be_performed claim.
 
   - scheme: practical_analogy_negative
     title: Closing a village school
@@ -510,8 +576,8 @@ examples:
     use: argument
     text: Closing Northfield's school was the wrong decision, and Southfield is in the same position, so merging its school with the next one would be wrong as well.
     bindings:
-      A1: Northfield
-      A2: Southfield
+      A1: Northfield when its school was threatened
+      A2: Southfield now that its school is threatened
       X1: closing Northfield's school
       X2: merging Southfield's school with the next one
     attacks:
@@ -550,9 +616,9 @@ examples:
       X1: reopening the schools in the first weeks of the 2020 wave
       X2: reopening the schools now
     attacks:
-      - question: walton/difference_bears_on
+      - question: walton/difference_for
         text: In 2020 nobody was vaccinated; now most teachers are.
-    note: It rebuts example 14. Its difference attack is about the 2020 wave and this one, so it undercuts this argument and leaves example 14, drawn from 2009, standing.
+    note: It rebuts example 14. Its attack is a difference that tells in favour of reopening now, so it undercuts this argument only; example 14 stands.
 
   - scheme: practical_analogy_negative
     title: A kidney for one's own child
@@ -568,6 +634,7 @@ examples:
       - question: CQ:premise_acceptable
         target: corresponds(X1,X2)
         text: Refusing to give an organ leaves the child as it was; ending a pregnancy is an act against the foetus. Forcing one is not the counterpart of forcing the other.
+    note: A verdict that forcing the mother would be wrong, carried over to forcing her here, so it is a practical analogy; compare example 5.
 
   - scheme: practical_analogy_negative
     title: The coast road and the valley road
@@ -580,7 +647,7 @@ examples:
       X1: raising the coast road's speed limit in 2015
       X2: raising the valley road's speed limit
     attacks:
-      - question: walton/difference_bears_on
+      - question: walton/difference_for
         text: The coast road has houses along it and the valley road has none.
 
   - scheme: negative_consequences
@@ -634,7 +701,7 @@ examples:
       P1: a first-year student may borrow ten books
       P2: a professor may borrow ten books
     attacks:
-      - question: walton/countervailing_difference
+      - question: walton/difference_against
         text: Professors keep books for years; ten books lent to a professor are ten books gone from the shelves for the whole term.
 
   - scheme: a_fortiori
@@ -656,12 +723,12 @@ examples:
     use: argument
     text: By the same logic, destroying an acorn should be morally equivalent to destroying a tree. As these are not morally equivalent, the former case is likewise not morally equivalent.
     bindings:
-      A: the argument that a zygote is a whole human, so destroying it is as wrong as killing a person
+      A: argument a12 on the board, that a zygote is a whole human, so destroying it is immoral
       B: the argument that an acorn is a whole oak, so destroying an acorn is as bad as felling an oak
     attacks:
       - question: walton/form_difference
         text: A zygote may become a being with interests and a life of its own; an acorn becomes a tree with neither. The attacked argument relies on that.
-    note: It answers Kialo 5637.12151 by undercutting its inference. Coded as analogy, the first review found, it can only be a counter-analogy that rebuts the conclusion, and the parallel argument it cites appears in no formula.
+    note: It answers Kialo 5637.12151 by undercutting its inference. In play, analogy bound to the target's undercutter could make the same move (D056); in annotation, analogy's form leaves the parallel argument it cites out of every formula.
 
   - scheme: parallel_argument_refutation
     title: Airplanes made by wind and chance
@@ -669,7 +736,7 @@ examples:
     use: argument
     text: Arguing that natural selection, the laws of physics, and chance explain the origins of life is akin to claiming that airplanes were created by wind and chance alone, and not by the work of a creator.
     bindings:
-      A: the argument that natural selection, physical law and chance explain the origin of life
+      A: argument a7 on the board, that natural selection, physical law and chance explain the origin of life
       B: the argument that wind and chance explain the origin of airplanes
     attacks:
       - question: CQ:premise_acceptable
@@ -682,6 +749,6 @@ examples:
     use: argument
     text: You say that most crashes happen within five miles of home, so those are the most dangerous roads. By that reasoning, since most people die in bed, beds would be the most dangerous place to be.
     bindings:
-      A: the argument that most crashes happen within five miles of home, so those roads are the most dangerous
+      A: argument a3 on the board, that most crashes happen within five miles of home, so those roads are the most dangerous
       B: the argument that most people die in bed, so beds are the most dangerous place to be
     note: Both arguments count events without asking how much time is spent where; the parallel argument shows the flaw by giving it an absurd conclusion.

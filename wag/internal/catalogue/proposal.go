@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -129,12 +130,13 @@ func proposalSchemes(p *Proposal, src *Sources) (map[string]Scheme, map[string]s
 	return schemes, lang
 }
 
-// questions is a proposed or candidate scheme's questions.
+// questions is a proposed or candidate scheme's questions: a proposed
+// scheme's from the proposal's questions, a candidate's from the candidates'.
 func (p *Proposal) questions(id string) []PQuery {
-	if qs, ok := p.Questions[id]; ok {
-		return qs
+	if in(schemeIDs(p.Schemes), id) {
+		return p.Questions[id]
 	}
-	if p.Candidates != nil {
+	if p.candidate(id) {
 		return p.Candidates.Questions[id]
 	}
 	return nil
@@ -163,12 +165,18 @@ func (s Scheme) formulas() []string {
 // CheckProposal checks a proposal against walton.yml:
 //   - each proposed or candidate scheme declares exactly the variables its
 //     formulas use, and every predicate it uses has a template;
+//   - questions are given only for proposed (or candidate) schemes, under
+//     their own heading, with distinct ids;
 //   - each question targets a formula of its scheme, and a walton/ question
 //     an assumption or exception whose predicate its id names, as in the
-//     catalogue (premises are challenged instead);
+//     catalogue (premises are challenged instead); a book label (7/CQ1) is
+//     one the compendium prints for that entry;
 //   - a candidate is a new scheme, neither in walton.yml nor proposed;
 //   - each example names a scheme, binds exactly its variables, presses only
-//     questions the scheme has, and challenges only its premises;
+//     questions the scheme has, and challenges only a premise or assumption
+//     that none of the scheme's questions targets (the game asks the question
+//     instead, game-rules.md §2); an answer's scheme concludes a bare
+//     proposition (a warning);
 //   - each proposed scheme has the minimum set of examples (docs/process.md
 //     §5): two arguments, an answer if it can be one, a near miss, and every
 //     question pressed at least once (warnings); a candidate needs one
@@ -194,6 +202,18 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 				bad("candidates: template %s is also proposed", k)
 			} else if _, ok := src.Language[k]; ok {
 				bad("candidates: template %s is already in walton.yml", k)
+			}
+		}
+	}
+	for k := range p.Questions {
+		if !in(schemeIDs(p.Schemes), k) {
+			bad("questions for %s, which is not a proposed scheme", k)
+		}
+	}
+	if c := p.Candidates; c != nil {
+		for k := range c.Questions {
+			if !in(schemeIDs(c.Schemes), k) {
+				bad("candidates: questions for %s, which is not a candidate", k)
 			}
 		}
 	}
@@ -233,7 +253,17 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 				bad("%s: variable %s occurs in no premise (the Carneades validator requires it)", s.ID, v)
 			}
 		}
+		ids := map[string]bool{}
 		for _, q := range p.questions(s.ID) {
+			if ids[q.ID] {
+				bad("%s: question %s is given twice", s.ID, q.ID)
+			}
+			ids[q.ID] = true
+			if m := bookLabelRE.FindStringSubmatch(q.ID); m != nil {
+				if l, ok := src.link(m[1]); !ok || !in(l.CQLabels, m[2]) {
+					bad("%s: question %s: the compendium prints no %s under %s", s.ID, q.ID, m[2], m[1])
+				}
+			}
 			if !in(s.formulas(), q.Target) {
 				bad("%s: question %s targets %s, not a formula of the scheme", s.ID, q.ID, q.Target)
 			} else if strings.HasPrefix(q.ID, "walton/") &&
@@ -266,6 +296,9 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		if x.Use == "answer" && x.Answers == "" {
 			bad("%s: an answer says which question and statement it answers", where)
 		}
+		if x.Use == "answer" && !answerable(s) {
+			warn("%s: %s does not conclude a bare proposition, so the game cannot use it as an answer", where, x.Scheme)
+		}
 		if x.Use == "near-miss" && x.Of == "" {
 			bad("%s: a near miss names the scheme it resembles (near_miss_of)", where)
 		}
@@ -282,8 +315,11 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		qs := p.questions(x.Scheme)
 		for _, a := range x.Attacks {
 			if a.Question == Challenge {
-				if !in(s.Premises, a.Target) {
-					bad("%s: a challenge targets a premise of %s, and %q is not one", where, x.Scheme, a.Target)
+				switch {
+				case !in(s.Premises, a.Target) && !in(s.Assumptions, a.Target):
+					bad("%s: a challenge targets a premise or assumption of %s, and %q is not one", where, x.Scheme, a.Target)
+				case targetedBy(qs, a.Target) != "":
+					bad("%s: %s is targeted by question %s, which the game asks instead of a challenge", where, a.Target, targetedBy(qs, a.Target))
 				}
 				continue
 			}
@@ -338,6 +374,20 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		}
 	}
 	return out
+}
+
+// bookLabelRE matches a question labelled as the book prints it: the
+// compendium entry and the question's label.
+var bookLabelRE = regexp.MustCompile(`^([0-9]+(?:\.[0-9]+)*[a-z]?)/(CQ[0-9]+)$`)
+
+// targetedBy is the id of the first question that targets a formula, or "".
+func targetedBy(qs []PQuery, f string) string {
+	for _, q := range qs {
+		if q.Target == f {
+			return q.ID
+		}
+	}
+	return ""
 }
 
 func schemeIDs(ss []Scheme) []string {

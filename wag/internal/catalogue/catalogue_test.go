@@ -529,11 +529,11 @@ func TestProposalFindsFaults(t *testing.T) {
 	s := sources(t)
 	base := func() *Proposal {
 		return &Proposal{Decisions: []string{"D999"}, Title: "t",
-			Schemes:   []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)"}, Conclusions: []string{"P"}}},
+			Schemes:   []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)", "similar_case(C)"}, Conclusions: []string{"P"}}},
 			Questions: map[string][]PQuery{"x_new": {{ID: "7/CQ2", Asks: "q", Target: "in_case(P,C)"}}},
 			Examples: []ProposalExample{
 				{Scheme: "x_new", Title: "a", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"},
-					Attacks: []Attack{{Question: "7/CQ2", Text: "x"}, {Question: Challenge, Target: "in_case(P,C)", Text: "y"}}},
+					Attacks: []Attack{{Question: "7/CQ2", Text: "x"}, {Question: Challenge, Target: "similar_case(C)", Text: "y"}}},
 				{Scheme: "x_new", Title: "b", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}},
 				{Scheme: "x_new", Title: "c", Text: "t", Use: "answer", Answers: "CQ:x", Bindings: map[string]string{"P": "p", "C": "c"}},
 				{Scheme: "analogy", Title: "d", Text: "t", Use: "near-miss", Of: "x_new", Bindings: bindAll(s, "analogy")},
@@ -580,6 +580,27 @@ func TestProposalFindsFaults(t *testing.T) {
 		}, "a candidate is a new scheme", true},
 		{"a candidate's template in walton.yml", func(p *Proposal) { p.Candidates.Language["in_case/2"] = "x" }, "already in walton.yml", true},
 		{"a candidate without an example", func(p *Proposal) { p.Examples = p.Examples[:4] }, "candidate x_cand: no example", false},
+		{"questions for an unknown scheme", func(p *Proposal) { p.Questions["x_typo"] = p.Questions["x_new"] }, "x_typo, which is not a proposed scheme", true},
+		{"candidate questions for a proposed scheme", func(p *Proposal) {
+			p.Candidates.Questions = map[string][]PQuery{"x_new": p.Questions["x_new"]}
+		}, "x_new, which is not a candidate", true},
+		{"a question given twice", func(p *Proposal) { p.Questions["x_new"] = append(p.Questions["x_new"], p.Questions["x_new"][0]) }, "given twice", true},
+		{"a label the book does not print", func(p *Proposal) {
+			p.Questions["x_new"][0].ID = "7/CQ9"
+			p.Examples[0].Attacks[0].Question = "7/CQ9"
+		}, "prints no CQ9 under 7", true},
+		{"a challenge of a premise a question targets", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "in_case(P,C)" }, "targeted by question 7/CQ2", true},
+		{"an answer from a scheme without a bare conclusion", func(p *Proposal) { p.Schemes[0].Conclusions = []string{"in_case(C,P)"} }, "cannot use it as an answer", false},
+	}
+	// A challenge of an assumption is allowed: the game presumes it as a
+	// premise.
+	p := base()
+	p.Schemes[0].Assumptions = []string{"in_case(C,P)"}
+	p.Examples[0].Attacks[1].Target = "in_case(C,P)"
+	for _, f := range CheckProposal(p, s) {
+		if f.Error {
+			t.Errorf("a challenge of an assumption: %s", f)
+		}
 	}
 	for _, c := range cases {
 		p := base()

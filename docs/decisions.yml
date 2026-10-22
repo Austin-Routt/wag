@@ -36,9 +36,11 @@ decisions:
     options were A, keep today's formula; B, add a two-case scheme beside
     analogy; C, replace analogy's formula, keeping its id, title and links.
     The owner chose C on 2026-10-22, to be made once the proposal's examples
-    are approved. The proposal (version 2, after an independent review) has
-    exceptions that name the claim: difference_bears_on(C1,C2,P2) and
-    closer_counter_case(C2,C1,P2).
+    are approved. The owner approved the proposal on 2026-10-22 with the
+    second independent review's changes (version 3: a directional difference
+    exception that names the claim, difference_against(C1,C2,P2); the book's
+    CQ3 as a counter-analogy against the conclusion), subject to a short
+    independent check; this decision closes when the change is made.
   category: scheme
   blocks: [game, verification]
   decider: owner
@@ -425,8 +427,12 @@ decisions:
     Should 8.1 and 8.2 get analogy's exceptions, with both situations as
     arguments (for example relevant_differences(A1,A2))? The owner chose the
     difference exception on 2026-10-22, with D001, to be made once the
-    proposal's examples are approved. The proposal (version 2) gives them
-    that exception only, naming the action: difference_bears_on(A1,A2,X2).
+    proposal's examples are approved. Version 3 of the proposal, approved
+    by the owner on 2026-10-22, gives them that exception only, naming the
+    action and sided: difference_against(A1,A2,X2) in the positive,
+    difference_for(A1,A2,X2) in the negative, so that when both argue from
+    the same past situation a difference against one leaves the other
+    standing.
   category: scheme
   blocks: [verification]
   decider: owner
@@ -447,7 +453,8 @@ decisions:
     that the target action should, or should not, be performed, so that the
     pair rebut each other and meet the practical schemes. A closer situation
     in which the course went the other way is then a practical analogy of
-    the opposite sign, which rebuts directly.
+    the opposite sign, which rebuts directly. The owner approved this answer
+    on 2026-10-22 (proposal version 3).
   category: vocabulary
   blocks: [verification, game]
   decider: owner
@@ -649,29 +656,40 @@ decisions:
   question: >-
     Should positive/negative scheme pairs be declared as polarity pairs and
     checked, never merged (the entries, walton.yml's schemes and the game's
-    schemes stay one per polarity)? As revised after the independent review
-    of 2026-10-22: pairs are declared in families.json's counterpart
+    schemes stay one per polarity)? As revised after the two independent
+    reviews of 2026-10-22: pairs are declared in families.json's counterpart
     relation and checked by the registry. The conclusions are p and ¬p.
-    Every other formula is shared, or a flip of a declared kind: p and ¬p, or
+    Every other formula is shared, or a flip of a declared kind: p and ¬p;
     two predicates declared contraries with the same arguments (good and
-    bad, right_to_do and wrong_to_do). The questions have the same targets;
-    their wording may flip. Every shared exception or assumption is declared
-    neutral as to polarity by a person, with a reason, since a shared
-    formula whose meaning depends on the side (D055) defeats both arguments.
-    The registry also reports exact pairs that nobody declared. Exact pairs
-    today: consequences (33.1, 33.2), once D055 is fixed; ethotic argument
-    (41), once ethotic2's conclusion is checked (¬S, where the book reads
-    the claim as less plausible); the practical analogies (8.1, 8.2), with
-    D029. Model and antimodel (6.3, 6.4) differ in more than a flip, so they
-    would be a looser counterpart, not checked as exact. Not values (19.1,
-    19.2), whose conclusions are two reasons that can hold together;
-    falsification only after D054.
+    bad, right_to_do and wrong_to_do); or a sided flip, two predicates for
+    the two directions with the same arguments (difference_against and
+    difference_for). The questions have the same targets; their wording may
+    flip. Every shared exception or assumption is declared neutral as to
+    polarity by a person, and the declaration is tested: one example per
+    side, run in the engine, must show that proving it for a reason that
+    favours either side should defeat both. The registry also reports exact
+    pairs that nobody declared. The engine does not enforce declared
+    contraries: both can be accepted at once. Pairs: the practical analogies
+    (8.1, 8.2), with D029; consequences (33.1, 33.2), once D055 is fixed;
+    ethotic argument (41), once ethotic2's conclusion is checked (¬S, where
+    the book reads the claim as less plausible). Model and antimodel (6.3,
+    6.4) differ in more than a flip, so they would be a looser counterpart,
+    not checked as exact. Not values (19.1, 19.2), whose conclusions are two
+    reasons that can hold together; falsification only after D054.
   category: vocabulary
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/proposals/D001-D028-D029.md"]
+  decided:
+    date: "2026-10-22"
+    by: owner
+    decision: >-
+      Yes, as revised: declared and checked, never merged, with the sided
+      flip and the tested neutrality declaration. The registry's check is
+      to build.
+    recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md"
 
 - id: D054
   title: Falsification's conclusion
@@ -700,15 +718,40 @@ decisions:
     bad consequences of an action outweigh the good undercuts the negative
     argument about that action as well as the positive one (shown in WAG's
     engine by the independent review of 2026-10-22). The exception was added
-    on 2026-10-22 for the book's 33/CQ3. Should it name the consequence each
-    argument cites, other_consequences(A,G) (B in 33.3, C in 33.4), so that
-    each argument's exception is its own?
+    on 2026-10-22 for the book's 33/CQ3. Naming the consequence,
+    other_consequences(A,G), is not enough: when both sides cite the same
+    consequence and value it oppositely, they still share the exception (the
+    second independent review's engine test). Should each side get its own
+    predicate, bad_outweighs(A,G) (bad consequences outweigh the good one
+    cited) in positive_consequences and good_outweighs(A,G) in the negative
+    schemes (B in 33.3), a sided flip under D053? 33.4, whose conclusion is
+    prudential(X), is checked separately.
   category: scheme
   blocks: [verification, game]
   decider: owner
   priority: 2
   status: open
   docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, owner decisions of 2026-10-22", "docs/proposals/D001-D028-D029.md"]
+
+- id: D057
+  title: Analogy's reach in the game
+  question: >-
+    Once analogy concludes a bare claim again (D001), should it answer every
+    critical question, as a thesis-independent scheme does today, including
+    the argument-locus questions (CQ:evidence, CQ:other_event), where its
+    correspondence premise would pair a claim about a case with a statement
+    about an argument? Or only questions at a premise, assumption or
+    exception locus: by explicit backup edges (thesis_independent stays
+    false) or by a locus limit on thesis independence (code, lint and
+    tests)? In play it may also conclude should-claims and be played as an
+    undercutter (D056); the choice between analogy and the practical
+    analogies is a rule for annotation.
+  category: game
+  blocks: [game]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/proposals/D001-D028-D029.md"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -791,16 +834,37 @@ decisions:
     unacceptable conclusion undercuts the argument attacked). Neither is a
     scheme of the book's compendium; the literature treats each as its own
     pattern. Proposal D001-D028-D029 sketches both as candidates, to test
-    that the analogy family's vocabulary extends to them. Should they be
-    added, as a walton.yml scheme (a fortiori) and as a game scheme for
-    direct undercutters (parallel refutation, whose variable names an
-    argument on the board), through the candidates route?
+    that the analogy family's vocabulary extends to them; the second
+    independent review found enough Kialo instances of both for the
+    candidates route's threshold. Should a fortiori be added to walton.yml
+    (it shares analogy's difference_against)? For parallel refutation, the
+    choice is between analogy played as an undercutter, which the game
+    already accepts (P2 bound to the attacked argument's undercutter), and a
+    scheme of its own, whose variable names an argument on the board; that
+    needs code, since the move check must bind the variable to the attacked
+    argument at the inference locus.
   category: scheme
   blocks: [play]
   decider: owner
   priority: 3
   status: open
   docs: ["docs/proposals/D001-D028-D029.md", "docs/process.md §8"]
+
+- id: D058
+  title: Argument from precedent reads a rule as a case
+  question: >-
+    exception_to_rule (argument from precedent) has the exception
+    relevant_differences(R,C), which puts the rule R where a case belongs:
+    its template reads "relevant differences between case R and case C".
+    Should it compare the precedent case with the current one, or name what
+    makes the rule inapplicable here? Found by the second independent review
+    of proposal D001-D028-D029.
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/proposals/D001-D028-D029.md"]
 
 # --- Decided ------------------------------------------------------------------
 
