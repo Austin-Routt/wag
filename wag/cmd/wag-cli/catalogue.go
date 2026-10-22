@@ -197,7 +197,11 @@ func runProposal(repo, path, waltonOut string) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	fmt.Printf("%s written: %d proposed scheme(s), %d example(s)\n", view, len(p.Schemes), len(p.Examples))
+	candidates := 0
+	if p.Candidates != nil {
+		candidates = len(p.Candidates.Schemes)
+	}
+	fmt.Printf("%s written: %d proposed scheme(s), %d candidate(s), %d example(s)\n", view, len(p.Schemes), candidates, len(p.Examples))
 	if waltonOut != "" {
 		raw, err := os.ReadFile(filepath.Join(repo, filepath.FromSlash(catalogue.SourcePaths.Walton)))
 		if err != nil {

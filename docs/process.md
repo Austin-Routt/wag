@@ -131,11 +131,13 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    - the templates they need, in our own words;
    - each scheme's questions after the change;
    - what else changes if it is decided;
-   - examples, each with its variables bound to phrases.
+   - examples, each with its variables bound to phrases;
+   - optionally, candidates: schemes sketched beside the proposal but not proposed, to test that its vocabulary extends to neighbouring patterns. They are checked and rendered like the proposed schemes, and never applied to `walton.yml`.
 2. **`wag-cli --proposal FILE`** checks it:
    - every variable is declared, used, in a premise, and bound in every example;
    - every predicate has a template;
-   - every question targets a formula of its scheme.
+   - every question targets a formula of its scheme, and a `walton/` question an assumption or exception, as in the catalogue;
+   - an example challenges only a premise (`CQ:premise_acceptable`, with the premise as its target), since every premise can be challenged without a question of its own.
 
    It also writes the view, `<decisions>.md`. Every formula of every example is rendered in English there, under each question that is pressed against it.
 3. **The minimum set of examples** for each proposed scheme (the check warns when one is missing):
@@ -146,7 +148,8 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
 
    The scheme's negated form gets an example where it has one.
 4. **The cleaning's gate and the registry** run on `walton.yml` with the proposal applied (`--proposal-walton PATH`, then `walton-check PATH` and `wag-cli --registry PATH`). Only the proposed schemes may differ from today's results.
-5. **The owner reads the view.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, and the decision is closed in the register.
+5. **An independent reviewer checks it** (§3): against the book, `walton.yml`, the game and Kialo, with examples of its own, and gives a verdict for each decision. The proposal is revised on its findings and reviewed again.
+6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, and the decision is closed in the register.
 
 A test keeps every committed proposal valid and its view current.
 

@@ -492,6 +492,8 @@ func TestProposalWalton(t *testing.T) {
 	p := &Proposal{
 		Schemes:  []Scheme{{ID: "s1", Variables: []string{"Z"}, Premises: []string{"a(Z)"}, Conclusions: []string{"c(Z)"}}, {ID: "s3", Variables: []string{"Y"}, Premises: []string{"a(Y)"}, Conclusions: []string{"Y"}}},
 		Language: map[string]string{"c/1": "%s is c, in a long template that a YAML marshaller would wrap onto a second line somewhere."},
+		Candidates: &Candidates{Schemes: []Scheme{{ID: "s4", Variables: []string{"Y"}, Premises: []string{"d(Y)"}, Conclusions: []string{"Y"}}},
+			Language: map[string]string{"d/1": "%s is d."}},
 	}
 	out, err := ProposalWalton(raw, p)
 	if err != nil {
@@ -505,6 +507,9 @@ func TestProposalWalton(t *testing.T) {
 	}
 	if strings.Contains(s, "a(X)") || strings.Contains(s, "true") {
 		t.Errorf("the old s1 block, or a boolean, is left:\n%s", s)
+	}
+	if strings.Contains(s, "s4") || strings.Contains(s, "d/1") {
+		t.Errorf("a candidate was applied:\n%s", s)
 	}
 	var w struct {
 		Schemes []Scheme `yaml:"argument_schemes"`
@@ -525,13 +530,18 @@ func TestProposalFindsFaults(t *testing.T) {
 	base := func() *Proposal {
 		return &Proposal{Decisions: []string{"D999"}, Title: "t",
 			Schemes:   []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)"}, Conclusions: []string{"P"}}},
-			Questions: map[string][]PQuery{"x_new": {{ID: "walton/in_case", Asks: "q", Target: "in_case(P,C)"}}},
+			Questions: map[string][]PQuery{"x_new": {{ID: "7/CQ2", Asks: "q", Target: "in_case(P,C)"}}},
 			Examples: []ProposalExample{
-				{Scheme: "x_new", Title: "a", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}, Attacks: []Attack{{Question: "walton/in_case", Text: "x"}}},
+				{Scheme: "x_new", Title: "a", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"},
+					Attacks: []Attack{{Question: "7/CQ2", Text: "x"}, {Question: Challenge, Target: "in_case(P,C)", Text: "y"}}},
 				{Scheme: "x_new", Title: "b", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}},
 				{Scheme: "x_new", Title: "c", Text: "t", Use: "answer", Answers: "CQ:x", Bindings: map[string]string{"P": "p", "C": "c"}},
 				{Scheme: "analogy", Title: "d", Text: "t", Use: "near-miss", Of: "x_new", Bindings: bindAll(s, "analogy")},
-			}}
+				{Scheme: "x_cand", Title: "e", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p"}},
+			},
+			Candidates: &Candidates{Schemes: []Scheme{{ID: "x_cand", Variables: []string{"P"}, Premises: []string{"x_odd(P)"}, Conclusions: []string{"P"}}},
+				Language: map[string]string{"x_odd/1": "%s is odd."}},
+		}
 	}
 	if fs := CheckProposal(base(), s); len(fs) != 0 {
 		t.Fatalf("a sound proposal has findings: %v", fs)
@@ -557,6 +567,19 @@ func TestProposalFindsFaults(t *testing.T) {
 		{"no answer", func(p *Proposal) { p.Examples = append(p.Examples[:2], p.Examples[3]) }, "no example shows it", false},
 		{"no near miss", func(p *Proposal) { p.Examples = p.Examples[:3] }, "no near miss", false},
 		{"a question never pressed", func(p *Proposal) { p.Examples[0].Attacks = nil }, "pressed in no example", false},
+		{"a walton/ question on a premise", func(p *Proposal) {
+			p.Questions["x_new"][0].ID = "walton/in_case"
+			p.Examples[0].Attacks[0].Question = "walton/in_case"
+		}, "a walton/ question targets an assumption or exception", true},
+		{"a challenge of a conclusion", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "P" }, "a challenge targets a premise", true},
+		{"a question with a target", func(p *Proposal) { p.Examples[0].Attacks[0].Target = "in_case(P,C)" }, "only a challenge", true},
+		{"a candidate that is in walton.yml", func(p *Proposal) {
+			p.Candidates.Schemes[0].ID = "analogy"
+			p.Examples[4].Scheme = "analogy"
+			p.Examples[4].Bindings = bindAll(s, "analogy")
+		}, "a candidate is a new scheme", true},
+		{"a candidate's template in walton.yml", func(p *Proposal) { p.Candidates.Language["in_case/2"] = "x" }, "already in walton.yml", true},
+		{"a candidate without an example", func(p *Proposal) { p.Examples = p.Examples[:4] }, "candidate x_cand: no example", false},
 	}
 	for _, c := range cases {
 		p := base()

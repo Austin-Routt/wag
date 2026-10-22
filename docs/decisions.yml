@@ -20,7 +20,8 @@ note: >-
   schemes with the generator, and verifying tier 1. Not yet registered: the
   semantic concerns recorded in walton-clean/CHANGELOG.md and the walton.yml
   audit (docs/walton-audit/REPORT.md), of which D054 is one; they are being
-  added.
+  added. D055 is a defect found by the independent review of proposal
+  D001-D028-D029.
 
 decisions:
 
@@ -31,9 +32,13 @@ decisions:
   question: >-
     Should analogy get a two-case scheme, with separate propositions for the
     source and the target case and a premise that they correspond, as
-    proposed in part 6 §4? The game's analogy question waits on it. The owner
-    chose the two-case form on 2026-10-22 (option C), to be made once the
-    proposal's examples are approved.
+    proposed in part 6 §4? The game's analogy question waits on it. The
+    options were A, keep today's formula; B, add a two-case scheme beside
+    analogy; C, replace analogy's formula, keeping its id, title and links.
+    The owner chose C on 2026-10-22, to be made once the proposal's examples
+    are approved. The proposal (version 2, after an independent review) has
+    exceptions that name the claim: difference_bears_on(C1,C2,P2) and
+    closer_counter_case(C2,C1,P2).
   category: scheme
   blocks: [game, verification]
   decider: owner
@@ -420,7 +425,8 @@ decisions:
     Should 8.1 and 8.2 get analogy's exceptions, with both situations as
     arguments (for example relevant_differences(A1,A2))? The owner chose the
     difference exception on 2026-10-22, with D001, to be made once the
-    proposal's examples are approved.
+    proposal's examples are approved. The proposal (version 2) gives them
+    that exception only, naming the action: difference_bears_on(A1,A2,X2).
   category: scheme
   blocks: [verification]
   decider: owner
@@ -439,7 +445,9 @@ decisions:
     A third answer is proposed with D001 and D028: the two-case form, an
     action in each situation joined by a correspondence premise, concluding
     that the target action should, or should not, be performed, so that the
-    pair rebut each other and meet the practical schemes.
+    pair rebut each other and meet the practical schemes. A closer situation
+    in which the course went the other way is then a practical analogy of
+    the opposite sign, which rebuts directly.
   category: vocabulary
   blocks: [verification, game]
   decider: owner
@@ -639,16 +647,25 @@ decisions:
 - id: D053
   title: Declared polarity pairs
   question: >-
-    Should positive/negative scheme pairs be declared as polarity pairs, with
-    the formulas that flip listed, and checked: the conclusions contradictory
-    (p and ¬p), every other formula shared or a listed flip (the evaluative
-    premise flipping to its contrary, as good and bad), and the same
-    questions? Declared and checked only: the entries, walton.yml's schemes
-    and the game's schemes stay one per polarity. Candidates: consequences
-    (33.1, 33.2), ethotic argument (41), model and antimodel (6.3, 6.4), the
-    practical analogies (8.1, 8.2, after D029). Not values (19.1, 19.2), whose
-    conclusions are two reasons that can hold together; falsification only
-    after D054.
+    Should positive/negative scheme pairs be declared as polarity pairs and
+    checked, never merged (the entries, walton.yml's schemes and the game's
+    schemes stay one per polarity)? As revised after the independent review
+    of 2026-10-22: pairs are declared in families.json's counterpart
+    relation and checked by the registry. The conclusions are p and ¬p.
+    Every other formula is shared, or a flip of a declared kind: p and ¬p, or
+    two predicates declared contraries with the same arguments (good and
+    bad, right_to_do and wrong_to_do). The questions have the same targets;
+    their wording may flip. Every shared exception or assumption is declared
+    neutral as to polarity by a person, with a reason, since a shared
+    formula whose meaning depends on the side (D055) defeats both arguments.
+    The registry also reports exact pairs that nobody declared. Exact pairs
+    today: consequences (33.1, 33.2), once D055 is fixed; ethotic argument
+    (41), once ethotic2's conclusion is checked (¬S, where the book reads
+    the claim as less plausible); the practical analogies (8.1, 8.2), with
+    D029. Model and antimodel (6.3, 6.4) differ in more than a flip, so they
+    would be a looser counterpart, not checked as exact. Not values (19.1,
+    19.2), whose conclusions are two reasons that can hold together;
+    falsification only after D054.
   category: vocabulary
   blocks: [verification]
   decider: owner
@@ -670,6 +687,28 @@ decisions:
   priority: 2
   status: open
   docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, semantic concerns", "docs/walton-audit/REPORT.md"]
+
+- id: D055
+  title: The consequence schemes share an exception whose meaning depends on the side
+  question: >-
+    positive_consequences, negative_consequences,
+    negative_consequences_reasoning and negative_consequences_prudential
+    share the exception other_consequences(A), "doing A also has
+    consequences of the opposite kind that outweigh the ones cited": its
+    meaning depends on the argument it belongs to, but its formula does not.
+    Carneades treats the formula as one statement, so an argument that the
+    bad consequences of an action outweigh the good undercuts the negative
+    argument about that action as well as the positive one (shown in WAG's
+    engine by the independent review of 2026-10-22). The exception was added
+    on 2026-10-22 for the book's 33/CQ3. Should it name the consequence each
+    argument cites, other_consequences(A,G) (B in 33.3, C in 33.4), so that
+    each argument's exception is its own?
+  category: scheme
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, owner decisions of 2026-10-22", "docs/proposals/D001-D028-D029.md"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -741,6 +780,27 @@ decisions:
   priority: 3
   status: open
   docs: ["docs/plan.md §7 item 7", "docs/catalogue-alignment.md §5"]
+
+- id: D056
+  title: A fortiori and refutation by parallel argument
+  question: >-
+    Two patterns of argument fit neither analogy nor the practical
+    analogies: a fortiori (the target is a stronger case for the claim than
+    the source, not a similar one) and refutation by parallel argument (an
+    argument of the same form with plainly acceptable premises and a plainly
+    unacceptable conclusion undercuts the argument attacked). Neither is a
+    scheme of the book's compendium; the literature treats each as its own
+    pattern. Proposal D001-D028-D029 sketches both as candidates, to test
+    that the analogy family's vocabulary extends to them. Should they be
+    added, as a walton.yml scheme (a fortiori) and as a game scheme for
+    direct undercutters (parallel refutation, whose variable names an
+    argument on the board), through the candidates route?
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/proposals/D001-D028-D029.md", "docs/process.md §8"]
 
 # --- Decided ------------------------------------------------------------------
 

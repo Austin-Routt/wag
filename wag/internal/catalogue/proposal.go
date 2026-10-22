@@ -27,7 +27,26 @@ type Proposal struct {
 	Effects   []string            `yaml:"effects,omitempty"`
 	Examples  []ProposalExample   `yaml:"examples"`
 	Questions map[string][]PQuery `yaml:"questions,omitempty"` // by scheme: the questions after the change
+	// Candidates are sketched beside the proposal, never applied (below).
+	Candidates *Candidates `yaml:"candidates,omitempty"`
 }
+
+// Candidates are schemes sketched beside a proposal but not proposed. They
+// test that the proposal's vocabulary extends to neighbouring patterns, so
+// that the proposed schemes need not be reopened when those are added. They
+// are checked and rendered like the proposed schemes, with their own
+// templates and questions, and never applied to walton.yml.
+type Candidates struct {
+	Note      string              `yaml:"note"`
+	Schemes   []Scheme            `yaml:"schemes"`
+	Language  map[string]string   `yaml:"language,omitempty"`
+	Questions map[string][]PQuery `yaml:"questions,omitempty"`
+}
+
+// Challenge is the game's challenge of a premise (game-rules.md §2): every
+// premise can be challenged, so a premise needs no question of its own. An
+// example presses it with the premise as its target.
+const Challenge = "CQ:premise_acceptable"
 
 // PQuery is a critical question of a proposed scheme: its label (a book
 // label, game/…, walton/…), what it asks, and the formula it targets.
@@ -54,9 +73,11 @@ type ProposalExample struct {
 	Note     string            `yaml:"note,omitempty"`
 }
 
-// Attack is a critical question pressed against an example.
+// Attack is a critical question pressed against an example, or a challenge
+// of one of its premises (Question is Challenge, Target the premise).
 type Attack struct {
 	Question string `yaml:"question"`
+	Target   string `yaml:"target,omitempty"`
 	Text     string `yaml:"text"`
 }
 
@@ -75,8 +96,9 @@ func LoadProposal(path string) (*Proposal, error) {
 	return &p, nil
 }
 
-// proposalSchemes is walton.yml's schemes with the proposal's in place,
-// and its language with the proposal's templates.
+// proposalSchemes is walton.yml's schemes with the proposal's in place and
+// its candidates added, and its language with the proposal's and the
+// candidates' templates.
 func proposalSchemes(p *Proposal, src *Sources) (map[string]Scheme, map[string]string) {
 	schemes := map[string]Scheme{}
 	for _, w := range src.Walton {
@@ -92,7 +114,42 @@ func proposalSchemes(p *Proposal, src *Sources) (map[string]Scheme, map[string]s
 	for k, v := range p.Language {
 		lang[k] = strings.TrimSpace(v)
 	}
+	if c := p.Candidates; c != nil {
+		for _, s := range c.Schemes {
+			if _, ok := schemes[s.ID]; !ok {
+				schemes[s.ID] = s
+			}
+		}
+		for k, v := range c.Language {
+			if _, ok := lang[k]; !ok {
+				lang[k] = strings.TrimSpace(v)
+			}
+		}
+	}
 	return schemes, lang
+}
+
+// questions is a proposed or candidate scheme's questions.
+func (p *Proposal) questions(id string) []PQuery {
+	if qs, ok := p.Questions[id]; ok {
+		return qs
+	}
+	if p.Candidates != nil {
+		return p.Candidates.Questions[id]
+	}
+	return nil
+}
+
+func (p *Proposal) candidate(id string) bool {
+	if p.Candidates == nil {
+		return false
+	}
+	for _, s := range p.Candidates.Schemes {
+		if s.ID == id {
+			return true
+		}
+	}
+	return false
 }
 
 func (s Scheme) formulas() []string {
@@ -104,13 +161,18 @@ func (s Scheme) formulas() []string {
 }
 
 // CheckProposal checks a proposal against walton.yml:
-//   - each proposed scheme declares exactly the variables its formulas use,
-//     and every predicate it uses has a template;
-//   - each example names a scheme, binds exactly its variables, and presses
-//     only questions the scheme has;
+//   - each proposed or candidate scheme declares exactly the variables its
+//     formulas use, and every predicate it uses has a template;
+//   - each question targets a formula of its scheme, and a walton/ question
+//     an assumption or exception whose predicate its id names, as in the
+//     catalogue (premises are challenged instead);
+//   - a candidate is a new scheme, neither in walton.yml nor proposed;
+//   - each example names a scheme, binds exactly its variables, presses only
+//     questions the scheme has, and challenges only its premises;
 //   - each proposed scheme has the minimum set of examples (docs/process.md
 //     §5): two arguments, an answer if it can be one, a near miss, and every
-//     question pressed at least once (warnings).
+//     question pressed at least once (warnings); a candidate needs one
+//     example.
 func CheckProposal(p *Proposal, src *Sources) []Finding {
 	var out []Finding
 	bad := func(f string, a ...any) { out = append(out, Finding{Error: true, Msg: fmt.Sprintf(f, a...)}) }
@@ -119,7 +181,23 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 	if len(p.Decisions) == 0 || p.Title == "" {
 		bad("a proposal names its decisions and has a title")
 	}
-	for _, s := range p.Schemes {
+	all := append([]Scheme{}, p.Schemes...)
+	if c := p.Candidates; c != nil {
+		for _, s := range c.Schemes {
+			if _, ok := findWalton(src, s.ID); ok || p.Questions[s.ID] != nil || in(schemeIDs(p.Schemes), s.ID) {
+				bad("candidate %s: a candidate is a new scheme, neither in walton.yml nor proposed", s.ID)
+			}
+			all = append(all, s)
+		}
+		for k := range c.Language {
+			if _, ok := p.Language[k]; ok {
+				bad("candidates: template %s is also proposed", k)
+			} else if _, ok := src.Language[k]; ok {
+				bad("candidates: template %s is already in walton.yml", k)
+			}
+		}
+	}
+	for _, s := range all {
 		used := map[string]bool{}
 		for _, f := range s.formulas() {
 			t, err := parseFormula(f)
@@ -155,13 +233,17 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 				bad("%s: variable %s occurs in no premise (the Carneades validator requires it)", s.ID, v)
 			}
 		}
-		for _, q := range p.Questions[s.ID] {
+		for _, q := range p.questions(s.ID) {
 			if !in(s.formulas(), q.Target) {
 				bad("%s: question %s targets %s, not a formula of the scheme", s.ID, q.ID, q.Target)
+			} else if strings.HasPrefix(q.ID, "walton/") &&
+				(!in(s.Assumptions, q.Target) && !in(s.Exceptions, q.Target) || "walton/"+predicate(q.Target) != q.ID) {
+				bad("%s: question %s: a walton/ question targets an assumption or exception whose predicate its id names (a premise is challenged, %s)", s.ID, q.ID, Challenge)
 			}
 		}
 	}
 	type tally struct{ arguments, answers, nearMisses int }
+	exemplified := map[string]bool{} // candidates with an example
 	count := map[string]*tally{}
 	pressed := map[string]map[string]bool{}
 	for _, s := range p.Schemes {
@@ -197,8 +279,17 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 				bad("%s: %s is not a variable of %s", where, v, s.ID)
 			}
 		}
-		qs := p.Questions[x.Scheme]
+		qs := p.questions(x.Scheme)
 		for _, a := range x.Attacks {
+			if a.Question == Challenge {
+				if !in(s.Premises, a.Target) {
+					bad("%s: a challenge targets a premise of %s, and %q is not one", where, x.Scheme, a.Target)
+				}
+				continue
+			}
+			if a.Target != "" {
+				bad("%s: only a challenge (%s) names its target; %s targets its own formula", where, Challenge, a.Question)
+			}
 			if questionByID(qs, a.Question) == nil {
 				bad("%s: %s is not a question of %s in this proposal", where, a.Question, x.Scheme)
 				continue
@@ -218,6 +309,16 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		if c := count[x.Of]; c != nil && x.Use == "near-miss" {
 			c.nearMisses++
 		}
+		if p.candidate(x.Scheme) {
+			exemplified[x.Scheme] = true
+		}
+	}
+	if c := p.Candidates; c != nil {
+		for _, s := range c.Schemes {
+			if !exemplified[s.ID] {
+				warn("candidate %s: no example", s.ID)
+			}
+		}
 	}
 	for _, s := range p.Schemes {
 		c := count[s.ID]
@@ -230,11 +331,19 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		if c.nearMisses == 0 {
 			warn("%s: no near miss", s.ID)
 		}
-		for _, q := range p.Questions[s.ID] {
+		for _, q := range p.questions(s.ID) {
 			if !pressed[s.ID][q.ID] {
 				warn("%s: question %s is pressed in no example", s.ID, q.ID)
 			}
 		}
+	}
+	return out
+}
+
+func schemeIDs(ss []Scheme) []string {
+	var out []string
+	for _, s := range ss {
+		out = append(out, s.ID)
 	}
 	return out
 }
@@ -386,53 +495,18 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 	}
 	b.WriteString("## The schemes as proposed\n\n")
 	for _, s := range p.Schemes {
-		fmt.Fprintf(&b, "### `%s`: %s\n\n", s.ID, s.Meta.Title)
-		if old, ok := findWalton(src, s.ID); ok {
-			b.WriteString("| Role | Now | Proposed |\n|---|---|---|\n")
-			for _, r := range []struct {
-				name     string
-				old, new []string
-			}{
-				{"variables", old.Variables, s.Variables}, {"premises", old.Premises, s.Premises},
-				{"assumptions", old.Assumptions, s.Assumptions}, {"exceptions", old.Exceptions, s.Exceptions},
-				{"conclusion", old.Conclusions, s.Conclusions},
-			} {
-				if len(r.old) == 0 && len(r.new) == 0 {
-					continue
-				}
-				fmt.Fprintf(&b, "| %s | %s | %s |\n", r.name, code(r.old), code(r.new))
-			}
-		} else {
-			b.WriteString("A new scheme.\n\n| Role | Proposed |\n|---|---|\n")
-			fmt.Fprintf(&b, "| variables | %s |\n| premises | %s |\n", code(s.Variables), code(s.Premises))
-			if len(s.Assumptions) > 0 {
-				fmt.Fprintf(&b, "| assumptions | %s |\n", code(s.Assumptions))
-			}
-			if len(s.Exceptions) > 0 {
-				fmt.Fprintf(&b, "| exceptions | %s |\n", code(s.Exceptions))
-			}
-			fmt.Fprintf(&b, "| conclusion | %s |\n", code(s.Conclusions))
-		}
-		b.WriteString("\n")
-		if qs := p.Questions[s.ID]; len(qs) > 0 {
-			b.WriteString("| Question | Asks | Targets |\n|---|---|---|\n")
-			for _, q := range qs {
-				fmt.Fprintf(&b, "| %s | %s | `%s` (%s) |\n", q.ID, cell(q.Asks), q.Target, roleOf(s, q.Target))
-			}
-			b.WriteString("\n")
-		}
+		writeScheme(&b, src, s, p.Questions[s.ID], "A new scheme.")
 	}
-	if len(p.Language) > 0 {
-		b.WriteString("**Templates added or changed:**\n\n")
-		keys := make([]string, 0, len(p.Language))
-		for k := range p.Language {
-			keys = append(keys, k)
+	writeTemplates(&b, "**Templates added or changed:**", p.Language)
+	if c := p.Candidates; c != nil {
+		b.WriteString("## Candidates: sketched, not proposed\n\n")
+		if c.Note != "" {
+			b.WriteString(strings.TrimSpace(c.Note) + "\n\n")
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			fmt.Fprintf(&b, "- `%s`: “%s”\n", k, strings.TrimSpace(p.Language[k]))
+		for _, s := range c.Schemes {
+			writeScheme(&b, src, s, c.Questions[s.ID], "A candidate, not proposed: it is not applied to `walton.yml`.")
 		}
-		b.WriteString("\n")
+		writeTemplates(&b, "**The candidates' templates:**", c.Language)
 	}
 	if len(p.Effects) > 0 {
 		b.WriteString("## What else changes if it is decided\n\n")
@@ -449,11 +523,14 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 		var tags []string
 		switch x.Use {
 		case "answer":
-			tags = append(tags, "**as an answer** in the game: "+strings.Join(strings.Fields(x.Answers), " "))
+			tags = append(tags, "**as an answer** in the game: "+strings.TrimSuffix(strings.Join(strings.Fields(x.Answers), " "), "."))
 		case "near-miss":
 			tags = append(tags, fmt.Sprintf("**a near miss** of `%s`: it is `%s`", x.Of, x.Scheme))
 		default:
 			tags = append(tags, fmt.Sprintf("**as an argument**, with `%s`", x.Scheme))
+		}
+		if p.candidate(x.Scheme) {
+			tags = append(tags, "a candidate")
 		}
 		if x.Form == "negated" {
 			tags = append(tags, "the negated (\"false\") form")
@@ -486,7 +563,11 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 		if len(x.Attacks) > 0 {
 			b.WriteString("\nPressed with its questions:\n\n")
 			for _, a := range x.Attacks {
-				q := questionByID(p.Questions[x.Scheme], a.Question)
+				if a.Question == Challenge {
+					fmt.Fprintf(&b, "- **Challenge** (%s), at the premise “%s”: %s\n", Challenge, strings.TrimSuffix(EnglishWith(a.Target, lang, x.Bindings), "."), strings.Join(strings.Fields(a.Text), " "))
+					continue
+				}
+				q := questionByID(p.questions(x.Scheme), a.Question)
 				if q == nil {
 					continue
 				}
@@ -499,6 +580,62 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 		b.WriteString("\n")
 	}
 	return b.Bytes()
+}
+
+// writeScheme renders a scheme against walton.yml's (now and proposed, or
+// new) and its questions.
+func writeScheme(b *bytes.Buffer, src *Sources, s Scheme, qs []PQuery, isNew string) {
+	fmt.Fprintf(b, "### `%s`: %s\n\n", s.ID, s.Meta.Title)
+	if old, ok := findWalton(src, s.ID); ok {
+		b.WriteString("| Role | Now | Proposed |\n|---|---|---|\n")
+		for _, r := range []struct {
+			name     string
+			old, new []string
+		}{
+			{"variables", old.Variables, s.Variables}, {"premises", old.Premises, s.Premises},
+			{"assumptions", old.Assumptions, s.Assumptions}, {"exceptions", old.Exceptions, s.Exceptions},
+			{"conclusion", old.Conclusions, s.Conclusions},
+		} {
+			if len(r.old) == 0 && len(r.new) == 0 {
+				continue
+			}
+			fmt.Fprintf(b, "| %s | %s | %s |\n", r.name, code(r.old), code(r.new))
+		}
+	} else {
+		fmt.Fprintf(b, "%s\n\n| Role | Proposed |\n|---|---|\n", isNew)
+		fmt.Fprintf(b, "| variables | %s |\n| premises | %s |\n", code(s.Variables), code(s.Premises))
+		if len(s.Assumptions) > 0 {
+			fmt.Fprintf(b, "| assumptions | %s |\n", code(s.Assumptions))
+		}
+		if len(s.Exceptions) > 0 {
+			fmt.Fprintf(b, "| exceptions | %s |\n", code(s.Exceptions))
+		}
+		fmt.Fprintf(b, "| conclusion | %s |\n", code(s.Conclusions))
+	}
+	b.WriteString("\n")
+	if len(qs) > 0 {
+		b.WriteString("| Question | Asks | Targets |\n|---|---|---|\n")
+		for _, q := range qs {
+			fmt.Fprintf(b, "| %s | %s | `%s` (%s) |\n", q.ID, cell(q.Asks), q.Target, roleOf(s, q.Target))
+		}
+		b.WriteString("\n")
+	}
+}
+
+func writeTemplates(b *bytes.Buffer, title string, lang map[string]string) {
+	if len(lang) == 0 {
+		return
+	}
+	b.WriteString(title + "\n\n")
+	keys := make([]string, 0, len(lang))
+	for k := range lang {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		fmt.Fprintf(b, "- `%s`: “%s”\n", k, strings.TrimSpace(lang[k]))
+	}
+	b.WriteString("\n")
 }
 
 func findWalton(src *Sources, id string) (Scheme, bool) {
