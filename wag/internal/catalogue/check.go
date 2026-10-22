@@ -41,6 +41,10 @@ type Options struct {
 	// book sentence is an error, WarnSimilar a warning.
 	ShortText                int
 	CopySimilar, WarnSimilar float64
+	// Register is the decision register; nil skips its checks. When
+	// RegisterView is set, the file there must be its current view.
+	Register     *Register
+	RegisterView string
 }
 
 // DefaultOptions are the thresholds of the copy check.
@@ -54,8 +58,9 @@ type Report struct {
 	Entries  int
 	Progress progress
 	Tier1    progress
-	Copied   bool // whether the copy check ran
-	Texts    int  // our texts the copy check compared
+	Copied   bool      // whether the copy check ran
+	Texts    int       // our texts the copy check compared
+	Register *Register // the decision register, when it was checked
 }
 
 // Errors counts the errors.
@@ -72,8 +77,13 @@ func (r *Report) Errors() int {
 // Summary is a line on where the catalogue stands.
 func (r *Report) Summary() string {
 	p := r.Progress
-	return fmt.Sprintf("%d entries; %d work items: %d verified, %d drafted, %d disputed, %d generated, %d to write (tier 1: %d of %d verified)",
+	s := fmt.Sprintf("%d entries; %d work items: %d verified, %d drafted, %d disputed, %d generated, %d to write (tier 1: %d of %d verified)",
 		r.Entries, p.items, p.verified, p.drafted, p.disputed, p.generated, p.todo, r.Tier1.verified, r.Tier1.items)
+	if r.Register != nil {
+		n, byP := r.Register.Open()
+		s += fmt.Sprintf("; open decisions: %d (priority 1: %d, 2: %d, 3: %d)", n, byP[1], byP[2], byP[3])
+	}
+	return s
 }
 
 type checker struct {
@@ -175,6 +185,16 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 				}
 				r.Findings = append(r.Findings, Finding{Msg: fmt.Sprintf("families.json: family %s lists compendium %s with no scheme, but links.json links it to %s; one of the two needs correcting",
 					f.ID, m.Compendium, strings.Join(ids, ", "))})
+			}
+		}
+	}
+	if opt.Register != nil {
+		r.Register = opt.Register
+		r.Findings = append(r.Findings, CheckRegister(opt.Register, all)...)
+		if opt.RegisterView != "" {
+			view, err := os.ReadFile(opt.RegisterView)
+			if err != nil || !bytes.Equal(bytes.ReplaceAll(view, []byte("\r\n"), []byte("\n")), RegisterMarkdown(opt.Register)) {
+				r.Findings = append(r.Findings, Finding{File: RegisterView, Error: true, Msg: "out of date: run wag-cli --catalogue-gen"})
 			}
 		}
 	}

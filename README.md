@@ -135,8 +135,8 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification by dimensions and type, with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
 **The next actions** ([the alignment plan §4](docs/catalogue-alignment.md#4-order), revised 2026-10-22):
-1. **Protect and organize the work:** CI, the decision register, a generated status report, and the agents' briefs and tools in WAG. The private workspace is in place since 2026-10-22.
-2. **The owner sorts the open decisions** in the register: those of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make), and the scheme changes the tier-1 entries leave open ([review part 12 §5](docs/review-2026-10-22-part12.md#5-what-is-left-open)), starting with those that block the game or verification.
+1. **Protect and organize the work:** a generated status report, and the agents' briefs and tools in WAG. The private workspace, CI and the decision register are in place since 2026-10-22.
+2. **The owner sorts the open decisions** in the register, [`docs/decisions.md`](docs/decisions.md): 51 open, 11 of them proposed as priority 1 because they hold up the game's schemes or verification. The owner confirms the priorities, then decides.
 3. **The game's fields** for the 9 game schemes, and the generator that reproduces today's NASCQ from the catalogue.
 4. **The verification protocol,** then a person verifies the 33 tier-1 entries (about 10–15 hours), while the version 4 guidelines are drafted.
 
@@ -185,6 +185,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) | The plan for complete coverage and alignment of the scheme catalogue: what is left, in which order, and when it is done |
+| [`docs/decisions.md`](docs/decisions.md) | **Every open decision,** with its priority, what it holds up and who decides it; generated from the register, [`docs/decisions.yml`](docs/decisions.yml) |
 | [`docs/process.md`](docs/process.md) | How the work is done: one source of truth per fact, statuses, independent agents, feedback from play, the decision register, the private workspace, the checks |
 | [`docs/review-2026-10-22-part13.md`](docs/review-2026-10-22-part13.md) | The owner's review of the goal: what the sources do not define, what the plan lacked, and the decisions of 2026-10-22 |
 | [`docs/review-2026-10-22-part12.md`](docs/review-2026-10-22-part12.md) | Tier 1 of the catalogue drafted and independently checked; the owner's changes to `walton.yml`; the decisions left open |

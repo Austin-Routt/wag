@@ -42,7 +42,7 @@ go run ./cmd/wag-cli --catalogue-show ID                    # a walton.yml schem
 ```
 
 - **Where things are.** Both commands find the repository's root from the working directory; `--repo` and `--catalogue` override that.
-- **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md`.
+- **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md` and the decision register's view, `docs/decisions.md`.
 - **`--catalogue-check`** reports errors, which fail it, and warnings. It ends with a progress line.
 - **A test keeps the committed catalogue current:** `internal/catalogue`, `TestCommittedCatalogueIsCurrent`. When a source changes, run `--catalogue-gen` and commit the result.
 
@@ -157,12 +157,17 @@ So set the status before or with any edit. An edit to a `generated` item is over
   - a question that neither the book nor the game asks is not named `walton/<predicate>`, or does not target that one assumption or exception.
 - **Copying:** a text of ours reproduces the book (below).
 - **The index:** `index.md` is out of date.
+- **The decision register** ([`docs/decisions.yml`](../../../docs/decisions.yml), [`docs/process.md`](../../../docs/process.md) §5):
+  - a discrepancy whose decision has a sentence beginning "Open" is listed under no open decision;
+  - the register names an entry or discrepancy that does not exist, or breaks its vocabularies;
+  - its view, `docs/decisions.md`, is out of date.
 
 **It warns:**
 - when a book question targets no formula and is not marked as undercutting (to decide while verifying);
 - when a game question targets another formula than its book question;
 - when the sources disagree with each other;
-- when the copy check did not run.
+- when the copy check did not run;
+- when the register and an entry disagree on whether a decision is still open.
 
 ### The copy check: no text of ours reproduces the book
 

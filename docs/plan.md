@@ -297,9 +297,9 @@ Some faults are not misused schemes: begging the question, the loaded question, 
    - links are written as rules, on examples, and kept modular;
    - feedback from play, verification with measured agreement, independent agents in a defined protocol, a register of open decisions, and a private development workspace ([`process.md`](process.md)).
 
-   What remains to decide:
-   - CI on the public repository ([`process.md`](process.md) §7);
-   - the targets the play report must meet, once the first report exists.
+   **Also decided on 2026-10-22:** CI on the public repository ([`process.md`](process.md) §7).
+
+   **Every open decision,** these included, is now in the decision register, [`decisions.md`](decisions.md), with its priority, what it holds up and who decides it ([`process.md`](process.md) §5).
 
 ## 8. Track D: dialogue types
 

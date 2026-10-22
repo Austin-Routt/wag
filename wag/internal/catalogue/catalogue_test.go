@@ -385,3 +385,82 @@ func TestEnglish(t *testing.T) {
 		}
 	}
 }
+
+// The committed decision register lists every open catalogue decision, its
+// references resolve, and docs/decisions.md is its current view.
+func TestCommittedRegister(t *testing.T) {
+	reg, err := LoadRegister(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if reg == nil {
+		t.Skip("no register")
+	}
+	entries, _, err := ReadDir(filepath.Join(root, filepath.FromSlash(Dir)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var all []*Entry
+	for _, e := range entries {
+		all = append(all, e)
+	}
+	for _, f := range CheckRegister(reg, all) {
+		if f.Error {
+			t.Error(f)
+		}
+	}
+	view, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(RegisterView)))
+	if err != nil || strings.ReplaceAll(string(view), "\r\n", "\n") != string(RegisterMarkdown(reg)) {
+		t.Errorf("%s is not the register's current view: run wag-cli --catalogue-gen", RegisterView)
+	}
+}
+
+// The register's check catches each kind of fault.
+func TestRegisterFindsFaults(t *testing.T) {
+	entry := &Entry{ID: "x", Discrepancies: []Discrepancy{
+		{Kind: "other", About: "a", Decision: "No change. Open: whether to add an exception."},
+		{Kind: "other", About: "b", Decision: "Open: whether to rename it."},
+		{Kind: "other", About: "c", Decision: "Done: renamed."},
+	}}
+	ok := Decision{ID: "D001", Title: "t", Question: "q", Category: "scheme", Decider: "owner", Priority: 1, Status: "open",
+		Items: []ItemRef{{"x", "other", "a"}, {"x", "other", "b"}}}
+	cases := []struct {
+		name  string
+		edit  func(d *Decision)
+		want  string
+		error bool
+	}{
+		{"an open item not listed", func(d *Decision) { d.Items = d.Items[:1] }, "other / b leaves a decision open", true},
+		{"a missing entry", func(d *Decision) { d.Items = append(d.Items, ItemRef{"y", "other", "a"}) }, `no catalogue entry "y"`, true},
+		{"a missing discrepancy", func(d *Decision) { d.Items = append(d.Items, ItemRef{"x", "other", "z"}) }, "has no discrepancy other / z", true},
+		{"a bad id", func(d *Decision) { d.ID = "7" }, "write D and three digits", true},
+		{"a bad category", func(d *Decision) { d.Category = "misc" }, `category "misc"`, true},
+		{"a bad block", func(d *Decision) { d.Blocks = []string{"everything"} }, `blocks "everything"`, true},
+		{"a bad priority", func(d *Decision) { d.Priority = 4 }, "priority 4", true},
+		{"decided without an outcome", func(d *Decision) { d.Status = "decided" }, "decided needs", true},
+		{"nowhere raised", func(d *Decision) { d.Items = nil }, "say where it is raised", true},
+		{"an item no longer open", func(d *Decision) { d.Items = append(d.Items, ItemRef{"x", "other", "c"}) }, "no longer says Open", false},
+	}
+	if fs := CheckRegister(&Register{Decisions: []Decision{ok}}, []*Entry{entry}); len(fs) != 0 {
+		t.Fatalf("a sound register has findings: %v", fs)
+	}
+	for _, c := range cases {
+		d := ok
+		d.Items = append([]ItemRef(nil), ok.Items...)
+		c.edit(&d)
+		var got []string
+		found := false
+		for _, f := range CheckRegister(&Register{Decisions: []Decision{d}}, []*Entry{entry}) {
+			got = append(got, f.String())
+			if strings.Contains(f.Msg, c.want) && f.Error == c.error {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("%s: want a finding with %q (error %v), got %v", c.name, c.want, c.error, got)
+		}
+	}
+	if !IsOpen("Open: x") || !IsOpen("No change. Open, for the owner: y") || IsOpen("Done: the open question is closed.") || IsOpen("Reopen it") {
+		t.Error("IsOpen does not tell an open decision")
+	}
+}

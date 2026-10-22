@@ -189,7 +189,7 @@ Once an entry's book links and families are verified, the catalogue is their aut
 - **Checker.**
   - Warn when a contrast has no contrast back in the other entry.
   - Warn when a question printed once under a heading (such as 33/CQ1–3) reads differently in the entries that share it.
-  - Count the open ("Open:") discrepancy decisions in the progress line.
+  - Count the open ("Open:") discrepancy decisions in the progress line. Done on 2026-10-22, with the decision register (M).
 - **A verification view in the dashboard.**
   - It shows an entry next to the book's text, which the verifier loads from a local file. The text is never stored or committed.
   - It has buttons to verify or dispute each item.
@@ -247,8 +247,8 @@ As [`process.md`](process.md) §4 describes:
 
 As [`process.md`](process.md) describes:
 1. **The private workspace** with its session-start hook. Done on 2026-10-22: `github.com/Austin-Routt/wag-workspace`, restored by the hook in a test from GitHub.
-2. **CI on every push,** once the owner agrees.
-3. **The decision register,** gathering every open decision, sorted by category and by what it blocks.
+2. **CI on every push.** Done on 2026-10-22 ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)).
+3. **The decision register,** gathering every open decision, sorted by category and by what it blocks. Done on 2026-10-22: [`decisions.yml`](decisions.yml), with its view [`decisions.md`](decisions.md), kept in step with the catalogue by the checker.
 4. **The generated status report.** Documents link to it instead of copying figures.
 5. **The agents' protocol:**
    - briefs moved into WAG;
@@ -263,12 +263,10 @@ As [`process.md`](process.md) describes:
 Revised on 2026-10-22 ([part 13](review-2026-10-22-part13.md)): the infrastructure first, so that no work is lost or repeated; then the game's fields, so that verification covers them too.
 
 1. **Protect and organize the work** (M):
-   - the workspace (done 2026-10-22);
-   - CI;
-   - the decision register;
+   - the workspace, CI and the decision register (done 2026-10-22);
    - the status report;
    - the briefs and pack builder moved into WAG.
-2. **The owner sorts the register:** first what blocks the game or verification, then the rest. C5 and C8, which change formulas, come before anyone verifies the entries they touch. C1 to C4 were decided on 2026-10-22; C6 and C7 can wait.
+2. **The owner sorts the register** ([`decisions.md`](decisions.md)): confirms the proposed priorities, then decides first what blocks the game or verification. C5 and C8, which change formulas, come before anyone verifies the entries they touch. C1 to C4 were decided on 2026-10-22; C6 and C7 can wait.
 3. **The game's fields and question choices for the 9 game schemes** (I, J), and **the generator** (E): its first output reproduces today's NASCQ and `core.yml`, and the game's tests pass.
 4. **The verification protocol,** then **a person verifies tier 1** (A), game fields included. Model checks are measured at the same time (M).
 5. **Feedback from play** (L), then beta play on the game's schemes by people and models.

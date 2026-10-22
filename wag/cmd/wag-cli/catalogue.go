@@ -49,6 +49,18 @@ func runCatalogueGen(repo, dir, by string) int {
 	for _, o := range r.Orphans {
 		fmt.Printf("note: %s is not made from the sources any more; left in place (the check reports it)\n", o)
 	}
+	reg, err := catalogue.LoadRegister(repo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if reg != nil {
+		if err := os.WriteFile(filepath.Join(repo, filepath.FromSlash(catalogue.RegisterView)), catalogue.RegisterMarkdown(reg), 0o644); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		fmt.Printf("%s written\n", catalogue.RegisterView)
+	}
 	return 0
 }
 
@@ -88,6 +100,14 @@ func runCatalogueCheck(repo, dir, books string) int {
 		}
 		opt.Book = c
 		fmt.Printf("copy check against %d book sentences from %s\n", c.Sentences(), strings.Join(paths, ", "))
+	}
+	// The decision register (docs/process.md §5), when there is one.
+	if opt.Register, err = catalogue.LoadRegister(repo); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if opt.Register != nil {
+		opt.RegisterView = filepath.Join(repo, filepath.FromSlash(catalogue.RegisterView))
 	}
 	r, err := catalogue.Check(dir, src, opt)
 	if err != nil {

@@ -27,11 +27,11 @@ jobs:
         run: go test -count=1 ./...
       - name: Lint the game's data
         run: go run ./cmd/wag-cli --lint
-      - name: The catalogue is what the generator makes from its sources
+      - name: The catalogue and the register's view are what the generator makes
         run: |
           go run ./cmd/wag-cli --catalogue-gen
-          git diff --exit-code -- data/catalogue || {
-            echo "::error::wag/data/catalogue differs from what --catalogue-gen makes: run it and commit the result"
+          git diff --exit-code -- data/catalogue ../docs/decisions.md || {
+            echo "::error::wag/data/catalogue or docs/decisions.md differs from what --catalogue-gen makes: run it and commit the result"
             exit 1
           }
       - name: Catalogue check

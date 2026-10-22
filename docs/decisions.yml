@@ -1,0 +1,714 @@
+# The decision register (docs/process.md §5): every open decision of the
+# project. Edit this file; docs/decisions.md is generated from it by
+# `wag-cli --catalogue-gen`, and `wag-cli --catalogue-check` keeps it in step
+# with the catalogue: every catalogue discrepancy whose decision begins
+# "Open" must be listed under an open decision here.
+#
+# Fields: id (D and three digits, never reused); title; question; category
+# (scheme, vocabulary, game, annotation, book, metadata, project); blocks
+# (game, verification, annotation, play, release); decider (owner, verifier,
+# data, play); priority (1 holds up the next steps, 2 later work, 3 can
+# wait); status (open, decided); items (catalogue discrepancies, by entry,
+# kind and about); docs (documents that raise it); decided (date, by,
+# decision, recorded) once taken. When a decision is taken, also update the
+# entries it lists, so that they no longer say "Open".
+
+note: >-
+  The priorities were proposed on 2026-10-22, when the register was made
+  (review part 13); the owner confirms or changes them. "The next steps" are
+  steps 3 and 4 of the alignment plan's order: the game's fields for the 9 game
+  schemes with the generator, and verifying tier 1.
+
+decisions:
+
+# --- Priority 1: the game's schemes, and who verifies -----------------------
+
+- id: D001
+  title: Analogy with a source and a target case (audit N12)
+  question: >-
+    Should analogy get a two-case scheme, with separate propositions for the
+    source and the target case and a premise that they correspond, as
+    proposed in part 6 §4? The game's analogy question waits on it.
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: analogy, kind: book-walton, about: "variables (N12)"}
+    - {entry: analogy, kind: other, about: "game questions"}
+  docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5"]
+
+- id: D002
+  title: Sign's 0-ary atoms
+  question: >-
+    How should sign's exception about a more reliable sign, which has no
+    arguments, be formalized (part 5 §4)? Its second question targets it.
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: sign, kind: book-walton, about: "CQ2"}
+  docs: ["docs/review-2026-10-13-part5.md §4"]
+
+- id: D003
+  title: Who bears the burden of practical reasoning's questions
+  question: >-
+    Should the questions of practical reasoning shift the burden to the
+    proponent when asked (making them assumptions), or stay exceptions that
+    the critic must support, as now?
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: practical_reasoning1, kind: book-walton, about: "burden of the questions"}
+    - {entry: practical_reasoning2, kind: book-walton, about: "burden of the questions"}
+    - {entry: practical_necessary_condition, kind: book-walton, about: "burden of the questions"}
+
+- id: D004
+  title: A conflicting-goal exception for practical reasoning 1
+  question: >-
+    Should practical_reasoning1 get an exception for a goal that conflicts
+    with G (incompatible_goal(G)), so that its first question and the game's
+    CQ:other_goals can target it instead of the conclusion?
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: practical_reasoning1, kind: book-walton, about: "CQ1"}
+
+- id: D005
+  title: A goal premise for practical reasoning
+  question: >-
+    Should practical reasoning 1 and 2 state that the agent has the goal, as
+    practical_inference does with have_goal(G)?
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: practical_reasoning1, kind: book-walton, about: "Premise 1"}
+    - {entry: practical_reasoning2, kind: book-walton, about: "Major Premise"}
+
+- id: D006
+  title: An equally good alternative against practical reasoning 2
+  question: >-
+    Should an alternative action that is just as good count against doing A?
+    It needs a formula that walton.yml lacks.
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: practical_reasoning2, kind: other, about: "game questions"}
+
+- id: D007
+  title: Which wording of practical reasoning the game uses
+  question: >-
+    When the game's texts are generated from the catalogue, should practical
+    reasoning follow the book's ch. 3 version or its ch. 9 version?
+  category: game
+  blocks: [game]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: practical_reasoning1, kind: other, about: "game questions"}
+    - {entry: practical_reasoning2, kind: other, about: "game questions"}
+
+- id: D008
+  title: A modal form for the consequence schemes
+  question: >-
+    Should brings_about(A,G) get a weaker, modal counterpart for consequences
+    that may follow, as cause to effect now has? Until then a hedged claim
+    is a reason to press the likelihood question.
+  category: vocabulary
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: positive_consequences, kind: book-walton, about: "CQ1-CQ2"}
+    - {entry: negative_consequences, kind: book-walton, about: "CQ1-CQ2"}
+
+- id: D009
+  title: The game's question texts from the catalogue
+  question: >-
+    Should the generated NASCQ take its question texts from the catalogue's
+    paraphrases, with the changes the entries list: the evidence question
+    asked at the consequence premise, a backup edge that lets negative
+    consequences answer the side-effect question, the opposite-consequences
+    question,
+    positive value described in the book's direction, sign's own likelihood
+    text, and CQ:field kept?
+  category: game
+  blocks: [game]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: expert_opinion, kind: other, about: "game questions"}
+    - {entry: position_to_know, kind: other, about: "game questions"}
+    - {entry: positive_consequences, kind: other, about: "game questions"}
+    - {entry: negative_consequences, kind: other, about: "game questions"}
+    - {entry: positive_value, kind: other, about: "game"}
+    - {entry: sign, kind: other, about: "game questions"}
+
+- id: D010
+  title: An exception for an honest but unreliable source
+  question: >-
+    Should position_to_know get an exception for a source who is sincere but
+    not reliable, which its second book question asks about?
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: open
+  items:
+    - {entry: position_to_know, kind: book-walton, about: "CQ2"}
+
+- id: D045
+  title: Who verifies the catalogue
+  question: >-
+    Who verifies the catalogue against the book, and is tier 1 the right
+    first set?
+  category: project
+  blocks: [verification]
+  decider: owner
+  priority: 1
+  status: open
+  docs: ["docs/plan.md §7 item 3"]
+
+# --- Priority 2: the other tier-1 schemes, shared readings, annotation ------
+
+- id: D011
+  title: Popular opinion's conclusion
+  question: >-
+    Should popular opinion conclude the accepted proposition itself, so that
+    the argument can back a claim directly as a game move needs?
+  category: scheme
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: popular_opinion, kind: other, about: "conclusion"}
+
+- id: D012
+  title: Popular opinion's general-acceptance assumption
+  question: >-
+    Should popular opinion drop its assumption that the proposition is
+    generally true, or rename generally_true to say what it means?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: popular_opinion, kind: book-walton, about: "General Acceptance Premise"}
+
+- id: D013
+  title: Whether popular acceptance is presumed
+  question: >-
+    Should the acceptance be an assumption, presumed until questioned, as the
+    book's ch. 4 suggests?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: popular_opinion, kind: book-walton, about: "CQ1 burden"}
+
+- id: D014
+  title: Repairing argument from example
+  question: >-
+    How should from_example's defects be repaired: swap its two formulas'
+    roles or their templates, and drop the individual from the
+    generalization, so that the conclusion is a rule?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: from_example, kind: partial-link, about: "6.1"}
+    - {entry: from_example, kind: book-walton, about: "generalization"}
+  docs: ["docs/review-2026-10-13-part5.md §4 and §8 item 1"]
+
+- id: D015
+  title: A further alternative for the cognitive alternatives scheme
+  question: Should alternative_cognitive get an exception for an alternative not considered?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: alternative_cognitive, kind: other, about: "critical questions"}
+
+- id: D016
+  title: Whether "not required" meets "should not be done"
+  question: >-
+    Should the game read alternative_normative's not_required(B) as
+    ¬should_be_performed(B), so that it meets the practical schemes?
+  category: vocabulary
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: alternative_normative, kind: other, about: "conclusion"}
+
+- id: D017
+  title: Exclusive alternatives as an assumption
+  question: Should alternative_normative state that the alternatives exclude each other, as an assumption?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: alternative_normative, kind: other, about: "critical questions"}
+
+- id: D018
+  title: Correlation to cause's second question
+  question: Should the template of the formula that correlation's second question targets be widened?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: correlation_to_cause, kind: book-walton, about: "CQ2"}
+
+- id: D019
+  title: An exception for defeasible modus ponens
+  question: >-
+    Should defeasible modus ponens get an exception for the case at hand,
+    with a template of our own? "Other" in the game is played as this scheme.
+  category: scheme
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: defeasible_modus_ponens, kind: other, about: "critical questions"}
+
+- id: D020
+  title: A defeasible rule premise
+  question: >-
+    Should defeasible modus ponens use defeasibly_implies(A,B), which
+    walton.yml has unused, as its rule premise?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: defeasible_modus_ponens, kind: other, about: "implies"}
+
+- id: D021
+  title: Defeasible modus ponens in the book
+  question: >-
+    A verifier with the book reads pp. 364–366, where the form is treated,
+    and confirms its two questions.
+  category: book
+  blocks: [verification]
+  decider: verifier
+  priority: 2
+  status: open
+  items:
+    - {entry: defeasible_modus_ponens, kind: not-in-book, about: "defeasible_modus_ponens"}
+
+- id: D022
+  title: A negative form of end and means
+  question: >-
+    Should end_and_means_1 get a negative variant (a bad end condemns its
+    means) or a graded conclusion?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: end_and_means_1, kind: book-walton, about: "polarity"}
+
+- id: D023
+  title: Questions borrowed from related schemes
+  question: >-
+    Should end_and_means_1 borrow the consequence schemes' questions, and
+    practical_goal borrow practical reasoning's (alternatives, conflicting
+    goals, side effects), since they apply to any goal-means argument?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: end_and_means_1, kind: other, about: "critical questions"}
+    - {entry: practical_goal, kind: other, about: "critical questions"}
+
+- id: D024
+  title: Exceptions for the rule schemes
+  question: >-
+    Should established_rule get exceptions for an overriding rule and an
+    exceptional case, and should rule get exceptions or questions taken from
+    55.1?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: established_rule, kind: book-walton, about: "CQ2 and CQ3"}
+    - {entry: rule, kind: other, about: "critical questions"}
+
+- id: D025
+  title: The agent and the action type in established rule
+  question: >-
+    Is a formula naming the agent and the action type worth adding, so that
+    55.1's first question could target the rule's action type?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: established_rule, kind: book-walton, about: "encoding"}
+
+- id: D026
+  title: Splitting argument from rules
+  question: Should rule be split into an evaluative and a prescriptive form?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: rule, kind: book-walton, about: "E and C"}
+
+- id: D027
+  title: The omission case in reasoning from negative consequences
+  question: >-
+    Does the book's parenthetical in 33.3's first premise mean to cover not
+    acting, given that the conclusion is unchanged?
+  category: book
+  blocks: [verification]
+  decider: verifier
+  priority: 2
+  status: open
+  items:
+    - {entry: negative_consequences_reasoning, kind: book-walton, about: "Premise 1"}
+
+- id: D028
+  title: Analogy's exceptions for the practical analogies
+  question: >-
+    Should 8.1 and 8.2 get analogy's exceptions, with both situations as
+    arguments (for example relevant_differences(A1,A2))?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: practical_analogy_positive, kind: other, about: "critical questions"}
+    - {entry: practical_analogy_negative, kind: other, about: "critical questions"}
+
+- id: D029
+  title: Whether the practical analogies rebut each other
+  question: >-
+    Should carry_out_wrong(A2,X) be read as ¬carry_out_right(A2,X), so that
+    the two practical analogies rebut each other, or should they stay apart?
+  category: vocabulary
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: practical_analogy_positive, kind: other, about: "Conclusion"}
+    - {entry: practical_analogy_negative, kind: other, about: "Conclusion"}
+
+- id: D030
+  title: The variable of the necessary-condition schema's possibility
+  question: Did walton.yml mean the means X, not the action A, in possible_action?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: practical_necessary_condition, kind: book-walton, about: "possible_action(A)"}
+
+- id: D031
+  title: The commitment form of sunk costs
+  question: >-
+    Should the book's commitment form of sunk costs (ch. 4) become a scheme
+    of its own?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: sunk_costs, kind: book-walton, about: "time indices and Premise 1"}
+
+- id: D032
+  title: A doubtful classification
+  question: >-
+    Should verbal_classification mark its classification premise as
+    defeasible, or add an exception for a doubtful usage?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: verbal_classification, kind: book-walton, about: "Classification Premise"}
+
+- id: D033
+  title: Future losses in argument from waste
+  question: >-
+    Should waste get future_losses_outweigh(X), as an exception (the
+    critic's burden) or as an assumption (the proponent's)?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: waste, kind: book-walton, about: "CQ2"}
+
+- id: D034
+  title: One domain formula for witnesses and positions to know
+  question: >-
+    Should witness_testimony's in_domain(D,S) be reordered to
+    in_domain(S,D), so that it is position_to_know's formula and one game
+    question can ask about both?
+  category: vocabulary
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: witness_testimony, kind: other, about: "in_domain(D,S)"}
+
+- id: D035
+  title: The testimony as a variable
+  question: Should witness_testimony take the testimony as a variable of its own?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: witness_testimony, kind: book-walton, about: "CQ1-CQ3"}
+
+- id: D036
+  title: How strong a causal link is
+  question: >-
+    Should causes(E1,E2) be read, in every scheme that uses it, as a
+    tendency, strong or weak, each scheme's first question asking whether it
+    is strong enough for its conclusion; or should a weak link get a formula
+    of its own, which the slope's links could also use?
+  category: vocabulary
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: cause_to_effect_modal, kind: book-walton, about: "Major Premise"}
+    - {entry: slippery_slope_inductive_step, kind: book-walton, about: "Recursive Premise"}
+
+- id: D037
+  title: Chaining causal steps
+  question: >-
+    Should walton.yml let will_occur(E) support may_occur(E) and
+    has_occurred(E), so that causal steps meet when they are chained?
+  category: vocabulary
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: cause_to_effect_modal, kind: other, about: "chaining"}
+
+- id: D038
+  title: Causal chains behind consequences arguments
+  question: >-
+    Should a chain of causal steps be able to back a consequence scheme's
+    brings_about(A,G), or stay a secondary instance beside the consequences
+    argument, as the batch-2 gold codes it?
+  category: vocabulary
+  blocks: [game]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: cause_to_effect_modal, kind: other, about: "consequence schemes"}
+
+- id: D039
+  title: Recoding the batch-2 gold's hypothetical causal steps
+  question: >-
+    Should the gold's 11 hypothetical causal steps be recoded with
+    cause_to_effect_modal, with the guidelines' item 11 and validate.py's R4
+    changed with them?
+  category: annotation
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: open
+  items:
+    - {entry: cause_to_effect_modal, kind: other, about: "batch-2 gold"}
+  docs: ["docs/kialo-batch2/guidelines.md item 11"]
+
+- id: D042
+  title: Division and composition are one pattern
+  question: >-
+    walton.yml's division_generic is a copy of composition_generic, while the
+    book's division (10.1) runs from the whole to the parts. Rewrite
+    division, merge the two, or declare them aliases? CI tolerates this one
+    registry error until then.
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/scheme-registry/README.md, Results", ".github/workflows/ci.yml"]
+
+- id: D043
+  title: Book text in the public repository
+  question: >-
+    What to do with the book text the public repository still holds: the
+    transcription of pp. 1–138 (docs/book-catalogue), quoted questions,
+    walton.yml's templates that repeat the book, and the deleted PDF in the
+    history? Options include moving the transcription to the private
+    workspace and rewriting the history.
+  category: project
+  blocks: [release]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/plan.md §7 item 1"]
+
+- id: D046
+  title: Paid model access
+  question: >-
+    Should WAG use a paid model tier, for annotation runs and for checks by
+    other providers' models?
+  category: project
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/plan.md §7 item 4", "docs/process.md §3"]
+
+- id: D047
+  title: The candidates threshold
+  question: >-
+    Is three occurrences in two discussions (or games) the right threshold for
+    a candidate scheme, question or link, and who reviews candidates?
+  category: project
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/plan.md §7 item 5", "docs/process.md §8"]
+
+# --- Priority 3: can wait ----------------------------------------------------
+
+- id: D040
+  title: Cause to effect's source
+  question: Should walton.yml's cause_to_effect cite the book's reference for 28 as its source?
+  category: metadata
+  decider: owner
+  priority: 3
+  status: open
+  items:
+    - {entry: cause_to_effect, kind: book-walton, about: "Major Premise"}
+
+- id: D041
+  title: Witness testimony's year
+  question: >-
+    Which year does the book's reference list give for witness testimony's
+    source? Correct walton.yml once it is checked.
+  category: metadata
+  decider: verifier
+  priority: 3
+  status: open
+  items:
+    - {entry: witness_testimony, kind: other, about: "source"}
+
+- id: D044
+  title: A licence for WAG
+  question: Under which licence may others use WAG? Carneades and walton.yml are MPL-2.0.
+  category: project
+  blocks: [release]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §7 item 2"]
+
+- id: D048
+  title: Scoring a negotiation
+  question: How is a negotiation game scored (Track D)?
+  category: project
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §7 item 6"]
+
+- id: D049
+  title: The quarrel's safeguards
+  question: What safeguards does a playable quarrel need, and may people play it or only model seats (Track D)?
+  category: project
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §7 item 6"]
+
+- id: D050
+  title: Corpora for dialogue types
+  question: Which corpora, under which licences, are used to find dialogue types in data (Track D)?
+  category: project
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §7 item 6"]
+
+- id: D051
+  title: Targets for the play report
+  question: What rates must the play report meet before the game's data counts as done?
+  category: game
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §7 item 7", "docs/catalogue-alignment.md §5"]
+
+# --- Decided ------------------------------------------------------------------
+
+- id: D052
+  title: CI on the public repository
+  question: Should every push to the public repository be checked automatically?
+  category: project
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/plan.md §7 item 7"]
+  decided:
+    date: "2026-10-22"
+    by: owner
+    decision: >-
+      Yes: GitHub Actions run the tests, the lint, the catalogue's generator
+      and check, the registry check, the gold's validation and the
+      walton.yml rebuild on every push and pull request.
+    recorded: ".github/workflows/ci.yml; docs/process.md §7"
