@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2164 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2173 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 8 of them changed by the owner's decisions (`analogy`, `negative_consequences`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| repair — owner decision | 7 | 7 |
+| repair — owner decision | 31 | 25 |
 | addition — owner decision | 95 | 20 |
-| **total** | **298** | **192** distinct lines (a line can carry edits of several categories) |
+| **total** | **322** | **210** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 173 lines removed, 268 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 102 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 187 lines removed, 291 added. That is 182 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 126 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -57,6 +57,8 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
 | `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
 | `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the `negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both templates are in our own words. |
+| `analogy` | variables `[A,C]` → `[P1,P2,C1,C2]`; premises `similar_to(C1,C2)`, `in_case(P1,C1)`, `corresponds(P1,P2)` (new template); conclusion `P2`; exception `difference_against(C1,C2,P2)` (new template) in place of `relevant_differences(C)`; `more_on_point(A,C)` removed | 2026-10-22 | Decision D001 (audit N12; WAG's proposal D001-D028-D029, version 3, after two independent reviews). The book's scheme 7 uses one letter for a claim made relative to each case; with one proposition, the premise asserted the target's claim of the source case, false whenever the two claims differ. The difference exception names the claim and tells against it, so it defeats only the argument it is about. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts the conclusion, so it needs no formula. |
+| `practical_analogy_positive`, `practical_analogy_negative` | variables `[A1,A2,X]` → `[A1,A2,X1,X2]`; premises `right_to_do(A1,X1)` or `wrong_to_do(A1,X1)`, `similar_to(A1,A2)`, `corresponds(X1,X2)`; conclusion `should_be_performed(X2)` or `¬should_be_performed(X2)` in place of `carry_out_right(A2,X)` and `carry_out_wrong(A2,X)`; exception `difference_against(A1,A2,X2)` or `difference_for(A1,A2,X2)` (new templates); `right_to_do/2` and `wrong_to_do/2` rewritten | 2026-10-22 | Decisions D028 and D029, with D001. The book's 8.1 and 8.2 use one action letter made relative to each situation. The old conclusions met no other scheme; now the two rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the sided exception lets a difference against one side leave the other standing when both argue from one past situation. The templates are in our own words. |
 
 ## Repairs that need the owner's approval
 
@@ -219,9 +221,18 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **102** · typo · template words 'Oflicial rulelebooks' (OCR) (used by: rule_physical_world_2)
   - before: `  correctly_report/0: "Oflicial rulelebooks correctly report the rules in force."`
   - after: `  correctly_report/0: "Official rulebooks correctly report the rules in force."`
+- **103** [insert after] · repair — owner decision · template for the analogy family's two-case form (D001, D028, D029), in our own words (used by: analogy, practical_analogy_negative, practical_analogy_positive)
+  - before: _(none)_
+  - after: `  corresponds/2: "In the other case, the counterpart of %s is %s."`
 - **110** [insert after] · template · abductive_backward uses data_set(D,A) with 2 arguments; only data_set/1 had a template (used by: abductive_backward, abductive_forward)
   - before: _(none)_
   - after: `  data_set/2: "%s is a set of data or supposed facts in case %s."`
+- **115** [insert after] · repair — owner decision · template for the analogy family's two-case form (D001, D028, D029), in our own words (used by: analogy, practical_analogy_positive)
+  - before: _(none)_
+  - after: `  difference_against/3: "%s and %s differ in a way that tells against %s."`
+- **115** [insert after] · repair — owner decision · template for the analogy family's two-case form (D001, D028, D029), in our own words (used by: practical_analogy_negative)
+  - before: _(none)_
+  - after: `  difference_for/3: "%s and %s differ in a way that tells in favour of %s."`
 - **118** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses do_obligator with 0 argument(s) and the template has 0 %s (used by: regulative_rule)
   - before: `  do_obligator: "One must not do what is prohibite -obligator-."`
   - after: `  do_obligator/0: "One must not do what is prohibite -obligator-."`
@@ -399,6 +410,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **313** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses reference_class with 0 argument(s) and the template has 0 %s (used by: retroductive)
   - before: `  reference_class: "Reference class of other agents who also might have brought about this event and also have same character is sufficient."`
   - after: `  reference_class/0: "Reference class of other agents who also might have brought about this event and also have same character is sufficient."`
+- **321** · repair — owner decision · the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the two-case form (D028, D029) (used by: practical_analogy_positive)
+  - before: `  right_to_do/2: "The right thing to do in %s, was to carry out action %s."`
+  - after: `  right_to_do/2: "In %s, %s was the right course."`
 - **323** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses rule_changed with 0 argument(s) and the template has 0 %s (used by: rule_physical_world_2)
   - before: `  rule_changed: "The rule has changed since the publication of the rulebook." `
   - after: `  rule_changed/0: "The rule has changed since the publication of the rulebook." `
@@ -474,6 +488,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **390** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
   - before: _(none)_
   - after: `  whole_of/4: "%s is made up of the parts %s, %s and %s."`
+- **402** · repair — owner decision · the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the two-case form (D028, D029) (used by: practical_analogy_negative)
+  - before: `  wrong_to_do/2: "The wrong thing to do in %s, was to carry out action %s."`
+  - after: `  wrong_to_do/2: "In %s, %s was the wrong course."`
 
 ### popular_opinion
 
@@ -516,12 +533,48 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **645** · typo · source: 'lnformal' (OCR l for I)
   - before: `              Douglas Walton, lnformal Logic New York: Cambridge University Press, 1989. p.257.`
   - after: `              Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257.`
+- **646** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `    variables: [A1,A2,X]`
+  - after: `    variables: [A1,A2,X1,X2]`
+- **648** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - carry_out_right(A2,X)`
+  - after: `      - should_be_performed(X2)`
+- **650** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - right_to_do(A1,X)`
+  - after: `      - right_to_do(A1,X1)`
+- **651** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `      - corresponds(X1,X2)`
+- **651** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **651** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `      - difference_against(A1,A2,X2)`
 
 ### practical_analogy_negative
 
 - **657** · typo · source: 'lnformal' (OCR l for I)
   - before: `              Douglas Walton, lnformal Logic New York: Cambridge University Press, 1989. p.257.`
   - after: `              Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257.`
+- **658** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `    variables: [A1,A2,X]`
+  - after: `    variables: [A1,A2,X1,X2]`
+- **660** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - carry_out_wrong(A2,X)`
+  - after: `      - ¬should_be_performed(X2)`
+- **662** · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - wrong_to_do(A1,X)`
+  - after: `      - wrong_to_do(A1,X1)`
+- **663** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `      - corresponds(X1,X2)`
+- **663** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **663** [insert after] · repair — owner decision · D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `      - difference_for(A1,A2,X2)`
 
 ### composition_generic
 
@@ -1045,6 +1098,30 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - reasonable_belive(M)`
   - after: `      - reasonable_believe(M)`
 
+### analogy
+
+- **1719** · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `    variables: [A,C]`
+  - after: `    variables: [P1,P2,C1,C2]`
+- **1720** · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `    conclusions: [A]`
+  - after: `    conclusions: [P2]`
+- **1722** · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - similar_case(C)`
+  - after: `      - similar_to(C1,C2)`
+- **1723** · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - in_case(A,C)`
+  - after: `      - in_case(P1,C1)`
+- **1723** [insert after] · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: _(none)_
+  - after: `      - corresponds(P1,P2)`
+- **1725** · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - relevant_differences(C)`
+  - after: `      - difference_against(C1,C2,P2)`
+- **1726** [delete] · repair — owner decision · D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)
+  - before: `      - more_on_point(A,C)`
+  - after: _(none)_
+
 ### cause_to_effect_modal
 
 - **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
@@ -1211,9 +1288,9 @@ With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems a
 - `two_person_practical`: the exceptions `alternative_means(A,X)` and `side_effect_other_act(B,A)` do not fit the order of their templates' arguments ("alternative means of realizing %s other than %s"; "Carrying out %s … %s other goals").
 - `exceptional` (was `exeptional`): `case_exception(A)` is both a premise and an assumption, and `rule_can_waived(X)` uses X, which no other formula shares.
 - `verbal_slippery_slope`: I declared F, the property in `individuals_property(A1,F,A2)`. Every other formula uses P for the property, so F is probably P. As written, the conditional is not linked to P.
-- `threat` (was `treat`): the premise `position_to_know(X)` ("I am in position to bring about %s") shares its name with the position-to-know predicate `position_to_know/2`. Other predicates used with two arities: `data_set/1`–`/2`, `excuse/0`–`/1`, `group_member/1`–`/2`, `cannot_present_sametime/2`–`/3`, `relevant_differences/1`–`/2`. They are different statements and easy to confuse.
+- `threat` (was `treat`): the premise `position_to_know(X)` ("I am in position to bring about %s") shares its name with the position-to-know predicate `position_to_know/2`. Other predicates used with two arities: `data_set/1`–`/2`, `excuse/0`–`/1`, `group_member/1`–`/2`, `cannot_present_sametime/2`–`/3`, and `relevant_differences/1`–`/2` until the analogy decision of 2026-10-22 left `relevant_differences/1` unused. They are different statements and easy to confuse.
 - `abductive_backward`: `data_set(D,A)` has 2 arguments, but `abductive_forward` has `data_set(D)`. I added a `data_set/2` template ("%s is a set of data or supposed facts in case %s."); the role of A there is a guess.
-- `exception_to_rule` (was `exeption_to_rule`): the content is upstream Carneades `precedent` with a new id and title. The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57).
+- `exception_to_rule` (was `exeption_to_rule`): the content is upstream Carneades `precedent` with a new id and title. The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57). Its exception `relevant_differences(R,C)` puts the rule where a case belongs (WAG's decision D058).
 - Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: `strongly_occur(X)` (template had the consequences C too), `cited_bad_consequences(X)` (the consequences; C occurs in `assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).
 - `biased/1` had two templates. The loaded one, "Arguer %s is biased.", is kept so loading is unchanged. It is also used for witnesses and sources (`credible_source`, `witness_testimony`), where upstream's deleted "%s is biased." fits better.
 - `waste` now uses `possible(X)`, whose existing template reads "Action %s is possible.", though X is a goal. `practical_reasoning2`'s `possible(G)` has the same mismatch; the deleted `posible/1` read "%s is possible.".
@@ -1261,5 +1338,5 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 - The stray " s" in the `data_account/2` template, and the soft hyphen in "pp.429­448".
 - `langugage:` occurs only in the category file `B_source-based-arguments/1_…yml`, not in `walton.yml`.
 - Negated formulas have no `¬p/n` WAG templates (WAG lint warning, see Gate).
-- Orphan templates (no scheme uses them; 14): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `negative_consequences/1`, `positive_consequences/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
+- Orphan templates (no scheme uses them; 18): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `more_on_point/2`, `negative_consequences/1`, `positive_consequences/1`, `relevant_differences/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
 

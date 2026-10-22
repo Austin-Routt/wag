@@ -5,10 +5,13 @@
 # Version 3, 2026-10-22: revised after two independent reviews (the private
 # workspace's verify/p-D001-D028-D029/ and verify/p-D001-D028-D029-v2/); the
 # changes are listed in the summary. The owner approved it on 2026-10-22,
-# subject to a short independent check of version 3.
+# subject to a short independent check of version 3. The check found it
+# correct once five small fixes were made (verify/p-D001-D028-D029-v3/); they
+# are made here, and the change was made in walton.yml the same day.
 
 decisions: [D001, D028, D029]
 title: The analogy family in two-case form
+applied: 2026-10-22, through walton-clean/tools/edits.py (the owner's decisions D001, D028 and D029)
 summary: |-
   **What changes.** The book's argument from analogy (7) and its practical
   counterparts (8.1, 8.2) use one letter for what holds in both cases: a claim
@@ -66,7 +69,8 @@ summary: |-
   concludes that verdict on the corresponding action here. Analogy covers
   every other claim: findings, predictions, deontic statuses that are not
   verdicts on doing something (entitled, obliged, permitted), and evaluations
-  of things other than actions (examples 5, 10, 18 and 22). This is a rule
+  of things other than actions. Examples 5 and 10 are analogies by this rule,
+  18 and 22 practical analogies. This is a rule
   for annotation and the catalogue. In play, analogy may conclude any
   statement, should-claims included, and can be played as an undercutter;
   how far it reaches as an answer is D057, and whether refutation by
@@ -253,7 +257,7 @@ effects:
   - "The batch-2 gold, guidelines and lexicon, each in two copies that a test keeps identical (docs/kialo-batch2 and wag/data/annotation/kialo-13292-batch2): 13292.61 is recoded with P1, P2, C1, C2, P2 bound to the very statement it backs; 13292.30 with A1, A2, X1, X2 and X2 = tax_meat, so that it concludes should_be_performed(tax_meat), the thesis; their challenges and lexicon atoms follow; validate.py must pass. to_wag.py plays the gold against the game's analogy, which keeps A and C until workstream E, so wag-game.json and wag-report.json are regenerated showing 13292.61 failing until then, with the reason stated, and regenerated again after E."
   - "Guidelines §3: the analogy note is rewritten. It gives the binding rule with the binding guidance; the choice between analogy and the practical analogies, with examples on both sides; imagined sources; and, for the form's limits, to use the near miss or Other rather than force the form."
   - "Annotation engine: its prompts follow walton.yml and the guidelines without code changes; measure.go flags old runs coded with A and C; agreement on analogy items is not compared across runs made before and after the change."
-  - "The game, when its data is generated from the catalogue (workstream E), not before: AS:analogy gets P1, P2, C1, C2 and answer variable P2; CQ:truth, CQ:difference and CQ:other_case are reworded and repatterned, CQ:other_case to the conclusion; no question for the correspondence premise, which the challenge covers; the premise templates, and core.yml's negation templates for the new predicates, are written. Its reach as an answer is D057: explicit backup edges to questions at a premise, assumption or exception locus (thesis_independent stays false, and the count of thesis-independent schemes stays 2), or a locus limit on thesis independence (code, lint and tests). In play it may conclude any statement and can be played as an undercutter (D056). Tests change: the analogy bindings in validation_rules_test.go and server_test.go; audit_test.go's item on analogy; core_integration_test.go's count if D057 takes the locus limit. docs/game-rules.md's paragraph on analogy and its answer variables, and the generated nascq-edges.md, are updated, and game-rules.md says that declared contraries are not enforced. The text protocol and the model prompts follow from the NASCQ; models fill P1, C1 and C2. Exports record the data's hash, and an old game with an analogy move replays with --data on its recorded version. The practical analogies join the game only by a later decision, with weights in contexts.json."
+  - "The game, when its data is generated from the catalogue (workstream E), not before: AS:analogy gets P1, P2, C1, C2 and answer variable P2; CQ:truth, CQ:difference and CQ:other_case are reworded and repatterned, CQ:other_case to the conclusion; no question for the correspondence premise, which the challenge covers; the premise templates, and core.yml's negation templates for the new predicates, are written. Its reach as an answer is D057: explicit backup edges to questions at a premise, assumption, exception or conclusion locus, the last for the counter-analogy that answers CQ:other_case (thesis_independent stays false, and the count of thesis-independent schemes stays 2), or a locus limit on thesis independence that keeps the conclusion locus (code, lint and tests). In play it may conclude any statement and can be played as an undercutter (D056). Tests change: the analogy bindings in validation_rules_test.go and server_test.go; audit_test.go's item on analogy; core_integration_test.go's count if D057 takes the locus limit. docs/game-rules.md's paragraph on analogy and its answer variables, and the generated nascq-edges.md, are updated, and game-rules.md says that declared contraries are not enforced. The text protocol and the model prompts follow from the NASCQ; models fill P1, C1 and C2. Exports record the data's hash, and an old game with an analogy move replays with --data on its recorded version. The practical analogies join the game only by a later decision, with weights in contexts.json."
   - "Docs: the catalogue README's counts, catalogue-alignment.md C5, and the register (D001, D028, D029 and D053 decided; D057 and D058 new)."
   - "Polarity (D053): the practical analogies are an exact pair, with right_to_do and wrong_to_do contraries and difference_against and difference_for a sided flip; they share no exception."
 
@@ -475,8 +479,8 @@ examples:
     bindings:
       A1: the opening of the tram line
       A2: the opening of the ferry route
-      X1: a free first month on the tram
-      X2: a free first week on the ferry
+      X1: giving a free first month on the tram
+      X2: giving a free first week on the ferry
     attacks:
       - question: walton/difference_against
         text: The ferry is used mostly by tourists, who would fill a free week and leave; the tram's riders were commuters forming a habit.
@@ -626,15 +630,19 @@ examples:
     use: argument
     text: Just as you cannot force a mother to donate an organ or blood to her child, you cannot force her to use her body to carry a foetus, even if that foetus is technically under her care.
     bindings:
-      A1: a child who needs an organ that only its mother can give
-      A2: a foetus that needs its mother's body to live
+      A1: a child's need for an organ that only its mother can give
+      A2: a foetus's need for its mother's body to live
       X1: forcing the mother to give the organ
       X2: forcing the mother to carry the pregnancy
     attacks:
       - question: CQ:premise_acceptable
         target: corresponds(X1,X2)
         text: Refusing to give an organ leaves the child as it was; ending a pregnancy is an act against the foetus. Forcing one is not the counterpart of forcing the other.
-    note: A verdict that forcing the mother would be wrong, carried over to forcing her here, so it is a practical analogy; compare example 5.
+    note: >-
+      "Cannot force" sits on the line between a permission (she may refuse,
+      which would be analogy) and a verdict on an action (forcing her would be
+      wrong). Read as the verdict on forcing, carried over to forcing her here,
+      it is a practical analogy; compare example 5.
 
   - scheme: practical_analogy_negative
     title: The coast road and the valley road
@@ -688,7 +696,7 @@ examples:
       - question: CQ:premise_acceptable
         target: stronger_case(C2,C1,P2)
         text: Ten minutes is far shorter than an hour; it is not clear that the child's case is the stronger one.
-    note: Analogy's form would misstate it (the child is not like the dog, but more deserving of protection), and analogy's difference exception would defeat it by the very difference it relies on.
+    note: Analogy's form would misstate it, since the child is not like the dog but more deserving of protection, so its similarity premise would be false. The difference it relies on favours the claim, so analogy's directional exception, which it shares, does not defeat it; version 2's undirected exception would have.
 
   - scheme: a_fortiori
     title: A professor's loans

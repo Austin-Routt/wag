@@ -134,7 +134,7 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
      - whether a causal chain should be able to back a consequence scheme's `brings_about(A,G)`, which no step concludes;
      - whether a `cause_to_effect` step should chain into a modal one (`will_occur(E)` meets no `may_occur(E)`);
      - whether the consequence schemes' `brings_about` and the slope's links should take a modal form too.
-5. **N12, analogy:** separate source and target propositions.
+5. **N12, analogy:** separate source and target propositions. **Done on 2026-10-22** (decisions D001, D028, D029; [proposal](proposals/D001-D028-D029.md), version 3, after two independent reviews and a short check): analogy and the practical analogies have a claim or action in each case, joined by a correspondence premise, with a directional difference exception; the practical analogies conclude `should_be_performed(X2)` and its negation. The game takes the new form at workstream E; until then the catalogue records that the game's copy differs. Two patterns that fit neither form are candidates ([`candidates.md`](candidates.md), D056).
 6. **The upstream defects** (duplicate ids; the master's typo and wrong variable list, already corrected in the cleaned file): record only. `walton.yml` is already right.
 7. **`walton.yml`'s English templates.** Rewrite in our own words the 173 that repeat the book (plan §7, item 1). The catalogue does not store them, but the game and `wag-cli --catalogue-show` render them.
 8. **The scheme changes that drafting tier 1 proposed.** These are the 57 open decisions recorded in the tier-1 entries, grouped in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open):

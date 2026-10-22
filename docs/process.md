@@ -137,10 +137,9 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    - every variable is declared, used, in a premise, and bound in every example;
    - every predicate has a template;
    - every question targets a formula of its scheme, and a `walton/` question an assumption or exception, as in the catalogue;
-   - a book label (`7/CQ1`) is one the compendium prints for that entry, and no id is given twice;
+   - a book label (`7/CQ1`) is one the compendium prints for an entry linked to the scheme, and no id is given twice;
    - questions are given only for the proposed and candidate schemes, each under its own heading;
-   - an example challenges only a premise or assumption that no question of its scheme targets (`CQ:premise_acceptable`, with the formula as its target), as the game allows;
-   - an example used as an answer comes from a scheme that concludes a bare proposition.
+   - an example challenges only a premise or assumption that no question of its scheme targets (`CQ:premise_acceptable`, with the formula as its target), as the game allows.
 
    It also writes the view, `<decisions>.md`. Every formula of every example is rendered in English there, under each question that is pressed against it.
 3. **The minimum set of examples** for each proposed scheme (the check warns when one is missing):
@@ -152,7 +151,7 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    The scheme's negated form gets an example where it has one.
 4. **The cleaning's gate and the registry** run on `walton.yml` with the proposal applied (`--proposal-walton PATH`, then `walton-check PATH` and `wag-cli --registry PATH`). Only the proposed schemes may differ from today's results.
 5. **An independent reviewer checks it** (§3): against the book, `walton.yml`, the game and Kialo, with examples of its own, and gives a verdict for each decision. The proposal is revised on its findings and reviewed again.
-6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, and the decision is closed in the register.
+6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, the decision is closed in the register, and the proposal is marked `applied`, so that its view says its "Now" columns now equal the proposed ones. The first proposal, [D001-D028-D029](proposals/D001-D028-D029.md), went this way on 2026-10-22: two independent reviews, then a short check of the third version.
 
 A test keeps every committed proposal valid and its view current.
 
@@ -196,7 +195,7 @@ New schemes, questions and links come from three places:
 - data: Kialo's "other" candidates, [`plan.md`](plan.md) §3;
 - play: "I wanted to say X and could not".
 
-All three go through one candidates file. A candidate seen at least three times in at least two discussions or games goes to a person, who decides one of four outcomes:
+All three go through one candidates file, [`candidates.md`](candidates.md) (since 2026-10-22: a fortiori and refutation by parallel argument, D056). A candidate seen at least three times in at least two discussions or games goes to a person, who decides one of four outcomes:
 - reject it;
 - merge it into an existing item;
 - record it as a domain version of one;

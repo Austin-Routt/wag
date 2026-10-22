@@ -136,7 +136,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 
 **The next actions** ([the alignment plan §4](docs/catalogue-alignment.md#4-order), revised 2026-10-22):
 1. **Protect and organize the work:** a generated status report, and the agents' briefs and tools in WAG. The private workspace, CI and the decision register are in place since 2026-10-22.
-2. **The owner sorts the open decisions** in the register, [`docs/decisions.md`](docs/decisions.md): 51 open, 11 of them proposed as priority 1 because they hold up the game's schemes or verification. The owner confirms the priorities, then decides.
+2. **The owner decides the open decisions** in the register, [`docs/decisions.md`](docs/decisions.md), by priority (confirmed on 2026-10-22). Decided so far: CI (D052); the analogy family in two-case form (D001, D028, D029), made on 2026-10-22 after two independent reviews of its proposal; declared polarity pairs (D053), whose check is still to build. New candidates go to [`docs/candidates.md`](docs/candidates.md).
 3. **The game's fields** for the 9 game schemes, and the generator that reproduces today's NASCQ from the catalogue.
 4. **The verification protocol,** then a person verifies the 33 tier-1 entries (about 10–15 hours), while the version 4 guidelines are drafted.
 
@@ -187,6 +187,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) | The plan for complete coverage and alignment of the scheme catalogue: what is left, in which order, and when it is done |
 | [`docs/proposals/`](docs/proposals/) | **Proposals for scheme changes:** the schemes as they would be, and examples rendered in English, for the owner to read before `walton.yml` changes ([`docs/process.md`](docs/process.md) §5). The first: [D001, D028 and D029](docs/proposals/D001-D028-D029.md), the analogy family in two-case form |
 | [`docs/decisions.md`](docs/decisions.md) | **Every open decision,** with its priority, what it holds up and who decides it; generated from the register, [`docs/decisions.yml`](docs/decisions.yml) |
+| [`docs/candidates.md`](docs/candidates.md) | **Candidates:** schemes, questions and links WAG may need, with the evidence and what implementing each needs. The first two: argument a fortiori and refutation by parallel argument (D056) |
 | [`docs/process.md`](docs/process.md) | How the work is done: one source of truth per fact, statuses, independent agents, feedback from play, the decision register, the private workspace, the checks |
 | [`docs/review-2026-10-22-part13.md`](docs/review-2026-10-22-part13.md) | The owner's review of the goal: what the sources do not define, what the plan lacked, and the decisions of 2026-10-22 |
 | [`docs/review-2026-10-22-part12.md`](docs/review-2026-10-22-part12.md) | Tier 1 of the catalogue drafted and independently checked; the owner's changes to `walton.yml`; the decisions left open |

@@ -42,14 +42,14 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 ## How the annotations went into the game
 
-`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-10-15:
+`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-10-22, after the analogy family's two-case form (decisions D001, D028, D029) and before the game's data takes it (workstream E):
 
 | Integration | Claims | Meaning |
 |---|---|---|
-| as intended | 20 | Played with its scheme, in its role: 16 arguments for or against a statement or new, 1 answer to a critical question, 3 challenges of a premise. |
+| as intended | 19 | Played with its scheme, in its role: 15 arguments for or against a statement or new, 1 answer to a critical question, 3 challenges of a premise. |
 | fragment | 3 | The claim states a premise of its target's argument (the scheme is the target's), so it supports that premise, with Other. |
-| coverage gap | 15 | The game lacks its scheme, so it was played with Other: the annotation is not at fault. The schemes: 5 `other`, 3 verbal classification, 2 cause to effect, 2 rule, and one each of ends and means, practical analogy, and practical necessary condition. |
-| failed | 6 | The game has the scheme, but the intended answer to a critical question cannot be made with it. 2 negative consequences answering "side effects" (an exception); 3 consequences or goal-based reasoning answering "other means"; 1 value argument answering "good consequences to weigh against". In each, the scheme's conclusion is not the answer: the bridge the audit's N4 and §4 discuss. |
+| coverage gap | 15 | The game lacks its scheme, so it was played with Other: the annotation is not at fault. The schemes: 5 `other`, 3 verbal classification, 2 cause to effect, 2 rule, and one each of ends and means, practical analogy, and practical necessary condition. The practical analogy (13292.30) now concludes the thesis itself, `should_be_performed(tax_meat)`, so its Other argument supports the thesis's own statement. |
+| failed | 7 | The game has the scheme, but the intended move cannot be made with it. 2 negative consequences answering "side effects" (an exception); 3 consequences or goal-based reasoning answering "other means"; 1 value argument answering "good consequences to weigh against". In each, the scheme's conclusion is not the answer: the bridge the audit's N4 and §4 discuss. And 13292.61, coded with analogy's two-case form, which the game's `AS:analogy` (still A and C) does not take until its data is generated from the catalogue; until then it is played with Other. |
 | duplicate | 1 | A challenge of a premise another claim already challenged. |
 | cascade | 2 | Its target was itself played with Other, so the premise it attacks is not on the board. |
 | not played | 2 | No scheme and no move: an amendment, and a causal claim on a missing premise. |

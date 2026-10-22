@@ -36,8 +36,8 @@ families:
 - family: F04
   name: Analogy and case-based arguments
   relation: related
-  note: walton.yml content applies the rule of a similar precedent case (similar_case/1
-    as in analogy)
+  note: walton.yml content applies the rule of a precedent case similar to the current
+    one (similar_case/1, which analogy also used until its two-case form of 2026-10-22)
   status: generated
 - family: F20
   name: Rules, exceptions and excuses

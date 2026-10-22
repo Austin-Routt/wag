@@ -13,22 +13,24 @@ walton:
 game:
   id: AS:analogy
 formulas:
-  variables: [A, C]
+  variables: [P1, P2, C1, C2]
   premises:
-  - similar_case(C)
-  - in_case(A,C)
+  - similar_to(C1,C2)
+  - in_case(P1,C1)
+  - corresponds(P1,P2)
   exceptions:
-  - relevant_differences(C)
-  - more_on_point(A,C)
+  - difference_against(C1,C2,P2)
   conclusions:
-  - A
+  - P2
 book:
 - entry: "7"
   title: Argument From Analogy
   pages: "315"
   match: exact
-  note: Same title and source (Fundamentals 2006, pp. 96-97); both premises and all
-    three CQs have formulas. The current case C2 is implicit.
+  note: Same title and source (Fundamentals 2006, pp. 96-97). The book's one letter,
+    a claim made relative to each case, is a claim in each case joined by a correspondence
+    premise of ours (decisions D001, D028 and D029, 2026-10-22); both premises and
+    all three CQs have formulas.
   status: generated
 families:
 - family: F04
@@ -38,17 +40,17 @@ families:
 premise_map:
 - entry: "7"
   label: Similarity Premise
-  formulas: [{formula: similar_case(C), locus: premise}]
-  note: '"Case C is similar to the current case"'
+  formulas: [{formula: 'similar_to(C1,C2)', locus: premise}]
   status: generated
 - entry: "7"
   label: Base Premise
-  formulas: [{formula: 'in_case(A,C)', locus: premise}]
+  formulas: [{formula: 'in_case(P1,C1)', locus: premise}]
   status: generated
 - entry: "7"
   label: Conclusion
-  formulas: [{formula: A, locus: conclusion}]
-  note: bare variable A; "in case C2" is implicit (the current case)
+  formulas: [{formula: P2, locus: conclusion}, {formula: 'corresponds(P1,P2)', locus: premise}]
+  note: P2, the claim about the target case; the correspondence premise, ours, says
+    that it is the counterpart of P1, the book's shared letter
   status: generated
 critical_questions:
 - id: 7/CQ1
@@ -60,17 +62,19 @@ critical_questions:
     text: Does the case of {C} differ from this one in relevant ways?
     locus: exception
     pattern: relevant_differences(C)
-  targets: [{formula: relevant_differences(C), locus: exception}]
-  note: In ch. 2 (p. 63) the book says that the matching question of its version-1
+  targets: [{formula: 'difference_against(C1,C2,P2)', locus: exception}]
+  note: 'In ch. 2 (p. 63) the book says that the matching question of its version-1
     list (p. 62, CQ3) could be an undercutter or a defeater, depending on how much
-    the differences matter; walton.yml makes it an exception, so the critic raises
-    it.
-  paraphrase: Do C and the present case differ in ways that weaken the likeness the
-    argument relies on?
+    the differences matter. walton.yml makes it an exception, so the critic raises
+    it, and since 2026-10-22 (D001) the exception names the claim carried over and
+    tells against it: a difference about another claim, or one that favours this claim,
+    does not defeat the argument.'
+  paraphrase: Do the two cases differ in a way that tells against the claim carried
+    over to the target?
   answer: 'The critic, who raises it with an argument. Against: a difference between
-    C and the present case that bears on A (a feature that made A hold in C and is
-    missing here), which undercuts the argument through relevant_differences(C). For:
-    showing that the differences are not ones that A depends on.'
+    C1 and C2 that tells against P2 (a feature that made P1 hold in C1 and is missing
+    in C2), which undercuts the argument through difference_against(C1,C2,P2). For:
+    showing that the differences do not bear on the claim, or that they favour it.'
   status: drafted by Claude Code, 2026-10-22
 - id: 7/CQ2
   book:
@@ -81,15 +85,15 @@ critical_questions:
     text: Is {A} really true in the case of {C}?
     locus: premise
     pattern: in_case(A,C)
-  targets: [{formula: 'in_case(A,C)', locus: premise}]
+  targets: [{formula: 'in_case(P1,C1)', locus: premise}]
   note: In ch. 2 (p. 63) the book calls the questions that only restate a premise
-    redundant; this is one. Since walton.yml has one A for both cases, the formula
-    says that the target's proposition held in C (see the discrepancy on the variables,
-    N12).
-  paraphrase: Does A in fact hold in the case C?
-  answer: 'The proponent, once asked. Against: evidence that A did not hold in C,
-    or held only in part, which undermines in_case(A,C). For: a record or source showing
-    that A held in C.'
+    redundant; this is one. For an imagined source case (a thought experiment), whether
+    the claim holds there is the audience's considered judgment.
+  paraphrase: Did the claim really hold in the source case?
+  answer: 'The proponent, once asked. Against: evidence that P1 did not hold in C1,
+    or held only in part, which undermines in_case(P1,C1). For: a record or source
+    showing that it held; for an imagined case, the audience''s considered judgment,
+    which the critic can contest by putting the case differently.'
   status: drafted by Claude Code, 2026-10-22
 - id: 7/CQ3
   book:
@@ -100,47 +104,50 @@ critical_questions:
     text: Is there a case more on point than {C} in which {A} is false?
     locus: exception
     pattern: more_on_point(A,C)
-  targets: [{formula: 'more_on_point(A,C)', locus: exception}]
-  note: walton.yml asks for a case "more on point" in which A is false; the book asks
-    for another case C3 also similar to C1. The book (p. 63) reads the matching question
-    of its version-1 list (p. 62, CQ4) as a counter-analogy, more like a defeater
-    (a rebuttal). The book's C3 resembles C1, the source case; the audit's draft (cq_drafts.json)
-    reads it as resembling the target. See the discrepancy on CQ3.
-  paraphrase: Can a further case be found that resembles C as well, yet where A turned
-    out false?
-  answer: 'The critic, who raises it with an argument. Against: a counter-case in
-    which A failed and which is closer to the present case than C, which undercuts
-    the argument through more_on_point(A,C); a counter-case only as close as C can
-    still be put as an argument against A, which rebuts it. For: showing that the
-    counter-case is less like the present case than C is, or that A failed there for
-    a reason absent here.'
+  targets: [{formula: P2, locus: conclusion}]
+  note: 'The book asks for another case like the source, C1, in which the claim failed,
+    and reads the matching question of its version-1 list (p. 62, CQ4) as a counter-analogy,
+    more like a defeater (p. 63). In the two-case form the counter-analogy needs no
+    formula of its own: it is an analogy from the further case for the opposite claim,
+    which rebuts the conclusion and is weighed against it. walton.yml''s more_on_point(A,C),
+    an undercutter, was removed with D001.'
+  paraphrase: Is there another case, much like the source, in which the counterpart
+    of the claim did not hold?
+  answer: 'The critic, who answers it with a counter-analogy: an analogy from the
+    further case for the opposite of P2, which rebuts the conclusion; Carneades weighs
+    the two. For: showing that the further case is less like the target than C1 is,
+    or that the claim failed there for a reason absent in C2.'
   status: drafted by Claude Code, 2026-10-22
 summary:
-  text: Use it when a proposition A is claimed to hold in the case at hand because
-    it holds in another case C that resembles this one. It carries a finding across
-    from one particular case to another, which sets it apart from from_example, which
-    argues from a case up to a general rule, and from practical_analogy_positive and
-    practical_analogy_negative, which carry over a verdict that an action was right
-    or wrong.
+  text: Use it when a claim is made about one case because a corresponding claim held
+    in another, similar case. It carries a claim that is not a verdict on an action
+    (a finding, a prediction, a deontic status such as having no obligation, an evaluation
+    of a thing) from one particular case to another. That sets it apart from from_example,
+    which argues from cases up to a general rule, and from practical_analogy_positive
+    and practical_analogy_negative, which carry over a verdict that an action taken
+    in a like situation was right or wrong. P2 says of the target case what P1 says
+    of the source; a recommendation drawn from a finding is a second argument.
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_analogy_positive
-  text: Choose practical_analogy_positive when what is carried over from the earlier
-    case is that doing X there was right, and the conclusion is that X is right here;
-    choose analogy when what is carried over is a matter of fact, such as that a measure
-    worked in C. A claim that a tax worked elsewhere (analogy) often backs a claim
-    that the tax is right here (practical analogy).
+  text: 'Choose practical_analogy_positive when the source is cited for a verdict
+    that an action taken there was right (whatever the word: right, the correct call,
+    what should be done) and the conclusion is that the corresponding action should
+    be done here; choose analogy for any other claim, such as a finding that a measure
+    worked in C1. A finding carried over by analogy (a tax cut consumption there)
+    often backs a practical claim through a second argument from consequences.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_analogy_negative
-  text: Choose practical_analogy_negative when the earlier case is cited because doing
-    X there was wrong, to argue that X is wrong here; choose analogy when the proposition
-    carried over is a matter of fact, such as that a measure failed in C.
+  text: Choose practical_analogy_negative when the source is cited for a verdict that
+    an action taken there was wrong (wrong, a mistake, unethical), to conclude that
+    the corresponding action should not be done here; choose analogy for any other
+    claim, including a deontic status that is not a verdict on doing something, such
+    as having no obligation (Kialo 5637.341).
   status: drafted by Claude Code, 2026-10-22
 - scheme: exception_to_rule
   text: Choose exception_to_rule (walton.yml's precedent scheme) when the similar
     case is cited for the rule it was decided by, and that rule's conclusion is applied
-    here; choose analogy when the proposition itself is carried from C to the present
-    case, with no rule in between.
+    here; choose analogy when a claim is carried from C1 to C2, with no rule in between.
   status: drafted by Claude Code, 2026-10-22
 - scheme: from_example
   text: 'Choose from_example when a case is offered as support for a general rule;
@@ -157,81 +164,192 @@ contrasts:
 examples:
 - text: A tax for tobacco significantly reduced its consumption.
   kialo: "13292.61"
-  coding: 'C = the tobacco-tax case; A = a meat tax would significantly reduce meat
-    consumption (the target proposition, as the gold codes it). Stated: in_case(A,C),
-    read as the source proposition (a tobacco tax cut smoking). Supplied: similar_case(C)
-    (both are excise taxes on a consumer good thought harmful). Conclusion: A, rebutting
-    13292.13 on the consumption link. The source proposition differs from A: see the
-    N12 discrepancy.'
+  coding: 'C1 = a tax on tobacco; C2 = a tax on meat; P1 = taxing tobacco significantly
+    reduced tobacco consumption; P2 = taxing meat would significantly reduce meat
+    consumption. Stated: in_case(P1,C1). Supplied: similar_to(C1,C2), corresponds(P1,P2).
+    Conclusion: P2, rebutting 13292.13 on the consumption link. Pressed: 7/CQ1 (meat
+    is a staple, and demand for staples changes little with price); 7/CQ3 by a counter-analogy
+    from a tax on sugary drinks.'
   status: drafted by Claude Code, 2026-10-22
-- text: When the city made the central bus lanes car-free, bus journeys there got
-    much quicker; making the ring road's lanes bus-only would speed up buses there
-    too.
-  coding: 'C = the car-free central bus lanes; A = making lanes bus-only speeds up
-    buses (target: the ring road). Stated: in_case(A,C) (journeys got quicker), and
-    the conclusion. Supplied: similar_case(C). Conclusion: A. A critic would raise
-    relevant_differences(C): the ring road carries through traffic with no other route.'
+- text: Judith Jarvis Thomson argues that people would be outraged if they found themselves
+    plugged to an ailing violinist, obliged to keep them alive for nine months. In
+    cases where biological parents do not choose to create life, the violinist in
+    the thought experiment is equivalent to the foetus.
+  kialo: "5637.341"
+  coding: 'C1 = being plugged into an ailing violinist without consent; C2 = an unchosen
+    pregnancy; P1 = one is not obliged to stay plugged in for nine months; P2 = the
+    pregnant person is not obliged to carry the pregnancy to term. Analogy, not a
+    practical analogy: it carries a deontic status, not a verdict on an action. The
+    source is imagined, so in_case(P1,C1) is the audience''s judgment. Its replies
+    press 7/CQ1 (5637.11606: a stranger, not one''s own child) and challenge corresponds(P1,P2)
+    (5637.344: being unplugged is not killing).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Like nuclear weapons, transhumanism can be limited through the principle of
+    mutual assured destruction.
+  kialo: "13564.1157"
+  coding: C1 = nuclear technology; C2 = transhumanist technology; P1 = the threat
+    of mutual destruction has kept nuclear weapons from being used; P2 = the threat
+    of mutual destruction would keep transhumanist weapons from being used. Its parent,
+    13564.1155, draws another analogy between the same two cases; the difference exception
+    names the claim, so a difference against this one leaves the parent standing.
+  status: drafted by Claude Code, 2026-10-22
+- text: Rent control in the old town did not bring more homes onto the market, and
+    the new district is much like it, so rent control there will not either.
+  coding: 'The "(false)" form, by negated claims: C1 = rent control in the old town;
+    C2 = rent control in the new district; P1 = rent control did not increase the
+    supply of homes in the old town; P2 = rent control will not increase the supply
+    of homes in the new district. A critic raises difference_against(C1,C2,P2): the
+    old town had no land left to build on, the new district has.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Road pricing ended Singapore's traffic jams, so London should bring it in.
+  coding: 'A chain. Analogy: C1 = road pricing in Singapore; C2 = road pricing in
+    London; P1 = road pricing ended the traffic jams in Singapore; P2 = road pricing
+    would end the traffic jams in London. Then positive consequences from P2 to the
+    recommendation. Binding P2 to the recommendation would make the correspondence
+    premise pair a finding with a policy.'
   status: drafted by Claude Code, 2026-10-22
 - text: Elsewhere, governments have put taxes on ecologically damaging businesses,
     e.g., carbon tax, oil tax etc.
   kialo: "13292.30"
-  coding: 'Near miss: it compares cases, but what crosses over is that taxing a damaging
-    activity was the right thing to do, and the conclusion is the thesis, a policy;
-    practical_analogy_positive, as the gold codes it (A1 = ecologically damaging businesses,
-    A2 = meat production, X = taxing the damaging activity).'
+  coding: 'Near miss: it compares situations, but the source is cited for a verdict
+    on an action (taxing carbon and oil was right) and the conclusion is the thesis,
+    that meat should be taxed; practical_analogy_positive, as the gold codes it (X2
+    = tax_meat).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+- text: In the Riverside tenants' case the court held that tenants may withhold rent
+    while the landlord leaves the heating broken; our tenants, whose heating has been
+    off for a month, may do the same.
+  coding: 'Near miss: a case cited for the rule it was decided by; exception_to_rule
+    (walton.yml''s precedent scheme), C = the Riverside tenants'' case, R = the rule,
+    S = our tenants may withhold rent.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
+- kind: game-differs
+  about: premise similar_to(C1,C2)
+  detail: The game's core.yml lacks the premise similar_to(C1,C2) of walton.yml.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: premise in_case(P1,C1)
+  detail: The game's core.yml lacks the premise in_case(P1,C1) of walton.yml.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: premise corresponds(P1,P2)
+  detail: The game's core.yml lacks the premise corresponds(P1,P2) of walton.yml.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: premise similar_case(C)
+  detail: The game's core.yml has the premise similar_case(C), which walton.yml lacks.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: premise in_case(A,C)
+  detail: The game's core.yml has the premise in_case(A,C), which walton.yml lacks.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: exception difference_against(C1,C2,P2)
+  detail: The game's core.yml lacks the exception difference_against(C1,C2,P2) of
+    walton.yml.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: exception relevant_differences(C)
+  detail: The game's core.yml has the exception relevant_differences(C), which walton.yml
+    lacks.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: exception more_on_point(A,C)
+  detail: The game's core.yml has the exception more_on_point(A,C), which walton.yml
+    lacks.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: conclusion P2
+  detail: The game's core.yml lacks the conclusion P2 of walton.yml.
+  decision: ""
+  status: generated
+- kind: game-differs
+  about: conclusion A
+  detail: The game's core.yml has the conclusion A, which walton.yml lacks.
+  decision: ""
+  status: generated
 - kind: book-walton
   about: variables (N12)
-  detail: 'The book''s scheme has two cases, a source C1 and a target C2, and concludes
-    that A holds in C2. walton.yml has only the source case C: the target is "the
-    current case", left implicit, and the conclusion is A itself. So in_case(A,C)
-    and the conclusion share one proposition, and the premise must say that the target''s
-    proposition held in the source case, which is false whenever the two cases are
-    about different things (a tobacco tax and a meat tax, 13292.61). The book''s "(false)"
-    form, A false in both cases, also has no formula of its own.'
-  decision: 'Open: the owner''s decision on N12 (docs/review-2026-10-13-part5.md §7
-    and §8 item 3; the proposal in docs/review-2026-10-15-part6.md §4, a new two-case
-    scheme beside analogy, with separate source and target propositions and a premise
-    that they correspond). Until then, bind A to the target proposition and keep the
-    source proposition in the coding''s notes, as the batch-2 guidelines do (§3).
-    The "(false)" form is coded by binding A to a negated proposition.'
+  detail: The book's scheme has two cases, a source C1 and a target C2, and uses one
+    letter for the claim made relative to each. walton.yml had only the source case
+    C, the target left implicit as "the current case", and one proposition A for both,
+    so its premise in_case(A,C) said that the target's claim held in the source case,
+    which is false whenever the two claims differ (a tobacco tax and a meat tax, 13292.61).
+  decision: 'Done (D001, decided by the owner on 2026-10-22; proposal D001-D028-D029,
+    version 3): a claim in each case, P1 and P2, joined by corresponds(P1,P2); similar_to(C1,C2)
+    names both cases; the conclusion is P2. The "(false)" form is coded by negated
+    claims.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Similarity Premise
-  detail: The book qualifies its similarity premise with "generally" and names both
-    cases; walton.yml's similar_case(C) drops the qualifier and compares C with an
-    implicit present case. Ch. 2 also gives a version 2 (p. 58), with a further premise
-    that the similarity observed is relevant to the similarity in question, and a
-    list of questions for version 1 (p. 62) that also asks whether the cases are similar
-    in the respects cited; walton.yml has no formula for either, and the compendium's
-    list drops the second.
+  detail: The book qualifies its similarity premise with "generally". Ch. 2 also gives
+    a version 2 (p. 58), with a further premise that the similarity observed is relevant
+    to the similarity in question, and a list of questions for version 1 (p. 62) that
+    also asks whether the cases are similar in the respects cited; walton.yml has
+    no formula for either, and the compendium's list drops the second.
   decision: No change. The catalogue follows the compendium's scheme 7, which is ch.
     2's version 1, the version the book recommends, keeping version 2 for cases where
-    relevance has to be decided (p. 86). A doubt about relevance is raised through
-    7/CQ1, and a doubt about the respects cited by challenging similar_case(C). "Generally"
-    is carried by the argument's defeasibility, not by the formula; the missing target
-    case is the N12 discrepancy.
+    relevance has to be decided (p. 86). Relevance is carried by the difference exception,
+    which names the claim (7/CQ1), and a doubt about the respects cited by challenging
+    similar_to(C1,C2). "Generally" is carried by the argument's defeasibility, not
+    by the formula.
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: CQ3
-  detail: 'The book''s counter-case need only resemble the source case and have A
-    false. walton.yml''s more_on_point(A,C) asks for a case more on point than C,
-    a stronger demand: a counter-case no closer than C does not establish the exception.'
-  decision: Keep the target. A counter-case that is closer than C undercuts through
-    more_on_point(A,C); one only as close can still be argued against A as a rebuttal,
-    which is the book's own reading of a counter-analogy (p. 63). Nothing the book
-    allows is lost.
+  detail: The book's counter-case need only resemble the source case and have the
+    claim fail there, and the book reads it as a counter-analogy (p. 63). walton.yml's
+    more_on_point(A,C) asked instead for a case more on point than C, as an undercutter.
+  decision: 'Done (D001, 2026-10-22): more_on_point is removed, and 7/CQ3 targets
+    the conclusion; the counter-analogy, an analogy from the further case for the
+    opposite claim, rebuts and is weighed.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
-  detail: CQ:other_case follows walton.yml ("more on point than {C}"), so it narrows
-    the book's CQ3; CQ:truth asks only whether A is true in C, dropping the book's
-    "(false)" form. CQ:difference is close to the book's CQ1.
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), word
-    CQ:other_case from 7/CQ3''s paraphrase if the owner widens the exception, or keep
-    it while more_on_point(A,C) stays.'
+  detail: 'Until the NASCQ is generated from the catalogue, the game''s AS:analogy
+    keeps the old form (A and C): CQ:difference asks of relevant_differences(C), CQ:truth
+    of in_case(A,C) and CQ:other_case of more_on_point(A,C), and analogy is not thesis-independent.'
+  decision: 'Open: at workstream E, AS:analogy takes P1, P2, C1, C2 and answer variable
+    P2; CQ:difference and CQ:truth are repatterned and CQ:other_case answered by a
+    counter-analogy at the conclusion; how far analogy reaches as an answer is D057.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: correspondence premise
+  detail: The book uses one letter for the claim in both cases; walton.yml has a claim
+    in each case joined by corresponds(P1,P2), which the book does not print.
+  decision: 'Keep (D001): it makes the shared letter explicit and lets the target
+    claim differ in wording, tense or predicate. It is challenged like any premise,
+    so it has no question of its own. Binding rule: P2 says of C2 what P1 says of
+    C1.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: difference exception
+  detail: The book's CQ1 asks whether the cases differ in ways that weaken the likeness.
+    walton.yml's exception difference_against(C1,C2,P2) names the claim and says that
+    the difference tells against it.
+  decision: 'Keep (D001): so a difference about one claim leaves another analogy between
+    the same cases standing, and a difference that favours the claim (as in an a fortiori
+    argument) defeats nothing. A general dissimilarity is a challenge of similar_to(C1,C2).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: limits of the form
+  detail: Several source cases fold into one C1 (Carneades does not add arguments
+    up); proportional analogies hide their relation in the correspondence premise;
+    imagined sources are judged, not observed. A fortiori arguments and refutation
+    by parallel argument fit neither this form nor the practical analogies.
+  decision: Code what fits with strain as analogy and note it; for what does not fit,
+    use the near miss or Other rather than force the form (guidelines §3). A fortiori
+    and refutation by parallel argument are candidates (docs/candidates.md, D056).
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -243,9 +361,10 @@ classification:
 specialises:
   scheme: ""
   note: 'Specialises nothing: it is the generic scheme of F04. Its practical counterparts,
-    practical_analogy_positive and practical_analogy_negative (p. 74), carry a verdict
-    on what was right or wrong to do, and are not narrowings of it in walton.yml''s
-    formulas.'
+    practical_analogy_positive and practical_analogy_negative (p. 74), share its vocabulary
+    (similar_to, corresponds and a difference exception) but carry a verdict on an
+    action and conclude that the action should, or should not, be performed, so they
+    are not narrowings of it.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [persuasion, deliberation, inquiry]
@@ -275,3 +394,11 @@ history:
   by: Claude Code
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the specialises note; a contrast with verbal_classification)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Updated for decisions D001, D028 and D029 (proposal D001-D028-D029, version
+    3): the questions retargeted to the two-case form, with new notes, paraphrases
+    and answers; the summary and contrasts state the choice by what is carried over;
+    examples from the proposal; the N12 and CQ3 discrepancies done; new ones on the
+    correspondence premise, the difference exception and the form''s limits; the game-questions
+    discrepancy now waits on workstream E and D057.'

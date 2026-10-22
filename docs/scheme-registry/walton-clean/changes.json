@@ -374,6 +374,17 @@
   "reason": "template words 'Oflicial rulelebooks' (OCR)"
  },
  {
+  "line": 103,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  corresponds/2: \"In the other case, the counterpart of %s is %s.\"",
+  "reason": "template for the analogy family's two-case form (D001, D028, D029), in our own words"
+ },
+ {
   "line": 110,
   "change": "insert after",
   "scheme": "language",
@@ -383,6 +394,28 @@
   "before": "",
   "after": "  data_set/2: \"%s is a set of data or supposed facts in case %s.\"",
   "reason": "abductive_backward uses data_set(D,A) with 2 arguments; only data_set/1 had a template"
+ },
+ {
+  "line": 115,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  difference_against/3: \"%s and %s differ in a way that tells against %s.\"",
+  "reason": "template for the analogy family's two-case form (D001, D028, D029), in our own words"
+ },
+ {
+  "line": 115,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  difference_for/3: \"%s and %s differ in a way that tells in favour of %s.\"",
+  "reason": "template for the analogy family's two-case form (D001, D028, D029), in our own words"
  },
  {
   "line": 118,
@@ -1034,6 +1067,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses reference_class with 0 argument(s) and the template has 0 %s"
  },
  {
+  "line": 321,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  right_to_do/2: \"The right thing to do in %s, was to carry out action %s.\"",
+  "after": "  right_to_do/2: \"In %s, %s was the right course.\"",
+  "reason": "the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the two-case form (D028, D029)"
+ },
+ {
   "line": 323,
   "change": "edit",
   "scheme": "language",
@@ -1309,6 +1353,17 @@
   "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
  },
  {
+  "line": 402,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  wrong_to_do/2: \"The wrong thing to do in %s, was to carry out action %s.\"",
+  "after": "  wrong_to_do/2: \"In %s, %s was the wrong course.\"",
+  "reason": "the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the two-case form (D028, D029)"
+ },
+ {
   "line": 410,
   "change": "edit",
   "scheme": "popular_opinion",
@@ -1408,6 +1463,72 @@
   "reason": "source: 'lnformal' (OCR l for I)"
  },
  {
+  "line": 646,
+  "change": "edit",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "    variables: [A1,A2,X]",
+  "after": "    variables: [A1,A2,X1,X2]",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 648,
+  "change": "edit",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - carry_out_right(A2,X)",
+  "after": "      - should_be_performed(X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 650,
+  "change": "edit",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - right_to_do(A1,X)",
+  "after": "      - right_to_do(A1,X1)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 651,
+  "change": "insert after",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - corresponds(X1,X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 651,
+  "change": "insert after",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 651,
+  "change": "insert after",
+  "scheme": "practical_analogy_positive",
+  "scheme_after": "practical_analogy_positive",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - difference_against(A1,A2,X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
   "line": 657,
   "change": "edit",
   "scheme": "practical_analogy_negative",
@@ -1417,6 +1538,72 @@
   "before": "              Douglas Walton, lnformal Logic New York: Cambridge University Press, 1989. p.257.",
   "after": "              Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257.",
   "reason": "source: 'lnformal' (OCR l for I)"
+ },
+ {
+  "line": 658,
+  "change": "edit",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "    variables: [A1,A2,X]",
+  "after": "    variables: [A1,A2,X1,X2]",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 660,
+  "change": "edit",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - carry_out_wrong(A2,X)",
+  "after": "      - ¬should_be_performed(X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 662,
+  "change": "edit",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - wrong_to_do(A1,X)",
+  "after": "      - wrong_to_do(A1,X1)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 663,
+  "change": "insert after",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - corresponds(X1,X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 663,
+  "change": "insert after",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 663,
+  "change": "insert after",
+  "scheme": "practical_analogy_negative",
+  "scheme_after": "practical_analogy_negative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - difference_for(A1,A2,X2)",
+  "reason": "D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met nothing). The book prints no questions for them; they get a difference exception, sided: against the action in the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
  },
  {
   "line": 669,
@@ -2847,6 +3034,83 @@
   "before": "      - reasonable_belive(M)",
   "after": "      - reasonable_believe(M)",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 1719,
+  "change": "edit",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "    variables: [A,C]",
+  "after": "    variables: [P1,P2,C1,C2]",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1720,
+  "change": "edit",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "    conclusions: [A]",
+  "after": "    conclusions: [P2]",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1722,
+  "change": "edit",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - similar_case(C)",
+  "after": "      - similar_to(C1,C2)",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1723,
+  "change": "edit",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - in_case(A,C)",
+  "after": "      - in_case(P1,C1)",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1723,
+  "change": "insert after",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - corresponds(P1,P2)",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1725,
+  "change": "edit",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - relevant_differences(C)",
+  "after": "      - difference_against(C1,C2,P2)",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
+ },
+ {
+  "line": 1726,
+  "change": "delete",
+  "scheme": "analogy",
+  "scheme_after": "analogy",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - more_on_point(A,C)",
+  "after": "",
+  "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
  },
  {
   "line": 1749,

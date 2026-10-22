@@ -43,7 +43,7 @@
  "meat_production_case": "the case of meat production",
  "higher_meat_price": "the consumer price of meat is higher",
  "tax_meat_reduces_meat_consumption": "a tax on meat would significantly reduce meat consumption",
- "tobacco_tax_case": "the case of tobacco taxation (a tobacco tax significantly reduced tobacco consumption)",
+ "tobacco_tax_case": "the case of a tax on tobacco",
  "synthetic_meat_development_advanced": "the development of synthetic meats is advanced",
  "more_dangerous_meat_production": "meat producers switch to cheaper and more dangerous means of producing meat",
  "farming_industry_not_meat_is_problem": "the animal farming industry, not meat itself, is what is problematic",
@@ -100,5 +100,7 @@
  "cheap_open_meat_trade": "meat imports stay cheap and trade stays open",
  "governments": "governments",
  "sustainability_and_animal_welfare": "sustainability and animal welfare",
- "meat_tax_proponents": "the proponents of a meat tax"
+ "meat_tax_proponents": "the proponents of a meat tax",
+ "meat_tax_case": "the case of a tax on meat",
+ "tobacco_tax_reduced_tobacco_consumption": "a tax on tobacco significantly reduced tobacco consumption"
 }

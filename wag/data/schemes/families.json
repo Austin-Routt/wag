@@ -178,19 +178,19 @@
      "scheme": "practical_analogy_positive",
      "relation": "context-specific",
      "compendium": "8.1",
-     "note": "practical (right action) form"
+     "note": "practical (right action) form; since 2026-10-22 it concludes should_be_performed, so it meets the practical schemes (D029)"
     },
     {
      "scheme": "practical_analogy_negative",
      "relation": "context-specific",
      "compendium": "8.2",
-     "note": "practical (wrong action) form"
+     "note": "practical (wrong action) form; since 2026-10-22 it concludes the negation of should_be_performed (D029)"
     },
     {
      "scheme": "exception_to_rule",
      "relation": "related",
      "compendium": "57",
-     "note": "walton.yml content applies the rule of a similar precedent case (similar_case/1 as in analogy)"
+     "note": "walton.yml content applies the rule of a precedent case similar to the current one (similar_case/1, which analogy also used until its two-case form of 2026-10-22)"
     }
    ]
   },

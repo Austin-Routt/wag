@@ -590,7 +590,18 @@ func TestProposalFindsFaults(t *testing.T) {
 			p.Examples[0].Attacks[0].Question = "7/CQ9"
 		}, "prints no CQ9 under 7", true},
 		{"a challenge of a premise a question targets", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "in_case(P,C)" }, "targeted by question 7/CQ2", true},
-		{"an answer from a scheme without a bare conclusion", func(p *Proposal) { p.Schemes[0].Conclusions = []string{"in_case(C,P)"} }, "cannot use it as an answer", false},
+	}
+	// A book label must belong to an entry linked to the scheme.
+	if w, ok := findWalton(s, "analogy"); ok {
+		p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
+			Questions: map[string][]PQuery{"analogy": {{ID: "33/CQ1", Asks: "q", Target: w.Premises[0]}}}}
+		found := false
+		for _, f := range CheckProposal(p, s) {
+			found = found || f.Error && strings.Contains(f.Msg, "33 is not a compendium entry of analogy")
+		}
+		if !found {
+			t.Error("a label of an entry not linked to the scheme is accepted")
+		}
 	}
 	// A challenge of an assumption is allowed: the game presumes it as a
 	// premise.
@@ -627,6 +638,16 @@ func bindAll(s *Sources, id string) map[string]string {
 		}
 	}
 	return m
+}
+
+// An applied proposal's view says so, since its "Now" columns then show the
+// changed walton.yml.
+func TestProposalApplied(t *testing.T) {
+	s := sources(t)
+	p := &Proposal{Decisions: []string{"D999"}, Title: "t", Applied: "2026-10-22, through edits.py"}
+	if v := string(ProposalView(p, s, "x.yml")); !strings.Contains(v, "**Applied:** 2026-10-22, through edits.py.") {
+		t.Errorf("the view does not say the proposal is applied:\n%s", v)
+	}
 }
 
 // Every committed proposal checks without errors, and its view is current.

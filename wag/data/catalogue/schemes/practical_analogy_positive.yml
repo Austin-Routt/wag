@@ -11,25 +11,35 @@ walton:
   source: 'Douglas Walton, Informal Logic New York: Cambridge University Press, 1989.
     p.257.'
 formulas:
-  variables: [A1, A2, X]
+  variables: [A1, A2, X1, X2]
   premises:
-  - right_to_do(A1,X)
+  - right_to_do(A1,X1)
   - similar_to(A1,A2)
+  - corresponds(X1,X2)
+  exceptions:
+  - difference_against(A1,A2,X2)
   conclusions:
-  - carry_out_right(A2,X)
+  - should_be_performed(X2)
 book:
 - entry: "8.1"
   title: Positive Schema
   pages: "316"
   parent: "8"
-  match: exact
-  note: Same title and source (Informal Logic 1989, p. 257).
+  match: partial
+  note: Same title and source (Informal Logic 1989, p. 257). The book's one action
+    letter, made relative to each situation, is an action in each situation joined
+    by a correspondence premise of ours; the conclusion restates the book's right
+    (wrong) thing to do as should (not) be performed, in the game's vocabulary, so
+    that the two rebut each other and meet the practical schemes; the sided difference
+    exception is ours, since the book prints no questions (decisions D001, D028 and
+    D029, 2026-10-22).
   status: generated
 families:
 - family: F04
   name: Analogy and case-based arguments
   relation: context-specific
-  note: practical (right action) form
+  note: practical (right action) form; since 2026-10-22 it concludes should_be_performed,
+    so it meets the practical schemes (D029)
   status: generated
 - family: F10
   name: Practical reasoning
@@ -39,7 +49,7 @@ families:
 premise_map:
 - entry: "8.1"
   label: Base Premise
-  formulas: [{formula: 'right_to_do(A1,X)', locus: premise}]
+  formulas: [{formula: 'right_to_do(A1,X1)', locus: premise}]
   status: generated
 - entry: "8.1"
   label: Similarity Premise
@@ -48,23 +58,43 @@ premise_map:
   status: generated
 - entry: "8.1"
   label: Conclusion
-  formulas: [{formula: 'carry_out_right(A2,X)', locus: conclusion}]
+  formulas: [{formula: should_be_performed(X2), locus: conclusion}, {formula: 'corresponds(X1,X2)',
+      locus: premise}]
+  note: X2, the action in the target situation; the correspondence premise, ours,
+    says that it is the counterpart of X1, the book's shared letter
   status: generated
-critical_questions: []
+critical_questions:
+- id: walton/difference_against
+  targets: [{formula: 'difference_against(A1,A2,X2)', locus: exception}]
+  note: 'No book question asks it: the book prints no questions for 8.1 or 8.2. The
+    exception is analogy''s difference question, given to its practical counterpart
+    (D028), and sided: a difference that tells against taking X2 here undercuts this
+    argument, while one in its favour undercuts the negative practical analogy instead,
+    so that when both argue from one past situation each side''s difference defeats
+    only the other (D053).'
+  paraphrase: Do the two situations differ in a way that tells against taking this
+    course here?
+  answer: 'The critic, who raises it with an argument. Against: a feature of the present
+    situation, absent from A1, that makes X2 a worse course here (the river bridge
+    is closed this time), which undercuts the argument through difference_against(A1,A2,X2).
+    For: showing that the differences do not bear on X2, or that they favour it.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: 'Use it when an action X is recommended in a situation A2 because X was the
-    right course in an earlier situation A1 that resembles A2. It is analogy put to
-    practical use: what crosses from one situation to the other is a verdict that
-    doing X was right, which sets it apart from analogy, which carries over a matter
-    of fact, and from practical_inference, which recommends X as a means to a goal.'
+  text: 'Use it when an action X2 is recommended in a situation A2 because the corresponding
+    action X1 was the right course in an earlier situation A1 that resembles A2. It
+    is analogy put to practical use: what crosses from one situation to the other
+    is a verdict that an action was right, and the conclusion, that X2 should be performed,
+    meets practical reasoning and the consequence arguments about the same action.
+    That sets it apart from analogy, which carries over any other claim, and from
+    practical_inference, which recommends X as a means to a goal.'
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: analogy
-  text: 'Choose practical_analogy_positive when the earlier situation is cited for
-    what it was right to do there, and the conclusion recommends the same action here;
-    choose analogy when what is carried over is a factual finding, such as that the
-    action worked. The two often come together: that a tax worked elsewhere (analogy)
-    backs the verdict that it was right there.'
+  text: 'The choice with analogy: a practical analogy cites the source for a verdict
+    that an action taken there was right or wrong, whatever the word, and concludes
+    that verdict on the corresponding action here; any other claim carried over is
+    analogy. A finding carried over by analogy (a tax worked there) can back the verdict
+    that the action was right, in a second argument.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_inference
   text: Choose practical_inference when X is recommended as a means to a goal the
@@ -73,10 +103,11 @@ contrasts:
     and also names the goal X served, code the inference it leans on.
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_analogy_negative
-  text: 'The negative counterpart, with the same form: choose practical_analogy_negative
-    when the earlier action is cited as a mistake, to argue against repeating it,
-    and practical_analogy_positive when it is cited as the right thing, to argue for
-    repeating it.'
+  text: 'The counterpart, with the same form: they conclude contradictories about
+    the same action, so they rebut each other and Carneades weighs them. Choose the
+    negative form when the earlier action is cited as a mistake, to argue against
+    repeating it, and the positive form when it is cited as the right course, to argue
+    for repeating it.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: popular_practice
   text: Choose popular_practice when an action is defended because most of those who
@@ -94,46 +125,106 @@ examples:
 - text: Elsewhere, governments have put taxes on ecologically damaging businesses,
     e.g., carbon tax, oil tax etc.
   kialo: "13292.30"
-  coding: 'A1 = ecologically damaging businesses elsewhere, taxed through carbon and
-    oil taxes; A2 = meat production; X = taxing the damaging activity. Stated: that
-    X was done in A1 (the text reports it); that doing it was right, right_to_do(A1,X),
-    is supplied. Inferred: similar_to(A1,A2) (meat production is ecologically damaging,
-    13292.4 and 13292.108). Conclusion: carry_out_right(A2,X), the thesis; re-parented
-    to the thesis, as in the gold.'
+  coding: 'A1 = countries facing the damage done by burning fossil fuels; A2 = our
+    country facing the damage done by meat production; X1 = taxing carbon and oil;
+    X2 = tax_meat, the thesis''s action. Stated: that X1 was done in A1; right_to_do(A1,X1)
+    is supplied (popular practice is the rival reading). Inferred: similar_to(A1,A2)
+    (meat production is ecologically damaging, 13292.4, 13292.108) and corresponds(X1,X2).
+    Conclusion: should_be_performed(tax_meat), the thesis, so it meets the consequence
+    arguments about the same action. Pressed: walton/difference_against (meat is food,
+    and a tax on food falls hardest on the poor); a challenge of corresponds(X1,X2).'
+  status: drafted by Claude Code, 2026-10-22
+- text: In the 2019 flood, evacuating the low town a day early was the right call.
+    This storm is like that one, so we should evacuate early again.
+  coding: 'A1 = the 2019 flood; A2 = this storm; X1 = evacuating the low town a day
+    early in 2019; X2 = evacuating the low town a day early now. Conclusion: should_be_performed(X2).
+    A negative practical analogy from the 2021 storm concludes its contradictory,
+    and the two rebut each other. A critic raises difference_against(A1,A2,X2): this
+    time the river bridge is closed.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Bailing out the banks in 2008 was right, since it stopped a run that would
+    have ruined ordinary savers. This crisis is like 2008, so the banks should be
+    bailed out again.
+  coding: A1 = the 2008 banking crisis; A2 = this banking crisis; X1 = bailing out
+    the banks in 2008; X2 = bailing out the banks now. Its negative counterpart argues
+    from the same situation that the bailout was wrong; their exceptions are sided,
+    so the negative's difference_for leaves this argument standing.
   status: drafted by Claude Code, 2026-10-22
 - text: Banning smoking in pubs was the right call, and vaping indoors is much the
     same, so it should be banned too.
-  coding: 'A1 = smoking in pubs; A2 = vaping indoors; X = a ban. Stated: right_to_do(A1,X)
-    ("the right call"), similar_to(A1,A2) ("much the same"). Conclusion: carry_out_right(A2,X).'
+  coding: 'A1 = smoking in pubs; A2 = vaping indoors; X1 = banning smoking in pubs;
+    X2 = banning vaping indoors. Stated: right_to_do(A1,X1) ("the right call"), similar_to(A1,A2)
+    ("much the same"); corresponds(X1,X2) supplied. Conclusion: should_be_performed(X2).'
   status: drafted by Claude Code, 2026-10-22
 - text: Sugar taxes in other countries cut sales of sugary drinks, so a meat tax would
     cut meat sales.
-  coding: 'Near miss: what crosses over is a factual result (the tax cut sales), not
-    a verdict that taxing was right, and the conclusion is a prediction, not a recommendation;
-    analogy (C = the sugar taxes; A = a meat tax would cut meat sales, the target
-    proposition, with the N12 caveat).'
+  coding: 'Near miss: what crosses over is a finding (the tax cut sales), not a verdict
+    that taxing was right, and the conclusion is a prediction; analogy (C1 = the sugar
+    taxes; C2 = a meat tax; P1 = the sugar taxes cut sales of sugary drinks; P2 =
+    a meat tax would cut meat sales).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+- text: Denmark, which everyone here looks up to, taxes saturated fat; we should tax
+    it too.
+  coding: 'Near miss: followed because it is admired, not because its situation is
+    like ours; from_model.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
+- kind: partial-link
+  about: "8.1"
+  detail: 'walton.yml formalizes compendium 8.1 only in part: Same title and source
+    (Informal Logic 1989, p. 257). The book''s one action letter, made relative to
+    each situation, is an action in each situation joined by a correspondence premise
+    of ours; the conclusion restates the book''s right (wrong) thing to do as should
+    (not) be performed, in the game''s vocabulary, so that the two rebut each other
+    and meet the practical schemes; the sided difference exception is ours, since
+    the book prints no questions (decisions D001, D028 and D029, 2026-10-22).'
+  decision: ""
+  status: generated
 - kind: other
   about: critical questions
-  detail: 'The book prints no questions for 8.1 or 8.2, and walton.yml gives the scheme
-    no assumptions or exceptions. So neither lets a critic raise what analogy''s exceptions
-    cover: a difference between A1 and A2 that matters to X, or a closer situation
-    in which X was wrong. The gold (13292.30) applies analogy''s questions by type.'
-  decision: 'Open: whether to give 8.1 and 8.2 analogy''s exceptions, with both situations
-    as arguments (for example relevant_differences(A1,A2)); a scheme change for the
-    owner. Until then, a difference between the situations is raised by challenging
-    similar_to(A1,A2), and a contrary precedent by an argument against the conclusion.'
+  detail: The book prints no questions for 8.1 or 8.2, and walton.yml gave the scheme
+    no assumptions or exceptions, so a critic could not raise a difference between
+    the situations that matters to the action.
+  decision: 'Done (D028, decided by the owner on 2026-10-22; proposal D001-D028-D029,
+    version 3): the exception difference_against(A1,A2,X2), sided; a contrary precedent
+    is a practical analogy of the opposite sign, which rebuts.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: Conclusion
-  detail: carry_out_right(A2,X) and the negative scheme's carry_out_wrong(A2,X) are
-    separate predicates, neither the negation of the other, so a positive and a negative
-    practical analogy about the same action do not conflict in the argument graph.
-  decision: 'Open: a modelling choice for the owner. Either read carry_out_wrong(A2,X)
-    as ¬carry_out_right(A2,X), so that the two schemes rebut each other, or keep them
-    apart and let a critic argue directly for ¬carry_out_right(A2,X).'
+  detail: 'carry_out_right(A2,X) and carry_out_wrong(A2,X) were separate predicates,
+    neither the negation of the other, and met no other scheme: a positive and a negative
+    practical analogy about the same action did not conflict, and neither supported
+    or attacked a practical claim.'
+  decision: 'Done (D029, 2026-10-22): the conclusions are should_be_performed(X2)
+    and its negation, so the two rebut each other and meet practical reasoning and
+    the consequence arguments.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: two actions
+  detail: The book's scheme uses one action letter made relative to each situation;
+    walton.yml has an action in each, X1 and X2, joined by corresponds(X1,X2), which
+    the book does not print.
+  decision: 'Keep (D028, D029): it lets the action here differ in wording or detail
+    from the one there, and the correspondence is challenged like any premise. X2
+    is to A2 what X1 was to A1.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: conclusion
+  detail: The book concludes that X is the right thing to do in the target situation;
+    walton.yml concludes that X2 should be performed, in the game's vocabulary.
+  decision: 'Keep (D029): so that it meets the practical schemes; links.json marks
+    the link partial.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: base premise
+  detail: No scheme concludes right_to_do, so a reason for the base premise (it saved
+    lives; it rewarded reckless lenders) cannot be chained in from a consequence or
+    practical-reasoning argument.
+  decision: 'Keep: a past verdict is not a should_be_performed claim. The premise
+    is backed by Other or a scheme with a bare conclusion (expert opinion, position
+    to know, analogy).'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -149,8 +240,9 @@ classification:
 specialises:
   scheme: ""
   note: 'Specialises nothing: the book presents it as the practical counterpart of
-    argument from analogy (ch. 2, p. 74), not a subtype. It carries a verdict on what
-    it was right to do, and shares no formula with analogy.'
+    argument from analogy (ch. 2, p. 74), not a subtype. It shares analogy''s vocabulary
+    (similar_to, corresponds and a difference exception) but carries a verdict on
+    an action and concludes that the action should be performed.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -181,3 +273,9 @@ history:
     specialises nothing (the book''s counterpart of analogy); the classification note
     names fairness; a contrast with practical_reasoning2; an invented example in place
     of 13292.55, which items.json has only cut off)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Updated for decisions D028 and D029, with D001 (proposal D001-D028-D029,
+    version 3): the question walton/difference_against on the new sided exception;
+    the summary and contrasts; examples from the proposal; the questions and conclusion
+    discrepancies done; new ones on the two actions, the conclusion and the base premise.'

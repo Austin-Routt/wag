@@ -3,7 +3,7 @@ walton-check walton.yml
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)
 stderr during import: ""
-schemes: 116, language keys: 410
+schemes: 116, language keys: 413
 
 == 2. Carneades validator ==
 before instantiation: 17 problem(s)
@@ -61,8 +61,8 @@ after instantiating every scheme: 17 problem(s)
  15 illustration                               PASS  args=1/1 premises+assumptions=2 exceptions=0
  16 from_model                                 PASS  args=1/1 premises+assumptions=3 exceptions=0
  17 from_antimodel                             PASS  args=1/1 premises+assumptions=3 exceptions=0
- 18 practical_analogy_positive                 PASS  args=1/1 premises+assumptions=2 exceptions=0
- 19 practical_analogy_negative                 PASS  args=1/1 premises+assumptions=2 exceptions=0
+ 18 practical_analogy_positive                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+ 19 practical_analogy_negative                 PASS  args=1/1 premises+assumptions=3 exceptions=1
  20 composition_generic                        PASS  args=1/1 premises+assumptions=2 exceptions=0
  21 part_in_whole                              PASS  args=1/1 premises+assumptions=2 exceptions=1
  22 division_generic                           PASS  args=1/1 premises+assumptions=2 exceptions=0
@@ -135,7 +135,7 @@ after instantiating every scheme: 17 problem(s)
  89 perception                                 PASS  args=1/1 premises+assumptions=2 exceptions=1
  90 memory                                     PASS  args=1/1 premises+assumptions=2 exceptions=0
  91 abduction                                  PASS  args=1/1 premises+assumptions=3 exceptions=1
- 92 analogy                                    PASS  args=1/1 premises+assumptions=2 exceptions=2
+ 92 analogy                                    PASS  args=1/1 premises+assumptions=3 exceptions=1
  93 appearance                                 PASS  args=1/1 premises+assumptions=1 exceptions=0
  94 cause_to_effect                            PASS  args=1/1 premises+assumptions=2 exceptions=1
  95 cause_to_effect_modal                      PASS  args=1/1 premises+assumptions=2 exceptions=1

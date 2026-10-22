@@ -523,4 +523,57 @@ ADDITIONS += [
     "      - interference(E1)",
     "",
 ]]
-OPS += OWNER_REPAIRS + ADDITIONS
+# ----------------------------------------------------------------------
+# 2026-10-22: the analogy family in two-case form (decisions D001, D028 and
+# D029; WAG's docs/proposals/D001-D028-D029.md, version 3, approved by the
+# owner after two independent reviews). The book's analogy (7) and its
+# practical counterparts (8.1, 8.2) use one letter for what holds in both
+# cases, made relative to each case. Here each case has its own claim or
+# action, joined by a correspondence premise; the difference exception
+# tells against what the argument concludes and names it, sided in the
+# practical pair; the book's CQ3 is a counter-analogy that rebuts, so
+# more_on_point goes. The practical analogies conclude that the target
+# action should (not) be performed, so that they rebut each other and meet
+# the practical schemes.
+_AN = ("D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false "
+       "whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between "
+       "the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, "
+       "a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner "
+       "decision of 2026-10-22 (proposal D001-D028-D029, version 3)")
+_PA = ("D028, D029: the book's practical analogies use one action letter made relative to each situation; now an action in "
+       "each situation (X1, X2) joined by corresponds(X1,X2), and the conclusion that the target action should (not) be "
+       "performed, so that the two rebut each other and meet the practical schemes (carry_out_right and carry_out_wrong met "
+       "nothing). The book prints no questions for them; they get a difference exception, sided: against the action in "
+       "the positive, in its favour in the negative. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)")
+_ANT = "template for the analogy family's two-case form (D001, D028, D029), in our own words"
+_RW = ("the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the "
+       "two-case form (D028, D029)")
+ANALOGY = [
+    insert(103, '  corresponds/2: "In the other case, the counterpart of %s is %s."', OWN, _ANT),
+    insert(115, '  difference_against/3: "%s and %s differ in a way that tells against %s."', OWN, _ANT),
+    insert(115, '  difference_for/3: "%s and %s differ in a way that tells in favour of %s."', OWN, _ANT),
+    dict(op="set", line=321, before='  right_to_do/2: "The right thing to do in %s, was to carry out action %s."',
+         after='  right_to_do/2: "In %s, %s was the right course."', category=OWN, reason=_RW),
+    dict(op="set", line=402, before='  wrong_to_do/2: "The wrong thing to do in %s, was to carry out action %s."',
+         after='  wrong_to_do/2: "In %s, %s was the wrong course."', category=OWN, reason=_RW),
+    sub(646, "[A1,A2,X]", "[A1,A2,X1,X2]", OWN, _PA),
+    sub(648, "carry_out_right(A2,X)", "should_be_performed(X2)", OWN, _PA),
+    sub(650, "right_to_do(A1,X)", "right_to_do(A1,X1)", OWN, _PA),
+    insert(651, "      - corresponds(X1,X2)", OWN, _PA),
+    insert(651, "    exceptions:", OWN, _PA),
+    insert(651, "      - difference_against(A1,A2,X2)", OWN, _PA),
+    sub(658, "[A1,A2,X]", "[A1,A2,X1,X2]", OWN, _PA),
+    sub(660, "carry_out_wrong(A2,X)", "¬should_be_performed(X2)", OWN, _PA),
+    sub(662, "wrong_to_do(A1,X)", "wrong_to_do(A1,X1)", OWN, _PA),
+    insert(663, "      - corresponds(X1,X2)", OWN, _PA),
+    insert(663, "    exceptions:", OWN, _PA),
+    insert(663, "      - difference_for(A1,A2,X2)", OWN, _PA),
+    sub(1719, "[A,C]", "[P1,P2,C1,C2]", OWN, _AN),
+    sub(1720, "[A]", "[P2]", OWN, _AN),
+    sub(1722, "similar_case(C)", "similar_to(C1,C2)", OWN, _AN),
+    sub(1723, "in_case(A,C)", "in_case(P1,C1)", OWN, _AN),
+    insert(1723, "      - corresponds(P1,P2)", OWN, _AN),
+    sub(1725, "relevant_differences(C)", "difference_against(C1,C2,P2)", OWN, _AN),
+    delete(1726, "      - more_on_point(A,C)", OWN, _AN),
+]
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY

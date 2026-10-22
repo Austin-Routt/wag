@@ -1,6 +1,14 @@
 popular_opinion                          assumptions  [] -> ['generally_accepted(A)']
 moral_justification_ad_populum_excuse    premises     ['morally_acceptable_action(X,A)', 'group_does(G,X,A)', 'acceptable_norm(X,A,G)', 'group_member(G)'] -> ['group_does(G,X,A)', 'acceptable_norm(X,A,G)', 'group_member(G)']
 moral_justification_ad_populum_excuse    conclusions  [] -> ['morally_acceptable_action(X,A)']
+practical_analogy_positive               variables    ['A1', 'A2', 'X'] -> ['A1', 'A2', 'X1', 'X2']
+practical_analogy_positive               premises     ['right_to_do(A1,X)', 'similar_to(A1,A2)'] -> ['right_to_do(A1,X1)', 'similar_to(A1,A2)', 'corresponds(X1,X2)']
+practical_analogy_positive               exceptions   [] -> ['difference_against(A1,A2,X2)']
+practical_analogy_positive               conclusions  ['carry_out_right(A2,X)'] -> ['should_be_performed(X2)']
+practical_analogy_negative               variables    ['A1', 'A2', 'X'] -> ['A1', 'A2', 'X1', 'X2']
+practical_analogy_negative               premises     ['wrong_to_do(A1,X)', 'similar_to(A1,A2)'] -> ['wrong_to_do(A1,X1)', 'similar_to(A1,A2)', 'corresponds(X1,X2)']
+practical_analogy_negative               exceptions   [] -> ['difference_for(A1,A2,X2)']
+practical_analogy_negative               conclusions  ['carry_out_wrong(A2,X)'] -> ['¬should_be_performed(X2)']
 part_in_whole                            variables    ['Y', 'X', 'P'] -> ['Y', 'X', 'A']
 rhetorical_oppositions_normative         premises     ['if_treatment_required(X,A,A2,X)', 'treatment_required(X,A)'] -> ['if_treatment_required(X,A,A2,X2)', 'treatment_required(X,A)']
 verbal_classification_vagueness          variables    ['A', 'P'] -> ['A', 'F']
@@ -9,12 +17,16 @@ negative_value                           conclusions  ['reason_retaining_goal(V,
 sacrifice                                premises     ['sacrifice_made(A,S)', 'great_sacrifice(S,A,X)', 'great_sacrifice_made(S,A)'] -> ['sacrifice_made(A,S)', 'great_sacrifice(S,A,V)', 'great_sacrifice_made(S,A)']
 sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A)']
 verbal_slippery_slope                    variables    ['A1', 'A2', 'A', 'P'] -> ['A1', 'A2', 'A', 'P', 'F']
+analogy                                  variables    ['A', 'C'] -> ['P1', 'P2', 'C1', 'C2']
+analogy                                  premises     ['similar_case(C)', 'in_case(A,C)'] -> ['similar_to(C1,C2)', 'in_case(P1,C1)', 'corresponds(P1,P2)']
+analogy                                  exceptions   ['relevant_differences(C)', 'more_on_point(A,C)'] -> ['difference_against(C1,C2,P2)']
+analogy                                  conclusions  ['A'] -> ['P2']
 negative_consequences                    exceptions   [] -> ['other_consequences(A)']
 positive_consequences                    exceptions   [] -> ['other_consequences(A)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
-14 scheme-level difference(s) after renames
+26 scheme-level difference(s) after renames
 added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning
-language: 392 -> 410 keys; keys only in clean: 52, only in original: 33, same key with a changed template: 27
+language: 392 -> 413 keys; keys only in clean: 55, only in original: 33, same key with a changed template: 29
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
@@ -28,7 +40,10 @@ language: 392 -> 410 keys; keys only in clean: 52, only in original: 33, same ke
   +  claimed_exception/2 '%s is put forward as an exception to the rule %s.'
   +  conflict_goals/3 '%s has some other goals %s that conflict with %s.'
   +  correctly_report/0 'Official rulebooks correctly report the rules in force.'
+  +  corresponds/2 'In the other case, the counterpart of %s is %s.'
   +  data_set/2 '%s is a set of data or supposed facts in case %s.'
+  +  difference_against/3 '%s and %s differ in a way that tells against %s.'
+  +  difference_for/3 '%s and %s differ in a way that tells in favour of %s.'
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
   +  goal_prestige/0 'Prestige is an important goal for you.'
@@ -121,9 +136,11 @@ language: 392 -> 410 keys; keys only in clean: 52, only in original: 33, same ke
   ~  other_consequences_presumption/2 'If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow.' -> 'If I act on the presumption that %s is not true, and it is true, consequences %s will follow.'
   ~  popular_practice/1 '%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s.' -> '%s is a popular practice among those who are familiar with what is acceptable or not in regard to it.'
   ~  receives_evaluation/2 '%s recieves the evaluation %s.' -> '%s receives the evaluation %s.'
+  ~  right_to_do/2 'The right thing to do in %s, was to carry out action %s.' -> 'In %s, %s was the right course.'
   ~  rule_require/3 'Normally, rule %s requires or forbids a type o f action or inaction %s, which carries with it a sanction - penalty- %s.' -> 'Normally, rule %s requires or forbids a type of action or inaction %s, which carries with it a sanction - penalty- %s.'
   ~  sacrifice_value/2 '%s has a great value.' -> '%s has a great value %s.'
   ~  situation_necessity/4 'As %s sets the situation, %s is a necessary or sufficient condition for caryying out %s, and tells %s this.' -> 'As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this.'
   ~  special_proposition/2 'A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.' -> '%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.'
   ~  sufficient_account/2 '%s itself as an explanation of %s apart from other alternative explanations availablle so far, is sufficient.' -> '%s itself as an explanation of %s apart from other alternative explanations available so far, is sufficient.'
   ~  typical_example/1 'Example %s is an typical example of the kinds of cases the generalzation covers.' -> 'Example %s is an typical example of the kinds of cases the generalization covers.'
+  ~  wrong_to_do/2 'The wrong thing to do in %s, was to carry out action %s.' -> 'In %s, %s was the wrong course.'

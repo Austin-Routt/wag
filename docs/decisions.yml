@@ -45,11 +45,21 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: analogy, kind: book-walton, about: "variables (N12)"}
-    - {entry: analogy, kind: other, about: "game questions"}
   docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5", "docs/proposals/D001-D028-D029.md"]
+  decided:
+    date: "2026-10-22"
+    by: owner
+    decision: >-
+      Option C, in the form of proposal D001-D028-D029, version 3: a claim in
+      each case (P1, P2) joined by corresponds(P1,P2); similar_to(C1,C2); the
+      exception difference_against(C1,C2,P2); the book's CQ3 answered by a
+      counter-analogy against the conclusion. Approved after two independent
+      reviews and a short independent check. The game takes it at workstream
+      E (D057).
+    recorded: "docs/scheme-registry/walton-clean/tools/edits.py (ANALOGY) and CHANGELOG.md; docs/scheme-registry/links.json; the catalogue entries; docs/kialo-batch2 (gold, guidelines); docs/proposals/D001-D028-D029.md"
 
 - id: D002
   title: Sign's 0-ary atoms
@@ -437,11 +447,21 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: practical_analogy_positive, kind: other, about: "critical questions"}
     - {entry: practical_analogy_negative, kind: other, about: "critical questions"}
   docs: ["docs/proposals/D001-D028-D029.md"]
+  decided:
+    date: "2026-10-22"
+    by: owner
+    decision: >-
+      The difference exception only, naming the action and sided:
+      difference_against(A1,A2,X2) in the positive, difference_for(A1,A2,X2)
+      in the negative (proposal D001-D028-D029, version 3). A contrary
+      precedent is a practical analogy of the opposite sign, which rebuts.
+      Approved after two independent reviews and a short independent check.
+    recorded: "docs/scheme-registry/walton-clean/tools/edits.py (ANALOGY) and CHANGELOG.md; docs/scheme-registry/links.json; the catalogue entries; docs/kialo-batch2 (gold, guidelines); docs/proposals/D001-D028-D029.md"
 
 - id: D029
   title: Whether the practical analogies rebut each other
@@ -459,11 +479,21 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: practical_analogy_positive, kind: other, about: "Conclusion"}
     - {entry: practical_analogy_negative, kind: other, about: "Conclusion"}
   docs: ["docs/proposals/D001-D028-D029.md"]
+  decided:
+    date: "2026-10-22"
+    by: owner
+    decision: >-
+      The third answer: the two-case form, an action in each situation joined
+      by corresponds(X1,X2), concluding should_be_performed(X2) and its
+      negation, so that the two rebut each other and meet the practical
+      schemes (proposal D001-D028-D029, version 3). Approved after two
+      independent reviews and a short independent check.
+    recorded: "docs/scheme-registry/walton-clean/tools/edits.py (ANALOGY) and CHANGELOG.md; docs/scheme-registry/links.json; the catalogue entries; docs/kialo-batch2 (gold, guidelines); docs/proposals/D001-D028-D029.md"
 
 - id: D030
   title: The variable of the necessary-condition schema's possibility
@@ -663,8 +693,8 @@ decisions:
     two predicates declared contraries with the same arguments (good and
     bad, right_to_do and wrong_to_do); or a sided flip, two predicates for
     the two directions with the same arguments (difference_against and
-    difference_for). The questions have the same targets; their wording may
-    flip. Every shared exception or assumption is declared neutral as to
+    difference_for). The questions have the same targets, or targets that
+    are declared flips of each other; their wording may flip. Every shared exception or assumption is declared neutral as to
     polarity by a person, and the declaration is tested: one example per
     side, run in the engine, must show that proving it for a reason that
     favours either side should defeat both. The registry also reports exact
@@ -740,10 +770,11 @@ decisions:
     critical question, as a thesis-independent scheme does today, including
     the argument-locus questions (CQ:evidence, CQ:other_event), where its
     correspondence premise would pair a claim about a case with a statement
-    about an argument? Or only questions at a premise, assumption or
-    exception locus: by explicit backup edges (thesis_independent stays
-    false) or by a locus limit on thesis independence (code, lint and
-    tests)? In play it may also conclude should-claims and be played as an
+    about an argument? Or only questions at a premise, assumption,
+    exception or conclusion locus (the last for the counter-analogy that
+    answers CQ:other_case, as the book's CQ3 now is): by explicit backup
+    edges (thesis_independent stays false) or by a locus limit on thesis
+    independence (code, lint and tests)? In play it may also conclude should-claims and be played as an
     undercutter (D056); the choice between analogy and the practical
     analogies is a rule for annotation.
   category: game
@@ -751,6 +782,8 @@ decisions:
   decider: owner
   priority: 2
   status: open
+  items:
+    - {entry: analogy, kind: other, about: "game questions"}
   docs: ["docs/proposals/D001-D028-D029.md"]
 
 # --- Priority 3: can wait ----------------------------------------------------
@@ -848,7 +881,7 @@ decisions:
   decider: owner
   priority: 3
   status: open
-  docs: ["docs/proposals/D001-D028-D029.md", "docs/process.md §8"]
+  docs: ["docs/candidates.md", "docs/proposals/D001-D028-D029.md", "docs/process.md §8"]
 
 - id: D058
   title: Argument from precedent reads a rule as a case
@@ -856,9 +889,10 @@ decisions:
     exception_to_rule (argument from precedent) has the exception
     relevant_differences(R,C), which puts the rule R where a case belongs:
     its template reads "relevant differences between case R and case C".
-    Should it compare the precedent case with the current one, or name what
-    makes the rule inapplicable here? Found by the second independent review
-    of proposal D001-D028-D029.
+    Should it compare the precedent case with the current one (as
+    relevant_differences(C), or naming both cases)? Its other exception,
+    inapplicable_rule(R), already covers a rule that does not apply here.
+    Found by the second independent review of proposal D001-D028-D029.
   category: scheme
   blocks: [verification]
   decider: owner

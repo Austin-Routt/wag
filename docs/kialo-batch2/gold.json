@@ -1807,42 +1807,44 @@
       ]
      },
      "bindings": {
-      "A": "tax_meat_reduces_meat_consumption",
-      "C": "tobacco_tax_case"
+      "P1": "tobacco_tax_reduced_tobacco_consumption",
+      "P2": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
+      "C1": "tobacco_tax_case",
+      "C2": "meat_tax_case"
      },
      "premises": [
       {
        "role": "premise",
-       "formula": "similar_case(tobacco_tax_case)",
-       "en": "Case 'the case of tobacco taxation (a tobacco tax significantly reduced tobacco consumption)' is similar to the current case.",
+       "formula": "similar_to(tobacco_tax_case,meat_tax_case)",
+       "en": "'the case of a tax on tobacco' is similar to 'the case of a tax on meat'.",
        "status": "supplied",
-       "note": "a tobacco tax is similar to a meat tax (an excise tax on a consumer good considered harmful)"
+       "note": "both are excise taxes on a consumer good considered harmful"
       },
       {
        "role": "premise",
-       "formula": "in_case(tax_meat_reduces_meat_consumption,tobacco_tax_case)",
-       "en": "'a tax on meat would significantly reduce meat consumption' is true in case 'the case of tobacco taxation (a tobacco tax significantly reduced tobacco consumption)'.",
+       "formula": "in_case(tobacco_tax_reduced_tobacco_consumption,tobacco_tax_case)",
+       "en": "'a tax on tobacco significantly reduced tobacco consumption' is true in case 'the case of a tax on tobacco'.",
        "status": "explicit",
-       "note": "the text states the source-case proposition 'a tax on tobacco significantly reduced its consumption'; walton.yml's analogy has one A for both cases (audit N12)"
+       "note": "the text states the source claim"
       },
       {
-       "role": "exception",
-       "formula": "relevant_differences(tobacco_tax_case)",
-       "en": "There are relevant differences between case 'the case of tobacco taxation (a tobacco tax significantly reduced tobacco consumption)' and the current case.",
+       "role": "premise",
+       "formula": "corresponds(tobacco_tax_reduced_tobacco_consumption,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
+       "en": "In the other case, the counterpart of 'a tax on tobacco significantly reduced tobacco consumption' is 'doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)''.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "P2 is the very statement the claim backs, the efficacy premise of 13292.108 that 13292.13 denies; it says of a meat tax what the source claim says of the tobacco tax"
       },
       {
        "role": "exception",
-       "formula": "more_on_point(tax_meat_reduces_meat_consumption,tobacco_tax_case)",
-       "en": "'a tax on meat would significantly reduce meat consumption' is false in another case which is more on point than case 'the case of tobacco taxation (a tobacco tax significantly reduced tobacco consumption)'.",
+       "formula": "difference_against(tobacco_tax_case,meat_tax_case,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
+       "en": "'the case of a tax on tobacco' and 'the case of a tax on meat' differ in a way that tells against 'doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)''.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown"
       }
      ],
      "conclusion": {
-      "formula": "tax_meat_reduces_meat_consumption",
-      "en": "A tax on meat would significantly reduce meat consumption."
+      "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
+      "en": "Doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)'."
      }
     }
    ],
@@ -1872,26 +1874,26 @@
      "cq": "7 CQ1",
      "wag_cq": "CQ:difference",
      "type": "analogy difference",
-     "formula": "relevant_differences(tobacco_tax_case)",
+     "formula": "difference_against(tobacco_tax_case,meat_tax_case,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
      "note": "tobacco is addictive and non-essential; meat is a staple food with close substitutes"
     },
     {
      "cq": "7 CQ2",
      "wag_cq": "CQ:truth",
      "type": "evidence",
-     "formula": "in_case(tax_meat_reduces_meat_consumption,tobacco_tax_case)",
+     "formula": "in_case(tobacco_tax_reduced_tobacco_consumption,tobacco_tax_case)",
      "note": "the source reports that cigarette taxes cut smoking"
     },
     {
      "cq": "7 CQ3",
      "wag_cq": "CQ:other_case",
      "type": "analogy difference",
-     "formula": "more_on_point(tax_meat_reduces_meat_consumption,tobacco_tax_case)",
-     "note": "an existing tax on a food would be more on point"
+     "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
+     "note": "a counter-analogy: a tax on a food bought by most households (sugary drinks) that barely changed consumption would rebut the conclusion"
     }
    ],
    "notes": {
-    "text": "Analogy kept apart (audit N12). Source case: tobacco taxation; source proposition: 'a tobacco tax significantly reduced tobacco consumption'. Target case: a meat tax; target proposition (A, coded): 'a meat tax would significantly reduce meat consumption'. Like 13292.14 it rebuts 13292.13 on the consumption link only.",
+    "text": "Analogy in its two-case form (D001, 2026-10-22). Source case: a tax on tobacco; source claim P1: a tobacco tax significantly reduced tobacco consumption. Target case: a tax on meat; target claim P2: the efficacy premise of 13292.108 that 13292.13 denies, so the analogy concludes the very statement 13292.13 denies. Like 13292.14 it rebuts 13292.13 on the consumption link only.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4475,7 +4477,7 @@
       "alternatives": [
        {
         "walton_id": "analogy",
-        "why_not": "the conclusion is an action (the right thing to do), which 8.1 encodes; AS:analogy is the playable form"
+        "why_not": "the source is cited for a verdict that taxing was right, carried to the corresponding action here, so it is 8.1 by the choice rule (guidelines §3); analogy carries any other claim"
        },
        {
         "walton_id": "popular_practice",
@@ -4490,13 +4492,14 @@
      "bindings": {
       "A1": "eco_damaging_business_case",
       "A2": "meat_production_case",
-      "X": "tax_damaging_activity"
+      "X1": "tax_damaging_activity",
+      "X2": "tax_meat"
      },
      "premises": [
       {
        "role": "premise",
        "formula": "right_to_do(eco_damaging_business_case,tax_damaging_activity)",
-       "en": "The right thing to do in 'the case of ecologically damaging businesses elsewhere (carbon and oil taxes)', was to carry out action 'putting a tax on the ecologically damaging activity'.",
+       "en": "In 'the case of ecologically damaging businesses elsewhere (carbon and oil taxes)', 'putting a tax on the ecologically damaging activity' was the right course.",
        "status": "supplied",
        "note": "the claim reports that governments did tax these businesses; that this was right is presupposed"
       },
@@ -4507,11 +4510,25 @@
        "status": "inferred",
        "cite": "13292.4",
        "note": "meat production is ecologically damaging (13292.4, 13292.108)"
+      },
+      {
+       "role": "premise",
+       "formula": "corresponds(tax_damaging_activity,tax_meat)",
+       "en": "In the other case, the counterpart of 'putting a tax on the ecologically damaging activity' is 'governments put a tax on meat'.",
+       "status": "supplied",
+       "note": "the thesis's action is the counterpart of the taxes cited"
+      },
+      {
+       "role": "exception",
+       "formula": "difference_against(eco_damaging_business_case,meat_production_case,tax_meat)",
+       "en": "'the case of ecologically damaging businesses elsewhere (carbon and oil taxes)' and 'the case of meat production' differ in a way that tells against 'governments put a tax on meat'.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown"
       }
      ],
      "conclusion": {
-      "formula": "carry_out_right(meat_production_case,tax_damaging_activity)",
-      "en": "Therefore, the right thing to do in 'the case of meat production' is carry out 'putting a tax on the ecologically damaging activity'."
+      "formula": "should_be_performed(tax_meat)",
+      "en": "Action 'governments put a tax on meat' should be performed."
      }
     }
    ],
@@ -4543,7 +4560,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "analogy difference",
-     "formula": "similar_to(eco_damaging_business_case,meat_production_case)",
+     "formula": "difference_against(eco_damaging_business_case,meat_production_case,tax_meat)",
      "note": "meat is food, a necessity; carbon and oil taxes price fuels and emissions"
     },
     {
@@ -4557,12 +4574,12 @@
      "cq": null,
      "wag_cq": null,
      "type": "analogy difference",
-     "formula": null,
-     "note": "a case more on point (an existing tax on a food) may differ"
+     "formula": "corresponds(tax_damaging_activity,tax_meat)",
+     "note": "a carbon tax prices emissions where a fuel is burned; a meat tax would price a food (a challenge of the correspondence premise)"
     }
    ],
    "notes": {
-    "text": "Precedent by practical analogy (8.1), kept apart (audit N12). Source case: taxes on ecologically damaging businesses (carbon, oil); source proposition: governments elsewhere (rightly) tax them. Target case: meat production, ecologically damaging per 13292.4 and 13292.108; target proposition: taxing it is right, i.e. the thesis. Kialo places it under 13292.4 (soil), which it does not support, so it is re-parented to the thesis. The book prints no CQs for 8.1; the analogy questions of 7 apply by type.",
+    "text": "Practical analogy (8.1) in its two-case form (D028, D029, 2026-10-22). Source situation: ecologically damaging businesses elsewhere, taxed through carbon and oil taxes; X1: taxing the damaging activity, right there (supplied). Target situation: meat production, ecologically damaging per 13292.4 and 13292.108; X2: tax_meat, the thesis's action, so the conclusion is should_be_performed(tax_meat), the thesis. Kialo places it under 13292.4 (soil), which it does not support, so it is re-parented to the thesis. The book prints no CQs for 8.1; its exception is a difference against taxing meat. A situation in which such a tax went wrong would be a negative practical analogy, a rebuttal.",
     "candidate_pattern": null
    },
    "adjudication": {

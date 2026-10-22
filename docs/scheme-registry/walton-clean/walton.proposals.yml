@@ -106,6 +106,7 @@ language:
   converse_relation/3: "%s can be in converse relation %s with %s."
   correctly_report/0: "Official rulebooks correctly report the rules in force."
   correlated/2: "Events %s and %s are correlated."
+  corresponds/2: "In the other case, the counterpart of %s is %s."
   counts_as/2: "%s counts as %s." 
   credibility_questioned/1: "%s's credibility as a sincere person who believes in his own argument has been put into question by the two premises above."
   credible_source/2: "Witness %s is a credible source for the domain %s."
@@ -119,6 +120,8 @@ language:
   descriptions_opposite/2: " Description of action imply that %s is personally committed to the opposite of %s."
   diagram_set/3: "There is a set of argument diagrams %s and in each argument diagram %s represents premises of an argument that, supplemented by plausible conditionals and other statements that function as missing parts of enthymemes, leads to a respective conclusion %s."
   dialog_committed/2: "Arguer %s has committed herself to proposition %s at some point in a dialogue."
+  difference_against/3: "%s and %s differ in a way that tells against %s."
+  difference_for/3: "%s and %s differ in a way that tells in favour of %s."
   dishonest/1: "%s is dishonest."
   distress/1: "Individual %s is in distress, is suffering."
   do_obligator/1: "%s must not do what is prohibited -obligatory-."
@@ -332,7 +335,7 @@ language:
   relevant_differences/2: "There are relevant differences between case %s and case %s."
   relieve/2: "If %s brings about %s, it will relieve or help to relieve this distress."
   respondent_member/1: "You, the respondent are a member of this audience, group %s."
-  right_to_do/2: "The right thing to do in %s, was to carry out action %s."
+  right_to_do/2: "In %s, %s was the right course."
   rule_can_waived/1: "If the case of %s is an exception, then the established rule can be waived in the case."
   rule_changed/0: "The rule has changed since the publication of the rulebook." 
   rule_of_case/2: "Rule %s is the ratio decidendi of case %s."
@@ -416,7 +419,7 @@ language:
   would_demote_value/2: "Achieving the goal %s would demote the value %s."
   would_promote_value/2:  "Achieving the goal %s would promote the value %s."
   would_realize/2: "Performing %s would realize event %s."
-  wrong_to_do/2: "The wrong thing to do in %s, was to carry out action %s."
+  wrong_to_do/2: "In %s, %s was the wrong course."
   
 argument_schemes:
   - id: popular_opinion
@@ -660,24 +663,30 @@ argument_schemes:
       title: Practical Reasoning From Analogy - Positive Schema
       source: >
               Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257.
-    variables: [A1,A2,X]
+    variables: [A1,A2,X1,X2]
     conclusions:
-      - carry_out_right(A2,X)
+      - should_be_performed(X2)
     premises:
-      - right_to_do(A1,X)
+      - right_to_do(A1,X1)
       - similar_to(A1,A2)
+      - corresponds(X1,X2)
+    exceptions:
+      - difference_against(A1,A2,X2)
       
   - id: practical_analogy_negative
     meta:
       title: Practical Reasoning From Analogy - Negative Schema
       source: >
               Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257.
-    variables: [A1,A2,X]
+    variables: [A1,A2,X1,X2]
     conclusions:
-      - carry_out_wrong(A2,X)
+      - ¬should_be_performed(X2)
     premises:
-      - wrong_to_do(A1,X)
+      - wrong_to_do(A1,X1)
       - similar_to(A1,A2)
+      - corresponds(X1,X2)
+    exceptions:
+      - difference_for(A1,A2,X2)
       
   - id: composition_generic
     meta:
@@ -1778,14 +1787,14 @@ argument_schemes:
       source: >
         Douglas Walton, Fundamentals of Critical Argumentation,
         Cambridge University Press, New York 2006, p. 96-97.
-    variables: [A,C]
-    conclusions: [A]
+    variables: [P1,P2,C1,C2]
+    conclusions: [P2]
     premises:
-      - similar_case(C)
-      - in_case(A,C)
+      - similar_to(C1,C2)
+      - in_case(P1,C1)
+      - corresponds(P1,P2)
     exceptions:
-      - relevant_differences(C)
-      - more_on_point(A,C)
+      - difference_against(C1,C2,P2)
 
   - id: appearance
     meta:

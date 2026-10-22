@@ -258,6 +258,23 @@ def main(outdir):
       "`negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion "
       "was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both "
       "templates are in our own words. |")
+    w("| `analogy` | variables `[A,C]` → `[P1,P2,C1,C2]`; premises `similar_to(C1,C2)`, `in_case(P1,C1)`, "
+      "`corresponds(P1,P2)` (new template); conclusion `P2`; exception `difference_against(C1,C2,P2)` (new template) in "
+      "place of `relevant_differences(C)`; `more_on_point(A,C)` removed | 2026-10-22 | Decision D001 (audit N12; WAG's "
+      "proposal D001-D028-D029, version 3, after two independent reviews). The book's scheme 7 uses one letter for a claim "
+      "made relative to each case; with one proposition, the premise asserted the target's claim of the source case, false "
+      "whenever the two claims differ. The difference exception names the claim and tells against it, so it defeats only "
+      "the argument it is about. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy "
+      "that rebuts the conclusion, so it needs no formula. |")
+    w("| `practical_analogy_positive`, `practical_analogy_negative` | variables `[A1,A2,X]` → `[A1,A2,X1,X2]`; premises "
+      "`right_to_do(A1,X1)` or `wrong_to_do(A1,X1)`, `similar_to(A1,A2)`, `corresponds(X1,X2)`; conclusion "
+      "`should_be_performed(X2)` or `¬should_be_performed(X2)` in place of `carry_out_right(A2,X)` and "
+      "`carry_out_wrong(A2,X)`; exception `difference_against(A1,A2,X2)` or `difference_for(A1,A2,X2)` (new templates); "
+      "`right_to_do/2` and `wrong_to_do/2` rewritten | 2026-10-22 | Decisions D028 and D029, with D001. The book's 8.1 and "
+      "8.2 use one action letter made relative to each situation. The old conclusions met no other scheme; now the two "
+      "rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the "
+      "sided exception lets a difference against one side leave the other standing when both argue from one past "
+      "situation. The templates are in our own words. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------
@@ -453,11 +470,12 @@ CONCERNS = [
     "the property, so F is probably P. As written, the conditional is not linked to P.",
     "`threat` (was `treat`): the premise `position_to_know(X)` (\"I am in position to bring about %s\") shares its name with the "
     "position-to-know predicate `position_to_know/2`. Other predicates used with two arities: `data_set/1`–`/2`, `excuse/0`–`/1`, "
-    "`group_member/1`–`/2`, `cannot_present_sametime/2`–`/3`, `relevant_differences/1`–`/2`. They are different statements and easy to confuse.",
+    "`group_member/1`–`/2`, `cannot_present_sametime/2`–`/3`, and `relevant_differences/1`–`/2` until the analogy decision of 2026-10-22 left `relevant_differences/1` unused. They are different statements and easy to confuse.",
     "`abductive_backward`: `data_set(D,A)` has 2 arguments, but `abductive_forward` has `data_set(D)`. I added a `data_set/2` "
     "template (\"%s is a set of data or supposed facts in case %s.\"); the role of A there is a guess.",
     "`exception_to_rule` (was `exeption_to_rule`): the content is upstream Carneades `precedent` with a new id and title. "
-    "The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57).",
+    "The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57). Its "
+    "exception `relevant_differences(R,C)` puts the rule where a case belongs (WAG's decision D058).",
     "Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: "
     "`strongly_occur(X)` (template had the consequences C too), `cited_bad_consequences(X)` (the consequences; C occurs in "
     "`assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).",

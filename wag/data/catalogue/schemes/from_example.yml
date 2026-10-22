@@ -171,9 +171,10 @@ examples:
   kialo: "13292.61"
   coding: 'Near miss: one case is cited, but in the discussion it is used to conclude
     that a meat tax would cut meat consumption, a claim about one other case, not
-    a general rule; analogy, as the gold codes it (C = the tobacco-tax case). The
-    gold notes that walton.yml''s from_example, which concludes the particular case,
-    could not express a case supporting a rule in any event.'
+    a general rule; analogy, as the gold codes it (C1 = the tobacco tax, C2 = a meat
+    tax, P2 = the efficacy premise that 13292.13 denies). The gold notes that walton.yml''s
+    from_example, which concludes the particular case, could not express a case supporting
+    a rule in any event.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -253,3 +254,6 @@ history:
   by: Claude Code
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     6.1/CQ1''s answer leads with the burden of its recorded target)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: The 13292.61 near miss recoded for analogy's two-case form (D001).

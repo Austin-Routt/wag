@@ -1,7 +1,16 @@
+error: AS:analogy: Carneades scheme analogy has variable P1, which the NASCQ scheme does not declare
+error: AS:analogy: Carneades scheme analogy has variable P2, which the NASCQ scheme does not declare
+error: AS:analogy: Carneades scheme analogy has variable C1, which the NASCQ scheme does not declare
+error: AS:analogy: Carneades scheme analogy has variable C2, which the NASCQ scheme does not declare
+error: AS:analogy: variable A is not a variable of Carneades scheme analogy
+error: AS:analogy: variable C is not a variable of Carneades scheme analogy
+error: AS:analogy: answer_variable A is not what Carneades scheme analogy concludes ([P2])
+error: CQ:difference: asked of AS:analogy: exception locus relevant_differences/1 is not an exception of Carneades scheme analogy
+error: CQ:other_case: asked of AS:analogy: exception locus more_on_point/2 is not an exception of Carneades scheme analogy
 warning: language: no template for ¬case_exception/1
 warning: language: no template for ¬known/1
 warning: language: no template for ¬presents/2
 warning: language: no template for ¬prestigious_individual/2
 warning: language: no template for ¬should_be_performed/1
 warning: language: no template for ¬should_do/2
-0 error(s), 6 warning(s)
+9 error(s), 6 warning(s)

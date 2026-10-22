@@ -116,11 +116,15 @@ as `answer_variable`:
 - A of analogy;
 - B of sign.
 
-Analogy is not thesis-independent since 2026-10-15: its formula has one
+Analogy is not thesis-independent since 2026-10-15: its formula had one
 proposition for the source case and the target (`in_case(A,C)` ⇒ `A`), so
 as the answer to any question it would say the answer held in another case.
-It still argues for or against a statement; the audit's N12 (a source and a
-target case) is pending.
+It still argues for or against a statement. Since 2026-10-22 `walton.yml`'s
+analogy has a claim in each case (`P1`, `P2`; decision D001), and the game
+takes that form when its data is generated from the catalogue (workstream
+E); how far it then reaches as an answer is decision D057. Declared
+contraries, such as `right_to_do` and `wrong_to_do`, are not enforced: both
+can be accepted at once (decision D053).
 
 The game binds this variable to the answer, so the premises are about the
 answer (`asserts(W, not(possible(A)))`) and the player does not fill it in.
