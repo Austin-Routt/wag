@@ -90,6 +90,12 @@ func main() {
 	closeShare := flag.Float64("close", registry.CloseShare, "with --registry: the share of formulas in common from which two schemes with the same conclusion are reported as close")
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	alternate := flag.Bool("alternate", false, "with --games: swap the seats every other game, as colours alternate in chess")
+	catGen := flag.Bool("catalogue-gen", false, "generate the scheme catalogue's skeleton from walton.yml, links.json, families.json and the NASCQ, keeping what people and models have written; write its index and exit")
+	catCheck := flag.Bool("catalogue-check", false, "check the scheme catalogue against its sources (formulas, book links, critical questions, statuses) and that no text reproduces the book; print the findings and exit (status 1 on an error)")
+	catDir := flag.String("catalogue", "", "with --catalogue-gen or --catalogue-check: the catalogue's directory (default: wag/data/catalogue of the repository)")
+	repoDir := flag.String("repo", "", "with --catalogue-gen or --catalogue-check: the repository's root (default: found from the working directory)")
+	books := flag.String("book", "", "with --catalogue-check: the book's text for the copy check, as comma-separated files (plain text, or JSON with \"text\" keys; default: docs/book-catalogue/catalogue.json if present)")
+	catBy := flag.String("by", "wag-cli --catalogue-gen", "with --catalogue-gen: who generates, for a new entry's history")
 	kialoCheck := flag.String("kialo-check", "", "import every <id>/graph.json of this folder (Kialo research visualizer data) and report, for each discussion, the claims that share a text and whether it imports; status 1 if one does not")
 	flag.Parse()
 
@@ -110,6 +116,12 @@ func main() {
 	}
 	if *lint {
 		os.Exit(runLint(files))
+	}
+	if *catGen {
+		os.Exit(runCatalogueGen(*repoDir, *catDir, *catBy))
+	}
+	if *catCheck {
+		os.Exit(runCatalogueCheck(*repoDir, *catDir, *books))
 	}
 	if *kialoCheck != "" {
 		os.Exit(runKialoCheck(files, *kialoCheck))

@@ -15,15 +15,16 @@ central claim, solo belief revision) are combinations of a few settings.
 
 | Path | What |
 |---|---|
-| `data/` | The game data: `schemes/core.yml` (Carneades schemes and their English `language` templates) and `nascq/*.json` (NASCQ schemes, critical questions, edges). Package `data` embeds them. |
+| `data/` | The game data: `schemes/core.yml` (Carneades schemes and their English `language` templates) and `nascq/*.json` (NASCQ schemes, critical questions, edges). Package `data` embeds them. Also `catalogue/`, the scheme catalogue: one entry per scheme, aligning the book, `walton.yml` and the NASCQ ([`data/catalogue/README.md`](data/catalogue/README.md)). |
 | `internal/carneades` | Adapter over the Carneades argument graph: moves as graph operations, checkpoints, labelling. |
 | `internal/nascq` | NASCQ loading, move validation (S0–S9, Q1), action enumeration (answers to critical questions, and arguments for or against any statement), data lint. |
 | `internal/registry` | Scheme patterns and families: finds schemes that repeat a pattern under another name, and close relatives no family declares (`docs/scheme-registry/README.md`). |
+| `internal/catalogue` | The scheme catalogue: its entry format and statuses, the generator that makes and merges the skeleton from the sources, the checker, and the copy check against the book's text ([`data/catalogue/README.md`](data/catalogue/README.md)). |
 | `internal/game` | Turns, modes, scoring, termination, invariants, agents (random, greedy, human, JSON), JSON view, batch runner. |
 | `internal/kialo` | Import of Kialo discussions (`graph.json` of the Kialo research visualizer) as games of "Other" arguments, one statement per claim (keyed by claim ID, so two claims with the same words stay apart). |
 | `internal/server` | HTTP server and browser interface (`web/`, embedded): the dialogue and board views, moderation, notes, export and replay, the NASCQ, Kialo import; the text protocol for language models (`protocol.go`), model seats (`llm.go`) and their traces (`traces.go`). |
 | `internal/llm` | The provider-neutral interface to language models: Gemini (Google's GenAI SDK), Claude (Anthropic's SDK), OpenAI-compatible endpoints (OpenAI, DeepSeek, LM Studio, llama.cpp, SGLang, vLLM, Ollama), an external command, a mock; profiles, retries, rate spacing, replay (`../docs/llm.md`). |
-| `cmd/wag-cli` | Command-line game, data lint, the table of every scheme–question link (`--edges`), and tournaments. |
+| `cmd/wag-cli` | Command-line game, data lint, the table of every scheme–question link (`--edges`), tournaments, and the catalogue's generator and checker. |
 | `cmd/wag-llm` | Language models play WAG headless and annotate Kialo claims, with full traces; replay a trace; sum up runs (`../docs/llm.md`). |
 | `cmd/wag-server` | The browser prototype: `go run ./cmd/wag-server` opens it at http://127.0.0.1:8080. |
 
@@ -67,6 +68,8 @@ go run ./cmd/wag-cli --data ./data --lint              # check data files on dis
 go run ./cmd/wag-cli --registry data/schemes/core.yml --families data/schemes/families.json  # one pattern, one name
 go run ./cmd/wag-cli --games 50 --p1 greedy --p2 random  # tournament statistics
 go run ./cmd/wag-cli --kialo-check <visualizer>/data   # import every captured Kialo discussion; report claims that share a text
+go run ./cmd/wag-cli --catalogue-gen                   # (re)generate the scheme catalogue's skeleton, keeping what was written
+go run ./cmd/wag-cli --catalogue-check [--book FILE]   # check the catalogue; exit 1 on an error
 go run ./cmd/wag-cli --modes                           # list the game modes
 go run ./cmd/wag-cli --mode debate --p2 human          # debate a claim against a friend
 go run ./cmd/wag-cli --mode cq --p1 greedy --p2 random # critical-question duel

@@ -1,6 +1,6 @@
 # The plan: one verified scheme catalogue, then annotation on it
 
-Status: proposed on 2026-10-15, not started. The owner decides the open questions in §7 before work begins.
+Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue's skeleton and its checker exist ([`wag/data/catalogue/`](../wag/data/catalogue/README.md)); nothing in it is drafted or verified yet. The owner's open questions are in §7.
 
 - **Why this plan,** from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md).
 - **What Walton and Macagno's classification adds:** [`review-2026-10-15-part8.md`](review-2026-10-15-part8.md).
@@ -37,7 +37,7 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 |---|---|---|
 | id, name, book number(s) and pages, family | `walton.yml`, `links.json`, `families.json` | generated |
 | summary: when the scheme applies, in two sentences of our own | new | drafted, then verified |
-| variables, premises, assumptions, exceptions, conclusion: formulas and English | `walton.yml` | generated |
+| variables, premises, assumptions, exceptions, conclusion: formulas. English readings are rendered from `walton.yml` when needed, not stored: many of its templates repeat the book (§7, item 1). | `walton.yml` | generated |
 | map from the book's premises to the formulas | `links.json` premise maps | generated, then verified |
 | critical questions: book label, our paraphrase, locus (premise, assumption, exception, conclusion, argument), the formula it is about, the game's CQ id if any, what counts as an answer | `links.json` CQ maps (197), the NASCQ (24), new paraphrases | drafted, then verified |
 | contrasts: "this, not X, when …", for each close relative | the registry's families and signatures, new text | drafted, then verified |
@@ -54,17 +54,13 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 |---|---|---|
 | The book's compendium (ch. 9) | 109 schemes (128 numbered entries, 19 of them headings only), 153 critical questions | Transcribed outside the repository |
 | `docs/scheme-registry/walton-clean/walton.yml` | 111 schemes with formulas and English; 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
-| `docs/scheme-registry/links.json` | 93 exact and 13 partial links from the book to `walton.yml`, 3 book schemes without one; 197 links from a CQ to a formula | Drafted by a model, not verified |
+| `docs/scheme-registry/links.json` | 93 compendium entries linked exactly to `walton.yml` and 13 partly (111 links: 94 exact, 17 partial), 3 without a link; 197 CQ links, 142 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
 | `wag/data/nascq/*.json` | 9 schemes, 24 CQs, 35 ask edges, 4 backup edges | The game's data, tested |
 | `wag/data/schemes/families.json` | 21 families | Drafted |
 
-`walton.yml` has 6 schemes the compendium does not list:
-- `defeasible_modus_ponens`;
-- `epistemic_ignorance`;
-- `exception_to_rule`;
-- `exceptional`;
-- `popular_practice`;
-- `threat`.
+Only one `walton.yml` scheme has no compendium entry: `defeasible_modus_ponens`. An earlier version of this plan counted six, from an older list. `links.json` links the other five:
+- `epistemic_ignorance` and `exception_to_rule`, partly;
+- `exceptional`, `popular_practice` and `threat`, exactly.
 
 ### Order of work
 
@@ -73,7 +69,9 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
    - every CQ's formula is one of its scheme's;
    - every game CQ appears;
    - no paraphrase reproduces the book's sentence.
-2. **Tier 1: about 25 schemes.** These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
+
+   **Done on 2026-10-22.** [`wag/data/catalogue/`](../wag/data/catalogue/README.md) holds 114 entries and an index; `wag-cli --catalogue-gen` and `--catalogue-check` make and check them. The README there lists every check and what the skeleton found.
+2. **Tier 1: 31 schemes** (first estimated at about 25), listed in the catalogue's README. These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
    - **practical reasoning:** practical reasoning 1 and 2, practical goal, end and means, necessary condition;
    - **consequences and values:** positive and negative consequences, positive and negative value;
    - **causes and signs:** cause to effect, correlation to cause, sign;
@@ -90,7 +88,7 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 
 **Effort.**
 - **Drafting:** a few working sessions with a model.
-- **Verification:** about 20–30 minutes a scheme for a person with the book. That is 8–12 hours for tier 1, and 35–55 hours for everything.
+- **Verification:** about 20–30 minutes a scheme for a person with the book. That is 10–15 hours for tier 1, and 40–55 hours for everything.
 
 **Done when:**
 - every tier-1 entry is verified;
@@ -201,7 +199,8 @@ Each step has examples from the catalogue. Where two answers are equally right, 
    - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book,** was added and then deleted on 2026-10-15. It is still in the history (commit f891090) until the history is rewritten ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)).
    - `docs/book-catalogue/` transcribes the scheme book's pp. 1–138 as printed: 75 scheme entries and 75 distinct critical questions.
    - `docs/walton-audit/cq_drafts.json` quotes 8 critical questions of the compendium.
-   - The game's data uses our own wording. `walton.yml` has a few quotations from its upstream authors.
+   - The game's data uses our own wording.
+   - **`walton.yml`'s English templates repeat the book more than a few times.** 173 of its 393 templates share eight or more words in a row with the compendium (measured 2026-10-22). The catalogue does not copy them. Replacing them with our own wording would settle it, since the formulas, not the English, are what `walton.yml` is the authority for.
 
    The options:
    - make the repository private;

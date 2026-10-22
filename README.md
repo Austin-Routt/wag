@@ -13,7 +13,9 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 
 **Status on 2026-10-15.**
 - **Working prototype:** the game, the browser dashboard, the model players, and a first annotation pipeline. They are tested and run on Windows.
-- **Weak link:** the scheme knowledge they share. The book, the Carneades collection and the game's data are not yet one verified catalogue.
+- **Weak link:** the scheme knowledge they share. The book, the Carneades collection and the game's data are not yet one verified catalogue. **Its skeleton exists since 2026-10-22:**
+  - 114 entries generated from the sources, with a checker ([`wag/data/catalogue/`](wag/data/catalogue/README.md));
+  - nothing in it is drafted or verified yet.
 - **Annotation so far:** every annotation was made by a language model; no person has checked it.
 - **Dialogue types:** a reference is written. The game plays only persuasion so far.
 
@@ -56,7 +58,8 @@ The next step is therefore not more code. It is to align and verify that catalog
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |
 | Kialo import | Working | A captured discussion becomes a game (one statement per claim, keyed by claim ID), or an annotation dataset; `wag-cli --kialo-check` imports a whole folder | | [`wag/README.md`](wag/README.md), [part 8 §2](docs/review-2026-10-15-part8.md#2-claims-merged-by-their-text) |
-| Scheme sources | Split | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | One verified catalogue; critical questions and examples for most schemes | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
+| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 111 schemes; the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
+| Scheme catalogue | Skeleton (phase 1, step 1) | **Entries:** 114, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 212, with their formulas. **Discrepancies:** 22, from the sources. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Everything people write: summaries, paraphrased questions, contrasts, examples, classification, verification | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`index.md`](wag/data/catalogue/index.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
 | Dialogue types | Reference written | Every game with a central claim is a persuasion dialogue: `debate` is the one-sided form; the points modes match no type | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
@@ -70,6 +73,7 @@ In order of importance. Each issue links to the document that explains it.
    - The model gets all 111 formulas. It gets critical questions only where Carneades encodes them as assumptions or exceptions (54 schemes), plus the game's 24 questions for its 9 schemes. It gets no descriptions, no examples, and no contrasts between close schemes.
    - It is asked to cite the book's critical questions, which it never sees. In the first run it made one up.
    - See [part 7 §3](docs/review-2026-10-15-part7.md#3-the-questions).
+   - **Since 2026-10-22,** the catalogue's skeleton aligns the sources scheme by scheme. Its content (paraphrased questions, descriptions, contrasts, examples) is still to draft and verify ([plan §2](docs/plan.md#2-phase-1-the-aligned-catalogue)).
 2. **The guidelines allow two answers in places, contradict each other once, and code four different things as "none".** "None" covers the thesis, bare premises, reasons that fit no scheme, and non-arguments. Most disagreements in the first Gemini run trace to this, not to the model. See [part 7 §2](docs/review-2026-10-15-part7.md#2-the-14-annotations-against-the-gold).
 3. **The gold is one model's reading.**
    - Both batch-2 annotators and the adjudicator were runs of the same language model, and no person has reviewed them.
@@ -83,6 +87,7 @@ In order of importance. Each issue links to the document that explains it.
 6. **Books in this public repository, and no licence.**
    - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book, was deleted on 2026-10-15,** but it is still in the history (commit f891090). Purging it means rewriting the history, the owner's decision. See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository) and [part 10](docs/review-2026-10-15-part10.md).
    - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
+   - **`walton.yml`'s English templates repeat the book.** 173 of its 393 templates share eight or more words in a row with the compendium (measured 2026-10-22). The catalogue does not copy them ([`wag/data/catalogue/README.md`](wag/data/catalogue/README.md)).
    - WAG itself has no licence.
    - All three need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
 7. **Every game with a central claim is a persuasion dialogue, in Walton's terms.**
@@ -92,7 +97,8 @@ In order of importance. Each issue links to the document that explains it.
    - See [`docs/dialogue-types.md`](docs/dialogue-types.md) §9 and [part 9](docs/review-2026-10-15-part9.md).
 8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
-   - 3 book schemes have no `walton.yml` scheme, and 6 `walton.yml` schemes are not in the book.
+   - 3 book schemes have no `walton.yml` scheme, and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. Earlier versions said 6, from an older list.
+   - `families.json` and `links.json` disagree on compendium 33.3 (the catalogue's checker warns).
    - 13 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
@@ -112,7 +118,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 
 | Phase | Goal | The work | Who |
 |---|---|---|---|
-| 1. Catalogue | One verified entry per scheme, aligned across the book, `walton.yml` and the NASCQ | **Generate** a skeleton from the existing sources. **Draft:** paraphrased critical questions with their loci, descriptions, contrasts, examples. **Verify:** about 25 schemes first, then the rest as the data needs them. | A model drafts; a person verifies with the book (about 20–30 minutes a scheme) |
+| 1. Catalogue | One verified entry per scheme, aligned across the book, `walton.yml` and the NASCQ | **Generate** a skeleton from the existing sources (done 2026-10-22). **Draft:** paraphrased critical questions with their loci, descriptions, contrasts, examples. **Verify:** 31 schemes first (tier 1), then the rest as the data needs them. | A model drafts; a person verifies with the book (about 20–30 minutes a scheme) |
 | 2. Annotation version 4 | Annotations that follow the catalogue | **Guidelines** as one decision procedure, with "none" split and the thesis given its conclusion form. **"Other"** with a structured proposal. **Prompts:** first candidates from an index, then the full entries. Formulas written by code; constrained JSON. | Code and guidelines; measured against version 3 |
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
@@ -121,8 +127,8 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 
 **The next three actions:**
 1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF still in the history and the book text, a licence, who verifies, paid model access, and Track D's open choices.
-2. Generate the catalogue skeleton and its checker.
-3. Verify the first set of schemes while the version 4 guidelines are drafted.
+2. Draft the 31 tier-1 entries of the catalogue with a model (its skeleton and checker are done).
+3. Verify them against the book while the version 4 guidelines are drafted.
 
 ## 5. Running it
 
@@ -144,6 +150,8 @@ go run ./cmd/wag-server            # the dashboard; --store DIR for another data
 go run ./cmd/wag-cli               # a game in the terminal
 go run ./cmd/wag-llm --help        # headless model games and annotation runs
 go run ./cmd/wag-cli --kialo-check DIR   # import every captured Kialo discussion in DIR; report problems
+go run ./cmd/wag-cli --catalogue-gen     # (re)generate the scheme catalogue's skeleton, keeping what was written
+go run ./cmd/wag-cli --catalogue-check   # check the catalogue (--book FILE for the copy check against the book)
 go test ./...                      # all tests
 GOOS=windows GOARCH=amd64 go build ./cmd/wag-server   # the Windows executable
 ```
@@ -191,6 +199,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 
 | Document | What it is |
 |---|---|
+| [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`index.md`](wag/data/catalogue/index.md) | **The scheme catalogue:** one entry per scheme, its format and statuses, its checks, what the skeleton found; the index of all entries |
 | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md) | The cleaned `walton.yml`, the book links (`links.json`), families, pattern signatures |
 | [`docs/scheme-registry/nascq-edges.md`](docs/scheme-registry/nascq-edges.md) | Every critical question of the game, and every answer it allows |
 | [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) | The audit of the Carneades Walton collection |
@@ -232,8 +241,8 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 |---|---|
 | `wag/` | The Go module |
 | `wag/cmd/` | `wag-server` (the dashboard), `wag-cli` (terminal games, lint, tournaments), `wag-llm` (headless model games and annotation) |
-| `wag/internal/` | `game`, `nascq`, `carneades`, `registry`, `kialo`, `llm`, `annotate`, `server` (with the web page) |
-| `wag/data/` | The game's data (`nascq/`, `schemes/`) and the built-in annotation dataset (`annotation/`), embedded in the binaries |
+| `wag/internal/` | `game`, `nascq`, `carneades`, `registry`, `catalogue`, `kialo`, `llm`, `annotate`, `server` (with the web page) |
+| `wag/data/` | The game's data (`nascq/`, `schemes/`) and the built-in annotation dataset (`annotation/`), embedded in the binaries; the scheme catalogue (`catalogue/`) |
 | `docs/` | Everything above; `kialo-batch2/` also holds its data and Python checkers |
 | `carneades-4/` | The Carneades 4 fork ([`CARNEADES_FORK.md`](CARNEADES_FORK.md)) |
 | `tools/` | `sync_carneades_fork.sh` |
