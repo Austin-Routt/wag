@@ -183,6 +183,7 @@ decisions:
     - {entry: negative_consequences, kind: other, about: "game questions"}
     - {entry: positive_value, kind: other, about: "game"}
     - {entry: sign, kind: other, about: "game questions"}
+  docs: ["docs/proposals/D055-D059.md"]
 
 - id: D010
   title: An exception for an honest but unreliable source
@@ -378,6 +379,7 @@ decisions:
   items:
     - {entry: end_and_means_1, kind: other, about: "critical questions"}
     - {entry: practical_goal, kind: other, about: "critical questions"}
+  docs: ["docs/proposals/D055-D059.md"]
 
 - id: D024
   title: Exceptions for the rule schemes
@@ -430,6 +432,7 @@ decisions:
   status: open
   items:
     - {entry: negative_consequences_reasoning, kind: book-walton, about: "Premise 1"}
+  docs: ["docs/proposals/D055-D059.md"]
 
 - id: D028
   title: Analogy's exceptions for the practical analogies
@@ -544,6 +547,7 @@ decisions:
   status: open
   items:
     - {entry: waste, kind: book-walton, about: "CQ2"}
+  docs: ["docs/proposals/D055-D059.md"]
 
 - id: D034
   title: One domain formula for witnesses and positions to know
@@ -754,11 +758,14 @@ decisions:
     second independent review's engine test). Should each side get its own
     predicate, bad_outweighs(A,G) (bad consequences outweigh the good one
     cited) in positive_consequences and good_outweighs(A,G) in the negative
-    schemes (B in 33.3), a sided flip under D053? 33.4, whose conclusion is
-    prudential(X), is checked separately. The owner chose this (option C;
-    the others were A, keep other_consequences(A); B, other_consequences(A,G);
-    D, no exception, the third question answered only by a rebuttal) on
-    2026-10-22, to be made once the proposal D055-D059 has been reviewed.
+    schemes (B in 33.3), and bad_outweighs(X,C) in 33.4, a sided flip under
+    D053? The owner chose this (option C; the others were A, keep
+    other_consequences(A); B, other_consequences(A,G); D, no exception, the
+    third question answered only by a rebuttal) on 2026-10-22. The
+    independent review of proposal D055-D059's version 1 approved it with
+    changes, made in version 2: among them, 33.4's likelihood assumption
+    strongly_occur(X), which has the same fault on one side, becomes
+    strongly_occur(X,C). It is made once the owner approves the proposal.
   category: scheme
   blocks: [verification, game]
   decider: owner
@@ -774,7 +781,9 @@ decisions:
     prudential argument neither supports nor meets any practical claim about X.
     Should it conclude should_be_performed(X), the game's practical
     conclusion, as the slippery slope's base case and the practical analogies
-    now do? Proposed with D055 in proposal D055-D059.
+    now do? Proposed with D055 in proposal D055-D059, whose independent
+    review approved it; 33.4's link to the book then becomes partial. The
+    same question for the family's other practical schemes is D063.
   category: vocabulary
   blocks: [verification, game]
   decider: owner
@@ -803,7 +812,56 @@ decisions:
   status: open
   items:
     - {entry: analogy, kind: other, about: "game questions"}
-  docs: ["docs/proposals/D001-D028-D029.md"]
+  docs: ["docs/proposals/D001-D028-D029.md", "docs/proposals/D055-D059.md"]
+
+- id: D061
+  title: Three presets weigh a game scheme's variants differently
+  question: >-
+    The policy, scientific and legal presets weigh AS:consequences (0.70,
+    0.35, 0.40) and AS:practical_reasoning, but do not name
+    AS:negative_consequences or AS:practical_reasoning_goal, which keep
+    their default weight (0.65). So under policy a positive consequences
+    argument beats an equal negative one, and under scientific and legal the
+    negative one wins, though the presets mean to weigh consequences alike
+    and say nothing of their sign. Should every preset give
+    AS:negative_consequences the weight of AS:consequences, and
+    AS:practical_reasoning_goal that of AS:practical_reasoning, with a test
+    that a preset weighing schemes by name names every game scheme? Found
+    by the independent review of proposal D055-D059 (its game test shows
+    the two sides tie in every preset once the weights are added); the
+    proposal applies it if the owner agrees.
+  category: game
+  blocks: [play]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["wag/data/contexts.json", "docs/proposals/D055-D059.md"]
+
+- id: D063
+  title: The consequence family's other practical conclusions meet nothing
+  question: >-
+    D059 makes the prudential form conclude should_be_performed(X), so that
+    it meets the other arguments about doing X. The family's other practical
+    schemes conclude predicates that no other scheme concludes or uses:
+    fear (ought_to_bring_about), danger (should_not, D062), threat
+    (not_bring_about, D060), the pragmatic argument from alternatives and
+    the disjunctive threat (do_other), waste (ought_to_continue), help
+    (carry_out), distress (bring_relief) and two-person practical reasoning
+    (should_carry_out). In WAG's engine an argument from fear for doing X
+    has no contact with a consequence argument against X. Should each
+    conclude should_be_performed or its negation for its action, keeping
+    what is particular to it (the speaker's threat, the agent who helps) in
+    its premises and questions? help, distress and two-person practical
+    reasoning name an agent, which should_be_performed does not. D016 asks
+    the same of alternative_normative. Found by the independent review of
+    proposal D055-D059. Many schemes outside these families conclude
+    predicates of their own too; that is not registered.
+  category: vocabulary
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/proposals/D055-D059.md", "docs/candidates.md §3"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -927,14 +985,60 @@ decisions:
     same way; but position_to_know(X) ("I am in position to bring about X")
     and assert_bad(X,C) ("I will see to it that X occurs if you bring about
     C") put X where the threatened consequence belongs. Should they read
-    position_to_know(C) and assert_bad(C,X)? Found while drafting proposal
-    D055-D059, whose example 14 renders it.
+    position_to_know(C) and assert_bad(C,X)? The independent review of
+    proposal D055-D059 found two more faults of the same scheme:
+    cited_bad_consequences(X) lost the consequence (the upstream template
+    has two slots, the book's first premise names it, and the cleaning
+    recorded it as a semantic concern), so it should be
+    cited_bad_consequences(X,C); and position_to_know/1 ("I am in position
+    to bring about") shares its name with the source scheme's
+    position_to_know/2, so it should be renamed (for example
+    able_to_bring_about(C)). Whether its conclusion should meet the
+    practical claims is D063. Found while drafting proposal D055-D059,
+    whose version 1 rendered it.
   category: scheme
   blocks: [verification]
   decider: owner
   priority: 3
   status: open
   docs: ["docs/proposals/D055-D059.md"]
+
+- id: D062
+  title: Argument from danger concludes about the danger
+  question: >-
+    walton.yml's danger has the premises occur(X,Y) ("if the respondent
+    brings about X, then Y will occur") and danger(Y), and concludes
+    should_not(Y), "you should not bring about Y": about the danger, where
+    the book's conclusion (37) is about the action. Should it conclude
+    should_not(X), or, with D063, ¬should_be_performed(X)? Its conclusion
+    template also begins "Therefore", which the views repeat after "So".
+    Found by the independent review of proposal D055-D059.
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/proposals/D055-D059.md"]
+
+- id: D064
+  title: Candidates from the review of the consequence family
+  question: >-
+    The independent review of proposal D055-D059 recorded twelve schemes,
+    questions and links that WAG lacks (docs/candidates.md §3). One, that
+    the family's practical conclusions should meet should_be_performed, is
+    registered as D063. Of the other eleven, which go forward (reject,
+    merge, domain version, add)? The strongest: a weighing scheme that
+    concludes D055's exceptions, tied to the opposite consequence it relies
+    on (seen at least nine times in two discussions); a global balance of
+    consequences; a mitigation question (can the action be done so that the
+    harm does not follow); a right or value that trumps consequences; and
+    the lesser evil.
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md §3", "docs/proposals/D055-D059.md"]
 
 # --- Decided ------------------------------------------------------------------
 
