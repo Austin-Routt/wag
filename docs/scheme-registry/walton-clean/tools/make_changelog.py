@@ -215,6 +215,15 @@ def main(outdir):
       "duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence "
       "scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the "
       "category file's repeat the book's premises. |")
+    w("| `whole_into_parts` (new) | added from `A_reasoning/2_inductive-reasoning.yml`, under its upstream id | 2026-10-22 | "
+      "It formalizes compendium 10.2, Division of the Whole into its Parts, which `walton.yml` lacked. Its formulas follow "
+      "the book as printed (three parts stand for the book's n; only the positive reading). Its four templates are in "
+      "our own words, because the category file's repeat the book. |")
+    w("| `full_slippery_slope` (new) | added from `A_reasoning/5_casual-reasoning.yml`, under its upstream id; source filled "
+      "in; `accept_all_steps` and `led_to_step` given the arguments `(C0,C2)` | 2026-10-22 | It formalizes compendium 53, "
+      "the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the "
+      "compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is "
+      "one statement for every instance (\"0-ary atoms\", below). Its five templates are in our own words. |")
     w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template "
       "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
       "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "

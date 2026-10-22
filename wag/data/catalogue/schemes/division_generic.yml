@@ -65,7 +65,7 @@ contrasts:
 - scheme: part_in_whole
   text: ""
   status: todo
-- scheme: division_of_the_whole_into_its_parts
+- scheme: whole_into_parts
   text: ""
   status: todo
 examples: []

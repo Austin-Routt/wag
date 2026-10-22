@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files.",
  "entries": [
   {
    "number": "1",
@@ -1808,7 +1808,53 @@
    "n_premises": 3,
    "cq_labels": [],
    "shares_cqs_printed_under": null,
-   "walton_links": []
+   "walton_links": [
+    {
+     "id": "whole_into_parts",
+     "match": "partial",
+     "reason": "Same title and reference as the upstream block that formalizes it (category file A_reasoning/2_inductive-reasoning.yml), added to walton.yml by the owner's decision of 2026-10-22 (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Partial: three parts stand for the book's x1 ... xn, and only the positive reading (x1 is A, so X is A) is formalized, not the negative one (no part is A, so X is not A).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "note": "three parts for the book's n",
+       "walton": [
+        {
+         "formula": "whole_of(X,X1,X2,X3)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "walton": [
+        {
+         "formula": "part_whole(X,A,X1,X2,X3)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 3",
+       "note": "the positive reading only",
+       "walton": [
+        {
+         "formula": "part_is(X1,A)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "whole_is(X,A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    }
+   ]
   },
   {
    "number": "11",
@@ -7126,7 +7172,72 @@
     "CQ3"
    ],
    "shares_cqs_printed_under": null,
-   "walton_links": []
+   "walton_links": [
+    {
+     "id": "full_slippery_slope",
+     "match": "exact",
+     "reason": "Same title as the upstream block that formalizes it (category file A_reasoning/5_casual-reasoning.yml), added to walton.yml by the owner's decision of 2026-10-22 with the compendium's reference as its source and arguments for its two 0-ary atoms (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Each printed premise has its formula; the series C0 ... Cn-1 is written with three cases.",
+     "premise_map": [
+      {
+       "compendium_label": "Initial Premise",
+       "walton": [
+        {
+         "formula": "initial_presumption(C0)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Sequential Premise",
+       "note": "three cases for the book's series",
+       "walton": [
+        {
+         "formula": "leads_to_next(C0,C1,C2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Group Opinion Premise",
+       "walton": [
+        {
+         "formula": "accept_all_steps(C0,C2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "walton": [
+       {
+        "formula": "not_acceptable_step(C0)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "note": "the strength of the argument as a whole; no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ2",
+       "note": "the proof standard the argument must meet; no formula",
+       "walton": []
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "led_to_step(C0,C2)",
+         "locus": "assumption"
+        }
+       ]
+      }
+     ]
+    }
+   ]
   },
   {
    "number": "54",

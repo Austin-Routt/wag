@@ -397,4 +397,61 @@ ADDITIONS = [
 _OC = ("the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the "
        "exception other_consequences, only in negative_consequences_prudential")
 ADDITIONS += [insert(n, text, ADD, _OC) for n in (1896, 1925) for text in ("    exceptions:", "      - other_consequences(A)")]
+# 2026-10-22: compendium 10.2 and 53 had no scheme in walton.yml; the upstream category files formalize them
+# (whole_into_parts, full_slippery_slope). Both come in under their upstream ids, with templates in our own words
+# (the category files' repeat the book's premises). full_slippery_slope also gets the compendium's reference as its
+# source (the category file's is empty), and arguments for its two 0-ary atoms, which are about the series of cases at
+# hand: a 0-ary atom is one statement for every instance (CHANGELOG, "0-ary atoms"; walton-audit REPORT §6).
+_WP = ("compendium 10.2, Division of the Whole into its Parts, formalized only in the category file "
+       "A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22")
+_FS = ("compendium 53, the Full Slippery Slope Argument, formalized only in the category file "
+       "A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's "
+       "reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand")
+_WPT = "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
+_FST = "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
+ADDITIONS += [
+    insert(13, '  accept_all_steps/2: "Opinion runs so that whoever comes to accept one case in the series from %s to %s '
+               'will be carried on to accept the next."', ADD, _FST),
+    insert(195, '  initial_presumption/1: "At the outset, %s is presumed acceptable."', ADD, _FST),
+    insert(204, '  leads_to_next/3: "In the chain of cases from %s through %s to %s, every case brings on the following '
+                'one, through causal, precedent or analogical links."', ADD, _FST),
+    insert(204, '  led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next '
+                'one."', ADD, _FST),
+    insert(231, '  not_acceptable_step/1: "%s cannot be accepted after all, whatever the initial presumption."', ADD, _FST),
+    insert(261, '  part_is/2: "The part %s has %s."', ADD, _WPT),
+    insert(262, '  part_whole/5: "%s can have %s only if at least one of %s, %s and %s has it."', ADD, _WPT),
+    insert(390, '  whole_is/2: "The whole %s has %s."', ADD, _WPT),
+    insert(390, '  whole_of/4: "%s is made up of the parts %s, %s and %s."', ADD, _WPT),
+] + [insert(705, text, ADD, _WP, scheme="whole_into_parts") for text in [
+    "  - id: whole_into_parts",
+    "    meta:",
+    "      title: Argument From Division - Division of the Whole into its Parts",
+    "      source: >",
+    "              Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation.",
+    "              Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 231-233,234-241.",
+    "    variables: [X,X1,X2,X3,A]",
+    "    conclusions:",
+    "      - whole_is(X,A)",
+    "    premises:",
+    "      - whole_of(X,X1,X2,X3)",
+    "      - part_whole(X,A,X1,X2,X3)",
+    "      - part_is(X1,A)",
+    "     ",
+]] + [insert(1573, text, ADD, _FS, scheme="full_slippery_slope") for text in [
+    "  - id: full_slippery_slope",
+    "    meta:",
+    "      title: Full Slippery Slope Argument",
+    "      source: >",
+    "             Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 200, 203.",
+    "    variables: [C0,C1,C2]",
+    "    conclusions:",
+    "      - not_acceptable_step(C0)",
+    "    premises:",
+    "      - initial_presumption(C0)",
+    "      - leads_to_next(C0,C1,C2)",
+    "      - accept_all_steps(C0,C2)",
+    "    assumptions:",
+    "      - led_to_step(C0,C2)",
+    "",
+]]
 OPS += OWNER_REPAIRS + ADDITIONS

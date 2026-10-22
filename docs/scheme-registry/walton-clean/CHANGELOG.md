@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2091 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 1 added by them (`negative_consequences_reasoning`); 112 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2129 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 3 added by them (`full_slippery_slope`, `negative_consequences_reasoning`, `whole_into_parts`); 114 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 138 / 147 | 17 / 17 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 112 | 0 of 112 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 114 | 0 of 114 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 67 of 111 | 108 of 112 | 112 of 112 |
+| schemes passing checks 2–4 | – | 67 of 111 | 110 of 114 | 114 of 114 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr; the audit's 137 is the same list without it.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 112 schemes, and check 2 passes for 108. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 112 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 114 schemes, and check 2 passes for 110. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 114 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -35,10 +35,10 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
 | repair — owner decision | 7 | 7 |
-| addition — owner decision | 22 | 5 |
-| **total** | **225** | **182** distinct lines (a line can carry edits of several categories) |
+| addition — owner decision | 60 | 14 |
+| **total** | **263** | **187** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 173 lines removed, 195 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 29 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 173 lines removed, 233 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 67 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -49,6 +49,8 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | scheme | change | decided | why |
 |---|---|---|---|
 | `negative_consequences_reasoning` (new) | added from `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences`; variables `[A,B]`; conclusion `¬should_be_performed(A)` in place of the block's `not_bring_about(A)`; exception `other_consequences(A)` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the category file's repeat the book's premises. |
+| `whole_into_parts` (new) | added from `A_reasoning/2_inductive-reasoning.yml`, under its upstream id | 2026-10-22 | It formalizes compendium 10.2, Division of the Whole into its Parts, which `walton.yml` lacked. Its formulas follow the book as printed (three parts stand for the book's n; only the positive reading). Its four templates are in our own words, because the category file's repeat the book. |
+| `full_slippery_slope` (new) | added from `A_reasoning/5_casual-reasoning.yml`, under its upstream id; source filled in; `accept_all_steps` and `led_to_step` given the arguments `(C0,C2)` | 2026-10-22 | It formalizes compendium 53, the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is one statement for every instance ("0-ary atoms", below). Its five templates are in our own words. |
 | `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
 | `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
@@ -116,6 +118,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **10** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses accept_saying with 0 argument(s) and the template has 0 %s (used by: common_folks_group_ad_populum)
   - before: `  accept_saying: "Therefore, you should accept what I say."`
   - after: `  accept_saying/0: "Therefore, you should accept what I say."`
+- **13** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
+  - before: _(none)_
+  - after: `  accept_all_steps/2: "Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next."`
 - **17** · template · template has no %s for arity 1; no scheme uses the predicate, so the arity is set to fit the template instead of inventing an argument (used by: no scheme)
   - before: `  action_fit_quality/1: "Description of action actually fit the quality."`
   - after: `  action_fit_quality/0: "Description of action actually fit the quality."`
@@ -254,9 +259,18 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **195** · typo · template word 'vinue' (OCR) (used by: inconsistent_commitment)
   - before: `  initial_commitment/2: "%s has claimed or indicated that he is committed to proposition %s. Generally, or by vinue of what he has said in the past."`
   - after: `  initial_commitment/2: "%s has claimed or indicated that he is committed to proposition %s. Generally, or by virtue of what he has said in the past."`
+- **195** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
+  - before: _(none)_
+  - after: `  initial_presumption/1: "At the outset, %s is presumed acceptable."`
 - **200** · template · malformed verb '% i' printed '%!i(string=...)s' (used by: group_2, rule_physical_world_1)
   - before: `  is/2: "% is %s."`
   - after: `  is/2: "%s is %s."`
+- **204** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
+  - before: _(none)_
+  - after: `  leads_to_next/3: "In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links."`
+- **204** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
+  - before: _(none)_
+  - after: `  led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."`
 - **208** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses means_end with 1 argument(s) and the template has 1 %s (used by: end_and_means_2)
   - before: `  means_end: "Means %s should be regarded as an end."`
   - after: `  means_end/1: "Means %s should be regarded as an end."`
@@ -284,6 +298,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **231** · typo · template word 'he' for 'be' (OCR) (used by: negative_normal_expectations)
   - before: `  normal_true/1: "If the situation were normal, %s would he true."`
   - after: `  normal_true/1: "If the situation were normal, %s would be true."`
+- **231** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
+  - before: _(none)_
+  - after: `  not_acceptable_step/1: "%s cannot be accepted after all, whatever the initial presumption."`
 - **239** · typo · misspelled predicate (used by: verbal_slippery_slope)
   - before: `  not_has_propery/2: "Therefore, you can't truly say that %s, has %s"`
   - after: `  not_has_property/2: "Therefore, you can't truly say that %s, has %s"`
@@ -317,9 +334,15 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **260** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses ought_to_continue with 2 argument(s) and the template has 2 %s (used by: waste)
   - before: `  ought_to_continue: "Therefore, %s ought to continue trying to realize %s."`
   - after: `  ought_to_continue/2: "Therefore, %s ought to continue trying to realize %s."`
+- **261** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
+  - before: _(none)_
+  - after: `  part_is/2: "The part %s has %s."`
 - **262** · typo · misspelled predicate (used by: part_in_whole)
   - before: `  part_propert/2: "%s is %s." `
   - after: `  part_property/2: "%s is %s." `
+- **262** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
+  - before: _(none)_
+  - after: `  part_whole/5: "%s can have %s only if at least one of %s, %s and %s has it."`
 - **277** · template · popular_practise is used with 1 argument (A); both %s meant A, the second printed '%!s(MISSING)' (used by: popular_practice)
   - before: `  popular_practise/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s."`
   - after: `  popular_practise/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."`
@@ -428,6 +451,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **390** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses waste_bad_thing with 2 argument(s) and the template has 2 %s (used by: waste)
   - before: `  waste_bad_thing: "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."`
   - after: `  waste_bad_thing/2: "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."`
+- **390** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
+  - before: _(none)_
+  - after: `  whole_is/2: "The whole %s has %s."`
+- **390** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
+  - before: _(none)_
+  - after: `  whole_of/4: "%s is made up of the parts %s, %s and %s."`
 
 ### popular_opinion
 
@@ -503,6 +532,51 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **702** · typo · misspelled predicate
   - before: `      - all_parts_propert(A,P)`
   - after: `      - all_parts_property(A,P)`
+
+### whole_into_parts
+
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `  - id: whole_into_parts`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    meta:`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      title: Argument From Division - Division of the Whole into its Parts`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      source: >`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `              Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation.`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `              Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 231-233,234-241.`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    variables: [X,X1,X2,X3,A]`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    conclusions:`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - whole_is(X,A)`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `    premises:`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - whole_of(X,X1,X2,X3)`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - part_whole(X,A,X1,X2,X3)`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - part_is(X1,A)`
+- **705** [insert after] · addition — owner decision · compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `     `
 
 ### opposition-descriptive_1
 
@@ -819,6 +893,54 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - individuals_propoerty(A1,F,A2)`
   - after: `      - individuals_property(A1,F,A2)`
 
+### full_slippery_slope
+
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `  - id: full_slippery_slope`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `    meta:`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      title: Full Slippery Slope Argument`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      source: >`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `             Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 200, 203.`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `    variables: [C0,C1,C2]`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      - not_acceptable_step(C0)`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `    premises:`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      - initial_presumption(C0)`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      - leads_to_next(C0,C1,C2)`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      - accept_all_steps(C0,C2)`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `    assumptions:`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: `      - led_to_step(C0,C2)`
+- **1573** [insert after] · addition — owner decision · compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand
+  - before: _(none)_
+  - after: _(none)_
+
 ### rule_physical_world_1
 
 - **1576** · typo · title 'Worl'
@@ -959,7 +1081,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 112 schemes (`proposals-check.txt`).
+With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 114 schemes (`proposals-check.txt`).
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 

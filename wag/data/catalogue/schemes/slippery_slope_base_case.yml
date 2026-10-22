@@ -187,11 +187,11 @@ contrasts:
     choose this causal slope when it runs through events and ends by rejecting an
     action.
   status: drafted by Claude Code, 2026-10-22
-- scheme: full_slippery_slope_argument
-  text: Choose full_slippery_slope_argument (compendium 53, not in walton.yml) when
-    the steps mix causal, precedent and analogical links and the text relies on a
-    climate of opinion that will carry people from each step to the next; choose this
-    causal slope when the links are events alone.
+- scheme: full_slippery_slope
+  text: Choose full_slippery_slope (compendium 53) when the steps mix causal, precedent
+    and analogical links and the text relies on a climate of opinion that will carry
+    people from each step to the next; choose this causal slope when the links are
+    events alone.
   status: drafted by Claude Code, 2026-10-22
 - scheme: gradualism
   text: The book grounds all slippery slopes in argument from gradualism (p. 114).
@@ -318,3 +318,7 @@ history:
     one rule for slope versus consequences; gradualism no longer misdescribed; the
     source year''s second citation recorded; 49/CQ1''s answer; the Bad Outcome Premise
     map note; the summary''s conclusion; the night-bus coding)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: The full slippery slope (53) is now walton.yml's full_slippery_slope (the
+    owner's decision of 2026-10-22); the contrast names it.

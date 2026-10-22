@@ -16,6 +16,7 @@ language:
   acceptable_action/1: "%s is an acceptable action."
   acceptable_in_case/1: "Therefore, %s is acceptable in this case."
   acceptable_norm/3: "Doing %s or accepting %s shows that they are an acceptable norm of conduct for %s."
+  accept_all_steps/2: "Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next."
   act_on_presumption/1: "Therefore, I act on the presumption that %s is not true or true."
   act_value/2: "Done act %s is attributed the value %s."
   action_character/1: "Agent %s did something that can be classified as fitting a particular character quality."
@@ -200,6 +201,7 @@ language:
   individual_property_false/2: "But quite clearly it is false that %s has %s."
   individuals_property/3: "If %s, has %s then, %s has it too."
   initial_commitment/2: "%s has claimed or indicated that he is committed to proposition %s. Generally, or by virtue of what he has said in the past."
+  initial_presumption/1: "At the outset, %s is presumed acceptable."
   instance/2: "%s is an instance of class %s."
   interference/1: "An event has occurred which interferes with event %s."
   internally_consistent/1: "%s is internally consistent."
@@ -209,6 +211,8 @@ language:
   judged_negative_value/2: "Value %s is negative as judged by agent %s."
   judged_positive_value/2: "Value %s is positive as judged by agent %s."
   known/1: "%s is known to be true."
+  leads_to_next/3: "In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links."
+  led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."
   legitimate_value/1: "%s is a legitimate value."
   looks_like/2: "%s looks like a %s."
   may_have/2: "%s, may have %s, for all we know or can prove."
@@ -236,6 +240,7 @@ language:
   negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal."
   negative_consequences/1: "Performing action %s would have negative consequences."
   normal_true/1: "If the situation were normal, %s would be true."
+  not_acceptable_step/1: "%s cannot be accepted after all, whatever the initial presumption."
   not_bring_about/1: "Therefore, you had better not bring about %s"
   not_character_action/1: "Agent %s has some actions that don't fit into defined character."  
   not_do_appear/2: "If you do not bring about %s, then %s will occur."
@@ -266,7 +271,9 @@ language:
   ought_to_bring_about/1: "Therefore, you ought to bring about %s."
   ought_to_continue/2: "Therefore, %s ought to continue trying to realize %s."
   out_group_not_accept/2: "If you do not accept %s, you will be out of this group %s."
+  part_is/2: "The part %s has %s."
   part_property/2: "%s is %s." 
+  part_whole/5: "%s can have %s only if at least one of %s, %s and %s has it."
   person_act/2: "Person %s done act %s." 
   person_acts_value/3: "%s acts %s will be %s."
   person_goal/2: "Person %s has goal %s."
@@ -395,6 +402,8 @@ language:
   valued_to_be_member/1: "Being a member of this group %s is highly valued for you."
   want_to_be_different/2: "%s want to be different from %s."
   waste_bad_thing/2: "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
+  whole_is/2: "The whole %s has %s."
+  whole_of/4: "%s is made up of the parts %s, %s and %s."
   will_occur/1: "An event %s will occur."
   without_correcting/1: "Speakers are able to use the word %s in the correct physical and grammatical context without being correct about the nature of its referent or property."
   worth_imitated/2: "Then %s worth being imitated by %s."
@@ -709,6 +718,20 @@ argument_schemes:
       - all_parts_property(A,P)
     assumptions: 
      - all_parts_has(A,P)
+     
+  - id: whole_into_parts
+    meta:
+      title: Argument From Division - Division of the Whole into its Parts
+      source: >
+              Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation.
+              Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 231-233,234-241.
+    variables: [X,X1,X2,X3,A]
+    conclusions:
+      - whole_is(X,A)
+    premises:
+      - whole_of(X,X1,X2,X3)
+      - part_whole(X,A,X1,X2,X3)
+      - part_is(X1,A)
      
   - id: opposition-descriptive_1
     meta:
@@ -1577,6 +1600,21 @@ argument_schemes:
       - individuals_property(A1,F,A2)
       - vague_property(P,A1,A)
       - individual_property_false(A,P)
+
+  - id: full_slippery_slope
+    meta:
+      title: Full Slippery Slope Argument
+      source: >
+             Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 200, 203.
+    variables: [C0,C1,C2]
+    conclusions:
+      - not_acceptable_step(C0)
+    premises:
+      - initial_presumption(C0)
+      - leads_to_next(C0,C1,C2)
+      - accept_all_steps(C0,C2)
+    assumptions:
+      - led_to_step(C0,C2)
 
   - id: rule_physical_world_1
     meta:

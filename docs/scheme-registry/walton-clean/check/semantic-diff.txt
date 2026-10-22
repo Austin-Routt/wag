@@ -13,8 +13,9 @@ negative_consequences                    exceptions   [] -> ['other_consequences
 positive_consequences                    exceptions   [] -> ['other_consequences(A)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
 14 scheme-level difference(s) after renames
-added by the owner's decision (not compared): negative_consequences_reasoning
-language: 392 -> 396 keys; keys only in clean: 38, only in original: 33, same key with a changed template: 27
+added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, negative_consequences_reasoning
+language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same key with a changed template: 27
+  +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
   +  agent_bring_about/2 'Bringing about %s would lead to %s.'
@@ -30,14 +31,20 @@ language: 392 -> 396 keys; keys only in clean: 38, only in original: 33, same ke
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
   +  goal_prestige/0 'Prestige is an important goal for you.'
+  +  initial_presumption/1 'At the outset, %s is presumed acceptable.'
+  +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
+  +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
   +  means_end/1 'Means %s should be regarded as an end.'
   +  more_important_ends/0 'Ends are more important than the means used to achieve them.'
   +  more_reliable/0 'There are more reliable account for the sign.'
+  +  not_acceptable_step/1 '%s cannot be accepted after all, whatever the initial presumption.'
   +  not_necessarily_true/0 'First premise not necessary true.'
   +  not_normal/0 'Therefore, the situation is not normal.'
   +  official_rulebook/3 'In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s.'
   +  other_consequences/1 'Doing %s also has consequences of the opposite kind that outweigh the ones cited.'
   +  ought_to_continue/2 'Therefore, %s ought to continue trying to realize %s.'
+  +  part_is/2 'The part %s has %s.'
+  +  part_whole/5 '%s can have %s only if at least one of %s, %s and %s has it.'
   +  position_to_know_group/2 'Group %s is in a special position to know that %s is true.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
   +  prudential/1 'Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s.'
@@ -53,6 +60,8 @@ language: 392 -> 396 keys; keys only in clean: 38, only in original: 33, same ke
   +  sufficient_evidence/0 'search for the evidence progress is sufficient.'
   +  synonymous/0 'Whenever expressions are referentially coextensive, they are synonymous.'
   +  waste_bad_thing/2 "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
+  +  whole_is/2 'The whole %s has %s.'
+  +  whole_of/4 '%s is made up of the parts %s, %s and %s.'
   -  accept_saying 'Therefore, you should accept what I say.'
   -  action_fit_quality/1 'Description of action actually fit the quality.'
   -  attack_well_supported 'Allegration made in character attack premise evidence are well supported.'

@@ -221,10 +221,10 @@
      "note": "whole to parts; walton.yml formulas copy composition_generic"
     },
     {
-     "scheme": "",
+     "scheme": "whole_into_parts",
      "relation": "subtype",
      "compendium": "10.2",
-     "note": "missing from walton.yml (whole_into_parts in category file A/2 only)"
+     "note": "division of the whole into its parts; as printed it reasons from a part to the whole; added to walton.yml from category file A/2 by the owner's decision of 2026-10-22"
     }
    ]
   },
@@ -766,10 +766,10 @@
      "compendium": "52"
     },
     {
-     "scheme": "",
+     "scheme": "full_slippery_slope",
      "relation": "subtype",
      "compendium": "53",
-     "note": "full slippery slope: missing from walton.yml (full_slippery_slope in category file A/5 only)"
+     "note": "full slippery slope: causal, precedent and analogical steps with a climate of opinion; added to walton.yml from category file A/5 by the owner's decision of 2026-10-22"
     },
     {
      "scheme": "gradualism",

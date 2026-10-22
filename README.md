@@ -36,7 +36,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 ```
   the book: Walton, Reed & Macagno (2008)        walton.yml: the Carneades collection
-  what a scheme says, its critical questions     the formulas (112 schemes)
+  what a scheme says, its critical questions     the formulas (114 schemes)
                        \                          /
                         links.json: the book ↔ walton.yml   (drafted, not verified)
                                     |
@@ -54,12 +54,12 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 | Part | State | What works | What is missing | Read |
 |---|---|---|---|---|
-| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 112 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
+| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 114 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
 | Browser dashboard (`wag-server`) | Prototype, used on Windows | **Play:** dialogue and board views. **Models:** type a key, find a model, add it as a player. **Annotate:** runs, model review, your verdicts. Everything is saved in a data folder (`~/WAG`). | A catalogue browser; causes for verdicts | [`docs/prototype.md`](docs/prototype.md), [`docs/llm.md`](docs/llm.md) |
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |
 | Kialo import | Working | A captured discussion becomes a game (one statement per claim, keyed by claim ID), or an annotation dataset; `wag-cli --kialo-check` imports a whole folder | | [`wag/README.md`](wag/README.md), [part 8 §2](docs/review-2026-10-15-part8.md#2-claims-merged-by-their-text) |
-| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 112 schemes (the upstream 111, and compendium 33.3's formalization, which the upstream master had lost; added by the owner on 2026-10-22); the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
+| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 114 schemes (the upstream 111, and the formalizations of compendium 33.3, 10.2 and 53, which the upstream collection has only in its category files; added by the owner on 2026-10-22); the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
 | Scheme catalogue | Tier 1 drafted and checked (phase 1, step 2) | **Entries:** 115, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 219, with their formulas (203 from the book, 35 with a game part, 6 that only `walton.yml` implies). **Discrepancies:** 117, 105 of them recorded while drafting tier 1. **Tier 1:** 32 entries drafted and checked by models. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Verification by a person; tier 2's 83 entries; the owner's decisions on the scheme changes tier 1 proposes | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`DRAFTING.md`](wag/data/catalogue/DRAFTING.md), [`index.md`](wag/data/catalogue/index.md), [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
@@ -98,14 +98,14 @@ In order of importance. Each issue links to the document that explains it.
    - See [`docs/dialogue-types.md`](docs/dialogue-types.md) §9 and [part 9](docs/review-2026-10-15-part9.md).
 8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
-   - 3 book schemes have no `walton.yml` scheme, and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. Earlier versions said 6, from an older list.
+   - 1 book scheme has no `walton.yml` scheme (50, the precedent slippery slope, formalized nowhere), and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. There were 3 such book schemes until the owner brought in 10.2 and 53 from the upstream category files on 2026-10-22; earlier versions said 6, from an older list.
    - Compendium 33.3 (reasoning from negative consequences) had no `walton.yml` scheme. The upstream collection formalizes it in a category file, under an id it already used; the owner brought it in as `negative_consequences_reasoning` on 2026-10-22 ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#changes-decided-by-the-owner)).
    - On the same day the owner corrected five upstream schemes that drafting tier 1 found wrong (the same CHANGELOG section):
      - two conclusions that met no other scheme now conclude `¬should_be_performed(A)`;
      - negative value's conclusion and template, which said the opposite of the book, are corrected;
      - the consequence schemes have the exception for the book's question about opposite consequences;
      - the slippery slope's source year is corrected.
-   - 11 of the book-to-`walton.yml` links are partial.
+   - 12 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
 **Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):

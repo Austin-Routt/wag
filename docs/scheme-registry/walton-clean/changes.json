@@ -11,6 +11,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses accept_saying with 0 argument(s) and the template has 0 %s"
  },
  {
+  "line": 13,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  accept_all_steps/2: \"Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.\"",
+  "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
+ },
+ {
   "line": 17,
   "change": "edit",
   "scheme": "language",
@@ -517,6 +528,17 @@
   "reason": "template word 'vinue' (OCR)"
  },
  {
+  "line": 195,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  initial_presumption/1: \"At the outset, %s is presumed acceptable.\"",
+  "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
+ },
+ {
   "line": 200,
   "change": "edit",
   "scheme": "language",
@@ -526,6 +548,28 @@
   "before": "  is/2: \"% is %s.\"",
   "after": "  is/2: \"%s is %s.\"",
   "reason": "malformed verb '% i' printed '%!i(string=...)s'"
+ },
+ {
+  "line": 204,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  leads_to_next/3: \"In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.\"",
+  "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
+ },
+ {
+  "line": 204,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  led_to_step/2: \"Accepting a case in the series from %s to %s will in fact carry people on to the next one.\"",
+  "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
  },
  {
   "line": 208,
@@ -625,6 +669,17 @@
   "before": "  normal_true/1: \"If the situation were normal, %s would he true.\"",
   "after": "  normal_true/1: \"If the situation were normal, %s would be true.\"",
   "reason": "template word 'he' for 'be' (OCR)"
+ },
+ {
+  "line": 231,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  not_acceptable_step/1: \"%s cannot be accepted after all, whatever the initial presumption.\"",
+  "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
  },
  {
   "line": 239,
@@ -748,6 +803,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses ought_to_continue with 2 argument(s) and the template has 2 %s"
  },
  {
+  "line": 261,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  part_is/2: \"The part %s has %s.\"",
+  "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
+ },
+ {
   "line": 262,
   "change": "edit",
   "scheme": "language",
@@ -757,6 +823,17 @@
   "before": "  part_propert/2: \"%s is %s.\" ",
   "after": "  part_property/2: \"%s is %s.\" ",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 262,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  part_whole/5: \"%s can have %s only if at least one of %s, %s and %s has it.\"",
+  "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
  },
  {
   "line": 277,
@@ -1155,6 +1232,28 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses waste_bad_thing with 2 argument(s) and the template has 2 %s"
  },
  {
+  "line": 390,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  whole_is/2: \"The whole %s has %s.\"",
+  "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
+ },
+ {
+  "line": 390,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  whole_of/4: \"%s is made up of the parts %s, %s and %s.\"",
+  "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
+ },
+ {
   "line": 410,
   "change": "edit",
   "scheme": "popular_opinion",
@@ -1329,6 +1428,160 @@
   "before": "      - all_parts_propert(A,P)",
   "after": "      - all_parts_property(A,P)",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: whole_into_parts",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument From Division - Division of the Whole into its Parts",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "              Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation.",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "              Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 231-233,234-241.",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [X,X1,X2,X3,A]",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - whole_is(X,A)",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - whole_of(X,X1,X2,X3)",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - part_whole(X,A,X1,X2,X3)",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - part_is(X1,A)",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 705,
+  "change": "insert after",
+  "scheme": "whole_into_parts",
+  "scheme_after": "whole_into_parts",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "     ",
+  "reason": "compendium 10.2, Division of the Whole into its Parts, formalized only in the category file A_reasoning/2_inductive-reasoning.yml; brought in by the owner's decision of 2026-10-22"
  },
  {
   "line": 712,
@@ -2121,6 +2374,171 @@
   "before": "      - individuals_propoerty(A1,F,A2)",
   "after": "      - individuals_property(A1,F,A2)",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: full_slippery_slope",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Full Slippery Slope Argument",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "             Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 200, 203.",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [C0,C1,C2]",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - not_acceptable_step(C0)",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - initial_presumption(C0)",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - leads_to_next(C0,C1,C2)",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - accept_all_steps(C0,C2)",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    assumptions:",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - led_to_step(C0,C2)",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
+ },
+ {
+  "line": 1573,
+  "change": "insert after",
+  "scheme": "full_slippery_slope",
+  "scheme_after": "full_slippery_slope",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "compendium 53, the Full Slippery Slope Argument, formalized only in the category file A_reasoning/5_casual-reasoning.yml; brought in by the owner's decision of 2026-10-22, with the compendium's reference as its source and arguments (C0,C2) for its two 0-ary atoms, which are about the series at hand"
  },
  {
   "line": 1576,

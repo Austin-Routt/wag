@@ -385,8 +385,8 @@ func mergeTargets(a, b []Target) []Target {
 
 var nonWord = regexp.MustCompile(`[^a-z0-9]+`)
 
-// slug makes an id from a compendium title: "Full Slippery Slope Argument"
-// becomes "full_slippery_slope_argument".
+// slug makes an id from a compendium title: "Precedent Slippery Slope Argument"
+// becomes "precedent_slippery_slope_argument".
 func slug(name string) string {
 	return strings.Trim(nonWord.ReplaceAllString(strings.ToLower(name), "_"), "_")
 }

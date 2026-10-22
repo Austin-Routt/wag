@@ -27,7 +27,7 @@
 
 | Item | State |
 |---|---|
-| Entries | 115: one for each of `walton.yml`'s 112 schemes, and one for each of the 3 compendium schemes it lacks. All 109 compendium schemes are linked to an entry. |
+| Entries | 115: one for each of `walton.yml`'s 114 schemes, and one for the compendium scheme it lacks (50, the precedent slippery slope). All 109 compendium schemes are linked to an entry. |
 | Tier 1 | 32 entries, drafted on 2026-10-22 and checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)). Not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
 | Book questions | All 153 printed questions are in some entry. 52 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 50 in tier 2. The checker lists them. |
@@ -49,8 +49,8 @@ What matters for alignment:
 |---|---|---|
 | A second `negative_consequences` block, formalizing compendium 33.3 (reasoning from negative consequences: an agent's act leads to an outcome bad for the agent's goals) | `A_reasoning/3_practical-reasoning.yml` | It is lost from the master, apparently because its id is a duplicate. **Brought in on 2026-10-22** as `negative_consequences_reasoning` (C1 below). |
 | A second `practical_necessary_condition` block, which is the sufficient-condition schema | same file | The same duplicate-id defect. The master already has it as `practical_sufficient_condition`, so nothing is lost. |
-| `whole_into_parts` | `A_reasoning/2_inductive-reasoning.yml` | A formalization of compendium 10.2, division of the whole into its parts, which `walton.yml` lacks. |
-| `full_slippery_slope` | `A_reasoning/5_casual-reasoning.yml` | A formalization of compendium 53, the full slippery slope, which `walton.yml` lacks. It has no source, and its formulas need checking (`accept_all_steps` and `led_to_step` have no arguments). |
+| `whole_into_parts` | `A_reasoning/2_inductive-reasoning.yml` | A formalization of compendium 10.2, division of the whole into its parts, which `walton.yml` lacked. **Brought in on 2026-10-22** (C2 below). |
+| `full_slippery_slope` | `A_reasoning/5_casual-reasoning.yml` | A formalization of compendium 53, the full slippery slope, which `walton.yml` lacked. It had no source, and two 0-ary atoms (`accept_all_steps`, `led_to_step`). **Brought in on 2026-10-22,** with the compendium's reference as its source and arguments for the two atoms (C2 below). |
 | `opposition_descriptive_2`, `_3` | same file | The master's `opposition-descriptive_2`, `_3`, spelled with an underscore. Nothing is lost. |
 | `commitment1` with `committed_to` | `B_source-based-arguments/2_…` | The master misspells it `commined_to`; the category file is right, and the cleaned `walton.yml` already has the correction (its CHANGELOG). |
 | `part_in_whole` with variables `[Y,X,A]` | `A_reasoning/2_inductive-reasoning.yml` | The master declares `[Y,X,P]`, though its formulas use A and never P. The category file is right, and the cleaned `walton.yml` already has the correction. |
@@ -101,7 +101,13 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
    - the slippery slope's source year is the book's 1992, not 1999. The book's ch. 4 cites the same page as 1999; a verifier with its reference list should confirm.
 
    The `other_consequences/1` template was rewritten with the exception, to say that the opposite consequences outweigh the cited ones.
-2. **10.2 and 53:** bring `whole_into_parts` and `full_slippery_slope` into `walton.yml`, after checking their formulas; or keep the two entries without a formalization.
+2. **10.2 and 53: decided on 2026-10-22.** `whole_into_parts` and `full_slippery_slope` are in `walton.yml` under their upstream ids, checked against the book first.
+   - **Both** follow the book as printed. Their templates are in our own words.
+   - **`full_slippery_slope`** has the compendium's reference as its source. Its two 0-ary atoms take the series' ends, `(C0,C2)`, because they are about the series at hand (the cleaning's rule on 0-ary atoms).
+   - **`links.json`** links 10.2 partly: three parts stand for the book's n, and only the positive reading is formalized. It links 53 exactly. `families.json` names both, and the catalogue's two placeholder entries gave way to real ones.
+   - **Left open,** in the entries when they are drafted (tier 2):
+     - whether `full_slippery_slope`'s conclusion, `not_acceptable_step(C0)`, should meet the practical schemes, as the base case's now does;
+     - whether its assumption `led_to_step`, which repeats the Group Opinion premise, should stay.
 3. **50, the precedent slippery slope:** write a formalization, which must pass Hansen's definition (plan §2); or leave it unformalized.
 4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).
 5. **N12, analogy:** separate source and target propositions.
@@ -180,7 +186,7 @@ Two ways to cover them:
 
 ## 4. Order
 
-1. **The owner decides C2 to C5,** which change formulas, before anyone verifies the entries they touch (C1 was decided on 2026-10-22). C6 and C7 can wait.
+1. **The owner decides C3 to C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 and C2 were decided on 2026-10-22). C6 and C7 can wait.
 2. **A person verifies tier 1** (A).
 3. **Generate the game's data** for the 9 game schemes from the verified tier 1 (E), and run the game's tests.
 4. **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D).
