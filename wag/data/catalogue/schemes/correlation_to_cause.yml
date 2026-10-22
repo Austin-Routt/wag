@@ -96,8 +96,8 @@ contrasts:
   text: 'Choose correlation_to_cause when the point of the argument is to establish
     that E1 brings about E2, from the fact that the two go together; choose cause_to_effect
     when that link is taken as given and used to predict an effect in a case. A text
-    often chains them: a correlation supports the link, and the link then predicts
-    what a measure will do.'
+    often chains them: a correlation supports the link, and the link then says what
+    a measure would do (cause_to_effect_modal, while the measure is not adopted).'
   status: drafted by Claude Code, 2026-10-22
 - scheme: cause_to_effect_modal
   text: Choose cause_to_effect_modal when a causal link, taken as given, is applied
@@ -206,3 +206,8 @@ history:
   what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
     decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner").
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the contrast with cause_to_effect sends a measure not yet adopted to
+    cause_to_effect_modal)'

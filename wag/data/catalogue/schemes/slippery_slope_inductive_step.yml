@@ -121,13 +121,14 @@ contrasts:
     E2 will happen because E1 has; choose slippery_slope_inductive_step when the point
     is that E1 is to be feared because it leads on to a horrible E2, as one link of
     a chain against a first step. A causal chain with no bad end and no first step
-    to reject is a series of cause_to_effect arguments.
+    to reject is a series of cause_to_effect arguments (cause_to_effect_modal when
+    the first cause is only proposed or possible).
   status: drafted by Claude Code, 2026-10-22
 - scheme: cause_to_effect_modal
   text: Choose slippery_slope_inductive_step when the step is a link of a chain said
     to end in a horrible outcome, to reject the first step; choose cause_to_effect_modal
-    for a hypothetical causal step whose effect is the point, or that a consequences
-    argument rests on.
+    for a hypothetical causal step whose effect is the point, or that explains, beside
+    a consequences argument, how its consequence could come about.
   status: drafted by Claude Code, 2026-10-22
 - scheme: correlation_to_cause
   text: 'Not a close relative: correlation_to_cause argues for a causal link from
@@ -194,10 +195,11 @@ discrepancies:
     link is causes(E1,E2), the same unqualified causal premise as cause_to_effect's.
   decision: 'No change for now: read causes(E1,E2) here as "E1 would plausibly lead
     to E2 in these circumstances", and treat a weak link as a reason to answer 49/CQ3
-    against it. Open: whether the slope''s links should use may_occur, as cause_to_effect_modal
-    (added on 2026-10-22, audit N8) does, for slopes that start from a proposal. Slopes
-    whose steps are precedents or classifications have schemes of their own (50, 51,
-    52), only two of them in walton.yml.'
+    against it. Open: whether causes(E1,E2) should get a weaker counterpart for the
+    slope''s links. cause_to_effect_modal (2026-10-22, audit N8) does not give one:
+    it keeps causes(E1,E2) and makes only the cause and the effect possible (its discrepancy
+    on the Major Premise). Slopes whose steps are precedents or classifications have
+    schemes of their own (50, 51, 52), only two of them in walton.yml.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Conclusion
@@ -271,3 +273,8 @@ history:
   what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
     decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner"); the Recursive Premise decision names it.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the contrasts with both causal schemes; the Recursive Premise decision
+    describes the modal scheme rightly)'

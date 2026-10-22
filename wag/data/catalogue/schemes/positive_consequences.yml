@@ -190,9 +190,9 @@ contrasts:
 - scheme: slippery_slope_base_case
   text: 'Not a close relative: a slippery slope argues against a first step from a
     horrible outcome at the end of a chain. A chain of events towards a good end,
-    argued for, is a series of cause_to_effect steps feeding positive_consequences;
-    gradualism is something else, leading a hearer to accept a conclusion in small
-    steps.'
+    argued for, is a series of causal steps (cause_to_effect_modal, for a proposed
+    action) beside a positive_consequences argument; gradualism is something else,
+    leading a hearer to accept a conclusion in small steps.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning2
   text: Choose practical_reasoning2 only when S2 is a state distinct from the action
@@ -208,10 +208,12 @@ contrasts:
     good result with no goal or value stated.
   status: drafted by Claude Code, 2026-10-22
 - scheme: cause_to_effect
-  text: Choose cause_to_effect when the claim's point is that the effect will happen;
+  text: 'Choose cause_to_effect when the claim''s point is that the effect will happen;
     choose positive_consequences when the point is that A should be done because its
     effect is good. A claim that defends the causal link a consequences argument relies
-    on is cause_to_effect, not a new consequences argument.
+    on is a causal step, not a new consequences argument: cause_to_effect if its cause
+    has occurred, cause_to_effect_modal if it is the proposed action or follows from
+    it.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: positive_value
   text: Choose positive_value when the reason given is a value that the agent holds
@@ -227,8 +229,8 @@ contrasts:
 - scheme: cause_to_effect_modal
   text: Choose positive_consequences when an effect is cited to argue that an action
     should be done; choose cause_to_effect_modal when the point is only that the effect
-    may follow, including a step that explains how a consequence cited by a consequences
-    argument would come about.
+    may follow, including a step that explains, beside a consequences argument, how
+    the consequence it cites could come about (the step concludes may_occur, not brings_about).
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A tax on meat would combat unhealthy meat consumption.
@@ -289,11 +291,12 @@ discrepancies:
     different strengths (will, may, must). brings_about(A,G) has no modality, and
     Kialo claims often hedge ("could", "would help").
   decision: 'No change. Code a hedged claim with brings_about(A,G), say so in the
-    coding, and treat the weaker link as a reason to answer 33/CQ1 against it; a hedged
-    causal step beneath it is coded with cause_to_effect_modal, which the owner''s
-    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
-    "Changes decided by the owner") added for causal steps only. Open: whether brings_about
-    should get a modal form too.'
+    coding, and treat the hedge as a reason to press 33/CQ1: the conclusion that A
+    should be done needs a consequence likely enough to act on. The claim''s causal
+    steps are coded beside it as secondary cause_to_effect_modal instances, which
+    conclude only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
+    the discrepancy on the consequence schemes). Open: whether brings_about should
+    get a modal form too.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: CQ3
@@ -377,3 +380,8 @@ history:
   what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
     decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner"); the CQ1-CQ2 decision names it.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the contrasts with both causal schemes and with the slope; the CQ1-CQ2
+    decision no longer has the steps back the argument)'

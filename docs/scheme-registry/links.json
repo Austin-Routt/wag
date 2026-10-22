@@ -4448,7 +4448,7 @@
     {
      "id": "cause_to_effect_modal",
      "match": "partial",
-     "reason": "The weak reading of 28 (\"A occurs (might occur)\"; \"B will (might) occur\"), which cause_to_effect does not formalize: written for WAG by the owner's decision of 2026-10-22 (audit N8; walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Partial: it formalizes only that reading; cause_to_effect formalizes the strong one.",
+     "reason": "The weak reading of 28 (the cause occurs or might; the effect will or might follow), which cause_to_effect does not formalize: written for WAG by the owner's decision of 2026-10-22 (audit N8; walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Partial: its causal premise is cause_to_effect's unqualified causes(E1,E2), while the weak reading's generalization is weak too. cause_to_effect stays exact for the strong reading, as both forms of 41 link exactly.",
      "premise_map": [
       {
        "compendium_label": "Major Premise",

@@ -203,7 +203,7 @@
    looks_like/2: "%s looks like a %s."
    may_have/2: "%s, may have %s, for all we know or can prove."
 -  means_end: "Means %s should be regarded as an end."
-+  may_occur/1: "%s occurs, or may occur, in this case."
++  may_occur/1: "An event %s has happened, or could happen."
 +  means_end/1: "Means %s should be regarded as an end."
    means_same/2: "%s means the same as %s"
    means_to_end/2: "%s is means to the end %s."

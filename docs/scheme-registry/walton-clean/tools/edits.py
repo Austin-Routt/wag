@@ -493,17 +493,18 @@ ADDITIONS += [
     "      - intolerable_exception(Cn,R)",
     "",
 ]]
-# 2026-10-22: the modal cause to effect (audit N8). Compendium 28 has a strong and a weak reading ("B will (might)
-# occur"; "A occurs (might occur)"), and cause_to_effect formalizes only the strong one: it asserts that the cause has
+# 2026-10-22: the modal cause to effect (audit N8). Compendium 28 has a strong and a weak reading (the cause occurs or
+# might; the effect will or might follow), and cause_to_effect formalizes only the strong one: it asserts that the cause has
 # occurred, so a causal step of a policy not yet adopted had no scheme. Written for WAG by the owner's decision: the
 # same causal generalization and exception as cause_to_effect, with may_occur for both the cause and the effect, so
-# that hypothetical steps chain (a tax may come in, prices may rise, consumption may fall).
+# that hypothetical steps chain (a tax may come in, prices may rise, consumption may fall). The causal premise is not
+# weakened: the book's weak reading has a weak generalization too, which the catalogue records as open.
 _MOD = ("audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which "
         "cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with "
         "cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that "
         "hypothetical steps chain")
 ADDITIONS += [
-    insert(207, '  may_occur/1: "%s occurs, or may occur, in this case."', ADD,
+    insert(207, '  may_occur/1: "An event %s has happened, or could happen."', ADD,
            "template for cause_to_effect_modal (audit N8), in our own words"),
 ] + [insert(1749, text, ADD, _MOD, scheme="cause_to_effect_modal") for text in [
     "  - id: cause_to_effect_modal",

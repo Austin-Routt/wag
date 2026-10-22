@@ -10,7 +10,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 **Status on 2026-10-22: tier 1 drafted and checked.**
 - **Generated:** every entry, from the sources.
 - **Drafted:** all 33 tier-1 entries, every work field, by models following [`DRAFTING.md`](DRAFTING.md).
-- **Checked:** three independent model agents checked the drafts and the generated parts against the book, the NASCQ and the upstream collection's files. Their 117 findings are applied ([review part 12](../../../docs/review-2026-10-22-part12.md)).
+- **Checked:** three independent model agents checked the drafts and the generated parts against the book, the NASCQ and the upstream collection's files. Their 117 findings are applied ([review part 12](../../../docs/review-2026-10-22-part12.md)). `cause_to_effect_modal`, added later the same day, had a check of its own, whose 28 findings are applied too.
 - **Not yet done:** nothing is verified (only a person verifies), and tier 2 is generated only.
 - **Next steps** ([the alignment plan](../../../docs/catalogue-alignment.md)):
   1. The owner decides the scheme changes that tier 1's entries leave open.
@@ -209,11 +209,11 @@ Each is compared with the book's text, normalized: lower case, and every variabl
 
 | Tier 1 now | Count |
 |---|---|
-| Work items | 818: 654 drafted, 164 generated (159 found right; the 5 of `cause_to_effect_modal`, added later, are in its own check) |
+| Work items | 826: 662 drafted, 164 generated (found right) |
 | Questions | 92: 76 from the book, 35 with a game part, 6 `walton/` questions; 5 attack the inference; 2 have no target yet (established rule's CQ2–3, their missing exceptions recorded) |
-| Examples | 106: 49 Kialo claims, 35 near misses |
-| Contrasts | 206, none one-way within tier 1 |
-| Discrepancies | 110, of which 55 have decisions still open, for the owner or a verifier |
+| Examples | 107: 49 Kialo claims, 35 near misses |
+| Contrasts | 208, none one-way within tier 1 |
+| Discrepancies | 115, of which 57 have decisions still open, for the owner or a verifier |
 
 ## What the skeleton found
 

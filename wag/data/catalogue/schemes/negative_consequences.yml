@@ -197,10 +197,11 @@ contrasts:
     event.
   status: drafted by Claude Code, 2026-10-22
 - scheme: cause_to_effect
-  text: Choose cause_to_effect when the claim's point is that the effect will happen,
-    for instance when it explains how a consequence that another claim cites would
-    come about; choose negative_consequences when the point is that A should not be
-    done because the effect is bad.
+  text: Choose cause_to_effect when the claim's point is that the effect will happen
+    from a cause that has occurred, for instance when it explains how a consequence
+    another claim cites comes about from present facts (from the proposed action,
+    cause_to_effect_modal); choose negative_consequences when the point is that A
+    should not be done because the effect is bad.
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
   text: A bad consequence offered as a reply to a practical-reasoning argument for
@@ -221,8 +222,9 @@ contrasts:
 - scheme: cause_to_effect_modal
   text: Choose negative_consequences when an effect is cited to argue that an action
     should not be done; choose cause_to_effect_modal when the point is only that the
-    effect may follow, including a step that explains how a consequence cited by a
-    consequences argument would come about.
+    effect may follow, including a step that explains, beside a consequences argument,
+    how the consequence it cites could come about (the step concludes may_occur, not
+    brings_about).
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A sin tax on meat would make food more expensive, despite many people not
@@ -248,7 +250,8 @@ examples:
   coding: 'A = a tax on meat (the "financial restrictions"); G = more cases of anemia.
     Stated: brings_about(A,G). Supplied: bad(G). Conclusion: ¬should_be_performed(A).
     The first sentence backs the link; the gold codes the step from less meat to anemia
-    as a secondary cause_to_effect instance.'
+    as a secondary cause_to_effect instance. Its cause is hypothetical, so under the
+    N8 decision it is a cause_to_effect_modal step (recoding the gold is open).'
   status: drafted by Claude Code, 2026-10-22
 - text: Taxes on meat would not resolve the problems associated with its production
     and consumption.
@@ -287,11 +290,12 @@ discrepancies:
     different strengths (will, may, must). brings_about(A,G) has no modality, and
     Kialo cons often hedge ("could", "might").
   decision: 'No change. Code a hedged claim with brings_about(A,G), say so in the
-    coding, and treat the weaker link as a reason to answer 33/CQ1 against it; a hedged
-    causal step beneath it is coded with cause_to_effect_modal, which the owner''s
-    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
-    "Changes decided by the owner") added for causal steps only. Open: whether brings_about
-    should get a modal form too.'
+    coding, and treat the hedge as a reason to press 33/CQ1: the conclusion that A
+    should not be done needs a consequence likely enough to act on. The claim''s causal
+    steps are coded beside it as secondary cause_to_effect_modal instances, which
+    conclude only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
+    the discrepancy on the consequence schemes). Open: whether brings_about should
+    get a modal form too.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: CQ3
@@ -377,3 +381,8 @@ history:
   what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
     decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner"); the CQ1-CQ2 decision names it.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the contrasts with both causal schemes; the CQ1-CQ2 decision no longer
+    has the steps back the argument; the 13292.180 coding)'

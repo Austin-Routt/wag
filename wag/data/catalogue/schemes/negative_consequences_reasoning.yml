@@ -170,6 +170,12 @@ contrasts:
     for as the way to reach a goal; choose negative_consequences_reasoning when an
     action is argued against because its result would harm the agent's goals.
   status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect_modal
+  text: Choose negative_consequences_reasoning when an agent's own action is said
+    to bring about an outcome bad for the agent's goals, to argue against doing it;
+    choose cause_to_effect_modal when the point is only that an effect may follow
+    from a cause that may occur.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: If I take the night shift I'll be asleep when my kids leave for school, and
     seeing them off is half of why I took this job. So I won't take it.
@@ -310,3 +316,7 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     33/CQ3 reads the exception as outweighing; the negotiation placement marked as
     our extrapolation; the upstream discrepancy made exact)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: a contrast with cause_to_effect_modal)'

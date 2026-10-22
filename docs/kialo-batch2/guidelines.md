@@ -165,4 +165,6 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 9. **The shared vocabulary** (`lexicon.json`) is issued with the batch. One atom per entity or proposition; the action is always `tax_meat`.
 10. **Challenge types** add possibility and conflicting goals.
 11. **Causal steps of an un-enacted policy.** Use `cause_to_effect` only if nothing better fits, with fit `reconstructed` and the note "hypothetical cause (needs a modal causal scheme, audit N8)".
-    - *Note of 2026-10-22.* `walton.yml` now has that modal scheme, `cause_to_effect_modal` (the owner's decision on audit N8). This batch keeps the rule above, because its gold codes these steps so; the rule changes when the gold is recoded. Later batches code such steps with `cause_to_effect_modal`.
+    - *Note of 2026-10-22.* `walton.yml` now has that modal scheme, `cause_to_effect_modal` (the owner's decision on audit N8).
+      - **Batch 2:** its gold still codes its 11 such steps by the rule above, with confidence at most 0.5, so an annotation of batch 2 that is scored against the gold follows it too, until the gold is recoded. `validate.py`'s rule R4 changes with the recoding.
+      - **Batch 3 and later:** code a causal step whose cause is only proposed or possible with `cause_to_effect_modal`, with fit and confidence as for any other instance and without the N8 note.

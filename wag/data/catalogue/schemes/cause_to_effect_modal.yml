@@ -24,11 +24,12 @@ book:
   title: Argument From Cause To Effect
   pages: "328"
   match: partial
-  note: 'The weak reading of 28 ("A occurs (might occur)"; "B will (might) occur"),
-    which cause_to_effect does not formalize: written for WAG by the owner''s decision
-    of 2026-10-22 (audit N8; walton-clean/CHANGELOG.md, "Changes decided by the owner").
-    Partial: it formalizes only that reading; cause_to_effect formalizes the strong
-    one.'
+  note: 'The weak reading of 28 (the cause occurs or might; the effect will or might
+    follow), which cause_to_effect does not formalize: written for WAG by the owner''s
+    decision of 2026-10-22 (audit N8; walton-clean/CHANGELOG.md, "Changes decided
+    by the owner"). Partial: its causal premise is cause_to_effect''s unqualified
+    causes(E1,E2), while the weak reading''s generalization is weak too. cause_to_effect
+    stays exact for the strong reading, as both forms of 41 link exactly.'
   status: generated
 families:
 - family: F13
@@ -59,15 +60,16 @@ critical_questions:
     entry: "28"
     label: CQ1
   targets: [{formula: 'causes(E1,E2)', locus: premise}]
-  note: The paraphrase is cause_to_effect's; the answer differs, since a weak link
-    ("could", "might") is what this scheme claims.
+  note: The paraphrase is cause_to_effect's; the answer asks for less, because this
+    scheme concludes only that E2 may occur. How weak a link causes(E1,E2) may state
+    is recorded in the discrepancy on the Major Premise.
   paraphrase: How reliably do events like E1 bring about events like E2 — always,
     usually, or only now and then?
-  answer: 'The proponent, once asked. Against: evidence that events like E1 rarely
-    or never produce E2, or only under conditions this case lacks, which undermines
-    causes(E1,E2). A link that is merely weak does not count against it, since the
-    scheme claims only that E2 may follow. For: evidence that E1 brings about E2 in
-    cases like this one often enough to make E2 a real prospect.'
+  answer: 'The proponent, once asked. Against: evidence that events like E1 do not
+    bring about E2, or do so only under conditions this case lacks, which undermines
+    causes(E1,E2). For: evidence that E1 brings about E2 in cases like this one often
+    enough that E2 is a real prospect. Since the conclusion is only that E2 may occur,
+    a modest but real tendency is enough.'
   status: drafted by Claude Code, 2026-10-22
 - id: 28/CQ2
   book:
@@ -88,21 +90,21 @@ critical_questions:
     entry: "28"
     label: CQ3
   targets: [{formula: interference(E1), locus: exception}]
-  paraphrase: Is anything present in this case that could stop E1 from bringing about
-    E2?
-  answer: 'The critic, who raises it with an argument. Against: a factor in this case
-    that blocks or offsets the effect, such as a countermeasure or a stronger opposing
-    cause, which undercuts the argument through interference(E1). For: showing that
-    no such factor is present, or that it is too weak to matter.'
+  paraphrase: Could some other factor in this case, present now or arriving with E1,
+    keep E1 from bringing about E2 or blunt its effect?
+  answer: 'The critic, who raises it with an argument. Against: a factor that is present,
+    or that E1 would bring with it, that blocks or offsets the effect, such as a countermeasure
+    or a stronger opposing cause, which undercuts the argument through interference(E1).
+    For: showing that no such factor is present or to be expected, or that it is too
+    weak to matter.'
   status: drafted by Claude Code, 2026-10-22
 summary:
-  text: Use it to argue that an event E2 may happen in a case because an event E1
-    happens, or may happen, there, and events like E1 generally bring about events
-    like E2. Typically E1 is a proposal not yet adopted, or the text says only that
-    E2 could follow. It is the weak, modal reading of the book's cause to effect (28),
-    which cause_to_effect leaves out by claiming that the cause has occurred and that
-    the effect will follow; its steps chain, the effect of one being the cause of
-    the next.
+  text: Use it when a cause E1 is only proposed, expected or possible in a case, typically
+    a measure not yet adopted, or the text says only that an effect could follow,
+    and events like E1 tend to bring about events like E2. It concludes only that
+    E2 may occur there, where cause_to_effect claims that the cause has occurred and
+    that the effect will follow, and its steps chain, the effect of one being the
+    cause of the next.
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect
@@ -124,21 +126,27 @@ contrasts:
 - scheme: slippery_slope_inductive_step
   text: Choose slippery_slope_inductive_step when the step is a link of a chain said
     to end in a horrible outcome, to reject the first step; choose cause_to_effect_modal
-    for a hypothetical causal step whose effect is the point, or that a consequences
-    argument rests on.
+    for a hypothetical causal step whose effect is the point, or that explains, beside
+    a consequences argument, how its consequence could come about.
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences
   text: Choose negative_consequences when an effect is cited to argue that an action
     should not be done; choose cause_to_effect_modal when the point is only that the
-    effect may follow, including a step that explains how a consequence cited by a
-    consequences argument would come about (the gold codes 13292.9's steps beneath
-    its negative_consequences argument).
+    effect may follow, including a step that explains, beside a consequences argument,
+    how the consequence it cites could come about (the step concludes may_occur, not
+    brings_about).
   status: drafted by Claude Code, 2026-10-22
 - scheme: positive_consequences
   text: Choose positive_consequences when an effect is cited to argue that an action
     should be done; choose cause_to_effect_modal when the point is only that the effect
-    may follow, including a step that explains how a consequence cited by a consequences
-    argument would come about.
+    may follow, including a step that explains, beside a consequences argument, how
+    the consequence it cites could come about (the step concludes may_occur, not brings_about).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences_reasoning
+  text: Choose negative_consequences_reasoning when an agent's own action is said
+    to bring about an outcome bad for the agent's goals, to argue against doing it;
+    choose cause_to_effect_modal when the point is only that an effect may follow
+    from a cause that may occur.
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Tariffs decrease consumption of goods, which would help decrease consumption
@@ -168,7 +176,8 @@ examples:
     (the tax should not be adopted). Two chained instances: E1 = a tax on meat, E2
     = harm to the meat industry; then E1 = that harm, E2 = lower tax revenue. In each,
     stated: causes(E1,E2); may_occur(E1), supplied for the tax and carried for the
-    harm; conclusion: may_occur(E2). "Could" is the weak link this scheme claims.'
+    harm; conclusion: may_occur(E2). "Could" marks the effect as only possible, which
+    is what may_occur(E2) concludes.'
   status: drafted by Claude Code, 2026-10-22
 - text: The price of meat does not reflect its true cost due to subsidies.
   kialo: "13292.11"
@@ -180,15 +189,14 @@ examples:
 discrepancies:
 - kind: partial-link
   about: "28"
-  detail: 'walton.yml formalizes compendium 28 only in part: The weak reading of 28
-    ("A occurs (might occur)"; "B will (might) occur"), which cause_to_effect does
-    not formalize: written for WAG by the owner''s decision of 2026-10-22 (audit N8;
-    walton-clean/CHANGELOG.md, "Changes decided by the owner"). Partial: it formalizes
-    only that reading; cause_to_effect formalizes the strong one.'
-  decision: 'Keep it partial: this scheme formalizes the weak reading of 28, and cause_to_effect
-    the strong one; together they cover the entry. Choose between them by whether
-    the cause has occurred and the text says the effect will follow (the contrast
-    with cause_to_effect).'
+  detail: 'This scheme formalizes compendium 28 only in part: the weak reading, which
+    cause_to_effect does not formalize, but with cause_to_effect''s unqualified causes(E1,E2)
+    where the weak reading''s generalization is weak too. Written for WAG by the owner''s
+    decision of 2026-10-22 (audit N8).'
+  decision: Keep it partial, for the causal premise (the discrepancy on the Major
+    Premise). cause_to_effect, which formalizes the strong reading, stays linked exactly,
+    as the two forms of 41 are. Choose between the two schemes by whether the cause
+    has occurred and the text says the effect will follow (the contrast with cause_to_effect).
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: actual causes
@@ -203,9 +211,10 @@ discrepancies:
   about: conditional claims
   detail: Policy claims often say that an effect "would" follow if the policy were
     adopted. may_occur(E2) weakens that conditional to a possibility.
-  decision: 'No change: the policy''s adoption is what the consequences argument above
-    the step puts in question, and while it is not adopted the step can conclude only
-    that the effect may occur; how strongly E1 brings about E2 is asked by 28/CQ1.'
+  decision: 'No change: while the policy is not adopted, the step can conclude only
+    that the effect may occur; how strongly E1 brings about E2 is asked by 28/CQ1.
+    Whether the steps can back the consequences argument beside them is the discrepancy
+    on the consequence schemes.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: chaining
@@ -213,10 +222,10 @@ discrepancies:
     chain: one step''s may_occur(E2) is the next one''s may_occur(E1). A cause_to_effect
     step chains into neither scheme: its will_occur(E2) meets neither may_occur(E1)
     nor has_occurred(E1), so a chain from an actual cause to a possible effect breaks
-    at the switch.'
-  decision: 'Open: whether walton.yml should let will_occur(E) support may_occur(E).
-    Until then, supply the next step''s minor premise and say in the coding that it
-    is the previous step''s conclusion.'
+    at the switch (cause_to_effect records the same gap between its own steps).'
+  decision: 'Open: whether walton.yml should let will_occur(E) support may_occur(E),
+    and has_occurred(E). Until then, supply the next step''s minor premise and say
+    in the coding that it is the previous step''s conclusion.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: batch-2 gold
@@ -225,6 +234,37 @@ discrepancies:
     with the note that they need a modal causal scheme (audit N8).
   decision: 'Open: recode them with this scheme, when the owner agrees. Later batches
     use it (batch-2 guidelines, item 11, note of 2026-10-22).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Major Premise
+  detail: 'In the book''s weak reading the causal generalization is weak too: the
+    effect may follow from the cause. The scheme keeps causes(E1,E2), cause_to_effect''s
+    unqualified causal premise, and puts the modality only on whether the cause and
+    the effect occur.'
+  decision: 'Open: read causes(E1,E2), in every scheme that uses it, as a tendency
+    of events like E1 to bring about events like E2, strong or weak, each scheme''s
+    CQ1 asking whether it is strong enough for what that scheme concludes; or give
+    a weak link a formula of its own. Until then, code a weak link with this scheme
+    and say so in the coding.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: consequence schemes
+  detail: A chain of modal steps from an action A to an outcome G concludes may_occur(G).
+    The consequence schemes need brings_about(A,G), which no step concludes and which
+    claims more, so the steps explain a consequence but do not back that premise in
+    the argument graph.
+  decision: 'Open: whether a causal chain should be able to back brings_about(A,G),
+    or stay a secondary instance beside the consequences argument, as the batch-2
+    gold codes it. Until then, code the steps as secondary instances of the claim,
+    not attached to brings_about(A,G).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: interference
+  detail: interference(E1)'s template says the interfering event has occurred; for
+    a cause that may occur, the interference may be one still to come, such as producers
+    absorbing a tax.
+  decision: 'No change: read it as a factor that is present or would come with E1,
+    as the paraphrase of 28/CQ3 does.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -258,3 +298,10 @@ history:
     decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner")). Drafted every field; the three questions are
     cause_to_effect's.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the Major Premise and the consequence schemes recorded; CQ1, CQ3, the
+    summary and the 13292.9 coding made consistent with them; the contrasts no longer
+    say the steps back a consequences argument; a contrast with negative_consequences_reasoning;
+    the partial link justified by the causal premise; the interference template recorded)'

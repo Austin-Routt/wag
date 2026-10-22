@@ -36,7 +36,7 @@ language: 392 -> 410 keys; keys only in clean: 52, only in original: 33, same ke
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
-  +  may_occur/1 '%s occurs, or may occur, in this case.'
+  +  may_occur/1 'An event %s has happened, or could happen.'
   +  means_end/1 'Means %s should be regarded as an end.'
   +  more_important_ends/0 'Ends are more important than the means used to achieve them.'
   +  more_reliable/0 'There are more reliable account for the sign.'

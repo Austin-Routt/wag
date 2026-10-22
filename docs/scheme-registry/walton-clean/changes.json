@@ -601,7 +601,7 @@
   "category": "addition — owner decision",
   "needs_owner_approval": false,
   "before": "",
-  "after": "  may_occur/1: \"%s occurs, or may occur, in this case.\"",
+  "after": "  may_occur/1: \"An event %s has happened, or could happen.\"",
   "reason": "template for cause_to_effect_modal (audit N8), in our own words"
  },
  {

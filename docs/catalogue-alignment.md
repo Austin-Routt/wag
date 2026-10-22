@@ -28,13 +28,13 @@
 | Item | State |
 |---|---|
 | Entries | 116, one for each of `walton.yml`'s 116 schemes. All 109 compendium schemes are linked to an entry, and since 2026-10-22 every one has a formalization. |
-| Tier 1 | 33 entries, drafted on 2026-10-22. The first 32 were checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)); `cause_to_effect_modal`, added later the same day (C4), is being checked on its own. Not yet verified by a person. |
+| Tier 1 | 33 entries, drafted on 2026-10-22. The first 32 were checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)); `cause_to_effect_modal`, added later the same day (C4), had a check of its own, whose 28 findings are applied (part 12 §4). Not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
 | Book questions | All 153 printed questions are in some entry. 48 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 46 in tier 2. The checker lists them. |
 | Questions for assumptions and exceptions | 10 assumptions and exceptions in 9 schemes had no question before tier 1 was drafted. Tier 1 adds six `walton/` questions: its five, and `legitimate_value`, whose book question turned out to ask something else. |
 | Entries without any question | 47: the book prints none for them, and the game asks none. |
-| Generated items still unverified | 763: book links, families, premise maps and question targets. 164 of them are in tier 1: the drafters and the checkers found 159 right, and the 5 of `cause_to_effect_modal` are in its check. The rest are tier 2's. |
-| Discrepancies | 121. Tier 1 holds 110: 60 between the book and `walton.yml`, 39 other, 7 partial links, 3 game differences, 1 not in the book. 55 of tier 1's decisions are open, for the owner or a verifier ([part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). |
+| Generated items still unverified | 763: book links, families, premise maps and question targets. 164 of them are in tier 1, where the drafters and the checkers found them right; the rest are tier 2's. |
+| Discrepancies | 126. Tier 1 holds 115: 61 between the book and `walton.yml`, 43 other, 7 partial links, 3 game differences, 1 not in the book. 57 of tier 1's decisions are open, for the owner or a verifier ([part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). |
 
 ### What the upstream collection holds that `walton.yml` lacks
 
@@ -121,13 +121,17 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
    - **The conclusion** negates the premise of the argument for an exceptional case (`exceptional`). The book calls the slope a counterargument to argument from precedent (p. 117), and this lets it meet that argument.
    - **One reading is ours.** The book prints C0 in the Intolerable Outcome Premise and CQ3 (the ch. 3 scan is unclear). The formula takes the end of the series, Cn, as a slippery slope needs. `links.json` therefore links 50 partly, and a verifier with the book should confirm the reading.
 4. **N8, the modal cause to effect: decided on 2026-10-22.** `cause_to_effect_modal` is written for WAG, for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7): `may_occur(E1)` and `causes(E1,E2)`, with the exception `interference(E1)`, conclude `may_occur(E2)`. Its source is the one the book gives for 28.
-   - **`cause_to_effect` keeps the strong reading** (`has_occurred`, `will_occur`). `links.json` links 28 to it exactly and to the new scheme partly, and `families.json` makes the new scheme a variant in F13. Both are tier-1 entries; their contrast says when to use which.
+   - **`cause_to_effect` keeps the strong reading** (`has_occurred`, `will_occur`). `links.json` links 28 to it exactly, as both forms of 41 link exactly, and to the new scheme partly, because its causal premise is not weakened, and `families.json` makes the new scheme a variant in F13. Both are tier-1 entries; their contrast says when to use which.
    - **The batch-2 gold** still codes its 11 hypothetical causal steps as `cause_to_effect` with the N8 note, as its guidelines (item 11) ask. Recoding them is left to the owner; later batches use the new scheme.
-   - **Left open,** in the entries: whether a `cause_to_effect` step should chain into a modal one (`will_occur(E)` meets no `may_occur(E)`); whether the consequence schemes' `brings_about` and the slope's links should take a modal form too.
+   - **Left open,** in the entries:
+     - whether `causes(E1,E2)` should be read as a tendency, strong or weak, in every scheme, or a weak link get a formula of its own (the book's weak reading weakens the generalization too);
+     - whether a causal chain should be able to back a consequence scheme's `brings_about(A,G)`, which no step concludes;
+     - whether a `cause_to_effect` step should chain into a modal one (`will_occur(E)` meets no `may_occur(E)`);
+     - whether the consequence schemes' `brings_about` and the slope's links should take a modal form too.
 5. **N12, analogy:** separate source and target propositions.
 6. **The upstream defects** (duplicate ids; the master's typo and wrong variable list, already corrected in the cleaned file): record only. `walton.yml` is already right.
 7. **`walton.yml`'s English templates.** Rewrite in our own words the 173 that repeat the book (plan §7, item 1). The catalogue does not store them, but the game and `wag-cli --catalogue-show` render them.
-8. **The scheme changes that drafting tier 1 proposed.** These are the 55 open decisions recorded in the tier-1 entries, grouped in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open):
+8. **The scheme changes that drafting tier 1 proposed.** These are the 57 open decisions recorded in the tier-1 entries, grouped in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open):
    - exceptions `walton.yml` lacks;
    - the burden of practical reasoning's questions;
    - formula shapes;

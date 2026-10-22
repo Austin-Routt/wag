@@ -82,11 +82,11 @@ critical_questions:
     no such factor is present, or that it is too weak to matter.'
   status: drafted by Claude Code, 2026-10-22
 summary:
-  text: Use it to predict that an event E2 will happen in a case because an event
-    E1 happens there, and events like E1 generally bring about events like E2. It
-    reasons forward from a cause taken as known to its effect, which sets it apart
-    from correlation_to_cause, which argues for the causal link itself, and from sign,
-    which infers from an indicator to what it indicates.
+  text: Use it to predict, or to explain, that an event E2 happens or will happen
+    in a case because an event E1 happens there, and events like E1 generally bring
+    about events like E2. It reasons forward from a cause taken as known to its effect,
+    which sets it apart from correlation_to_cause, which argues for the causal link
+    itself, and from sign, which infers from an indicator to what it indicates.
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect_modal
@@ -111,19 +111,22 @@ contrasts:
   text: Choose slippery_slope_inductive_step when a step is one link of a chain said
     to lead to a bad end, and the point is not to take the first step; choose cause_to_effect
     for a causal step whose effect is itself the point. A chain of causal predictions
-    with no bad end and no proposal to reject is a series of cause_to_effect arguments.
+    with no bad end and no proposal to reject is a series of cause_to_effect arguments
+    (cause_to_effect_modal when the first cause is only proposed or possible).
   status: drafted by Claude Code, 2026-10-22
 - scheme: positive_consequences
   text: Choose positive_consequences when the effect is cited to argue that an action
     should be done; choose cause_to_effect when the point is only that the effect
     will happen, including a step that explains how a consequence cited elsewhere
-    comes about.
+    comes about, when its cause has occurred; when the cause is the proposed action
+    or follows from it, cause_to_effect_modal.
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences
   text: Choose negative_consequences when the effect is cited to argue that an action
     should not be done; choose cause_to_effect when the point is only that the effect
     will happen, including a step that explains how a consequence cited elsewhere
-    comes about.
+    comes about, when its cause has occurred; when the cause is the proposed action
+    or follows from it, cause_to_effect_modal.
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Meat production creates significant greenhouse gas emissions which contribute
@@ -131,10 +134,17 @@ examples:
   kialo: "13292.2"
   coding: 'In the gold these are secondary instances; the claim''s primary scheme
     is verbal_classification. Two chained instances. First: E1 = meat production;
-    E2 = significant greenhouse-gas emissions. Stated: causes(E1,E2). Supplied: has_occurred(E1)
-    (meat is produced now). Conclusion: will_occur(E2). Second: E1 = those emissions;
-    E2 = climate change being driven. Stated: causes(E1,E2). Supplied: has_occurred(E1).
-    Conclusion: will_occur(E2).'
+    E2 = significant greenhouse-gas emissions. Stated: has_occurred(E1) and causes(E1,E2).
+    Conclusion: will_occur(E2). Second: E1 = those emissions; E2 = climate change
+    being driven. Stated: has_occurred(E1) and causes(E1,E2). Conclusion: will_occur(E2).
+    As in the gold, both causes are actual and explicit, so no hypothetical-cause
+    note applies.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The town's main factory shut in March, so local unemployment will climb this
+    year.
+  coding: 'E1 = the closure of the factory; E2 = higher local unemployment. Stated:
+    has_occurred(E1). Supplied: causes(E1,E2), that closing a large employer puts
+    people out of work. Conclusion: will_occur(E2), a prediction.'
   status: drafted by Claude Code, 2026-10-22
 - text: The energy consumed in producing meat, starting from birthing and feeding
     animals to slaughter and processing, far exceeds the energy needed to grow an
@@ -199,6 +209,23 @@ discrepancies:
     about events of E2''s kind", as the paraphrases do. Open: give walton.yml the
     book''s reference as its source.'
   status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: conclusion tense
+  detail: will_occur(E2) reads as a future event, but causal explanations of a state
+    that holds now are coded with it (in the gold, 13292.2, .4, .11 and .141).
+  decision: 'No change for now: read will_occur(E2) as "E2 holds now or will hold",
+    and say so in the coding. The template''s wording goes with the rewrite of walton.yml''s
+    templates (catalogue-alignment.md, C7).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: chaining
+  detail: A step's conclusion will_occur(E2) is not the next step's minor premise
+    has_occurred(E2), nor cause_to_effect_modal's may_occur(E2), so chained steps
+    do not meet in the argument graph.
+  decision: 'As in cause_to_effect_modal''s discrepancy on chaining, where the question
+    is left to the owner: until then, state or supply the next step''s minor premise
+    and say in the coding that it is the previous step''s conclusion.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
   reasoning: epistemic
@@ -241,3 +268,9 @@ history:
     "Changes decided by the owner"): the two discrepancies are done; the hypothetical
     examples moved to cause_to_effect_modal (13292.14 kept as a near miss), actual
     ones in their place (13292.141, 13292.11); a contrast with cause_to_effect_modal.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
+    (findings: the consequence and slope contrasts send hypothetical steps to cause_to_effect_modal;
+    the 13292.2 coding follows the gold (both causes explicit); a forward example;
+    the conclusion tense and chaining recorded; the summary covers explanations)'
