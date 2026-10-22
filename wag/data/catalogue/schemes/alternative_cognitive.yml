@@ -45,52 +45,140 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when two possibilities A and B are in play, either of which may hold,
+    and A is shown to be unlikely, to conclude that B is likely the case. It rules
+    out one possibility to accept the other about what is the case, which sets it
+    apart from alternative_normative, which reasons about what is required, and from
+    pragmatic_alternative, which recommends an action by the bad outcome of not taking
+    it.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: opposition-descriptive_1
-  text: ""
-  status: todo
+  text: Choose opposition-descriptive_1 when the text infers that a subject cannot
+    have a property because it has an incompatible one; choose alternative_cognitive
+    when it infers that one possibility holds because the other has been ruled out
+    as unlikely. The opposition reasons from what is present to what is excluded,
+    the alternatives scheme from what is excluded to what is left.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-descriptive_2
-  text: ""
-  status: todo
+  text: 'Close in form: a subject that lacks P must have the contradictory P2. Choose
+    opposition-descriptive_2 when the two options are contradictory predicates of
+    one subject, so that the step is certain; choose alternative_cognitive when they
+    are two possible states of affairs and the conclusion is only plausible, because
+    the first is only plausibly ruled out.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-descriptive_3
-  text: ""
-  status: todo
+  text: As with opposition-descriptive_2, but for complementary contraries (a whole
+    number that is not odd is even). Choose it when the alternatives are a predicate
+    and its complementary contrary; choose alternative_cognitive for two possible
+    states of affairs weighed by plausibility.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-normative
-  text: ""
-  status: todo
+  text: 'Not a close relative: opposition-normative denies that a subject can receive
+    two opposite evaluations at once, an evaluative claim about one subject, not a
+    choice between two possible states of affairs.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rhetorical_oppositions_normative
-  text: ""
-  status: todo
+  text: 'Not a close relative: it carries a required treatment over to the contrary
+    subject (contrary subjects, contrary treatments) and concludes a requirement,
+    not what is the case.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rhetorical_oppositions_descriptive
-  text: ""
-  status: todo
+  text: 'Not a close relative: it infers a converse relation between two terms (if
+    A stands in R to B, B can stand in R2 to A), with no alternatives to choose between.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: alternative_normative
-  text: ""
-  status: todo
+  text: 'Its normative twin (13.2). Choose alternative_cognitive when the alternatives
+    are states of affairs and the question is which one holds; choose alternative_normative
+    when they are actions or requirements and the question is which one is required.
+    The direction differs too: here ruling one option out supports the other; there
+    requiring one option rules the other out.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: pragmatic_alternative
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose pragmatic_alternative when the text says that an action must be taken
+    or something bad will happen, and concludes that the action should be taken; choose
+    alternative_cognitive when both options are states of affairs and the conclusion
+    is that one of them is likely the case. The book treats the pragmatic form as
+    the disjunctive syllogism carried over to decisions (pp. 106–7).
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: 'The car won''t start: either the battery is flat or the starter motor has
+    failed. The headlights still come on at full brightness, so the battery is probably
+    fine; it''s most likely the starter.'
+  coding: 'A = the battery is flat; B = the starter motor has failed. Stated: can_be_case(A,B),
+    plausibly_not_case(A) (the headlights are bright). Supplied: none. Conclusion:
+    plausibly_case(B). The second premise is itself backed by a sign (the bright headlights).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Either the parcel was lost in transit or it was left at the wrong door. Tracking
+    shows it reached our local depot this morning, so it wasn't lost on the way; most
+    likely a neighbour has it.
+  coding: 'A = the parcel was lost in transit; B = the parcel was left at the wrong
+    door. Stated: can_be_case(A,B), plausibly_not_case(A) (the tracking record). Supplied:
+    none. Conclusion: plausibly_case(B).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Either we repair the roof this summer or the ceiling will come down in the
+    winter storms, so we must repair the roof.
+  coding: 'Near miss: it has the either-or form, but one side is a bad outcome and
+    the conclusion is an action; pragmatic_alternative (A = repair the roof this summer,
+    B = the ceiling comes down in winter).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: ch. 3 version (p. 106)
+  detail: In ch. 3 the book gives the deductive disjunctive syllogism (p or q; not
+    q; so p) and says it may serve a pragmatic argument (p. 106). The compendium's
+    13.1, and walton.yml with it, weaken the second premise and the conclusion to
+    plausibility, and the disjunction to "can be the case".
+  decision: 'No change: walton.yml follows the compendium. A deductive instance (the
+    alternatives exhaustive, one of them certainly false) is coded with this scheme
+    too, its premises then holding outright.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: critical questions
+  detail: 'Neither the book (13 prints no questions) nor walton.yml (no assumptions
+    or exceptions) gives the scheme critical questions. Its usual weakness is the
+    disjunction, which does not say that A and B are the only possibilities: a third
+    one that the text overlooks, the attack ND describes on the disjunctive premise
+    of a dilemma (ND pp. 160–1).'
+  decision: 'No question added: can_be_case(A,B) is a premise, so a third possibility
+    is raised as a challenge to it. Open: whether walton.yml should add an exception
+    for a further alternative.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: discovery
+  group: finding entities
+  note: Not in the tree; placed with argument from sign and argument from ignorance
+    under finding entities, because like them it concludes what is plausibly the case
+    from the evidence at hand, here by ruling out the other possibility. The upstream
+    collection files it with practical reasoning (category file A/3), but its premises
+    and conclusion concern what is the case, not what to do.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is a plausible version of disjunctive syllogism (ch.
+    3, p. 106), and its family (F06) holds parallel oppositions and alternatives,
+    not narrower versions of it.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [inquiry, persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table; our extrapolation. As evidence for what is the case it
+    serves inquiry, where possibilities are narrowed down, persuasion, and deliberation,
+    where the facts behind a choice are settled. For the dilemma in deliberation,
+    ND describes the attack of finding a third option (ND pp. 160–1), which is this
+    scheme's main weakness too. No type makes it suspect as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the eight contrasts (four marked as not close), the examples,
+    two discrepancies (the ch. 3 deductive form; the lack of questions), the classification,
+    specialises and the dialogue types. The book prints no questions under 13 and
+    walton.yml has no assumptions or exceptions, so there are no questions to draft.

@@ -147,7 +147,7 @@ Place the scheme in Walton and Macagno's tree (2015, p. 22; reproduced in Aberde
 The tree names these schemes under its groups:
 - **Discovery.** Establishing rules: random sample to population, best explanation. Finding entities: sign, ignorance.
 - **Application.** Based on cases: established rule, verbal classification, cause to effect. Defeasible rule-based: example, analogy, precedent. Chained: gradualism, precedent slippery slope, sorites slippery slope.
-- **Practical.** Instrumental: practical reasoning, action to motive. Values: values, fairness. Value-based: positive or negative consequences, with waste, threat and sunk costs under them.
+- **Practical.** Instrumental (the tree's "instrumental argument from practical reasoning"): goal-based practical reasoning, action to motive. Values: values, fairness. Value-based (its "value-based argument from practical reasoning"): value-based practical reasoning, and positive or negative consequences, with waste, threat and sunk costs under them.
 - **Source-dependent.** Position to know: expert opinion; position to know, with witness testimony. Ad hominem: direct; circumstantial, with inconsistent commitment; attacking credibility, with bias and poisoning the well. Popular acceptance: popular opinion, popular practice.
 
 **When the tree does not list the scheme,** place it by its nearest listed relative, and say so in `note`: "Not in the tree; placed with …, because …". The checker allows a group only under its own heading.
@@ -156,7 +156,7 @@ The tree names these schemes under its groups:
 
 `specialises` names the scheme this one is a domain or narrower version of. Examples:
 - witness testimony specialises position to know;
-- practical_reasoning2 specialises practical_reasoning1, if it does.
+- practical_reasoning1 (value-based) specialises practical_reasoning2 (goal-based): it has all of practical_reasoning2's core premises, plus premises about a value.
 
 Its `note` says what the narrowing adds. If it specialises nothing, leave `scheme` empty, say so in the `note`, and set the status to drafted.
 

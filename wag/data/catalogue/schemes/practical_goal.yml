@@ -46,31 +46,82 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when a person or body P is said to have a goal G and an act X helps
+    toward G, to conclude that P should do X. It is a third-person form of practical
+    reasoning in which the act need only contribute to the goal, which sets it apart
+    from practical_inference, where the arguer reasons from its own goal to a means
+    that realizes it.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_inference
-  text: ""
-  status: todo
-examples: []
+  text: practical_inference (22.1) reasons from the arguer's own goal to a means that
+    realizes it, and carries the book's questions on conflicting goals, alternatives,
+    possibility and consequences; practical_goal has a named person P, an act that
+    only contributes to G, and no questions. Choose practical_goal when the text recommends
+    an act to a third party because it helps toward that party's goal; choose practical_inference
+    when the arguer reasons about a goal of their own.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_reasoning2
+  text: Choose practical_reasoning2 when the text describes the present circumstances
+    and a resulting state in which the goal is met; choose practical_goal when it
+    says only that an act helps toward a goal that a named person or body has. The
+    game plays practical_reasoning2, not practical_goal.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The hospital wants to cut waiting times in its emergency department, and an
+    evening clinic for minor injuries would help with that, so the hospital should
+    open one.
+  coding: 'P = the hospital; G = shorter waiting times in the emergency department;
+    X = open an evening clinic for minor injuries. Stated: person_goal(P,G), contributing_action(X,G)
+    ("would help"). Supplied: none. Conclusion: should_do(P,X).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Maria wants to run a marathon next year. Joining a running club would get
+    her training on track, so she ought to sign up.
+  coding: 'P = Maria; G = run a marathon next year; X = join a running club. Stated:
+    person_goal(P,G), contributing_action(X,G). Supplied: none. Conclusion: should_do(P,X).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Rationing meat via personal carbon budgets/allowances (credits) where everybody
+    in a country can consume a small amount of meat but larger amounts cost extra
+    … would help reduce carbon emissions.
+  kialo: "13292.147"
+  coding: 'Near miss: "would help" is the language of contribution, but no person
+    or body is said to hold the goal; the claim says that the action brings about
+    a good outcome. positive_consequences (A = ration meat through carbon budgets,
+    G = lower carbon emissions), as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies: []
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: instrumental
+  note: The tree does not name the argument from goal, but compendium 22.5 is a form
+    of practical reasoning (22), and it argues from a goal to an act without values,
+    as the instrumental argument from practical reasoning does.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is a variant of practical_inference (F10), in the
+    third person and with an act that need only contribute to the goal, a weaker means
+    premise rather than a narrower one.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table. ND discusses practical reasoning in deliberation (ND pp.
+    153–5) and in negotiation (ND pp. 105, 111), but not this third-person form; placing
+    it in the same types, and in persuasion about action, is our extrapolation. No
+    type makes it suspect as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the contrasts, the examples, the classification, specialises
+    and the dialogue types. The book prints no questions under 22.5 and walton.yml
+    has no assumptions or exceptions, so there are no questions to draft; the book
+    and walton.yml agree in substance, so no discrepancy is recorded.

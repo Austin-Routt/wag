@@ -79,20 +79,36 @@ critical_questions:
   book:
     entry: "22.4"
     label: CQ1
-  targets: []
-  note: no formula (WAG asks it at the conclusion)
-  paraphrase: ""
-  answer: ""
-  status: generated
+  game:
+    id: CQ:other_goals
+    text: Are there goals other than {G} that should come first?
+    locus: conclusion
+  targets: [{formula: should_be_performed(A), locus: conclusion}]
+  note: 'No formula: unlike practical_reasoning2 (incompatible_goal(G)), practical_reasoning1
+    has no exception for a conflicting goal. Targeted at the conclusion, where the
+    game asks it, and the game''s CQ:other_goals moved here from its own item. The
+    game''s text asks which goals should come first; the book''s, which goals might
+    conflict. See the discrepancies on CQ1 and on the game''s questions.'
+  paraphrase: Which other goals of the agent could clash with G?
+  answer: 'The critic, who raises it with an argument. Against: another goal of the
+    agent that pursuing G would set back, and that should come first, put forward
+    as an argument that A should not be performed, which rebuts the argument. For:
+    showing that the agent''s other goals fit with G, or rank below it.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ2
   book:
     entry: "22.4"
     label: CQ2
-  targets: [{formula: 'would_promote_value(G,V)', locus: premise}, {formula: legitimate_value(V),
-      locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'would_promote_value(G,V)', locus: premise}]
+  note: 'Values. Corrected targets: dropped legitimate_value(V), which links.json
+    also gave. The book takes V as the agent''s own values and asks only how well
+    G fits them; whether V is a legitimate value is walton.yml''s separate assumption,
+    asked by walton/legitimate_value.'
+  paraphrase: How far do the agent's values V support G, or at least fit with it?
+  answer: 'The proponent, once asked. Against: showing that achieving G does little
+    for V, or works against it, which undermines would_promote_value(G,V). For: showing
+    how achieving G advances V.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ3
   book:
     entry: "22.4"
@@ -103,9 +119,16 @@ critical_questions:
     locus: exception
     pattern: realize_more_effectively(G,A)
   targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'Alternatives. walton.yml has no formula for an alternative that is merely
+    as good as A: the exception needs one that realizes G more effectively. See the
+    discrepancy on the game''s questions.'
+  paraphrase: Are there actions besides A that would achieve G too, and deserve to
+    be weighed against it?
+  answer: 'The critic, who raises it with an argument. Against: another action that
+    would realize G better than A, which undercuts the argument through realize_more_effectively(G,A).
+    For: showing that no other action realizes G, or that each one does worse than
+    A.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ4
   book:
     entry: "22.4"
@@ -117,17 +140,27 @@ critical_questions:
     pattern: bring_about_more_effectively(S2,A)
   targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}, {formula: 'bring_about_more_effectively(S2,A)',
       locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Efficiency.
+  paraphrase: Of A and the other actions that would achieve G, which one does it most
+    efficiently?
+  answer: 'The critic, who raises it with an argument. Against: an action that would
+    reach S2, or realize G, at lower cost or more surely than A, which undercuts the
+    argument through bring_about_more_effectively(S2,A) or realize_more_effectively(G,A).
+    For: a comparison showing that A is the most efficient of the options.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ5
   book:
     entry: "22.4"
     label: CQ5
   targets: [{formula: 'promote_more_effectively(V,A)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Best by values. The book weighs the options against the agent's whole set
+    of values; walton.yml compares them on the one value V. See the discrepancy on
+    V.
+  paraphrase: Of A and its alternatives, which one serves the agent's values V best?
+  answer: 'The critic, who raises it with an argument. Against: an action that would
+    promote V more than A does, which undercuts the argument through promote_more_effectively(V,A).
+    For: showing that no alternative does more for V than A.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ6
   book:
     entry: "22.4"
@@ -138,9 +171,15 @@ critical_questions:
     locus: premise
     pattern: possible(A)
   targets: [{formula: possible(A), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Possibility. The game asks it at the premise; possible(A) is an assumption
+    of walton.yml, and both put the burden on the proponent.
+  paraphrase: What reason is there to think that the agent can actually carry out
+    A?
+  answer: 'The proponent, once asked. Against: showing that A is beyond the agent''s
+    means, powers or authority in the circumstances S1, which undermines possible(A).
+    For: evidence that the agent has the resources and the standing to do A, such
+    as a plan or a precedent.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ7
   book:
     entry: "22.4"
@@ -151,39 +190,108 @@ critical_questions:
     locus: exception
     pattern: side_effects(A,S1)
   targets: [{formula: 'side_effects(A,S1)', locus: exception}]
-  note: template "...would have side-effects which demote some value"
-  paraphrase: ""
-  answer: ""
-  status: generated
-- id: game/CQ:other_goals
-  game:
-    id: CQ:other_goals
-    text: Are there goals other than {G} that should come first?
-    locus: conclusion
-  targets: [{formula: should_be_performed(A), locus: conclusion}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: template "...would have side-effects which demote some value". The book asks
+    only about consequences that outweigh G; walton.yml's exception, and the game's
+    text, cover any side effect that demotes a value.
+  paraphrase: Which consequences of doing A might cost more, in value, than achieving
+    G is worth?
+  answer: 'The critic, who raises it with an argument. Against: a consequence of doing
+    A in S1 that demotes some value, enough to outweigh what G gains, which undercuts
+    the argument through side_effects(A,S1). For: showing that A has no such consequence,
+    or that it weighs less than G.'
+  status: drafted by Claude Code, 2026-10-22
+- id: walton/worthy_goal
+  targets: [{formula: worthy_goal(G), locus: assumption}]
+  note: Neither the book nor the game asks it. The premise map links the book's first
+    premise (the agent has G) to this assumption, as an approximation; see the discrepancy
+    on Premise 1.
+  paraphrase: Is G a goal worth pursuing?
+  answer: 'The proponent, once asked. Against: showing that G is trivial, harmful
+    or not the agent''s proper concern, which undermines worthy_goal(G). For: reasons
+    why G deserves to be pursued, such as the value V it serves.'
+  status: drafted by Claude Code, 2026-10-22
+- id: walton/legitimate_value
+  targets: [{formula: legitimate_value(V), locus: assumption}]
+  note: Neither the book nor the game asks it; 22.4/CQ2 asks how well G fits V, not
+    whether V is legitimate.
+  paraphrase: Is V a value that may properly count in this decision?
+  answer: 'The proponent, once asked. Against: showing that V is not a value the parties
+    accept, or should carry no weight here (a private advantage presented as a value),
+    which undermines legitimate_value(V). For: showing that V is widely held or recognised
+    in the setting, such as public health or fairness.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when an action A is recommended because, in the present circumstances
+    S1, doing A would lead to a state S2 in which a goal G is met, and achieving G
+    promotes a value V. The value premise sets it apart from practical_reasoning2,
+    which argues from the goal alone, and from positive_value, which supports a goal
+    by a value without reaching an action.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_value
-  text: ""
-  status: todo
+  text: positive_value concludes only that a value V is a reason to keep a goal G;
+    it reaches no action. Choose practical_reasoning1 when the text goes on to an
+    action whose result meets G; choose positive_value when it argues only that a
+    value makes a goal worth holding (Kialo gold, 13292.43).
+  status: drafted by Claude Code, 2026-10-22
 - scheme: negative_value
-  text: ""
-  status: todo
+  text: negative_value weighs a goal by a value judged negative, and reaches no action.
+    Choose practical_reasoning1 when the text recommends an action because its result
+    meets a goal that promotes V. A value that the action would harm is a side effect
+    within practical_reasoning1 (side_effects(A,S1)) or the ground of a separate negative_consequences
+    argument, not negative_value.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sacrifice
-  text: ""
-  status: todo
+  text: 'Not a close relative: sacrifice infers that a thing has great value from
+    the great sacrifice made for it, and concludes no action. A text that urges going
+    on because of what has already been given up is waste or sunk_costs, not practical_reasoning1.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_inference
-  text: ""
-  status: todo
+  text: practical_inference is the book's basic goal-means scheme (22.1), with no
+    value and no circumstances. Choose practical_reasoning1 when the text names the
+    value V that the goal serves as well as the means; choose practical_inference
+    when it gives only the goal and the means.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning2
-  text: ""
-  status: todo
-examples: []
+  text: practical_reasoning2 has the same circumstances, transition and goal, without
+    the value. Choose practical_reasoning1 only when the text, or its immediate context,
+    names the value V that achieving G promotes; otherwise practical_reasoning2 (batch-2
+    guidelines, §3).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_consequences
+  text: Choose positive_consequences when the claim says only that A brings about
+    something good; choose practical_reasoning1 when it states the present circumstances,
+    a resulting state in which a goal is met, and the value that goal promotes.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Commuters on the east side now spend an hour in traffic each way. A protected
+    bike lane on Main Street would let many of them cycle instead, which would cut
+    congestion, and less congestion means cleaner air for everyone. The city should
+    build the lane.
+  coding: 'S1 = east-side commuters spend an hour in traffic; A = build a protected
+    bike lane on Main Street; S2 = many commuters cycle; G = less congestion; V =
+    clean air (public health). Stated: current_circumstances(S1), would_bring_about(A,S1,S2),
+    would_be_realized(G,S2), would_promote_value(G,V). Supplied: none. Conclusion:
+    should_be_performed(A).'
+  status: drafted by Claude Code, 2026-10-22
+- text: The library is shut on Saturdays, the only day many working parents can bring
+    their children. Opening on Saturdays would let those children borrow books too,
+    and every child should have the same chance to read.
+  coding: 'S1 = the library is closed on Saturdays; A = open the library on Saturdays;
+    S2 = working parents'' children can borrow books; G = every child has access to
+    the library; V = equal opportunity. Stated: current_circumstances(S1), would_bring_about(A,S1,S2),
+    would_promote_value(G,V) (the last clause). Supplied: would_be_realized(G,S2).
+    Conclusion: should_be_performed(A), left implicit.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Tax revenue is not the primary reason to tax meat; there are other, more pressing
+    issues, such as sustainability or animal welfare.
+  kialo: "13292.43"
+  coding: 'Near miss: it names values behind taxing meat, but no circumstances, no
+    resulting state and no goal met in it; positive_value (V = sustainability and
+    animal welfare, G = taxing meat), as the gold codes it. The gold sets practical_reasoning1
+    aside because three of its premises would have to be supplied.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "22.4"
@@ -191,25 +299,107 @@ discrepancies:
     Practical Reasoning") but another source and structure (Atkinson & Bench-Capon
     2007, action-based alternating transition systems). WAG AS:practical_reasoning
     uses this id.'
-  decision: ""
-  status: generated
+  decision: Keep the partial link. The book's 22.4 (a goal, values supporting it,
+    a necessary or sufficient means) and Atkinson and Bench-Capon's scheme share the
+    value premise and the conclusion. The catalogue reads the book's premises and
+    questions onto walton.yml's formulas through the premise map and the targets,
+    and records the gaps below. The game plays this scheme as AS:practical_reasoning.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ1
+  detail: 22.4/CQ1 asks about the agent's other goals that conflict with G. practical_reasoning1
+    has no formula for it; practical_reasoning2 has the exception incompatible_goal(G).
+  decision: 'Open: add incompatible_goal(G) to practical_reasoning1''s exceptions
+    in walton.yml, then target CQ1 and the game''s CQ:other_goals at it. Until then,
+    CQ1 targets the conclusion, as the game does: a conflicting goal is raised as
+    an argument against doing A.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Premise 1
+  detail: The book's first premise says that the agent has the goal G. No formula
+    says so; links.json maps it, as an approximation, to the assumption worthy_goal(G),
+    which says that G is worth pursuing, a different and evaluative claim.
+  decision: 'Keep the approximate map. Open: whether to add a goal premise like practical_inference''s
+    have_goal(G). worthy_goal(G) and legitimate_value(V), which no book question asks
+    about, get walton/ questions.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Premise 3
+  detail: 'The book''s means premise says that A is needed for G, or enough for it.
+    walton.yml splits it into would_bring_about(A,S1,S2) and would_be_realized(G,S2),
+    which say that A would lead to a state in which G is met: the sufficient reading
+    only. The circumstances S1 have no basis in 22.4.'
+  decision: No change. Code a text that says A is needed for G with this scheme when
+    it names a value, and record the necessity in the coding; practical_necessary_condition
+    encodes necessity but has no value premise.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: V
+  detail: In the book V is the agent's set of values, and CQ5 weighs the options against
+    all of them; in walton.yml V is one value, and promote_more_effectively(V,A) compares
+    the options on that value alone.
+  decision: No change. Bind V to the value the text names; another value is raised
+    through side_effects(A,S1) or a separate argument.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: burden of the questions
+  detail: 'In ch. 3 the book says that asking any of the questions it lists for practical
+    reasoning defeats the argument, at least for a time, until the proponent answers
+    (p. 96): each question shifts the burden to the proponent. walton.yml makes the
+    alternatives, efficiency, values and side-effects questions exceptions, which
+    the critic must prove.'
+  decision: 'The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
+    §2), and the answers say so. Open: the owner''s decision whether these questions
+    should shift the burden when asked, which would make them assumptions.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: CQ:other_goals asks which goals should come first, where 22.4/CQ1 asks which
+    goals might conflict with G. CQ:other_means asks whether another action could
+    also achieve G, but its pattern requires one that does better. CQ:side_effect
+    asks about any bad side effect, where 22.4/CQ7 asks only about consequences that
+    outweigh G.
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
+    the texts from these paraphrases.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: value-based
+  note: The tree's third practical group is the value-based argument from practical
+    reasoning, with arguments from consequences under it (Walton and Macagno 2015,
+    p. 22, in Aberdein 2020, Table 4); this scheme is that argument. Its instrumental
+    counterpart, practical_reasoning2, heads the instrumental group.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: practical_reasoning2
+  note: 'It adds a premise to practical_reasoning2, would_promote_value(G,V), with
+    the value questions (22.4/CQ2 and CQ5) and the assumption legitimate_value(V);
+    in the book too, 22.4 adds a value premise and two value questions to 22.1. In
+    walton.yml the narrowing holds for the premises only: practical_reasoning1 lacks
+    practical_reasoning2''s possible(G), intervening_actions(A,G) and incompatible_goal(G).'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'From ND: practical reasoning is the characteristic argument of deliberation
+    (ND pp. 153–5), and argument in negotiation also rests on practical reasoning
+    about goals and means (ND pp. 105, 111); the book places it typically in deliberation
+    (p. 96). Persuasion about what to do is our extrapolation, supported by ND''s
+    remark that deliberation between parties whose basic goals conflict is a mix of
+    persuasion and deliberation (ND p. 282, ch. 6 n. 1). ND names no type in which
+    it is suspect.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the seven book questions
+    and two walton/ questions (worthy_goal, legitimate_value), the contrasts, the
+    examples, the discrepancies, the classification, specialises and the dialogue
+    types. Moved the game's CQ:other_goals onto 22.4/CQ1, targeted at the conclusion,
+    and dropped legitimate_value(V) from 22.4/CQ2's targets.

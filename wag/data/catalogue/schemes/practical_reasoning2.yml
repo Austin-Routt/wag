@@ -47,13 +47,19 @@ families:
 premise_map:
 - entry: "22.1"
   label: Major Premise
-  formulas: [{formula: 'would_be_realized(G,S2)', locus: premise}]
-  note: goal G realized in the resulting state
-  status: generated
+  formulas: []
+  note: 'Corrected: links.json mapped it to would_be_realized(G,S2), which says that
+    S2 meets G, not that the agent has G. No formula of practical_reasoning2 says
+    that the agent has G.'
+  status: drafted by Claude Code, 2026-10-22
 - entry: "22.1"
   label: Minor Premise
-  formulas: [{formula: 'would_bring_about(A,S1,S2)', locus: premise}]
-  status: generated
+  formulas: [{formula: 'would_bring_about(A,S1,S2)', locus: premise}, {formula: 'would_be_realized(G,S2)',
+      locus: premise}]
+  note: 'Corrected: added would_be_realized(G,S2). The means-end link is split across
+    both formulas (A in S1 leads to S2, and G is met in S2), as links.json maps 22.4''s
+    means premise for practical_reasoning1.'
+  status: drafted by Claude Code, 2026-10-22
 - entry: "22.1"
   label: Conclusion
   formulas: [{formula: should_be_performed(A), locus: conclusion}]
@@ -69,9 +75,16 @@ critical_questions:
     locus: exception
     pattern: incompatible_goal(G)
   targets: [{formula: incompatible_goal(G), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Conflicting goals. The book asks which such goals should be considered; walton.yml
+    makes the conflict an exception, so the critic must name the goal. See the discrepancy
+    on the burden of the questions.
+  paraphrase: Would pursuing G clash with other goals the agent has that deserve to
+    be weighed?
+  answer: 'The critic, who raises it with an argument. Against: another goal of the
+    agent that G conflicts with and that matters as much or more, which undercuts
+    the argument through incompatible_goal(G). For: showing that no other goal is
+    at stake, or that G can be pursued without giving the others up.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.1/CQ2
   book:
     entry: "22.1"
@@ -81,19 +94,40 @@ critical_questions:
     text: Could an action other than {A} also achieve {G}?
     locus: exception
     pattern: realize_more_effectively(G,A)
-  targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}, {formula: 'bring_about_more_effectively(S2,A)',
-      locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}]
+  note: 'Alternatives. Corrected targets: links.json also gave bring_about_more_effectively(S2,A),
+    which is about efficiency in reaching S2, the topic of CQ3. Dropped here, so that
+    22.1/CQ2 and CQ3 are targeted as the same two questions are in practical_reasoning1
+    (22.4/CQ3 and CQ4). walton.yml has no formula for an alternative that is merely
+    as good as A; see the discrepancy on the game''s questions.'
+  paraphrase: Are there actions besides A that would achieve G too, and deserve to
+    be weighed against it?
+  answer: 'The critic, who raises it with an argument. Against: another action that
+    would realize G better than A, which undercuts the argument through realize_more_effectively(G,A).
+    For: showing that no other action realizes G, or that each one does worse than
+    A.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.1/CQ3
   book:
     entry: "22.1"
     label: CQ3
-  targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  game:
+    id: CQ:best_means
+    text: Is {A} the best way to achieve {G}?
+    locus: exception
+    pattern: bring_about_more_effectively(S2,A)
+  targets: [{formula: 'realize_more_effectively(G,A)', locus: exception}, {formula: 'bring_about_more_effectively(S2,A)',
+      locus: exception}]
+  note: 'Efficiency. Corrected targets: added bring_about_more_effectively(S2,A),
+    moved from CQ2, and moved the game''s CQ:best_means here from its own item, since
+    the game asks whether A is the best way to G, which is this question.'
+  paraphrase: Of A and the other actions that would achieve G, which one does it most
+    efficiently?
+  answer: 'The critic, who raises it with an argument. Against: an action that would
+    reach S2, or realize G, at lower cost or more surely than A, which undercuts the
+    argument through bring_about_more_effectively(S2,A) or realize_more_effectively(G,A).
+    For: a comparison showing that A is the most efficient of the options.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.1/CQ4
   book:
     entry: "22.1"
@@ -104,9 +138,15 @@ critical_questions:
     locus: premise
     pattern: possible(A)
   targets: [{formula: possible(A), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Possibility. The game asks it at the premise; possible(A) is an assumption
+    of walton.yml, and both put the burden on the proponent.
+  paraphrase: What reason is there to think that the agent can actually carry out
+    A?
+  answer: 'The proponent, once asked. Against: showing that A is beyond the agent''s
+    means, powers or authority in the circumstances S1, which undermines possible(A).
+    For: evidence that the agent has the resources and the standing to do A, such
+    as a plan or a precedent.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 22.1/CQ5
   book:
     entry: "22.1"
@@ -117,19 +157,16 @@ critical_questions:
     locus: exception
     pattern: side_effects(A,S1)
   targets: [{formula: 'side_effects(A,S1)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
-- id: game/CQ:best_means
-  game:
-    id: CQ:best_means
-    text: Is {A} the best way to achieve {G}?
-    locus: exception
-    pattern: bring_about_more_effectively(S2,A)
-  targets: [{formula: 'bring_about_more_effectively(S2,A)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Consequences. The book's question covers any further consequence; walton.yml's
+    exception and the game's text cover only harmful ones, which are those that can
+    defeat the argument. The ch. 3 list of questions (p. 96) also speaks of known
+    bad consequences.
+  paraphrase: What further consequences of doing A should be weighed as well?
+  answer: 'The critic, who raises it with an argument. Against: a known consequence
+    of doing A in S1 that harms something the agent cares about, which undercuts the
+    argument through side_effects(A,S1). For: showing that A has no such consequence,
+    or that its cost is small beside G.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:goal_possible
   game:
     id: CQ:goal_possible
@@ -137,9 +174,13 @@ critical_questions:
     locus: premise
     pattern: possible(G)
   targets: [{formula: possible(G), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: No question of 22.1 asks it; practical_inference has the same assumption (possible_goal(G)).
+    walton.yml's English reads "Action G is possible", although G is a goal.
+  paraphrase: Can G be reached at all, by any means?
+  answer: 'The proponent, once asked. Against: showing that G cannot be reached whatever
+    is done, which undermines possible(G). For: cases where G, or goals like it, have
+    been reached, or a credible path to it.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:intervening_actions
   game:
     id: CQ:intervening_actions
@@ -148,45 +189,167 @@ critical_questions:
     locus: exception
     pattern: intervening_actions(A,G)
   targets: [{formula: 'intervening_actions(A,G)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: No question of 22.1 asks it; the book's two-person practical reasoning asks
+    whether other actions besides the means are required (23/CQ5; also ch. 3, p. 97).
+  paraphrase: Would further steps be needed after A before G is achieved?
+  answer: 'The critic, who raises it with an argument. Against: steps that must follow
+    A, or conditions that must also be met, before G is reached, which undercuts the
+    argument through intervening_actions(A,G) unless the proponent plans for them.
+    For: showing that A by itself leads to S2, and so to G.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when an action A is recommended because, in the present circumstances
+    S1, doing A would lead to a state S2 in which the agent's goal G is met. It argues
+    from a goal back to a means with no value premise, which sets it apart from practical_reasoning1,
+    which also names the value V that G serves, and from positive_consequences, which
+    recommends A for a good outcome without a goal or circumstances.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_inference
-  text: ""
-  status: todo
+  text: 'practical_inference encodes compendium 22.1 directly: a goal G and an action
+    A that is a means to it, with no circumstances. Choose practical_reasoning2 when
+    the text describes the present situation S1 and a resulting state S2 that differs
+    from the action; choose practical_inference when it says only that A serves G.
+    The game plays practical_reasoning2 (AS:practical_reasoning_goal), not practical_inference.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
-  text: ""
-  status: todo
-examples: []
+  text: Choose practical_reasoning1 when the text also names the value V that the
+    goal serves (health, fairness, liberty); choose practical_reasoning2 when it argues
+    from the goal alone. A value only hinted at does not make the argument value-based
+    (Kialo gold, 13292.104 and 13292.118).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_consequences
+  text: Choose positive_consequences when the claim says only that A brings about
+    a good outcome; choose practical_reasoning2 when it also states the circumstances
+    S1 and a state S2, distinct from the action, in which the goal is met (batch-2
+    rule R3). A proposal with a purpose but no circumstances is positive_consequences.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Meat is not inherently problematic. What is problematic is the animal farming
+    industry, so the appropriate solution is to regulate this industry rather than
+    penalize those who wish to consume meat.
+  kialo: "13292.104"
+  coding: 'A = regulate the animal farming industry; S1 = the farming industry, not
+    meat itself, is the problem; S2 = the industry is regulated; G = the problems
+    of meat are resolved. Stated: current_circumstances(S1), would_bring_about(A,S1,S2),
+    would_be_realized(G,S2) ("the appropriate solution"). Supplied: none. Conclusion:
+    should_be_performed(A). As the gold notes, S2 nearly restates A. The claim offers
+    A as a better means than taxing meat: an answer to 22.1/CQ2 (CQ:other_means) of
+    the environmental argument for the tax (13292.108).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Taxing meat would raise the consumer price to reflect the real costs of meat
+    consumption.
+  kialo: "13292.118"
+  coding: 'A = tax meat; S1 = the price of meat is below its real costs; S2 = a higher
+    consumer price; G = the price reflects the real costs. Stated: would_bring_about(A,S1,S2),
+    would_be_realized(G,S2). Supplied: current_circumstances(S1), which the child
+    claim 13292.11 states. Conclusion: should_be_performed(A). No value is named,
+    so not practical_reasoning1.'
+  status: drafted by Claude Code, 2026-10-22
+- text: A tax on meat would combat unhealthy meat consumption.
+  kialo: "13292.115"
+  coding: 'Near miss: "combat" sounds like a goal, but the claim gives no circumstances
+    and no state distinct from the outcome; it says that the tax brings about something
+    good. positive_consequences (A = tax meat, G = less unhealthy meat consumption),
+    as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "22.1"
   detail: 'walton.yml formalizes compendium 22.1 only in part: Later version from
     another source (Walton 2015, Goal-Based Reasoning for Argumentation): instrumental
     practical reasoning with circumstances S1/S2.'
-  decision: ""
-  status: generated
+  decision: Keep the partial link. practical_reasoning2 is Walton's 2015 version,
+    which the book does not print; practical_inference is the exact encoding of 22.1.
+    The catalogue reads 22.1's premises and questions onto this scheme through the
+    premise map and the targets, and records the gaps below. The game plays this scheme,
+    so its questions are 22.1's as targeted here.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Major Premise
+  detail: '22.1''s major premise says that the agent has the goal G. No formula of
+    practical_reasoning2 says so: G enters only through would_be_realized(G,S2). links.json
+    mapped the major premise to that formula, which belongs to the means; the catalogue
+    maps it to nothing and gives both transition formulas to the minor premise.'
+  decision: 'Open: whether to add a goal premise, like practical_inference''s have_goal(G).
+    Until then, the agent''s holding G is taken from the binding of G, and a critic
+    who denies it argues against the conclusion.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: current_circumstances(S1)
+  detail: '22.1 states no circumstances: current_circumstances(S1) and the resulting
+    state S2 come from Walton 2015. The book''s ch. 3 possibility question mentions
+    the given circumstances (p. 96), and ND relativises the means premise to the agent''s
+    view of the situation (ND p. 154).'
+  decision: No change. Bind S1 only when the text or its context describes the present
+    situation (batch-2 guidelines, §3 and R4); otherwise code practical_inference,
+    or a fragment of the parent's argument.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: burden of the questions
+  detail: 'In ch. 3 the book says that asking any of the five questions it lists for
+    practical reasoning defeats the argument, at least for a time, until the proponent
+    answers (p. 96): each question shifts the burden to the proponent. walton.yml
+    makes the conflicting-goals, alternatives, efficiency and side-effects questions
+    exceptions, which the critic must prove.'
+  decision: 'The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
+    §2), and the answers say so. Open: the owner''s decision whether these questions
+    should shift the burden when asked, which would make them assumptions.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: possible(G), intervening_actions(A,G)
+  detail: 'Two formulas have no basis in 22.1: the assumption possible(G) and the
+    exception intervening_actions(A,G). The second matches the book''s two-person
+    question on further actions needed besides the means (23/CQ5; p. 97).'
+  decision: No change; the game's questions about them stand on their own (game/CQ:goal_possible,
+    game/CQ:intervening_actions).
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: CQ:other_means asks whether another action could also achieve G, but its
+    pattern realize_more_effectively(G,A) needs an action that does better, so an
+    equally good alternative answers the text yes without making the exception true.
+    CQ:side_effect asks about bad side effects only, where 22.1/CQ5 asks about further
+    consequences in general.
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
+    the texts from these paraphrases, and decide whether an equally good alternative
+    should count against A, which needs a formula walton.yml lacks.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: instrumental
+  note: The tree's first practical group is the instrumental argument from practical
+    reasoning (Walton and Macagno 2015, p. 22, in Aberdein 2020, Table 4); this goal-based
+    scheme, without values, is that argument.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is a later formulation of the basic goal-means scheme
+    of 22.1 (practical_inference), which splits the means premise through the circumstances
+    S1 and the resulting state S2 rather than narrowing it. families.json lists both
+    as members of F10, this one as a variant.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'From ND: practical reasoning, from a goal and a means to a practical ought,
+    is the characteristic argument of deliberation (ND pp. 153–5), and argument in
+    negotiation also rests on practical reasoning about goals and the means to them
+    (ND pp. 105, 111). The book too places it typically in deliberation (p. 96). Persuasion
+    about what to do is our extrapolation. ND names no type in which it is suspect.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the five book questions
+    and two game questions, the contrasts, the examples, the discrepancies, the classification,
+    specialises and the dialogue types. Corrected the targets of 22.1/CQ2 and CQ3,
+    moved the game's CQ:best_means onto 22.1/CQ3, and corrected the premise map of
+    22.1's major and minor premises.

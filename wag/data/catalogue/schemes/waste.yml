@@ -56,47 +56,129 @@ critical_questions:
     entry: "24"
     label: CQ1
   targets: [{formula: possible(X), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: Possibility. In walton.yml's letters A is the agent and X the goal (the book's
+    a and A). walton.yml's English reads "Action X is possible", although X is a goal;
+    upstream spells the predicate posible (see the discrepancy).
+  paraphrase: Can the goal X still be reached at all?
+  answer: 'The proponent, once asked. Against: showing that X can no longer be reached,
+    whatever more A does, which undermines possible(X): further effort would then
+    be wasted too. For: evidence that X is still within reach, such as the progress
+    so far or a clear path to the end.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 24/CQ2
   book:
     entry: "24"
     label: CQ2
   targets: []
-  note: no formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  undercuts: true
+  note: Reassessment. No formula of waste encodes the forward-looking balance; sunk_costs
+    has it as the exception future_losses_outweigh(A). Marked as undercutting, since
+    it asks whether past effort is a reason to go on at all; see the discrepancy on
+    CQ2.
+  paraphrase: Should the agent leave aside the losses so far, which cannot be got
+    back, and weigh afresh what pursuing X will cost and yield from now on?
+  answer: 'The proponent, once asked: the argument is out of force until answered.
+    Against: showing that, from now on, continuing toward X would cost more than it
+    would yield, so that only the past effort speaks for it, which undercuts the argument.
+    For: showing that the remaining costs of reaching X are worth its benefits, judged
+    from now on.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when an agent A has already put effort into pursuing a goal X, and
+    the argument is that stopping now would let that effort go for nothing, which
+    would be bad, so A ought to keep trying. It looks back at past effort toward a
+    goal, which sets it apart from practical_inference, which looks forward from a
+    goal to a means, and from sunk_costs, which in walton.yml rests on the amount
+    already spent on an action.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_inference
-  text: ""
-  status: todo
+  text: Choose practical_inference when the reason for an action is that it is a means
+    to a goal the agent now holds; choose waste when the reason to continue is that
+    the effort already spent would otherwise be lost. A text that says both (we still
+    want X, and quitting would throw our work away) holds two arguments.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sunk_costs
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: The two are close, and the book treats waste and sunk costs as one argument
+    under two names (pp. 10–11), though its compendium separates them. Choose waste
+    when the text says that stopping would make the agent's efforts toward a goal
+    come to nothing; choose sunk_costs when it cites the amount already spent on an
+    action (money, time) as too much to write off.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: We've spent four summers restoring this old sailing boat. If we give up now,
+    all that work goes for nothing, and that would be a real shame, so let's keep
+    at it.
+  coding: 'A = we (the restorers); X = a restored sailing boat. Stated: stop_realize_wasted(A,X)
+    ("all that work goes for nothing"), waste_bad_thing(A,X) ("a real shame"). Supplied:
+    none. Conclusion: ought_to_continue(A,X). Open to 24/CQ2: whether finishing the
+    boat still pays from here.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The neighbourhood association has spent six years building up the community
+    garden. Walking away now would throw all of that away, which would be a loss for
+    the whole street, so the association should keep going.
+  coding: 'A = the neighbourhood association; X = a thriving community garden. Stated:
+    stop_realize_wasted(A,X) ("throw all of that away"), waste_bad_thing(A,X) ("a
+    loss for the whole street"). Supplied: none. Conclusion: ought_to_continue(A,X).'
+  status: drafted by Claude Code, 2026-10-22
+- text: If we drop the trial now, the patients already enrolled will lose their follow-up
+    care, so we must carry on with it.
+  coding: 'Near miss: it argues for continuing, but from a harm that stopping would
+    cause later, not from past effort going to waste; negative_consequences (A = drop
+    the trial now, G = enrolled patients lose follow-up care).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: CQ2
+  detail: 24/CQ2 asks for a forward-looking reassessment of costs and benefits, past
+    losses aside; no formula of waste encodes it. sunk_costs, which cites the same
+    2002 article, has it as the exception future_losses_outweigh(A).
+  decision: 'The catalogue marks CQ2 as undercutting the inference, so asking it puts
+    the argument out of force until the proponent shows that going on pays from now.
+    Open: whether to add future_losses_outweigh(X) to waste in walton.yml, as an exception
+    (the critic''s burden, as in sunk_costs) or as an assumption (the proponent''s,
+    as asking the book''s question implies).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: possible(X)
+  detail: The upstream master and the category file A/3 spell the assumption posible(X);
+    the cleaned walton.yml corrects it to possible(X) (walton-clean/changes.json),
+    whose English template speaks of an action, although X is a goal.
+  decision: No change; the catalogue uses the cleaned spelling and reads possible(X)
+    as "the goal X can be reached".
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: value-based
+  note: The tree lists argument from waste under arguments from consequences, within
+    the value-based argument from practical reasoning (Walton and Macagno 2015, p.
+    22, in Aberdein 2020, Table 4).
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: waste and sunk_costs are variants in family F11, neither
+    a narrower version of the other, and waste is related to, not a narrowing of,
+    practical_inference (F10).'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'Not in ND''s table, and ND does not discuss it; our extrapolation. As a reason
+    to keep pursuing a goal it belongs to deliberation, and to negotiation and persuasion
+    about action. In deliberation ND stresses plasticity: commitment to a line of
+    action may be retracted when it runs into trouble (ND p. 165), so past effort
+    alone weighs little there; the misuse is caught by 24/CQ2, not by the type.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the two questions (24/CQ2
+    marked as undercutting), the contrasts, the examples, two discrepancies, the classification,
+    specialises and the dialogue types.

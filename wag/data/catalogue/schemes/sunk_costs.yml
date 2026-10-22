@@ -60,43 +60,147 @@ premise_map:
   label: Conclusion
   formulas: [{formula: should_be_performed(A), locus: conclusion}]
   status: generated
-critical_questions: []
+critical_questions:
+- id: walton/feasible
+  targets: [{formula: feasible(A), locus: assumption}]
+  note: Neither the book (25 prints no questions) nor the game asks it; it matches
+    the possibility question printed under waste (24/CQ1).
+  paraphrase: Can A still actually be carried through?
+  answer: 'The proponent, once asked. Against: showing that A can no longer be completed,
+    whatever more is spent, which undermines feasible(A). For: evidence that A can
+    still be finished, such as a plan, the means and the time to do it.'
+  status: drafted by Claude Code, 2026-10-22
+- id: walton/future_losses_outweigh
+  targets: [{formula: future_losses_outweigh(A), locus: exception}]
+  note: Neither the book nor the game asks it; it matches the reassessment question
+    printed under waste (24/CQ2), which the catalogue treats there as undercutting,
+    since waste has no formula for it.
+  paraphrase: Judged from now on, would completing A cost more than it is worth?
+  answer: 'The critic, who raises it with an argument. Against: an estimate showing
+    that the further costs of completing A exceed its value, past costs aside, which
+    undercuts the argument through future_losses_outweigh(A). For: showing that completing
+    A is still worth what it will cost from here.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when costs C have already been sunk into an action or project A, and
+    the argument is that they are too high to waste, so A should be carried through.
+    In walton.yml it rests on the size of what has been spent, which sets it apart
+    from waste, which rests on efforts toward a goal coming to nothing, and from the
+    book's own version (25), which rests on an earlier commitment to A.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_inference
-  text: ""
-  status: todo
+  text: Choose practical_inference when the reason to act is that the action serves
+    a goal the agent now holds; choose sunk_costs when the reason is what has already
+    been spent on it. The first looks forward, the second back, and walton/future_losses_outweigh
+    tests the backward look.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: waste
-  text: ""
-  status: todo
-examples: []
+  text: The two are close, and the book treats waste and sunk costs as one argument
+    under two names (pp. 10–11), though its compendium separates them. Choose sunk_costs
+    when the text cites the amount already spent on an action (money, time) as too
+    much to write off; choose waste when it says that stopping would make the agent's
+    efforts toward a goal come to nothing.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: sacrifice
+  text: Choose sacrifice when the text infers that something is valuable because much
+    was given up for it; choose sunk_costs when it infers that an action should be
+    completed because of what has been spent on it. A text can do both ("we have given
+    so much for this that it must be worth finishing").
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The city has already spent two million on the stadium's design and site work.
+    That is far too much to throw away, so construction should go ahead.
+  coding: 'A = build the stadium; C = two million spent on design and site work. Stated:
+    sunk_costs(A,C), too_high_to_waste(C). Supplied: none. Conclusion: should_be_performed(A).
+    Open to walton/future_losses_outweigh: whether finishing the stadium is worth
+    what it will still cost.'
+  status: drafted by Claude Code, 2026-10-22
+- text: We've put eighteen months and most of our savings into this café. That's too
+    much to walk away from, so we're keeping it open.
+  coding: 'A = keep the café open; C = eighteen months and most of the owners'' savings.
+    Stated: sunk_costs(A,C), too_high_to_waste(C) ("too much to walk away from").
+    Supplied: none. Conclusion: should_be_performed(A).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Cancelling the stadium now would trigger a two-million penalty in the builder's
+    contract, so the city should go ahead with it.
+  coding: 'Near miss: the cost it cites is not already spent but would follow from
+    stopping, a forward-looking reason; negative_consequences (A = cancel the stadium,
+    G = a two-million penalty).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "25"
   detail: 'walton.yml formalizes compendium 25 only in part: Same title and source
     (Argumentation 16, 2002, p. 489; from upstream Carneades), but a different structure:
     costs already incurred instead of the t1/t2 pre-commitment.'
-  decision: ""
-  status: generated
+  decision: Keep the partial link. walton.yml's form, which cites the same article
+    and page (Walton 2002, p. 489), argues from costs already incurred; the book's
+    25 argues from a commitment made earlier. The catalogue codes texts that cite
+    sunk costs with this scheme; a text that argues from an earlier commitment alone
+    is the book's form, which walton.yml lacks (below).
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: time indices and Premise 1
+  detail: 'The book''s scheme sets a time of commitment t1 and a time of decision
+    t2; its first premise says that at t2 the agent must decide whether to do A, and
+    its second rests on what the agent did or undertook at t1. walton.yml has no time
+    indices, no choice premise and no commitment: the premise map leaves the time
+    definitions and Premise 1 without formulas, and maps Premise 2 to the costs only
+    approximately (sunk_costs(A,C), too_high_to_waste(C)).'
+  decision: 'Open: whether to add the book''s commitment form to walton.yml as a scheme
+    of its own; the book''s ch. 4 treats sunk costs as argument from commitment applied
+    to a decision about action (p. 135). Until then, code a text that argues from
+    an earlier commitment with this scheme only if it also cites what has been spent,
+    and otherwise as other, with a note.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: feasible(A), future_losses_outweigh(A)
+  detail: 'The assumption feasible(A) and the exception future_losses_outweigh(A)
+    have no basis in entry 25, which prints no questions. They match the two questions
+    printed under 24 (waste): whether the goal can be reached, and whether to reassess
+    costs and benefits from now on.'
+  decision: 'Keep both, with the questions walton/feasible and walton/future_losses_outweigh.
+    The burdens differ between the two entries: here the forward reassessment is an
+    exception, for the critic to prove; under waste, which has no formula for it,
+    the catalogue makes it undercutting.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: value-based
+  note: The tree lists argument from sunk costs under arguments from consequences,
+    within the value-based argument from practical reasoning (Walton and Macagno 2015,
+    p. 22, in Aberdein 2020, Table 4). The book's ch. 4 treats it instead as argument
+    from commitment applied to a decision about action (p. 135), which the tree does
+    not reflect.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing in walton.yml. The book derives it from argument from
+    commitment combined with practical reasoning (pp. 135–6), but walton.yml's costs-based
+    form narrows neither the commitment schemes nor practical_inference; with waste
+    it forms family F11.
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'Not in ND''s table, and ND does not discuss it; our extrapolation. As a reason
+    to carry a course of action through it belongs to deliberation, and to negotiation
+    and persuasion about action. In deliberation ND stresses plasticity: commitment
+    to a line of action may be retracted when it runs into trouble (ND p. 165), so
+    past costs alone weigh little there; the misuse is caught by future_losses_outweigh(A),
+    not by the type.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, two walton/ questions (feasible, future_losses_outweigh),
+    the contrasts, the examples, the discrepancies, the classification, specialises
+    and the dialogue types.

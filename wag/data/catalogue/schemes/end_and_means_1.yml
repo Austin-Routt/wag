@@ -45,34 +45,92 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when a thing or measure X is valued because it is the means to an end
+    Y that is good, to conclude that X is good as well. It concludes an evaluation
+    of the means, not an action, which sets it apart from practical_inference and
+    positive_consequences, and it runs from end to means, the reverse of end_and_means_3,
+    which values the end because its means is easy.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: practical_inference
-  text: ""
-  status: todo
+  text: practical_inference concludes that the agent should carry out the means; end_and_means_1
+    concludes only that the means is good. Choose end_and_means_1 when the text praises
+    X for what it leads to without recommending that anyone do it; choose practical_inference
+    when it recommends X to an agent who holds the goal.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: end_and_means_3
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Both rest on means_to_end(X,Y) but run in opposite directions. Choose end_and_means_1
+    when the end's goodness is the reason to value the means; choose end_and_means_3
+    when the ease of the means is the reason to value the end.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_consequences
+  text: positive_consequences concludes that an action should be performed because
+    it brings about something good. Choose end_and_means_1 when the conclusion is
+    only that X is good, as the gold reads 13292.3; choose positive_consequences when
+    the text goes on to recommend X.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Curbing meat consumption would reduce health care costs.
+  kialo: "13292.3"
+  coding: 'X = reduced meat consumption; Y = reduced health-care costs. Stated: means_to_end(X,Y).
+    Supplied: good(Y). Conclusion: good(X). In Kialo it backs the claim that less
+    meat eating is good (13292.115''s good(G)), so the conclusion is an evaluation,
+    not an action.'
+  status: drafted by Claude Code, 2026-10-22
+- text: 'The new water-treatment plant is a good thing: it is how the bay will get
+    clean again, and a clean bay benefits everyone who lives here.'
+  coding: 'X = the new water-treatment plant; Y = a clean bay. Stated: means_to_end(X,Y),
+    good(Y) ("benefits everyone"). Supplied: none. Conclusion: good(X).'
+  status: drafted by Claude Code, 2026-10-22
+- text: A four-day school week would save the district a fortune in heating, so the
+    board should adopt it.
+  coding: 'Near miss: it cites a good result, but concludes that the board should
+    act, not that the plan is good; positive_consequences (A = adopt a four-day school
+    week, G = lower heating costs).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: polarity
+  detail: The book's variant 1 also runs with a bad end, which makes the means bad,
+    and lets a good end make a bad means less bad. walton.yml has only good(Y) and
+    good(X), so neither the negative form nor the "less bad" conclusion can be coded.
+  decision: 'Open: add a negative variant (from a bad end to a bad means) or a graded
+    conclusion to walton.yml. Until then, code only the positive form with this scheme;
+    a text that condemns a means for its bad end is negative_consequences when it
+    concludes against an action, and otherwise other, with a note.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: instrumental
+  note: Not in the tree; placed with the instrumental argument from practical reasoning,
+    because it rests on a means-end link as that argument does. Its conclusion evaluates
+    the means rather than recommending an action, which brings it near the values
+    group.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is one of three ends-and-means variants (22.6.1–3,
+    after Perelman and Olbrechts-Tyteca), none of them a narrower version of another.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table; our extrapolation. It values a means by its end, which
+    serves deliberation, where means are weighed against a goal (ND pp. 153–5), and
+    persuasion about whether a measure or practice is good. Since it proposes no action,
+    negotiation is left out. No type makes it suspect as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the contrasts, the examples, one book-walton discrepancy
+    (the lost negative and "less bad" forms), the classification, specialises and
+    the dialogue types. The book prints no questions under 22.6 and walton.yml has
+    no assumptions or exceptions, so there are no questions to draft.

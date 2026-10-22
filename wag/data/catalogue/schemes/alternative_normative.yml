@@ -45,52 +45,140 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when two courses of action A and B are alternatives of which only one
+    can be required, and A is required, to conclude that B is not required. It rules
+    out what is not called for among exclusive options, which sets it apart from alternative_cognitive,
+    which reasons about what is the case, and from pragmatic_alternative, which argues
+    for an action from the bad outcome of its alternative.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: opposition-descriptive_1
-  text: ""
-  status: todo
+  text: 'Not a close relative: it concerns predicates that a subject cannot have together,
+    not which of two courses of action is required.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-descriptive_2
-  text: ""
-  status: todo
+  text: 'Not a close relative: it infers which of two contradictory predicates a subject
+    must have, a descriptive claim, not a requirement.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-descriptive_3
-  text: ""
-  status: todo
+  text: 'Not a close relative: like opposition-descriptive_2, it infers a predicate
+    of a subject (a complementary contrary), not a requirement.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-normative
-  text: ""
-  status: todo
+  text: 'The closest of the oppositions: it denies that a subject can receive two
+    opposite evaluations at once. Choose opposition-normative when the text objects
+    that one thing is treated in two incompatible ways (taxed and subsidised); choose
+    alternative_normative when it argues that, since one of two exclusive measures
+    is required, the other is not (Kialo gold, 13292.123).'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rhetorical_oppositions_normative
-  text: ""
-  status: todo
+  text: Choose rhetorical_oppositions_normative when a required treatment of one subject
+    is carried over, reversed, to the contrary subject; choose alternative_normative
+    when two measures for the same situation exclude each other and one of them is
+    required.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rhetorical_oppositions_descriptive
-  text: ""
-  status: todo
+  text: 'Not a close relative: it infers a converse relation between two terms, with
+    no requirement and no alternatives.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: alternative_cognitive
-  text: ""
-  status: todo
+  text: 'Its cognitive twin (13.1). Choose alternative_normative when the alternatives
+    are actions or requirements and one is required; choose alternative_cognitive
+    when they are states of affairs and one is ruled out as unlikely. The direction
+    differs too: here requiring one option rules the other out; there ruling one option
+    out supports the other.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: pragmatic_alternative
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose pragmatic_alternative when the text argues that an action must be taken
+    because otherwise something bad will happen; choose alternative_normative when
+    it concludes that another course is not required because a competing one is. A
+    claim that one measure, rather than another, is the right one often carries both
+    an alternative_normative step and a practical reasoning for the measure (Kialo
+    gold, 13292.104).
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Meat is not inherently problematic. What is problematic is the animal farming
+    industry, so the appropriate solution is to regulate this industry rather than
+    penalize those who wish to consume meat.
+  kialo: "13292.104"
+  coding: 'A = regulate the animal farming industry; B = tax meat. Stated: can_be_required(A,B)
+    ("rather than"), is_required(A) ("the appropriate solution is to regulate this
+    industry"). Supplied: none. Conclusion: not_required(B). The gold codes it as
+    a secondary instance; the primary is practical_reasoning2 for regulating the industry.
+    See the discrepancy on the conclusion.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The grant can pay for the library repairs or the new playground, not both.
+    The fire inspector has ordered the library repairs, so the playground is not what
+    this grant has to fund.
+  coding: 'A = the grant funds the library repairs; B = the grant funds the new playground.
+    Stated: can_be_required(A,B) ("not both"), is_required(A) (the inspector''s order).
+    Supplied: none. Conclusion: not_required(B).'
+  status: drafted by Claude Code, 2026-10-22
+- text: To both tax and subsidise a good is an incoherent policy; instead, distortions
+    caused by subsidies should be removed by abolishing those subsidies (or at least
+    exempting meat from them).
+  kialo: "13292.123"
+  coding: 'Near miss: "instead" sets two measures against each other, but the claim
+    argues for its own measure from the circumstances and from the incoherence of
+    taxing and subsidising at once, not from an either-or requirement. The gold codes
+    practical_reasoning2 (A = abolish meat subsidies, G = a price that reflects the
+    real costs), and the incoherence as an argument from opposition (11.2), and sets
+    alternative_normative aside.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: other
+  about: conclusion
+  detail: walton.yml's conclusion not_required(B) is not the negation of should_be_performed(B),
+    the conclusion of the practical schemes, so in the game an instance does not rebut
+    a practical argument for B.
+  decision: 'Open: whether the game should read not_required(B) as ¬should_be_performed(B).
+    Until then, code the counterargument to a proposal with the practical scheme it
+    rests on, as the gold does for 13292.104, and this scheme as a secondary instance.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: critical questions
+  detail: 'Neither the book (13 prints no questions) nor walton.yml (no assumptions
+    or exceptions) gives the scheme critical questions. Its weak points are its premises:
+    whether A and B really exclude each other (both may be required, or neither, or
+    a third course may do), and whether A is required.'
+  decision: 'No question added: both are premises and can be challenged directly;
+    a third course is the attack ND describes on the disjunctive premise of a dilemma
+    (ND pp. 160–1). Open: whether walton.yml should state the exclusiveness as an
+    assumption.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: instrumental
+  note: Not in the tree; placed with the instrumental argument from practical reasoning,
+    because it settles which of alternative courses of action is called for, as the
+    alternatives premise of practical reasoning does. The upstream collection also
+    files it with practical reasoning (category file A/3).
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the normative member of the alternatives pair
+    (13.1, 13.2) in family F06.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, negotiation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table; our extrapolation. Choosing between exclusive courses of
+    action is the stuff of deliberation, which ND often finds posed as a choice between
+    two options (ND pp. 153, 158), and of negotiation and persuasion about what to
+    do. No type makes it suspect as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the eight contrasts (four marked as not close), the examples,
+    two discrepancies (the conclusion's fit with the practical schemes; the lack of
+    questions), the classification, specialises and the dialogue types. The book prints
+    no questions under 13 and walton.yml has no assumptions or exceptions, so there
+    are no questions to draft.
