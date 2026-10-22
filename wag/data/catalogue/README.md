@@ -7,12 +7,15 @@ One entry per argumentation scheme. Each entry aligns three sources:
 
 Every item that people or models write carries a status. This is phase 1 of [the plan](../../../docs/plan.md#2-phase-1-the-aligned-catalogue).
 
-**Status on 2026-10-22: the skeleton.**
+**Status on 2026-10-22: tier 1 drafted and checked.**
 - **Generated:** every entry, from the sources.
-- **Not yet done:** nothing is drafted or verified.
-- **Next steps** (plan §2, order of work):
-  1. A model drafts the 32 tier-1 entries.
-  2. A person verifies them against the book.
+- **Drafted:** all 32 tier-1 entries, every work field, by model agents following [`DRAFTING.md`](DRAFTING.md).
+- **Checked:** three independent model agents checked the drafts and the generated parts against the book, the NASCQ and the upstream collection's files. Their 117 findings are applied ([review part 12](../../../docs/review-2026-10-22-part12.md)).
+- **Not yet done:** nothing is verified (only a person verifies), and tier 2 is generated only.
+- **Next steps** ([the alignment plan](../../../docs/catalogue-alignment.md)):
+  1. The owner decides the scheme changes that tier 1's entries leave open.
+  2. A person verifies tier 1 against the book.
+  3. The game's data is generated from the verified entries; tier 2 is drafted and checked the same way.
 
 | File | What |
 |---|---|
@@ -35,6 +38,7 @@ Run them from `wag/`:
 ```sh
 go run ./cmd/wag-cli --catalogue-gen [--by "WHO"]   # (re)generate the skeleton; keeps what people and models wrote
 go run ./cmd/wag-cli --catalogue-check [--book FILE,FILE]   # check everything; status 1 on an error
+go run ./cmd/wag-cli --catalogue-show ID                    # a walton.yml scheme's formulas with their English readings
 ```
 
 - **Where things are.** Both commands find the repository's root from the working directory; `--repo` and `--catalogue` override that.
@@ -148,7 +152,9 @@ So set the status before or with any edit. An edit to a `generated` item is over
   - an item marked drafted or verified has no text;
   - an example lacks its text or its coding;
   - a contrast or `specialises` names an unknown entry;
-  - a classification, dialogue type or discrepancy kind is outside the vocabulary.
+  - a classification, dialogue type or discrepancy kind is outside the vocabulary;
+  - a classification's group is not one of Walton and Macagno's groups under its heading, a source-dependent scheme is given a kind of reasoning, or a drafted classification stops short of a group;
+  - a question that neither the book nor the game asks is not named `walton/<predicate>`, or does not target that one assumption or exception.
 - **Copying:** a text of ours reproduces the book (below).
 - **The index:** `index.md` is out of date.
 
@@ -196,9 +202,22 @@ Each is compared with the book's text, normalized: lower case, and every variabl
 | Slippery slope | `slippery_slope_base_case`, `slippery_slope_inductive_step` |
 | The general form | `defeasible_modus_ponens` |
 
+**How tier 1 was drafted and checked** (2026-10-22, [review part 12](../../../docs/review-2026-10-22-part12.md)):
+- **The guide and the exemplars.** [`DRAFTING.md`](DRAFTING.md) and two exemplars, `expert_opinion` and `cause_to_effect`.
+- **The drafting.** Four drafting agents, one per group above, each in its own copy of the catalogue. Their patches were merged here.
+- **The check.** Three agents that had not drafted checked every entry, the generated parts too.
+
+| Tier 1 now | Count |
+|---|---|
+| Work items | 784: 625 drafted, 159 generated (found right) |
+| Questions | 89: 73 from the book, 35 with a game part, 6 `walton/` questions; 5 attack the inference; 2 have no target yet (established rule's CQ2–3, their missing exceptions recorded) |
+| Examples | 101: 44 Kialo claims, 33 near misses |
+| Contrasts | 194, none one-way within tier 1 |
+| Discrepancies | 105, of which 55 have decisions still open, for the owner or a verifier |
+
 ## What the skeleton found
 
-Generated on 2026-10-22.
+Generated on 2026-10-22, before tier 1 was drafted. The paragraph on 33.3 below says how the owner's changes of the same day moved these figures.
 
 | | Count |
 |---|---|

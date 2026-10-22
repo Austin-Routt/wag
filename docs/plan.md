@@ -82,6 +82,8 @@ Only one `walton.yml` scheme has no compendium entry: `defeasible_modus_ponens`.
    - **slippery slope.**
 
    A model drafts every field; a person verifies them against the book.
+
+   **Drafted and checked on 2026-10-22.** Four drafting agents followed [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md); three independent agents checked the drafts and the generated parts against the book, the NASCQ and the upstream files, and their 117 findings are applied ([part 12](review-2026-10-22-part12.md)). What remains, to complete coverage and alignment, is in [`catalogue-alignment.md`](catalogue-alignment.md).
 3. **Tier 2: the rest,** in the order the data asks for them: the schemes that annotators propose as near misses, and the "other" candidates.
 
 **The index's top level is Walton and Macagno's tree.** Our families sit under it, and the few schemes it leaves out (some linguistic ones) are placed by hand. **`defeasible_modus_ponens`** is in tier 1 as the general form "other" falls back to (§3). **A derived scheme must pass Hansen's definition:** a pattern of sentential forms with variables, at least one schematic constant, and a conclusion.

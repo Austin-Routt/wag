@@ -70,6 +70,7 @@ go run ./cmd/wag-cli --games 50 --p1 greedy --p2 random  # tournament statistics
 go run ./cmd/wag-cli --kialo-check <visualizer>/data   # import every captured Kialo discussion; report claims that share a text
 go run ./cmd/wag-cli --catalogue-gen                   # (re)generate the scheme catalogue's skeleton, keeping what was written
 go run ./cmd/wag-cli --catalogue-check [--book FILE]   # check the catalogue; exit 1 on an error
+go run ./cmd/wag-cli --catalogue-show ID               # a walton.yml scheme's formulas with their English readings
 go run ./cmd/wag-cli --modes                           # list the game modes
 go run ./cmd/wag-cli --mode debate --p2 human          # debate a claim against a friend
 go run ./cmd/wag-cli --mode cq --p1 greedy --p2 random # critical-question duel

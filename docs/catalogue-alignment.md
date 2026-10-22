@@ -1,6 +1,6 @@
 # Plan: complete coverage and alignment of the scheme catalogue
 
-**Started 2026-10-22, after tier 1 was drafted.** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 32 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
+**Started 2026-10-22, while tier 1 was drafted; updated the same day after its independent check ([part 12](review-2026-10-22-part12.md)).** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 32 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
 
 **The catalogue's own README has the current figures:** [`wag/data/catalogue/README.md`](../wag/data/catalogue/README.md). The figures below were measured on 2026-10-22, from the committed catalogue and the upstream collection.
 
@@ -28,13 +28,13 @@
 | Item | State |
 |---|---|
 | Entries | 115: one for each of `walton.yml`'s 112 schemes, and one for each of the 3 compendium schemes it lacks. All 109 compendium schemes are linked to an entry. |
-| Tier 1 | 32 entries, drafted on 2026-10-22, checked by an independent model, not yet verified by a person. |
+| Tier 1 | 32 entries, drafted on 2026-10-22 and checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)). Not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
-| Book questions | All 153 printed questions are in some entry. Several book questions target no formula and are not marked as undercutting; the checker lists them. |
-| Questions for assumptions and exceptions | 10 assumptions and exceptions in 9 schemes had no question before tier 1 was drafted. Tier 1 adds `walton/` questions for its five. |
+| Book questions | All 153 printed questions are in some entry. 52 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 50 in tier 2. The checker lists them. |
+| Questions for assumptions and exceptions | 10 assumptions and exceptions in 9 schemes had no question before tier 1 was drafted. Tier 1 adds six `walton/` questions: its five, and `legitimate_value`, whose book question turned out to ask something else. |
 | Entries without any question | 47: the book prints none for them, and the game asks none. |
-| Generated items still unverified | About 840: book links, families, premise maps and question targets. |
-| Discrepancies | Before drafting, the generator found 17 partial links, 3 compendium schemes without a formalization, 1 `walton.yml` scheme not in the book, and 1 game difference. Drafting tier 1 added the book-versus-`walton.yml` differences it found. |
+| Generated items still unverified | 747: book links, families, premise maps and question targets. 159 of them are in tier 1, where the drafters and the checkers found them right; the rest are tier 2's. |
+| Discrepancies | 117. Tier 1 holds 105: 60 between the book and `walton.yml`, 35 other, 6 partial links, 3 game differences, 1 not in the book. 55 of tier 1's decisions are open, for the owner or a verifier ([part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). |
 
 ### What the upstream collection holds that `walton.yml` lacks
 
@@ -63,7 +63,7 @@ What matters for alignment:
 
 **The work.** 32 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
 
-**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N8, N12). Otherwise the verifier would verify entries that are about to change.
+**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N8, N12, and the scheme changes listed in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). Otherwise the verifier would verify entries that are about to change.
 
 ### B. Draft tier 2
 
@@ -98,13 +98,23 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
    - the new scheme and the slippery slope's base case conclude `¬should_be_performed(A)`, so that they meet the consequence and practical-reasoning arguments about the same action. The new scheme had threat's `not_bring_about(A)`; the base case had `negative_consequences(A)`, which no other scheme uses;
    - `negative_value` concludes `reason_retracting_goal(V,G)`, as the book has it, and its `negative_affects/3` template is corrected. Both had been copied from `positive_value` and said the opposite; 19.2 now links exactly;
    - the three consequence schemes get the exception `other_consequences(A)`, which `negative_consequences_prudential` already had, for the book's question about opposite consequences (33/CQ3). The game's copies of positive and negative consequences lack it until the game's data is generated from the catalogue (E). The batch-2 gold gains the exception in its 16 consequence instances;
-   - the slippery slope's source year is the book's 1992, not 1999.
+   - the slippery slope's source year is the book's 1992, not 1999. The book's ch. 4 cites the same page as 1999; a verifier with its reference list should confirm.
+
+   The `other_consequences/1` template was rewritten with the exception, to say that the opposite consequences outweigh the cited ones.
 2. **10.2 and 53:** bring `whole_into_parts` and `full_slippery_slope` into `walton.yml`, after checking their formulas; or keep the two entries without a formalization.
 3. **50, the precedent slippery slope:** write a formalization, which must pass Hansen's definition (plan §2); or leave it unformalized.
 4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).
 5. **N12, analogy:** separate source and target propositions.
 6. **The upstream defects** (duplicate ids; the master's typo and wrong variable list, already corrected in the cleaned file): record only. `walton.yml` is already right.
 7. **`walton.yml`'s English templates.** Rewrite in our own words the 173 that repeat the book (plan §7, item 1). The catalogue does not store them, but the game and `wag-cli --catalogue-show` render them.
+8. **The scheme changes that drafting tier 1 proposed.** These are the 55 open decisions recorded in the tier-1 entries, grouped in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open):
+   - exceptions `walton.yml` lacks;
+   - the burden of practical reasoning's questions;
+   - formula shapes;
+   - citations;
+   - the game's texts.
+
+   Those that change tier-1 formulas come before tier 1's verification (A).
 
 ### D. Decide every book question and cover every assumption and exception
 
@@ -114,7 +124,7 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
   - or a `book-walton` discrepancy naming the missing formula.
 
   The checker warns until it is decided.
-- **Uncovered assumptions and exceptions.** Give each a `walton/<predicate>` question. There are five left after tier 1, in tier-2 schemes.
+- **Uncovered assumptions and exceptions.** Give each a `walton/<predicate>` question. There are five left after tier 1, in tier-2 schemes. Tier 1 added six, including `legitimate_value`, once its book question proved to ask something else.
 - **Uncovered premises: no new questions.** The game's challenge move lets anyone question any premise that no question covers (game rules §2).
 
 ### E. Generate the game's data from the catalogue
