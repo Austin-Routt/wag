@@ -185,7 +185,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) | The plan for complete coverage and alignment of the scheme catalogue: what is left, in which order, and when it is done |
-| [`docs/proposals/`](docs/proposals/) | **Proposals for scheme changes:** the schemes as they would be, and examples rendered in English, for the owner to read before `walton.yml` changes ([`docs/process.md`](docs/process.md) §5). The first: [D001 and D028](docs/proposals/D001-D028.md), analogy between two cases |
+| [`docs/proposals/`](docs/proposals/) | **Proposals for scheme changes:** the schemes as they would be, and examples rendered in English, for the owner to read before `walton.yml` changes ([`docs/process.md`](docs/process.md) §5). The first: [D001, D028 and D029](docs/proposals/D001-D028-D029.md), the analogy family in two-case form |
 | [`docs/decisions.md`](docs/decisions.md) | **Every open decision,** with its priority, what it holds up and who decides it; generated from the register, [`docs/decisions.yml`](docs/decisions.yml) |
 | [`docs/process.md`](docs/process.md) | How the work is done: one source of truth per fact, statuses, independent agents, feedback from play, the decision register, the private workspace, the checks |
 | [`docs/review-2026-10-22-part13.md`](docs/review-2026-10-22-part13.md) | The owner's review of the goal: what the sources do not define, what the plan lacked, and the decisions of 2026-10-22 |

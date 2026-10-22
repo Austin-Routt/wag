@@ -17,7 +17,10 @@ note: >-
   The priorities were proposed on 2026-10-22, when the register was made
   (review part 13), and confirmed by the owner the same day. "The next steps" are
   steps 3 and 4 of the alignment plan's order: the game's fields for the 9 game
-  schemes with the generator, and verifying tier 1.
+  schemes with the generator, and verifying tier 1. Not yet registered: the
+  semantic concerns recorded in walton-clean/CHANGELOG.md and the walton.yml
+  audit (docs/walton-audit/REPORT.md), of which D054 is one; they are being
+  added.
 
 decisions:
 
@@ -39,7 +42,7 @@ decisions:
   items:
     - {entry: analogy, kind: book-walton, about: "variables (N12)"}
     - {entry: analogy, kind: other, about: "game questions"}
-  docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5", "docs/proposals/D001-D028.md"]
+  docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5", "docs/proposals/D001-D028-D029.md"]
 
 - id: D002
   title: Sign's 0-ary atoms
@@ -426,13 +429,17 @@ decisions:
   items:
     - {entry: practical_analogy_positive, kind: other, about: "critical questions"}
     - {entry: practical_analogy_negative, kind: other, about: "critical questions"}
-  docs: ["docs/proposals/D001-D028.md"]
+  docs: ["docs/proposals/D001-D028-D029.md"]
 
 - id: D029
   title: Whether the practical analogies rebut each other
   question: >-
     Should carry_out_wrong(A2,X) be read as ¬carry_out_right(A2,X), so that
     the two practical analogies rebut each other, or should they stay apart?
+    A third answer is proposed with D001 and D028: the two-case form, an
+    action in each situation joined by a correspondence premise, concluding
+    that the target action should, or should not, be performed, so that the
+    pair rebut each other and meet the practical schemes.
   category: vocabulary
   blocks: [verification, game]
   decider: owner
@@ -441,6 +448,7 @@ decisions:
   items:
     - {entry: practical_analogy_positive, kind: other, about: "Conclusion"}
     - {entry: practical_analogy_negative, kind: other, about: "Conclusion"}
+  docs: ["docs/proposals/D001-D028-D029.md"]
 
 - id: D030
   title: The variable of the necessary-condition schema's possibility
@@ -627,6 +635,41 @@ decisions:
   priority: 2
   status: open
   docs: ["docs/plan.md §7 item 5", "docs/process.md §8"]
+
+- id: D053
+  title: Declared polarity pairs
+  question: >-
+    Should positive/negative scheme pairs be declared as polarity pairs, with
+    the formulas that flip listed, and checked: the conclusions contradictory
+    (p and ¬p), every other formula shared or a listed flip (the evaluative
+    premise flipping to its contrary, as good and bad), and the same
+    questions? Declared and checked only: the entries, walton.yml's schemes
+    and the game's schemes stay one per polarity. Candidates: consequences
+    (33.1, 33.2), ethotic argument (41), model and antimodel (6.3, 6.4), the
+    practical analogies (8.1, 8.2, after D029). Not values (19.1, 19.2), whose
+    conclusions are two reasons that can hold together; falsification only
+    after D054.
+  category: vocabulary
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/proposals/D001-D028-D029.md"]
+
+- id: D054
+  title: Falsification's conclusion
+  question: >-
+    evidence_hypothesis_falsification concludes ¬A, the event, which its
+    premise already says is false; the book concludes that the hypothesis is
+    false (¬H), and verification, its positive counterpart, concludes H. Its
+    assumption also reverses the arguments of verification's
+    sufficient_correlation(H,A). Correct both?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, semantic concerns", "docs/walton-audit/REPORT.md"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
