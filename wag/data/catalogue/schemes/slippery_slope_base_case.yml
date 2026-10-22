@@ -8,7 +8,7 @@ tier: 1
 walton:
   id: slippery_slope_base_case
   title: Slippery Slope Argument
-  source: Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999,
+  source: Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992,
     pp. 93, 95.
 formulas:
   variables: [A, E]
@@ -16,14 +16,15 @@ formulas:
   - would_realize(A,E)
   - horrible_costs(E)
   conclusions:
-  - negative_consequences(A)
+  - ¬should_be_performed(A)
 book:
 - entry: "49"
   title: Slippery Slope Argument
   pages: 339-340
   match: partial
   note: 'Upstream Carneades recursive encoding (title "Slippery Slope Argument"; source
-    Slippery Slope Arguments, printed year 1999, pp. 93, 95): base case of the chain.'
+    Slippery Slope Arguments, printed year 1999, corrected to the book''s 1992 on
+    2026-10-22, pp. 93, 95): base case of the chain.'
   status: generated
 families:
 - family: F15
@@ -54,9 +55,9 @@ premise_map:
   status: generated
 - entry: "49"
   label: Conclusion
-  formulas: [{formula: negative_consequences(A), locus: conclusion}]
-  note: 'book: "A0 should not be brought about"; walton.yml: "Performing action A
-    would have negative consequences"'
+  formulas: [{formula: ¬should_be_performed(A), locus: conclusion}]
+  note: 'book: "A0 should not be brought about"; walton.yml''s conclusion was negative_consequences(A)
+    until 2026-10-22'
   status: generated
 critical_questions:
 - id: 49/CQ1
@@ -202,16 +203,15 @@ examples:
   coding: 'A = allowing phones at lunch; E = phones in study hall. Stated: would_realize(A,E).
     Supplied: horrible_costs(E), the conclusion of two inductive steps (phones in
     study hall → phones in class → no lesson uninterrupted), whose final outcome''s
-    badness the text implies. Conclusion: negative_consequences(A); the implied "so
-    don''t allow them" is the book''s conclusion, which walton.yml does not reach
-    (see the discrepancy on the conclusion).'
+    badness the text implies. Conclusion: ¬should_be_performed(A), the implied "so
+    don''t allow them".'
   status: drafted by Claude Code, 2026-10-22
 - text: Close the night bus line and late-shift workers will drive home instead; more
     of them driving tired means more crashes on the ring road, and some of those crashes
     will kill.
   coding: 'A = closing the night bus line; E = late-shift workers driving home. Stated:
     would_realize(A,E). Supplied: horrible_costs(E), from the inductive steps (driving
-    home → more tired drivers on the ring road → fatal crashes). Conclusion: negative_consequences(A).'
+    home → more tired drivers on the ring road → fatal crashes). Conclusion: ¬should_be_performed(A).'
   status: drafted by Claude Code, 2026-10-22
 - text: Such a tax would negatively affect the protein intake of millions of people
     and open the market to the inevitable push by governments to incentivize the consumption
@@ -227,7 +227,8 @@ discrepancies:
   about: "49"
   detail: 'walton.yml formalizes compendium 49 only in part: Upstream Carneades recursive
     encoding (title "Slippery Slope Argument"; source Slippery Slope Arguments, printed
-    year 1999, pp. 93, 95): base case of the chain.'
+    year 1999, corrected to the book''s 1992 on 2026-10-22, pp. 93, 95): base case
+    of the chain.'
   decision: 'Keep the link as partial, and keep the split. The book''s one scheme
     becomes two in walton.yml: this base case (the first link, from the action A0
     = A to the first event A1 = E, E''s horrible costs, and a conclusion about A)
@@ -247,21 +248,22 @@ discrepancies:
 - kind: book-walton
   about: Conclusion
   detail: The book's conclusion is that A0 is not to be done. walton.yml's base case
-    concludes negative_consequences(A), that A would have negative consequences, and
+    concluded negative_consequences(A), that A would have negative consequences, and
     no walton.yml scheme takes that formula as a premise, so an encoded slope never
-    reaches a recommendation.
-  decision: 'Open, for the owner: conclude ¬should_be_performed(A), as negative_consequences
-    does and as the book has it, so that a slope meets the pros of the same action
-    on one issue. Until then, code negative_consequences(A) and say in the coding
-    that it counts against A.'
+    reached a recommendation.
+  decision: 'Done: the owner''s decision of 2026-10-22 changed the conclusion to ¬should_be_performed(A),
+    as the book and negative_consequences have it, so a slope meets the pros of the
+    same action (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
+    by the owner").'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: source
-  detail: walton.yml cites Slippery Slope Arguments (Vale Press, Newport News) as
+  detail: walton.yml cited Slippery Slope Arguments (Vale Press, Newport News) as
     of 1999; the compendium cites the same title and pages (93, 95) from the same
     publisher as of 1992.
-  decision: 'Open: a verifier should check the year against the book''s reference
-    list; the catalogue cites the book''s reference.'
+  decision: 'Done: the owner''s decision of 2026-10-22 changed the year to the book''s
+    1992 (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided by the
+    owner").'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -280,8 +282,7 @@ specialises:
   note: ND places the slippery slope under argument from consequences, as the case
     where the bad results come in a graded series (p. 161). The narrowing adds the
     chain of steps (carried by slippery_slope_inductive_step) and a horrible end;
-    walton.yml's conclusion, negative_consequences(A), is not negative_consequences'
-    ¬should_be_performed(A) (see the discrepancy on the conclusion).
+    since 2026-10-22 both conclude ¬should_be_performed(A).
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -303,3 +304,7 @@ history:
     and answers of the three questions (49/CQ2 now targets the first link), the fifteen
     contrasts, the examples, the decision on the partial link, three book-walton discrepancies
     and one on the source, the classification, specialises and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is ¬should_be_performed(A)
+    and the source year 1992; examples, specialises and discrepancies follow.'

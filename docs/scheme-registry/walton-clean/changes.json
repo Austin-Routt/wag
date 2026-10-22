@@ -594,6 +594,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses more_reliable with 0 argument(s) and the template has 0 %s"
  },
  {
+  "line": 229,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  negative_affects/3: \"The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal.\"",
+  "after": "  negative_affects/3: \"That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal.\"",
+  "reason": "the template said that a bad value supports commitment to the goal, the opposite of the book's 19.2; rewritten in our own words"
+ },
+ {
   "line": 231,
   "change": "edit",
   "scheme": "language",
@@ -834,6 +845,17 @@
   "before": "  reapplication_sequence/2: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
   "after": "  reapplication_sequence/2: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s.\"",
   "reason": "template for the repaired reapplication_sequence(A2,A) (line 1557), in the file's '-...-' style"
+ },
+ {
+  "line": 308,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  reason_retracting_goal/2: \"%s is a reason to give up commitment to goal %s.\"",
+  "reason": "template for negative_value's new conclusion, in our own words"
  },
  {
   "line": 309,
@@ -1727,6 +1749,17 @@
   "reason": "source: 'lnformal' (OCR l for I)"
  },
  {
+  "line": 892,
+  "change": "edit",
+  "scheme": "negative_value",
+  "scheme_after": "negative_value",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - reason_retaining_goal(V,G)",
+  "after": "      - reason_retracting_goal(V,G)",
+  "reason": "the conclusion was copied from positive_value and says the opposite of the book's 19.2 (the negative value is a reason to retract commitment to the goal)"
+ },
+ {
   "line": 901,
   "change": "edit",
   "scheme": "sacrifice",
@@ -2145,6 +2178,28 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 1896,
+  "change": "insert after",
+  "scheme": "negative_consequences",
+  "scheme_after": "negative_consequences",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
+ },
+ {
+  "line": 1896,
+  "change": "insert after",
+  "scheme": "negative_consequences",
+  "scheme_after": "negative_consequences",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - other_consequences(A)",
+  "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
+ },
+ {
   "line": 1897,
   "change": "insert after",
   "scheme": "negative_consequences_reasoning",
@@ -2251,7 +2306,7 @@
   "category": "addition — owner decision",
   "needs_owner_approval": false,
   "before": "",
-  "after": "      - not_bring_about(A)",
+  "after": "      - ¬should_be_performed(A)",
   "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
  },
  {
@@ -2295,8 +2350,52 @@
   "category": "addition — owner decision",
   "needs_owner_approval": false,
   "before": "",
+  "after": "    exceptions:",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - other_consequences(A)",
+  "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1897,
+  "change": "insert after",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
   "after": "      ",
   "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
+ },
+ {
+  "line": 1925,
+  "change": "insert after",
+  "scheme": "positive_consequences",
+  "scheme_after": "positive_consequences",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
+ },
+ {
+  "line": 1925,
+  "change": "insert after",
+  "scheme": "positive_consequences",
+  "scheme_after": "positive_consequences",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - other_consequences(A)",
+  "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
  },
  {
   "line": 1976,
@@ -2308,5 +2407,38 @@
   "before": "  - id: exeption_to_rule",
   "after": "  - id: exception_to_rule",
   "reason": "scheme id 'exeption'"
+ },
+ {
+  "line": 1997,
+  "change": "edit",
+  "scheme": "slippery_slope_base_case",
+  "scheme_after": "slippery_slope_base_case",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
+  "after": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.",
+  "reason": "the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book"
+ },
+ {
+  "line": 2000,
+  "change": "edit",
+  "scheme": "slippery_slope_base_case",
+  "scheme_after": "slippery_slope_base_case",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - negative_consequences(A)",
+  "after": "      - ¬should_be_performed(A)",
+  "reason": "the conclusion is used by no other scheme, so a slippery slope never meets the consequence and practical reasoning schemes' should_be_performed(A); the book's conclusion (49) is that A should not be brought about"
+ },
+ {
+  "line": 2009,
+  "change": "edit",
+  "scheme": "slippery_slope_inductive_step",
+  "scheme_after": "slippery_slope_inductive_step",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
+  "after": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.",
+  "reason": "the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book"
  }
 ]

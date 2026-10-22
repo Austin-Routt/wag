@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Added by the owner's decision\"); it was linked partly to negative_consequences.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion.",
  "entries": [
   {
    "number": "1",
@@ -2761,8 +2761,8 @@
    "walton_links": [
     {
      "id": "negative_value",
-     "match": "partial",
-     "reason": "Same title and references, but the conclusion is the positive variant's \"reason for retaining commitment\".",
+     "match": "exact",
+     "reason": "Same title and references. Until 2026-10-22 the conclusion was the positive variant's \"reason for retaining commitment\"; the owner's decision changed it to reason_retracting_goal(V,G), as the book has it.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -2785,10 +2785,9 @@
       }
      ],
      "conclusion_map": {
-      "note": "book: \"V is a reason for retracting commitment to goal G\"",
       "walton": [
        {
-        "formula": "reason_retaining_goal(V,G)",
+        "formula": "reason_retracting_goal(V,G)",
         "locus": "conclusion"
        }
       ]
@@ -5270,8 +5269,13 @@
       },
       {
        "cq": "CQ3",
-       "note": "counter-argument (negative consequences); no formula",
-       "walton": []
+       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)",
+       "walton": [
+        {
+         "formula": "other_consequences(A)",
+         "locus": "exception"
+        }
+       ]
       }
      ]
     }
@@ -5338,7 +5342,13 @@
       },
       {
        "cq": "CQ3",
-       "walton": []
+       "walton": [
+        {
+         "formula": "other_consequences(A)",
+         "locus": "exception"
+        }
+       ],
+       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)"
       }
      ]
     }
@@ -5385,7 +5395,7 @@
      "conclusion_map": {
       "walton": [
        {
-        "formula": "not_bring_about(A)",
+        "formula": "¬should_be_performed(A)",
         "locus": "conclusion"
        }
       ]
@@ -5412,8 +5422,13 @@
       },
       {
        "cq": "CQ3",
-       "note": "counter-argument (opposite consequences); no formula",
-       "walton": []
+       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)",
+       "walton": [
+        {
+         "formula": "other_consequences(A)",
+         "locus": "exception"
+        }
+       ]
       }
      ]
     }
@@ -6820,7 +6835,7 @@
     {
      "id": "slippery_slope_base_case",
      "match": "partial",
-     "reason": "Upstream Carneades recursive encoding (title \"Slippery Slope Argument\"; source Slippery Slope Arguments, printed year 1999, pp. 93, 95): base case of the chain.",
+     "reason": "Upstream Carneades recursive encoding (title \"Slippery Slope Argument\"; source Slippery Slope Arguments, printed year 1999, corrected to the book's 1992 on 2026-10-22, pp. 93, 95): base case of the chain.",
      "premise_map": [
       {
        "compendium_label": "First Step Premise",
@@ -6849,10 +6864,10 @@
       }
      ],
      "conclusion_map": {
-      "note": "book: \"A0 should not be brought about\"; walton.yml: \"Performing action A would have negative consequences\"",
+      "note": "book: \"A0 should not be brought about\"; walton.yml's conclusion was negative_consequences(A) until 2026-10-22",
       "walton": [
        {
-        "formula": "negative_consequences(A)",
+        "formula": "¬should_be_performed(A)",
         "locus": "conclusion"
        }
       ]

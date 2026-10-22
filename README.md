@@ -98,8 +98,13 @@ In order of importance. Each issue links to the document that explains it.
 8. **Smaller known gaps.**
    - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
    - 3 book schemes have no `walton.yml` scheme, and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. Earlier versions said 6, from an older list.
-   - Compendium 33.3 (reasoning from negative consequences) had no `walton.yml` scheme. The upstream collection formalizes it in a category file, under an id it already used; the owner brought it in as `negative_consequences_reasoning` on 2026-10-22 ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#added-by-the-owners-decision)).
-   - 12 of the book-to-`walton.yml` links are partial.
+   - Compendium 33.3 (reasoning from negative consequences) had no `walton.yml` scheme. The upstream collection formalizes it in a category file, under an id it already used; the owner brought it in as `negative_consequences_reasoning` on 2026-10-22 ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#changes-decided-by-the-owner)).
+   - On the same day the owner corrected five upstream schemes that drafting tier 1 found wrong (the same CHANGELOG section):
+     - two conclusions that met no other scheme now conclude `¬should_be_performed(A)`;
+     - negative value's conclusion and template, which said the opposite of the book, are corrected;
+     - the consequence schemes have the exception for the book's question about opposite consequences;
+     - the slippery slope's source year is corrected.
+   - 11 of the book-to-`walton.yml` links are partial.
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
 **Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):

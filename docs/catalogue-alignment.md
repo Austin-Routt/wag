@@ -90,9 +90,15 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
 1. **33.3: decided on 2026-10-22.** The upstream second `negative_consequences` block is in `walton.yml` as `negative_consequences_reasoning`:
    - variables filled in;
    - templates in our own words;
-   - recorded in the cleaning's CHANGELOG under "Added by the owner's decision".
+   - recorded in the cleaning's CHANGELOG under "Changes decided by the owner".
 
    `links.json` links 33.3 to it exactly, `families.json` names it, and the catalogue has it as a tier-1 entry.
+
+   **Also decided on 2026-10-22,** from what drafting tier 1 found (the same CHANGELOG section):
+   - the new scheme and the slippery slope's base case conclude `¬should_be_performed(A)`, so that they meet the consequence and practical-reasoning arguments about the same action. The new scheme had threat's `not_bring_about(A)`; the base case had `negative_consequences(A)`, which no other scheme uses;
+   - `negative_value` concludes `reason_retracting_goal(V,G)`, as the book has it, and its `negative_affects/3` template is corrected. Both had been copied from `positive_value` and said the opposite; 19.2 now links exactly;
+   - the three consequence schemes get the exception `other_consequences(A)`, which `negative_consequences_prudential` already had, for the book's question about opposite consequences (33/CQ3). The game's copies of positive and negative consequences lack it until the game's data is generated from the catalogue (E). The batch-2 gold gains the exception in its 16 consequence instances;
+   - the slippery slope's source year is the book's 1992, not 1999.
 2. **10.2 and 53:** bring `whole_into_parts` and `full_slippery_slope` into `walton.yml`, after checking their formulas; or keep the two entries without a formalization.
 3. **50, the precedent slippery slope:** write a formalization, which must pass Hansen's definition (plan §2); or leave it unformalized.
 4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).

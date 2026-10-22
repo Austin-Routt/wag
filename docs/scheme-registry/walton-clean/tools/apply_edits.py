@@ -61,7 +61,7 @@ def main(argv):
             "scheme": op.get("scheme") or owner[n],
             "scheme_after": ID_MAP.get(op.get("scheme") or owner[n], op.get("scheme") or owner[n]),
             "category": op["category"],
-            "needs_owner_approval": op["category"].startswith("repair"),
+            "needs_owner_approval": op["category"] == "repair — needs approval",
             "before": before,
             "after": after,
             "reason": op["reason"],

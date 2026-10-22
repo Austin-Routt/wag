@@ -3,7 +3,7 @@ walton-check walton.proposals.yml
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)
 stderr during import: ""
-schemes: 112, language keys: 396
+schemes: 112, language keys: 397
 
 == 2. Carneades validator ==
 before instantiation: 0 problem(s)
@@ -110,10 +110,10 @@ after instantiating every scheme: 0 problem(s)
  98 ethotic2                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
  99 expert_opinion                             PASS  args=1/1 premises+assumptions=4 exceptions=2
 100 ignorance                                  PASS  args=1/1 premises+assumptions=2 exceptions=1
-101 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
-102 negative_consequences_reasoning            PASS  args=1/1 premises+assumptions=2 exceptions=0
+101 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+102 negative_consequences_reasoning            PASS  args=1/1 premises+assumptions=2 exceptions=1
 103 position_to_know                           PASS  args=1/1 premises+assumptions=3 exceptions=1
-104 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+104 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
 105 practical_reasoning1                       PASS  args=1/1 premises+assumptions=7 exceptions=4
 106 practical_reasoning2                       PASS  args=1/1 premises+assumptions=5 exceptions=5
 107 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2

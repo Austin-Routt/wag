@@ -18,6 +18,8 @@ formulas:
   premises:
   - brings_about(A,G)
   - good(G)
+  exceptions:
+  - other_consequences(A)
   conclusions:
   - should_be_performed(A)
 book:
@@ -86,18 +88,18 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: should_be_performed(A), locus: conclusion}]
-  note: Counter-argument from the opposite consequences; no formula of this scheme
-    encodes it, so it targets the conclusion, as the game's CQ:side_effect does. walton.yml
-    encodes the same book question as the exception other_consequences(X) only in
-    negative_consequences_prudential (see the book-walton discrepancy on CQ3). The
-    two arguments are then weighed against each other, as ND describes (p. 159).
+  targets: [{formula: other_consequences(A), locus: exception}]
+  note: Targets the exception other_consequences(A), which the owner's decision of
+    2026-10-22 gave the three consequence schemes (walton.yml had it only in negative_consequences_prudential).
+    Raising the opposite consequences undercuts the argument; they can also be put
+    as a counter-argument on the conclusion, and the two are then weighed, as ND describes
+    (p. 159).
   paraphrase: Would doing A also have consequences of the opposite kind to G that
     ought to be weighed against it?
   answer: 'The critic, who raises it with an argument. Against: a bad consequence
-    of A, put forward as an argument from negative_consequences for ¬should_be_performed(A),
-    which rebuts the argument when it outweighs G. For: showing that A has no such
-    consequence, or that G outweighs it.'
+    of A that outweighs G, which undercuts the argument through other_consequences(A).
+    For: showing that A has no such consequence, or that it is too slight to change
+    the balance.'
   status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:evidence
   game:
@@ -242,6 +244,14 @@ examples:
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
+- kind: game-differs
+  about: exception other_consequences(A)
+  detail: The game's core.yml lacks the exception other_consequences(A) of walton.yml.
+  decision: Keep the game as it is until its data is generated from the catalogue
+    (plan §6; catalogue-alignment.md, workstream E). The game asks the book's 33/CQ3
+    at the conclusion, as a rebuttal (CQ:side_effect); then core.yml gets the exception
+    other_consequences(A) and the question is asked at it, as in walton.yml.
+  status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise
   detail: The compendium's single premise says that doing A will plausibly have good
@@ -267,11 +277,10 @@ discrepancies:
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
     walton.yml has no formula for it here, while it encodes the same question as the
     exception other_consequences(X) in negative_consequences_prudential.
-  decision: 'The catalogue targets the conclusion: the opposite consequences come
-    as a counter-argument, which rebuts, as in the game. Open: whether walton.yml
-    should give positive_consequences and negative_consequences the exception other_consequences(A),
-    as it does the prudential scheme; that would make the question an undercutter
-    instead.'
+  decision: 'Done: the owner''s decision of 2026-10-22 gave positive_consequences,
+    negative_consequences and negative_consequences_reasoning the exception other_consequences(A);
+    33/CQ3 targets it (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
+    by the owner").'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
@@ -319,3 +328,7 @@ history:
     game-only questions (33/CQ3 now targets the conclusion), the contrasts (four added:
     practical_reasoning1 and 2, cause_to_effect, positive_value), the examples, four
     discrepancies, the classification, specialises and the dialogue types.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised for the owner''s decision of 2026-10-22 (the exception other_consequences(A)):
+    33/CQ3 targets it; the CQ3 discrepancy is done; the game-differs decision written.'

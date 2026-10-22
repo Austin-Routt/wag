@@ -1,9 +1,9 @@
 """Every edit made to walton.yml, in application order.
 
 Line numbers are those of the ORIGINAL file (2068 lines).  Categories:
-syntax, typo, variable, template, "repair — needs approval", and
-"addition — owner decision" (content the owner decided to add, ADDITIONS
-at the end).
+syntax, typo, variable, template, "repair — needs approval", and the
+owner's decisions at the end: "repair — owner decision" (OWNER_REPAIRS)
+and "addition — owner decision" (ADDITIONS).
 """
 
 SYN = "syntax"
@@ -12,6 +12,7 @@ VAR = "variable"
 TPL = "template"
 REP = "repair — needs approval"
 ADD = "addition — owner decision"
+OWN = "repair — owner decision"
 
 # scheme id renames (typos), old -> new
 ID_MAP = {
@@ -315,8 +316,32 @@ OPS = [
 ]
 
 # ----------------------------------------------------------------------
-# Additions the owner decided. Applied after every edit above, so the
-# renames do not touch them.
+# Repairs the owner decided, 2026-10-22. Applied after every edit above,
+# so the renames do not touch them.
+_NEG = ("the conclusion is used by no other scheme, so a slippery slope never meets the consequence and practical "
+        "reasoning schemes' should_be_performed(A); the book's conclusion (49) is that A should not be brought about")
+_YEAR = ("the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of "
+         "the same book")
+_NV = ("the conclusion was copied from positive_value and says the opposite of the book's 19.2 (the negative value is "
+       "a reason to retract commitment to the goal)")
+OWNER_REPAIRS = [
+    sub(2000, "negative_consequences(A)", "¬should_be_performed(A)", OWN, _NEG),
+    sub(1997, "1999", "1992", OWN, _YEAR),
+    sub(2009, "1999", "1992", OWN, _YEAR),
+    sub(892, "reason_retaining_goal(V,G)", "reason_retracting_goal(V,G)", OWN, _NV),
+    insert(308, '  reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."', OWN,
+           "template for negative_value's new conclusion, in our own words"),
+    dict(op="set", line=229,
+         before='  negative_affects/3: "The fact that value %s is negative affects the interpretation and therefore the '
+                'evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal."',
+         after='  negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value '
+               'counts against commitment to the goal."',
+         category=OWN, reason="the template said that a bad value supports commitment to the goal, the opposite of the "
+                              "book's 19.2; rewritten in our own words"),
+]
+
+# ----------------------------------------------------------------------
+# Additions the owner decided. Applied after the repairs above.
 #
 # 2026-10-22: compendium 33.3, Reasoning from Negative Consequences. The
 # category file A_reasoning/3_practical-reasoning.yml formalizes it in a
@@ -324,7 +349,11 @@ OPS = [
 # the master has only the first block of that id, so 33.3 had no scheme.
 # It comes in under a new id, with its empty variable list filled in, and
 # with templates in our own words: the category file's own templates
-# repeat the book's premises (and one has a typo).
+# repeat the book's premises (and one has a typo). Its conclusion is
+# ¬should_be_performed(A), like negative_consequences', instead of the
+# category file's not_bring_about(A), threat's predicate, so that the
+# consequence arguments can rebut one another; and it has the exception
+# other_consequences(A), like the other consequence schemes (below).
 _R33 = ("compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file "
         "A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the "
         "master; added under a new id by the owner's decision of 2026-10-22")
@@ -342,10 +371,17 @@ ADDITIONS = [
     "             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.",
     "    variables: [A,B]",
     "    conclusions:",
-    "      - not_bring_about(A)",
+    "      - ¬should_be_performed(A)",
     "    premises:",
     "      - agent_bring_about(A,B)",
     "      - bad_for_goals(B)",
+    "    exceptions:",
+    "      - other_consequences(A)",
     "      ",
 ]]
-OPS += ADDITIONS
+# 2026-10-22: the book's question about other, opposite consequences (33/CQ3, printed for 33.1-33.4) had a formula
+# only in negative_consequences_prudential (33.4); the other three consequence schemes get the same exception.
+_OC = ("the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the "
+       "exception other_consequences, only in negative_consequences_prudential")
+ADDITIONS += [insert(n, text, ADD, _OC) for n in (1896, 1925) for text in ("    exceptions:", "      - other_consequences(A)")]
+OPS += OWNER_REPAIRS + ADDITIONS

@@ -229,7 +229,7 @@ language:
   must_proper/2: "The conditional, If %s than %s is not, by itself, acceptable to the respondent, nor are shorter sequences acceptable to the respondent."
   necessary_action/2: "I have selected one member %s as an acceptable, or as the most acceptable, necessary condition for %s."
   needed_nonarbitrary/2: " %s occurs in a context of dialogue that requires a nonarbitrary definition for a key property %s that occurs in argument."
-  negative_affects/3: "The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal."
+  negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal."
   negative_consequences/1: "Performing action %s would have negative consequences."
   normal_true/1: "If the situation were normal, %s would be true."
   not_bring_about/1: "Therefore, you had better not bring about %s"
@@ -308,6 +308,7 @@ language:
   reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s."
   reason_in_favor/1: "There is a reason in favor of %s."
   reason_retaining_goal/2: "%s is a reason for retaining commitment to goal %s." 
+  reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."
   reasonable_believe/1: "It is reasonable to believe %s."
   reasonable_case/1: "It is reasonable to believe that %s is the case."
   recalls/2: "Person %s recalls %s."
@@ -891,7 +892,7 @@ argument_schemes:
                between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. 
     variables: [V,A,G]
     conclusions: 
-      - reason_retaining_goal(V,G)
+      - reason_retracting_goal(V,G)
     premises: 
       - judged_negative_value(V,A)
       - negative_affects(V,G,A)
@@ -1897,6 +1898,8 @@ argument_schemes:
     premises:
       - brings_about(A,G)
       - bad(G)
+    exceptions:
+      - other_consequences(A)
       
   - id: negative_consequences_reasoning
     meta:
@@ -1907,10 +1910,12 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
     variables: [A,B]
     conclusions:
-      - not_bring_about(A)
+      - ¬should_be_performed(A)
     premises:
       - agent_bring_about(A,B)
       - bad_for_goals(B)
+    exceptions:
+      - other_consequences(A)
       
   - id: position_to_know
     meta:
@@ -1940,6 +1945,8 @@ argument_schemes:
     premises:
       - brings_about(A,G)
       - good(G)
+    exceptions:
+      - other_consequences(A)
 
   - id: practical_reasoning1
     meta:
@@ -2011,10 +2018,10 @@ argument_schemes:
     meta:
       title: Slippery Slope Argument
       source: >
-        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.
+        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.
     variables: [A,E]
     conclusions:
-      - negative_consequences(A)
+      - ¬should_be_performed(A)
     premises:
       - would_realize(A,E)
       - horrible_costs(E)
@@ -2023,7 +2030,7 @@ argument_schemes:
     meta:
       title: Slippery Slope Argument
       source: >
-        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.
+        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.
     variables: [E1,E2]
     conclusions:
       - horrible_costs(E1)

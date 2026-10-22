@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2084 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, and 1 added by the owner's decision ([below](#added-by-the-owners-decision): `negative_consequences_reasoning`), 112 in all. Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2091 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 1 added by them (`negative_consequences_reasoning`); 112 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -23,7 +23,7 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
-`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula (`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, and the four approval-needed repairs. The six primed-variable schemes are identical apart from the variable names.
+`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula (`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four approval-needed repairs, and the owner's decisions (below; the added scheme is listed, not compared). The six primed-variable schemes are identical apart from the variable names.
 
 ## Diff size
 
@@ -34,20 +34,25 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| addition — owner decision | 16 | 3 |
-| **total** | **210** | **172** distinct lines (a line can carry edits of several categories) |
+| repair — owner decision | 6 | 6 |
+| addition — owner decision | 22 | 5 |
+| **total** | **222** | **180** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 166 lines removed, 181 added. That is 162 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`), and 16 added by the owner's decision (below).
+Unified diff against the original (`walton.diff`): 171 lines removed, 193 added. That is 167 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 28 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 20, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
-## Added by the owner's decision
+## Changes decided by the owner
 
-Content the upstream collection has but its master `walton.yml` lost, brought in by the owner's decision. These are not cleaning edits: they add schemes.
+These are not cleaning edits: they change what schemes say, or add one. Each was decided by the owner, on the date given; `tools/edits.py` records them as "repair — owner decision" and "addition — owner decision" (`OWNER_REPAIRS`, `ADDITIONS`), applied after the cleaning.
 
-| scheme | from | decided | why |
+| scheme | change | decided | why |
 |---|---|---|---|
-| `negative_consequences_reasoning` | `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash; its empty variable list is filled in (`[A,B]`); its two templates are written in our own words, because the category file's repeat the book's premises. |
+| `negative_consequences_reasoning` (new) | added from `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences`; variables `[A,B]`; conclusion `¬should_be_performed(A)` in place of the block's `not_bring_about(A)`; exception `other_consequences(A)` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the category file's repeat the book's premises. |
+| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). |
+| `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
+| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book. |
+| `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the `negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both templates are in our own words. |
 
 ## Repairs that need the owner's approval
 
@@ -270,6 +275,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **221** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses more_reliable with 0 argument(s) and the template has 0 %s (used by: sign)
   - before: `  more_reliable: "There are more reliable account for the sign."`
   - after: `  more_reliable/0: "There are more reliable account for the sign."`
+- **229** · repair — owner decision · the template said that a bad value supports commitment to the goal, the opposite of the book's 19.2; rewritten in our own words (used by: negative_value)
+  - before: `  negative_affects/3: "The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal."`
+  - after: `  negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal."`
 - **231** · typo · template word 'thte' (used by: negative_normal_expectations)
   - before: `  normal_true/1: "If thte situation were normal, %s would he true."`
   - after: `  normal_true/1: "If the situation were normal, %s would he true."`
@@ -294,7 +302,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **251** · typo · misspelled predicate (used by: rule_physical_world_2)
   - before: `  oficcial_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
   - after: `  official_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
-- **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: negative_consequences_prudential)
+- **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: negative_consequences, negative_consequences_prudential, negative_consequences_reasoning, positive_consequences)
   - before: `  other_consequences: "There are some good or bad consequences of doing %s should be taken into account."`
   - after: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
 - **256** · template · the predicate has 2 arguments (A,C); 'A %s' was the variable name plus a stray %s ('A is true') (used by: negative_practical)
@@ -336,6 +344,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **306** · repair — needs approval · template for the repaired reapplication_sequence(A2,A) (line 1557), in the file's '-...-' style (used by: sorites_slippery_slope)
   - before: `  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
   - after: `  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s."`
+- **308** [insert after] · repair — owner decision · template for negative_value's new conclusion, in our own words (used by: negative_value)
+  - before: _(none)_
+  - after: `  reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."`
 - **309** · typo · misspelled predicate (used by: memory)
   - before: `  reasonable_belive/1: "It is reasonable to believe %s."`
   - after: `  reasonable_believe/1: "It is reasonable to believe %s."`
@@ -642,6 +653,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **889** · typo · source: 'lnformal' (OCR l for I)
   - before: `               between Parties without a Consensus about Values." lnformal Logic 22 (2003a), pp. 231 -245. `
   - after: `               between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. `
+- **892** · repair — owner decision · the conclusion was copied from positive_value and says the opposite of the book's 19.2 (the negative value is a reason to retract commitment to the goal)
+  - before: `      - reason_retaining_goal(V,G)`
+  - after: `      - reason_retracting_goal(V,G)`
 
 ### sacrifice
 
@@ -835,6 +849,15 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - reasonable_belive(M)`
   - after: `      - reasonable_believe(M)`
 
+### negative_consequences
+
+- **1896** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1896** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
+  - before: _(none)_
+  - after: `      - other_consequences(A)`
+
 ### negative_consequences_reasoning
 
 - **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
@@ -866,7 +889,7 @@ Format: **line** · category · reason, then the line before and after. An inser
   - after: `    conclusions:`
 - **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
   - before: _(none)_
-  - after: `      - not_bring_about(A)`
+  - after: `      - ¬should_be_performed(A)`
 - **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
   - before: _(none)_
   - after: `    premises:`
@@ -878,13 +901,43 @@ Format: **line** · category · reason, then the line before and after. An inser
   - after: `      - bad_for_goals(B)`
 - **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
   - before: _(none)_
+  - after: `    exceptions:`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
+  - after: `      - other_consequences(A)`
+- **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
+  - before: _(none)_
   - after: `      `
+
+### positive_consequences
+
+- **1925** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1925** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
+  - before: _(none)_
+  - after: `      - other_consequences(A)`
 
 ### exeption_to_rule → exception_to_rule
 
 - **1976** · typo · scheme id 'exeption'
   - before: `  - id: exeption_to_rule`
   - after: `  - id: exception_to_rule`
+
+### slippery_slope_base_case
+
+- **1997** · repair — owner decision · the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book
+  - before: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.`
+  - after: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.`
+- **2000** · repair — owner decision · the conclusion is used by no other scheme, so a slippery slope never meets the consequence and practical reasoning schemes' should_be_performed(A); the book's conclusion (49) is that A should not be brought about
+  - before: `      - negative_consequences(A)`
+  - after: `      - ¬should_be_performed(A)`
+
+### slippery_slope_inductive_step
+
+- **2009** · repair — owner decision · the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book
+  - before: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.`
+  - after: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.`
 
 ## Schemes that cannot pass without a change of meaning
 
@@ -964,5 +1017,5 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 - The stray " s" in the `data_account/2` template, and the soft hyphen in "pp.429­448".
 - `langugage:` occurs only in the category file `B_source-based-arguments/1_…yml`, not in `walton.yml`.
 - Negated formulas have no `¬p/n` WAG templates (WAG lint warning, see Gate).
-- Orphan templates (no scheme uses them; 13): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `positive_consequences/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
+- Orphan templates (no scheme uses them; 14): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `negative_consequences/1`, `positive_consequences/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
 

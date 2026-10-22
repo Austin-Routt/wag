@@ -19,15 +19,16 @@ formulas:
   - judged_negative_value(V,A)
   - negative_affects(V,G,A)
   conclusions:
-  - reason_retaining_goal(V,G)
+  - reason_retracting_goal(V,G)
 book:
 - entry: "19.2"
   title: 'Variant 2: Negative Value'
   pages: "321"
   parent: "19"
-  match: partial
-  note: Same title and references, but the conclusion is the positive variant's "reason
-    for retaining commitment".
+  match: exact
+  note: Same title and references. Until 2026-10-22 the conclusion was the positive
+    variant's "reason for retaining commitment"; the owner's decision changed it to
+    reason_retracting_goal(V,G), as the book has it.
   status: generated
 families:
 - family: F09
@@ -47,17 +48,15 @@ premise_map:
   status: generated
 - entry: "19.2"
   label: Conclusion
-  formulas: [{formula: 'reason_retaining_goal(V,G)', locus: conclusion}]
-  note: 'book: "V is a reason for retracting commitment to goal G"'
+  formulas: [{formula: 'reason_retracting_goal(V,G)', locus: conclusion}]
   status: generated
 critical_questions: []
 summary:
   text: Use it when an agent A judges a value V to be bad, and V bears on a goal G
     of A so as to count against it, as when someone gives up an aim because of the
-    vice it would feed. In the book it concludes that V is a reason for A to give
-    up its commitment to G, which sets it apart from negative_consequences, which
-    argues against an action from a bad result; walton.yml's conclusion says the opposite
-    (see the discrepancies).
+    vice it would feed. It concludes that V is a reason for A to give up its commitment
+    to G, which sets it apart from negative_consequences, which argues against an
+    action from a bad result.
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_value
@@ -87,16 +86,14 @@ examples:
 - text: I'm giving up on becoming famous online. That kind of fame runs on vanity,
     and I count vanity a vice.
   coding: 'V = vanity; A = the speaker; G = becoming famous online. Stated: judged_negative_value(V,A)
-    ("a vice") and negative_affects(V,G,A) (the goal runs on it). Conclusion, as the
-    book has it: V is a reason to drop the commitment to G. walton.yml''s conclusion
-    reads reason_retaining_goal(V,G); until it is corrected, code it so and note that
-    it stands for giving the goal up.'
+    ("a vice") and negative_affects(V,G,A) (the goal runs on it). Conclusion: reason_retracting_goal(V,G),
+    V is a reason to drop the commitment to G.'
   status: drafted by Claude Code, 2026-10-22
 - text: 'The club should stop aiming to beat every rival at any price: the members
     see win-at-all-costs ruthlessness as a bad thing, and that aim is built on it.'
   coding: 'V = win-at-all-costs ruthlessness; A = the club''s members; G = beating
     every rival at any price. Stated: judged_negative_value(V,A) and negative_affects(V,G,A).
-    Conclusion: a reason to drop G (walton.yml''s formula as in the first example).'
+    Conclusion: reason_retracting_goal(V,G).'
   status: drafted by Claude Code, 2026-10-22
 - text: Taxing meat might force producers to use cheaper and more dangerous means
     of producing meat.
@@ -107,26 +104,24 @@ examples:
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
-- kind: partial-link
-  about: "19.2"
-  detail: 'walton.yml formalizes compendium 19.2 only in part: Same title and references,
-    but the conclusion is the positive variant''s "reason for retaining commitment".'
-  decision: Keep the link as partial until walton.yml is corrected. The book's conclusion
-    is that V is a reason to give up the commitment to G; walton.yml's is reason_retaining_goal(V,G),
-    copied from positive_value, which says the opposite. walton.yml should conclude
-    with a predicate of its own (for example reason_retracting_goal(V,G), with a template
-    in our own words); then the link can become exact. Until then, code the book's
-    conclusion with the existing formula and say in the coding that it stands for
-    retraction.
+- kind: book-walton
+  about: Conclusion
+  detail: The book concludes that V is a reason to give up the commitment to G. walton.yml
+    concluded reason_retaining_goal(V,G), copied from positive_value, which says the
+    opposite; links.json therefore linked 19.2 only in part.
+  decision: 'Done: the owner''s decision of 2026-10-22 gave the scheme its own conclusion,
+    reason_retracting_goal(V,G), with a template in our own words; links.json now
+    links 19.2 exactly (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
+    by the owner").'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise 2
   detail: In the book, a negative value goes against commitment to the goal. walton.yml's
-    template for negative_affects(V,G,A) ends by saying that a bad value supports
-    commitment to the goal, again copied from the positive variant.
-  decision: 'Correct the template with the conclusion (owner''s decision on walton.yml):
-    negative_affects(V,G,A) should say that V''s being bad counts against A''s goal
-    G. The formula itself can stay; the catalogue reads it in the book''s sense.'
+    template for negative_affects(V,G,A) said that a bad value supports commitment
+    to the goal, copied from the positive variant.
+  decision: 'Done: the owner''s decision of 2026-10-22 rewrote the template, in our
+    own words, so that a bad value counts against the goal (docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -165,3 +160,8 @@ history:
     positive variant''s), one book-walton discrepancy on the premise''s template,
     the classification, specialises and the dialogue types. The book prints no questions
     for 19 and the game does not play the scheme, so it has none.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is reason_retracting_goal(V,G)
+    and the negative_affects template is corrected; the partial link is now exact,
+    so its discrepancy becomes a done book-walton one; summary and examples follow.'

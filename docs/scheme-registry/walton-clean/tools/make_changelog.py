@@ -22,7 +22,9 @@ from edits import ID_MAP as _IDS  # noqa: E402
 
 NEW_ID = dict(_IDS)
 assert NEW_ID == {o: n for o, n, _ in ID_MAP}, "id map out of sync with edits.py"
-CATS = ["syntax", "typo", "variable", "template", "repair — needs approval", "addition — owner decision"]
+CATS = ["syntax", "typo", "variable", "template", "repair — needs approval", "repair — owner decision",
+        "addition — owner decision"]
+OWNER = ("repair — owner decision", "addition — owner decision")
 
 
 def term_preds(f):
@@ -84,14 +86,18 @@ def main(outdir):
     w("# walton.yml cleanup: changelog")
     w("")
     nschemes = len(dump["schemes"])
-    added = sorted({r["scheme"] for r in rows if r["category"].startswith("addition") and r["scheme"] != "language"})
+    added = sorted({r["scheme"] for r in rows if r["category"].startswith("addition") and r["change"] == "insert after"
+                    and r["scheme"] not in ("language",) and r["after"].lstrip().startswith("- id:")})
+    changed = sorted({r["scheme_after"] for r in rows if r["category"] in OWNER and r["scheme"] != "language"} - set(added))
     cleanp = os.path.join(outdir, "check", "walton.clean.yml")
     nlines = len(open(cleanp, encoding="utf-8").read().split("\n")) if os.path.exists(cleanp) else "?"
     w("Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, "
       "SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` "
       f"({nlines} lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): "
-      f"the same 111 schemes in the same order, and {len(added)} added by the owner's decision "
-      f"([below](#added-by-the-owners-decision): {', '.join('`' + a + '`' for a in added)}), {nschemes} in all. "
+      f"the same 111 schemes in the same order, {len(changed)} of them changed by the owner's decisions "
+      f"({', '.join('`' + c + '`' for c in changed)}), and {len(added)} added by them "
+      f"({', '.join('`' + a + '`' for a in added)}); {nschemes} in all. "
+      "See [Changes decided by the owner](#changes-decided-by-the-owner). "
       "Every edit below is also in `changes.json` and is produced by "
       "`tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are "
       "those of the original file.")
@@ -144,8 +150,9 @@ def main(outdir):
     w("")
     w("`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, "
       "after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula "
-      "(`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, and the four "
-      "approval-needed repairs. The six primed-variable schemes are identical apart from the variable names.")
+      "(`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four "
+      "approval-needed repairs, and the owner's decisions (below; the added scheme is listed, not compared). The six "
+      "primed-variable schemes are identical apart from the variable names.")
     w("")
 
     # ---- diff size ----------------------------------------------------------
@@ -169,12 +176,13 @@ def main(outdir):
     w(f"| **total** | **{len(rows)}** | **{len(all_lines)}** distinct lines (a line can carry edits of several categories) |")
     w("")
     ndel = sum(1 for r in rows if r["change"] == "delete")
-    nins = sum(1 for r in rows if r["change"] == "insert after" and not r["category"].startswith("addition"))
-    nadd = sum(1 for r in rows if r["category"].startswith("addition"))
+    nins = sum(1 for r in rows if r["change"] == "insert after" and r["category"] not in OWNER)
+    nadd = sum(1 for r in rows if r["category"] in OWNER)
     w(f"Unified diff against the original (`walton.diff`): {minus} lines removed, {plus} added. That is "
       f"{minus - ndel} lines changed in place, {ndel} deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, "
       f"and the conclusion that was listed as a premise), {nins} inserted (the templates `cannot_present_sametime/3` "
-      f"and `data_set/2`, and that conclusion under `conclusions:`), and {nadd} added by the owner's decision (below).")
+      f"and `data_set/2`, and that conclusion under `conclusions:`); {nadd} of the recorded edits are the owner's "
+      "decisions (below).")
     w("")
     kinds = collections.Counter()
     for r in rows:
@@ -191,19 +199,34 @@ def main(outdir):
       "The `popular_practise` rename also renames the scheme id (counted under predicate names).")
     w("")
 
-    # ---- additions ------------------------------------------------------------
-    w("## Added by the owner's decision")
+    # ---- the owner's decisions --------------------------------------------------
+    w("## Changes decided by the owner")
     w("")
-    w("Content the upstream collection has but its master `walton.yml` lost, brought in by the owner's decision. "
-      "These are not cleaning edits: they add schemes.")
+    w("These are not cleaning edits: they change what schemes say, or add one. Each was decided by the owner, on the "
+      "date given; `tools/edits.py` records them as \"repair — owner decision\" and \"addition — owner decision\" "
+      "(`OWNER_REPAIRS`, `ADDITIONS`), applied after the cleaning.")
     w("")
-    w("| scheme | from | decided | why |")
+    w("| scheme | change | decided | why |")
     w("|---|---|---|---|")
-    w("| `negative_consequences_reasoning` | `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block "
-      "with the id `negative_consequences` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative "
-      "Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids "
-      "the clash; its empty variable list is filled in (`[A,B]`); its two templates are written in our own words, "
-      "because the category file's repeat the book's premises. |")
+    w("| `negative_consequences_reasoning` (new) | added from `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a "
+      "second block with the id `negative_consequences`; variables `[A,B]`; conclusion `¬should_be_performed(A)` in place "
+      "of the block's `not_bring_about(A)`; exception `other_consequences(A)` | 2026-10-22 | It formalizes compendium "
+      "33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a "
+      "duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence "
+      "scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the "
+      "category file's repeat the book's premises. |")
+    w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added | 2026-10-22 | The "
+      "book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its "
+      "formula only in `negative_consequences_prudential` (33.4). |")
+    w("| `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | "
+      "No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical "
+      "reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |")
+    w("| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book "
+      "cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book. |")
+    w("| `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the "
+      "`negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion "
+      "was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both "
+      "templates are in our own words. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------

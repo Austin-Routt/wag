@@ -16,8 +16,10 @@ formulas:
   premises:
   - agent_bring_about(A,B)
   - bad_for_goals(B)
+  exceptions:
+  - other_consequences(A)
   conclusions:
-  - not_bring_about(A)
+  - ¬should_be_performed(A)
 book:
 - entry: "33.3"
   title: Reasoning from Negative Consequences
@@ -50,7 +52,7 @@ premise_map:
   status: generated
 - entry: "33.3"
   label: Conclusion
-  formulas: [{formula: not_bring_about(A), locus: conclusion}]
+  formulas: [{formula: ¬should_be_performed(A), locus: conclusion}]
   status: generated
 critical_questions:
 - id: 33/CQ1
@@ -87,25 +89,24 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: not_bring_about(A), locus: conclusion}]
-  note: 'Counter-argument from the opposite consequences; no formula of this scheme
-    encodes it, so it targets the conclusion, as for positive_consequences and negative_consequences.
-    No walton.yml scheme concludes the negation of not_bring_about(A): a positive_consequences
-    argument concludes should_be_performed(A), which does not formally meet it (see
-    the discrepancy on the conclusion).'
+  targets: [{formula: other_consequences(A), locus: exception}]
+  note: Targets the exception other_consequences(A), which the owner's decision of
+    2026-10-22 gave the three consequence schemes (walton.yml had it only in negative_consequences_prudential).
+    Raising the opposite consequences undercuts the argument; they can also be put
+    as a counter-argument on the conclusion, and the two are then weighed, as ND describes
+    (p. 159).
   paraphrase: Would doing A also have consequences of the opposite kind to B that
     ought to be weighed against it?
   answer: 'The critic, who raises it with an argument. Against: a consequence of A
-    that serves the agent''s goals, put forward as a counter-argument for doing A,
-    which rebuts the argument when it outweighs B. For: showing that A has no such
-    consequence, or that B outweighs it.'
+    that serves the agent''s goals and outweighs B, which undercuts the argument through
+    other_consequences(A). For: showing that A has no such consequence, or that it
+    is too slight to change the balance.'
   status: drafted by Claude Code, 2026-10-22
 summary:
   text: 'Use it when an agent weighs an action of its own: bringing about A would
     lead to an outcome B that would harm the agent''s own goals, so the agent had
     better not bring A about. It is the first-person, goal-relative form of negative_consequences
-    (compendium 33.3), and concludes not_bring_about(A), the predicate threat also
-    concludes, rather than ¬should_be_performed(A).'
+    (compendium 33.3), and concludes, as that scheme does, ¬should_be_performed(A).'
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_consequences
@@ -118,8 +119,7 @@ contrasts:
   text: Choose negative_consequences_reasoning when an agent reasons about its own
     action and the outcome is bad by that agent's goals ("if I do this, it defeats
     what I am after"); choose negative_consequences when an action, such as a policy,
-    is judged by an outcome that is bad in general terms. In a policy debate prefer
-    negative_consequences, whose conclusion meets the pros on should_be_performed(A).
+    is judged by an outcome that is bad in general terms. Both conclude ¬should_be_performed(A).
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
   text: Choose negative_consequences_prudential when the bad outcome would follow
@@ -135,10 +135,10 @@ contrasts:
     an agent rejects one of its own options for a result that would harm its goals.
   status: drafted by Claude Code, 2026-10-22
 - scheme: threat
-  text: Both conclude not_bring_about(A). Choose threat when the speaker undertakes
-    to cause the bad outcome if the hearer acts; choose negative_consequences_reasoning
-    when the agent itself foresees the bad outcome of its own action and no one undertakes
-    to cause it.
+  text: Threat concludes not_bring_about(A), this scheme ¬should_be_performed(A).
+    Choose threat when the speaker undertakes to cause the bad outcome if the hearer
+    acts; choose negative_consequences_reasoning when the agent itself foresees the
+    bad outcome of its own action and no one undertakes to cause it.
   status: drafted by Claude Code, 2026-10-22
 - scheme: ad_baculum
   text: 'Not a close relative: the disjunctive threat demands an action of the hearer
@@ -174,14 +174,14 @@ examples:
     seeing them off is half of why I took this job. So I won't take it.
   coding: 'A = taking the night shift; B = missing the children before school. Stated:
     agent_bring_about(A,B), and bad_for_goals(B) (seeing them off is one of the speaker''s
-    aims). Conclusion: not_bring_about(A). The agent is the speaker; no formula names
-    it.'
+    aims). Conclusion: ¬should_be_performed(A). The agent is the speaker; no formula
+    names it.'
   status: drafted by Claude Code, 2026-10-22
 - text: 'We''d better not open a second shop this year: the loan would tie up the
     cash we need to keep the first one going.'
   coding: 'A = opening a second shop this year; B = the cash the first shop needs
     being tied up in the loan. Stated: agent_bring_about(A,B), and bad_for_goals(B)
-    (the owners'' goal of keeping the first shop going). Conclusion: not_bring_about(A).'
+    (the owners'' goal of keeping the first shop going). Conclusion: ¬should_be_performed(A).'
   status: drafted by Claude Code, 2026-10-22
 - text: A sin tax on meat would make food more expensive, despite many people not
     being able to afford it.
@@ -206,11 +206,9 @@ discrepancies:
 - kind: book-walton
   about: Conclusion
   detail: The book's conclusion is first-person and qualified as practical ("practically
-    speaking"). walton.yml's not_bring_about(A) has no agent, and its template, shared
-    with threat, reads as advice to a second person ("you had better not").
-  decision: 'No change for now: read not_bring_about(A) as the agent''s own practical
-    conclusion about its own action, and name the agent in the coding. See the other
-    discrepancy on the conclusion for the predicate itself.'
+    speaking"). walton.yml's ¬should_be_performed(A) names no agent and no qualifier.
+  decision: 'No change: read it as the agent''s own practical conclusion about its
+    own action, and name the agent in the coding.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: agent
@@ -224,15 +222,13 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: conclusion
-  detail: not_bring_about(A) is not the negation of should_be_performed(A), the conclusion
-    of positive_consequences and the practical-reasoning schemes. An argument of this
-    scheme and one for the same action therefore do not rebut each other, and 33/CQ3's
-    counter-argument cannot formally meet it.
-  decision: 'Open, for the owner: conclude ¬should_be_performed(A), as negative_consequences
-    does, or keep the predicate the upstream block has. We recommend ¬should_be_performed(A),
-    so that the scheme can take part in the same weighing of pros and cons. Until
-    then, code cons in policy debates with negative_consequences (batch-2 guidelines
-    §3).'
+  detail: 'The upstream block concluded not_bring_about(A), threat''s predicate, which
+    is not the negation of should_be_performed(A), the conclusion of positive_consequences
+    and the practical-reasoning schemes: this scheme''s arguments and arguments for
+    the same action could not rebut each other.'
+  decision: 'Done: the owner''s decision of 2026-10-22 changed the conclusion to ¬should_be_performed(A),
+    as negative_consequences has it (docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: CQ1-CQ2
@@ -247,18 +243,21 @@ discrepancies:
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
     walton.yml has no formula for it here, while it encodes the same question as the
     exception other_consequences(X) in negative_consequences_prudential.
-  decision: 'The catalogue targets the conclusion, as for the other two forms. Open:
-    whether walton.yml should give the consequence schemes the exception other_consequences(A),
-    as it does the prudential scheme.'
+  decision: 'Done: the owner''s decision of 2026-10-22 gave positive_consequences,
+    negative_consequences and negative_consequences_reasoning the exception other_consequences(A);
+    33/CQ3 targets it (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
+    by the owner").'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: upstream
   detail: The scheme comes from the second block with the id negative_consequences
     in the upstream category file A_reasoning/3_practical-reasoning.yml (line 511),
     which has an empty variable list and templates that repeat the book's premises.
-    walton.yml gives it a new id, the variables [A,B], and templates in our own words.
-  decision: 'No change: the owner''s decision of 2026-10-22, recorded in docs/scheme-registry/walton-clean/CHANGELOG.md
-    ("Added by the owner''s decision").'
+    walton.yml gives it a new id, the variables [A,B], templates in our own words,
+    the conclusion ¬should_be_performed(A) in place of not_bring_about(A), and the
+    exception other_consequences(A).
+  decision: 'No change: the owner''s decisions of 2026-10-22 (docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -271,8 +270,9 @@ classification:
 specialises:
   scheme: negative_consequences
   note: 'families.json (F15) makes it a subtype of 33.2: the action is the agent''s
-    own and the outcome is bad by the agent''s goals. Its conclusion is a different
-    predicate (not_bring_about(A)), so it does not feed negative_consequences'' formulas.'
+    own and the outcome is bad by the agent''s goals. Since 2026-10-22 it has the
+    same conclusion, ¬should_be_performed(A), and the same exception, so the two meet
+    the same arguments for A.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion, negotiation]
@@ -298,3 +298,8 @@ history:
     shared questions (33/CQ3 targets the conclusion), the contrasts (one added: practical_reasoning2),
     the examples, seven discrepancies, the classification, specialises and the dialogue
     types.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is ¬should_be_performed(A)
+    and 33/CQ3 targets the new exception other_consequences(A); summary, contrasts,
+    examples, specialises and discrepancies follow.'

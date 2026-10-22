@@ -8,7 +8,7 @@ tier: 1
 walton:
   id: slippery_slope_inductive_step
   title: Slippery Slope Argument
-  source: Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999,
+  source: Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992,
     pp. 93, 95.
 formulas:
   variables: [E1, E2]
@@ -57,7 +57,7 @@ premise_map:
   note: 'Corrected by Claude Code, 2026-10-22: the generated item mapped the book''s
     conclusion (A0 is not to be brought about) to horrible_costs(E1), which is an
     intermediate conclusion the book does not print. The book''s conclusion is drawn
-    by slippery_slope_base_case, in part (negative_consequences(A)).'
+    by slippery_slope_base_case, (¬should_be_performed(A)).'
   status: drafted by Claude Code, 2026-10-22
 critical_questions:
 - id: 49/CQ1
@@ -205,11 +205,12 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: source
-  detail: walton.yml cites Slippery Slope Arguments (Vale Press, Newport News) as
+  detail: walton.yml cited Slippery Slope Arguments (Vale Press, Newport News) as
     of 1999; the compendium cites the same title and pages (93, 95) from the same
     publisher as of 1992.
-  decision: 'Open: a verifier should check the year against the book''s reference
-    list; the catalogue cites the book''s reference.'
+  decision: 'Done: the owner''s decision of 2026-10-22 changed the year to the book''s
+    1992 (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided by the
+    owner").'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -248,3 +249,7 @@ history:
     discrepancies and one on the source, the classification, specialises and the dialogue
     types; corrected the premise map of the book''s conclusion, which the inductive
     step does not express.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised for the owner''s decisions of 2026-10-22: the source year is 1992,
+    and the base case concludes ¬should_be_performed(A).'

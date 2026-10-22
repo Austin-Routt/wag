@@ -164,6 +164,13 @@
        "en": "'food becomes more expensive for the many people who cannot afford it' is bad.",
        "status": "supplied",
        "note": "signalled by \"despite many people not being able to afford it\", not stated"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -267,6 +274,13 @@
        "formula": "bad(tax_revenue_reduced)",
        "en": "'tax revenues are reduced' is bad.",
        "status": "supplied"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -637,6 +651,13 @@
        "en": "'unhealthy meat consumption is reduced' is good.",
        "status": "supplied",
        "note": "near-explicit: the consumption is called \"unhealthy\""
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -1117,6 +1138,13 @@
        "en": "'cases of anemia increase' is bad.",
        "status": "supplied",
        "note": "uncontroversial; not stated"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -1278,6 +1306,13 @@
        "en": "'the country's food security decreases' is bad.",
        "status": "supplied",
        "note": "grounded by the explicit first sentence (poor communities need the easiest access to all food), not stated"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -1470,6 +1505,13 @@
        "en": "'people starve because the tax reduces their access to meat' is bad.",
        "status": "explicit",
        "note": "\"a more severe threat\""
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -1900,6 +1942,13 @@
        "en": "'the development of synthetic meats is advanced' is good.",
        "status": "supplied",
        "note": "supplied: synthetic meat would replace problematic meat production (the link to 13292.13's problems is supplied)"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat_and_fund_synthetic_meat_research)",
+       "en": "There are some good or bad consequences of doing 'governments tax meat and use some of the revenue to encourage research into synthetic meats' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -1995,6 +2044,13 @@
        "en": "'meat producers switch to cheaper and more dangerous means of producing meat' is bad.",
        "status": "explicit",
        "note": "\"more dangerous\" is itself the negative evaluation"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -2852,6 +2908,13 @@
        "en": "'meat is underconsumed to an unhealthy degree' is bad.",
        "status": "explicit",
        "note": "\"unhealthy\""
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -3568,6 +3631,13 @@
        "en": "'domestic meat producers are pushed out of the market' is bad.",
        "status": "supplied",
        "note": "backed by the child 13292.131 (\"This would be detrimental\")"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -4654,6 +4724,13 @@
        "formula": "good(carbon_emissions_reduced)",
        "en": "'carbon emissions are reduced' is good.",
        "status": "supplied"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(ration_meat_via_carbon_budgets)",
+       "en": "There are some good or bad consequences of doing 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -5031,6 +5108,13 @@
        "en": "'domestic meat producers are not pushed out of the market by cheaper imported meat' is good.",
        "status": "supplied",
        "note": "the issue is the parent's bad outcome; avoiding it is good"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat_with_import_safeguards)",
+       "en": "There are some good or bad consequences of doing 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -5857,6 +5941,13 @@
        "formula": "good(unhealthy_underconsumption_prevented)",
        "en": "'unhealthy underconsumption of meat is prevented' is good.",
        "status": "supplied"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat_with_accompanying_measures)",
+       "en": "There are some good or bad consequences of doing 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -6229,6 +6320,13 @@
        "en": "'regenerative agriculture, which produces both meat and environmental benefits, is deterred' is bad.",
        "status": "supplied",
        "note": "grounded by the explicit environmental benefits of regenerative agriculture, not stated"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -6329,6 +6427,13 @@
        "en": "'the protein intake of millions of people is reduced' is bad.",
        "status": "explicit",
        "note": "\"negatively affect\""
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
@@ -6369,6 +6474,13 @@
        "en": "'governments push to incentivize eating insects as a protein alternative' is bad.",
        "status": "supplied",
        "note": "implied by the framing; disputed by 13292.58, 13292.226 and 13292.239"
+      },
+      {
+       "role": "exception",
+       "formula": "other_consequences(tax_meat)",
+       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
      ],
      "conclusion": {
