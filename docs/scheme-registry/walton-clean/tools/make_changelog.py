@@ -224,6 +224,16 @@ def main(outdir):
       "the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the "
       "compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is "
       "one statement for every instance (\"0-ary atoms\", below). Its five templates are in our own words. |")
+    w("| `precedent_slippery_slope` (new) | written for WAG: premises `claimed_exception(C0,R)`, `sets_precedent(C0,C1,R)`, "
+      "`precedent_chain(C1,Cn,R)`, `intolerable_exception(Cn,R)`; conclusion `¬case_exception(C0)` | 2026-10-22 | It "
+      "formalizes compendium 50, the Precedent Slippery Slope Argument, which no upstream file formalizes. One formula per "
+      "printed premise, with the Related Cases Premise split into the first pair and the chain so that the book's CQ1 and "
+      "CQ2 each have one. The intolerable case is taken to be the end of the series, Cn, as a slippery slope needs; the "
+      "book prints C0 there and in CQ3 (the compendium, p. 340; the ch. 3 scan, p. 116, is unclear but looks the same), "
+      "which can also be read as \"treating C0 as an exception would be intolerable because of where it leads\", a "
+      "reason the chain premises then carry. A verifier with the book should confirm the reading. The conclusion negates `case_exception`, the premise of the "
+      "argument for an exceptional case (`exceptional`), so that the slope meets the argument it counters (p. 117). Its "
+      "templates are our own. |")
     w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template "
       "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
       "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "

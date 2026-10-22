@@ -750,10 +750,10 @@
      "note": "causal slippery slope, recursive two-scheme encoding"
     },
     {
-     "scheme": "",
+     "scheme": "precedent_slippery_slope",
      "relation": "subtype",
      "compendium": "50",
-     "note": "precedent slippery slope: missing everywhere"
+     "note": "precedent slippery slope: cases bound by treating like cases alike; formalized nowhere upstream, written for walton.yml by the owner's decision of 2026-10-22; counters the argument for an exceptional case"
     },
     {
      "scheme": "sorites_slippery_slope",

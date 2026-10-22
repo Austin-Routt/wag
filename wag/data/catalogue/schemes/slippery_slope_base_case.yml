@@ -170,11 +170,11 @@ contrasts:
     link from the action to the first event; a slope with n links is n−1 inductive
     steps and one base case.
   status: drafted by Claude Code, 2026-10-22
-- scheme: precedent_slippery_slope_argument
-  text: Choose precedent_slippery_slope_argument (compendium 50, not in walton.yml)
-    when the steps are cases bound together by treating like cases alike, so that
-    one exception to a rule forces the next; choose this causal slope when each step
-    is an event that brings on the next.
+- scheme: precedent_slippery_slope
+  text: Choose precedent_slippery_slope (compendium 50) when the steps are cases bound
+    together by treating like cases alike, so that one exception to a rule forces
+    the next; choose this causal slope when each step is an event that brings on the
+    next.
   status: drafted by Claude Code, 2026-10-22
 - scheme: sorites_slippery_slope
   text: Choose sorites_slippery_slope when the steps are small differences along a
@@ -322,3 +322,7 @@ history:
   by: Claude Code
   what: The full slippery slope (53) is now walton.yml's full_slippery_slope (the
     owner's decision of 2026-10-22); the contrast names it.
+- date: "2026-10-22"
+  by: Claude Code
+  what: The precedent slippery slope (50) is now walton.yml's precedent_slippery_slope
+    (the owner's decision of 2026-10-22); the contrast names it.

@@ -1,6 +1,7 @@
+warning: language: no template for ¬case_exception/1
 warning: language: no template for ¬known/1
 warning: language: no template for ¬presents/2
 warning: language: no template for ¬prestigious_individual/2
 warning: language: no template for ¬should_be_performed/1
 warning: language: no template for ¬should_do/2
-0 error(s), 5 warning(s)
+0 error(s), 6 warning(s)

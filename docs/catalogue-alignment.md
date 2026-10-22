@@ -27,7 +27,7 @@
 
 | Item | State |
 |---|---|
-| Entries | 115: one for each of `walton.yml`'s 114 schemes, and one for the compendium scheme it lacks (50, the precedent slippery slope). All 109 compendium schemes are linked to an entry. |
+| Entries | 115, one for each of `walton.yml`'s 115 schemes. All 109 compendium schemes are linked to an entry, and since 2026-10-22 every one has a formalization. |
 | Tier 1 | 32 entries, drafted on 2026-10-22 and checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)). Not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
 | Book questions | All 153 printed questions are in some entry. 52 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 50 in tier 2. The checker lists them. |
@@ -55,7 +55,7 @@ What matters for alignment:
 | `commitment1` with `committed_to` | `B_source-based-arguments/2_…` | The master misspells it `commined_to`; the category file is right, and the cleaned `walton.yml` already has the correction (its CHANGELOG). |
 | `part_in_whole` with variables `[Y,X,A]` | `A_reasoning/2_inductive-reasoning.yml` | The master declares `[Y,X,P]`, though its formulas use A and never P. The category file is right, and the cleaned `walton.yml` already has the correction. |
 
-**The one compendium scheme with no formalization anywhere** is 50, the precedent slippery slope.
+**The one compendium scheme with no formalization anywhere** was 50, the precedent slippery slope. It got a scheme written for WAG on 2026-10-22 (C3 below).
 
 ## 3. Workstreams
 
@@ -108,7 +108,18 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
    - **Left open,** in the entries when they are drafted (tier 2):
      - whether `full_slippery_slope`'s conclusion, `not_acceptable_step(C0)`, should meet the practical schemes, as the base case's now does;
      - whether its assumption `led_to_step`, which repeats the Group Opinion premise, should stay.
-3. **50, the precedent slippery slope:** write a formalization, which must pass Hansen's definition (plan §2); or leave it unformalized.
+3. **50, the precedent slippery slope: decided on 2026-10-22.** `precedent_slippery_slope` is written for WAG. It passes Hansen's definition: sentential forms with variables, predicate constants, a conclusion.
+
+   | Book | Formula |
+   |---|---|
+   | Claim to Exceptional Status Premise | `claimed_exception(C0,R)` |
+   | Related Cases Premise, the first pair (CQ1) | `sets_precedent(C0,C1,R)` |
+   | Related Cases Premise, the chain (CQ2) | `precedent_chain(C1,Cn,R)` |
+   | Intolerable Outcome Premise (CQ3) | `intolerable_exception(Cn,R)` |
+   | Conclusion | `¬case_exception(C0)` |
+
+   - **The conclusion** negates the premise of the argument for an exceptional case (`exceptional`). The book calls the slope a counterargument to argument from precedent (p. 117), and this lets it meet that argument.
+   - **One reading is ours.** The book prints C0 in the Intolerable Outcome Premise and CQ3 (the ch. 3 scan is unclear). The formula takes the end of the series, Cn, as a slippery slope needs. `links.json` therefore links 50 partly, and a verifier with the book should confirm the reading.
 4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).
 5. **N12, analogy:** separate source and target propositions.
 6. **The upstream defects** (duplicate ids; the master's typo and wrong variable list, already corrected in the cleaned file): record only. `walton.yml` is already right.
@@ -186,7 +197,7 @@ Two ways to cover them:
 
 ## 4. Order
 
-1. **The owner decides C3 to C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 and C2 were decided on 2026-10-22). C6 and C7 can wait.
+1. **The owner decides C4, C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 to C3 were decided on 2026-10-22). C6 and C7 can wait.
 2. **A person verifies tier 1** (A).
 3. **Generate the game's data** for the 9 game schemes from the verified tier 1 (E), and run the game's tests.
 4. **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D).

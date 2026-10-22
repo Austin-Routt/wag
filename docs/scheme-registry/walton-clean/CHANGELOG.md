@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2129 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 3 added by them (`full_slippery_slope`, `negative_consequences_reasoning`, `whole_into_parts`); 114 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2148 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 4 added by them (`full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 115 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 138 / 147 | 17 / 17 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 114 | 0 of 114 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 115 | 0 of 115 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 67 of 111 | 110 of 114 | 114 of 114 |
+| schemes passing checks 2–4 | – | 67 of 111 | 111 of 115 | 115 of 115 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr; the audit's 137 is the same list without it.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 114 schemes, and check 2 passes for 110. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 114 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 115 schemes, and check 2 passes for 111. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 115 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -35,10 +35,10 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
 | repair — owner decision | 7 | 7 |
-| addition — owner decision | 60 | 14 |
-| **total** | **263** | **187** distinct lines (a line can carry edits of several categories) |
+| addition — owner decision | 79 | 18 |
+| **total** | **282** | **190** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 173 lines removed, 233 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 67 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 173 lines removed, 252 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 86 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -51,6 +51,7 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | `negative_consequences_reasoning` (new) | added from `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences`; variables `[A,B]`; conclusion `¬should_be_performed(A)` in place of the block's `not_bring_about(A)`; exception `other_consequences(A)` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the category file's repeat the book's premises. |
 | `whole_into_parts` (new) | added from `A_reasoning/2_inductive-reasoning.yml`, under its upstream id | 2026-10-22 | It formalizes compendium 10.2, Division of the Whole into its Parts, which `walton.yml` lacked. Its formulas follow the book as printed (three parts stand for the book's n; only the positive reading). Its four templates are in our own words, because the category file's repeat the book. |
 | `full_slippery_slope` (new) | added from `A_reasoning/5_casual-reasoning.yml`, under its upstream id; source filled in; `accept_all_steps` and `led_to_step` given the arguments `(C0,C2)` | 2026-10-22 | It formalizes compendium 53, the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is one statement for every instance ("0-ary atoms", below). Its five templates are in our own words. |
+| `precedent_slippery_slope` (new) | written for WAG: premises `claimed_exception(C0,R)`, `sets_precedent(C0,C1,R)`, `precedent_chain(C1,Cn,R)`, `intolerable_exception(Cn,R)`; conclusion `¬case_exception(C0)` | 2026-10-22 | It formalizes compendium 50, the Precedent Slippery Slope Argument, which no upstream file formalizes. One formula per printed premise, with the Related Cases Premise split into the first pair and the chain so that the book's CQ1 and CQ2 each have one. The intolerable case is taken to be the end of the series, Cn, as a slippery slope needs; the book prints C0 there and in CQ3 (the compendium, p. 340; the ch. 3 scan, p. 116, is unclear but looks the same), which can also be read as "treating C0 as an exception would be intolerable because of where it leads", a reason the chain premises then carry. A verifier with the book should confirm the reading. The conclusion negates `case_exception`, the premise of the argument for an exceptional case (`exceptional`), so that the slope meets the argument it counters (p. 117). Its templates are our own. |
 | `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
 | `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
@@ -202,6 +203,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **88** · template · cited_bad_consequences is used with 1 argument (X); the second %s printed '%!s(MISSING)' (used by: threat)
   - before: `  cited_bad_consequences/1: "If you bring about %s, some cited bad consequences, %s, will follow."`
   - after: `  cited_bad_consequences/1: "If you bring about %s, some cited bad consequences will follow."`
+- **88** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
+  - before: _(none)_
+  - after: `  claimed_exception/2: "%s is put forward as an exception to the rule %s."`
 - **91** · typo · misspelled predicate (used by: circumstantial_ad_hominem)
   - before: `  commited_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
   - after: `  committed_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
@@ -262,6 +266,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **195** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  initial_presumption/1: "At the outset, %s is presumed acceptable."`
+- **199** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
+  - before: _(none)_
+  - after: `  intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."`
 - **200** · template · malformed verb '% i' printed '%!i(string=...)s' (used by: group_2, rule_physical_world_1)
   - before: `  is/2: "% is %s."`
   - after: `  is/2: "%s is %s."`
@@ -355,6 +362,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **281** · template · the template has 2 %s and the scheme uses position_to_know_group(G,A) (used by: position_to_know_ad_populum)
   - before: `  position_to_know_group/1: "Group %s is in a special position to know that %s is true."`
   - after: `  position_to_know_group/2: "Group %s is in a special position to know that %s is true."`
+- **290** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
+  - before: _(none)_
+  - after: `  precedent_chain/3: "From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s."`
 - **297** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses proper_sequence with 0 argument(s) and the template has 0 %s (used by: gradualism)
   - before: `  proper_sequence: "Sequence of proposition is dealt with in the appropriate order."`
   - after: `  proper_sequence/0: "Sequence of proposition is dealt with in the appropriate order."`
@@ -397,6 +407,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **329** · template · the template has 3 %s and the scheme uses same_meaning(L,W,D) (used by: rule_mental_world)
   - before: `  same_meaning/2: "Speakers of %s believe that %s means the same as %s."`
   - after: `  same_meaning/3: "Speakers of %s believe that %s means the same as %s."`
+- **332** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
+  - before: _(none)_
+  - after: `  sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s."`
 - **337** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses should_not with 1 argument(s) and the template has 1 %s (used by: danger)
   - before: `  should_not: "Therefore you should not bring about %s."`
   - after: `  should_not/1: "Therefore you should not bring about %s."`
@@ -941,6 +954,54 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: _(none)_
   - after: _(none)_
 
+### precedent_slippery_slope
+
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `  - id: precedent_slippery_slope`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `    meta:`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      title: Precedent Slippery Slope Argument`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      source: >`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `             1995, p. 159. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 93, 95.`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `    variables: [C0,C1,Cn,R]`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      - ¬case_exception(C0)`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `    premises:`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      - claimed_exception(C0,R)`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      - sets_precedent(C0,C1,R)`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      - precedent_chain(C1,Cn,R)`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: `      - intolerable_exception(Cn,R)`
+- **1573** [insert after] · addition — owner decision · compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)
+  - before: _(none)_
+  - after: _(none)_
+
 ### rule_physical_world_1
 
 - **1576** · typo · title 'Worl'
@@ -1081,7 +1142,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 114 schemes (`proposals-check.txt`).
+With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 115 schemes (`proposals-check.txt`).
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 

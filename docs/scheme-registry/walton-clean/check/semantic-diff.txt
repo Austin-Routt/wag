@@ -13,8 +13,8 @@ negative_consequences                    exceptions   [] -> ['other_consequences
 positive_consequences                    exceptions   [] -> ['other_consequences(A)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
 14 scheme-level difference(s) after renames
-added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, negative_consequences_reasoning
-language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same key with a changed template: 27
+added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, negative_consequences_reasoning
+language: 392 -> 409 keys; keys only in clean: 51, only in original: 33, same key with a changed template: 27
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
@@ -25,6 +25,7 @@ language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same ke
   +  being_credible/0 'Therefore, you ought to take what I say as being more credible or acceptable.'
   +  cannot_present_sametime/3 '%s cannot present %s and %s at the same time and in the same respect.'
   +  character_relevant/0 'In the type of dialogue in which the argument was used issue of character relevant.'
+  +  claimed_exception/2 '%s is put forward as an exception to the rule %s.'
   +  conflict_goals/3 '%s has some other goals %s that conflict with %s.'
   +  correctly_report/0 'Official rulebooks correctly report the rules in force.'
   +  data_set/2 '%s is a set of data or supposed facts in case %s.'
@@ -32,6 +33,7 @@ language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same ke
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
   +  goal_prestige/0 'Prestige is an important goal for you.'
   +  initial_presumption/1 'At the outset, %s is presumed acceptable.'
+  +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
   +  means_end/1 'Means %s should be regarded as an end.'
@@ -46,6 +48,7 @@ language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same ke
   +  part_is/2 'The part %s has %s.'
   +  part_whole/5 '%s can have %s only if at least one of %s, %s and %s has it.'
   +  position_to_know_group/2 'Group %s is in a special position to know that %s is true.'
+  +  precedent_chain/3 'From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
   +  prudential/1 'Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s.'
   +  reapplication_sequence/2 'A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s.'
@@ -53,6 +56,7 @@ language: 392 -> 405 keys; keys only in clean: 47, only in original: 33, same ke
   +  reference_class/0 'Reference class of other agents who also might have brought about this event and also have same character is sufficient.'
   +  rule_changed/0 'The rule has changed since the publication of the rulebook.'
   +  same_meaning/3 'Speakers of %s believe that %s means the same as %s.'
+  +  sets_precedent/3 'Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s.'
   +  should_not/1 'Therefore you should not bring about %s.'
   +  speakers_correct/0 'Speakers of a language are generally correct about word definitions in that language.'
   +  strong_advocate/3 '%s advocate %s in a strong way indicating her personal commitment to %s.'

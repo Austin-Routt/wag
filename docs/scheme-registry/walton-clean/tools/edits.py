@@ -454,4 +454,43 @@ ADDITIONS += [
     "      - led_to_step(C0,C2)",
     "",
 ]]
+# 2026-10-22: compendium 50, the Precedent Slippery Slope Argument, had no formalization anywhere (upstream included).
+# Written for WAG by the owner's decision, from the compendium (p. 340) and the book's ch. 3 version (pp. 116-117):
+# - one formula per printed premise, the Related Cases Premise split in two, so that CQ1 (would C0 set a precedent?)
+#   and CQ2 (why would each intervening precedent occur?) each have one: the first pair (C0 binds C1) and the chain
+#   from C1 to the end case Cn;
+# - the intolerable case is taken to be the end of the series, Cn, as a slippery slope needs: the book prints C0 there
+#   and in CQ3 (the compendium; the ch. 3 scan is unclear but looks the same), which can also be read as "treating C0
+#   as an exception would be intolerable because of where it leads", a reason the chain premises then carry;
+# - the conclusion is the negation of case_exception, the premise of the argument for an exceptional case
+#   (exceptional), so that the slope meets the argument it counters (p. 117).
+_PS = ("compendium 50, the Precedent Slippery Slope Argument, formalized nowhere upstream; written for WAG by the "
+       "owner's decision of 2026-10-22, one formula per printed premise (the Related Cases Premise split into the first "
+       "pair and the chain), the end case Cn as the intolerable one (the book prints C0; see the comment above), and the "
+       "conclusion ¬case_exception(C0), which meets the argument for an exceptional case it counters (p. 117)")
+_PST = "template for precedent_slippery_slope (50), in our own words"
+ADDITIONS += [
+    insert(88, '  claimed_exception/2: "%s is put forward as an exception to the rule %s."', ADD, _PST),
+    insert(199, '  intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."', ADD, _PST),
+    insert(290, '  precedent_chain/3: "From %s to %s runs a chain of cases, each so like the next that an exception for one '
+                'commits us to an exception for the next under the rule %s."', ADD, _PST),
+    insert(332, '  sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like '
+                'cases must be treated alike under the rule %s."', ADD, _PST),
+] + [insert(1573, text, ADD, _PS, scheme="precedent_slippery_slope") for text in [
+    "  - id: precedent_slippery_slope",
+    "    meta:",
+    "      title: Precedent Slippery Slope Argument",
+    "      source: >",
+    "             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,",
+    "             1995, p. 159. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 93, 95.",
+    "    variables: [C0,C1,Cn,R]",
+    "    conclusions:",
+    "      - ¬case_exception(C0)",
+    "    premises:",
+    "      - claimed_exception(C0,R)",
+    "      - sets_precedent(C0,C1,R)",
+    "      - precedent_chain(C1,Cn,R)",
+    "      - intolerable_exception(Cn,R)",
+    "",
+]]
 OPS += OWNER_REPAIRS + ADDITIONS

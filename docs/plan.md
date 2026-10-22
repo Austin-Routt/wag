@@ -53,8 +53,8 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | Source | What it has | State |
 |---|---|---|
 | The book's compendium (ch. 9) | 109 schemes (128 numbered entries, 19 of them headings only), 153 critical questions | Transcribed outside the repository |
-| `docs/scheme-registry/walton-clean/walton.yml` | 114 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files on 2026-10-22); 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
-| `docs/scheme-registry/links.json` | 96 compendium entries linked exactly to `walton.yml` and 12 partly (113 links: 97 exact, 16 partial; after the owner's decisions of 2026-10-22), 1 without a link (50); 200 CQ links, 146 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
+| `docs/scheme-registry/walton-clean/walton.yml` | 115 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files, and 50's, written for WAG, on 2026-10-22); 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
+| `docs/scheme-registry/links.json` | 96 compendium entries linked exactly to `walton.yml` and 13 partly (114 links: 97 exact, 17 partial; after the owner's decisions of 2026-10-22), none without a link; 203 CQ links, 149 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
 | `wag/data/nascq/*.json` | 9 schemes, 24 CQs, 35 ask edges, 4 backup edges | The game's data, tested |
 | `wag/data/schemes/families.json` | 21 families | Drafted |
 
@@ -216,7 +216,8 @@ Each step has examples from the catalogue. Where two answers are equally right, 
    - `negative_value` gets its own conclusion and a corrected template;
    - the consequence schemes get the exception `other_consequences(A)`;
    - the slippery slope's source year is 1992;
-   - compendium 10.2 and 53, formalized only in the upstream category files, are brought in as `whole_into_parts` and `full_slippery_slope` (the latter with its source filled in and arguments for its two 0-ary atoms).
+   - compendium 10.2 and 53, formalized only in the upstream category files, are brought in as `whole_into_parts` and `full_slippery_slope` (the latter with its source filled in and arguments for its two 0-ary atoms);
+   - compendium 50, formalized nowhere, gets a scheme written for WAG, `precedent_slippery_slope`.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
 6. **Dialogue types (Track D, §8).** Decided by the owner on 2026-10-15:
