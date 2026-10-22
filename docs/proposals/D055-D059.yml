@@ -3,37 +3,55 @@
 # form's conclusion. `wag-cli --proposal` checks it and writes its view,
 # D055-D059.md. How proposals work: process.md §5.
 #
-# Version 2, 2026-10-22: the independent review of version 1 approved option
-# C and D059 with changes; this version makes them. Version 1 is commit
-# afa80d2. The owner chose option C for D055 (sided exceptions) on
-# 2026-10-22; walton.yml changes only once the owner approves.
+# Version 3, 2026-10-22: the second independent review approved D055 with
+# changes and D059 as proposed; this version makes the changes. Version 1 is
+# commit afa80d2, version 2 commit b992b4f. The owner chose option C for
+# D055 (sided exceptions) on 2026-10-22; walton.yml changes only once the
+# owner approves.
 
 decisions: [D055, D059]
 title: Sided opposite-consequences exceptions for the consequence family
 summary: |-
-  **What version 2 changes.** The independent review of version 1 approved
-  option C and D059 with changes. It found one error in the proposal and two
-  outside it, which are now registered. Version 2 makes these changes:
-  - **The count:** 12 gold instances share one exception statement, not 16.
-  - **The templates** read as the action's: "The action A has bad (good)
-    consequences that outweigh G". Version 1 began with "Doing", which read
-    "Doing governments putting a tax on meat", and its "also" made 33.4's C
-    look like a consequence of acting.
-  - **33.4's likelihood assumption** now names the consequence:
-    `strongly_occur(X,C)`.
-  - **The titles and sources** are kept as walton.yml has them. Version 1 had
-    renamed 33.3 and 33.4 and dropped a reference without saying so.
-  - **Each third question** states both routes.
-  - **The limits** of the sided exceptions are stated, and the claim that
-    equal arguments tie is qualified.
-  - **The effects list** is completed.
-  - **Two decisions are informed,** D027 and D057, and **D060 is extended**.
-  - **Four decisions are new.** D061 (the presets) is applied with this
-    proposal if the owner agrees. D062 and D063 are found defects, and D064
-    covers the review's twelve candidates.
-  - **Example 14** is recoded as the disjunctive threat. **Examples 15–17**
-    are new: a second weighing claim in the gold, the omission case and a
-    balance claim.
+  **What version 3 changes.** The second independent review approved D055
+  with changes and D059 as proposed. It found two errors, both on the
+  annotation side, and ten warnings. Version 3 makes these changes:
+  - **Example 6 now follows the rule.** Version 2 bound A to making
+    abortion services inaccessible, the opposite of the thesis's action. It
+    is now positive consequences of access, and 5637.12239's weighing
+    claim argues that argument's exception.
+  - **The omission rule is narrowed.** Only a harm of not acting to the
+    agent or the addressee is the prudential form (33.4), whose premises
+    speak to "you". A harm of not acting to others is coded as positive
+    consequences of the action, with G the harm avoided. The pattern is a
+    candidate (C015).
+  - **The annotation rule is scoped and sharpened:**
+    - it applies to replies to the four consequence schemes;
+    - a value that the action promotes or harms counts as a consequence;
+    - the cue words are hints, and the test is that the claim names and
+      ranks two consequences;
+    - it says which instance is primary.
+  - **The gold effects can be recorded:**
+    - 13292.127's weighing becomes its primary instance;
+    - the eight challenges labelled with 33's third question are split.
+  - **Three more limits** are stated.
+  - **Examples 1 and 8:** example 8 binds the slippery slope to its first
+    step, and example 1's consequence reads "a fall in unhealthy meat
+    consumption".
+  - **The register:**
+    - D061, D062 and D063 are corrected; D063 now covers the practical
+      reasoning family's own conclusions;
+    - D070 (practical reasoning's side effects) and D071 (cause to
+      effect's interference) are new;
+    - the candidates are in the new registry, `docs/candidates.yml`, with
+      the second review's seven.
+
+  **Version 2,** after the first review:
+  - corrected the count of gold instances;
+  - reworded the templates;
+  - gave 33.4's likelihood assumption its consequence;
+  - kept walton.yml's titles and sources;
+  - stated both routes in each third question;
+  - added the annotation rule, the limits and examples 15–17.
 
   **The problem (D055).** The book's argument from consequences (33) has four
   forms:
@@ -85,52 +103,78 @@ summary: |-
     *outweigh* the one cited.
 
   The exception is needed because WAG sets weights by scheme and context, not
-  by content. Without it, nothing lets a player argue that one consequence
-  matters more. Under the usual proof standard, two opposite consequence
-  arguments that weigh alike tie and both go out. They weigh alike in the
-  everyday and equal presets. The other three presets do not name negative
-  consequences, so it keeps its default weight there while positive
-  consequences does not. That is an omission: D061, fixed with this proposal
-  if the owner agrees. Kialo makes the claim outright:
-  - 13292.127 and 5637.12239 (examples 1 and 6);
+  by content (a moderator may weigh a single argument, and imported Kialo
+  arguments keep their vote-based weights). Without it, nothing in ordinary
+  play or annotation lets a player argue that one consequence matters more.
+  Under the usual proof standard, two opposite consequence arguments that
+  weigh alike tie and both go out. They weigh alike in the everyday and equal
+  presets. The other three presets do not name negative consequences, so it
+  keeps its default weight there while positive consequences does not. That
+  is an omission: D061, fixed with this proposal if the owner agrees. Kialo
+  makes the claim outright:
+  - 13292.127 (example 1);
+  - 5637.12239 (example 6);
   - 13292.43 (example 15).
 
   For annotators (guidelines §3), the rule is:
-  - **A claim that cites a further consequence without comparing it** with one
-    already argued is a consequence argument of its sign: a rebuttal. This
-    holds however grave it calls the consequence.
-  - **A claim that compares argues the exception** of the argument it weighs
-    against. It compares when it says, in words or by a plain comparative,
-    that a consequence matters more or less than the one the other side
-    cites. Cues: outweigh, worse, more serious, more important, more
-    pressing, not worth, the price of, at the cost of, net benefit, net harm.
+  - **Scope.** The rule is for replies to the four consequence schemes.
+    Against practical reasoning, a further bad consequence answers its
+    side-effects question at `side_effects(A,S1)`, as the guidelines say
+    today. Whether that exception should take the same two routes is D070.
+  - **A claim that cites a further consequence without ranking it** against
+    one already argued is a consequence argument of its sign: a rebuttal.
+    This holds however grave it calls the consequence.
+  - **A claim that ranks argues the exception** of the argument it weighs
+    against. It names a consequence of the action and one that the other
+    side cites, and says that one matters more than the other.
+    - Words such as outweigh, worse, more serious, more pressing, not worth,
+      the price of and net benefit are hints, not the test.
+    - "A life not worth living" ranks nothing, and "both emotional and
+      physical harms" ranks without any of those words.
+  - **A value or right named as something the action promotes or harms is a
+    consequence** ("better animal welfare", "pupils losing their privacy"),
+    and a ranking with it is the exception, as in example 15.
+    - It is a right or value set against consequences only when it is said
+      to rule the action in or out whatever its consequences ("no one may be
+      watched all day").
+    - That is not this exception: code it with the value schemes or Other
+      (candidate C007).
   - **Code it with Other** unless a source-based scheme fits. Bind A and G as
     in the argument it weighs against. That argument is the Kialo parent if
     the parent cites the outweighed consequence; otherwise the claim is
     re-parented to it.
   - **A comparison with a class or a whole side** ("than any harm of high
-    meat consumption") gives one instance for each argument of that class on
-    the board.
+    meat consumption") gives one instance for each consequence argument of
+    that class on the board. Arguments of the class that are not consequence
+    schemes are left out; practical reasoning is answered at its own
+    side-effects exception.
   - **A concession plus a weighing** ("true, it cuts emissions, but the jobs
     matter more") gives two instances: the rebuttal and the weighing.
+    - The gold records one target per claim, so one instance is primary:
+      the weighing, when the claim's words are the comparison (13292.127);
+      otherwise the opposite consequence.
   - **A claim that a cited consequence is small, rare or minor,** naming no
     rival consequence, attacks good(G) or bad(G), or the likelihood (33/CQ1).
     It does not attack the exception.
-  - **A right or value set against a consequence** is not this exception.
-    Code it with the value schemes or Other; it is a candidate (D064).
   - **A reply that denies a weighing claim** argues the claim's negation.
   - **A compound consequence** ("cleaner air and fewer accidents") is split
     into one argument per consequence when a reply weighs only one of them.
-  - **Bind A to the thesis's action, never to its omission.** A reason for not
-    doing A is a negative consequence of A. A harm of not doing A is the
-    prudential form (33.4) for A (example 16; D027).
+  - **Code one consideration once:** as a gain (33.1) or as an averted harm
+    (33.4), not both.
+  - **Bind A to the thesis's action, never to its omission or its
+    opposite.**
+    - A reason against doing A is a negative consequence of A.
+    - A harm of not doing A to the agent or the addressee is the prudential
+      form (33.4) for A (example 16; D027).
+    - A harm of not doing A to others or to society is positive consequences
+      of A, with G the harm avoided (example 6; candidate C015).
 
   **The limits of the sided exceptions** (all tested in WAG's engine by the
-  review):
+  reviews):
   - **A balance claim that names no single consequence** ("all told, the
     costs outweigh the benefits") is one exception per argument it answers.
     One proof leaves the other arguments on that side standing (example 17).
-    A side-level balance exception is a candidate (D064).
+    A side-level balance exception is a candidate (C004).
   - **Contrary weighing claims do not meet.** "Starvation outweighs the health
     gain" (against the positive argument) and "the health gain outweighs
     starvation" (against the negative one) are different statements. Both
@@ -139,7 +183,25 @@ summary: |-
     the weighing claim, as the guideline says.
   - **No scheme concludes the exceptions,** so a weighing claim is argued with
     Other or a source scheme. It is not tied to the opposite consequence it
-    relies on. A weighing scheme would tie them; it is a candidate (D064).
+    relies on. A weighing scheme would tie them; it is a candidate (C003).
+  - **33.2 and 33.3 share an exception when bound alike.** 33.3's
+    `good_outweighs(A,B)` is the same statement as 33.2's `good_outweighs(A,G)`
+    when the action and the consequence are the same phrases, so one
+    weighing claim defeats both.
+    - That is right when they are one consideration, but the template does
+      not say that 33.3 weighs for the agent's goals.
+    - In policy debates prefer 33.2, as the catalogue says.
+  - **One consideration, two framings.** A gain cited with 33.1 ("the attic
+    staying dry") and the same harm averted, cited with 33.4 ("the attic
+    flooding"), conclude the same statement but have different exceptions.
+    A weighing claim therefore reaches only one of them; the guideline says
+    to code a consideration once.
+  - **An exception holds whatever the weights.**
+    - A weighing claim argued with weight 0.1 removes a consequence argument
+      of weight 0.9 if no one answers it.
+    - A denial of equal weight cancels it, and the argument stands.
+    - So in play a weighing claim decides only when it is unanswered or
+      argued from a stronger source.
 
   **Why not the alternatives.**
   - **Keeping `other_consequences(A)`** (A) keeps the defect.
@@ -148,13 +210,14 @@ summary: |-
     same one and value it oppositely, they still share the exception. For
     example, legal cannabis means more adults use it, which one side counts
     as good and the other as bad (examples 3 and 7). This was shown in WAG's
-    engine by the second review of proposal D001-D028-D029 and again by this
-    proposal's review.
+    engine by the second review of proposal D001-D028-D029, and again by
+    this proposal's reviews.
   - **Dropping the exception** (D), so that the third question is answered
     only by a rebuttal, loses the weighing claim.
   - **Option C plus a weighing scheme** would be better for play and
     annotation. It is not needed to make C, and it is recorded as a
-    candidate.
+    candidate (C003). An exception can use only its scheme's variables, so
+    within Carneades the rival consequence cannot be named in it.
 
   **D059, the prudential form's conclusion.** 33.4 concludes `prudential(X)`,
   "you ought prudentially to do X", which no other scheme concludes or uses.
@@ -171,11 +234,13 @@ summary: |-
     questions, as "the right thing to do" is in the practical analogies.
   - **The match:** 33.4's link to the book becomes partial, as 8.1 and 8.2
     did under D029.
+  - **What it still lacks, not caused by D059:** 33.4 never says that doing
+    X would avert C, which fear (36) states. That question is a candidate
+    (C016).
 
-  The same reasoning reaches the family's other practical schemes, whose
-  conclusions meet nothing either: fear, danger, threat, the alternatives,
-  waste, help, distress and two-person practical reasoning. They are
-  registered together as D063, not changed here.
+  The same reasoning reaches the family's other practical schemes, and the
+  practical reasoning family's own, whose conclusions meet nothing either.
+  They are registered together as D063, not changed here.
 
   **What else this settles, informs or leaves.**
   - **D053:** the positive and negative consequence schemes (33.1, 33.2)
@@ -192,10 +257,14 @@ summary: |-
     - the source schemes' exceptions (`dishonest(W)`, `biased(W)`,
       `untrustworthy(W)`): one source's arguments on both sides share them,
       which is also neutral.
-  - **The scan for same-side defeaters that omit a variable of their scheme:**
-    in the consequence family, only `strongly_occur(X)`, fixed here. Most
-    elsewhere omit rightly (`possible(A)` is about the action alone). The
-    list outside the family is not reviewed here.
+  - **The scan for same-side defeaters that omit a variable of their
+    scheme:**
+    - in the consequence family, only `strongly_occur(X)`, fixed here;
+    - outside it, cause to effect's `interference(E1)` names only the cause,
+      so two causal arguments from one cause fall together (the second
+      review's engine test). It is registered as D071, not changed here;
+    - most other omissions are right (`possible(A)` is about the action
+      alone), and the list is not reviewed further here.
   - **Informed, not settled:**
     - D033 and sunk costs' exception `future_losses_outweigh(A)`. D033 asks
       whether argument from waste takes a "future losses outweigh" defeater,
@@ -205,22 +274,32 @@ summary: |-
     - D009: the game's question texts. The game keeps its rebuttal questions
       and gains the exception questions at workstream E. The backup edge from
       negative consequences to `CQ:side_effect` is D009's.
-    - D027: the omission case. It now has a home in 33.4 (example 16).
+    - D027: the omission case. Since 33.4 now meets the practical claim, the
+      first-person omission case has a home there. A harm of not acting to
+      others does not (example 6).
     - D057: who may answer the new exception-locus questions; analogy's
       reach there is D057's.
+    - D070: whether practical reasoning's `side_effects(A,S1)`, which defeats
+      the argument whatever the weights, should take the same two routes.
   - **Not touched:** D008 (a modal brings_about) and D038 (causal chains
     backing brings_about).
 
   **Found, registered, not changed here.**
-  - **D060** (threat names the wrong variables), extended by the review.
-    `cited_bad_consequences(X)` also lost its consequence, and
+  - **D060** (threat names the wrong variables), extended by the first
+    review. `cited_bad_consequences(X)` also lost its consequence, and
     `position_to_know/1` shares its name with the source scheme's predicate.
   - **D061:** three presets leave negative consequences, and goal-based
-    practical reasoning, at their default weights. It is applied with this
-    proposal if the owner agrees.
-  - **D062:** danger concludes about the danger, not the action.
-  - **D063:** the family's other practical conclusions.
-  - **D064:** the review's twelve candidates (docs/candidates.md §3).
+    practical reasoning, at their default weights. It also moves negative
+    consequences against every other scheme in those presets, as they
+    intend. It is applied with this proposal if the owner agrees.
+  - **D062:** danger concludes about the danger, not the action; its
+    `occur/2` template also says "the respondent bring about".
+  - **D063:** the practical conclusions that meet nothing, in the
+    consequence family and in the practical reasoning family.
+  - **D070** and **D071**, above.
+  - **The candidates** of both reviews are in the registry
+    (`docs/candidates.yml`), grouped by family and pattern and decided by
+    group (D056, D063–D069).
 
   **What is ours, not the book's:**
   - the two exceptions and their templates (the book asks whether opposite
@@ -305,13 +384,13 @@ questions:
 effects:
   - "walton.yml, through walton-clean/tools/edits.py as owner decisions, with CHANGELOG rows: the exception other_consequences(A) of 33.1-33.3 (added by the owner's decision of 2026-10-22) and other_consequences(X) of 33.4 become bad_outweighs(A,G), good_outweighs(A,G), good_outweighs(A,B) and bad_outweighs(X,C); 33.4's assumption strongly_occur(X) becomes strongly_occur(X,C), which closes the CHANGELOG's semantic concern on it; 33.4's conclusion prudential(X) becomes should_be_performed(X). Titles and sources are unchanged. Templates added: bad_outweighs/2, good_outweighs/2, strongly_occur/2. Unused afterwards, kept and listed as orphan templates as the cleaning does: other_consequences/1, prudential/1, strongly_occur/1. check/run.sh regenerates the derived files; the gate and the registry differ only in the four schemes and the language keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
   - "links.json: 33's CQ3 maps to the new exception in each of 33.1-33.4. For 33.4, whose catalogue entry is generated (tier 2) and takes its question targets from links.json: CQ1 maps to strongly_occur(X,C) and CQ2 to bad_consequence(X,C) (no target today); the conclusion map becomes should_be_performed(X); the match becomes partial, with a note that the conclusion is restated in the game's vocabulary, as 8.1 and 8.2 under D029."
-  - "families.json: F15's note on 33.4 (a subtype of 33.2) adds that it is 33.2 applied to not doing X (book p. 104) and, since D059, concludes should_be_performed(X). The consequence pair is declared once D053's check is built."
-  - "Catalogue (--catalogue-gen, then the drafted entries): the four entries regenerate. The drafted 33/CQ3 items of 33.1-33.3 are retargeted, with notes on the two routes and the limits. The drafted game questions are rewritten as rebuttals, leaving 'outweighs' to 33/CQ3: game/CQ:opposite_consequences in 33.2, whose paraphrase says 'outweighs G', and game/CQ:side_effect in 33.1, whose answer says so. 33.4 gains discrepancies recording D055, D059 and what is ours. The game-differs decisions are updated (the game keeps its rebuttal questions and gains the exception questions at workstream E). The examples here move into the entries. Also updated where they describe other_consequences(A) as current: catalogue-alignment.md (the paragraph on the owner's changes) and scheme-registry/README.md."
-  - "The batch-2 gold, guidelines and lexicon, in both copies: the 12 instances whose exception is other_consequences(tax_meat), and the 4 whose exception names another action (13292.145, .147, .194, .235), get bad_outweighs or good_outweighs with their own A and G. 13292.127's secondary weighing instance, coded Other, concludes bad_outweighs(tax_meat, G of 13292.115), the exception of the argument it weighs against, and is re-parented to it (its Kialo parent is 13292.7). 13292.43 ('other, more pressing issues' than revenue), coded today as an argument from positive value answering the question at 13292.9's conclusion, is recoded as Other concluding good_outweighs(tax_meat,tax_revenue_reduced), an answer to 33/CQ3 at 13292.9's exception. The table of questions and formulas (guidelines §5 item 3) is regenerated; no challenge names other_consequences. Guidelines §3 gains the rule in the summary. validate.py must pass; to_wag.py's replay is regenerated."
-  - "Tests and views: TestGoldChecks and annotate.TestRun fail until the gold is recoded, TestCommittedCatalogueIsCurrent until the catalogue regenerates, and TestCommittedProposals until both proposal views are regenerated. The applied D001-D028-D029.md changes in one line: its example 24 renders negative consequences' exception from walton.yml."
+  - "families.json: F15's note on 33.4 becomes: a subtype of 33.2 (book p. 104); in our reading, 33.2 applied to not doing X; since D059 it concludes should_be_performed(X). The consequence pair is declared once D053's check is built."
+  - "Catalogue (--catalogue-gen, then the drafted entries): the four entries regenerate. The drafted 33/CQ3 items of 33.1-33.3 are retargeted, with notes on the two routes and the limits. The drafted game questions are rewritten as rebuttals, leaving 'outweighs' to 33/CQ3: game/CQ:opposite_consequences in 33.2, whose paraphrase says 'outweighs G', and game/CQ:side_effect in 33.1, whose answer says so. 33.4 gains discrepancies recording D055, D059 and what is ours. The game-differs decisions are updated (the game keeps its rebuttal questions and gains the exception questions at workstream E). The examples here move into the entries. Also updated where they describe other_consequences(A) as current: catalogue-alignment.md (the paragraph on the owner's changes), scheme-registry/README.md, and plan.md §7 item 3 ('since replaced by D055')."
+  - "The batch-2 gold, guidelines and lexicon, in both copies. (1) The 12 instances whose exception is other_consequences(tax_meat), and the 4 whose exception names another action (13292.145, .147, .194, .235), get bad_outweighs or good_outweighs with their own A and G. (2) 13292.127: its weighing becomes the primary instance, Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), with the role cq_answer to 33.1 CQ3 at 13292.115's exception (re-parented: its Kialo parent is 13292.7); the starvation consequence becomes a secondary instance; 13292.204 targets brings_about(tax_meat,starvation_from_reduced_meat_access), which the new primary keeps as a premise, and 13292.202 (exempting poor countries), coded today against the conclusion, is retargeted to that premise; 13292.108, practical reasoning, is left out of its class comparison, since practical reasoning has no outweighing exception. (3) 13292.43 ('other, more pressing issues' than revenue), coded today as an argument from positive value answering the question at 13292.9's conclusion, is recoded as Other concluding good_outweighs(tax_meat,tax_revenue_reduced), an answer to 33.2 CQ3 at 13292.9's exception. (4) The eight challenges that pair the book's label 33.1 CQ3 or 33.2 CQ3 with an argument's conclusion (13292.7, .9, .115, .121, .127, .147, .180, .194) are split in two: the book's question at the new exception, and the game's question (wag_cq) at the conclusion, where the game asks it until workstream E. (5) The table of questions and formulas (guidelines §5 item 3) is regenerated. (6) Guidelines §3 gains the rule in the summary, with worked hard cases: 5637.14596 and 13292.149 (comparative words, no ranking), 5637.188 (a ranking without them), 5637.11001 and 5637.13330 (values), 13292.25 (minimising). validate.py must pass; to_wag.py's replay and the README's table of how the annotations went into the game are regenerated."
+  - "Tests and views: TestGoldChecks and annotate.TestRun fail until the gold is recoded, TestCommittedCatalogueIsCurrent until the catalogue regenerates, and TestCommittedProposals until both proposal views are regenerated. The applied D001-D028-D029.md changes in one line: its example 24 renders negative consequences' exception from walton.yml. The candidates registry's sketches that define bad_outweighs/2, good_outweighs/2 or strongly_occur/2 drop those templates, which the check then reports as already in walton.yml, and its near misses render the new exceptions."
   - "The game, at workstream E: AS:consequences and AS:negative_consequences get the exceptions, with an exception-locus question beside the rebuttal question each keeps (CQ:side_effect and CQ:opposite_consequences). No consequence scheme concludes the exceptions, so a player answers with Other or a thesis-independent scheme (expert opinion, position to know); whether analogy may is D057, and the backup edge from negative consequences to CQ:side_effect is D009. Until then the catalogue records that the game's copy differs."
-  - "D061, if the owner agrees: contexts.json gives AS:negative_consequences the weight of AS:consequences, and AS:practical_reasoning_goal that of AS:practical_reasoning, in the policy, scientific and legal presets, with a test that a preset weighing schemes by name names every game scheme."
-  - "Register: D055 and D059 decided; D053 can declare the consequence pair; D009, D023, D027, D033 and D057 note this proposal. Already made with version 2: D060 extended; D061-D064 registered; the review's candidates added to docs/candidates.md (§3)."
+  - "D061, if the owner agrees: contexts.json gives AS:negative_consequences the weight of AS:consequences, and AS:practical_reasoning_goal that of AS:practical_reasoning, in the policy, scientific and legal presets, with a test that a preset weighing schemes by name names every game scheme. It also moves negative consequences against every other scheme in those presets (under policy, value-based practical reasoning no longer beats it)."
+  - "Register: D055 and D059 decided; D053 can declare the consequence pair; D009, D023, D027, D033, D057 and D070 note this proposal, and D027 records that 33.4 covers only the agent's or addressee's harm of not acting. Already made: D060-D064 (version 2), corrected in version 3 (D061, D062, D063); D065-D071; the candidates registry, docs/candidates.yml."
 
 examples:
   # --- positive_consequences (33.1) ---------------------------------------
@@ -322,7 +401,7 @@ examples:
     text: A tax on meat would combat unhealthy meat consumption.
     bindings:
       A: governments putting a tax on meat
-      G: less unhealthy meat consumption
+      G: a fall in unhealthy meat consumption
     attacks:
       - question: 33/CQ1
         text: People who eat a lot of meat buy it whatever it costs; a tax that adds a little to the price changes little for them.
@@ -333,7 +412,8 @@ examples:
       comparison ("a more severe threat than") is the exception's claim; the
       starvation itself, argued as a negative consequence, would be a
       rebuttal. Its Kialo parent is 13292.7, so its weighing instance is
-      re-parented to this argument.
+      re-parented to this argument and becomes its primary instance (the
+      gold records one target per claim).
 
   - scheme: positive_consequences
     title: A congestion charge
@@ -394,18 +474,28 @@ examples:
       argument, a rebuttal; this attack is the further claim that the good
       outweighs this bad, the exception.
 
-  - scheme: negative_consequences
-    title: Abusive relationships and access to abortion
+  # Example 6 is positive consequences since version 3; it stays here so
+  # that the numbers do not change.
+  - scheme: positive_consequences
+    title: Access to abortion and abusive relationships
     kialo: "5637.1866"
     use: argument
     text: People in physically abusive relationships are likely to stay tethered to their abusers when they cannot end a pregnancy.
     bindings:
-      A: making abortion services inaccessible
-      G: people in abusive relationships staying tied to their abusers
+      A: pregnant people having access to abortion services
+      G: people in abusive relationships being able to leave their abusers
     attacks:
       - question: 33/CQ3
-        text: Kialo 5637.12239 replies that healthy relationships also last longer when abortion services are inaccessible, and that the benefit of that may outweigh the harm of bad relationships enduring.
-    note: The Kialo text is condensed. 5637.12239 states the weighing claim outright ("may outweigh"), so it is an argument for good_outweighs, the exception, not only a rebuttal.
+        text: Kialo 5637.12239 replies that healthy relationships also last longer when abortion services are inaccessible, and that the benefit of that may outweigh the harm of bad relationships enduring; that is, access has a bad consequence, healthy relationships ending sooner, that outweighs this good one.
+    note: >-
+      The claim states a harm of not having access, to people other than
+      the addressee, so it is coded as positive consequences of the thesis's
+      action, with G the harm avoided (version 3's rule; the pattern is
+      candidate C015). Version 2 bound A to making abortion services
+      inaccessible, the opposite of the thesis's action, so its conclusion
+      met nothing about the thesis. 5637.12239 states the weighing claim
+      outright ("may outweigh"), so it argues bad_outweighs, this argument's
+      exception, not only a rebuttal. The Kialo text is condensed.
 
   - scheme: negative_consequences
     title: Legal cannabis, against
@@ -425,11 +515,16 @@ examples:
     invented: true
     use: near-miss
     near_miss_of: negative_consequences
-    text: A meat tax is only the first step; it will lead, one rise after another, to meat being banned outright.
+    text: A meat tax is only the first step; once it exists it will be raised again a year later, and again, until meat is banned outright.
     bindings:
       A: governments putting a tax on meat
-      E: meat being banned outright
-    note: The bad outcome is reached through a chain of further steps, not as the action's own consequence; the slippery slope's base case.
+      E: the meat tax being raised again a year later
+    note: >-
+      The base case ties the action to the first step of a chain; inductive
+      steps (each rise causes the next, down to the ban) carry the ban's
+      horrible costs back to that first step. It argues from a chain of
+      further steps, not from the action's own consequence, so it is the
+      slippery slope, not negative consequences.
 
   # --- negative_consequences_reasoning (33.3) ------------------------------
   - scheme: negative_consequences_reasoning
@@ -540,9 +635,11 @@ examples:
         text: Kialo 13292.43 replies that revenue is not why the tax is wanted, and that sustainability and animal welfare are more pressing; that is, the tax's good consequences outweigh the lost revenue.
     note: >-
       The gold codes 13292.43 as an argument from positive value answering
-      the question at the conclusion. It compares ("more pressing"), so under
-      version 2's rule it argues good_outweighs, this argument's exception,
-      with Other; the values it names are its reasons. Recoded in the effects.
+      the question at the conclusion. It ranks two consequences ("more
+      pressing"), so under the rule it argues good_outweighs, this
+      argument's exception, with Other. The values it names, sustainability
+      and animal welfare, are things the tax would promote, so they count as
+      consequences (the rule's value test). Recoded in the effects.
 
   - scheme: negative_consequences_prudential
     title: Renewing a passport
@@ -557,8 +654,9 @@ examples:
       Coded as reasoning from negative consequences with A = letting the
       passport lapse, it would conclude that letting it lapse should not be
       done, a statement that meets nothing about renewing it. A harm of not
-      doing an action is the prudential form for that action (version 2's
-      rule; D027).
+      doing an action, to the agent or the addressee, is the prudential form
+      for that action (the rule; D027). A harm to others would be positive
+      consequences of the action (example 6).
 
   - scheme: positive_consequences
     title: A four-day week

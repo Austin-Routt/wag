@@ -802,6 +802,26 @@ func TestCandidatesFindFaults(t *testing.T) {
 			t.Errorf("want %q among %v", want, msgs)
 		}
 	}
+	// A listing that names the others (also) settles the note; also naming
+	// a candidate that does not list the claim is an error.
+	acked := ok
+	acked.ID = "C002"
+	acked.Sketch, acked.Examples = nil, nil
+	acked.Kind = "link"
+	acked.Sightings = []Sighting{kialo("1.1"), kialo("3.1"), kialo("4.1")}
+	acked.Sightings[0].Also = []string{"C001"}
+	acked.Sightings[1].Also = []string{"C001"}
+	msgs = nil
+	for _, f := range CheckCandidates(base(ok, acked), reg, src) {
+		msgs = append(msgs, f.String())
+	}
+	all = strings.Join(msgs, "\n")
+	if strings.Contains(all, "1.1 is listed under") {
+		t.Errorf("an acknowledged listing is still noted: %v", msgs)
+	}
+	if !strings.Contains(all, "sighting 3.1: also C001, which does not list it") {
+		t.Errorf("want an error for also naming a candidate that does not list the claim, got %v", msgs)
+	}
 	// The stages: an unverified sighting does not count; an exemption does.
 	c := ok
 	c.Sightings = []Sighting{kialo("1.1"), kialo("2.1"), {Source: "kialo", Ref: "2.2", Fit: "clean", Note: "n", Found: "f"}}

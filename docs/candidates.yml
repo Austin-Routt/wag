@@ -18,7 +18,8 @@
 #     paraphrase, never their text); sightings (source: kialo, game or
 #     annotation; ref; place, unless a Kialo ref gives it; fit: clean or
 #     strain; archived: a Kialo claim outside the discussion's active
-#     scope; note, in our words; found; verified, by a second reader who
+#     scope; also: the other candidates the same claim is listed under;
+#     note, in our words; found; verified, by a second reader who
 #     read the text against the note); exempt (why the threshold does not
 #     apply: a gap shown by analysis, not a pattern in data); sketch (the candidate as walton.yml
 #     might have it: schemes, language, questions, checked like a
@@ -37,8 +38,9 @@ note: |-
   from three places: the literature, data (Kialo, the gold, annotation
   runs) and play ("I wanted to say X and could not"). A review, an annotation
   run or a play report records each candidate in this file's shape. A new
-  sighting of an existing candidate is added to that candidate; the check
-  notes a claim listed under two candidates.
+  sighting of an existing candidate is added to that candidate. A claim
+  that shows two patterns is listed under both, each listing naming the
+  other; the check notes a claim listed twice without that.
 
   Each candidate is placed in a family of the scheme families
   (`wag/data/schemes/families.json`) and in a pattern group. A group's table
@@ -97,12 +99,15 @@ groups:
       whether the consequence matters enough (C005), and argue that a
       catastrophic, irreversible harm outweighs a small likelihood (C008).
 
-  - id: changing-the-action
-    name: Changing the action
+  - id: the-action
+    name: The action itself
     families: [F15]
     about: >-
-      Replies that keep the action but change how it is done, or add a
-      measure to it, so that a cited bad consequence no longer follows.
+      Replies to a consequence argument about the action rather than its
+      consequences: the action done differently, so that the harm does not
+      follow (C006); another action that brings the same good at less cost
+      (C017); or the action not possible at all (C018). Practical reasoning
+      has questions for the last two; the consequence schemes have none.
 
   - id: values-against-consequences
     name: Values and rights against consequences
@@ -111,6 +116,17 @@ groups:
       A consequence set against a right, a duty or a value, not against
       another consequence: the action is ruled out, or in, whatever its
       consequences.
+
+  - id: harms-of-not-acting
+    name: Harms of not acting
+    families: [F15]
+    about: >-
+      Arguments from what follows if an action is not done. The book's forms
+      for it speak to the agent (33.3's parenthetical) or warn the addressee
+      (33.4); a harm of not acting to others has no form of its own (C015).
+      The prudential form never says that doing the action would avert the
+      harm (C016), and one consideration can be framed as a gain or as a
+      harm averted (C020).
 
   - id: threat-or-warning
     name: Threat or warning
@@ -190,6 +206,7 @@ candidates:
         verified: session check, 2026-10-22
       - source: kialo
         ref: "2629.7265"
+        also: [C013]
         fit: clean
         archived: true
         note: Good parents let a child suffer a little for a greater good, so how much more would a perfect God; it also argues the greater good (C013).
@@ -597,7 +614,7 @@ candidates:
         bindings:
           A: governments putting a tax on meat
           H: starvation from reduced access to meat
-          G: less unhealthy meat consumption
+          G: a fall in unhealthy meat consumption
         attacks:
           - question: 33/CQ1
             text: The tax would raise the price of meat a little; in the countries that would adopt it, no one starves for lack of meat.
@@ -953,6 +970,7 @@ candidates:
         verified: session check, 2026-10-22
       - source: kialo
         ref: "2629.7265"
+        also: [C001]
         fit: clean
         archived: true
         note: Good parents allow a child limited suffering, such as a jab, for a greater good.
@@ -964,6 +982,12 @@ candidates:
         archived: true
         note: Free will may be impossible without the possibility of evil, and its good may outweigh the evil.
         found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14130"
+        fit: strain
+        note: It is sometimes right to put someone at risk of death for society's benefit, as with prisoners carried in police cars; a harm accepted for a greater good, without saying it is needed for it.
+        found: review of D055-D059 v2
         verified: session check, 2026-10-22
     sketch:
       note: On D055-D059 version 2's good_outweighs.
@@ -1030,7 +1054,7 @@ candidates:
           G: the child being protected from measles
         note: It cites a good consequence but sets it against no harm, so it is positive consequences.
     open:
-      - "A variant of C003 with a necessity premise, or a scheme of its own? The sightings are all in one discussion (2629), on the problem of evil."
+      - "A variant of C003 with a necessity premise, or a scheme of its own? All but one of the sightings are in the discussion on God's existence (2629), on the problem of evil."
 
   # --- magnitude-risk ----------------------------------------------------------
   - id: C005
@@ -1281,7 +1305,7 @@ candidates:
   - id: C006
     name: Mitigation
     kind: exception
-    group: changing-the-action
+    group: the-action
     decision: D066
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
@@ -1303,6 +1327,8 @@ candidates:
     related:
       - candidate: C013
         how: "The converse: C013 says the harm cannot be avoided."
+      - candidate: C017
+        how: C017 replaces the action rather than changing it.
     sources:
       - "The batch-2 gold and guidelines: the action_amendment role."
     sightings:
@@ -1524,7 +1550,7 @@ candidates:
         text: A tax on meat would combat unhealthy meat consumption.
         bindings:
           A: governments putting a tax on meat
-          G: less unhealthy meat consumption
+          G: a fall in unhealthy meat consumption
         attacks:
           - question: C007/Q1
             text: In the spirit of Kialo 13292.29, what one eats is a personal choice, and the state has no business steering it.
@@ -1786,3 +1812,712 @@ candidates:
     open:
       - "Its conclusion is a prediction; how does it meet the practical claims (it should not) and the factual claims about the future (cause to effect's will_occur)?"
       - "Is it the practical inference (22.1) used for prediction, a domain version rather than a new scheme?"
+
+  # --- found by the second review of D055-D059 ---------------------------------
+  - id: C015
+    name: Harm of not acting to others
+    kind: scheme
+    group: harms-of-not-acting
+    decision: D069
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: medium
+    what: >-
+      An action should be done because, if it is not, a bad outcome befalls
+      others or society. The book's forms for not acting speak to the agent
+      (33.3's parenthetical) or warn an addressee (33.4, very bad "for
+      you"). Proposal D055-D059 codes this pattern as positive consequences
+      of the action, with the harm avoided as G; a scheme of its own would
+      cite the harm as what follows from not acting.
+    compares: the harm that follows, for others, if the action is not done
+    concludes: the action should be done
+    closest:
+      - item: positive consequences (33.1), with G the harm avoided
+        why: >-
+          It fits, but restates the harm as a good ("the streets staying
+          dry"), and its likelihood question then asks about the action's
+          effect, not about what happens without it.
+      - item: the prudential form (33.4)
+        why: Its premises speak to an addressee who was considering not acting and for whom the harm is very bad.
+      - item: reasoning from negative consequences (33.3), for an omission
+        why: First person; with the omission as A it concludes about the omission, which meets nothing about the action (D027).
+      - item: need for help (38) and distress (39)
+        why: They argue from a third party's need, but conclude that the hearer should help or relieve, which meets nothing (D063).
+    related:
+      - candidate: C016
+        how: Whether doing the action would avert the harm applies to it too.
+      - candidate: C020
+        how: The same consideration can be framed as a gain or as a harm averted.
+    sources:
+      - "The book p. 101: danger and pity arguments proceed from the bad consequences that doing or not doing an action may have, for the hearer or for a third party."
+      - "ND p. 170: the bad consequences of the existing system cited in favour of a proposal to change it."
+    sightings:
+      - source: kialo
+        ref: "5637.1866"
+        also: [C020]
+        fit: clean
+        note: When they cannot end a pregnancy, people in abusive relationships stay tied to their abusers.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.97"
+        fit: clean
+        note: Parents without the means to raise disabled children raise them to shorter, harder lives when they cannot get an abortion.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14596"
+        also: [C019]
+        fit: clean
+        note: Being denied an abortion leads to worse financial, health and family outcomes.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.2738"
+        fit: clean
+        note: Women denied an abortion are far more likely to be poor and on public assistance months later; a study cited for the harm.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.15"
+        fit: clean
+        note: When abortion is banned, people seek illegal abortions.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.1717"
+        fit: strain
+        note: Deaths from unsafe abortion, cited in support of 5637.15; evidence for the harm more than the argument itself.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.196"
+        also: [C016]
+        fit: strain
+        note: A tax on beef alone leaves the welfare and pollution problems of other meats; a harm of not doing the wider action.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    sketch:
+      note: On D055-D059 version 2's bad_outweighs.
+      schemes:
+        - id: harm_of_inaction
+          meta:
+            title: Harm of not acting to others (candidate)
+            source: Candidate C015, not in the compendium.
+          variables: [A, C]
+          premises: ["omission_leads_to(A,C)", "bad(C)"]
+          assumptions: []
+          exceptions: ["bad_outweighs(A,C)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        omission_leads_to/2: "If %s is not done, %s will follow."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        harm_of_inaction:
+          - {id: 33/CQ1, asks: "How likely is it that C will follow if A is not done?", target: "omission_leads_to(A,C)"}
+          - {id: 33/CQ3, asks: "Would doing A have bad consequences of its own that outweigh the harm C?", target: "bad_outweighs(A,C)"}
+    examples:
+      - scheme: harm_of_inaction
+        title: Disabled children and access
+        kialo: "5637.97"
+        use: argument
+        text: Not everyone has the means to raise a disabled child; when they cannot get an abortion, children are born to shorter lives and more suffering.
+        bindings:
+          A: pregnant people having access to abortion services
+          C: parents without the means raising disabled children to shorter, harder lives
+        note: The Kialo text is condensed.
+      - scheme: harm_of_inaction
+        title: Illegal abortions
+        kialo: "5637.15"
+        use: argument
+        text: When abortion is banned, people seek abortions illegally.
+        bindings:
+          A: abortion being legal
+          C: people seeking illegal and unsafe abortions
+        attacks:
+          - question: 33/CQ1
+            text: Most of those who would seek one can travel to a neighbouring country where it is legal.
+      - scheme: harm_of_inaction
+        title: The river wall
+        invented: true
+        use: argument
+        text: If the county does not raise the river wall, the riverside streets will flood every winter, so it should raise it.
+        bindings:
+          A: the county raising the river wall
+          C: the riverside streets flooding every winter
+        attacks:
+          - question: 33/CQ3
+            text: Raising the wall would push the floodwater onto the farms downstream, which is worse.
+      - scheme: negative_consequences_prudential
+        title: Insuring the house
+        invented: true
+        use: near-miss
+        near_miss_of: harm_of_inaction
+        text: You were thinking of not insuring your house. But if you don't, a fire could leave you with nothing, which would be very bad for you. So insure it.
+        bindings:
+          X: insuring your house
+          C: losing everything in a fire
+        note: The harm falls on the addressee, who was considering not acting, so it is the prudential form (33.4).
+    needs:
+      - "D055 applied first (its exception), and D027 settled (33.3's omission case)."
+    open:
+      - "A scheme of its own, or a coding rule (positive consequences with the harm avoided), as proposal D055-D059 has it?"
+      - "Does it merge with need for help (38) once D063 gives that scheme a practical conclusion?"
+
+  - id: C016
+    name: Would doing the action avert the harm?
+    kind: question
+    group: harms-of-not-acting
+    decision: D069
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: medium
+    what: >-
+      The prudential form (33.4) says that not doing X leads to C, but not
+      that doing X would avert C. A reply that C would follow anyway, or that
+      something else is what averts it, has no question to answer and no
+      formula to attack. Fear (36) states the premise: the action is the
+      only way to prevent the harm.
+    compares: doing the action with the harm it is meant to avert
+    concludes: an assumption, and its question, for the prudential form
+    closest:
+      - item: 33/CQ1
+        why: It asks how likely C is without X, not whether X stops C.
+      - item: fear's only_way_prevent(Y,X) (36)
+        why: The premise exists, in another scheme.
+      - item: positive and negative consequences' brings_about(A,G)
+        why: There the action's effect is the premise; in 33.4 the premise is about not acting.
+    related:
+      - candidate: C015
+        how: The same question applies to a harm of not acting to others.
+      - candidate: C017
+        how: A reply that another remedy averts the harm is also an alternative.
+    sources:
+      - "The compendium: 33.4 against 36 (fear's only-way premise)."
+      - "ND p. 170: a remedy that would fail to offset the bad consequences of the system it replaces."
+    sightings:
+      - source: kialo
+        ref: "5637.2803"
+        also: [C017]
+        fit: strain
+        note: Education, not legalisation, is what would reduce the harm of illegal abortions; another remedy averts it.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.196"
+        also: [C015]
+        fit: strain
+        note: A tax on beef alone leaves the other meats' harms; the narrower action does not avert all of the harm.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    sketch:
+      note: On D055-D059 version 2's form of the prudential argument.
+      schemes:
+        - id: prudential_averts
+          meta:
+            title: The prudential form with an averting assumption (candidate)
+            source: Candidate C016.
+          variables: [X, C]
+          premises: ["not_doing(X)", "bad_consequence(X,C)"]
+          assumptions: ["strongly_occur(X,C)", "averts(X,C)"]
+          exceptions: ["bad_outweighs(X,C)"]
+          conclusions: ["should_be_performed(X)"]
+      language:
+        averts/2: "Doing %s would avert %s."
+        strongly_occur/2: "If %s is not done, %s is likely to follow."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        prudential_averts:
+          - {id: C016/Q1, asks: "Would doing X actually avert C?", target: "averts(X,C)"}
+    examples:
+      - scheme: prudential_averts
+        title: A backup in the same bag
+        invented: true
+        use: argument
+        text: You were thinking of not backing up your thesis. But if you don't, a theft could lose a year's work, which would be very bad for you. So back it up.
+        bindings:
+          X: backing up your thesis
+          C: losing a year's work to a theft
+        attacks:
+          - question: C016/Q1
+            text: The only backup you plan is a drive kept in the same bag as the laptop; a thief takes both.
+      - scheme: prudential_averts
+        title: The wrong strain
+        invented: true
+        use: argument
+        text: You were going to skip the flu jab. But if you don't get it, you may catch the flu that is going round, which would be very bad for you. So get it.
+        bindings:
+          X: getting the flu jab
+          C: catching the flu that is going round
+        attacks:
+          - question: C016/Q1
+            text: This year's jab was made for a different strain from the one going round.
+      - scheme: prudential_averts
+        title: A smoke alarm
+        invented: true
+        use: argument
+        text: You were thinking of not fitting a smoke alarm. But if you don't, a fire at night could kill you in your sleep, which would be very bad for you. So fit one.
+        bindings:
+          X: fitting a smoke alarm
+          C: dying in a night-time fire
+        attacks:
+          - question: C016/Q1
+            text: You sleep with earplugs in; an ordinary alarm would not wake you.
+      - scheme: fear
+        title: Locking the shed
+        invented: true
+        use: near-miss
+        near_miss_of: prudential_averts
+        text: If you don't lock the shed, it will be broken into; that would be very bad for you; you ought to prevent it, and locking it is the only way. So lock it.
+        bindings:
+          X: locking the shed
+          Y: the shed being broken into
+        note: Fear states that the action is the only way to prevent the harm, the premise the prudential form lacks.
+    open:
+      - "An assumption (the proponent's burden once asked) or an exception (the critic's)?"
+      - "Does it belong to C015's scheme as well, if that is added?"
+
+  - id: C017
+    name: Another action with better consequences
+    kind: exception
+    group: the-action
+    decision: D066
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: medium
+    what: >-
+      A reply to a positive consequences argument that another action would
+      bring the same good at less cost, or more easily. ND lists alternative
+      courses of action among the questions on consequences; the book's
+      three questions do not ask it, and walton.yml gives it only to
+      practical reasoning.
+    compares: the action with another that brings the same good
+    concludes: an exception on positive consequences
+    closest:
+      - item: practical reasoning's realize_more_effectively(G,A) (CQ:other_means)
+        why: The question exists, but only for practical reasoning; replies to a consequence argument have none.
+      - item: C006, mitigation
+        why: C006 changes the same action; C017 replaces it.
+      - item: C010, the lesser evil
+        why: C010 compares two courses that are both bad.
+    related:
+      - candidate: C006
+        how: Both answer with a claim about the action rather than its consequences.
+      - candidate: C016
+        how: A reply that another remedy averts a harm is also an alternative.
+    sources:
+      - "ND p. 158: deliberating agents consider alternative ways of reaching their goal; p. 159: whether there are alternative courses of action, among the questions on consequences."
+    sightings:
+      - source: kialo
+        ref: "13292.171"
+        also: [C018]
+        fit: clean
+        note: Removing meat subsidies would be easier than taxing meat, since the tax affects more voters.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.151"
+        also: [C021]
+        fit: clean
+        note: Rationing through carbon budgets would let poor people still eat some meat, unlike a tax.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.149"
+        also: [C018]
+        fit: strain
+        note: Rationing would be harder and costlier to run than a plain meat tax; the alternatives' costs compared, the other way.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14546"
+        fit: clean
+        note: There are better ways to raise the birth rate that weigh the parents' quality of life.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.2803"
+        also: [C016]
+        fit: clean
+        note: Education, not legalisation, is the way to reduce the harm of illegal abortions.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    sketch:
+      note: The exception on positive consequences, on D055-D059 version 2's form; none on the negative schemes, since another action is no defeater of a reason against this one.
+      schemes:
+        - id: positive_consequences_alternative
+          meta:
+            title: Positive consequences with an alternatives exception (candidate)
+            source: Candidate C017.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "good(G)"]
+          assumptions: []
+          exceptions: ["bad_outweighs(A,G)", "better_alternative(A,G)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        better_alternative/2: "Some action other than %s would bring about %s at less cost."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        positive_consequences_alternative:
+          - {id: C017/Q1, asks: "Would another action bring about G at less cost, or more easily, than A?", target: "better_alternative(A,G)"}
+    examples:
+      - scheme: positive_consequences_alternative
+        title: Subsidies instead of a tax
+        invented: true
+        use: argument
+        text: A meat tax would cut emissions from farming, so governments should bring one in.
+        bindings:
+          A: governments putting a tax on meat
+          G: lower emissions from farming
+        attacks:
+          - question: C017/Q1
+            text: Ending the subsidies that keep meat cheap would cut the same emissions and anger fewer voters, as Kialo 13292.171 argues.
+      - scheme: positive_consequences_alternative
+        title: A new lane
+        invented: true
+        use: argument
+        text: A new motorway lane would cut journey times, so the region should build it.
+        bindings:
+          A: the region building a new motorway lane
+          G: shorter journey times
+        attacks:
+          - question: C017/Q1
+            text: Retiming the lights at the two junctions would save the same minutes for a fraction of the price.
+      - scheme: positive_consequences_alternative
+        title: A birth bonus
+        invented: true
+        use: argument
+        text: Paying families a bonus for each child would raise the birth rate, so the state should pay it.
+        bindings:
+          A: the state paying a bonus for each child
+          G: a higher birth rate
+        attacks:
+          - question: C017/Q1
+            text: Cheaper childcare raises the birth rate as much and lets parents keep working, in the spirit of Kialo 5637.14546.
+      - scheme: practical_reasoning2
+        title: Clean air by the cheapest means
+        invented: true
+        use: near-miss
+        near_miss_of: positive_consequences_alternative
+        text: The city's goal is clean air by 2030, and a congestion charge is the way to get there, so it should bring one in.
+        bindings:
+          A: bringing in a congestion charge
+          S1: the city's air being dirty
+          S2: the city's air being clean
+          G: clean air by 2030
+        note: Against practical reasoning the question exists already (realize_more_effectively, CQ:other_means).
+    open:
+      - "An exception on positive consequences and the prudential form only, or a question the game borrows from practical reasoning (D023)?"
+      - "The batch-2 gold answers CQ:other_means only where the parent is practical reasoning (13292.104, 13292.123, 13292.147)."
+
+  - id: C018
+    name: Can the action be carried out?
+    kind: question
+    group: the-action
+    decision: D066
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: low
+    what: >-
+      A reply that the action cannot be carried out, being impractical,
+      politically out of reach or unaffordable, whatever its consequences.
+      Practical reasoning presumes that the action is possible; the
+      consequence schemes do not.
+    compares: the action with what can be done
+    concludes: an assumption, and its question, for positive consequences
+    closest:
+      - item: practical reasoning's possible(A) (CQ:possibility)
+        why: The assumption exists, but only for practical reasoning.
+      - item: sunk costs' feasible(A) and waste's possible(X)
+        why: The same presumption, in other schemes.
+    related:
+      - candidate: C017
+        how: An easier alternative is often argued beside infeasibility (13292.171).
+    sightings:
+      - source: kialo
+        ref: "13292.165"
+        fit: clean
+        note: Taxing meat and making its production greener at once would demand too drastic a change.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.188"
+        fit: clean
+        note: A meat tax would not raise enough to make insect farms financially viable.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.149"
+        also: [C017]
+        fit: strain
+        note: Rationing would be harder to set up than a tax; difficulty more than impossibility.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.171"
+        also: [C017]
+        fit: strain
+        note: Taxing meat would touch more voters than removing subsidies; political reach, beside an alternative.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    sketch:
+      note: The assumption on positive consequences, on D055-D059 version 2's form.
+      schemes:
+        - id: positive_consequences_feasible
+          meta:
+            title: Positive consequences with a feasibility assumption (candidate)
+            source: Candidate C018.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "good(G)"]
+          assumptions: ["possible(A)"]
+          exceptions: ["bad_outweighs(A,G)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        positive_consequences_feasible:
+          - {id: C018/Q1, asks: "Can A be carried out at all?", target: "possible(A)"}
+    examples:
+      - scheme: positive_consequences_feasible
+        title: Both at once
+        invented: true
+        use: argument
+        text: Taxing meat and making its production greener at the same time would cut emissions fastest, so governments should do both.
+        bindings:
+          A: governments taxing meat and greening its production at once
+          G: the fastest cut in emissions from meat
+        attacks:
+          - question: C018/Q1
+            text: As Kialo 13292.165 puts it, doing both at once asks too drastic a change in how meat is produced and eaten.
+      - scheme: positive_consequences_feasible
+        title: A line through the wetland
+        invented: true
+        use: argument
+        text: A high-speed line to the north would halve journey times, so it should be built.
+        bindings:
+          A: building a high-speed line to the north
+          G: journey times to the north being halved
+        attacks:
+          - question: C018/Q1
+            text: The only route crosses a protected wetland and could never get planning consent.
+      - scheme: positive_consequences_feasible
+        title: Free meals for all
+        invented: true
+        use: argument
+        text: Free school meals for every pupil would end hunger in class, so the council should provide them.
+        bindings:
+          A: the council providing free school meals for every pupil
+          G: no pupil being hungry in class
+        attacks:
+          - question: C018/Q1
+            text: The council's whole schools budget would not pay for a third of them.
+      - scheme: negative_consequences
+        title: The line's cost
+        invented: true
+        use: near-miss
+        near_miss_of: positive_consequences_feasible
+        text: A high-speed line to the north would cost billions, so it should not be built.
+        bindings:
+          A: building a high-speed line to the north
+          G: the line costing billions
+        note: A cost is a consequence of doing the action, argued against it; it does not say that the action cannot be done.
+    open:
+      - "All four sightings are in the meat-tax discussion (13292); is feasibility as common elsewhere?"
+
+  - id: C019
+    name: Accrual of consequence arguments
+    kind: link
+    group: weighing
+    decision: D064
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: low
+    what: >-
+      Several consequences on one side, each weaker than a single
+      consequence on the other, never add up in Carneades: the strongest
+      argument on each side decides. ND names the number of consequences as
+      a factor of an argument's strength, and Kialo claims bundle several
+      harms. Proposal D055-D059's rule splits a bundle into arguments; it
+      cannot let them accrue.
+    compares: how many consequences each side cites
+    concludes: a rule for the engine, or an accrual argument
+    closest:
+      - item: C004, balance of consequences
+        why: One global claim about the balance, not a sum of the arguments.
+      - item: the analogy entries' limit, several source cases folded into one
+        why: The same limit of Carneades, for analogy.
+    related:
+      - candidate: C004
+        how: Both concern the whole of an action's consequences.
+    sources:
+      - "ND pp. 158-159: an argument from consequences is stronger the more consequences it cites, and a consequence may be compound."
+    sightings:
+      - source: kialo
+        ref: "5637.14596"
+        also: [C015]
+        fit: clean
+        note: Being denied an abortion leads to worse financial, health and family outcomes; three harms in one claim.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.188"
+        also: [C021]
+        fit: clean
+        note: Women forced to carry to term face both emotional and physical harms, against men's emotional harms alone; two harms set against one.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.56"
+        fit: clean
+        note: The tax would cut millions of people's protein intake and open the way to a push for eating insects; two harms in one claim.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    needs:
+      - "Code in the engine (an option that adds the weights of same-side consequence arguments about one action, up to a cap), or an accrual scheme weighed by a moderator."
+    open:
+      - "Is accrual wanted at all? Carneades' choice not to add arguments up is deliberate, and the game's weights are set by scheme."
+
+  - id: C020
+    name: One consideration as a gain and as an averted harm
+    kind: link
+    group: harms-of-not-acting
+    decision: D069
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: low
+    what: >-
+      The same reason for doing X can be coded as positive consequences (G =
+      the attic staying dry) or as the prudential form (C = the attic
+      flooding). The two conclude the same statement but have different
+      exceptions, so a weighing claim reaches only one, and a board can hold
+      both framings at once. Proposal D055-D059's rule codes a consideration
+      once; a declared equivalence would let the registry check it.
+    compares: a gain and the same harm averted
+    concludes: a rule for annotation, or a declared equivalence
+    closest:
+      - item: D053's sided flip
+        why: It pairs a scheme with its opposite, not one consideration with its reframing.
+    related:
+      - candidate: C015
+        how: C015's harm of not acting is the averted-harm framing of a gain.
+    sightings:
+      - source: kialo
+        ref: "5637.1866"
+        also: [C015]
+        fit: strain
+        note: Staying tied to an abuser without access, beside pro-choice claims about being able to leave; one consideration in two framings.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    open:
+      - "An annotation rule only, or a declared equivalence between good(avoiding(C)) and bad(C) that the registry checks?"
+
+  - id: C021
+    name: On whom does the consequence fall?
+    kind: question
+    group: magnitude-risk
+    decision: D065
+    found:
+      - "the second independent review of proposal D055-D059, 2026-10-22"
+    confidence: low
+    what: >-
+      A reply that weighs a consequence by who bears it: the agent, a third
+      party, those who chose it or did not. C005 asks how bad a consequence
+      is and for how many, not for whom.
+    compares: who bears the cited consequence
+    concludes: a question at good(G) or bad(G)
+    closest:
+      - item: C005, how serious the consequence is
+        why: It asks how bad and for how many; this asks who. It may merge into C005 as a third respect.
+      - item: C007, a right or value against consequences
+        why: A claim about who may bear a harm can be a claim of right.
+    related:
+      - candidate: C005
+        how: A third respect of the same question; a merge is likely.
+    sightings:
+      - source: kialo
+        ref: "5637.188"
+        also: [C019]
+        fit: clean
+        note: Men may bear emotional harm from an abortion, but women forced to carry to term bear emotional and physical harm.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.151"
+        also: [C017]
+        fit: strain
+        note: Rationing would spare the poor, on whom a tax falls; who bears the cost, beside an alternative.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.11001"
+        fit: strain
+        note: Harm to one person does not justify controlling another; who bears it, said as a right.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-22
+    sketch:
+      note: The question on negative consequences, on D055-D059 version 2's form.
+      schemes:
+        - id: negative_consequences_bearer
+          meta:
+            title: Negative consequences with a question of who bears them (candidate)
+            source: Candidate C021.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "bad(G)"]
+          assumptions: []
+          exceptions: ["good_outweighs(A,G)"]
+          conclusions: ["¬should_be_performed(A)"]
+      language:
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        negative_consequences_bearer:
+          - {id: C021/Q1, asks: "Who bears G, and does that change how much it counts against doing A?", target: "bad(G)"}
+    examples:
+      - scheme: negative_consequences_bearer
+        title: Whose harm
+        invented: true
+        use: argument
+        text: An abortion can cause the man involved real emotional harm, so it should not be done without him.
+        bindings:
+          A: a pregnant person having an abortion without the man's agreement
+          G: the man suffering emotional harm
+        attacks:
+          - question: C021/Q1
+            text: As Kialo 5637.188 replies, if the pregnancy goes on it is the woman who bears both the emotional and the physical harm.
+      - scheme: negative_consequences_bearer
+        title: A sugar tax
+        invented: true
+        use: argument
+        text: A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
+        bindings:
+          A: bringing in a tax on sugary drinks
+          G: the weekly shop costing more
+        attacks:
+          - question: C021/Q1
+            text: The cost falls on those who drink a lot of them, the very people whose health the tax protects.
+      - scheme: negative_consequences_bearer
+        title: The festival road
+        invented: true
+        use: argument
+        text: Closing the high street for the festival would delay deliveries, so it should stay open.
+        bindings:
+          A: closing the high street for the festival
+          G: deliveries being delayed
+        attacks:
+          - question: C021/Q1
+            text: The delays fall on the festival's own suppliers, who asked for the closure.
+      - scheme: negative_consequences
+        title: A dearer shop, denied
+        invented: true
+        use: near-miss
+        near_miss_of: negative_consequences_bearer
+        text: A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
+        bindings:
+          A: bringing in a tax on sugary drinks
+          G: the weekly shop costing more
+        attacks:
+          - question: CQ:premise_acceptable
+            target: brings_about(A,G)
+            text: Most shoppers would switch to the untaxed drinks, so their weekly shop would cost the same.
+        note: The reply denies that the consequence follows, a question of likelihood (33/CQ1), not of who bears it.
+    open:
+      - "Merge into C005 as a third respect (how bad, for how many, for whom)?"

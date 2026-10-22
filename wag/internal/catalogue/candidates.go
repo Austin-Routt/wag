@@ -136,9 +136,12 @@ type Sighting struct {
 	Place    string `yaml:"place,omitempty"` // the discussion or game; a Kialo ref's own
 	Fit      string `yaml:"fit"`
 	Archived bool   `yaml:"archived,omitempty"` // a Kialo claim the discussion has archived
-	Note     string `yaml:"note"`               // what it says and how it fits, in our words
-	Found    string `yaml:"found"`
-	Verified string `yaml:"verified,omitempty"`
+	// Also names the other candidates the same claim is listed under, when
+	// it shows two patterns.
+	Also     []string `yaml:"also,flow,omitempty"`
+	Note     string   `yaml:"note"` // what it says and how it fits, in our words
+	Found    string   `yaml:"found"`
+	Verified string   `yaml:"verified,omitempty"`
 }
 
 // Sketch is the candidate as walton.yml might have it: a new scheme, or a
@@ -291,7 +294,9 @@ func (c *Candidate) asProposal() *Proposal {
 //     recorded and decided after; a candidate over the threshold has one
 //     (a warning otherwise);
 //   - a sighting says where it was seen, how it fits and what it shows, and
-//     is not listed twice; a claim listed under two candidates is noted;
+//     is not listed twice; a claim listed under two candidates is noted
+//     unless a listing names the others (also), and also names only
+//     candidates that list the claim;
 //   - the sketch and examples pass the proposal check (CheckProposal), each
 //     example uses the sketch or is a near miss of it, and no two sketches
 //     share a scheme id or give one template two texts.
@@ -347,6 +352,7 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 		ids[c.ID] = true
 	}
 	refs := map[string][]string{}       // a sighting's ref: the candidates it is listed under
+	also := map[string][][]string{}     // a sighting's ref: each listing's also, with its candidate first
 	sketchOf := map[string]string{}     // a sketch's scheme id: its candidate
 	templates := map[string][2]string{} // a sketch's template: its text and candidate
 	for _, c := range cr.Candidates {
@@ -436,6 +442,7 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 			}
 			seen[s.Ref] = true
 			refs[s.Ref] = append(refs[s.Ref], c.ID)
+			also[s.Ref] = append(also[s.Ref], append([]string{c.ID}, s.Also...))
 		}
 		// The sketch and the examples.
 		for _, f := range CheckProposal(c.asProposal(), src) {
@@ -479,14 +486,32 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 		}
 	}
 	keys := make([]string, 0, len(refs))
-	for k, v := range refs {
-		if len(v) > 1 {
-			keys = append(keys, k)
-		}
+	for k := range refs {
+		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		out = append(out, Finding{File: CandidatesFile, Msg: fmt.Sprintf("note: %s is listed under %s: one pattern, or a claim showing two?", k, strings.Join(refs[k], " and "))})
+		listed := refs[k]
+		acknowledged := false
+		for _, a := range also[k] {
+			for _, o := range a[1:] {
+				if !in(listed, o) {
+					bad("%s: sighting %s: also %s, which does not list it", a[0], k, o)
+				}
+			}
+			named := 0
+			for _, c := range listed {
+				if c != a[0] && in(a[1:], c) {
+					named++
+				}
+			}
+			if named == len(listed)-1 {
+				acknowledged = true
+			}
+		}
+		if len(listed) > 1 && !acknowledged {
+			out = append(out, Finding{File: CandidatesFile, Msg: fmt.Sprintf("note: %s is listed under %s: one pattern, or a claim showing two (say so with also)?", k, strings.Join(listed, " and "))})
+		}
 	}
 	return out
 }
@@ -653,6 +678,9 @@ func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[stri
 			ref := s.Ref
 			if s.Archived {
 				ref += " (archived)"
+			}
+			if len(s.Also) > 0 {
+				ref += "; also " + strings.Join(s.Also, ", ")
 			}
 			fmt.Fprintf(b, "| %s %s | %s | %s | %s | %s | %s |\n", s.Source, s.place(), ref, s.Fit, cell(s.Note), cell(s.Found), orDash(cell(s.Verified)))
 		}

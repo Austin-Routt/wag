@@ -205,7 +205,7 @@ All three go through one registry, [`candidates.yml`](candidates.yml). Its view,
 - **What it is not:** the items it comes closest to and why each falls short; related candidates and how they relate.
 - **Its form:** a sketch, checked as a proposal's candidates are (§5) and never applied; examples rendered in English, with a near miss; what WAG's engine showed; what implementing it needs; open questions.
 
-**Intake.** Every review brief, annotation run and play report records the candidates it meets in this shape, or one that converts to it. A new sighting of an existing candidate is added to that candidate, not recorded as a new one; the check notes a claim listed under two candidates. A sighting counts only once a second reader has read the text against its note (it is then *verified*).
+**Intake.** Every review brief, annotation run and play report records the candidates it meets in this shape, or one that converts to it. A new sighting of an existing candidate is added to that candidate, not recorded as a new one. A claim that shows two patterns is listed under both, and each listing names the other (`also`); the check notes a claim listed twice without that. A sighting counts only once a second reader has read the text against its note (it is then *verified*).
 
 **The stages,** computed by the check:
 - **collecting:** fewer than three verified sightings in two discussions or games (the threshold; whether it is right is D047). A gap shown by analysis rather than by data, such as a scan of `walton.yml` or an engine test, is exempt, with the reason recorded.
