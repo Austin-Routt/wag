@@ -52,44 +52,125 @@ critical_questions:
     entry: "15"
     label: CQ1
   targets: [{formula: 'inadequate_definition(D,G)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's wording asks for evidence that D is adequate, as if the proponent
+    had to show it; walton.yml makes inadequacy an exception, which the critic must
+    back (see the discrepancy on CQ1).
+  paraphrase: Is D a sound definition of G, given rival definitions under which O
+    would not count as G?
+  answer: 'The critic, who raises it with an argument. Against: a rival definition
+    of G, at least as well supported as D, under which O would not be a G, which undercuts
+    the argument through inadequate_definition(D,G). For: showing that D is the accepted
+    or authoritative definition of G (a statute, a standard, the usage of those who
+    apply the term), or that O is a G under the rivals too.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 15/CQ2
   book:
     entry: "15"
     label: CQ2
   targets: [{formula: 'classified_as(D,G)', locus: premise}]
-  note: 'stipulative or biased definition: no separate formula'
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'stipulative or biased definition: no separate formula. The question goes
+    to the classification premise, the link from D to G.'
+  paraphrase: Does the step from D to G rest on a definition merely laid down for
+    the occasion, or slanted to one side?
+  answer: 'The proponent, once asked. Against: showing that D was made up for the
+    dispute, or chosen because it favours the arguer''s side (a persuasive definition),
+    which undermines classified_as(D,G). For: showing that D is the established definition
+    of G, used by those who apply the term and not fixed for this case.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when O is put in a category G because O meets a definition D, and whatever
+    meets D counts as G, as when a statute, a standard or a dictionary entry settles
+    what a word covers. It is the case of verbal_classification in which the link
+    to G is a definition, so the dispute turns on whether D is the right definition
+    of G.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: verbal_classification
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose definition_to_verbal_classification when the text gives or relies on
+    a definition D of G and checks O against it; choose verbal_classification when
+    the step to G goes through a property or criterion that is not offered as a definition,
+    such as a guideline level for unhealthy eating.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: verbal_classification_arbitrariness
+  text: 'A counter, not an alternative: choose verbal_classification_arbitrariness
+    for an argument that rejects another argument because a key term is defined arbitrarily
+    where the dialogue needs a principled definition. It is how a critic can press
+    15/CQ2 as an argument of its own.'
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The WHO's cancer agency defines processed meat as meat transformed by salting,
+    curing, fermentation or smoking; bacon is cured and smoked, so bacon is processed
+    meat.
+  coding: 'O = bacon; D = the agency''s definition of processed meat; G = processed
+    meat. Stated: satisfies_definition(O,D) (cured and smoked), classified_as(D,G)
+    (the definition is cited as fixing the term). Conclusion: instance(O,G).'
+  status: drafted by Claude Code, 2026-10-22
+- text: The city's bylaw defines a short-term rental as any let of fewer than 30 nights;
+    the flat on Elm Street is let by the week, so it is a short-term rental.
+  coding: 'O = the Elm Street flat; D = the bylaw''s definition; G = short-term rentals.
+    Stated: satisfies_definition(O,D), classified_as(D,G). Conclusion: instance(O,G).
+    If the text went on to say that the flat therefore needs a licence, that further
+    step would be established_rule.'
+  status: drafted by Claude Code, 2026-10-22
+- text: North American citizens consume more meat than dietary guidelines recommend.
+  kialo: "13292.8"
+  coding: 'Near miss: it classifies the consumption as unhealthy by a criterion (the
+    guidelines'' recommended level), not by a definition of unhealthy eating; verbal_classification
+    (O = North Americans'' meat consumption, F = consumption above the guidelines,
+    G = unhealthy meat consumption), as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: CQ1
+  detail: The book's first question asks what evidence shows that D is adequate, in
+    the light of alternative definitions, which reads as a burden on the proponent.
+    walton.yml encodes it as the exception inadequate_definition(D,G), which the critic
+    must raise and back.
+  decision: 'Follow walton.yml: the formulas decide. The question''s own reference
+    to alternative definitions that would exclude O shows what the critic brings.
+    A doubt about D that offers no rival goes to 15/CQ2, against the premise classified_as(D,G).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: Classification Premise
+  detail: The compendium prints the classification premise with the individual a in
+    the place where the bound variable x is meant; the transcription records it as
+    a misprint. walton.yml's classified_as(D,G), whatever meets D is counted as G,
+    has the intended reading.
+  decision: 'No change: the catalogue follows the intended reading, as walton.yml
+    does.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: based on cases
+  note: Not in the tree; placed with verbal classification, because it is that scheme
+    with a definition as the link to the category (family F07). Aberdein (2020) lists
+    it among the schemes the tree leaves out, with other arguments about language.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: verbal_classification
+  note: The link from O's features to G is a definition D, which adds the questions
+    whether D is an adequate definition of G and whether it is stipulated or slanted.
+    The conclusion, instance(O,G), is the same formula.
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [persuasion, inquiry, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table, and ND does not discuss the scheme; our extrapolation,
+    as for verbal_classification. The book (not ND) observes that to define a term,
+    an ethical one especially, is usually to take a side already (p. 67); that risk
+    is what 15/CQ2 tests, in any type.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the two questions, the
+    contrasts (adding verbal_classification_arbitrariness), the examples with a gold
+    near miss, two discrepancies (CQ1's burden, the printed premise), the classification,
+    specialises (verbal_classification) and the dialogue types.

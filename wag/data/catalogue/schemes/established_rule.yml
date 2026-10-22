@@ -56,54 +56,183 @@ critical_questions:
   book:
     entry: "55.1"
     label: CQ1
-  targets: [{formula: applicable(R), locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'has_conclusion(R,C)', locus: premise}, {formula: applicable(R),
+      locus: premise}]
+  note: Generated with applicable(R) alone. The book asks whether the action the rule
+    requires includes this act, which in walton.yml's encoding is whether R has the
+    conclusion C here; whether R's conditions hold for this agent is applicable(R).
+    The question puts both in doubt, so both are targets.
+  paraphrase: Does what R requires actually cover the act that C says the agent must
+    perform, in this case?
+  answer: 'The proponent, once asked. Against: showing that R requires some other
+    type of action, of which the act in C is not an instance, or that R''s conditions
+    do not hold for this agent, which undermines has_conclusion(R,C) or applicable(R).
+    For: the wording of R, or how it is applied, showing that it demands acts of this
+    type of agents in this position.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 55.1/CQ2
   book:
     entry: "55.1"
     label: CQ2
   targets: []
-  note: 'conflicting rules: no formula'
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'conflicting rules: no formula. See the discrepancy on CQ2 and CQ3.'
+  paraphrase: Does some other rule in force clash with R here, or take priority over
+    it?
+  answer: 'The critic, who raises it with an argument. Against: another rule that
+    binds the agent, requires something incompatible with C, and outranks R or is
+    more specific to the case, which would undercut the argument through an exception
+    that walton.yml lacks; until one is added, it is raised as a rebuttal of C, an
+    argument from the other rule. For: showing that the rules can both be met, or
+    that R takes priority.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 55.1/CQ3
   book:
     entry: "55.1"
     label: CQ3
   targets: []
-  note: 'exceptional case: no formula'
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'exceptional case: no formula. The book''s major premise itself reserves the
+    exception, and the book reads this question as a counterargument showing that
+    the case does not fall under the rule (p. 71). That reading could point to applicable(R),
+    but applicable(R) is a premise, which would put the burden on the proponent; the
+    major premise''s reservation puts it on whoever claims the exception. See the
+    discrepancy on CQ2 and CQ3.'
+  paraphrase: Is this case special, with mitigating circumstances or a valid excuse
+    that release the agent from complying with R?
+  answer: 'The critic, who raises it with an argument. Against: circumstances that
+    make this case an exception, or an excuse the rule recognises (illness, an emergency),
+    which would undercut the argument through an exception that walton.yml lacks;
+    until one is added, it is raised with argument for an exceptional case (exceptional)
+    or plea_for_excuse. For: showing that the circumstances are ordinary, or that
+    the excuse is not one the rule allows.'
+  status: drafted by Claude Code, 2026-10-22
+- id: walton/valid
+  targets: [{formula: valid(R), locus: assumption}]
+  note: No book question asks it; the book's premises take the rule to be established,
+    and walton.yml's assumption valid(R) carries that.
+  paraphrase: Is R a binding rule, properly made and still in force for those it governs?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: showing that R was never adopted by anyone with the standing to make
+    it, has been repealed or has lapsed, or is not accepted by those it governs, which
+    undermines valid(R). For: where and by whom R was laid down or agreed, and that
+    it is still in force.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when an agent is said to have to do something because a standing rule
+    R, accepted by those it governs (a regulation, a house rule, an agreed policy
+    or deadline), requires that type of action of agents in the agent's position.
+    It concludes the obligation C for this case, barring an exceptional case or an
+    overriding rule; the rule's standing and the duty it imposes set it apart from
+    rule (55.2), where any principle linking a situation to an evaluation or a conduct
+    will do.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: rule
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose established_rule when the general premise is a standing rule, accepted
+    by those it governs, and the conclusion is that this agent must act on it; choose
+    rule when it is a principle the arguer proposes or invokes to justify an evaluation
+    or a conduct, whose standing as a rule is itself in dispute, as with the gold's
+    "tax by environmental impact".
+  status: drafted by Claude Code, 2026-10-22
+- scheme: regulative_rule
+  text: Choose regulative_rule when the text states that an act is prohibited or obligatory
+    and concludes that someone must (not) do it; choose established_rule when it cites
+    a rule established for a class of agents and the agent's falling under it. The
+    two are close, and the choice turns on whether the text appeals to the rule's
+    being in force for the agent (established_rule) or to the act's deontic status
+    (regulative_rule).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: exceptional
+  text: 'A counter: exceptional argues that the established rule may be waived because
+    the agent''s case is an exception. Choose it for the reply that 55.1/CQ3 invites;
+    choose established_rule for the argument that applies the rule.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: verbal_classification
+  text: 'The book calls established rule the pragmatic counterpart of verbal classification
+    (p. 70): choose established_rule when the conclusion is what the agent must do,
+    verbal_classification when it is what something is.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: popular_practice
+  text: Choose popular_practice when the text cites what most people do as a reason
+    to think it acceptable; choose established_rule when it cites a rule that requires
+    it. A common practice is not yet a rule.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The school's food policy requires a meat-free option at every lunch, so the
+    caterer has to offer one on barbecue day too.
+  coding: 'R = the school''s food-policy rule on lunches, as it applies to the caterer;
+    C = the caterer must offer a meat-free option on barbecue day. Stated: has_conclusion(R,C)
+    (the rule requires a meat-free option at every lunch), applicable(R) (barbecue
+    day is a school lunch). Supplied: valid(R). Conclusion: C. 55.1/CQ3 is where a
+    claim that barbecue day is special would go.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Club rules say members must sign their guests in at the front desk, so you
+    will have to sign your sister in.
+  coding: 'R = the club''s rule on guests; C = you must sign your sister in at the
+    front desk. Stated: has_conclusion(R,C), applicable(R) (you are a member, your
+    sister your guest). Supplied: valid(R). Conclusion: C.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Elsewhere, governments have put taxes on ecologically damaging businesses,
+    e.g., carbon tax, oil tax etc.
+  kialo: "13292.30"
+  coding: 'Near miss: it cites what other governments have done, but states no rule
+    that requires a meat tax; practical_analogy_positive, as the gold codes it (the
+    gold rejects established_rule because no rule is stated, only practice).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: CQ2 and CQ3
+  detail: The book's major premise leaves room for exceptional cases, and its CQ2
+    (a conflicting or overriding rule) and CQ3 (an exceptional case, extenuating circumstances,
+    an excuse) raise them. walton.yml's established_rule has no exception formula,
+    so neither question targets a formula.
+  decision: 'Leave both without targets, and code such a challenge as a rebuttal of
+    C, or as an argument for an exceptional case or a plea for excuse. Open: add exceptions
+    to walton.yml, for instance one that another rule overrides R here and one that
+    the case is an exception to R; regulative_rule''s excuse is a model.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: encoding
+  detail: 'The book''s scheme is about an agent a and a type of action A that the
+    established rule requires of agents like a, and concludes that a is obliged to
+    do A. walton.yml encodes generic rule application, with only a rule R and a conclusion
+    C: the agent, the action type and the obligation are folded into C, and the rule''s
+    being established into valid(R).'
+  decision: 'No change: bind C to the obligation (that a is bound to do A) and R to
+    the rule as it applies to a; the questions read as drafted. Open: whether a formula
+    naming the agent and the action type is worth adding, so that 55.1/CQ1 could target
+    the rule''s action type directly.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: based on cases
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: rule
+  note: 'The book prints both under argument from rules (55). Established rule narrows
+    the general rule scheme: the situation is that a rule is established for agents
+    like a, and the conduct is the action it requires, with exceptions reserved. The
+    two walton.yml schemes share no predicate, so the narrowing is in what they say,
+    not in their formulas.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: The book (p. 71, not ND) says the scheme belongs to deliberation, which sets
+    it apart from verbal classification. ND does not discuss it. Persuasion, where
+    the dispute is whether an agent is bound to act, is our extrapolation.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the three book questions
+    and of walton/valid, a second target for 55.1/CQ1, the contrasts (adding regulative_rule,
+    exceptional, verbal_classification and popular_practice), the examples with a
+    gold near miss, two discrepancies (no exception formulas for CQ2 and CQ3; the
+    generic encoding), the classification, specialises (rule) and the dialogue types.

@@ -52,34 +52,127 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: 'Use it when an action X is recommended in a situation A2 because X was the
+    right course in an earlier situation A1 that resembles A2. It is analogy put to
+    practical use: what crosses from one situation to the other is a verdict that
+    doing X was right, which sets it apart from analogy, which carries over a matter
+    of fact, and from practical_inference, which recommends X as a means to a goal.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: analogy
-  text: ""
-  status: todo
+  text: 'Choose practical_analogy_positive when the earlier situation is cited for
+    what it was right to do there, and the conclusion recommends the same action here;
+    choose analogy when what is carried over is a factual finding, such as that the
+    action worked. The two often come together: that a tax worked elsewhere (analogy)
+    backs the verdict that it was right there.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_inference
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose practical_inference when X is recommended as a means to a goal the
+    agent has; choose practical_analogy_positive when it is recommended because X
+    was right in a similar situation, with no goal stated. When a text cites a precedent
+    and also names the goal X served, code the inference it leans on.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_analogy_negative
+  text: 'The negative counterpart, with the same form: choose practical_analogy_negative
+    when the earlier action is cited as a mistake, to argue against repeating it,
+    and practical_analogy_positive when it is cited as the right thing, to argue for
+    repeating it.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: popular_practice
+  text: Choose popular_practice when an action is defended because most of those who
+    know the field accept it; choose practical_analogy_positive when it is defended
+    because it was right in a situation like this one. Citing what other governments
+    have done can be either; the gold codes 13292.30 as a practical analogy, since
+    the other cases are cited as precedents, not as a majority.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Elsewhere, governments have put taxes on ecologically damaging businesses,
+    e.g., carbon tax, oil tax etc.
+  kialo: "13292.30"
+  coding: 'A1 = ecologically damaging businesses elsewhere, taxed through carbon and
+    oil taxes; A2 = meat production; X = taxing the damaging activity. Stated: that
+    X was done in A1 (the text reports it); that doing it was right, right_to_do(A1,X),
+    is supplied. Inferred: similar_to(A1,A2) (meat production is ecologically damaging,
+    13292.4 and 13292.108). Conclusion: carry_out_right(A2,X), the thesis; re-parented
+    to the thesis, as in the gold.'
+  status: drafted by Claude Code, 2026-10-22
+- text: This only matters until a majority of society believes that the consequence
+    of use outweighs the personal choice benefit. Many countries tax tobacco and alcohol
+    more than other consumer products …
+  kialo: "13292.55"
+  coding: 'A1 = tobacco and alcohol, whose use harms enough to outweigh the value
+    of free choice; A2 = meat; X = taxing the product above other goods. Stated: that
+    X is done in A1. Supplied: right_to_do(A1,X), and similar_to(A1,A2), which the
+    first sentence prepares (once society judges the harm to outweigh the choice).
+    Conclusion: carry_out_right(A2,X). Not in the gold; the text is cut off in items.json.
+    It answers 13292.29''s appeal to personal choice.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Sugar taxes in other countries cut sales of sugary drinks, so a meat tax would
+    cut meat sales.
+  coding: 'Near miss: what crosses over is a factual result (the tax cut sales), not
+    a verdict that taxing was right, and the conclusion is a prediction, not a recommendation;
+    analogy (C = the sugar taxes; A = a meat tax would cut meat sales, the target
+    proposition, with the N12 caveat).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: other
+  about: critical questions
+  detail: 'The book prints no questions for 8.1 or 8.2, and walton.yml gives the scheme
+    no assumptions or exceptions. So neither lets a critic raise what analogy''s exceptions
+    cover: a difference between A1 and A2 that matters to X, or a closer situation
+    in which X was wrong. The gold (13292.30) applies analogy''s questions by type.'
+  decision: 'Open: whether to give 8.1 and 8.2 analogy''s exceptions, with both situations
+    as arguments (for example relevant_differences(A1,A2)); a scheme change for the
+    owner. Until then, a difference between the situations is raised by challenging
+    similar_to(A1,A2), and a contrary precedent by an argument against the conclusion.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: Conclusion
+  detail: carry_out_right(A2,X) and the negative scheme's carry_out_wrong(A2,X) are
+    separate predicates, neither the negation of the other, so a positive and a negative
+    practical analogy about the same action do not conflict in the argument graph.
+  decision: 'Open: a modelling choice for the owner. Either read carry_out_wrong(A2,X)
+    as ¬carry_out_right(A2,X), so that the two schemes rebut each other, or keep them
+    apart and let a critic argue directly for ¬carry_out_right(A2,X).'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: values
+  note: 'Not in the tree; placed with values (values, fairness), because its premise
+    and its conclusion are verdicts on whether an action is right, not claims about
+    goals, means or consequences. Its analogical form would also fit with analogy
+    (application, defeasible rule-based). Open: which placement the owner prefers.'
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: analogy
+  note: 'The book introduces it as the practical counterpart of argument from analogy
+    (ch. 2, p. 74): the proposition carried from one situation to the other is that
+    doing X is right. walton.yml names both situations (A1, A2), where analogy leaves
+    the target implicit, and gives it none of analogy''s exceptions.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'Not in ND''s table, and ND does not discuss it; our extrapolation. It answers
+    "what should we do?", so it belongs where practical reasoning does: deliberation
+    (ND pp. 151–7) and persuasion about an action. In negotiation, an appeal to what
+    was right in a like case works as the fair, independent standard that Fisher and
+    Ury recommend, which ND says lies outside the normative model of negotiation (p.
+    102); we list negotiation in neither list.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the contrasts (two added: the negative counterpart,
+    and popular_practice, an alternative in the gold), the examples (13292.30 of the
+    gold and 13292.55), two other discrepancies (no questions or exceptions; the unrelated
+    positive and negative conclusions), the classification (not in the tree), specialises
+    and the dialogue types. No questions: the book prints none, and walton.yml has
+    no assumption or exception to ask about.'

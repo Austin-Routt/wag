@@ -47,57 +47,152 @@ critical_questions:
     entry: "29"
     label: CQ1
   targets: [{formula: 'correlated(E1,E2)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's premise speaks of a positive correlation; correlated(E1,E2) does
+    not say which way the two vary (see the discrepancy on the premise).
+  paraphrase: Do E1 and E2 actually vary together, as the argument claims?
+  answer: 'The proponent, once asked. Against: data showing that E1 and E2 do not
+    occur together more often than chance would have it, or that the reported association
+    comes from a small, selected or badly measured sample, which undermines correlated(E1,E2).
+    For: data from adequate samples in which E1 and E2 rise and fall together.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 29/CQ2
   book:
     entry: "29"
     label: CQ2
   targets: [{formula: 'explanatory_theory(E1,E2)', locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: walton.yml's assumption asks for a theory of how E1 causes E2; the book asks
+    more widely for any reason to rule out coincidence (see the discrepancy on CQ2).
+  paraphrase: What reason is there to think that the link between E1 and E2 is more
+    than chance?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: showing that nothing beyond the bare co-occurrence supports the link
+    (no account of how E1 could produce E2, no repetition in other samples), which
+    undermines explanatory_theory(E1,E2). For: an account of how E1 produces E2, or
+    the association''s recurring in independent studies.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 29/CQ3
   book:
     entry: "29"
     label: CQ3
   targets: [{formula: 'causes_both(E1,E2)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book names the third factor (its C); walton.yml's exception has no variable
+    for it, so the factor is named in the critic's argument, not in the formula.
+  paraphrase: Might another event explain why E1 and E2 go together, by producing
+    each of them?
+  answer: 'The critic, who raises it with an argument. Against: a factor shown to
+    produce both E1 and E2, such as income or age behind two health outcomes, which
+    undercuts the argument through causes_both(E1,E2). For: showing that the association
+    survives when such factors are held fixed, or that no common cause is plausible.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when two kinds of event, E1 and E2, are found to go together, and the
+    arguer concludes that E1 brings about E2. It argues for the causal link itself
+    from the co-occurrence, which sets it apart from cause_to_effect, which takes
+    such a link as given to predict an effect, and from sign, which infers what an
+    indicator points to without claiming that one produces the other.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect
-  text: ""
-  status: todo
+  text: 'Choose correlation_to_cause when the point of the argument is to establish
+    that E1 brings about E2, from the fact that the two go together; choose cause_to_effect
+    when that link is taken as given and used to predict an effect in a case. A text
+    often chains them: a correlation supports the link, and the link then predicts
+    what a measure will do.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sign
-  text: ""
-  status: todo
+  text: Choose correlation_to_cause when the conclusion is a causal claim about two
+    kinds of event; choose sign when a known association is used to infer, from a
+    finding in this situation, that something else holds here, with no claim about
+    which produces which.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_inductive_step
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: 'Not a close relative: slippery_slope_inductive_step takes a causal link as
+    given and passes horrible costs back along it; it never argues that the link exists.
+    Choose correlation_to_cause only when the text argues for the link from co-occurrence.'
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Regions where people eat the most red meat also have the highest rates of
+    heart disease, so red meat causes heart disease.
+  coding: 'E1 = eating a lot of red meat; E2 = heart disease. Stated: correlated(E1,E2)
+    (the regional pattern). Supplied: explanatory_theory(E1,E2) (for instance, saturated
+    fat raising cholesterol). Conclusion: causes(E1,E2). A critic would raise causes_both(E1,E2):
+    wealth, smoking or age may differ between the regions and drive both.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Since the city put in protected bike lanes, cycling injuries have fallen on
+    every street that got one; the lanes are what made cycling safer.
+  coding: 'E1 = a protected bike lane on a street; E2 = fewer cycling injuries there.
+    Stated: correlated(E1,E2) (street by street, over time). Supplied: explanatory_theory(E1,E2)
+    (separating bikes from cars prevents collisions). Conclusion: causes(E1,E2). Open
+    to 29/CQ1 (were the streets compared with similar streets without lanes?) and
+    to 29/CQ3 (a city-wide drop in traffic over the same years).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Meta-analyses and reviews of studies and trials have shown again and again
+    that meat reduction and vegetarianism results not in a decrease of health, but
+    in better health, lower mortality and longer lifespans, …
+  kialo: "13292.233"
+  coding: 'Near miss: the claim states a causal finding, but it argues from what the
+    studies report, not from a co-occurrence it presents itself; expert_opinion, as
+    the gold codes it (W = the meta-analyses and reviews). A text that gave the data
+    (lower mortality among people who eat less meat) and drew the causal link itself
+    would be correlation_to_cause.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: Premise
+  detail: The book's premise is a positive correlation between the two factors; walton.yml's
+    correlated(E1,E2) says only that they are correlated, not in which direction.
+  decision: No change. Read correlated(E1,E2) as a positive correlation. An inverse
+    association (more of E1, less of the other factor) is coded with E2 bound to the
+    decrease, so that the conclusion says E1 brings about the decrease.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ2
+  detail: 'The book''s CQ2 asks for any reason to think the correlation is more than
+    a coincidence. walton.yml''s assumption explanatory_theory(E1,E2) asks for a theory
+    of how E1 causes E2, which is one such reason but not the only one: an association
+    that recurs across independent samples is another.'
+  decision: 'Keep the target. Until walton.yml words the wider condition, read explanatory_theory(E1,E2)
+    as "there is some reason, beyond the co-occurrence, to think that E1 produces
+    E2", and accept any such reason as a positive answer. Open: whether the owner
+    wants the formula''s template widened.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: discovery
+  group: establishing rules
+  note: Not in the tree; placed with random sample to population and best explanation
+    (discovery, establishing rules), because it moves from observed co-occurrence
+    to a general causal claim, where cause_to_effect (based on cases) applies such
+    a claim to a case.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing. It argues for the causal link that cause_to_effect takes
+    as its major premise; the two are variants in F13, not one a narrowing of the
+    other.
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [inquiry, persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: 'Not in ND''s table (docs/dialogue-types.md §7); mostly our extrapolation.
+    ND describes inquiries that set out to find the cause of an event by weighing
+    rival causal hypotheses against the evidence (ND p. 86), where this argument is
+    a natural move; at the discovery stage it can propose a hypothesis, and it counts
+    as established only once its questions are answered (ND pp. 97–8). In persuasion
+    and deliberation it serves as evidence that a measure would work. The book (ch.
+    2, p. 84) calls the leap from a correlation to a causal conclusion, without looking
+    into other factors, the post hoc fallacy: a misuse in any type, not in one.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the three questions, the
+    contrasts, the examples (own examples, and a Kialo near miss), two book-walton
+    discrepancies, the classification (not in the tree), specialises and the dialogue
+    types.

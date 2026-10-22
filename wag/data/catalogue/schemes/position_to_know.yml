@@ -64,9 +64,20 @@ critical_questions:
     pattern: position_to_know(W,D)
   targets: [{formula: 'position_to_know(W,D)', locus: premise}, {formula: 'in_domain(S,D)',
       locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book asks whether the source can know the proposition itself. walton.yml
+    splits that into W's position in a domain D and S's belonging to D, so the question
+    targets both formulas. The book aims this question at the major premise and says
+    the argument fails without it (pp. 89–90). The game's CQ:position asks only about
+    D; the second half is the game's own CQ:field (game/CQ:field).
+  paraphrase: Does W have the kind of access to D that would let W know whether S
+    holds?
+  answer: 'The proponent, once asked. Against: showing that W had no first-hand access
+    to the facts that settle S (W was not present, does not keep the records, or only
+    passes on hearsay), or that S lies beyond what W''s access covers, which undermines
+    position_to_know(W,D) or in_domain(S,D). For: how W came to know about D, such
+    as being on the spot, living there or keeping the records, and that S is among
+    the facts that access reveals.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 1/CQ2
   book:
     entry: "1"
@@ -77,10 +88,20 @@ critical_questions:
     locus: exception
     pattern: dishonest(W)
   targets: [{formula: dishonest(W), locus: exception}]
-  note: only "honest" is encoded; "reliable" has no separate formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: only "honest" is encoded; "reliable" has no separate formula. walton.yml and
+    the game make it an exception, so the critic carries it; but the book's p. 17
+    counts honesty among the linked premises the audience must accept, and calls this
+    question a second premise (see the discrepancy on CQ2). The game's text adds bias,
+    which none of the book's position-to-know questions mention, and drops reliability.
+  paraphrase: Is W a truthful and dependable source, or is there reason to doubt W's
+    word?
+  answer: 'The critic, who raises it with an argument. Against: evidence that W has
+    lied before, or has a motive to mislead about S, which undercuts the argument
+    through dishonest(W). For: W''s record of truthful reports, and the absence of
+    any reason for W to deceive. A charge that W is honest but careless or unreliable
+    has no formula of its own; it is best put against position_to_know(W,D) (1/CQ1),
+    as a doubt about W''s access.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 1/CQ3
   book:
     entry: "1"
@@ -91,9 +112,16 @@ critical_questions:
     locus: premise
     pattern: asserts(W,S)
   targets: [{formula: 'asserts(W,S)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's p. 17 reads this question as aimed at the words W actually used,
+    as against a paraphrase or an interpretation of them; p. 90 names distortion of
+    the source's words as the risk.
+  paraphrase: Do W's own words, rather than someone's report or rewording of them,
+    state S?
+  answer: 'The proponent, once asked. Against: W''s actual words, when they say something
+    other than S or less than S (a misquotation, a second-hand or distorted report),
+    which undermines asserts(W,S). For: a quotation, recording or citation of W stating
+    S.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:field
   game:
     id: CQ:field
@@ -101,47 +129,129 @@ critical_questions:
     locus: premise
     pattern: in_domain(S,D)
   targets: [{formula: 'in_domain(S,D)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'No book question of its own: the book''s major premise states it (a domain
+    containing the proposition), and the book''s CQ1 covers it (see 1/CQ1). A premise
+    can always be challenged in the game.'
+  paraphrase: Is S one of the matters that W's access to D covers?
+  answer: 'The proponent, once asked. Against: showing that S concerns something outside
+    D (a resident of the street reporting on the city''s budget), which undermines
+    in_domain(S,D). For: showing that S is the kind of fact that W''s access to D
+    would reveal.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: 'Use it when a claim S is offered on the word of a source W who has first-hand
+    access to the matters of D that S belongs to: someone who was there, lives or
+    works on the spot, or keeps the records. The claim rests on W''s access to the
+    facts, not on mastery of a field (expert_opinion), and lacks the sincerity premise
+    and the checks against other evidence that make a witness''s account in court
+    or at an inquiry witness_testimony.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: expert_opinion
-  text: ""
-  status: todo
+  text: Choose position_to_know when W's standing on S comes from access to the facts
+    of D (having been there, living nearby, holding the records); choose expert_opinion
+    when it comes from knowledge of a field (training, research, a professional record),
+    which also lets W interpret the facts. The book makes expert opinion a subtype
+    of position to know (p. 14), so a text silent about expertise takes the general
+    scheme.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: credible_source
-  text: ""
-  status: todo
+  text: Choose credible_source when the text rests W's standing on W's credibility
+    as a source in D, a reputation or a track record such as a reputable newspaper's
+    or an official agency's, without saying how W knows; choose position_to_know when
+    it points to W's access to the facts.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: witness_testimony
-  text: ""
-  status: todo
+  text: Choose witness_testimony when W reports, as a witness, a fact or event W perceived,
+    in a setting that tests the account (a court, an inquiry, an investigation), so
+    that W's sincerity and the account's fit with other evidence are in play; choose
+    position_to_know for a source with access whose report is not tested that way,
+    or who reports what W knows from long experience of D rather than one event.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: position_to_know_ad_populum
-  text: ""
-  status: todo
+  text: Choose position_to_know_ad_populum when the claim rests on everyone in a group
+    G accepting it, the group being well placed to know (the residents, the regular
+    users); choose position_to_know when it rests on one source's word.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: expert_opinion_ad_populum
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: 'Not a close relative: it rests on agreement among a group of experts, not
+    on anyone''s access to the facts. Choose expert_opinion_ad_populum when the text
+    appeals to what the experts in a field all accept.'
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The caretaker, who unlocks the sports hall every morning, says the heating
+    there has been off all week.
+  coding: 'W = the caretaker; D = the state of the sports hall; S = the hall''s heating
+    has been off all week. Stated: asserts(W,S), and the ground of position_to_know(W,D)
+    (W unlocks the hall every morning). Supplied: in_domain(S,D). Conclusion: S.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The manager of the farmers' market told the council that the stalls sold about
+    half as much beef this summer as last.
+  coding: 'W = the market manager; D = trade at the farmers'' market; S = beef sales
+    at the market roughly halved this summer. Stated: asserts(W,S). Supplied: position_to_know(W,D)
+    (a manager sees the stalls'' trade), in_domain(S,D). Conclusion: S. The council
+    is not testing a witness''s account of an event, so it is not witness_testimony.'
+  status: drafted by Claude Code, 2026-10-22
+- text: A professor of nutrition says that eating red meat every day raises the risk
+    of bowel cancer.
+  coding: 'Near miss: the claim does not rest on access to particular facts but on
+    knowledge of a field, which is what lets the source generalise about risk; expert_opinion
+    (W = the professor, D = nutrition science, S = daily red meat raises the risk
+    of bowel cancer).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: CQ2
+  detail: The book asks whether the source is honest, trustworthy and reliable; walton.yml
+    encodes only dishonesty, as the exception dishonest(W). The book's p. 17 also
+    treats honesty as a premise the audience must accept for the argument to succeed,
+    which would make it an assumption (the proponent's burden), while walton.yml and
+    the game make it an exception (the critic's).
+  decision: 'Follow walton.yml: the critic must back a charge of dishonesty, as for
+    expert_opinion''s trustworthiness question (p. 33). p. 17 itself leaves open where
+    premises end and questions begin. A charge of mere unreliability goes against
+    position_to_know(W,D). Open: whether walton.yml should add an exception for an
+    unreliable but honest source.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: 'The game''s texts differ from the book''s questions: CQ:position asks whether
+    W can know about the domain D, where the book asks about the proposition; CQ:trustworthiness
+    asks about honesty and bias, where the book asks about honesty, trustworthiness
+    and reliability; CQ:field has no book question of its own.'
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
+    the game''s texts from these paraphrases. Keep CQ:field: it questions a premise
+    that the book''s major premise states.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
+  source: dependent
   reasoning: ""
   epistemic: ""
-  group: ""
-  status: todo
+  group: position to know
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the generic scheme of its family (F01). expert_opinion
+    and witness_testimony narrow it.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [information_seeking, deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: 'ND treats asking someone in a position to know as a subtype of information-seeking
+    (pp. 134–5), which joins deliberation when the question is how to do something
+    (pp. 135–6). Persuasion comes from the book, not ND: it says the argument is often
+    used in deliberation and persuasion (p. 90). Inquiry is left out: a public inquiry
+    gathers testimony as data at its first stage (ND p. 92), to be checked before
+    anything is built on it (our reading). No type makes the scheme suspect as such.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the four questions, the
+    contrasts, the examples, two discrepancies (CQ2's locus and reliability, the game's
+    texts), the classification, specialises and the dialogue types.

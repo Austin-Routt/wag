@@ -52,83 +52,200 @@ critical_questions:
     entry: "6.1"
     label: CQ1
   targets: [{formula: 'has_properties(A,P1,P2)', locus: conclusion}]
-  note: the book's premise, but the conclusion in walton.yml
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: the book's premise, but the conclusion in walton.yml. The target follows the
+    formula's English, as the premise map does; see the partial-link discrepancy.
+  paraphrase: Does the individual A really have both P1 and P2?
+  answer: 'The proponent, once asked, in the book''s direction, where this is the
+    premise; as walton.yml stands it is the conclusion, so a critic who denies it
+    must argue for its negation. Against: evidence that A lacks P1 or P2 (a misreported
+    case, a different individual), which undermines the book''s premise (and rebuts
+    has_properties(A,P1,P2) in walton.yml''s roles). For: a record or source showing
+    that A has both properties.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 6.1/CQ2
   book:
     entry: "6.1"
     label: CQ2
   targets: []
-  note: inference question; no formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  undercuts: true
+  note: 'inference question; no formula. Decided as undercutting: it asks whether
+    the case, even if accurately described, supports the rule at all.'
+  paraphrase: Does A's having both P1 and P2 actually count in favour of the rule
+    that whatever has P1 has P2?
+  answer: 'The proponent, once asked: the argument is out of force until answered.
+    Against: showing that A''s two properties go together by accident, or for a reason
+    unrelated to P1, so that the case lends the rule no support, which undercuts the
+    argument. For: showing that A has P2 because it has P1, as the rule claims.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 6.1/CQ3
   book:
     entry: "6.1"
     label: CQ3
   targets: [{formula: typical_example(A), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: Is A a representative case of the things the general claim is about?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: showing that A is unusual among things with P1 (an extreme, hand-picked
+    or famous case), which undermines typical_example(A). For: showing that A is like
+    most things with P1 in the respects that matter to P2.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 6.1/CQ4
   book:
     entry: "6.1"
     label: CQ4
-  targets: []
-  note: no formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'both_properties(A,P1,P2)', locus: premise}]
+  note: The generator found no formula. It targets the formula whose English is the
+    generalization, both_properties(A,P1,P2), which walton.yml has as a premise, as
+    6.1/CQ1 targets the particular case where walton.yml has it. In the book's direction
+    the generalization is the conclusion, and the question would undercut; either
+    way the proponent must answer it.
+  paraphrase: How strong a rule is claimed, one that holds always, usually, or only
+    now and then?
+  answer: 'The proponent, once asked. Against: showing that the rule is claimed more
+    strongly than one case can bear, or that things with P1 often lack P2, which undermines
+    both_properties(A,P1,P2) as walton.yml stands (in the book''s direction, it undercuts
+    the step from the case to so strong a rule). For: further cases, or a reason why
+    P1 brings P2 with it, that support a rule of the strength claimed.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 6.1/CQ5
   book:
     entry: "6.1"
     label: CQ5
   targets: [{formula: impair_general(A), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: Is there something peculiar to the case of A that keeps it from carrying
+    over to other things with P1?
+  answer: 'The critic, who raises it with an argument. Against: a circumstance particular
+    to A (its setting, its timing, an extra factor) that explains why A has P2 and
+    that other things with P1 lack, which undercuts the argument through impair_general(A).
+    For: showing that A''s circumstances are ordinary, or that P2 follows P1 in cases
+    without them.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when one particular case, an individual A that has both property P1
+    and property P2, is offered as support for the general claim that whatever has
+    P1 also has P2. It reasons from a case up to a rule, which sets it apart from
+    analogy, which carries a finding across to one other case, and from illustration,
+    which has the rule among its premises and takes the case as confirming it.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: illustration
-  text: ""
-  status: todo
+  text: Choose illustration when the rule is already among the premises and the case
+    is cited as confirming it; choose from_example when the case is the evidence offered
+    for a rule not yet granted.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: from_model
-  text: ""
-  status: todo
+  text: Choose from_model when an admired individual's conduct is held up for others
+    to copy, a practical conclusion (they should do the same); choose from_example
+    when a case is offered as evidence that a general claim is true.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: from_antimodel
-  text: ""
-  status: todo
-examples: []
+  text: Choose from_antimodel when someone's conduct is cited so that others will
+    avoid doing what that person does; choose from_example when a case is evidence
+    for a general claim. A case cited as a warning is antimodel, or negative consequences,
+    not example.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: analogy
+  text: 'Choose analogy when the case is used to conclude something about one other
+    case; choose from_example when it is used to support a general claim. One case
+    can do both in turn: a tax that cut consumption elsewhere can back a rule about
+    such taxes, or a prediction about a meat tax, and the gold codes 13292.61 as analogy.'
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Our company's four-day-week trial kept output steady for a whole year, so
+    shorter working weeks don't cost productivity.
+  coding: 'A = the company''s trial; P1 = moving to a four-day week; P2 = keeping
+    output steady. In the book''s direction: stated, has_properties(A,P1,P2) (the
+    particular case; walton.yml''s conclusion); concluded, the rule that firms moving
+    to a four-day week keep output steady, which is both_properties(A,P1,P2) in walton.yml''s
+    English (a premise there). Open to 6.1/CQ3 (one firm, perhaps an unusual one)
+    and 6.1/CQ5.'
+  status: drafted by Claude Code, 2026-10-22
+- text: My neighbour's heat pump kept her house warm through two hard winters, so
+    heat pumps work fine in cold climates.
+  coding: 'A = the neighbour''s house; P1 = being heated by a heat pump in a cold
+    climate; P2 = staying warm through winter. Book''s direction, coded as in the
+    first example: stated has_properties(A,P1,P2); concluded the rule (both_properties(A,P1,P2)
+    in walton.yml''s English). A critic would raise impair_general(A): the house may
+    be unusually well insulated.'
+  status: drafted by Claude Code, 2026-10-22
+- text: A tax for tobacco significantly reduced its consumption.
+  kialo: "13292.61"
+  coding: 'Near miss: one case is cited, but in the discussion it is used to conclude
+    that a meat tax would cut meat consumption, a claim about one other case, not
+    a general rule; analogy, as the gold codes it (C = the tobacco-tax case). The
+    gold notes that walton.yml''s from_example, which concludes the particular case,
+    could not express a case supporting a rule in any event.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: partial-link
   about: "6.1"
   detail: 'walton.yml formalizes compendium 6.1 only in part: Same title, but the
     premise and the conclusion are swapped: walton.yml concludes the particular case
     from the generalization.'
-  decision: ""
-  status: generated
+  decision: 'Open: the owner''s decision on the content defects (docs/review-2026-10-13-part5.md
+    §4 and §8 item 1). Two repairs fit the book: swap the two formulas'' roles (premise
+    has_properties(A,P1,P2), conclusion both_properties(A,P1,P2)), or swap their English
+    templates. The second is our guess at where the slip lies: the name both_properties
+    reads naturally as "A has both properties", and the assumption and exception (A
+    as a typical example, A''s generalizability) only make sense when the argument
+    generalizes from A. Until then, the premise map and the targets follow the formulas
+    as their English reads (6.1/CQ1 on the conclusion, 6.1/CQ4 on the premise), and
+    the examples are coded in the book''s direction. After either repair, those two
+    targets change.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: generalization
+  detail: The book's conclusion generalizes over any individual x. walton.yml's generalization
+    formula has the individual A as its argument ("if A has P1 then it also has P2"),
+    so it states a conditional about A alone, not a rule about whatever has P1.
+  decision: 'Open, with the partial link: a repaired scheme should drop A from the
+    generalization, giving it only the two properties (for example generally_has(P1,P2)),
+    so that the conclusion is a rule and A appears only in the premise, the assumption
+    and the exception.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: source
+  detail: walton.yml cites Perelman and Olbrechts-Tyteca (1969, pp. 357–368), the
+    reference the book prints after 6.4 for 6.2–6.4; the book cites Walton (1995,
+    p. 135) for 6.1.
+  decision: No change to the scheme. When walton.yml is next edited, its meta.source
+    for from_example should cite Walton 1995, p. 135, the reference of 6.1 (the owner's
+    call).
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: defeasible rule-based
+  note: The tree lists argument from example under defeasible rule-based application.
+    In the book's direction it reasons from a case to a rule, which would also suit
+    discovery (establishing rules); we follow the tree.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing. F03 has no generic scheme: from_example, illustration
+    and from_model are subtypes, and from_antimodel a counterpart, under the book''s
+    heading 6.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [inquiry, persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table; our extrapolation, from the guide's rule for epistemic
+    schemes. In an inquiry a single case can suggest a rule at the discovery stage
+    but cannot establish it (ND pp. 97–8); in persuasion and deliberation it is a
+    common way of giving a general claim some support. Generalizing from an untypical
+    case is a misuse in any type, and 6.1/CQ3 and CQ5 are the questions that catch
+    it.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the five questions (6.1/CQ2
+    decided as undercutting, 6.1/CQ4 given the generalization formula as its target),
+    the contrasts (one added, with analogy), the examples, the decision on the partial
+    link, a book-walton discrepancy on the generalization and an other one on the
+    source, the classification, specialises and the dialogue types.

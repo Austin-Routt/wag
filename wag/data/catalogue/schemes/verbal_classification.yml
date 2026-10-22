@@ -48,59 +48,155 @@ critical_questions:
     entry: "14"
     label: CQ1
   targets: [{formula: 'instance(O,F)', locus: premise}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The ch. 2 defeasible form asks the same of its concluded property (p. 68),
+    where the compendium asks it of the premise's F.
+  paraphrase: How clearly does O fall in class F, or is O a doubtful case whose membership
+    in F could be disputed?
+  answer: 'The proponent, once asked. Against: features of O that make it a borderline
+    or doubtful case of F, or evidence that it lacks a mark of F, which undermines
+    instance(O,F). For: evidence that O has the features that make something an F,
+    clearly rather than marginally.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 14/CQ2
   book:
     entry: "14"
     label: CQ2
   targets: [{formula: 'subclass(F,G)', locus: premise}]
-  note: no exception for doubtful word usage
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: no exception for doubtful word usage. The question targets the classification
+    premise; walton.yml's subclass(F,G) is a strict inclusion, so a usage that holds
+    only for most Fs is a reason to deny it (see the discrepancy on the classification
+    premise).
+  paraphrase: Does counting every F as a G rest only on a contestable assumption about
+    how the word for G is used?
+  answer: 'The proponent, once asked. Against: showing that ordinary or technical
+    usage does not count every F as a G, or that doing so is one disputed usage among
+    others (a loaded label), which undermines subclass(F,G). For: an accepted definition,
+    a standard usage, or a shared rule that counts F as G.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: 'Use it when a thing, act or policy O is put in a category G because O has
+    a property F and whatever has F counts as G, as when a label that carries a verdict
+    (harmful, unhealthy, unfair) is applied to a case. It concludes O''s membership
+    in G by classification alone: not from a stated definition (definition_to_verbal_classification),
+    from how O looks (appearance), from a comparison with a similar case (analogy),
+    or from a rule that requires an action (established_rule).'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: definition_to_verbal_classification
-  text: ""
-  status: todo
+  text: Choose definition_to_verbal_classification when the text states or relies
+    on a definition D of G and argues that O meets it; choose verbal_classification
+    when F is a property or category O has and the step from F to G is a generalisation
+    or customary usage, not a definition.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: verbal_classification_vagueness
-  text: ""
-  status: todo
+  text: 'A counter, not an alternative: choose verbal_classification_vagueness for
+    an argument that rejects another argument because a key term is too vague for
+    the precision the dialogue needs; it can be the critic''s reply to a verbal_classification.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: verbal_classification_arbitrariness
-  text: ""
-  status: todo
+  text: 'A counter, not an alternative: choose verbal_classification_arbitrariness
+    for an argument that rejects another argument because its key property is defined
+    arbitrarily where the dialogue needs a principled definition.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: appearance
-  text: ""
-  status: todo
+  text: Choose appearance when O is put in class C because it looks like a C, from
+    perception; choose verbal_classification when the classification goes through
+    a property O is said to have and a link between categories.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rule_physical_world_1
-  text: ""
-  status: todo
+  text: 'Not a close relative for coding: it argues that a word W has the same meaning
+    as D, from expressions that pick out the same things; verbal_classification applies
+    a meaning to classify O. Choose it only when the conclusion is what a word means.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rule_mental_world
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: 'Not a close relative for coding: it concludes that W has the same meaning
+    as D because the speakers of a language believe so. It can back 14/CQ2, by showing
+    what usage supports counting F as G.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: analogy
+  text: Choose analogy when O is said to be G because a similar case is G; choose
+    verbal_classification when O is G because it has F and Fs are Gs, with no case
+    compared. The book stresses that the two are easily mixed up (pp. 66–9).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: established_rule
+  text: Choose established_rule when the general premise is a rule that requires an
+    action of agents like O, and the conclusion is what O must do; choose verbal_classification
+    when the conclusion says what O is. The book calls the established-rule scheme
+    the pragmatic counterpart of this one (p. 70).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: rule
+  text: Choose rule when the general premise attaches an evaluation or a required
+    conduct to a kind of situation; choose verbal_classification when it attaches
+    a category, and the conclusion is O's membership in it.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Meat production creates significant greenhouse gas emissions which contribute
+    to climate change.
+  kialo: "13292.2"
+  coding: 'O = meat production; F = significant sources of greenhouse-gas emissions
+    that drive climate change; G = activities that are bad for the environment. Stated:
+    instance(O,F). Supplied: subclass(F,G). Conclusion: instance(O,G), which backs
+    13292.108''s claim that meat production harms the environment. The causal links
+    in the claim are separate cause_to_effect steps, as the gold codes them.'
+  status: drafted by Claude Code, 2026-10-22
+- text: North American citizens consume more meat than dietary guidelines recommend.
+  kialo: "13292.8"
+  coding: 'O = North Americans'' meat consumption; F = meat consumption above what
+    dietary guidelines recommend; G = unhealthy meat consumption. Stated: instance(O,F).
+    Supplied: subclass(F,G), which rests on the guidelines'' authority (the gold adds
+    a secondary expert_opinion step). Conclusion: instance(O,G). Not definition_to_verbal_classification:
+    the guideline level is a criterion of unhealthy eating, not its definition.'
+  status: drafted by Claude Code, 2026-10-22
+- text: The WHO's cancer agency defines processed meat as meat transformed by salting,
+    curing, fermentation or smoking; ham is cured, so ham counts as processed meat.
+  coding: 'Near miss: the step to the category is a definition that is stated and
+    then checked against the case; definition_to_verbal_classification (O = ham, D
+    = the agency''s definition of processed meat, G = processed meat).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: Classification Premise
+  detail: The book's classification premise says that whatever has F can be classified
+    as G, and its ch. 2 version lets this premise be a defeasible generalisation,
+    open to exceptions (p. 68). walton.yml writes subclass(F,G), a strict inclusion
+    of classes, and gives the scheme no exceptions, which makes it the deductive form
+    of ch. 2 (p. 66). It also speaks of classes where the book speaks of properties.
+  decision: 'No change for now: read subclass(F,G) as "Fs are, as a rule, counted
+    as Gs", and put any doubt about the generalisation, or about the usage behind
+    it, through 14/CQ2 against that premise. Open: whether walton.yml should mark
+    the classification premise as defeasible, or add an exception for a doubtful usage.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: based on cases
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the generic scheme of its family (F07). definition_to_verbal_classification
+    narrows it.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [persuasion, inquiry, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table (docs/dialogue-types.md §7), and ND does not discuss the
+    scheme; our extrapolation. Classifying a case gives evidence about what it is,
+    so it serves persuasion and inquiry, and deliberation, where the category a case
+    falls in often decides which policy or rule applies to it. The book (not ND) warns
+    that a classification by a loaded term can beg the question when its definition
+    is the point in dispute (pp. 67–8); that is a misuse in any type, not a type in
+    which the scheme is suspect.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the two questions, the
+    contrasts (adding analogy, established_rule and rule), the examples from the batch-2
+    gold, a discrepancy on the classification premise, the classification, specialises
+    and the dialogue types.

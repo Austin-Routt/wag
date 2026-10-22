@@ -62,18 +62,33 @@ critical_questions:
     locus: premise
     pattern: strong_correlation(A,B)
   targets: [{formula: 'strong_correlation(A,B)', locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book asks for a degree; walton.yml's assumption says only that the link
+    is strong. The game's CQ:likelihood is a question shared with the consequences
+    schemes ("the claimed link") and does not name the sign or what it indicates (see
+    the discrepancy on the game's questions).
+  paraphrase: How closely does a finding like A go with B, as a dependable indicator
+    of it or only a loose one?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: evidence that A often turns up without B, or that B is often absent where
+    A is found, which undermines strong_correlation(A,B). For: a record showing that
+    where A is found, B is nearly always present.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 30/CQ2
   book:
     entry: "30"
     label: CQ2
   targets: [{formula: more_reliable, locus: exception}]
-  note: 0-ary exception
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: '0-ary exception: it names neither the sign nor the event (see the discrepancy
+    on CQ2). The game asks the same thing as game/CQ:other_event, at the argument
+    locus, because its copy of sign lacks the exception.'
+  paraphrase: Is there an event other than B that would explain the finding A better
+    than B does?
+  answer: 'The critic, who raises it with an argument. Against: an event other than
+    B that would also produce A and is more likely in this situation (a fake, a faulty
+    instrument, another condition with the same symptom), which undercuts the argument
+    through more_reliable. For: showing that the rival accounts are absent here, or
+    less likely than B.'
+  status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:other_event
   game:
     id: CQ:other_event
@@ -81,46 +96,148 @@ critical_questions:
     locus: argument
   targets: []
   undercuts: true
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: 'The game''s form of 30/CQ2, at the argument locus. Its burden differs from
+    walton.yml''s: asking this question puts the argument out of force until the proponent
+    answers, while the exception more_reliable must be argued by the critic (see the
+    game-differs discrepancy).'
+  paraphrase: Would some cause other than B account better for the observed A?
+  answer: 'The proponent, once asked: the argument is out of force until answered.
+    Against: a rival account of A that fits this situation better than B, which undercuts
+    the argument. For: reasons why B remains the best account of A here, such as the
+    absence of the rival''s other traces.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when a finding A, observed in a situation, is taken to show that B
+    holds there, because findings like A usually go with B. It reasons from an indicator
+    to what it indicates, without claiming that either produces the other, which sets
+    it apart from cause_to_effect and correlation_to_cause; and it leans on a standing
+    link between A and B, where abduction compares rival explanations of what was
+    observed.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect
-  text: ""
-  status: todo
+  text: 'Choose cause_to_effect when the text claims that E1 brings about E2 and predicts
+    the effect; choose sign when a finding A is offered as showing that B holds, with
+    no claim that one produces the other. When A is an effect and B its presumed cause,
+    the text reasons back from effect to cause: that is sign (or abduction), not cause_to_effect.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: correlation_to_cause
-  text: ""
-  status: todo
+  text: Choose correlation_to_cause when the conclusion is a causal link between two
+    kinds of event, argued from their going together; choose sign when such an association
+    is taken as known and used to infer, from a finding in this situation, that B
+    holds here.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_inductive_step
-  text: ""
-  status: todo
-examples: []
+  text: 'Not a close relative: slippery_slope_inductive_step passes horrible costs
+    back along a causal link; sign infers a present state of affairs from an indicator
+    and says nothing about chains or costs.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: abduction
+  text: Choose abduction when the text weighs rival explanations of what was observed
+    and concludes that the best one holds; choose sign when it relies on a known link
+    between a finding and what such findings usually indicate. The book calls sign
+    closely related to inference to the best explanation (p. 10), and the upstream
+    collection files sign with the abductive schemes (A/4).
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The dog keeps scratching at its ears and shaking its head, so it has probably
+    got an ear infection.
+  coding: 'A = the dog scratching its ears and shaking its head; B = the dog has an
+    ear infection. Stated: finding_true(A). Supplied: indicated_true(B,A). Conclusion:
+    true_in_situation(B). The assumption strong_correlation(A,B) is the weak point:
+    an allergy or a grass seed would produce the same signs (30/CQ2).'
+  status: drafted by Claude Code, 2026-10-22
+- text: Food banks in the region report record demand this winter, which shows that
+    many households here can no longer afford enough food.
+  coding: 'A = record demand at the region''s food banks; B = widespread food insecurity
+    in the region. Stated: finding_true(A), and the conclusion. Supplied: indicated_true(B,A).
+    Conclusion: true_in_situation(B). A critic might raise more_reliable: more food
+    banks opening, or better publicity, would also raise demand.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Supermarkets are giving more and more shelf space to meat substitutes, a sign
+    that demand for them is growing.
+  coding: 'A = more shelf space for meat substitutes; B = growing demand for meat
+    substitutes. Stated: finding_true(A). Supplied: indicated_true(B,A). Conclusion:
+    true_in_situation(B).'
+  status: drafted by Claude Code, 2026-10-22
+- text: The river is rising after three days of rain, so the low road will flood tonight.
+  coding: 'Near miss: the finding is a cause, and the conclusion an effect still to
+    come, predicted by a causal link; cause_to_effect (E1 = the rising river, E2 =
+    the low road flooding). Had the text inferred heavy rain upstream from the rising
+    river, it would be sign.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
 discrepancies:
 - kind: game-differs
   about: exception more_reliable
   detail: The game's core.yml lacks the exception more_reliable of walton.yml.
-  decision: ""
-  status: generated
+  decision: Keep the game as it is for now. Its argument-locus question CQ:other_event
+    does the exception's work without the 0-ary formula, which would be one statement
+    shared by every sign argument. When walton.yml gives the exception arguments (see
+    the discrepancy on CQ2), add it to core.yml and point CQ:other_event at it with
+    locus exception; the burden then moves from the proponent (an undercutting question)
+    to the critic, as walton.yml's exception has it, and 30/CQ2 and game/CQ:other_event
+    become one question.
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ2
+  detail: 'The book''s CQ2 is about this sign and the event it is taken to signify.
+    walton.yml''s exception more_reliable has no arguments, so it cannot say which
+    finding or which event it concerns, and its template ("the sign") refers to nothing
+    in the formula. Instantiated, it is one statement for every sign argument: establishing
+    it against one would count against all of them (audit REPORT §3.2 and §5).'
+  decision: 'A defect in walton.yml''s formula. Proposed repair: give the exception
+    the sign and the event, for example more_reliable(A,B) ("an event other than B
+    accounts for A more reliably"); the cleaning''s CHANGELOG and the audit''s cq_drafts.json
+    suggest more_reliable(A). Open: the owner''s decision on the 0-ary atoms (docs/review-2026-10-13-part5.md
+    §4). Until then, 30/CQ2 targets the exception as it stands.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: game questions
+  detail: CQ:likelihood is the game's shared likelihood question, worded for any link
+    ("the claimed link"); the book's CQ1 asks how strongly the sign goes with what
+    it signifies. CQ:other_event asks for a better explanation of A, close to the
+    book's CQ2, but as an undercutting question (see the game-differs discrepancy).
+    The game's premise text "{B} is indicated when {A} holds" drops the book's "generally".
+    The game also lets sign back answers to CQ:side_effect, CQ:possibility and CQ:goal_possible,
+    practical-reasoning questions the book does not connect with sign.
+  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), give
+    sign its own likelihood text, from 30/CQ1''s paraphrase, and keep "generally"
+    in the premise. The backup edges can stay: sign concludes that a state of affairs
+    holds, which can serve as factual evidence in an answer to those questions.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: discovery
+  group: finding entities
+  note: The tree lists argument from sign under finding entities.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: Specialises nothing in walton.yml. The book relates it to abduction, inference
+    to the best explanation (p. 10), but presents it as a scheme of its own, resting
+    on a generalization about what a finding usually indicates.
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [inquiry, persuasion, deliberation]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table (docs/dialogue-types.md §7); our extrapolation. As evidence
+    that something holds, it serves inquiry, persuasion and deliberation. In an inquiry,
+    conjectures from what has been observed belong to the discovery stage, where ND
+    treats abductive guesswork as characteristic (ND pp. 80–1, 97); at the later stages
+    the link between sign and signified must be established. No type makes it suspect
+    as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the two book questions
+    and the game's other-event question, the contrasts (one added, with abduction),
+    the examples, the decision on the game-differs discrepancy, a book-walton discrepancy
+    on the 0-ary exception and an other one on the game's questions, the classification,
+    specialises and the dialogue types.

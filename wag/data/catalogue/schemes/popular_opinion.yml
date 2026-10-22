@@ -39,9 +39,12 @@ families:
 premise_map:
 - entry: "4"
   label: General Acceptance Premise
-  formulas: [{formula: generally_true(A), locus: premise}]
-  note: predicate name says "true", template says "generally accepted as true"
-  status: generated
+  formulas: [{formula: generally_true(A), locus: premise}, {formula: generally_accepted(A),
+      locus: assumption}]
+  note: predicate name says "true", template says "generally accepted as true". Added
+    the assumption generally_accepted(A), which has the same reading as the premise
+    and so encodes the same book premise.
+  status: drafted by Claude Code, 2026-10-22
 - entry: "4"
   label: Presumption Premise
   formulas: [{formula: favor(A), locus: premise}]
@@ -57,78 +60,203 @@ critical_questions:
     label: CQ1
   targets: [{formula: generally_true(A), locus: premise}, {formula: generally_accepted(A),
       locus: assumption}]
-  note: generally_accepted(A) is listed under the misspelled key "assumption:" and
-    is dropped at load
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: In upstream walton.yml and the category file B/4, generally_accepted(A) sits
+    under the misspelled key "assumption:", which Carneades ignores, so the formula
+    was dropped at load; the cleaned walton.yml lists it under assumptions. Both formulas
+    have the same English reading, that A is widely accepted as true (see the discrepancy
+    on the general acceptance premise). The book's ch. 4 asks the same of a large
+    majority of a reference group (p. 124).
+  paraphrase: What shows that A really is widely accepted, such as survey results
+    or A's being common knowledge?
+  answer: 'The proponent, once asked. Against: a poll or other evidence that opinion
+    on A is divided, or that only a small or unrepresentative group holds it, which
+    undermines generally_true(A) and its duplicate generally_accepted(A). For: a representative
+    poll, or signs that A is common knowledge among those concerned.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 4/CQ2
   book:
     entry: "4"
     label: CQ2
   targets: [{formula: doubting_general(A), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The ch. 4 version asks for other evidence that A is not true (p. 124). walton.yml's
+    template for doubting_general(A) speaks of doubting that A is "generally true",
+    which can be misread as doubt about the general acceptance; the book's question
+    is about A's truth.
+  paraphrase: Setting its popularity aside, is there good reason to think A false?
+  answer: 'The critic, who raises it with an argument. Against: evidence that A is
+    false, or that the common view rests on a misconception, which undercuts the argument
+    through doubting_general(A), and may also be put as a rebuttal of A. For: evidence
+    for A beyond its popularity.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when the support offered for a claim A is that A is widely accepted,
+    by the public or by most of some group, as a poll or A's being common knowledge
+    shows. It concludes only that there is a presumptive reason for A; when the text
+    says why the group's acceptance should count (it is placed to know, expert, has
+    deliberated, or is admired), a subtype of the family fits better, and when it
+    cites what people do rather than what they believe, popular_practice does.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: pop_scheme
-  text: ""
-  status: todo
+  text: 'pop_scheme is the bare form: everyone in a reference group G accepts A, so
+    A is true or should be accepted. Choose pop_scheme when the text draws A itself,
+    or the duty to accept it, straight from a group''s agreement (the bandwagon);
+    choose popular_opinion for the measured claim that wide acceptance gives a reason
+    for A.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: position_to_know_ad_populum
-  text: ""
-  status: todo
+  text: Choose position_to_know_ad_populum when the text adds that the group that
+    accepts A is well placed to know about it (the locals, the regular users); choose
+    popular_opinion when acceptance alone is offered.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: expert_opinion_ad_populum
-  text: ""
-  status: todo
+  text: Choose expert_opinion_ad_populum when those who agree are experts in A's field
+    (a scientific consensus); choose popular_opinion for the public, or a group with
+    no claim to expertise.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: deliberation_ad_populum
-  text: ""
-  status: todo
+  text: Choose deliberation_ad_populum when the text stresses that the group reached
+    its view after long and careful deliberation (a jury, a citizens' assembly); choose
+    popular_opinion when no such process is cited.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: moral_justification_ad_populum
-  text: ""
-  status: todo
+  text: Choose moral_justification_ad_populum when the appeal is to what good people,
+    or a group with good qualities, accept, and the hearer is urged to accept a policy
+    P to be counted among them; choose popular_opinion when the group's goodness plays
+    no part.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: moral_justification_ad_populum_excuse
-  text: ""
-  status: todo
+  text: Choose the excuse subtype when speakers defend their own conduct X as acceptable
+    because everyone in their group does it (standard practice in a trade); popular_opinion
+    concerns what is believed true, not an excuse for one's own act.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: snob_appeal_ad_populum
-  text: ""
-  status: todo
+  text: Choose snob_appeal_ad_populum when the group is an elite the hearer wants
+    to join, and accepting A (or buying something) is the way in; choose popular_opinion
+    when the appeal is to how many accept A, not to their prestige.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: appeal_to_vanity_ad_populum
-  text: ""
-  status: todo
+  text: Choose appeal_to_vanity_ad_populum when the hearer is flattered as belonging
+    with an admired group and urged to act as its members do; popular_opinion has
+    no flattery and concludes about A, not an action.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rhetoric_ad_populum
-  text: ""
-  status: todo
+  text: 'Choose rhetoric_ad_populum when the pressure is the threat of exclusion:
+    accept A or lose a place in a group the hearer values; choose popular_opinion
+    when the hearer''s membership is not at stake.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: common_folk_ad_populum
-  text: ""
-  status: todo
+  text: Choose common_folk_ad_populum when speakers ask to be believed because they
+    are ordinary people like their audience; the support is the speaker's shared background,
+    not the acceptance of A by many.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: common_folks_group_ad_populum
-  text: ""
-  status: todo
+  text: As common_folk_ad_populum, with the audience named as a group G the speaker
+    shares a background with; choose it, not popular_opinion, when that shared membership
+    is the appeal.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: popular_practice
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose popular_practice when the text cites what most people do to conclude
+    that doing it is acceptable; choose popular_opinion when it cites what most people
+    believe to conclude that there is a reason for A.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Polls show that four in five residents agree the town centre is unsafe after
+    dark, which is a reason to think it is.
+  coding: 'A = the town centre is unsafe after dark. Stated: generally_true(A) (the
+    poll), favor(A) (the step from acceptance to a reason). Supplied: generally_accepted(A),
+    which duplicates the premise. Conclusion: reason_in_favor(A). 4/CQ2 would bring
+    in the crime figures.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Almost everyone now accepts that eating a lot of processed meat is bad for
+    you.
+  coding: 'A = eating a lot of processed meat is bad for one''s health. Stated: generally_true(A).
+    Supplied: favor(A), generally_accepted(A). Conclusion: reason_in_favor(A). Offered
+    as a pro of a meat tax, it would back a premise about harm to health; 4/CQ1 asks
+    what shows that "almost everyone" accepts it.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Most of the farmers in the valley have switched to drip irrigation, so it
+    must be the sensible way to water crops here.
+  coding: 'Near miss: it cites what most farmers do, and concludes that doing it is
+    acceptable, not that a claim is true; popular_practice (A = watering crops here
+    by drip irrigation). Were the farmers presented as best placed to know, position_to_know_ad_populum
+    would compete.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: General Acceptance Premise
+  detail: 'walton.yml encodes the book''s one general acceptance premise twice: as
+    the premise generally_true(A) and as the assumption generally_accepted(A), whose
+    English readings are word for word the same. The premise''s name says "true",
+    where the book''s premise is about acceptance.'
+  decision: 'Treat the two as one statement: 4/CQ1 targets both, and the premise map
+    now lists both. Open: drop the assumption from walton.yml, or rename generally_true
+    to say what it means.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: ch. 4 forms
+  detail: 'The book''s ch. 4 versions speak of a large majority of a named reference
+    group G, allow the negative form (a majority''s rejection gives a presumption
+    against A), and add a third question: why think this majority likely to be right
+    (pp. 123–5). walton.yml follows the compendium''s entry 4: no G, only the positive
+    form, and two questions; the presumption premise favor(A) carries the third question''s
+    link.'
+  decision: No change. Name the group in the coding; bind A to a negation for a majority's
+    rejection; and put ch. 4's third question as a challenge to favor(A), a premise
+    the proponent must then back. Prefer a subtype (4.2 to 4.4) when the text says
+    why the group's view should count.
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: conclusion
+  detail: walton.yml concludes reason_in_favor(A), as the compendium's entry does;
+    it is a statement about A, not A itself, so in an argument graph it does not support
+    A without a further step. pop_scheme, by contrast, concludes is_true(A).
+  decision: 'Open: whether the conclusion should be A, so that the argument can back
+    a claim directly, as a game move needs. Until then, code the conclusion as walton.yml
+    has it and say in the coding which claim it backs.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: assumption key
+  detail: Upstream walton.yml and the category file B_source-based-arguments/4 list
+    generally_accepted(A) under the misspelled key "assumption:", which Carneades
+    ignores, so they load the scheme without it (walton-audit REPORT §2). The cleaned
+    walton.yml uses "assumptions:".
+  decision: The catalogue follows the cleaned walton.yml; nothing to change. The generated
+    note on 4/CQ1, which said the formula is dropped, described the upstream file
+    and was corrected.
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
+  source: dependent
   reasoning: ""
   epistemic: ""
-  group: ""
-  status: todo
+  group: popular acceptance
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the generic scheme of its family (F02); the eleven
+    ad populum subtypes (4.1 to 4.11) and popular_practice narrow or vary it.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
-  suspect: []
-  note: ""
-  status: todo
+  proper: [deliberation, persuasion]
+  suspect: [inquiry]
+  note: 'From ND, via docs/dialogue-types.md §7: appeals to popular opinion are not
+    wrong in principle, and democratic political argument uses them, with polls (ND
+    pp. 21–2); they go wrong when they stand in for examining the evidence, or when
+    emotion hides the lack of good premises (pp. 22, 248). The book (not ND) ties
+    the argument to deliberation and to public decisions (pp. 123, 125). Suspect in
+    inquiry is our extrapolation: an inquiry builds only on premises that can be firmly
+    established (ND p. 70), and wide acceptance does not establish A.'
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the two questions (correcting
+    4/CQ1's note), the twelve contrasts, the examples, four discrepancies (the duplicated
+    premise, the ch. 4 forms, the conclusion, the upstream assumption key), the classification,
+    specialises and the dialogue types; added the assumption to the general acceptance
+    premise's map.

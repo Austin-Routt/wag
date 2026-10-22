@@ -68,67 +68,190 @@ critical_questions:
     entry: "3"
     label: CQ1
   targets: [{formula: internally_consistent(S), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book's question is about everything the witness said; walton.yml's assumption
+    is about S alone (see the discrepancy on the consistency questions).
+  paraphrase: Does W's account hang together, without parts that contradict each other?
+  answer: 'The proponent, once asked: the assumption holds until it is questioned.
+    Against: points at which W''s account contradicts itself, such as two different
+    times or places given for the same event, which undermines internally_consistent(S).
+    For: showing that the parts of the account fit together, or that an apparent conflict
+    is a slip that leaves S untouched.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 3/CQ2
   book:
     entry: "3"
     label: CQ2
   targets: [{formula: inconsistent_with_known_facts(S), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  paraphrase: Does S fit what the other evidence in the case, apart from W's testimony,
+    has established?
+  answer: 'The critic, who raises it with an argument. Against: evidence independent
+    of W, such as records, physical traces or recordings, that conflicts with S, which
+    undercuts the argument through inconsistent_with_known_facts(S), and may also
+    be put as a rebuttal of S. For: independent evidence that agrees with S, or that
+    leaves it open.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 3/CQ3
   book:
     entry: "3"
     label: CQ3
   targets: [{formula: inconsistent_with_other_witnesses(S), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book asks about witnesses who testified independently; the formula does
+    not say so. Agreement among witnesses who compared their stories counts for less,
+    and a conflict with such a witness counts for less too.
+  paraphrase: Do other witnesses, testifying independently of W, give accounts that
+    agree with S?
+  answer: 'The critic, who raises it with an argument. Against: another witness''s
+    independent account that contradicts S, which undercuts the argument through inconsistent_with_other_witnesses(S).
+    For: independent witnesses who confirm S, or reasons why the conflicting account
+    is the less reliable one.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 3/CQ4
   book:
     entry: "3"
     label: CQ4
   targets: [{formula: biased(W), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book attributes the bias to the account, walton.yml to the witness; the
+    difference does not change the answer. walton.yml's template for biased/1 reads
+    "Arguer W is biased", though W here is a witness, not an arguer.
+  paraphrase: Could W's account be slanted by bias, such as a stake in the outcome
+    or loyalty to one side?
+  answer: 'The critic, who raises it with an argument. Against: evidence that W gains
+    or loses by S being accepted, or is tied to one of the parties, which undercuts
+    the argument through biased(W). For: showing that W has no stake in the outcome
+    and no tie to either side.'
+  status: drafted by Claude Code, 2026-10-22
 - id: 3/CQ5
   book:
     entry: "3"
     label: CQ5
   targets: [{formula: implausible(S), locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  note: The book asks how plausible S is, a matter of degree; walton.yml's exception
+    is yes or no. A low plausibility weakens the conclusion without defeating it;
+    the exception records only an S that is implausible enough to defeat it.
+  paraphrase: Taken on its own, apart from who asserts it, how likely is S to be true?
+  answer: 'The critic, who raises it with an argument. Against: reasons why S is improbable
+    on its face, for instance because events of that kind rarely happen that way,
+    which undercuts the argument through implausible(S), and may also be put as a
+    rebuttal of S. For: showing that S is the kind of thing that often happens, or
+    fits what is known of the circumstances.'
+  status: drafted by Claude Code, 2026-10-22
 summary:
-  text: ""
-  status: todo
+  text: Use it when a fact or event S is offered on the testimony of a witness W who
+    was placed to perceive it and is taken to be sincere, typically before a court,
+    an inquiry or an investigation. It concludes that S may be accepted, subject to
+    checks that W's account hangs together, fits the other evidence and other witnesses,
+    and is free of bias; the sincerity premise and these checks set it apart from
+    the general position_to_know.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: position_to_know
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose witness_testimony when W reports a fact or event W perceived, in a
+    setting that tests the account (a court, an inquiry, an investigation), so that
+    W's sincerity, the account's consistency and its fit with other evidence are at
+    issue; choose position_to_know for a source whose access to D is the whole point,
+    as with a local reporting what usually happens there.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: expert_opinion
+  text: Choose expert_opinion for an expert witness, who interprets facts from knowledge
+    of a field (a pathologist on the cause of an injury); choose witness_testimony
+    for a witness who reports what W perceived and is not asked to interpret it.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: At the council hearing, the crossing guard stated that three cars ran the
+    red light outside the school last Tuesday morning.
+  coding: 'W = the crossing guard; D = traffic at the school crossing; S = three cars
+    ran the red light there last Tuesday morning. Stated: asserts(W,S), and the ground
+    of position_to_know(W,D) (W was on duty at the crossing). Supplied: in_domain(D,S),
+    believes(W,S), internally_consistent(S). Conclusion: S.'
+  status: drafted by Claude Code, 2026-10-22
+- text: A former night-shift worker told the parliamentary committee that carcasses
+    at the plant were routinely left unrefrigerated for hours.
+  coding: 'W = the former worker; D = the plant''s practices on the night shift; S
+    = carcasses there were routinely left unrefrigerated for hours. Stated: asserts(W,S),
+    and the ground of position_to_know(W,D) (W worked those shifts). Supplied: in_domain(D,S),
+    believes(W,S), internally_consistent(S). Conclusion: S. The committee would test
+    S against the plant''s records (3/CQ2) and other workers (3/CQ3).'
+  status: drafted by Claude Code, 2026-10-22
+- text: The pathologist told the court that the bruising on the victim's arm was consistent
+    with a fall, not a blow.
+  coding: 'Near miss: a witness in court, but one who gives an opinion interpreting
+    the facts from knowledge of a field, not a report of what she saw happen; expert_opinion
+    (W = the pathologist, D = forensic pathology, S = the bruising is consistent with
+    a fall, not a blow).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: Position to Know Premise
+  detail: 'The book''s premise is that the witness is placed to know whether the proposition
+    is true; it names no domain. walton.yml takes position_to_know''s encoding, with
+    a domain D: position_to_know(W,D) and in_domain(D,S).'
+  decision: 'No change: bind D to the scene or matter W observed, so that the two
+    formulas together say what the book''s premise says.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: in_domain(D,S)
+  detail: walton.yml writes in_domain(D,S), the reverse of the in_domain(S,D) that
+    every other scheme uses (walton-audit REPORT §3.5; walton-clean CHANGELOG). It
+    is inherited from upstream Carneades, and the category file B/1 has it too. Read
+    literally, its template says that D is in the domain of S.
+  decision: 'Code the roles, not the order: D is the domain and S the statement, read
+    as "S is a matter of D". Open: reorder it to in_domain(S,D) in walton.yml, so
+    that the formula is shared with position_to_know and a game question about it
+    can be asked of both.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: conclusion
+  detail: The book's conclusion is qualified as plausible, and allows the negative
+    form. walton.yml concludes S, with no qualifier and only the positive form.
+  decision: 'No change, as for expert_opinion: bind S to a negated proposition for
+    "W states that not-P", and let the argument''s weight and proof standard carry
+    the plausibility.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ1-CQ3
+  detail: The book's three consistency questions are about what the witness said,
+    the whole account; walton.yml's formulas internally_consistent(S), inconsistent_with_known_facts(S)
+    and inconsistent_with_other_witnesses(S) are about S alone. A contradiction elsewhere
+    in the account bears on W's reliability but is not, as written, about S.
+  decision: 'Read S in these three formulas as standing for W''s account of which
+    S is part, and say so in the coding. Open: whether walton.yml should take the
+    testimony as a variable of its own.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
+  source: dependent
   reasoning: ""
   epistemic: ""
-  group: ""
-  status: todo
+  group: position to know
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: position_to_know
+  note: 'The tree places witness testimony under position to know, and the book sets
+    the two side by side (pp. 88–91): the witness reports a fact or event W perceived,
+    and the scheme adds the truth-telling premise (believes(W,S)) and the consistency
+    and bias questions. Its formulas keep position_to_know''s premises (with in_domain''s
+    arguments reversed); in place of the exception dishonest(W), sincerity is a premise.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [persuasion, inquiry]
   suspect: []
-  note: ""
-  status: todo
+  note: The book (p. 90, not ND) says witness testimony belongs above all to the courtroom.
+    ND likens the criminal trial to a persuasion dialogue governed by its own rules
+    of evidence (pp. 232–4), and has public inquiries gather the testimony of witnesses
+    at their first stage (p. 92). We list persuasion (the trial) and inquiry (the
+    public inquiry). Questioning the witness is information-seeking inside these,
+    and deliberation is not the scheme's home (the book gives deliberation to position_to_know,
+    p. 90); both are our reading. No type makes it suspect as such.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: Drafted the summary, the paraphrases and answers of the five questions, the
+    contrasts (adding expert_opinion), the examples, four discrepancies (the domain
+    premise, in_domain's argument order, the conclusion's qualifier, the consistency
+    questions), the classification, specialises (position_to_know) and the dialogue
+    types.

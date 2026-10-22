@@ -51,34 +51,121 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: 'Use it when an action X is opposed in a situation A2 because X was the wrong
+    course in an earlier situation A1 that resembles A2. It is the negative form of
+    practical_analogy_positive: what crosses over is a verdict that doing X was a
+    mistake, which sets it apart from analogy, which carries over a matter of fact,
+    and from negative_consequences, which opposes X for the bad outcomes it would
+    bring.'
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: analogy
-  text: ""
-  status: todo
+  text: 'Choose practical_analogy_negative when the earlier situation is cited because
+    doing X there was wrong, and the conclusion is that X is wrong here; choose analogy
+    when what is carried over is a factual finding, such as that the action failed.
+    The two often come together: that a measure failed elsewhere (analogy) backs the
+    verdict that it was wrong there.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: practical_inference
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: Choose practical_inference when the argument is about whether X is a means
+    to a goal; choose practical_analogy_negative when X is opposed because it was
+    wrong in a similar situation, whatever goal it served there.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_analogy_positive
+  text: 'The positive counterpart, with the same form: choose practical_analogy_positive
+    when the earlier action is cited as the right thing, to argue for repeating it,
+    and practical_analogy_negative when it is cited as a mistake, to argue against
+    repeating it.'
+  status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences
+  text: Choose negative_consequences when X is opposed because of bad outcomes it
+    would bring here; choose practical_analogy_negative when it is opposed because
+    doing X in a similar earlier situation was judged wrong. "It went badly when they
+    tried it" can be either; code practical_analogy_negative when the text leans on
+    the likeness of the situations, and negative_consequences when it leans on the
+    outcome.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: Bringing in rent controls in the 1970s was a mistake that shrank the supply
+    of homes to let; the housing market today is much the same, so it would be a mistake
+    to bring them back.
+  coding: 'A1 = the housing market of the 1970s; A2 = today''s housing market; X =
+    imposing rent controls. Stated: wrong_to_do(A1,X), similar_to(A1,A2), and the
+    conclusion carry_out_wrong(A2,X). The reason given for the first premise (a shrinking
+    supply) is a negative_consequences argument backing it.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Cutting the school's music budget the last time enrolment fell was the wrong
+    call, and enrolment is falling again, so cutting it now would be wrong too.
+  coding: 'A1 = the earlier fall in enrolment; A2 = the present fall; X = cutting
+    the music budget. Stated: wrong_to_do(A1,X), similar_to(A1,A2) (enrolment is falling
+    again). Conclusion: carry_out_wrong(A2,X).'
+  status: drafted by Claude Code, 2026-10-22
+- text: When the next town banned plastic bags, shoppers bought thicker bags and plastic
+    use went up; a ban here would do the same.
+  coding: 'Near miss: what crosses over is a factual result (plastic use went up),
+    not a verdict that the ban was wrong, and the conclusion is a prediction; analogy
+    (C = the next town''s ban; A = a bag ban raises plastic use, with the N12 caveat).
+    Used to oppose the ban, it would then back a negative_consequences argument.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: other
+  about: critical questions
+  detail: 'The book prints no questions for 8.1 or 8.2, and walton.yml gives the scheme
+    no assumptions or exceptions. So neither lets a critic raise what analogy''s exceptions
+    cover: a difference between A1 and A2 that matters to X, or a closer situation
+    in which X was right.'
+  decision: 'Open: whether to give 8.1 and 8.2 analogy''s exceptions, with both situations
+    as arguments (for example relevant_differences(A1,A2)); a scheme change for the
+    owner. Until then, a difference between the situations is raised by challenging
+    similar_to(A1,A2), and a contrary precedent by an argument against the conclusion.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: Conclusion
+  detail: carry_out_wrong(A2,X) and the positive scheme's carry_out_right(A2,X) are
+    separate predicates, neither the negation of the other, so a negative and a positive
+    practical analogy about the same action do not conflict in the argument graph.
+  decision: 'Open: a modelling choice for the owner. Either read carry_out_wrong(A2,X)
+    as ¬carry_out_right(A2,X), so that the two schemes rebut each other, or keep them
+    apart and let a critic argue directly for ¬carry_out_wrong(A2,X).'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
+  source: independent
+  reasoning: practical
   epistemic: ""
-  group: ""
-  status: todo
+  group: values
+  note: 'Not in the tree; placed with values (values, fairness), as practical_analogy_positive
+    is, because its premise and its conclusion are verdicts on whether an action is
+    wrong, not claims about goals, means or consequences. Its analogical form would
+    also fit with analogy (application, defeasible rule-based). Open: which placement
+    the owner prefers.'
+  status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: ""
-  note: ""
-  status: todo
+  scheme: analogy
+  note: 'The book gives it with the positive scheme as the practical counterpart of
+    argument from analogy (ch. 2, p. 74): the proposition carried from one situation
+    to the other is that doing X is wrong. walton.yml names both situations (A1, A2),
+    where analogy leaves the target implicit, and gives it none of analogy''s exceptions.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table, and ND does not discuss it; our extrapolation, as for practical_analogy_positive.
+    It answers "what should we not do?", so it belongs in deliberation (ND pp. 151–7)
+    and in persuasion about an action. In negotiation, an appeal to what was wrong
+    in a like case works as the independent standard that ND says lies outside the
+    normative model of negotiation (p. 102); we list negotiation in neither list.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the contrasts (two added: the positive counterpart,
+    and negative_consequences), own examples (no Kialo claim of discussion 13292 fits),
+    two other discrepancies (no questions or exceptions; the unrelated positive and
+    negative conclusions), the classification (not in the tree), specialises and the
+    dialogue types. No questions: the book prints none, and walton.yml has no assumption
+    or exception to ask about.'

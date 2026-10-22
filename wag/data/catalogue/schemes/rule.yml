@@ -45,55 +45,155 @@ premise_map:
   status: generated
 critical_questions: []
 summary:
-  text: ""
-  status: todo
+  text: Use it when a general principle attaches an evaluation E, or a required conduct
+    C, to a kind of situation A, and the text argues that A obtains, so that E is
+    justified or C is required. It is the plain form of arguing from a rule, as with
+    a policy principle the arguer invokes (tax each product by its environmental impact);
+    an established, binding rule for an agent is established_rule, and a prohibition
+    or obligation is regulative_rule.
+  status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: rule_physical_world_1
-  text: ""
-  status: todo
+  text: 'Not a close relative for coding: it argues for a claim about meaning (that
+    a word W has the same meaning as D) from expressions that pick out the same things.
+    Choose it only when the conclusion is what a word means.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rule_physical_world_2
-  text: ""
-  status: todo
+  text: Choose rule_physical_world_2 when the conclusion is that D counts as W under
+    an institution's official rulebook, a constitutive rule (what counts as a goal,
+    a resident, a vehicle); choose rule when the rule attaches an evaluation or a
+    required conduct to a situation.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: rule_mental_world
-  text: ""
-  status: todo
+  text: 'Not a close relative for coding: it concludes what a word means from what
+    the speakers of a language believe it means.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: established_rule
-  text: ""
-  status: todo
+  text: Choose established_rule when the rule is a standing one, accepted by those
+    it governs (a regulation, a house rule, an agreed deadline), and the conclusion
+    is that an agent must act on it, with conflicting rules and exceptions in view;
+    choose rule when the general premise is a principle the arguer proposes or invokes,
+    whose standing may itself be in dispute.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: regulative_rule
-  text: ""
-  status: todo
+  text: Choose regulative_rule when the premise is that an act is prohibited or obligatory
+    and the conclusion is that someone must, or must not, do it, with an excuse or
+    an overriding duty as the exception; choose rule for a principle that justifies
+    an evaluation or a conduct without that wording of duty.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: exceptional
-  text: ""
-  status: todo
+  text: 'A counter: exceptional argues that a rule may be waived because this case
+    is an exception. Choose it for the reply that sets a rule aside, rule for the
+    argument that applies one.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: exception_to_rule
-  text: ""
-  status: todo
+  text: 'walton.yml''s exception_to_rule carries upstream Carneades'' precedent formulas:
+    a similar case whose ratio decidendi R has conclusion S. Choose it when the text
+    argues from a precedent case; choose rule when a general principle is applied
+    directly, with no case compared.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: plea_for_excuse
-  text: ""
-  status: todo
+  text: 'A counter: plea_for_excuse argues that the pleader, who broke a rule, should
+    be spared its sanction because of an excuse. Choose it for that reply, rule for
+    applying the rule.'
+  status: drafted by Claude Code, 2026-10-22
 - scheme: defeasible_modus_ponens
-  text: ""
-  status: todo
-examples: []
-discrepancies: []
+  text: defeasible_modus_ponens is the bare form (A implies B; A; so B). Choose rule
+    when the conditional is a norm that attaches an evaluation or a conduct to a situation;
+    fall back on defeasible_modus_ponens only when no scheme with a fitting conditional
+    applies.
+  status: drafted by Claude Code, 2026-10-22
+examples:
+- text: The tax should be linked directly to the environmental impact. For example,
+    beef production releases five times the amount of greenhouse gas emissions, requires
+    28 times more land, 11 times more water, and six times as much reactive nitrogen
+    as the average of the other categories of meat. Beef should have a higher tax
+    than wild game such as venison.
+  kialo: "13292.46"
+  coding: 'A = beef production has a far greater environmental impact than other meats;
+    E = a higher tax rate on beef is justified; C = beef is taxed at a higher rate
+    than wild game such as venison. Stated: evaluation(A,E,C) (the principle "tax
+    by environmental impact", applied to beef), case(A) (the figures). Conclusion:
+    evaluation_justified(E,C). The gold re-parents it to the thesis as an amendment
+    of the proposed tax.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Eating meat is a personal choice. Individuals are at liberty to do as they
+    wish, and the state should have nothing to do with it.
+  kialo: "13292.29"
+  coding: 'A = eating meat is a personal choice; E = individuals are at liberty to
+    decide whether and how much meat to eat; C = the state stays out of individuals''
+    meat eating. Stated: evaluation(A,E,C) (the liberty principle for personal choices),
+    case(A). Conclusion: evaluation_justified(E,C). The step from "the state stays
+    out" to "no meat tax" is left implicit, as the gold notes.'
+  status: drafted by Claude Code, 2026-10-22
+- text: Most of these sources of greenhouse gasses comes from beef production; other
+    sources of meat, such as pork, poultry, and mutton produce significantly less
+    of these gasses, so it may be beneficial to merely tax the largest culprits rather
+    than all sources.
+  kialo: "13292.190"
+  coding: 'Near miss: it reaches a narrower tax from the facts about where the emissions
+    come from, but states no general principle of tax design, unlike 13292.46; practical_reasoning2,
+    as the gold codes it.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+discrepancies:
+- kind: book-walton
+  about: E and C
+  detail: 'The book''s rule attaches either an evaluation E or a required conduct
+    C to the situation (written with a slash: E is justified / C is required). walton.yml
+    puts both in every formula, evaluation(A,E,C) and evaluation_justified(E,C), so
+    each instance must bind both.'
+  decision: 'No change for now: bind E to the evaluation and C to the conduct it calls
+    for, as the gold does; when the text gives only one, bind the other to the matching
+    statement and say so in the coding. Open: split the scheme into an evaluative
+    and a prescriptive form.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: critical questions
+  detail: The book prints no critical questions for 55.2, and walton.yml gives the
+    scheme no assumptions or exceptions, so the only ways to criticise it are to deny
+    a premise or to rebut the conclusion. The questions of its sibling 55.1 (does
+    the rule cover this conduct, is there a conflicting rule, is this case an exception)
+    fit it as well.
+  decision: 'Open: whether to give the scheme exceptions, or questions, taken from
+    55.1. Until then, a conflicting rule or an exceptional case is raised as a rebuttal
+    of the conclusion, or as an attack on evaluation(A,E,C).'
+  status: drafted by Claude Code, 2026-10-22
 classification:
-  source: ""
-  reasoning: ""
-  epistemic: ""
-  group: ""
-  status: todo
+  source: independent
+  reasoning: epistemic
+  epistemic: application
+  group: based on cases
+  note: Not in the tree; placed with established rule, because the book prints both
+    under argument from rules (55) and both apply a general rule to a case to reach
+    an evaluation or a required conduct. The upstream collection files it with the
+    defeasible rule-based arguments (C/2) and the verbal classification arguments
+    (C/4); we did not follow it, because the tree's defeasible rule-based group holds
+    example, analogy and precedent, which argue from cases.
+  status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: ""
-  status: todo
+  note: 'Specialises nothing: it is the generic scheme of its family (F20). established_rule
+    and regulative_rule narrow it.'
+  status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: []
+  proper: [deliberation, persuasion]
   suspect: []
-  note: ""
-  status: todo
+  note: Not in ND's table, and ND does not discuss the scheme; our extrapolation.
+    A rule that attaches an evaluation or a required conduct to a situation answers
+    what should be done or thought about it, so it is at home in deliberation and
+    in persuasion about action; the gold's two instances are arguments in a policy
+    debate. Its walton.yml source (Schellens and De Jong 2004) studies persuasive
+    brochures.
+  status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Drafted the summary, the contrasts, the examples from the batch-2 gold (with
+    a gold near miss), two discrepancies (E and C bound together, no questions or
+    exceptions), the classification, specialises and the dialogue types. No critical
+    questions: the book prints none and walton.yml has no assumption or exception.'
