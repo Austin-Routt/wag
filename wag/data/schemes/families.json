@@ -568,6 +568,12 @@
      "compendium": "28"
     },
     {
+     "scheme": "cause_to_effect_modal",
+     "relation": "variant",
+     "compendium": "28",
+     "note": "the weak reading of 28 (the cause may occur; the effect may occur), for hypothetical causal steps; written for walton.yml by the owner's decision of 2026-10-22 (audit N8)"
+    },
+    {
      "scheme": "correlation_to_cause",
      "relation": "variant",
      "compendium": "29"

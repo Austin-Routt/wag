@@ -224,6 +224,12 @@ contrasts:
     choose positive_consequences when it argues that an action should be done for
     its good result.
   status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect_modal
+  text: Choose positive_consequences when an effect is cited to argue that an action
+    should be done; choose cause_to_effect_modal when the point is only that the effect
+    may follow, including a step that explains how a consequence cited by a consequences
+    argument would come about.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A tax on meat would combat unhealthy meat consumption.
   kialo: "13292.115"
@@ -282,10 +288,12 @@ discrepancies:
   detail: The book's first two questions allow the consequences to be claimed with
     different strengths (will, may, must). brings_about(A,G) has no modality, and
     Kialo claims often hedge ("could", "would help").
-  decision: 'No change for now. Code a hedged claim with brings_about(A,G), say so
-    in the coding, and treat the weaker link as a reason to answer 33/CQ1 against
-    it. Open: whether the modal variant the owner decides for the causal family (audit
-    N8) should extend to this premise.'
+  decision: 'No change. Code a hedged claim with brings_about(A,G), say so in the
+    coding, and treat the weaker link as a reason to answer 33/CQ1 against it; a hedged
+    causal step beneath it is coded with cause_to_effect_modal, which the owner''s
+    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner") added for causal steps only. Open: whether brings_about
+    should get a modal form too.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: CQ3
@@ -364,3 +372,8 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the contrast with practical_reasoning2 states the batch-2 rule as that entry does;
     a contrast back to end_and_means_1)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
+    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner"); the CQ1-CQ2 decision names it.

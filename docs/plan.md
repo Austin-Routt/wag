@@ -19,7 +19,7 @@ Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue
   - *verified* (by a person, with a date);
   - *disputed* (with the reason).
 
-  Where the book and `walton.yml` disagree (for example the book's modal cause to effect, audit N8), the entry records both and the decision.
+  Where the book and `walton.yml` disagree (for example the book's modal cause to effect, audit N8, which the owner settled on 2026-10-22 with a second scheme), the entry records both and the decision.
 - **No book text in the public repository.**
   - The catalogue holds our own paraphrases, the book's labels (scheme number, CQ number) and page references.
   - The book stays the owner's copy, outside the repository, for verification.
@@ -53,8 +53,8 @@ One file per scheme, for example `catalogue/schemes/negative_consequences.yml`, 
 | Source | What it has | State |
 |---|---|---|
 | The book's compendium (ch. 9) | 109 schemes (128 numbered entries, 19 of them headings only), 153 critical questions | Transcribed outside the repository |
-| `docs/scheme-registry/walton-clean/walton.yml` | 115 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files, and 50's, written for WAG, on 2026-10-22); 54 encode some CQs as assumptions or exceptions | Cleaned so that Carneades loads it; content unchanged |
-| `docs/scheme-registry/links.json` | 96 compendium entries linked exactly to `walton.yml` and 13 partly (114 links: 97 exact, 17 partial; after the owner's decisions of 2026-10-22), none without a link; 203 CQ links, 149 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
+| `docs/scheme-registry/walton-clean/walton.yml` | 116 schemes with formulas and English (111 upstream; compendium 33.3's, 10.2's and 53's, brought in from the upstream category files, and 50's and the modal form of 28, written for WAG, on 2026-10-22); 59 encode some CQs as assumptions or exceptions (54 of the upstream 111) | Cleaned so that Carneades loads it; content unchanged |
+| `docs/scheme-registry/links.json` | 96 compendium entries linked exactly to `walton.yml` and 13 partly (115 links: 97 exact, 18 partial; after the owner's decisions of 2026-10-22), none without a link; 203 CQ links, 149 of them naming a formula | Drafted by a model, not verified. All its formulas check against `walton.yml` (the catalogue's checker). |
 | `wag/data/nascq/*.json` | 9 schemes, 24 CQs, 35 ask edges, 4 backup edges | The game's data, tested |
 | `wag/data/schemes/families.json` | 21 families | Drafted |
 
@@ -70,11 +70,11 @@ Only one `walton.yml` scheme has no compendium entry: `defeasible_modus_ponens`.
    - every game CQ appears;
    - no paraphrase reproduces the book's sentence.
 
-   **Done on 2026-10-22.** [`wag/data/catalogue/`](../wag/data/catalogue/README.md) holds 114 entries and an index (115 since compendium 33.3 has its own scheme); `wag-cli --catalogue-gen` and `--catalogue-check` make and check them. The README there lists every check and what the skeleton found.
-2. **Tier 1: 32 schemes** (first estimated at about 25; 31 until 33.3's scheme joined the consequences on 2026-10-22), listed in the catalogue's README. These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
+   **Done on 2026-10-22.** [`wag/data/catalogue/`](../wag/data/catalogue/README.md) holds 114 entries and an index (116 since compendium 33.3 and the modal cause to effect got schemes of their own, the same day); `wag-cli --catalogue-gen` and `--catalogue-check` make and check them. The README there lists every check and what the skeleton found.
+2. **Tier 1: 33 schemes** (first estimated at about 25; 31 until 33.3's scheme joined the consequences, and 32 until the modal cause to effect joined the causes, both on 2026-10-22), listed in the catalogue's README. These are the 13 schemes of the batch-2 gold and the close relatives needed for contrasts:
    - **practical reasoning:** practical reasoning 1 and 2, practical goal, end and means, necessary condition;
    - **consequences and values:** positive and negative consequences, reasoning from negative consequences, positive and negative value;
-   - **causes and signs:** cause to effect, correlation to cause, sign;
+   - **causes and signs:** cause to effect and its modal form, correlation to cause, sign;
    - **cases and analogy:** analogy, the practical analogies, example;
    - **sources:** expert opinion, position to know, witness testimony, popular opinion;
    - **classification and rules:** verbal classification, definition to verbal classification, rule, established rule;
@@ -217,7 +217,8 @@ Each step has examples from the catalogue. Where two answers are equally right, 
    - the consequence schemes get the exception `other_consequences(A)`;
    - the slippery slope's source year is 1992;
    - compendium 10.2 and 53, formalized only in the upstream category files, are brought in as `whole_into_parts` and `full_slippery_slope` (the latter with its source filled in and arguments for its two 0-ary atoms);
-   - compendium 50, formalized nowhere, gets a scheme written for WAG, `precedent_slippery_slope`.
+   - compendium 50, formalized nowhere, gets a scheme written for WAG, `precedent_slippery_slope`;
+   - the modal reading of compendium 28 (audit N8) gets a scheme written for WAG, `cause_to_effect_modal`.
 4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
 5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
 6. **Dialogue types (Track D, §8).** Decided by the owner on 2026-10-15:

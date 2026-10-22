@@ -9,7 +9,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 
 **Status on 2026-10-22: tier 1 drafted and checked.**
 - **Generated:** every entry, from the sources.
-- **Drafted:** all 32 tier-1 entries, every work field, by model agents following [`DRAFTING.md`](DRAFTING.md).
+- **Drafted:** all 33 tier-1 entries, every work field, by models following [`DRAFTING.md`](DRAFTING.md).
 - **Checked:** three independent model agents checked the drafts and the generated parts against the book, the NASCQ and the upstream collection's files. Their 117 findings are applied ([review part 12](../../../docs/review-2026-10-22-part12.md)).
 - **Not yet done:** nothing is verified (only a person verifies), and tier 2 is generated only.
 - **Next steps** ([the alignment plan](../../../docs/catalogue-alignment.md)):
@@ -19,7 +19,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 
 | File | What |
 |---|---|
-| `schemes/<id>.yml` | 115 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
+| `schemes/<id>.yml` | 116 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
 | This README | The format, the statuses, the commands, the checks |
 
@@ -188,13 +188,13 @@ Each is compared with the book's text, normalized: lower case, and every variabl
 
 ## Tier 1
 
-32 schemes, verified first: the 13 schemes of the batch-2 gold, their close relatives for contrasts, and defeasible modus ponens, the form "other" falls back to (plan §2). Reasoning from negative consequences joined on 2026-10-22, when compendium 33.3 got its own scheme.
+33 schemes, verified first: the 13 schemes of the batch-2 gold, their close relatives for contrasts, and defeasible modus ponens, the form "other" falls back to (plan §2). Two joined on 2026-10-22, when the owner gave them schemes of their own: reasoning from negative consequences (compendium 33.3), and the modal form of cause to effect (28, audit N8).
 
 | Group | Schemes |
 |---|---|
 | Practical reasoning | `practical_reasoning1`, `practical_reasoning2`, `practical_goal`, `end_and_means_1`, `practical_necessary_condition` |
 | Consequences and values | `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, `positive_value`, `negative_value` |
-| Causes and signs | `cause_to_effect`, `correlation_to_cause`, `sign` |
+| Causes and signs | `cause_to_effect`, `cause_to_effect_modal`, `correlation_to_cause`, `sign` |
 | Cases and analogy | `analogy`, `practical_analogy_positive`, `practical_analogy_negative`, `from_example` |
 | Sources | `expert_opinion`, `position_to_know`, `witness_testimony`, `popular_opinion` |
 | Classification and rules | `verbal_classification`, `definition_to_verbal_classification`, `rule`, `established_rule` |
@@ -209,11 +209,11 @@ Each is compared with the book's text, normalized: lower case, and every variabl
 
 | Tier 1 now | Count |
 |---|---|
-| Work items | 784: 625 drafted, 159 generated (found right) |
-| Questions | 89: 73 from the book, 35 with a game part, 6 `walton/` questions; 5 attack the inference; 2 have no target yet (established rule's CQ2–3, their missing exceptions recorded) |
-| Examples | 101: 44 Kialo claims, 33 near misses |
-| Contrasts | 194, none one-way within tier 1 |
-| Discrepancies | 105, of which 55 have decisions still open, for the owner or a verifier |
+| Work items | 818: 654 drafted, 164 generated (159 found right; the 5 of `cause_to_effect_modal`, added later, are in its own check) |
+| Questions | 92: 76 from the book, 35 with a game part, 6 `walton/` questions; 5 attack the inference; 2 have no target yet (established rule's CQ2–3, their missing exceptions recorded) |
+| Examples | 106: 49 Kialo claims, 35 near misses |
+| Contrasts | 206, none one-way within tier 1 |
+| Discrepancies | 110, of which 55 have decisions still open, for the owner or a verifier |
 
 ## What the skeleton found
 
@@ -234,4 +234,4 @@ Generated on 2026-10-22, before tier 1 was drafted. The paragraph on 33.3 below 
 - primed variables (`P'`, now `P2`);
 - one stray parenthesis.
 
-**The sources disagreed once, on compendium 33.3.** `families.json` listed it as having no `walton.yml` scheme, while `links.json` linked it, partially, to `negative_consequences`. `families.json` was right about `walton.yml`: the upstream collection formalizes 33.3 only in a category file, in a second block under the id `negative_consequences`, and its master lost it. On 2026-10-22 the owner decided to bring it in. It is now `negative_consequences_reasoning`, a tier-1 entry; `links.json` links 33.3 to it exactly, and `families.json` names it. The catalogue then had 115 entries, and the generated discrepancies dropped to 21 (16 partial links). The same day the owner brought in 10.2 and 53 from the upstream category files, as `whole_into_parts` and `full_slippery_slope`. Their placeholder entries (`division_of_the_whole_into_its_parts`, `full_slippery_slope_argument`) gave way to real ones, so the catalogue still has 115 entries. Then 50, the precedent slippery slope, formalized nowhere upstream, got a scheme written for WAG, `precedent_slippery_slope`, and its placeholder gave way too: every entry now has a formalization.
+**The sources disagreed once, on compendium 33.3.** `families.json` listed it as having no `walton.yml` scheme, while `links.json` linked it, partially, to `negative_consequences`. `families.json` was right about `walton.yml`: the upstream collection formalizes 33.3 only in a category file, in a second block under the id `negative_consequences`, and its master lost it. On 2026-10-22 the owner decided to bring it in. It is now `negative_consequences_reasoning`, a tier-1 entry; `links.json` links 33.3 to it exactly, and `families.json` names it. The catalogue then had 115 entries, and the generated discrepancies dropped to 21 (16 partial links). The same day the owner brought in 10.2 and 53 from the upstream category files, as `whole_into_parts` and `full_slippery_slope`. Their placeholder entries (`division_of_the_whole_into_its_parts`, `full_slippery_slope_argument`) gave way to real ones, so the catalogue still has 115 entries. Then 50, the precedent slippery slope, formalized nowhere upstream, got a scheme written for WAG, `precedent_slippery_slope`, and its placeholder gave way too: every entry now has a formalization. Last, the modal form of cause to effect (audit N8) got a scheme written for WAG, `cause_to_effect_modal`, a tier-1 entry that took the catalogue to 116 entries and added one partial link (28).

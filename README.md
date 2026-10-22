@@ -14,8 +14,8 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 **Status on 2026-10-15.**
 - **Working prototype:** the game, the browser dashboard, the model players, and a first annotation pipeline. They are tested and run on Windows.
 - **Weak link:** the scheme knowledge they share. The book, the Carneades collection and the game's data are not yet one verified catalogue. **Its skeleton exists since 2026-10-22:**
-  - 115 entries generated from the sources, with a checker ([`wag/data/catalogue/`](wag/data/catalogue/README.md));
-  - the 32 tier-1 entries drafted by model agents and checked by three independent ones (2026-10-22, [review part 12](docs/review-2026-10-22-part12.md));
+  - 116 entries generated from the sources, with a checker ([`wag/data/catalogue/`](wag/data/catalogue/README.md));
+  - the 33 tier-1 entries drafted by model agents and checked by three independent ones (2026-10-22, [review part 12](docs/review-2026-10-22-part12.md));
   - nothing verified yet: only a person verifies.
 - **Annotation so far:** every annotation was made by a language model; no person has checked it.
 - **Dialogue types:** a reference is written. The game plays only persuasion so far.
@@ -36,7 +36,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 ```
   the book: Walton, Reed & Macagno (2008)        walton.yml: the Carneades collection
-  what a scheme says, its critical questions     the formulas (115 schemes)
+  what a scheme says, its critical questions     the formulas (116 schemes)
                        \                          /
                         links.json: the book ↔ walton.yml   (drafted, not verified)
                                     |
@@ -54,13 +54,13 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 | Part | State | What works | What is missing | Read |
 |---|---|---|---|---|
-| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 115 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
+| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 116 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
 | Browser dashboard (`wag-server`) | Prototype, used on Windows | **Play:** dialogue and board views. **Models:** type a key, find a model, add it as a player. **Annotate:** runs, model review, your verdicts. Everything is saved in a data folder (`~/WAG`). | A catalogue browser; causes for verdicts | [`docs/prototype.md`](docs/prototype.md), [`docs/llm.md`](docs/llm.md) |
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |
 | Kialo import | Working | A captured discussion becomes a game (one statement per claim, keyed by claim ID), or an annotation dataset; `wag-cli --kialo-check` imports a whole folder | | [`wag/README.md`](wag/README.md), [part 8 §2](docs/review-2026-10-15-part8.md#2-claims-merged-by-their-text) |
-| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 115 schemes (the upstream 111; the formalizations of compendium 33.3, 10.2 and 53, which the upstream collection has only in its category files; and one written for 50, which it lacks; all added by the owner on 2026-10-22); the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
-| Scheme catalogue | Tier 1 drafted and checked (phase 1, step 2) | **Entries:** 115, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 219, with their formulas (203 from the book, 35 with a game part, 6 that only `walton.yml` implies). **Discrepancies:** 117, 105 of them recorded while drafting tier 1. **Tier 1:** 32 entries drafted and checked by models. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Verification by a person; tier 2's 83 entries; the owner's decisions on the scheme changes tier 1 proposes | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`DRAFTING.md`](wag/data/catalogue/DRAFTING.md), [`index.md`](wag/data/catalogue/index.md), [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) |
+| Scheme sources | Aligned in a skeleton | `walton.yml` cleaned so that Carneades loads all 116 schemes (the upstream 111; the formalizations of compendium 33.3, 10.2 and 53, which the upstream collection has only in its category files; one written for 50, which it lacks; and the modal form of 28, cause to effect; all added by the owner on 2026-10-22); the book linked to it; families and pattern signatures | | [`docs/scheme-registry/README.md`](docs/scheme-registry/README.md), [`docs/walton-audit/REPORT.md`](docs/walton-audit/REPORT.md) |
+| Scheme catalogue | Tier 1 drafted and checked (phase 1, step 2) | **Entries:** 116, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 222, with their formulas (206 from the book, 35 with a game part, 6 that only `walton.yml` implies). **Discrepancies:** 121, 110 of them in tier 1's entries. **Tier 1:** 33 entries drafted and checked by models. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Verification by a person; tier 2's 83 entries; the owner's decisions on the scheme changes tier 1 proposes | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`DRAFTING.md`](wag/data/catalogue/DRAFTING.md), [`index.md`](wag/data/catalogue/index.md), [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
 | Dialogue types | Reference written | Every game with a central claim is a persuasion dialogue: `debate` is the one-sided form; the points modes match no type | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
@@ -71,10 +71,10 @@ The next step is therefore not more code. It is to align and verify that catalog
 In order of importance. Each issue links to the document that explains it.
 
 1. **The scheme knowledge is split, and the annotating model sees only part of it.**
-   - The model gets all 111 formulas. It gets critical questions only where Carneades encodes them as assumptions or exceptions (54 schemes), plus the game's 24 questions for its 9 schemes. It gets no descriptions, no examples, and no contrasts between close schemes.
+   - The model gets all 116 formulas. It gets critical questions only where Carneades encodes them as assumptions or exceptions (59 schemes), plus the game's 24 questions for its 9 schemes. It gets no descriptions, no examples, and no contrasts between close schemes.
    - It is asked to cite the book's critical questions, which it never sees. In the first run it made one up.
    - See [part 7 §3](docs/review-2026-10-15-part7.md#3-the-questions).
-   - **Since 2026-10-22,** the catalogue's skeleton aligns the sources scheme by scheme, and its 32 tier-1 entries are drafted and checked by models (paraphrased questions, descriptions, contrasts, examples, discrepancies). Nothing is verified by a person yet ([plan §2](docs/plan.md#2-phase-1-the-aligned-catalogue)).
+   - **Since 2026-10-22,** the catalogue's skeleton aligns the sources scheme by scheme, and its 33 tier-1 entries are drafted and checked by models (paraphrased questions, descriptions, contrasts, examples, discrepancies). Nothing is verified by a person yet ([plan §2](docs/plan.md#2-phase-1-the-aligned-catalogue)).
 2. **The guidelines allow two answers in places, contradict each other once, and code four different things as "none".** "None" covers the thesis, bare premises, reasons that fit no scheme, and non-arguments. Most disagreements in the first Gemini run trace to this, not to the model. See [part 7 §2](docs/review-2026-10-15-part7.md#2-the-14-annotations-against-the-gold).
 3. **The gold is one model's reading.**
    - Both batch-2 annotators and the adjudicator were runs of the same language model, and no person has reviewed them.
@@ -97,7 +97,7 @@ In order of importance. Each issue links to the document that explains it.
    - The second aim needs a protocol for each type and an annotation scheme for types and shifts. That is Track D, after the scheme catalogue.
    - See [`docs/dialogue-types.md`](docs/dialogue-types.md) §9 and [part 9](docs/review-2026-10-15-part9.md).
 8. **Smaller known gaps.**
-   - The book's cause to effect is modal; `walton.yml`'s is not (audit N8).
+   - The book's cause to effect is modal; `walton.yml`'s was not (audit N8). On 2026-10-22 the owner added the modal form as `cause_to_effect_modal` ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#changes-decided-by-the-owner)). The batch-2 gold still codes its 11 hypothetical causal steps as `cause_to_effect`, with the N8 note, until it is recoded.
    - Every book scheme now has a `walton.yml` scheme, and 1 `walton.yml` scheme (`defeasible_modus_ponens`) is not in the book. Three book schemes had none until 2026-10-22, when the owner brought in 10.2 and 53 from the upstream category files and had one written for 50, the precedent slippery slope; earlier versions said 6, from an older list.
    - Compendium 33.3 (reasoning from negative consequences) had no `walton.yml` scheme. The upstream collection formalizes it in a category file, under an id it already used; the owner brought it in as `negative_consequences_reasoning` on 2026-10-22 ([CHANGELOG](docs/scheme-registry/walton-clean/CHANGELOG.md#changes-decided-by-the-owner)).
    - On the same day the owner corrected five upstream schemes that drafting tier 1 found wrong (the same CHANGELOG section):
@@ -105,7 +105,7 @@ In order of importance. Each issue links to the document that explains it.
      - negative value's conclusion and template, which said the opposite of the book, are corrected;
      - the consequence schemes have the exception for the book's question about opposite consequences;
      - the slippery slope's source year is corrected.
-   - 13 of the book-to-`walton.yml` links are partial.
+   - 13 compendium entries are linked to `walton.yml` only partly (18 of the 115 links are partial).
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
 **Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):
@@ -124,7 +124,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 
 | Phase | Goal | The work | Who |
 |---|---|---|---|
-| 1. Catalogue | One verified entry per scheme, aligned across the book, `walton.yml` and the NASCQ | **Generate** a skeleton from the existing sources (done 2026-10-22). **Draft:** paraphrased critical questions with their loci, descriptions, contrasts, examples. Tier 1 drafted and checked by models (done 2026-10-22). **Verify:** the 32 tier-1 schemes first, then the rest as the data needs them ([the alignment plan](docs/catalogue-alignment.md)). | A model drafts; a person verifies with the book (about 20–30 minutes a scheme) |
+| 1. Catalogue | One verified entry per scheme, aligned across the book, `walton.yml` and the NASCQ | **Generate** a skeleton from the existing sources (done 2026-10-22). **Draft:** paraphrased critical questions with their loci, descriptions, contrasts, examples. Tier 1 drafted and checked by models (done 2026-10-22). **Verify:** the 33 tier-1 schemes first, then the rest as the data needs them ([the alignment plan](docs/catalogue-alignment.md)). | A model drafts; a person verifies with the book (about 20–30 minutes a scheme) |
 | 2. Annotation version 4 | Annotations that follow the catalogue | **Guidelines** as one decision procedure, with "none" split and the thesis given its conclusion form. **"Other"** with a structured proposal. **Prompts:** first candidates from an index, then the full entries. Formulas written by code; constrained JSON. | Code and guidelines; measured against version 3 |
 | 3. Data | A gold people stand behind, beyond one debate | **Review** batch 2 in the dashboard. **Re-code** it under version 4. **Add** four to nine discussions of other kinds, and a probe set per scheme. | People, helped by model annotators |
 | 4. Evaluation, alongside | Know what each change does | Acceptable answers; a cause for every disagreement; development and test sets; one change at a time; re-scoring from recorded calls; several models | Code, then routine |
@@ -134,7 +134,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 **The next three actions:**
 1. The owner decides the open questions of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make): the book PDF still in the history and the book text, a licence, who verifies, paid model access, and Track D's open choices.
 2. The owner decides the scheme changes that the tier-1 entries leave open ([review part 12 §5](docs/review-2026-10-22-part12.md#5-what-is-left-open)), starting with those that change tier-1 formulas.
-3. A person verifies the 32 tier-1 entries against the book (about 10–15 hours) while the version 4 guidelines are drafted ([the alignment plan](docs/catalogue-alignment.md)).
+3. A person verifies the 33 tier-1 entries against the book (about 10–15 hours) while the version 4 guidelines are drafted ([the alignment plan](docs/catalogue-alignment.md)).
 
 ## 5. Running it
 

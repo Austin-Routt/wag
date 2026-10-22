@@ -122,6 +122,11 @@ contrasts:
     no claim that one produces the other. When A is an effect and B its presumed cause,
     the text reasons back from effect to cause: that is sign (or abduction), not cause_to_effect.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect_modal
+  text: Choose sign when an observed finding is taken to indicate something; choose
+    cause_to_effect_modal when a cause that may occur, typically not yet observed,
+    is said to bring about an effect.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: correlation_to_cause
   text: Choose correlation_to_cause when the conclusion is a causal link between two
     kinds of event, argued from their going together; choose sign when such an association
@@ -246,3 +251,8 @@ history:
   by: Claude Code
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the summary no longer denies a causal link from B to A)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
+    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").

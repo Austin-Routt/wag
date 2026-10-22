@@ -99,6 +99,11 @@ contrasts:
     often chains them: a correlation supports the link, and the link then predicts
     what a measure will do.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect_modal
+  text: Choose cause_to_effect_modal when a causal link, taken as given, is applied
+    to a cause that may occur; choose correlation_to_cause when the point is to establish
+    the link from the fact that the two go together.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: sign
   text: Choose correlation_to_cause when the conclusion is a causal claim about two
     kinds of event; choose sign when a known association is used to infer, from a
@@ -196,3 +201,8 @@ history:
     contrasts, the examples (own examples, and a Kialo near miss), two book-walton
     discrepancies, the classification (not in the tree), specialises and the dialogue
     types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
+    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").

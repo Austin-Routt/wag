@@ -165,3 +165,4 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 9. **The shared vocabulary** (`lexicon.json`) is issued with the batch. One atom per entity or proposition; the action is always `tax_meat`.
 10. **Challenge types** add possibility and conflicting goals.
 11. **Causal steps of an un-enacted policy.** Use `cause_to_effect` only if nothing better fits, with fit `reconstructed` and the note "hypothetical cause (needs a modal causal scheme, audit N8)".
+    - *Note of 2026-10-22.* `walton.yml` now has that modal scheme, `cause_to_effect_modal` (the owner's decision on audit N8). This batch keeps the rule above, because its gold codes these steps so; the rule changes when the gold is recoded. Later batches code such steps with `cause_to_effect_modal`.

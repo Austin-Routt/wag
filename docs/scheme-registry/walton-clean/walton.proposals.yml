@@ -214,6 +214,7 @@ language:
   legitimate_value/1: "%s is a legitimate value."
   looks_like/2: "%s looks like a %s."
   may_have/2: "%s, may have %s, for all we know or can prove."
+  may_occur/1: "%s occurs, or may occur, in this case."
   means_end/1: "Means %s should be regarded as an end."
   means_same/2: "%s means the same as %s"
   means_to_end/2: "%s is means to the end %s."
@@ -1804,6 +1805,21 @@ argument_schemes:
       - will_occur(E2)
     premises:
       - has_occurred(E1)
+      - causes(E1,E2)
+    exceptions:
+      - interference(E1)
+
+  - id: cause_to_effect_modal
+    meta:
+      title: Argument from Cause to Effect - Modal Form
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,
+             1995, pp. 140-141.
+    variables: [E1,E2]
+    conclusions:
+      - may_occur(E2)
+    premises:
+      - may_occur(E1)
       - causes(E1,E2)
     exceptions:
       - interference(E1)

@@ -234,6 +234,12 @@ def main(outdir):
       "reason the chain premises then carry. A verifier with the book should confirm the reading. The conclusion negates `case_exception`, the premise of the "
       "argument for an exceptional case (`exceptional`), so that the slope meets the argument it counters (p. 117). Its "
       "templates are our own. |")
+    w("| `cause_to_effect_modal` (new) | written for WAG: premises `may_occur(E1)`, `causes(E1,E2)`; exception "
+      "`interference(E1)`; conclusion `may_occur(E2)` | 2026-10-22 | The modal cause to effect of audit N8. Compendium 28 "
+      "reads \"B will (might) occur\" and \"A occurs (might occur)\"; `cause_to_effect` formalizes only the strong "
+      "reading and asserts that the cause has occurred, so the causal step of a policy not yet adopted had no scheme. It "
+      "keeps `cause_to_effect`'s causal premise and exception, so the book's three questions target the same formulas, and "
+      "uses `may_occur` for both the cause and the effect, so that hypothetical steps chain. Its template is our own. |")
     w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template "
       "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
       "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "

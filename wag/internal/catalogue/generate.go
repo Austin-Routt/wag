@@ -21,7 +21,7 @@ var Tier1 = []string{
 	// consequences and values
 	"positive_consequences", "negative_consequences", "negative_consequences_reasoning", "positive_value", "negative_value",
 	// causes and signs
-	"cause_to_effect", "correlation_to_cause", "sign",
+	"cause_to_effect", "cause_to_effect_modal", "correlation_to_cause", "sign",
 	// cases and analogy
 	"analogy", "practical_analogy_positive", "practical_analogy_negative", "from_example",
 	// sources

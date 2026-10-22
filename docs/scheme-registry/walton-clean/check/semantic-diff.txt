@@ -13,8 +13,8 @@ negative_consequences                    exceptions   [] -> ['other_consequences
 positive_consequences                    exceptions   [] -> ['other_consequences(A)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
 14 scheme-level difference(s) after renames
-added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, negative_consequences_reasoning
-language: 392 -> 409 keys; keys only in clean: 51, only in original: 33, same key with a changed template: 27
+added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning
+language: 392 -> 410 keys; keys only in clean: 52, only in original: 33, same key with a changed template: 27
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
@@ -36,6 +36,7 @@ language: 392 -> 409 keys; keys only in clean: 51, only in original: 33, same ke
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
+  +  may_occur/1 '%s occurs, or may occur, in this case.'
   +  means_end/1 'Means %s should be regarded as an end.'
   +  more_important_ends/0 'Ends are more important than the means used to achieve them.'
   +  more_reliable/0 'There are more reliable account for the sign.'

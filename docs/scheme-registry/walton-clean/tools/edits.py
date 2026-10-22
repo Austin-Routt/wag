@@ -493,4 +493,33 @@ ADDITIONS += [
     "      - intolerable_exception(Cn,R)",
     "",
 ]]
+# 2026-10-22: the modal cause to effect (audit N8). Compendium 28 has a strong and a weak reading ("B will (might)
+# occur"; "A occurs (might occur)"), and cause_to_effect formalizes only the strong one: it asserts that the cause has
+# occurred, so a causal step of a policy not yet adopted had no scheme. Written for WAG by the owner's decision: the
+# same causal generalization and exception as cause_to_effect, with may_occur for both the cause and the effect, so
+# that hypothetical steps chain (a tax may come in, prices may rise, consumption may fall).
+_MOD = ("audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which "
+        "cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with "
+        "cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that "
+        "hypothetical steps chain")
+ADDITIONS += [
+    insert(207, '  may_occur/1: "%s occurs, or may occur, in this case."', ADD,
+           "template for cause_to_effect_modal (audit N8), in our own words"),
+] + [insert(1749, text, ADD, _MOD, scheme="cause_to_effect_modal") for text in [
+    "  - id: cause_to_effect_modal",
+    "    meta:",
+    "      title: Argument from Cause to Effect - Modal Form",
+    "      source: >",
+    "             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,",
+    "             1995, pp. 140-141.",
+    "    variables: [E1,E2]",
+    "    conclusions:",
+    "      - may_occur(E2)",
+    "    premises:",
+    "      - may_occur(E1)",
+    "      - causes(E1,E2)",
+    "    exceptions:",
+    "      - interference(E1)",
+    "",
+]]
 OPS += OWNER_REPAIRS + ADDITIONS

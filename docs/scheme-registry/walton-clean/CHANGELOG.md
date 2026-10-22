@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2148 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 4 added by them (`full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 115 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2164 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 5 of them changed by the owner's decisions (`negative_consequences`, `negative_value`, `positive_consequences`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 138 / 147 | 17 / 17 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 115 | 0 of 115 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 116 | 0 of 116 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 67 of 111 | 111 of 115 | 115 of 115 |
+| schemes passing checks 2–4 | – | 67 of 111 | 112 of 116 | 116 of 116 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr; the audit's 137 is the same list without it.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 115 schemes, and check 2 passes for 111. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 115 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 112. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 116 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -35,10 +35,10 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
 | repair — owner decision | 7 | 7 |
-| addition — owner decision | 79 | 18 |
-| **total** | **282** | **190** distinct lines (a line can carry edits of several categories) |
+| addition — owner decision | 95 | 20 |
+| **total** | **298** | **192** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 173 lines removed, 252 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 86 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 173 lines removed, 268 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 102 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -52,6 +52,7 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | `whole_into_parts` (new) | added from `A_reasoning/2_inductive-reasoning.yml`, under its upstream id | 2026-10-22 | It formalizes compendium 10.2, Division of the Whole into its Parts, which `walton.yml` lacked. Its formulas follow the book as printed (three parts stand for the book's n; only the positive reading). Its four templates are in our own words, because the category file's repeat the book. |
 | `full_slippery_slope` (new) | added from `A_reasoning/5_casual-reasoning.yml`, under its upstream id; source filled in; `accept_all_steps` and `led_to_step` given the arguments `(C0,C2)` | 2026-10-22 | It formalizes compendium 53, the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is one statement for every instance ("0-ary atoms", below). Its five templates are in our own words. |
 | `precedent_slippery_slope` (new) | written for WAG: premises `claimed_exception(C0,R)`, `sets_precedent(C0,C1,R)`, `precedent_chain(C1,Cn,R)`, `intolerable_exception(Cn,R)`; conclusion `¬case_exception(C0)` | 2026-10-22 | It formalizes compendium 50, the Precedent Slippery Slope Argument, which no upstream file formalizes. One formula per printed premise, with the Related Cases Premise split into the first pair and the chain so that the book's CQ1 and CQ2 each have one. The intolerable case is taken to be the end of the series, Cn, as a slippery slope needs; the book prints C0 there and in CQ3 (the compendium, p. 340; the ch. 3 scan, p. 116, is unclear but looks the same), which can also be read as "treating C0 as an exception would be intolerable because of where it leads", a reason the chain premises then carry. A verifier with the book should confirm the reading. The conclusion negates `case_exception`, the premise of the argument for an exceptional case (`exceptional`), so that the slope meets the argument it counters (p. 117). Its templates are our own. |
+| `cause_to_effect_modal` (new) | written for WAG: premises `may_occur(E1)`, `causes(E1,E2)`; exception `interference(E1)`; conclusion `may_occur(E2)` | 2026-10-22 | The modal cause to effect of audit N8. Compendium 28 reads "B will (might) occur" and "A occurs (might occur)"; `cause_to_effect` formalizes only the strong reading and asserts that the cause has occurred, so the causal step of a policy not yet adopted had no scheme. It keeps `cause_to_effect`'s causal premise and exception, so the book's three questions target the same formulas, and uses `may_occur` for both the cause and the effect, so that hypothetical steps chain. Its template is our own. |
 | `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
 | `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
@@ -278,6 +279,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **204** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."`
+- **207** [insert after] · addition — owner decision · template for cause_to_effect_modal (audit N8), in our own words (used by: cause_to_effect_modal)
+  - before: _(none)_
+  - after: `  may_occur/1: "%s occurs, or may occur, in this case."`
 - **208** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses means_end with 1 argument(s) and the template has 1 %s (used by: end_and_means_2)
   - before: `  means_end: "Means %s should be regarded as an end."`
   - after: `  means_end/1: "Means %s should be regarded as an end."`
@@ -1041,6 +1045,54 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - reasonable_belive(M)`
   - after: `      - reasonable_believe(M)`
 
+### cause_to_effect_modal
+
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `  - id: cause_to_effect_modal`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `    meta:`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      title: Argument from Cause to Effect - Modal Form`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      source: >`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `             1995, pp. 140-141.`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `    variables: [E1,E2]`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      - may_occur(E2)`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `    premises:`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      - may_occur(E1)`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      - causes(E1,E2)`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: `      - interference(E1)`
+- **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
+  - before: _(none)_
+  - after: _(none)_
+
 ### negative_consequences
 
 - **1896** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
@@ -1142,7 +1194,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 115 schemes (`proposals-check.txt`).
+With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 116 schemes (`proposals-check.txt`).
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 

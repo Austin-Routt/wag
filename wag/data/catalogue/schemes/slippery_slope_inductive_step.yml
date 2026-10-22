@@ -123,6 +123,12 @@ contrasts:
     a chain against a first step. A causal chain with no bad end and no first step
     to reject is a series of cause_to_effect arguments.
   status: drafted by Claude Code, 2026-10-22
+- scheme: cause_to_effect_modal
+  text: Choose slippery_slope_inductive_step when the step is a link of a chain said
+    to end in a horrible outcome, to reject the first step; choose cause_to_effect_modal
+    for a hypothetical causal step whose effect is the point, or that a consequences
+    argument rests on.
+  status: drafted by Claude Code, 2026-10-22
 - scheme: correlation_to_cause
   text: 'Not a close relative: correlation_to_cause argues for a causal link from
     a correlation. It may back the premise causes(E1,E2) of an inductive step, but
@@ -188,9 +194,10 @@ discrepancies:
     link is causes(E1,E2), the same unqualified causal premise as cause_to_effect's.
   decision: 'No change for now: read causes(E1,E2) here as "E1 would plausibly lead
     to E2 in these circumstances", and treat a weak link as a reason to answer 49/CQ3
-    against it. Open, with the modal variant of the causal family (audit N8): whether
-    the slope''s links should use it. Slopes whose steps are precedents or classifications
-    have schemes of their own (50, 51, 52), only two of them in walton.yml.'
+    against it. Open: whether the slope''s links should use may_occur, as cause_to_effect_modal
+    (added on 2026-10-22, audit N8) does, for slopes that start from a proposal. Slopes
+    whose steps are precedents or classifications have schemes of their own (50, 51,
+    52), only two of them in walton.yml.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Conclusion
@@ -259,3 +266,8 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the source year''s second citation recorded; 49/CQ1''s answer; the night-bus coding
     follows the text''s steps)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: A contrast with cause_to_effect_modal, added to walton.yml by the owner's
+    decision of 2026-10-22 (audit N8; docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner"); the Recursive Premise decision names it.

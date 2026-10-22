@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision. Also changed 2026-10-22: 28 also links, partly, to cause_to_effect_modal (audit N8).",
  "entries": [
   {
    "number": "1",
@@ -4410,6 +4410,71 @@
       "walton": [
        {
         "formula": "will_occur(E2)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": [
+      {
+       "cq": "CQ1",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ2",
+       "note": "no separate evidence formula",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "cq": "CQ3",
+       "walton": [
+        {
+         "formula": "interference(E1)",
+         "locus": "exception"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cause_to_effect_modal",
+     "match": "partial",
+     "reason": "The weak reading of 28 (\"A occurs (might occur)\"; \"B will (might) occur\"), which cause_to_effect does not formalize: written for WAG by the owner's decision of 2026-10-22 (audit N8; walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Partial: it formalizes only that reading; cause_to_effect formalizes the strong one.",
+     "premise_map": [
+      {
+       "compendium_label": "Major Premise",
+       "walton": [
+        {
+         "formula": "causes(E1,E2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Minor Premise",
+       "note": "the cause occurs, or may occur",
+       "walton": [
+        {
+         "formula": "may_occur(E1)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the effect may occur",
+      "walton": [
+       {
+        "formula": "may_occur(E2)",
         "locus": "conclusion"
        }
       ]

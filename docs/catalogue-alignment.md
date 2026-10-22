@@ -1,6 +1,6 @@
 # Plan: complete coverage and alignment of the scheme catalogue
 
-**Started 2026-10-22, while tier 1 was drafted; updated the same day after its independent check ([part 12](review-2026-10-22-part12.md)).** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 32 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
+**Started 2026-10-22, while tier 1 was drafted; updated the same day after its independent check ([part 12](review-2026-10-22-part12.md)).** This plan expands [plan §2](plan.md#2-phase-1-the-aligned-catalogue), the aligned catalogue, from the 33 tier-1 schemes to every scheme. It lists what is left and in which order, and it states when the catalogue is complete and aligned.
 
 **The catalogue's own README has the current figures:** [`wag/data/catalogue/README.md`](../wag/data/catalogue/README.md). The figures below were measured on 2026-10-22, from the committed catalogue and the upstream collection.
 
@@ -27,14 +27,14 @@
 
 | Item | State |
 |---|---|
-| Entries | 115, one for each of `walton.yml`'s 115 schemes. All 109 compendium schemes are linked to an entry, and since 2026-10-22 every one has a formalization. |
-| Tier 1 | 32 entries, drafted on 2026-10-22 and checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)). Not yet verified by a person. |
+| Entries | 116, one for each of `walton.yml`'s 116 schemes. All 109 compendium schemes are linked to an entry, and since 2026-10-22 every one has a formalization. |
+| Tier 1 | 33 entries, drafted on 2026-10-22. The first 32 were checked by three independent model agents, whose 117 findings are applied ([part 12](review-2026-10-22-part12.md)); `cause_to_effect_modal`, added later the same day (C4), is being checked on its own. Not yet verified by a person. |
 | Tier 2 | 83 entries, generated only. |
-| Book questions | All 153 printed questions are in some entry. 52 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 50 in tier 2. The checker lists them. |
+| Book questions | All 153 printed questions are in some entry. 48 book-question items target no formula and are not marked as undercutting: 2 in tier 1 (established rule, with the missing exceptions recorded), 46 in tier 2. The checker lists them. |
 | Questions for assumptions and exceptions | 10 assumptions and exceptions in 9 schemes had no question before tier 1 was drafted. Tier 1 adds six `walton/` questions: its five, and `legitimate_value`, whose book question turned out to ask something else. |
 | Entries without any question | 47: the book prints none for them, and the game asks none. |
-| Generated items still unverified | 747: book links, families, premise maps and question targets. 159 of them are in tier 1, where the drafters and the checkers found them right; the rest are tier 2's. |
-| Discrepancies | 117. Tier 1 holds 105: 60 between the book and `walton.yml`, 35 other, 6 partial links, 3 game differences, 1 not in the book. 55 of tier 1's decisions are open, for the owner or a verifier ([part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). |
+| Generated items still unverified | 763: book links, families, premise maps and question targets. 164 of them are in tier 1: the drafters and the checkers found 159 right, and the 5 of `cause_to_effect_modal` are in its check. The rest are tier 2's. |
+| Discrepancies | 121. Tier 1 holds 110: 60 between the book and `walton.yml`, 39 other, 7 partial links, 3 game differences, 1 not in the book. 55 of tier 1's decisions are open, for the owner or a verifier ([part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). |
 
 ### What the upstream collection holds that `walton.yml` lacks
 
@@ -61,9 +61,9 @@ What matters for alignment:
 
 ### A. A person verifies tier 1
 
-**The work.** 32 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
+**The work.** 33 entries, about 20 to 30 minutes each with the book: 10 to 15 hours. [`DRAFTING.md`](../wag/data/catalogue/DRAFTING.md) §"Verifying" says how.
 
-**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N8, N12, and the scheme changes listed in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). Otherwise the verifier would verify entries that are about to change.
+**Before it starts:** the owner's decisions in workstream C that change tier-1 formulas (N12, and the scheme changes listed in [part 12 §5](review-2026-10-22-part12.md#5-what-is-left-open)). Otherwise the verifier would verify entries that are about to change.
 
 ### B. Draft tier 2
 
@@ -120,7 +120,10 @@ Each of these changes `walton.yml`, `links.json` or `families.json`. The catalog
 
    - **The conclusion** negates the premise of the argument for an exceptional case (`exceptional`). The book calls the slope a counterargument to argument from precedent (p. 117), and this lets it meet that argument.
    - **One reading is ours.** The book prints C0 in the Intolerable Outcome Premise and CQ3 (the ch. 3 scan is unclear). The formula takes the end of the series, Cn, as a slippery slope needs. `links.json` therefore links 50 partly, and a verifier with the book should confirm the reading.
-4. **N8, the modal cause to effect:** a variant in the causal family for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7).
+4. **N8, the modal cause to effect: decided on 2026-10-22.** `cause_to_effect_modal` is written for WAG, for causes that might occur, or have not yet (`docs/review-2026-10-13-part5.md` §7): `may_occur(E1)` and `causes(E1,E2)`, with the exception `interference(E1)`, conclude `may_occur(E2)`. Its source is the one the book gives for 28.
+   - **`cause_to_effect` keeps the strong reading** (`has_occurred`, `will_occur`). `links.json` links 28 to it exactly and to the new scheme partly, and `families.json` makes the new scheme a variant in F13. Both are tier-1 entries; their contrast says when to use which.
+   - **The batch-2 gold** still codes its 11 hypothetical causal steps as `cause_to_effect` with the N8 note, as its guidelines (item 11) ask. Recoding them is left to the owner; later batches use the new scheme.
+   - **Left open,** in the entries: whether a `cause_to_effect` step should chain into a modal one (`will_occur(E)` meets no `may_occur(E)`); whether the consequence schemes' `brings_about` and the slope's links should take a modal form too.
 5. **N12, analogy:** separate source and target propositions.
 6. **The upstream defects** (duplicate ids; the master's typo and wrong variable list, already corrected in the cleaned file): record only. `walton.yml` is already right.
 7. **`walton.yml`'s English templates.** Rewrite in our own words the 173 that repeat the book (plan §7, item 1). The catalogue does not store them, but the game and `wag-cli --catalogue-show` render them.
@@ -197,7 +200,7 @@ Two ways to cover them:
 
 ## 4. Order
 
-1. **The owner decides C4, C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 to C3 were decided on 2026-10-22). C6 and C7 can wait.
+1. **The owner decides C5 and C8,** which change formulas, before anyone verifies the entries they touch (C1 to C4 were decided on 2026-10-22). C6 and C7 can wait.
 2. **A person verifies tier 1** (A).
 3. **Generate the game's data** for the 9 game schemes from the verified tier 1 (E), and run the game's tests.
 4. **Tier 2 in batches** (B), each with its questions decided and its assumptions and exceptions covered (D).

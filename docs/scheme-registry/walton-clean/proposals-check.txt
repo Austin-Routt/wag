@@ -3,7 +3,7 @@ walton-check walton.proposals.yml
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)
 stderr during import: ""
-schemes: 115, language keys: 410
+schemes: 116, language keys: 411
 
 == 2. Carneades validator ==
 before instantiation: 0 problem(s)
@@ -104,28 +104,29 @@ after instantiating every scheme: 0 problem(s)
  92 analogy                                    PASS  args=1/1 premises+assumptions=2 exceptions=2
  93 appearance                                 PASS  args=1/1 premises+assumptions=1 exceptions=0
  94 cause_to_effect                            PASS  args=1/1 premises+assumptions=2 exceptions=1
- 95 correlation_to_cause                       PASS  args=1/1 premises+assumptions=2 exceptions=1
- 96 credible_source                            PASS  args=1/1 premises+assumptions=3 exceptions=3
- 97 definition_to_verbal_classification        PASS  args=1/1 premises+assumptions=2 exceptions=1
- 98 defeasible_modus_ponens                    PASS  args=1/1 premises+assumptions=2 exceptions=0
- 99 established_rule                           PASS  args=1/1 premises+assumptions=3 exceptions=0
-100 ethotic1                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
-101 ethotic2                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
-102 expert_opinion                             PASS  args=1/1 premises+assumptions=4 exceptions=2
-103 ignorance                                  PASS  args=1/1 premises+assumptions=2 exceptions=1
-104 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
-105 negative_consequences_reasoning            PASS  args=1/1 premises+assumptions=2 exceptions=1
-106 position_to_know                           PASS  args=1/1 premises+assumptions=3 exceptions=1
-107 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
-108 practical_reasoning1                       PASS  args=1/1 premises+assumptions=7 exceptions=4
-109 practical_reasoning2                       PASS  args=1/1 premises+assumptions=5 exceptions=5
-110 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2
-111 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
-112 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
-113 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
-114 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
-115 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
-schemes failing instantiation: 0 of 115
+ 95 cause_to_effect_modal                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 96 correlation_to_cause                       PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 97 credible_source                            PASS  args=1/1 premises+assumptions=3 exceptions=3
+ 98 definition_to_verbal_classification        PASS  args=1/1 premises+assumptions=2 exceptions=1
+ 99 defeasible_modus_ponens                    PASS  args=1/1 premises+assumptions=2 exceptions=0
+100 established_rule                           PASS  args=1/1 premises+assumptions=3 exceptions=0
+101 ethotic1                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+102 ethotic2                                   PASS  args=1/1 premises+assumptions=3 exceptions=0
+103 expert_opinion                             PASS  args=1/1 premises+assumptions=4 exceptions=2
+104 ignorance                                  PASS  args=1/1 premises+assumptions=2 exceptions=1
+105 negative_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+106 negative_consequences_reasoning            PASS  args=1/1 premises+assumptions=2 exceptions=1
+107 position_to_know                           PASS  args=1/1 premises+assumptions=3 exceptions=1
+108 positive_consequences                      PASS  args=1/1 premises+assumptions=2 exceptions=1
+109 practical_reasoning1                       PASS  args=1/1 premises+assumptions=7 exceptions=4
+110 practical_reasoning2                       PASS  args=1/1 premises+assumptions=5 exceptions=5
+111 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2
+112 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+113 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
+114 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+115 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+116 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
+schemes failing instantiation: 0 of 116
 
 == 4. language ==
 0 problem(s)
@@ -133,7 +134,7 @@ schemes failing instantiation: 0 of 115
 declared variables used in no formula (informational): 0
 
 == per scheme (checks 2-4) ==
-schemes passing every check: 115 of 115
+schemes passing every check: 116 of 116
 problems not tied to one scheme (language keys etc.): 0
 
 == GATE ==
