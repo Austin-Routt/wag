@@ -28,7 +28,9 @@ decisions:
   question: >-
     Should analogy get a two-case scheme, with separate propositions for the
     source and the target case and a premise that they correspond, as
-    proposed in part 6 §4? The game's analogy question waits on it.
+    proposed in part 6 §4? The game's analogy question waits on it. The owner
+    chose the two-case form on 2026-10-22 (option C), to be made once the
+    proposal's examples are approved.
   category: scheme
   blocks: [game, verification]
   decider: owner
@@ -37,7 +39,7 @@ decisions:
   items:
     - {entry: analogy, kind: book-walton, about: "variables (N12)"}
     - {entry: analogy, kind: other, about: "game questions"}
-  docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5"]
+  docs: ["docs/review-2026-10-13-part5.md §7", "docs/review-2026-10-15-part6.md §4", "docs/catalogue-alignment.md §3 C5", "docs/proposals/D001-D028.md"]
 
 - id: D002
   title: Sign's 0-ary atoms
@@ -413,7 +415,9 @@ decisions:
   title: Analogy's exceptions for the practical analogies
   question: >-
     Should 8.1 and 8.2 get analogy's exceptions, with both situations as
-    arguments (for example relevant_differences(A1,A2))?
+    arguments (for example relevant_differences(A1,A2))? The owner chose the
+    difference exception on 2026-10-22, with D001, to be made once the
+    proposal's examples are approved.
   category: scheme
   blocks: [verification]
   decider: owner
@@ -422,6 +426,7 @@ decisions:
   items:
     - {entry: practical_analogy_positive, kind: other, about: "critical questions"}
     - {entry: practical_analogy_negative, kind: other, about: "critical questions"}
+  docs: ["docs/proposals/D001-D028.md"]
 
 - id: D029
   title: Whether the practical analogies rebut each other

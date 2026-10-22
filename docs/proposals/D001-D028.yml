@@ -1,0 +1,248 @@
+# Proposal for decisions D001 and D028 (docs/decisions.md): the evidence,
+# prepared before walton.yml changes. `wag-cli --proposal` checks it and writes
+# its view, D001-D028.md. How proposals work: docs/process.md §5.
+
+decisions: [D001, D028]
+title: Analogy between two cases, and the practical analogies' difference exception
+summary: >-
+  **D001.** The book's argument from analogy compares two cases: a claim held
+  in the source case, the cases are alike, so the corresponding claim holds in
+  the target case. walton.yml's `analogy` names only the source case and uses
+  one proposition for both, so its premise says that the target's claim held
+  in the source case, which is false whenever the two claims differ. The owner
+  chose to replace the formula with a two-case form (option C, 2026-10-22):
+  source and target cases (Cs, Ct), source and target claims (Ps, Pt), and a
+  premise that the target claim is the counterpart of the source finding.
+  It reuses walton.yml's predicates for similarity, the source finding and
+  differences, and adds two: `corresponds/2`, and `closer_counter_case/2` for
+  the counter-case. The current exception, `more_on_point(A,C)`, reads a
+  claim as false "in another case", which only works while one claim serves
+  every case; the first rendering of these examples showed it failing. The
+  new exception keeps the current design: a counter-case closer to the target
+  than the source undercuts the argument, and one merely similar to the
+  source (the book's CQ3 as printed) is argued against the conclusion as a
+  rebuttal.
+  **D028.** The two practical analogies (8.1, 8.2), for which the book prints
+  no questions, get analogy's difference exception with both situations as
+  arguments, `relevant_differences(A1,A2)`, so that one game question about
+  differences can serve all three schemes.
+  **What to judge in the renderings:** whether each line says something true
+  and sensible; in particular the two new templates, `corresponds/2` and
+  `closer_counter_case/2`.
+
+schemes:
+  - id: analogy
+    meta:
+      title: Argument from Analogy
+      source: Douglas Walton, Fundamentals of Critical Argumentation, Cambridge University Press, New York 2006, p. 96-97.
+    variables: [Ps, Pt, Cs, Ct]
+    premises: ["similar_to(Cs,Ct)", "in_case(Ps,Cs)", "corresponds(Ps,Pt)"]
+    assumptions: []
+    exceptions: ["relevant_differences(Cs,Ct)", "closer_counter_case(Ct,Cs)"]
+    conclusions: [Pt]
+  - id: practical_analogy_positive
+    meta:
+      title: Practical Reasoning From Analogy - Positive Schema
+      source: "Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257."
+    variables: [A1, A2, X]
+    premises: ["right_to_do(A1,X)", "similar_to(A1,A2)"]
+    assumptions: []
+    exceptions: ["relevant_differences(A1,A2)"]
+    conclusions: ["carry_out_right(A2,X)"]
+  - id: practical_analogy_negative
+    meta:
+      title: Practical Reasoning From Analogy - Negative Schema
+      source: "Douglas Walton, Informal Logic New York: Cambridge University Press, 1989. p.257."
+    variables: [A1, A2, X]
+    premises: ["wrong_to_do(A1,X)", "similar_to(A1,A2)"]
+    assumptions: []
+    exceptions: ["relevant_differences(A1,A2)"]
+    conclusions: ["carry_out_wrong(A2,X)"]
+
+language:
+  corresponds/2: "What %s says of the other case, %s says of this one."
+  closer_counter_case/2: "There is a case closer to %s than %s is, in which the corresponding claim failed."
+
+questions:
+  analogy:
+    - {id: 7/CQ1, asks: "Do the two cases differ in ways that weaken the likeness?", target: "relevant_differences(Cs,Ct)"}
+    - {id: 7/CQ2, asks: "Did the claim really hold in the source case?", target: "in_case(Ps,Cs)"}
+    - {id: 7/CQ3, asks: "Is there a case closer to this one in which the claim failed?", target: "closer_counter_case(Ct,Cs)"}
+    - {id: walton/corresponds, asks: "Does the claim about this case say what the finding said about the other?", target: "corresponds(Ps,Pt)"}
+  practical_analogy_positive:
+    - {id: walton/relevant_differences, asks: "Do the two situations differ in ways that matter to what was right there?", target: "relevant_differences(A1,A2)"}
+  practical_analogy_negative:
+    - {id: walton/relevant_differences, asks: "Do the two situations differ in ways that matter to what was wrong there?", target: "relevant_differences(A1,A2)"}
+
+effects:
+  - "walton.yml: analogy's formulas replaced and the template corresponds/2 added; both practical analogies gain the exception; made through walton-clean/tools/edits.py as owner decisions, with CHANGELOG rows; the gate and the registry check rerun."
+  - "links.json: compendium 7's premise and question maps retarget (similarity to similar_to(Cs,Ct), the base premise and CQ2 to in_case(Ps,Cs), the conclusion to Pt, CQ1 to relevant_differences(Cs,Ct), CQ3 to closer_counter_case(Ct,Cs)); more_on_point/2 is then used by no scheme."
+  - "Catalogue: analogy's entry regenerates and its drafted questions are retargeted; it gains the question walton/corresponds; its N12 discrepancy is done; these examples replace its own. The practical analogies gain the question walton/relevant_differences, and D028's discrepancies are done. An independent check follows."
+  - "Batch-2 gold: 13292.61 is recoded with the four variables; 13292.30 (practical_analogy_positive) gains the exception, as supplied; validate.py must still pass. The guidelines' analogy note (§3) is updated: the source claim is now in the formula, not in a note."
+  - "The game, when its data is generated from the catalogue (workstream E), not before: AS:analogy gets the four variables, answer variable Pt, and is thesis-independent again; the correspondence question is a new NASCQ question; CQ:difference can be asked of the practical analogies if they join the game. Old games that used analogy replay on the data version they record."
+
+examples:
+  # --- analogy (D001) ------------------------------------------------------
+  - scheme: analogy
+    title: The tobacco tax and a meat tax
+    kialo: "13292.61"
+    use: argument
+    text: A tax for tobacco significantly reduced its consumption.
+    bindings:
+      Cs: a tax on tobacco
+      Ct: a tax on meat
+      Ps: taxing tobacco significantly reduced tobacco consumption
+      Pt: taxing meat would significantly reduce meat consumption
+    attacks:
+      - question: 7/CQ1
+        text: Tobacco is bought by a minority, often and in small amounts; meat is a staple that most households buy every week, and demand for staples changes little with price.
+      - question: 7/CQ2
+        text: Smoking fell while advertising bans and smoke-free laws came in; was it the tax that cut consumption?
+      - question: 7/CQ3
+        text: Suppose a tax on sugary drinks, a food bought by most households and so a closer case, left consumption almost unchanged.
+    note: The batch-2 gold codes this claim with the current formula, A bound to the target claim and the source claim kept in a note (audit N12).
+
+  - scheme: analogy
+    title: The same scheme as an answer in the game
+    invented: true
+    use: answer
+    answers: >-
+      CQ:likelihood ("How likely is it that the claimed link actually holds?"),
+      asked of a consequences argument whose premise is that a tax on meat brings
+      about lower meat consumption; the proponent answers for the premise. The
+      game binds Pt to that premise; the player gives the source case, the
+      target case and the source finding.
+    text: The tobacco tax cut smoking, and a meat tax would work the same way on meat.
+    bindings:
+      Cs: the tobacco tax
+      Ct: a tax on meat
+      Ps: the tobacco tax brought about lower tobacco consumption
+      Pt: a tax on meat brings about lower meat consumption
+    note: >-
+      Under the current formula the second premise would read: the meat claim is
+      true in case "the tobacco tax", which is why analogy stopped being
+      thesis-independent on 2026-10-15. Here each premise is about its own case.
+
+  - scheme: analogy
+    title: Rent control in two districts
+    invented: true
+    use: argument
+    form: negated
+    text: Rent control in the old town did not bring more homes onto the market, and the new district is much like it, so rent control there will not either.
+    bindings:
+      Cs: rent control in the old town
+      Ct: rent control in the new district
+      Ps: rent control did not increase the supply of homes in the old town
+      Pt: rent control will not increase the supply of homes in the new district
+    attacks:
+      - question: 7/CQ1
+        text: The old town had no land left to build on; the new district has open land, so supply there depends on other things.
+
+  - scheme: analogy
+    title: A four-day week, from a software firm to a hospital
+    invented: true
+    use: argument
+    text: At a software firm a four-day week left staff happier and output unchanged, so a four-day week at the city hospital will keep patient care just as good.
+    bindings:
+      Cs: the four-day week at a software firm
+      Ct: a four-day week at the city hospital
+      Ps: staff were happier and their weekly output stayed the same
+      Pt: patient care will stay just as good
+    attacks:
+      - question: walton/corresponds
+        text: The firm's finding is about the weekly output of its own staff; the claim about the hospital is about care that must be given every day of the week. What was found at the firm is not the counterpart of what is claimed for the hospital.
+
+  - scheme: practical_analogy_positive
+    title: Taxing damaging businesses elsewhere
+    kialo: "13292.30"
+    use: near-miss
+    near_miss_of: analogy
+    text: Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., carbon tax, oil tax etc.
+    bindings:
+      A1: ecologically damaging businesses elsewhere
+      A2: meat production
+      X: taxing the damaging activity
+    note: It compares two cases, but what carries over is a verdict on an action (taxing was the right thing to do), not a finding, so it is the practical analogy, as the gold codes it.
+
+  # --- the practical analogies (D028) ---------------------------------------
+  - scheme: practical_analogy_positive
+    title: Evacuating early, as in the last flood
+    invented: true
+    use: argument
+    text: In the 2019 flood, evacuating the low town a day early was the right call. This storm is like that one, so we should evacuate early again.
+    bindings:
+      A1: the 2019 flood
+      A2: this storm
+      X: evacuating the low town a day early
+    attacks:
+      - question: walton/relevant_differences
+        text: This time the river bridge is closed, so an early evacuation would send people along the flood plain, the very route the water will cover first.
+
+  - scheme: practical_analogy_positive
+    title: Carbon taxes and a meat tax
+    kialo: "13292.30"
+    use: argument
+    text: Elsewhere, governments have put taxes on ecologically damaging businesses, e.g., carbon tax, oil tax etc.
+    bindings:
+      A1: ecologically damaging businesses elsewhere
+      A2: meat production
+      X: taxing the damaging activity
+    attacks:
+      - question: walton/relevant_differences
+        text: Carbon and oil taxes fall on a fuel that producers burn; a meat tax would fall on food that households eat, and weigh most on the poorest.
+
+  - scheme: analogy
+    title: A smoking ban abroad and at home
+    invented: true
+    use: near-miss
+    near_miss_of: practical_analogy_positive
+    form: negated
+    text: A neighbouring country's smoking ban in pubs did not cut pub takings, so ours will not either.
+    bindings:
+      Cs: the neighbouring country's smoking ban in pubs
+      Ct: our smoking ban in pubs
+      Ps: the ban did not reduce pub takings there
+      Pt: the ban will not reduce pub takings here
+    note: >-
+      It looks like a practical analogy, but what carries over is a finding (takings
+      did not fall), not a verdict on an action, so it is analogy. The two claims
+      differ only in their case, which is the form the current single-proposition
+      formula could express; the two-case form covers it with a correspondence that
+      is plainly true.
+
+  - scheme: practical_analogy_negative
+    title: Bailing out banks again
+    invented: true
+    use: argument
+    text: Bailing out the banks in the last crisis was the wrong thing to do, since it rewarded reckless lending. This crisis is like that one, so a bailout now would be wrong too.
+    bindings:
+      A1: the last banking crisis
+      A2: this crisis
+      X: bailing out the failing banks
+    attacks:
+      - question: walton/relevant_differences
+        text: Last time the banks failed through their own reckless lending; this time they are failing because a pandemic shut down the firms they lent to.
+
+  - scheme: practical_analogy_negative
+    title: Closing a village school
+    invented: true
+    use: argument
+    text: Closing Northfield's school was the wrong decision, and Southfield is in the same position, so closing its school would be wrong as well.
+    bindings:
+      A1: Northfield
+      A2: Southfield
+      X: closing the village school
+    attacks:
+      - question: walton/relevant_differences
+        text: Northfield's children had no other school within ten miles; Southfield has one two miles away.
+
+  - scheme: negative_consequences
+    title: Closing a school because of what follows
+    invented: true
+    use: near-miss
+    near_miss_of: practical_analogy_negative
+    text: Closing the village school would make the children travel ten miles a day, so it should not be done.
+    bindings:
+      A: closing the village school
+      G: the children travelling ten miles a day to school
+    note: No other case is cited; the action is judged by its own consequence, so it is negative consequences.

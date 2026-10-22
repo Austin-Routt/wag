@@ -165,3 +165,60 @@ func fileExists(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil
 }
+
+// runProposal checks a proposal for a decision that changes walton.yml,
+// writes its view beside it, and, given a path, walton.yml with the
+// proposal applied, for the cleaning's gate. Status 1 on an error.
+func runProposal(repo, path, waltonOut string) int {
+	repo, _, err := catalogueDirs(repo, "")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	src, err := catalogue.Load(repo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	p, err := catalogue.LoadProposal(path)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	errs := 0
+	for _, f := range catalogue.CheckProposal(p, src) {
+		fmt.Println(f)
+		if f.Error {
+			errs++
+		}
+	}
+	view := catalogue.ProposalViewPath(path)
+	if err := os.WriteFile(view, catalogue.ProposalView(p, src, filepath.Base(path)), 0o644); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	fmt.Printf("%s written: %d proposed scheme(s), %d example(s)\n", view, len(p.Schemes), len(p.Examples))
+	if waltonOut != "" {
+		raw, err := os.ReadFile(filepath.Join(repo, filepath.FromSlash(catalogue.SourcePaths.Walton)))
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		out, err := catalogue.ProposalWalton(raw, p)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		if err := os.WriteFile(waltonOut, out, 0o644); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		fmt.Printf("%s written: walton.yml with the proposal applied (run walton-check on it)\n", waltonOut)
+	}
+	if errs > 0 {
+		fmt.Printf("%d error(s)\n", errs)
+		return 1
+	}
+	fmt.Println("no errors")
+	return 0
+}

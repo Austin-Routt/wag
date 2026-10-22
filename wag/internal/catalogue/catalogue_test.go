@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"gopkg.in/yaml.v2"
 )
 
 const root = "../../.."
@@ -462,5 +464,145 @@ func TestRegisterFindsFaults(t *testing.T) {
 	}
 	if !IsOpen("Open: x") || !IsOpen("No change. Open, for the owner: y") || IsOpen("Done: the open question is closed.") || IsOpen("Reopen it") {
 		t.Error("IsOpen does not tell an open decision")
+	}
+}
+
+// A formula reads with its variables bound to phrases, and a reading that
+// opens with a quotation is capitalized inside it.
+func TestEnglishWith(t *testing.T) {
+	lang := map[string]string{"in_case/2": "%s is true in case %s.", "similar_to/2": "%s is similar to %s."}
+	bind := map[string]string{"Ps": "the tax cut smoking", "Cs": "the tobacco tax", "Ct": "a meat tax", "Pt": "a meat tax cuts meat eating"}
+	for _, c := range []struct{ formula, want string }{
+		{"in_case(Ps,Cs)", "“The tax cut smoking” is true in case “the tobacco tax”."},
+		{"similar_to(Cs,Ct)", "“The tobacco tax” is similar to “a meat tax”."},
+		{"Pt", "A meat tax cuts meat eating."},
+		{"in_case(Ps,X)", "“The tax cut smoking” is true in case X."},
+	} {
+		if got := EnglishWith(c.formula, lang, bind); got != c.want {
+			t.Errorf("%s: got %q, want %q", c.formula, got, c.want)
+		}
+	}
+}
+
+// Applying a proposal to walton.yml changes only its schemes' blocks and its
+// templates; every other byte stays (a YAML round trip would turn a
+// variable Y into a boolean).
+func TestProposalWalton(t *testing.T) {
+	raw := []byte("meta:\n  title: t\nlanguage:\n  a/1: \"%s is a.\"\n  b/1: \"%s is b.\"\n\nargument_schemes:\n  - id: s1\n    variables: [X,Y]\n    premises:\n      - a(X)\n    conclusions:\n      - b(Y)\n\n  - id: s2\n    variables: [Y]\n    premises:\n      - a(Y)\n    conclusions:\n      - b(Y)\n")
+	p := &Proposal{
+		Schemes:  []Scheme{{ID: "s1", Variables: []string{"Z"}, Premises: []string{"a(Z)"}, Conclusions: []string{"c(Z)"}}, {ID: "s3", Variables: []string{"Y"}, Premises: []string{"a(Y)"}, Conclusions: []string{"Y"}}},
+		Language: map[string]string{"c/1": "%s is c, in a long template that a YAML marshaller would wrap onto a second line somewhere."},
+	}
+	out, err := ProposalWalton(raw, p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(out)
+	for _, want := range []string{"  b/1: \"%s is b.\"\n  c/1: \"%s is c, in a long", "  - id: s2\n    variables: [Y]\n", "  - id: s3\n", "    - c(Z)"} {
+		if !strings.Contains(s, want) {
+			t.Errorf("the result lacks %q:\n%s", want, s)
+		}
+	}
+	if strings.Contains(s, "a(X)") || strings.Contains(s, "true") {
+		t.Errorf("the old s1 block, or a boolean, is left:\n%s", s)
+	}
+	var w struct {
+		Schemes []Scheme `yaml:"argument_schemes"`
+	}
+	if err := yaml.UnmarshalStrict(out, &struct {
+		Meta     map[string]string `yaml:"meta"`
+		Language map[string]string `yaml:"language"`
+		Schemes  *[]Scheme         `yaml:"argument_schemes"`
+	}{Schemes: &w.Schemes}); err != nil || len(w.Schemes) != 3 || w.Schemes[1].Variables[0] != "Y" {
+		t.Errorf("the result does not read back as three schemes (%v): %+v", err, w.Schemes)
+	}
+}
+
+// The proposal check catches each kind of fault, and asks for the minimum
+// set of examples.
+func TestProposalFindsFaults(t *testing.T) {
+	s := sources(t)
+	base := func() *Proposal {
+		return &Proposal{Decisions: []string{"D999"}, Title: "t",
+			Schemes:   []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)"}, Conclusions: []string{"P"}}},
+			Questions: map[string][]PQuery{"x_new": {{ID: "walton/in_case", Asks: "q", Target: "in_case(P,C)"}}},
+			Examples: []ProposalExample{
+				{Scheme: "x_new", Title: "a", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}, Attacks: []Attack{{Question: "walton/in_case", Text: "x"}}},
+				{Scheme: "x_new", Title: "b", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}},
+				{Scheme: "x_new", Title: "c", Text: "t", Use: "answer", Answers: "CQ:x", Bindings: map[string]string{"P": "p", "C": "c"}},
+				{Scheme: "analogy", Title: "d", Text: "t", Use: "near-miss", Of: "x_new", Bindings: bindAll(s, "analogy")},
+			}}
+	}
+	if fs := CheckProposal(base(), s); len(fs) != 0 {
+		t.Fatalf("a sound proposal has findings: %v", fs)
+	}
+	cases := []struct {
+		name  string
+		edit  func(p *Proposal)
+		want  string
+		error bool
+	}{
+		{"an unbound variable", func(p *Proposal) { delete(p.Examples[0].Bindings, "C") }, "variable C is not bound", true},
+		{"a stray binding", func(p *Proposal) { p.Examples[0].Bindings["Q"] = "q" }, "Q is not a variable", true},
+		{"no template", func(p *Proposal) { p.Schemes[0].Premises = []string{"nowhere(P,C)"}; p.Questions = nil }, "no template for nowhere/2", true},
+		{"an undeclared variable", func(p *Proposal) { p.Schemes[0].Variables = []string{"P"} }, "variable C is used but not declared", true},
+		{"a variable in no premise", func(p *Proposal) {
+			p.Schemes[0].Variables = append(p.Schemes[0].Variables, "D")
+			p.Schemes[0].Conclusions = []string{"in_case(P,D)"}
+		}, "variable D occurs in no premise", true},
+		{"a question off the scheme", func(p *Proposal) { p.Questions["x_new"][0].Target = "in_case(C,P)" }, "not a formula of the scheme", true},
+		{"an unknown question", func(p *Proposal) { p.Examples[0].Attacks[0].Question = "7/CQ9" }, "7/CQ9 is not a question", true},
+		{"an answer without its question", func(p *Proposal) { p.Examples[2].Answers = "" }, "says which question", true},
+		{"one argument only", func(p *Proposal) { p.Examples = append(p.Examples[:1], p.Examples[2:]...) }, "the minimum is two", false},
+		{"no answer", func(p *Proposal) { p.Examples = append(p.Examples[:2], p.Examples[3]) }, "no example shows it", false},
+		{"no near miss", func(p *Proposal) { p.Examples = p.Examples[:3] }, "no near miss", false},
+		{"a question never pressed", func(p *Proposal) { p.Examples[0].Attacks = nil }, "pressed in no example", false},
+	}
+	for _, c := range cases {
+		p := base()
+		c.edit(p)
+		var got []string
+		found := false
+		for _, f := range CheckProposal(p, s) {
+			got = append(got, f.String())
+			if strings.Contains(f.Msg, c.want) && f.Error == c.error {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("%s: want a finding with %q (error %v), got %v", c.name, c.want, c.error, got)
+		}
+	}
+}
+
+func bindAll(s *Sources, id string) map[string]string {
+	m := map[string]string{}
+	if w, ok := findWalton(s, id); ok {
+		for _, v := range w.Variables {
+			m[v] = strings.ToLower(v)
+		}
+	}
+	return m
+}
+
+// Every committed proposal checks without errors, and its view is current.
+func TestCommittedProposals(t *testing.T) {
+	s := sources(t)
+	files, _ := filepath.Glob(filepath.Join(root, "docs", "proposals", "*.yml"))
+	for _, f := range files {
+		p, err := LoadProposal(f)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+		for _, fd := range CheckProposal(p, s) {
+			if fd.Error {
+				t.Errorf("%s: %s", filepath.Base(f), fd)
+			}
+		}
+		view, err := os.ReadFile(ProposalViewPath(f))
+		if err != nil || strings.ReplaceAll(string(view), "\r\n", "\n") != string(ProposalView(p, s, filepath.Base(f))) {
+			t.Errorf("%s is not the proposal's current view: run wag-cli --proposal %s", ProposalViewPath(filepath.Base(f)), filepath.Base(f))
+		}
 	}
 }

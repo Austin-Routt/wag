@@ -122,6 +122,34 @@ A decision raised in several entries is one decision that lists them all. For ex
 2. Update the entries it lists, so that they no longer say "Open".
 3. Make the change in the source it concerns: `edits.py` for a formula, the guidelines for annotation.
 
+### Proposals: examples before a scheme changes
+
+A decision that changes a scheme's formulas is prepared as a proposal (the owner's decision of 2026-10-22, with D001). The proposal is written and checked first; `walton.yml` changes only once the owner has read it.
+
+1. **The proposal file,** `docs/proposals/<decisions>.yml`, holds:
+   - the schemes as they would be;
+   - the templates they need, in our own words;
+   - each scheme's questions after the change;
+   - what else changes if it is decided;
+   - examples, each with its variables bound to phrases.
+2. **`wag-cli --proposal FILE`** checks it:
+   - every variable is declared, used, in a premise, and bound in every example;
+   - every predicate has a template;
+   - every question targets a formula of its scheme.
+
+   It also writes the view, `<decisions>.md`. Every formula of every example is rendered in English there, under each question that is pressed against it.
+3. **The minimum set of examples** for each proposed scheme (the check warns when one is missing):
+   - two uses as an argument;
+   - one use as a game answer, if the scheme concludes a bare proposition;
+   - every question pressed at least once;
+   - a near miss, coded with the scheme it really is.
+
+   The scheme's negated form gets an example where it has one.
+4. **The cleaning's gate and the registry** run on `walton.yml` with the proposal applied (`--proposal-walton PATH`, then `walton-check PATH` and `wag-cli --registry PATH`). Only the proposed schemes may differ from today's results.
+5. **The owner reads the view.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, and the decision is closed in the register.
+
+A test keeps every committed proposal valid and its view current.
+
 ## 6. The private workspace
 
 `github.com/Austin-Routt/wag-workspace`, private, holds what the public repository may not or need not:

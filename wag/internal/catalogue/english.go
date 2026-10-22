@@ -12,9 +12,10 @@ import (
 // A name starting with a capital letter and without arguments is a
 // variable.
 type term struct {
-	neg  bool
-	name string
-	args []*term
+	neg    bool
+	name   string
+	args   []*term
+	phrase bool // a bound variable: name is its phrase (EnglishWith)
 }
 
 var tokenRE = regexp.MustCompile(`\s*(¬|[A-Za-z_][A-Za-z0-9_]*|\(|\)|,|\S)`)
@@ -76,6 +77,9 @@ func isName(s string) bool {
 }
 
 func (t *term) variable() bool {
+	if t.phrase {
+		return false
+	}
 	r, _ := utf8.DecodeRuneInString(t.name)
 	return len(t.args) == 0 && unicode.IsUpper(r)
 }
@@ -85,11 +89,37 @@ func (t *term) variable() bool {
 // template reads "It is not the case that ...". A formula that does not
 // parse reads as itself.
 func English(formula string, lang map[string]string) string {
+	return EnglishWith(formula, lang, nil)
+}
+
+// EnglishWith reads a formula as English does, with its variables bound to
+// phrases: a bound variable reads as its phrase, in quotes in argument
+// position and as a sentence when it is the whole formula.
+func EnglishWith(formula string, lang map[string]string, bind map[string]string) string {
 	t, err := parseFormula(formula)
 	if err != nil {
 		return formula
 	}
+	if len(bind) > 0 {
+		t = t.bound(bind)
+	}
 	return sentence(say(t, lang))
+}
+
+// bound replaces the bound variables by atoms that read as their phrases.
+func (t *term) bound(bind map[string]string) *term {
+	if t.variable() {
+		if p, ok := bind[t.name]; ok {
+			return &term{name: p, neg: t.neg, phrase: true}
+		}
+		return t
+	}
+	c := *t
+	c.args = make([]*term, len(t.args))
+	for i, a := range t.args {
+		c.args[i] = a.bound(bind)
+	}
+	return &c
 }
 
 // say reads a term, without the final period.
@@ -103,7 +133,7 @@ func say(t *term, lang map[string]string) string {
 		inner.neg = false
 		return "it is not the case that " + lowerFirst(say(&inner, lang))
 	}
-	if t.variable() {
+	if t.variable() || t.phrase {
 		return t.name
 	}
 	tmpl, ok := lang[fmt.Sprintf("%s/%d", t.name, len(t.args))]
@@ -136,20 +166,31 @@ func fill(tmpl string, args []*term, lang map[string]string) string {
 // argument reads a term in argument position: a variable or an atom as
 // itself, anything else in quotes.
 func argument(a *term, lang map[string]string) string {
+	if a.phrase && !a.neg {
+		return "“" + a.name + "”"
+	}
 	if !a.neg && len(a.args) == 0 {
 		return a.name
 	}
 	return "“" + say(a, lang) + "”"
 }
 
-// sentence capitalizes and ends a reading with a period.
+// sentence capitalizes and ends a reading with a period. A reading that
+// opens with a quotation is capitalized inside it.
 func sentence(s string) string {
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return s
 	}
-	r, n := utf8.DecodeRuneInString(s)
-	s = string(unicode.ToUpper(r)) + s[n:]
+	for i, r := range s {
+		if unicode.IsLetter(r) {
+			s = s[:i] + string(unicode.ToUpper(r)) + s[i+utf8.RuneLen(r):]
+			break
+		}
+		if r != '“' && r != '"' && r != '\'' {
+			break
+		}
+	}
 	if !strings.HasSuffix(s, ".") && !strings.HasSuffix(s, "?") && !strings.HasSuffix(s, "!") {
 		s += "."
 	}

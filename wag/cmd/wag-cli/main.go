@@ -97,6 +97,8 @@ func main() {
 	books := flag.String("book", "", "with --catalogue-check: the book's text for the copy check, as comma-separated files (plain text, or JSON with \"text\" keys; default: docs/book-catalogue/catalogue.json if present)")
 	catShow := flag.String("catalogue-show", "", "print a walton.yml scheme's formulas by role, with their English readings (rendered from walton.yml's templates, which often repeat the book: read them, do not copy them), and exit")
 	catBy := flag.String("by", "wag-cli --catalogue-gen", "with --catalogue-gen: who generates, for a new entry's history")
+	proposal := flag.String("proposal", "", "check a proposal for a decision that changes walton.yml (docs/proposals/*.yml) and write its view beside it (.md): the proposed schemes, and every example rendered in English; status 1 on an error")
+	proposalWalton := flag.String("proposal-walton", "", "with --proposal: also write walton.yml with the proposal applied to this file, for the cleaning's gate (walton-check)")
 	kialoCheck := flag.String("kialo-check", "", "import every <id>/graph.json of this folder (Kialo research visualizer data) and report, for each discussion, the claims that share a text and whether it imports; status 1 if one does not")
 	flag.Parse()
 
@@ -126,6 +128,9 @@ func main() {
 	}
 	if *catShow != "" {
 		os.Exit(runCatalogueShow(*repoDir, *catShow))
+	}
+	if *proposal != "" {
+		os.Exit(runProposal(*repoDir, *proposal, *proposalWalton))
 	}
 	if *kialoCheck != "" {
 		os.Exit(runKialoCheck(files, *kialoCheck))
