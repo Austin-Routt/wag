@@ -82,8 +82,8 @@ critical_questions:
     entry: "3"
     label: CQ2
   targets: [{formula: inconsistent_with_known_facts(S), locus: exception}]
-  paraphrase: Does S fit what the other evidence in the case, apart from W's testimony,
-    has established?
+  paraphrase: Does anything known in the case from sources other than W contradict
+    S?
   answer: 'The critic, who raises it with an argument. Against: evidence independent
     of W, such as records, physical traces or recordings, that conflicts with S, which
     undercuts the argument through inconsistent_with_known_facts(S), and may also
@@ -98,8 +98,8 @@ critical_questions:
   note: The book asks about witnesses who testified independently; the formula does
     not say so. Agreement among witnesses who compared their stories counts for less,
     and a conflict with such a witness counts for less too.
-  paraphrase: Do other witnesses, testifying independently of W, give accounts that
-    agree with S?
+  paraphrase: Have witnesses who did not confer with W given a different account of
+    S?
   answer: 'The critic, who raises it with an argument. Against: another witness''s
     independent account that contradicts S, which undercuts the argument through inconsistent_with_other_witnesses(S).
     For: independent witnesses who confirm S, or reasons why the conflicting account
@@ -164,13 +164,13 @@ examples:
     of position_to_know(W,D) (W was on duty at the crossing). Supplied: in_domain(D,S),
     believes(W,S), internally_consistent(S). Conclusion: S.'
   status: drafted by Claude Code, 2026-10-22
-- text: A former night-shift worker told the parliamentary committee that carcasses
-    at the plant were routinely left unrefrigerated for hours.
-  coding: 'W = the former worker; D = the plant''s practices on the night shift; S
-    = carcasses there were routinely left unrefrigerated for hours. Stated: asserts(W,S),
-    and the ground of position_to_know(W,D) (W worked those shifts). Supplied: in_domain(D,S),
-    believes(W,S), internally_consistent(S). Conclusion: S. The committee would test
-    S against the plant''s records (3/CQ2) and other workers (3/CQ3).'
+- text: A lorry driver who was waiting at the crossing told the inquest that the barrier
+    was still up when the train came through.
+  coding: 'W = the lorry driver; D = what happened at the level crossing that evening;
+    S = the barrier was still up when the train passed. Stated: asserts(W,S), and
+    the ground of position_to_know(W,D) (W was waiting at the crossing). Supplied:
+    in_domain(D,S), believes(W,S), internally_consistent(S). Conclusion: S. The inquest
+    would test S against the signal records (3/CQ2) and other witnesses (3/CQ3).'
   status: drafted by Claude Code, 2026-10-22
 - text: The pathologist told the court that the bruising on the victim's arm was consistent
     with a fall, not a blow.
@@ -178,6 +178,15 @@ examples:
     the facts from knowledge of a field, not a report of what she saw happen; expert_opinion
     (W = the pathologist, D = forensic pathology, S = the bruising is consistent with
     a fall, not a blow).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-22
+- text: A former night-shift worker told the parliamentary committee that carcasses
+    at the plant were routinely left unrefrigerated for hours.
+  coding: 'Near miss: the worker reports a routine practice known from long experience
+    of the plant, not one event perceived; position_to_know (W = the former worker,
+    D = the plant''s night-shift practices, S = carcasses were routinely left unrefrigerated
+    for hours). The book gives knowledge from experience to position to know, and
+    a fact or event perceived to witness testimony (p. 88).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -218,6 +227,13 @@ discrepancies:
     S is part, and say so in the coding. Open: whether walton.yml should take the
     testimony as a variable of its own.'
   status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: source
+  detail: walton.yml cites Witness Testimony Evidence as of 2008; the compendium's
+    entry 3 cites it as of 2007, p. 60.
+  decision: 'Open, for the owner: correct the year, as was done for the slippery slope
+    on 2026-10-22, once the book''s reference list is checked.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: dependent
   reasoning: ""
@@ -255,3 +271,9 @@ history:
     premise, in_domain's argument order, the conclusion's qualifier, the consistency
     questions), the classification, specialises (position_to_know) and the dialogue
     types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    a witness to one event as the second example, the routine-practice text kept as
+    a near miss (position_to_know); 3/CQ2 and CQ3 paraphrased afresh; the source year
+    recorded)'

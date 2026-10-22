@@ -315,16 +315,29 @@ OPS = [
     rename("vaguness_recejted", "vagueness_rejected", [385, 819], TYPO, "misspelled predicate"),
 ]
 
+# A soft hyphen (U+00AD) stands for the dash in the first Bench-Capon citation of the two value schemes, so most
+# renderers print "pp.429448". Found while drafting the catalogue, 2026-10-22.
+OPS += [sub(n, "pp.429\u00ad448", "pp. 429-448", TYPO, "source: a soft hyphen (U+00AD) in place of the page range's dash")
+        for n in (872, 887)]
+
 # ----------------------------------------------------------------------
 # Repairs the owner decided, 2026-10-22. Applied after every edit above,
 # so the renames do not touch them.
 _NEG = ("the conclusion is used by no other scheme, so a slippery slope never meets the consequence and practical "
         "reasoning schemes' should_be_performed(A); the book's conclusion (49) is that A should not be brought about")
-_YEAR = ("the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of "
-         "the same book")
+_YEAR = ("the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations "
+         "of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites "
+         "p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work")
 _NV = ("the conclusion was copied from positive_value and says the opposite of the book's 19.2 (the negative value is "
        "a reason to retract commitment to the goal)")
 OWNER_REPAIRS = [
+    dict(op="set", line=255,
+         before='  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."',
+         after='  other_consequences/1: "Doing %s also has consequences of the opposite kind that outweigh the ones cited."',
+         category=OWN,
+         reason="the exception now carries the book's 33/CQ3 in the three consequence schemes (below), and an exception that "
+                "holds defeats the argument whatever the weights; so it must say that the opposite consequences outweigh "
+                "the cited ones, not only that some exist. The old template was also ungrammatical. In our own words"),
     sub(2000, "negative_consequences(A)", "¬should_be_performed(A)", OWN, _NEG),
     sub(1997, "1999", "1992", OWN, _YEAR),
     sub(2009, "1999", "1992", OWN, _YEAR),

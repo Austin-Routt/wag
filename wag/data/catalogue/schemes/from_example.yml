@@ -54,12 +54,12 @@ critical_questions:
   targets: [{formula: 'has_properties(A,P1,P2)', locus: conclusion}]
   note: the book's premise, but the conclusion in walton.yml. The target follows the
     formula's English, as the premise map does; see the partial-link discrepancy.
+    In the book's direction, where this is the premise, the proponent would carry
+    the burden once asked.
   paraphrase: Does the individual A really have both P1 and P2?
-  answer: 'The proponent, once asked, in the book''s direction, where this is the
-    premise; as walton.yml stands it is the conclusion, so a critic who denies it
-    must argue for its negation. Against: evidence that A lacks P1 or P2 (a misreported
-    case, a different individual), which undermines the book''s premise (and rebuts
-    has_properties(A,P1,P2) in walton.yml''s roles). For: a record or source showing
+  answer: 'Whoever denies it must argue for its negation: as walton.yml stands, has_properties(A,P1,P2)
+    is the conclusion, so the denial rebuts it. Against: evidence that A lacks P1
+    or P2 (a misreported case, a different individual). For: a record or source showing
     that A has both properties.'
   status: drafted by Claude Code, 2026-10-22
 - id: 6.1/CQ2
@@ -249,3 +249,7 @@ history:
     the contrasts (one added, with analogy), the examples, the decision on the partial
     link, a book-walton discrepancy on the generalization and an other one on the
     source, the classification, specialises and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    6.1/CQ1''s answer leads with the burden of its recorded target)'

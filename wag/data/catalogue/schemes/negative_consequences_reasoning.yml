@@ -90,17 +90,18 @@ critical_questions:
     entry: "33"
     label: CQ3
   targets: [{formula: other_consequences(A), locus: exception}]
-  note: Targets the exception other_consequences(A), which the owner's decision of
-    2026-10-22 gave the three consequence schemes (walton.yml had it only in negative_consequences_prudential).
-    Raising the opposite consequences undercuts the argument; they can also be put
-    as a counter-argument on the conclusion, and the two are then weighed, as ND describes
-    (p. 159).
+  note: 'Targets the exception other_consequences(A), added by the owner''s decision
+    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
+    of the opposite kind that outweigh the ones cited". An exception that holds defeats
+    the argument whatever the weights, so a lesser opposite consequence is not this
+    exception: it is weighed as a separate counter-argument on the conclusion (ND
+    p. 159).'
   paraphrase: Would doing A also have consequences of the opposite kind to B that
     ought to be weighed against it?
   answer: 'The critic, who raises it with an argument. Against: a consequence of A
     that serves the agent''s goals and outweighs B, which undercuts the argument through
     other_consequences(A). For: showing that A has no such consequence, or that it
-    is too slight to change the balance.'
+    does not outweigh the one cited.'
   status: drafted by Claude Code, 2026-10-22
 summary:
   text: 'Use it when an agent weighs an action of its own: bringing about A would
@@ -253,9 +254,10 @@ discrepancies:
   detail: The scheme comes from the second block with the id negative_consequences
     in the upstream category file A_reasoning/3_practical-reasoning.yml (line 511),
     which has an empty variable list and templates that repeat the book's premises.
-    walton.yml gives it a new id, the variables [A,B], templates in our own words,
-    the conclusion ¬should_be_performed(A) in place of not_bring_about(A), and the
-    exception other_consequences(A).
+    walton.yml gives it a new id, the variables [A,B], two templates in our own words
+    (agent_bring_about, bad_for_goals), the conclusion ¬should_be_performed(A) in
+    place of not_bring_about(A) (whose master template, shared with threat, is second-person;
+    the category file's own is first-person), and the exception other_consequences(A).
   decision: 'No change: the owner''s decisions of 2026-10-22 (docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
@@ -281,10 +283,10 @@ dialogue_types:
     from consequences belong to deliberation (ND pp. 157–60), including the solitary
     deliberation in which one person looks for the bad consequences of a course of
     action by playing devil''s advocate (p. 152), which is this scheme''s first-person
-    setting. In negotiation ND treats arguments from negative consequences for the
-    other party''s goals as relevant (p. 116). Used against a thesis about what is
-    true, it is ad consequentiam (pp. 176–7). Persuasion (about what to do) and inquiry
-    are our extrapolation, as for negative_consequences.'
+    setting. Used against a thesis about what is true, it is ad consequentiam (pp.
+    176–7). Negotiation, where a party may reject an option because it would harm
+    its own goals, persuasion about what to do, and inquiry are our extrapolation
+    (ND p. 116 speaks of the other party''s goals, the threat setting).'
   status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
@@ -303,3 +305,8 @@ history:
   what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is ¬should_be_performed(A)
     and 33/CQ3 targets the new exception other_consequences(A); summary, contrasts,
     examples, specialises and discrepancies follow.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    33/CQ3 reads the exception as outweighing; the negotiation placement marked as
+    our extrapolation; the upstream discrepancy made exact)'

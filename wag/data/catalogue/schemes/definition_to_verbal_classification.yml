@@ -70,12 +70,12 @@ critical_questions:
   targets: [{formula: 'classified_as(D,G)', locus: premise}]
   note: 'stipulative or biased definition: no separate formula. The question goes
     to the classification premise, the link from D to G.'
-  paraphrase: Does the step from D to G rest on a definition merely laid down for
-    the occasion, or slanted to one side?
-  answer: 'The proponent, once asked. Against: showing that D was made up for the
-    dispute, or chosen because it favours the arguer''s side (a persuasive definition),
-    which undermines classified_as(D,G). For: showing that D is the established definition
-    of G, used by those who apply the term and not fixed for this case.'
+  paraphrase: Does the step from D to G rest on a definition someone simply decreed,
+    or one slanted to favour a side?
+  answer: 'The proponent, once asked. Against: showing that D was simply decreed rather
+    than drawn from established use, or chosen because it favours the arguer''s side
+    (a persuasive definition), which undermines classified_as(D,G). For: showing that
+    D is the established definition of G, used by those who apply the term.'
   status: drafted by Claude Code, 2026-10-22
 summary:
   text: Use it when O is put in a category G because O meets a definition D, and whatever
@@ -174,3 +174,7 @@ history:
     contrasts (adding verbal_classification_arbitrariness), the examples with a gold
     near miss, two discrepancies (CQ1's burden, the printed premise), the classification,
     specialises (verbal_classification) and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    15/CQ2 no longer narrows "stipulative")'

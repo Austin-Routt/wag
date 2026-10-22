@@ -704,6 +704,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s"
  },
  {
+  "line": 255,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  other_consequences/1: \"There are some good or bad consequences of doing %s should be taken into account.\"",
+  "after": "  other_consequences/1: \"Doing %s also has consequences of the opposite kind that outweigh the ones cited.\"",
+  "reason": "the exception now carries the book's 33/CQ3 in the three consequence schemes (below), and an exception that holds defeats the argument whatever the weights; so it must say that the opposite consequences outweigh the cited ones, not only that some exist. The old template was also ungrammatical. In our own words"
+ },
+ {
   "line": 256,
   "change": "edit",
   "scheme": "language",
@@ -1716,6 +1727,17 @@
   "reason": "unquoted title containing ': ' is a YAML error (trailing space dropped)"
  },
  {
+  "line": 872,
+  "change": "edit",
+  "scheme": "positive_value",
+  "scheme_after": "positive_value",
+  "category": "typo",
+  "needs_owner_approval": false,
+  "before": "               Journal of Logic and Computation 13 (2003), pp.429­448. ",
+  "after": "               Journal of Logic and Computation 13 (2003), pp. 429-448. ",
+  "reason": "source: a soft hyphen (U+00AD) in place of the page range's dash"
+ },
+ {
   "line": 874,
   "change": "edit",
   "scheme": "positive_value",
@@ -1736,6 +1758,17 @@
   "before": "      title: Argument From Values - Variant 2: Negative Value",
   "after": "      title: \"Argument From Values - Variant 2: Negative Value\"",
   "reason": "unquoted title containing ': ' is a YAML error"
+ },
+ {
+  "line": 887,
+  "change": "edit",
+  "scheme": "negative_value",
+  "scheme_after": "negative_value",
+  "category": "typo",
+  "needs_owner_approval": false,
+  "before": "               Journal of Logic and Computation 13 (2003), pp.429­448. ",
+  "after": "               Journal of Logic and Computation 13 (2003), pp. 429-448. ",
+  "reason": "source: a soft hyphen (U+00AD) in place of the page range's dash"
  },
  {
   "line": 889,
@@ -2417,7 +2450,7 @@
   "needs_owner_approval": false,
   "before": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
   "after": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.",
-  "reason": "the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book"
+  "reason": "the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work"
  },
  {
   "line": 2000,
@@ -2439,6 +2472,6 @@
   "needs_owner_approval": false,
   "before": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
   "after": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.",
-  "reason": "the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book"
+  "reason": "the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work"
  }
 ]

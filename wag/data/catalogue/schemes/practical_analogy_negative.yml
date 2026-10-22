@@ -85,6 +85,11 @@ contrasts:
     the likeness of the situations, and negative_consequences when it leans on the
     outcome.
   status: drafted by Claude Code, 2026-10-22
+- scheme: practical_reasoning2
+  text: Choose practical_reasoning2 when the argument is whether X serves a goal in
+    the present circumstances; choose practical_analogy_negative when X is opposed
+    because doing it in a similar situation was wrong.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Bringing in rent controls in the 1970s was a mistake that shrank the supply
     of homes to let; the housing market today is much the same, so it would be a mistake
@@ -138,14 +143,14 @@ classification:
     is, because its premise and its conclusion are verdicts on whether an action is
     wrong, not claims about goals, means or consequences. Its analogical form would
     also fit with analogy (application, defeasible rule-based). Open: which placement
-    the owner prefers.'
+    the owner prefers. It is closest to fairness, which also asks that like cases
+    be treated alike.'
   status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: analogy
-  note: 'The book gives it with the positive scheme as the practical counterpart of
-    argument from analogy (ch. 2, p. 74): the proposition carried from one situation
-    to the other is that doing X is wrong. walton.yml names both situations (A1, A2),
-    where analogy leaves the target implicit, and gives it none of analogy''s exceptions.'
+  scheme: ""
+  note: 'Specialises nothing: the book presents it as the practical counterpart of
+    argument from analogy (ch. 2, p. 74), not a subtype. It carries a verdict on what
+    it was wrong to do, and shares no formula with analogy.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -169,3 +174,8 @@ history:
     negative conclusions), the classification (not in the tree), specialises and the
     dialogue types. No questions: the book prints none, and walton.yml has no assumption
     or exception to ask about.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    specialises nothing (the book''s counterpart of analogy); the classification note
+    names fairness; a contrast with practical_reasoning2)'

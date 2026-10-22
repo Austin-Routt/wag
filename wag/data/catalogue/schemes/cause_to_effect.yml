@@ -107,11 +107,24 @@ contrasts:
     for a causal step whose effect is itself the point. A chain of causal predictions
     with no bad end and no proposal to reject is a series of cause_to_effect arguments.
   status: drafted by Claude Code, 2026-10-22
+- scheme: positive_consequences
+  text: Choose positive_consequences when the effect is cited to argue that an action
+    should be done; choose cause_to_effect when the point is only that the effect
+    will happen, including a step that explains how a consequence cited elsewhere
+    comes about.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences
+  text: Choose negative_consequences when the effect is cited to argue that an action
+    should not be done; choose cause_to_effect when the point is only that the effect
+    will happen, including a step that explains how a consequence cited elsewhere
+    comes about.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Meat production creates significant greenhouse gas emissions which contribute
     to climate change.
   kialo: "13292.2"
-  coding: 'Two chained instances, as the gold codes them. First: E1 = meat production;
+  coding: 'In the gold these are secondary instances; the claim''s primary scheme
+    is verbal_classification. Two chained instances. First: E1 = meat production;
     E2 = significant greenhouse-gas emissions. Stated: causes(E1,E2). Supplied: has_occurred(E1)
     (meat is produced now). Conclusion: will_occur(E2). Second: E1 = those emissions;
     E2 = climate change being driven. Stated: causes(E1,E2). Supplied: has_occurred(E1).
@@ -129,10 +142,12 @@ examples:
 - text: A tax on meat could actually reduce tax revenues by harming the trillion-dollar
     meat industry, which pays substantial taxes.
   kialo: "13292.9"
-  coding: 'Two chained instances. First: E1 = a tax on meat; E2 = harm to the meat
-    industry. Second: E1 = that harm; E2 = lower tax revenue. In each, stated: causes(E1,E2);
-    supplied: has_occurred(E1); conclusion: will_occur(E2). The claim says "could",
-    a weaker link than walton.yml''s will_occur; see the discrepancy on the conclusion.'
+  coding: 'In the gold these are secondary instances; the claim''s primary scheme
+    is negative_consequences (the tax should not be adopted). Two chained instances.
+    First: E1 = a tax on meat; E2 = harm to the meat industry. Second: E1 = that harm;
+    E2 = lower tax revenue. In each, stated: causes(E1,E2); supplied: has_occurred(E1);
+    conclusion: will_occur(E2). The claim says "could", a weaker link than walton.yml''s
+    will_occur; see the discrepancy on the conclusion.'
   status: drafted by Claude Code, 2026-10-22
 - text: Towns with more fast-food outlets have higher obesity rates, so fast food
     is making people obese.
@@ -161,6 +176,16 @@ discrepancies:
   decision: Open, with the conclusion's discrepancy (audit N8). Until then, read has_occurred(E1)
     as "E1 occurs, or would occur, in this case"; the batch-2 gold marks such steps
     reconstructed, with the N8 note (docs/kialo-batch2/guidelines.md, item 11).
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Major Premise
+  detail: The book's major premise is a generalization over kinds of event (generally,
+    if A occurs, B will occur). causes(E1,E2) uses the same terms as the particular
+    has_occurred(E1), so the kind and the instance are not told apart. walton.yml
+    also cites no source, where the book cites Walton 1995, pp. 140–141.
+  decision: 'No change: read causes(E1,E2) as "events of E1''s kind generally bring
+    about events of E2''s kind", as the paraphrases do. Open: give walton.yml the
+    book''s reference as its source.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -193,3 +218,8 @@ history:
   what: Drafted the summary, the paraphrases and answers of the three questions, the
     contrasts, the examples, two book-walton discrepancies (N8), the classification,
     specialises and the dialogue types (an exemplar for DRAFTING.md).
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the codings of 13292.2 and 13292.9 name the gold''s primary schemes; contrasts
+    with the two consequence schemes; the generalization and the missing source recorded)'

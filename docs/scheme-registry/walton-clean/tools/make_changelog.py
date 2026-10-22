@@ -215,14 +215,18 @@ def main(outdir):
       "duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence "
       "scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the "
       "category file's repeat the book's premises. |")
-    w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added | 2026-10-22 | The "
-      "book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its "
-      "formula only in `negative_consequences_prudential` (33.4). |")
+    w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template "
+      "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
+      "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "
+      "exception that holds defeats the argument whatever the weights, so the template now says that the opposite "
+      "consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |")
     w("| `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | "
       "No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical "
       "reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |")
-    w("| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book "
-      "cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book. |")
+    w("| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The "
+      "book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the "
+      "same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for "
+      "gradualism, as \"Walton, 1999\"; its reference list, not checked, may give that as another work. |")
     w("| `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the "
       "`negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion "
       "was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both "

@@ -65,9 +65,11 @@ critical_questions:
     was dropped at load; the cleaned walton.yml lists it under assumptions. Both formulas
     have the same English reading, that A is widely accepted as true (see the discrepancy
     on the general acceptance premise). The book's ch. 4 asks the same of a large
-    majority of a reference group (p. 124).
-  paraphrase: What shows that A really is widely accepted, such as survey results
-    or A's being common knowledge?
+    majority of a reference group (p. 124). The book's ch. 4 puts the burden of this
+    question on the critic (p. 124); walton.yml makes it a premise, and the catalogue
+    follows walton.yml (see the discrepancy on the CQ1 burden).
+  paraphrase: Is there real evidence that most people hold A, or is its popularity
+    only asserted?
   answer: 'The proponent, once asked. Against: a poll or other evidence that opinion
     on A is divided, or that only a small or unrepresentative group holds it, which
     undermines generally_true(A) and its duplicate generally_accepted(A). For: a representative
@@ -161,12 +163,13 @@ contrasts:
     believe to conclude that there is a reason for A.
   status: drafted by Claude Code, 2026-10-22
 examples:
-- text: Polls show that four in five residents agree the town centre is unsafe after
-    dark, which is a reason to think it is.
-  coding: 'A = the town centre is unsafe after dark. Stated: generally_true(A) (the
-    poll), favor(A) (the step from acceptance to a reason). Supplied: generally_accepted(A),
-    which duplicates the premise. Conclusion: reason_in_favor(A). 4/CQ2 would bring
-    in the crime figures.'
+- text: Most people in a national poll say that standing desks are better for your
+    back, so there is some reason to think they are.
+  coding: 'A = standing desks are better for one''s back. Stated: generally_true(A)
+    (the poll), favor(A) (the step from acceptance to a reason). Supplied: generally_accepted(A),
+    which duplicates the premise. Conclusion: reason_in_favor(A). Those polled have
+    no special access to the matter, which keeps it popular_opinion, not position_to_know_ad_populum;
+    4/CQ2 would bring in the medical evidence.'
   status: drafted by Claude Code, 2026-10-22
 - text: Almost everyone now accepts that eating a lot of processed meat is bad for
     you.
@@ -188,8 +191,8 @@ discrepancies:
   about: General Acceptance Premise
   detail: 'walton.yml encodes the book''s one general acceptance premise twice: as
     the premise generally_true(A) and as the assumption generally_accepted(A), whose
-    English readings are word for word the same. The premise''s name says "true",
-    where the book''s premise is about acceptance.'
+    English readings say the same thing (one template lacks a verb). The premise''s
+    name says "true", where the book''s premise is about acceptance.'
   decision: 'Treat the two as one statement: 4/CQ1 targets both, and the premise map
     now lists both. Open: drop the assumption from walton.yml, or rename generally_true
     to say what it means.'
@@ -211,7 +214,7 @@ discrepancies:
   about: conclusion
   detail: walton.yml concludes reason_in_favor(A), as the compendium's entry does;
     it is a statement about A, not A itself, so in an argument graph it does not support
-    A without a further step. pop_scheme, by contrast, concludes is_true(A).
+    A without a further step. pop_scheme, by contrast, concludes is_true(A) and should_accept(A).
   decision: 'Open: whether the conclusion should be A, so that the argument can back
     a claim directly, as a game move needs. Until then, code the conclusion as walton.yml
     has it and say in the coding which claim it backs.'
@@ -226,6 +229,16 @@ discrepancies:
     note on 4/CQ1, which said the formula is dropped, described the upstream file
     and was corrected.
   status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: CQ1 burden
+  detail: The book's ch. 4 puts the burden of the first two critical points, whether
+    the majority really accepts A and whether other evidence tells against A, on the
+    opponent (p. 124). The compendium's CQ1 asks what evidence supports the acceptance,
+    and walton.yml makes it the premise generally_true(A), the proponent's burden
+    once asked.
+  decision: 'Follow walton.yml: the formulas decide. Open: whether the acceptance
+    should be presumed, as an assumption, as ch. 4 suggests.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: dependent
   reasoning: ""
@@ -234,8 +247,9 @@ classification:
   status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: 'Specialises nothing: it is the generic scheme of its family (F02); the eleven
-    ad populum subtypes (4.1 to 4.11) and popular_practice narrow or vary it.'
+  note: 'Specialises nothing: it is the generic scheme of its family (F02). The ad
+    populum variants (4.2 to 4.11) and popular_practice vary it; the book treats the
+    pop scheme (4.1) as the bare form of the same pattern, not a subtype (pp. 123–4).'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -260,3 +274,8 @@ history:
     premise, the ch. 4 forms, the conclusion, the upstream assumption key), the classification,
     specialises and the dialogue types; added the assumption to the general acceptance
     premise's map.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the CQ1 burden of ch. 4 recorded; 4/CQ1 paraphrased afresh; a poll of people without
+    special access as the first example; two details corrected; the specialises note)'

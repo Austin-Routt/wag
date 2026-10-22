@@ -149,6 +149,11 @@ contrasts:
     about such taxes, or a prediction about a meat tax, and the gold codes 13292.61
     as analogy.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: verbal_classification
+  text: Choose verbal_classification when O is put in a category because it has a
+    property that marks the category; choose analogy when a finding is carried over
+    from one compared case. The book warns that the two are easily mixed up (pp. 66–9).
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A tax for tobacco significantly reduced its consumption.
   kialo: "13292.61"
@@ -237,9 +242,10 @@ classification:
   status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
-  note: 'Specialises nothing: it is the generic scheme of F04. practical_analogy_positive
-    and practical_analogy_negative narrow it to verdicts on what it was right or wrong
-    to do.'
+  note: 'Specialises nothing: it is the generic scheme of F04. Its practical counterparts,
+    practical_analogy_positive and practical_analogy_negative (p. 74), carry a verdict
+    on what was right or wrong to do, and are not narrowings of it in walton.yml''s
+    formulas.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [persuasion, deliberation, inquiry]
@@ -265,3 +271,7 @@ history:
     gold), three book-walton discrepancies (N12, the similarity premise and ch. 2's
     versions, CQ3) and an other one on the game's questions, the classification, specialises
     and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the specialises note; a contrast with verbal_classification)'

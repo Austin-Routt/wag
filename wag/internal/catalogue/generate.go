@@ -149,7 +149,7 @@ func (g *Generator) entry(w Scheme) *Entry {
 	e.Contrasts = g.contrasts(w.ID, e.Families)
 	if len(e.Book) == 0 {
 		e.Discrepancies = append(e.Discrepancies, Discrepancy{Kind: "not-in-book", About: w.ID,
-			Detail: "The compendium (ch. 9) lists no scheme this formalizes. walton.yml cites: " + e.Walton.Source, Status: Generated})
+			Detail: "The compendium (ch. 9) lists no scheme this formalizes. " + cites(e.Walton.Source), Status: Generated})
 	}
 	e.Discrepancies = append(e.Discrepancies, g.gameDiffs(w)...)
 	g.work(e)
@@ -634,4 +634,12 @@ func (g *Generator) Write(dir string) (Result, error) {
 		return r, err
 	}
 	return r, nil
+}
+
+// cites says what walton.yml cites for a scheme.
+func cites(source string) string {
+	if strings.TrimSpace(source) == "" {
+		return "walton.yml cites no source."
+	}
+	return "walton.yml cites: " + source
 }

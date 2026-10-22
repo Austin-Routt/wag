@@ -168,7 +168,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -278,7 +278,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -655,7 +655,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -1142,7 +1142,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -1310,7 +1310,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -1509,7 +1509,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -1946,7 +1946,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat_and_fund_synthetic_meat_research)",
-       "en": "There are some good or bad consequences of doing 'governments tax meat and use some of the revenue to encourage research into synthetic meats' should be taken into account.",
+       "en": "Doing 'governments tax meat and use some of the revenue to encourage research into synthetic meats' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -2048,7 +2048,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -2912,7 +2912,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -3635,7 +3635,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -4728,7 +4728,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(ration_meat_via_carbon_budgets)",
-       "en": "There are some good or bad consequences of doing 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' should be taken into account.",
+       "en": "Doing 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -5112,7 +5112,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat_with_import_safeguards)",
-       "en": "There are some good or bad consequences of doing 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' should be taken into account.",
+       "en": "Doing 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -5945,7 +5945,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat_with_accompanying_measures)",
-       "en": "There are some good or bad consequences of doing 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' should be taken into account.",
+       "en": "Doing 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -6324,7 +6324,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -6431,7 +6431,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }
@@ -6478,7 +6478,7 @@
       {
        "role": "exception",
        "formula": "other_consequences(tax_meat)",
-       "en": "There are some good or bad consequences of doing 'governments put a tax on meat' should be taken into account.",
+       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
       }

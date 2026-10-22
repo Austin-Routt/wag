@@ -85,6 +85,11 @@ contrasts:
     have done can be either; the gold codes 13292.30 as a practical analogy, since
     the other cases are cited as precedents, not as a majority.
   status: drafted by Claude Code, 2026-10-22
+- scheme: practical_reasoning2
+  text: Choose practical_reasoning2 when X is argued for as the means, in the present
+    circumstances, to a goal; choose practical_analogy_positive when X is argued for
+    because it was the right thing in a similar situation, with no goal or means stated.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Elsewhere, governments have put taxes on ecologically damaging businesses,
     e.g., carbon tax, oil tax etc.
@@ -96,16 +101,10 @@ examples:
     13292.4 and 13292.108). Conclusion: carry_out_right(A2,X), the thesis; re-parented
     to the thesis, as in the gold.'
   status: drafted by Claude Code, 2026-10-22
-- text: This only matters until a majority of society believes that the consequence
-    of use outweighs the personal choice benefit. Many countries tax tobacco and alcohol
-    more than other consumer products …
-  kialo: "13292.55"
-  coding: 'A1 = tobacco and alcohol, whose use harms enough to outweigh the value
-    of free choice; A2 = meat; X = taxing the product above other goods. Stated: that
-    X is done in A1. Supplied: right_to_do(A1,X), and similar_to(A1,A2), which the
-    first sentence prepares (once society judges the harm to outweigh the choice).
-    Conclusion: carry_out_right(A2,X). Not in the gold; the text is cut off in items.json.
-    It answers 13292.29''s appeal to personal choice.'
+- text: Banning smoking in pubs was the right call, and vaping indoors is much the
+    same, so it should be banned too.
+  coding: 'A1 = smoking in pubs; A2 = vaping indoors; X = a ban. Stated: right_to_do(A1,X)
+    ("the right call"), similar_to(A1,A2) ("much the same"). Conclusion: carry_out_right(A2,X).'
   status: drafted by Claude Code, 2026-10-22
 - text: Sugar taxes in other countries cut sales of sugary drinks, so a meat tax would
     cut meat sales.
@@ -144,14 +143,14 @@ classification:
   note: 'Not in the tree; placed with values (values, fairness), because its premise
     and its conclusion are verdicts on whether an action is right, not claims about
     goals, means or consequences. Its analogical form would also fit with analogy
-    (application, defeasible rule-based). Open: which placement the owner prefers.'
+    (application, defeasible rule-based). Open: which placement the owner prefers.
+    It is closest to fairness, which also asks that like cases be treated alike.'
   status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: analogy
-  note: 'The book introduces it as the practical counterpart of argument from analogy
-    (ch. 2, p. 74): the proposition carried from one situation to the other is that
-    doing X is right. walton.yml names both situations (A1, A2), where analogy leaves
-    the target implicit, and gives it none of analogy''s exceptions.'
+  scheme: ""
+  note: 'Specialises nothing: the book presents it as the practical counterpart of
+    argument from analogy (ch. 2, p. 74), not a subtype. It carries a verdict on what
+    it was right to do, and shares no formula with analogy.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -176,3 +175,9 @@ history:
     positive and negative conclusions), the classification (not in the tree), specialises
     and the dialogue types. No questions: the book prints none, and walton.yml has
     no assumption or exception to ask about.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    specialises nothing (the book''s counterpart of analogy); the classification note
+    names fairness; a contrast with practical_reasoning2; an invented example in place
+    of 13292.55, which items.json has only cut off)'

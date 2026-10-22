@@ -86,17 +86,18 @@ critical_questions:
     entry: "33"
     label: CQ3
   targets: [{formula: other_consequences(A), locus: exception}]
-  note: Targets the exception other_consequences(A), which the owner's decision of
-    2026-10-22 gave the three consequence schemes (walton.yml had it only in negative_consequences_prudential).
-    Raising the opposite consequences undercuts the argument; they can also be put
-    as a counter-argument on the conclusion, and the two are then weighed, as ND describes
-    (p. 159).
+  note: 'Targets the exception other_consequences(A), added by the owner''s decision
+    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
+    of the opposite kind that outweigh the ones cited". An exception that holds defeats
+    the argument whatever the weights, so a lesser opposite consequence is not this
+    exception: it is weighed as a separate counter-argument on the conclusion (ND
+    p. 159).'
   paraphrase: Would doing A also have consequences of the opposite kind to G that
     ought to be weighed against it?
   answer: 'The critic, who raises it with an argument. Against: a good consequence
     of A that outweighs G, which undercuts the argument through other_consequences(A).
-    For: showing that A has no such consequence, or that it is too slight to change
-    the balance.'
+    For: showing that A has no such consequence, or that it does not outweigh the
+    one cited.'
   status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:evidence
   game:
@@ -107,6 +108,8 @@ critical_questions:
   undercuts: true
   note: The game's form of 33/CQ2, asked of the inference (locus argument) rather
     than of the premise brings_about(A,G); see the discrepancy on the game's questions.
+    It stays apart from 33/CQ2, whose target is the premise, because the game asks
+    it of the inference.
   paraphrase: Does enough evidence back the claim that doing A brings about G?
   answer: 'The proponent, once asked: the argument is out of force until answered.
     Against: showing that no study, record or mechanism supports the link, which undercuts
@@ -119,7 +122,9 @@ critical_questions:
     locus: conclusion
   targets: [{formula: ¬should_be_performed(A), locus: conclusion}]
   note: The game's form of 33/CQ3. It asks for the weighing outright ("to weigh against"),
-    which the book's question leaves implicit.
+    which the book's question leaves implicit. It stays apart from 33/CQ3, which since
+    2026-10-22 targets the exception other_consequences(A), because the game asks
+    it at the conclusion.
   paraphrase: Would doing A also bring about something good that outweighs G?
   answer: 'The critic, who raises it with an argument. Against: a good consequence
     of A, put forward as an argument from positive_consequences (the game lets AS:consequences
@@ -143,8 +148,9 @@ contrasts:
   text: Choose negative_consequences_reasoning when an agent reasons about its own
     action, and the outcome is bad by that agent's own goals ("if I do this, it defeats
     what I am after, so I had better not"); choose negative_consequences when an action,
-    such as a policy, is judged by an outcome that is bad in general terms. In a policy
-    debate prefer negative_consequences, whose conclusion meets the pros on should_be_performed(A).
+    such as a policy, is judged by an outcome that is bad in general terms. Both conclude
+    ¬should_be_performed(A); in a policy debate, where the badness is judged in general
+    terms, prefer negative_consequences.
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
   text: Choose negative_consequences_prudential when the bad outcome would follow
@@ -185,9 +191,10 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_base_case
   text: Choose a slippery slope (slippery_slope_base_case with slippery_slope_inductive_step)
-    when the bad end is reached through a graduated sequence of steps that the first
-    step sets off; choose negative_consequences when the bad outcome follows from
-    the action in one step, or with a single intermediate cause.
+    when the text presents a series of at least two further events after the first
+    step, each said to bring on the next, ending in a horrible outcome; choose negative_consequences
+    when the action leads to the bad outcome directly or through one stated intermediate
+    event.
   status: drafted by Claude Code, 2026-10-22
 - scheme: cause_to_effect
   text: Choose cause_to_effect when the claim's point is that the effect will happen,
@@ -206,6 +213,11 @@ contrasts:
     and that tells against keeping a goal; choose negative_consequences when the reason
     is a bad outcome that the action would produce.
   status: drafted by Claude Code, 2026-10-22
+- scheme: practical_analogy_negative
+  text: Choose practical_analogy_negative when X is opposed because doing it in a
+    similar earlier situation was judged wrong; choose negative_consequences when
+    it is opposed for the bad outcome it would bring here.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A sin tax on meat would make food more expensive, despite many people not
     being able to afford it.
@@ -220,7 +232,9 @@ examples:
     and bad(G) ("unhealthy"). Conclusion: ¬should_be_performed(A). "Could" claims
     a weaker link than brings_about(A,G) states, a reason to press 33/CQ1. Offered
     as a reply to the pro 13292.115, it is also a bad side effect of that argument''s
-    action (CQ:side_effect).'
+    action (CQ:side_effect). In the game it is a direct rebuttal of 13292.115''s conclusion:
+    the NASCQ does not let negative_consequences back CQ:side_effect (see positive_consequences''
+    discrepancy on the game''s questions).'
   status: drafted by Claude Code, 2026-10-22
 - text: Meat is the easiest source of organic iron for one's diet. Any financial restrictions
     will only increase cases for anemia directly because of this.
@@ -234,8 +248,9 @@ examples:
     and consumption.
   kialo: "13292.13"
   coding: 'Near miss: it names no bad result of the tax; it only denies that the tax
-    achieves what its supporters claim. A bare denial of their brings_about(A,G) premise
-    (batch-2 guidelines §3), coded none in the gold, not an argument from negative
+    achieves what its supporters claim. A bare denial of the pros'' efficacy premise:
+    would_bring_about(A,S1,S2) of 13292.108 in the gold, and equally brings_about(A,G)
+    of 13292.115 (batch-2 guidelines §3); coded none, not an argument from negative
     consequences.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
@@ -247,6 +262,9 @@ discrepancies:
     (plan §6; catalogue-alignment.md, workstream E). The game asks the book's 33/CQ3
     at the conclusion, as a rebuttal (CQ:opposite_consequences); then core.yml gets
     the exception other_consequences(A) and the question is asked at it, as in walton.yml.
+    The backup edge AS:consequences → CQ:opposite_consequences concludes should_be_performed(A),
+    which cannot conclude an exception (rule S9), so that edge changes when the question
+    moves.
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise
@@ -286,6 +304,15 @@ discrepancies:
   decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
     the game''s texts from these paraphrases and sit the evidence question on 33/CQ2
     at the premise.'
+  status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: A_reasoning/3:511
+  detail: The category file A_reasoning/3_practical-reasoning.yml has a second block
+    with this id (line 511), which formalizes compendium 33.3; the master kept only
+    the first block, which matches walton.yml.
+  decision: 'No change here: the second block is now negative_consequences_reasoning
+    (the owner''s decision of 2026-10-22, docs/scheme-registry/walton-clean/CHANGELOG.md,
+    "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -330,3 +357,10 @@ history:
   by: Claude Code
   what: 'Revised for the owner''s decision of 2026-10-22 (the exception other_consequences(A)):
     33/CQ3 targets it; the CQ3 discrepancy is done; the game-differs decision written.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    33/CQ3 reads the exception as outweighing; the game notes and the S9 point on
+    the backup edge; the upstream second block recorded; one rule for slope versus
+    consequences; a contrast with practical_analogy_negative; two example codings
+    corrected)'

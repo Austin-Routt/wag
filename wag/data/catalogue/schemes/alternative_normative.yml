@@ -66,10 +66,11 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: opposition-normative
   text: 'The closest of the oppositions: it denies that a subject can receive two
-    opposite evaluations at once. Choose opposition-normative when the text objects
-    that one thing is treated in two incompatible ways (taxed and subsidised); choose
-    alternative_normative when it argues that, since one of two exclusive measures
-    is required, the other is not (Kialo gold, 13292.123).'
+    opposite evaluations at once. Choose it when the text objects that one thing is
+    treated in two incompatible ways (taxed and subsidised), though while walton.yml''s
+    encoding of it is broken such a text is coded other, as the gold codes 13292.123;
+    choose alternative_normative when it argues that, since one of two exclusive measures
+    is required, the other is not.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: rhetorical_oppositions_normative
   text: Choose rhetorical_oppositions_normative when a required treatment of one subject
@@ -122,8 +123,9 @@ examples:
     argues for its own measure from the circumstances and from the incoherence of
     taxing and subsidising at once, not from an either-or requirement. The gold codes
     practical_reasoning2 (A = abolish meat subsidies, G = a price that reflects the
-    real costs), and the incoherence as an argument from opposition (11.2), and sets
-    alternative_normative aside.'
+    real costs), and the incoherence as other, describing an argument from opposition
+    (11.2) that walton.yml''s opposition-normative cannot express; it sets alternative_normative
+    aside.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -155,7 +157,9 @@ classification:
   note: Not in the tree; placed with the instrumental argument from practical reasoning,
     because it settles which of alternative courses of action is called for, as the
     alternatives premise of practical reasoning does. The upstream collection also
-    files it with practical reasoning (category file A/3).
+    files it with practical reasoning (category file A/3). It is a deontic inference
+    with no goal premise; placed under practical reasoning because its options are
+    courses of action, while its cognitive twin (13.1) goes under discovery.
   status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
@@ -182,3 +186,8 @@ history:
     questions), the classification, specialises and the dialogue types. The book prints
     no questions under 13 and walton.yml has no assumptions or exceptions, so there
     are no questions to draft.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with opposition-normative and the near miss follow what the gold
+    did with 13292.123; the classification note)'

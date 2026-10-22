@@ -36,7 +36,7 @@ language: 392 -> 396 keys; keys only in clean: 38, only in original: 33, same ke
   +  not_necessarily_true/0 'First premise not necessary true.'
   +  not_normal/0 'Therefore, the situation is not normal.'
   +  official_rulebook/3 'In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s.'
-  +  other_consequences/1 'There are some good or bad consequences of doing %s should be taken into account.'
+  +  other_consequences/1 'Doing %s also has consequences of the opposite kind that outweigh the ones cited.'
   +  ought_to_continue/2 'Therefore, %s ought to continue trying to realize %s.'
   +  position_to_know_group/2 'Group %s is in a special position to know that %s is true.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'

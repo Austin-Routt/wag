@@ -209,8 +209,11 @@ contrasts:
   text: 'practical_inference encodes compendium 22.1 directly: a goal G and an action
     A that is a means to it, with no circumstances. Choose practical_reasoning2 when
     the text describes the present situation S1 and a resulting state S2 that differs
-    from the action; choose practical_inference when it says only that A serves G.
-    The game plays practical_reasoning2 (AS:practical_reasoning_goal), not practical_inference.'
+    from the action; choose practical_inference when the text states, as a premise,
+    that the agent has the goal G and that A is a means to it, with no circumstances.
+    A claim that A has a good result, without a goal premise, is positive_consequences
+    (batch-2 guidelines §5 item 4; gold rule R3). The game plays practical_reasoning2
+    (AS:practical_reasoning_goal), not practical_inference.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
   text: Choose practical_reasoning1 when the text also names the value V that the
@@ -219,10 +222,41 @@ contrasts:
     (Kialo gold, 13292.104 and 13292.118).
   status: drafted by Claude Code, 2026-10-22
 - scheme: positive_consequences
-  text: Choose positive_consequences when the claim says only that A brings about
-    a good outcome; choose practical_reasoning2 when it also states the circumstances
-    S1 and a state S2, distinct from the action, in which the goal is met (batch-2
-    rule R3). A proposal with a purpose but no circumstances is positive_consequences.
+  text: Choose practical_reasoning2 when S2 is a state distinct from the action and,
+    of S1, the step from A to S2 and the step from S2 to G, at most one has to be
+    supplied (the claim's immediate context counts as given); choose positive_consequences
+    when the claim says only that A brings about a good outcome. A proposal stated
+    with its purpose is positive_consequences (batch-2 guidelines §5 item 4; gold
+    rule R3).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_necessary_condition
+  text: Choose practical_necessary_condition when the text says the means is required
+    ("have to", "the only way") and can be done; choose practical_reasoning2 when
+    it describes the circumstances and a resulting state in which the goal is met
+    (Kialo gold, 13292.45).
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_goal
+  text: Choose practical_goal when the text says only that an act helps toward a goal
+    that a named person or body has; choose practical_reasoning2 when it describes
+    the present circumstances and a resulting state in which the goal is met. The
+    game plays practical_reasoning2, not practical_goal.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences_reasoning
+  text: Practical reasoning starts from a goal and looks for the action; reasoning
+    from consequences starts from the action and judges it by its outcome (the book,
+    p. 101). Choose practical_reasoning2 when an action is argued for as the way to
+    reach a goal; choose negative_consequences_reasoning when an agent argues against
+    its own action because the result would harm its goals.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_analogy_positive
+  text: Choose practical_analogy_positive when X is argued for because it was the
+    right thing in a similar situation, with no goal or means stated; choose practical_reasoning2
+    when X is argued for as the means, in the present circumstances, to a goal.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: practical_analogy_negative
+  text: Choose practical_analogy_negative when X is opposed because doing it in a
+    similar situation was wrong; choose practical_reasoning2 when the argument is
+    whether X serves a goal in the present circumstances.
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Meat is not inherently problematic. What is problematic is the animal farming
@@ -281,10 +315,15 @@ discrepancies:
   detail: '22.1 states no circumstances: current_circumstances(S1) and the resulting
     state S2 come from Walton 2015. The book''s ch. 3 possibility question mentions
     the given circumstances (p. 96), and ND relativises the means premise to the agent''s
-    view of the situation (ND p. 154).'
-  decision: No change. Bind S1 only when the text or its context describes the present
-    situation (batch-2 guidelines, §3 and R4); otherwise code practical_inference,
-    or a fragment of the parent's argument.
+    view of the situation (ND p. 154). The book''s ch. 3 version writes the goal and
+    the means as states of affairs S0 … Sn (p. 95), which anticipates S1 and S2, but
+    has no circumstances premise.'
+  decision: No change. Bind S1 when the claim or its immediate context describes the
+    present situation (batch-2 guidelines §3; gold rule R3). A proposal that only
+    gives A and its good result is positive_consequences; a claim that states only
+    S1 or only G is a fragment of its parent's argument. Use practical_inference only
+    outside the game, for a text that states the agent's goal and a means to it and
+    nothing more.
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: burden of the questions
@@ -307,14 +346,18 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
-  detail: CQ:other_means asks whether another action could also achieve G, but its
+  detail: 'CQ:other_means asks whether another action could also achieve G, but its
     pattern realize_more_effectively(G,A) needs an action that does better, so an
     equally good alternative answers the text yes without making the exception true.
     CQ:side_effect asks about bad side effects only, where 22.1/CQ5 asks about further
-    consequences in general.
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
-    the texts from these paraphrases, and decide whether an equally good alternative
-    should count against A, which needs a formula walton.yml lacks.'
+    consequences in general. The game''s texts follow the book''s own ch. 3 list of
+    questions (p. 96): Other-Means, Best-Means, Possibility and Side Effects. So these
+    are ch. 3 against ch. 9 differences, not only the game''s. CQ:best_means asks
+    for the best way to reach G, but its pattern is efficiency in reaching S2, and
+    "best" is wider than efficiency.'
+  decision: 'Open: choose between the ch. 3 and ch. 9 wordings when the NASCQ is generated
+    from the catalogue (plan §6), and decide whether an equally good alternative should
+    count against A, which needs a formula walton.yml lacks.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -353,3 +396,14 @@ history:
     specialises and the dialogue types. Corrected the targets of 22.1/CQ2 and CQ3,
     moved the game's CQ:best_means onto 22.1/CQ3, and corrected the premise map of
     22.1's major and minor premises.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the test against positive_consequences follows the batch-2 rule (R3); the practical_inference
+    contrast agrees with it; the S1 discrepancy cites R3 and p. 95; the game questions
+    are ch. 3''s (p. 96), with CQ:best_means''s pattern; contrasts back to practical_necessary_condition,
+    practical_goal and negative_consequences_reasoning)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: Added the contrasts back to the two practical analogies (cross-entry check,
+    2026-10-22).

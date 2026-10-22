@@ -96,11 +96,12 @@ contrasts:
     tests the backward look.
   status: drafted by Claude Code, 2026-10-22
 - scheme: waste
-  text: The two are close, and the book treats waste and sunk costs as one argument
-    under two names (pp. 10–11), though its compendium separates them. Choose sunk_costs
-    when the text cites the amount already spent on an action (money, time) as too
-    much to write off; choose waste when it says that stopping would make the agent's
-    efforts toward a goal come to nothing.
+  text: 'The two are close: the book first gives them as two names for one argument
+    (pp. 10–11), then distinguishes them, waste comparing consequences and sunk costs
+    resting on an earlier commitment (p. 135); its compendium separates them. Choose
+    sunk_costs when the text cites the amount already spent on an action (money, time)
+    as too much to write off; choose waste when it says that stopping would make the
+    agent''s efforts toward a goal come to nothing.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: sacrifice
   text: Choose sacrifice when the text infers that something is valuable because much
@@ -125,8 +126,9 @@ examples:
 - text: Cancelling the stadium now would trigger a two-million penalty in the builder's
     contract, so the city should go ahead with it.
   coding: 'Near miss: the cost it cites is not already spent but would follow from
-    stopping, a forward-looking reason; negative_consequences (A = cancel the stadium,
-    G = a two-million penalty).'
+    stopping, a forward-looking reason; negative_consequences_prudential (X = going
+    ahead with the stadium, C = a two-million penalty), or negative_consequences against
+    cancelling.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -204,3 +206,8 @@ history:
   what: Drafted the summary, two walton/ questions (feasible, future_losses_outweigh),
     the contrasts, the examples, the discrepancies, the classification, specialises
     and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with waste cites p. 135 as well as pp. 10–11; the near miss is the
+    prudential form)'

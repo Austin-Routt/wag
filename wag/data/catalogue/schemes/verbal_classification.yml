@@ -66,8 +66,8 @@ critical_questions:
     premise; walton.yml's subclass(F,G) is a strict inclusion, so a usage that holds
     only for most Fs is a reason to deny it (see the discrepancy on the classification
     premise).
-  paraphrase: Does counting every F as a G rest only on a contestable assumption about
-    how the word for G is used?
+  paraphrase: Is counting F as G just one way of using the word for G, which others
+    could fairly reject?
   answer: 'The proponent, once asked. Against: showing that ordinary or technical
     usage does not count every F as a G, or that doing so is one disputed usage among
     others (a loaded label), which undermines subclass(F,G). For: an accepted definition,
@@ -147,11 +147,12 @@ examples:
     a secondary expert_opinion step). Conclusion: instance(O,G). Not definition_to_verbal_classification:
     the guideline level is a criterion of unhealthy eating, not its definition.'
   status: drafted by Claude Code, 2026-10-22
-- text: The WHO's cancer agency defines processed meat as meat transformed by salting,
-    curing, fermentation or smoking; ham is cured, so ham counts as processed meat.
+- text: Under the city's cycling code, a cycle path is a lane kept for bicycles and
+    marked as such; the painted lane on Mill Road is kept for bicycles and marked,
+    so it counts as a cycle path.
   coding: 'Near miss: the step to the category is a definition that is stated and
-    then checked against the case; definition_to_verbal_classification (O = ham, D
-    = the agency''s definition of processed meat, G = processed meat).'
+    then checked against the case; definition_to_verbal_classification (O = the Mill
+    Road lane, D = the code''s definition of a cycle path, G = cycle paths).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -200,3 +201,8 @@ history:
     contrasts (adding analogy, established_rule and rule), the examples from the batch-2
     gold, a discrepancy on the classification premise, the classification, specialises
     and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    14/CQ2 paraphrased afresh; a near miss that does not repeat definition_to_verbal_classification''s
+    example)'

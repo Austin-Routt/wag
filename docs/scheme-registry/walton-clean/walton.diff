@@ -257,7 +257,7 @@
    opposite_action/3: "%s has carried out an action, or set of actions, that imply that %s is personally committed to %s."
 -  other_consequences: "There are some good or bad consequences of doing %s should be taken into account."
 -  other_consequences_presumption/2: "If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow."
-+  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."
++  other_consequences/1: "Doing %s also has consequences of the opposite kind that outweigh the ones cited."
 +  other_consequences_presumption/2: "If I act on the presumption that %s is not true, and it is true, consequences %s will follow."
    other_credible_sources_disagree/1: "Other credible source disagree with %s."
    other_goals_conflict/1: "Other goals that might conflict with %s."
@@ -686,7 +686,8 @@
 +      title: "Argument From Values - Variant 1: Positive Value"
        source: >
                 Trevor Bench-Capon, "Persuasion in Practical Argument Using Value-based Argumentation Frameworks." 
-                Journal of Logic and Computation 13 (2003), pp.429­448. 
+-               Journal of Logic and Computation 13 (2003), pp.429­448. 
++               Journal of Logic and Computation 13 (2003), pp. 429-448. 
                 Trevor Bench-Capon, "Agreeing to Differ: Modelling Persuasive Dialogue
 -               between Parties without a Consensus about Values." lnformal Logic 22 (2003a), pp. 231 -245. 
 +               between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. 
@@ -701,7 +702,8 @@
 +      title: "Argument From Values - Variant 2: Negative Value"
        source: >
                 Trevor Bench-Capon, "Persuasion in Practical Argument Using Value-based Argumentation Frameworks." 
-                Journal of Logic and Computation 13 (2003), pp.429­448. 
+-               Journal of Logic and Computation 13 (2003), pp.429­448. 
++               Journal of Logic and Computation 13 (2003), pp. 429-448. 
                 Trevor Bench-Capon, "Agreeing to Differ: Modelling Persuasive Dialogue
 -               between Parties without a Consensus about Values." lnformal Logic 22 (2003a), pp. 231 -245. 
 +               between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. 

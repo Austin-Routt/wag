@@ -95,12 +95,13 @@ critical_questions:
   targets: [{formula: acceptable_action(X), locus: assumption}]
   note: Acceptable/Best Option Question. The Selection Premise, necessary_action(X,A),
     states the same choice as a premise, so the question bears on it too; the generated
-    target keeps the assumption.
+    target keeps the assumption. acceptable_action(X) covers acceptability only; whether
+    X is the best means bears on the Selection Premise, necessary_action(X,A), which
+    can be challenged directly.
   paraphrase: Is X an acceptable choice among the means to A, or even the best one?
   answer: 'The proponent, once asked. Against: showing that X is unacceptable (unlawful,
-    too costly, against the agent''s principles), or clearly worse than another of
-    the means, which undermines acceptable_action(X). For: reasons why X is acceptable,
-    and better than the other means.'
+    too costly, against the agent''s principles), which undermines acceptable_action(X).
+    For: reasons why X is acceptable.'
   status: drafted by Claude Code, 2026-10-22
 - id: 22.3/CQ3
   book:
@@ -133,8 +134,9 @@ critical_questions:
     label: CQ5
   targets: [{formula: 'conflict_goals(P,A2,A)', locus: exception}]
   note: Conflicting Goals Question; A2 is the other goal. P and A2 occur in no premise
-    (see the discrepancy on P and A2), and the audit finds no English template matching
-    conflict_goals/3 (docs/walton-audit/REPORT.md §5).
+    (see the discrepancy on P and A2), and upstream keyed its template conflict_goals/2;
+    the cleaning renamed it /3 (walton-clean CHANGELOG, item 97), so the formula now
+    has its English reading.
   paraphrase: Does P have another goal A2 that reaching A could clash with?
   answer: 'The critic, who raises it with an argument. Against: a goal A2 of P that
     reaching A would set back, which undercuts the argument through conflict_goals(P,A2,A).
@@ -170,6 +172,8 @@ contrasts:
     to bring A about ("would solve", "can achieve"); choose practical_necessary_condition
     when it says A cannot be had without X ("we have to", "there is no other way").
     The two schemas differ only in this premise (sufficient_action against necessary_action).
+    That holds in walton.yml, which follows the compendium's misprinted 22.3; in ch.
+    3 (p. 96) the alternatives premise differs too.
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning2
   text: 'Choose practical_reasoning2 when the text describes the present circumstances
@@ -203,7 +207,9 @@ examples:
     "can solve" says the measures would be enough, not that they are needed, and no
     choice among alternatives or practicality is stated. positive_consequences (A
     = tax meat with import safeguards, G = domestic producers protected), as the gold
-    codes it, having set practical_sufficient_condition aside.'
+    codes it, having set practical_sufficient_condition aside. "Would need to" in
+    the second sentence says what the measures require of imports, not that the measures
+    are necessary for the goal.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -294,3 +300,8 @@ history:
     under 22.3) and of walton/possible_action, the contrasts, the examples, the discrepancies
     (including the duplicate id in the category file A/3), the classification, specialises
     and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    22.3/CQ5''s note on the template; 22.3/CQ2''s answer keeps to acceptability; the
+    near miss''s "would need to"; the misprint behind "differ only in this premise")'

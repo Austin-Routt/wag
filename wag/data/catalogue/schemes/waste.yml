@@ -99,11 +99,12 @@ contrasts:
     want X, and quitting would throw our work away) holds two arguments.
   status: drafted by Claude Code, 2026-10-22
 - scheme: sunk_costs
-  text: The two are close, and the book treats waste and sunk costs as one argument
-    under two names (pp. 10–11), though its compendium separates them. Choose waste
-    when the text says that stopping would make the agent's efforts toward a goal
-    come to nothing; choose sunk_costs when it cites the amount already spent on an
-    action (money, time) as too much to write off.
+  text: 'The two are close: the book first gives them as two names for one argument
+    (pp. 10–11), then distinguishes them, waste comparing consequences and sunk costs
+    resting on an earlier commitment (p. 135); its compendium separates them. Choose
+    waste when the text says that stopping would make the agent''s efforts toward
+    a goal come to nothing; choose sunk_costs when it cites the amount already spent
+    on an action (money, time) as too much to write off.'
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: We've spent four summers restoring this old sailing boat. If we give up now,
@@ -124,8 +125,9 @@ examples:
 - text: If we drop the trial now, the patients already enrolled will lose their follow-up
     care, so we must carry on with it.
   coding: 'Near miss: it argues for continuing, but from a harm that stopping would
-    cause later, not from past effort going to waste; negative_consequences (A = drop
-    the trial now, G = enrolled patients lose follow-up care).'
+    cause later, not from past effort going to waste; negative_consequences_prudential
+    (X = carrying on with the trial, C = enrolled patients lose follow-up care), or
+    negative_consequences against dropping it.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
@@ -182,3 +184,8 @@ history:
   what: Drafted the summary, the paraphrases and answers of the two questions (24/CQ2
     marked as undercutting), the contrasts, the examples, two discrepancies, the classification,
     specialises and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with sunk_costs cites p. 135 as well as pp. 10–11; the near miss
+    is the prudential form)'

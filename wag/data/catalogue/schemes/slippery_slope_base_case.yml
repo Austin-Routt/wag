@@ -51,8 +51,9 @@ premise_map:
 - entry: "49"
   label: Bad Outcome Premise
   formulas: [{formula: horrible_costs(E), locus: premise}]
-  note: propagated back by slippery_slope_inductive_step
-  status: generated
+  note: the book's Bad Outcome Premise only for a one-link chain; otherwise horrible_costs(E)
+    is the conclusion of the last inductive step, propagated back
+  status: drafted by Claude Code, 2026-10-22
 - entry: "49"
   label: Conclusion
   formulas: [{formula: ¬should_be_performed(A), locus: conclusion}]
@@ -69,10 +70,10 @@ critical_questions:
     link is a premise of its own argument: the first here, the others in slippery_slope_inductive_step.'
   paraphrase: Which of the steps leading from A, through E, to the bad outcome does
     the arguer actually state?
-  answer: 'The proponent, once asked. Against: showing that the arguer jumps from
-    A to the bad outcome, or to E, without saying how one leads to the other, which
-    undermines would_realize(A,E). For: the stated sequence of events, each a plausible
-    step from the one before.'
+  answer: 'The proponent, once asked. Against: showing that the steps between A and
+    the bad outcome are not stated but assumed, so that the coder had to supply them,
+    which undermines would_realize(A,E) as stated. For: pointing to where the text
+    gives each step.'
   status: drafted by Claude Code, 2026-10-22
 - id: 49/CQ2
   book:
@@ -108,25 +109,26 @@ critical_questions:
     to E in the circumstances.'
   status: drafted by Claude Code, 2026-10-22
 summary:
-  text: 'Use it to argue that an action A would have negative consequences because
-    A would set off an event E that leads, link by link, to an outcome with horrible
-    costs. walton.yml splits the book''s single slippery slope (49) in two: this base
-    case ties the action to the first event of the chain and to that event''s horrible
-    costs, while slippery_slope_inductive_step carries the horrible costs back along
-    each further link from the final outcome to E; the graduated chain is what sets
-    a slope apart from plain negative_consequences.'
+  text: 'Use it to argue that an action A should not be taken because A would set
+    off an event E that leads, link by link, to an outcome with horrible costs. walton.yml
+    splits the book''s single slippery slope (49) in two: this base case ties the
+    action to the first event of the chain and to that event''s horrible costs, while
+    slippery_slope_inductive_step carries the horrible costs back along each further
+    link from the final outcome to E; the graduated chain is what sets a slope apart
+    from plain negative_consequences.'
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_consequences
-  text: 'Not a close relative: it argues for an action from a good result. A step-by-step
-    chain towards a good end is gradualism, not a slope.'
+  text: 'Not a close relative: it argues for an action from a good result. A chain
+    of events towards a good end, argued for, is a series of cause_to_effect steps
+    feeding positive_consequences.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences
   text: ND treats the slippery slope as a subtype of argument from consequences (p.
-    161). Choose the slope when the bad end is reached through a graduated sequence
-    of steps that the first one sets off; choose negative_consequences when the action
-    leads to the bad outcome in one step. A single further step, even an "inevitable"
-    one, is negative_consequences (13292.56, below).
+    161). Choose the slope when the text presents a series of at least two further
+    events after the first step, each said to bring on the next, ending in a horrible
+    outcome; choose negative_consequences when the action leads to the bad outcome
+    directly or through one stated intermediate event (13292.56, below).
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_reasoning
   text: Choose negative_consequences_reasoning when an agent rejects its own action
@@ -209,9 +211,10 @@ examples:
 - text: Close the night bus line and late-shift workers will drive home instead; more
     of them driving tired means more crashes on the ring road, and some of those crashes
     will kill.
-  coding: 'A = closing the night bus line; E = late-shift workers driving home. Stated:
-    would_realize(A,E). Supplied: horrible_costs(E), from the inductive steps (driving
-    home → more tired drivers on the ring road → fatal crashes). Conclusion: ¬should_be_performed(A).'
+  coding: 'A = closing the night bus line; E = late-shift workers driving home tired.
+    Stated: would_realize(A,E). Supplied: horrible_costs(E), from the inductive steps
+    (driving home tired → more crashes on the ring road → fatal crashes). Conclusion:
+    ¬should_be_performed(A).'
   status: drafted by Claude Code, 2026-10-22
 - text: Such a tax would negatively affect the protein intake of millions of people
     and open the market to the inevitable push by governments to incentivize the consumption
@@ -261,9 +264,10 @@ discrepancies:
   detail: walton.yml cited Slippery Slope Arguments (Vale Press, Newport News) as
     of 1999; the compendium cites the same title and pages (93, 95) from the same
     publisher as of 1992.
-  decision: 'Done: the owner''s decision of 2026-10-22 changed the year to the book''s
+  decision: 'Done: the owner''s decision of 2026-10-22 changed the year to the compendium''s
     1992 (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided by the
-    owner").'
+    owner"). The book''s ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999";
+    a verifier with the book''s reference list should confirm which work that is.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -308,3 +312,9 @@ history:
   by: Claude Code
   what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is ¬should_be_performed(A)
     and the source year 1992; examples, specialises and discrepancies follow.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    one rule for slope versus consequences; gradualism no longer misdescribed; the
+    source year''s second citation recorded; 49/CQ1''s answer; the Bad Outcome Premise
+    map note; the summary''s conclusion; the night-bus coding)'

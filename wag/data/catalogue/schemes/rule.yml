@@ -69,11 +69,10 @@ contrasts:
     the speakers of a language believe it means.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: established_rule
-  text: Choose established_rule when the rule is a standing one, accepted by those
-    it governs (a regulation, a house rule, an agreed deadline), and the conclusion
-    is that an agent must act on it, with conflicting rules and exceptions in view;
-    choose rule when the general premise is a principle the arguer proposes or invokes,
-    whose standing may itself be in dispute.
+  text: Choose rule when a principle attaches an evaluation or a conduct to a kind
+    of situation, whether or not it is a rule in force; choose established_rule when
+    the text cites a rule in force for a class of agents and concludes what this agent
+    must do, with conflicting rules and exceptions in view.
   status: drafted by Claude Code, 2026-10-22
 - scheme: regulative_rule
   text: Choose regulative_rule when the premise is that an act is prohibited or obligatory
@@ -102,6 +101,17 @@ contrasts:
     when the conditional is a norm that attaches an evaluation or a conduct to a situation;
     fall back on defeasible_modus_ponens only when no scheme with a fitting conditional
     applies.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: positive_value
+  text: Choose positive_value when a value the agent holds is offered as a reason
+    to keep a goal; choose rule when a principle is applied to a case to conclude
+    what is justified or required. The gold weighs both for 13292.29 (liberty) and
+    codes rule.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: verbal_classification
+  text: Choose verbal_classification when the conclusion is what something is, by
+    a property that marks a category; choose rule when it is what is justified or
+    required in a situation.
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: The tax should be linked directly to the environmental impact. For example,
@@ -197,3 +207,8 @@ history:
     a gold near miss), two discrepancies (E and C bound together, no questions or
     exceptions), the classification, specialises and the dialogue types. No critical
     questions: the book prints none and walton.yml has no assumption or exception.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with established_rule restated as that entry''s is; contrasts with
+    positive_value and verbal_classification)'

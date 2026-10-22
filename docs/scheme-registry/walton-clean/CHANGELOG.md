@@ -30,17 +30,17 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | category | recorded edits | original lines touched |
 |---|---|---|
 | syntax | 12 | 12 |
-| typo | 105 | 97 |
+| typo | 107 | 99 |
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| repair — owner decision | 6 | 6 |
+| repair — owner decision | 7 | 7 |
 | addition — owner decision | 22 | 5 |
-| **total** | **222** | **180** distinct lines (a line can carry edits of several categories) |
+| **total** | **225** | **182** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 171 lines removed, 193 added. That is 167 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 28 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 173 lines removed, 195 added. That is 169 lines changed in place, 4 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 29 of the recorded edits are the owner's decisions (below).
 
-Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 20, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
+Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
 ## Changes decided by the owner
 
@@ -49,9 +49,9 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | scheme | change | decided | why |
 |---|---|---|---|
 | `negative_consequences_reasoning` (new) | added from `A_reasoning/3_practical-reasoning.yml`, lines 511–524, a second block with the id `negative_consequences`; variables `[A,B]`; conclusion `¬should_be_performed(A)` in place of the block's `not_bring_about(A)`; exception `other_consequences(A)` | 2026-10-22 | It formalizes compendium 33.3, Reasoning from Negative Consequences, which had no scheme: the master keeps only the first block of a duplicated id. The new id avoids the clash. `not_bring_about` is threat's predicate and meets no other consequence scheme, so the arguments could not rebut one another. Its two templates are in our own words, because the category file's repeat the book's premises. |
-| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). |
+| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
-| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book. |
+| `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
 | `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the `negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both templates are in our own words. |
 
 ## Repairs that need the owner's approval
@@ -305,6 +305,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: negative_consequences, negative_consequences_prudential, negative_consequences_reasoning, positive_consequences)
   - before: `  other_consequences: "There are some good or bad consequences of doing %s should be taken into account."`
   - after: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
+- **255** · repair — owner decision · the exception now carries the book's 33/CQ3 in the three consequence schemes (below), and an exception that holds defeats the argument whatever the weights; so it must say that the opposite consequences outweigh the cited ones, not only that some exist. The old template was also ungrammatical. In our own words (used by: negative_consequences, negative_consequences_prudential, negative_consequences_reasoning, positive_consequences)
+  - before: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
+  - after: `  other_consequences/1: "Doing %s also has consequences of the opposite kind that outweigh the ones cited."`
 - **256** · template · the predicate has 2 arguments (A,C); 'A %s' was the variable name plus a stray %s ('A is true') (used by: negative_practical)
   - before: `  other_consequences_presumption/2: "If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow."`
   - after: `  other_consequences_presumption/2: "If I act on the presum ption that %s is not true, and it is true, consequences %s will follow."`
@@ -641,6 +644,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **869** · syntax · unquoted title containing ': ' is a YAML error (trailing space dropped)
   - before: `      title: Argument From Values - Variant 1: Positive Value `
   - after: `      title: "Argument From Values - Variant 1: Positive Value"`
+- **872** · typo · source: a soft hyphen (U+00AD) in place of the page range's dash
+  - before: `               Journal of Logic and Computation 13 (2003), pp.429­448. `
+  - after: `               Journal of Logic and Computation 13 (2003), pp. 429-448. `
 - **874** · typo · source: 'lnformal' (OCR l for I)
   - before: `               between Parties without a Consensus about Values." lnformal Logic 22 (2003a), pp. 231 -245. `
   - after: `               between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. `
@@ -650,6 +656,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **884** · syntax · unquoted title containing ': ' is a YAML error
   - before: `      title: Argument From Values - Variant 2: Negative Value`
   - after: `      title: "Argument From Values - Variant 2: Negative Value"`
+- **887** · typo · source: a soft hyphen (U+00AD) in place of the page range's dash
+  - before: `               Journal of Logic and Computation 13 (2003), pp.429­448. `
+  - after: `               Journal of Logic and Computation 13 (2003), pp. 429-448. `
 - **889** · typo · source: 'lnformal' (OCR l for I)
   - before: `               between Parties without a Consensus about Values." lnformal Logic 22 (2003a), pp. 231 -245. `
   - after: `               between Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231 -245. `
@@ -926,7 +935,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ### slippery_slope_base_case
 
-- **1997** · repair — owner decision · the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book
+- **1997** · repair — owner decision · the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work
   - before: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.`
   - after: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.`
 - **2000** · repair — owner decision · the conclusion is used by no other scheme, so a slippery slope never meets the consequence and practical reasoning schemes' should_be_performed(A); the book's conclusion (49) is that A should not be brought about
@@ -935,7 +944,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ### slippery_slope_inductive_step
 
-- **2009** · repair — owner decision · the book cites these pages (compendium 49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book
+- **2009** · repair — owner decision · the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work
   - before: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.`
   - after: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.`
 

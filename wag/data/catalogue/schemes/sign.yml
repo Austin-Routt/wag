@@ -107,12 +107,13 @@ critical_questions:
     absence of the rival''s other traces.'
   status: drafted by Claude Code, 2026-10-22
 summary:
-  text: Use it when a finding A, observed in a situation, is taken to show that B
-    holds there, because findings like A usually go with B. It reasons from an indicator
-    to what it indicates, without claiming that either produces the other, which sets
-    it apart from cause_to_effect and correlation_to_cause; and it leans on a standing
-    link between A and B, where abduction compares rival explanations of what was
-    observed.
+  text: 'Use it when a finding A, observed in a situation, is taken to show that B
+    holds there, because findings like A usually go with B. It infers from an indicator
+    to what it indicates, resting on their usual association: if one causes the other,
+    the cause runs from B to A and the argument does not depend on saying so, which
+    sets it apart from cause_to_effect and correlation_to_cause; and it leans on a
+    standing link between A and B, where abduction compares rival explanations of
+    what was observed.'
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: cause_to_effect
@@ -241,3 +242,7 @@ history:
     the examples, the decision on the game-differs discrepancy, a book-walton discrepancy
     on the 0-ary exception and an other one on the game's questions, the classification,
     specialises and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the summary no longer denies a causal link from B to A)'

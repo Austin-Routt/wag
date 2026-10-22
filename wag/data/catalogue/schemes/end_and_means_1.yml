@@ -100,15 +100,22 @@ discrepancies:
     a text that condemns a means for its bad end is negative_consequences when it
     concludes against an action, and otherwise other, with a note.'
   status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: critical questions
+  detail: Neither the book (22.6.1 prints no questions) nor walton.yml (no assumptions
+    or exceptions) gives the scheme critical questions; both premises can be challenged.
+  decision: 'Open: whether to borrow questions from the consequence schemes (33/CQ1–3),
+    which apply to any argument that values something by what it leads to.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
   reasoning: practical
   epistemic: ""
-  group: instrumental
-  note: Not in the tree; placed with the instrumental argument from practical reasoning,
-    because it rests on a means-end link as that argument does. Its conclusion evaluates
-    the means rather than recommending an action, which brings it near the values
-    group.
+  group: value-based
+  note: 'Not in the tree; placed with arguments from consequences (value-based), which
+    it parallels: a means that leads to a good end is valued for it, as an action
+    is for its good result. Its means-end link also brings it near the instrumental
+    group, but it concludes an evaluation, not an action.'
   status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
@@ -134,3 +141,7 @@ history:
     (the lost negative and "less bad" forms), the classification, specialises and
     the dialogue types. The book prints no questions under 22.6 and walton.yml has
     no assumptions or exceptions, so there are no questions to draft.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    placed with the consequences (value-based); the missing questions recorded)'

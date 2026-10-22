@@ -83,12 +83,13 @@ examples:
 discrepancies:
 - kind: not-in-book
   about: defeasible_modus_ponens
-  detail: 'The compendium (ch. 9) lists no scheme this formalizes. walton.yml cites: '
+  detail: The compendium (ch. 9) lists no scheme this formalizes. walton.yml cites
+    no source.
   decision: 'Keep it, in tier 1, as the general form "other" falls back to (plan §2,
-    §3). It is not a compendium scheme, but the book''s ch. 11 opens with a section
-    on the defeasible modus ponens form of schemes (p. 364, by the table of contents);
-    that text is not in our OCR (pp. 1–138), and walton.yml cites no source. Open:
-    a verifier with the book should read ch. 11 §1 and cite it as the book''s basis.'
+    §3). It is not a compendium scheme. The book introduces the form on pp. 16, 19
+    and 77 and treats it in ch. 11 §1 (from p. 364, by the table of contents); Aberdein
+    (2020) cites its p. 366, with two questions, backing and exception. Open: a verifier
+    with the book should read pp. 364–366 and confirm the two questions.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: critical questions
@@ -106,8 +107,10 @@ discrepancies:
   detail: The template of implies(A,B) reads as a plain conditional, which would make
     the argument deductive; the scheme's name and its use in WAG's plan make it a
     defeasible rule.
-  decision: No change to the formula. In coding, write the rule out as a defeasible
-    generalization ("as a rule, if A then B"), as plan §3 asks.
+  decision: 'No change to the formula. In coding, write the rule out as a defeasible
+    generalization ("as a rule, if A then B"), as plan §3 asks. Open, for the owner:
+    use defeasibly_implies(A,B) as the premise; walton.yml already has it, unused,
+    and its template reads as a defeasible rule.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -148,3 +151,8 @@ history:
     (one added: established_rule), the examples, the decision on the not-in-book discrepancy,
     two other discrepancies (the plan''s two questions have no formula; implies reads
     as strict), the classification, specialises and the dialogue types.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the book''s basis (pp. 16, 19, 77; ch. 11 §1; Aberdein''s p. 366); defeasibly_implies
+    noted)'

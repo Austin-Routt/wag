@@ -55,10 +55,11 @@ families:
 premise_map:
 - entry: "22.4"
   label: Premise 1
-  formulas: [{formula: worthy_goal(G), locus: assumption}]
-  note: 'approximate: the book''s "I have a goal G" has no premise; worthy_goal(G)
-    is an assumption'
-  status: generated
+  formulas: []
+  note: no formula says that the agent has G; worthy_goal(G) says G is worth pursuing,
+    which the book's premise does not claim (links.json mapped it approximately).
+    Corrected by Claude Code, as for 22.1 in practical_reasoning2
+  status: drafted by Claude Code, 2026-10-22
 - entry: "22.4"
   label: Premise 2
   formulas: [{formula: 'would_promote_value(G,V)', locus: premise}]
@@ -84,11 +85,12 @@ critical_questions:
     text: Are there goals other than {G} that should come first?
     locus: conclusion
   targets: [{formula: should_be_performed(A), locus: conclusion}]
-  note: 'No formula: unlike practical_reasoning2 (incompatible_goal(G)), practical_reasoning1
-    has no exception for a conflicting goal. Targeted at the conclusion, where the
-    game asks it, and the game''s CQ:other_goals moved here from its own item. The
-    game''s text asks which goals should come first; the book''s, which goals might
-    conflict. See the discrepancies on CQ1 and on the game''s questions.'
+  note: 'No premise, assumption or exception encodes it. The conclusion is a stand-in,
+    as in the game: a conflicting goal is raised as a counter-argument (a rebuttal,
+    weighed), where practical_reasoning2''s 22.1/CQ1 undercuts through incompatible_goal(G).
+    The game''s CQ:other_goals moved here from its own item. Its text asks which goals
+    should come first, as the book''s ch. 3 list does (p. 96); ch. 9 asks which goals
+    might conflict. See the discrepancies on CQ1 and on the game''s questions.'
   paraphrase: Which other goals of the agent could clash with G?
   answer: 'The critic, who raises it with an argument. Against: another goal of the
     agent that pursuing G would set back, and that should come first, put forward
@@ -105,8 +107,8 @@ critical_questions:
     G fits them; whether V is a legitimate value is walton.yml''s separate assumption,
     asked by walton/legitimate_value.'
   paraphrase: How far do the agent's values V support G, or at least fit with it?
-  answer: 'The proponent, once asked. Against: showing that achieving G does little
-    for V, or works against it, which undermines would_promote_value(G,V). For: showing
+  answer: 'The proponent, once asked. Against: showing that achieving G does not advance
+    V, or works against it, which undermines would_promote_value(G,V). For: showing
     how achieving G advances V.'
   status: drafted by Claude Code, 2026-10-22
 - id: 22.4/CQ3
@@ -263,6 +265,12 @@ contrasts:
     something good; choose practical_reasoning1 when it states the present circumstances,
     a resulting state in which a goal is met, and the value that goal promotes.
   status: drafted by Claude Code, 2026-10-22
+- scheme: negative_consequences
+  text: Choose negative_consequences when a bad result of A is offered against doing
+    A; as a reply to a practical_reasoning1 argument for the same A it is the side_effects(A,S1)
+    exception. Choose practical_reasoning1 only when the text argues for an action
+    from circumstances, a goal and the value it serves.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: Commuters on the east side now spend an hour in traffic each way. A protected
     bike lane on Main Street would let many of them cycle instead, which would cut
@@ -319,9 +327,9 @@ discrepancies:
   detail: The book's first premise says that the agent has the goal G. No formula
     says so; links.json maps it, as an approximation, to the assumption worthy_goal(G),
     which says that G is worth pursuing, a different and evaluative claim.
-  decision: 'Keep the approximate map. Open: whether to add a goal premise like practical_inference''s
-    have_goal(G). worthy_goal(G) and legitimate_value(V), which no book question asks
-    about, get walton/ questions.'
+  decision: 'Map it to nothing, as for 22.1 in practical_reasoning2; worthy_goal(G)
+    and legitimate_value(V), which no book question asks about, keep their walton/
+    questions. Open: whether to add a goal premise like practical_inference''s have_goal(G).'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise 3
@@ -354,13 +362,24 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
-  detail: CQ:other_goals asks which goals should come first, where 22.4/CQ1 asks which
-    goals might conflict with G. CQ:other_means asks whether another action could
-    also achieve G, but its pattern requires one that does better. CQ:side_effect
+  detail: 'CQ:other_goals asks which goals should come first, where 22.4/CQ1 asks
+    which goals might conflict with G. CQ:other_means asks whether another action
+    could also achieve G, but its pattern requires one that does better. CQ:side_effect
     asks about any bad side effect, where 22.4/CQ7 asks only about consequences that
-    outweigh G.
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
-    the texts from these paraphrases.'
+    outweigh G. The game''s texts follow the book''s own ch. 3 list of questions (p.
+    96): Other-Goals asks about goals that should have priority, Best-Means about
+    the best of the alternatives, Side Effects about known bad consequences. So these
+    are ch. 3 against ch. 9 differences, not only the game''s. CQ:best_means asks
+    for the best way to reach G, but its pattern is efficiency in reaching S2.'
+  decision: 'Open: choose between the ch. 3 and ch. 9 wordings when the NASCQ is generated
+    from the catalogue (plan §6).'
+  status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: Premise 2 and CQ2
+  detail: The book asks whether G is supported by, or at least consistent with, the
+    agent's values; walton.yml's premise would_promote_value(G,V) requires that achieving
+    G promote V, so a goal merely consistent with V fails it.
+  decision: 'No change: code texts that claim only consistency with a value with practical_reasoning2.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -403,3 +422,9 @@ history:
     examples, the discrepancies, the classification, specialises and the dialogue
     types. Moved the game's CQ:other_goals onto 22.4/CQ1, targeted at the conclusion,
     and dropped legitimate_value(V) from 22.4/CQ2's targets.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    Premise 1 maps to nothing, as in 22.1; the game questions are ch. 3''s (p. 96);
+    22.4/CQ1''s note; 22.4/CQ2''s answer and the consistency discrepancy; a contrast
+    back to negative_consequences)'

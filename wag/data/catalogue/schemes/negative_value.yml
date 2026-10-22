@@ -9,7 +9,7 @@ walton:
   id: negative_value
   title: 'Argument From Values - Variant 2: Negative Value'
   source: 'Trevor Bench-Capon, "Persuasion in Practical Argument Using Value-based
-    Argumentation Frameworks." Journal of Logic and Computation 13 (2003), pp.429­448.
+    Argumentation Frameworks." Journal of Logic and Computation 13 (2003), pp. 429-448.
     Trevor Bench-Capon, "Agreeing to Differ: Modelling Persuasive Dialogue between
     Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231
     -245.'
@@ -60,11 +60,11 @@ summary:
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: positive_value
-  text: The counterpart. Choose negative_value when the agent judges the value bad
-    and it tells against the goal; choose positive_value when the agent holds the
-    value good and it speaks for the goal. A text that sets a good value against a
-    goal can often be coded either way (V = liberty, positive, against G; or V = interference,
-    negative); prefer the value the text names.
+  text: The counterpart. Choose negative_value when a value the agent judges bad tells
+    against the goal; choose positive_value when a value it holds good speaks for
+    the goal. A good value that a goal would violate is coded as negative_value with
+    V = the violation (for example, V = interference with personal choice), as the
+    book frames its example on p. 322.
   status: drafted by Claude Code, 2026-10-22
 - scheme: sacrifice
   text: 'Not a close relative: sacrifice infers how much something is worth from what
@@ -91,8 +91,8 @@ examples:
   status: drafted by Claude Code, 2026-10-22
 - text: 'The club should stop aiming to beat every rival at any price: the members
     see win-at-all-costs ruthlessness as a bad thing, and that aim is built on it.'
-  coding: 'V = win-at-all-costs ruthlessness; A = the club''s members; G = beating
-    every rival at any price. Stated: judged_negative_value(V,A) and negative_affects(V,G,A).
+  coding: 'V = win-at-all-costs ruthlessness; A = the club (its members as a body);
+    G = beating every rival at any price. Stated: judged_negative_value(V,A) and negative_affects(V,G,A).
     Conclusion: reason_retracting_goal(V,G).'
   status: drafted by Claude Code, 2026-10-22
 - text: Taxing meat might force producers to use cheaper and more dangerous means
@@ -123,6 +123,12 @@ discrepancies:
     own words, so that a bad value counts against the goal (docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
+- kind: other
+  about: B_source-based-arguments/2
+  detail: The category file concludes reason_retaining_goal(V,G) and keeps the old
+    negative_affects template, as walton.yml did before the owner's decision of 2026-10-22.
+  decision: 'No change: walton.yml follows the book.'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
   reasoning: practical
@@ -130,7 +136,7 @@ classification:
   group: values
   note: The tree lists argument from values under values. The upstream collection
     files it with arguments from commitment (B_source-based-arguments/2_argumen-from-commitment.yml),
-    with the same formulas.
+    with the positive variant's conclusion, which walton.yml corrected on 2026-10-22.
   status: drafted by Claude Code, 2026-10-22
 specialises:
   scheme: ""
@@ -165,3 +171,8 @@ history:
   what: 'Revised for the owner''s decisions of 2026-10-22: the conclusion is reason_retracting_goal(V,G)
     and the negative_affects template is corrected; the partial link is now exact,
     so its discrepancy becomes a done book-walton one; summary and examples follow.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with positive_value no longer allows a good value against a goal;
+    the category file''s difference recorded; the second example''s agent)'

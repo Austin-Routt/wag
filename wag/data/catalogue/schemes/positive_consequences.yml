@@ -89,17 +89,18 @@ critical_questions:
     entry: "33"
     label: CQ3
   targets: [{formula: other_consequences(A), locus: exception}]
-  note: Targets the exception other_consequences(A), which the owner's decision of
-    2026-10-22 gave the three consequence schemes (walton.yml had it only in negative_consequences_prudential).
-    Raising the opposite consequences undercuts the argument; they can also be put
-    as a counter-argument on the conclusion, and the two are then weighed, as ND describes
-    (p. 159).
+  note: 'Targets the exception other_consequences(A), added by the owner''s decision
+    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
+    of the opposite kind that outweigh the ones cited". An exception that holds defeats
+    the argument whatever the weights, so a lesser opposite consequence is not this
+    exception: it is weighed as a separate counter-argument on the conclusion (ND
+    p. 159).'
   paraphrase: Would doing A also have consequences of the opposite kind to G that
     ought to be weighed against it?
   answer: 'The critic, who raises it with an argument. Against: a bad consequence
     of A that outweighs G, which undercuts the argument through other_consequences(A).
-    For: showing that A has no such consequence, or that it is too slight to change
-    the balance.'
+    For: showing that A has no such consequence, or that it does not outweigh the
+    one cited.'
   status: drafted by Claude Code, 2026-10-22
 - id: game/CQ:evidence
   game:
@@ -110,6 +111,8 @@ critical_questions:
   undercuts: true
   note: The game's form of 33/CQ2, asked of the inference (locus argument) rather
     than of the premise brings_about(A,G); see the discrepancy on the game's questions.
+    It stays apart from 33/CQ2, whose target is the premise, because the game asks
+    it of the inference.
   paraphrase: Does enough evidence back the claim that doing A brings about G?
   answer: 'The proponent, once asked: the argument is out of force until answered.
     Against: showing that no study, record or mechanism supports the link, which undercuts
@@ -122,12 +125,16 @@ critical_questions:
     locus: conclusion
   targets: [{formula: should_be_performed(A), locus: conclusion}]
   note: 'The game''s narrower form of 33/CQ3: it asks only about bad side effects
-    of A, while the book''s question covers any consequences of the opposite kind.'
+    of A, while the book''s question covers any consequences of the opposite kind.
+    It stays apart from 33/CQ3, which since 2026-10-22 targets the exception other_consequences(A),
+    because the game asks it at the conclusion.'
   paraphrase: Would doing A also bring about something bad?
-  answer: 'The critic, who raises it with an argument. Against: a bad side effect
-    of A, put forward as an argument from negative_consequences, which rebuts the
-    argument when it outweighs G. For: showing that A has no such effect, or that
-    G outweighs it.'
+  answer: 'The critic, who raises it with an argument. Against: evidence of a bad
+    effect of A that outweighs G, which rebuts the argument. In the game the answer
+    is backed by expert_opinion, position_to_know or sign: no backup edge lets negative_consequences
+    back it, so an argument from negative consequences against A is played as a direct
+    rebuttal instead. For: showing that A has no such effect, or that G outweighs
+    it.'
   status: drafted by Claude Code, 2026-10-22
 summary:
   text: 'Use it when an action A is recommended because doing it would bring about
@@ -151,10 +158,9 @@ contrasts:
     walton.yml has no first-person positive form.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
-  text: 'Not a close relative: the prudential form argues for doing A from the bad
-    outcome of failing to do it, as a warning to someone who was thinking of not doing
-    A. Choose positive_consequences when the reason is a good outcome that doing A
-    brings.'
+  text: Choose negative_consequences_prudential when the reason is a harm that failing
+    to do A would bring, addressed to someone inclined not to act; choose positive_consequences
+    when the reason is a good that doing A brings.
   status: drafted by Claude Code, 2026-10-22
 - scheme: pragmatic_alternative
   text: 'Choose pragmatic_alternative when the text presents a forced choice: either
@@ -172,9 +178,9 @@ contrasts:
     for a good it brings, with no one threatening anything.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: fear
-  text: 'Not a close relative: the fear appeal argues for doing A as the only way
-    to avert something very bad for the hearer, and works through the hearer''s fear.
-    Choose positive_consequences when the reason is a benefit gained, not a harm averted.'
+  text: Choose fear when the argument presents A as the only way to avert something
+    very bad for the hearer and works through the hearer's fear; choose positive_consequences
+    when the reason is a benefit gained, not a harm averted.
   status: drafted by Claude Code, 2026-10-22
 - scheme: danger
   text: 'Not a close relative: the danger appeal argues against an action that would
@@ -183,15 +189,18 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: slippery_slope_base_case
   text: 'Not a close relative: a slippery slope argues against a first step from a
-    horrible outcome at the end of a chain. A chain of steps towards a good end, argued
-    for, is gradualism or a series of cause_to_effect steps feeding positive_consequences.'
+    horrible outcome at the end of a chain. A chain of events towards a good end,
+    argued for, is a series of cause_to_effect steps feeding positive_consequences;
+    gradualism is something else, leading a hearer to accept a conclusion in small
+    steps.'
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning2
-  text: Choose practical_reasoning2 only when the claim or its context states the
-    circumstances S1, a resulting state S2 distinct from the action, and the goal
-    G that S2 realizes; choose positive_consequences when the claim chiefly says that
-    the action brings about a good outcome (batch-2 guidelines §3, adjudication rule
-    4).
+  text: Choose practical_reasoning2 only when S2 is a state distinct from the action
+    and, of S1, the step from A to S2 and the step from S2 to G, at most one has to
+    be supplied (the claim's immediate context counts as given); choose positive_consequences
+    when the claim chiefly says that the action brings about a good outcome. A proposal
+    stated with its purpose is positive_consequences (batch-2 guidelines §5 item 4;
+    gold rule R3).
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
   text: Choose practical_reasoning1 when, besides circumstances and a goal, the claim
@@ -208,6 +217,12 @@ contrasts:
   text: Choose positive_value when the reason given is a value that the agent holds
     and that favours keeping a goal; choose positive_consequences when the reason
     is an outcome that the action produces.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: end_and_means_1
+  text: Choose end_and_means_1 when the claim concludes only that X is good because
+    it leads to a good end, without recommending that anyone do X (Kialo gold, 13292.3);
+    choose positive_consequences when it argues that an action should be done for
+    its good result.
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A tax on meat would combat unhealthy meat consumption.
@@ -231,7 +246,7 @@ examples:
   coding: 'A = a meat tax whose revenue partly funds research into synthetic meat;
     G = faster development of synthetic meat. Stated: the conclusion should_be_performed(A),
     and its purpose, which is brings_about(A,G). Supplied: good(G). A proposal stated
-    with its purpose is coded this way (adjudication rule 4).'
+    with its purpose is coded this way (batch-2 gold rule R3).'
   status: drafted by Claude Code, 2026-10-22
 - text: Taxing meat would raise the consumer price to reflect the real costs of meat
     consumption.
@@ -287,10 +302,15 @@ discrepancies:
   detail: 'The game''s three questions differ from the book''s: CQ:likelihood drops
     the modality and speaks of "the claimed link"; CQ:evidence asks the book''s evidence
     question of the inference (locus argument), not of the premise brings_about(A,G);
-    CQ:side_effect narrows the opposite-consequences question to bad side effects.'
+    CQ:side_effect narrows the opposite-consequences question to bad side effects.
+    No backup edge lets AS:negative_consequences back CQ:side_effect, the mirror of
+    AS:consequences backing CQ:opposite_consequences; and CQ:side_effect''s caes_mapping
+    names the argument, while its ask edge, which the game uses, names the conclusion.'
   decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
     the game''s texts from these paraphrases, sit the evidence question on 33/CQ2
-    at the premise, and keep the side-effects question as the game''s form of 33/CQ3.'
+    at the premise, add the backup edge AS:negative_consequences → CQ:side_effect,
+    and ask the opposite-consequences questions at the exception other_consequences(A),
+    as 33/CQ3 now is.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -332,3 +352,15 @@ history:
   by: Claude Code
   what: 'Revised for the owner''s decision of 2026-10-22 (the exception other_consequences(A)):
     33/CQ3 targets it; the CQ3 discrepancy is done; the game-differs decision written.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    33/CQ3 reads the exception as outweighing; CQ:side_effect''s answer says what
+    the game can back it with, and the missing backup edge is recorded; the game questions''
+    notes say why they stay apart; contrasts on gradualism, the prudential form and
+    fear; the batch-2 rule cited as R3)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the contrast with practical_reasoning2 states the batch-2 rule as that entry does;
+    a contrast back to end_and_means_1)'

@@ -9,7 +9,7 @@ walton:
   id: positive_value
   title: 'Argument From Values - Variant 1: Positive Value'
   source: 'Trevor Bench-Capon, "Persuasion in Practical Argument Using Value-based
-    Argumentation Frameworks." Journal of Logic and Computation 13 (2003), pp.429­448.
+    Argumentation Frameworks." Journal of Logic and Computation 13 (2003), pp. 429-448.
     Trevor Bench-Capon, "Agreeing to Differ: Modelling Persuasive Dialogue between
     Parties without a Consensus about Values." Informal Logic 22 (2003a), pp. 231
     -245.'
@@ -126,9 +126,9 @@ examples:
   status: drafted by Claude Code, 2026-10-22
 - text: The school should keep its aim of mixed-ability classes. Its teachers care
     about fairness, and that aim is how fairness shows in the timetable.
-  coding: 'V = fairness; A = the school''s teachers; G = mixed-ability classes. Stated:
-    judged_positive_value(V,A) and positive_affects(V,G,A). Conclusion: reason_retaining_goal(V,G),
-    stated as "should keep its aim".'
+  coding: 'V = fairness; A = the school (its teachers as a body); G = mixed-ability
+    classes. Stated: judged_positive_value(V,A) and positive_affects(V,G,A). Conclusion:
+    reason_retaining_goal(V,G), stated as "should keep its aim".'
   status: drafted by Claude Code, 2026-10-22
 - text: Eating meat is a personal choice. Individuals are at liberty to do as they
     wish, and the state should have nothing to do with it.
@@ -190,3 +190,7 @@ history:
     (the book prints none), the contrasts (two added: positive_consequences, rule),
     the examples, one discrepancy on the game, the classification, specialises and
     the dialogue types.'
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    the second example''s agent owns the goal)'

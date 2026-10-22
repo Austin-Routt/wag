@@ -160,7 +160,8 @@ critical_questions:
   note: Backup Evidence Question; the argument is a nested term. The book treats it
     as an implicit premise on p. 33, and on p. 92 as an attack on the link between
     premises and conclusion; walton.yml's assumption follows p. 33.
-  paraphrase: Does W's assertion that S rest on evidence?
+  paraphrase: Has W any data, study or observation behind the claim that S, or is
+    it an unsupported view?
   answer: 'The proponent, once asked: the assumption holds until it is questioned.
     Against: showing that W''s claim rests on no data, study or observation in D (a
     guess, a personal view), which undermines based_on_evidence(asserts(W,S)). For:
@@ -187,6 +188,18 @@ contrasts:
     choose credible_source when it rests it on reputation or a track record that is
     not expertise, such as a reputable newspaper.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: expert_opinion_ad_populum
+  text: Choose expert_opinion_ad_populum when the weight lies on the experts of a
+    field agreeing, a consensus, rather than on what one source found; choose expert_opinion
+    when a source, or a body of studies, is cited for its finding. The gold weighs
+    both for 13292.233 and codes expert_opinion, since the studies are cited for what
+    they found.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: witness_testimony
+  text: Choose expert_opinion for an expert witness, who interprets the facts from
+    knowledge of a field (a pathologist on the cause of a bruise); choose witness_testimony
+    for a witness who reports what W perceived and is not asked to interpret it.
+  status: drafted by Claude Code, 2026-10-22
 examples:
 - text: A 2020 scientific analysis of external costs of foods using life-cycle assessment
     and meta-analytical approaches found that external greenhouse gas costs are typically
@@ -194,9 +207,9 @@ examples:
   kialo: "13292.224"
   coding: 'W = the 2020 study in Nature Communications (its authors); D = the external
     costs of food; S = external greenhouse-gas costs are highest for animal-based
-    products. Stated: asserts(W,S), and in part based_on_evidence(asserts(W,S)) (life-cycle
-    assessment, meta-analysis). Supplied: expert(W,D), in_domain(S,D). Conclusion:
-    S.'
+    products. Stated: expert(W,D) (a scientific analysis, as the gold reads it), asserts(W,S),
+    and in part based_on_evidence(asserts(W,S)) (life-cycle assessment, meta-analysis).
+    Supplied: in_domain(S,D). Conclusion: S.'
   status: drafted by Claude Code, 2026-10-22
 - text: Meta-analyses and reviews of studies and trials have shown again and again
     that meat reduction and vegetarianism results not in a decrease of health, but
@@ -204,10 +217,11 @@ examples:
     of red meat and/or processed meats are reduced.
   kialo: "13292.233"
   coding: 'W = the meta-analyses and reviews cited; D = nutritional epidemiology;
-    S = reducing meat improves health and lengthens life. Stated: asserts(W,S). Supplied:
-    expert(W,D), in_domain(S,D). Conclusion: S. W is a body of studies rather than
-    a person, as the gold codes it; expert(W,D) then concerns the studies'' standing
-    in the field.'
+    S = reducing meat improves health and lengthens life. Stated: expert(W,D) (meta-analyses
+    and reviews), asserts(W,S), based_on_evidence(asserts(W,S)) (studies and trials),
+    as the gold marks them. Supplied: in_domain(S,D). Conclusion: S. W is a body of
+    studies rather than a person, as the gold codes it; expert(W,D) then concerns
+    the studies'' standing in the field.'
   status: drafted by Claude Code, 2026-10-22
 - text: The building inspector who walked through the flat on Monday says the back
     stairs have no handrail.
@@ -229,10 +243,10 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
-  detail: 'Two of the game''s questions narrow the book''s: CQ:opinion asks only whether
-    W said S (the book also asks what W''s words imply), and CQ:consistency asks whether
-    other credible sources agree (the book asks whether S is consistent with what
-    other experts say).'
+  detail: 'The game''s questions differ from the book''s: CQ:opinion narrows CQ3 (only
+    whether W said S; the book also asks what W''s words imply); CQ:consistency changes
+    CQ5 (any credible source, and agreement rather than consistency); CQ:expertise
+    ties CQ1 to the domain D.'
   decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
     the game''s texts from these paraphrases.'
   status: drafted by Claude Code, 2026-10-22
@@ -250,13 +264,14 @@ specialises:
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [information_seeking, persuasion, deliberation]
-  suspect: [inquiry]
+  suspect: []
   note: 'From ND, via docs/dialogue-types.md §7: consulting an expert is information-seeking,
     and an expert''s opinion is fit evidence in persuasion and deliberation, where
-    a position must be taken without full knowledge (ND pp. 32–3, 143–7, 265–8). It
-    is suspect in scientific inquiry, where objective evidence is available and required,
-    and in any type when it is used to stop critical questions. Public inquiries,
-    which hear expert testimony, are an exception.'
+    a position must be taken without full knowledge (ND pp. 32–3, 143–7, 265–8). Inquiry
+    is in neither list: public inquiries rely on expert testimony (ND pp. 32–3), while
+    in a scientific inquiry, where objective evidence is available and required, an
+    appeal to an expert in its place is suspect. In any type it is suspect when used
+    to stop critical questions.'
   status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
@@ -268,3 +283,9 @@ history:
   what: Drafted the summary, the paraphrases and answers of the six questions, the
     contrasts, the examples, two discrepancies, the classification, specialises and
     the dialogue types (an exemplar for DRAFTING.md).
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    inquiry in neither dialogue list, with the reason; contrasts with expert_opinion_ad_populum
+    and witness_testimony; the game-questions discrepancy restated; 2/CQ6 paraphrased
+    afresh; the examples follow the gold on what is stated)'

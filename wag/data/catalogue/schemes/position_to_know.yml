@@ -112,13 +112,13 @@ critical_questions:
     locus: premise
     pattern: asserts(W,S)
   targets: [{formula: 'asserts(W,S)', locus: premise}]
-  note: The book's p. 17 reads this question as aimed at the words W actually used,
-    as against a paraphrase or an interpretation of them; p. 90 names distortion of
-    the source's words as the risk.
-  paraphrase: Do W's own words, rather than someone's report or rewording of them,
-    state S?
-  answer: 'The proponent, once asked. Against: W''s actual words, when they say something
-    other than S or less than S (a misquotation, a second-hand or distorted report),
+  note: The book's p. 17 suggests, tentatively, a stricter reading aimed at W's very
+    words, as against a report or rewording of them, and leaves it open; p. 90 names
+    distortion of the source's words as the risk. The paraphrase keeps the book's
+    question.
+  paraphrase: Is it a fact that W put S forward as true?
+  answer: 'The proponent, once asked. Against: evidence that W did not say S, or said
+    something other than or less than S (a misquotation, a distorted second-hand report),
     which undermines asserts(W,S). For: a quotation, recording or citation of W stating
     S.'
   status: drafted by Claude Code, 2026-10-22
@@ -224,6 +224,13 @@ discrepancies:
     the game''s texts from these paraphrases. Keep CQ:field: it questions a premise
     that the book''s major premise states.'
   status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: conclusion
+  detail: The book lets the source assert that the proposition is false, and concludes
+    that it is false. walton.yml has only the positive form.
+  decision: 'No change, as for expert_opinion: bind S to a negated proposition for
+    "W says that not-P".'
+  status: drafted by Claude Code, 2026-10-22
 classification:
   source: dependent
   reasoning: ""
@@ -236,14 +243,15 @@ specialises:
     and witness_testimony narrow it.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
-  proper: [information_seeking, deliberation, persuasion]
+  proper: [information_seeking, deliberation, persuasion, inquiry]
   suspect: []
   note: 'ND treats asking someone in a position to know as a subtype of information-seeking
     (pp. 134–5), which joins deliberation when the question is how to do something
     (pp. 135–6). Persuasion comes from the book, not ND: it says the argument is often
-    used in deliberation and persuasion (p. 90). Inquiry is left out: a public inquiry
-    gathers testimony as data at its first stage (ND p. 92), to be checked before
-    anything is built on it (our reading). No type makes the scheme suspect as such.'
+    used in deliberation and persuasion (p. 90). Inquiry is listed too: the first
+    stage of an inquiry collects information from those in a position to know, as
+    witnesses (ND p. 92), to be checked before anything is built on it (our reading,
+    as for witness_testimony). No type makes the scheme suspect as such.'
   status: drafted by Claude Code, 2026-10-22
 history:
 - date: "2026-10-22"
@@ -255,3 +263,8 @@ history:
   what: Drafted the summary, the paraphrases and answers of the four questions, the
     contrasts, the examples, two discrepancies (CQ2's locus and reliability, the game's
     texts), the classification, specialises and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    1/CQ3 asks the book''s question, with p. 17''s stricter reading in the note; inquiry
+    listed as proper, as for witness_testimony; the negative form recorded)'

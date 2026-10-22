@@ -38,14 +38,16 @@ families:
 premise_map:
 - entry: "55.1"
   label: Major Premise
-  formulas: [{formula: 'has_conclusion(R,C)', locus: premise}, {formula: valid(R),
-      locus: assumption}]
-  note: the rule R with conclusion C
-  status: generated
+  formulas: [{formula: 'has_conclusion(R,C)', locus: premise}]
+  note: the rule R with conclusion C. The premise's reservation of exceptions has
+    no formula (see the discrepancy on CQ2 and CQ3)
+  status: drafted by Claude Code, 2026-10-22
 - entry: "55.1"
   label: Minor Premise
-  formulas: [{formula: applicable(R), locus: premise}]
-  status: generated
+  formulas: [{formula: applicable(R), locus: premise}, {formula: valid(R), locus: assumption}]
+  note: 'that the rule is established (valid) and applies to a. Corrected by Claude
+    Code: links.json mapped valid(R) to the Major Premise'
+  status: drafted by Claude Code, 2026-10-22
 - entry: "55.1"
   label: Conclusion
   formulas: [{formula: C, locus: conclusion}]
@@ -96,8 +98,8 @@ critical_questions:
     but applicable(R) is a premise, which would put the burden on the proponent; the
     major premise''s reservation puts it on whoever claims the exception. See the
     discrepancy on CQ2 and CQ3.'
-  paraphrase: Is this case special, with mitigating circumstances or a valid excuse
-    that release the agent from complying with R?
+  paraphrase: Does something about this agent's situation, such as illness, an emergency
+    or an accepted excuse, take the case outside what R demands?
   answer: 'The critic, who raises it with an argument. Against: circumstances that
     make this case an exception, or an excuse the rule recognises (illness, an emergency),
     which would undercut the argument through an exception that walton.yml lacks;
@@ -127,11 +129,10 @@ summary:
   status: drafted by Claude Code, 2026-10-22
 contrasts:
 - scheme: rule
-  text: Choose established_rule when the general premise is a standing rule, accepted
-    by those it governs, and the conclusion is that this agent must act on it; choose
-    rule when it is a principle the arguer proposes or invokes to justify an evaluation
-    or a conduct, whose standing as a rule is itself in dispute, as with the gold's
-    "tax by environmental impact".
+  text: Choose established_rule when the text cites a rule in force for a class of
+    agents and concludes what this agent must do; choose rule when a principle attaches
+    an evaluation or a conduct to a kind of situation, whether or not it is a rule
+    in force.
   status: drafted by Claude Code, 2026-10-22
 - scheme: regulative_rule
   text: Choose regulative_rule when the text states that an act is prohibited or obligatory
@@ -155,6 +156,12 @@ contrasts:
   text: Choose popular_practice when the text cites what most people do as a reason
     to think it acceptable; choose established_rule when it cites a rule that requires
     it. A common practice is not yet a rule.
+  status: drafted by Claude Code, 2026-10-22
+- scheme: defeasible_modus_ponens
+  text: Choose defeasible_modus_ponens for a conditional the arguer puts forward without
+    appeal to its standing as a rule; choose established_rule when the rule is an
+    accepted one, whose validity and applicability can be questioned as such (valid(R),
+    applicable(R)).
   status: drafted by Claude Code, 2026-10-22
 examples:
 - text: The school's food policy requires a meat-free option at every lunch, so the
@@ -210,12 +217,11 @@ classification:
   group: based on cases
   status: drafted by Claude Code, 2026-10-22
 specialises:
-  scheme: rule
-  note: 'The book prints both under argument from rules (55). Established rule narrows
-    the general rule scheme: the situation is that a rule is established for agents
-    like a, and the conduct is the action it requires, with exceptions reserved. The
-    two walton.yml schemes share no predicate, so the narrowing is in what they say,
-    not in their formulas.'
+  scheme: ""
+  note: 'Specialises nothing: the book prints it beside argument from rules (55.2)
+    under 55, as siblings, and in walton.yml''s formulas neither narrows the other:
+    established_rule applies any rule R with a bare conclusion C, while rule concludes
+    that an evaluation or a conduct is justified or required.'
   status: drafted by Claude Code, 2026-10-22
 dialogue_types:
   proper: [deliberation, persuasion]
@@ -236,3 +242,11 @@ history:
     exceptional, verbal_classification and popular_practice), the examples with a
     gold near miss, two discrepancies (no exception formulas for CQ2 and CQ3; the
     generic encoding), the classification, specialises (rule) and the dialogue types.
+- date: "2026-10-22"
+  by: Claude Code
+  what: 'Revised after the independent model check of 2026-10-22 (findings applied:
+    valid(R) mapped to the Minor Premise; specialises nothing (a sibling of rule);
+    55.1/CQ3 paraphrased afresh; the contrast with rule restated as rule''s is)'
+- date: "2026-10-22"
+  by: Claude Code
+  what: Added the contrast back to defeasible_modus_ponens (cross-entry check, 2026-10-22).
