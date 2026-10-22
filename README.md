@@ -135,7 +135,7 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification by dimensions and type, with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
 **The next actions** ([the alignment plan §4](docs/catalogue-alignment.md#4-order), revised 2026-10-22):
-1. **Protect and organize the work:** push the private workspace, CI, the decision register, a generated status report, and the agents' briefs and tools in WAG.
+1. **Protect and organize the work:** CI, the decision register, a generated status report, and the agents' briefs and tools in WAG. The private workspace is in place since 2026-10-22.
 2. **The owner sorts the open decisions** in the register: those of [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make), and the scheme changes the tier-1 entries leave open ([review part 12 §5](docs/review-2026-10-22-part12.md#5-what-is-left-open)), starting with those that block the game or verification.
 3. **The game's fields** for the 9 game schemes, and the generator that reproduces today's NASCQ from the catalogue.
 4. **The verification protocol,** then a person verifies the 33 tier-1 entries (about 10–15 hours), while the version 4 guidelines are drafted.

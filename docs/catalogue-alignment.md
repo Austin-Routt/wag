@@ -246,7 +246,7 @@ As [`process.md`](process.md) §4 describes:
 ### M. The process and its infrastructure
 
 As [`process.md`](process.md) describes:
-1. **The private workspace** with its session-start hook. Done on 2026-10-22, except the push, which waits for the owner to create the repository.
+1. **The private workspace** with its session-start hook. Done on 2026-10-22: `github.com/Austin-Routt/wag-workspace`, restored by the hook in a test from GitHub.
 2. **CI on every push,** once the owner agrees.
 3. **The decision register,** gathering every open decision, sorted by category and by what it blocks.
 4. **The generated status report.** Documents link to it instead of copying figures.
@@ -263,7 +263,7 @@ As [`process.md`](process.md) describes:
 Revised on 2026-10-22 ([part 13](review-2026-10-22-part13.md)): the infrastructure first, so that no work is lost or repeated; then the game's fields, so that verification covers them too.
 
 1. **Protect and organize the work** (M):
-   - the workspace pushed;
+   - the workspace (done 2026-10-22);
    - CI;
    - the decision register;
    - the status report;
