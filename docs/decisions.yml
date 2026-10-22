@@ -755,13 +755,32 @@ decisions:
     predicate, bad_outweighs(A,G) (bad consequences outweigh the good one
     cited) in positive_consequences and good_outweighs(A,G) in the negative
     schemes (B in 33.3), a sided flip under D053? 33.4, whose conclusion is
-    prudential(X), is checked separately.
+    prudential(X), is checked separately. The owner chose this (option C;
+    the others were A, keep other_consequences(A); B, other_consequences(A,G);
+    D, no exception, the third question answered only by a rebuttal) on
+    2026-10-22, to be made once the proposal D055-D059 has been reviewed.
   category: scheme
   blocks: [verification, game]
   decider: owner
   priority: 2
   status: open
-  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, owner decisions of 2026-10-22", "docs/proposals/D001-D028-D029.md"]
+  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, owner decisions of 2026-10-22", "docs/proposals/D001-D028-D029.md", "docs/proposals/D055-D059.md"]
+
+- id: D059
+  title: The prudential form's conclusion meets nothing
+  question: >-
+    negative_consequences_prudential (33.4) concludes prudential(X), "you
+    ought prudentially to do X", which no other scheme concludes or uses, so a
+    prudential argument neither supports nor meets any practical claim about X.
+    Should it conclude should_be_performed(X), the game's practical
+    conclusion, as the slippery slope's base case and the practical analogies
+    now do? Proposed with D055 in proposal D055-D059.
+  category: vocabulary
+  blocks: [verification, game]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/proposals/D055-D059.md"]
 
 - id: D057
   title: Analogy's reach in the game
@@ -899,6 +918,23 @@ decisions:
   priority: 3
   status: open
   docs: ["docs/proposals/D001-D028-D029.md"]
+
+- id: D060
+  title: Argument from threat names the wrong variables
+  question: >-
+    walton.yml's threat concludes not_bring_about(X), with X the action the
+    respondent is warned against, and cited_bad_consequences(X) uses X the
+    same way; but position_to_know(X) ("I am in position to bring about X")
+    and assert_bad(X,C) ("I will see to it that X occurs if you bring about
+    C") put X where the threatened consequence belongs. Should they read
+    position_to_know(C) and assert_bad(C,X)? Found while drafting proposal
+    D055-D059, whose example 14 renders it.
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/proposals/D055-D059.md"]
 
 # --- Decided ------------------------------------------------------------------
 
