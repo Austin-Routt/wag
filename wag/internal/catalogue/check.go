@@ -45,6 +45,10 @@ type Options struct {
 	// RegisterView is set, the file there must be its current view.
 	Register     *Register
 	RegisterView string
+	// Candidates is the candidates registry; nil skips its checks. When
+	// CandidatesView is set, the file there must be its current view.
+	Candidates     *CandidateRegister
+	CandidatesView string
 }
 
 // DefaultOptions are the thresholds of the copy check.
@@ -54,13 +58,14 @@ func DefaultOptions() Options {
 
 // Report is the result of a check.
 type Report struct {
-	Findings []Finding
-	Entries  int
-	Progress progress
-	Tier1    progress
-	Copied   bool      // whether the copy check ran
-	Texts    int       // our texts the copy check compared
-	Register *Register // the decision register, when it was checked
+	Findings   []Finding
+	Entries    int
+	Progress   progress
+	Tier1      progress
+	Copied     bool               // whether the copy check ran
+	Texts      int                // our texts the copy check compared
+	Register   *Register          // the decision register, when it was checked
+	Candidates *CandidateRegister // the candidates registry, when it was checked
 }
 
 // Errors counts the errors.
@@ -82,6 +87,15 @@ func (r *Report) Summary() string {
 	if r.Register != nil {
 		n, byP := r.Register.Open()
 		s += fmt.Sprintf("; open decisions: %d (priority 1: %d, 2: %d, 3: %d)", n, byP[1], byP[2], byP[3])
+	}
+	if cr := r.Candidates; cr != nil {
+		ready := 0
+		for i := range cr.Candidates {
+			if cr.Candidates[i].Stage(cr.Threshold) == StageReady {
+				ready++
+			}
+		}
+		s += fmt.Sprintf("; candidates: %d (%d ready)", len(cr.Candidates), ready)
 	}
 	return s
 }
@@ -195,6 +209,22 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 			view, err := os.ReadFile(opt.RegisterView)
 			if err != nil || !bytes.Equal(bytes.ReplaceAll(view, []byte("\r\n"), []byte("\n")), RegisterMarkdown(opt.Register)) {
 				r.Findings = append(r.Findings, Finding{File: RegisterView, Error: true, Msg: "out of date: run wag-cli --catalogue-gen"})
+			}
+		}
+	}
+	if opt.Candidates != nil {
+		r.Candidates = opt.Candidates
+		r.Findings = append(r.Findings, CheckCandidates(opt.Candidates, opt.Register, src)...)
+		if opt.Book != nil {
+			c := &checker{r: r, file: CandidatesFile, src: src, ids: ids}
+			for _, t := range candidateTexts(opt.Candidates) {
+				c.copyCheck(t.where, t.text, opt)
+			}
+		}
+		if opt.CandidatesView != "" {
+			view, err := os.ReadFile(opt.CandidatesView)
+			if err != nil || !bytes.Equal(bytes.ReplaceAll(view, []byte("\r\n"), []byte("\n")), CandidatesMarkdown(opt.Candidates, opt.Register, src)) {
+				r.Findings = append(r.Findings, Finding{File: CandidatesView, Error: true, Msg: "out of date: run wag-cli --catalogue-gen"})
 			}
 		}
 	}
@@ -535,24 +565,29 @@ func (c *checker) copies(e *Entry, opt Options) {
 		texts = append(texts, struct{ where, text string }{"discrepancy " + d.About + " decision", d.Decision})
 	}
 	for _, t := range texts {
-		if strings.TrimSpace(t.text) == "" {
-			continue
-		}
-		c.r.Texts++
-		if g := opt.Book.Shares(t.text, opt.CopyRun); g != "" {
-			c.err("%s reproduces the book: %d words in a row (%q)", t.where, opt.CopyRun, g)
-			continue
-		}
-		if r, s := opt.Book.Closest(t.text, opt.ShortText); r >= opt.CopySimilar {
-			c.err("%s reproduces a book sentence (%.0f%% the same words, in order): %q", t.where, 100*r, s)
-			continue
-		} else if r >= opt.WarnSimilar {
-			c.warn("%s is close to a book sentence (%.0f%%): %q; rephrase it", t.where, 100*r, s)
-			continue
-		}
-		if g := opt.Book.Shares(t.text, opt.WarnRun); g != "" {
-			c.warn("%s shares %d words in a row with the book (%q); rephrase it", t.where, opt.WarnRun, g)
-		}
+		c.copyCheck(t.where, t.text, opt)
+	}
+}
+
+// copyCheck compares one text of ours with the book.
+func (c *checker) copyCheck(where, text string, opt Options) {
+	if strings.TrimSpace(text) == "" {
+		return
+	}
+	c.r.Texts++
+	if g := opt.Book.Shares(text, opt.CopyRun); g != "" {
+		c.err("%s reproduces the book: %d words in a row (%q)", where, opt.CopyRun, g)
+		return
+	}
+	if r, s := opt.Book.Closest(text, opt.ShortText); r >= opt.CopySimilar {
+		c.err("%s reproduces a book sentence (%.0f%% the same words, in order): %q", where, 100*r, s)
+		return
+	} else if r >= opt.WarnSimilar {
+		c.warn("%s is close to a book sentence (%.0f%%): %q; rephrase it", where, 100*r, s)
+		return
+	}
+	if g := opt.Book.Shares(text, opt.WarnRun); g != "" {
+		c.warn("%s shares %d words in a row with the book (%q); rephrase it", where, opt.WarnRun, g)
 	}
 }
 

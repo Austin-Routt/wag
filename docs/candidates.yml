@@ -1,0 +1,1788 @@
+# The candidates registry (docs/process.md §8): schemes, questions,
+# exceptions and links that WAG does not have yet but that the literature,
+# data or play suggest it may need. docs/candidates.md is generated from it
+# by `wag-cli --catalogue-gen`; `wag-cli --catalogue-check` checks it.
+#
+# Fields:
+#   groups: id (lower-case words joined by hyphens); name; families
+#     (families.json ids; none: across families); about (what the members
+#     share, and how they differ).
+#   candidates: id (C and three digits, never reused); name; kind (scheme,
+#     question, exception, link); group; decision (the register's decision
+#     that settles it, needed once it meets the threshold); outcome (date,
+#     by, result: reject, merge, domain or add; into; recorded), once taken;
+#     found (who found it, when); confidence (the finder's: high, medium,
+#     low); what; compares and concludes (short, for the group's table);
+#     closest (item, why it falls short); related (candidate, how); sources
+#     (the literature, the book's and ND's pages: references and our
+#     paraphrase, never their text); sightings (source: kialo, game or
+#     annotation; ref; place, unless a Kialo ref gives it; fit: clean or
+#     strain; archived: a Kialo claim outside the discussion's active
+#     scope; note, in our words; found; verified, by a second reader who
+#     read the text against the note); exempt (why the threshold does not
+#     apply: a gap shown by analysis, not a pattern in data); sketch (the candidate as walton.yml
+#     might have it: schemes, language, questions, checked like a
+#     proposal's candidates, never applied); examples (as in a proposal; an
+#     example of use is coded with the sketch, a near miss with a scheme
+#     WAG has, near_miss_of naming the sketch); engine; needs; open.
+#
+# Sketches of questions and exceptions for the consequence schemes are
+# written on the forms of proposal D055-D059, version 2 (bad_outweighs,
+# good_outweighs, strongly_occur(X,C)), and define those templates; once
+# D055 is applied, the check reports them as already in walton.yml, and
+# they are removed here.
+
+note: |-
+  This is the registry of [`process.md`](process.md) §8. Candidates come
+  from three places: the literature, data (Kialo, the gold, annotation
+  runs) and play ("I wanted to say X and could not"). A review, an annotation
+  run or a play report records each candidate in this file's shape. A new
+  sighting of an existing candidate is added to that candidate; the check
+  notes a claim listed under two candidates.
+
+  Each candidate is placed in a family of the scheme families
+  (`wag/data/schemes/families.json`) and in a pattern group. A group's table
+  sets its members side by side: what each compares or asks, what it
+  concludes, what it comes closest to, how often it has been seen, and how
+  far it has got. Kialo claims are cited by id with our own note; their
+  text stays in the private workspace, and the book is cited by page.
+
+  Not candidates yet, and recorded in the catalogue's analogy entries:
+  several source cases folded into one (Carneades does not add arguments
+  up); proportional analogies; imagined sources; and a precedent cited for
+  its rule, which is exception_to_rule (whose exception reads a rule as a
+  case: D058).
+
+threshold:
+  sightings: 3
+  places: 2
+  decision: D047
+
+groups:
+  - id: case-comparison
+    name: Comparing cases
+    families: [F04]
+    about: >-
+      Arguments from one case to another. Analogy relies on the cases being
+      alike; the candidate relies on one case being a stronger case than the
+      other for the same kind of claim.
+
+  - id: inference-attacks
+    name: Attacking an argument's inference
+    about: >-
+      Replies that do not deny an argument's premises or conclusion but say
+      that its premises do not support its conclusion: by citing a parallel
+      argument whose conclusion is plainly unacceptable (C002), or by saying
+      that a reason for doing something is no reason for believing something
+      (C011). Both conclude, in WAG's engine, that the argument is undercut.
+
+  - id: weighing
+    name: Weighing consequences
+    families: [F15]
+    about: >-
+      Arguments that set consequences against each other. They differ in
+      what is set against what: one consequence against another cited by
+      the other side (C003), all of an action's consequences against all
+      (C004), the consequences of two courses when one must be taken (C010),
+      or a harm against the good it is needed for (C013). They differ also
+      in what they conclude: D055's exceptions (C003, C013), a side-level
+      exception (C004), or a practical claim (C010).
+
+  - id: magnitude-risk
+    name: Magnitude and risk
+    families: [F15]
+    about: >-
+      How bad a consequence is, beside how likely it is. The book's
+      questions on consequences ask about likelihood and evidence; these ask
+      whether the consequence matters enough (C005), and argue that a
+      catastrophic, irreversible harm outweighs a small likelihood (C008).
+
+  - id: changing-the-action
+    name: Changing the action
+    families: [F15]
+    about: >-
+      Replies that keep the action but change how it is done, or add a
+      measure to it, so that a cited bad consequence no longer follows.
+
+  - id: values-against-consequences
+    name: Values and rights against consequences
+    families: [F09, F15]
+    about: >-
+      A consequence set against a right, a duty or a value, not against
+      another consequence: the action is ruled out, or in, whatever its
+      consequences.
+
+  - id: threat-or-warning
+    name: Threat or warning
+    families: [F15]
+    about: >-
+      Whether a warning of bad consequences is a prudential argument or an
+      indirect threat: the difference is whether the speaker can bring the
+      consequence about and means to.
+
+  - id: practical-conclusions
+    name: Where practical conclusions meet
+    families: [F10, F15]
+    about: >-
+      Practical schemes whose conclusions no other scheme concludes or uses,
+      so that their arguments meet nothing in a debate about the same
+      action.
+
+  - id: predicting-agents
+    name: Predicting what agents will do
+    families: [F10, F14]
+    about: >-
+      Predictions of an agent's action from the agent's reasons: what the
+      agent expects an action to bring and wants. They conclude a
+      prediction, not a recommendation.
+
+candidates:
+  # --- case-comparison ---------------------------------------------------------
+  - id: C001
+    name: Argument a fortiori
+    kind: scheme
+    group: case-comparison
+    decision: D056
+    found:
+      - "the first independent review of proposal D001-D028-D029, 2026-10-22"
+      - "the second independent review of that proposal: more Kialo sightings"
+    confidence: high
+    what: >-
+      A claim holds in one case, and another case is a stronger case for the
+      same kind of claim, so the claim holds there all the more ("if a
+      student may borrow ten books, a professor certainly may"); negatively,
+      if it fails for the stronger case it fails still more for the weaker
+      ("not enough for a state, let alone a country"). The cases are ordered
+      on the respect that matters, not alike.
+    compares: two cases, one stronger for the claim than the other
+    concludes: the claim, about the second case
+    closest:
+      - item: analogy (7)
+        why: >-
+          Its premise is that the cases are similar, which is false here,
+          and a difference between them is the reason, not a defeater.
+      - item: argument from precedent (exception_to_rule)
+        why: A precedent applies a rule to a like case; nothing is ordered.
+    sources:
+      - "The book: not one of the compendium's schemes; not mentioned in pp. 1-138 (the OCR searched)."
+      - "The classical argument from the more and the less; a fortiori as an argument of legal interpretation (Walton, Sartor and Macagno, Statutory Interpretation, 2021)."
+      - "'A Refined Concept of A Fortiori Arguments for Argumentation Theory', which proposes four critical questions (not yet read here)."
+    sightings:
+      - source: kialo
+        ref: "5637.347"
+        fit: clean
+        archived: true
+        note: If separating parasitic conjoined twins is allowed, then ending a pregnancy, when the foetus is less formed still, should be too.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.186"
+        fit: clean
+        note: The negated form; insect farming could not feed one US state, let alone a country.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.8449"
+        fit: strain
+        archived: true
+        note: In a young universe we could not see most of our own galaxy, let alone others; an a fortiori step inside an argument from evidence.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.7265"
+        fit: clean
+        archived: true
+        note: Good parents let a child suffer a little for a greater good, so how much more would a perfect God; it also argues the greater good (C013).
+        found: session check of C013's sightings, 2026-10-22
+        verified: session check, 2026-10-22
+    sketch:
+      note: >-
+        As in proposal D001-D028-D029's candidates. It shares analogy's
+        directional exception: a difference that tells against the claim
+        defeats both, and the stronger-case difference, which favours the
+        claim, defeats neither.
+      schemes:
+        - id: a_fortiori
+          meta:
+            title: Argument a fortiori (candidate)
+            source: Candidate C001, not in the compendium; see D056.
+          variables: [P1, P2, C1, C2]
+          premises: ["in_case(P1,C1)", "stronger_case(C2,C1,P2)", "corresponds(P1,P2)"]
+          assumptions: []
+          exceptions: ["difference_against(C1,C2,P2)"]
+          conclusions: ["P2"]
+      language:
+        stronger_case/3: "%s is a stronger case than %s for %s."
+      questions:
+        a_fortiori:
+          - {id: walton/difference_against, asks: "Does a difference between the cases, other than the one the argument relies on, tell against the claim here?", target: "difference_against(C1,C2,P2)"}
+    examples:
+      - scheme: a_fortiori
+        title: If not for a dog, then not for a child
+        invented: true
+        use: argument
+        text: We would never leave a dog alone in a hot car for an hour; all the more, we must not leave a child there for ten minutes.
+        bindings:
+          C1: a dog left in a hot car for an hour
+          C2: a child left in a hot car for ten minutes
+          P1: leaving the dog in the hot car for an hour is wrong
+          P2: leaving the child in the hot car for ten minutes is wrong
+        attacks:
+          - question: CQ:premise_acceptable
+            target: stronger_case(C2,C1,P2)
+            text: Ten minutes is far shorter than an hour; it is not clear that the child's case is the stronger one.
+      - scheme: a_fortiori
+        title: A professor's loans
+        invented: true
+        use: argument
+        text: If a first-year student may borrow ten books from the library, a professor certainly may.
+        bindings:
+          C1: a first-year student borrowing ten books
+          C2: a professor borrowing ten books
+          P1: a first-year student may borrow ten books
+          P2: a professor may borrow ten books
+        attacks:
+          - question: walton/difference_against
+            text: Professors keep books for years; ten books lent to a professor are ten books gone from the shelves for the whole term.
+      - scheme: a_fortiori
+        title: Bread that would have been thrown away
+        invented: true
+        use: argument
+        form: negated
+        text: The court did not jail the man who stole bread to feed his children; still less should it jail the man who took bread that was about to be thrown away.
+        bindings:
+          C1: stealing bread to feed one's children
+          C2: taking bread that was about to be thrown away
+          P1: jailing the man who stole bread to feed his children was not justified
+          P2: jailing the man who took bread about to be thrown away is not justified
+        note: The negated form, with the claim negated in the bindings, as in analogy's.
+      - scheme: analogy
+        title: Staff loans, by likeness
+        invented: true
+        use: near-miss
+        near_miss_of: a_fortiori
+        text: Students may borrow ten books, and library staff are in the same position as students when they borrow, so staff may borrow ten books too.
+        bindings:
+          C1: a student borrowing ten books
+          C2: a member of staff borrowing ten books
+          P1: a student may borrow ten books
+          P2: a member of staff may borrow ten books
+        note: The cases are said to be alike, not ordered; nothing makes the staff member's case the stronger one, so it is analogy. Compare example 2.
+    engine:
+      - "Proposal D001-D028-D029's version 3 test (TestV3AFortioriBesideAnalogy, in the private workspace) and its second review's R13: a difference that tells against the claim defeats an a fortiori and an analogy argued for the same claim from the same cases; the stronger-case difference defeats neither."
+      - "With version 2's undirected exception it would have forced a change to analogy (the second review's R10)."
+    needs:
+      - "A walton.yml addition through walton-clean/tools/edits.py (ADDITIONS) and its template."
+      - "A catalogue entry with no book entry, in family F04, with questions drafted from the literature."
+      - "The game later, at workstream E; it concludes a bare claim, so D057 applies to it."
+    open:
+      - "'A stronger case than C1 for P2' reads circularly, since P2 is already the claim about C2: should the respect in which C2 is stronger be a variable of its own?"
+      - "'Other than the one it relies on' lives only in the question's text: is that enough, or does the exception need it in its formula?"
+      - "Can annotators code the negated form without confusing the two directions?"
+
+  # --- inference-attacks -------------------------------------------------------
+  - id: C002
+    name: Refutation by parallel argument
+    kind: scheme
+    group: inference-attacks
+    decision: D056
+    found:
+      - "the first independent review of proposal D001-D028-D029, 2026-10-22"
+      - "the second independent review of that proposal: more Kialo sightings"
+    confidence: high
+    what: >-
+      An argument is attacked by citing a parallel argument of the same
+      form, with plainly acceptable premises and a plainly unacceptable
+      conclusion; the attacked argument's inference is thereby undercut ("by
+      that reasoning, destroying an acorn would be as bad as felling an
+      oak"). Its conclusion is about an argument, not a case. Also called
+      refutation by logical analogy, or by parity of reasoning.
+    compares: the attacked argument with a parallel one of the same form
+    concludes: the attacked argument is undercut
+    closest:
+      - item: analogy (7), played as an undercutter
+        why: >-
+          In play the game already accepts analogy bound to the attacked
+          argument's undercutter; in annotation, analogy about cases can only
+          rebut the conclusion, and the parallel argument it cites appears in
+          no formula.
+    related:
+      - candidate: C011
+        how: Both undercut an argument's inference rather than deny its premises or conclusion.
+    sources:
+      - "The book: no scheme in the compendium; pp. 54-55 discuss Govier's a priori analogy, the family it belongs to."
+      - "Govier's logical analogies; Woods and Hudak's parity of reasoning; Hitchcock's counterexampling parallel arguments; Juthe's refutation by parallel argument (Argumentation)."
+    sightings:
+      - source: kialo
+        ref: "5637.12201"
+        fit: clean
+        archived: true
+        note: By the same logic destroying an acorn would equal felling a tree; it answers 5637.12151.
+        found: first review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.18591"
+        fit: clean
+        archived: true
+        note: Explaining life by selection, physics and chance is like explaining airplanes by wind and chance; ridicule by parity.
+        found: first review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.2296"
+        fit: clean
+        archived: true
+        note: The same reasoning would condemn condoms as denying a potential child; 5637.3072 replies with a feature the parallel lacks, the sketch's exception.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.22874"
+        fit: clean
+        note: Evidence that one suspect is innocent does not show another guilty; in the same way, disproving materialism does not prove theism.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.19533"
+        fit: strain
+        note: If murder were wrong only for harming the species, failing to have a child would be as wrong; a reductio of a principle more than a parallel argument.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.3697"
+        fit: clean
+        archived: true
+        note: By the same claim, emergency rooms would encourage head injuries, yet no one would close them.
+        found: second review of D001-D028-D029
+        verified: session check, 2026-10-22
+    sketch:
+      note: >-
+        As in proposal D001-D028-D029's candidates. A names an argument on
+        the board, which walton.yml's formulas never do.
+      schemes:
+        - id: parallel_argument_refutation
+          meta:
+            title: Refutation by parallel argument (candidate)
+            source: Candidate C002, not in the compendium; see D056.
+          variables: [A, B]
+          premises: ["same_form(B,A)", "acceptable_premises(B)", "unacceptable_conclusion(B)"]
+          assumptions: []
+          exceptions: ["form_difference(A,B)"]
+          conclusions: ["undercut(A)"]
+      language:
+        same_form/2: "%s has the same form as %s."
+        acceptable_premises/1: "The premises of %s are plainly acceptable."
+        unacceptable_conclusion/1: "The conclusion of %s is plainly unacceptable."
+        form_difference/2: "%s relies on a feature that %s lacks."
+        undercut/1: "%s does not support its conclusion."
+      questions:
+        parallel_argument_refutation:
+          - {id: walton/form_difference, asks: "Does the attacked argument rely on a feature that the parallel argument lacks?", target: "form_difference(A,B)"}
+    examples:
+      - scheme: parallel_argument_refutation
+        title: Acorns and oaks
+        kialo: "5637.12201"
+        use: argument
+        text: By the same logic, destroying an acorn should be morally equivalent to destroying a tree. As these are not morally equivalent, the former case is likewise not morally equivalent.
+        bindings:
+          A: argument a12 on the board, that a zygote is a whole human, so destroying it is immoral
+          B: the argument that an acorn is a whole oak, so destroying an acorn is as bad as felling an oak
+        attacks:
+          - question: walton/form_difference
+            text: A zygote may become a being with interests and a life of its own; an acorn becomes a tree with neither. The attacked argument relies on that.
+      - scheme: parallel_argument_refutation
+        title: Airplanes made by wind and chance
+        kialo: "2629.18591"
+        use: argument
+        text: Arguing that natural selection, the laws of physics, and chance explain the origins of life is akin to claiming that airplanes were created by wind and chance alone, and not by the work of a creator.
+        bindings:
+          A: argument a7 on the board, that natural selection, physical law and chance explain the origin of life
+          B: the argument that wind and chance explain the origin of airplanes
+        attacks:
+          - question: CQ:premise_acceptable
+            target: same_form(B,A)
+            text: Airplanes do not reproduce; natural selection works only on things that copy themselves with variation, so the two arguments do not share a form.
+      - scheme: parallel_argument_refutation
+        title: Crashes near home, deaths in bed
+        invented: true
+        use: argument
+        text: You say that most crashes happen within five miles of home, so those are the most dangerous roads. By that reasoning, since most people die in bed, beds would be the most dangerous place to be.
+        bindings:
+          A: argument a3 on the board, that most crashes happen within five miles of home, so those roads are the most dangerous
+          B: the argument that most people die in bed, so beds are the most dangerous place to be
+        note: Both arguments count events without asking how much time is spent where; the parallel argument shows the flaw by giving it an absurd conclusion.
+      - scheme: analogy
+        title: Acorns, as a counter-analogy
+        invented: true
+        use: near-miss
+        near_miss_of: parallel_argument_refutation
+        text: Destroying an acorn is nothing like felling an oak, and a zygote stands to a person as an acorn stands to an oak, so destroying a zygote is nothing like killing a person.
+        bindings:
+          C1: an acorn being destroyed
+          C2: a zygote being destroyed
+          P1: destroying the acorn is not as bad as felling an oak
+          P2: destroying the zygote is not as bad as killing a person
+        note: It argues for the opposite claim, a rebuttal, rather than showing that the attacked argument's reasoning fails; compare example 1.
+    engine:
+      - "The second review of D001-D028-D029 (R9, R9b, R9c, R12): it works as an answer at the argument locus; it undercuts the attacked argument, and its own exception, once proven, reinstates it."
+      - "As a support move it never applies: the adapter files its main argument as an exception argument, with no owner and no presumed premises. The move check (S9) refuses it at the inference locus, since it has no answer variable."
+      - "Bound to a description, A names no argument; A must be bound to the attacked argument's id."
+    needs:
+      - "D056 chooses: (a) analogy played as an undercutter (no new scheme; templates that read well with an argument as a case; an annotation rule); or (b) a scheme of its own, which needs code so that S9 returns undercut(<target>) at the inference locus and the move check binds A to the attacked argument."
+    open:
+      - "'The premises of B are plainly acceptable' strains when B is a pattern, and is false when B shares the very principle under attack (a reductio, 2629.19533): the same candidate or another?"
+      - "Ridicule by parity (2629.18591) is often a weak or fallacious use; the exception is the defence, and the dialogue type should set its weight."
+      - "The book's a priori analogy (pp. 54-55) is the source to read before writing its questions."
+
+  - id: C011
+    name: Appeal to consequences, as an objection
+    kind: question
+    group: inference-attacks
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: low
+    what: >-
+      The objection that a consequence argument is offered for the truth of
+      a claim: that one should believe something, or that it would be bad if
+      it were false, is no reason to think it true. In the game, S9 already
+      keeps a consequence scheme from concluding a factual statement, but no
+      question lets a player raise the objection, which Kialo users raise by
+      name.
+    compares: a reason to act (or believe) with a reason to think true
+    concludes: the argument is undercut, as support for a factual claim
+    closest:
+      - item: S9 (game-rules.md)
+        why: It refuses the move in the game; it does not let a player object to it in annotation or argue about it.
+      - item: the consequence entries' dialogue-type notes
+        why: They mark inquiry as a type where the scheme is suspect, but name no objection.
+    related:
+      - candidate: C002
+        how: Both undercut an argument's inference.
+      - candidate: C014
+        how: Both concern where a practical conclusion may meet a claim.
+    sources:
+      - "ND pp. 176-177: the argument ad consequentiam, and when it is fallacious."
+    sightings:
+      - source: kialo
+        ref: "2629.18670"
+        fit: clean
+        note: Even if one should believe in a god, that is no reason to be convinced one exists; it answers 2629.17573, a net-benefit argument for belief.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.19027"
+        fit: clean
+        note: Arguing for God's existence from how bad its absence would be is named as the appeal to consequences; it answers 2629.3501.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    open:
+      - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion."
+      - "Only one discussion so far (on God's existence); the others are practical debates, where the objection rarely arises."
+
+  # --- weighing ----------------------------------------------------------------
+  - id: C003
+    name: Weighing an opposite consequence against a cited one
+    kind: scheme
+    group: weighing
+    decision: D064
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: high
+    what: >-
+      An argument that a consequence H of an action matters more than the
+      consequence G that an argument of the other sign cites, so that the
+      other argument does not carry. It is the claim behind D055's sided
+      exceptions, argued with a scheme tied to H rather than with Other.
+    compares: one consequence of the action against one cited by the other side
+    concludes: the other argument's exception (bad_outweighs or good_outweighs)
+    closest:
+      - item: Other, concluding D055's exception
+        why: >-
+          It carries the claim but not its link to H, so the weighing claim
+          survives the loss of the consequence it relies on.
+      - item: negative practical reasoning (26.2), more_serious_consequences/2
+        why: It compares consequences only for acting on a presumption, inside another scheme.
+      - item: 33/CQ3 as a rebuttal (D055)
+        why: A plain opposite consequence is weighed by the scheme weights, which cannot say that one consequence matters more.
+    related:
+      - candidate: C004
+        how: The same comparison made globally, naming no consequence.
+      - candidate: C013
+        how: C003 with a premise that the harm is needed for the good.
+      - candidate: C010
+        how: C010 compares the consequences of two courses, not two consequences of one.
+      - candidate: C005
+        how: How much a consequence matters is what C003's comparison and C005's question both turn on.
+    sources:
+      - "ND p. 159: the evaluation of consequences as a comparative weighing of the good against the bad; p. 168: the course followed by the lesser evil, after Aristotle; p. 170: the bad outweighing the good."
+    sightings:
+      - source: kialo
+        ref: "13292.127"
+        fit: clean
+        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's secondary instance).
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.43"
+        fit: clean
+        note: Revenue is not why the tax is wanted; sustainability and animal welfare press harder than the lost revenue.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.12239"
+        fit: clean
+        note: Good relationships also last longer without access to abortion, and that benefit may outweigh bad relationships enduring.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14031"
+        fit: strain
+        note: Bans meant to stop selective abortion cause more harm to disabled pregnant people; a comparison plus a new consequence.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.357"
+        fit: clean
+        archived: true
+        note: One person's hardship does not outweigh the benefit to society of a new life.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.239"
+        fit: strain
+        archived: true
+        note: Death is worse than hardship, so hardship cannot excuse ending a life; a consequence weighed against a life, close to C007.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: >-
+        Gated and engine-tested by the review (OUT/alternative.yml there). The
+        two are a polarity pair under D053. On D055-D059 version 2's
+        templates.
+      schemes:
+        - id: bad_outweighs_good
+          meta:
+            title: Weighing a bad consequence against a good one (candidate)
+            source: Candidate C003, not in the compendium.
+          variables: [A, H, G]
+          premises: ["brings_about(A,H)", "bad(H)", "matters_more(H,G)"]
+          assumptions: []
+          exceptions: []
+          conclusions: ["bad_outweighs(A,G)"]
+        - id: good_outweighs_bad
+          meta:
+            title: Weighing a good consequence against a bad one (candidate)
+            source: Candidate C003, not in the compendium.
+          variables: [A, H, G]
+          premises: ["brings_about(A,H)", "good(H)", "matters_more(H,G)"]
+          assumptions: []
+          exceptions: []
+          conclusions: ["good_outweighs(A,G)"]
+      language:
+        matters_more/2: "%s matters more than %s."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        bad_outweighs_good:
+          - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
+          - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
+        good_outweighs_bad:
+          - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
+          - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
+    examples:
+      - scheme: bad_outweighs_good
+        title: Starvation against healthier eating
+        kialo: "13292.127"
+        use: answer
+        answers: 33/CQ3 of 13292.115, the positive consequences argument for the meat tax; it concludes that argument's exception.
+        text: Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.
+        bindings:
+          A: governments putting a tax on meat
+          H: starvation from reduced access to meat
+          G: less unhealthy meat consumption
+        attacks:
+          - question: 33/CQ1
+            text: The tax would raise the price of meat a little; in the countries that would adopt it, no one starves for lack of meat.
+        note: Its Kialo parent is 13292.7, but it weighs against 13292.115's consequence, so it is re-parented there.
+      - scheme: good_outweighs_bad
+        title: Sustainability against lost revenue
+        kialo: "13292.43"
+        use: answer
+        answers: 33/CQ3 of 13292.9, the negative consequences argument that the tax would cut revenue; it concludes that argument's exception.
+        text: Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.
+        bindings:
+          A: governments putting a tax on meat
+          H: progress on sustainability and animal welfare
+          G: tax revenues falling
+      - scheme: bad_outweighs_good
+        title: The mobile library
+        invented: true
+        use: argument
+        text: Opening on Sundays would cost the housebound their mobile library, and that matters more than a quiet room for shift workers.
+        bindings:
+          A: the council opening the branch library on Sundays
+          H: housebound readers losing the mobile library
+          G: shift workers having a quiet place to study
+        attacks:
+          - question: C003/Q1
+            text: Twelve people use the mobile van; four hundred shift workers have asked for Sunday opening.
+      - scheme: good_outweighs_bad
+        title: Attention in lessons
+        invented: true
+        use: argument
+        text: Pupils paying attention in every lesson matters more than the rare day a pupil cannot reach a parent at once.
+        bindings:
+          A: the school banning phones
+          H: pupils paying better attention in lessons
+          G: pupils being unable to reach their parents in an emergency
+      - scheme: negative_consequences
+        title: Farm jobs, without a comparison
+        invented: true
+        use: near-miss
+        near_miss_of: bad_outweighs_good
+        text: A meat tax would cost thousands of jobs on livestock farms, so governments should not bring one in.
+        bindings:
+          A: governments putting a tax on meat
+          G: thousands of farm workers losing their jobs
+        note: It cites a bad consequence but compares it with nothing the other side cites, so it is a plain negative consequences argument, a rebuttal (D055's two routes).
+    engine:
+      - "The review of D055-D059 v1, test RD8: the weighing argument undercuts the positive argument; undermining brings_about(A,H) then takes down both the weighing argument and the negative argument citing H, and the positive argument is reinstated."
+    needs:
+      - "D055 applied first: its exceptions are what the weighing schemes conclude."
+      - "A walton.yml addition (two schemes and matters_more/2), catalogue entries in F15, a declared polarity pair (D053)."
+      - "In the game: an answer at the new exception-locus questions (workstream E), so a weighing claim is one move, not a rebuttal plus an Other argument."
+    open:
+      - "One scheme concluding D055's exception, or a form of 33/CQ3's question?"
+      - "How is matters_more judged: seriousness, number affected, reversibility (C005, C008)?"
+      - "A comparison with a class of consequences (13292.127) gives one instance per argument of the class: is that workable?"
+
+  - id: C004
+    name: Balance of consequences
+    kind: exception
+    group: weighing
+    decision: D064
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      A claim that, all told, an action's costs outweigh its benefits, or
+      the reverse, naming no single consequence. Under D055's sided
+      exceptions it has to be argued once against each argument of the other
+      side (D055-D059, example 17); a side-level exception would let one
+      proof answer them all.
+    compares: all of an action's consequences against all
+    concludes: a side-level exception (net_cost, net_benefit)
+    closest:
+      - item: D055's bad_outweighs(A,G) and good_outweighs(A,G)
+        why: Each names one consequence, so a global claim is many instances.
+      - item: sunk costs' future_losses_outweigh(A)
+        why: The same global form, but on one scheme and one side.
+      - item: today's other_consequences(A)
+        why: A global form too, but shared by both sides, which is D055's defect.
+    related:
+      - candidate: C003
+        how: C003 names the consequences it compares.
+    sources:
+      - "ND p. 170: a favourable or unfavourable balance of good over bad consequences."
+    sightings:
+      - source: kialo
+        ref: "13564.400"
+        fit: clean
+        note: Weighing the pros and cons, becoming transhuman may not be worth its costs.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14336"
+        fit: clean
+        note: Inequality worsens life for everyone, so a ban yields no net benefit; denies a balance claim.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.17573"
+        fit: clean
+        note: A religious life has a net positive effect on people; a balance claim, used for belief (see C011).
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.12666"
+        fit: strain
+        note: The good of saving a life outweighs any ethical cost of the abortion; global on one side, and the cost is the act's moral character.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: Sided side-level exceptions beside D055's, on D055-D059 version 2's forms.
+      schemes:
+        - id: positive_consequences_balance
+          meta:
+            title: Positive consequences with a balance exception (candidate)
+            source: Candidate C004.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "good(G)"]
+          assumptions: []
+          exceptions: ["bad_outweighs(A,G)", "net_cost(A)"]
+          conclusions: ["should_be_performed(A)"]
+        - id: negative_consequences_balance
+          meta:
+            title: Negative consequences with a balance exception (candidate)
+            source: Candidate C004.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "bad(G)"]
+          assumptions: []
+          exceptions: ["good_outweighs(A,G)", "net_benefit(A)"]
+          conclusions: ["¬should_be_performed(A)"]
+      language:
+        net_cost/1: "All told, the costs of the action %s outweigh its benefits."
+        net_benefit/1: "All told, the benefits of the action %s outweigh its costs."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        positive_consequences_balance:
+          - {id: C004/Q1, asks: "All told, do the costs of doing A outweigh its benefits?", target: "net_cost(A)"}
+        negative_consequences_balance:
+          - {id: C004/Q1, asks: "All told, do the benefits of doing A outweigh its costs?", target: "net_benefit(A)"}
+    examples:
+      - scheme: positive_consequences_balance
+        title: A bypass
+        invented: true
+        use: argument
+        text: A bypass would take the lorries out of the town centre, so the county should build it.
+        bindings:
+          A: the county building the bypass
+          G: lorries kept out of the town centre
+        attacks:
+          - question: C004/Q1
+            text: Count everything, the price, the lost farmland and three years of roadworks, and the bypass costs more than it gives.
+      - scheme: positive_consequences_balance
+        title: Longer lives through enhancement
+        invented: true
+        use: argument
+        text: Enhancing our bodies with technology would let people live far longer, so we should pursue it.
+        bindings:
+          A: people enhancing their bodies with technology
+          G: people living far longer
+        attacks:
+          - question: C004/Q1
+            text: As Kialo 13564.400 puts it in its own words, once the pros and cons are weighed the gain may not be worth what it costs to get there.
+      - scheme: negative_consequences_balance
+        title: Saturday school
+        invented: true
+        use: argument
+        text: Opening the school on Saturdays would wear the teachers out, so it should not be done.
+        bindings:
+          A: the school opening on Saturdays
+          G: the teachers being worn out
+        attacks:
+          - question: C004/Q1
+            text: Counting everything, the extra teaching, the free childcare and the catch-up for weaker pupils, the benefits outweigh the costs.
+      - scheme: positive_consequences
+        title: A stadium's trade
+        invented: true
+        use: near-miss
+        near_miss_of: positive_consequences_balance
+        text: The new stadium's benefits outweigh its costs, because it will bring forty home games a year of trade to local businesses.
+        bindings:
+          A: the city building the stadium
+          G: forty home games a year bringing trade to local businesses
+        note: It uses the words of a balance claim but argues from one consequence, so it is positive consequences; the weighing words are its own claim about its exception.
+    engine:
+      - "The review of D055-D059 v1, test RD2: under D055's sided exceptions a balance claim proven against one positive argument leaves the others standing; the claim stays tied until each is answered."
+    needs:
+      - "D055 applied, and D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side."
+    open:
+      - "Side-level exceptions, or a scheme concluding ¬should_be_performed(A) from net_cost(A), weighed like any rebuttal? The first is closer to how Kialo uses the claim."
+      - "If both net_cost(A) and a weighing against one consequence are available, which should annotators choose?"
+
+  - id: C010
+    name: The lesser evil
+    kind: scheme
+    group: weighing
+    decision: D064
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      Of two courses, one of which must be taken and both of which have bad
+      consequences, take the one whose consequences are less bad. The
+      comparison is between two courses, not between consequences of one,
+      and its weak point is a third course (slipping between the horns).
+    compares: the bad consequences of two courses, one of which must be taken
+    concludes: the less bad course should be taken
+    closest:
+      - item: pragmatic argument from alternatives (34)
+        why: It says that one course is bad, so the other should be taken; it compares nothing.
+      - item: C003, weighing
+        why: C003 weighs two consequences of one action.
+      - item: alternative_normative (13.2)
+        why: It reasons from requirements, not consequences.
+    related:
+      - candidate: C003
+        how: Both compare how bad consequences are; C010 compares courses.
+    sources:
+      - "ND p. 153: a problem posed as a dilemma, each course with seriously negative consequences; pp. 160-161: the dilemma, and slipping between or grasping the horns; p. 168: the course followed by the lesser evil, after Aristotle."
+    sightings:
+      - source: kialo
+        ref: "5637.208"
+        fit: clean
+        note: When the woman's life is at risk and the foetus cannot survive, abortion is better than letting both die.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14334"
+        fit: strain
+        note: If equality costs allowing abortion, an unequal society may be better; two bad courses compared, also a weighing.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.7306"
+        fit: clean
+        note: God may have chosen suffering over another way to the same goal that would be worse.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      schemes:
+        - id: lesser_evil
+          meta:
+            title: The lesser evil (candidate)
+            source: Candidate C010, not in the compendium.
+          variables: [A, B, G1, G2]
+          premises: ["either(A,B)", "brings_about(A,G1)", "brings_about(B,G2)", "bad(G1)", "bad(G2)", "less_bad(G1,G2)"]
+          assumptions: []
+          exceptions: ["third_option(A,B)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        either/2: "Either %s or %s must be done."
+        less_bad/2: "%s is less bad than %s."
+        third_option/2: "There is a course other than %s and %s."
+      questions:
+        lesser_evil:
+          - {id: C010/Q1, asks: "Is there a third course, so that neither A nor B need be taken?", target: "third_option(A,B)"}
+          - {id: C010/Q2, asks: "Is G1 really less bad than G2?", target: "less_bad(G1,G2)"}
+    examples:
+      - scheme: lesser_evil
+        title: When both would die
+        kialo: "5637.208"
+        use: argument
+        text: When a pregnant person's life is at risk and the foetus would not survive on its own, an abortion is better than letting both the woman and the foetus die.
+        bindings:
+          A: ending the pregnancy
+          B: letting the pregnancy continue
+          G1: the foetus dying
+          G2: both the woman and the foetus dying
+        note: The Kialo text is condensed.
+      - scheme: lesser_evil
+        title: The leg
+        invented: true
+        use: argument
+        text: Either we take off the leg or the infection spreads; losing a leg is terrible, but losing your life is worse, so we operate.
+        bindings:
+          A: amputating the leg
+          B: leaving the leg
+          G1: the patient losing a leg
+          G2: the infection spreading and killing the patient
+        attacks:
+          - question: C010/Q1
+            text: A new antibiotic has cleared infections like this in half the cases; try it for two days before deciding.
+      - scheme: lesser_evil
+        title: Hours or jobs
+        invented: true
+        use: argument
+        text: The firm must either cut everyone's hours by a tenth or lay off a fifth of the staff; shorter hours hurt less, so it should cut hours.
+        bindings:
+          A: cutting everyone's hours by a tenth
+          B: laying off a fifth of the staff
+          G1: everyone earning a tenth less
+          G2: a fifth of the staff losing their jobs
+        attacks:
+          - question: C010/Q2
+            text: The staff who would be laid off are mostly near retirement and would take a generous package; for them a layoff is not worse.
+      - scheme: pragmatic_alternative
+        title: The last train
+        invented: true
+        use: near-miss
+        near_miss_of: lesser_evil
+        text: Either you leave now or you miss the last train, and you don't want to miss it, so leave now.
+        bindings:
+          A: your leaving now
+          B: your missing the last train
+        note: Only one course is said to be bad; nothing is compared, so it is the pragmatic argument from alternatives (34).
+    open:
+      - "A scheme of its own, or a variant of the pragmatic argument from alternatives (34), whose conclusion meets nothing today (D063)?"
+      - "Kialo's sightings are moral choices; is the weight of 'less bad' a value judgement that needs the value schemes (C007)?"
+
+  - id: C013
+    name: The greater good
+    kind: scheme
+    group: weighing
+    decision: D064
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: low
+    what: >-
+      A harm is justified because it is needed for, or inseparable from, a
+      greater good: a weighing with a premise that the good cannot be had
+      without the harm. Common in the problem of evil and in arguments about
+      permitting harm.
+    compares: a harm against the good it is needed for
+    concludes: the good outweighs the harm (good_outweighs)
+    closest:
+      - item: C003, weighing
+        why: C003 compares two consequences without saying that one is needed for the other.
+      - item: positive consequences (33.1)
+        why: It cites a good consequence, but does not answer the harm.
+    related:
+      - candidate: C003
+        how: C013 is C003 with a necessity premise; perhaps a variant of it.
+      - candidate: C006
+        how: "The converse: C006 says the harm can be avoided, C013 that it cannot."
+    sightings:
+      - source: kialo
+        ref: "2629.1471"
+        fit: clean
+        note: Suffering may be tied to far greater goods, whose loss would not be worth ending suffering.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.2856"
+        fit: clean
+        note: Greater goods, such as perseverance, come from suffering, so avoiding suffering is not the greatest good.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.944"
+        fit: clean
+        note: Evil and pain are the necessary cost of real free will.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.7265"
+        fit: clean
+        archived: true
+        note: Good parents allow a child limited suffering, such as a jab, for a greater good.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.2119"
+        fit: clean
+        archived: true
+        note: Free will may be impossible without the possibility of evil, and its good may outweigh the evil.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: On D055-D059 version 2's good_outweighs.
+      schemes:
+        - id: greater_good
+          meta:
+            title: The greater good (candidate)
+            source: Candidate C013, not in the compendium.
+          variables: [A, B, G]
+          premises: ["brings_about(A,B)", "bad(B)", "needed_for(B,G)", "good(G)", "matters_more(G,B)"]
+          assumptions: []
+          exceptions: []
+          conclusions: ["good_outweighs(A,B)"]
+      language:
+        needed_for/2: "%s is needed for %s."
+        matters_more/2: "%s matters more than %s."
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        greater_good:
+          - {id: C013/Q1, asks: "Could G be had without B?", target: "needed_for(B,G)"}
+          - {id: C013/Q2, asks: "Does G really matter more than B?", target: "matters_more(G,B)"}
+    examples:
+      - scheme: greater_good
+        title: The jab
+        invented: true
+        use: argument
+        text: The jab hurts, but without it the child is not protected from measles, which matters far more than a moment's pain.
+        bindings:
+          A: the parents having the child vaccinated
+          B: the child feeling the pain of the jab
+          G: the child being protected from measles
+      - scheme: greater_good
+        title: Suffering and greater goods
+        kialo: "2629.1471"
+        use: argument
+        text: Suffering may be inextricably tied to far greater good things, the loss of which would not be worth the abolition of suffering.
+        bindings:
+          A: God permitting suffering
+          B: suffering in the world
+          G: far greater goods that cannot exist without suffering
+        attacks:
+          - question: C013/Q1
+            text: An all-powerful being could bring about those goods without the suffering; nothing shows that they need it.
+      - scheme: greater_good
+        title: Training camp
+        invented: true
+        use: argument
+        text: The camp is gruelling, but a team cannot get match-fit without it, and being fit for the season matters more than three weeks of sore legs.
+        bindings:
+          A: the club holding a pre-season training camp
+          B: three weeks of sore and tired players
+          G: the team being fit for the season
+        attacks:
+          - question: C013/Q2
+            text: Two players were injured at last year's camp and missed half the season.
+      - scheme: positive_consequences
+        title: Protection from measles
+        invented: true
+        use: near-miss
+        near_miss_of: greater_good
+        text: Vaccinating the child protects it from measles, so the parents should do it.
+        bindings:
+          A: the parents having the child vaccinated
+          G: the child being protected from measles
+        note: It cites a good consequence but sets it against no harm, so it is positive consequences.
+    open:
+      - "A variant of C003 with a necessity premise, or a scheme of its own? The sightings are all in one discussion (2629), on the problem of evil."
+
+  # --- magnitude-risk ----------------------------------------------------------
+  - id: C005
+    name: How serious is the cited consequence?
+    kind: question
+    group: magnitude-risk
+    decision: D065
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      A question that the book's three questions on consequences do not ask:
+      is the cited consequence good or bad enough, and for enough people, to
+      bear on whether the action should be done? In WAG good(G) and bad(G)
+      are yes-or-no, so a minimising reply ("the burden is small") can only
+      deny them or be a bare challenge.
+    compares: how good or bad the cited consequence is
+    concludes: a question at good(G) or bad(G)
+    closest:
+      - item: 33/CQ1
+        why: It asks how likely the consequence is, not how much it matters.
+      - item: the challenge of a premise (CQ:premise_acceptable)
+        why: It denies that G is bad, rather than asking whether it is bad enough.
+    related:
+      - candidate: C008
+        how: C008 argues from how serious a consequence is; C005 questions it.
+      - candidate: C003
+        how: C003 compares how much two consequences matter.
+    sources:
+      - "ND p. 158: the strength of an argument from consequences depends on how serious the consequences are and how likely; p. 159."
+      - "The batch-2 gold: challenges of type 'severity or value' with no printed question (13292.127, 13292.56)."
+    sightings:
+      - source: kialo
+        ref: "13292.25"
+        fit: clean
+        note: The extra burden of the tax may be as small as changing what one eats; answers 13292.7.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.58"
+        fit: strain
+        note: Eating insects has only good sides; it denies that the cited consequence is bad, rather than saying it is small.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.1752"
+        fit: strain
+        archived: true
+        note: The minor pains of pregnancy should not outweigh a foetus's life; minimising, inside a weighing.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: The question on negative consequences, on D055-D059 version 2's form; the mirror on positive consequences targets good(G).
+      schemes:
+        - id: negative_consequences_severity
+          meta:
+            title: Negative consequences with a severity question (candidate)
+            source: Candidate C005.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "bad(G)"]
+          assumptions: []
+          exceptions: ["good_outweighs(A,G)"]
+          conclusions: ["¬should_be_performed(A)"]
+      language:
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        negative_consequences_severity:
+          - {id: C005/Q1, asks: "Is G bad enough, and for enough people, to count against doing A?", target: "bad(G)"}
+    examples:
+      - scheme: negative_consequences_severity
+        title: A small burden
+        kialo: "13292.7"
+        use: argument
+        text: A sin tax on meat would make food more expensive, despite many people not being able to afford it.
+        bindings:
+          A: governments putting a tax on meat
+          G: food becoming less affordable for the poor
+        attacks:
+          - question: C005/Q1
+            text: Kialo 13292.25 replies that the extra burden may be no more than changing what one eats.
+      - scheme: negative_consequences_severity
+        title: Childcare on Fridays
+        invented: true
+        use: argument
+        text: A four-day school week would leave parents finding childcare one more day a week, so the school should not adopt it.
+        bindings:
+          A: the school adopting a four-day week
+          G: parents finding childcare one more day a week
+        attacks:
+          - question: C005/Q1
+            text: The school would run a club that day for a small fee; for most families the cost is a few pounds a week.
+      - scheme: negative_consequences_severity
+        title: Motorway noise
+        invented: true
+        use: argument
+        text: Raising the motorway's speed limit would add noise for the homes nearby, so it should not be raised.
+        bindings:
+          A: raising the motorway's speed limit
+          G: more noise for the homes nearby
+        attacks:
+          - question: C005/Q1
+            text: The nearest houses are a kilometre away behind a bank; the extra noise would be below what anyone can hear.
+      - scheme: negative_consequences
+        title: Dogs on the beach
+        invented: true
+        use: near-miss
+        near_miss_of: negative_consequences_severity
+        text: Allowing dogs on the beach would mean more litter, so it should not be allowed.
+        bindings:
+          A: allowing dogs on the beach
+          G: more litter on the beach
+        attacks:
+          - question: CQ:premise_acceptable
+            target: brings_about(A,G)
+            text: The beaches that already allow dogs have no more litter than the others; owners there clean up.
+        note: The reply denies that the consequence will follow, a question of likelihood (33/CQ1), not of how bad it is.
+    open:
+      - "A question at the premise, or a graded premise (how bad) that the weights could read?"
+      - "Do annotators tell 'small' (C005) from 'unlikely' (33/CQ1) reliably?"
+
+  - id: C008
+    name: Precaution against a catastrophic, irreversible risk
+    kind: scheme
+    group: magnitude-risk
+    decision: D065
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      An action should not be taken because it may bring about a harm that
+      would be catastrophic and could not be undone, even if that is
+      unlikely. The likelihood is conceded and outweighed by the size and
+      permanence of the harm, which 33/CQ1 cannot express.
+    compares: a small chance against a catastrophic, irreversible harm
+    concludes: the action should not be taken
+    closest:
+      - item: negative consequences (33.2)
+        why: It cites a consequence that will follow, and a doubt about its likelihood defeats it.
+      - item: argument from danger appeal (37)
+        why: It warns of a danger to the hearer, with no claim about irreversibility or a small chance outweighed.
+    related:
+      - candidate: C005
+        how: Both are about how serious a consequence is.
+    sources:
+      - "The precautionary principle, in environmental and health policy (not yet read here)."
+    sightings:
+      - source: kialo
+        ref: "13564.175"
+        fit: clean
+        note: Transhumanism could cause irreversible changes to our evolution unless every step is taken with care.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13564.70"
+        fit: clean
+        note: The consequences of our errors in remaking ourselves might be catastrophic.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13564.1159"
+        fit: strain
+        note: Transhumanism could endanger health and raise existential risk; a risk claim without irreversibility.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "27150.203"
+        fit: strain
+        note: Those alarmed by AI are right, since its dangers are real; it lists risks rather than arguing from their size.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.12406"
+        fit: clean
+        archived: true
+        note: An 8.8% chance of unjustly killing someone is not worth the risk; the chance conceded, outweighed by the harm.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      schemes:
+        - id: precaution
+          meta:
+            title: Precaution against a catastrophic, irreversible risk (candidate)
+            source: Candidate C008, not in the compendium.
+          variables: [A, G]
+          premises: ["may_bring_about(A,G)", "catastrophic(G)", "irreversible(G)"]
+          assumptions: []
+          exceptions: ["negligible_risk(A,G)", "precaution_costs_outweigh(A)"]
+          conclusions: ["¬should_be_performed(A)"]
+      language:
+        may_bring_about/2: "The action %s may bring about %s."
+        catastrophic/1: "%s would be catastrophic."
+        irreversible/1: "%s could not be undone."
+        negligible_risk/2: "The chance that the action %s brings about %s is too small to count."
+        precaution_costs_outweigh/1: "Not doing %s would cost more than the risk it avoids."
+      questions:
+        precaution:
+          - {id: C008/Q1, asks: "Is the chance that doing A brings about G so small that it can be set aside?", target: "negligible_risk(A,G)"}
+          - {id: C008/Q2, asks: "Would not doing A cost more than the risk it avoids?", target: "precaution_costs_outweigh(A)"}
+    examples:
+      - scheme: precaution
+        title: Dimming the sun
+        invented: true
+        use: argument
+        text: Spraying particles into the stratosphere might disrupt the monsoon, which would be a catastrophe that could not be reversed, so it should not be done.
+        bindings:
+          A: spraying particles into the stratosphere
+          G: the monsoon failing
+        attacks:
+          - question: C008/Q2
+            text: Without it, warming will disrupt the monsoon anyway, and more surely.
+      - scheme: precaution
+        title: Editing newborns
+        invented: true
+        use: argument
+        text: Editing the genes of newborns might change our descendants in ways no one could undo, so it should not be allowed.
+        bindings:
+          A: editing the genes of newborns
+          G: inherited changes to humanity that no one could undo
+        note: In our words, after Kialo 13564.175 and 13564.70.
+      - scheme: precaution
+        title: Gene-drive mosquitoes
+        invented: true
+        use: argument
+        text: Releasing gene-drive mosquitoes might wipe out a species that other animals depend on, which could not be undone, so they should not be released.
+        bindings:
+          A: releasing gene-drive mosquitoes
+          G: the collapse of species that depend on the mosquito
+        attacks:
+          - question: C008/Q1
+            text: The targeted species is one of three thousand mosquito species, and no animal is known to depend on it alone.
+          - question: C008/Q2
+            text: Malaria kills hundreds of thousands a year; not releasing them costs more than the risk.
+      - scheme: negative_consequences
+        title: Flooding the valley
+        invented: true
+        use: near-miss
+        near_miss_of: precaution
+        text: Building the dam would flood the farms in the valley, so it should not be built.
+        bindings:
+          A: building the dam
+          G: the valley's farms being flooded
+        note: The harm is certain and not catastrophic; nothing is weighed against a small chance, so it is negative consequences.
+    open:
+      - "A scheme of its own, or a question for 33.2 ('Is the consequence irreversible?') feeding C003's comparison?"
+      - "How does it meet a likelihood objection (33/CQ1), which it concedes in advance?"
+
+  # --- changing-the-action -----------------------------------------------------
+  - id: C006
+    name: Mitigation
+    kind: exception
+    group: changing-the-action
+    decision: D066
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      A reply to a negative consequence argument that keeps the action but
+      adds a measure or narrows its scope, so that the bad consequence no
+      longer follows. The batch-2 gold codes it with the role
+      action_amendment, with no scheme question behind it.
+    compares: the action as argued against with the action as amended
+    concludes: the bad consequence need not follow (an exception)
+    closest:
+      - item: 33/CQ1
+        why: It doubts that the consequence follows from the action as it is, not that it follows from the action as it could be done.
+      - item: practical reasoning's alternative-means exceptions (realize_more_effectively, bring_about_more_effectively)
+        why: They concern another action, not the same one changed.
+      - item: the gold's action_amendment role
+        why: A role, with no question or formula.
+    related:
+      - candidate: C013
+        how: "The converse: C013 says the harm cannot be avoided."
+    sources:
+      - "The batch-2 gold and guidelines: the action_amendment role."
+    sightings:
+      - source: kialo
+        ref: "13292.24"
+        fit: clean
+        note: Tax credits or food stamps would spare those who could no longer afford food; answers 13292.36.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.194"
+        fit: clean
+        note: Eco-tariffs and import standards would stop cheap imports undercutting local farms; answers 13292.12.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.45"
+        fit: clean
+        note: Import standards can be kept high; the problem is manageable. Answers 13292.12.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.202"
+        fit: clean
+        note: The tax could exempt poor countries, so that no one starves; answers 13292.127.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.235"
+        fit: clean
+        note: Accompanying measures would prevent people eating too little meat; answers 13292.121.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.144"
+        fit: clean
+        note: Selective abortion can be prevented without banning abortion; answers 5637.84.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: The exception on negative consequences, on D055-D059 version 2's form.
+      schemes:
+        - id: negative_consequences_mitigation
+          meta:
+            title: Negative consequences with a mitigation exception (candidate)
+            source: Candidate C006.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "bad(G)"]
+          assumptions: []
+          exceptions: ["good_outweighs(A,G)", "avoidable(A,G)"]
+          conclusions: ["¬should_be_performed(A)"]
+      language:
+        avoidable/2: "The action %s can be carried out so that %s does not follow."
+        good_outweighs/2: "The action %s has good consequences that outweigh %s."
+      questions:
+        negative_consequences_mitigation:
+          - {id: C006/Q1, asks: "Can A be done in a way, or with a measure, that keeps G from following?", target: "avoidable(A,G)"}
+    examples:
+      - scheme: negative_consequences_mitigation
+        title: Food security
+        kialo: "13292.36"
+        use: argument
+        text: In poor communities people need easy access to all kinds of food; a meat tax would add costs to food and decrease food security.
+        bindings:
+          A: governments putting a tax on meat
+          G: poor communities losing secure access to food
+        attacks:
+          - question: C006/Q1
+            text: Kialo 13292.24 replies that governments can give tax credits or food stamps to those who could no longer afford food.
+        note: The Kialo text is condensed.
+      - scheme: negative_consequences_mitigation
+        title: Cheap imports
+        kialo: "13292.12"
+        use: argument
+        text: A tax on meat would make imported meat cheaper by comparison, pushing domestic farms out of the market.
+        bindings:
+          A: governments putting a tax on meat
+          G: cheap imports pushing domestic farms out of the market
+        attacks:
+          - question: C006/Q1
+            text: Kialo 13292.194 replies that eco-tariffs and import standards would hold imports to the same bar.
+        note: The Kialo text is condensed.
+      - scheme: negative_consequences_mitigation
+        title: Night flights
+        invented: true
+        use: argument
+        text: A new runway would bring planes over the town all night, so it should not be built.
+        bindings:
+          A: building a new runway
+          G: planes flying over the town all night
+        attacks:
+          - question: C006/Q1
+            text: Build it with a night curfew written into the permit, as other airports have, and the night flights do not come.
+      - scheme: positive_consequences
+        title: Fund cheaper plant protein instead
+        invented: true
+        use: near-miss
+        near_miss_of: negative_consequences_mitigation
+        text: Instead of taxing meat, governments should fund cheaper plant protein, which would cut meat eating without raising food prices.
+        bindings:
+          A: governments funding cheaper plant protein
+          G: people eating less meat without food prices rising
+        note: It proposes another action, argued for on its own, not the same action changed; an alternative, not a mitigation.
+    open:
+      - "Does a mitigation undercut the argument (an exception), or move the issue to the amended action, which then needs its own arguments?"
+      - "The gold records five of its six sightings with the role action_amendment: should that role become this exception's answer?"
+
+  # --- values-against-consequences -------------------------------------------
+  - id: C007
+    name: A right or value against consequences
+    kind: exception
+    group: values-against-consequences
+    decision: D067
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      A consequence argument answered by a right, a duty or a value rather
+      than by another consequence: liberty against health costs, a right to
+      life against hardship. D055's exceptions compare consequences only;
+      nothing in walton.yml lets a right or a value defeat, or outweigh, a
+      consequence argument.
+    compares: a right, duty or value against a consequence
+    concludes: the action is ruled out (or in) whatever its consequences
+    closest:
+      - item: practical reasoning's side_effects(A,S1)
+        why: It names a value that the action demotes, inside practical reasoning only.
+      - item: positive and negative value (19.1, 19.2)
+        why: They argue for or against a goal from a value; they do not answer a consequence argument.
+      - item: D055's bad_outweighs and good_outweighs
+        why: They set a consequence against a consequence.
+    related:
+      - candidate: C003
+        how: C003 weighs a consequence against a consequence.
+    sightings:
+      - source: kialo
+        ref: "13292.29"
+        fit: clean
+        note: Eating meat is a personal choice in which the state has no business; liberty against the case for the tax.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13292.55"
+        fit: clean
+        note: Once most people think the health costs outweigh the liberty, taxes follow, as with tobacco; a consequence weighed against a value, the other way.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.1259"
+        fit: clean
+        note: Not being ready for a child does not justify ending a human life; a right set against a consequence.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.14182"
+        fit: strain
+        note: Bodily autonomy matters more than the right to life; two rights ranked, no consequence.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.4449"
+        fit: clean
+        archived: true
+        note: The right to life matters more than a mental illness, which can be cured where death cannot.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.3450"
+        fit: strain
+        archived: true
+        note: Forcing a pregnancy to continue puts the foetus's life above the woman's liberty; a value ranking inside a rights argument.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      note: The exception on positive consequences, on D055-D059 version 2's form; the mirror on negative consequences would be required(A).
+      schemes:
+        - id: positive_consequences_rights
+          meta:
+            title: Positive consequences with a rights exception (candidate)
+            source: Candidate C007.
+          variables: [A, G]
+          premises: ["brings_about(A,G)", "good(G)"]
+          assumptions: []
+          exceptions: ["bad_outweighs(A,G)", "forbidden(A)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        forbidden/1: "Doing %s would violate a right or a duty that no good consequence outweighs."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        positive_consequences_rights:
+          - {id: C007/Q1, asks: "Would doing A violate a right or duty that its good consequences cannot outweigh?", target: "forbidden(A)"}
+    examples:
+      - scheme: positive_consequences_rights
+        title: Reading everyone's email
+        invented: true
+        use: argument
+        text: If the state read everyone's email, it would catch more criminals, so it should.
+        bindings:
+          A: the state reading everyone's email
+          G: more criminals being caught
+        attacks:
+          - question: C007/Q1
+            text: People have a right to private correspondence; catching more criminals does not license breaking it for everyone.
+      - scheme: positive_consequences_rights
+        title: Five lives for one
+        invented: true
+        use: argument
+        text: Taking one healthy patient's organs would save five dying patients, so the surgeon should do it.
+        bindings:
+          A: the surgeon taking one healthy patient's organs
+          G: five dying patients being saved
+        attacks:
+          - question: C007/Q1
+            text: The healthy patient has a right not to be killed, which no number of lives saved overrides.
+      - scheme: positive_consequences_rights
+        title: The meat tax and personal choice
+        kialo: "13292.115"
+        use: argument
+        text: A tax on meat would combat unhealthy meat consumption.
+        bindings:
+          A: governments putting a tax on meat
+          G: less unhealthy meat consumption
+        attacks:
+          - question: C007/Q1
+            text: In the spirit of Kialo 13292.29, what one eats is a personal choice, and the state has no business steering it.
+      - scheme: negative_consequences
+        title: Resentment of the tax
+        invented: true
+        use: near-miss
+        near_miss_of: positive_consequences_rights
+        text: A meat tax would make people feel the state is policing their plates, so governments should not bring one in.
+        bindings:
+          A: governments putting a tax on meat
+          G: people resenting the state for policing their food
+        note: It cites a consequence of the tax, people's resentment, not a right that rules it out, so it is negative consequences.
+    open:
+      - "Are rights weighed against consequences (an outweighing claim), or do they trump them (an exception)? Kialo has both (13292.55 weighs; 5637.1259 trumps)."
+      - "Does it belong with the value schemes (F09) rather than as an exception of the consequence schemes?"
+
+  # --- threat-or-warning -------------------------------------------------------
+  - id: C012
+    name: Is the warning an indirect threat?
+    kind: question
+    group: threat-or-warning
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: low
+    what: >-
+      A prudential warning (33.4) can carry an indirect threat when the
+      speaker can bring the bad consequence about and means to. The book
+      separates the two by the speaker's commitment to bringing it about. No
+      question of 33.4 asks it, and nothing links 33.4 to threat.
+    compares: who would bring the bad consequence about
+    concludes: a question for the prudential form; if answered yes, a threat
+    closest:
+      - item: argument from threat (35) and the disjunctive threat (35.1)
+        why: They code an explicit threat; a veiled one looks like a warning.
+      - item: the prudential form's questions (33)
+        why: They ask about likelihood and evidence, not about who brings the consequence about.
+    sources:
+      - "The book p. 102: an adviser's warning is not a threat; pp. 104-105: two warnings that read as indirect threats (after Walton 2000, p. 123)."
+      - "ND p. 116: threats as negative consequences, at home in negotiation."
+    sketch:
+      note: On D055-D059 version 2's form of the prudential argument.
+      schemes:
+        - id: prudential_indirect_threat
+          meta:
+            title: The prudential form with an indirect-threat exception (candidate)
+            source: Candidate C012.
+          variables: [X, C]
+          premises: ["not_doing(X)", "bad_consequence(X,C)"]
+          assumptions: ["strongly_occur(X,C)"]
+          exceptions: ["bad_outweighs(X,C)", "speaker_brings_about(C)"]
+          conclusions: ["should_be_performed(X)"]
+      language:
+        speaker_brings_about/1: "The one giving the warning can bring about %s, and means to if the warning is ignored."
+        strongly_occur/2: "If %s is not done, %s is likely to follow."
+        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
+      questions:
+        prudential_indirect_threat:
+          - {id: C012/Q1, asks: "Can the speaker bring C about, and does the speaker mean to if X is not done?", target: "speaker_brings_about(C)"}
+    examples:
+      - scheme: prudential_indirect_threat
+        title: Protection
+        invented: true
+        use: argument
+        text: You were thinking of not paying for our protection. But if you don't, your shop windows may get broken, which would be very bad for you. So pay.
+        bindings:
+          X: paying for protection
+          C: the shop's windows being broken
+        attacks:
+          - question: C012/Q1
+            text: The windows in this street get broken only in shops that refused to pay these same men.
+      - scheme: prudential_indirect_threat
+        title: The doctor's warning
+        invented: true
+        use: argument
+        text: You were thinking of not giving up smoking. But if you don't, you may well get lung disease, which would be very bad for you. So give it up.
+        bindings:
+          X: giving up smoking
+          C: getting lung disease
+        attacks:
+          - question: C012/Q1
+            text: Asked and answered no; the doctor can neither cause the disease nor wants to, so it is a warning, not a threat.
+      - scheme: prudential_indirect_threat
+        title: The new lease
+        invented: true
+        use: argument
+        text: You were thinking of not signing the new lease. But if you don't sign by Friday, you may find yourself without a flat, which would be very bad for you. So sign.
+        bindings:
+          X: signing the new lease by Friday
+          C: losing the flat
+        attacks:
+          - question: C012/Q1
+            text: The one warning you is the landlord, who decides whether you keep the flat.
+      - scheme: ad_baculum
+        title: The photos
+        invented: true
+        use: near-miss
+        near_miss_of: prudential_indirect_threat
+        text: Pay me by Friday, or I'll send those photos to your employer.
+        bindings:
+          X: your paying me by Friday
+          Y: the photos being sent to your employer
+        note: The threat is stated outright, so it is the disjunctive threat (35.1), not a warning.
+    needs:
+      - "D060 (threat's variables) and D063 (threat's and ad baculum's conclusions) first, so that a warning recoded as a threat meets the debate."
+    open:
+      - "An exception that defeats the prudential argument, or a link that recodes it as a threat? Not yet looked for in Kialo."
+
+  # --- practical-conclusions ---------------------------------------------------
+  - id: C014
+    name: The family's practical conclusions should meet should_be_performed
+    kind: link
+    group: practical-conclusions
+    decision: D063
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: high
+    what: >-
+      D059's reasoning reaches beyond the prudential form: fear
+      (ought_to_bring_about), danger (should_not), threat (not_bring_about),
+      the pragmatic argument from alternatives and the disjunctive threat
+      (do_other), waste (ought_to_continue), help (carry_out), distress
+      (bring_relief) and two-person practical reasoning (should_carry_out)
+      conclude predicates that no other scheme concludes or uses, so their
+      arguments meet nothing about the same action.
+    compares: each scheme's conclusion with the game's practical conclusion
+    concludes: should_be_performed(X), or its negation, for the scheme's action
+    exempt: >-
+      A gap in walton.yml's vocabulary, shown by a scan of the conclusions
+      and an engine test; not a pattern that data has to show.
+    closest:
+      - item: D059
+        why: It makes the change for the prudential form only.
+      - item: D016
+        why: It asks the same for alternative_normative's not_required.
+    related:
+      - candidate: C011
+        how: Both concern where a practical conclusion may meet a claim.
+    sources:
+      - "The book pp. 103-106: each of these concludes that the respondent should, or should not, bring about the action."
+    engine:
+      - "The review of D055-D059 v1, test RD5: a prudential argument for X meets negative consequences, the slippery slope's base case and the negative practical analogy on one issue, and has no contact with danger, threat, fear or the pragmatic argument from alternatives."
+    needs:
+      - "D062 (danger's variable) and D060 (threat's) first; help, distress and two-person practical reasoning name an agent, which should_be_performed does not."
+
+  # --- predicting-agents -------------------------------------------------------
+  - id: C009
+    name: Prediction from an agent's incentives
+    kind: scheme
+    group: predicting-agents
+    decision: D068
+    found:
+      - "the independent review of proposal D055-D059, version 1, 2026-10-22"
+    confidence: medium
+    what: >-
+      A prediction that an agent will (or will not) do something because the
+      agent expects it to bring something the agent wants (or fears).
+      Predictive debates use it to support a factual claim, not a
+      recommendation, so it must not meet should_be_performed.
+    compares: what the agent expects an action to bring, and what the agent wants
+    concludes: the agent is likely to do it (a prediction)
+    closest:
+      - item: practical reasoning (22, 22.1)
+        why: It concludes what an agent should do, not what the agent will do.
+      - item: abductive argument from character to action (31.4)
+        why: It predicts from character, not from the agent's reasons.
+    sightings:
+      - source: kialo
+        ref: "27150.193"
+        fit: clean
+        note: The expected benefits of AGI will push those with a stake in it to remove the barriers to building it.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "27150.197"
+        fit: clean
+        note: Its military uses will make governments race to develop AGI first.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13564.430"
+        fit: clean
+        note: Curiosity about consciousness will lead us to find out how to become transhuman.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+      - source: kialo
+        ref: "13564.393"
+        fit: strain
+        note: Transhumanism costs too much to be worth it, offered as a reason people will resist it (13564.48); an evaluation used as a prediction.
+        found: review of D055-D059 v1
+        verified: session check, 2026-10-22
+    sketch:
+      schemes:
+        - id: incentive_prediction
+          meta:
+            title: Prediction from an agent's incentives (candidate)
+            source: Candidate C009, not in the compendium.
+          variables: [P, A, G]
+          premises: ["can_do(P,A)", "expects(P,A,G)", "wants(P,G)"]
+          assumptions: []
+          exceptions: ["stronger_counter_incentive(P,A)"]
+          conclusions: ["likely_to_do(P,A)"]
+      language:
+        can_do/2: "%s is in a position to undertake %s."
+        expects/3: "%s expects %s to bring about %s."
+        wants/2: "%s wants %s."
+        likely_to_do/2: "%s is likely to undertake %s."
+        stronger_counter_incentive/2: "%s has a stronger reason not to undertake %s."
+      questions:
+        incentive_prediction:
+          - {id: C009/Q1, asks: "Does P have a stronger reason not to do A?", target: "stronger_counter_incentive(P,A)"}
+          - {id: C009/Q2, asks: "Does P really expect A to bring about G?", target: "expects(P,A,G)"}
+    examples:
+      - scheme: incentive_prediction
+        title: A race for AGI
+        kialo: "27150.197"
+        use: argument
+        text: The military applications of AGI would ensure that governments devote resources to developing it before other governments do.
+        bindings:
+          P: governments
+          A: developing AGI
+          G: military advantage over other governments
+        attacks:
+          - question: C009/Q1
+            text: An arms-control treaty with inspections would make a secret programme costlier than falling behind.
+      - scheme: incentive_prediction
+        title: Curiosity about consciousness
+        kialo: "13564.430"
+        use: argument
+        text: Our curiosity and obsession in the search for human consciousness will lead us to figuring out how to be transhuman.
+        bindings:
+          P: researchers
+          A: pursuing ways to become transhuman
+          G: understanding human consciousness
+        attacks:
+          - question: C009/Q2
+            text: Research on consciousness studies brains as they are; nothing suggests that its researchers expect enhancement to answer their questions.
+      - scheme: incentive_prediction
+        title: A price war
+        invented: true
+        use: argument
+        text: If we cut prices, the supermarket next door will cut theirs too, since it expects to lose its customers otherwise and it wants to keep them.
+        bindings:
+          P: the supermarket next door
+          A: cutting its prices
+          G: keeping its customers
+      - scheme: practical_reasoning2
+        title: Governments should build AGI
+        invented: true
+        use: near-miss
+        near_miss_of: incentive_prediction
+        text: Governments want military superiority, and developing AGI is how to get it, so they should develop it.
+        bindings:
+          A: governments developing AGI
+          S1: governments lacking military superiority
+          S2: governments having military superiority
+          G: military superiority
+        note: It recommends the action from a goal; the candidate predicts the action from the agent's reasons.
+    open:
+      - "Its conclusion is a prediction; how does it meet the practical claims (it should not) and the factual claims about the future (cause to effect's will_occur)?"
+      - "Is it the practical inference (22.1) used for prediction, a domain version rather than a new scheme?"

@@ -677,7 +677,10 @@ decisions:
   title: The candidates threshold
   question: >-
     Is three occurrences in two discussions (or games) the right threshold for
-    a candidate scheme, question or link, and who reviews candidates?
+    a candidate scheme, question or link, and who reviews candidates? The
+    candidates registry (docs/candidates.yml) counts only verified
+    sightings, but counts those of archived Kialo claims and those that fit
+    with strain; should either be left out?
   category: project
   blocks: [annotation]
   decider: owner
@@ -861,7 +864,7 @@ decisions:
   decider: owner
   priority: 2
   status: open
-  docs: ["docs/proposals/D055-D059.md", "docs/candidates.md §3"]
+  docs: ["docs/proposals/D055-D059.md", "docs/candidates.md"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -1021,24 +1024,86 @@ decisions:
   docs: ["docs/proposals/D055-D059.md"]
 
 - id: D064
-  title: Candidates from the review of the consequence family
+  title: Weighing consequences
   question: >-
-    The independent review of proposal D055-D059 recorded twelve schemes,
-    questions and links that WAG lacks (docs/candidates.md §3). One, that
-    the family's practical conclusions should meet should_be_performed, is
-    registered as D063. Of the other eleven, which go forward (reject,
-    merge, domain version, add)? The strongest: a weighing scheme that
-    concludes D055's exceptions, tied to the opposite consequence it relies
-    on (seen at least nine times in two discussions); a global balance of
-    consequences; a mitigation question (can the action be done so that the
-    harm does not follow); a right or value that trumps consequences; and
-    the lesser evil.
+    Four candidates set consequences against each other
+    (docs/candidates.md, the group "Weighing consequences"): C003, a scheme
+    that concludes D055's exceptions from a consequence of the other sign
+    that matters more; C004, a balance of all an action's consequences, as
+    a side-level exception; C010, the lesser evil between two courses; and
+    C013, the greater good, a harm needed for a good. Which go forward, and
+    as what (reject, merge, domain version, add)? C003, C004 and C010 meet
+    the threshold; C013's sightings are all in one discussion. C003 needs
+    D055 applied first, and C004 needs D033 settled.
   category: scheme
   blocks: [play]
   decider: owner
   priority: 3
   status: open
-  docs: ["docs/candidates.md §3", "docs/proposals/D055-D059.md"]
+  docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+
+- id: D065
+  title: Magnitude and risk
+  question: >-
+    Two candidates concern how serious a consequence is (docs/candidates.md,
+    the group "Magnitude and risk"): C005, a question whether the cited
+    consequence is bad (or good) enough, for enough people, to bear on the
+    action, which the book's three questions do not ask; and C008,
+    precaution, an argument that a catastrophic, irreversible harm
+    outweighs a small chance of it. Which go forward, and as what? Both
+    meet the threshold.
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md"]
+
+- id: D066
+  title: Mitigation
+  question: >-
+    C006 (docs/candidates.md): a reply that keeps the action but changes
+    how it is done, so that a cited bad consequence does not follow, seen
+    six times (five in the batch-2 gold, where the role action_amendment
+    records it with no question behind it). Should the negative consequence
+    schemes get an exception for it, or should it redirect the issue to the
+    amended action?
+  category: scheme
+  blocks: [play, annotation]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md"]
+
+- id: D067
+  title: Rights and values against consequences
+  question: >-
+    C007 (docs/candidates.md): a consequence argument answered by a right, a
+    duty or a value rather than by another consequence. Should the
+    consequence schemes get sided exceptions for it (forbidden, required),
+    or should it be argued with the value schemes? Kialo has both a weighing
+    form and a trumping form.
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md"]
+
+- id: D068
+  title: Prediction from an agent's incentives
+  question: >-
+    C009 (docs/candidates.md): a prediction that an agent will do something
+    because the agent expects it to bring what the agent wants, used in the
+    predictive debates (AGI, transhumanism) for factual claims. A scheme of
+    its own, or practical inference (22.1) read as a prediction (a domain
+    version)? It must not conclude a practical claim.
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md"]
 
 # --- Decided ------------------------------------------------------------------
 

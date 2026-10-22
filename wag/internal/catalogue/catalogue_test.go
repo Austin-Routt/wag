@@ -671,3 +671,150 @@ func TestCommittedProposals(t *testing.T) {
 		}
 	}
 }
+
+// The candidates registry passes its check, and its view is current.
+func TestCommittedCandidates(t *testing.T) {
+	cr, err := LoadCandidates(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cr == nil {
+		t.Skip("no candidates registry")
+	}
+	reg, err := LoadRegister(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	src := sources(t)
+	for _, f := range CheckCandidates(cr, reg, src) {
+		if f.Error {
+			t.Error(f)
+		}
+	}
+	view, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(CandidatesView)))
+	if err != nil || strings.ReplaceAll(string(view), "\r\n", "\n") != string(CandidatesMarkdown(cr, reg, src)) {
+		t.Errorf("%s is not the registry's current view: run wag-cli --catalogue-gen", CandidatesView)
+	}
+}
+
+// The candidates check catches each kind of fault, and the stages follow
+// the evidence and the minimum.
+func TestCandidatesFindFaults(t *testing.T) {
+	src := sources(t)
+	reg := &Register{Decisions: []Decision{
+		{ID: "D001", Status: "open"}, {ID: "D002", Status: "decided"}, {ID: "D047", Status: "open"},
+	}}
+	kialo := func(ref string) Sighting {
+		return Sighting{Source: "kialo", Ref: ref, Fit: "clean", Note: "n", Found: "f", Verified: "v"}
+	}
+	sketch := &Sketch{
+		Schemes: []Scheme{{ID: "sketch_x", Variables: []string{"A", "G"},
+			Premises: []string{"brings_about(A,G)", "good(G)"}, Exceptions: []string{"tested_x(A)"},
+			Conclusions: []string{"should_be_performed(A)"}}},
+		Language:  map[string]string{"tested_x/1": "%s is tested."},
+		Questions: map[string][]PQuery{"sketch_x": {{ID: "C001/Q1", Asks: "Tested?", Target: "tested_x(A)"}}},
+	}
+	use := func(title string) ProposalExample {
+		return ProposalExample{Scheme: "sketch_x", Title: title, Text: "t", Invented: true, Use: "argument",
+			Bindings: map[string]string{"A": "a", "G": "g"}}
+	}
+	near := ProposalExample{Scheme: "positive_consequences", Title: "near", Text: "t", Invented: true, Use: "near-miss",
+		Of: "sketch_x", Bindings: map[string]string{"A": "a", "G": "g"}}
+	ok := Candidate{ID: "C001", Name: "x", Kind: "exception", Group: "g", Decision: "D001", Found: []string{"f"},
+		Confidence: "medium", What: "w", Compares: "c", Concludes: "c",
+		Closest:   []Closest{{Item: "positive_consequences", Why: "w"}},
+		Sightings: []Sighting{kialo("1.1"), kialo("1.2"), kialo("2.1")},
+		Sketch:    sketch, Examples: []ProposalExample{use("u1"), use("u2"), use("u3"), near}}
+	base := func(cs ...Candidate) *CandidateRegister {
+		return &CandidateRegister{Threshold: Threshold{Sightings: 3, Places: 2, Decision: "D047"},
+			Groups: []CandidateGroup{{ID: "g", Name: "G", Families: []string{"F15"}, About: "a"}}, Candidates: cs}
+	}
+	if fs := CheckCandidates(base(ok), reg, src); len(fs) != 0 {
+		t.Fatalf("a sound registry has findings: %v", fs)
+	}
+	if s := ok.Stage(base().Threshold); s != StageReady {
+		t.Errorf("a complete candidate is %s, want ready", s)
+	}
+	cases := []struct {
+		name  string
+		edit  func(c *Candidate)
+		want  string
+		error bool
+	}{
+		{"a bad id", func(c *Candidate) { c.ID = "X1" }, "write C and three digits", true},
+		{"a bad kind", func(c *Candidate) { c.Kind = "rule" }, `kind "rule"`, true},
+		{"no group", func(c *Candidate) { c.Group = "h" }, `no group "h"`, true},
+		{"an unknown decision", func(c *Candidate) { c.Decision = "D999" }, "no decision D999", true},
+		{"a taken decision without an outcome", func(c *Candidate) { c.Decision = "D002" }, "no outcome is recorded", false},
+		{"over the threshold without a decision", func(c *Candidate) { c.Decision = "" }, "meets the threshold", false},
+		{"a bad outcome", func(c *Candidate) {
+			c.Decision = "D002"
+			c.Outcome = &CandidateOutcome{Date: "d", By: "b", Result: "keep", Recorded: "r"}
+		}, `outcome "keep"`, true},
+		{"a merge into nothing", func(c *Candidate) {
+			c.Decision = "D002"
+			c.Outcome = &CandidateOutcome{Date: "d", By: "b", Result: "merge", Recorded: "r"}
+		}, "names the item", true},
+		{"a bad Kialo ref", func(c *Candidate) { c.Sightings = append(c.Sightings, kialo("abc")) }, "discussion.claim", true},
+		{"a sighting twice", func(c *Candidate) { c.Sightings = append(c.Sightings, kialo("1.1")) }, "listed twice", true},
+		{"a bad fit", func(c *Candidate) { c.Sightings[0].Fit = "good" }, `fit "good"`, true},
+		{"a sketch with no template", func(c *Candidate) {
+			s := *sketch
+			s.Language = nil
+			c.Sketch = &s
+		}, "no template for tested_x/1", true},
+		{"an example not of the sketch", func(c *Candidate) {
+			x := near
+			x.Use = "argument"
+			c.Examples = append(c.Examples, x)
+		}, "coded with the candidate's sketch", true},
+		{"a closest item without why", func(c *Candidate) { c.Closest = []Closest{{Item: "x"}} }, "why it does not cover", true},
+	}
+	for _, k := range cases {
+		c := ok
+		c.Sightings = append([]Sighting(nil), ok.Sightings...)
+		c.Examples = append([]ProposalExample(nil), ok.Examples...)
+		k.edit(&c)
+		var got []string
+		found := false
+		for _, f := range CheckCandidates(base(c), reg, src) {
+			got = append(got, f.String())
+			if strings.Contains(f.Msg, k.want) && f.Error == k.error {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("%s: want a finding with %q (error %v), got %v", k.name, k.want, k.error, got)
+		}
+	}
+	// Two candidates: a shared sighting is noted; a sketch id or a template
+	// given twice is an error.
+	other := ok
+	other.ID = "C002"
+	got := CheckCandidates(base(ok, other), reg, src)
+	var msgs []string
+	for _, f := range got {
+		msgs = append(msgs, f.String())
+	}
+	all := strings.Join(msgs, "\n")
+	for _, want := range []string{"1.1 is listed under C001 and C002", "sketch sketch_x is also C001's"} {
+		if !strings.Contains(all, want) {
+			t.Errorf("want %q among %v", want, msgs)
+		}
+	}
+	// The stages: an unverified sighting does not count; an exemption does.
+	c := ok
+	c.Sightings = []Sighting{kialo("1.1"), kialo("2.1"), {Source: "kialo", Ref: "2.2", Fit: "clean", Note: "n", Found: "f"}}
+	if s := c.Stage(base().Threshold); s != StageCollecting {
+		t.Errorf("two verified sightings: %s, want collecting", s)
+	}
+	c.Exempt = "a gap shown by analysis"
+	if s := c.Stage(base().Threshold); s != StageReady {
+		t.Errorf("an exempt candidate: %s, want ready", s)
+	}
+	c = ok
+	c.Examples = c.Examples[:2]
+	if s := c.Stage(base().Threshold); s != StageDrafting {
+		t.Errorf("no near miss and two examples: %s, want drafting", s)
+	}
+}

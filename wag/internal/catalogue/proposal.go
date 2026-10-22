@@ -591,68 +591,74 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 	b.WriteString("## The examples, rendered\n\n")
 	b.WriteString("Each example binds the scheme's variables to phrases; every formula is then read with `walton.yml`'s templates and the proposal's. Read each line as the game would show it, and ask whether it says something true and sensible.\n\n")
 	for i, x := range p.Examples {
-		s := schemes[x.Scheme]
-		fmt.Fprintf(&b, "### %d. %s\n\n", i+1, x.Title)
-		var tags []string
-		switch x.Use {
-		case "answer":
-			tags = append(tags, "**as an answer** in the game: "+strings.TrimSuffix(strings.Join(strings.Fields(x.Answers), " "), "."))
-		case "near-miss":
-			tags = append(tags, fmt.Sprintf("**a near miss** of `%s`: it is `%s`", x.Of, x.Scheme))
-		default:
-			tags = append(tags, fmt.Sprintf("**as an argument**, with `%s`", x.Scheme))
-		}
-		if p.candidate(x.Scheme) {
-			tags = append(tags, "a candidate")
-		}
-		if x.Form == "negated" {
-			tags = append(tags, "the negated (\"false\") form")
-		}
-		switch {
-		case x.Kialo != "":
-			tags = append(tags, "Kialo "+x.Kialo)
-		case x.Invented:
-			tags = append(tags, "our own text")
-		}
-		fmt.Fprintf(&b, "%s.\n\n> %s\n\n", strings.Join(tags, "; "), strings.Join(strings.Fields(x.Text), " "))
-		var vars []string
-		for _, v := range s.Variables {
-			vars = append(vars, fmt.Sprintf("%s = “%s”", v, x.Bindings[v]))
-		}
-		fmt.Fprintf(&b, "Bindings: %s.\n\n", strings.Join(vars, "; "))
-		for _, f := range s.Premises {
-			fmt.Fprintf(&b, "- %s\n", EnglishWith(f, lang, x.Bindings))
-		}
-		for _, f := range s.Assumptions {
-			fmt.Fprintf(&b, "- *Presumed:* %s\n", EnglishWith(f, lang, x.Bindings))
-		}
-		for _, f := range s.Exceptions {
-			fmt.Fprintf(&b, "- *Unless:* %s\n", EnglishWith(f, lang, x.Bindings))
-		}
-		for _, f := range s.Conclusions {
-			// Some templates open with "Therefore,"; the label says it.
-			fmt.Fprintf(&b, "- **So:** %s\n", sentence(strings.TrimPrefix(EnglishWith(f, lang, x.Bindings), "Therefore, ")))
-		}
-		if len(x.Attacks) > 0 {
-			b.WriteString("\nPressed with its questions:\n\n")
-			for _, a := range x.Attacks {
-				if a.Question == Challenge {
-					fmt.Fprintf(&b, "- **Challenge** (%s), at the premise “%s”: %s\n", Challenge, strings.TrimSuffix(EnglishWith(a.Target, lang, x.Bindings), "."), strings.Join(strings.Fields(a.Text), " "))
-					continue
-				}
-				q := questionByID(p.questions(x.Scheme), a.Question)
-				if q == nil {
-					continue
-				}
-				fmt.Fprintf(&b, "- **%s**, at the %s “%s”: %s\n", a.Question, roleOf(s, q.Target), strings.TrimSuffix(EnglishWith(q.Target, lang, x.Bindings), "."), strings.Join(strings.Fields(a.Text), " "))
-			}
-		}
-		if x.Note != "" {
-			fmt.Fprintf(&b, "\n*Note:* %s\n", strings.Join(strings.Fields(x.Note), " "))
-		}
-		b.WriteString("\n")
+		writeExample(&b, "###", i+1, x, schemes[x.Scheme], lang, p.questions(x.Scheme), p.candidate(x.Scheme))
 	}
 	return b.Bytes()
+}
+
+// writeExample renders an example under a heading of the given level: how it
+// is used, its text and bindings, its scheme's formulas read in English, the
+// questions pressed against it and its note.
+func writeExample(b *bytes.Buffer, level string, n int, x ProposalExample, s Scheme, lang map[string]string, qs []PQuery, candidate bool) {
+	fmt.Fprintf(b, "%s %d. %s\n\n", level, n, x.Title)
+	var tags []string
+	switch x.Use {
+	case "answer":
+		tags = append(tags, "**as an answer** in the game: "+strings.TrimSuffix(strings.Join(strings.Fields(x.Answers), " "), "."))
+	case "near-miss":
+		tags = append(tags, fmt.Sprintf("**a near miss** of `%s`: it is `%s`", x.Of, x.Scheme))
+	default:
+		tags = append(tags, fmt.Sprintf("**as an argument**, with `%s`", x.Scheme))
+	}
+	if candidate {
+		tags = append(tags, "a candidate")
+	}
+	if x.Form == "negated" {
+		tags = append(tags, "the negated (\"false\") form")
+	}
+	switch {
+	case x.Kialo != "":
+		tags = append(tags, "Kialo "+x.Kialo)
+	case x.Invented:
+		tags = append(tags, "our own text")
+	}
+	fmt.Fprintf(b, "%s.\n\n> %s\n\n", strings.Join(tags, "; "), strings.Join(strings.Fields(x.Text), " "))
+	var vars []string
+	for _, v := range s.Variables {
+		vars = append(vars, fmt.Sprintf("%s = “%s”", v, x.Bindings[v]))
+	}
+	fmt.Fprintf(b, "Bindings: %s.\n\n", strings.Join(vars, "; "))
+	for _, f := range s.Premises {
+		fmt.Fprintf(b, "- %s\n", EnglishWith(f, lang, x.Bindings))
+	}
+	for _, f := range s.Assumptions {
+		fmt.Fprintf(b, "- *Presumed:* %s\n", EnglishWith(f, lang, x.Bindings))
+	}
+	for _, f := range s.Exceptions {
+		fmt.Fprintf(b, "- *Unless:* %s\n", EnglishWith(f, lang, x.Bindings))
+	}
+	for _, f := range s.Conclusions {
+		// Some templates open with "Therefore,"; the label says it.
+		fmt.Fprintf(b, "- **So:** %s\n", sentence(strings.TrimPrefix(EnglishWith(f, lang, x.Bindings), "Therefore, ")))
+	}
+	if len(x.Attacks) > 0 {
+		b.WriteString("\nPressed with its questions:\n\n")
+		for _, a := range x.Attacks {
+			if a.Question == Challenge {
+				fmt.Fprintf(b, "- **Challenge** (%s), at the premise “%s”: %s\n", Challenge, strings.TrimSuffix(EnglishWith(a.Target, lang, x.Bindings), "."), strings.Join(strings.Fields(a.Text), " "))
+				continue
+			}
+			q := questionByID(qs, a.Question)
+			if q == nil {
+				continue
+			}
+			fmt.Fprintf(b, "- **%s**, at the %s “%s”: %s\n", a.Question, roleOf(s, q.Target), strings.TrimSuffix(EnglishWith(q.Target, lang, x.Bindings), "."), strings.Join(strings.Fields(a.Text), " "))
+		}
+	}
+	if x.Note != "" {
+		fmt.Fprintf(b, "\n*Note:* %s\n", strings.Join(strings.Fields(x.Note), " "))
+	}
+	b.WriteString("\n")
 }
 
 // writeScheme renders a scheme against walton.yml's (now and proposed, or

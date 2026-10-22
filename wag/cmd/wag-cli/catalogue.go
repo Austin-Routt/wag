@@ -61,6 +61,18 @@ func runCatalogueGen(repo, dir, by string) int {
 		}
 		fmt.Printf("%s written\n", catalogue.RegisterView)
 	}
+	cands, err := catalogue.LoadCandidates(repo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if cands != nil {
+		if err := os.WriteFile(filepath.Join(repo, filepath.FromSlash(catalogue.CandidatesView)), catalogue.CandidatesMarkdown(cands, reg, src), 0o644); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		fmt.Printf("%s written\n", catalogue.CandidatesView)
+	}
 	return 0
 }
 
@@ -108,6 +120,14 @@ func runCatalogueCheck(repo, dir, books string) int {
 	}
 	if opt.Register != nil {
 		opt.RegisterView = filepath.Join(repo, filepath.FromSlash(catalogue.RegisterView))
+	}
+	// The candidates registry (docs/process.md §8), when there is one.
+	if opt.Candidates, err = catalogue.LoadCandidates(repo); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if opt.Candidates != nil {
+		opt.CandidatesView = filepath.Join(repo, filepath.FromSlash(catalogue.CandidatesView))
 	}
 	r, err := catalogue.Check(dir, src, opt)
 	if err != nil {
