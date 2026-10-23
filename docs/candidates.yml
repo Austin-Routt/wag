@@ -86,9 +86,10 @@ groups:
       what is set against what: one consequence against another cited by
       the other side (C003), all of an action's consequences against all
       (C004), the consequences of two courses when one must be taken (C010),
-      or a harm against the good it is needed for (C013). They differ also
-      in what they conclude: D055's exceptions (C003, C013), a side-level
-      exception (C004), or a practical claim (C010).
+      or a harm against the good it is needed for (C013); and whether several
+      consequences on one side may add up (C019). They differ also in what
+      they conclude: D055's exceptions (C003, C013), a side-level exception
+      (C004), a practical claim (C010), or a rule for the engine (C019).
 
   - id: magnitude-risk
     name: Magnitude and risk
@@ -96,8 +97,10 @@ groups:
     about: >-
       How bad a consequence is, beside how likely it is. The book's
       questions on consequences ask about likelihood and evidence; these ask
-      whether the consequence matters enough (C005), and argue that a
-      catastrophic, irreversible harm outweighs a small likelihood (C008).
+      whether the consequence matters enough (C005) and on whom it falls
+      (C021), argue that a catastrophic, irreversible harm outweighs a small
+      likelihood (C008), and, conversely, that a certain harm outweighs a
+      speculative one (C024).
 
   - id: the-action
     name: The action itself
@@ -123,10 +126,20 @@ groups:
     about: >-
       Arguments from what follows if an action is not done. The book's forms
       for it speak to the agent (33.3's parenthetical) or warn the addressee
-      (33.4); a harm of not acting to others has no form of its own (C015).
-      The prudential form never says that doing the action would avert the
-      harm (C016), and one consideration can be framed as a gain or as a
-      harm averted (C020).
+      (33.4). A harm of not acting to others has no consequence form of its
+      own (C015); the book's p. 101 places it in the pity appeals (38, 39),
+      whose conclusions meet nothing (D063). The prudential form never says
+      that doing the action would avert the harm (C016); one consideration
+      can be framed as a gain or as a harm averted (C020); and whether the
+      agent must prevent a harm at all is doing against allowing (C023).
+
+  - id: what-happens-anyway
+    name: What happens anyway
+    families: [F15]
+    about: >-
+      Arguments whose baseline is an outcome that happens whatever is done:
+      the action is argued for because it makes that outcome less harmful,
+      or lets it be steered, not because it brings or prevents it.
 
   - id: threat-or-warning
     name: Threat or warning
@@ -370,6 +383,26 @@ candidates:
         note: By the same claim, emergency rooms would encourage head injuries, yet no one would close them.
         found: second review of D001-D028-D029
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.4457"
+        fit: clean
+        archived: true
+        note: By the same logic, if burglaries happen anyway they should be made safe for the burglars; a parallel argument against 5637.26 (C022).
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.4558"
+        fit: clean
+        note: No one would refuse to regulate guns because people would buy them illegally, so the argument fails for abortion too; it answers 5637.15.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.4645"
+        fit: strain
+        archived: true
+        note: The same logic would undo every law against an immoral act; a parallel argument joined to a weighing of the lives at stake.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: >-
         As in proposal D001-D028-D029's candidates. A names an argument on
@@ -490,6 +523,12 @@ candidates:
         note: Arguing for God's existence from how bad its absence would be is named as the appeal to consequences; it answers 2629.3501.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "2629.22816"
+        fit: clean
+        note: Religious belief brings psychological benefits whether or not God exists, so the benefits do not support God's existence.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     open:
       - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion."
       - "Only one discussion so far (on God's existence); the others are practical debates, where the objection rarely arises."
@@ -569,6 +608,21 @@ candidates:
         note: Death is worse than hardship, so hardship cannot excuse ending a life; a consequence weighed against a life, close to C007.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.548"
+        also: [C005]
+        fit: clean
+        archived: true
+        note: Injuries from unsafe abortion do not compare with the lives a ban would save; it answers 5637.15.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.3739"
+        fit: strain
+        archived: true
+        note: It says the other argument assumes that the harm of a controlling mind-set outweighs that of an unplanned pregnancy, and denies it.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: >-
         Gated and engine-tested by the review (OUT/alternative.yml there). The
@@ -724,6 +778,28 @@ candidates:
         note: The good of saving a life outweighs any ethical cost of the abortion; global on one side, and the cost is the act's moral character.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.5912"
+        also: [C022]
+        fit: clean
+        note: Abortion bans do more harm than good; a balance claim about the opposite action.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.1557"
+        also: [C019]
+        fit: strain
+        archived: true
+        note: A ban would mean fewer lives lost overall, counting the women and the foetuses; a net sum across two groups.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "13292.149"
+        also: [C017, C018]
+        fit: strain
+        note: Rationing would likely cost more than it brings in; a net loss of the other course.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
     sketch:
       note: Sided side-level exceptions beside D055's, on D055-D059 version 2's forms.
       schemes:
@@ -829,6 +905,8 @@ candidates:
         why: C003 weighs two consequences of one action.
       - item: alternative_normative (13.2)
         why: It reasons from requirements, not consequences.
+      - item: negative practical reasoning (26.2)
+        why: It compares the consequences of two courses, but only for acting on a presumption when the truth is unknown.
     related:
       - candidate: C003
         how: Both compare how bad consequences are; C010 compares courses.
@@ -853,6 +931,26 @@ candidates:
         note: God may have chosen suffering over another way to the same goal that would be worse.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.4851"
+        fit: strain
+        archived: true
+        note: Pregnancy carries a greater risk of death than abortion; the risks of two courses compared, offered against a claim about what is natural.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.135"
+        also: [C017]
+        fit: strain
+        note: Adoption, though imperfect, is better than abortion because the child lives; two courses compared, the first conceded to have costs.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.121"
+        fit: strain
+        note: Abortion harms well-being less than pregnancy and childbirth; the harms of two courses compared.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
     sketch:
       schemes:
         - id: lesser_evil
@@ -965,7 +1063,7 @@ candidates:
       - source: kialo
         ref: "2629.944"
         fit: clean
-        note: Evil and pain are the necessary cost of real free will.
+        note: The possibility of evil and pain is the necessary cost of real free will.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
       - source: kialo
@@ -1106,6 +1204,14 @@ candidates:
         note: The minor pains of pregnancy should not outweigh a foetus's life; minimising, inside a weighing.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.548"
+        also: [C003]
+        fit: strain
+        archived: true
+        note: A law's bad consequences count only if they are substantial beside its good ones; the severity question in comparative form.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: The question on negative consequences, on D055-D059 version 2's form; the mirror on positive consequences targets good(G).
       schemes:
@@ -1502,6 +1608,26 @@ candidates:
         note: Forcing a pregnancy to continue puts the foetus's life above the woman's liberty; a value ranking inside a rights argument.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.315"
+        also: [C021]
+        fit: strain
+        archived: true
+        note: Her say outranks his because of what she would be forced to bear; two parties' claims ranked, a consequence as the reason.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.2792"
+        fit: strain
+        note: Pain is subjective, so no one may decide for another that their life is not worth living; a principle against an argument about the kindest outcome.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.13330"
+        fit: strain
+        note: Wars are fought for liberty, so people hold liberty worth more than life; two values ranked, no consequence.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
     sketch:
       note: The exception on positive consequences, on D055-D059 version 2's form; the mirror on negative consequences would be required(A).
       schemes:
@@ -1742,6 +1868,24 @@ candidates:
         note: Transhumanism costs too much to be worth it, offered as a reason people will resist it (13564.48); an evaluation used as a prediction.
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.1340"
+        fit: strain
+        note: Legal abortion encourages irresponsible sexual behaviour; an incentive effect cited as a consequence.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.10799"
+        fit: strain
+        note: Access to abortion can encourage promiscuity, citing a study; an incentive effect cited as a consequence.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.12060"
+        fit: strain
+        note: When abortion cost teenagers more, they had safer sex; a prediction from incentives, as evidence.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
     sketch:
       schemes:
         - id: incentive_prediction
@@ -1868,8 +2012,8 @@ candidates:
       - source: kialo
         ref: "5637.14596"
         also: [C019]
-        fit: clean
-        note: Being denied an abortion leads to worse financial, health and family outcomes.
+        fit: strain
+        note: Being denied an abortion leads to worse financial, health and family outcomes; its parent gives the person's own reasons, so whether the harm is to others turns on who the agent is.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
       - source: kialo
@@ -1897,6 +2041,25 @@ candidates:
         note: A tax on beef alone leaves the welfare and pollution problems of other meats; a harm of not doing the wider action.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.3772"
+        fit: clean
+        note: Denying access to safe, legal abortion lowers the pregnant person's quality of life; a value harmed by not acting.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.3997"
+        fit: strain
+        note: Those for whom childbirth is unsafe need a legal alternative; close to need for help (38).
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.563"
+        fit: clean
+        archived: true
+        note: For a mother in a bad situation, continuing the pregnancy harms her and the child; the lives a ban saves can be cruel ones.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: On D055-D059 version 2's bad_outweighs.
       schemes:
@@ -2124,7 +2287,7 @@ candidates:
         verified: session check, 2026-10-22
       - source: kialo
         ref: "13292.149"
-        also: [C018]
+        also: [C018, C004]
         fit: strain
         note: Rationing would be harder and costlier to run than a plain meat tax; the alternatives' costs compared, the other way.
         found: review of D055-D059 v2
@@ -2142,6 +2305,19 @@ candidates:
         note: Education, not legalisation, is the way to reduce the harm of illegal abortions.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.135"
+        also: [C010]
+        fit: clean
+        note: Adoption gives what abortion is sought for without the child dying, so it is the better course.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "13292.161"
+        fit: strain
+        note: Given the urgency, cutting consumption as well as greening production is better than greening alone; a combined course said to be better.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: The exception on positive consequences, on D055-D059 version 2's form; none on the negative schemes, since another action is no defeater of a reason against this one.
       schemes:
@@ -2242,13 +2418,13 @@ candidates:
         verified: session check, 2026-10-22
       - source: kialo
         ref: "13292.188"
-        fit: clean
-        note: A meat tax would not raise enough to make insect farms financially viable.
+        fit: strain
+        note: A meat tax would not raise enough to make insect farms viable; a doubt about 13292.56's consequence more than about whether an argued action can be done.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
       - source: kialo
         ref: "13292.149"
-        also: [C017]
+        also: [C017, C004]
         fit: strain
         note: Rationing would be harder to set up than a tax; difficulty more than impossibility.
         found: review of D055-D059 v2
@@ -2372,6 +2548,14 @@ candidates:
         note: The tax would cut millions of people's protein intake and open the way to a push for eating insects; two harms in one claim.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.1557"
+        also: [C004]
+        fit: strain
+        archived: true
+        note: Lives lost are added across women and foetuses into one figure; accrual within one kind of consequence.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     needs:
       - "Code in the engine (an option that adds the weights of same-side consequence arguments about one action, up to a cap), or an accrual scheme weighed by a moderator."
     open:
@@ -2454,6 +2638,14 @@ candidates:
         note: Harm to one person does not justify controlling another; who bears it, said as a right.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
+      - source: kialo
+        ref: "5637.315"
+        also: [C007]
+        fit: clean
+        archived: true
+        note: When the two disagree, her view counts for more, since she is the one forced to carry the child or undergo a procedure.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
     sketch:
       note: The question on negative consequences, on D055-D059 version 2's form.
       schemes:
@@ -2521,3 +2713,227 @@ candidates:
         note: The reply denies that the consequence follows, a question of likelihood (33/CQ1), not of who bears it.
     open:
       - "Merge into C005 as a third respect (how bad, for how many, for whom)?"
+
+  # --- found by the third review of D055-D059 ----------------------------------
+  - id: C022
+    name: Argument from inevitability
+    kind: scheme
+    group: what-happens-anyway
+    decision: D072
+    found:
+      - "the third independent review of proposal D055-D059, 2026-10-23"
+    confidence: medium
+    what: >-
+      An outcome will happen whether or not the action is taken, and the
+      action makes it less harmful, or lets it be steered, so the action
+      should be taken: abortions happen whether legal or not, so make them
+      safe; enhancement is coming anyway, so shape it. The comparison is with
+      a baseline in which the outcome still happens, not with one in which
+      it does not.
+    compares: the outcome with and without the action, given that it happens anyway
+    concludes: the action should be taken
+    closest:
+      - item: positive consequences (33.1)
+        why: It cites a good consequence (safer abortions) but has no premise that the outcome happens anyway, which is what its replies dispute.
+      - item: C015, harm of not acting to others
+        why: It cites the harm of not acting without the premise that the outcome comes regardless.
+      - item: C016, whether the action averts the harm
+        why: C016 asks whether the action prevents the harm; here the premise is that it cannot be prevented, only made less harmful.
+      - item: practical reasoning (22.1, 22.4)
+        why: It reasons from a goal to a means, not from an outcome that comes whatever is done.
+    related:
+      - candidate: C015
+        how: Its harm-reduction form starts from a harm of not acting (5637.15).
+      - candidate: C002
+        how: Its Kialo replies are parallel refutations (guns, burglaries).
+      - candidate: C016
+        how: The converse question, whether the action averts the outcome.
+    sources:
+      - "Not in the compendium or pp. 1-138 (searched for 'anyway' and 'inevitable'); ND not searched."
+      - "The public-health literature on harm reduction (not read here)."
+    sightings:
+      - source: kialo
+        ref: "5637.26"
+        fit: clean
+        archived: true
+        note: If abortions happen anyway, it is better to make them safe, so that at least the women survive.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.10534"
+        fit: clean
+        archived: true
+        note: Illegal abortions carry great risks, and since they will happen anyway they should be made as safe as possible.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.5912"
+        also: [C004]
+        fit: strain
+        note: Legal abortion is a harm-reduction measure, and bans do more harm than good; the inevitability premise is implied, beside a balance claim.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.4385"
+        fit: strain
+        archived: true
+        note: A ban saves no lives, since abortions happen legal or not, only by clandestine providers; the premise used against a weighing claim.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "13564.84"
+        fit: clean
+        note: The next step is inevitable, so we should take control of the process; the steering form.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "13564.224"
+        fit: clean
+        note: Humanity is heading that way regardless, so it is better to shape it than leave it to others.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+    sketch:
+      note: A first form, drafted by the third review and checked here.
+      schemes:
+        - id: harm_reduction
+          meta:
+            title: Argument from inevitability (candidate)
+            source: Candidate C022, not in the compendium.
+          variables: [A, E]
+          premises: ["happens_anyway(E)", "less_harmful_with(A,E)"]
+          assumptions: []
+          exceptions: ["encourages(A,E)"]
+          conclusions: ["should_be_performed(A)"]
+      language:
+        happens_anyway/1: "%s will happen whether or not anything is done about it."
+        less_harmful_with/2: "Doing %s would make %s less harmful."
+        encourages/2: "Doing %s would make %s happen more often."
+      questions:
+        harm_reduction:
+          - {id: C022/Q1, asks: "Would E really happen as often if A were not done?", target: "happens_anyway(E)"}
+          - {id: C022/Q2, asks: "Would doing A make E happen more often?", target: "encourages(A,E)"}
+    examples:
+      - scheme: harm_reduction
+        title: Pill testing at festivals
+        invented: true
+        use: argument
+        text: People will take pills at festivals whatever the rules say, and testing stalls catch the dangerous batches, so festivals should offer them.
+        bindings:
+          A: festivals offering pill testing
+          E: people taking pills at festivals
+        attacks:
+          - question: C022/Q2
+            text: Where testing is offered, more first-timers try pills, reassured by the stall.
+      - scheme: harm_reduction
+        title: Driving lessons at school
+        invented: true
+        use: argument
+        text: Teenagers in the countryside will drive at seventeen whatever we think, so the school should run proper driving lessons.
+        bindings:
+          A: the school running driving lessons
+          E: rural teenagers driving at seventeen
+      - scheme: harm_reduction
+        title: Shaping what is coming
+        invented: true
+        use: argument
+        text: Automation of the warehouse will come whether the union likes it or not, so the union should negotiate how it is brought in.
+        bindings:
+          A: the union negotiating how automation is brought in
+          E: the warehouse being automated
+        attacks:
+          - question: C022/Q1
+            text: The owners shelved automation twice for cost; it is far from certain.
+      - scheme: positive_consequences
+        title: Safer roads
+        invented: true
+        use: near-miss
+        near_miss_of: harm_reduction
+        text: A speed camera on the school road would make drivers slow down, so the council should install one.
+        bindings:
+          A: the council installing a speed camera on the school road
+          G: drivers slowing down on the school road
+        note: Nothing is said to happen anyway; the action is argued from its consequence, so it is positive consequences.
+    open:
+      - "One scheme for both forms (harm reduction, steering), or two?"
+      - "Its replies in 5637 are parallel refutations (5637.4558, guns; 5637.4457, burglaries) and the objection that inevitability is no reason to permit (5637.94, 13564.260): an exception, or a question?"
+
+  - id: C023
+    name: Doing against allowing
+    kind: question
+    group: harms-of-not-acting
+    decision: D069
+    found:
+      - "the third independent review of proposal D055-D059, 2026-10-23"
+    confidence: low
+    what: >-
+      A reply to an argument from a harm of not acting: the agent may be
+      bound not to cause a harm, but not to act so as to prevent one (the
+      state may stop actions that harm others, not compel actions that
+      prevent harm). It asks whether a harm of not acting bears on the agent
+      at all, not how likely or how bad it is.
+    compares: a harm the agent causes with a harm the agent fails to prevent
+    concludes: a question for arguments from a harm of not acting
+    closest:
+      - item: C015, harm of not acting to others
+        why: Its sketch's questions ask about likelihood and outweighing, not whether the agent must prevent the harm.
+      - item: need for help (38), its cost premise
+        why: It limits the duty to help by its cost to the helper, not by the line between doing and allowing.
+      - item: C007, a right or value against consequences
+        why: A right can rule an action out; this limits a duty to act.
+    related:
+      - candidate: C015
+        how: The question would be asked of C015's arguments.
+    sources:
+      - "The book p. 101: the pity appeals argue from what doing or not doing an action does to a third party (not the distinction itself)."
+    sightings:
+      - source: kialo
+        ref: "5637.3838"
+        fit: clean
+        note: The state may stop actions that harm others, but has no power to compel actions that prevent harm.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+    open:
+      - "Only one sighting so far; look for it in debates about duties to rescue or to aid."
+
+  - id: C024
+    name: A certain harm against a speculative one
+    kind: question
+    group: magnitude-risk
+    decision: D065
+    found:
+      - "the third independent review of proposal D055-D059, 2026-10-23"
+    confidence: low
+    what: >-
+      A weighing claim made, or answered, by how likely the two consequences
+      are: a harm that is only feared should not outweigh one that is
+      certain. It is the converse of precaution (C008), which lets a
+      catastrophic but unlikely harm outweigh. C003's comparison is judged by
+      seriousness, number and duration, not by likelihood.
+    compares: the likelihood of the cited consequence with that of its rival
+    concludes: a question for weighing claims (C003) and D055's exceptions
+    closest:
+      - item: 33/CQ1
+        why: It asks how likely one cited consequence is, not whether the rival is less likely.
+      - item: C003's question C003/Q1
+        why: It asks whether H matters more by seriousness, number or duration; likelihood is not among them.
+      - item: C008, precaution
+        why: The converse principle.
+      - item: negative practical reasoning (26.2)
+        why: It weighs the seriousness of two courses' consequences under uncertainty, inside the argument from ignorance.
+    related:
+      - candidate: C008
+        how: The converse.
+      - candidate: C003
+        how: A further respect of C003's comparison.
+    sources:
+      - "ND p. 159: when the likelihood of the outcomes is factored into the comparative weighing, it becomes a cost-benefit calculation."
+    sightings:
+      - source: kialo
+        ref: "5637.2376"
+        fit: clean
+        archived: true
+        note: No evidence shows that access makes people careless, while denial certainly forces unwanted pregnancies; a feared risk should not outweigh a real one.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+    open:
+      - "A question of C003, or a respect of C005 (how serious, for how many, how likely)?"

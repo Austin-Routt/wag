@@ -56,6 +56,8 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 Played with Other is therefore not one thing. It covers coverage gaps, fragments and failures, and only the failures count against the scheme–question links.
 
+Since 2026-10-23 the replay plays an answer at an exception as an argument that the exception holds. An annotation's polarity is its stance on the target's conclusion, so it flips at an exception. Before, the two answers about side effects and the three about other means (13292.174, .5, .104, .147, .123) were played against the exceptions they answer. The counts did not change.
+
 ## Annotating with models
 
 The dashboard's *Annotate* tab (`docs/llm.md`) has models annotate these claims under these guidelines, one claim per call, top-down, several models in parallel. A reviewer model compares their annotations, and you give your verdicts, claim by claim. The dataset is built into WAG (`wag/data/annotation/kialo-13292-batch2`, a copy of this folder, kept equal by a test).

@@ -426,9 +426,9 @@ decisions:
     Does the book's parenthetical in 33.3's first premise mean to cover not
     acting, given that the conclusion is unchanged? Since proposal
     D055-D059 makes 33.4 conclude should_be_performed(X), a harm of not
-    acting to the agent or the addressee has a home there; a harm of not
-    acting to others is coded as positive consequences of the action (the
-    proposal's rule; candidate C015).
+    acting to the one who would act (whom 33.4 addresses as "you") has a
+    home there; a harm of not acting to anyone else is coded as positive
+    consequences of the action (the proposal's rule; candidate C015).
   category: book
   blocks: [verification]
   decider: verifier
@@ -837,9 +837,11 @@ decisions:
     by the independent review of proposal D055-D059 (its game test shows
     the two sides tie in every preset once the weights are added); the
     proposal applies it if the owner agrees. It also moves negative
-    consequences against every other scheme in those presets, as they
-    intend: under policy, value-based practical reasoning no longer beats
-    it; under scientific and legal it falls below sign and position to know.
+    consequences against the other schemes in those presets, as they
+    intend: under policy it ties value-based practical reasoning, which
+    beats it today; under scientific it falls below sign, position to know,
+    analogy and Other; under legal below sign and analogy, level with Other
+    (it is below position to know there already).
   category: game
   blocks: [play]
   decider: owner
@@ -848,7 +850,7 @@ decisions:
   docs: ["wag/data/contexts.json", "docs/proposals/D055-D059.md"]
 
 - id: D063
-  title: The consequence family's other practical conclusions meet nothing
+  title: Practical conclusions that meet nothing
   question: >-
     D059 makes the prudential form conclude should_be_performed(X), so that
     it meets the other arguments about doing X. The family's other practical
@@ -1102,14 +1104,15 @@ decisions:
 - id: D065
   title: Magnitude and risk
   question: >-
-    Three candidates concern how serious a consequence is (docs/candidates.md,
-    the group "Magnitude and risk"): C005, a question whether the cited
-    consequence is bad (or good) enough, for enough people, to bear on the
-    action, which the book's three questions do not ask; and C008,
-    precaution, an argument that a catastrophic, irreversible harm
-    outweighs a small chance of it; and C021, on whom the consequence
-    falls, which may merge into C005. Which go forward, and as what? All
-    three meet the threshold.
+    Four candidates concern how serious or how likely a consequence is
+    (docs/candidates.md, the group "Magnitude and risk"): C005, a question
+    whether the cited consequence is bad (or good) enough, for enough
+    people, to bear on the action, which the book's three questions do not
+    ask; C008, precaution, an argument that a catastrophic, irreversible
+    harm outweighs a small chance of it; C021, on whom the consequence
+    falls, which may merge into C005; and C024, a certain harm set against a
+    speculative one, the converse of C008. Which go forward, and as what?
+    C005, C008 and C021 meet the threshold.
   category: scheme
   blocks: [play]
   decider: owner
@@ -1172,22 +1175,44 @@ decisions:
 - id: D069
   title: Harms of not acting
   question: >-
-    Three candidates concern a harm that follows if an action is not done
+    Four candidates concern a harm that follows if an action is not done
     (docs/candidates.md, the group "Harms of not acting"): C015, a harm of
-    not acting to others or to society, which the book's forms cover only
-    for the agent (33.3's parenthetical, D027) or the addressee (33.4), and
-    which proposal D055-D059 codes as positive consequences of the action
-    with the harm avoided; C016, a question whether doing the action would
-    avert the harm, which 33.4 lacks and fear states; and C020, one
-    consideration framed as a gain and as an averted harm. Should the first
-    become a scheme of its own, or stay a coding rule? C015 meets the
-    threshold.
+    not acting to others or to society, which the consequence forms cover
+    only for the one who would act (33.3's parenthetical, D027; 33.4), and
+    which proposal D055-D059 codes as positive consequences of the action,
+    with the harm's not happening as G (the book's p. 101 places harms to a
+    third party in the pity appeals, 38 and 39, whose conclusions meet
+    nothing, D063); C016, a question whether doing the action would avert
+    the harm, which 33.4 lacks and fear states; C020, one consideration
+    framed as a gain and as an averted harm; and C023, doing against
+    allowing, whether the agent is bound to prevent a harm at all. Should
+    the first become a scheme of its own, or stay a coding rule? C015 meets
+    the threshold.
   category: scheme
   blocks: [annotation, play]
   decider: owner
   priority: 3
   status: open
   docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+
+- id: D072
+  title: Arguments from what happens anyway
+  question: >-
+    C022 (docs/candidates.md, the group "What happens anyway"): an outcome
+    will happen whether or not the action is taken, and the action makes it
+    less harmful or lets it be steered, so the action should be taken
+    ("abortions happen anyway, so make them safe"; "it is coming anyway, so
+    shape it"). Its comparison is with a baseline in which the outcome still
+    happens, which no consequence scheme states. Should it become a scheme,
+    with an exception for the outcome being preventable after all? Kialo
+    answers it with parallel arguments (C002), and it meets the threshold.
+    Found by the third independent review of proposal D055-D059.
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md"]
 
 # --- Decided ------------------------------------------------------------------
 

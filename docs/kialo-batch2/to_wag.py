@@ -240,6 +240,11 @@ def main():
                 "action_amendment", "alternative_means", "independent_pro", "independent_con", "none", "clarification"):
             stmt = None
         actions = []
+        # Polarity is the stance on the target's conclusion. At an exception
+        # it flips: a move against the argument argues that the exception
+        # holds, and a move for it argues that it does not.
+        at_exception = tpart.startswith("exception")
+        kind = ("attack" if pol == "for" else "support") if at_exception else ("support" if pol == "for" else "attack")
         # A fragment that states a premise of its target's argument carries the
         # target's scheme, not one of its own: it supports the premise.
         fragment = scheme.get("fit") == "fragment" and stmt and tpart.startswith("premise")
@@ -254,10 +259,10 @@ def main():
                     act["target_premise_id"] = f.strip().replace(" ", "")
             actions.append(("cq", act))
         if stmt and wag:
-            actions.append(("statement", {"type": "support" if pol == "for" else "attack", "target_stmt_id": stmt, "scheme_id": wag,
+            actions.append(("statement", {"type": kind, "target_stmt_id": stmt, "scheme_id": wag,
                                           "variable_bindings": bindings, "text": literal}))
         if stmt:
-            actions.append(("other", {"type": "support" if pol == "for" else "attack", "target_stmt_id": stmt, "scheme_id": "AS:other",
+            actions.append(("other", {"type": kind, "target_stmt_id": stmt, "scheme_id": "AS:other",
                                       "variable_bindings": {"P1": literal}, "text": literal}))
         if not stmt:
             if wag:

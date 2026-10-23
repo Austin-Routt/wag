@@ -435,13 +435,13 @@
     "cq": null,
     "target_arg": null,
     "target_stmt": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-    "type": "attack",
+    "type": "support",
     "arg": "a51",
-    "conclusion": "¬side_effects(tax_meat,meat_production_and_consumption_harm_environment)"
+    "conclusion": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)"
    },
    "fallback_after": [
     "cq: S5: scheme \"AS:negative_consequences\" cannot back up CQ \"CQ:side_effect\" (no backup edge and scheme is not thesis-independent)",
-    "statement: S9: Argument from Negative Consequences cannot conclude the opposite of side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
+    "statement: S9: Argument from Negative Consequences cannot conclude side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
    ],
    "integration": "failed"
   },
@@ -469,13 +469,13 @@
     "cq": null,
     "target_arg": null,
     "target_stmt": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
-    "type": "attack",
+    "type": "support",
     "arg": "a53",
-    "conclusion": "¬realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
+    "conclusion": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
    },
    "fallback_after": [
     "cq: S5: scheme \"AS:practical_reasoning_goal\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
-    "statement: S9: Instrumental Practical Reasoning cannot conclude the opposite of realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
+    "statement: S9: Instrumental Practical Reasoning cannot conclude realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
    ],
    "integration": "failed"
   },
@@ -988,13 +988,13 @@
     "cq": null,
     "target_arg": null,
     "target_stmt": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
-    "type": "attack",
+    "type": "support",
     "arg": "a82",
-    "conclusion": "¬realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
+    "conclusion": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
    },
    "fallback_after": [
     "cq: S5: scheme \"AS:consequences\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
-    "statement: S9: Argument from Positive Consequences cannot conclude the opposite of realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
+    "statement: S9: Argument from Positive Consequences cannot conclude realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat): its conclusion has the form should_be_performed(A)"
    ],
    "integration": "failed"
   },
@@ -1369,13 +1369,13 @@
     "cq": null,
     "target_arg": null,
     "target_stmt": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-    "type": "attack",
+    "type": "support",
     "arg": "a125",
-    "conclusion": "¬side_effects(tax_meat,meat_production_and_consumption_harm_environment)"
+    "conclusion": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)"
    },
    "fallback_after": [
     "cq: S5: scheme \"AS:negative_consequences\" cannot back up CQ \"CQ:side_effect\" (no backup edge and scheme is not thesis-independent)",
-    "statement: S9: Argument from Negative Consequences cannot conclude the opposite of side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
+    "statement: S9: Argument from Negative Consequences cannot conclude side_effects(tax_meat,meat_production_and_consumption_harm_environment): its conclusion has the form ¬should_be_performed(A)"
    ],
    "integration": "failed"
   },
@@ -1433,13 +1433,13 @@
     "cq": null,
     "target_arg": null,
     "target_stmt": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
-    "type": "attack",
+    "type": "support",
     "arg": "a130",
-    "conclusion": "¬realize_more_effectively(meat_price_reflects_real_costs,tax_meat)"
+    "conclusion": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)"
    },
    "fallback_after": [
     "cq: S5: scheme \"AS:practical_reasoning_goal\" cannot back up CQ \"CQ:other_means\" (no backup edge and scheme is not thesis-independent)",
-    "statement: S9: Instrumental Practical Reasoning cannot conclude the opposite of realize_more_effectively(meat_price_reflects_real_costs,tax_meat): its conclusion has the form should_be_performed(A)"
+    "statement: S9: Instrumental Practical Reasoning cannot conclude realize_more_effectively(meat_price_reflects_real_costs,tax_meat): its conclusion has the form should_be_performed(A)"
    ],
    "integration": "failed"
   },
