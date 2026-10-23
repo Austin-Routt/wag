@@ -112,7 +112,7 @@ The rounds now go like this.
 4. **Fixing a finding.**
    - **Reproduce it first:** run the check, or read the source it cites.
    - **Write the fix in our words.** A reviewer's suggested text is checked like any other: against the sources, the rule's cases and the gold. Record where it came from.
-   - **A fix may not depart from the approved text** without the departure being put to the owner as such. The D055-D059 application set its scope rule by a claim's target, against the approved summary and the final check's fix. The gold's cases caught one fault in that rule before the commit, and the independent review of the application found the departure itself unfounded; the rule now follows the approved text.
+   - **A fix may not depart from the approved text** unless the departure is put to the owner as a choice of its own, with both texts. The D055-D059 application set its scope rule by a claim's target, not by its conclusion as the approved summary and the final check's fix have it. The author's report before the approval said so, but as the fix to a warning, inside a request to approve the proposal, not as a choice. The gold's cases caught one fault in that rule before the commit; the independent review of the application, which had not seen the report, found its reasons did not hold. The rule now follows the approved text, and the target test is the owner's to choose.
    - **State each fact once.**
      - A rule lives in one place: for annotation rules, the guidelines, with an id. Other texts cite the id.
      - When a rule's wording changes, the old wording goes on the retired list, which a test enforces (§1).
