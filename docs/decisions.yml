@@ -840,8 +840,9 @@ decisions:
     consequences against the other schemes in those presets, as they
     intend: under policy it ties value-based practical reasoning, which
     beats it today; under scientific it falls below sign, position to know,
-    analogy and Other; under legal below sign and analogy, level with Other
-    (it is below position to know there already).
+    analogy and Other (from a tie with sign today); under legal below expert
+    opinion, sign and analogy, level with Other (from a tie with expert
+    opinion today, and below position to know there already).
   category: game
   blocks: [play]
   decider: owner
@@ -1081,18 +1082,21 @@ decisions:
 - id: D064
   title: Weighing consequences
   question: >-
-    Five candidates set consequences against each other
+    Seven candidates set consequences against each other
     (docs/candidates.md, the group "Weighing consequences"): C003, a scheme
     that concludes D055's exceptions from a consequence of the other sign
     that matters more; C004, a balance of all an action's consequences, as
     a side-level exception; C010, the lesser evil between two courses; and
-    C013, the greater good, a harm needed for a good; and C019, accrual.
-    Which go forward, and
+    C013, the greater good, a harm needed for a good; C019, accrual; C025,
+    that no one else is made worse off; and C026, the chooser's own
+    weighing, read from the choice. Which go forward, and
     as what (reject, merge, domain version, add)? C003, C004 and C010 meet
     the threshold, and so does C013 since the second review found a
     sighting in a second discussion. C019, the accrual of consequences (how
     many are cited, which Carneades does not add up), joined the group with
-    the second review. C003 needs D055 applied first, and C004 needs D033
+    the second review and meets it too; C025 meets it, and C026's sightings
+    are all in one discussion. C025 and C026 were found by the fourth
+    review. C003 needs D055 applied first, and C004 needs D033
     settled.
   category: scheme
   blocks: [play]
@@ -1213,6 +1217,44 @@ decisions:
   priority: 3
   status: open
   docs: ["docs/candidates.md"]
+
+- id: D073
+  title: The replay chooses the moving side from a claim's immediate target
+  question: >-
+    docs/kialo-batch2/to_wag.py takes the side that makes a move from the
+    claim's polarity, which is its stance on its immediate target, not on
+    the thesis. So replies to Con's arguments are moved by Con, and backings
+    of them by Pro (13292.25 and 13292.33 by Con; 13292.180, 13292.36 and
+    13292.127 by Pro). The labels are unaffected, but the owners and scores
+    are not what the annotations mean. Should the script compose the
+    polarities along the target chain to the thesis to choose the side?
+    Found by the fourth independent review of proposal D055-D059.
+  category: annotation
+  blocks: [annotation]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/kialo-batch2/to_wag.py", "docs/proposals/D055-D059.md"]
+
+- id: D074
+  title: The appeal to consequences as an objection
+  question: >-
+    C011 (docs/candidates.md, the group "Attacking an argument's
+    inference"): the objection that a consequence argument is offered for
+    the truth of a claim, that a reason to act or to believe is no reason
+    to think something true. In the game S9 already keeps a consequence
+    scheme from concluding a factual statement, but nothing lets a player
+    raise the objection, and Kialo users raise it by name. A question or
+    undercutter for the consequence schemes, or a link rule that a
+    practical conclusion about believing P does not support P? It met the
+    threshold when the fourth independent review of proposal D055-D059
+    found it outside the debate on God's existence (27150.12).
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
 
 # --- Decided ------------------------------------------------------------------
 

@@ -56,7 +56,7 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 Played with Other is therefore not one thing. It covers coverage gaps, fragments and failures, and only the failures count against the scheme–question links.
 
-Since 2026-10-23 the replay plays an answer at an exception as an argument that the exception holds. An annotation's polarity is its stance on the target's conclusion, so it flips at an exception. Before, the two answers about side effects and the three about other means (13292.174, .5, .104, .147, .123) were played against the exceptions they answer. The counts did not change.
+Since 2026-10-23 the replay plays an answer at an exception as an argument that the exception holds. An annotation's polarity is its stance on the target's conclusion, so it flips at an exception. Before, the two answers about side effects and the three about other means (13292.174, .5, .104, .147, .123) were played against the exceptions they answer. The counts did not change, but the evaluation did: 13292.118's goal-based practical reasoning, in force before, is now undercut by the other-means answers, and 13292.108's, out before for a premise, is now undercut too. Both answers are Other arguments, so their weights do not matter (D070). The thesis stays out.
 
 ## Annotating with models
 
