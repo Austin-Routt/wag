@@ -347,7 +347,9 @@ func Relate(a, b Pattern) (Relation, bool) { return relate(a, b) }
 // Distance is how far apart two patterns are: the role:predicate items of
 // each, the conclusion included, that the other lacks. An added or dropped
 // formula counts one, a changed formula two (one dropped, one added). It
-// also returns the items only a has and only b has.
+// also returns the items only a has and only b has. It compares predicates
+// only: two patterns with the same predicates in each role are 0 apart even
+// when their variables flow differently (their Canonical forms differ).
 func Distance(a, b Pattern) (int, []string, []string) {
 	onlyA, onlyB := diff(a, b)
 	ca, cb := diffRole(a, b, RoleConclusion)

@@ -8,7 +8,9 @@
 # A test (wag/internal/annotate, TestRuleCases) checks that:
 #   - every rule of §3.1 has a case, and every case names rules of §3.1;
 #   - every coding follows walton.yml (the gold's own checker);
-#   - a case that is a claim of batch 2 is coded as gold.json codes it;
+#   - a case that is a claim of batch 2 is coded as gold.json codes it, and
+#     a claim of the batch's discussion that is not in the gold is marked
+#     outside_batch, so that a mistyped id fails;
 #   - no retired wording (below) appears in the guidelines, these cases,
 #     the catalogue's entries or the candidates registry.
 #
@@ -29,9 +31,15 @@ retired:
   - phrase: harm of not doing A is the prudential form
     now: a harm of not doing A that falls on the one who acts (OC13)
     why: second review of D055-D059, error (every harm of not acting sent to 33.4)
-  - phrase: set by a claim's conclusion
-    now: what the claim does at its actual target decides (OC1)
-    why: final check of D055-D059 v5, warning 1
+  - phrase: does at its actual target
+    now: what the claim concludes decides (OC1)
+    why: independent review of the application, error 1 (a scope by the target reversed the approved one)
+  - phrase: whatever the claim itself concludes
+    now: what the claim concludes decides (OC1)
+    why: independent review of the application, error 1
+  - phrase: code such a claim with Other
+    now: a consequence claim with a practical conclusion is coded with the consequence schemes, naming C011 (OC1)
+    why: independent review of the application, error 1
   - phrase: is a weighing, with the harm of not acting phrased as a good state
     now: the harm of not acting counts as a good consequence of A, and the weighing takes the A and G of the argument it answers (OC6)
     why: final check of D055-D059 v5, warning 2 (it put the wrong consequence in the exception)
@@ -45,22 +53,22 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: negative_consequences, fit: reconstructed}
+        bindings: {A: pursuing_agi, G: resources_wasted_on_unforeseeable_risks}
         premises:
-        - {role: premise, formula: 'agi_risks_unforeseeable'}
-        - {role: premise, formula: 'pursuing_agi_wastes_resources'}
-        conclusion: {formula: '¬agi_possible'}
+        - {role: premise, formula: 'brings_about(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
+        - {role: premise, formula: 'bad(resources_wasted_on_unforeseeable_risks)'}
+        - {role: exception, formula: 'good_outweighs(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
+        conclusion: {formula: '¬should_be_performed(pursuing_agi)'}
       role: {kind: independent_con, cq: null, polarity: against}
       target: {actual: {claim: '27150.1', part: conclusion}}
     why: >-
-      It is offered as a reason that its target, a claim about what is the
-      case, is false, so it is not coded with a consequence scheme, though it
-      argues from what pursuing AGI would cost.
-      Coded with negative consequences, its conclusion (that AGI should not be
-      pursued) would meet nothing at its target. Its reply 27150.12 (whether we
-      should is irrelevant to whether we can) is the objection candidate C011
-      names.
+      Its conclusion is about an action (AGI should not be pursued), so it is
+      coded with negative consequences, though its target, the thesis that
+      AGI is possible, says what is the case. Its conclusion meets nothing
+      there, and it proposes no other action, so it is the appeal C011
+      names: its reply 27150.12 (whether we should is irrelevant to whether
+      we can) is that objection.
 
   - id: OC1-b
     rules: [OC1]
@@ -70,17 +78,20 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: positive_consequences, fit: reconstructed}
+        bindings: {A: believing_in_god, G: psychosocial_benefits_of_religion}
         premises:
-        - {role: premise, formula: 'religion_has_psychosocial_benefits'}
-        conclusion: {formula: '¬explanations_question_religious_experience'}
-      role: {kind: rebuttal, cq: null, polarity: against}
+        - {role: premise, formula: 'brings_about(believing_in_god,psychosocial_benefits_of_religion)'}
+        - {role: premise, formula: 'good(psychosocial_benefits_of_religion)'}
+        - {role: exception, formula: 'bad_outweighs(believing_in_god,psychosocial_benefits_of_religion)'}
+        conclusion: {formula: 'should_be_performed(believing_in_god)'}
+      role: {kind: independent_con, cq: null, polarity: against}
       target: {actual: {claim: '2629.9032', part: conclusion}}
     why: >-
-      The claim's own conclusion is practical (believing makes sense), but it
-      is offered against a claim about what is the case, as a reason that the
-      claim is false: other, naming C011.
+      Its conclusion is about an action, believing, so it is coded with
+      positive consequences. It is offered against a claim about what is the
+      case and proposes no other action, so its conclusion meets nothing
+      there and it names C011.
 
   - id: OC1-d
     rules: [OC1]
@@ -100,10 +111,11 @@ cases:
       role: {kind: action_amendment, cq: null, polarity: against}
       target: {actual: {claim: '13292.13', part: conclusion}}
     why: >-
-      Its target says what is the case (the tax's efficacy), but the claim
-      does not argue that it is false: it proposes a changed action, so it is
-      coded with positive consequences, as an amendment. Contrast OC1-a,
-      which is offered as a reason that its target is false.
+      Its target says what is the case (the tax's efficacy), and its
+      conclusion is about an action, a changed one, so it is coded with
+      positive consequences, as an amendment, as the gold codes it. It
+      proposes a changed action, so it is not the appeal C011 names.
+      Contrast OC1-a.
 
   - id: OC1-c
     rules: [OC1]
@@ -126,6 +138,23 @@ cases:
       A further bad consequence offered against practical reasoning answers its
       side-effects question, at side_effects(A,S1), not a consequence
       scheme's exception (D070).
+
+  - id: OC1-e
+    rules: [OC1]
+    claim: (constructed) Believing in free will makes people behave better, so free will exists.
+    target: the thesis that free will exists
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'belief_in_free_will_improves_conduct'}
+        conclusion: {formula: 'free_will_exists'}
+      role: {kind: independent_pro, cq: null, polarity: for}
+    why: >-
+      It concludes what is the case from the consequences of believing it, so
+      it is not coded with a consequence scheme: other, naming C011.
 
   - id: OC2-a
     rules: [OC2]
@@ -191,6 +220,31 @@ cases:
       "Not worth living" is a cue word that ranks nothing: no consequence is
       set against another. The claim states a principle against the target
       (C007), not a weighing.
+
+  - id: OC3-c
+    rules: [OC3, OC13]
+    kialo: "5637.14596"
+    claim: Being denied an abortion leads to worse financial, health and family outcomes, worse still after rape.
+    target: 5637.1, that pregnant people should have the right to choose abortion
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: positive_consequences, fit: reconstructed}
+        bindings: {A: access_to_abortion, G: seekers_avoid_worse_outcomes}
+        premises:
+        - {role: premise, formula: 'brings_about(access_to_abortion,seekers_avoid_worse_outcomes)'}
+        - {role: premise, formula: 'good(seekers_avoid_worse_outcomes)'}
+        - {role: exception, formula: 'bad_outweighs(access_to_abortion,seekers_avoid_worse_outcomes)'}
+        conclusion: {formula: 'should_be_performed(access_to_abortion)'}
+      role: {kind: independent_pro, cq: null, polarity: for}
+      target: {actual: {claim: '5637.1', part: conclusion}}
+    why: >-
+      "Worse" compares the outcomes with and without access; it ranks no
+      consequence against one the other side cites, so it is not a weighing
+      (OC3). The harm of not having access falls on those seeking an abortion,
+      not on whoever would grant access, so it is positive consequences of
+      access, with G the harm's not happening (OC13). Its conclusion is the
+      thesis's, so it is coded against the thesis, re-parented from 5637.3728.
 
   - id: OC4-a
     rules: [OC4, OC7, OC8]
@@ -284,9 +338,31 @@ cases:
       Two values ranked, with no consequence of an action named: not a
       weighing of consequences (C007).
 
+  - id: OC5-c
+    rules: [OC5]
+    kialo: "13292.29"
+    claim: Eating meat is a personal choice, and the state should keep out of it.
+    target: 13292.115, positive consequences of the tax (less unhealthy meat consumption)
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: rule, fit: explicit}
+        bindings: {E: individual_liberty_over_meat_eating, A: meat_eating_is_personal_choice, C: state_stays_out_of_meat_eating}
+        premises:
+        - {role: premise, formula: 'evaluation(meat_eating_is_personal_choice,individual_liberty_over_meat_eating,state_stays_out_of_meat_eating)'}
+        - {role: premise, formula: 'case(meat_eating_is_personal_choice)'}
+        conclusion: {formula: 'evaluation_justified(individual_liberty_over_meat_eating,state_stays_out_of_meat_eating)'}
+      role: {kind: rebuttal, cq: null, polarity: against}
+      target: {actual: {claim: '13292.115', part: conclusion}}
+    why: >-
+      A liberty that rules the tax out whatever the health facts: not the
+      exception, which weighs one consequence against another. The argument
+      from rules (55.2) fits it, as the gold codes it, naming C007.
+
   - id: OC6-a
     rules: [OC6, OC2]
     kialo: "13292.149"
+    outside_batch: true
     claim: Carbon-budget rationing would be harder to run than a plain meat tax and would likely cost more than it brings in.
     target: 13292.147, positive consequences of rationing meat through personal carbon budgets
     coding:
@@ -314,6 +390,33 @@ cases:
       cites, so it is a further bad consequence of rationing, a rebuttal (OC2),
       not a balance claim (OC14). The rebuttal reaches the target's
       conclusion, so it is primary (§5 item 5).
+
+  - id: OC8-a
+    rules: [OC8]
+    claim: (constructed) True, a meat tax would cut emissions, but the jobs it would cost matter more.
+    target: a positive consequences argument for the tax (emissions cut)
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'brings_about(tax_meat,jobs_lost)'}
+        - {role: premise, formula: 'matters_more(jobs_lost,emissions_cut)'}
+        conclusion: {formula: 'bad_outweighs(tax_meat,emissions_cut)'}
+      - primary: false
+        scheme: {walton_id: negative_consequences, fit: reconstructed}
+        bindings: {A: tax_meat, G: jobs_lost}
+        premises:
+        - {role: premise, formula: 'brings_about(tax_meat,jobs_lost)'}
+        - {role: premise, formula: 'bad(jobs_lost)'}
+        - {role: exception, formula: 'good_outweighs(tax_meat,jobs_lost)'}
+        conclusion: {formula: '¬should_be_performed(tax_meat)'}
+      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
+    why: >-
+      A concession and a ranking: two instances, the weighing and the
+      rebuttal. The words state the comparison ("matter more"), so the
+      weighing is primary.
 
   - id: OC9-a
     rules: [OC9]
@@ -403,9 +506,10 @@ cases:
         conclusion: {formula: 'should_be_performed(fix_roof_now)'}
       role: {kind: independent_pro, cq: null, polarity: for}
     why: >-
-      One consideration, a gain and the same harm averted: coded once. Coded
-      also with the prudential form, it would have another exception, and a
-      weighing claim would reach only one of the two.
+      One consideration, a gain and the same harm averted: coded once, and
+      as the gain, which the claim leads with. Coded also with the prudential
+      form, it would have another exception, and a weighing claim would reach
+      only one of the two.
 
   - id: OC13-a
     rules: [OC13]

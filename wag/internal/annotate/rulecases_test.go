@@ -100,13 +100,16 @@ func TestRuleCases(t *testing.T) {
 			Why    string `yaml:"why"`
 		} `yaml:"retired"`
 		Cases []struct {
-			ID     string         `yaml:"id"`
-			Rules  []string       `yaml:"rules"`
-			Kialo  string         `yaml:"kialo"`
-			Claim  string         `yaml:"claim"`
-			Target string         `yaml:"target"`
-			Coding map[string]any `yaml:"coding"`
-			Why    string         `yaml:"why"`
+			ID    string   `yaml:"id"`
+			Rules []string `yaml:"rules"`
+			Kialo string   `yaml:"kialo"`
+			// OutsideBatch marks a claim of the batch's discussion that is
+			// not one of its 50, so that a mistyped id is not taken for one.
+			OutsideBatch bool           `yaml:"outside_batch"`
+			Claim        string         `yaml:"claim"`
+			Target       string         `yaml:"target"`
+			Coding       map[string]any `yaml:"coding"`
+			Why          string         `yaml:"why"`
 		} `yaml:"cases"`
 	}
 	if err := yaml.UnmarshalStrict(raw, &f); err != nil {
@@ -136,6 +139,7 @@ func TestRuleCases(t *testing.T) {
 		t.Fatal(err)
 	}
 	gold := ds[0].Gold
+	discussion := strings.SplitN(ds[0].IDs()[0], ".", 2)[0] + "."
 	seen := map[string]bool{}
 	for _, cs := range f.Cases {
 		if cs.ID == "" || seen[cs.ID] {
@@ -155,6 +159,13 @@ func TestRuleCases(t *testing.T) {
 		a, _ := plain(cs.Coding).(map[string]any)
 		for _, p := range c.Check(a, nil) {
 			t.Errorf("%s: %s", cs.ID, p)
+		}
+		_, inGold := gold[cs.Kialo]
+		switch {
+		case inGold && cs.OutsideBatch:
+			t.Errorf("%s: %s is a claim of the batch, not outside it", cs.ID, cs.Kialo)
+		case !inGold && !cs.OutsideBatch && strings.HasPrefix(cs.Kialo, discussion):
+			t.Errorf("%s: %s is of the batch's discussion but not in the gold: mark it outside_batch, or fix the id", cs.ID, cs.Kialo)
 		}
 		if g, ok := gold[cs.Kialo]; ok {
 			if got, want := shape(a), shape(g); got != want {

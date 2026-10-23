@@ -6282,7 +6282,7 @@
    ],
    "notes": {
     "text": "Anti-paternalist rebuttal: whatever the health facts (13292.8), the state should not act on them. It sits in the health branch and argues for the opposite of 13292.115's conclusion should_be_performed(tax_meat) through a rule from personal liberty (55.2); the step 'the state stays out' -> 'no meat tax' is left implicit. It does not address the externality arguments (13292.218, 13292.108), which are not about self-regarding choices, so it is coded as a reply to 115 rather than as a new con of the thesis. As a game question it would be CQ:other_goals (liberty should come first).",
-    "candidate_pattern": null
+    "candidate_pattern": "a liberty set against a consequence, whatever its size (C007; guidelines §3.1, OC5)"
    },
    "adjudication": {
     "changed_fields": [
@@ -6290,7 +6290,17 @@
      "target.actual",
      "instances.scheme.fit"
     ],
-    "reason": "role and target: B (rebuttal of 13292.115's conclusion). The liberty objection answers the paternalist health argument in whose branch it sits and leaves the externality arguments untouched, so it replies to 115 rather than opening a new con of the thesis (A); the conclusion it opposes is the same formula. fit: B (explicit): both annotators marked the rule and the case explicit, and the required conduct is stated. Scheme agreed."
+    "reason": "role and target: B (rebuttal of 13292.115's conclusion). The liberty objection answers the paternalist health argument in whose branch it sits and leaves the externality arguments untouched, so it replies to 115 rather than opening a new con of the thesis (A); the conclusion it opposes is the same formula. fit: B (explicit): both annotators marked the rule and the case explicit, and the required conduct is stated. Scheme agreed.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "the independent review of the D055 application (recode_d055_review.py)",
+      "fields": [
+       "notes.candidate_pattern"
+      ],
+      "what": "Names C007, as OC5 asks of a right or value set against consequences; the coding is unchanged."
+     }
+    ]
    }
   },
   {

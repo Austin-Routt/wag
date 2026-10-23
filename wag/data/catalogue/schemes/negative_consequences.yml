@@ -251,9 +251,10 @@ examples:
     a weaker link than brings_about(A,G) states, a reason to press 33/CQ1. Offered
     as a reply to the pro 13292.115, it is a further bad consequence that ranks nothing,
     so it rebuts that argument''s conclusion and does not argue its exception (docs/kialo-batch2/guidelines.md
-    §3.1, OC2); in the game it answers CQ:side_effect. In the game it is a direct
-    rebuttal of 13292.115''s conclusion: the NASCQ does not let negative_consequences
-    back CQ:side_effect (see positive_consequences'' discrepancy on the game''s questions).'
+    §3.1, OC2); it is 33/CQ3''s rebuttal route, which the game asks as CQ:side_effect.
+    In the game it is played as a direct rebuttal of 13292.115''s conclusion: the
+    NASCQ does not let negative_consequences back CQ:side_effect (see positive_consequences''
+    discrepancy on the game''s questions).'
   status: drafted by Claude Code, 2026-10-23
 - text: A tax on meat could reduce tax revenues, since it would harm the meat industry,
     which pays substantial taxes.
@@ -431,3 +432,7 @@ history:
     is the rebuttal route; the contrast with the prudential form follows the guidelines
     (§3.1, OC13); the proposal''s examples moved here; the CQ3 and game-differs discrepancies
     follow.'
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Revised after the independent review of the application: example 13292.121''s
+    note on how the game plays it.'

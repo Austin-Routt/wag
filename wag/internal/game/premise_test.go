@@ -116,6 +116,12 @@ func TestContexts(t *testing.T) {
 				t.Errorf("context %s weighs schemes by name but not %s", c.ID, id)
 			}
 		}
+		// The two sides, and the two forms, of one scheme weigh alike.
+		for a, b := range map[string]string{"AS:negative_consequences": "AS:consequences", "AS:practical_reasoning_goal": "AS:practical_reasoning"} {
+			if c.Weights[a] != c.Weights[b] {
+				t.Errorf("context %s weighs %s %v but %s %v", c.ID, a, c.Weights[a], b, c.Weights[b])
+			}
+		}
 	}
 	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
 	gs.NASCQ.EnableOther()

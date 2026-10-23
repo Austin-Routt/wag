@@ -40,15 +40,15 @@ case: D058).
 | Comparing cases | [C001](#c001-argument-a-fortiori) | Argument a fortiori | scheme | variant of analogy | 4 verified in 3; met | ready | D056 (open) |
 | Attacking an argument's inference | [C002](#c002-refutation-by-parallel-argument) | Refutation by parallel argument | scheme | new | 9 verified in 2; met | ready | D056 (open) |
 | Attacking an argument's inference | [C011](#c011-appeal-to-consequences-as-an-objection) | Appeal to consequences, as an objection | question | addition to positive_consequences, negative_consequences, negative_consequences_reasoning, negative_consequences_prudential | 6 verified in 2; met | drafting | D074 (open) |
-| Weighing consequences | [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) | Weighing an opposite consequence against a cited one | scheme | variant of positive_consequences, negative_consequences | 12 verified in 2; met | ready | D064 (open) |
+| Weighing consequences | [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) | Weighing an opposite consequence against a cited one | scheme | variant of positive_consequences, negative_consequences | 15 verified in 2; met | ready | D064 (open) |
 | Weighing consequences | [C004](#c004-balance-of-consequences) | Balance of consequences | exception | addition to positive_consequences, negative_consequences | 7 verified in 4; met | ready | D064 (open) |
-| Weighing consequences | [C010](#c010-the-lesser-evil) | The lesser evil | scheme | composition of pragmatic_alternative, C003 | 7 verified in 2; met | ready | D064 (open) |
+| Weighing consequences | [C010](#c010-the-lesser-evil) | The lesser evil | scheme | composition of pragmatic_alternative, C003 | 4 verified in 2; met | ready | D064 (open) |
 | Weighing consequences | [C013](#c013-the-greater-good) | The greater good | scheme | specialization of C003 | 6 verified in 2; met | ready | D064 (open) |
 | Weighing consequences | [C019](#c019-accrual-of-consequence-arguments) | Accrual of consequence arguments | link | rule about positive_consequences, negative_consequences | 4 verified in 2; met | ready | D064 (open) |
 | Weighing consequences | [C025](#c025-no-one-else-is-made-worse-off) | No one else is made worse off | scheme | specialization of C004 | 4 verified in 2; met | drafting | D064 (open) |
 | Weighing consequences | [C026](#c026-the-choosers-own-weighing) | The chooser's own weighing | scheme | specialization of position_to_know, C003 | 3 verified in 1 | collecting | D064 (open) |
 | Magnitude and risk | [C005](#c005-how-serious-is-the-cited-consequence) | How serious is the cited consequence? | question | addition to negative_consequences, positive_consequences | 7 verified in 2; met | ready | D065 (open) |
-| Magnitude and risk | [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) | Precaution against a catastrophic, irreversible risk | scheme | variant of negative_consequences, danger | 6 verified in 3; met | ready | D065 (open) |
+| Magnitude and risk | [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) | Precaution against a catastrophic, irreversible risk | scheme | variant of negative_consequences, negative_practical | 6 verified in 3; met | ready | D065 (open) |
 | Magnitude and risk | [C021](#c021-on-whom-does-the-consequence-fall) | On whom does the consequence fall? | question | addition to negative_consequences, positive_consequences | 4 verified in 2; met | ready | D065 (open) |
 | Magnitude and risk | [C024](#c024-a-certain-harm-against-a-speculative-one) | A certain harm against a speculative one | question | addition to C003 | 2 verified in 1 | collecting | D065 (open) |
 | The action itself | [C006](#c006-mitigation) | Mitigation | exception | addition to negative_consequences | 6 verified in 2; met | ready | D066 (open) |
@@ -66,12 +66,12 @@ case: D058).
 
 ## By relation
 
-How each candidate stands to the schemes WAG has (process.md §8), from the most to the least distinct. The relation is given by hand and checked against the sketch's formula distance from `walton.yml`; the usual outcome is what a person most often decides for such a candidate, not a decision.
+How each candidate stands to the schemes WAG has (process.md §8), from the most to the least distinct. The relation is given by hand and checked against the sketch's formulas: their distance from `walton.yml` and from the candidate's base (process.md §8). The usual outcome is what a person most often decides for such a candidate, not a decision.
 
 | Relation | What it is | Usually | Candidates |
 |---|---|---|---|
 | new (2) | a pattern of its own: no scheme WAG has is its form | add | [C002](#c002-refutation-by-parallel-argument) Refutation by parallel argument; [C009](#c009-prediction-from-an-agents-incentives) Prediction from an agent's incentives |
-| variant (5) | a scheme WAG has with a premise, the conclusion or the modality changed | a domain version, or add it to the base's family | [C001](#c001-argument-a-fortiori) Argument a fortiori (analogy); [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) Weighing an opposite consequence against a cited one (positive_consequences, negative_consequences); [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) Precaution against a catastrophic, irreversible risk (negative_consequences, danger); [C015](#c015-harm-of-not-acting-to-others) Harm of not acting to others (positive_consequences, negative_consequences_prudential); [C022](#c022-argument-from-inevitability) Argument from inevitability (positive_consequences) |
+| variant (5) | a scheme WAG has with a premise, the conclusion or the modality changed | a domain version, or add it to the base's family | [C001](#c001-argument-a-fortiori) Argument a fortiori (analogy); [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) Weighing an opposite consequence against a cited one (positive_consequences, negative_consequences); [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) Precaution against a catastrophic, irreversible risk (negative_consequences, negative_practical); [C015](#c015-harm-of-not-acting-to-others) Harm of not acting to others (positive_consequences, negative_consequences_prudential); [C022](#c022-argument-from-inevitability) Argument from inevitability (positive_consequences) |
 | specialization (3) | a scheme WAG has (or a candidate) with premises added: a narrower case | a domain version, or merge into the base | [C013](#c013-the-greater-good) The greater good (C003); [C025](#c025-no-one-else-is-made-worse-off) No one else is made worse off (C004); [C026](#c026-the-choosers-own-weighing) The chooser's own weighing (position_to_know, C003) |
 | composition (1) | two schemes or candidates chained or combined | merge, as a rule for coding the chain, or reject | [C010](#c010-the-lesser-evil) The lesser evil (pragmatic_alternative, C003) |
 | addition (12) | one premise, assumption, exception or question added to a scheme WAG has | merge into the base | [C011](#c011-appeal-to-consequences-as-an-objection) Appeal to consequences, as an objection (positive_consequences, negative_consequences, negative_consequences_reasoning, negative_consequences_prudential); [C004](#c004-balance-of-consequences) Balance of consequences (positive_consequences, negative_consequences); [C005](#c005-how-serious-is-the-cited-consequence) How serious is the cited consequence? (negative_consequences, positive_consequences); [C006](#c006-mitigation) Mitigation (negative_consequences); [C007](#c007-a-right-or-value-against-consequences) A right or value against consequences (positive_consequences, negative_consequences); [C012](#c012-is-the-warning-an-indirect-threat) Is the warning an indirect threat? (negative_consequences_prudential); [C016](#c016-would-doing-the-action-avert-the-harm) Would doing the action avert the harm? (negative_consequences_prudential); [C017](#c017-another-action-with-better-consequences) Another action with better consequences (positive_consequences); [C018](#c018-can-the-action-be-carried-out) Can the action be carried out? (positive_consequences); [C021](#c021-on-whom-does-the-consequence-fall) On whom does the consequence fall? (negative_consequences, positive_consequences); [C023](#c023-doing-against-allowing) Doing against allowing (positive_consequences); [C024](#c024-a-certain-harm-against-a-speculative-one) A certain harm against a speculative one (C003) |
@@ -385,7 +385,7 @@ Bindings: P1 = “destroying the acorn is not as bad as felling an oak”; P2 = 
 
 The objection that a consequence argument is offered for the truth of a claim: that one should believe something, or that it would be bad if it were false, is no reason to think it true. In the game, S9 already keeps a consequence scheme from concluding a factual statement, but no question lets a player raise the objection, which Kialo users raise by name.
 
-**Relation:** addition to positive_consequences, negative_consequences, negative_consequences_reasoning, negative_consequences_prudential (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). An objection to a consequence argument offered for the truth of a claim, the ad consequentiam fallacy (ND pp. 176-177), as a question or undercutter of the consequence schemes. Until D074, the guidelines code such a claim with Other (kialo-batch2/guidelines.md §3.1, OC1).
+**Relation:** addition to positive_consequences, negative_consequences, negative_consequences_reasoning, negative_consequences_prudential (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). An objection to a consequence argument offered for the truth of a claim, the ad consequentiam fallacy (ND pp. 176-177), as a question or undercutter of the consequence schemes. Until D074, the guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, one that concludes what is the case with Other (kialo-batch2/guidelines.md §3.1, OC1).
 
 **Closest, and why each falls short:**
 - S9 (game-rules.md): It refuses the move in the game; it does not let a player object to it in annotation or argue about it.
@@ -411,7 +411,7 @@ The objection that a consequence argument is offered for the truth of a claim: t
 
 **Open questions:**
 - A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion.
-- Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines code such a claim with Other and name C011 (kialo-batch2/guidelines.md §3.1, OC1).
+- Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1).
 
 ## Weighing consequences
 
@@ -421,9 +421,9 @@ Arguments that set consequences against each other. They differ in what is set a
 
 | Id | Candidate | Kind | Relation | Compares | Concludes | Closest | Seen | Stage |
 |---|---|---|---|---|---|---|---|---|
-| [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) | Weighing an opposite consequence against a cited one | scheme | variant of positive_consequences, negative_consequences | one consequence of the action against one cited by the other side | the other argument's exception (bad_outweighs or good_outweighs) | Other, concluding D055's exception; negative practical reasoning (26.2), more_serious_consequences/2; 33/CQ3 as a rebuttal (D055) | 12 verified in 2; met | ready |
+| [C003](#c003-weighing-an-opposite-consequence-against-a-cited-one) | Weighing an opposite consequence against a cited one | scheme | variant of positive_consequences, negative_consequences | one consequence of the action against one cited by the other side | the other argument's exception (bad_outweighs or good_outweighs) | Other, concluding D055's exception; negative practical reasoning (26.2), more_serious_consequences/2; 33/CQ3 as a rebuttal (D055) | 15 verified in 2; met | ready |
 | [C004](#c004-balance-of-consequences) | Balance of consequences | exception | addition to positive_consequences, negative_consequences | all of an action's consequences against all | a side-level exception (net_cost, net_benefit) | D055's bad_outweighs(A,G) and good_outweighs(A,G); sunk costs' future_losses_outweigh(A); today's other_consequences(A) | 7 verified in 4; met | ready |
-| [C010](#c010-the-lesser-evil) | The lesser evil | scheme | composition of pragmatic_alternative, C003 | the bad consequences of two courses, one of which must be taken | the less bad course should be taken | pragmatic argument from alternatives (34); C003, weighing; alternative_normative (13.2); negative practical reasoning (26.2) | 7 verified in 2; met | ready |
+| [C010](#c010-the-lesser-evil) | The lesser evil | scheme | composition of pragmatic_alternative, C003 | the bad consequences of two courses, one of which must be taken | the less bad course should be taken | pragmatic argument from alternatives (34); C003, weighing; alternative_normative (13.2); negative practical reasoning (26.2) | 4 verified in 2; met | ready |
 | [C013](#c013-the-greater-good) | The greater good | scheme | specialization of C003 | a harm against the good it is needed for | the good outweighs the harm (good_outweighs) | C003, weighing; positive consequences (33.1) | 6 verified in 2; met | ready |
 | [C019](#c019-accrual-of-consequence-arguments) | Accrual of consequence arguments | link | rule about positive_consequences, negative_consequences | how many consequences each side cites | a rule for the engine, or an accrual argument | C004, balance of consequences; the analogy entries' limit, several source cases folded into one | 4 verified in 2; met | ready |
 | [C025](#c025-no-one-else-is-made-worse-off) | No one else is made worse off | scheme | specialization of C004 | a good to some with no cost to anyone else | the action should be done, or allowed | positive consequences (33.1); C004, balance of consequences; C021, on whom the consequence falls; C007, a right or value against consequences | 4 verified in 2; met | drafting |
@@ -455,11 +455,11 @@ An argument that a consequence H of an action matters more than the consequence 
 **Sources:**
 - ND p. 159: the evaluation of consequences as a comparative weighing of the good against the bad; p. 168: the course followed by the lesser evil, after Aristotle; p. 170: the bad outweighing the good.
 
-**Sightings:** 12, 12 verified, in 2 places; the threshold is met.
+**Sightings:** 15, 15 verified, in 2 places; the threshold is met.
 
 | Where | Ref | Fit | What it shows | Found | Verified |
 |---|---|---|---|---|---|
-| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's secondary instance). | review of D055-D059 v1 | session check, 2026-10-22 |
+| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055). | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 13292 | 13292.43 | clean | Revenue is not why the tax is wanted; sustainability and animal welfare press harder than the lost revenue. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.12239 | clean | Good relationships also last longer without access to abortion, and that benefit may outweigh bad relationships enduring. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.14031 | strain | Bans meant to stop selective abortion cause more harm to disabled pregnant people; a comparison plus a new consequence. | review of D055-D059 v1 | session check, 2026-10-22 |
@@ -471,6 +471,9 @@ An argument that a consequence H of an action matters more than the consequence 
 | kialo 5637 | 5637.113 (archived); also C005 | clean | One more person's effect on the climate is tiny beside what is at stake for the child; it outweighs 5637.65's climate gain. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.2797 (archived) | clean | A strained relationship with a child is mostly better than no child at all; weighed against the harm of unready parenthood that 5637.1251 cites. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.5701 (archived); also C026 | clean | A strained relationship brings suffering to mother and child, and no child would bring less; a counter-weighing against 5637.2797. | review of D055-D059 v4 | session check, 2026-10-23 |
+| kialo 5637 | 5637.121 | strain | Abortion harms well-being less than pregnancy and childbirth; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010. | review of D055-D059 v2 | session check, 2026-10-23 |
+| kialo 5637 | 5637.4851 (archived) | strain | Pregnancy carries a greater risk of death than abortion; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010, offered against a claim about what is natural. | review of D055-D059 v3 | session check, 2026-10-23 |
+| kialo 5637 | 5637.2372 (archived) | strain | It is not certain that the hardships cited are worse than never living, and foster care beats no life; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010. | review of D055-D059 v4 | session check, 2026-10-23 |
 
 **The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
 
@@ -593,7 +596,7 @@ Bindings: A = “governments putting a tax on meat”; G = “thousands of farm 
 - The review of D055-D059 v1, test RD8: the weighing argument undercuts the positive argument; undermining brings_about(A,H) then takes down both the weighing argument and the negative argument citing H, and the positive argument is reinstated.
 
 **What implementing it needs:**
-- D055 applied first: its exceptions are what the weighing schemes conclude.
+- D055's exceptions (applied 2026-10-23) are what the weighing schemes conclude.
 - A walton.yml addition (two schemes and matters_more/2), catalogue entries in F15, a declared polarity pair (D053).
 - In the game: an answer at the new exception-locus questions (workstream E), so a weighing claim is one move, not a rebuttal plus an Other argument.
 
@@ -751,7 +754,7 @@ Bindings: A = “the city building the stadium”; G = “forty home games a yea
 - The review of D055-D059 v1, test RD2: under D055's sided exceptions a balance claim proven against one positive argument leaves the others standing; the claim stays tied until each is answered.
 
 **What implementing it needs:**
-- D055 applied, and D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side.
+- D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side.
 
 **Open questions:**
 - Side-level exceptions, or a scheme concluding ¬should_be_performed(A) from net_cost(A), weighed like any rebuttal? The first is closer to how Kialo uses the claim.
@@ -780,17 +783,14 @@ Of two courses, one of which must be taken and both of which have bad consequenc
 **Sources:**
 - ND p. 153: a problem posed as a dilemma, each course with seriously negative consequences; pp. 160-161: the dilemma, and slipping between or grasping the horns; p. 168: the course followed by the lesser evil, after Aristotle.
 
-**Sightings:** 7, 7 verified, in 2 places; the threshold is met.
+**Sightings:** 4, 4 verified, in 2 places; the threshold is met.
 
 | Where | Ref | Fit | What it shows | Found | Verified |
 |---|---|---|---|---|---|
 | kialo 5637 | 5637.208 | clean | When the woman's life is at risk and the foetus cannot survive, abortion is better than letting both die. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.14334 | strain | If equality costs allowing abortion, an unequal society may be better; two bad courses compared, also a weighing. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 2629 | 2629.7306 | clean | God may have chosen suffering over another way to the same goal that would be worse. | review of D055-D059 v1 | session check, 2026-10-22 |
-| kialo 5637 | 5637.4851 (archived) | strain | Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6), offered against a claim about what is natural. | review of D055-D059 v3 | session check, 2026-10-23 |
 | kialo 5637 | 5637.135; also C017 | strain | Adoption, though imperfect, is better than abortion because the child lives; two courses compared, the first conceded to have costs. | review of D055-D059 v2 | session check, 2026-10-23 |
-| kialo 5637 | 5637.121 | strain | Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6). | review of D055-D059 v2 | session check, 2026-10-23 |
-| kialo 5637 | 5637.2372 (archived) | strain | It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6). | review of D055-D059 v4 | session check, 2026-10-23 |
 
 **The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
 
@@ -1134,7 +1134,7 @@ How bad a consequence is, beside how likely it is. The book's questions on conse
 | Id | Candidate | Kind | Relation | Compares | Concludes | Closest | Seen | Stage |
 |---|---|---|---|---|---|---|---|---|
 | [C005](#c005-how-serious-is-the-cited-consequence) | How serious is the cited consequence? | question | addition to negative_consequences, positive_consequences | how good or bad the cited consequence is | a question at good(G) or bad(G) | 33/CQ1; the challenge of a premise (CQ:premise_acceptable) | 7 verified in 2; met | ready |
-| [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) | Precaution against a catastrophic, irreversible risk | scheme | variant of negative_consequences, danger | a small chance against a catastrophic, irreversible harm | the action should not be taken | negative consequences (33.2); argument from danger appeal (37) | 6 verified in 3; met | ready |
+| [C008](#c008-precaution-against-a-catastrophic-irreversible-risk) | Precaution against a catastrophic, irreversible risk | scheme | variant of negative_consequences, negative_practical | a small chance against a catastrophic, irreversible harm | the action should not be taken | negative consequences (33.2); argument from danger appeal (37); negative practical reasoning (26.2) | 6 verified in 3; met | ready |
 | [C021](#c021-on-whom-does-the-consequence-fall) | On whom does the consequence fall? | question | addition to negative_consequences, positive_consequences | who bears the cited consequence | a question at good(G) or bad(G) | C005, how serious the consequence is; C007, a right or value against consequences | 4 verified in 2; met | ready |
 | [C024](#c024-a-certain-harm-against-a-speculative-one) | A certain harm against a speculative one | question | addition to C003 | the likelihood of the cited consequence with that of its rival | a question for weighing claims (C003) and D055's exceptions | 33/CQ1; C003's question C003/Q1; C008, precaution; negative practical reasoning (26.2) | 2 verified in 1 | collecting |
 
@@ -1274,7 +1274,7 @@ Pressed with its questions:
 
 An action should not be taken because it may bring about a harm that would be catastrophic and could not be undone, even if that is unlikely. The likelihood is conceded and outweighed by the size and permanence of the harm, which 33/CQ1 cannot express.
 
-**Relation:** variant of negative_consequences, danger (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Negative consequences with a consequence that may follow, two premises of severity and an exception for negligible risk. 33/CQ1 already allows consequences that may follow, and the danger appeal (37) is the book's special case of negative consequences about a risk to the hearer (p. 102).
+**Relation:** variant of negative_consequences, negative_practical (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Negative consequences with a consequence that may follow, two premises of severity and an exception for negligible risk; close too to negative practical reasoning (26.2), which acts on the worst possibility when a fact is unknown. 33/CQ1 already allows consequences that may follow, and the danger appeal (37) is the book's case of negative consequences about a risk to the hearer (p. 102).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
 - `precaution` is 7 from `slippery_slope_base_case`, sharing 1 (adds exception negligible_risk/2, exception precaution_costs_outweigh/1, premise catastrophic/1, premise irreversible/1, premise may_bring_about/2; lacks premise horrible_costs/1, premise would_realize/2).
@@ -1282,6 +1282,7 @@ An action should not be taken because it may bring about a harm that would be ca
 **Closest, and why each falls short:**
 - negative consequences (33.2): It cites a consequence that will follow, and a doubt about its likelihood defeats it.
 - argument from danger appeal (37): It warns of a danger to the hearer, with no claim about irreversibility or a small chance outweighed.
+- negative practical reasoning (26.2): It acts on the worst possibility when a fact is unknown, by comparing the consequences of the two presumptions; it has no premise that the harm is catastrophic or irreversible.
 
 **Related candidates:**
 - C005: Both are about how serious a consequence is.
@@ -1289,6 +1290,7 @@ An action should not be taken because it may bring about a harm that would be ca
 **Sources:**
 - The precautionary principle, in environmental and health policy (not yet read here).
 - The book p. 102: the danger appeal, a special kind of argument from negative consequences; the compendium's 33/CQ1 allows consequences that will, may or must occur.
+- The book pp. 99-100 (compendium 26.2): negative practical reasoning, a subspecies of the argument from ignorance that decides on the presumption that the worst possibility holds, with a firearms safety rule as its example.
 
 **Sightings:** 6, 6 verified, in 3 places; the threshold is met.
 
@@ -2137,7 +2139,7 @@ Arguments from what follows if an action is not done. The book's forms for it sp
 
 An action should be done because, if it is not, a bad outcome befalls others or society. The book's forms for not acting speak to the agent (33.3's parenthetical) or warn the one who would act (33.4, very bad "for you"). Since D055 the guidelines code this pattern as positive consequences of the action, with G the harm's not happening, phrased as a good state (kialo-batch2/guidelines.md §3.1, OC13); a scheme of its own would cite the harm as what follows from not acting.
 
-**Relation:** variant of positive_consequences, negative_consequences_prudential (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Positive consequences with the harm of not acting cited as such (omission_leads_to, bad) instead of its not happening as a good; or the prudential form for a harm to others. The guidelines code it as positive consequences (kialo-batch2/guidelines.md §3.1, OC13); the book places harms to a third party in the pity appeals (p. 101).
+**Relation:** variant of positive_consequences, negative_consequences_prudential (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Positive consequences with the harm of not acting cited as such (omission_leads_to, bad) instead of its not happening as a good; or the prudential form for a harm to others. The guidelines code it as positive consequences (kialo-batch2/guidelines.md §3.1, OC13). Need for help (38) and distress (39) argue from a third party's harm too (the book p. 101), but their conclusions meet nothing (D063), so they are closest items, not its base.
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
 - `harm_of_inaction` is 4 from `positive_consequences`, sharing 2 (adds premise bad/1, premise omission_leads_to/2; lacks premise brings_about/2, premise good/1).
@@ -2265,7 +2267,7 @@ Bindings: X = “insuring your house”; C = “losing everything in a fire”.
 *Note:* The harm falls on the one who would act, the addressee who was considering not insuring, so it is the prudential form (33.4).
 
 **What implementing it needs:**
-- D055 applied first (its exception), and D027 settled (33.3's omission case).
+- D027 settled (33.3's omission case); D055's exception is applied.
 
 **Open questions:**
 - A scheme of its own, or a coding rule (positive consequences with the harm's not happening as G), as proposal D055-D059 has it?

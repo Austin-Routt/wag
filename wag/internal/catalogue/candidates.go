@@ -385,34 +385,57 @@ func (c *Candidate) Nearest(ws []registry.Pattern) []Nearness {
 	return out
 }
 
-// baseDistance is how near the candidate's sketch comes to any scheme of its
-// base: a walton.yml scheme, or another candidate's sketch. -1 if there is
-// nothing to measure.
-func (c *Candidate) baseDistance(src *Sources, sketches map[string][]Scheme) int {
+// basePatterns are the patterns of one base: a walton.yml scheme, or the
+// schemes of another candidate's sketch.
+func basePatterns(b string, src *Sources, sketches map[string][]Scheme) []registry.Pattern {
+	var ps []registry.Pattern
+	for _, w := range src.Walton {
+		if w.ID == b {
+			ps = append(ps, patternOf(w))
+		}
+	}
+	for _, s := range sketches[b] {
+		ps = append(ps, patternOf(s))
+	}
+	return ps
+}
+
+// baseDistance is how near the candidate's sketch comes to the schemes of
+// its bases that share a formula with it: -1 if none does. measured is false
+// when there is nothing to measure (no sketch, or no base with formulas).
+func (c *Candidate) baseDistance(src *Sources, sketches map[string][]Scheme) (best int, measured bool) {
+	best = -1
 	if c.Sketch == nil || c.Relation == nil {
-		return -1
+		return best, false
 	}
 	var ps []registry.Pattern
 	for _, b := range c.Relation.Base {
-		for _, w := range src.Walton {
-			if w.ID == b {
-				ps = append(ps, patternOf(w))
-			}
-		}
-		for _, s := range sketches[b] {
-			ps = append(ps, patternOf(s))
-		}
+		ps = append(ps, basePatterns(b, src, sketches)...)
 	}
 	if len(ps) == 0 {
-		return -1
+		return best, false
 	}
-	best := -1
 	for _, s := range c.Sketch.Schemes {
 		if n := near(s, ps); n.Nearest != "" && (best < 0 || n.Distance < best) {
 			best = n.Distance
 		}
 	}
-	return best
+	return best, true
+}
+
+// sharesWith reports whether some scheme of the candidate's sketch shares a
+// formula with base b; true when there is nothing to measure.
+func (c *Candidate) sharesWith(b string, src *Sources, sketches map[string][]Scheme) bool {
+	ps := basePatterns(b, src, sketches)
+	if c.Sketch == nil || len(ps) == 0 {
+		return true
+	}
+	for _, s := range c.Sketch.Schemes {
+		if near(s, ps).Nearest != "" {
+			return true
+		}
+	}
+	return false
 }
 
 // asProposal is the candidate's sketch and examples as a proposal's
@@ -444,8 +467,11 @@ func (c *Candidate) asProposal() *Proposal {
 //     schemes, a question or exception adds to one, a link is a rule), and
 //     names a base that exists; a scheme whose sketch is one formula or less
 //     from a walton.yml scheme is an error (it is a question or exception of
-//     that scheme); an addition far from its base, and a new pattern near a
-//     walton.yml scheme, are warnings.
+//     that scheme); a new pattern within two formulas of a walton.yml scheme,
+//     an addition more than one formula from its base, a variant or
+//     specialization more than two changed formulas (4) from it or sharing
+//     nothing with it, and a composition that shares nothing with one of its
+//     bases, are warnings.
 func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Finding {
 	var out []Finding
 	bad := func(f string, a ...any) {
@@ -574,8 +600,31 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 					warn("%s: sketch %s is only %d formulas from walton.yml's %s (%s): a variant of it?", where, n.Sketch, n.Distance, n.Nearest, diffText(n))
 				}
 			}
-			if d := c.baseDistance(src, sketches); r.Kind == "addition" && d > 1 {
-				warn("%s: an addition is one formula from its base, but its sketch is %d from the nearest", where, d)
+			far := func(limit int) (string, bool) {
+				d, measured := c.baseDistance(src, sketches)
+				switch {
+				case !measured || (d >= 0 && d <= limit):
+					return "", false
+				case d < 0:
+					return "shares no formula with it", true
+				}
+				return fmt.Sprintf("is %d from the nearest", d), true
+			}
+			switch r.Kind {
+			case "addition":
+				if how, ok := far(1); ok {
+					warn("%s: an addition is one formula from its base, but its sketch %s", where, how)
+				}
+			case "variant", "specialization":
+				if how, ok := far(4); ok {
+					warn("%s: a %s changes or adds a few formulas of its base, but its sketch %s: write it on the base's formulas, or reconsider the relation", where, r.Kind, how)
+				}
+			case "composition":
+				for _, b := range r.Base {
+					if !c.sharesWith(b, src, sketches) {
+						warn("%s: a composition draws on each of its bases, but its sketch shares no formula with %s", where, b)
+					}
+				}
 			}
 		}
 		for _, r := range c.Related {
@@ -792,7 +841,7 @@ func CandidatesMarkdown(cr *CandidateRegister, reg *Register, src *Sources) []by
 	b.WriteString("\n")
 	// The same candidates by how they stand to what WAG has.
 	b.WriteString("## By relation\n\n")
-	b.WriteString("How each candidate stands to the schemes WAG has (process.md §8), from the most to the least distinct. The relation is given by hand and checked against the sketch's formula distance from `walton.yml`; the usual outcome is what a person most often decides for such a candidate, not a decision.\n\n")
+	b.WriteString("How each candidate stands to the schemes WAG has (process.md §8), from the most to the least distinct. The relation is given by hand and checked against the sketch's formulas: their distance from `walton.yml` and from the candidate's base (process.md §8). The usual outcome is what a person most often decides for such a candidate, not a decision.\n\n")
 	b.WriteString("| Relation | What it is | Usually | Candidates |\n|---|---|---|---|\n")
 	for _, k := range RelationKinds {
 		var cs []string

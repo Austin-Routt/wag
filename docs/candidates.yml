@@ -511,7 +511,9 @@ candidates:
         An objection to a consequence argument offered for the truth of a
         claim, the ad consequentiam fallacy (ND pp. 176-177), as a question or
         undercutter of the consequence schemes. Until D074, the guidelines
-        code such a claim with Other (kialo-batch2/guidelines.md §3.1, OC1).
+        name C011 on such a claim: one with a practical conclusion is coded
+        with the consequence scheme it fits, one that concludes what is the
+        case with Other (kialo-batch2/guidelines.md §3.1, OC1).
     group: inference-attacks
     decision: D074
     found:
@@ -578,7 +580,7 @@ candidates:
         verified: session check, 2026-10-23
     open:
       - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion."
-      - "Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines code such a claim with Other and name C011 (kialo-batch2/guidelines.md §3.1, OC1)."
+      - "Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1)."
 
   # --- weighing ----------------------------------------------------------------
   - id: C003
@@ -629,7 +631,7 @@ candidates:
       - source: kialo
         ref: "13292.127"
         fit: clean
-        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's secondary instance).
+        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055).
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
       - source: kialo
@@ -708,6 +710,26 @@ candidates:
         fit: clean
         archived: true
         note: A strained relationship brings suffering to mother and child, and no child would bring less; a counter-weighing against 5637.2797.
+        found: review of D055-D059 v4
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.121"
+        fit: strain
+        note: Abortion harms well-being less than pregnancy and childbirth; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010.
+        found: review of D055-D059 v2
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.4851"
+        fit: strain
+        archived: true
+        note: Pregnancy carries a greater risk of death than abortion; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010, offered against a claim about what is natural.
+        found: review of D055-D059 v3
+        verified: session check, 2026-10-23
+      - source: kialo
+        ref: "5637.2372"
+        fit: strain
+        archived: true
+        note: It is not certain that the hardships cited are worse than never living, and foster care beats no life; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
     sketch:
@@ -802,7 +824,7 @@ candidates:
     engine:
       - "The review of D055-D059 v1, test RD8: the weighing argument undercuts the positive argument; undermining brings_about(A,H) then takes down both the weighing argument and the negative argument citing H, and the positive argument is reinstated."
     needs:
-      - "D055 applied first: its exceptions are what the weighing schemes conclude."
+      - "D055's exceptions (applied 2026-10-23) are what the weighing schemes conclude."
       - "A walton.yml addition (two schemes and matters_more/2), catalogue entries in F15, a declared polarity pair (D053)."
       - "In the game: an answer at the new exception-locus questions (workstream E), so a weighing claim is one move, not a rebuttal plus an Other argument."
     open:
@@ -968,7 +990,7 @@ candidates:
     engine:
       - "The review of D055-D059 v1, test RD2: under D055's sided exceptions a balance claim proven against one positive argument leaves the others standing; the claim stays tied until each is answered."
     needs:
-      - "D055 applied, and D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side."
+      - "D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side."
     open:
       - "Side-level exceptions, or a scheme concluding ¬should_be_performed(A) from net_cost(A), weighed like any rebuttal? The first is closer to how Kialo uses the claim."
       - "If both net_cost(A) and a weighing against one consequence are available, which should annotators choose?"
@@ -1031,31 +1053,11 @@ candidates:
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
       - source: kialo
-        ref: "5637.4851"
-        fit: strain
-        archived: true
-        note: Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6), offered against a claim about what is natural.
-        found: review of D055-D059 v3
-        verified: session check, 2026-10-23
-      - source: kialo
         ref: "5637.135"
         also: [C017]
         fit: strain
         note: Adoption, though imperfect, is better than abortion because the child lives; two courses compared, the first conceded to have costs.
         found: review of D055-D059 v2
-        verified: session check, 2026-10-23
-      - source: kialo
-        ref: "5637.121"
-        fit: strain
-        note: Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6).
-        found: review of D055-D059 v2
-        verified: session check, 2026-10-23
-      - source: kialo
-        ref: "5637.2372"
-        fit: strain
-        archived: true
-        note: It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6).
-        found: review of D055-D059 v4
         verified: session check, 2026-10-23
     sketch:
       schemes:
@@ -1429,13 +1431,14 @@ candidates:
     kind: scheme
     relation:
       kind: variant
-      base: [negative_consequences, danger]
+      base: [negative_consequences, negative_practical]
       why: >-
         Negative consequences with a consequence that may follow, two premises
-        of severity and an exception for negligible risk. 33/CQ1 already
-        allows consequences that may follow, and the danger appeal (37) is the
-        book's special case of negative consequences about a risk to the
-        hearer (p. 102).
+        of severity and an exception for negligible risk; close too to
+        negative practical reasoning (26.2), which acts on the worst
+        possibility when a fact is unknown. 33/CQ1 already allows consequences
+        that may follow, and the danger appeal (37) is the book's case of
+        negative consequences about a risk to the hearer (p. 102).
     group: magnitude-risk
     decision: D065
     found:
@@ -1453,12 +1456,15 @@ candidates:
         why: It cites a consequence that will follow, and a doubt about its likelihood defeats it.
       - item: argument from danger appeal (37)
         why: It warns of a danger to the hearer, with no claim about irreversibility or a small chance outweighed.
+      - item: negative practical reasoning (26.2)
+        why: It acts on the worst possibility when a fact is unknown, by comparing the consequences of the two presumptions; it has no premise that the harm is catastrophic or irreversible.
     related:
       - candidate: C005
         how: Both are about how serious a consequence is.
     sources:
       - "The precautionary principle, in environmental and health policy (not yet read here)."
       - "The book p. 102: the danger appeal, a special kind of argument from negative consequences; the compendium's 33/CQ1 allows consequences that will, may or must occur."
+      - "The book pp. 99-100 (compendium 26.2): negative practical reasoning, a subspecies of the argument from ignorance that decides on the presumption that the worst possibility holds, with a firearms safety rule as its example."
     sightings:
       - source: kialo
         ref: "13564.175"
@@ -2168,8 +2174,10 @@ candidates:
         Positive consequences with the harm of not acting cited as such
         (omission_leads_to, bad) instead of its not happening as a good; or
         the prudential form for a harm to others. The guidelines code it as
-        positive consequences (kialo-batch2/guidelines.md §3.1, OC13); the
-        book places harms to a third party in the pity appeals (p. 101).
+        positive consequences (kialo-batch2/guidelines.md §3.1, OC13). Need
+        for help (38) and distress (39) argue from a third party's harm too
+        (the book p. 101), but their conclusions meet nothing (D063), so they
+        are closest items, not its base.
     group: harms-of-not-acting
     decision: D069
     found:
@@ -2346,7 +2354,7 @@ candidates:
           C: losing everything in a fire
         note: The harm falls on the one who would act, the addressee who was considering not insuring, so it is the prudential form (33.4).
     needs:
-      - "D055 applied first (its exception), and D027 settled (33.3's omission case)."
+      - "D027 settled (33.3's omission case); D055's exception is applied."
     open:
       - "A scheme of its own, or a coding rule (positive consequences with the harm's not happening as G), as proposal D055-D059 has it?"
       - "Does it merge with need for help (38) once D063 gives that scheme a practical conclusion?"

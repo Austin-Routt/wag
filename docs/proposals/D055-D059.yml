@@ -16,7 +16,9 @@
 # It now lives in kialo-batch2/guidelines.md §3.1, as rules OC1-OC14 with
 # worked cases in kialo-batch2/rule-cases.yml, and is maintained there. The
 # five warnings are fixed there and in the catalogue, not here: the scope is
-# set by what the claim does at its target (OC1); a weighing against a harm of not acting
+# set by the claim's conclusion, as the summary says, so a consequence claim
+# with a practical conclusion is coded with the schemes even against a
+# factual claim, naming C011 (OC1); a weighing against a harm of not acting
 # takes the A and G of the argument it answers (OC6); example 6's note, as
 # it moved into the catalogue, reads a right as the action that grants or
 # secures it; C011's registry note and 33.3's Premise 1 decision are

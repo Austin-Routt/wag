@@ -12,7 +12,7 @@ Parts not built yet are marked **(to build)**.
 | The formulas | `walton.yml`: WAG's formula layer, which starts from the upstream collection | `walton-clean/tools/edits.py` and `check/run.sh`, with every change in the CHANGELOG |
 | The game's fields and links | the catalogue's game fields **(to build: workstream I)** | drafting and verifying, then data and play |
 | The game's data (NASCQ, `core.yml`) | generated from the catalogue **(to build: workstream E)** | never by hand, once generated |
-| How to code a claim (annotation rules) | the batch's guidelines (`docs/kialo-batch2/guidelines.md`); the rules on opposite consequences are numbered (§3.1, OC1–OC14), each with worked cases in `rule-cases.yml` | editing the rule there, once, with a case for it; a test checks the cases against `walton.yml` and the gold, and rejects a rule's retired wording anywhere (`TestRuleCases`) |
+| How to code a claim (annotation rules) | the batch's guidelines (`docs/kialo-batch2/guidelines.md`); the rules on opposite consequences are numbered (§3.1, OC1–OC14), each with worked cases in `rule-cases.yml` | editing the rule there, once, with a case for it; a test checks the cases against `walton.yml` and the gold, and rejects a rule's retired wording in the guidelines, the cases, the catalogue's entries and the candidates registry (`TestRuleCases`; proposals and reviews are records and keep their wording) |
 | Open decisions | the decision register, [`decisions.yml`](decisions.yml) (§5) | the decider named in each |
 | The book's text and other private sources | the private workspace (§6) | the owner |
 | Figures (counts, progress) | a generated status report **(to build, §7)** | nobody: documents link to it instead of copying numbers |
@@ -102,6 +102,8 @@ The rounds now go like this.
      - a false claim;
      - a defect in a formula, template or question;
      - a rule that tells annotators to code something wrongly;
+     - a coding in the gold or the worked cases that does not follow the rules;
+     - a code bug, or a test that passes when it should fail;
      - a wrong effect, or a missing one.
    - **Warnings and notes do not start a new version.** They go to the owner with the verdict, and the owner decides:
      - which to fix now;
@@ -109,7 +111,8 @@ The rounds now go like this.
    - **A proposal is done** when a verification round finds no errors on the checklist and every check is green.
 4. **Fixing a finding.**
    - **Reproduce it first:** run the check, or read the source it cites.
-   - **Write the fix in our words.** A reviewer's suggested text is checked like any other: against the sources, the rule's cases and the gold. Record where it came from. (The D055-D059 final check's own fix for its first warning would have coded a claim whose conclusion meets nothing at its target. The fix as first written was wrong too, until the gold's cases showed it.)
+   - **Write the fix in our words.** A reviewer's suggested text is checked like any other: against the sources, the rule's cases and the gold. Record where it came from.
+   - **A fix may not depart from the approved text** without the departure being put to the owner as such. The D055-D059 application set its scope rule by a claim's target, against the approved summary and the final check's fix. The gold's cases caught one fault in that rule before the commit, and the independent review of the application found the departure itself unfounded; the rule now follows the approved text.
    - **State each fact once.**
      - A rule lives in one place: for annotation rules, the guidelines, with an id. Other texts cite the id.
      - When a rule's wording changes, the old wording goes on the retired list, which a test enforces (§1).
@@ -265,7 +268,15 @@ All three go through one registry, [`candidates.yml`](candidates.yml). Its view,
 | addition | one premise, assumption, exception or question added to a scheme WAG has | question or exception | merge into the base |
 | rule | a rule for annotation or the engine | link | the guidelines or the engine |
 
-- **The formula check.** The check measures each sketch against `walton.yml` with the registry's patterns (`internal/registry`: predicates by role, the conclusion included; a changed formula counts two) and shows the nearest scheme in the view. A scheme whose sketch is within one formula of a `walton.yml` scheme is an error: it is a question or exception of that scheme. A new pattern within two formulas of one, and an addition more than one formula from its base, are warnings.
+- **The formula check.** The check measures each sketch with the registry's patterns (`internal/registry`: predicates by role, the conclusion included; a changed formula counts two), against `walton.yml` and against the candidate's own base, and shows the nearest `walton.yml` scheme in the view. Only schemes that share a formula with the sketch count as near.
+  - **An error:** a scheme whose sketch is within one formula of a `walton.yml` scheme. It is a question or exception of that scheme.
+  - **Warnings:**
+    - a new pattern within two formulas of a `walton.yml` scheme;
+    - an addition more than one formula from its base;
+    - a variant or specialization more than two changed formulas (4) from its base, or sharing nothing with it;
+    - a composition that shares no formula with one of its bases.
+
+    A warning says the sketch is not written on the formulas its relation names: write it on them, or reconsider the relation.
 - **The literature check.** Before a candidate is registered, the book's compendium and text and ND are searched for the pattern, and what they say is recorded in its sources, or that nothing was found and what was searched for. A pattern the sources describe is not a discovery: its relation says how it stands to the schemes they give.
 
 **Intake.** Every review brief, annotation run and play report records the candidates it meets in this shape, or one that converts to it. Looking for candidates is its own task, with its own brief (§3), not part of reviewing a proposal. A new sighting of an existing candidate is added to that candidate, not recorded as a new one. A claim that shows two patterns is listed under both, and each listing names the other (`also`); the check notes a claim listed twice without that. A sighting counts only once a second reader has read the text against its note (it is then *verified*).

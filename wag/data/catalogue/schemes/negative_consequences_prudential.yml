@@ -135,9 +135,12 @@ examples:
     may fall ill during your exams, which would be very bad for you. So get the jab.
   coding: 'X = getting the flu jab; C = falling ill during the exams. Pressed: 33/CQ2
     at bad_consequence(X,C) (last winter''s flu peaked in February, and the exams
-    are in December). A second warning for the jab that cites another consequence
-    (passing the flu to a newborn in the family) has its own likelihood assumption,
-    so showing that the flu will not strike during the exams leaves it standing (D055).'
+    are in December). A second warning for the jab that cites another harm to the
+    same reader (missing the family''s trip in January) has its own likelihood assumption,
+    so showing that the flu will not strike during the exams leaves it standing (D055).
+    A harm to someone else, such as passing the flu to a newborn in the family, is
+    not this form: it is positive consequences of the jab (kialo-batch2/guidelines.md
+    §3.1, OC13).'
   status: drafted by Claude Code, 2026-10-23
 - text: Pay me by Friday, or I'll send those photos to your employer.
   coding: 'Near miss: the bad consequence is one the arguer undertakes to bring about,
@@ -169,7 +172,8 @@ discrepancies:
     upstream template had both slots, and the cleaning recorded the lost argument
     as a semantic concern.'
   decision: 'Done: decision D055 (2026-10-23) made it strongly_occur(X,C), with a
-    template of ours; 33/CQ1 targets it.'
+    template of ours; 33/CQ1 targets it. Also ours: 33/CQ2''s target, bad_consequence(X,C),
+    the premise that names C; the question had no target before.'
   status: drafted by Claude Code, 2026-10-23
 - kind: book-walton
   about: CQ3
@@ -178,7 +182,8 @@ discrepancies:
   decision: 'Done: decision D055 (2026-10-23) replaced it with the sided exception
     bad_outweighs(X,C): X has bad consequences that outweigh C, a consequence of not
     doing X. The exceptions'' limits are recorded in positive_consequences'' discrepancy
-    on 33/CQ3.'
+    on 33/CQ3. What is ours: the template of bad_outweighs/2, and reading the exception
+    as weighing against C, a consequence of not doing X.'
   status: drafted by Claude Code, 2026-10-23
 - kind: other
   about: first person
@@ -216,3 +221,8 @@ history:
   what: 'Drafted for decisions D055 and D059 (proposal D055-D059, version 5): the
     proposal''s examples; discrepancies recording D059''s conclusion, D055''s likelihood
     assumption and sided exception, and the first-person reading.'
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Revised after the independent review of the application: the flu-jab example''s
+    second warning cites a harm to the reader (OC13); what is ours is recorded for
+    33/CQ2 and 33/CQ3.'

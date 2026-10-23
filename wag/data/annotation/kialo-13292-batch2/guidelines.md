@@ -138,11 +138,12 @@ Terms:
 
 Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/kialo-batch2`; not given to annotators, because some cases are claims of this batch). A test checks that the codings follow `walton.yml` and the gold, that every rule has a case, and that no retired wording of a rule is used. What the exceptions cannot do is recorded once, in the catalogue entry for positive consequences (`wag/data/catalogue/schemes/positive_consequences.yml`, the discrepancy on 33/CQ3).
 
-**OC1. Scope.** These rules are for claims about consequence arguments (33.1–33.4).
+**OC1. Scope.** These rules are for consequence claims: claims that argue from what an action would bring about (33.1–33.4).
 - A further bad consequence offered against practical reasoning answers its side-effects question, at `side_effects(A,S1)` (D070).
-- What the claim does at its actual target (§2 item 5) decides. A consequence argument concludes that an action should or should not be done.
-  - If the claim is offered as a reason that a claim about what is the case is true or false (that God exists, that AGI can be built), do not code it with a consequence scheme, whatever the claim itself concludes. Code it with `other`, for or against that claim, and name candidate C011 in `notes`.
-  - If the claim argues for or against an action, code it with the consequence schemes, whatever the discussion's thesis. This includes a reply to a claim about what is the case that proposes a changed or another action (role `action_amendment` or `alternative_means`): it argues for that action, not about the claim's truth.
+- What the claim concludes decides, not its target or the discussion's thesis.
+  - A consequence claim that concludes something about an action (doing, believing, pursuing, steering) is coded with the scheme that fits it: a consequence scheme, or practical reasoning by §3.
+    - This holds when its target is a claim about what is the case too. Its conclusion then meets nothing at the target; code its role and polarity as usual. Unless it proposes a changed or another action (`action_amendment`, `alternative_means`), it is then the appeal that candidate C011 objects to: name C011 in `notes`.
+  - A claim that concludes what is the case from consequences (that God exists, because believing it does good) is not coded with a consequence scheme. Code it with `other`, and name C011 in `notes`.
 
 **OC2. A further consequence that ranks nothing is a rebuttal.** A claim that cites a further consequence of the action, without ranking it against one already argued, is a consequence argument of its own sign at the conclusion of the argument it answers. This holds however grave the claim calls the consequence. It holds after a concession with a bare "but" ("poultry is healthier, but means more miserable lives").
 
@@ -159,7 +160,7 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 
 **OC5. Values and rights.**
 - A value or a right named as something the action promotes or harms is a consequence ("cleaner rivers", "pupils losing their privacy"). A ranking with it argues the exception (OC3).
-- A value or a right is set against consequences only when the claim says that it rules the action in or out whatever its consequences ("no one may be watched all day"). That is not the exception. Code it with the value schemes or `other`, and name candidate C007 in `notes`.
+- A value or a right is set against consequences only when the claim says that it rules the action in or out whatever its consequences ("no one may be watched all day"). That is not the exception. Code it with the scheme that fits it (the value schemes, the argument from rules, 55, or `other`), and name candidate C007 in `notes`.
 - Two values ranked against each other, with no consequence named, are not a weighing of consequences either (C007).
 
 **OC6. Another course is not the exception.**
@@ -183,13 +184,13 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 
 **OC11. Split a compound consequence** ("cleaner air and fewer accidents") into one argument per consequence when a reply weighs only one of them.
 
-**OC12. Code one consideration once:** as a gain (33.1) or as an averted harm (33.4), not both.
+**OC12. Code one consideration once:** as a gain (33.1) or as an averted harm (33.4), not both. Code the framing the claim leads with. A claim that states both alike is coded as the gain (33.1), which the game can play.
 
 **OC13. The one who acts, and the action.** Bind A to the thesis's action, never to its omission or its opposite.
 - When the thesis states a right, A is the action that grants or secures the right ("pregnant people having access to abortion services").
 - In a policy debate, the one who acts is whoever would enact the policy as the thesis states it. The people it affects are others, even when the action's phrase names them.
 - A reason against doing A is a negative consequence of A (33.2).
-- A harm of not doing A that falls on the one who acts is the prudential form (33.4) for A. Its templates address the one who acts as "you" (a government whose revenue falls without the tax); a first-person claim reads "I". The game does not have 33.4 yet, so it is played with `other`.
+- A harm of not doing A that falls on the one who acts is the prudential form (33.4) for A, unless the claim also states the consideration as a gain (then OC12). Its templates address the one who acts as "you" (a government whose revenue falls without the tax); a first-person claim reads "I". The game does not have 33.4 yet, so it is played with `other`.
 - A harm of not doing A that falls on anyone else, the reader included when the reader does not act, is positive consequences of A (33.1). Its G is the harm's not happening, phrased as a good state ("people in abusive relationships being able to leave their abusers"; candidate C015).
 
 **OC14. A balance claim** that names no single consequence ("all told, the costs outweigh the benefits") is a comparison with a whole side: code it by OC7, and name candidate C004 in `notes`.

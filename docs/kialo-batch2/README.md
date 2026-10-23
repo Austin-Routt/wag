@@ -15,7 +15,7 @@ The second round of formalizing Kialo claims as Walton scheme instances, as the 
 | `annotator-A.json`, `annotator-B.json` | The two independent annotations. |
 | `agreement.py`, `agreement.json` | Agreement per field (Cohen's kappa), at the level of scheme families, on premises and bindings, and against the first pilot. |
 | `gold.json` | The adjudicated annotations, each disagreement resolved with its reason. A later recoding is recorded in the item's `adjudication.recoded`. |
-| `recode_d055.py` | The recoding of the gold for decisions D055 and D059 (2026-10-23): the sided exceptions, the weighing claims 13292.127 and 13292.43, and the 33/CQ3 challenges split. A one-off, kept as the record; it refuses to run twice. |
+| `recode_d055.py`, `recode_d055_review.py` | The recoding of the gold for decisions D055 and D059 (2026-10-23): the sided exceptions, the weighing claims 13292.127 and 13292.43, and the 33/CQ3 challenges split; then 13292.29 naming C007, as OC5 asks, after the independent review of the application. One-offs, kept as the record; each refuses to run twice. |
 | `adjudication.md` | The disagreements by kind, how they were resolved, and what they say about the guidelines. |
 | `lexicon.json`, `validate.py` | The shared atoms of the discussion, and the check that every formula instantiates `walton.yml`, every target exists and the guidelines' rules hold. |
 | `to_wag.py`, `wag-report.json`, `wag-game.json` | The gold annotations played as a WAG game through the server, move by move, each with what the annotation intended and what was played. The game loads in the browser (*Load an exported game*). |

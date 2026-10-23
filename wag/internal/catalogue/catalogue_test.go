@@ -789,6 +789,22 @@ func TestCandidatesFindFaults(t *testing.T) {
 		{"an addition far from its base", func(c *Candidate) {
 			c.Relation = &Relation{Kind: "addition", Base: []string{"negative_consequences"}, Why: "w"}
 		}, "an addition is one formula from its base", false},
+		{"a new pattern near a walton.yml scheme", func(c *Candidate) {
+			s := *sketch
+			s.Schemes = []Scheme{s.Schemes[0]}
+			s.Schemes[0].Exceptions = []string{"tested_x(A)"}
+			c.Sketch = &s
+			c.Kind = "scheme"
+			c.Relation = &Relation{Kind: "new", Why: "w"}
+		}, "only 2 formulas from walton.yml's positive_consequences", false},
+		{"a variant far from its base", func(c *Candidate) {
+			c.Kind = "scheme"
+			c.Relation = &Relation{Kind: "variant", Base: []string{"negative_consequences"}, Why: "w"}
+		}, "a variant changes or adds a few formulas of its base, but its sketch is 7 from the nearest", false},
+		{"a composition that shares nothing with a base", func(c *Candidate) {
+			c.Kind = "scheme"
+			c.Relation = &Relation{Kind: "composition", Base: []string{"positive_consequences", "analogy"}, Why: "w"}
+		}, "shares no formula with analogy", false},
 	}
 	for _, k := range cases {
 		c := ok
