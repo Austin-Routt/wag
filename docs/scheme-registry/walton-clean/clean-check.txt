@@ -3,7 +3,7 @@ walton-check walton.yml
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)
 stderr during import: ""
-schemes: 116, language keys: 413
+schemes: 116, language keys: 416
 
 == 2. Carneades validator ==
 before instantiation: 17 problem(s)

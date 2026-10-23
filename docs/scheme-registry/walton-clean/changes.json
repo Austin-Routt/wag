@@ -143,6 +143,17 @@
   "reason": "template for the 33.3 scheme added below, in our own words (the category file's repeats the book)"
  },
  {
+  "line": 49,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  bad_outweighs/2: \"The action %s has bad consequences that outweigh %s.\"",
+  "reason": "template for the consequence schemes' sided exceptions (D055, D059), in our own words"
+ },
+ {
   "line": 50,
   "change": "edit",
   "scheme": "language",
@@ -548,6 +559,17 @@
   "before": "  good_group/2: \"Everybody who is good, or who represen ts a group %s with good qualities, accepts policy %s.\"",
   "after": "  good_group/2: \"Everybody who is good, or who represents a group %s with good qualities, accepts policy %s.\"",
   "reason": "template word 'represen ts' (OCR)"
+ },
+ {
+  "line": 152,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  good_outweighs/2: \"The action %s has good consequences that outweigh %s.\"",
+  "reason": "template for the consequence schemes' sided exceptions (D055, D059), in our own words"
  },
  {
   "line": 194,
@@ -1230,6 +1252,17 @@
   "before": "  strongly_occur/1: \"If you don't do %s consequences %s may strongly appear.\"",
   "after": "  strongly_occur/1: \"If you don't do %s consequences may strongly appear.\"",
   "reason": "strongly_occur is used with 1 argument (X); the template had a second %s"
+ },
+ {
+  "line": 357,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  strongly_occur/2: \"If %s is not done, %s is likely to follow.\"",
+  "reason": "template for the consequence schemes' sided exceptions (D055, D059), in our own words"
  },
  {
   "line": 359,
@@ -2453,6 +2486,39 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 1289,
+  "change": "edit",
+  "scheme": "negative_consequences_prudential",
+  "scheme_after": "negative_consequences_prudential",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - prudential(X)",
+  "after": "      - should_be_performed(X)",
+  "reason": "D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
+  "line": 1294,
+  "change": "edit",
+  "scheme": "negative_consequences_prudential",
+  "scheme_after": "negative_consequences_prudential",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - other_consequences(X)",
+  "after": "      - bad_outweighs(X,C)",
+  "reason": "D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
+  "line": 1296,
+  "change": "edit",
+  "scheme": "negative_consequences_prudential",
+  "scheme_after": "negative_consequences_prudential",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "     -  strongly_occur(X)",
+  "after": "     -  strongly_occur(X,C)",
+  "reason": "D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
   "line": 1310,
   "change": "edit",
   "scheme": "treat",
@@ -3300,6 +3366,17 @@
   "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
  },
  {
+  "line": 1896,
+  "change": "edit",
+  "scheme": "negative_consequences",
+  "scheme_after": "negative_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - bad(G)\n    exceptions:\n      - other_consequences(A)",
+  "after": "      - bad(G)\n    exceptions:\n      - good_outweighs(A,G)",
+  "reason": "D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
   "line": 1897,
   "change": "insert after",
   "scheme": "negative_consequences_reasoning",
@@ -3476,6 +3553,17 @@
   "reason": "compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22"
  },
  {
+  "line": 1897,
+  "change": "edit",
+  "scheme": "negative_consequences_reasoning",
+  "scheme_after": "negative_consequences_reasoning",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      \n  - id: negative_consequences_reasoning\n    meta:\n      title: Argument From Consequences - Reasoning From Negative Consequences\n      source: >\n             Douglas Walton, A Pragmatic Theory of Fallacy.\n             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.\n             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.\n    variables: [A,B]\n    conclusions:\n      - ¬should_be_performed(A)\n    premises:\n      - agent_bring_about(A,B)\n      - bad_for_goals(B)\n    exceptions:\n      - other_consequences(A)\n      ",
+  "after": "      \n  - id: negative_consequences_reasoning\n    meta:\n      title: Argument From Consequences - Reasoning From Negative Consequences\n      source: >\n             Douglas Walton, A Pragmatic Theory of Fallacy.\n             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.\n             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.\n    variables: [A,B]\n    conclusions:\n      - ¬should_be_performed(A)\n    premises:\n      - agent_bring_about(A,B)\n      - bad_for_goals(B)\n    exceptions:\n      - good_outweighs(A,B)\n      ",
+  "reason": "D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
   "line": 1925,
   "change": "insert after",
   "scheme": "positive_consequences",
@@ -3496,6 +3584,17 @@
   "before": "",
   "after": "      - other_consequences(A)",
   "reason": "the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential"
+ },
+ {
+  "line": 1925,
+  "change": "edit",
+  "scheme": "positive_consequences",
+  "scheme_after": "positive_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - good(G)\n    exceptions:\n      - other_consequences(A)",
+  "after": "      - good(G)\n    exceptions:\n      - bad_outweighs(A,G)",
+  "reason": "D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
  },
  {
   "line": 1976,

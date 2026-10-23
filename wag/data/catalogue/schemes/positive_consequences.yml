@@ -19,7 +19,7 @@ formulas:
   - brings_about(A,G)
   - good(G)
   exceptions:
-  - other_consequences(A)
+  - bad_outweighs(A,G)
   conclusions:
   - should_be_performed(A)
 book:
@@ -88,20 +88,23 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: other_consequences(A), locus: exception}]
-  note: 'Targets the exception other_consequences(A), added by the owner''s decision
-    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
-    of the opposite kind that outweigh the ones cited". An exception that holds defeats
-    the argument whatever the weights, so a lesser opposite consequence is not this
-    exception: it is weighed as a separate counter-argument on the conclusion (ND
-    p. 159).'
-  paraphrase: Would doing A also have consequences of the opposite kind to G that
-    ought to be weighed against it?
-  answer: 'The critic, who raises it with an argument. Against: a bad consequence
-    of A that outweighs G, which undercuts the argument through other_consequences(A).
-    For: showing that A has no such consequence, or that it does not outweigh the
-    one cited.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'bad_outweighs(A,G)', locus: exception}]
+  note: 'Targets the sided exception bad_outweighs(A,G), decision D055 (2026-10-23):
+    doing A has bad consequences that outweigh G. It names G, so it defeats only this
+    argument, not every consequence argument about A. The question has two routes
+    (docs/kialo-batch2/guidelines.md §3.1): a further bad consequence of A that ranks
+    nothing rebuts the conclusion, as a negative_consequences argument weighed by
+    the scheme weights (OC2); a claim that a bad consequence of A matters more than
+    G argues this exception (OC3, OC4). The exceptions'' limits are recorded in the
+    discrepancy on 33/CQ3.'
+  paraphrase: Would doing A have bad consequences that matter more than G?
+  answer: 'The critic, who raises it with an argument. Against: a claim that some
+    bad consequence of A matters more than G, coded with Other or a source-based scheme
+    (expert opinion, position to know), which argues bad_outweighs(A,G) and, unanswered,
+    defeats the argument whatever the weights. For: a reply that attacks that claim''s
+    own comparison, or the consequence it relies on (OC10); only a reply that nothing
+    outweighs G answers every weighing claim at once.'
+  status: drafted by Claude Code, 2026-10-23
 - id: game/CQ:evidence
   game:
     id: CQ:evidence
@@ -124,18 +127,19 @@ critical_questions:
     text: Would doing {A} have bad side effects?
     locus: conclusion
   targets: [{formula: should_be_performed(A), locus: conclusion}]
-  note: 'The game''s narrower form of 33/CQ3: it asks only about bad side effects
-    of A, while the book''s question covers any consequences of the opposite kind.
-    It stays apart from 33/CQ3, which since 2026-10-22 targets the exception other_consequences(A),
-    because the game asks it at the conclusion.'
+  note: 'The game''s form of the rebuttal route of 33/CQ3: it asks, at the conclusion,
+    for a further bad consequence of A. Whether a bad consequence outweighs G is the
+    exception bad_outweighs(A,G), which 33/CQ3 targets (D055); the game gains that
+    question at workstream E.'
   paraphrase: Would doing A also bring about something bad?
-  answer: 'The critic, who raises it with an argument. Against: evidence of a bad
-    effect of A that outweighs G, which rebuts the argument. In the game the answer
-    is backed by expert_opinion, position_to_know or sign: no backup edge lets negative_consequences
-    back it, so an argument from negative consequences against A is played as a direct
-    rebuttal instead. For: showing that A has no such effect, or that G outweighs
-    it.'
-  status: drafted by Claude Code, 2026-10-22
+  answer: 'The critic, who raises it with an argument. Against: a bad effect of A,
+    played as a rebuttal of the conclusion; the weights decide between it and the
+    argument. In the game the answer is backed by expert_opinion, position_to_know
+    or sign: no backup edge lets negative_consequences back it, so an argument from
+    negative consequences against A is played as a direct rebuttal instead. A claim
+    that the bad effect outweighs G answers 33/CQ3 instead. For: showing that A has
+    no such effect.'
+  status: drafted by Claude Code, 2026-10-23
 summary:
   text: 'Use it when an action A is recommended because doing it would bring about
     an outcome G that is good, and the claim offers nothing more: no circumstances,
@@ -159,9 +163,11 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
   text: Choose negative_consequences_prudential when the reason is a harm that failing
-    to do A would bring, addressed to someone inclined not to act; choose positive_consequences
-    when the reason is a good that doing A brings.
-  status: drafted by Claude Code, 2026-10-22
+    to do A would bring on the one who acts, whom it warns; choose positive_consequences
+    when the reason is a good that doing A brings, and also when it is a harm of not
+    doing A that falls on anyone else, with G the harm's not happening, phrased as
+    a good state (docs/kialo-batch2/guidelines.md §3.1, OC13).
+  status: drafted by Claude Code, 2026-10-23
 - scheme: pragmatic_alternative
   text: 'Choose pragmatic_alternative when the text presents a forced choice: either
     A is done or a bad outcome B follows, so A must be done. Choose positive_consequences
@@ -238,8 +244,48 @@ examples:
   coding: 'A = a tax on meat; G = less unhealthy meat consumption. Stated: brings_about(A,G).
     Supplied: good(G), plain from "unhealthy". Conclusion: should_be_performed(A),
     the thesis. "Combat" is goal language, but no circumstances or separate goal are
-    stated, so it is not practical reasoning (the gold''s note).'
-  status: drafted by Claude Code, 2026-10-22
+    stated, so it is not practical reasoning (the gold''s note). Pressed: 33/CQ1 (heavy
+    meat eaters buy it whatever it costs); 33/CQ3 by 13292.127, which says that starvation
+    from less access to meat is worse than any harm of high meat consumption: it argues
+    bad_outweighs(A,G), re-parented to this argument from its Kialo parent 13292.7
+    (docs/kialo-batch2/guidelines.md §3.1, OC4, OC7).'
+  status: drafted by Claude Code, 2026-10-23
+- text: A congestion charge would get traffic in the city centre moving again, so
+    the council should bring one in.
+  coding: 'A = the council bringing in a congestion charge; G = traffic in the city
+    centre moving again. Stated: brings_about(A,G) and the conclusion. Supplied: good(G).
+    Pressed: 33/CQ2, since the only figures quoted come from a city with a metro on
+    every street.'
+  status: drafted by Claude Code, 2026-10-23
+- text: Legalising cannabis would mean more adults use it openly and safely, which
+    is a good thing.
+  coding: A = legalising cannabis; G = more adults using cannabis. negative_consequences'
+    example from public health cites the same G, valued oppositely. Each argument's
+    exception names its own side (bad_outweighs here, good_outweighs there), so they
+    share none; the dispute over the value is fought over good(G) and bad(G).
+  status: drafted by Claude Code, 2026-10-23
+- text: People in physically abusive relationships are likely to stay tethered to
+    their abusers when they cannot end a pregnancy.
+  kialo: "5637.1866"
+  coding: 'The thesis states a right ("the right to choose abortion"), so A is the
+    action that grants or secures it: pregnant people having access to abortion services.
+    G = people in abusive relationships being able to leave their abusers. The claim
+    states a harm of not having access that falls on people other than the one who
+    acts, so it is positive consequences of access, with G the harm''s not happening,
+    phrased as a good state (docs/kialo-batch2/guidelines.md §3.1, OC13; candidate
+    C015). Pressed: 33/CQ3 by 5637.12239, which says that healthy relationships also
+    last longer without access and that this may outweigh the harm: bad_outweighs(A,G)
+    (OC3, OC4). The Kialo text is condensed.'
+  status: drafted by Claude Code, 2026-10-23
+- text: A four-day week would leave staff more rested, so the firm should try it.
+  coding: 'A = the firm trying a four-day week; G = staff being more rested. Pressed:
+    33/CQ3 by a balance claim (all told, the costs to the firm outweigh the benefits),
+    which names no single consequence: one weighing instance, bad_outweighs(A,G),
+    for each positive argument about the four-day week on the board (OC14), and one
+    proof leaves the others standing (candidate C004). A reply that names the bad
+    consequence (the lost Friday orders matter more than rested staff) is an ordinary
+    weighing claim.'
+  status: drafted by Claude Code, 2026-10-23
 - text: Rationing meat via personal carbon budgets/allowances (credits) where everybody
     in a country can consume a small amount of meat … would help reduce carbon emissions.
   kialo: "13292.147"
@@ -266,15 +312,26 @@ examples:
     gold codes it.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: The city has set itself the goal of clean air by 2030, and a congestion charge
+    is the way to get there, so it should bring one in.
+  coding: 'Near miss: the action is argued for as the means to a goal the agent has
+    set, not by a consequence judged good; practical_reasoning2 (S1 = the city''s
+    air being dirty, A = bringing in a congestion charge, S2 = the city''s air being
+    clean, G = clean air by 2030).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-23
 discrepancies:
 - kind: game-differs
-  about: exception other_consequences(A)
-  detail: The game's core.yml lacks the exception other_consequences(A) of walton.yml.
+  about: exception bad_outweighs(A,G)
+  detail: The game's core.yml lacks the exception bad_outweighs(A,G) of walton.yml.
   decision: Keep the game as it is until its data is generated from the catalogue
-    (plan §6; catalogue-alignment.md, workstream E). The game asks the book's 33/CQ3
-    at the conclusion, as a rebuttal (CQ:side_effect); then core.yml gets the exception
-    other_consequences(A) and the question is asked at it, as in walton.yml.
-  status: drafted by Claude Code, 2026-10-22
+    (plan §6; catalogue-alignment.md, workstream E). The game asks 33/CQ3's rebuttal
+    route at the conclusion (CQ:side_effect) and keeps it; core.yml then gets the
+    exception bad_outweighs(A,G), with a question at it for the weighing route (D055).
+    No scheme concludes the exception, so a player answers that question with Other
+    or a source-based scheme (expert opinion, position to know); whether analogy may
+    is D057.
+  status: drafted by Claude Code, 2026-10-23
 - kind: book-walton
   about: Premise
   detail: The compendium's single premise says that doing A will plausibly have good
@@ -301,13 +358,33 @@ discrepancies:
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
-    walton.yml has no formula for it here, while it encodes the same question as the
-    exception other_consequences(X) in negative_consequences_prudential.
-  decision: 'Done: the owner''s decision of 2026-10-22 gave positive_consequences,
-    negative_consequences and negative_consequences_reasoning the exception other_consequences(A);
-    33/CQ3 targets it (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
-    by the owner").'
-  status: drafted by Claude Code, 2026-10-22
+    walton.yml had no formula for it here. The owner's decision of 2026-10-22 added
+    other_consequences(A), but that one exception was shared by every consequence
+    argument about A on both sides, so one argument that it held defeated them all
+    (D055).
+  decision: 'Done: decision D055 (2026-10-23) gave each consequence scheme an exception
+    on its own side that names the consequence it cites: bad_outweighs(A,G) here,
+    good_outweighs(A,G) in negative_consequences, good_outweighs(A,B) in negative_consequences_reasoning,
+    bad_outweighs(X,C) in negative_consequences_prudential. 33/CQ3 targets it, by
+    two routes (docs/kialo-batch2/guidelines.md §3.1). What the sided exceptions cannot
+    do (each tested in WAG''s engine by the proposal''s reviews; docs/proposals/D055-D059.md):
+    (1) a balance claim that names no single consequence needs one weighing instance
+    per argument it answers, and one proof leaves the others standing (candidate C004);
+    (2) contrary weighing claims (starvation outweighs the health gain; the health
+    gain outweighs starvation) are different statements, so both can be accepted and
+    both arguments fall, since declared contraries are not enforced (D053); (3) no
+    scheme concludes the exceptions, so a weighing claim is argued with Other or a
+    source-based scheme and is not tied to the rival consequence it relies on (candidate
+    C003); (4) negative_consequences and negative_consequences_reasoning share the
+    exception when bound alike, so one weighing claim defeats both; (5) one consideration
+    framed as a gain (33.1) and as a harm averted (33.4) has two exceptions, and a
+    weighing claim reaches only one (the guidelines code it once, OC12); (6) every
+    weighing claim against one argument argues the same statement, so a reply that
+    denied the exception would cancel them all (the guidelines have a reply attack
+    the weighing claim''s own comparison, OC10); (7) an exception holds whatever the
+    weights: an unanswered weighing claim of weight 0.1 removes an argument of weight
+    0.9, and an equal denial restores it.'
+  status: drafted by Claude Code, 2026-10-23
 - kind: other
   about: game questions
   detail: 'The game''s three questions differ from the book''s: CQ:likelihood drops
@@ -320,9 +397,9 @@ discrepancies:
   decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
     the game''s texts from these paraphrases, sit the evidence question on 33/CQ2
     at the premise, add the backup edge AS:negative_consequences → CQ:side_effect,
-    and ask the opposite-consequences questions at the exception other_consequences(A),
-    as 33/CQ3 now is.'
-  status: drafted by Claude Code, 2026-10-22
+    and add the book''s 33/CQ3 at the exception bad_outweighs(A,G), beside CQ:side_effect
+    at the conclusion (D055).'
+  status: drafted by Claude Code, 2026-10-23
 classification:
   source: independent
   reasoning: practical
@@ -385,3 +462,10 @@ history:
   what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
     (findings: the contrasts with both causal schemes and with the slope; the CQ1-CQ2
     decision no longer has the steps back the argument)'
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Revised for decisions D055 and D059 (proposal D055-D059, version 5): 33/CQ3
+    targets the sided exception bad_outweighs(A,G), with its two routes; CQ:side_effect
+    is the rebuttal route; the contrast with the prudential form follows the guidelines
+    (§3.1, OC13); the proposal''s examples moved here; the CQ3 discrepancy records
+    D055 and the exceptions'' limits; the game-differs decision is for the new exception.'

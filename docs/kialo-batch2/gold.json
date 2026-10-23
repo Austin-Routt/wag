@@ -167,10 +167,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'food becomes more expensive for the many people who cannot afford it'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -217,10 +217,17 @@
     },
     {
      "cq": "33.2 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)",
+     "note": "the thesis's pros may outweigh it"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "the thesis's pros may outweigh it"
+     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": null,
@@ -236,7 +243,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -277,10 +294,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'tax revenues are reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -411,10 +428,17 @@
     },
     {
      "cq": "33.2 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
+     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare)"
+     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": null,
@@ -437,7 +461,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -654,10 +688,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'unhealthy meat consumption is reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -701,10 +735,16 @@
     },
     {
      "cq": "33.1 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
      "formula": "should_be_performed(tax_meat)",
-     "note": "side effect at the conclusion: 13292.121 (unhealthy underconsumption)"
+     "note": "side effect at the conclusion: 13292.121 (unhealthy underconsumption); the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": null,
@@ -720,7 +760,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -1141,10 +1191,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,more_anemia_cases)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'cases of anemia increase'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -1247,10 +1297,16 @@
     },
     {
      "cq": "33.2 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "good_outweighs(tax_meat,more_anemia_cases)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "13292.233: meat reduction improves health"
+     "note": "13292.233: meat reduction improves health; the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": "28 CQ1",
@@ -1268,7 +1324,17 @@
     "changed_fields": [
      "target.other_kialo_parents"
     ],
-    "reason": "Agreed on scheme, role and primary target. The second parent's function (B: premise_backing of 121's brings_about; A: no role given) is coded cq_answer CQ:likelihood with polarity for, because negative_consequences has CQ:likelihood on that premise (R2, R7). The causal step's cause is the shared atom reduced_meat_consumption (R5)."
+    "reason": "Agreed on scheme, role and primary target. The second parent's function (B: premise_backing of 121's brings_about; A: no role given) is coded cq_answer CQ:likelihood with polarity for, because negative_consequences has CQ:likelihood on that premise (R2, R7). The causal step's cause is the shared atom reduced_meat_consumption (R5).",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -1309,10 +1375,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,food_security_decreased)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'the country's food security decreases'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -1479,6 +1545,51 @@
     {
      "primary": true,
      "scheme": {
+      "walton_id": "other",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.45,
+      "alternatives": [
+       {
+        "walton_id": "negative_practical",
+        "why_not": "uses more_serious_consequences/2, but concerns acting on a presumption under ignorance"
+       }
+      ],
+      "description": "Weighing of consequences: a bad consequence of the tax (starvation) is more serious than the harms of high meat consumption that the pros cite, so the tax's bad consequences outweigh the good one 13292.115 argues: the exception of that positive consequences argument (D055; guidelines §3.1, OC3, OC4). No scheme concludes the exception (candidate C003). walton.yml has more_serious_consequences/2 only inside negative_practical (26.2), which compares the costs of acting on a presumption under ignorance and does not fit."
+     },
+     "bindings": {},
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
+       "en": "The action 'governments put a tax on meat' brings about 'people starve because the tax reduces their access to meat'.",
+       "status": "inferred",
+       "cite": "13292.7"
+      },
+      {
+       "role": "premise",
+       "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
+       "en": "The action 'governments put a tax on meat' brings about 'unhealthy meat consumption is reduced'.",
+       "status": "inferred",
+       "cite": "13292.115",
+       "note": "the conceded benefit that is outweighed"
+      },
+      {
+       "role": "premise",
+       "formula": "more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)",
+       "en": "Consequences 'people starve because the tax reduces their access to meat' are more serious than consequences 'the harms of high meat consumption (those the pros of the tax cite)'.",
+       "status": "explicit"
+      }
+     ],
+     "conclusion": {
+      "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
+      "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'unhealthy meat consumption is reduced'."
+     }
+    },
+    {
+     "primary": false,
+     "scheme": {
       "walton_id": "negative_consequences",
       "compendium": "33.2",
       "wag_id": "AS:negative_consequences",
@@ -1508,55 +1619,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'people starve because the tax reduces their access to meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
-      }
-     ],
-     "conclusion": {
-      "formula": "¬should_be_performed(tax_meat)",
-      "en": "'governments put a tax on meat' should not be done."
-     }
-    },
-    {
-     "primary": false,
-     "scheme": {
-      "walton_id": "other",
-      "compendium": null,
-      "wag_id": null,
-      "fit": "reconstructed",
-      "confidence": 0.45,
-      "alternatives": [
-       {
-        "walton_id": "negative_practical",
-        "why_not": "uses more_serious_consequences/2, but concerns acting on a presumption under ignorance"
-       }
-      ],
-      "description": "Weighing of consequences: a bad consequence of the action is more serious than the bad state the action would remove, so the action should not be performed. walton.yml has more_serious_consequences/2 only inside negative_practical (26.2), which compares the costs of acting on a presumption under ignorance and does not fit."
-     },
-     "bindings": {},
-     "premises": [
-      {
-       "role": "premise",
-       "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
-       "en": "The action 'governments put a tax on meat' brings about 'people starve because the tax reduces their access to meat'.",
-       "status": "inferred",
-       "cite": "13292.7"
-      },
-      {
-       "role": "premise",
-       "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
-       "en": "The action 'governments put a tax on meat' brings about 'unhealthy meat consumption is reduced'.",
-       "status": "inferred",
-       "cite": "13292.115",
-       "note": "the conceded benefit that is outweighed"
-      },
-      {
-       "role": "premise",
-       "formula": "more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)",
-       "en": "Consequences 'people starve because the tax reduces their access to meat' are more serious than consequences 'the harms of high meat consumption (those the pros of the tax cite)'.",
-       "status": "explicit"
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -1566,19 +1632,21 @@
     }
    ],
    "role": {
-    "kind": "independent_pro",
+    "kind": "cq_answer",
     "confidence": 0.5,
-    "cq": null,
-    "polarity": "for"
+    "cq": "33.1 CQ3",
+    "polarity": "against"
    },
    "target": {
     "kialo_parent": "13292.7",
     "kialo_relation": "pro",
     "actual": {
-     "claim": "13292.7",
-     "part": "conclusion"
+     "claim": "13292.115",
+     "part": "exception",
+     "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
+     "instance": "primary"
     },
-    "re_parented": false
+    "re_parented": true
    },
    "evidence": {
     "status": "assertion",
@@ -1590,7 +1658,7 @@
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
      "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
-     "note": "13292.204: those at risk of starvation rarely eat meat; 13292.206 replies"
+     "note": "of the secondary instance, the starvation consequence"
     },
     {
      "cq": "33.2 CQ2",
@@ -1600,27 +1668,49 @@
     },
     {
      "cq": "33.2 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
-     "formula": "¬should_be_performed(tax_meat)"
+     "formula": "¬should_be_performed(tax_meat)",
+     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
      "formula": "more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)",
-     "note": "the comparison is asserted, not argued; 13292.202 avoids the harm by an amendment"
+     "note": "the comparison is asserted, not argued; a reply that denies it attacks this premise (OC10)"
     }
    ],
    "notes": {
-    "text": "The text asserts only the comparison; the link tax -> starvation is presupposed and is what the children engage (13292.202 amends the action, 13292.204 denies the link), so negative consequences is primary and the comparison is a secondary weighing instance ('other'). Alternative role: premise_backing of 13292.7's bad(G). 'Any consequence of high meat consumption' refers to the harms the pros cite (13292.115, 13292.108).",
-    "candidate_pattern": "weighing of consequences: the bad consequences of A outweigh the good ones it brings (also 13292.43)"
+    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link.",
+    "candidate_pattern": "weighing of consequences (C003); a comparison with a class (OC7)"
    },
    "adjudication": {
     "changed_fields": [
      "instances.premises.status"
     ],
-    "reason": "Scheme, role and target agreed. bad(G) is marked explicit as B did ('a more severe threat' states the evaluation); A marked it supplied while noting the same words."
+    "reason": "Scheme, role and target agreed. bad(G) is marked explicit as B did ('a more severe threat' states the evaluation); A marked it supplied while noting the same words.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "instances.primary",
+       "instances.conclusion",
+       "role",
+       "target",
+       "challenges",
+       "notes"
+      ],
+      "what": "The weighing became the primary instance, an answer to 33.1 CQ3 at 13292.115's new exception; the starvation consequence is secondary. Before, negative consequences was primary, an independent pro of 13292.7."
+     }
+    ]
    }
   },
   {
@@ -1947,10 +2037,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat_and_fund_synthetic_meat_research)",
-       "en": "Doing 'governments tax meat and use some of the revenue to encourage research into synthetic meats' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "bad_outweighs(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)",
+       "en": "The action 'governments tax meat and use some of the revenue to encourage research into synthetic meats' has bad consequences that outweigh 'the development of synthetic meats is advanced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -2049,10 +2139,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,more_dangerous_meat_production)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'meat producers switch to cheaper and more dangerous means of producing meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -2783,53 +2873,46 @@
     {
      "primary": true,
      "scheme": {
-      "walton_id": "positive_value",
-      "compendium": "19.1",
-      "wag_id": "AS:values",
+      "walton_id": "other",
+      "compendium": null,
+      "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.45,
+      "confidence": 0.5,
       "alternatives": [
        {
-        "walton_id": "practical_reasoning1",
-        "why_not": "values are named, but neither circumstances nor how the tax promotes them; it would be a fragment with three supplied premises"
-       },
-       {
-        "walton_id": "other",
-        "why_not": "a priority reading (the goal's values outweigh the revenue loss); the claim's content is the values for which the goal is kept"
+        "walton_id": "positive_value",
+        "why_not": "it ranks two consequences of the tax, and the values it names are things the tax would promote, so they count as consequences (OC3, OC5)"
        }
-      ]
+      ],
+      "description": "Weighing of consequences: what the tax would promote (sustainability, animal welfare) presses harder than the lost revenue 13292.9 cites, so the tax's good consequences outweigh it: the exception of that negative consequences argument (D055; guidelines §3.1, OC4, OC5). No scheme concludes the exception (candidate C003)."
      },
-     "bindings": {
-      "V": "sustainability_and_animal_welfare",
-      "A": "meat_tax_proponents",
-      "G": "tax_meat"
-     },
+     "bindings": {},
      "premises": [
       {
        "role": "premise",
-       "formula": "judged_positive_value(sustainability_and_animal_welfare,meat_tax_proponents)",
-       "en": "Value 'sustainability and animal welfare' is positive as judged by agent 'the proponents of a meat tax'.",
+       "formula": "brings_about(tax_meat,sustainability_and_animal_welfare)",
+       "en": "The action 'governments put a tax on meat' brings about 'sustainability and animal welfare'.",
        "status": "explicit",
-       "note": "\"more pressing issues\"; the agent (the proponents of the tax) is not named in the text"
+       "note": "these issues, not revenue, are the reasons to tax meat"
       },
       {
        "role": "premise",
-       "formula": "positive_affects(sustainability_and_animal_welfare,tax_meat,meat_tax_proponents)",
-       "en": "The fact that value 'sustainability and animal welfare' is positive affects the interpretation and therefore the evaluation of goal 'governments put a tax on meat' of agent 'the proponents of a meat tax', if value is good, it supports commitment to goal.",
+       "formula": "more_pressing(sustainability_and_animal_welfare,tax_revenue_reduced)",
+       "en": "'sustainability and animal welfare' presses harder than 'tax revenues are reduced'.",
        "status": "explicit",
-       "note": "these values, not revenue, are the reasons to tax meat"
+       "note": "\"other, more pressing issues\""
       }
      ],
      "conclusion": {
-      "formula": "reason_retaining_goal(sustainability_and_animal_welfare,tax_meat)",
-      "en": "'sustainability and animal welfare' is a reason for retaining commitment to goal 'governments put a tax on meat'."
+      "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
+      "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'tax revenues are reduced'."
      }
     }
    ],
    "role": {
     "kind": "cq_answer",
     "confidence": 0.5,
-    "cq": "CQ:opposite_consequences",
+    "cq": "33.2 CQ3",
     "polarity": "against"
    },
    "target": {
@@ -2837,7 +2920,9 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.9",
-     "part": "conclusion"
+     "part": "exception",
+     "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
+     "instance": "primary"
     },
     "re_parented": false
    },
@@ -2848,32 +2933,40 @@
    "challenges": [
     {
      "cq": null,
-     "wag_cq": "CQ:legitimate_value",
-     "type": "severity or value",
-     "formula": "judged_positive_value(sustainability_and_animal_welfare,meat_tax_proponents)"
-    },
-    {
-     "cq": null,
-     "wag_cq": "CQ:value_effect",
+     "wag_cq": null,
      "type": "efficacy",
-     "formula": "positive_affects(sustainability_and_animal_welfare,tax_meat,meat_tax_proponents)",
+     "formula": "brings_about(tax_meat,sustainability_and_animal_welfare)",
      "note": "does the tax actually serve sustainability and animal welfare? (cf. 13292.13)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
-     "formula": null,
+     "formula": "more_pressing(sustainability_and_animal_welfare,tax_revenue_reduced)",
      "note": "'more pressing' than revenue is asserted, not argued"
     }
    ],
    "notes": {
-    "text": "Answers 33.2 CQ3 of 13292.9 (CQ:opposite_consequences: good consequences of the tax outweigh the revenue loss) against it: the tax serves sustainability and animal welfare, which matter more than revenue. The answer is carried by an argument from positive value whose goal is the thesis action. The question sits at the conclusion, which R2 (premises and exceptions) does not decide; both annotators chose cq_answer. Alternative role: undercutter (the revenue consequence does not bear on the case for the tax).",
-    "candidate_pattern": "weighing of consequences (see 13292.127)"
+    "text": "Answers 33.2 CQ3 of 13292.9 against it: the tax serves sustainability and animal welfare, which press harder than the lost revenue. It ranks two consequences, so it argues the exception of 13292.9's argument, good_outweighs(tax_meat,tax_revenue_reduced), with Other (guidelines §3.1, OC3, OC4). The values it names are things the tax would promote, so they count as consequences (OC5). Its Kialo parent cites the outweighed consequence, so it is not re-parented.",
+    "candidate_pattern": "weighing of consequences (C003)"
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "instances",
+       "role.cq",
+       "target",
+       "challenges",
+       "notes"
+      ],
+      "what": "Was an argument from positive value answering CQ:opposite_consequences at 13292.9's conclusion; now Other concluding good_outweighs at 13292.9's exception, an answer to 33.2 CQ3."
+     }
+    ]
    }
   },
   {
@@ -2913,10 +3006,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'meat is underconsumed to an unhealthy degree'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -2960,10 +3053,16 @@
     },
     {
      "cq": "33.2 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "good_outweighs(tax_meat,unhealthy_meat_underconsumption)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "13292.233: better health from meat reduction"
+     "note": "13292.233: better health from meat reduction; the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
     {
      "cq": null,
@@ -2979,7 +3078,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -3636,10 +3745,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,domestic_meat_industry_pushed_out)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'domestic meat producers are pushed out of the market'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -4744,10 +4853,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(ration_meat_via_carbon_budgets)",
-       "en": "Doing 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
+       "en": "The action 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' has bad consequences that outweigh 'carbon emissions are reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -4797,10 +4906,16 @@
     },
     {
      "cq": "33.1 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
      "formula": "should_be_performed(ration_meat_via_carbon_budgets)",
-     "note": "13292.149: harder and costlier to implement than a plain meat tax"
+     "note": "13292.149: harder and costlier to implement than a plain meat tax; the game asks it at the conclusion, as a rebuttal, until workstream E"
     }
    ],
    "notes": {
@@ -4812,7 +4927,17 @@
      "instances.scheme",
      "role"
     ],
-    "reason": "scheme: A (positive_consequences). R3: the claim chiefly says that the alternative brings about a good outcome; its 'where' clause describes the rationing itself rather than a resulting state, and S1 comes only from the parent. role: both alternative_means against 108's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). Target agreed."
+    "reason": "scheme: A (positive_consequences). R3: the claim chiefly says that the alternative brings about a good outcome; its 'where' clause describes the rationing itself rather than a resulting state, and S1 comes only from the parent. role: both alternative_means against 108's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). Target agreed.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -5128,10 +5253,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat_with_import_safeguards)",
-       "en": "Doing 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
+       "en": "The action 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' has bad consequences that outweigh 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -5178,10 +5303,16 @@
     },
     {
      "cq": "33.1 CQ3",
+     "wag_cq": null,
+     "type": "opposite consequences",
+     "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)"
+    },
+    {
+     "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
      "formula": "should_be_performed(tax_meat_with_import_safeguards)",
-     "note": "trade disputes; verification costs"
+     "note": "trade disputes; verification costs; the game asks it at the conclusion, as a rebuttal, until workstream E"
     }
    ],
    "notes": {
@@ -5193,7 +5324,17 @@
      "instances.scheme",
      "evidence"
     ],
-    "reason": "scheme: A (positive_consequences). R3: the claim chiefly says the measures 'can solve this issue'; its second sentence specifies the measures rather than a resulting state, and the circumstances come only from the parent, so B's practical reasoning is not warranted. evidence: B (definition): the link explains what an eco-tariff is. Role, polarity and target agreed."
+    "reason": "scheme: A (positive_consequences). R3: the claim chiefly says the measures 'can solve this issue'; its second sentence specifies the measures rather than a resulting state, and the circumstances come only from the parent, so B's practical reasoning is not warranted. evidence: B (definition): the link explains what an eco-tariff is. Role, polarity and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     }
+    ]
    }
   },
   {
@@ -5349,7 +5490,9 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.127",
-     "part": "conclusion"
+     "part": "premise",
+     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
+     "instance": "primary"
     },
     "re_parented": false
    },
@@ -5374,7 +5517,7 @@
     }
    ],
    "notes": {
-    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope. Polarity against 127; it still supports a (restricted) meat tax. Stated as a possibility ('there can be', 'could'). Its sibling 13292.204 instead denies the starvation link.",
+    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope, so it targets the starvation link, a premise of 127's primary instance since D055. Polarity against 127; it still supports a (restricted) meat tax. Stated as a possibility ('there can be', 'could'). Its sibling 13292.204 instead denies the starvation link.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5382,7 +5525,17 @@
      "instances.scheme",
      "instances.scheme.fit"
     ],
-    "reason": "scheme and fit: A (none). R3: the claim states only the amended action; B's practical reasoning took S1 from the target and supplied both the resulting state and the goal, a full instance built on invented premises. Role, polarity and target agreed."
+    "reason": "scheme and fit: A (none). R3: the claim states only the amended action; B's practical reasoning took S1 from the target and supplied both the resulting state and the goal, a full instance built on invented premises. Role, polarity and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "target"
+      ],
+      "what": "Retargeted from 13292.127's conclusion to its starvation premise, since 127's primary instance is now the weighing."
+     }
+    ]
    }
   },
   {
@@ -5442,9 +5595,9 @@
     }
    ],
    "role": {
-    "kind": "cq_answer",
+    "kind": "premise_attack",
     "confidence": 0.6,
-    "cq": "CQ:likelihood",
+    "cq": null,
     "polarity": "against"
    },
    "target": {
@@ -5482,7 +5635,7 @@
     }
    ],
    "notes": {
-    "text": "Answers 33.2 CQ1 (CQ:likelihood) of the starvation consequence that 13292.127 presupposes, against it: the people at risk do not eat meat, so a meat tax cannot starve them by reducing their meat access. The premise is 127's own (inferred from 13292.7), so this is not re-parenting (R1).",
+    "text": "Denies the starvation link that 13292.127 presupposes: the people at risk do not eat meat, so a meat tax cannot starve them by reducing their meat access. Since D055 that link is a premise of 13292.127's primary instance, the weighing (Other), which no question covers, so this is a premise attack (R2). The premise is 127's own (inferred from 13292.7), so this is not re-parenting (R1).",
     "candidate_pattern": "absent exposure: the affected group is not exposed to the cause, so the cited consequence cannot reach it"
    },
    "adjudication": {
@@ -5491,7 +5644,17 @@
      "re_parented",
      "instances.premises"
     ],
-    "reason": "role: B (cq_answer CQ:likelihood). The claim denies brings_about(tax_meat,starvation...), the premise 33.2 CQ1 targets, so cq_answer (R2); A had premise_attack. re_parented: false (R1; both had true): the target is a premise of the Kialo parent's own argument. Scheme (other) and target agreed; the premises are B's, with lexicon atoms, including B's supplied link."
+    "reason": "role: B (cq_answer CQ:likelihood). The claim denies brings_about(tax_meat,starvation...), the premise 33.2 CQ1 targets, so cq_answer (R2); A had premise_attack. re_parented: false (R1; both had true): the target is a premise of the Kialo parent's own argument. Scheme (other) and target agreed; the premises are B's, with lexicon atoms, including B's supplied link.",
+    "recoded": [
+     {
+      "date": "2026-10-23",
+      "by": "decision D055 (proposal D055-D059, version 5; recode_d055.py)",
+      "fields": [
+       "role"
+      ],
+      "what": "cq_answer CQ:likelihood -> premise_attack: its target premise is now in 13292.127's Other instance, which no question covers (R2)."
+     }
+    ]
    }
   },
   {
@@ -5961,10 +6124,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat_with_accompanying_measures)",
-       "en": "Doing 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "bad_outweighs(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)",
+       "en": "The action 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' has bad consequences that outweigh 'unhealthy underconsumption of meat is prevented'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -6340,10 +6503,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,regenerative_agriculture_deterred)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'regenerative agriculture, which produces both meat and environmental benefits, is deterred'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -6447,10 +6610,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,protein_intake_of_millions_reduced)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'the protein intake of millions of people is reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {
@@ -6494,10 +6657,10 @@
       },
       {
        "role": "exception",
-       "formula": "other_consequences(tax_meat)",
-       "en": "Doing 'governments put a tax on meat' also has consequences of the opposite kind that outweigh the ones cited.",
+       "formula": "good_outweighs(tax_meat,government_push_for_insect_protein)",
+       "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'governments push to incentivize eating insects as a protein alternative'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Added on 2026-10-22, when walton.yml gave the scheme this exception (the owner's decision; walton-clean/CHANGELOG.md)."
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       }
      ],
      "conclusion": {

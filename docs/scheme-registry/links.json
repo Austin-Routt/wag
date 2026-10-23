@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision. Also changed 2026-10-22: 28 also links, partly, to cause_to_effect_modal (audit N8). Changed 2026-10-22: 7, 8.1 and 8.2 link to the two-case forms of analogy and the practical analogies (decisions D001, D028 and D029, 2026-10-22); 8.1 and 8.2 are partial, their conclusions restated as should (not) be performed.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision. Also changed 2026-10-22: 28 also links, partly, to cause_to_effect_modal (audit N8). Changed 2026-10-22: 7, 8.1 and 8.2 link to the two-case forms of analogy and the practical analogies (decisions D001, D028 and D029, 2026-10-22); 8.1 and 8.2 are partial, their conclusions restated as should (not) be performed. Changed 2026-10-23: 33.1-33.4's CQ3 maps to each scheme's own sided exception (bad_outweighs or good_outweighs, naming the consequence the argument cites), which replaced the shared other_consequences (decision D055); 33.4 concludes should_be_performed(X), so it is partial, its conclusion restated in the game's vocabulary (decision D059), and its CQ1 and CQ2 map to strongly_occur(X,C) and bad_consequence(X,C).",
  "entries": [
   {
    "number": "1",
@@ -5395,10 +5395,10 @@
       },
       {
        "cq": "CQ3",
-       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)",
+       "note": "the sided exception bad_outweighs(A,G), the bad consequences said to outweigh G, decision D055 (2026-10-23); it replaced other_consequences(A), shared by both sides. A further consequence that ranks nothing rebuts the conclusion instead (kialo-batch2/guidelines.md §3)",
        "walton": [
         {
-         "formula": "other_consequences(A)",
+         "formula": "bad_outweighs(A,G)",
          "locus": "exception"
         }
        ]
@@ -5470,11 +5470,11 @@
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "other_consequences(A)",
+         "formula": "good_outweighs(A,G)",
          "locus": "exception"
         }
        ],
-       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)"
+       "note": "the sided exception good_outweighs(A,G), the good consequences said to outweigh G, decision D055 (2026-10-23); it replaced other_consequences(A), shared by both sides. A further consequence that ranks nothing rebuts the conclusion instead (kialo-batch2/guidelines.md §3)"
       }
      ]
     }
@@ -5548,10 +5548,10 @@
       },
       {
        "cq": "CQ3",
-       "note": "the exception other_consequences(A), added to walton.yml on 2026-10-22 (the owner's decision)",
+       "note": "the sided exception good_outweighs(A,B), the good consequences said to outweigh B, decision D055 (2026-10-23); it replaced other_consequences(A), shared by both sides. A further consequence that ranks nothing rebuts the conclusion instead (kialo-batch2/guidelines.md §3)",
        "walton": [
         {
-         "formula": "other_consequences(A)",
+         "formula": "good_outweighs(A,B)",
          "locus": "exception"
         }
        ]
@@ -5575,8 +5575,8 @@
    "walton_links": [
     {
      "id": "negative_consequences_prudential",
-     "match": "exact",
-     "reason": "Same title and references.",
+     "match": "partial",
+     "reason": "Same title and references. The conclusion restates the book's call to reconsider and do X prudentially as should_be_performed(X), in the game's vocabulary, so that the warning meets the practical schemes about X (decision D059, 2026-10-23), as 8.1 and 8.2 do under D029.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -5598,9 +5598,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "the book's 'ought prudentially to do' X, restated (D059); the old prudential(X) met no other scheme",
       "walton": [
        {
-        "formula": "prudential(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -5610,23 +5611,31 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "strongly_occur(X)",
+         "formula": "strongly_occur(X,C)",
          "locus": "assumption"
         }
-       ]
+       ],
+       "note": "the likelihood assumption names the consequence C since D055 (2026-10-23)"
       },
       {
        "cq": "CQ2",
-       "walton": []
+       "walton": [
+        {
+         "formula": "bad_consequence(X,C)",
+         "locus": "premise"
+        }
+       ],
+       "note": "no separate evidence formula; the evidence question is pressed at the premise that names C (D055)"
       },
       {
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "other_consequences(X)",
+         "formula": "bad_outweighs(X,C)",
          "locus": "exception"
         }
-       ]
+       ],
+       "note": "the sided exception bad_outweighs(X,C), decision D055 (2026-10-23); it replaced other_consequences(X)"
       }
      ]
     }

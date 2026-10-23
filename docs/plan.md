@@ -272,7 +272,7 @@ Some faults are not misused schemes: begging the question, the loaded question, 
    - compendium 33.3's formalization, lost from the upstream master under a duplicate id, is brought into `walton.yml` as `negative_consequences_reasoning`;
    - it and the slippery slope's base case conclude `¬should_be_performed(A)`;
    - `negative_value` gets its own conclusion and a corrected template;
-   - the consequence schemes get the exception `other_consequences(A)`;
+   - the consequence schemes get the exception `other_consequences(A)` (since replaced by D055's sided exceptions, 2026-10-23);
    - the slippery slope's source year is 1992;
    - compendium 10.2 and 53, formalized only in the upstream category files, are brought in as `whole_into_parts` and `full_slippery_slope` (the latter with its source filled in and arguments for its two 0-ary atoms);
    - compendium 50, formalized nowhere, gets a scheme written for WAG, `precedent_slippery_slope`;

@@ -576,4 +576,38 @@ ANALOGY = [
     sub(1725, "relevant_differences(C)", "difference_against(C1,C2,P2)", OWN, _AN),
     delete(1726, "      - more_on_point(A,C)", OWN, _AN),
 ]
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY
+# ----------------------------------------------------------------------
+# 2026-10-23: sided exceptions for the consequence schemes (decisions D055
+# and D059; WAG's docs/proposals/D055-D059.md, version 5, approved by the
+# owner after four independent reviews and a final check). The book's
+# 33/CQ3 had one formula, other_consequences(A), shared by the arguments
+# for and against an action, so that one argument that it held defeated
+# every consequence argument about the action on both sides. Each scheme
+# now has an exception on its own side that names the consequence it
+# cites: an argument for A is defeated by bad consequences that outweigh
+# its G, one against A by good ones that outweigh its G (or B). The
+# prudential form's likelihood assumption names the consequence too, and
+# it concludes that X should be done, so that it meets the practical
+# schemes about X. Templates are our own; other_consequences/1,
+# prudential/1 and strongly_occur/1 are left as orphan templates.
+_SE = ("D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument "
+       "that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception "
+       "on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is "
+       "about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)")
+_PR = ("D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one "
+       "action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided "
+       "exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes "
+       "about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)")
+_SET = "template for the consequence schemes' sided exceptions (D055, D059), in our own words"
+CONSEQUENCES = [
+    insert(49, '  bad_outweighs/2: "The action %s has bad consequences that outweigh %s."', OWN, _SET),
+    insert(152, '  good_outweighs/2: "The action %s has good consequences that outweigh %s."', OWN, _SET),
+    insert(357, '  strongly_occur/2: "If %s is not done, %s is likely to follow."', OWN, _SET),
+    sub(1289, "prudential(X)", "should_be_performed(X)", OWN, _PR),
+    sub(1294, "other_consequences(X)", "bad_outweighs(X,C)", OWN, _PR),
+    sub(1296, "strongly_occur(X)", "strongly_occur(X,C)", OWN, _PR),
+    sub(1896, "other_consequences(A)", "good_outweighs(A,G)", OWN, _SE, scheme="negative_consequences"),
+    sub(1897, "other_consequences(A)", "good_outweighs(A,B)", OWN, _SE, scheme="negative_consequences_reasoning"),
+    sub(1925, "other_consequences(A)", "bad_outweighs(A,G)", OWN, _SE, scheme="positive_consequences"),
+]
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES

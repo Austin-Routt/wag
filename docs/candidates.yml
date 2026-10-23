@@ -28,10 +28,9 @@
 #     WAG has, near_miss_of naming the sketch); engine; needs; open.
 #
 # Sketches of questions and exceptions for the consequence schemes are
-# written on the forms of proposal D055-D059, version 2 (bad_outweighs,
-# good_outweighs, strongly_occur(X,C)), and define those templates; once
-# D055 is applied, the check reports them as already in walton.yml, and
-# they are removed here.
+# written on the forms of decisions D055 and D059 (bad_outweighs,
+# good_outweighs, strongly_occur(X,C)), whose templates are in walton.yml
+# since 2026-10-23.
 
 note: |-
   This is the registry of [`process.md`](process.md) §8. Candidates come
@@ -553,7 +552,7 @@ candidates:
         verified: session check, 2026-10-23
     open:
       - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion."
-      - "Only one discussion so far (on God's existence); the others are practical debates, where the objection rarely arises."
+      - "Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines code such a claim with Other and name C011 (kialo-batch2/guidelines.md §3.1, OC1)."
 
   # --- weighing ----------------------------------------------------------------
   - id: C003
@@ -702,8 +701,6 @@ candidates:
           conclusions: ["good_outweighs(A,G)"]
       language:
         matters_more/2: "%s matters more than %s."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         bad_outweighs_good:
           - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
@@ -850,7 +847,7 @@ candidates:
         ref: "13292.149"
         also: [C017, C018]
         fit: strain
-        note: Rationing would likely cost more than it brings in; a net loss of the other course, which proposal D055-D059 codes as a negative consequence of rationing, not a balance claim.
+        note: Rationing would likely cost more than it brings in; a net loss of the other course, which the guidelines code as a negative consequence of rationing, not a balance claim (§3.1, OC6, OC14; rule-cases.yml OC6-a).
         found: review of D055-D059 v2
         verified: session check, 2026-10-23
     sketch:
@@ -877,8 +874,6 @@ candidates:
       language:
         net_cost/1: "All told, the costs of the action %s outweigh its benefits."
         net_benefit/1: "All told, the benefits of the action %s outweigh its costs."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         positive_consequences_balance:
           - {id: C004/Q1, asks: "All told, do the costs of doing A outweigh its benefits?", target: "net_cost(A)"}
@@ -988,7 +983,7 @@ candidates:
         ref: "5637.4851"
         fit: strain
         archived: true
-        note: Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, which the rule codes as a weighing (C003), offered against a claim about what is natural.
+        note: Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6), offered against a claim about what is natural.
         found: review of D055-D059 v3
         verified: session check, 2026-10-23
       - source: kialo
@@ -1001,14 +996,14 @@ candidates:
       - source: kialo
         ref: "5637.121"
         fit: strain
-        note: Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, which the rule codes as a weighing (C003).
+        note: Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6).
         found: review of D055-D059 v2
         verified: session check, 2026-10-23
       - source: kialo
         ref: "5637.2372"
         fit: strain
         archived: true
-        note: It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, which the rule codes as a weighing (C003).
+        note: It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6).
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
     sketch:
@@ -1163,7 +1158,6 @@ candidates:
       language:
         needed_for/2: "%s is needed for %s."
         matters_more/2: "%s matters more than %s."
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         greater_good:
           - {id: C013/Q1, asks: "Could G be had without B?", target: "needed_for(B,G)"}
@@ -1308,8 +1302,6 @@ candidates:
           assumptions: []
           exceptions: ["good_outweighs(A,G)"]
           conclusions: ["¬should_be_performed(A)"]
-      language:
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         negative_consequences_severity:
           - {id: C005/Q1, asks: "Is G bad enough, and for enough people, to count against doing A?", target: "bad(G)"}
@@ -1578,7 +1570,6 @@ candidates:
           conclusions: ["¬should_be_performed(A)"]
       language:
         avoidable/2: "The action %s can be carried out so that %s does not follow."
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         negative_consequences_mitigation:
           - {id: C006/Q1, asks: "Can A be done in a way, or with a measure, that keeps G from following?", target: "avoidable(A,G)"}
@@ -1732,7 +1723,6 @@ candidates:
           conclusions: ["should_be_performed(A)"]
       language:
         forbidden/1: "Doing %s would violate a right or a duty that no good consequence outweighs."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         positive_consequences_rights:
           - {id: C007/Q1, asks: "Would doing A violate a right or duty that its good consequences cannot outweigh?", target: "forbidden(A)"}
@@ -1821,8 +1811,6 @@ candidates:
           conclusions: ["should_be_performed(X)"]
       language:
         speaker_brings_about/1: "The one giving the warning can bring about %s, and means to if the warning is ignored."
-        strongly_occur/2: "If %s is not done, %s is likely to follow."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         prudential_indirect_threat:
           - {id: C012/Q1, asks: "Can the speaker bring C about, and does the speaker mean to if X is not done?", target: "speaker_brings_about(C)"}
@@ -2066,10 +2054,10 @@ candidates:
       An action should be done because, if it is not, a bad outcome befalls
       others or society. The book's forms for not acting speak to the agent
       (33.3's parenthetical) or warn the one who would act (33.4, very bad
-      "for you"). Proposal D055-D059 codes this pattern as positive consequences
-      of the action, with the harm's not happening, phrased as a good state,
-      as G; a scheme of its own would cite the harm as what follows from not
-      acting.
+      "for you"). Since D055 the guidelines code this pattern as positive
+      consequences of the action, with G the harm's not happening, phrased as
+      a good state (kialo-batch2/guidelines.md §3.1, OC13); a scheme of its own
+      would cite the harm as what follows from not acting.
     compares: the harm that follows, for others, if the action is not done
     concludes: the action should be done
     closest:
@@ -2186,7 +2174,6 @@ candidates:
           conclusions: ["should_be_performed(A)"]
       language:
         omission_leads_to/2: "If %s is not done, %s will follow."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         harm_of_inaction:
           - {id: 33/CQ1, asks: "How likely is it that C will follow if A is not done?", target: "omission_leads_to(A,C)"}
@@ -2299,8 +2286,6 @@ candidates:
           conclusions: ["should_be_performed(X)"]
       language:
         averts/2: "Doing %s would avert %s."
-        strongly_occur/2: "If %s is not done, %s is likely to follow."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         prudential_averts:
           - {id: C016/Q1, asks: "Would doing X actually avert C?", target: "averts(X,C)"}
@@ -2459,7 +2444,6 @@ candidates:
           conclusions: ["should_be_performed(A)"]
       language:
         better_alternative/2: "Some action other than %s would bring about %s at less cost."
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         positive_consequences_alternative:
           - {id: C017/Q1, asks: "Would another action bring about G at less cost, or more easily, than A?", target: "better_alternative(A,G)"}
@@ -2575,8 +2559,6 @@ candidates:
           assumptions: ["possible(A)"]
           exceptions: ["bad_outweighs(A,G)"]
           conclusions: ["should_be_performed(A)"]
-      language:
-        bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
       questions:
         positive_consequences_feasible:
           - {id: C018/Q1, asks: "Can A be carried out at all?", target: "possible(A)"}
@@ -2640,7 +2622,7 @@ candidates:
       consequence on the other, never add up in Carneades: the strongest
       argument on each side decides. ND names the number of consequences as
       a factor of an argument's strength, and Kialo claims bundle several
-      harms. Proposal D055-D059's rule splits a bundle into arguments; it
+      harms. The guidelines split a bundle into arguments (§3.1, OC11); it
       cannot let them accrue.
     compares: how many consequences each side cites
     concludes: a rule for the engine, or an accrual argument
@@ -2701,8 +2683,8 @@ candidates:
       the attic staying dry) or as the prudential form (C = the attic
       flooding). The two conclude the same statement but have different
       exceptions, so a weighing claim reaches only one, and a board can hold
-      both framings at once. Proposal D055-D059's rule codes a consideration
-      once; a declared equivalence would let the registry check it.
+      both framings at once. The guidelines code a consideration
+      once (§3.1, OC12); a declared equivalence would let the registry check it.
     compares: a gain and the same harm averted
     concludes: a rule for annotation, or a declared equivalence
     closest:
@@ -2785,8 +2767,6 @@ candidates:
           assumptions: []
           exceptions: ["good_outweighs(A,G)"]
           conclusions: ["¬should_be_performed(A)"]
-      language:
-        good_outweighs/2: "The action %s has good consequences that outweigh %s."
       questions:
         negative_consequences_bearer:
           - {id: C021/Q1, asks: "Who bears G, and does that change how much it counts against doing A?", target: "bad(G)"}
@@ -3196,7 +3176,7 @@ candidates:
         ref: "5637.392"
         fit: strain
         archived: true
-        note: Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret offered against reading the choice as the weighing (a reply).
+        note: Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret figures, which would answer reading the choice as the weighing, offered against 5637.378.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
     open:

@@ -18,7 +18,7 @@ formulas:
   - brings_about(A,G)
   - bad(G)
   exceptions:
-  - other_consequences(A)
+  - good_outweighs(A,G)
   conclusions:
   - ¬should_be_performed(A)
 book:
@@ -85,20 +85,22 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: other_consequences(A), locus: exception}]
-  note: 'Targets the exception other_consequences(A), added by the owner''s decision
-    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
-    of the opposite kind that outweigh the ones cited". An exception that holds defeats
-    the argument whatever the weights, so a lesser opposite consequence is not this
-    exception: it is weighed as a separate counter-argument on the conclusion (ND
-    p. 159).'
-  paraphrase: Would doing A also have consequences of the opposite kind to G that
-    ought to be weighed against it?
-  answer: 'The critic, who raises it with an argument. Against: a good consequence
-    of A that outweighs G, which undercuts the argument through other_consequences(A).
-    For: showing that A has no such consequence, or that it does not outweigh the
-    one cited.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'good_outweighs(A,G)', locus: exception}]
+  note: 'Targets the sided exception good_outweighs(A,G), decision D055 (2026-10-23):
+    doing A has good consequences that outweigh G. It names G, so it defeats only
+    this argument. The question has two routes (docs/kialo-batch2/guidelines.md §3.1):
+    a further good consequence of A that ranks nothing rebuts the conclusion, as a
+    positive_consequences argument weighed by the scheme weights (OC2); a claim that
+    a good consequence of A matters more than G argues this exception (OC3, OC4).
+    The exceptions'' limits are recorded in positive_consequences'' discrepancy on
+    33/CQ3.'
+  paraphrase: Would doing A have good consequences that matter more than G?
+  answer: 'The critic, who raises it with an argument. Against: a claim that some
+    good consequence of A matters more than G, coded with Other or a source-based
+    scheme, which argues good_outweighs(A,G) and, unanswered, defeats the argument
+    whatever the weights. For: a reply that attacks that claim''s own comparison,
+    or the consequence it relies on (OC10).'
+  status: drafted by Claude Code, 2026-10-23
 - id: game/CQ:evidence
   game:
     id: CQ:evidence
@@ -121,16 +123,18 @@ critical_questions:
     text: Would doing {A} also have good consequences, to weigh against {G}?
     locus: conclusion
   targets: [{formula: ¬should_be_performed(A), locus: conclusion}]
-  note: The game's form of 33/CQ3. It asks for the weighing outright ("to weigh against"),
-    which the book's question leaves implicit. It stays apart from 33/CQ3, which since
-    2026-10-22 targets the exception other_consequences(A), because the game asks
-    it at the conclusion.
-  paraphrase: Would doing A also bring about something good that outweighs G?
+  note: 'The game''s form of the rebuttal route of 33/CQ3: it asks, at the conclusion,
+    for a good consequence of A, which the game plays as an argument from positive
+    consequences (AS:consequences backs it); the weights decide between the two. Whether
+    a good consequence outweighs G is the exception good_outweighs(A,G), which 33/CQ3
+    targets (D055); the game gains that question at workstream E.'
+  paraphrase: Would doing A also bring about something good, to set against G?
   answer: 'The critic, who raises it with an argument. Against: a good consequence
     of A, put forward as an argument from positive_consequences (the game lets AS:consequences
-    back this answer), which rebuts the argument when it outweighs G. For: showing
-    that A has no such consequence, or that G outweighs it.'
-  status: drafted by Claude Code, 2026-10-22
+    back this answer), which rebuts the conclusion; the weights decide between them.
+    A claim that the good consequence outweighs G answers 33/CQ3 instead. For: showing
+    that A has no such consequence.'
+  status: drafted by Claude Code, 2026-10-23
 summary:
   text: Use it when an action A is argued against because doing it would bring about
     an outcome G that is bad. It concludes that A should not be done; it is the mirror
@@ -154,11 +158,12 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
   text: Choose negative_consequences_prudential when the bad outcome would follow
-    from not doing A, and the arguer warns someone who was considering not doing it
-    that they ought to do A after all; the book counts it a subtype of negative consequences
-    (p. 104). Choose negative_consequences when the bad outcome follows from doing
-    A.
-  status: drafted by Claude Code, 2026-10-22
+    from not doing A and falls on the one who acts, whom the arguer warns to do A
+    after all; the book counts it a subtype of negative consequences (p. 104). A bad
+    outcome of not doing A that falls on others is an argument for A, positive_consequences
+    with G the harm's not happening (docs/kialo-batch2/guidelines.md §3.1, OC13).
+    Choose negative_consequences when the bad outcome follows from doing A.
+  status: drafted by Claude Code, 2026-10-23
 - scheme: pragmatic_alternative
   text: 'Choose pragmatic_alternative when the text sets up an either-or: A must be
     done or the bad outcome B follows, so A should be done. Choose negative_consequences
@@ -232,18 +237,42 @@ examples:
   kialo: "13292.7"
   coding: 'A = a tax on meat; G = food becoming unaffordable for many people. Stated:
     brings_about(A,G). Supplied: bad(G); the affordability clause says why it is bad.
-    Conclusion: ¬should_be_performed(A).'
-  status: drafted by Claude Code, 2026-10-22
+    Conclusion: ¬should_be_performed(A). Pressed: 33/CQ1 (meat is a small part of
+    what poor households spend on food, and cheaper foods would not be taxed); 33/CQ3
+    by a claim that the health gains of eating less meat, above all among the poor,
+    outweigh a higher price for one food, which argues good_outweighs(A,G). A plain
+    counter (the tax cuts emissions) would be a positive_consequences argument, a
+    rebuttal (docs/kialo-batch2/guidelines.md §3.1, OC2, OC3).'
+  status: drafted by Claude Code, 2026-10-23
 - text: Taxing meat could also result in an unhealthy underconsumption of meat.
   kialo: "13292.121"
   coding: 'A = a tax on meat; G = unhealthy underconsumption of meat. Stated: brings_about(A,G),
     and bad(G) ("unhealthy"). Conclusion: ¬should_be_performed(A). "Could" claims
     a weaker link than brings_about(A,G) states, a reason to press 33/CQ1. Offered
-    as a reply to the pro 13292.115, it is also a bad side effect of that argument''s
-    action (CQ:side_effect). In the game it is a direct rebuttal of 13292.115''s conclusion:
-    the NASCQ does not let negative_consequences back CQ:side_effect (see positive_consequences''
-    discrepancy on the game''s questions).'
-  status: drafted by Claude Code, 2026-10-22
+    as a reply to the pro 13292.115, it is a further bad consequence that ranks nothing,
+    so it rebuts that argument''s conclusion and does not argue its exception (docs/kialo-batch2/guidelines.md
+    §3.1, OC2); in the game it answers CQ:side_effect. In the game it is a direct
+    rebuttal of 13292.115''s conclusion: the NASCQ does not let negative_consequences
+    back CQ:side_effect (see positive_consequences'' discrepancy on the game''s questions).'
+  status: drafted by Claude Code, 2026-10-23
+- text: A tax on meat could reduce tax revenues, since it would harm the meat industry,
+    which pays substantial taxes.
+  kialo: "13292.9"
+  coding: 'A = a tax on meat; G = tax revenues falling. Stated: brings_about(A,G),
+    with its reason. Supplied: bad(G). Pressed: 33/CQ3 by 13292.43 (revenue is not
+    why the tax is wanted; sustainability and animal welfare press harder), which
+    ranks two consequences and so argues good_outweighs(A,G), with Other; the values
+    it names are things the tax would promote, so they count as consequences (docs/kialo-batch2/guidelines.md
+    §3.1, OC3, OC4, OC5).'
+  status: drafted by Claude Code, 2026-10-23
+- text: Legalising cannabis would mean more adults use it, which is bad for public
+    health.
+  coding: 'A = legalising cannabis; G = more adults using cannabis. Pressed: 33/CQ2,
+    since the studies cited measure use among teenagers, not adults, and come from
+    before any country legalised it. The counterpart of positive_consequences'' example
+    with the same G, valued oppositely; each has its own exception, so they share
+    none.'
+  status: drafted by Claude Code, 2026-10-23
 - text: Meat is the easiest source of organic iron for one's diet. Any financial restrictions
     will only increase cases for anemia directly because of this.
   kialo: "13292.180"
@@ -263,18 +292,26 @@ examples:
     consequences.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: A meat tax is only the first step; once it exists it will be raised again
+    a year later, and again, until meat is banned outright.
+  coding: 'Near miss: it argues from a chain of further steps, not from the action''s
+    own consequence; slippery_slope_base_case (A = a tax on meat, E = the tax being
+    raised again a year later), with inductive steps that carry the ban''s horrible
+    costs back to the first step.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-23
 discrepancies:
 - kind: game-differs
-  about: exception other_consequences(A)
-  detail: The game's core.yml lacks the exception other_consequences(A) of walton.yml.
+  about: exception good_outweighs(A,G)
+  detail: The game's core.yml lacks the exception good_outweighs(A,G) of walton.yml.
   decision: Keep the game as it is until its data is generated from the catalogue
-    (plan §6; catalogue-alignment.md, workstream E). The game asks the book's 33/CQ3
-    at the conclusion, as a rebuttal (CQ:opposite_consequences); then core.yml gets
-    the exception other_consequences(A) and the question is asked at it, as in walton.yml.
-    The backup edge AS:consequences → CQ:opposite_consequences concludes should_be_performed(A),
-    which cannot conclude an exception (rule S9), so that edge changes when the question
-    moves.
-  status: drafted by Claude Code, 2026-10-22
+    (plan §6; catalogue-alignment.md, workstream E). The game asks 33/CQ3's rebuttal
+    route at the conclusion (CQ:opposite_consequences) and keeps it, with its backup
+    edge from AS:consequences, a rebuttal; core.yml then gets the exception good_outweighs(A,G),
+    with a question at it for the weighing route (D055). No scheme concludes the exception
+    (rule S9), so a player answers that question with Other or a source-based scheme;
+    whether analogy may is D057.
+  status: drafted by Claude Code, 2026-10-23
 - kind: book-walton
   about: Premise
   detail: The compendium's 33.2 has a single premise (doing A will have bad consequences)
@@ -300,13 +337,14 @@ discrepancies:
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
-    walton.yml has no formula for it here, while it encodes the same question as the
-    exception other_consequences(X) in negative_consequences_prudential.
-  decision: 'Done: the owner''s decision of 2026-10-22 gave positive_consequences,
-    negative_consequences and negative_consequences_reasoning the exception other_consequences(A);
-    33/CQ3 targets it (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
-    by the owner").'
-  status: drafted by Claude Code, 2026-10-22
+    walton.yml had no formula for it here; the owner's decision of 2026-10-22 added
+    other_consequences(A), shared by every consequence argument about A on both sides
+    (D055).
+  decision: 'Done: decision D055 (2026-10-23) replaced it with the sided exception
+    good_outweighs(A,G); 33/CQ3 targets it, by two routes (docs/kialo-batch2/guidelines.md
+    §3.1). The exceptions'' limits are recorded in positive_consequences'' discrepancy
+    on 33/CQ3.'
+  status: drafted by Claude Code, 2026-10-23
 - kind: other
   about: game questions
   detail: CQ:likelihood drops the book's modality and speaks of "the claimed link";
@@ -386,3 +424,10 @@ history:
   what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
     (findings: the contrasts with both causal schemes; the CQ1-CQ2 decision no longer
     has the steps back the argument; the 13292.180 coding)'
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Revised for decisions D055 and D059 (proposal D055-D059, version 5): 33/CQ3
+    targets the sided exception good_outweighs(A,G), with its two routes; CQ:opposite_consequences
+    is the rebuttal route; the contrast with the prudential form follows the guidelines
+    (§3.1, OC13); the proposal''s examples moved here; the CQ3 and game-differs discrepancies
+    follow.'

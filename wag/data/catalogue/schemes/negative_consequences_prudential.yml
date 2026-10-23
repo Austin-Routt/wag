@@ -17,25 +17,29 @@ formulas:
   - not_doing(X)
   - bad_consequence(X,C)
   assumptions:
-  - strongly_occur(X)
+  - strongly_occur(X,C)
   exceptions:
-  - other_consequences(X)
+  - bad_outweighs(X,C)
   conclusions:
-  - prudential(X)
+  - should_be_performed(X)
 book:
 - entry: "33.4"
   title: Argument from Negative Consequences (Prudential Inference)
   pages: "332"
   parent: "33"
-  match: exact
+  match: partial
   cqs_printed_under: "33"
-  note: Same title and references.
+  note: Same title and references. The conclusion restates the book's call to reconsider
+    and do X prudentially as should_be_performed(X), in the game's vocabulary, so
+    that the warning meets the practical schemes about X (decision D059, 2026-10-23),
+    as 8.1 and 8.2 do under D029.
   status: generated
 families:
 - family: F15
   name: Consequences, alternatives, threat and fear
   relation: subtype
-  note: of 33.2
+  note: of 33.2 (book p. 104); in our reading, 33.2 applied to not doing X; since
+    D059 (2026-10-23) it concludes should_be_performed(X)
   status: generated
 premise_map:
 - entry: "33.4"
@@ -48,14 +52,17 @@ premise_map:
   status: generated
 - entry: "33.4"
   label: Conclusion
-  formulas: [{formula: prudential(X), locus: conclusion}]
+  formulas: [{formula: should_be_performed(X), locus: conclusion}]
+  note: the book's 'ought prudentially to do' X, restated (D059); the old prudential(X)
+    met no other scheme
   status: generated
 critical_questions:
 - id: 33/CQ1
   book:
     entry: "33"
     label: CQ1
-  targets: [{formula: strongly_occur(X), locus: assumption}]
+  targets: [{formula: 'strongly_occur(X,C)', locus: assumption}]
+  note: the likelihood assumption names the consequence C since D055 (2026-10-23)
   paraphrase: ""
   answer: ""
   status: generated
@@ -63,7 +70,9 @@ critical_questions:
   book:
     entry: "33"
     label: CQ2
-  targets: []
+  targets: [{formula: 'bad_consequence(X,C)', locus: premise}]
+  note: no separate evidence formula; the evidence question is pressed at the premise
+    that names C (D055)
   paraphrase: ""
   answer: ""
   status: generated
@@ -71,7 +80,9 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: other_consequences(X), locus: exception}]
+  targets: [{formula: 'bad_outweighs(X,C)', locus: exception}]
+  note: the sided exception bad_outweighs(X,C), decision D055 (2026-10-23); it replaced
+    other_consequences(X)
   paraphrase: ""
   answer: ""
   status: generated
@@ -106,8 +117,80 @@ contrasts:
 - scheme: slippery_slope_base_case
   text: ""
   status: todo
-examples: []
-discrepancies: []
+examples:
+- text: You were thinking of not backing up your thesis. But if you don't, one disk
+    failure could lose a year's work, which would be very bad for you. So you should
+    back it up.
+  coding: 'X = backing up the thesis; C = losing a year''s work. Stated: not_doing(X),
+    bad_consequence(X,C) and the conclusion should_be_performed(X), which meets a
+    negative consequences argument that backing up should not be done (D059). Pressed:
+    33/CQ1 at strongly_occur(X,C) (the laptop is new and the university server keeps
+    a copy every night); 33/CQ3 by the claim that the only backup on offer, a public
+    cloud service, would breach the ethics approval for the confidential interview
+    data, which is worse than the small risk of loss: bad_outweighs(X,C). C is a consequence
+    of not acting, so the exception reads: backing up has bad consequences that outweigh
+    losing a year''s work.'
+  status: drafted by Claude Code, 2026-10-23
+- text: You were going to skip the flu jab this year. But if you don't get it, you
+    may fall ill during your exams, which would be very bad for you. So get the jab.
+  coding: 'X = getting the flu jab; C = falling ill during the exams. Pressed: 33/CQ2
+    at bad_consequence(X,C) (last winter''s flu peaked in February, and the exams
+    are in December). A second warning for the jab that cites another consequence
+    (passing the flu to a newborn in the family) has its own likelihood assumption,
+    so showing that the flu will not strike during the exams leaves it standing (D055).'
+  status: drafted by Claude Code, 2026-10-23
+- text: Pay me by Friday, or I'll send those photos to your employer.
+  coding: 'Near miss: the bad consequence is one the arguer undertakes to bring about,
+    so it is the disjunctive threat, ad_baculum (35.1; X = your paying me by Friday,
+    Y = the photos being sent to your employer); the prudential form cites a consequence
+    that follows of itself. Its conclusion meets no should_be_performed claim (D063).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-23
+discrepancies:
+- kind: partial-link
+  about: "33.4"
+  detail: 'walton.yml formalizes compendium 33.4 only in part: Same title and references.
+    The conclusion restates the book''s call to reconsider and do X prudentially as
+    should_be_performed(X), in the game''s vocabulary, so that the warning meets the
+    practical schemes about X (decision D059, 2026-10-23), as 8.1 and 8.2 do under
+    D029.'
+  decision: 'Done: decision D059 (2026-10-23). The book''s conclusion (reconsider,
+    and prudentially do X) is restated as should_be_performed(X), so that the warning
+    meets the practical schemes about X. What the restatement loses (the call to reconsider,
+    "prudentially", the ceteris-paribus clause) is carried by not_doing(X), bad_consequence(X,C)''s
+    "very bad for you", the argument''s weight and its questions. The old prudential(X)
+    met no other scheme.'
+  status: drafted by Claude Code, 2026-10-23
+- kind: book-walton
+  about: CQ1
+  detail: 'The likelihood assumption strongly_occur(X) named the action but not the
+    consequence, so two warnings about one action that cite different consequences
+    shared it: showing one consequence unlikely defeated the other warning too. The
+    upstream template had both slots, and the cleaning recorded the lost argument
+    as a semantic concern.'
+  decision: 'Done: decision D055 (2026-10-23) made it strongly_occur(X,C), with a
+    template of ours; 33/CQ1 targets it.'
+  status: drafted by Claude Code, 2026-10-23
+- kind: book-walton
+  about: CQ3
+  detail: 33/CQ3's exception, other_consequences(X), named only the action, so it
+    was shared with every consequence argument about X.
+  decision: 'Done: decision D055 (2026-10-23) replaced it with the sided exception
+    bad_outweighs(X,C): X has bad consequences that outweigh C, a consequence of not
+    doing X. The exceptions'' limits are recorded in positive_consequences'' discrepancy
+    on 33/CQ3.'
+  status: drafted by Claude Code, 2026-10-23
+- kind: other
+  about: first person
+  detail: The templates address the one who acts as "you" (you were considering not
+    doing X; very bad for you). The book's parenthetical reading of 33.3, the omission
+    case, is the same form in the first person.
+  decision: 'No change to the templates. Read a first-person instance with "I" for
+    "you", and bind X without a possessive ("backing up the thesis", not "your thesis"),
+    so that it meets the arguments about the same action. Who counts as the one who
+    acts: docs/kialo-batch2/guidelines.md §3.1, OC13 (D027). The game does not have
+    this scheme yet, so it is played with Other.'
+  status: drafted by Claude Code, 2026-10-23
 classification:
   source: ""
   reasoning: ""
@@ -128,3 +211,8 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Drafted for decisions D055 and D059 (proposal D055-D059, version 5): the
+    proposal''s examples; discrepancies recording D059''s conclusion, D055''s likelihood
+    assumption and sided exception, and the first-person reading.'

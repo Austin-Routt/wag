@@ -100,7 +100,8 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - When a claim states only S1, or only G, without the inference, code a `fragment` of its parent's argument. Do not code a full instance with three invented premises.
 - **Cons of a policy.**
   - A bad consequence of the action is negative consequences: `¬should_be_performed(A)` from `brings_about(A,G)` and `bad(G)`.
-  - Bind A to the action exactly as the thesis states it, so that the con and the thesis's pros meet on one issue.
+  - Bind A to the action exactly as the thesis states it, so that the con and the thesis's pros meet on one issue (§3.1, OC13).
+  - A further consequence offered as a reply, and a claim that one consequence outweighs another, follow §3.1.
 - **Bare denials.** "The tax would not resolve the problems" is a `premise_attack` or a `cq_answer` against the efficacy premise of the arguments it denies, with `fit: none` or `other`. It is not a new scheme.
 - **Analogy and the practical analogies** (`analogy`, `practical_analogy_positive`, `practical_analogy_negative`; two-case form since 2026-10-22, decisions D001, D028, D029).
   - Each case has its own claim or action, joined by `corresponds`: P1 in the source case C1 and P2 in the target case C2; X1 in situation A1 and X2 in A2. P2 says of C2 what P1 says of C1, and X2 is to A2 what X1 was to A1.
@@ -116,6 +117,82 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
 - **New patterns.** Do not invent schemes. If you see a recurring inference no scheme covers, name it in `notes.candidate_pattern`.
 - **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, and mark one as primary.
 - **Uncertainty.** Give `confidence` (0 to 1) separately for scheme and role: your estimate that a careful annotator would choose the same. Write what you were unsure of in `notes`.
+
+### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23)
+
+Each consequence scheme has an exception on its own side. The exception names the consequence that the argument cites.
+
+| Scheme | Exception | It says |
+|---|---|---|
+| `positive_consequences` (33.1) | `bad_outweighs(A,G)` | A has bad consequences that outweigh G. |
+| `negative_consequences` (33.2) | `good_outweighs(A,G)` | A has good consequences that outweigh G. |
+| `negative_consequences_reasoning` (33.3) | `good_outweighs(A,B)` | A has good consequences that outweigh B. |
+| `negative_consequences_prudential` (33.4) | `bad_outweighs(X,C)` | X has bad consequences that outweigh C. 33.4 concludes `should_be_performed(X)`. |
+
+The book's third question about consequences (33/CQ3, opposite consequences) has two routes. A further consequence that ranks nothing is a rebuttal (OC2). A claim that one consequence matters more than another argues the exception (OC3). The rules below decide which route a claim takes.
+
+Terms:
+- *the argument it answers*: the consequence argument that a claim replies to;
+- *a weighing claim*: a claim that one consequence matters more than another;
+- *the one who acts*: the agent who would do the action A.
+
+Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/kialo-batch2`; not given to annotators, because some cases are claims of this batch). A test checks that the codings follow `walton.yml` and the gold, that every rule has a case, and that no retired wording of a rule is used. What the exceptions cannot do is recorded once, in the catalogue entry for positive consequences (`wag/data/catalogue/schemes/positive_consequences.yml`, the discrepancy on 33/CQ3).
+
+**OC1. Scope.** These rules are for claims about consequence arguments (33.1–33.4).
+- A further bad consequence offered against practical reasoning answers its side-effects question, at `side_effects(A,S1)` (D070).
+- What the claim does at its actual target (§2 item 5) decides. A consequence argument concludes that an action should or should not be done.
+  - If the claim is offered as a reason that a claim about what is the case is true or false (that God exists, that AGI can be built), do not code it with a consequence scheme, whatever the claim itself concludes. Code it with `other`, for or against that claim, and name candidate C011 in `notes`.
+  - If the claim argues for or against an action, code it with the consequence schemes, whatever the discussion's thesis. This includes a reply to a claim about what is the case that proposes a changed or another action (role `action_amendment` or `alternative_means`): it argues for that action, not about the claim's truth.
+
+**OC2. A further consequence that ranks nothing is a rebuttal.** A claim that cites a further consequence of the action, without ranking it against one already argued, is a consequence argument of its own sign at the conclusion of the argument it answers. This holds however grave the claim calls the consequence. It holds after a concession with a bare "but" ("poultry is healthier, but means more miserable lives").
+
+**OC3. A ranking argues the exception.** A claim that names a consequence of the action and a consequence that the argument it answers cites, and says that one matters more than the other, argues that argument's exception.
+- Words such as outweigh, worse, more serious, more pressing, not worth, the price of and net benefit are hints, not the test.
+- "A life not worth living" ranks nothing. "Both emotional and physical harms", set against emotional harms, ranks without any of those words.
+
+**OC4. How to code a weighing claim.**
+- Use `other`, unless a source-based scheme fits (expert opinion, position to know). No scheme concludes the exceptions (candidate C003).
+- Its conclusion is the exception of the argument it answers, with that argument's own A and G (A and B for 33.3; X and C for 33.4): `bad_outweighs(A,G)` against an argument for A, `good_outweighs(A,G)` against an argument against A.
+- Its role is `cq_answer`. Its `cq` is the third question of that argument's scheme (`33.1 CQ3`, `33.2 CQ3`, `33.3 CQ3`, `33.4 CQ3`). Its target is that argument's exception. Its polarity is `against`, its stance on that argument's conclusion (§5 item 8).
+- The argument it answers is the Kialo parent, if the parent cites the outweighed consequence. Otherwise re-parent the claim to the argument that cites it (§5 item 1).
+- If no argument on the board cites the outweighed consequence, code the claim as a consequence argument of its own sign, or as backing of its parent's premise, and name the comparison in `notes`.
+
+**OC5. Values and rights.**
+- A value or a right named as something the action promotes or harms is a consequence ("cleaner rivers", "pupils losing their privacy"). A ranking with it argues the exception (OC3).
+- A value or a right is set against consequences only when the claim says that it rules the action in or out whatever its consequences ("no one may be watched all day"). That is not the exception. Code it with the value schemes or `other`, and name candidate C007 in `notes`.
+- Two values ranked against each other, with no consequence named, are not a weighing of consequences either (C007).
+
+**OC6. Another course is not the exception.**
+- A claim that another course is better compares two actions, not two consequences of one action ("adoption, though not perfect, is better than abortion"). Code it with `other`, and name candidate C010 or C017 in `notes`. Another course is a different action (adoption, regulation, rationing).
+- The action's omission is not another course. A claim that a consequence of A matters more, or less, than a harm of not doing A weighs two consequences of A: the harm of not acting counts as a good consequence of A, its not happening (OC13). Code it by OC4, with the A and G of the argument it answers.
+
+**OC7. A comparison with a class or a whole side** ("than any benefit of the curfew") weighs against every consequence argument of that class on the board: one weighing instance for each.
+- Arguments of the class that are not consequence schemes are left out. Practical reasoning has no outweighing exception (D070).
+- The gold records one target per claim. Until its format takes more, code one instance: against the Kialo parent's argument if it is in the class, else against the earliest argument of the class on the board.
+
+**OC8. A concession plus a weighing** ("true, it cuts emissions, but the jobs matter more") gives two instances: the rebuttal (OC2) and the weighing (OC4). Mark one primary:
+- the weighing, when the claim's words state the comparison;
+- the opposite consequence, when they state that consequence;
+- when they state both alike, the instance whose target the claim's last sentence addresses.
+
+**OC9. A claim that a cited consequence is small, rare or minor,** and names no rival consequence, attacks `good(G)` or `bad(G)`, or the consequence's likelihood (33/CQ1). It does not argue the exception.
+
+**OC10. A reply to a weighing claim** attacks that claim's own instance: its comparison (a premise of its `other` instance, such as `more_serious_consequences(...)`) or the consequence it relies on. Only a reply that nothing outweighs G argues against the exception itself, because that would cancel every other weighing claim against the argument.
+- When the weighing is the claim's secondary instance, which the gold cannot target, the reply targets the claim's primary instance and names the comparison in `notes`, until the gold's format takes a target instance.
+- When the weighing is argued from a source, the reply answers the source scheme's own questions.
+
+**OC11. Split a compound consequence** ("cleaner air and fewer accidents") into one argument per consequence when a reply weighs only one of them.
+
+**OC12. Code one consideration once:** as a gain (33.1) or as an averted harm (33.4), not both.
+
+**OC13. The one who acts, and the action.** Bind A to the thesis's action, never to its omission or its opposite.
+- When the thesis states a right, A is the action that grants or secures the right ("pregnant people having access to abortion services").
+- In a policy debate, the one who acts is whoever would enact the policy as the thesis states it. The people it affects are others, even when the action's phrase names them.
+- A reason against doing A is a negative consequence of A (33.2).
+- A harm of not doing A that falls on the one who acts is the prudential form (33.4) for A. Its templates address the one who acts as "you" (a government whose revenue falls without the tax); a first-person claim reads "I". The game does not have 33.4 yet, so it is played with `other`.
+- A harm of not doing A that falls on anyone else, the reader included when the reader does not act, is positive consequences of A (33.1). Its G is the harm's not happening, phrased as a good state ("people in abusive relationships being able to leave their abusers"; candidate C015).
+
+**OC14. A balance claim** that names no single consequence ("all told, the costs outweigh the benefits") is a comparison with a whole side: code it by OC7, and name candidate C004 in `notes`.
 
 ## 4. Output
 
@@ -155,7 +232,7 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target premise or exception is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the target's primary instance. Further Kialo parents go in `target.other_kialo_parents`.
 3. **CQ answer or direct attack.**
    - `cq_answer` exactly when the targeted formula is one that a critical question of the target's scheme is about.
-   - The batch ships a table of (scheme, formula) → (compendium CQ, game CQ), from `docs/scheme-registry/links.json` and `edges.json`.
+   - `validate.py` builds the table of (scheme, formula) → (compendium CQ, game CQ) from `docs/scheme-registry/links.json` and `edges.json` each time it runs. Since D055 (2026-10-23) it maps 33/CQ3 to each consequence scheme's own exception.
    - Otherwise the role is `premise_attack`, `premise_backing` or `undercutter`.
    - `side_effect` and `alternative_means` become values of `role.move`, a finer label beside the kind.
    - A question about the conclusion (opposite consequences, side effects of a consequences argument) is a `cq_answer` too.

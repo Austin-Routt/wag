@@ -1,6 +1,7 @@
 package game
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -93,11 +94,28 @@ func TestSayInNegatedConclusion(t *testing.T) {
 	}
 }
 
-// Every context preset loads and weighs only schemes that exist.
+// Every context preset loads and weighs only schemes that exist. A preset
+// that weighs schemes by name, with no "*" for the rest, names every game
+// scheme: one left out keeps its default weight, so that, say, positive and
+// negative consequences would weigh differently (decision D061).
 func TestContexts(t *testing.T) {
 	cs, err := LoadContexts(data.ContextsJSON)
 	if err != nil || len(cs) == 0 {
 		t.Fatalf("contexts: %v %v", cs, err)
+	}
+	var schemes map[string]json.RawMessage
+	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil || len(schemes) == 0 {
+		t.Fatalf("schemes.json: %v", err)
+	}
+	for _, c := range cs {
+		if _, all := c.Weights["*"]; all || len(c.Weights) == 0 {
+			continue
+		}
+		for id := range schemes {
+			if _, ok := c.Weights[id]; !ok {
+				t.Errorf("context %s weighs schemes by name but not %s", c.ID, id)
+			}
+		}
 	}
 	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
 	gs.NASCQ.EnableOther()

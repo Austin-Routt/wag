@@ -17,7 +17,7 @@ formulas:
   - agent_bring_about(A,B)
   - bad_for_goals(B)
   exceptions:
-  - other_consequences(A)
+  - good_outweighs(A,B)
   conclusions:
   - ¬should_be_performed(A)
 book:
@@ -89,20 +89,21 @@ critical_questions:
   book:
     entry: "33"
     label: CQ3
-  targets: [{formula: other_consequences(A), locus: exception}]
-  note: 'Targets the exception other_consequences(A), added by the owner''s decision
-    of 2026-10-22 and read, as its template now says, as "doing A also has consequences
-    of the opposite kind that outweigh the ones cited". An exception that holds defeats
-    the argument whatever the weights, so a lesser opposite consequence is not this
-    exception: it is weighed as a separate counter-argument on the conclusion (ND
-    p. 159).'
-  paraphrase: Would doing A also have consequences of the opposite kind to B that
-    ought to be weighed against it?
-  answer: 'The critic, who raises it with an argument. Against: a consequence of A
-    that serves the agent''s goals and outweighs B, which undercuts the argument through
-    other_consequences(A). For: showing that A has no such consequence, or that it
-    does not outweigh the one cited.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'good_outweighs(A,B)', locus: exception}]
+  note: 'Targets the sided exception good_outweighs(A,B), decision D055 (2026-10-23):
+    doing A has good consequences that outweigh B. The question has two routes (docs/kialo-batch2/guidelines.md
+    §3.1): a further good consequence that ranks nothing rebuts the conclusion (OC2);
+    a claim that a good consequence of A matters more than B argues this exception
+    (OC3, OC4). Bound alike, it is the same statement as negative_consequences'' good_outweighs(A,G),
+    so one weighing claim defeats both; the exceptions'' limits are recorded in positive_consequences''
+    discrepancy on 33/CQ3.'
+  paraphrase: Would doing A have consequences that serve the agent's goals and matter
+    more than B?
+  answer: 'The critic, who raises it with an argument. Against: a claim that a consequence
+    of A that serves the agent''s goals matters more than B, coded with Other or a
+    source-based scheme, which argues good_outweighs(A,B). For: a reply that attacks
+    that claim''s own comparison, or the consequence it relies on (OC10).'
+  status: drafted by Claude Code, 2026-10-23
 summary:
   text: 'Use it when an agent weighs an action of its own: bringing about A would
     lead to an outcome B that would harm the agent''s own goals, so the agent had
@@ -124,12 +125,12 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: negative_consequences_prudential
   text: Choose negative_consequences_prudential when the bad outcome would follow
-    from not acting, and the arguer warns someone who was considering not doing A
-    that they ought to do it; choose negative_consequences_reasoning when the bad
-    outcome would follow from doing A. The book's parenthetical "don't bring about"
-    reading of 33.3 is close to the prudential form (see the discrepancy on Premise
-    1).
-  status: drafted by Claude Code, 2026-10-22
+    from not doing A and falls on the one who acts, whom it warns to do A after all;
+    a first-person case (the book's parenthetical reading of 33.3) reads "I" for its
+    "you". Choose negative_consequences_reasoning when the bad outcome would follow
+    from doing A. Never bind A to the omission (docs/kialo-batch2/guidelines.md §3.1,
+    OC13; the discrepancy on Premise 1).
+  status: drafted by Claude Code, 2026-10-23
 - scheme: pragmatic_alternative
   text: Choose pragmatic_alternative when the text sets up an either-or addressed
     to the hearer (do A, or B follows); choose negative_consequences_reasoning when
@@ -190,6 +191,21 @@ examples:
     being tied up in the loan. Stated: agent_bring_about(A,B), and bad_for_goals(B)
     (the owners'' goal of keeping the first shop going). Conclusion: ¬should_be_performed(A).'
   status: drafted by Claude Code, 2026-10-22
+- text: If I take the job abroad, my children will lose all their friends, and that
+    goes against everything I want for them, so I should not take it.
+  coding: 'A = my taking the job abroad; B = my children losing all their friends.
+    Stated: agent_bring_about(A,B), bad_for_goals(B) and the conclusion. Pressed:
+    33/CQ1 (the children are ten and twelve, and the school there is known for helping
+    newcomers settle); 33/CQ3 by the claim that the job doubles the salary and would
+    pay for the children''s university, which serves what the agent wants for them
+    far more: good_outweighs(A,B).'
+  status: drafted by Claude Code, 2026-10-23
+- text: If I sign a two-year lease, I am tied to the city just when I meant to travel,
+    which works against my plans, so I should not sign it.
+  coding: 'A = my signing a two-year lease; B = my being tied to the city when I meant
+    to travel. Pressed: 33/CQ2, since the lease lets the tenant leave after six months
+    with a month''s notice.'
+  status: drafted by Claude Code, 2026-10-23
 - text: A sin tax on meat would make food more expensive, despite many people not
     being able to afford it.
   kialo: "13292.7"
@@ -198,6 +214,24 @@ examples:
     a tax on meat, G = food becoming unaffordable for many), as the gold codes it.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: My goal is to keep the children settled, and turning down the job abroad is
+    how I do that, so I should turn it down.
+  coding: 'Near miss: the agent argues from a goal to the means, not from a bad outcome
+    of the action; practical_reasoning2 (S1 = the children being at a school they
+    love, A = my turning down the job abroad, S2 = the children staying at that school,
+    G = the children being settled).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-23
+- text: You were going to let your passport lapse. But if you don't renew it, you
+    can't fly to your sister's wedding in May, which would be very bad for you. So
+    renew it.
+  coding: 'Near miss: coded with this scheme and A = letting the passport lapse, it
+    would conclude that letting it lapse should not be done, which meets nothing about
+    renewing it. The harm of not acting falls on the one who acts, so it is negative_consequences_prudential
+    for renewing (X = renewing the passport, C = missing the sister''s wedding in
+    May; docs/kialo-batch2/guidelines.md §3.1, OC13; D027).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-10-23
 discrepancies:
 - kind: book-walton
   about: Premise 1
@@ -205,11 +239,15 @@ discrepancies:
     bringing A about that leads to B. agent_bring_about(A,B) covers only doing A.
     The conclusion as printed has no matching reading, so the parenthetical case would
     need the opposite conclusion (bring A about).
-  decision: 'No change to the formulas. Code that case with negative_consequences_prudential
-    when it is a warning to someone considering not acting; otherwise bind A to the
-    omission and say so in the coding. Open: whether the parenthetical is meant to
-    license the omission case at all, given the unchanged conclusion.'
-  status: drafted by Claude Code, 2026-10-22
+  decision: 'No change to the formulas. The parenthetical (not bringing A about) is
+    the omission case, coded by the guidelines (docs/kialo-batch2/guidelines.md §3.1,
+    OC13): a harm of not doing A that falls on the one who acts is negative_consequences_prudential
+    for A, read in the first person (that entry''s discrepancy on the first person);
+    a harm that falls on anyone else is positive_consequences of A, with G the harm''s
+    not happening. A is never bound to the omission, whose conclusion would meet nothing
+    about A. Open: whether the book meant the parenthetical to license the omission
+    case at all (D027).'
+  status: drafted by Claude Code, 2026-10-23
 - kind: book-walton
   about: Conclusion
   detail: The book's conclusion is first-person and qualified as practical ("practically
@@ -248,13 +286,14 @@ discrepancies:
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
-    walton.yml has no formula for it here, while it encodes the same question as the
-    exception other_consequences(X) in negative_consequences_prudential.
-  decision: 'Done: the owner''s decision of 2026-10-22 gave positive_consequences,
-    negative_consequences and negative_consequences_reasoning the exception other_consequences(A);
-    33/CQ3 targets it (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided
-    by the owner").'
-  status: drafted by Claude Code, 2026-10-22
+    The owner's decision of 2026-10-22 gave this scheme the exception other_consequences(A),
+    shared by every consequence argument about A on both sides (D055).
+  decision: 'Done: decision D055 (2026-10-23) replaced it with the sided exception
+    good_outweighs(A,B); 33/CQ3 targets it, by two routes (docs/kialo-batch2/guidelines.md
+    §3.1). Bound alike it is negative_consequences'' exception too; in a policy debate
+    prefer negative_consequences (the contrast). The exceptions'' limits are recorded
+    in positive_consequences'' discrepancy on 33/CQ3.'
+  status: drafted by Claude Code, 2026-10-23
 - kind: other
   about: upstream
   detail: The scheme comes from the second block with the id negative_consequences
@@ -263,10 +302,11 @@ discrepancies:
     walton.yml gives it a new id, the variables [A,B], two templates in our own words
     (agent_bring_about, bad_for_goals), the conclusion ¬should_be_performed(A) in
     place of not_bring_about(A) (whose master template, shared with threat, is second-person;
-    the category file's own is first-person), and the exception other_consequences(A).
-  decision: 'No change: the owner''s decisions of 2026-10-22 (docs/scheme-registry/walton-clean/CHANGELOG.md,
-    "Changes decided by the owner").'
-  status: drafted by Claude Code, 2026-10-22
+    the category file's own is first-person), and an exception for 33/CQ3 (other_consequences(A)
+    on 2026-10-22, good_outweighs(A,B) since D055, 2026-10-23).
+  decision: 'No change: the owner''s decisions of 2026-10-22 and D055 of 2026-10-23
+    (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided by the owner").'
+  status: drafted by Claude Code, 2026-10-23
 classification:
   source: independent
   reasoning: practical
@@ -278,10 +318,11 @@ classification:
 specialises:
   scheme: negative_consequences
   note: 'families.json (F15) makes it a subtype of 33.2: the action is the agent''s
-    own and the outcome is bad by the agent''s goals. Since 2026-10-22 it has the
-    same conclusion, ¬should_be_performed(A), and the same exception, so the two meet
-    the same arguments for A.'
-  status: drafted by Claude Code, 2026-10-22
+    own and the outcome is bad by the agent''s goals. It has the same conclusion,
+    ¬should_be_performed(A), and, bound alike, the same exception, good_outweighs
+    (D055), so the two meet the same arguments for A and one weighing claim defeats
+    both.'
+  status: drafted by Claude Code, 2026-10-23
 dialogue_types:
   proper: [deliberation, persuasion, negotiation]
   suspect: [inquiry]
@@ -320,3 +361,9 @@ history:
   by: Claude Code
   what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
     (findings: a contrast with cause_to_effect_modal)'
+- date: "2026-10-23"
+  by: Claude Code
+  what: 'Revised for decisions D055 and D059 (proposal D055-D059, version 5): 33/CQ3
+    targets the sided exception good_outweighs(A,B), with its two routes; the Premise
+    1 decision follows the guidelines (§3.1, OC13) and binds A to no omission; the
+    proposal''s examples moved here; the CQ3, upstream and specialises texts follow.'

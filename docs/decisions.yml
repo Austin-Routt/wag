@@ -424,11 +424,12 @@ decisions:
   title: The omission case in reasoning from negative consequences
   question: >-
     Does the book's parenthetical in 33.3's first premise mean to cover not
-    acting, given that the conclusion is unchanged? Since proposal
-    D055-D059 makes 33.4 conclude should_be_performed(X), a harm of not
-    acting to the one who would act (whom 33.4 addresses as "you") has a
-    home there; a harm of not acting to anyone else is coded as positive
-    consequences of the action (the proposal's rule; candidate C015).
+    acting, given that the conclusion is unchanged? Since D059 (2026-10-23)
+    33.4 concludes should_be_performed(X), so a harm of not acting that
+    falls on the one who acts (whom 33.4 addresses as "you") has a home
+    there; a harm of not acting to anyone else is coded as positive
+    consequences of the action (kialo-batch2/guidelines.md §3.1, OC13;
+    candidate C015). A is never bound to the omission.
   category: book
   blocks: [verification]
   decider: verifier
@@ -711,7 +712,7 @@ decisions:
     favours either side should defeat both. The registry also reports exact
     pairs that nobody declared. The engine does not enforce declared
     contraries: both can be accepted at once. Pairs: the practical analogies
-    (8.1, 8.2), with D029; consequences (33.1, 33.2), once D055 is fixed;
+    (8.1, 8.2), with D029; consequences (33.1, 33.2), now that D055 is decided (2026-10-23);
     ethotic argument (41), once ethotic2's conclusion is checked (¬S, where
     the book reads the claim as less plausible). Model and antimodel (6.3,
     6.4) differ in more than a flip, so they would be a looser counterpart,
@@ -772,13 +773,30 @@ decisions:
     independent review of proposal D055-D059's version 1 approved it with
     changes, made in version 2: among them, 33.4's likelihood assumption
     strongly_occur(X), which has the same fault on one side, becomes
-    strongly_occur(X,C). It is made once the owner approves the proposal.
+    strongly_occur(X,C). The owner approved proposal D055-D059, version 5,
+    on 2026-10-23, after four independent reviews and a final check.
   category: scheme
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, owner decisions of 2026-10-22", "docs/proposals/D001-D028-D029.md", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-10-23"
+    by: owner
+    decision: >-
+      Option C, in the form of proposal D055-D059, version 5: the sided
+      exceptions bad_outweighs(A,G) in positive_consequences,
+      good_outweighs(A,G) in negative_consequences, good_outweighs(A,B) in
+      negative_consequences_reasoning and bad_outweighs(X,C) in
+      negative_consequences_prudential, whose likelihood assumption becomes
+      strongly_occur(X,C). The book's 33/CQ3 targets them, by two routes: a
+      plain opposite consequence rebuts, a ranking argues the exception. The
+      annotation rule is guidelines §3.1 (OC1-OC14), with the final check's
+      five warnings fixed there; the exceptions' limits are recorded in the
+      catalogue entry for positive consequences. The game takes the
+      exceptions at workstream E.
+    recorded: "docs/scheme-registry/walton-clean/tools/edits.py (CONSEQUENCES) and CHANGELOG.md; docs/scheme-registry/links.json; wag/data/schemes/families.json; the four catalogue entries; docs/kialo-batch2 (gold by recode_d055.py, guidelines §3.1, rule-cases.yml, the replay); docs/proposals/D055-D059.md"
 
 - id: D059
   title: The prudential form's conclusion meets nothing
@@ -795,8 +813,18 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-10-23"
+    by: owner
+    decision: >-
+      Yes, with D055 (proposal D055-D059, version 5): 33.4 concludes
+      should_be_performed(X), and its link to the book is partial, the
+      conclusion restated in the game's vocabulary as 8.1 and 8.2 are under
+      D029. The game does not have 33.4; it is played with Other until it
+      does.
+    recorded: "docs/scheme-registry/walton-clean/tools/edits.py (CONSEQUENCES) and CHANGELOG.md; docs/scheme-registry/links.json; wag/data/schemes/families.json; the catalogue entry negative_consequences_prudential; docs/proposals/D055-D059.md"
 
 - id: D057
   title: Analogy's reach in the game
@@ -847,8 +875,17 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["wag/data/contexts.json", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-10-23"
+    by: owner
+    decision: >-
+      Yes: the policy, scientific and legal presets give
+      AS:negative_consequences the weight of AS:consequences and
+      AS:practical_reasoning_goal that of AS:practical_reasoning, and a test
+      checks that a preset weighing schemes by name names every game scheme.
+    recorded: "wag/data/contexts.json; wag/internal/game/premise_test.go (TestContexts)"
 
 - id: D063
   title: Practical conclusions that meet nothing
@@ -1183,8 +1220,8 @@ decisions:
     (docs/candidates.md, the group "Harms of not acting"): C015, a harm of
     not acting to others or to society, which the consequence forms cover
     only for the one who would act (33.3's parenthetical, D027; 33.4), and
-    which proposal D055-D059 codes as positive consequences of the action,
-    with the harm's not happening as G (the book's p. 101 places harms to a
+    which the guidelines code as positive consequences of the action, with
+    the harm's not happening as G (§3.1, OC13; the book's p. 101 places harms to a
     third party in the pity appeals, 38 and 39, whose conclusions meet
     nothing, D063); C016, a question whether doing the action would avert
     the harm, which 33.4 lacks and fear states; C020, one consideration

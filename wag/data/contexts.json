@@ -14,7 +14,7 @@
       "description": "What should be done, argued pro and con: arguments from goals, values and consequences carry the most weight; the stronger case wins. The game is still a persuasion dialogue about a practical claim, not a deliberation (docs/dialogue-types.md).",
       "standard": "PE",
       "require_evidence": false,
-      "weights": {"AS:practical_reasoning": 0.7, "AS:consequences": 0.7, "AS:values": 0.6, "AS:expert_opinion": 0.6, "AS:position_to_know": 0.55, "AS:sign": 0.5, "AS:analogy": 0.5, "AS:other": 0.45}
+      "weights": {"AS:practical_reasoning": 0.7, "AS:practical_reasoning_goal": 0.7, "AS:consequences": 0.7, "AS:negative_consequences": 0.7, "AS:values": 0.6, "AS:expert_opinion": 0.6, "AS:position_to_know": 0.55, "AS:sign": 0.5, "AS:analogy": 0.5, "AS:other": 0.45}
     },
     {
       "id": "scientific",
@@ -22,7 +22,7 @@
       "description": "What is true, argued pro and con: evidence and expertise carry the most weight, goals and values the least; the claim must be clear and convincing, and sources are required. The game is still an adversarial persuasion dialogue, not a cooperative inquiry (docs/dialogue-types.md).",
       "standard": "CCE",
       "require_evidence": true,
-      "weights": {"AS:expert_opinion": 0.75, "AS:sign": 0.65, "AS:position_to_know": 0.55, "AS:analogy": 0.45, "AS:other": 0.4, "AS:consequences": 0.35, "AS:practical_reasoning": 0.35, "AS:values": 0.3}
+      "weights": {"AS:expert_opinion": 0.75, "AS:sign": 0.65, "AS:position_to_know": 0.55, "AS:analogy": 0.45, "AS:other": 0.4, "AS:consequences": 0.35, "AS:negative_consequences": 0.35, "AS:practical_reasoning": 0.35, "AS:practical_reasoning_goal": 0.35, "AS:values": 0.3}
     },
     {
       "id": "legal",
@@ -31,7 +31,7 @@
       "standard": "BRD",
       "require_evidence": true,
       "moderated": true,
-      "weights": {"AS:position_to_know": 0.7, "AS:expert_opinion": 0.65, "AS:analogy": 0.6, "AS:sign": 0.55, "AS:other": 0.4, "AS:consequences": 0.4, "AS:practical_reasoning": 0.4, "AS:values": 0.3}
+      "weights": {"AS:position_to_know": 0.7, "AS:expert_opinion": 0.65, "AS:analogy": 0.6, "AS:sign": 0.55, "AS:other": 0.4, "AS:consequences": 0.4, "AS:negative_consequences": 0.4, "AS:practical_reasoning": 0.4, "AS:practical_reasoning_goal": 0.4, "AS:values": 0.3}
     },
     {
       "id": "equal",

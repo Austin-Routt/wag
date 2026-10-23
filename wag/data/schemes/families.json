@@ -678,7 +678,7 @@
      "scheme": "negative_consequences_prudential",
      "relation": "subtype",
      "compendium": "33.4",
-     "note": "of 33.2"
+     "note": "of 33.2 (book p. 104); in our reading, 33.2 applied to not doing X; since D059 (2026-10-23) it concludes should_be_performed(X)"
     },
     {
      "scheme": "pragmatic_alternative",

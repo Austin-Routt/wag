@@ -7,11 +7,24 @@
 # changes and D059 and D061 as proposed; this version makes the changes.
 # Version 1 is commit afa80d2, version 2 b992b4f, version 3 4dbd491,
 # version 4 8b525a3. The owner chose option C for
-# D055 (sided exceptions) on 2026-10-22; walton.yml changes only once the
-# owner approves.
+# D055 (sided exceptions) on 2026-10-22.
+#
+# A final independent check of version 5 found no errors and five warnings
+# (the private workspace's verify/p-D055-D059-v5/). The owner approved D055,
+# D059 and D061 on 2026-10-23, and the change was made the same day. The
+# annotation rule in the summary is the approved text, kept as the record.
+# It now lives in kialo-batch2/guidelines.md §3.1, as rules OC1-OC14 with
+# worked cases in kialo-batch2/rule-cases.yml, and is maintained there. The
+# five warnings are fixed there and in the catalogue, not here: the scope is
+# set by what the claim does at its target (OC1); a weighing against a harm of not acting
+# takes the A and G of the argument it answers (OC6); example 6's note, as
+# it moved into the catalogue, reads a right as the action that grants or
+# secures it; C011's registry note and 33.3's Premise 1 decision are
+# corrected.
 
 decisions: [D055, D059]
 title: Sided opposite-consequences exceptions for the consequence family
+applied: 2026-10-23, through walton-clean/tools/edits.py (the owner's decisions D055 and D059); the annotation rule is guidelines §3.1
 summary: |-
   **What version 5 changes.** The fourth independent review approved D055
   with changes, and D059 and D061 as proposed. It found one error, a note

@@ -15,18 +15,21 @@ verbal_classification_vagueness          variables    ['A', 'P'] -> ['A', 'F']
 verbal_classification_arbitrariness      premises     ['arbitrary_defined_property(A,F)', 'needed_nonarbitrary((A,F)', 'arbitrary_property(F,A)'] -> ['arbitrary_defined_property(A,F)', 'needed_nonarbitrary(A,F)', 'arbitrary_property(F,A)']
 negative_value                           conclusions  ['reason_retaining_goal(V,G)'] -> ['reason_retracting_goal(V,G)']
 sacrifice                                premises     ['sacrifice_made(A,S)', 'great_sacrifice(S,A,X)', 'great_sacrifice_made(S,A)'] -> ['sacrifice_made(A,S)', 'great_sacrifice(S,A,V)', 'great_sacrifice_made(S,A)']
+negative_consequences_prudential         assumptions  ['strongly_occur(X)'] -> ['strongly_occur(X,C)']
+negative_consequences_prudential         exceptions   ['other_consequences(X)'] -> ['bad_outweighs(X,C)']
+negative_consequences_prudential         conclusions  ['prudential(X)'] -> ['should_be_performed(X)']
 sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A)']
 verbal_slippery_slope                    variables    ['A1', 'A2', 'A', 'P'] -> ['A1', 'A2', 'A', 'P', 'F']
 analogy                                  variables    ['A', 'C'] -> ['P1', 'P2', 'C1', 'C2']
 analogy                                  premises     ['similar_case(C)', 'in_case(A,C)'] -> ['similar_to(C1,C2)', 'in_case(P1,C1)', 'corresponds(P1,P2)']
 analogy                                  exceptions   ['relevant_differences(C)', 'more_on_point(A,C)'] -> ['difference_against(C1,C2,P2)']
 analogy                                  conclusions  ['A'] -> ['P2']
-negative_consequences                    exceptions   [] -> ['other_consequences(A)']
-positive_consequences                    exceptions   [] -> ['other_consequences(A)']
+negative_consequences                    exceptions   [] -> ['good_outweighs(A,G)']
+positive_consequences                    exceptions   [] -> ['bad_outweighs(A,G)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
-26 scheme-level difference(s) after renames
+29 scheme-level difference(s) after renames
 added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning
-language: 392 -> 413 keys; keys only in clean: 55, only in original: 33, same key with a changed template: 29
+language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same key with a changed template: 29
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
@@ -34,6 +37,7 @@ language: 392 -> 413 keys; keys only in clean: 55, only in original: 33, same ke
   +  attack_well_supported/0 'Allegation made in character attack premise evidence are well supported.'
   +  background/0 'The speaker is an ordinary person, that is, share a common background with the audience.'
   +  bad_for_goals/1 "%s would harm the agent's goals."
+  +  bad_outweighs/2 'The action %s has bad consequences that outweigh %s.'
   +  being_credible/0 'Therefore, you ought to take what I say as being more credible or acceptable.'
   +  cannot_present_sametime/3 '%s cannot present %s and %s at the same time and in the same respect.'
   +  character_relevant/0 'In the type of dialogue in which the argument was used issue of character relevant.'
@@ -47,6 +51,7 @@ language: 392 -> 413 keys; keys only in clean: 55, only in original: 33, same ke
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
   +  goal_prestige/0 'Prestige is an important goal for you.'
+  +  good_outweighs/2 'The action %s has good consequences that outweigh %s.'
   +  initial_presumption/1 'At the outset, %s is presumed acceptable.'
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
@@ -77,6 +82,7 @@ language: 392 -> 413 keys; keys only in clean: 55, only in original: 33, same ke
   +  speakers_correct/0 'Speakers of a language are generally correct about word definitions in that language.'
   +  strong_advocate/3 '%s advocate %s in a strong way indicating her personal commitment to %s.'
   +  strongly_occur/1 "If you don't do %s consequences may strongly appear."
+  +  strongly_occur/2 'If %s is not done, %s is likely to follow.'
   +  sufficient_evidence/0 'search for the evidence progress is sufficient.'
   +  synonymous/0 'Whenever expressions are referentially coextensive, they are synonymous.'
   +  waste_bad_thing/2 "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."

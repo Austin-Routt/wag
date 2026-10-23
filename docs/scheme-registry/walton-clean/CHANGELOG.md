@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2173 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 8 of them changed by the owner's decisions (`analogy`, `negative_consequences`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 9 of them changed by the owner's decisions (`analogy`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| repair — owner decision | 31 | 25 |
+| repair — owner decision | 40 | 34 |
 | addition — owner decision | 95 | 20 |
-| **total** | **322** | **210** distinct lines (a line can carry edits of several categories) |
+| **total** | **331** | **215** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 187 lines removed, 291 added. That is 182 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 126 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 190 lines removed, 297 added. That is 185 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 135 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -53,12 +53,13 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | `full_slippery_slope` (new) | added from `A_reasoning/5_casual-reasoning.yml`, under its upstream id; source filled in; `accept_all_steps` and `led_to_step` given the arguments `(C0,C2)` | 2026-10-22 | It formalizes compendium 53, the Full Slippery Slope Argument, which `walton.yml` lacked. The category file's source is empty, so the compendium's reference is used. Its two 0-ary atoms are about the series of cases at hand, and a 0-ary atom is one statement for every instance ("0-ary atoms", below). Its five templates are in our own words. |
 | `precedent_slippery_slope` (new) | written for WAG: premises `claimed_exception(C0,R)`, `sets_precedent(C0,C1,R)`, `precedent_chain(C1,Cn,R)`, `intolerable_exception(Cn,R)`; conclusion `¬case_exception(C0)` | 2026-10-22 | It formalizes compendium 50, the Precedent Slippery Slope Argument, which no upstream file formalizes. One formula per printed premise, with the Related Cases Premise split into the first pair and the chain so that the book's CQ1 and CQ2 each have one. The intolerable case is taken to be the end of the series, Cn, as a slippery slope needs; the book prints C0 there and in CQ3 (the compendium, p. 340; the ch. 3 scan, p. 116, is unclear but looks the same), which can also be read as "treating C0 as an exception would be intolerable because of where it leads", a reason the chain premises then carry. A verifier with the book should confirm the reading. The conclusion negates `case_exception`, the premise of the argument for an exceptional case (`exceptional`), so that the slope meets the argument it counters (p. 117). Its templates are our own. |
 | `cause_to_effect_modal` (new) | written for WAG: premises `may_occur(E1)`, `causes(E1,E2)`; exception `interference(E1)`; conclusion `may_occur(E2)` | 2026-10-22 | The modal cause to effect of audit N8. Compendium 28 has a weak reading beside the strong one (the cause occurs or might; the effect will or might follow); `cause_to_effect` formalizes only the strong reading and asserts that the cause has occurred, so the causal step of a policy not yet adopted had no scheme. It keeps `cause_to_effect`'s causal premise and exception, so the book's three questions target the same formulas, and uses `may_occur` for both the cause and the effect, so that hypothetical steps chain. The causal premise is not weakened, though the book's weak reading has a weak generalization too; the catalogue records that as open. Its template is our own. |
-| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |
+| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template `other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An exception that holds defeats the argument whatever the weights, so the template now says that the opposite consequences outweigh the ones cited (it had said only that some exist, ungrammatically). Replaced on 2026-10-23 by the sided exceptions of D055 (below). |
 | `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |
 | `slippery_slope_base_case`, `slippery_slope_inductive_step` | source year 1999 → 1992 | 2026-10-22 | The book's compendium cites the same pages (49, pp. 93, 95) as 1992, as do `walton.yml`'s three other citations of the same book, and booksellers' listings date the Vale Press edition 1992. The book's ch. 4 (p. 114) cites p. 93, for gradualism, as "Walton, 1999"; its reference list, not checked, may give that as another work. |
 | `negative_value` | conclusion `reason_retaining_goal(V,G)` → `reason_retracting_goal(V,G)` (new template); the `negative_affects/3` template rewritten | 2026-10-22 | Both said the opposite of the book's 19.2: the conclusion was copied from `positive_value`, and the template said a bad value supports commitment to the goal. Both templates are in our own words. |
 | `analogy` | variables `[A,C]` → `[P1,P2,C1,C2]`; premises `similar_to(C1,C2)`, `in_case(P1,C1)`, `corresponds(P1,P2)` (new template); conclusion `P2`; exception `difference_against(C1,C2,P2)` (new template) in place of `relevant_differences(C)`; `more_on_point(A,C)` removed | 2026-10-22 | Decision D001 (audit N12; WAG's proposal D001-D028-D029, version 3, after two independent reviews). The book's scheme 7 uses one letter for a claim made relative to each case; with one proposition, the premise asserted the target's claim of the source case, false whenever the two claims differ. The difference exception names the claim and tells against it, so it defeats only the argument it is about. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts the conclusion, so it needs no formula. |
 | `practical_analogy_positive`, `practical_analogy_negative` | variables `[A1,A2,X]` → `[A1,A2,X1,X2]`; premises `right_to_do(A1,X1)` or `wrong_to_do(A1,X1)`, `similar_to(A1,A2)`, `corresponds(X1,X2)`; conclusion `should_be_performed(X2)` or `¬should_be_performed(X2)` in place of `carry_out_right(A2,X)` and `carry_out_wrong(A2,X)`; exception `difference_against(A1,A2,X2)` or `difference_for(A1,A2,X2)` (new templates); `right_to_do/2` and `wrong_to_do/2` rewritten | 2026-10-22 | Decisions D028 and D029, with D001. The book's 8.1 and 8.2 use one action letter made relative to each situation. The old conclusions met no other scheme; now the two rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the sided exception lets a difference against one side leave the other standing when both argue from one past situation. The templates are in our own words. |
+| `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, `negative_consequences_prudential` | exception `other_consequences(A)` (or `(X)`) → `bad_outweighs(A,G)`, `good_outweighs(A,G)`, `good_outweighs(A,B)` and `bad_outweighs(X,C)` (new templates); in `negative_consequences_prudential`, assumption `strongly_occur(X)` → `strongly_occur(X,C)` (new template) and conclusion `prudential(X)` → `should_be_performed(X)` | 2026-10-23 | Decisions D055 and D059 (WAG's proposal D055-D059, version 5, after four independent reviews and a final check). The one exception for the book's 33/CQ3 was shared by the arguments for and against an action, so one argument that opposite consequences outweigh defeated every consequence argument about the action, on both sides. Each scheme now has an exception on its own side that names the consequence it cites, and so defeats only the argument it is about. The prudential form's likelihood assumption names the consequence too, and its conclusion meets the practical schemes about X. `other_consequences/1`, `prudential/1` and `strongly_occur/1` are left as orphan templates. The templates are in our own words. |
 
 ## Repairs that need the owner's approval
 
@@ -158,6 +159,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **46** [insert after] · addition — owner decision · template for the 33.3 scheme added below, in our own words (the category file's repeats the book) (used by: negative_consequences_reasoning)
   - before: _(none)_
   - after: `  bad_for_goals/1: "%s would harm the agent's goals."`
+- **49** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: negative_consequences_prudential, positive_consequences)
+  - before: _(none)_
+  - after: `  bad_outweighs/2: "The action %s has bad consequences that outweigh %s."`
 - **50** · template · '%v' is not a %s verb (WAG lint error) (used by: expert_opinion)
   - before: `  based_on_evidence/1: "The assertion %v is based on evidence."`
   - after: `  based_on_evidence/1: "The assertion %s is based on evidence."`
@@ -269,6 +273,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **151** · typo · template word 'represen ts' (OCR) (used by: moral_justification_ad_populum)
   - before: `  good_group/2: "Everybody who is good, or who represen ts a group %s with good qualities, accepts policy %s."`
   - after: `  good_group/2: "Everybody who is good, or who represents a group %s with good qualities, accepts policy %s."`
+- **152** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: negative_consequences, negative_consequences_reasoning)
+  - before: _(none)_
+  - after: `  good_outweighs/2: "The action %s has good consequences that outweigh %s."`
 - **194** · typo · misspelled predicate (used by: verbal_slippery_slope)
   - before: `  individuals_propoerty/3: "If %s, has %s then, %s has it too."`
   - after: `  individuals_property/3: "If %s, has %s then, %s has it too."`
@@ -341,10 +348,10 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **251** · typo · misspelled predicate (used by: rule_physical_world_2)
   - before: `  oficcial_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
   - after: `  official_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
-- **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: negative_consequences, negative_consequences_prudential, negative_consequences_reasoning, positive_consequences)
+- **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  other_consequences: "There are some good or bad consequences of doing %s should be taken into account."`
   - after: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
-- **255** · repair — owner decision · the exception now carries the book's 33/CQ3 in the three consequence schemes (below), and an exception that holds defeats the argument whatever the weights; so it must say that the opposite consequences outweigh the cited ones, not only that some exist. The old template was also ungrammatical. In our own words (used by: negative_consequences, negative_consequences_prudential, negative_consequences_reasoning, positive_consequences)
+- **255** · repair — owner decision · the exception now carries the book's 33/CQ3 in the three consequence schemes (below), and an exception that holds defeats the argument whatever the weights; so it must say that the opposite consequences outweigh the cited ones, not only that some exist. The old template was also ungrammatical. In our own words (used by: no scheme)
   - before: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
   - after: `  other_consequences/1: "Doing %s also has consequences of the opposite kind that outweigh the ones cited."`
 - **256** · template · the predicate has 2 arguments (A,C); 'A %s' was the variable name plus a stray %s ('A is true') (used by: negative_practical)
@@ -386,7 +393,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **299** · typo · misspelled predicate (used by: verbal_classification_vagueness)
   - before: `  property_precion_needed/1: "%s occurs in a context of dialogue that requires a certain level of precision that is appropriate for that context."`
   - after: `  property_precision_needed/1: "%s occurs in a context of dialogue that requires a certain level of precision that is appropriate for that context."`
-- **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: negative_consequences_prudential)
+- **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  prudential: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
   - after: `  prudential/1: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
 - **306** · repair — needs approval · template for the repaired reapplication_sequence(A2,A) (line 1557) (used by: sorites_slippery_slope)
@@ -455,6 +462,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **357** · template · strongly_occur is used with 1 argument (X); the template had a second %s (used by: negative_consequences_prudential)
   - before: `  strongly_occur/1: "If you don't do %s consequences %s may strongly appear."`
   - after: `  strongly_occur/1: "If you don't do %s consequences may strongly appear."`
+- **357** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: negative_consequences_prudential)
+  - before: _(none)_
+  - after: `  strongly_occur/2: "If %s is not done, %s is likely to follow."`
 - **359** · typo · misspelled predicate (used by: no scheme)
   - before: `  succesful_account/2: "%s , is the account that explains %s most successfully."`
   - after: `  successful_account/2: "%s , is the account that explains %s most successfully."`
@@ -888,6 +898,18 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - succesful_diagram(C1)`
   - after: `      - successful_diagram(C1)`
 
+### negative_consequences_prudential
+
+- **1289** · repair — owner decision · D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `      - prudential(X)`
+  - after: `      - should_be_performed(X)`
+- **1294** · repair — owner decision · D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `      - other_consequences(X)`
+  - after: `      - bad_outweighs(X,C)`
+- **1296** · repair — owner decision · D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `     -  strongly_occur(X)`
+  - after: `     -  strongly_occur(X,C)`
+
 ### treat → threat
 
 - **1310** · typo · scheme id 'treat' for 'threat' (title: Argument From Threat)
@@ -1178,6 +1200,13 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1896** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
   - before: _(none)_
   - after: `      - other_consequences(A)`
+- **1896** · repair — owner decision · D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `      - bad(G)
+    exceptions:
+      - other_consequences(A)`
+  - after: `      - bad(G)
+    exceptions:
+      - good_outweighs(A,G)`
 
 ### negative_consequences_reasoning
 
@@ -1229,6 +1258,41 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1897** [insert after] · addition — owner decision · compendium 33.3 (Reasoning from Negative Consequences), formalized in the category file A_reasoning/3_practical-reasoning.yml under the duplicate id negative_consequences and missing from the master; added under a new id by the owner's decision of 2026-10-22
   - before: _(none)_
   - after: `      `
+- **1897** · repair — owner decision · D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `      
+  - id: negative_consequences_reasoning
+    meta:
+      title: Argument From Consequences - Reasoning From Negative Consequences
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy.
+             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.
+             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
+    variables: [A,B]
+    conclusions:
+      - ¬should_be_performed(A)
+    premises:
+      - agent_bring_about(A,B)
+      - bad_for_goals(B)
+    exceptions:
+      - other_consequences(A)
+      `
+  - after: `      
+  - id: negative_consequences_reasoning
+    meta:
+      title: Argument From Consequences - Reasoning From Negative Consequences
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy.
+             Tuscaloosa and London: University of Alabama Press, 1995. pp. 155-156.
+             Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
+    variables: [A,B]
+    conclusions:
+      - ¬should_be_performed(A)
+    premises:
+      - agent_bring_about(A,B)
+      - bad_for_goals(B)
+    exceptions:
+      - good_outweighs(A,B)
+      `
 
 ### positive_consequences
 
@@ -1238,6 +1302,13 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1925** [insert after] · addition — owner decision · the book's 33/CQ3 (other, opposite consequences) applies to 33.1-33.4; walton.yml had its formula, the exception other_consequences, only in negative_consequences_prudential
   - before: _(none)_
   - after: `      - other_consequences(A)`
+- **1925** · repair — owner decision · D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)
+  - before: `      - good(G)
+    exceptions:
+      - other_consequences(A)`
+  - after: `      - good(G)
+    exceptions:
+      - bad_outweighs(A,G)`
 
 ### exeption_to_rule → exception_to_rule
 
@@ -1291,7 +1362,7 @@ With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems a
 - `threat` (was `treat`): the premise `position_to_know(X)` ("I am in position to bring about %s") shares its name with the position-to-know predicate `position_to_know/2`. Other predicates used with two arities: `data_set/1`–`/2`, `excuse/0`–`/1`, `group_member/1`–`/2`, `cannot_present_sametime/2`–`/3`, and `relevant_differences/1`–`/2` until the analogy decision of 2026-10-22 left `relevant_differences/1` unused. They are different statements and easy to confuse.
 - `abductive_backward`: `data_set(D,A)` has 2 arguments, but `abductive_forward` has `data_set(D)`. I added a `data_set/2` template ("%s is a set of data or supposed facts in case %s."); the role of A there is a guess.
 - `exception_to_rule` (was `exeption_to_rule`): the content is upstream Carneades `precedent` with a new id and title. The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57). Its exception `relevant_differences(R,C)` puts the rule where a case belongs (WAG's decision D058).
-- Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: `strongly_occur(X)` (template had the consequences C too), `cited_bad_consequences(X)` (the consequences; C occurs in `assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).
+- Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: `strongly_occur(X)` (template had the consequences C too; since D055, on 2026-10-23, the formula is `strongly_occur(X,C)`), `cited_bad_consequences(X)` (the consequences; C occurs in `assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).
 - `biased/1` had two templates. The loaded one, "Arguer %s is biased.", is kept so loading is unchanged. It is also used for witnesses and sources (`credible_source`, `witness_testimony`), where upstream's deleted "%s is biased." fits better.
 - `waste` now uses `possible(X)`, whose existing template reads "Action %s is possible.", though X is a goal. `practical_reasoning2`'s `possible(G)` has the same mismatch; the deleted `posible/1` read "%s is possible.".
 - Titles: `verbal_classification_vagueness` has the title of `definition_to_verbal_classification`; `rule_mental_world` has an empty title; `slippery_slope_base_case` and `slippery_slope_inductive_step` share a title; `abduction` has no `meta`.
@@ -1338,5 +1409,5 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 - The stray " s" in the `data_account/2` template, and the soft hyphen in "pp.429­448".
 - `langugage:` occurs only in the category file `B_source-based-arguments/1_…yml`, not in `walton.yml`.
 - Negated formulas have no `¬p/n` WAG templates (WAG lint warning, see Gate).
-- Orphan templates (no scheme uses them; 18): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `more_on_point/2`, `negative_consequences/1`, `positive_consequences/1`, `relevant_differences/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
+- Orphan templates (no scheme uses them; 21): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `more_on_point/2`, `negative_consequences/1`, `other_consequences/1`, `positive_consequences/1`, `prudential/1`, `relevant_differences/1`, `strongly_occur/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
 

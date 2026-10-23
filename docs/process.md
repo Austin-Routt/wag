@@ -12,6 +12,7 @@ Parts not built yet are marked **(to build)**.
 | The formulas | `walton.yml`: WAG's formula layer, which starts from the upstream collection | `walton-clean/tools/edits.py` and `check/run.sh`, with every change in the CHANGELOG |
 | The game's fields and links | the catalogue's game fields **(to build: workstream I)** | drafting and verifying, then data and play |
 | The game's data (NASCQ, `core.yml`) | generated from the catalogue **(to build: workstream E)** | never by hand, once generated |
+| How to code a claim (annotation rules) | the batch's guidelines (`docs/kialo-batch2/guidelines.md`); the rules on opposite consequences are numbered (§3.1, OC1–OC14), each with worked cases in `rule-cases.yml` | editing the rule there, once, with a case for it; a test checks the cases against `walton.yml` and the gold, and rejects a rule's retired wording anywhere (`TestRuleCases`) |
 | Open decisions | the decision register, [`decisions.yml`](decisions.yml) (§5) | the decider named in each |
 | The book's text and other private sources | the private workspace (§6) | the owner |
 | Figures (counts, progress) | a generated status report **(to build, §7)** | nobody: documents link to it instead of copying numbers |
@@ -151,7 +152,7 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    The scheme's negated form gets an example where it has one.
 4. **The cleaning's gate and the registry** run on `walton.yml` with the proposal applied (`--proposal-walton PATH`, then `walton-check PATH` and `wag-cli --registry PATH`). Only the proposed schemes may differ from today's results.
 5. **An independent reviewer checks it** (§3): against the book, `walton.yml`, the game and Kialo, with examples of its own, and gives a verdict for each decision. The proposal is revised on its findings and reviewed again.
-6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, the decision is closed in the register, and the proposal is marked `applied`, so that its view says its "Now" columns now equal the proposed ones. The first proposal, [D001-D028-D029](proposals/D001-D028-D029.md), went this way on 2026-10-22: two independent reviews, then a short check of the third version.
+6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, the decision is closed in the register, and the proposal is marked `applied`, so that its view says its "Now" columns now equal the proposed ones. The first proposal, [D001-D028-D029](proposals/D001-D028-D029.md), went this way on 2026-10-22: two independent reviews, then a short check of the third version. The second, [D055-D059](proposals/D055-D059.md), on 2026-10-23: four independent reviews, then a final check of the fifth version. Its annotation rule moved into the guidelines (§1), where the final check's warnings were fixed; the proposal keeps the approved text as its record.
 
 A test keeps every committed proposal valid and its view current.
 
@@ -179,7 +180,7 @@ A test keeps every committed proposal valid and its view current.
   - the catalogue, the register's view and the candidates' view equal what `--catalogue-gen` makes;
   - `--catalogue-check`. Its copy check reads only `docs/book-catalogue`, since the compendium's transcription is private;
   - the registry check, which tolerates only the known duplicate (D042 in the register);
-  - the gold's `validate.py`;
+  - the gold's `validate.py`, and the guidelines' worked cases (`TestRuleCases`, in `go test`);
   - the upstream `walton.yml` fetched and checked against its recorded SHA-256, and `check/run.sh` reproducing every committed file.
 - **The status report (to build):** one command prints every figure the documents need:
   - entries and items by status;

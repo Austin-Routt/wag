@@ -386,7 +386,7 @@ The objection that a consequence argument is offered for the truth of a claim: t
 
 **Open questions:**
 - A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion.
-- Only one discussion so far (on God's existence); the others are practical debates, where the objection rarely arises.
+- Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines code such a claim with Other and name C011 (kialo-batch2/guidelines.md §3.1, OC1).
 
 ## Weighing consequences
 
@@ -477,8 +477,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
 - `matters_more/2`: “%s matters more than %s.”
 
 **Examples, rendered:**
@@ -555,7 +553,7 @@ Bindings: A = “governments putting a tax on meat”; G = “thousands of farm 
 
 - The action “governments putting a tax on meat” brings about “thousands of farm workers losing their jobs”.
 - “Thousands of farm workers losing their jobs” is bad.
-- *Unless:* Doing “governments putting a tax on meat” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “thousands of farm workers losing their jobs”.
 - **So:** It is not the case that action “governments putting a tax on meat” should be performed.
 
 *Note:* It cites a bad consequence but compares it with nothing the other side cites, so it is a plain negative consequences argument, a rebuttal (D055's two routes).
@@ -600,7 +598,7 @@ A claim that, all told, an action's costs outweigh its benefits, or the reverse,
 | kialo 5637 | 5637.12666 | strain | The good of saving a life outweighs any ethical cost of the abortion; global on one side, and the cost is the act's moral character. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.5912; also C022 | clean | Abortion bans do more harm than good; a balance claim about the opposite action. | review of D055-D059 v3 | session check, 2026-10-23 |
 | kialo 5637 | 5637.1557 (archived); also C019 | strain | A ban would mean fewer lives lost overall, counting the women and the foetuses; a net sum across two groups. | review of D055-D059 v3 | session check, 2026-10-23 |
-| kialo 13292 | 13292.149; also C017, C018 | strain | Rationing would likely cost more than it brings in; a net loss of the other course, which proposal D055-D059 codes as a negative consequence of rationing, not a balance claim. | review of D055-D059 v2 | session check, 2026-10-23 |
+| kialo 13292 | 13292.149; also C017, C018 | strain | Rationing would likely cost more than it brings in; a net loss of the other course, which the guidelines code as a negative consequence of rationing, not a balance claim (§3.1, OC6, OC14; rule-cases.yml OC6-a). | review of D055-D059 v2 | session check, 2026-10-23 |
 
 **The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
 
@@ -638,8 +636,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
 - `net_benefit/1`: “All told, the benefits of the action %s outweigh its costs.”
 - `net_cost/1`: “All told, the costs of the action %s outweigh its benefits.”
 
@@ -709,7 +705,7 @@ Bindings: A = “the city building the stadium”; G = “forty home games a yea
 
 - The action “the city building the stadium” brings about “forty home games a year bringing trade to local businesses”.
 - “Forty home games a year bringing trade to local businesses” is good.
-- *Unless:* Doing “the city building the stadium” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “the city building the stadium” has bad consequences that outweigh “forty home games a year bringing trade to local businesses”.
 - **So:** Action “the city building the stadium” should be performed.
 
 *Note:* It uses the words of a balance claim but argues from one consequence, so it is positive consequences; the weighing words are its own claim about its exception.
@@ -749,10 +745,10 @@ Of two courses, one of which must be taken and both of which have bad consequenc
 | kialo 5637 | 5637.208 | clean | When the woman's life is at risk and the foetus cannot survive, abortion is better than letting both die. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.14334 | strain | If equality costs allowing abortion, an unequal society may be better; two bad courses compared, also a weighing. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 2629 | 2629.7306 | clean | God may have chosen suffering over another way to the same goal that would be worse. | review of D055-D059 v1 | session check, 2026-10-22 |
-| kialo 5637 | 5637.4851 (archived) | strain | Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, which the rule codes as a weighing (C003), offered against a claim about what is natural. | review of D055-D059 v3 | session check, 2026-10-23 |
+| kialo 5637 | 5637.4851 (archived) | strain | Pregnancy carries a greater risk of death than abortion; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6), offered against a claim about what is natural. | review of D055-D059 v3 | session check, 2026-10-23 |
 | kialo 5637 | 5637.135; also C017 | strain | Adoption, though imperfect, is better than abortion because the child lives; two courses compared, the first conceded to have costs. | review of D055-D059 v2 | session check, 2026-10-23 |
-| kialo 5637 | 5637.121 | strain | Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, which the rule codes as a weighing (C003). | review of D055-D059 v2 | session check, 2026-10-23 |
-| kialo 5637 | 5637.2372 (archived) | strain | It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, which the rule codes as a weighing (C003). | review of D055-D059 v4 | session check, 2026-10-23 |
+| kialo 5637 | 5637.121 | strain | Abortion harms well-being less than pregnancy and childbirth; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6). | review of D055-D059 v2 | session check, 2026-10-23 |
+| kialo 5637 | 5637.2372 (archived) | strain | It is not certain that the hardships cited are worse than never living, and foster care beats no life; the second course is the first's omission, so the guidelines code it as a weighing of two consequences of one action, not as another course (§3.1, OC6). | review of D055-D059 v4 | session check, 2026-10-23 |
 
 **The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
 
@@ -906,7 +902,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
 - `matters_more/2`: “%s matters more than %s.”
 - `needed_for/2`: “%s is needed for %s.”
 
@@ -975,7 +970,7 @@ Bindings: A = “the parents having the child vaccinated”; G = “the child be
 
 - The action “the parents having the child vaccinated” brings about “the child being protected from measles”.
 - “The child being protected from measles” is good.
-- *Unless:* Doing “the parents having the child vaccinated” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “the parents having the child vaccinated” has bad consequences that outweigh “the child being protected from measles”.
 - **So:** Action “the parents having the child vaccinated” should be performed.
 
 *Note:* It cites a good consequence but sets it against no harm, so it is positive consequences.
@@ -987,7 +982,7 @@ Bindings: A = “the parents having the child vaccinated”; G = “the child be
 
 **Kind:** link. **Decision:** D064 (open). **Stage:** ready. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** low.
 
-Several consequences on one side, each weaker than a single consequence on the other, never add up in Carneades: the strongest argument on each side decides. ND names the number of consequences as a factor of an argument's strength, and Kialo claims bundle several harms. Proposal D055-D059's rule splits a bundle into arguments; it cannot let them accrue.
+Several consequences on one side, each weaker than a single consequence on the other, never add up in Carneades: the strongest argument on each side decides. ND names the number of consequences as a factor of an argument's strength, and Kialo claims bundle several harms. The guidelines split a bundle into arguments (§3.1, OC11); it cannot let them accrue.
 
 **Closest, and why each falls short:**
 - C004, balance of consequences: One global claim about the balance, not a sum of the arguments.
@@ -1063,7 +1058,7 @@ The person who chooses the action, and who bears its consequences, has already w
 |---|---|---|---|---|---|
 | kialo 5637 | 5637.10818 (archived) | clean | Someone who seeks an abortion has already judged that the pregnancy's potential is worth less to them than something else; it answers 5637.2428. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.5701 (archived); also C003 | clean | A mother who wanted an abortion is likely better off not raising the child; the choice read as the weighing. | review of D055-D059 v4 | session check, 2026-10-23 |
-| kialo 5637 | 5637.392 (archived) | strain | Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret offered against reading the choice as the weighing (a reply). | review of D055-D059 v4 | session check, 2026-10-23 |
+| kialo 5637 | 5637.392 (archived) | strain | Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret figures, which would answer reading the choice as the weighing, offered against 5637.378. | review of D055-D059 v4 | session check, 2026-10-23 |
 
 **Open questions:**
 - All three sightings are in the abortion discussion (5637); is the pattern found elsewhere (consumer choice, risky sports)?
@@ -1130,10 +1125,6 @@ A sketch: not in `walton.yml`.
 |---|---|---|
 | C005/Q1 | Is G bad enough, and for enough people, to count against doing A? | `bad(G)` (premise) |
 
-**Its templates:**
-
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
-
 **Examples, rendered:**
 
 #### 1. A small burden
@@ -1197,7 +1188,7 @@ Bindings: A = “allowing dogs on the beach”; G = “more litter on the beach�
 
 - The action “allowing dogs on the beach” brings about “more litter on the beach”.
 - “More litter on the beach” is bad.
-- *Unless:* Doing “allowing dogs on the beach” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “allowing dogs on the beach” has good consequences that outweigh “more litter on the beach”.
 - **So:** It is not the case that action “allowing dogs on the beach” should be performed.
 
 Pressed with its questions:
@@ -1331,7 +1322,7 @@ Bindings: A = “building the dam”; G = “the valley's farms being flooded”
 
 - The action “building the dam” brings about “the valley's farms being flooded”.
 - “The valley's farms being flooded” is bad.
-- *Unless:* Doing “building the dam” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “building the dam” has good consequences that outweigh “the valley's farms being flooded”.
 - **So:** It is not the case that action “building the dam” should be performed.
 
 *Note:* The harm is certain and not catastrophic; nothing is weighed against a small chance, so it is negative consequences.
@@ -1380,10 +1371,6 @@ A sketch: not in `walton.yml`.
 | Question | Asks | Targets |
 |---|---|---|
 | C021/Q1 | Who bears G, and does that change how much it counts against doing A? | `bad(G)` (premise) |
-
-**Its templates:**
-
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
 
 **Examples, rendered:**
 
@@ -1448,7 +1435,7 @@ Bindings: A = “bringing in a tax on sugary drinks”; G = “the weekly shop c
 
 - The action “bringing in a tax on sugary drinks” brings about “the weekly shop costing more”.
 - “The weekly shop costing more” is bad.
-- *Unless:* Doing “bringing in a tax on sugary drinks” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “bringing in a tax on sugary drinks” has good consequences that outweigh “the weekly shop costing more”.
 - **So:** It is not the case that action “bringing in a tax on sugary drinks” should be performed.
 
 Pressed with its questions:
@@ -1552,7 +1539,6 @@ A sketch: not in `walton.yml`.
 **Its templates:**
 
 - `avoidable/2`: “The action %s can be carried out so that %s does not follow.”
-- `good_outweighs/2`: “The action %s has good consequences that outweigh %s.”
 
 **Examples, rendered:**
 
@@ -1624,7 +1610,7 @@ Bindings: A = “governments funding cheaper plant protein”; G = “people eat
 
 - The action “governments funding cheaper plant protein” brings about “people eating less meat without food prices rising”.
 - “People eating less meat without food prices rising” is good.
-- *Unless:* Doing “governments funding cheaper plant protein” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “governments funding cheaper plant protein” has bad consequences that outweigh “people eating less meat without food prices rising”.
 - **So:** Action “governments funding cheaper plant protein” should be performed.
 
 *Note:* It proposes another action, argued for on its own, not the same action changed; an alternative, not a mitigation.
@@ -1686,7 +1672,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
 - `better_alternative/2`: “Some action other than %s would bring about %s at less cost.”
 
 **Examples, rendered:**
@@ -1813,10 +1798,6 @@ A sketch: not in `walton.yml`.
 |---|---|---|
 | C018/Q1 | Can A be carried out at all? | `possible(A)` (assumption) |
 
-**Its templates:**
-
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
-
 **Examples, rendered:**
 
 #### 1. Both at once
@@ -1883,7 +1864,7 @@ Bindings: A = “building a high-speed line to the north”; G = “the line cos
 
 - The action “building a high-speed line to the north” brings about “the line costing billions”.
 - “The line costing billions” is bad.
-- *Unless:* Doing “building a high-speed line to the north” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “building a high-speed line to the north” has good consequences that outweigh “the line costing billions”.
 - **So:** It is not the case that action “building a high-speed line to the north” should be performed.
 
 *Note:* A cost is a consequence of doing the action, argued against it; it does not say that the action cannot be done.
@@ -1950,7 +1931,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
 - `forbidden/1`: “Doing %s would violate a right or a duty that no good consequence outweighs.”
 
 **Examples, rendered:**
@@ -2019,7 +1999,7 @@ Bindings: A = “governments putting a tax on meat”; G = “people resenting t
 
 - The action “governments putting a tax on meat” brings about “people resenting the state for policing their food”.
 - “People resenting the state for policing their food” is bad.
-- *Unless:* Doing “governments putting a tax on meat” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “people resenting the state for policing their food”.
 - **So:** It is not the case that action “governments putting a tax on meat” should be performed.
 
 *Note:* It cites a consequence of the tax, people's resentment, not a right that rules it out, so it is negative consequences.
@@ -2045,7 +2025,7 @@ Arguments from what follows if an action is not done. The book's forms for it sp
 
 **Kind:** scheme. **Decision:** D069 (open). **Stage:** ready. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** medium.
 
-An action should be done because, if it is not, a bad outcome befalls others or society. The book's forms for not acting speak to the agent (33.3's parenthetical) or warn the one who would act (33.4, very bad "for you"). Proposal D055-D059 codes this pattern as positive consequences of the action, with the harm's not happening, phrased as a good state, as G; a scheme of its own would cite the harm as what follows from not acting.
+An action should be done because, if it is not, a bad outcome befalls others or society. The book's forms for not acting speak to the agent (33.3's parenthetical) or warn the one who would act (33.4, very bad "for you"). Since D055 the guidelines code this pattern as positive consequences of the action, with G the harm's not happening, phrased as a good state (kialo-batch2/guidelines.md §3.1, OC13); a scheme of its own would cite the harm as what follows from not acting.
 
 **Closest, and why each falls short:**
 - positive consequences (33.1), with G the harm's not happening: It fits, but restates the harm as a good ("the streets staying dry"), and its likelihood question then asks about the action's effect, not about what happens without it.
@@ -2100,7 +2080,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
 - `omission_leads_to/2`: “If %s is not done, %s will follow.”
 
 **Examples, rendered:**
@@ -2164,9 +2143,9 @@ Bindings: X = “insuring your house”; C = “losing everything in a fire”.
 
 - You were considering not doing “insuring your house”.
 - But, if you do not do “insuring your house”, some consequence “losing everything in a fire”, which will be very bad for you, will occur, or is likely to occur.
-- *Presumed:* If you don't do “insuring your house” consequences may strongly appear.
-- *Unless:* Doing “insuring your house” also has consequences of the opposite kind that outweigh the ones cited.
-- **So:** You ought to reconsider other things being equal and you ought prudentially to do “insuring your house”.
+- *Presumed:* If “insuring your house” is not done, “losing everything in a fire” is likely to follow.
+- *Unless:* The action “insuring your house” has bad consequences that outweigh “losing everything in a fire”.
+- **So:** Action “insuring your house” should be performed.
 
 *Note:* The harm falls on the one who would act, the addressee who was considering not insuring, so it is the prudential form (33.4).
 
@@ -2226,8 +2205,6 @@ A sketch: not in `walton.yml`.
 **Its templates:**
 
 - `averts/2`: “Doing %s would avert %s.”
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
-- `strongly_occur/2`: “If %s is not done, %s is likely to follow.”
 
 **Examples, rendered:**
 
@@ -2312,7 +2289,7 @@ Bindings: X = “locking the shed”; Y = “the shed being broken into”.
 
 **Kind:** link. **Decision:** D069 (open). **Stage:** collecting; missing: the threshold (1 verified in 1 places; 3 in 2 needed). **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** low.
 
-The same reason for doing X can be coded as positive consequences (G = the attic staying dry) or as the prudential form (C = the attic flooding). The two conclude the same statement but have different exceptions, so a weighing claim reaches only one, and a board can hold both framings at once. Proposal D055-D059's rule codes a consideration once; a declared equivalence would let the registry check it.
+The same reason for doing X can be coded as positive consequences (G = the attic staying dry) or as the prudential form (C = the attic flooding). The two conclude the same statement but have different exceptions, so a weighing claim reaches only one, and a board can hold both framings at once. The guidelines code a consideration once (§3.1, OC12); a declared equivalence would let the registry check it.
 
 **Closest, and why each falls short:**
 - D053's sided flip: It pairs a scheme with its opposite, not one consideration with its reframing.
@@ -2484,7 +2461,7 @@ Bindings: A = “the council installing a speed camera on the school road”; G 
 
 - The action “the council installing a speed camera on the school road” brings about “drivers slowing down on the school road”.
 - “Drivers slowing down on the school road” is good.
-- *Unless:* Doing “the council installing a speed camera on the school road” also has consequences of the opposite kind that outweigh the ones cited.
+- *Unless:* The action “the council installing a speed camera on the school road” has bad consequences that outweigh “drivers slowing down on the school road”.
 - **So:** Action “the council installing a speed camera on the school road” should be performed.
 
 *Note:* Nothing is said to happen anyway; the action is argued from its consequence, so it is positive consequences.
@@ -2539,9 +2516,7 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `bad_outweighs/2`: “The action %s has bad consequences that outweigh %s.”
 - `speaker_brings_about/1`: “The one giving the warning can bring about %s, and means to if the warning is ignored.”
-- `strongly_occur/2`: “If %s is not done, %s is likely to follow.”
 
 **Examples, rendered:**
 

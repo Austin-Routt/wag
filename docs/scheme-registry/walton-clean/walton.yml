@@ -55,6 +55,7 @@ language:
   bad_for_you/1: "%s is very bad for you."
   bad_moral_character/1: "%s has bad moral character."
   bad_not_accepted/2: "%s 's argument %s should not be accepted."
+  bad_outweighs/2: "The action %s has bad consequences that outweigh %s."
   based_on_evidence/1: "The assertion %s is based on evidence."
   being_credible/0: "Therefore, you ought to take what I say as being more credible or acceptable."
   believe_it/1: "Recalling %s is a prima facie reason to believe it."
@@ -162,6 +163,7 @@ language:
   good/1: "%s is good."
   good_group/2: "Everybody who is good, or who represents a group %s with good qualities, accepts policy %s."
   good_moral_character/1: "%s is of good moral character."
+  good_outweighs/2: "The action %s has good consequences that outweigh %s."
   great_sacrifice/3: "If a great sacrifice %s has been made for %s, then the value %s of it will be greater."
   great_sacrifice_made/2: "A great sacrifice %s has been made for %s."
   great_side_effects/2: "There will be too great negative side effects of %s bringing about %s."
@@ -377,6 +379,7 @@ language:
   strong_correlation/2: "Correlation of %s and %s is strong."
   stronger_than_character/1: "There are some strong evidences that supported %s more than than the character issue."
   strongly_occur/1: "If you don't do %s consequences may strongly appear."
+  strongly_occur/2: "If %s is not done, %s is likely to follow."
   subclass/2:  "%s is a subclass of %s."
   successful_account/2: "%s , is the account that explains %s most successfully."
   successful_diagram/1: "The most plausible -strongest- argument is represented by %s."
@@ -1330,14 +1333,14 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
     variables: [X,C]
     conclusions:
-      - prudential(X)
+      - should_be_performed(X)
     premises:
       - not_doing(X)
       - bad_consequence(X,C)
     exceptions:
-      - other_consequences(X)
+      - bad_outweighs(X,C)
     assumptions: 
-     -  strongly_occur(X)
+     -  strongly_occur(X,C)
 
   - id: pragmatic_alternative
     meta:
@@ -1984,7 +1987,7 @@ argument_schemes:
       - brings_about(A,G)
       - bad(G)
     exceptions:
-      - other_consequences(A)
+      - good_outweighs(A,G)
       
   - id: negative_consequences_reasoning
     meta:
@@ -2000,7 +2003,7 @@ argument_schemes:
       - agent_bring_about(A,B)
       - bad_for_goals(B)
     exceptions:
-      - other_consequences(A)
+      - good_outweighs(A,B)
       
   - id: position_to_know
     meta:
@@ -2031,7 +2034,7 @@ argument_schemes:
       - brings_about(A,G)
       - good(G)
     exceptions:
-      - other_consequences(A)
+      - bad_outweighs(A,G)
 
   - id: practical_reasoning1
     meta:

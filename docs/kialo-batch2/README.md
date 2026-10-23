@@ -9,11 +9,13 @@ The second round of formalizing Kialo claims as Walton scheme instances, as the 
 
 | File | What |
 |---|---|
-| `guidelines.md` | The annotation guidelines: version 2 (the audit's separate fields, the policies, the output format), and the version 3 changes the adjudication found (§5). |
+| `guidelines.md` | The annotation guidelines: version 2 (the audit's separate fields, the policies, the output format), the rules on opposite consequences and weighing (§3.1, rules OC1–OC14, decisions D055 and D059), and the version 3 changes the adjudication found (§5). |
+| `rule-cases.yml` | Worked cases for each rule of §3.1, with their codings and the rule's retired wording. A test (`wag/internal/annotate`, `TestRuleCases`) checks the codings against `walton.yml` and the gold, that every rule has a case, and that no retired wording survives. Not given to annotators: some cases are claims of this batch. |
 | `items.json` | The 50 claims, top-down, with their Kialo context (parents, ancestors, siblings, children, votes). |
 | `annotator-A.json`, `annotator-B.json` | The two independent annotations. |
 | `agreement.py`, `agreement.json` | Agreement per field (Cohen's kappa), at the level of scheme families, on premises and bindings, and against the first pilot. |
-| `gold.json` | The adjudicated annotations, each disagreement resolved with its reason. |
+| `gold.json` | The adjudicated annotations, each disagreement resolved with its reason. A later recoding is recorded in the item's `adjudication.recoded`. |
+| `recode_d055.py` | The recoding of the gold for decisions D055 and D059 (2026-10-23): the sided exceptions, the weighing claims 13292.127 and 13292.43, and the 33/CQ3 challenges split. A one-off, kept as the record; it refuses to run twice. |
 | `adjudication.md` | The disagreements by kind, how they were resolved, and what they say about the guidelines. |
 | `lexicon.json`, `validate.py` | The shared atoms of the discussion, and the check that every formula instantiates `walton.yml`, every target exists and the guidelines' rules hold. |
 | `to_wag.py`, `wag-report.json`, `wag-game.json` | The gold annotations played as a WAG game through the server, move by move, each with what the annotation intended and what was played. The game loads in the browser (*Load an exported game*). |
@@ -42,21 +44,23 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 ## How the annotations went into the game
 
-`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-10-22, after the analogy family's two-case form (decisions D001, D028, D029) and before the game's data takes it (workstream E):
+`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-10-23, after the analogy family's two-case form (decisions D001, D028, D029) and the consequence family's sided exceptions (D055, D059), and before the game's data takes them (workstream E):
 
 | Integration | Claims | Meaning |
 |---|---|---|
-| as intended | 19 | Played with its scheme, in its role: 15 arguments for or against a statement or new, 1 answer to a critical question, 3 challenges of a premise. |
+| as intended | 18 | Played with its scheme, in its role: 14 arguments for or against a statement or new, 1 answer to a critical question, 3 challenges of a premise. |
 | fragment | 3 | The claim states a premise of its target's argument (the scheme is the target's), so it supports that premise, with Other. |
 | coverage gap | 15 | The game lacks its scheme, so it was played with Other: the annotation is not at fault. The schemes: 5 `other`, 3 verbal classification, 2 cause to effect, 2 rule, and one each of ends and means, practical analogy, and practical necessary condition. The practical analogy (13292.30) now concludes the thesis itself, `should_be_performed(tax_meat)`, so its Other argument supports the thesis's own statement. |
-| failed | 7 | The game has the scheme, but the intended move cannot be made with it. 2 negative consequences answering "side effects" (an exception); 3 consequences or goal-based reasoning answering "other means"; 1 value argument answering "good consequences to weigh against". In each, the scheme's conclusion is not the answer: the bridge the audit's N4 and §4 discuss. And 13292.61, coded with analogy's two-case form, which the game's `AS:analogy` (still A and C) does not take until its data is generated from the catalogue; until then it is played with Other. |
+| failed | 6 | The game has the scheme, but the intended move cannot be made with it. 2 negative consequences answering "side effects" (an exception); 3 consequences or goal-based reasoning answering "other means". In each, the scheme's conclusion is not the answer: the bridge the audit's N4 and §4 discuss. And 13292.61, coded with analogy's two-case form, which the game's `AS:analogy` (still A and C) does not take until its data is generated from the catalogue; until then it is played with Other. |
 | duplicate | 1 | A challenge of a premise another claim already challenged. |
 | cascade | 2 | Its target was itself played with Other, so the premise it attacks is not on the board. |
-| not played | 2 | No scheme and no move: an amendment, and a causal claim on a missing premise. |
+| not played | 4 | No scheme and no move: an amendment, and a causal claim on a missing premise. And the two weighing claims, 13292.127 and 13292.43, whose targets, the new exceptions, are not on the game's board until workstream E. |
 
 Played with Other is therefore not one thing. It covers coverage gaps, fragments and failures, and only the failures count against the scheme–question links.
 
-Since 2026-10-23 the replay plays an answer at an exception as an argument that the exception holds. An annotation's polarity is its stance on the target's conclusion, so it flips at an exception. Before, the two answers about side effects and the three about other means (13292.174, .5, .104, .147, .123) were played against the exceptions they answer. The counts did not change, but the evaluation did: 13292.118's goal-based practical reasoning, in force before, is now undercut by the other-means answers, and 13292.108's, out before for a premise, is now undercut too. Both answers are Other arguments, so their weights do not matter (D070). The thesis stays out.
+Since 2026-10-23 the replay plays an answer at an exception as an argument that the exception holds. An annotation's polarity is its stance on the target's conclusion, so it flips at an exception. Before, the two answers about side effects and the three about other means (13292.174, .5, .104, .147, .123) were played against the exceptions they answer. The counts did not change, but the evaluation did: 13292.118's goal-based practical reasoning, in force before, is now undercut by 13292.123's other-means answer, and 13292.108's, out before for a premise, is now undercut by the two side-effect answers (13292.174, .5) and two other-means answers (13292.104, .147). All five answers are Other arguments, so their weights do not matter (D070). The thesis stays out.
+
+Since 2026-10-23 the gold is recoded for D055 (`recode_d055.py`). 13292.127, a negative consequences argument before, is now a weighing claim against 13292.115's new exception, and 13292.43, a value argument before, one against 13292.9's; neither target is on the game's board yet, so neither is played. 13292.127's starvation argument, now its secondary instance, leaves the replayed debate, and 13292.204, which denies the starvation link, is played as a new Other argument that attacks nothing. The script labels it a coverage gap, though by its own definitions it is a cascade. The thesis stays out. The fourth independent review's replay of the same recoding gave the same result, claim by claim.
 
 ## Annotating with models
 

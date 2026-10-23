@@ -246,7 +246,8 @@ def main(outdir):
       "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
       "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "
       "exception that holds defeats the argument whatever the weights, so the template now says that the opposite "
-      "consequences outweigh the ones cited (it had said only that some exist, ungrammatically). |")
+      "consequences outweigh the ones cited (it had said only that some exist, ungrammatically). Replaced on 2026-10-23 "
+      "by the sided exceptions of D055 (below). |")
     w("| `slippery_slope_base_case` | conclusion `negative_consequences(A)` → `¬should_be_performed(A)` | 2026-10-22 | "
       "No other scheme uses `negative_consequences(A)`, so a slippery slope never met the consequence and practical "
       "reasoning schemes; the book's conclusion (49) is that the first step should not be taken. |")
@@ -275,6 +276,18 @@ def main(outdir):
       "rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the "
       "sided exception lets a difference against one side leave the other standing when both argue from one past "
       "situation. The templates are in our own words. |")
+    w("| `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, "
+      "`negative_consequences_prudential` | exception `other_consequences(A)` (or `(X)`) → `bad_outweighs(A,G)`, "
+      "`good_outweighs(A,G)`, `good_outweighs(A,B)` and `bad_outweighs(X,C)` (new templates); in "
+      "`negative_consequences_prudential`, assumption `strongly_occur(X)` → `strongly_occur(X,C)` (new template) and "
+      "conclusion `prudential(X)` → `should_be_performed(X)` | 2026-10-23 | Decisions D055 and D059 (WAG's proposal "
+      "D055-D059, version 5, after four independent reviews and a final check). The one exception for the book's "
+      "33/CQ3 was shared by the arguments for and against an action, so one argument that opposite consequences "
+      "outweigh defeated every consequence argument about the action, on both sides. Each scheme now has an exception "
+      "on its own side that names the consequence it cites, and so defeats only the argument it is about. The "
+      "prudential form's likelihood assumption names the consequence too, and its conclusion meets the practical "
+      "schemes about X. `other_consequences/1`, `prudential/1` and `strongly_occur/1` are left as orphan templates. "
+      "The templates are in our own words. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------
@@ -477,7 +490,8 @@ CONCERNS = [
     "The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57). Its "
     "exception `relevant_differences(R,C)` puts the rule where a case belongs (WAG's decision D058).",
     "Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: "
-    "`strongly_occur(X)` (template had the consequences C too), `cited_bad_consequences(X)` (the consequences; C occurs in "
+    "`strongly_occur(X)` (template had the consequences C too; since D055, on 2026-10-23, the formula is "
+    "`strongly_occur(X,C)`), `cited_bad_consequences(X)` (the consequences; C occurs in "
     "`assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).",
     "`biased/1` had two templates. The loaded one, \"Arguer %s is biased.\", is kept so loading is unchanged. It is also used "
     "for witnesses and sources (`credible_source`, `witness_testimony`), where upstream's deleted \"%s is biased.\" fits better.",

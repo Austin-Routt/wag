@@ -104,9 +104,9 @@ In order of importance. Each issue links to the document that explains it.
    - On the same day the owner corrected five upstream schemes that drafting tier 1 found wrong (the same CHANGELOG section):
      - two conclusions that met no other scheme now conclude `¬should_be_performed(A)`;
      - negative value's conclusion and template, which said the opposite of the book, are corrected;
-     - the consequence schemes have the exception for the book's question about opposite consequences;
+     - the consequence schemes have the exception for the book's question about opposite consequences (since 2026-10-23, an exception on each scheme's own side, D055; and the prudential form concludes `should_be_performed(X)`, D059);
      - the slippery slope's source year is corrected.
-   - 13 compendium entries are linked to `walton.yml` only partly (18 of the 115 links are partial).
+   - 16 compendium entries are linked to `walton.yml` only partly (21 of the 115 links are partial, 2026-10-23).
    - See [part 6](docs/review-2026-10-15-part6.md) and [the registry](docs/scheme-registry/README.md).
 
 **Fixed on 2026-10-15** (part 7 §1, part 8 §2, part 9 §4):
@@ -185,7 +185,7 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 | This README | Where the project stands, its issues, its direction |
 | [`docs/plan.md`](docs/plan.md) | The plan: the catalogue, annotation version 4, data, evaluation; the owner's open decisions |
 | [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) | The plan for complete coverage and alignment of the scheme catalogue: what is left, in which order, and when it is done |
-| [`docs/proposals/`](docs/proposals/) | **Proposals for scheme changes:** the schemes as they would be, and examples rendered in English, for the owner to read before `walton.yml` changes ([`docs/process.md`](docs/process.md) §5). The first: [D001, D028 and D029](docs/proposals/D001-D028-D029.md), the analogy family in two-case form (applied). Under review: [D055 and D059](docs/proposals/D055-D059.md), sided opposite-consequences exceptions for the consequence family (version 5, after four independent reviews) |
+| [`docs/proposals/`](docs/proposals/) | **Proposals for scheme changes:** the schemes as they would be, and examples rendered in English, for the owner to read before `walton.yml` changes ([`docs/process.md`](docs/process.md) §5). The first: [D001, D028 and D029](docs/proposals/D001-D028-D029.md), the analogy family in two-case form (applied 2026-10-22). The second: [D055 and D059](docs/proposals/D055-D059.md), sided opposite-consequences exceptions for the consequence family (applied 2026-10-23, after four independent reviews and a final check; its annotation rule is now [the guidelines' §3.1](docs/kialo-batch2/guidelines.md)) |
 | [`docs/decisions.md`](docs/decisions.md) | **Every open decision,** with its priority, what it holds up and who decides it; generated from the register, [`docs/decisions.yml`](docs/decisions.yml) |
 | [`docs/candidates.md`](docs/candidates.md) | **Candidates:** schemes, questions, exceptions and links WAG may need, generated from the registry [`candidates.yml`](docs/candidates.yml) ([`process.md`](docs/process.md) §8). Each has its verified sightings, the items it comes closest to, a checked sketch and rendered examples. They are grouped by family and pattern so that similar ones are compared and decided together (D056, D063-D069, D072, D074) |
 | [`docs/process.md`](docs/process.md) | How the work is done: one source of truth per fact, statuses, independent agents, feedback from play, the decision register, the private workspace, the checks |
