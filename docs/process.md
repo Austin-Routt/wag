@@ -72,6 +72,51 @@ Models draft and check. Each run follows this protocol.
    - Batches are small enough to check.
    - Each run's cost (tokens, calls, time) is recorded.
 
+### Review rounds
+
+Since 2026-10-23, after the rounds on proposal D055-D059. Their record showed:
+- **The formulas were settled at version 2.** The later rounds worked on the rule for annotators and the effects.
+- **Every error after version 1 came from the fix of the round before.**
+  - Two came from a reviewer's suggested text taken as written.
+  - Two came from a rule stated in several places and changed in one.
+- **The findings never ran out,** because each brief asked for new Kialo probes and new candidates.
+
+The rounds now go like this.
+
+1. **One full review.**
+   - It reviews everything: the formulas, templates and questions, the examples, the effects and the rules for annotators.
+   - It may test the rules on Kialo claims the proposal does not use.
+   - The claims it uses become the probe set, listed in its report.
+2. **Then verification rounds, scoped to the diff.** Each later brief gives the previous findings, the diff since the version reviewed, and this checklist:
+   - **each finding:** made, made in part, not made or not needed, and whether it was made correctly;
+   - **each changed passage:** every other place that states the same fact, found by searching for its key terms and for the rule's retired wording;
+   - **every check green:**
+     - the proposal check and the catalogue check;
+     - `validate.py`;
+     - the rule's worked cases (`TestRuleCases`);
+     - the effects' scripts;
+     - `go test`;
+   - **the probe set only:** no new Kialo probes, and no search for candidates.
+3. **Severity, and when it is done.**
+   - **An error blocks:**
+     - a false claim;
+     - a defect in a formula, template or question;
+     - a rule that tells annotators to code something wrongly;
+     - a wrong effect, or a missing one.
+   - **Warnings and notes do not start a new version.** They go to the owner with the verdict, and the owner decides:
+     - which to fix now;
+     - which to record, in the register if they raise a question.
+   - **A proposal is done** when a verification round finds no errors on the checklist and every check is green.
+4. **Fixing a finding.**
+   - **Reproduce it first:** run the check, or read the source it cites.
+   - **Write the fix in our words.** A reviewer's suggested text is checked like any other: against the sources, the rule's cases and the gold. Record where it came from. (The D055-D059 final check's own fix for its first warning would have coded a claim whose conclusion meets nothing at its target. The fix as first written was wrong too, until the gold's cases showed it.)
+   - **State each fact once.**
+     - A rule lives in one place: for annotation rules, the guidelines, with an id. Other texts cite the id.
+     - When a rule's wording changes, the old wording goes on the retired list, which a test enforces (§1).
+   - **Effects that change data are scripts,** committed with the change. The numbers a proposal states come from running them.
+   - **Run every check** after the edit, before the commit.
+5. **Looking for candidates is its own brief,** after the review, against the registry and its relations (§8). A review notes a candidate it meets in passing, but is not asked to find them.
+
 ## 4. Feedback from play (to build)
 
 People and models beta-testing WAG report through one channel:
@@ -151,7 +196,10 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
 
    The scheme's negated form gets an example where it has one.
 4. **The cleaning's gate and the registry** run on `walton.yml` with the proposal applied (`--proposal-walton PATH`, then `walton-check PATH` and `wag-cli --registry PATH`). Only the proposed schemes may differ from today's results.
-5. **An independent reviewer checks it** (§3): against the book, `walton.yml`, the game and Kialo, with examples of its own, and gives a verdict for each decision. The proposal is revised on its findings and reviewed again.
+5. **An independent reviewer checks it** (§3, review rounds): against the book, `walton.yml`, the game and Kialo, with examples of its own, and gives a verdict for each decision.
+   - The first review is full.
+   - The proposal is revised on its errors, and each later round verifies the diff against the checklist.
+   - Warnings go to the owner with the verdict.
 6. **The owner reads the view and the reviews.** If it is approved, the change is made through `edits.py`. The examples move into the catalogue's entries, the decision is closed in the register, and the proposal is marked `applied`, so that its view says its "Now" columns now equal the proposed ones. The first proposal, [D001-D028-D029](proposals/D001-D028-D029.md), went this way on 2026-10-22: two independent reviews, then a short check of the third version. The second, [D055-D059](proposals/D055-D059.md), on 2026-10-23: four independent reviews, then a final check of the fifth version. Its annotation rule moved into the guidelines (§1), where the final check's warnings were fixed; the proposal keeps the approved text as its record.
 
 A test keeps every committed proposal valid and its view current.
@@ -199,14 +247,28 @@ New schemes, questions, exceptions and links come from three places:
 All three go through one registry, [`candidates.yml`](candidates.yml). Its view, [`candidates.md`](candidates.md), is generated by `wag-cli --catalogue-gen`, and `--catalogue-check` checks both.
 
 **What each candidate records.**
-- **Its place:** an id (C and three digits, never reused); a kind (scheme, question, exception or link); and a pattern group within a family of `families.json`. Similar candidates sit side by side in their group's table, which shows what each compares, what it concludes, what it comes closest to, how often it has been seen and how far it has got.
+- **Its place:** an id (C and three digits, never reused); a kind (scheme, question, exception or link); its relation to what WAG has (below); and a pattern group within a family of `families.json`. Similar candidates sit side by side in their group's table, which shows what each compares, what it concludes, how it relates, what it comes closest to, how often it has been seen and how far it has got.
 - **Its evidence:**
   - sources: the literature, and the book's and ND's pages, cited and paraphrased, never copied;
   - sightings in data, each with how well it fits (clean or with strain), a note in our own words, who found it and who verified it. Kialo claims are cited by id; their text stays in the private workspace.
 - **What it is not:** the items it comes closest to and why each falls short; related candidates and how they relate.
 - **Its form:** a sketch, checked as a proposal's candidates are (§5) and never applied; examples rendered in English, with a near miss; what WAG's engine showed; what implementing it needs; open questions.
 
-**Intake.** Every review brief, annotation run and play report records the candidates it meets in this shape, or one that converts to it. A new sighting of an existing candidate is added to that candidate, not recorded as a new one. A claim that shows two patterns is listed under both, and each listing names the other (`also`); the check notes a claim listed twice without that. A sighting counts only once a second reader has read the text against its note (it is then *verified*).
+**Its relation to what WAG has** (since 2026-10-23). Most patterns found in data are not new schemes but questions, premises or variants of schemes WAG has, so each candidate says which, with its base (the `walton.yml` schemes or candidates it is built from) and why:
+
+| Relation | What it is | Its kind | Usual outcome |
+|---|---|---|---|
+| new | a pattern of its own: no scheme WAG has is its form | scheme | add |
+| variant | a scheme WAG has with a premise, the conclusion or the modality changed | scheme | a domain version, or add it to the base's family |
+| specialization | a scheme WAG has (or a candidate) with premises added | scheme | a domain version, or merge into the base |
+| composition | two schemes or candidates chained or combined | scheme | merge, as a rule for coding the chain, or reject |
+| addition | one premise, assumption, exception or question added to a scheme WAG has | question or exception | merge into the base |
+| rule | a rule for annotation or the engine | link | the guidelines or the engine |
+
+- **The formula check.** The check measures each sketch against `walton.yml` with the registry's patterns (`internal/registry`: predicates by role, the conclusion included; a changed formula counts two) and shows the nearest scheme in the view. A scheme whose sketch is within one formula of a `walton.yml` scheme is an error: it is a question or exception of that scheme. A new pattern within two formulas of one, and an addition more than one formula from its base, are warnings.
+- **The literature check.** Before a candidate is registered, the book's compendium and text and ND are searched for the pattern, and what they say is recorded in its sources, or that nothing was found and what was searched for. A pattern the sources describe is not a discovery: its relation says how it stands to the schemes they give.
+
+**Intake.** Every review brief, annotation run and play report records the candidates it meets in this shape, or one that converts to it. Looking for candidates is its own task, with its own brief (§3), not part of reviewing a proposal. A new sighting of an existing candidate is added to that candidate, not recorded as a new one. A claim that shows two patterns is listed under both, and each listing names the other (`also`); the check notes a claim listed twice without that. A sighting counts only once a second reader has read the text against its note (it is then *verified*).
 
 **The stages,** computed by the check:
 - **collecting:** fewer than three verified sightings in two discussions or games (the threshold; whether it is right is D047). A gap shown by analysis rather than by data, such as a scan of `walton.yml` or an engine test, is exempt, with the reason recorded.

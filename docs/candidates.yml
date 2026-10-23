@@ -8,7 +8,10 @@
 #     (families.json ids; none: across families); about (what the members
 #     share, and how they differ).
 #   candidates: id (C and three digits, never reused); name; kind (scheme,
-#     question, exception, link); group; decision (the register's decision
+#     question, exception, link); relation (kind: new, variant,
+#     specialization, composition, addition or rule; base: the walton.yml
+#     schemes or candidates it is built from, none for new; why), checked
+#     against the sketch's formula distance from walton.yml; group; decision (the register's decision
 #     that settles it, needed once it meets the threshold); outcome (date,
 #     by, result: reject, merge, domain or add; into; recorded), once taken;
 #     found (who found it, when); confidence (the finder's: high, medium,
@@ -171,6 +174,13 @@ candidates:
   - id: C001
     name: Argument a fortiori
     kind: scheme
+    relation:
+      kind: variant
+      base: [analogy]
+      why: >-
+        Analogy's form with its similarity premise replaced: the second case
+        is stronger for the claim, so a difference between the cases is the
+        reason, not a defeater. Its sketch is one premise from analogy's.
     group: case-comparison
     decision: D056
     found:
@@ -315,6 +325,14 @@ candidates:
   - id: C002
     name: Refutation by parallel argument
     kind: scheme
+    relation:
+      kind: new
+      why: >-
+        It concludes that another argument is undercut, from a parallel
+        argument of the same form whose premises are acceptable and whose
+        conclusion is not; its sketch shares no formula with any scheme of
+        walton.yml. The literature treats it as a technique of its own
+        (sources).
     group: inference-attacks
     decision: D056
     found:
@@ -486,6 +504,14 @@ candidates:
   - id: C011
     name: Appeal to consequences, as an objection
     kind: question
+    relation:
+      kind: addition
+      base: [positive_consequences, negative_consequences, negative_consequences_reasoning, negative_consequences_prudential]
+      why: >-
+        An objection to a consequence argument offered for the truth of a
+        claim, the ad consequentiam fallacy (ND pp. 176-177), as a question or
+        undercutter of the consequence schemes. Until D074, the guidelines
+        code such a claim with Other (kialo-batch2/guidelines.md §3.1, OC1).
     group: inference-attacks
     decision: D074
     found:
@@ -558,6 +584,15 @@ candidates:
   - id: C003
     name: Weighing an opposite consequence against a cited one
     kind: scheme
+    relation:
+      kind: variant
+      base: [positive_consequences, negative_consequences]
+      why: >-
+        A consequence argument's premises and a ranking premise, concluding
+        the other side's exception instead of that an action should or should
+        not be done: the comparative weighing ND describes as how the two
+        kinds of consequence argument are judged together (p. 159), and the
+        scheme D055's exceptions lack.
     group: weighing
     decision: D064
     found:
@@ -778,6 +813,13 @@ candidates:
   - id: C004
     name: Balance of consequences
     kind: exception
+    relation:
+      kind: addition
+      base: [positive_consequences, negative_consequences]
+      why: >-
+        A side-level exception added to each consequence scheme (net_cost,
+        net_benefit): the favourable or unfavourable balance ND describes (p.
+        170).
     group: weighing
     decision: D064
     found:
@@ -934,6 +976,15 @@ candidates:
   - id: C010
     name: The lesser evil
     kind: scheme
+    relation:
+      kind: composition
+      base: [pragmatic_alternative, C003]
+      why: >-
+        A forced choice between two courses (the alternatives of 34, or a
+        dilemma) combined with a weighing of their bad consequences (C003):
+        Aristotle's topic of the lesser evil (ND p. 168), and the dilemma that
+        ND evaluates with practical reasoning, whose third course is this
+        sketch's exception (pp. 160-161).
     group: weighing
     decision: D064
     found:
@@ -1081,6 +1132,13 @@ candidates:
   - id: C013
     name: The greater good
     kind: scheme
+    relation:
+      kind: specialization
+      base: [C003]
+      why: >-
+        C003's weighing with a premise added: the harm is needed for the good.
+        ND's side-effects premise asks whether a goal is worth its bad
+        consequences (p. 155).
     group: weighing
     decision: D064
     found:
@@ -1103,6 +1161,8 @@ candidates:
         how: C013 is C003 with a necessity premise; perhaps a variant of it.
       - candidate: C006
         how: "The converse: C006 says the harm can be avoided, C013 that it cannot."
+    sources:
+      - "ND p. 155: the side-effects premise of practical reasoning, whether a goal is worth the bad consequences that go with it."
     sightings:
       - source: kialo
         ref: "2629.1471"
@@ -1213,6 +1273,13 @@ candidates:
   - id: C005
     name: How serious is the cited consequence?
     kind: question
+    relation:
+      kind: addition
+      base: [negative_consequences, positive_consequences]
+      why: >-
+        A question at bad(G) or good(G), formulas the schemes already have, so
+        its sketch is the scheme itself. Seriousness is one respect of the
+        weighing ND describes (pp. 158-159).
     group: magnitude-risk
     decision: D065
     found:
@@ -1360,6 +1427,15 @@ candidates:
   - id: C008
     name: Precaution against a catastrophic, irreversible risk
     kind: scheme
+    relation:
+      kind: variant
+      base: [negative_consequences, danger]
+      why: >-
+        Negative consequences with a consequence that may follow, two premises
+        of severity and an exception for negligible risk. 33/CQ1 already
+        allows consequences that may follow, and the danger appeal (37) is the
+        book's special case of negative consequences about a risk to the
+        hearer (p. 102).
     group: magnitude-risk
     decision: D065
     found:
@@ -1382,6 +1458,7 @@ candidates:
         how: Both are about how serious a consequence is.
     sources:
       - "The precautionary principle, in environmental and health policy (not yet read here)."
+      - "The book p. 102: the danger appeal, a special kind of argument from negative consequences; the compendium's 33/CQ1 allows consequences that will, may or must occur."
     sightings:
       - source: kialo
         ref: "13564.175"
@@ -1493,6 +1570,12 @@ candidates:
   - id: C006
     name: Mitigation
     kind: exception
+    relation:
+      kind: addition
+      base: [negative_consequences]
+      why: >-
+        One exception added to negative consequences: the cited consequence
+        can be avoided by carrying out the same action another way.
     group: the-action
     decision: D066
     found:
@@ -1627,6 +1710,12 @@ candidates:
   - id: C007
     name: A right or value against consequences
     kind: exception
+    relation:
+      kind: addition
+      base: [positive_consequences, negative_consequences]
+      why: >-
+        One exception added: a right or a duty rules the action in or out
+        whatever its consequences.
     group: values-against-consequences
     decision: D067
     found:
@@ -1650,6 +1739,8 @@ candidates:
     related:
       - candidate: C003
         how: C003 weighs a consequence against a consequence.
+    sources:
+      - "Not a scheme of the compendium or ND (searched 2026-10-23 for rights that trump consequences)."
     sightings:
       - source: kialo
         ref: "13292.29"
@@ -1778,6 +1869,14 @@ candidates:
   - id: C012
     name: Is the warning an indirect threat?
     kind: question
+    relation:
+      kind: addition
+      base: [negative_consequences_prudential]
+      why: >-
+        One exception added to the prudential form: the speaker means to bring
+        the harm about. The book tells a warning from a threat by that
+        commitment (pp. 102-104), and ND describes the indirect threat put as
+        a warning (p. 114).
     group: threat-or-warning
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
@@ -1797,6 +1896,7 @@ candidates:
     sources:
       - "The book p. 102: an adviser's warning is not a threat; pp. 104-105: two warnings that read as indirect threats (after Walton 2000, p. 123)."
       - "ND p. 116: threats as negative consequences, at home in negotiation."
+      - "ND p. 114: the indirect threat, put as a warning so that the speaker can deny having threatened."
     sketch:
       note: On D055-D059 version 2's form of the prudential argument.
       schemes:
@@ -1867,6 +1967,13 @@ candidates:
   - id: C014
     name: The family's practical conclusions should meet should_be_performed
     kind: link
+    relation:
+      kind: rule
+      base: [fear, danger, threat, pragmatic_alternative, ad_baculum, waste, help, distress, two_person_practical]
+      why: >-
+        Not a scheme: a rule that the family's practical conclusions be stated
+        as should_be_performed, as D059 did for the prudential form, so that
+        their arguments meet the others about the same action (D063).
     group: practical-conclusions
     decision: D063
     found:
@@ -1904,6 +2011,13 @@ candidates:
   - id: C009
     name: Prediction from an agent's incentives
     kind: scheme
+    relation:
+      kind: new
+      why: >-
+        It concludes a prediction of what an agent will do, from what the
+        agent expects an action to bring and wants; its sketch shares no
+        formula with any scheme of walton.yml. Practical reasoning concludes
+        what should be done, and 31.4 predicts from character.
     group: predicting-agents
     decision: D068
     found:
@@ -1921,6 +2035,8 @@ candidates:
         why: It concludes what an agent should do, not what the agent will do.
       - item: abductive argument from character to action (31.4)
         why: It predicts from character, not from the agent's reasons.
+    sources:
+      - "Not in the compendium, the book's pp. 1-138 or ND (searched 2026-10-23 for predict, motive, incentive)."
     sightings:
       - source: kialo
         ref: "27150.193"
@@ -2045,6 +2161,15 @@ candidates:
   - id: C015
     name: Harm of not acting to others
     kind: scheme
+    relation:
+      kind: variant
+      base: [positive_consequences, negative_consequences_prudential]
+      why: >-
+        Positive consequences with the harm of not acting cited as such
+        (omission_leads_to, bad) instead of its not happening as a good; or
+        the prudential form for a harm to others. The guidelines code it as
+        positive consequences (kialo-batch2/guidelines.md §3.1, OC13); the
+        book places harms to a third party in the pity appeals (p. 101).
     group: harms-of-not-acting
     decision: D069
     found:
@@ -2229,6 +2354,12 @@ candidates:
   - id: C016
     name: Would doing the action avert the harm?
     kind: question
+    relation:
+      kind: addition
+      base: [negative_consequences_prudential]
+      why: >-
+        One assumption added to the prudential form: doing X would avert C.
+        Fear (36) has the premise (only_way_prevent).
     group: harms-of-not-acting
     decision: D069
     found:
@@ -2340,6 +2471,13 @@ candidates:
   - id: C017
     name: Another action with better consequences
     kind: exception
+    relation:
+      kind: addition
+      base: [positive_consequences]
+      why: >-
+        One exception added to positive consequences: another action brings
+        the same good at less cost. Practical reasoning has the question (ND
+        p. 155; the compendium's 22.1 CQ2 and CQ3).
     group: the-action
     decision: D066
     found:
@@ -2367,6 +2505,7 @@ candidates:
         how: A reply that another remedy averts a harm is also an alternative.
     sources:
       - "ND p. 158: deliberating agents consider alternative ways of reaching their goal; p. 159: whether there are alternative courses of action, among the questions on consequences."
+      - "ND p. 155: practical reasoning's questions, whether there are alternatives and whether this one is the best; the compendium's 22.1 CQ2 and CQ3."
     sightings:
       - source: kialo
         ref: "13292.171"
@@ -2500,6 +2639,13 @@ candidates:
   - id: C018
     name: Can the action be carried out?
     kind: question
+    relation:
+      kind: addition
+      base: [positive_consequences]
+      why: >-
+        One assumption added to positive consequences: the action can be
+        carried out. Practical reasoning has it (ND p. 155, the practicality
+        premise; walton.yml's possible(A)).
     group: the-action
     decision: D066
     found:
@@ -2520,6 +2666,8 @@ candidates:
     related:
       - candidate: C017
         how: An easier alternative is often argued beside infeasibility (13292.171).
+    sources:
+      - "ND p. 155: practical reasoning's practicality premise and its question, whether the action can be brought about."
     sightings:
       - source: kialo
         ref: "13292.165"
@@ -2612,6 +2760,13 @@ candidates:
   - id: C019
     name: Accrual of consequence arguments
     kind: link
+    relation:
+      kind: rule
+      base: [positive_consequences, negative_consequences]
+      why: >-
+        Not a scheme: whether several consequence arguments on one side should
+        add up, which Carneades does not do. A rule for the engine, or an
+        accrual argument.
     group: weighing
     decision: D064
     found:
@@ -2673,6 +2828,14 @@ candidates:
   - id: C020
     name: One consideration as a gain and as an averted harm
     kind: link
+    relation:
+      kind: rule
+      base: [positive_consequences, negative_consequences_prudential]
+      why: >-
+        Not a scheme: one consideration framed as a gain (33.1) and as an
+        averted harm (33.4). The guidelines code it once (kialo-
+        batch2/guidelines.md §3.1, OC12); a declared equivalence would let the
+        registry check it.
     group: harms-of-not-acting
     decision: D069
     found:
@@ -2707,6 +2870,13 @@ candidates:
   - id: C021
     name: On whom does the consequence fall?
     kind: question
+    relation:
+      kind: addition
+      base: [negative_consequences, positive_consequences]
+      why: >-
+        A question at bad(G) or good(G), formulas the schemes have, so its
+        sketch is the scheme itself: who bears the consequence, one respect of
+        the weighing beside C005's seriousness. It may merge into C005.
     group: magnitude-risk
     decision: D065
     found:
@@ -2726,6 +2896,8 @@ candidates:
     related:
       - candidate: C005
         how: A third respect of the same question; a merge is likely.
+    sources:
+      - "Not in the compendium or ND as a question of its own (searched 2026-10-23)."
     sightings:
       - source: kialo
         ref: "5637.188"
@@ -2825,6 +2997,13 @@ candidates:
   - id: C022
     name: Argument from inevitability
     kind: scheme
+    relation:
+      kind: variant
+      base: [positive_consequences]
+      why: >-
+        Positive consequences whose good is a harm made less harmful, with a
+        premise that the outcome happens anyway and an exception that the
+        action encourages it.
     group: what-happens-anyway
     decision: D072
     found:
@@ -2856,7 +3035,7 @@ candidates:
       - candidate: C016
         how: The converse question, whether the action averts the outcome.
     sources:
-      - "Not in the compendium or pp. 1-138 (searched for 'anyway' and 'inevitable'); ND not searched."
+      - "Not in the compendium, pp. 1-138 or ND (searched 2026-10-23 for anyway, inevitable, regardless)."
       - "The public-health literature on harm reduction (not read here)."
     sightings:
       - source: kialo
@@ -2981,6 +3160,13 @@ candidates:
   - id: C023
     name: Doing against allowing
     kind: question
+    relation:
+      kind: addition
+      base: [positive_consequences]
+      why: >-
+        A question for arguments from a harm of not acting, which the
+        guidelines code as positive consequences (§3.1, OC13): whether the
+        agent must prevent the harm at all. A value premise, close to C007.
     group: harms-of-not-acting
     decision: D069
     found:
@@ -3019,6 +3205,13 @@ candidates:
   - id: C024
     name: A certain harm against a speculative one
     kind: question
+    relation:
+      kind: addition
+      base: [C003]
+      why: >-
+        A question for weighing claims: whether the rival consequence is less
+        likely than the cited one. ND factors the outcomes' probability into
+        the weighing (p. 159).
     group: magnitude-risk
     decision: D065
     found:
@@ -3070,6 +3263,11 @@ candidates:
   - id: C025
     name: No one else is made worse off
     kind: scheme
+    relation:
+      kind: specialization
+      base: [C004]
+      why: >-
+        A balance claim (C004) whose costs to others are nil: a Pareto claim.
     group: weighing
     decision: D064
     found:
@@ -3096,6 +3294,8 @@ candidates:
     related:
       - candidate: C021
         how: Both turn on who bears a consequence.
+    sources:
+      - "Not in the compendium or ND (searched 2026-10-23 for worse off)."
     sightings:
       - source: kialo
         ref: "13564.418"
@@ -3130,6 +3330,13 @@ candidates:
   - id: C026
     name: The chooser's own weighing
     kind: scheme
+    relation:
+      kind: specialization
+      base: [position_to_know, C003]
+      why: >-
+        Position to know applied to a weighing: the chooser is placed to know
+        what matters most to them, so their choice says which consequence
+        weighs more for them (C003).
     group: weighing
     decision: D064
     found:
@@ -3156,6 +3363,8 @@ candidates:
     related:
       - candidate: C003
         how: C026 infers the outcome of C003's comparison from a choice.
+    sources:
+      - "Not in the compendium or ND (searched 2026-10-23 for the chooser as best judge)."
     sightings:
       - source: kialo
         ref: "5637.10818"

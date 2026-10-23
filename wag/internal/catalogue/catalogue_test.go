@@ -709,7 +709,7 @@ func TestCandidatesFindFaults(t *testing.T) {
 	}
 	sketch := &Sketch{
 		Schemes: []Scheme{{ID: "sketch_x", Variables: []string{"A", "G"},
-			Premises: []string{"brings_about(A,G)", "good(G)"}, Exceptions: []string{"tested_x(A)"},
+			Premises: []string{"brings_about(A,G)", "good(G)"}, Exceptions: []string{"bad_outweighs(A,G)", "tested_x(A)"},
 			Conclusions: []string{"should_be_performed(A)"}}},
 		Language:  map[string]string{"tested_x/1": "%s is tested."},
 		Questions: map[string][]PQuery{"sketch_x": {{ID: "C001/Q1", Asks: "Tested?", Target: "tested_x(A)"}}},
@@ -721,6 +721,7 @@ func TestCandidatesFindFaults(t *testing.T) {
 	near := ProposalExample{Scheme: "positive_consequences", Title: "near", Text: "t", Invented: true, Use: "near-miss",
 		Of: "sketch_x", Bindings: map[string]string{"A": "a", "G": "g"}}
 	ok := Candidate{ID: "C001", Name: "x", Kind: "exception", Group: "g", Decision: "D001", Found: []string{"f"},
+		Relation:   &Relation{Kind: "addition", Base: []string{"positive_consequences"}, Why: "w"},
 		Confidence: "medium", What: "w", Compares: "c", Concludes: "c",
 		Closest:   []Closest{{Item: "positive_consequences", Why: "w"}},
 		Sightings: []Sighting{kialo("1.1"), kialo("1.2"), kialo("2.1")},
@@ -769,6 +770,25 @@ func TestCandidatesFindFaults(t *testing.T) {
 			c.Examples = append(c.Examples, x)
 		}, "coded with the candidate's sketch", true},
 		{"a closest item without why", func(c *Candidate) { c.Closest = []Closest{{Item: "x"}} }, "why it does not cover", true},
+		{"no relation", func(c *Candidate) { c.Relation = nil }, "say how it stands to what WAG has", true},
+		{"a bad relation", func(c *Candidate) { c.Relation = &Relation{Kind: "cousin", Base: []string{"analogy"}, Why: "w"} }, `relation "cousin"`, true},
+		{"a relation that does not fit the kind", func(c *Candidate) {
+			c.Relation = &Relation{Kind: "variant", Base: []string{"positive_consequences"}, Why: "w"}
+		}, "of kind exception cannot be a variant", true},
+		{"a base that does not exist", func(c *Candidate) {
+			c.Relation = &Relation{Kind: "addition", Base: []string{"nowhere"}, Why: "w"}
+		}, "base nowhere is neither", true},
+		{"a new pattern with a base", func(c *Candidate) {
+			c.Kind = "scheme"
+			c.Relation = &Relation{Kind: "new", Base: []string{"analogy"}, Why: "w"}
+		}, "a new pattern has no base", true},
+		{"a scheme one formula from walton.yml", func(c *Candidate) {
+			c.Kind = "scheme"
+			c.Relation = &Relation{Kind: "variant", Base: []string{"positive_consequences"}, Why: "w"}
+		}, "within one formula of walton.yml's positive_consequences (adds exception tested_x/1)", true},
+		{"an addition far from its base", func(c *Candidate) {
+			c.Relation = &Relation{Kind: "addition", Base: []string{"negative_consequences"}, Why: "w"}
+		}, "an addition is one formula from its base", false},
 	}
 	for _, k := range cases {
 		c := ok
@@ -808,6 +828,7 @@ func TestCandidatesFindFaults(t *testing.T) {
 	acked.ID = "C002"
 	acked.Sketch, acked.Examples = nil, nil
 	acked.Kind = "link"
+	acked.Relation = &Relation{Kind: "rule", Base: []string{"positive_consequences"}, Why: "w"}
 	acked.Sightings = []Sighting{kialo("1.1"), kialo("3.1"), kialo("4.1")}
 	acked.Sightings[0].Also = []string{"C001"}
 	acked.Sightings[1].Also = []string{"C001"}

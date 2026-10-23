@@ -341,6 +341,25 @@ func relate(a, b Pattern) (Relation, bool) {
 	return Relation{}, false
 }
 
+// Relate tells how two patterns relate, as Compare does for each pair.
+func Relate(a, b Pattern) (Relation, bool) { return relate(a, b) }
+
+// Distance is how far apart two patterns are: the role:predicate items of
+// each, the conclusion included, that the other lacks. An added or dropped
+// formula counts one, a changed formula two (one dropped, one added). It
+// also returns the items only a has and only b has.
+func Distance(a, b Pattern) (int, []string, []string) {
+	onlyA, onlyB := diff(a, b)
+	ca, cb := diffRole(a, b, RoleConclusion)
+	for _, p := range ca {
+		onlyA = append(onlyA, RoleConclusion+" "+p)
+	}
+	for _, p := range cb {
+		onlyB = append(onlyB, RoleConclusion+" "+p)
+	}
+	return len(onlyA) + len(onlyB), onlyA, onlyB
+}
+
 // CloseShare is the share of formulas (shared over all, by role and
 // predicate) from which two schemes with the same conclusion are reported
 // as close.

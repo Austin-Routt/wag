@@ -11,7 +11,10 @@ import (
 	"sort"
 	"strings"
 
+	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"gopkg.in/yaml.v2"
+
+	"github.com/yourorg/wag/internal/registry"
 )
 
 // The candidates registry (docs/process.md §8): schemes, questions,
@@ -40,7 +43,31 @@ var (
 	Confidences = []string{"high", "medium", "low"}
 	// Results are the four outcomes of process.md §8.
 	Results = []string{"reject", "merge", "domain", "add"}
+	// RelationKinds say how a candidate stands to what WAG has (process.md
+	// §8), from the most to the least distinct.
+	RelationKinds = []string{"new", "variant", "specialization", "composition", "addition", "rule"}
 )
+
+// relationAbout says what each relation is, and the outcome it usually
+// leads to.
+var relationAbout = map[string][2]string{
+	"new":            {"a pattern of its own: no scheme WAG has is its form", "add"},
+	"variant":        {"a scheme WAG has with a premise, the conclusion or the modality changed", "a domain version, or add it to the base's family"},
+	"specialization": {"a scheme WAG has (or a candidate) with premises added: a narrower case", "a domain version, or merge into the base"},
+	"composition":    {"two schemes or candidates chained or combined", "merge, as a rule for coding the chain, or reject"},
+	"addition":       {"one premise, assumption, exception or question added to a scheme WAG has", "merge into the base"},
+	"rule":           {"a rule for annotation or the engine, not a scheme", "the guidelines or the engine"},
+}
+
+// relationsOf are the relations a kind of candidate can have: a scheme is
+// new or built from schemes; a question or an exception adds to a scheme;
+// a link is a rule.
+var relationsOf = map[string][]string{
+	"scheme":    {"new", "variant", "specialization", "composition"},
+	"question":  {"addition"},
+	"exception": {"addition"},
+	"link":      {"rule"},
+}
 
 // The stages of a candidate, in order.
 const (
@@ -81,6 +108,7 @@ type Candidate struct {
 	ID         string            `yaml:"id"`
 	Name       string            `yaml:"name"`
 	Kind       string            `yaml:"kind"`
+	Relation   *Relation         `yaml:"relation"` // how it stands to what WAG has
 	Group      string            `yaml:"group"`
 	Decision   string            `yaml:"decision,omitempty"` // the register's decision that settles it
 	Outcome    *CandidateOutcome `yaml:"outcome,omitempty"`
@@ -102,6 +130,16 @@ type Candidate struct {
 	Engine   []string          `yaml:"engine,omitempty"` // what tests in WAG's engine showed
 	Needs    []string          `yaml:"needs,omitempty"`  // what implementing it needs
 	Open     []string          `yaml:"open,omitempty"`   // open questions
+}
+
+// Relation is how a candidate stands to the schemes WAG has: a pattern of
+// its own, or built from the schemes (or other candidates) it names as its
+// base. The registry checks it against the sketch's formula distance from
+// walton.yml.
+type Relation struct {
+	Kind string   `yaml:"kind"`
+	Base []string `yaml:"base,flow,omitempty"` // walton.yml scheme ids, or candidate ids
+	Why  string   `yaml:"why"`
 }
 
 // CandidateOutcome is what a person decided.
@@ -275,6 +313,108 @@ func (c *Candidate) Stage(th Threshold) string {
 	return StageReady
 }
 
+// Nearness is how close a sketch scheme is to a scheme WAG has: the
+// walton.yml scheme it is nearest to, and the role:predicate items it lacks
+// and adds (registry.Distance), among the schemes that share a formula
+// with it. Kind is the registry's relation between the two, if any
+// (identical, one-formula, extends, same-form, close). Nearest is empty when
+// no scheme shares a formula with it.
+type Nearness struct {
+	Sketch, Nearest string
+	Distance        int
+	Shared          int // the role:predicate items the two have in common
+	Lacks, Adds     []string
+	Kind            string
+}
+
+// patternOf is a scheme's pattern, as the registry makes it.
+func patternOf(s Scheme) registry.Pattern {
+	return registry.PatternOf(&caes.Scheme{Id: s.ID, Variables: s.Variables, Premises: s.Premises,
+		Assumptions: s.Assumptions, Exceptions: s.Exceptions, Conclusions: s.Conclusions})
+}
+
+// waltonPatterns are walton.yml's schemes as patterns, in file order.
+func waltonPatterns(src *Sources) []registry.Pattern {
+	ps := make([]registry.Pattern, len(src.Walton))
+	for i, s := range src.Walton {
+		ps[i] = patternOf(s)
+	}
+	return ps
+}
+
+// near measures a sketch scheme against patterns and returns the nearest
+// of those that share at least one formula with it: the smallest distance,
+// then the most formulas shared, then the first in order. A small scheme
+// that shares nothing is not near, however few formulas it has.
+func near(s Scheme, ps []registry.Pattern) Nearness {
+	p := patternOf(s)
+	size := func(q registry.Pattern) int {
+		n := 0
+		for _, l := range q.Predicates {
+			n += len(l)
+		}
+		return n
+	}
+	best := Nearness{Sketch: s.ID, Distance: -1}
+	for _, w := range ps {
+		d, lacks, adds := registry.Distance(w, p)
+		shared := (size(w) + size(p) - d) / 2
+		if shared == 0 {
+			continue
+		}
+		if best.Distance < 0 || d < best.Distance || (d == best.Distance && shared > best.Shared) {
+			best = Nearness{Sketch: s.ID, Nearest: w.ID, Distance: d, Shared: shared, Lacks: lacks, Adds: adds}
+			if r, ok := registry.Relate(w, p); ok {
+				best.Kind = r.Kind
+			}
+		}
+	}
+	return best
+}
+
+// Nearest is, for each scheme of the candidate's sketch, the walton.yml
+// scheme it is nearest to.
+func (c *Candidate) Nearest(ws []registry.Pattern) []Nearness {
+	if c.Sketch == nil {
+		return nil
+	}
+	var out []Nearness
+	for _, s := range c.Sketch.Schemes {
+		out = append(out, near(s, ws))
+	}
+	return out
+}
+
+// baseDistance is how near the candidate's sketch comes to any scheme of its
+// base: a walton.yml scheme, or another candidate's sketch. -1 if there is
+// nothing to measure.
+func (c *Candidate) baseDistance(src *Sources, sketches map[string][]Scheme) int {
+	if c.Sketch == nil || c.Relation == nil {
+		return -1
+	}
+	var ps []registry.Pattern
+	for _, b := range c.Relation.Base {
+		for _, w := range src.Walton {
+			if w.ID == b {
+				ps = append(ps, patternOf(w))
+			}
+		}
+		for _, s := range sketches[b] {
+			ps = append(ps, patternOf(s))
+		}
+	}
+	if len(ps) == 0 {
+		return -1
+	}
+	best := -1
+	for _, s := range c.Sketch.Schemes {
+		if n := near(s, ps); n.Nearest != "" && (best < 0 || n.Distance < best) {
+			best = n.Distance
+		}
+	}
+	return best
+}
+
 // asProposal is the candidate's sketch and examples as a proposal's
 // candidates, for the proposal check and the rendering.
 func (c *Candidate) asProposal() *Proposal {
@@ -299,7 +439,13 @@ func (c *Candidate) asProposal() *Proposal {
 //     candidates that list the claim;
 //   - the sketch and examples pass the proposal check (CheckProposal), each
 //     example uses the sketch or is a near miss of it, and no two sketches
-//     share a scheme id or give one template two texts.
+//     share a scheme id or give one template two texts;
+//   - the relation is given, fits the kind (a scheme is new or built from
+//     schemes, a question or exception adds to one, a link is a rule), and
+//     names a base that exists; a scheme whose sketch is one formula or less
+//     from a walton.yml scheme is an error (it is a question or exception of
+//     that scheme); an addition far from its base, and a new pattern near a
+//     walton.yml scheme, are warnings.
 func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Finding {
 	var out []Finding
 	bad := func(f string, a ...any) {
@@ -345,12 +491,21 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 		}
 	}
 	ids := map[string]bool{}
+	sketches := map[string][]Scheme{} // a candidate's sketch schemes, for bases that are candidates
 	for _, c := range cr.Candidates {
 		if ids[c.ID] {
 			bad("%s: the id is used twice", c.ID)
 		}
 		ids[c.ID] = true
+		if c.Sketch != nil {
+			sketches[c.ID] = c.Sketch.Schemes
+		}
 	}
+	walton := map[string]bool{}
+	for _, s := range src.Walton {
+		walton[s.ID] = true
+	}
+	ws := waltonPatterns(src)
 	refs := map[string][]string{}       // a sighting's ref: the candidates it is listed under
 	also := map[string][][]string{}     // a sighting's ref: each listing's also, with its candidate first
 	sketchOf := map[string]string{}     // a sketch's scheme id: its candidate
@@ -382,6 +537,45 @@ func CheckCandidates(cr *CandidateRegister, reg *Register, src *Sources) []Findi
 		for _, x := range c.Closest {
 			if strings.TrimSpace(x.Item) == "" || strings.TrimSpace(x.Why) == "" {
 				bad("%s: a closest item needs the item and why it does not cover the candidate", where)
+			}
+		}
+		// The relation, and the sketch's distance from walton.yml.
+		if r := c.Relation; r == nil {
+			bad("%s: say how it stands to what WAG has (relation: kind, base, why)", where)
+		} else {
+			if !in(RelationKinds, r.Kind) {
+				bad("%s: relation %q is not one of %s", where, r.Kind, strings.Join(RelationKinds, ", "))
+			} else if in(CandidateKinds, c.Kind) && !in(relationsOf[c.Kind], r.Kind) {
+				bad("%s: a candidate of kind %s cannot be a %s; it is %s", where, c.Kind, r.Kind, strings.Join(relationsOf[c.Kind], " or "))
+			}
+			if strings.TrimSpace(r.Why) == "" {
+				bad("%s: say why the relation is %s", where, r.Kind)
+			}
+			switch {
+			case r.Kind == "new" && len(r.Base) > 0:
+				bad("%s: a new pattern has no base (its nearest relatives are closest items)", where)
+			case r.Kind != "new" && len(r.Base) == 0:
+				bad("%s: a %s names its base", where, r.Kind)
+			}
+			for _, b := range r.Base {
+				if !walton[b] && (!ids[b] || b == c.ID) {
+					bad("%s: base %s is neither a scheme of walton.yml nor another candidate", where, b)
+				}
+			}
+			for _, n := range c.Nearest(ws) {
+				if n.Nearest == "" {
+					continue
+				}
+				if c.Kind == "scheme" && n.Distance <= 1 {
+					bad("%s: sketch %s is within one formula of walton.yml's %s (%s): a question or exception of it, not a scheme",
+						where, n.Sketch, n.Nearest, diffText(n))
+				}
+				if r.Kind == "new" && n.Distance <= 2 {
+					warn("%s: sketch %s is only %d formulas from walton.yml's %s (%s): a variant of it?", where, n.Sketch, n.Distance, n.Nearest, diffText(n))
+				}
+			}
+			if d := c.baseDistance(src, sketches); r.Kind == "addition" && d > 1 {
+				warn("%s: an addition is one formula from its base, but its sketch is %d from the nearest", where, d)
 			}
 		}
 		for _, r := range c.Related {
@@ -525,6 +719,9 @@ func candidateTexts(cr *CandidateRegister) []struct{ where, text string } {
 	}
 	for _, c := range cr.Candidates {
 		add(c.ID+" what", c.What)
+		if c.Relation != nil {
+			add(c.ID+" relation", c.Relation.Why)
+		}
 		for _, x := range c.Closest {
 			add(c.ID+" closest "+x.Item, x.Why)
 		}
@@ -567,6 +764,7 @@ func CandidatesMarkdown(cr *CandidateRegister, reg *Register, src *Sources) []by
 	for i := range cr.Candidates {
 		stages[cr.Candidates[i].Stage(th)]++
 	}
+	ws := waltonPatterns(src)
 	b.WriteString("# Candidates\n\n")
 	b.WriteString("Generated by `wag-cli --catalogue-gen` from [`candidates.yml`](candidates.yml), the candidates registry ([`process.md`](process.md) §8). Edit that file, not this one.\n\n")
 	fmt.Fprintf(&b, "**%d candidates in %d groups:** %d ready, %d drafting, %d collecting, %d decided.\n\n",
@@ -580,16 +778,36 @@ func CandidatesMarkdown(cr *CandidateRegister, reg *Register, src *Sources) []by
 	b.WriteString("- **drafting:** over the threshold, but the minimum is not complete.\n")
 	b.WriteString("- **ready:** the minimum is complete: the threshold, the closest items and why each fails, and, for a scheme, question or exception, a sketch that passes the proposal check, three examples of its use and a near miss. It goes to a person through its decision.\n")
 	b.WriteString("- **decided:** reject, merge, domain version or add. An addition becomes a proposal (§5).\n\n")
-	b.WriteString("## Index\n\n| Group | Id | Candidate | Kind | Seen | Stage | Decision |\n|---|---|---|---|---|---|---|\n")
+	b.WriteString("## Index\n\n| Group | Id | Candidate | Kind | Relation | Seen | Stage | Decision |\n|---|---|---|---|---|---|---|---|\n")
 	for _, g := range cr.Groups {
 		for i := range cr.Candidates {
 			c := &cr.Candidates[i]
 			if c.Group != g.ID {
 				continue
 			}
-			fmt.Fprintf(&b, "| %s | [%s](#%s) | %s | %s | %s | %s | %s |\n", cell(g.Name), c.ID, anchor(c), cell(c.Name), c.Kind,
-				seenCell(c, th), c.Stage(th), decisionCell(c.Decision, status))
+			fmt.Fprintf(&b, "| %s | [%s](#%s) | %s | %s | %s | %s | %s | %s |\n", cell(g.Name), c.ID, anchor(c), cell(c.Name), c.Kind,
+				cell(relationCell(c)), seenCell(c, th), c.Stage(th), decisionCell(c.Decision, status))
 		}
+	}
+	b.WriteString("\n")
+	// The same candidates by how they stand to what WAG has.
+	b.WriteString("## By relation\n\n")
+	b.WriteString("How each candidate stands to the schemes WAG has (process.md §8), from the most to the least distinct. The relation is given by hand and checked against the sketch's formula distance from `walton.yml`; the usual outcome is what a person most often decides for such a candidate, not a decision.\n\n")
+	b.WriteString("| Relation | What it is | Usually | Candidates |\n|---|---|---|---|\n")
+	for _, k := range RelationKinds {
+		var cs []string
+		for i := range cr.Candidates {
+			c := &cr.Candidates[i]
+			if c.Relation == nil || c.Relation.Kind != k {
+				continue
+			}
+			s := fmt.Sprintf("[%s](#%s) %s", c.ID, anchor(c), c.Name)
+			if len(c.Relation.Base) > 0 {
+				s += " (" + strings.Join(c.Relation.Base, ", ") + ")"
+			}
+			cs = append(cs, s)
+		}
+		fmt.Fprintf(&b, "| %s (%d) | %s | %s | %s |\n", k, len(cs), relationAbout[k][0], relationAbout[k][1], orDash(cell(strings.Join(cs, "; "))))
 	}
 	b.WriteString("\n")
 	for _, g := range cr.Groups {
@@ -602,7 +820,7 @@ func CandidatesMarkdown(cr *CandidateRegister, reg *Register, src *Sources) []by
 			fams = []string{"across families"}
 		}
 		fmt.Fprintf(&b, "*Families:* %s.\n\n%s\n\n", strings.Join(fams, "; "), strings.Join(strings.Fields(g.About), " "))
-		b.WriteString("| Id | Candidate | Kind | Compares | Concludes | Closest | Seen | Stage |\n|---|---|---|---|---|---|---|---|\n")
+		b.WriteString("| Id | Candidate | Kind | Relation | Compares | Concludes | Closest | Seen | Stage |\n|---|---|---|---|---|---|---|---|---|\n")
 		for i := range cr.Candidates {
 			c := &cr.Candidates[i]
 			if c.Group != g.ID {
@@ -612,21 +830,21 @@ func CandidatesMarkdown(cr *CandidateRegister, reg *Register, src *Sources) []by
 			for _, x := range c.Closest {
 				closest = append(closest, x.Item)
 			}
-			fmt.Fprintf(&b, "| [%s](#%s) | %s | %s | %s | %s | %s | %s | %s |\n", c.ID, anchor(c), cell(c.Name), c.Kind, cell(c.Compares),
-				cell(c.Concludes), cell(strings.Join(closest, "; ")), seenCell(c, th), c.Stage(th))
+			fmt.Fprintf(&b, "| [%s](#%s) | %s | %s | %s | %s | %s | %s | %s | %s |\n", c.ID, anchor(c), cell(c.Name), c.Kind, cell(relationCell(c)),
+				cell(c.Compares), cell(c.Concludes), cell(strings.Join(closest, "; ")), seenCell(c, th), c.Stage(th))
 		}
 		b.WriteString("\n")
 		for i := range cr.Candidates {
 			c := &cr.Candidates[i]
 			if c.Group == g.ID {
-				writeCandidate(&b, c, th, status, src)
+				writeCandidate(&b, c, th, status, src, ws)
 			}
 		}
 	}
 	return b.Bytes()
 }
 
-func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[string]string, src *Sources) {
+func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[string]string, src *Sources, ws []registry.Pattern) {
 	fmt.Fprintf(b, "### %s. %s\n\n", c.ID, c.Name)
 	stage := c.Stage(th)
 	if m := c.Missing(th); stage == StageDrafting || stage == StageCollecting {
@@ -642,6 +860,25 @@ func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[stri
 		fmt.Fprintf(b, "**Outcome:** %s%s, %s, by %s; recorded in %s.\n\n", o.Result, into, o.Date, o.By, o.Recorded)
 	}
 	fmt.Fprintf(b, "%s\n\n", strings.Join(strings.Fields(c.What), " "))
+	if r := c.Relation; r != nil {
+		fmt.Fprintf(b, "**Relation:** %s (%s; usually: %s). %s\n\n", relationCell(c), relationAbout[r.Kind][0], relationAbout[r.Kind][1],
+			strings.Join(strings.Fields(r.Why), " "))
+	}
+	if ns := c.Nearest(ws); len(ns) > 0 {
+		b.WriteString("**Nearest in `walton.yml`** (computed from the sketch's formulas):\n")
+		for _, n := range ns {
+			if n.Nearest == "" {
+				fmt.Fprintf(b, "- `%s` shares no formula with any scheme of `walton.yml`.\n", n.Sketch)
+				continue
+			}
+			kind := ""
+			if n.Kind != "" {
+				kind = "; the registry's relation: " + n.Kind
+			}
+			fmt.Fprintf(b, "- `%s` is %d from `%s`, sharing %d (%s%s).\n", n.Sketch, n.Distance, n.Nearest, n.Shared, diffText(n), kind)
+		}
+		b.WriteString("\n")
+	}
 	if len(c.Closest) > 0 {
 		b.WriteString("**Closest, and why each falls short:**\n")
 		for _, x := range c.Closest {
@@ -720,6 +957,35 @@ func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[stri
 		}
 		b.WriteString("\n")
 	}
+}
+
+// diffText says what a sketch scheme adds to and lacks of its nearest
+// scheme.
+func diffText(n Nearness) string {
+	if n.Distance == 0 {
+		return "the same formulas"
+	}
+	var parts []string
+	if len(n.Adds) > 0 {
+		parts = append(parts, "adds "+strings.Join(n.Adds, ", "))
+	}
+	if len(n.Lacks) > 0 {
+		parts = append(parts, "lacks "+strings.Join(n.Lacks, ", "))
+	}
+	return strings.Join(parts, "; ")
+}
+
+// relationCell is a candidate's relation in a few words: "variant of X".
+func relationCell(c *Candidate) string {
+	r := c.Relation
+	if r == nil {
+		return "–"
+	}
+	of := map[string]string{"variant": " of ", "specialization": " of ", "composition": " of ", "addition": " to ", "rule": " about "}[r.Kind]
+	if len(r.Base) == 0 {
+		return r.Kind
+	}
+	return r.Kind + of + strings.Join(r.Base, ", ")
 }
 
 // anchor is the candidate's heading anchor in the view.
