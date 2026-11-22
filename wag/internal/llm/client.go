@@ -56,6 +56,9 @@ type Client struct {
 	// A replay, which has nothing to wait for, sets it to NoWait.
 	Sleep func(ctx context.Context, d time.Duration) error
 
+	// Budget, if set, bounds every attempt, retries included (D046).
+	Budget *Budget
+
 	mu   sync.Mutex
 	last time.Time
 }
@@ -134,12 +137,21 @@ func (c *Client) Complete(ctx context.Context, req Request, report func(Attempt)
 		if err := ctx.Err(); err != nil {
 			return nil, AsError(c.Provider.Name(), err)
 		}
+		held, err := c.Budget.Reserve(c.Profile, req)
+		if err != nil {
+			return nil, err
+		}
 		a := Attempt{Profile: c.Profile.Name, Provider: c.Provider.Name(), N: n, Start: time.Now().UTC(), Waited: waited, Request: req}
 		cctx, cancel := context.WithTimeout(ctx, timeout)
 		start := time.Now()
 		resp, err := c.Provider.Complete(cctx, req)
 		a.Latency = time.Since(start)
 		cancel()
+		if err != nil {
+			c.Budget.Charge(c.Profile, req, held, nil)
+		} else {
+			c.Budget.Charge(c.Profile, req, held, resp)
+		}
 		if err != nil {
 			a.Error = AsError(c.Provider.Name(), err)
 			if ctx.Err() != nil { // the caller gave up, not the call

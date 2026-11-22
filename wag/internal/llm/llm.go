@@ -114,6 +114,7 @@ const (
 	KindEmpty      = "empty"   // an answer without text
 	KindBadReply   = "bad_reply"
 	KindNoProvider = "config"
+	KindBudget     = "budget" // the run's budget refused the call before it was sent (D046)
 )
 
 // Error is a failed call.

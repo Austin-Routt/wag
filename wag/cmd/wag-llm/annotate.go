@@ -30,6 +30,7 @@ func annotateCmd(ctx context.Context, args []string) error {
 	limit := fs.Int("limit", 0, "annotate only the first N claims (0: all)")
 	independent := fs.Bool("independent-first-pass", false, "withhold this annotator's earlier answers; preserve source context")
 	all := fs.Bool("review-all", false, "with --reviewer: review every claim two annotators annotated, not only those where they disagree")
+	limits := addBudgetFlags(fs)
 	_ = fs.Parse(args)
 	if *out == "" {
 		return fmt.Errorf("annotate needs --out")
@@ -66,6 +67,15 @@ func annotateCmd(ctx context.Context, args []string) error {
 		}
 		rev = &p
 	}
+	used := append([]llm.Profile{}, ann...)
+	if rev != nil {
+		used = append(used, *rev)
+	}
+	budget, err := limits.budget(used)
+	if err != nil {
+		return err
+	}
+	defer reportBudget(os.Stderr, budget)
 	clients := map[string]*llm.Client{}
 	for _, p := range append(append([]llm.Profile{}, ann...), ps...) {
 		if _, done := clients[p.Name]; done {
@@ -78,6 +88,7 @@ func annotateCmd(ctx context.Context, args []string) error {
 		if err != nil {
 			return fmt.Errorf("profile %s: %v", p.Name, err)
 		}
+		c.Budget = budget
 		clients[p.Name] = c
 	}
 	find := func(id string) (*annotate.Dataset, error) {

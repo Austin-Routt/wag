@@ -258,6 +258,7 @@ func play(ctx context.Context, args []string) error {
 	standard := fs.String("standard", "", "the claim's proof standard: PE, CCE or BRD")
 	rounds := fs.Int("max-rounds", 10, "the game ends after this many rounds")
 	maxMoves := fs.Int("max-moves", 80, "stop a game after this many moves (a guard on cost)")
+	limits := addBudgetFlags(fs)
 	seed := fs.Int64("seed", 1, "the seed of the rule bots (game n uses seed+n)")
 	out := fs.String("out", "", "the directory for the trace files, exports and summary.jsonl")
 	dataDir := fs.String("data", "", "the game data directory (default: built in)")
@@ -278,12 +279,24 @@ func play(ctx context.Context, args []string) error {
 		return err
 	}
 	srv.SetContext(ctx)
+	var used []llm.Profile
+	for _, p := range ps {
+		if p.Name == *pro || p.Name == *con {
+			used = append(used, p)
+		}
+	}
+	budget, err := limits.budget(used)
+	if err != nil {
+		return err
+	}
+	defer reportBudget(os.Stderr, budget)
 	have := map[string]bool{}
 	for _, p := range ps {
 		c, err := llm.NewClient(p)
 		if err != nil {
 			return fmt.Errorf("profile %s: %v", p.Name, err)
 		}
+		c.Budget = budget
 		srv.AddModel(c)
 		have[p.Name] = true
 		if n := p.Notice(); n != "" && (p.Name == *pro || p.Name == *con) {
@@ -341,6 +354,10 @@ func play(ctx context.Context, args []string) error {
 		fmt.Fprintln(sum, string(line))
 		fmt.Printf("game %d: %s (pro) vs %s (con): %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
 			s["winner_side"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
+		if budget.Refused() {
+			fmt.Fprintln(os.Stderr, "The run's budget is reached: no further game is started.")
+			break
+		}
 	}
 	return ctx.Err()
 }

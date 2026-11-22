@@ -105,6 +105,18 @@ Free-tier limits are low and change; AI Studio shows your project's. They are co
 - **What a game costs.** A WAG prompt is 4,000–12,000 tokens. A move takes one call, or more after a rejected reply, and a retry resends the conversation so far. Twenty requests a day is one short game; a paid tier or another model is needed for real runs.
 - **Thinking.** Gemini 2.5 Flash thinks before it answers, by default as long as it likes (up to about 7,600 thinking tokens per annotation in our first run). `thinking_budget` in a profile caps it (0 turns it off); whether that costs accuracy has not been measured.
 
+### A run's budget (D046)
+
+`wag-llm play` and `wag-llm annotate` take hard limits on what a run may spend:
+
+- `--max-calls N` counts every call to a model, retries included; the run stops before the N+1th.
+- `--max-tokens N` and `--max-cost X` refuse any call whose worst case would take the run past the limit, before it is sent. The worst case is the request's size in bytes (no tokenizer makes more tokens than bytes) plus the profile's `max_output_tokens`, so these limits need `max_output_tokens` on every profile the run calls. Gemini counts its reasoning apart from the answer, so a Gemini profile also needs a fixed `thinking_budget` (0 turns thinking off); for the other providers the output limit includes reasoning.
+- `--prices FILE` gives the price per million tokens, by profile name or model (`"*"` for any other): `{"gemini-2.5-flash": {"input": 0.3, "output": 2.5}}`. `--max-cost` needs it; the currency is the file's. Reasoning tokens are priced as output.
+
+After each call the budget counts what the provider reported, or the call's worst case when it reported nothing, and a failed call counts too, since a provider may bill one. A refused call fails with the kind `budget`: an annotation run stops that annotator, and `play` stops the game there, saves its trace and export, and starts no further game. The run prints what it spent at the end.
+
+A run that calls a provider with an API key must have a limit: without `--max-calls`, `--max-tokens` or `--max-cost` it does not start. Mock profiles and local servers need none. As D046 says, runs with the owner's keys run on the owner's machine, with limits the owner sets for that run. The dashboard does not take a budget yet (stage 2).
+
 ## Profiles
 
 A profile is a configured model. Give profiles on the command line, repeatable:

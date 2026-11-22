@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"flag"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/yourorg/wag/internal/llm"
 )
 
 // A headless game with a scripted model and a rule bot writes its trace
@@ -102,5 +105,90 @@ func TestAnnotate(t *testing.T) {
 	}
 	if again, _ := os.ReadFile(filepath.Join(out2, "calls.jsonl")); len(again) != len(calls) {
 		t.Fatal("a finished run called again")
+	}
+}
+
+// D046: a run that calls a provider with an API key needs a limit; mock and
+// local providers need none; a cost limit needs prices.
+func TestBudgetFlags(t *testing.T) {
+	dir := t.TempDir()
+	prices := filepath.Join(dir, "prices.json")
+	os.WriteFile(prices, []byte(`{"m": {"input": 0.3, "output": 2.5}}`), 0o644)
+	keyed := []llm.Profile{{Name: "k", Provider: "anthropic"}}
+	for _, tc := range []struct {
+		args    []string
+		used    []llm.Profile
+		limited bool
+		err     string
+	}{
+		{nil, keyed, false, "D046"},
+		{nil, []llm.Profile{{Name: "m", Provider: "mock"}, {Name: "l", Provider: "ollama"}}, false, ""},
+		{[]string{"--max-calls", "5"}, keyed, true, ""},
+		{[]string{"--max-cost", "1"}, keyed, false, "--prices"},
+		{[]string{"--max-cost", "1", "--prices", prices}, keyed, true, ""},
+		{[]string{"--max-calls", "-1"}, keyed, false, "negative"},
+	} {
+		fs := flag.NewFlagSet("t", flag.ContinueOnError)
+		f := addBudgetFlags(fs)
+		if err := fs.Parse(tc.args); err != nil {
+			t.Fatal(err)
+		}
+		b, err := f.budget(tc.used)
+		if tc.err != "" {
+			if err == nil || !strings.Contains(err.Error(), tc.err) {
+				t.Errorf("%v: got %v, want an error about %s", tc.args, err, tc.err)
+			}
+			continue
+		}
+		if err != nil || b.Limited() != tc.limited {
+			t.Errorf("%v: budget %+v, %v", tc.args, b, err)
+		}
+	}
+}
+
+// An annotation run stops at its limit: with --max-calls 1, the first claim
+// is annotated, and the second is refused before any call is made.
+func TestAnnotateStopsAtItsBudget(t *testing.T) {
+	dir := t.TempDir()
+	data := filepath.Join(dir, "d")
+	os.MkdirAll(data, 0o755)
+	os.WriteFile(filepath.Join(data, "items.json"), []byte(`{"discussion": {"thesis_claim_id": "1.1"}, "items": [
+		{"kialo_claim_id": "1.2", "text": "Meat is bad for the climate."},
+		{"kialo_claim_id": "1.3", "text": "Taxes hurt the poor."}]}`), 0o644)
+	prof := filepath.Join(dir, "p.json")
+	reply := `"{\"instances\": [{\"primary\": true, \"scheme\": {\"walton_id\": \"none\", \"fit\": \"none\"}}]}"`
+	os.WriteFile(prof, []byte(`[{"name": "ann", "provider": "mock", "model": "m", "replies": [`+reply+`, `+reply+`]}]`), 0o644)
+	out := filepath.Join(dir, "run")
+	if err := annotateCmd(context.Background(), []string{"--models", prof, "--dataset", data, "--out", out, "--max-calls", "1"}); err != nil {
+		t.Fatal(err)
+	}
+	calls, _ := os.ReadFile(filepath.Join(out, "calls.jsonl"))
+	if n := strings.Count(string(calls), "\n"); n != 1 {
+		t.Fatalf("%d calls made, want 1", n)
+	}
+	ann, _ := os.ReadFile(filepath.Join(out, "annotations", "ann.json"))
+	run, _ := os.ReadFile(filepath.Join(out, "run.json"))
+	if !strings.Contains(string(ann), `"1.2"`) || strings.Contains(string(ann), `"1.3"`) || !strings.Contains(string(run), "budget (D046)") {
+		t.Fatalf("the second claim should fail on the budget:\n%s\n%s", ann, run)
+	}
+}
+
+// play stops at its limit: the game in which the budget refused a call is
+// saved, stopped, and no further game starts.
+func TestPlayStopsAtItsBudget(t *testing.T) {
+	dir := t.TempDir()
+	prof := filepath.Join(dir, "profiles.json")
+	os.WriteFile(prof, []byte(`{"profiles":[{"name":"scripted","provider":"mock","model":"mock-1","replies":[
+		"{\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:consequences\",\"variable_bindings\":{\"A\":\"tax meat\",\"G\":\"lower emissions\"}}}",
+		"{\"action\":{\"type\":\"abstain\"}}"]}]}`), 0o644)
+	out := filepath.Join(dir, "out")
+	if err := play(context.Background(), []string{"--models", prof, "--pro", "scripted", "--con", "greedy", "--out", out,
+		"--games", "3", "--max-rounds", "4", "--max-calls", "1"}); err != nil {
+		t.Fatal(err)
+	}
+	traces, _ := filepath.Glob(filepath.Join(out, "*.trace.jsonl"))
+	sum, _ := os.ReadFile(filepath.Join(out, "summary.jsonl"))
+	if len(traces) != 1 || !strings.Contains(string(sum), "budget (D046)") {
+		t.Fatalf("%d games, summary %s", len(traces), sum)
 	}
 }

@@ -40,6 +40,9 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 
 **Stage 2 is done when**, for its slice: no known contract violation; no input changed without its record (data, prompt, profile, model); every recorded event replays without asking a model again; the wrong actor, context, polarity and evidence revision are each refused by a test; what is unresolved or unavailable is stated, not guessed; and the sources and the code are reviewed at the exact versions used. These are finite checks; they do not claim that every argument people make can be expressed (after ChatGPT's review of stages 0 and 1).
 
+**Stage 2 so far:**
+- 2026-11-22: run budgets (D046). `wag-llm play` and `annotate` take hard limits on calls, tokens and cost, refuse a call before it is sent if its worst case would pass them, count retries, and do not start a run with an API key and no limit ([`llm.md`](llm.md#a-runs-budget-d046)). Tested on mock clients. The dashboard does not take a budget yet, and the spending is printed but not yet part of a run's record.
+
 ## 1. Principles
 
 - **One catalogue, with an authority for each part.** The owner's decisions of 2026-10-15 and 2026-10-22:
