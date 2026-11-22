@@ -22,7 +22,7 @@ Status: proposed on 2026-10-15. **Revised on 2026-11-22:** §0 gives the order o
 
 ## 0. From 2026-11-22: the order of work
 
-After the external reviews of 22 November 2026 (kept whole in the workspace, `reviews/2026-11-22`; checked in `verify/r-reviews-2026-11-22` and `verify/r-convergence-2026-11-22`) the owner set the direction, and a standing rule for decisions ([`process.md`](process.md) §5). Where this section and the older ones differ, this section decides the order; the principles of §1 stand.
+After the external reviews of 22 November 2026 (kept whole in the workspace, `reviews/2026-11-22`; checked in `verify/r-reviews-2026-11-22`, `verify/r-convergence-2026-11-22` and `verify/r-stage-review-2026-11-22`) the owner set the direction, and a standing rule for decisions ([`process.md`](process.md) §5). Where this section and the older ones differ, this section decides the order; the principles of §1 stand.
 
 - **Data-driven development with model and human players, now.** API players and Kialo annotation produce the data that improves the game, the catalogue and a reusable dataset. Work may go on from entries models have checked, its results marked provisional; a person still verifies, and no accuracy claim or release rests on entries only models have checked (D045).
 - **Full NASCQ** is a checked contract within a versioned set and four measured rates beyond it (the goal, above; D082).
@@ -32,11 +32,13 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 
 | Stage | What | State |
 |---|---|---|
-| 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open; D084, the reserved name `is` the engine swap brought to light, decided), this section, `process.md` | done 2026-11-22 |
-| 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text | done 2026-11-22 |
-| 2 | The first slice, practical reasoning and the consequences: D063, D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records; book text out of the public tree (D043) | next |
+| 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open; D084, the reserved name `is` the engine swap brought to light, decided), this section, `process.md`. After ChatGPT's review of stages 0 and 1 ([what was adopted](review-2026-11-22-stages.md)): the owner's D078 (history kept), D044 and D080 (licences now); D081 decided; ten refinements; 6 open, four of them questions of fact for a person | done 2026-11-22 |
+| 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text. Closed after ChatGPT's review of stages 0 and 1: CI on both Go versions, a registry gate that fails closed; D084 and D081 applied through proposal [D081-D084](proposals/D081-D084.md); annotation identity at every entry point; a malformed final move refused, never replaced; typed answers instead of free-text bridges; MPL-2.0 and CC BY 4.0 | done 2026-11-22 |
+| 2 | The first slice, practical reasoning and the consequences: D063 (with positive binding), D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; one versioned game profile, its catalogue, formulas and engine pinned by content; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records and the first admission policy (D076, [evidence-records.md](evidence-records.md)); API runs with hard caps shown on mock clients first (D046); book text out of the public tree (D043) | in progress |
 | 3 | A bounded Kialo and API pilot on the owner's machine, with hard caps (D046): independent first passes, a lexicon not drawn from the gold, the moves players could not make recorded, development and held-out discussions kept apart, the size planned from the gain to detect | after stage 2 |
 | 4 | The other families; tier 2 from the library's records; a person's blind sample of claims; AS2 and meta-argument trials, kept only if they do better than a simpler baseline at the same cost | later |
+
+**Stage 2 is done when**, for its slice: no known contract violation; no input changed without its record (data, prompt, profile, model); every recorded event replays without asking a model again; the wrong actor, context, polarity and evidence revision are each refused by a test; what is unresolved or unavailable is stated, not guessed; and the sources and the code are reviewed at the exact versions used. These are finite checks; they do not claim that every argument people make can be expressed (after ChatGPT's review of stages 0 and 1).
 
 ## 1. Principles
 

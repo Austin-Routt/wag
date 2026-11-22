@@ -1012,6 +1012,7 @@ candidates:
       - "The review of D055-D059 v1, test RD2: under D055's sided exceptions a balance claim proven against one positive argument leaves the others standing; the claim stays tied until each is answered."
     needs:
       - "D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side."
+      - "The action, the set of consequences weighed and the value policy are stated: an incomplete list, or a balance about another action, does not establish the overall balance claimed. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "Side-level exceptions, or a scheme concluding ¬should_be_performed(A) from net_cost(A), weighed like any rebuttal? The first is closer to how Kialo uses the claim."
       - "If both net_cost(A) and a weighing against one consequence are available, which should annotators choose?"
@@ -1147,6 +1148,8 @@ candidates:
           A: your leaving now
           B: your missing the last train
         note: Only one course is said to be bad; nothing is compared, so it is the pragmatic argument from alternatives (34).
+    needs:
+      - "A warrant that one of the courses must be taken, and the feasible alternatives: two bad courses alone do not show that either must be chosen. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "A scheme of its own, or a variant of the pragmatic argument from alternatives (34), whose conclusion meets nothing today (D063)?"
       - "Is a choice between an action and its omission a lesser evil, or a weighing, as proposal D055-D059's rule codes it (5637.121, 5637.2372, 5637.4851)?"
@@ -1289,6 +1292,8 @@ candidates:
           A: the parents having the child vaccinated
           G: the child being protected from measles
         note: It cites a good consequence but sets it against no harm, so it is positive consequences.
+    needs:
+      - "A premise that the action brings about the good, beside the harm's being needed for it: causing something a good needs does not show that the action produces the good. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "A variant of C003 with a necessity premise, or a scheme of its own? All but one of the sightings are in the discussion on God's existence (2629), on the problem of evil."
 
@@ -1595,6 +1600,8 @@ candidates:
           A: building the dam
           G: the valley's farms being flooded
         note: The harm is certain and not catastrophic; nothing is weighed against a small chance, so it is negative consequences.
+    needs:
+      - "Magnitude, uncertainty, irreversibility, proportionality and the risks of the alternatives or of mitigation: a merely conceivable harm is not an automatic veto. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "A scheme of its own, or a question for 33.2 ('Is the consequence irreversible?') feeding C003's comparison?"
       - "How does it meet a likelihood objection (33/CQ1), which it concedes in advance?"
@@ -2903,6 +2910,7 @@ candidates:
         verified: session check, 2026-10-23
     needs:
       - "Code in the engine (an option that adds the weights of same-side consequence arguments about one action, up to a cap), or an accrual scheme weighed by a moderator."
+      - "An explicit, versioned aggregation policy (dependence between reasons, duplicates, units, normalization): it must not change Carneades' default weighing or count a repeated reason twice. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "Is accrual wanted at all? Carneades' choice not to add arguments up is deliberate, and the game's weights are set by scheme."
 
@@ -3297,6 +3305,8 @@ candidates:
         note: The state may stop actions that harm others, but has no power to compel actions that prevent harm.
         found: review of D055-D059 v3
         verified: session check, 2026-10-23
+    needs:
+      - "The actor's capability, role, commitments and rights are bound: neither a duty to prevent every harm nor an exemption for every omission is assumed. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "Only one sighting so far; look for it in debates about duties to rescue or to aid."
 
@@ -3354,6 +3364,8 @@ candidates:
         note: Human lives should not be ended to avoid a merely possible future strain on the planet's capacity; a certain harm against a hypothetical one.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
+    needs:
+      - "Likelihood weighed with magnitude under a stated risk policy: a certain small harm does not always outweigh a possible catastrophe. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "A question of C003, or a respect of C005 (how serious, for how many, how likely)?"
 
@@ -3421,6 +3433,8 @@ candidates:
         note: Unlike jaywalking, which endangers traffic, an abortion affects no one else; the premise alone.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
+    needs:
+      - "The affected parties, the baseline and the uncertainty, with a scoped normative warrant: no known loser is not proof that no one loses, nor of legality or of an obligation. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "A scheme of its own, or a premise (no one else bears a cost) that answers C021's question?"
       - "Does its principled form belong with C007, the rights against consequences?"
@@ -3486,5 +3500,7 @@ candidates:
         note: Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret figures, which would answer reading the choice as the weighing, offered against 5637.378.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
+    needs:
+      - "Questions on the chooser's knowledge, coercion, time and alternatives: a preference is not the same as welfare, or as permission. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "All three sightings are in the abortion discussion (5637); is the pattern found elsewhere (consumer choice, risky sports)?"

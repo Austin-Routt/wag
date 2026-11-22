@@ -187,6 +187,7 @@ decisions:
   decider: owner
   priority: 1
   status: decided
+  docs: ["docs/review-2026-11-22-stages.md"]
   items:
     - {entry: practical_reasoning1, kind: other, about: "game questions"}
     - {entry: practical_reasoning2, kind: other, about: "game questions"}
@@ -197,7 +198,9 @@ decisions:
       The book's ch. 9 version, the compendium, which is the catalogue's
       authority (plan §1). Ch. 3's further questions are kept as derived
       questions, each with its source (D023). (The review left the chapter
-      unchosen.)
+      unchosen.) Refined 2026-11-22 under the standing rule, on ChatGPT's
+      review of stages 0 and 1: a derived question keeps its chapter and page,
+      so that derived is not read as invented.
     recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D008
@@ -211,6 +214,7 @@ decisions:
   decider: owner
   priority: 1
   status: decided
+  docs: ["docs/review-2026-11-22-stages.md"]
   items:
     - {entry: positive_consequences, kind: book-walton, about: "CQ1-CQ2"}
     - {entry: negative_consequences, kind: book-walton, about: "CQ1-CQ2"}
@@ -223,6 +227,10 @@ decisions:
       Likelihood stays a question (33/CQ1, CQ:likelihood). (The review left
       variant or field open and added an adequacy assumption; WAG's precedent
       is a scheme of its own, and the likelihood question already exists.)
+      Refined 2026-11-22 under the standing rule, on ChatGPT's review of
+      stages 0 and 1: a test shows that a possible or weak causal premise
+      cannot fill a categorical one; the modal variants keep their modality in
+      premises and conclusion.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D009
@@ -247,7 +255,7 @@ decisions:
     - {entry: negative_consequences, kind: other, about: "game questions"}
     - {entry: positive_value, kind: other, about: "game"}
     - {entry: sign, kind: other, about: "game questions"}
-  docs: ["docs/proposals/D055-D059.md"]
+  docs: ["docs/proposals/D055-D059.md", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -256,7 +264,11 @@ decisions:
       paraphrases, with the changes the entries list, except the backup edge
       that lets negative consequences answer the side-effect question, which
       D070 and D075 replace. CQ:field is kept. Every generated question gets a
-      test that its formula target is one of its scheme's.
+      test that its formula target is one of its scheme's. Refined 2026-11-22
+      under the standing rule, on ChatGPT's review of stages 0 and 1: the test
+      of each generated question also covers the catalogue version, the
+      target's role and type, the variable substitution, the argument
+      instance, the polarity, the response's effect and its replay.
     recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D010
@@ -317,7 +329,7 @@ decisions:
   decider: owner
   priority: 1
   status: decided
-  docs: ["docs/review-2026-10-15-part6.md §4", "docs/game-rules.md", "the external reviews of 2026-11-22 (wag-workspace reviews/2026-11-22)"]
+  docs: ["docs/review-2026-10-15-part6.md §4", "docs/game-rules.md", "the external reviews of 2026-11-22 (wag-workspace reviews/2026-11-22)", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -331,7 +343,12 @@ decisions:
       are C003's (D064), the side effect that outweighs (D070) and another
       means that does better, with part 6's sketches repaired (their side
       effect left a variable unbound). D009, D038, D057 and D063's bridges
-      follow this rule.
+      follow this rule. Refined 2026-11-22 under the standing rule, on
+      ChatGPT's review of stages 0 and 1: answer schemes bind agent and
+      context positively (D063). The lint rule against free-text bridges
+      landed in stage 1, and a saved game a bridge let through stops at that
+      move with the reason. An engine scheme shared by two game schemes is a
+      lint error, since the game records which one was played.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D082
@@ -370,6 +387,7 @@ decisions:
   decider: owner
   priority: 2
   status: decided
+  docs: ["docs/review-2026-11-22-stages.md"]
   items:
     - {entry: popular_opinion, kind: other, about: "conclusion"}
   decided:
@@ -378,7 +396,10 @@ decisions:
     decision: >-
       No. popular_opinion keeps reason_in_favor(A), as the book concludes.
       Where a game needs it to meet A, a bridge scheme connects them, with its
-      own exception (D075's rule for bridges).
+      own exception (D075's rule for bridges). Refined 2026-11-22 under the
+      standing rule, on ChatGPT's review of stages 0 and 1: the bridge is an
+      explicit warrant with its own challenge, never counted as evidence
+      beside the reason it bridges.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D012
@@ -573,12 +594,16 @@ decisions:
     external review and the developer's check), not yet by a person: pp.
     364-367 treat the form and give the extra premise that the rule has no
     exception (p. 366), and print no numbered questions for it. If a person
-    confirms, its questions are derived (D019).
+    confirms, its questions are derived (D019). Checked again on 2026-11-22 by
+    models (ChatGPT's review of stages 0 and 1, and an independent check of
+    the page images): no questions for the form are printed at pp. 16, 19, 77,
+    242, 253 or 373 either.
   category: book
   blocks: [verification]
   decider: verifier
   priority: 2
   status: open
+  docs: ["docs/review-2026-11-22-stages.md"]
   items:
     - {entry: defeasible_modus_ponens, kind: not-in-book, about: "defeasible_modus_ponens"}
 
@@ -700,7 +725,13 @@ decisions:
     bound to the omission. Checked on 2026-11-22 by two models, not yet by a
     person: 33.3's first premise on p. 332 carries the parenthetical and the
     conclusion stays negative. Whatever the reading, no omission scheme is
-    added: 33.4 and OC13 cover not acting (D069).
+    added: 33.4 and OC13 cover not acting (D069). Checked again on 2026-11-22
+    by models (ChatGPT's review of stages 0 and 1, and an independent check of
+    the page images): 33.3's premise reads "bring about (don't bring about) A"
+    while its conclusion stays negative (p. 332), so the text does not settle
+    what the parenthetical intends; 33.4 covers the prudential case of an
+    omission. How an omission is coded is D069's (refined 2026-11-22). A
+    person confirms the reading.
   category: book
   blocks: [verification]
   decider: verifier
@@ -708,7 +739,7 @@ decisions:
   status: open
   items:
     - {entry: negative_consequences_reasoning, kind: book-walton, about: "Premise 1"}
-  docs: ["docs/proposals/D055-D059.md"]
+  docs: ["docs/proposals/D055-D059.md", "docs/review-2026-11-22-stages.md"]
 
 - id: D028
   title: Analogy's exceptions for the practical analogies
@@ -1319,7 +1350,7 @@ decisions:
   decider: owner
   priority: 2
   status: decided
-  docs: ["docs/proposals/D055-D059.md", "docs/candidates.md"]
+  docs: ["docs/proposals/D055-D059.md", "docs/candidates.md", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1333,7 +1364,13 @@ decisions:
       exception (the agent is not the one deliberating) connects them to
       should_be_performed(A). Requirements and permissions stay apart (D016).
       (The review proposed sharing only identical propositions and bridging
-      the rest; this applies that rule with D059's precedent.)
+      the rest; this applies that rule with D059's precedent.) Refined
+      2026-11-22 under the standing rule, on ChatGPT's review of stages 0 and
+      1: the bridge needs the agent and the deliberation context positively
+      the same, or explicitly mapped. The exception alone is not enough: an
+      exception nobody raises is presumed not to hold, so an unknown agent
+      would pass. Continuing an activity binds to the continuing action, not
+      only to its goal.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D070
@@ -1401,7 +1438,7 @@ decisions:
   decider: owner
   priority: 2
   status: decided
-  docs: ["the external reviews of 2026-11-22 (ChatGPT's evidence design)", "wag/internal/server/protocol.go"]
+  docs: ["the external reviews of 2026-11-22 (ChatGPT's evidence design)", "wag/internal/server/protocol.go", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1413,7 +1450,13 @@ decisions:
       commitments, not verification. Built in slices from stage 2; the four
       game profiles of the review (cooperative, adversarial, moderated,
       automated) wait for Track D. A moderator's decision on a statement is a
-      hard assumption today, and is labelled so.
+      hard assumption today, and is labelled so. Refined 2026-11-22 under the
+      standing rule, on ChatGPT's review of stages 0 and 1: the first evidence
+      slice fixes its admission policy before its first episode: two players,
+      each consenting to the same revision of the source, one acceptance being
+      one party's commitment and silence no consent; withdrawing a consent
+      removes only its own route of admission. Captured content is data, never
+      instructions (this does not decide D079).
     recorded: "docs/decisions.yml; to apply: the game's moves and export (plan §0, stage 2)"
 
 - id: D077
@@ -1450,11 +1493,19 @@ decisions:
   blocks: [release]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/decisions.yml D043", "README.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner
+    decision: >-
+      No: the public history stays as it is (the owner, 2026-11-22). D043
+      takes book text out of the current tree by ordinary commits, and the
+      private workspace keeps what is removed.
+    recorded: "docs/decisions.yml; D043's current-tree work is in stage 2 (plan §0)"
 
 - id: D081
-  title: Four repairs awaiting approval
+  title: The four repairs of the cleaning
   question: >-
     The cleaning of walton.yml made four repairs that still await the owner's
     approval (CHANGELOG, "Repairs that need the owner's approval"):
@@ -1466,8 +1517,23 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
-  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md", "docs/scheme-registry/walton-clean/changes.json"]
+  status: decided
+  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md", "docs/scheme-registry/walton-clean/changes.json", "docs/proposals/D081-D084.md", "docs/migrations/D081-sorites.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Approve three as made: moral_justification_ad_populum_excuse concludes
+      the speaker's moral justification (p. 312); sacrifice's value is the
+      declared V (p. 322); rhetorical_oppositions_normative keeps WAG's
+      treatment-first roles, which its templates follow (p. 318). Revise the
+      fourth: sorites_slippery_slope's chain becomes
+      reapplication_sequence(A2,A,P), so that a chain about one property
+      cannot serve an argument about another; the printed chain premise names
+      no property, so the scoping is our reading (pp. 340-341). As ChatGPT's
+      review of stages 0 and 1 recommended; an independent check of the book's
+      page images agreed.
+    recorded: "docs/proposals/D081-D084.yml; walton.yml through edits.py, applied 2026-11-22"
 
 - id: D084
   title: The reserved name is/2
@@ -1483,7 +1549,7 @@ decisions:
   decider: owner
   priority: 2
   status: decided
-  docs: ["docs/scheme-registry/walton-clean/clean-check.txt", "the external reviews of 2026-11-22 (Fable's report)", "verify/r-reviews-2026-11-22 in the workspace (agent 3, 5b)"]
+  docs: ["docs/scheme-registry/walton-clean/clean-check.txt", "the external reviews of 2026-11-22 (Fable's report)", "verify/r-reviews-2026-11-22 in the workspace (agent 3, 5b)", "docs/proposals/D081-D084.md", "docs/migrations/D084-is-a.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1494,7 +1560,7 @@ decisions:
       premise to rule_physical_world_1 (referentially_coextensive(W,D)); that
       changes the scheme and is not part of this decision. A check on both
       engines found that the rename restores group_2's conclusion.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D081-D084.yml; walton.yml through edits.py, applied 2026-11-22"
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -1521,14 +1587,17 @@ decisions:
   question: >-
     Which year does the book's reference list give for witness testimony's
     source? Correct walton.yml once it is checked. Checked on 2026-11-22 by
-    two models, not yet by a person: the compendium prints 2007 (p. 311). Once
-    a person confirms, walton.yml cites 2007, as the slope's year was
-    corrected; the publisher's later printing (2008) is noted in the
-    CHANGELOG.
+    two models, not yet by a person: the compendium prints 2007 (p. 311). The
+    bibliography prints 2007 too (p. 428: Walton (2007), Witness Testimony
+    Evidence), checked on 2026-11-22 by models on the page images; the book
+    gives no other year, and an earlier note here of a later printing in 2008
+    had no basis in it and is withdrawn. Once a person confirms, walton.yml
+    cites 2007, as the slope's year was corrected.
   category: metadata
   decider: verifier
   priority: 3
   status: open
+  docs: ["docs/review-2026-11-22-stages.md"]
   items:
     - {entry: witness_testimony, kind: other, about: "source"}
 
@@ -1543,13 +1612,14 @@ decisions:
   docs: ["docs/plan.md §7 item 2"]
   decided:
     date: "2026-11-22"
-    by: owner (standing rule of 2026-11-22)
+    by: owner
     decision: >-
       MPL-2.0 for WAG's own code, the licence of Carneades and walton.yml,
-      added at the first release. Third-party material (the book's labels and
-      paraphrases aside, Kialo data, upstream files) keeps its own terms. The
-      documents' and data's licence is D080.
-    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
+      added now (the owner, 2026-11-22), not at the first release as first
+      decided. Third-party material (the book's labels and paraphrases aside,
+      Kialo data, upstream files) keeps its own terms. The documents' and
+      data's licence is D080.
+    recorded: "LICENSE, LICENSING.md"
 
 - id: D048
   title: Scoring a negotiation
@@ -1591,7 +1661,7 @@ decisions:
   decider: owner
   priority: 3
   status: decided
-  docs: ["docs/plan.md §7 item 6"]
+  docs: ["docs/plan.md §7 item 6", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1600,7 +1670,12 @@ decisions:
       licence allows research use, each recorded with its licence; WAG's own
       game traces only as a second source. (The review proposed WAG's traces
       first; finding dialogue types in our own synthetic play would be
-      circular.)
+      circular.) Refined 2026-11-22 under the standing rule, on ChatGPT's
+      review of stages 0 and 1: the two sources have different jobs: Kialo
+      finds patterns the design did not foresee, native play tests legality,
+      answerability and the protocol. A reconstruction of a Kialo discussion
+      stays marked apart from observed dialogue and from model-written
+      arguments.
     recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D051
@@ -1611,14 +1686,17 @@ decisions:
   decider: owner
   priority: 3
   status: decided
-  docs: ["docs/plan.md §7 item 7", "docs/catalogue-alignment.md §5"]
+  docs: ["docs/plan.md §7 item 7", "docs/catalogue-alignment.md §5", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
     decision: >-
       The denominators are set now: assigned and attempted items, the moves
       players intended, the moves made, matches, and unknowns. Target rates
-      are set after the first pilot measures them, not before.
+      are set after the first pilot measures them, not before. Refined
+      2026-11-22 under the standing rule, on ChatGPT's review of stages 0 and
+      1: thresholds and success criteria may be learnt on the pilot's
+      development discussions, and are frozen before the held-out run.
     recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D056
@@ -1896,7 +1974,7 @@ decisions:
   decider: owner
   priority: 3
   status: decided
-  docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+  docs: ["docs/candidates.md", "docs/proposals/D055-D059.md", "docs/review-2026-11-22-stages.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1907,7 +1985,12 @@ decisions:
       action avert the harm) becomes a question of 33.4; C020 is covered by
       OC12; C023 (doing against allowing) stays a candidate. (The review
       proposed a new omission scheme through D027; that duplicates 33.4 and
-      OC13, which the owner decided.)
+      OC13, which the owner decided.) Refined 2026-11-22 under the standing
+      rule, on ChatGPT's review of stages 0 and 1: an omission coded as a
+      positive consequence (OC13) records whether the action's preventing the
+      harm is explicit, implicit, unknown or disputed; C016's question
+      challenges it, and its existence does not make the link a fact. The
+      guidelines gain rule cases for this in stage 2.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D072
@@ -1997,13 +2080,18 @@ decisions:
     Captured pages come with sites' terms of use, may hold personal data, and
     may carry instructions aimed at the models that read them. How are these
     handled? The owner's note of 2026-11-22: to be reviewed and decided later;
-    capture for research goes on meanwhile (D077).
+    capture for research goes on meanwhile (D077). ChatGPT's review of stages
+    0 and 1 (2026-11-22) recommended rights, privacy and untrusted-content
+    controls before bulk capture or any model's reading of captured content;
+    not adopted, since the owner reserved these questions for later review and
+    capture for research goes on (D077). Stage 2 treats captured content as
+    data, never as instructions (D076), which does not decide this question.
   category: project
   blocks: [release]
   decider: owner
   priority: 3
   status: open
-  docs: ["the owner's notes of 2026-11-22", "docs/decisions.yml D077"]
+  docs: ["the owner's notes of 2026-11-22", "docs/decisions.yml D077", "docs/review-2026-11-22-stages.md"]
 
 - id: D080
   title: A licence for WAG's documents and data
@@ -2015,8 +2103,20 @@ decisions:
   blocks: [release]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/decisions.yml D044"]
+  decided:
+    date: "2026-11-22"
+    by: owner
+    decision: >-
+      CC BY 4.0, now (the owner, 2026-11-22), for WAG's own documents,
+      catalogue text and annotations. Code is MPL-2.0 (D044), and files
+      derived from MPL-2.0 sources, walton.yml and its copies among them, stay
+      MPL-2.0. Material WAG does not own keeps its own terms: the book's text
+      where the tree still quotes it (D043 removes it), Kialo's content,
+      captured evidence and the vendored engine. LICENSING.md lists which
+      paths carry which licence.
+    recorded: "LICENSE, LICENSES/CC-BY-4.0.txt, LICENSING.md, README.md"
 
 - id: D083
   title: Candidates kept after the decisions of 2026-11-22
@@ -2026,13 +2126,33 @@ decisions:
     greater good), C019 (accrual), C025 (no one else made worse off), C026
     (the chooser's own weighing), C008 (precaution), C024 (a certain harm
     against a speculative one) and C023 (doing against allowing). Which go
-    forward, and as what, once their premises are written?
+    forward, and as what, once their premises are written? ChatGPT's review of
+    stages 0 and 1 proposed a form and a constraint for each of the nine; the
+    constraints are recorded as needs on the candidates, and D083 is decided
+    when their sketches are ready (docs/candidates.md, "ready").
   category: scheme
   blocks: [play]
   decider: owner
   priority: 3
   status: open
-  docs: ["docs/candidates.md", "docs/decisions.yml D064, D065, D069"]
+  docs: ["docs/candidates.md", "docs/decisions.yml D064, D065, D069", "docs/review-2026-11-22-stages.md"]
+
+- id: D085
+  title: The Argument of the Beard's page
+  question: >-
+    walton.yml and the catalogue cite Walton, "The Argument of the Beard",
+    Informal Logic 18 (1996), for the sorites slippery slope at p. 151. The
+    book cites p. 251 (p. 341), and its bibliography gives the article as pp.
+    235-251 (p. 427); links.json already notes the difference. Found on
+    2026-11-22 by models (an independent check of ChatGPT's review of stages 0
+    and 1), not yet by a person. Once a person confirms, walton.yml cites p.
+    251.
+  category: metadata
+  blocks: [release]
+  decider: verifier
+  priority: 3
+  status: open
+  docs: ["docs/scheme-registry/links.json", "docs/review-2026-11-22-stages.md"]
 
 # --- Decided ------------------------------------------------------------------
 

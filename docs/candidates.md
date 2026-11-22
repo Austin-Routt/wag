@@ -763,6 +763,7 @@ Bindings: A = “the city building the stadium”; G = “forty home games a yea
 
 **What implementing it needs:**
 - D033 settled (waste's future losses), since sunk costs' future_losses_outweigh(A) is the same claim on one side.
+- The action, the set of consequences weighed and the value policy are stated: an incomplete list, or a balance about another action, does not establish the overall balance claimed. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
 
 **Open questions:**
 - Side-level exceptions, or a scheme concluding ¬should_be_performed(A) from net_cost(A), weighed like any rebuttal? The first is closer to how Kialo uses the claim.
@@ -901,6 +902,9 @@ Bindings: A = “your leaving now”; B = “your missing the last train”.
 
 *Note:* Only one course is said to be bad; nothing is compared, so it is the pragmatic argument from alternatives (34).
 
+**What implementing it needs:**
+- A warrant that one of the courses must be taken, and the feasible alternatives: two bad courses alone do not show that either must be chosen. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
+
 **Open questions:**
 - A scheme of its own, or a variant of the pragmatic argument from alternatives (34), whose conclusion meets nothing today (D063)?
 - Is a choice between an action and its omission a lesser evil, or a weighing, as proposal D055-D059's rule codes it (5637.121, 5637.2372, 5637.4851)?
@@ -1033,6 +1037,9 @@ Bindings: A = “the parents having the child vaccinated”; G = “the child be
 
 *Note:* It cites a good consequence but sets it against no harm, so it is positive consequences.
 
+**What implementing it needs:**
+- A premise that the action brings about the good, beside the harm's being needed for it: causing something a good needs does not show that the action produces the good. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
+
 **Open questions:**
 - A variant of C003 with a necessity premise, or a scheme of its own? All but one of the sightings are in the discussion on God's existence (2629), on the problem of evil.
 
@@ -1065,6 +1072,7 @@ Several consequences on one side, each weaker than a single consequence on the o
 
 **What implementing it needs:**
 - Code in the engine (an option that adds the weights of same-side consequence arguments about one action, up to a cap), or an accrual scheme weighed by a moderator.
+- An explicit, versioned aggregation policy (dependence between reasons, duplicates, units, normalization): it must not change Carneades' default weighing or count a repeated reason twice. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
 
 **Open questions:**
 - Is accrual wanted at all? Carneades' choice not to add arguments up is deliberate, and the game's weights are set by scheme.
@@ -1098,6 +1106,9 @@ The action brings a good to some and leaves everyone else no worse off, so it sh
 | kialo 5637 | 5637.5523 (archived) | strain | Whatever harms no one else should be legal; the same line stated as a principle. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.10400 (archived) | strain | Unlike jaywalking, which endangers traffic, an abortion affects no one else; the premise alone. | review of D055-D059 v4 | session check, 2026-10-23 |
 
+**What implementing it needs:**
+- The affected parties, the baseline and the uncertainty, with a scoped normative warrant: no known loser is not proof that no one loses, nor of legality or of an obligation. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
+
 **Open questions:**
 - A scheme of its own, or a premise (no one else bears a cost) that answers C021's question?
 - Does its principled form belong with C007, the rights against consequences?
@@ -1129,6 +1140,9 @@ The person who chooses the action, and who bears its consequences, has already w
 | kialo 5637 | 5637.10818 (archived) | clean | Someone who seeks an abortion has already judged that the pregnancy's potential is worth less to them than something else; it answers 5637.2428. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.5701 (archived); also C003 | clean | A mother who wanted an abortion is likely better off not raising the child; the choice read as the weighing. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.392 (archived) | strain | Most women who kept a pregnancy after rape did not regret it, and most who ended one did; regret figures, which would answer reading the choice as the weighing, offered against 5637.378. | review of D055-D059 v4 | session check, 2026-10-23 |
+
+**What implementing it needs:**
+- Questions on the chooser's knowledge, coercion, time and alternatives: a preference is not the same as welfare, or as permission. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
 
 **Open questions:**
 - All three sightings are in the abortion discussion (5637); is the pattern found elsewhere (consumer choice, risky sports)?
@@ -1412,6 +1426,9 @@ Bindings: A = “building the dam”; G = “the valley's farms being flooded”
 
 *Note:* The harm is certain and not catastrophic; nothing is weighed against a small chance, so it is negative consequences.
 
+**What implementing it needs:**
+- Magnitude, uncertainty, irreversibility, proportionality and the risks of the alternatives or of mitigation: a merely conceivable harm is not an automatic veto. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
+
 **Open questions:**
 - A scheme of its own, or a question for 33.2 ('Is the consequence irreversible?') feeding C003's comparison?
 - How does it meet a likelihood objection (33/CQ1), which it concedes in advance?
@@ -1569,6 +1586,9 @@ A weighing claim made, or answered, by how likely the two consequences are: a ha
 |---|---|---|---|---|---|
 | kialo 5637 | 5637.2376 (archived) | clean | No evidence shows that access makes people careless, while denial certainly forces unwanted pregnancies; a feared risk should not outweigh a real one. | review of D055-D059 v3 | session check, 2026-10-23 |
 | kialo 5637 | 5637.1202 (archived) | clean | Human lives should not be ended to avoid a merely possible future strain on the planet's capacity; a certain harm against a hypothetical one. | review of D055-D059 v4 | session check, 2026-10-23 |
+
+**What implementing it needs:**
+- Likelihood weighed with magnitude under a stated risk policy: a certain small harm does not always outweigh a possible catastrophe. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
 
 **Open questions:**
 - A question of C003, or a respect of C005 (how serious, for how many, how likely)?
@@ -2480,6 +2500,9 @@ A reply to an argument from a harm of not acting: the agent may be bound not to 
 | Where | Ref | Fit | What it shows | Found | Verified |
 |---|---|---|---|---|---|
 | kialo 5637 | 5637.3838 | clean | The state may stop actions that harm others, but has no power to compel actions that prevent harm. | review of D055-D059 v3 | session check, 2026-10-23 |
+
+**What implementing it needs:**
+- The actor's capability, role, commitments and rights are bound: neither a duty to prevent every harm nor an exemption for every omission is assumed. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)
 
 **Open questions:**
 - Only one sighting so far; look for it in debates about duties to rescue or to aid.
