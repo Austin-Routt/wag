@@ -8,9 +8,11 @@ import (
 
 // Fingerprint renders the graph's structure canonically (statements with
 // their arguments, issue, undercutter flag and text; arguments with premises,
-// conclusion, undercutter and role; issues with positions; assumptions).
-// Two graphs with equal fingerprints are structurally identical. Used by the
-// rollback tests, and useful for replay checks.
+// conclusion, undercutter and role; issues with positions; assumptions,
+// default provenance and questioned statements).
+// Equal fingerprints mean equality only for the fields rendered below.
+// Labels, weights, parameters, schemes, standards and metadata are excluded.
+// Used by rollback tests; a complete replay comparison needs additional state.
 func (a *Adapter) Fingerprint() string {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -55,5 +57,9 @@ func (a *Adapter) Fingerprint() string {
 		fmt.Fprintf(&b, "I %s|%s\n", id, strings.Join(pos, ","))
 	}
 	fmt.Fprintf(&b, "assumptions %s\n", strings.Join(a.Graph.Assumptions, ","))
+	for _, id := range SortedKeys(a.Graph.Defaults) {
+		fmt.Fprintf(&b, "default %s=%t\n", id, a.Graph.Defaults[id])
+	}
+	fmt.Fprintf(&b, "questioned %s\n", strings.Join(a.Graph.Questioned, ","))
 	return b.String()
 }

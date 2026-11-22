@@ -33,7 +33,7 @@ func InputHashes(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) (yamlSHA, na
 // MoveDigest is a SHA-256 over a canonical rendering of the move history:
 // every move's player, action (with bindings in sorted order), created
 // argument IDs, weight, score delta and the statement labels after it.
-// Two games are the same game exactly when their digests are equal. Wall-clock
+// Equal digests mean equality only for this deliberately partial rendering. Wall-clock
 // metadata (created_at) is deliberately not part of it.
 func (gs *GameState) MoveDigest() string {
 	var b strings.Builder

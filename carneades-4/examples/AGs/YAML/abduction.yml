@@ -30,7 +30,18 @@ assumptions:
   - explanation(weather,wet)
   - in(weather,rain)
 
-labels:
+# Declare expected identities so CLI prevalidation can check them before
+# inference. The native assertion key is tests, not the old ignored labels key.
+statements:
+  rain: It rained.
+  observed(wet): Wet conditions have been observed.
+  in(weather,rain): The weather theory contains rain.
+  explanation(weather,wet): The weather theory explains wet conditions.
+  undercut(a1): The abduction argument is undercut.
+  undercut(a2): The exception argument is undercut.
+  more_coherent_explanation(weather,wet): A more coherent explanation exists.
+
+tests:
   in:
     - rain
     - observed(wet)

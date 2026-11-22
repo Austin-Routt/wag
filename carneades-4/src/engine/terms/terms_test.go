@@ -9,6 +9,7 @@ package terms
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestMatch1(t *testing.T) {
@@ -222,5 +223,25 @@ func TestUnify14(t *testing.T) {
 		"[1, 2, 3, 4, 5, 6]")
 	if !ok {
 		t.Errorf("TestUnify12 failed\n")
+	}
+}
+
+// A variable whose binding chain ends in a variable bound to itself (X to
+// Y, Y to Y, as matching p(X,Y) against p(Y,Y) gives) substitutes to that
+// variable; the chain used to be followed for ever.
+func TestSubstituteChainEndingInCycle(t *testing.T) {
+	x, y := NewVariable("X"), NewVariable("Y")
+	var env Bindings
+	env = AddBinding(y, y, env)
+	env = AddBinding(x, y, env)
+	done := make(chan Term, 1)
+	go func() { done <- Substitute(x, env) }()
+	select {
+	case got := <-done:
+		if got.String() != "Y" {
+			t.Errorf("Substitute(X) = %v, want Y", got)
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("Substitute did not stop on a chain ending in a cycle")
 	}
 }

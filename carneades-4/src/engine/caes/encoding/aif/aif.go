@@ -18,9 +18,11 @@
 package aif
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"sort"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 )
@@ -52,13 +54,14 @@ type Node struct {
 	Type      string `json:"type"`
 }
 
+// Caes converts an AIF value satisfying ValidateProfile. Callers reading an
+// untrusted or unvalidated value must use Import or ValidateProfile first.
+// AIF scheme names are provenance, not bindings to executable Walton schemes.
 func (ag AIF) Caes() *caes.ArgGraph {
 	stmts := make(map[string]*caes.Statement)
 	assms := make(map[string]bool) // keys are statement ids
 	args := make(map[string]*caes.Argument)
 	issues := make(map[string]*caes.Issue)
-	schemes := make(map[string]*caes.Scheme)
-
 	nodeType := func(id string) string {
 		if stmts[id] != nil {
 			return "Statement"
@@ -86,12 +89,10 @@ func (ag AIF) Caes() *caes.ArgGraph {
 		case "RA":
 			arg := caes.NewArgument()
 			arg.Id = node.Id
-			if s := schemes[node.Scheme]; s != nil {
-				arg.Scheme = s
-			} else {
-				s := caes.Scheme{Id: node.Scheme, Weight: caes.LinkedWeighingFunction}
-				arg.Scheme = &s
-			}
+			arg.Scheme = caes.BasicSchemes["linked"]
+			arg.Metadata["aif_scheme"] = node.Scheme
+			arg.Metadata["aif_text"] = node.Text
+			arg.Metadata["aif_timestamp"] = node.Timestamp
 			args[arg.Id] = arg
 		default:
 			continue
@@ -120,6 +121,7 @@ func (ag AIF) Caes() *caes.ArgGraph {
 			case "Statement":
 				s := stmts[edge.To]
 				i.Positions = append(i.Positions, s)
+				s.Issue = i
 			default:
 				continue
 			}
@@ -139,6 +141,8 @@ func (ag AIF) Caes() *caes.ArgGraph {
 	}
 
 	cag := caes.NewArgGraph()
+	cag.Metadata["import_profile"] = "AIF I/RA/binary-CA: linked arguments and symmetric incompatibility"
+	cag.Metadata["import_assumption_policy"] = "I nodes without an incoming RA and without a CA issue are stipulated"
 
 	for i, _ := range stmts {
 		s := stmts[i]
@@ -157,9 +161,12 @@ func (ag AIF) Caes() *caes.ArgGraph {
 		cag.Arguments[arg.Id] = arg
 	}
 
-	for k, _ := range assms {
-		cag.Assumptions = append(cag.Assumptions, k)
+	for k, assumed := range assms {
+		if assumed {
+			cag.Assumptions = append(cag.Assumptions, k)
+		}
 	}
+	sort.Strings(cag.Assumptions)
 	return cag
 }
 
@@ -168,11 +175,21 @@ func Import(inFile io.Reader) (*caes.ArgGraph, error) {
 	if err != nil {
 		return nil, err
 	}
-	aif := newAIF()
-	err = json.Unmarshal(data, &aif)
-	if err != nil {
+	if err := rejectDuplicateKeys(data); err != nil {
+		return nil, caes.NewRunError(caes.ErrInvalidInput, "AIF: %v", err)
+	}
+	var aif AIF
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&aif); err != nil {
+		return nil, caes.NewRunError(caes.ErrInvalidInput, "AIF: %v", err)
+	}
+	var trailing interface{}
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		return nil, caes.NewRunError(caes.ErrInvalidInput, "AIF: expected one JSON object")
+	}
+	if err := aif.ValidateProfile(); err != nil {
 		return nil, err
 	}
-	ag := aif.Caes()
-	return ag, err
+	return aif.Caes(), nil
 }

@@ -84,7 +84,13 @@ type Problem struct {
 // Validate the statements of an argument graph
 func validateStatements(ag *caes.ArgGraph) []Problem {
 	problems := []Problem{}
+	seen := map[string]*caes.Statement{}
 	for k, _ := range ag.Statements {
+		n := terms.Normalize(k)
+		if old, exists := seen[n]; exists && old != ag.Statements[k] {
+			problems = append(problems, Problem{STATEMENT, "", "multiple statement objects normalize to the same formula", n})
+		}
+		seen[n] = ag.Statements[k]
 
 		// Check that the key is a term
 		t, ok := terms.ReadString(k)
@@ -127,85 +133,310 @@ func validateIssues(ag *caes.ArgGraph) []Problem {
 	return problems
 }
 
-// Validate the arguments of an argument graph
+// Validate the arguments of an argument graph. An argument that names a
+// scheme must instantiate it with one substitution: the scheme's variables
+// bound to the argument's parameters, and under those bindings each premise
+// an instance of one of the scheme's premises or assumptions (each used once)
+// and the conclusion an instance of one of its conclusions.
 func validateArguments(ag *caes.ArgGraph) []Problem {
 	problems := []Problem{}
 	for id, arg := range ag.Arguments {
-		if arg.Conclusion == nil {
-			problems = append(problems, Problem{ARGUMENT, id, "argument has no conclusion", ""})
+		if arg == nil || arg.Scheme == nil || caes.IsBasicScheme(arg.Scheme) {
+			// arguments of the basic schemes (linked, convergent, ...) and
+			// undercutters without a scheme have no pattern to check
 			continue
 		}
-		// Arguments without a scheme (e.g. from the CAF importer) or with a basic
-		// scheme have nothing to match. Upstream returned here, which skipped every
-		// remaining argument in (random) map order, and dereferenced a nil scheme.
-		if arg.Scheme == nil || caes.IsBasicScheme(arg.Scheme) {
+		if s := arg.Scheme; len(s.Premises) == 0 && len(s.Assumptions) == 0 && len(s.Conclusions) == 0 && len(s.Deletions) == 0 {
+			// a scheme that only gives a weighing function (upstream's
+			// rebuttal, lex and mcda examples) has no pattern either
 			continue
 		}
-		// check that number of parameters matches the number of variables in the scheme
-		if len(arg.Parameters) != len(arg.Scheme.Variables) {
+		s := arg.Scheme
+		if len(arg.Parameters) == 0 && len(s.Variables) != 0 {
+			// no parameters written: the substitution is the one that makes
+			// the conclusion, premises and exception links instances of the
+			// scheme. Try every matching substitution: a symmetric premise
+			// list can have more than one, and its exception links must agree
+			// with the same one.
+			validInstance := false
+			validExceptions := instanceWithoutParameters(s, arg, func(b terms.Bindings) bool {
+				validInstance = true
+				return carriesExceptions(ag, arg, b)
+			})
+			if !validInstance {
+				p := Problem{ARGUMENT, id, "premises and conclusion do not instantiate the scheme with one substitution", ""}
+				problems = append(problems, p)
+			} else if !validExceptions {
+				p := exceptionProblem(id, s)
+				problems = append(problems, p)
+			}
+			continue
+		}
+		if len(arg.Parameters) != len(s.Variables) {
 			p := Problem{ARGUMENT, id, "number of parameters not the same as declared in the scheme", ""}
+			problems = append(problems, p)
+			continue
+		}
+		// the substitution given by the parameters
+		var b terms.Bindings
+		bound := true
+		for i, name := range s.Variables {
+			v, ok1 := terms.ReadFormula(name)
+			t, ok2 := terms.ReadFormula(arg.Parameters[i])
+			if !ok1 || !ok2 || v.Type() != terms.VariableType {
+				p := Problem{ARGUMENT, id, "parameter or scheme variable is not a term", name + " = " + arg.Parameters[i]}
+				problems = append(problems, p)
+				bound = false
+				break
+			}
+			b = terms.AddBinding(v.(terms.Variable), t, b)
+		}
+		if !bound {
+			continue
+		}
+
+		// premises: the scheme's premises and assumptions, each used once
+		patterns := []terms.Term{}
+		for _, ps := range append(append([]string{}, s.Premises...), s.Assumptions...) {
+			if t, ok := terms.ReadFormula(ps); ok {
+				patterns = append(patterns, t) // patterns of schemes are checked elsewhere
+			}
+		}
+		stmts := []terms.Term{}
+		for _, pr := range arg.Premises {
+			if pr.Stmt == nil {
+				problems = append(problems, Problem{ARGUMENT, id, "premise without a statement", ""})
+				continue
+			}
+			t, ok := terms.ReadFormula(pr.Stmt.Id)
+			if !ok {
+				problems = append(problems, Problem{ARGUMENT, id, "premise is not a term", pr.Stmt.Id})
+				continue
+			}
+			stmts = append(stmts, t)
+		}
+		if len(arg.Premises) != len(s.Premises)+len(s.Assumptions) {
+			p := Problem{ARGUMENT, id, "number of premises not the same as declared in the scheme, including assumptions", ""}
+			problems = append(problems, p)
+		} else if len(stmts) == len(patterns) && !matchEach(patterns, stmts, b, make([]bool, len(patterns))) {
+			p := Problem{ARGUMENT, id, "premises do not instantiate the scheme's premises and assumptions with the argument's parameters", ""}
 			problems = append(problems, p)
 		}
 
-		// check that the number of premises equals the sum of the number of
-		// premises and assumptions of the argument's scheme
-		if len(arg.Premises) != len(arg.Scheme.Premises)+len(arg.Scheme.Assumptions) {
-			p := Problem{ARGUMENT, id, "number of premises not the same as declared in the scheme, including assumptions", ""}
+		// the scheme's exceptions are critical questions the argument has to
+		// carry: a nonnil undercutter alone is not enough. Every exception
+		// must have a direct linked argument for that undercutter, under the
+		// same substitution (docs/contracts.md, contract 6). Report missing
+		// links; never complete or rewrite an authored graph.
+		if !carriesExceptions(ag, arg, b) {
+			p := exceptionProblem(id, s)
 			problems = append(problems, p)
-		} else {
-			// Check whether the premises match the scheme
-			for i, pr := range arg.Premises {
-				t1, ok := terms.ReadString(pr.Stmt.Id)
-				if !ok {
-					p := Problem{ARGUMENT, id, "premise is not a term", pr.Stmt.Id}
-					problems = append(problems, p)
-				} else {
-					if i < len(arg.Scheme.Premises) { // upstream: len-1, so the last premise was read as assumption -1 (index panic)
-						// the premise is not an assumption
-						t2, _ := terms.ReadString(arg.Scheme.Premises[i])
-						// Premises of schemes are checked elsewhere
-						_, ok := terms.Match(t1, t2, nil)
-						if !ok {
-							p := Problem{ARGUMENT, id, "premise does not match the scheme", pr.Stmt.Id}
-							problems = append(problems, p)
-						}
-					} else {
-						// the premise is an assumption
-						j := i - len(arg.Scheme.Premises)
-						t2, _ := terms.ReadString(arg.Scheme.Assumptions[j])
-						// Assumptions of schemes are checked elsewhere
-						_, ok := terms.Match(t1, t2, nil)
-						if !ok {
-							p := Problem{ARGUMENT, id, "premise does not match its assumption in the scheme", pr.Stmt.Id}
-							problems = append(problems, p)
-						}
-					}
-				}
-			}
 		}
-		// Check whether the conclusion matches some conclusion of the scheme
-		t3, ok := terms.ReadString(arg.Conclusion.Id)
+
+		// conclusion
+		if arg.Conclusion == nil {
+			problems = append(problems, Problem{ARGUMENT, id, "argument without a conclusion", ""})
+			continue
+		}
+		t3, ok := terms.ReadFormula(arg.Conclusion.Id)
 		if !ok {
 			p := Problem{ARGUMENT, id, "conclusion is not a term.", arg.Conclusion.Id}
 			problems = append(problems, p)
+			continue
 		}
 		found := false
-		for _, s := range arg.Scheme.Conclusions {
-			t4, _ := terms.ReadString(s)
-			// conclusions of schemes validated elsewhere
-			_, ok := terms.Match(t3, t4, nil)
-			if ok {
-				// matching conclusion found
+		for _, cs := range s.Conclusions {
+			t4, ok := terms.ReadFormula(cs)
+			if !ok {
+				continue // conclusions of schemes are checked elsewhere
+			}
+			if _, ok := terms.MatchFormula(t4, t3, b); ok {
 				found = true
 				break
 			}
 		}
 		if !found {
-			p := Problem{ARGUMENT, id, "conclusion does not match the scheme.", arg.Conclusion.Id}
+			p := Problem{ARGUMENT, id, "conclusion does not instantiate a conclusion of the scheme with the argument's parameters.", arg.Conclusion.Id}
 			problems = append(problems, p)
 		}
 	}
 	return problems
+}
+
+// instanceWithoutParameters reports whether an argument written without
+// parameters is an instance of its scheme: one substitution makes its
+// conclusion a conclusion of the scheme and its premises the scheme's
+// premises and assumptions, each used once. accept checks that the exception
+// links use the same substitution, without writing inferred parameters back.
+func instanceWithoutParameters(s *caes.Scheme, arg *caes.Argument, accept func(terms.Bindings) bool) bool {
+	if arg.Conclusion == nil || len(arg.Premises) != len(s.Premises)+len(s.Assumptions) {
+		return false
+	}
+	c, ok := terms.ReadFormula(arg.Conclusion.Id)
+	if !ok {
+		return false
+	}
+	patterns := []terms.Term{}
+	for _, ps := range append(append([]string{}, s.Premises...), s.Assumptions...) {
+		if t, ok := terms.ReadFormula(ps); ok {
+			patterns = append(patterns, t)
+		}
+	}
+	stmts := []terms.Term{}
+	for _, pr := range arg.Premises {
+		if pr.Stmt == nil {
+			return false
+		}
+		t, ok := terms.ReadFormula(pr.Stmt.Id)
+		if !ok {
+			return false
+		}
+		stmts = append(stmts, t)
+	}
+	// Bind from the premises first. A conclusion ¬X may normalize to p once
+	// a premise binds X to ¬p; comparing that conclusion before the bindings
+	// exist would reject the valid authored instance.
+	return matchEachWith(patterns, stmts, nil, make([]bool, len(patterns)), func(b terms.Bindings) bool {
+		for _, cs := range s.Conclusions {
+			cp, ok := terms.ReadFormula(cs)
+			if !ok {
+				continue
+			}
+			if b2, ok := terms.MatchFormula(cp, c, b); ok && accept(b2) {
+				return true
+			}
+		}
+		return false
+	})
+}
+
+// matchEach reports whether the statements can be paired one to one with the
+// patterns so that every pair matches under one extension of the bindings b.
+func matchEach(patterns, stmts []terms.Term, b terms.Bindings, used []bool) bool {
+	return matchEachWith(patterns, stmts, b, used, func(terms.Bindings) bool { return true })
+}
+
+func matchEachWith(patterns, stmts []terms.Term, b terms.Bindings, used []bool, accept func(terms.Bindings) bool) bool {
+	if len(stmts) == 0 {
+		return accept(b)
+	}
+	// Ordinarily matching one statement first is order-independent. An
+	// unbound negated variable is different: given(X) may bind X=¬p, making
+	// the deferred pattern ¬X match p. Try another statement first in that
+	// case, without inventing an inverse-negation binding from p alone.
+	choices := 1
+	for i, p := range patterns {
+		if !used[i] && negationNeedsBinding(p, b) {
+			choices = len(stmts)
+			break
+		}
+	}
+	for j := 0; j < choices; j++ {
+		for i, p := range patterns {
+			if used[i] {
+				continue
+			}
+			if b2, ok := terms.MatchFormula(p, stmts[j], b); ok {
+				remaining := stmts[1:]
+				if j != 0 {
+					remaining = append(append([]terms.Term(nil), stmts[:j]...), stmts[j+1:]...)
+				}
+				used[i] = true
+				matched := matchEachWith(patterns, remaining, b2, used, accept)
+				used[i] = false
+				if matched {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func negationNeedsBinding(t terms.Term, b terms.Bindings) bool {
+	switch x := t.(type) {
+	case terms.Compound:
+		if x.Functor == "¬" && len(x.Args) == 1 {
+			if v, ok := x.Args[0].(terms.Variable); ok {
+				if _, bound := terms.GetBinding(v, b); !bound {
+					return true
+				}
+			}
+		}
+		for _, a := range x.Args {
+			if negationNeedsBinding(a, b) {
+				return true
+			}
+		}
+	case terms.List:
+		for _, a := range x {
+			if negationNeedsBinding(a, b) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func exceptionProblem(id string, s *caes.Scheme) Problem {
+	return Problem{ARGUMENT, id,
+		"does not carry the scheme's exceptions: each instantiated exception needs a direct, single-premise linked argument for this argument's undercutter; let inference construct the argument, or supply all exception links",
+		strings.Join(s.Exceptions, ", ")}
+}
+
+// carriesExceptions recognizes the exception structure built by
+// InstantiateScheme and preserved by YAML export/import. An inert undercutter,
+// a link for another instance, a missing exception, an extra prerequisite or a
+// custom weighing function must not silently suppress a scheme's exceptions.
+// An exception argument can itself be attacked, as generated arguments can;
+// this validates its structure, not the outcome of a particular dispute.
+func carriesExceptions(ag *caes.ArgGraph, arg *caes.Argument, b terms.Bindings) bool {
+	if len(arg.Scheme.Exceptions) == 0 {
+		return true
+	}
+	u := arg.Undercutter
+	if u == nil || ag.Statements[terms.Normalize(u.Id)] != u {
+		return false
+	}
+	for _, e := range arg.Scheme.Exceptions {
+		pattern, ok := terms.ReadFormula(e)
+		if !ok {
+			return false
+		}
+		// Validation also sees malformed, nonground authored input. Do not
+		// follow variable-to-variable bindings (possibly cyclic) while
+		// checking an exception: valid argument bindings are ground terms.
+		for _, v := range pattern.OccurVars() {
+			value, bound := terms.GetBinding(v, b)
+			if !bound || !terms.Ground(value, nil) {
+				return false
+			}
+		}
+		instance := terms.NormalizeNegation(terms.Substitute(pattern, b))
+		if !terms.Ground(instance, nil) {
+			return false
+		}
+		found := false
+		for _, link := range u.Args {
+			if link == nil || ag.Arguments[link.Id] != link || link.Conclusion != u || len(link.Premises) != 1 {
+				continue
+			}
+			// A nil scheme has the linked weighing function. After YAML
+			// import that same default is the built-in linked scheme.
+			if link.Scheme != nil && link.Scheme != caes.BasicSchemes["linked"] {
+				continue
+			}
+			p := link.Premises[0].Stmt
+			if p != nil && ag.Statements[terms.Normalize(p.Id)] == p && terms.Normalize(p.Id) == terms.Normalize(instance.String()) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
 }
 
 // Validate the assumptions of an argument graph
@@ -223,6 +454,12 @@ func validateAssumptions(ag *caes.ArgGraph) []Problem {
 			if !terms.AtomicFormula(t) || !terms.Ground(t, b) {
 				p := Problem{ASSUMPTION, "", "not a ground atomic formula", k}
 				problems = append(problems, p)
+			}
+			if d := caes.ArithmeticProblem(k); d != "" {
+				problems = append(problems, Problem{ASSUMPTION, "", "arithmetic the rule engine would compute; quote a constant such as a date", k})
+			}
+			if d := caes.ReservedProblem(k); d != "" {
+				problems = append(problems, Problem{ASSUMPTION, "", "a reserved name (is, true, false) used as a predicate", k})
 			}
 		}
 		// Check that there is a statement for the assumption
@@ -297,6 +534,11 @@ func validateLanguage(l caes.Language) []Problem {
 			problems = append(problems, p)
 		} else if !isPred(l[0]) {
 			p := Problem{LANGUAGE, k, "not a predicate symbol", l[0]}
+			problems = append(problems, p)
+		} else if caes.ReservedPredicates[l[0]] {
+			// docs/contracts.md, contract 7: in a rule body GoCHR executes
+			// is/2 as an assignment
+			p := Problem{LANGUAGE, k, "a reserved name, not a predicate symbol", l[0]}
 			problems = append(problems, p)
 		} else {
 			var n int
@@ -373,6 +615,14 @@ func validateScheme(s *caes.Scheme, l caes.Language) []Problem {
 			default:
 				p := Problem{SCHEME, s.Id, "not an atomic formula", atm}
 				problems = append(problems, p)
+			}
+			if kind != "guard" {
+				if d := caes.ArithmeticProblem(atm); d != "" {
+					problems = append(problems, Problem{SCHEME, s.Id, "arithmetic the rule engine would compute; quote a constant such as a date", atm})
+				}
+				if d := caes.ReservedProblem(atm); d != "" {
+					problems = append(problems, Problem{SCHEME, s.Id, "a reserved name (is, true, false) used as a predicate", atm})
+				}
 			}
 			// Check that the predicate of the atom, with the given arity, has been declared in the language
 

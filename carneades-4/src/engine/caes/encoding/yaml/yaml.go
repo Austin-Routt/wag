@@ -11,12 +11,11 @@
 package yaml
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"sort"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
@@ -24,6 +23,7 @@ import (
 	// "log"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type (
@@ -31,6 +31,8 @@ type (
 		Arguments             map[string]*umArgument
 		Argument_schemes      []*umArgScheme
 		Assumptions           []string
+		Questioned            []string // statements called into question (contract 5)
+		Defaults              []string // assumptions a scheme instantiation added (contract 5)
 		caesArgSchemes        []*caes.Scheme
 		caesLabels            map[string]caes.Label
 		caesStatements        map[string]*caes.Statement
@@ -56,6 +58,7 @@ type (
 		Guards      []string
 		Meta        caes.Metadata
 		Premises    []string
+		Roles       []string // the role of each premise, as USAGE.md documents (PLAN.md 4.3)
 		Variables   []string
 		Weight      interface{}
 		// string
@@ -72,7 +75,7 @@ type (
 		Parameters  []string
 		umpremises  []umPremis
 		Undercutter string
-		Weigth      float64 //
+		Weigth      float64 `yaml:"weight"`
 	}
 	umIssue struct {
 		id           string
@@ -108,10 +111,25 @@ var collOfWF2source map[string]interface{}                   // collection of we
 
 // Import
 
-func Import(inFile io.Reader) (*caes.ArgGraph, error) {
+// importing serializes Import and Export: both work in the package-level
+// tables above (docs/contracts.md, contract 1).
+var importing sync.Mutex
 
-	collOfWeighingFunctions = caes.BasicWeighingFunctions
-	collOfSchemes = caes.BasicSchemes
+func Import(inFile io.Reader) (*caes.ArgGraph, error) {
+	importing.Lock()
+	defer importing.Unlock()
+
+	// Work on copies of the built-in tables: writing imported schemes and
+	// weighing functions into caes.BasicSchemes and caes.BasicWeighingFunctions
+	// made every later import see them (issue E-GLOBALS of tools/vv).
+	collOfWeighingFunctions = map[string]caes.WeighingFunction{}
+	for k, v := range caes.BasicWeighingFunctions {
+		collOfWeighingFunctions[k] = v
+	}
+	collOfSchemes = map[string]*caes.Scheme{}
+	for k, v := range caes.BasicSchemes {
+		collOfSchemes[k] = v
+	}
 	collOfAssumptions = []string{}
 	collOfWF2source = map[string]interface{}{}
 
@@ -123,7 +141,9 @@ func Import(inFile io.Reader) (*caes.ArgGraph, error) {
 	m := new(argMapGraph)
 
 	//	m := make(map[interface{}]interface{})
-	err = yaml.Unmarshal(data, m)
+	// Unknown semantic fields and duplicate keys must not silently change the
+	// graph. In particular, an attack flag is not a native YAML conclusion.
+	err = yaml.UnmarshalStrict(data, m)
 	if err != nil {
 		return nil, err
 	}
@@ -155,6 +175,9 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 	// ------------
 
 	for id, iss := range m.Issues {
+		if iss == nil {
+			return nil, fmt.Errorf("issue %q must be a mapping, not null", id)
+		}
 		iss.id = id
 		// fmt.Printf(" issue: %s standard: \"%s\"\n", id, iss.Standard)
 		switch iss.Standard {
@@ -180,12 +203,15 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 	// set argument-id and scan premises
 	// ---------------------------------
 	for id, arg := range m.Arguments {
+		if arg == nil {
+			return nil, fmt.Errorf("argument %q must be a mapping, not null", id)
+		}
 		// for id, _ := range m.Arguments {
 		arg.id = id
 		// fmt.Printf(" Arg.: %s, Premises: %v \n", id, arg.Premises)
 		arg.umpremises, err = iface2premises(arg.Premises)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("argument %q: %w", id, err)
 		}
 	}
 	// for _, arg := range m.Arguments {
@@ -194,7 +220,10 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 
 	// scan Labels
 	// -----------
-	m.caesLabels = labels2caes(m.Tests)
+	m.caesLabels, err = labels2caes(m.Tests)
+	if err != nil {
+		return nil, err
+	}
 	// scan Assumtions
 	// ---------------
 	if m.Assumptions != nil && len(m.Assumptions) != 0 {
@@ -221,6 +250,9 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 	// --------------------
 
 	for _, argS := range m.Argument_schemes {
+		if argS == nil {
+			return nil, fmt.Errorf("argument scheme must be a mapping, not null")
+		}
 		name := argS.Id
 		// scan weight in argument_schemes
 		argS.caesWeight, err = iface2weighfunc(argS.Weight, name, collOfWeighingFunctions)
@@ -250,7 +282,11 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 	m.caesArgSchemes = []*caes.Scheme{}
 	for _, as := range m.Argument_schemes {
 		id := as.Id
+		if len(as.Roles) > len(as.Premises) {
+			return nil, fmt.Errorf(" *** Semantic Error: scheme %s has %d roles for %d premises\n", id, len(as.Roles), len(as.Premises))
+		}
 		s := caes.Scheme{Id: id, Metadata: as.Meta, Variables: as.Variables, Weight: as.caesWeight,
+			WeightSpec: as.Weight, Roles: normStringVec(as.Roles),
 			Premises: as.Premises, Assumptions: as.Assumptions, Exceptions: as.Exceptions,
 			Deletions: normStringVec(as.Deletions),
 			Guards:    normStringVec(as.Guards), Conclusions: normStringVec(as.Conclusions)}
@@ -260,20 +296,23 @@ func scanArgMapGraph(m *argMapGraph) (*argMapGraph, error) {
 	return m, nil
 }
 
-func labels2caes(ul *umLabel) map[string]caes.Label {
+func labels2caes(ul *umLabel) (map[string]caes.Label, error) {
 	ml := map[string]caes.Label{}
 	if ul != nil {
-		for _, in := range ul.In {
-			ml[in] = caes.In
-		}
-		for _, out := range ul.Out {
-			ml[out] = caes.Out
-		}
-		for _, undec := range ul.Undecided {
-			ml[undec] = caes.Undecided
+		for _, group := range []struct {
+			names []string
+			label caes.Label
+		}{{ul.In, caes.In}, {ul.Out, caes.Out}, {ul.Undecided, caes.Undecided}} {
+			for _, name := range group.names {
+				n := normString(name)
+				if old, exists := ml[n]; exists && old != group.label {
+					return nil, fmt.Errorf("conflicting expected labels normalize to %q", n)
+				}
+				ml[n] = group.label
+			}
 		}
 	}
-	return ml
+	return ml, nil
 }
 
 func caesArgMapGraph2caes(m *argMapGraph) (caesAg *caes.ArgGraph, err error) {
@@ -283,6 +322,7 @@ func caesArgMapGraph2caes(m *argMapGraph) (caesAg *caes.ArgGraph, err error) {
 	theory := caes.NewTheory()
 	theory.Language = m.Language
 	theory.WeighingFunctions = m.caesWeighingFunctions
+	theory.WeighingSpecs = m.Weighing_functions
 	theory.ArgSchemes = m.caesArgSchemes
 	theory.IssueSchemes = m.Issue_schemes
 
@@ -351,7 +391,19 @@ func caesArgMapGraph2caes(m *argMapGraph) (caesAg *caes.ArgGraph, err error) {
 	// Arguments
 	// first = true
 	caesAg.Arguments = map[string]*caes.Argument{}
+	// An argument with a scheme and parameters and nothing else is a request
+	// to instantiate the scheme (docs/contracts.md, contract 6): it is carried
+	// out at the end of the import, once the assumptions are in place.
+	type request struct {
+		id, scheme string
+		parameters []string
+	}
+	requests := []request{}
 	for yamlArg_Id, yamlArg_Val := range m.Arguments {
+		if yamlArg_Val.Scheme != "" && yamlArg_Val.Conclusion == "" && len(yamlArg_Val.umpremises) == 0 && yamlArg_Val.Undercutter == "" {
+			requests = append(requests, request{yamlArg_Id, yamlArg_Val.Scheme, normStringVec(yamlArg_Val.Parameters)})
+			continue
+		}
 		// fmt.Printf(" Argument2caes: %s\n", yamlArg_Id)
 		caesArg := &caes.Argument{Id: yamlArg_Id, Metadata: yamlArg_Val.Meta, Weight: yamlArg_Val.Weigth}
 		caesAg.Arguments[yamlArg_Id] = caesArg
@@ -435,6 +487,19 @@ func caesArgMapGraph2caes(m *argMapGraph) (caesAg *caes.ArgGraph, err error) {
 
 	}
 	// fmt.Printf("   ---  Arguments --- \n %v \n ------End Arguments --- \n", caesAg.Arguments)
+	// Statements called into question, and the assumptions that are defaults
+	// of an instantiated scheme rather than stipulations (contract 5)
+	caesAg.Questioned = normStringVec(m.Questioned)
+	stipulated := map[string]bool{}
+	for _, s := range collOfAssumptions {
+		stipulated[terms.Normalize(s)] = true
+	}
+	for _, d := range normStringVec(m.Defaults) {
+		collOfAssumptions = append(collOfAssumptions, d)
+		if !stipulated[terms.Normalize(d)] {
+			caesAg.Defaults[terms.Normalize(d)] = true
+		}
+	}
 	// Assumptions
 	caesAg.Assumptions = []string{}
 	for _, yamlAss := range collOfAssumptions {
@@ -490,6 +555,26 @@ func caesArgMapGraph2caes(m *argMapGraph) (caesAg *caes.ArgGraph, err error) {
 				}
 				return caesAg, errors.New(" *** Semantic Error: " + lbl_str + "- Label: " + lbl_Id + ", is not a Statement-ID\n")
 			}
+		}
+	}
+
+	// requests to instantiate a scheme (contract 6)
+	sort.Slice(requests, func(i, j int) bool { return requests[i].id < requests[j].id })
+	if len(requests) != 0 {
+		caesAg.Theory.InitSchemeIndex()
+	}
+	for _, r := range requests {
+		scheme, ok := collOfSchemes[r.scheme]
+		if !ok || caes.IsBasicScheme(scheme) {
+			return caesAg, errors.New(" *** Semantic Error: Scheme: " + r.scheme + ", from Argument: " + r.id + ", is not a scheme of the theory\n")
+		}
+		if len(r.parameters) != len(scheme.Variables) {
+			return caesAg, fmt.Errorf(" *** Semantic Error: Argument %s gives %d parameters, scheme %s declares %d\n", r.id, len(r.parameters), r.scheme, len(scheme.Variables))
+		}
+		n := len(caesAg.Arguments)
+		caesAg.InstantiateScheme(r.scheme, r.parameters)
+		if len(caesAg.Arguments) == n {
+			return caesAg, errors.New(" *** Semantic Error: Argument " + r.id + ": scheme " + r.scheme + " cannot be instantiated with these parameters\n")
 		}
 	}
 
@@ -784,7 +869,6 @@ func iface2preference(pref interface{}) (caes.WeighingFunction, []caes.PropertyO
 		return nil, nil,
 			errors.New("*** ERROR wrong type afer preference: '" + fmt.Sprintf("%v", pT) + "'\n")
 	}
-	return nil, nil, nil // dummy return
 }
 
 func iface2criteria(cr interface{}) (caes.WeighingFunction, *caes.Criteria, error) {
@@ -832,7 +916,6 @@ func iface2criteria(cr interface{}) (caes.WeighingFunction, *caes.Criteria, erro
 		return nil, nil,
 			errors.New("*** Error unknown type after criteria: '" + fmt.Sprintf("%v", subT) + "', expected keys-struct with keys 'hard:' and 'soft'\n")
 	}
-	return caes.CriteriaWeighingFunction(&c), &c, nil
 }
 
 func iface2soft(body interface{}, soft map[string]caes.SoftConstraint) (map[string]caes.SoftConstraint, error) {
@@ -925,12 +1008,12 @@ func iface2soft(body interface{}, soft map[string]caes.SoftConstraint) (map[stri
 					soft[key.(string)] = caes.SoftConstraint{Factor: factor, NormalizedValues: normValues} // set the NormelizesValues
 				default:
 					return soft,
-						errors.New("*** Error in criteria: soft: key expected factor: ... values: ...-list not '" + fmt.Sprintf("%v' (type=%T", value, valT) + ")\n")
+						errors.New("*** Error in criteria: soft: key expected factor: ... values: ...-list not '" + fmt.Sprintf("%v' (type=%v", value, valT) + ")\n")
 
 				}
 			default:
 				return soft,
-					errors.New("*** Error in criteria: soft: expected a string-key and not '" + fmt.Sprintf("%v' (type=%T", key, keyT) + ")\n")
+					errors.New("*** Error in criteria: soft: expected a string-key and not '" + fmt.Sprintf("%v' (type=%v", key, keyT) + ")\n")
 			}
 		}
 	default:
@@ -1048,6 +1131,9 @@ func iface2statement(value interface{}, yamlStats map[string]*caes.Statement) (m
 					errors.New("*** Error statemment name must be a string not '" + fmt.Sprintf("%v", st_key) + "'\n")
 			}
 			keyStr := normString(st_key.(string))
+			if _, exists := yamlStats[keyStr]; exists {
+				return nil, fmt.Errorf("statement keys normalize to the same formula %q", keyStr)
+			}
 			switch st_value.(type) {
 			case string:
 				yamlStats[keyStr] = &caes.Statement{
@@ -1070,6 +1156,8 @@ func iface2statement(value interface{}, yamlStats map[string]*caes.Statement) (m
 					return yamlStats, err
 				}
 				yamlStats[keyStr] = v
+			default:
+				return nil, fmt.Errorf("statement %q must have scalar text or a mapping, got %T", keyStr, st_value)
 			}
 		}
 	default:
@@ -1130,7 +1218,11 @@ func iface2xstatement(st_value interface{}, stat *caes.Statement) (*caes.Stateme
 				stat.Label = caes.Out
 			case "undecided":
 				stat.Label = caes.Undecided
+			default:
+				return nil, fmt.Errorf("statement %q has invalid label %q", stat.Id, iface2string(st_subvalue))
 			}
+		default:
+			return nil, fmt.Errorf("statement %q has unknown field %q", stat.Id, st_subkey)
 		}
 	}
 	return stat, nil
@@ -1397,53 +1489,29 @@ func iface2parameters(inArg interface{}) ([]string, error) {
 
 func iface2premises(inArg interface{}) ([]umPremis, error) {
 	var outArg []umPremis
-	switch inArg.(type) {
+	switch ps := inArg.(type) {
+	case nil:
+		return outArg, nil
 	case []interface{}:
-		// fmt.Printf(" [")
-		for idx, stat := range inArg.([]interface{}) {
-			switch stat.(type) {
-			case string:
-				umP := umPremis{stmt: normString(stat.(string))}
-				if outArg == nil {
-					outArg = []umPremis{umP}
-				} else {
-					outArg = append(outArg, umP)
-				}
-				if idx != 0 {
-					// fmt.Printf(", ")
-				}
-				// fmt.Printf("%s", stat.(string))
-
+		for idx, value := range ps {
+			stmt, ok := value.(string)
+			if !ok {
+				return nil, fmt.Errorf("premises[%d] must be a statement ID string, got %T; use a role-to-ID mapping for roles", idx, value)
 			}
+			outArg = append(outArg, umPremis{stmt: normString(stmt)})
 		}
-		// fmt.Printf("]")
 	case map[interface{}]interface{}:
-		// fmt.Printf("\n")
-		for key, val := range inArg.(map[interface{}]interface{}) {
-			premis := umPremis{}
-			valStr := ""
-			switch val.(type) {
-			case string:
-				valStr = val.(string)
-			default:
-				valStr = iface2string(val)
+		for key, value := range ps {
+			role, roleOK := key.(string)
+			stmt, stmtOK := value.(string)
+			if !roleOK || !stmtOK {
+				return nil, fmt.Errorf("premises must map role strings to statement ID strings, got %T: %T", key, value)
 			}
-			keyStr := ""
-			switch key.(type) {
-			case string:
-				keyStr = key.(string)
-			default:
-				keyStr = iface2string(key)
-			}
-			keyStr = strings.ToLower(keyStr)
-			premis.role = keyStr
-			premis.stmt = normString(valStr)
-			if outArg == nil {
-				outArg = []umPremis{premis}
-			} else {
-				outArg = append(outArg, premis)
-			}
+			outArg = append(outArg, umPremis{role: strings.ToLower(role), stmt: normString(stmt)})
 		}
+		sort.Slice(outArg, func(i, j int) bool { return outArg[i].role < outArg[j].role })
+	default:
+		return nil, fmt.Errorf("premises must be a list of statement ID strings or a role-to-ID mapping, got %T", inArg)
 	}
 	return outArg, nil
 }
@@ -1473,7 +1541,7 @@ func iface2references(reference interface{}, yamlRefs map[string]caes.Metadata) 
 
 func normString(src string) (scr2 string) {
 	// fmt.Printf(">%s<\n", src)
-	t, ok := terms.ReadString(src)
+	t, ok := terms.ReadFormula(src)
 	if ok {
 		return t.String()
 	}
@@ -1489,18 +1557,17 @@ func normStringVec(in []string) []string {
 
 // Export
 
-// mkYamlString renders a string as a YAML double-quoted scalar using JSON
-// escaping, which is valid YAML. Upstream wrapped strings in quotes without
-// escaping backslashes or newlines, so text such as `\(` (common in Kialo
-// markdown) produced files that could not be re-imported.
+// mkYamlString renders a valid UTF-8 string as a YAML double-quoted scalar.
+// Go's ASCII quoted form uses escapes accepted by YAML, including \x, \u
+// and \U. Quoting every non-ASCII rune also protects NEL from YAML 1.1 line
+// folding and keeps DEL/C1/noncharacters out of the literal source stream.
+// JSON escaping alone is insufficient for this YAML 1.1 parser.
+//
+// Invalid UTF-8 is replaced by U+FFFD first. Quoted as it is, each bad byte
+// would become \xNN, which YAML reads as the character U+00NN: "caf\xe9" would
+// come back as "café" with no sign that the input was damaged.
 func mkYamlString(str string) string {
-	var b bytes.Buffer
-	enc := json.NewEncoder(&b)
-	enc.SetEscapeHTML(false)
-	if err := enc.Encode(str); err != nil {
-		return strconv.Quote(str)
-	}
-	return strings.TrimRight(b.String(), "\n")
+	return strconv.QuoteToASCII(strings.ToValidUTF8(str, "\uFFFD"))
 }
 
 func writeMetaData(f io.Writer, sp1 string, sp2 string, md caes.Metadata) {
@@ -1572,9 +1639,9 @@ func writeWF(f io.Writer, key, name string, weight caes.WeighingFunction) {
 			fmt.Fprintf(f, "# %shard: [", sp4)
 			for ix, val := range c.HardConstraints {
 				if ix != 0 {
-					fmt.Fprintf(f, ", %v", val)
+					fmt.Fprintf(f, ", %d", val)
 				} else {
-					fmt.Fprintf(f, "%v", val)
+					fmt.Fprintf(f, "%d", val)
 				}
 			}
 			fmt.Fprintf(f, "]\n")
@@ -1622,10 +1689,14 @@ func writeWF(f io.Writer, key, name string, weight caes.WeighingFunction) {
 }
 
 func ExportWithReferences(f io.Writer, caesAg *caes.ArgGraph) {
+	importing.Lock()
+	defer importing.Unlock()
 	writeArgGraph1(false, f, caesAg)
 }
 
 func Export(f io.Writer, caesAg *caes.ArgGraph) {
+	importing.Lock()
+	defer importing.Unlock()
 	writeArgGraph1(true, f, caesAg)
 }
 
@@ -1718,10 +1789,32 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 			}
 		}
 	}
-	if caesAg.Assumptions != nil && len(caesAg.Assumptions) != 0 {
+	// The stipulated assumptions, the defaults of instantiated schemes and the
+	// questioned statements are written apart, so that each keeps its origin
+	// (docs/contracts.md, contract 5).
+	stipulated, defaults := []string{}, []string{}
+	for _, stat := range caesAg.Assumptions {
+		if caesAg.Defaults[terms.Normalize(stat)] {
+			defaults = append(defaults, stat)
+		} else {
+			stipulated = append(stipulated, stat)
+		}
+	}
+	for _, l := range []struct {
+		key   string
+		stats []string
+	}{{"questioned", caesAg.Questioned}, {"defaults", defaults}} {
+		if len(l.stats) != 0 {
+			fmt.Fprintf(f, "%s:\n", l.key)
+			for _, stat := range l.stats {
+				fmt.Fprintf(f, "%s- %s\n", sp1, mkYamlString(stat))
+			}
+		}
+	}
+	if len(stipulated) != 0 {
 		fmt.Fprintf(f, "assumptions:\n")
-		for _, stat := range caesAg.Assumptions {
-			fmt.Fprintf(f, "%s- %s\n", sp1, stat)
+		for _, stat := range stipulated {
+			fmt.Fprintf(f, "%s- %s\n", sp1, mkYamlString(stat))
 		}
 		/*		fmt.Fprintf(f, "assumptions: [")
 				first := true
@@ -1771,11 +1864,11 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 					if first == true {
 						// fmt.Fprintf(f, "%spremises: [%s", sp2, s)
 						fmt.Fprintf(f, "%spremises:\n", sp2)
-						fmt.Fprintf(f, "%s- %s\n", sp3, s)
+						fmt.Fprintf(f, "%s- %s\n", sp3, mkYamlString(s))
 						first = false
 					} else {
 						// fmt.Fprintf(f, ",%s", s)
-						fmt.Fprintf(f, "%s- %s\n", sp3, s)
+						fmt.Fprintf(f, "%s- %s\n", sp3, mkYamlString(s))
 					}
 				}
 			}
@@ -1783,7 +1876,7 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 				fmt.Fprintf(f, "]\n")
 			}*/
 			if ref_caesAg_Arg.Conclusion != nil {
-				fmt.Fprintf(f, "%sconclusion: %s\n", sp2, ref_caesAg_Arg.Conclusion.Id)
+				fmt.Fprintf(f, "%sconclusion: %s\n", sp2, mkYamlString(ref_caesAg_Arg.Conclusion.Id))
 			}
 			if ref_caesAg_Arg.Weight != 0.0 {
 				fmt.Fprintf(f, "%sweight: %4.2f\n", sp2, ref_caesAg_Arg.Weight)
@@ -1792,18 +1885,15 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 				fmt.Fprintf(f, "%sscheme: %s\n", sp2, ref_caesAg_Arg.Scheme.Id)
 			}
 			if ref_caesAg_Arg.Parameters != nil && len(ref_caesAg_Arg.Parameters) != 0 {
-				fmt.Fprintf(f, "%sparameters: ", sp2)
-				for idx, para := range ref_caesAg_Arg.Parameters {
-					if idx == 0 {
-						fmt.Fprintf(f, "[%s", para)
-					} else {
-						fmt.Fprintf(f, ", %s", para)
-					}
+				// one parameter per line, quoted where YAML needs it: a flow
+				// list split liable(acme,smith) at its comma (E-EXPORT)
+				fmt.Fprintf(f, "%sparameters:\n", sp2)
+				for _, para := range ref_caesAg_Arg.Parameters {
+					fmt.Fprintf(f, "%s- %s\n", sp3, mkYamlString(para))
 				}
-				fmt.Fprintf(f, "]\n")
 			}
 			if ref_caesAg_Arg.Undercutter != nil {
-				fmt.Fprintf(f, "%sundercutter: %s\n", sp2, ref_caesAg_Arg.Undercutter.Id)
+				fmt.Fprintf(f, "%sundercutter: %s\n", sp2, mkYamlString(ref_caesAg_Arg.Undercutter.Id))
 			}
 		}
 	}
@@ -1818,64 +1908,32 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 			writeKeyValue1(f, sp3, md_key, md_val)
 		}
 	}
+	// The theory: without it an exported graph whose arguments use schemes
+	// cannot be read back (issue E-EXPORT of tools/vv).
+	writeTheory(f, caesAg.Theory)
+
 	if caesAg.ExpectedLabeling != nil && len(caesAg.ExpectedLabeling) != 0 {
-		fmt.Fprintf(f, "labels:\n")
-		in := []string{}
-		out := []string{}
-		undec := []string{}
+		// under tests:, the key the importer reads (it was labels:, which
+		// the importer ignores; E-EXPORT)
+		fmt.Fprintf(f, "tests:\n")
+		byLabel := map[caes.Label][]string{}
 		for stat, lbl := range caesAg.ExpectedLabeling {
-			switch lbl {
-			case caes.Undecided:
-				undec = append(undec, stat)
-			case caes.In:
-				in = append(in, stat)
-			case caes.Out:
-				out = append(out, stat)
-			}
-
+			byLabel[lbl] = append(byLabel[lbl], stat)
 		}
-		if len(in) != 0 {
-			fmt.Fprintf(f, "%sin: ", sp2)
-			first := true
-			for _, stat := range in {
-				if !first {
-					fmt.Fprintf(f, ", %s", mkYamlString(stat))
-				} else {
-					fmt.Fprintf(f, "[%s", mkYamlString(stat))
-					first = false
-				}
+		for _, k := range []struct {
+			key string
+			lbl caes.Label
+		}{{"in", caes.In}, {"out", caes.Out}, {"undecided", caes.Undecided}} {
+			stats := byLabel[k.lbl]
+			if len(stats) == 0 {
+				continue
 			}
-			fmt.Fprintf(f, "]\n")
-		}
-
-		if len(out) != 0 {
-			fmt.Fprintf(f, "%sout: ", sp2)
-			first := true
-			for _, stat := range out {
-				if !first {
-					fmt.Fprintf(f, ", %s", mkYamlString(stat))
-				} else {
-					fmt.Fprintf(f, "[%s", mkYamlString(stat))
-					first = false
-				}
+			sort.Strings(stats)
+			fmt.Fprintf(f, "%s%s:\n", sp1, k.key)
+			for _, stat := range stats {
+				fmt.Fprintf(f, "%s- %s\n", sp2, mkYamlString(stat))
 			}
-			fmt.Fprintf(f, "]\n")
 		}
-
-		if len(undec) != 0 {
-			fmt.Fprintf(f, "%sundecided: ", sp2)
-			first := true
-			for _, stat := range undec {
-				if !first {
-					fmt.Fprintf(f, ", %s", mkYamlString(stat))
-				} else {
-					fmt.Fprintf(f, "[%s", mkYamlString(stat))
-					first = false
-				}
-			}
-			fmt.Fprintf(f, "]\n")
-		}
-
 	}
 
 	//	// Write out the theory, as a YAML comment, for debugging
@@ -1935,4 +1993,95 @@ func writeArgGraph1(noRefs bool, f io.Writer, caesAg *caes.ArgGraph) {
 	//		}
 	//	}
 
+}
+
+// writeTheory writes the language, the argument schemes and the issue schemes
+// of a theory, so that an exported graph whose arguments use schemes can be
+// imported again. A scheme's weighing function is not written: only the
+// default one survives a round trip so far.
+// writeSpec writes a value as it was read from YAML (a weight or a weighing
+// function) under a key, indented by sp.
+func writeSpec(f io.Writer, sp, key string, v interface{}) {
+	out, err := yaml.Marshal(v)
+	if err != nil {
+		return
+	}
+	text := strings.TrimRight(string(out), "\n")
+	switch v.(type) {
+	case map[interface{}]interface{}, map[string]interface{}, []interface{}:
+	default:
+		fmt.Fprintf(f, "%s%s: %s\n", sp, key, text)
+		return
+	}
+	fmt.Fprintf(f, "%s%s:\n", sp, key)
+	for _, line := range strings.Split(text, "\n") {
+		fmt.Fprintf(f, "%s%s%s\n", sp, spPlus, line)
+	}
+}
+
+func writeTheory(f io.Writer, t *caes.Theory) {
+	if t == nil {
+		return
+	}
+	list := func(sp, key string, l []string) {
+		if len(l) == 0 {
+			return
+		}
+		fmt.Fprintf(f, "%s%s:\n", sp, key)
+		for _, s := range l {
+			fmt.Fprintf(f, "%s%s- %s\n", sp, spPlus, mkYamlString(s))
+		}
+	}
+	if len(t.Language) > 0 {
+		keys := make([]string, 0, len(t.Language))
+		for k := range t.Language {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		fmt.Fprintf(f, "language:\n")
+		for _, k := range keys {
+			fmt.Fprintf(f, "%s%s: %s\n", sp1, mkYamlString(k), mkYamlString(t.Language[k]))
+		}
+	}
+	if len(t.WeighingSpecs) > 0 {
+		keys := make([]string, 0, len(t.WeighingSpecs))
+		for k := range t.WeighingSpecs {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		fmt.Fprintf(f, "weighing_functions:\n")
+		for _, k := range keys {
+			writeSpec(f, sp1, mkYamlString(k), t.WeighingSpecs[k])
+		}
+	}
+	if len(t.ArgSchemes) > 0 {
+		fmt.Fprintf(f, "argument_schemes:\n")
+		for _, s := range t.ArgSchemes {
+			fmt.Fprintf(f, "%s- id: %s\n", sp1, mkYamlString(s.Id))
+			in := sp1 + "  " // the keys of a list item align with "id"
+			writeMetaData(f, in, in+spPlus, s.Metadata)
+			list(in, "variables", s.Variables)
+			if s.WeightSpec != nil {
+				writeSpec(f, in, "weight", s.WeightSpec)
+			}
+			list(in, "roles", s.Roles)
+			list(in, "premises", s.Premises)
+			list(in, "assumptions", s.Assumptions)
+			list(in, "exceptions", s.Exceptions)
+			list(in, "deletions", s.Deletions)
+			list(in, "guards", s.Guards)
+			list(in, "conclusions", s.Conclusions)
+		}
+	}
+	if len(t.IssueSchemes) > 0 {
+		keys := make([]string, 0, len(t.IssueSchemes))
+		for k := range t.IssueSchemes {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		fmt.Fprintf(f, "issue_schemes:\n")
+		for _, k := range keys {
+			list(sp1, mkYamlString(k), []string(*t.IssueSchemes[k]))
+		}
+	}
 }

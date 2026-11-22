@@ -31,6 +31,9 @@ func TestCAES(t *testing.T) {
 	success := true
 	for _, fi := range files {
 		// fmt.Printf("filename: %s\n", examples+fi.Name())
+		if skipUnsupported(t, fi.Name()) {
+			continue
+		}
 		f, err := os.Open(examples + fi.Name())
 		checkErr(err)
 		if path.Ext(f.Name()) == ".yml" {

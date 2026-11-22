@@ -9,8 +9,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/carneades/carneades-4/src/common"
+	"github.com/carneades/carneades-4/src/engine/caes"
 )
 
 var inputFormats = []string{"caf", "yaml", "aif", "agxml", "lkif"}
@@ -42,6 +44,14 @@ Execute "carneades help [command]" for further information.
 `
 
 func main() {
+	// A panic is an internal failure (docs/contracts.md, contract 3): exit
+	// with its status, 6, not with the status 2 the Go runtime uses.
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Fprintf(os.Stderr, "carneades: internal failure: %v\n%s", r, debug.Stack())
+			os.Exit(caes.ExitStatus(caes.ErrInternal))
+		}
+	}()
 	if len(os.Args) == 1 {
 		fmt.Printf("%s\nversion: %s\nsource: %s\nblog: %s\nTry 'carneades help' for instructions.\n", common.Name, common.Version, common.Source, common.Blog)
 	} else {

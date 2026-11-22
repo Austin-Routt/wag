@@ -7,6 +7,9 @@
 // Import CAES argument graphs from Andreas Peldszus's XML
 // format for argument graphs, for use with his Arg-Microtexts corpus. See:
 // https://github.com/peldszus/arg-microtexts/blob/master/corpus/arggraph.dtd
+//
+// This is an experimental legacy converter, not a corpus-conformance adapter.
+// Import rejects structures outside its declared simple segmentation profile.
 
 // See also:
 // Andreas Peldszus and Manfred Stede. From argument diagrams to argumentation
@@ -20,6 +23,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"sort"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 )
@@ -46,13 +50,14 @@ type Edge struct {
 }
 
 type Arggraph struct {
-	Id      string  `xml:"id,attr"`
-	Stance  string  `xml:"stance,attr"`
-	TopicId string  `xml:"topic_id,attr"`
-	Edus    []Edu   `xml:"edu"`
-	Joints  []Joint `xml:"joint"`
-	Adus    []Adu   `xml:"adu"`
-	Edges   []Edge  `xml:"edge"`
+	XMLName xml.Name `xml:"arggraph"`
+	Id      string   `xml:"id,attr"`
+	Stance  string   `xml:"stance,attr"`
+	TopicId string   `xml:"topic_id,attr"`
+	Edus    []Edu    `xml:"edu"`
+	Joints  []Joint  `xml:"joint"`
+	Adus    []Adu    `xml:"adu"`
+	Edges   []Edge   `xml:"edge"`
 }
 
 // Convert to an Arggraph to a CAES argument graph
@@ -61,6 +66,7 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 	cag.Metadata["id"] = pag.Id
 	cag.Metadata["stance"] = pag.Stance
 	cag.Metadata["topic_id"] = pag.TopicId
+	cag.Metadata["import_profile"] = "experimental AGXML: one EDU per ADU; not corpus-conformance certified"
 	edus := make(map[string][]string) // elementary discourse units
 	stmts := make(map[string]*caes.Statement)
 	args := make(map[string]*caes.Argument)
@@ -102,7 +108,8 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 				cid = "¬" + e.Trg
 				if _, ok := stmts[cid]; !ok {
 					// create the contrary statement for rebuttals
-					stmts[cid] = &caes.Statement{Id: cid}
+					stmts[cid] = caes.NewStatement()
+					stmts[cid].Id = cid
 					// create the issue
 					issueCounter++
 					issueId := fmt.Sprintf("i%v", issueCounter)
@@ -118,9 +125,10 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 				}
 			}
 			c := stmts[cid]
-			arg := caes.Argument{Id: e.Id, Premises: ps, Conclusion: c}
-			c.Args = append(c.Args, &arg)
-			args[e.Id] = &arg
+			arg := caes.NewArgument()
+			arg.Id, arg.Premises, arg.Conclusion = e.Id, ps, c
+			c.Args = append(c.Args, arg)
+			args[e.Id] = arg
 			if e.Type == "exa" {
 				arg.Metadata["note"] = "support by example"
 			}
@@ -128,7 +136,8 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 			cid := "¬app(" + e.Trg + ")"
 			if _, ok := stmts[cid]; !ok {
 				// create the undercutter statement
-				stmts[cid] = &caes.Statement{Id: cid}
+				stmts[cid] = caes.NewStatement()
+				stmts[cid].Id, stmts[cid].Text = cid, cid
 			}
 			c := stmts[cid]
 			s := stmts[e.Src]
@@ -166,6 +175,9 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 			assums[s.Id] = false
 		}
 		cag.Statements[s.Id] = s
+		if contrary := stmts["¬"+s.Id]; contrary != nil {
+			contrary.Text = "¬" + s.Text
+		}
 	}
 	for _, issue := range issues {
 		cag.Issues[issue.Id] = issue
@@ -175,14 +187,16 @@ func (pag *Arggraph) Caes() *caes.ArgGraph {
 	}
 	for _, arg := range args {
 		cag.Arguments[arg.Id] = arg
-		arg.Conclusion.Args = append(arg.Conclusion.Args, arg)
 		if s, ok := stmts["¬app("+arg.Id+")"]; ok {
 			arg.Undercutter = s
 		}
 	}
-	for k, _ := range assums {
-		cag.Assumptions = append(cag.Assumptions, k)
+	for k, assumed := range assums {
+		if assumed {
+			cag.Assumptions = append(cag.Assumptions, k)
+		}
 	}
+	sort.Strings(cag.Assumptions)
 	return cag
 }
 
@@ -194,6 +208,9 @@ func Import(inFile io.Reader) (*caes.ArgGraph, error) {
 	v := Arggraph{}
 	err = xml.Unmarshal(data, &v)
 	if err != nil {
+		return nil, err
+	}
+	if err := v.validateProfile(); err != nil {
 		return nil, err
 	}
 	ag := v.Caes()

@@ -10,6 +10,8 @@
 // For further information, see:
 // https://github.com/carneades/carneades-3/blob/master/schemas/CAF.rnc
 // http://www.policy-impact.eu/
+// This is an experimental legacy converter, not a complete CAF conformance
+// implementation. Import checks its supported shape before conversion.
 
 package caf
 
@@ -20,17 +22,20 @@ import (
 	"io"
 	"io/ioutil"
 	"regexp"
+	"strings"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 )
 
 type CAF struct {
-	XMLName    xml.Name   `xml:"caf"`
-	Version    string     `xml:"version,attr"`
-	Metadata   Metadata   `xml:"metadata"`
-	Statements Statements `xml:"statements"`
-	Arguments  Arguments  `xml:"arguments"`
-	References References `xml:"references"`
+	XMLName      xml.Name   `xml:"caf"`
+	Version      string     `xml:"version,attr"`
+	Metadata     Metadata   `xml:"metadata"`
+	Statements   Statements `xml:"statements"`
+	Arguments    Arguments  `xml:"arguments"`
+	References   References `xml:"references"`
+	Unknown      []xml.Name `xml:",any"`
+	UnknownAttrs []xml.Attr `xml:",any,attr"`
 }
 
 type Metadata struct {
@@ -127,15 +132,17 @@ type Statements struct {
 }
 
 type Statement struct {
-	XMLName  xml.Name     `xml:"statement"`
-	Id       string       `xml:"id,attr"`
-	Weight   float64      `xml:"weight,attr"`
-	Value    float64      `xml:"value,attr"`
-	Standard string       `xml:"standard,attr"`
-	Atom     string       `xml:"atom,attr"`
-	Main     bool         `xml:"main,attr"`
-	Metadata Metadata     `xml:"metadata"`
-	Texts    Descriptions `xml:"descriptions"`
+	XMLName      xml.Name     `xml:"statement"`
+	Id           string       `xml:"id,attr"`
+	Weight       float64      `xml:"weight,attr"`
+	Value        float64      `xml:"value,attr"`
+	Standard     string       `xml:"standard,attr"`
+	Atom         string       `xml:"atom,attr"`
+	Main         bool         `xml:"main,attr"`
+	Metadata     Metadata     `xml:"metadata"`
+	Texts        Descriptions `xml:"descriptions"`
+	Unknown      []xml.Name   `xml:",any"`
+	UnknownAttrs []xml.Attr   `xml:",any,attr"`
 }
 
 type Arguments struct {
@@ -144,16 +151,18 @@ type Arguments struct {
 }
 
 type Argument struct {
-	XMLName    xml.Name   `xml:"argument"`
-	Id         string     `xml:"id,attr"`
-	Strict     bool       `xml:"strict,attr"`
-	Pro        bool       `xml:"pro,attr"`
-	Scheme     string     `xml:"scheme,attr"`
-	Weight     float64    `xml:"weight,attr"`
-	Value      float64    `xml:"value,attr"`
-	Metadata   Metadata   `xml:"metadata"`
-	Conclusion Conclusion `xml:"conclusion"`
-	Premises   Premises   `xml:"premises"`
+	XMLName      xml.Name   `xml:"argument"`
+	Id           string     `xml:"id,attr"`
+	Strict       bool       `xml:"strict,attr"`
+	Pro          bool       `xml:"pro,attr"`
+	Scheme       string     `xml:"scheme,attr"`
+	Weight       float64    `xml:"weight,attr"`
+	Value        float64    `xml:"value,attr"`
+	Metadata     Metadata   `xml:"metadata"`
+	Conclusion   Conclusion `xml:"conclusion"`
+	Premises     Premises   `xml:"premises"`
+	Unknown      []xml.Name `xml:",any"`
+	UnknownAttrs []xml.Attr `xml:",any,attr"`
 }
 
 type Premises struct {
@@ -162,11 +171,13 @@ type Premises struct {
 }
 
 type Premise struct {
-	XMLName   xml.Name `xml:"premise"`
-	Positive  bool     `xml:"positive,attr"`
-	Role      string   `xml:"role,attr"`
-	Implicit  string   `xml:"implicit,attr"`
-	Statement string   `xml:"statement,attr"` // Id
+	XMLName      xml.Name   `xml:"premise"`
+	Positive     bool       `xml:"positive,attr"`
+	Role         string     `xml:"role,attr"`
+	Implicit     string     `xml:"implicit,attr"`
+	Statement    string     `xml:"statement,attr"` // Id
+	Unknown      []xml.Name `xml:",any"`
+	UnknownAttrs []xml.Attr `xml:",any,attr"`
 }
 
 type Conclusion struct {
@@ -185,6 +196,7 @@ var undercutRegExp = regexp.MustCompile(`^\((undercut|valid)[[:blank:]]+([^\)]*)
 func (caf *CAF) Caes() *caes.ArgGraph {
 	cag := caes.NewArgGraph()
 	cag.Metadata = caf.Metadata.toMap()
+	cag.Metadata["import_profile"] = "experimental CAF 1.3: source-scheme names are provenance; not conformance certified"
 	for _, md := range caf.References.Content {
 		cag.References[md.Key] = md.toMap()
 	}
@@ -195,7 +207,6 @@ func (caf *CAF) Caes() *caes.ArgGraph {
 	uids := make(map[string]string) // from URIs to shorter ids
 	issues := make(map[string]*caes.Issue)
 	issueCounter := 0
-	schemes := make(map[string]*caes.Scheme)
 
 	// hasComplement: returns true if the statement with the given id
 	// has a complement in the argument graph
@@ -212,6 +223,9 @@ func (caf *CAF) Caes() *caes.ArgGraph {
 	// with the given id, creating the statement for the complement
 	// if it does not already exist
 	complement := func(stmtId string) string {
+		if strings.HasPrefix(stmtId, "¬") {
+			return strings.TrimPrefix(stmtId, "¬")
+		}
 		negId := "¬" + stmtId
 		if _, ok := stmts[negId]; ok {
 			return negId
@@ -314,12 +328,8 @@ func (caf *CAF) Caes() *caes.ArgGraph {
 		}
 		uids[a.Id] = arg.Id
 		arg.Metadata = a.Metadata.toMap()
-		if s := schemes[a.Scheme]; s != nil {
-			arg.Scheme = s
-		} else {
-			s := caes.Scheme{Id: a.Scheme, Weight: caes.LinkedWeighingFunction}
-			schemes[a.Scheme] = &s
-		}
+		arg.Scheme = caes.BasicSchemes["linked"]
+		arg.Metadata["caf_scheme"] = a.Scheme
 		arg.Weight = a.Weight
 		// a.Value ignored, since arguments are no longer labelled
 
@@ -338,7 +348,7 @@ func (caf *CAF) Caes() *caes.ArgGraph {
 			// the conclusion undercuts some argument
 			var arg2 *caes.Argument
 			if uids[uid] == "" {
-				arg2 := caes.NewArgument()
+				arg2 = caes.NewArgument()
 				aid++
 				arg2.Id = fmt.Sprintf("a%v", aid)
 				args[arg2.Id] = arg2
@@ -403,6 +413,9 @@ func Import(inFile io.Reader) (*caes.ArgGraph, error) {
 	caf := CAF{}
 	err = xml.Unmarshal(data, &caf)
 	if err != nil {
+		return nil, err
+	}
+	if err := caf.validateProfile(); err != nil {
 		return nil, err
 	}
 	return caf.Caes(), nil

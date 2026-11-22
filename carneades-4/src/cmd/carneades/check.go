@@ -16,7 +16,7 @@ import (
 )
 
 const helpCheck = `
-usage: carneades check [-f input-format] [input-file]
+usage: carneades check [-f input-format] [-experimental-import] [input-file]
 
 Checks an argument graph for syntactic and semantic errors
 and prints out error messages to the standard output.
@@ -24,7 +24,14 @@ and prints out error messages to the standard output.
 If no input-file is specified, input is read from stdin. 
 
 The -f flag ("from") specifies the format of the input file: Currently 
-yaml, aif, agxml and lkif are supported. (default: yaml)
+yaml and a restricted aif profile are supported. (default: yaml)
+The legacy caf, agxml and lkif converters require -experimental-import.
+That opt-in does not certify conversion fidelity or skip input validation.
+The AIF profile accepts I/RA/binary-CA structures only; CA becomes symmetric
+incompatibility and RA becomes a linked argument. Scheme names are provenance,
+not executable scheme-library bindings. Dialogical nodes are refused.
+I nodes without an incoming RA and without a CA issue are stipulated; this
+conversion policy does not establish their truth or general AIFdb conformance.
 
 The "yaml" format is the native format of Carneades 4.x.  YAML is a schemeless
 data interchange format. See http://yaml.org/ for general information about
@@ -65,6 +72,7 @@ https://github.com/carneades/carneades-2
 func checkCmd() {
 	eval := flag.NewFlagSet("eval", flag.ContinueOnError)
 	fromFlag := eval.String("f", "yaml", "the format of the source file")
+	experimentalFlag := eval.Bool("experimental-import", false, "opt in to a legacy converter; does not certify conversion fidelity")
 
 	var inFile *os.File
 	var outFile *os.File = os.Stderr
@@ -74,8 +82,8 @@ func checkCmd() {
 		log.Fatal(err)
 	}
 
-	if !contains(inputFormats, *fromFlag) {
-		log.Fatal(fmt.Errorf("unsupported input format: %s\n", *fromFlag))
+	if err := checkImportProfile(*fromFlag, *experimentalFlag); err != nil {
+		failImport(err)
 		return
 	}
 
@@ -99,35 +107,35 @@ func checkCmd() {
 		ag, err = yaml.Import(inFile)
 		inFile.Close()
 		if err != nil {
-			log.Fatal(err)
+			failImport(err)
 			return
 		}
 	case "agxml":
 		ag, err = agxml.Import(inFile)
 		inFile.Close()
 		if err != nil {
-			log.Fatal(err)
+			failImport(err)
 			return
 		}
 	case "aif":
 		ag, err = aif.Import(inFile)
 		inFile.Close()
 		if err != nil {
-			log.Fatal(err)
+			failImport(err)
 			return
 		}
 	case "lkif":
 		ag, err = lkif.Import(inFile)
 		inFile.Close()
 		if err != nil {
-			log.Fatal(err)
+			failImport(err)
 			return
 		}
 	case "caf":
 		ag, err = caf.Import(inFile)
 		inFile.Close()
 		if err != nil {
-			log.Fatal(err)
+			failImport(err)
 			return
 		}
 	default:
@@ -147,6 +155,16 @@ func checkCmd() {
 		}
 	}
 	if len(problems) > 0 {
-		os.Exit(1) // fork: upstream exited 0 even when problems were listed
+		// invalid input (docs/contracts.md, contract 3)
+		os.Exit(caes.ExitStatus(caes.ErrInvalidInput))
+	}
+	if err := caes.Unsupported(ag.Theory); err != nil {
+		// outside the supported profile (docs/contracts.md, contract 1)
+		fmt.Fprintf(outFile, "%v\n", err)
+		os.Exit(caes.ExitStatus(err))
+	}
+	if err := ag.CheckContext(); err != nil {
+		fmt.Fprintf(outFile, "%v\n", err)
+		os.Exit(caes.ExitStatus(err))
 	}
 }

@@ -106,7 +106,8 @@ func (a *Adapter) AssumptionCount() int {
 // assumptions (e.g. possible(A) of practical reasoning); the game retracts them
 // and presumes them instead, so that critical questions can undermine them.
 // Carneades rebuilds its internal assumption map from this list at the start of
-// every labelling, so truncating the list is sufficient.
+// every labelling. The matching default origins must be removed as well;
+// questioned history is retained.
 func (a *Adapter) RetractAssumptionsSince(n int) []string {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -115,5 +116,25 @@ func (a *Adapter) RetractAssumptionsSince(n int) []string {
 	}
 	out := append([]string{}, a.Graph.Assumptions[n:]...)
 	a.Graph.Assumptions = a.Graph.Assumptions[:n]
+	a.forgetRetractedDefaults(out)
 	return out
+}
+
+// forgetRetractedDefaults removes the origin markers of withdrawn assumptions.
+// A duplicate still present in the assumption list retains its origin. IDs are
+// normalized so API-created aliases have the same behavior as imported facts.
+// IMPORTANT: Caller must hold a.mu.
+func (a *Adapter) forgetRetractedDefaults(ids []string) {
+	withdrawn := make(map[string]bool, len(ids))
+	for _, id := range ids {
+		withdrawn[terms.Normalize(id)] = true
+	}
+	for _, id := range a.Graph.Assumptions {
+		delete(withdrawn, terms.Normalize(id))
+	}
+	for id := range a.Graph.Defaults {
+		if withdrawn[terms.Normalize(id)] {
+			delete(a.Graph.Defaults, id)
+		}
+	}
 }

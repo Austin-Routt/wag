@@ -204,6 +204,7 @@ func (a *Adapter) unassume(s *caes.Statement) {
 		}
 	}
 	a.Graph.Assumptions = kept
+	a.forgetRetractedDefaults([]string{id})
 }
 
 // AddFreeArgumentOn adds an argument of the user-defined scheme for the

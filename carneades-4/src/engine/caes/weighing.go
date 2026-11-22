@@ -101,7 +101,7 @@ func ConvergentWeighingFunction(arg *Argument, l Labelling) float64 {
 func CumulativeWeighingFunction(arg *Argument, l Labelling) float64 {
 	n := len(arg.Premises)
 	if n == 0 {
-		return 1.0 // vacuous, as in the linked function; upstream divided 0 by 0 (NaN)
+		return 1.0 // vacuous support, consistent with the linked weighing function
 	}
 	m := 0
 	for _, p := range arg.Premises {

@@ -25,6 +25,10 @@ jobs:
         run: go vet ./...
       - name: go test
         run: go test -count=1 ./...
+      - name: The vendored engine's own tests (GoCHR, carneades-4 and WAG's fork regressions)
+        # Only these catch a lost engine fix; WAG's suite passes without them.
+        working-directory: .
+        run: bash tools/engine-tests.sh
       - name: Lint the game's data
         run: go run ./cmd/wag-cli --lint
       - name: The catalogue and the generated views are what the generator makes

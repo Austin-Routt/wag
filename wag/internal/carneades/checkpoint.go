@@ -7,7 +7,7 @@ import (
 // Checkpoint is a restorable record of the argument graph's structure: which
 // statements, arguments and issues exist, every statement's argument list,
 // issue, undercutter flag and text, every argument's undercutter, every
-// issue's positions, and the assumption list.
+// issue's positions, and the assumption list, default provenance and questioned statements.
 //
 // Review defect #5: a move rejected as cyclic was undone by RemoveArguments
 // only, which left behind the statements, issues, assumptions and undercutter
@@ -17,6 +17,8 @@ type Checkpoint struct {
 	args        map[string]*caes.Statement // argument ID -> its undercutter at checkpoint time
 	issues      map[string][]*caes.Statement
 	assumptions []string
+	defaults    map[string]bool
+	questioned  []string
 }
 
 type stmtState struct {
@@ -37,6 +39,11 @@ func (a *Adapter) Checkpoint() *Checkpoint {
 		args:        make(map[string]*caes.Statement, len(a.Graph.Arguments)),
 		issues:      make(map[string][]*caes.Statement, len(a.Graph.Issues)),
 		assumptions: append([]string{}, a.Graph.Assumptions...),
+		defaults:    make(map[string]bool, len(a.Graph.Defaults)),
+		questioned:  append([]string{}, a.Graph.Questioned...),
+	}
+	for id, isDefault := range a.Graph.Defaults {
+		cp.defaults[id] = isDefault
 	}
 	for id, s := range a.Graph.Statements {
 		cp.stmts[id] = stmtState{stmt: s, args: append([]*caes.Argument{}, s.Args...), issue: s.Issue,
@@ -94,4 +101,9 @@ func (a *Adapter) Restore(cp *Checkpoint) {
 		is.Positions = append([]*caes.Statement{}, pos...)
 	}
 	a.Graph.Assumptions = append([]string{}, cp.assumptions...)
+	a.Graph.Defaults = make(map[string]bool, len(cp.defaults))
+	for id, isDefault := range cp.defaults {
+		a.Graph.Defaults[id] = isDefault
+	}
+	a.Graph.Questioned = append([]string{}, cp.questioned...)
 }

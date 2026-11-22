@@ -152,8 +152,8 @@ func (args1 ArgSet) Subset(args2 ArgSet) bool {
 	return true
 }
 
-// EqualArgSetSlices: returns true iff for every ArgSet in l1 there is an
-// equal ArgSet in l2
+// EqualArgSetSlices compares extension families as sets: order and repeated
+// copies of the same extension do not matter, but missing or extra extensions do.
 func EqualArgSetSlices(l1, l2 []ArgSet) bool {
 	member := func(S1 ArgSet, l []ArgSet) bool {
 		for _, S2 := range l {
@@ -165,6 +165,11 @@ func EqualArgSetSlices(l1, l2 []ArgSet) bool {
 	}
 	for _, S1 := range l1 {
 		if !member(S1, l2) {
+			return false
+		}
+	}
+	for _, S2 := range l2 {
+		if !member(S2, l1) {
 			return false
 		}
 	}

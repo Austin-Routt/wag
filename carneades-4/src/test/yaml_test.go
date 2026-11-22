@@ -26,6 +26,9 @@ func TestYaml(t *testing.T) {
 	files, err := d.Readdir(0)
 	check(t, err)
 	for _, fi := range files {
+		if skipUnsupported(t, fi.Name()) {
+			continue
+		}
 		file, err := os.Open(yamlDir + fi.Name())
 		check(t, err)
 		if path.Ext(file.Name()) == ".yml" {
@@ -51,9 +54,9 @@ func TestYaml(t *testing.T) {
 
 			err = checkLabeling(l, ag.Statements, ag.ExpectedLabeling)
 			if err != nil {
-				// fork: upstream only printed this, so a wrong labelling never failed the test
-				t.Errorf("%s: expected labelling not met: %s", fi.Name(), err.Error())
+				t.Errorf("%s: %v", fi.Name(), err)
 			}
+			expected := ag.ExpectedLabeling
 			//	fmt.Printf("---------- Write ArgGraph 2 Yaml: %s ----------\n", filename1)
 			//	yaml.Export(os.Stdout, ag)
 			//	fmt.Printf("---------- End: Write ArgGraph 2 Yaml: %s ----------\n", filename1)
@@ -77,6 +80,10 @@ func TestYaml(t *testing.T) {
 			// fmt.Printf(" Import-Assumptions: %v \n", ag.Assumptions)
 			fmt.Printf(" -  -  -  -  -  -  End Import %s \n", yamlTmp+filename2)
 			check(t, err)
+			if err := ag.Infer(); err != nil {
+				t.Errorf("%s after export and import: Infer: %v", fi.Name(), err)
+			}
+			checkRoundTrip(t, fi.Name(), checkLabeling(ag.GroundedLabelling(), ag.Statements, expected))
 			// fmt.Printf("---------- WriteArgGraph 02  %s ----------\n", filename2)
 			// yaml.ExportWithReferences(os.Stdout, ag)
 			// fmt.Printf("---------- End: WriteArgGraph 02 %s ----------\n", filename2)

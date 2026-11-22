@@ -78,11 +78,11 @@ func TestReinstatement(t *testing.T) {
 }
 
 func TestOddLoop(t *testing.T) {
-	args := []dung.Arg{a1, a2, a2}
+	args := []dung.Arg{a1, a2, a3}
 	atks := make(map[dung.Arg][]dung.Arg)
 	atks[a1] = []dung.Arg{a2}
-	atks[a2] = []dung.Arg{a2}
-	atks[a2] = []dung.Arg{a1}
+	atks[a2] = []dung.Arg{a3}
+	atks[a3] = []dung.Arg{a1}
 	af := dung.NewAF(args, atks)
 	l := af.GroundedExtension()
 	if l.Contains(a1) {
@@ -91,8 +91,11 @@ func TestOddLoop(t *testing.T) {
 	if l.Contains(a2) {
 		t.Errorf("expected 2 to be out")
 	}
-	if l.Contains(a2) {
+	if l.Contains(a3) {
 		t.Errorf("expected 3 to be out")
+	}
+	if len(af.StableExtensions()) != 0 {
+		t.Error("an odd directed attack cycle has no stable extension")
 	}
 }
 

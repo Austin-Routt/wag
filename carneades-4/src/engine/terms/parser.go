@@ -35,14 +35,20 @@ func ReadString(src string) (result Term, ok bool) {
 	// var s *sc.Scanner
 	// Initialize the scanner.
 	s.Init(strings.NewReader(src))
-	s.Error = Err
-
+	hadError := false
+	s.Error = func(s *sc.Scanner, message string) {
+		if message != "illegal char literal" && message != "invalid char literal" {
+			hadError = true
+			Err(s, message)
+		}
+	}
 	result, _, ok = readBIConstraint(&s)
+	ok = ok && !hadError
 	return
 }
 
 func Err(s *sc.Scanner, str string) {
-	if str != "illegal char literal" {
+	if str != "illegal char literal" && str != "invalid char literal" {
 		fmt.Fprintln(os.Stderr, "*** Parse Error before[", s.Pos(), "]:", str)
 	}
 }
@@ -113,7 +119,7 @@ func Assignexpr(s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 			return
 		}
 		if t.Type() != VariableType {
-			Err(s, fmt.Sprintf(" A Variable, not %s, exspected on the left site of %s", t, op))
+			s.Error(s, fmt.Sprintf(" A Variable, not %s, exspected on the left site of %s", t, op))
 			return t, tok, false
 		}
 		t1 := t
@@ -505,7 +511,7 @@ func factor(s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 				c := n[0]
 				ok = true
 				if c < 'A' || c > 'Z' {
-					Err(s, fmt.Sprintf("expected variable in [-list after '|' not '%s'", n))
+					s.Error(s, fmt.Sprintf("expected variable in [-list after '|' not '%s'", n))
 					ok = false
 				}
 				v := Variable{Name: n, index: big.NewInt(0)}
@@ -515,17 +521,17 @@ func factor(s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 				if tok == ']' {
 					return t, s.Scan(), ok
 				} else {
-					Err(s, fmt.Sprintf("missing closed ']' after '[ ... | %s", n))
+					s.Error(s, fmt.Sprintf("missing closed ']' after '[ ... | %s", n))
 					return t, tok, false
 				}
 			} else {
-				Err(s, fmt.Sprintf("expected variable in [-list after '|' not '%s'", Tok2str(tok)))
+				s.Error(s, fmt.Sprintf("expected variable in [-list after '|' not '%s'", Tok2str(tok)))
 				return t, tok, false
 
 			}
 		}
 		if tok != ']' {
-			Err(s, fmt.Sprintf("missing closed ']' for the open '[' at position %s", pos))
+			s.Error(s, fmt.Sprintf("missing closed ']' for the open '[' at position %s", pos))
 			return t, tok, false
 		}
 		return t, s.Scan(), true
@@ -539,7 +545,7 @@ func factor(s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 			return
 		}
 		if tok != ')' {
-			Err(s, fmt.Sprintf("missing closed ')' for the open '(' at position %s", pos))
+			s.Error(s, fmt.Sprintf("missing closed ')' for the open '(' at position %s", pos))
 			return t, tok, false
 		}
 		tok = s.Scan()
@@ -576,17 +582,17 @@ func factor(s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 		}
 	// case sc.Comment:
 	case sc.EOF:
-		Err(s, "EOF missing term")
+		s.Error(s, "EOF missing term")
 		return Atom("nil"), tok, false
 	default:
-		Err(s, fmt.Sprintf("unexpected character '%c', expect <variable>, <name>, <constant>, '(' or '['", tok))
+		s.Error(s, fmt.Sprintf("unexpected character '%c', expect <variable>, <name>, <constant>, '(' or '['", tok))
 		t = Atom("nil")
 		return t, tok, false
 	}
-	return t, tok, true
+	return t, tok, ok
 }
 
-// <bi_0 name> | <name>'('')' | <name> '(' <expression> [',' <expression>]0..n ')'
+// <bi_0 name> | <name>'(”)' | <name> '(' <expression> [',' <expression>]0..n ')'
 func Factor_name(name string, s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bool) {
 	if trace {
 		fmt.Printf("--> factor_name : %s, '%s'\n", name, Tok2str(tok1))
@@ -617,7 +623,7 @@ func Factor_name(name string, s *sc.Scanner, tok1 rune) (t Term, tok rune, ok bo
 	t = Compound{Functor: name, Args: args}
 
 	if tok != ')' {
-		Err(s, fmt.Sprintf("missing closed ')' for the open '(' at position %s", pos))
+		s.Error(s, fmt.Sprintf("missing closed ')' for the open '(' at position %s", pos))
 		return t, tok, false
 	}
 	return t, s.Scan(), true
@@ -657,15 +663,11 @@ func sString(s *sc.Scanner) (Term, rune, bool) {
 	if trace {
 		fmt.Printf("--> sString : '%s'\n", s.TokenText())
 	}
-	var (
-		str string
-		err error
-	)
-	_, err = fmt.Sscan(s.TokenText(), &str)
-	if err == nil {
-		return String(str), s.Scan(), true
-	}
-	return String(str), s.Scan(), false
+	// The string keeps its quotes, as in GoCHR's reader, so that a term
+	// prints back as it was written and means the same to both readers.
+	// fmt.Sscan stopped at the first space: "it rains" was read as "it
+	// (E-TERMS).
+	return String(s.TokenText()), s.Scan(), true
 }
 
 func sChar(s *sc.Scanner) (Term, rune, bool) {

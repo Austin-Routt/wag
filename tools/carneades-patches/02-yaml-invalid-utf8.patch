@@ -1,0 +1,57 @@
+diff -ruN a/third_party/carneades-4/src/engine/caes/encoding/yaml/invalid_utf8_test.go third_party/carneades-4/src/engine/caes/encoding/yaml/invalid_utf8_test.go
+--- a/third_party/carneades-4/src/engine/caes/encoding/yaml/invalid_utf8_test.go	1970-01-01 00:00:00.000000000 +0000
++++ b/third_party/carneades-4/src/engine/caes/encoding/yaml/invalid_utf8_test.go	2026-11-22 20:07:36.679039928 +0000
+@@ -0,0 +1,36 @@
++package yaml_test
++
++import (
++	"bytes"
++	"testing"
++
++	"github.com/carneades/carneades-4/src/engine/caes"
++	caesyaml "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
++)
++
++// Invalid UTF-8 in a statement's text or a string value of the metadata comes
++// back as U+FFFD, never as a different valid character.
++func TestYAMLInvalidUTF8BecomesReplacementCharacter(t *testing.T) {
++	for _, tc := range []struct{ in, want string }{
++		{"a\xffb", "a\uFFFDb"},
++		{"caf\xe9", "caf\uFFFD"},
++		{"\xc3(", "\uFFFD("},
++		{"ok \u00e9", "ok \u00e9"},
++	} {
++		g := caes.NewArgGraph()
++		g.Metadata["title"] = tc.in
++		g.Statements["s"] = &caes.Statement{Id: "s", Text: tc.in, Label: caes.Undecided}
++		var out bytes.Buffer
++		caesyaml.Export(&out, g)
++		got, err := caesyaml.Import(bytes.NewReader(out.Bytes()))
++		if err != nil {
++			t.Fatalf("%q: reimport: %v", tc.in, err)
++		}
++		if s := got.Statements["s"]; s == nil || s.Text != tc.want {
++			t.Errorf("%q: statement got %#v, want text %q", tc.in, s, tc.want)
++		}
++		if v, _ := got.Metadata["title"].(string); v != tc.want {
++			t.Errorf("%q: metadata got %q, want %q", tc.in, v, tc.want)
++		}
++	}
++}
+diff -ruN a/third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go
+--- a/third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go	2026-11-22 20:07:36.657725339 +0000
++++ b/third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go	2026-11-22 20:07:36.678673158 +0000
+@@ -1562,8 +1562,12 @@
+ // and \U. Quoting every non-ASCII rune also protects NEL from YAML 1.1 line
+ // folding and keeps DEL/C1/noncharacters out of the literal source stream.
+ // JSON escaping alone is insufficient for this YAML 1.1 parser.
++//
++// Invalid UTF-8 is replaced by U+FFFD first. Quoted as it is, each bad byte
++// would become \xNN, which YAML reads as the character U+00NN: "caf\xe9" would
++// come back as "café" with no sign that the input was damaged.
+ func mkYamlString(str string) string {
+-	return strconv.QuoteToASCII(str)
++	return strconv.QuoteToASCII(strings.ToValidUTF8(str, "\uFFFD"))
+ }
+ 
+ func writeMetaData(f io.Writer, sp1 string, sp2 string, md caes.Metadata) {

@@ -28,6 +28,8 @@ If no input-file is specified, input is read from stdin.
 
 The -f flag ("from") specifies the format of the input file. Currently only 
 the Trivial Graph Format (tgf) is supported.  (default: tgf)
+The profile requires declared unique node IDs, a # separator and two endpoint
+IDs per attack line. Edge labels are refused; support edges are not attacks.
 
 The -p flag specifies the decision problem to be solved, which must be one
 of DC, DS, EE or SE, where
@@ -41,7 +43,7 @@ of DC, DS, EE or SE, where
 The default problem is EE, enumerating all extensions.
 
 The -s flag specifies the Dung semantics to use, which must be one of
-GR, SO, PR, ST, where
+GR, CO, PR, ST, where
 
 - GR: Grounded semantics
 - CO: Complete semantics

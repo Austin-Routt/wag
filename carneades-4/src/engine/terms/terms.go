@@ -97,7 +97,7 @@ type BindEle struct {
 }
 
 func Normalize(s string) string {
-	t, ok := ReadString(s)
+	t, ok := ReadFormula(s)
 	if ok {
 		return t.String()
 	} else {
@@ -793,6 +793,9 @@ func Substitute(t Term, env Bindings) Term {
 		for ok == true {
 			result = t2
 			if t2.Type() == VariableType && !visited[t2.(Variable)] {
+				// mark every variable of the chain, not only the first,
+				// so that a chain ending in a cycle (Y bound to Y) stops
+				visited[t2.(Variable)] = true
 				t2, ok = GetBinding(t2.(Variable), env)
 				continue
 			} else {

@@ -6,6 +6,8 @@ toolchain go1.24.7
 
 replace github.com/carneades/carneades-4 => ../carneades-4
 
+replace github.com/hfried/GoCHR => ../GoCHR
+
 require (
 	github.com/anthropics/anthropic-sdk-go v1.80.0
 	github.com/carneades/carneades-4 v0.0.0-00010101000000-000000000000

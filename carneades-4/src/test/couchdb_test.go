@@ -39,9 +39,9 @@ func TestCouchDB(t *testing.T) {
 	flag.Parse()
 	resp, err := http.Get("http://127.0.0.1:5984/")
 	if err != nil {
-		// upstream called log.Fatal here, which aborted the whole test binary
-		// (every test in the package reported FAIL) whenever no CouchDB was running
-		t.Skip("no CouchDB server at 127.0.0.1:5984: ", err)
+		// log.Fatal here ended the whole test binary, and with it every
+		// other test of the package, on a machine without CouchDB.
+		t.Skipf("no CouchDB server on 127.0.0.1:5984: %v", err)
 	}
 	defer resp.Body.Close()
 

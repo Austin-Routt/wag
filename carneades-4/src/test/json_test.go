@@ -27,6 +27,9 @@ func TestJson(t *testing.T) {
 	files, err := d.Readdir(0)
 	check(t, err)
 	for _, fi := range files {
+		if skipUnsupported(t, fi.Name()) {
+			continue
+		}
 		// YML-IMPORT
 		// ==========
 		file, err := os.Open(yamlDir + fi.Name())
@@ -58,9 +61,8 @@ func TestJson(t *testing.T) {
 			//	printLabeling(l2)
 			err = checkLabeling(l, ag.Statements, ag.ExpectedLabeling)
 			if err != nil {
-				fmt.Printf(" yaml-Import: %v, Labeling fail %v \n", fi.Name(), err)
+				t.Errorf("%s: %v", fi.Name(), err)
 			}
-			// check(t, err)
 
 			// JSON-Export in Temp-Dir with the file-name: <name>.json
 			// =========== -------------------------------------------
@@ -108,10 +110,7 @@ func TestJson(t *testing.T) {
 			//	fmt.Printf(" ## Labeling json-Datei: \n")
 			//	printLabeling(l2)
 			err = checkLabeling(l2, ag2.Statements, ag.ExpectedLabeling)
-			if err != nil {
-				fmt.Printf(" json-Import: %v, Labeling fail %v \n", strings.Replace(fi.Name(), ".yml", ".json", 1), err)
-			}
-			// check(t, err)
+			checkRoundTrip(t, fi.Name(), err)
 
 		} else {
 			file.Close()

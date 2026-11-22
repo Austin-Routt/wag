@@ -1,35 +1,24 @@
-//go:build js
-
-// Fork note: GopherJS command. The compile fix (pointer arguments for the
-// GraphML and DOT exporters, the dot package import) comes from the Walton
-// Argumentation Game's bundled copy. The build constraint stays, because
-// ordinary builds and tests do not have the GopherJS toolchain.
-
 package main
 
 import (
 	"bytes"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/carneades/carneades-4/src/engine/caes/encoding/dot"      // <-- added
+	dotout "github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
 	"github.com/carneades/carneades-4/src/engine/caes/encoding/graphml"
 	"github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 	"github.com/gopherjs/gopherjs/js"
 )
 
-// GraphMLExportToString exports an argument graph to GraphML format.
-// It accepts a pointer to caes.ArgGraph.
 func GraphMLExportToString(ag *caes.ArgGraph) (string, error) {
 	var b bytes.Buffer
-	err := graphml.Export(&b, ag)
+	var err = graphml.Export(&b, ag)
 	return b.String(), err
 }
 
-// DotExportToString exports an argument graph to DOT format.
-// It accepts a pointer to caes.ArgGraph.
 func DotExportToString(ag *caes.ArgGraph) (string, error) {
 	var b bytes.Buffer
-	err := dot.Export(&b, ag)   // using the correct dot package
+	var err = dotout.Export(&b, ag)
 	return b.String(), err
 }
 
@@ -71,12 +60,12 @@ func evalJs(input string, inputFormat string, outputFormat string) map[string]in
 
 	switch outputFormat {
 	case "yaml":
-		str = YamlExportToString(ag)   // ag is already a pointer
+		str = YamlExportToString(ag)
 		err = nil
 	case "graphml":
-		str, err = GraphMLExportToString(ag)   // pass pointer directly
+		str, err = GraphMLExportToString(ag)
 	case "dot":
-		str, err = DotExportToString(ag)       // pass pointer directly
+		str, err = DotExportToString(ag)
 	default:
 		return map[string]interface{}{
 			"err": "invalid output format",

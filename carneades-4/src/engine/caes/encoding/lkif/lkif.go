@@ -13,6 +13,9 @@
 // LKIF is the native format of Carneades 2, a desktop argument mapping
 // tool with a graphical user interface. Also known as the Carneades Editor.
 // https://github.com/carneades/carneades-2/blob/master/schemas/LKIF.rnc
+// This is an experimental legacy converter. Import accepts one argument graph
+// with explicit premise types/polarities; successful conversion is not a
+// certificate of general LKIF semantic fidelity.
 
 package lkif
 
@@ -102,6 +105,7 @@ type Premise struct {
 func (lag *ArgumentGraph) Caes() *caes.ArgGraph {
 	assums := map[string]bool{}
 	cag := caes.NewArgGraph()
+	cag.Metadata["import_profile"] = "experimental single-graph LKIF; not conformance certified"
 	if lag.Id != "" {
 		cag.Metadata["id"] = lag.Id
 	}
@@ -227,13 +231,14 @@ func (lag *ArgumentGraph) Caes() *caes.ArgGraph {
 					us.Id = uid
 					us.Text = uid
 					stmts[us.Id] = us
-					arg.Undercutter = us
 				}
+				arg.Undercutter = us
 				e := caes.NewArgument() // for the exception
 				e.Id = arg.Id + "." + fmt.Sprintf("%v", i)
 				e.Conclusion = us
 				e.Premises = []caes.Premise{pr}
 				args[e.Id] = e
+				us.Args = append(us.Args, e)
 			case "assumption":
 				arg.Premises = append(arg.Premises, pr)
 				assums[pr.Stmt.Id] = true
@@ -286,6 +291,12 @@ func Import(inFile io.Reader) (*caes.ArgGraph, error) {
 	}
 	if len(lkif.ArgumentGraphs.Content) == 0 {
 		return nil, errors.New("No argument graphs found in the input file.\n")
+	}
+	if len(lkif.ArgumentGraphs.Content) != 1 {
+		return nil, caes.NewRunError(caes.ErrUnsupported, "experimental LKIF: exactly one argument graph is required; extra graphs must not be silently discarded")
+	}
+	if err := lkif.ArgumentGraphs.Content[0].validateProfile(); err != nil {
+		return nil, err
 	}
 	ag := lkif.ArgumentGraphs.Content[0].Caes()
 	return ag, err

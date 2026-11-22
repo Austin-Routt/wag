@@ -1,0 +1,176 @@
+--- a/third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go
++++ b/third_party/carneades-4/src/engine/caes/encoding/yaml/yaml.go
+@@ -1557,28 +1557,13 @@
+ 
+ // Export
+ 
++// mkYamlString renders a valid UTF-8 string as a YAML double-quoted scalar.
++// Go's ASCII quoted form uses escapes accepted by YAML, including \x, \u
++// and \U. Quoting every non-ASCII rune also protects NEL from YAML 1.1 line
++// folding and keeps DEL/C1/noncharacters out of the literal source stream.
++// JSON escaping alone is insufficient for this YAML 1.1 parser.
+ func mkYamlString(str string) string {
+-	newstr := str
+-	if strings.ContainsAny(str, "\n\r:-?,[]{}#&!*|>'\"%@`") {
+-		if strings.Contains(str, "\"") {
+-			if strings.Contains(str, "'") {
+-				// mark \"
+-				newstr1 := []rune{}
+-				for _, ch := range str {
+-					if ch == '"' {
+-						newstr1 = append(newstr1, '\\')
+-					}
+-					newstr1 = append(newstr1, ch)
+-				}
+-				newstr = "\"" + string(newstr1) + "\""
+-			} else {
+-				newstr = "'" + newstr + "'"
+-			}
+-		} else {
+-			newstr = "\"" + newstr + "\""
+-		}
+-	}
+-	return newstr
++	return strconv.QuoteToASCII(str)
+ }
+ 
+ func writeMetaData(f io.Writer, sp1 string, sp2 string, md caes.Metadata) {
+--- /dev/null
++++ b/third_party/carneades-4/src/engine/caes/encoding/yaml/export_scalar_review_test.go
+@@ -0,0 +1,46 @@
++package yaml_test
++
++import (
++	"bytes"
++	"testing"
++
++	"github.com/carneades/carneades-4/src/engine/caes"
++	caesyaml "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
++)
++
++// These expected bytes are authored inputs, not predictions from the exporter.
++// The contract is limited to valid UTF-8 scalar string values at the tested
++// statement-text and string-metadata locations, with an ordinary statement ID.
++func TestReviewYAMLScalarRoundTrip(t *testing.T) {
++	cases := []struct{ name, text string }{
++		{"ordinary", "ordinary text"},
++		{"mixed_quotes", "He said \"it's fine\"."},
++		{"kialo_math_backslash", `Math: \(x\)`},
++		{"windows_path", `C:\new\file`},
++		{"newline", "first\nsecond"},
++		{"controls", "tab\tNUL\x00\x01end"},
++		{"boolean_looking", "yes"},
++		{"numeric_looking", "123"},
++		{"unicode", "Crème brûlée ≤ 5; λ → μ"},
++		{"empty", ""},
++	}
++	for _, tc := range cases {
++		t.Run(tc.name, func(t *testing.T) {
++			g := caes.NewArgGraph()
++			g.Metadata["title"] = tc.text
++			g.Statements["s"] = &caes.Statement{Id: "s", Text: tc.text, Label: caes.Undecided}
++			var out bytes.Buffer
++			caesyaml.Export(&out, g)
++			got, err := caesyaml.Import(bytes.NewReader(out.Bytes()))
++			if err != nil {
++				t.Fatalf("reimport: %v\nexported:\n%s", err, out.String())
++			}
++			if s := got.Statements["s"]; s == nil || s.Text != tc.text {
++				t.Errorf("statement got %#v; want text %q", s, tc.text)
++			}
++			if value, ok := got.Metadata["title"].(string); !ok || value != tc.text {
++				t.Errorf("metadata got %#v; want string %q", got.Metadata["title"], tc.text)
++			}
++		})
++	}
++}
+--- /dev/null
++++ b/third_party/carneades-4/src/engine/caes/encoding/yaml/unicode_roundtrip_test.go
+@@ -0,0 +1,87 @@
++package yaml_test
++
++import (
++	"bytes"
++	"fmt"
++	"strings"
++	"testing"
++
++	"github.com/carneades/carneades-4/src/engine/caes"
++	caesyaml "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
++)
++
++// Check the actual Export -> Import contract, comparing each string with its
++// authored input, not an expected value calculated by another encoder.
++func TestConvergenceYAMLUnicodeRoundTrip(t *testing.T) {
++	cases := []struct{ name, text string }{
++		{"DEL", "before\u007fafter"},
++		{"C1_80", "before\u0080after"},
++		{"NEL", "before\u0085after"},
++		{"C1_9f", "before\u009fafter"},
++		{"noncharacter_FFFE", "before\ufffeafter"},
++		{"noncharacter_FFFF", "before\uffffafter"},
++		{"line_separator", "before\u2028after"},
++		{"paragraph_separator", "before\u2029after"},
++		{"nonBMP", "before\U0001f600after\U0010ffff"},
++	}
++	var boundaries strings.Builder
++	for r := rune(0); r <= 0x9f; r++ {
++		boundaries.WriteRune(r)
++	}
++	for _, r := range []rune{0xd7ff, 0xe000, 0xfdd0, 0xfdef, 0xfffd, 0xfffe, 0xffff, 0x10000, 0x1fffe, 0x1ffff, 0x10fffd, 0x10fffe, 0x10ffff} {
++		boundaries.WriteRune(r)
++	}
++	cases = append(cases, struct{ name, text string }{"control_and_scalar_boundaries", boundaries.String()})
++	for _, tc := range cases {
++		t.Run(tc.name, func(t *testing.T) {
++			g := caes.NewArgGraph()
++			g.Metadata["title"] = tc.text
++			g.Statements["s"] = &caes.Statement{Id: "s", Text: tc.text, Label: caes.Undecided}
++			var out bytes.Buffer
++			caesyaml.Export(&out, g)
++			got, err := caesyaml.Import(bytes.NewReader(out.Bytes()))
++			if err != nil {
++				t.Fatalf("reimport: %v; export %q", err, out.String())
++			}
++			if s := got.Statements["s"]; s == nil || s.Text != tc.text {
++				t.Errorf("statement got %v, want text %q", s, tc.text)
++			}
++			if value, ok := got.Metadata["title"].(string); !ok || value != tc.text {
++				t.Errorf("metadata got %#v; want string %q", got.Metadata["title"], tc.text)
++			}
++		})
++	}
++}
++
++// This property check covers all valid Unicode scalar values in 17 bounded
++// batches, as actual graph string values. It does not cover identifiers, other
++// metadata types, invalid UTF-8 byte sequences or complete graph round trips.
++func TestConvergenceYAMLAllUnicodeScalars(t *testing.T) {
++	for plane := 0; plane <= 16; plane++ {
++		t.Run(fmt.Sprintf("plane_%02x", plane), func(t *testing.T) {
++			var b strings.Builder
++			for r := rune(plane * 0x10000); r < rune((plane+1)*0x10000); r++ {
++				if r >= 0xd800 && r <= 0xdfff {
++					continue
++				}
++				b.WriteRune(r)
++			}
++			text := b.String()
++			g := caes.NewArgGraph()
++			g.Metadata["title"] = text
++			g.Statements["s"] = &caes.Statement{Id: "s", Text: text, Label: caes.Undecided}
++			var out bytes.Buffer
++			caesyaml.Export(&out, g)
++			got, err := caesyaml.Import(bytes.NewReader(out.Bytes()))
++			if err != nil {
++				t.Fatalf("reimport: %v", err)
++			}
++			if s := got.Statements["s"]; s == nil || s.Text != text {
++				t.Fatal("statement scalar bytes changed")
++			}
++			if value, ok := got.Metadata["title"].(string); !ok || value != text {
++				t.Fatal("metadata scalar bytes/type changed")
++			}
++		})
++	}
++}
