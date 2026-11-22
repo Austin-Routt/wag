@@ -128,6 +128,7 @@ type Run struct {
 	builds        []string
 	scoringInputs []string // pinned scoring-only filenames, not model inputs
 	loadErrors    []string // damaged saved result files: inspectable, never silently overwritten
+	curPrompt     string   // digest of the loaded dataset's annotator system prompt (immutable after load)
 }
 
 var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -140,7 +141,7 @@ func FileName(name string) string { return strings.Trim(unsafe.ReplaceAllString(
 func checkResultNames(s Settings) error {
 	files := map[string]string{}
 	for _, p := range s.Annotators {
-		filename := FileName(p.Name)
+		filename := strings.ToLower(FileName(p.Name)) // one file on case-insensitive file systems
 		if filename == "" {
 			return fmt.Errorf("annotator %q has no usable result filename", p.Name)
 		}
@@ -239,6 +240,7 @@ func newRun(dir string, d *Dataset, s Settings) *Run {
 		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}}
 	r.inputHashes = copyHashes(d.Hashes)
 	r.promptHash = sha([]byte(d.AnnotatorSystem()))
+	r.curPrompt = r.promptHash
 	r.scoringInputs = []string{}
 	if d.GoldFile != "" && !d.annotationFiles[d.GoldFile] {
 		r.scoringInputs = append(r.scoringInputs, d.GoldFile)
@@ -488,8 +490,17 @@ func copyHashes(in map[string]string) map[string]string {
 	return out
 }
 
+// Damaged reports whether saved result files could not be read when the run
+// was opened. Such a run can be inspected but not written; a caller that
+// keeps runs open should open it again once the files are repaired.
+func (r *Run) Damaged() bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return len(r.loadErrors) > 0
+}
+
 // checkInputs compares the run's pinned identity with its inputs as they are
-// now, leaving out the gold, which an annotator never sees.
+// now, leaving out the scoring-only inputs (a gold file no annotator is given).
 func (r *Run) checkInputs() error {
 	if len(r.loadErrors) > 0 {
 		return fmt.Errorf("saved run data cannot be read (%s); inspect or recover those files before continuing", strings.Join(r.loadErrors, "; "))
@@ -518,7 +529,7 @@ func (r *Run) checkInputs() error {
 			changed = append(changed, k)
 		}
 	}
-	if r.promptHash != sha([]byte(r.Dataset.AnnotatorSystem())) {
+	if r.promptHash != r.curPrompt {
 		changed = append(changed, "the annotator's system prompt")
 	}
 	if len(changed) > 0 {

@@ -67,13 +67,17 @@ func (s *Server) run(id string) (*annotate.Run, []string, error) {
 		if r, err = annotate.Open(dir, s.dataset); err != nil {
 			return nil, nil, err
 		}
-		s.mu.Lock()
-		if x := s.runs[id]; x != nil {
-			r = x
-		} else {
-			s.runs[id] = r
+		// A run whose saved files are damaged is not kept: once they are
+		// repaired, the next request opens it afresh, without a restart.
+		if !r.Damaged() {
+			s.mu.Lock()
+			if x := s.runs[id]; x != nil {
+				r = x
+			} else {
+				s.runs[id] = r
+			}
+			s.mu.Unlock()
 		}
-		s.mu.Unlock()
 	}
 	var notes []string
 	profiles := append([]llm.Profile{}, r.Settings.Annotators...)

@@ -103,7 +103,8 @@ The move:
 | `text`, `evidence` | The argument in the player's words, and its sources. Both are shown to the other player. |
 
 **What the parser accepts.**
-- **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error.
+- **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error. A bracket in prose, such as a citation `[s3]`, a footnote `[1]` or a link, is not JSON: an array counts only when it is empty or starts with an object, an array or a string.
+- **Field types.** A target, scheme, question, attack type or text must be text, and the bindings an object of phrases (a number is read as a phrase). Any other value is refused by name, since dropping it would change the move: a defence without its target would be a new argument. `null` counts as absent.
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

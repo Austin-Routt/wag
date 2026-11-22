@@ -325,3 +325,62 @@ func TestWorkbenchKialoDataset(t *testing.T) {
 		t.Fatalf("a discussion outside: %d", code)
 	}
 }
+
+// A run whose saved results are damaged is readable but refuses writes; once
+// the file is repaired, the next request opens it again, with no restart.
+func TestWorkbenchDamagedRunRecovers(t *testing.T) {
+	srv, ts := newTestServerWith(t)
+	store := t.TempDir()
+	if err := srv.SetStore(store); err != nil {
+		t.Fatal(err)
+	}
+	ds, _ := annotate.Builtin()
+	gold := ds[0].Gold
+	srv.AddModel(llm.WithProvider(llm.Profile{Name: "one", Provider: "mock", Params: llm.Params{Model: "m-one"}}, &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+		m := claimRe.FindAllStringSubmatch(req.Messages[len(req.Messages)-1].Content, -1)
+		b, _ := json.Marshal(gold[m[len(m)-1][1]])
+		return &llm.Response{Text: string(b)}, nil
+	}}))
+	var made struct {
+		Status annotate.Status `json:"status"`
+	}
+	if code := do(t, ts, "POST", "/api/annotate/runs", map[string]any{"dataset": ds[0].ID, "annotators": []string{"one"}, "count": 1}, &made); code != 200 {
+		t.Fatalf("new run: %d", code)
+	}
+	id, item := made.Status.ID, made.Status.Settings.Items[0]
+	do(t, ts, "POST", "/api/annotate/runs/"+id+"/start", map[string]any{}, nil)
+	for i := 0; i < 200; i++ {
+		var s struct {
+			Status annotate.Status `json:"status"`
+		}
+		do(t, ts, "GET", "/api/annotate/runs/"+id, nil, &s)
+		if s.Status.Busy == "" && s.Status.Progress[0].Done == 1 {
+			break
+		}
+		time.Sleep(20 * time.Millisecond)
+	}
+	path := filepath.Join(store, "annotation", id, "annotations", "one.json")
+	good, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	forget := func() { // as after a restart
+		srv.mu.Lock()
+		delete(srv.runs, id)
+		srv.mu.Unlock()
+	}
+	verdict := map[string]any{"item": item, "choice": "one", "note": "right"}
+	if err := os.WriteFile(path, good[:len(good)/2], 0o644); err != nil {
+		t.Fatal(err)
+	}
+	forget()
+	if code := do(t, ts, "POST", "/api/annotate/runs/"+id+"/verdict", verdict, nil); code != http.StatusBadRequest {
+		t.Fatalf("a verdict on a damaged run: %d, want 400", code)
+	}
+	if err := os.WriteFile(path, good, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code := do(t, ts, "POST", "/api/annotate/runs/"+id+"/verdict", verdict, nil); code != 200 {
+		t.Fatalf("a verdict after the repair: %d, want 200", code)
+	}
+}

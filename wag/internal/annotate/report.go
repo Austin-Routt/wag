@@ -68,7 +68,7 @@ func (r *Run) Report() (*Report, error) {
 	defer r.mu.Unlock()
 	r.refreshDrift()
 	rep := &Report{Run: r.ID, Dataset: r.Dataset.ID, Items: len(r.Settings.Items), Disagreements: map[string][]string{},
-		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC(), EvaluationInputsSHA256: copyHashes(r.Dataset.Hashes), EvaluationPromptSHA256: sha([]byte(r.Dataset.AnnotatorSystem())), EvaluationBuild: buildID()}
+		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC(), EvaluationInputsSHA256: copyHashes(r.Dataset.Hashes), EvaluationPromptSHA256: r.curPrompt, EvaluationBuild: buildID()}
 	in := map[string]bool{}
 	for _, id := range r.Settings.Items {
 		in[id] = true

@@ -706,6 +706,34 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	if t == "" {
 		return nascq.ProposedAction{}, false, nil
 	}
+	// A target, scheme or question given as anything but text is refused by
+	// name: dropping it would change the move (a defence without its target
+	// is a new argument). null counts as absent.
+	for _, k := range []string{"scheme_id", "scheme", "target_arg_id", "target", "argument",
+		"answers_cq_id", "cq", "question", "critical_question", "target_premise_id", "premise",
+		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words"} {
+		if v, exists := m[k]; exists && v != nil {
+			if _, ok := v.(string); !ok {
+				return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q must be text, not %s", k, jsonKind(v))
+			}
+		}
+	}
+	for _, k := range []string{"variable_bindings", "bindings", "slots", "variables", "parts"} {
+		v, exists := m[k]
+		if !exists || v == nil {
+			continue
+		}
+		vb, ok := v.(map[string]interface{})
+		if !ok {
+			return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q must be an object of variable bindings, not %s", k, jsonKind(v))
+		}
+		for name, x := range vb {
+			switch x.(type) {
+			case map[string]interface{}, []interface{}:
+				return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q: the binding of %s must be a phrase, not %s", k, name, jsonKind(x))
+			}
+		}
+	}
 	switch t {
 	case "pass":
 		t = "abstain"
@@ -838,7 +866,7 @@ func alternatives(v interface{}) []Alternative {
 			am = m
 		}
 		// A considered move with an unreadable source is still recorded, without sources.
-		if a, ok, err := moveOf(am); ok {
+		if a, ok, err := moveOf(am); ok && a.Type != "" {
 			if err != nil {
 				a.Evidence = nil
 			}
@@ -971,6 +999,12 @@ func jsonCandidates(s string) []string {
 			}
 		case r == '{' || r == '[':
 			if depth == 0 {
+				// A bracket in prose ("[s3]", "[1]", "[a link](…)") is not
+				// a move container; a JSON array that could hold or be a
+				// move starts with {, [, " or is empty.
+				if r == '[' && !arrayStart(s[i+1:]) {
+					continue
+				}
 				start = i
 			}
 			depth++
@@ -988,6 +1022,16 @@ func jsonCandidates(s string) []string {
 		out = append(out, s[start:])
 	}
 	return out
+}
+
+// arrayStart reports whether the text after a '[' begins like a JSON array
+// of containers or strings, or an empty array.
+func arrayStart(rest string) bool {
+	if strings.HasPrefix(rest, "]") {
+		return true // []
+	}
+	t := strings.TrimLeft(rest, " \t\r\n")
+	return t != "" && strings.ContainsRune("{[\"", rune(t[0]))
 }
 
 // jsonKind names the JSON type of a decoded value, for error messages.
