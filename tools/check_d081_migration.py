@@ -11,12 +11,21 @@ from check_d084_migration import formula_values, require, schemes
 
 
 CHAIN = "reapplication_sequence(A2,A,P)"
-TEXT = "%s is linked through successive cases to %s by inferences concerning property %s."
+TEXT = "A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s."
 EXPECTED = {
     "moral_justification_ad_populum_excuse": ("conclusions", "morally_acceptable_action(X,A)"),
     "sacrifice": ("premises", "great_sacrifice(S,A,V)"),
     "rhetorical_oppositions_normative": ("premises", "if_treatment_required(X,A,A2,X2)"),
     "sorites_slippery_slope": ("premises", CHAIN),
+}
+# The forms the repairs replaced (the upstream file, primes renamed by the
+# cleaning). Without --before, as CI runs it, the check must still fail if
+# one of them comes back beside its repair.
+REPLACED = {
+    "moral_justification_ad_populum_excuse": ("premises", "morally_acceptable_action(X,A)"),
+    "sacrifice": ("premises", "great_sacrifice(S,A,X)"),
+    "rhetorical_oppositions_normative": ("premises", "if_treatment_required(X,A,A2,X)"),
+    "sorites_slippery_slope": ("premises", "reapplication_sequence(A2,A)"),
 }
 
 
@@ -48,6 +57,10 @@ def check(root, before=None):
         catalog = yaml.safe_load((root / f"wag/data/catalogue/schemes/{sid}.yml").read_text())
         require(formula in catalog["formulas"][role], f"{sid} has stale catalogue formulas")
         require(formula in set(formula_values(catalog["premise_map"])), f"{sid} has stale catalogue source maps")
+    for sid, (role, formula) in REPLACED.items():
+        require(formula not in records[sid][role], f"{sid} still has the replaced {formula}")
+        catalog = yaml.safe_load((root / f"wag/data/catalogue/schemes/{sid}.yml").read_text())
+        require(formula not in catalog["formulas"][role], f"{sid}'s catalogue still has the replaced {formula}")
     if before:
         exact_delta(yaml.safe_load(before.read_text()), after)
     return {"migration": "D081", "integrity": "pass", "exact_scoped_delta": "pass" if before else "not requested"}

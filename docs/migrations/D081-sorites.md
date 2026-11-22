@@ -2,10 +2,13 @@
 
 ## Accepted source dispositions
 
-An independent AI reviewer compared the narrow repairs against the supplied
-Walton, Reed and Macagno (2008) source, under the user's delegation to resolve
-remaining decisions. This is AI source review, not human verification or a
-claim that test success proves source interpretation. The supplied PDF's SHA-256
+ChatGPT's review of stages 0 and 1 compared the narrow repairs with Walton,
+Reed and Macagno (2008); a second, independent reviewer checked each against
+the book's page images (the private workspace's
+`verify/r-stage-review-2026-11-22/`, report B). Both are model checks, not a
+person's verification, and passing tests do not prove a reading of the source.
+D081 is decided under the owner's standing rule of 2026-11-22, after the
+proposal [D081-D084](../proposals/D081-D084.md) was checked. The PDF's SHA-256
 is `d010348014e8b80fa561b68e5fac732cce0b3905fb0b1d522dd6fd2578a69634`.
 
 | Record | Printed source | Disposition |
@@ -13,22 +16,23 @@ is `d010348014e8b80fa561b68e5fac732cce0b3905fb0b1d522dd6fd2578a69634`.
 | `moral_justification_ad_populum_excuse` | Entry 4.6, p. 312 | Accept moving `morally_acceptable_action(X,A)` from premises to the empty conclusion. |
 | `sacrifice` | Entry 20, p. 322 | Accept `great_sacrifice(S,A,V)` in place of its undeclared X argument. |
 | `rhetorical_oppositions_normative` | Entry 12.1, p. 318 | Accept contrary treatment X2 in the fourth argument. Preserve WAG's treatment-first argument roles. |
-| `sorites_slippery_slope` | Entry 51, pp. 340–341 | Revise the earlier binary repair: the chain must carry the same property P as the initial and inductive premises and conclusion. |
+| `sorites_slippery_slope` | Entry 51, pp. 340–341 | Revise the earlier binary repair: the chain carries the property P that the base and inductive premises and the conclusion are about. The printed chain premise names no property; scoping it to P is our reading. |
 
 The first three executable repairs were already present. Their disposition and
 stale source-link descriptions are corrected here. The only new executable
-scheme change in this patch is sorites. The recipe's existing `owner decision`
-category denotes authorized decisions; the reason fields explicitly retain the
-delegated, independent AI provenance rather than claiming personal source
-inspection by the owner. These decisions approve the stated repairs only.
+scheme change is sorites. The recipe's `owner decision` category is right for
+all four: the owner's standing rule makes a checked recommendation the owner's
+decision, and the reason fields name the review it came from, not a reading of
+the book by the owner. These decisions approve the stated repairs only.
 
 ## Sorites change
 
 Replace `reapplication_sequence(A2,A)` with
-`reapplication_sequence(A2,A,P)` and language key `/2` with `/3`. Its new wording
-names both endpoints and the property. The other premises remain
-`beyond_contention(A2,P)` and `all_has(A2,P,A1)`; the conclusion remains
-`may_have(A,P)`.
+`reapplication_sequence(A2,A,P)` and language key `/2` with `/3`. Its template,
+in our own words, keeps the book's sense: a chain of modus ponens steps from the
+clear case through the grey area, each step concerning the property. The other
+premises remain `beyond_contention(A2,P)` and `all_has(A2,P,A1)`; the conclusion
+remains `may_have(A,P)`.
 
 A chain about wealth cannot establish a stepwise classification concerning
 baldness merely because its endpoint names coincide. The binary representation

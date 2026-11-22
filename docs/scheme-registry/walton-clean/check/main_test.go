@@ -68,6 +68,59 @@ func TestOutputErrorsAreNotIgnored(t *testing.T) {
 	}
 }
 
+const validFixture = `language:
+  p/1: "p %s"
+  c/1: "c %s"
+argument_schemes:
+  - id: s
+    variables: [X]
+    premises: [p(X)]
+    conclusions: [c(X)]
+`
+
+// Each part of check 1 fails the import gate on its own; in particular an
+// import error without strict-decode errors (the strict engine's own
+// refusal) is not passed by the lenient reading.
+func TestImportGateNeedsEveryCheck(t *testing.T) {
+	if !importPasses(&report{}) {
+		t.Fatal("a clean report failed the import gate")
+	}
+	for name, r := range map[string]report{
+		"yaml error":    {YAMLError: "x"},
+		"import error":  {ImportError: "x", LenientImport: "read leniently"},
+		"import stderr": {ImportStderr: "x"},
+		"strict decode": {StrictErrors: []string{"x"}},
+	} {
+		r := r
+		if importPasses(&r) {
+			t.Errorf("%s passed the import gate", name)
+		}
+	}
+}
+
+// A report that cannot be written stops the checker with status 2, an
+// operational error, which run.sh does not take for a finding (status 1).
+func TestReportWriteErrorStopsTheChecker(t *testing.T) {
+	dir := t.TempDir()
+	in := filepath.Join(dir, "input.yml")
+	if err := os.WriteFile(in, []byte(validFixture), 0600); err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command(os.Args[0], "-test.run=^TestCheckerProcessHelper$")
+	cmd.Env = append(os.Environ(), "WAG_CLEAN_CHECK_HELPER=1", "WAG_CLEAN_CHECK_INPUT="+in,
+		"WAG_CLEAN_CHECK_REPORT="+filepath.Join(dir, "absent", "report.json"))
+	var log bytes.Buffer
+	cmd.Stdout, cmd.Stderr = &log, &log
+	err := cmd.Run()
+	exit, ok := err.(*exec.ExitError)
+	if !ok || exit.ExitCode() != 2 {
+		t.Fatalf("unwritable report: got %v, want exit status 2\n%s", err, log.String())
+	}
+	if !strings.Contains(log.String(), "write report") {
+		t.Fatalf("the failure does not say what failed:\n%s", log.String())
+	}
+}
+
 func runCheckerFixture(t *testing.T, input string) (report, int) {
 	t.Helper()
 	dir := t.TempDir()

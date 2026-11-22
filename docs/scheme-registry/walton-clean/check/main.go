@@ -190,13 +190,13 @@ func main() {
 	dumpOut := flag.String("dump", "", "write the imported schemes and language as JSON to this file")
 	flag.Parse()
 	if flag.NArg() != 1 {
-		fmt.Println("usage: walton-check [-json out.json] file.yml")
+		fmt.Fprintln(os.Stderr, "usage: walton-check [-json out.json] [-dump out.json] file.yml")
 		os.Exit(2)
 	}
 	path := flag.Arg(0)
 	data, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Println("read:", err)
+		fmt.Fprintln(os.Stderr, "read:", err)
 		os.Exit(2)
 	}
 
@@ -235,7 +235,7 @@ func main() {
 		}
 		r.ImportStderr += cap.take()
 	}
-	r.Gate["1_import"] = r.YAMLError == "" && r.ImportError == "" && r.ImportStderr == "" && len(r.StrictErrors) == 0
+	r.Gate["1_import"] = importPasses(&r)
 	if err != nil || ag == nil || ag.Theory == nil {
 		finish(&r, *jsonOut, realStderr)
 		return
@@ -640,6 +640,13 @@ func finish(r *report, jsonOut string, realStderr *os.File) {
 	if !r.Pass {
 		os.Exit(1)
 	}
+}
+
+// importPasses is check 1's verdict: the file decodes, the engine imports it
+// strictly, without an error or parser output, and it has no unknown or
+// duplicate keys. Reading a refused file leniently never passes it.
+func importPasses(r *report) bool {
+	return r.YAMLError == "" && r.ImportError == "" && r.ImportStderr == "" && len(r.StrictErrors) == 0
 }
 
 func writeJSON(path string, value interface{}, indent string) error {

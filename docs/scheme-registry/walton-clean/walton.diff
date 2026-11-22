@@ -325,7 +325,7 @@
    realize_more_effectively/2: "There exists an action that would realize the goal %s more effectively than %s."
    really_distress/1: "%s is really in distress."
 -  reapplication_sequence: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."
-+  reapplication_sequence/3: "%s is linked through successive cases to %s by inferences concerning property %s."
++  reapplication_sequence/3: "A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s."
    reason_in_favor/1: "There is a reason in favor of %s."
    reason_retaining_goal/2: "%s is a reason for retaining commitment to goal %s." 
 -  reasonable_belive/1: "It is reasonable to believe %s."

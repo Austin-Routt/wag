@@ -44,7 +44,8 @@ python3 -I "$OUT/tools/apply_edits.py" "$IN" "$OUT/walton.proposals.yml" --with-
 cd "$OUT" || exit 2
 check_one original check/original.txt check/walton-check -json check/original.json "$IN"
 # The report names the file it read: not a path on this machine.
-{ echo "walton-check walton.yml (the original)"; tail -n +2 check/original.txt; } > check/original.tmp && mv check/original.tmp check/original.txt
+{ echo "walton-check walton.yml (the original)"; tail -n +2 check/original.txt; } > check/original.tmp
+mv check/original.tmp check/original.txt
 check_one syntax-only check/syntax-only.txt check/walton-check -json check/syntax-only.json -dump tools/dump-syntax-only.json check/walton.syntax-only.yml
 check_one clean clean-check.txt check/walton-check -json check/clean.json -dump tools/dump-clean.json walton.yml
 check_one proposals proposals-check.txt check/walton-check -json check/proposals.json walton.proposals.yml

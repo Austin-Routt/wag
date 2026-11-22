@@ -25,9 +25,10 @@ against exactly the two formula replacements and one key rename. Do this before
 applying another semantic migration; a later independent change must make that
 strict comparison fail.
 
-`go test ./internal/carneades -run '^TestD084NativeInference$' -count=1` from
-`wag/` tests native forward inference on positive and mismatched/missing-premise
-cases. It loads the committed library and isolates the named scheme. These tests
+`go test ./internal/carneades -run '^TestD084Native' -count=1` from `wag/`
+runs both D084 tests: native forward inference on positive and
+mismatched/missing-premise cases, and the two-scheme bridge in which group_2's
+conclusion feeds rule_physical_world_1. It loads the committed library and isolates the named scheme. These tests
 do not substitute WAG's explicit `InstantiateScheme` path for the CHR path that
 caused the compatibility concern.
 
@@ -41,6 +42,11 @@ issues and argument conclusions. Reject ambiguous collisions with an existing
 `is_a` statement unless its identity and provenance are reconciled explicitly.
 Do not globally replace the English word `is`, quoted evidence, or arbitrary
 string substrings. This patch does not supply a blind historical graph rewriter.
+
+The batch-2 gold keeps the old name: `docs/kialo-batch2/annotator-A.json` has
+seven `is(...)` formulas and describes is/2 as a walton.yml predicate. They are
+the historical record of what that annotator wrote against the catalogue of
+the time, and stay as they are; `validate.py` passes. A new run uses `is_a`.
 
 The rename removes a runtime-name collision; it does not certify the full source
 interpretation of entry 54.1. In particular, foundation's additional

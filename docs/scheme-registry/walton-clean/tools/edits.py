@@ -13,8 +13,8 @@ TPL = "template"
 REP = "repair — needs approval"
 ADD = "addition — owner decision"
 OWN = "repair — owner decision"
-_D081 = ("D081: independent AI source review under user-delegated decision authority, "
-         "Walton, Reed and Macagno (2008), printed ")
+_D081 = ("D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the "
+         "book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed ")
 
 # scheme id renames (typos), old -> new
 ID_MAP = {
@@ -121,7 +121,7 @@ OPS = [
         "F is used in individuals_propoerty(A1,F,A2) but undeclared (non-ground statement); declared"),
 
     # ------------------------------------------------------------------
-    # 4. D081 repairs, independently source-reviewed under delegated authority.
+    # 4. D081 repairs (proposal D081-D084), decided under the owner's standing rule.
     # ------------------------------------------------------------------
     insert(495, "      - morally_acceptable_action(X,A)", OWN,
            _D081 + "p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the "
@@ -140,8 +140,8 @@ OPS = [
     sub(306, "  reapplication_sequence:", "  reapplication_sequence/3:", OWN,
         _D081 + "pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557)"),
     sub(306, '"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."',
-        '"%s is linked through successive cases to %s by inferences concerning property %s."', OWN,
-        _D081 + "pp. 340-341, entry 51: new template names both endpoints and the property; original wording is not copied"),
+        '"A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s."', OWN,
+        _D081 + "pp. 340-341, entry 51: the template names both ends of the chain and its property, in our own words"),
 
     # ------------------------------------------------------------------
     # 5. Language keys without /arity (29)

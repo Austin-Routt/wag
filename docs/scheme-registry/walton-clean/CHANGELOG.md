@@ -401,12 +401,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  prudential: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
   - after: `  prudential/1: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
-- **306** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557) (used by: sorites_slippery_slope)
+- **306** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557) (used by: sorites_slippery_slope)
   - before: `  reapplication_sequence: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
   - after: `  reapplication_sequence/3: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
-- **306** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: new template names both endpoints and the property; original wording is not copied (used by: sorites_slippery_slope)
+- **306** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: the template names both ends of the chain and its property, in our own words (used by: sorites_slippery_slope)
   - before: `  reapplication_sequence/3: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
-  - after: `  reapplication_sequence/3: "%s is linked through successive cases to %s by inferences concerning property %s."`
+  - after: `  reapplication_sequence/3: "A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s."`
 - **308** [insert after] · repair — owner decision · template for negative_value's new conclusion, in our own words (used by: negative_value)
   - before: _(none)_
   - after: `  reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."`
@@ -524,10 +524,10 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ### moral_justification_ad_populum_excuse
 
-- **495** [insert after] · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)
+- **495** [insert after] · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)
   - before: _(none)_
   - after: `      - morally_acceptable_action(X,A)`
-- **497** [delete] · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise
+- **497** [delete] · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise
   - before: `      -  morally_acceptable_action(X,A)`
   - after: _(none)_
 
@@ -743,7 +743,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **768** · variable · primed variable A' does not parse (' starts a quoted atom); renamed A2 within the scheme
   - before: `      - if_treatment_required(X,A,A',X)`
   - after: `      - if_treatment_required(X,A,A2,X)`
-- **768** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 318, entry 12.1: the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error). Preserve WAG's treatment-first variable roles.
+- **768** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 318, entry 12.1: the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error). Preserve WAG's treatment-first variable roles.
   - before: `      - if_treatment_required(X,A,A2,X)`
   - after: `      - if_treatment_required(X,A,A2,X2)`
 
@@ -830,7 +830,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **901** · typo · source: 'Trtalise' (OCR)
   - before: `               Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Trtalise on Argumentation. `
   - after: `               Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. `
-- **908** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 322, entry 20: undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V
+- **908** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 322, entry 20: undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V
   - before: `      - great_sacrifice(S,A,X)`
   - after: `      - great_sacrifice(S,A,V)`
 
@@ -980,7 +980,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1555** · typo · misspelled predicate
   - before: `      - beyond_contetion(A2,P)`
   - after: `      - beyond_contention(A2,P)`
-- **1557** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: the chain links clear case A2 to A for the same property P. The former binary repair bound A but could reuse chain evidence concerning a different property.
+- **1557** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: the chain links clear case A2 to A for the same property P. The former binary repair bound A but could reuse chain evidence concerning a different property.
   - before: `      - reapplication_sequence`
   - after: `      - reapplication_sequence(A2,A,P)`
 

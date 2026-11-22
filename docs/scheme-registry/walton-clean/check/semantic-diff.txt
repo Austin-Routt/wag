@@ -72,7 +72,7 @@ language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same ke
   +  precedent_chain/3 'From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
   +  prudential/1 'Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s.'
-  +  reapplication_sequence/3 '%s is linked through successive cases to %s by inferences concerning property %s.'
+  +  reapplication_sequence/3 'A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s.'
   +  reason_retracting_goal/2 '%s is a reason to give up commitment to goal %s.'
   +  reference_class/0 'Reference class of other agents who also might have brought about this event and also have same character is sufficient.'
   +  rule_changed/0 'The rule has changed since the publication of the rulebook.'
