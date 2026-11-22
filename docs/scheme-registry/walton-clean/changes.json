@@ -1027,22 +1027,22 @@
   "change": "edit",
   "scheme": "language",
   "scheme_after": "language",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "  reapplication_sequence: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
-  "after": "  reapplication_sequence/2: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
-  "reason": "template for the repaired reapplication_sequence(A2,A) (line 1557)"
+  "after": "  reapplication_sequence/3: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557)"
  },
  {
   "line": 306,
   "change": "edit",
   "scheme": "language",
   "scheme_after": "language",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
-  "before": "  reapplication_sequence/2: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
-  "after": "  reapplication_sequence/2: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s.\"",
-  "reason": "template for the repaired reapplication_sequence(A2,A) (line 1557), in the file's '-...-' style"
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  reapplication_sequence/3: \"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area.\"",
+  "after": "  reapplication_sequence/3: \"%s is linked through successive cases to %s by inferences concerning property %s.\"",
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: new template names both endpoints and the property; original wording is not copied"
  },
  {
   "line": 308,
@@ -1445,22 +1445,22 @@
   "change": "insert after",
   "scheme": "moral_justification_ad_populum_excuse",
   "scheme_after": "moral_justification_ad_populum_excuse",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "",
   "after": "      - morally_acceptable_action(X,A)",
-  "reason": "empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)"
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)"
  },
  {
   "line": 497,
   "change": "delete",
   "scheme": "moral_justification_ad_populum_excuse",
   "scheme_after": "moral_justification_ad_populum_excuse",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "      -  morally_acceptable_action(X,A)",
   "after": "",
-  "reason": "moved to conclusions (line 495); it was the scheme's conclusion listed as a premise"
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise"
  },
  {
   "line": 569,
@@ -2116,11 +2116,11 @@
   "change": "edit",
   "scheme": "rhetorical_oppositions_normative",
   "scheme_after": "rhetorical_oppositions_normative",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "      - if_treatment_required(X,A,A2,X)",
   "after": "      - if_treatment_required(X,A,A2,X2)",
-  "reason": "the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error)"
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 318, entry 12.1: the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error). Preserve WAG's treatment-first variable roles."
  },
  {
   "line": 777,
@@ -2347,11 +2347,11 @@
   "change": "edit",
   "scheme": "sacrifice",
   "scheme_after": "sacrifice",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "      - great_sacrifice(S,A,X)",
   "after": "      - great_sacrifice(S,A,V)",
-  "reason": "undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V"
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 322, entry 20: undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V"
  },
  {
   "line": 933,
@@ -2666,11 +2666,11 @@
   "change": "edit",
   "scheme": "sorites_slippery_slope",
   "scheme_after": "sorites_slippery_slope",
-  "category": "repair — needs approval",
-  "needs_owner_approval": true,
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
   "before": "      - reapplication_sequence",
-  "after": "      - reapplication_sequence(A2,A)",
-  "reason": "0-ary chaining premise: the conclusion's individual A occurred in no premise (validator error); the chain links the clear case A2 to A"
+  "after": "      - reapplication_sequence(A2,A,P)",
+  "reason": "D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: the chain links clear case A2 to A for the same property P. The former binary repair bound A but could reuse chain evidence concerning a different property."
  },
  {
   "line": 1565,

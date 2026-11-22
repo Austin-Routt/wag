@@ -38,7 +38,7 @@ premise_map:
 - entry: "20"
   label: Premise 2
   formulas: [{formula: 'great_sacrifice(S,A,V)', locus: premise}]
-  note: X undeclared, where the value V belongs
+  note: 'D081: the value argument V replaces undeclared X (p. 322).'
   status: generated
 - entry: "20"
   label: Premise 3
@@ -47,7 +47,7 @@ premise_map:
 - entry: "20"
   label: Conclusion
   formulas: [{formula: 'sacrifice_value(A,V)', locus: conclusion}]
-  note: template "%s has a great value." drops V
+  note: The repaired two-argument template names both A and value V.
   status: generated
 critical_questions: []
 summary:

@@ -168,7 +168,7 @@ def main(outdir):
     w("`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, "
       "after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula "
       "(`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four "
-      "approval-needed repairs, and the owner's decisions (below; the added scheme is listed, not compared). The six "
+      "D081 repairs accepted under delegated authority, and the owner's decisions (below; the added scheme is listed, not compared). The six "
       "primed-variable schemes are identical apart from the variable names.")
     w("")
 
@@ -198,8 +198,8 @@ def main(outdir):
     w(f"Unified diff against the original (`walton.diff`): {minus} lines removed, {plus} added. That is "
       f"{minus - ndel} lines changed in place, {ndel} deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, "
       f"and the conclusion that was listed as a premise), {nins} inserted (the templates `cannot_present_sametime/3` "
-      f"and `data_set/2`, and that conclusion under `conclusions:`); {nadd} of the recorded edits are the owner's "
-      "decisions (below).")
+      f"and `data_set/2`); {nadd} of the recorded edits are authorized decisions "
+      "(including the D081 conclusion move, below).")
     w("")
     kinds = collections.Counter()
     for r in rows:
@@ -219,9 +219,11 @@ def main(outdir):
     # ---- the owner's decisions --------------------------------------------------
     w("## Changes decided by the owner")
     w("")
-    w("These are not cleaning edits: they change what schemes say, or add one. Each was decided by the owner, on the "
-      "date given; `tools/edits.py` records them as \"repair — owner decision\" and \"addition — owner decision\" "
-      "(`OWNER_REPAIRS`, `ADDITIONS`), applied after the cleaning.")
+    w("These change what schemes say, add one, or apply an authorized vocabulary migration. Earlier decisions were "
+      "made by the owner on the date given. D081 was independently reviewed by an AI reviewer against the supplied book "
+      "under the owner's delegated decision authority, not by a human annotator; its scoped repairs are described below. "
+      "`tools/edits.py` records authorized choices as \"repair — owner decision\" and \"addition — owner decision\". "
+      "Those category names do not claim that the owner personally checked every source page.")
     w("")
     w("| scheme | change | decided | why |")
     w("|---|---|---|---|")
@@ -308,7 +310,12 @@ def main(outdir):
     w("")
 
     # ---- repairs list -------------------------------------------------------
-    w("## Repairs that need the owner's approval")
+    w("## D081 repairs accepted after independent source review")
+    w("")
+    w("These narrow repairs were accepted under user-delegated decision authority after an independent AI source "
+      "review of the supplied book: entry 4.6 p. 312, entry 20 p. 322, entry 12.1 p. 318, and entry 51 pp. 340–341. "
+      "The original binary sorites repair required the additional property scope shown here. This is not human "
+      "verification or approval of every other interpretation in these records; see `docs/migrations/D081-sorites.md`.")
     w("")
     w("| scheme | line | before | after | why |")
     w("|---|---|---|---|---|")
@@ -320,8 +327,8 @@ def main(outdir):
          "X was undeclared (non-ground statement) and V occurred only in the conclusion; the template's third argument is \"the value %s\""),
         ("rhetorical_oppositions_normative", "768", "`if_treatment_required(X,A,A',X)`", "`if_treatment_required(X,A,A2,X2)`",
          "the 4th argument is \"the contrary treatment %s\" (X'), not X. Otherwise X' occurs only in the conclusion (validator error). The A'→A2 rename on the same line is a plain variable fix"),
-        ("sorites_slippery_slope", "1557, 306", "premise `reapplication_sequence` (0-ary)", "`reapplication_sequence(A2,A)`; template `…from the clear area -%s- through the grey area to %s.`",
-         "the conclusion's individual A occurred in no premise (validator error). The chain premise is the one that links the clear case A2 to A"),
+        ("sorites_slippery_slope", "1557, 306", "premise `reapplication_sequence` (0-ary); intermediate binary repair `reapplication_sequence(A2,A)`", "`reapplication_sequence(A2,A,P)` with a template naming both endpoints and P",
+         "the chain links clear case A2 to A for the same property P. Binding only the endpoints could reuse a chain about a different property"),
     ]
     for r in rep:
         w("| " + " | ".join(r) + " |")

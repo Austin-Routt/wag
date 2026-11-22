@@ -13,6 +13,8 @@ TPL = "template"
 REP = "repair — needs approval"
 ADD = "addition — owner decision"
 OWN = "repair — owner decision"
+_D081 = ("D081: independent AI source review under user-delegated decision authority, "
+         "Walton, Reed and Macagno (2008), printed ")
 
 # scheme id renames (typos), old -> new
 ID_MAP = {
@@ -119,26 +121,27 @@ OPS = [
         "F is used in individuals_propoerty(A1,F,A2) but undeclared (non-ground statement); declared"),
 
     # ------------------------------------------------------------------
-    # 4. Repairs of broken encodings (need the owner's approval)
+    # 4. D081 repairs, independently source-reviewed under delegated authority.
     # ------------------------------------------------------------------
-    insert(495, "      - morally_acceptable_action(X,A)", REP,
-           "empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the "
+    insert(495, "      - morally_acceptable_action(X,A)", OWN,
+           _D081 + "p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the "
            "first premise is the conclusion (as in the category file B/4)"),
-    delete(497, "      -  morally_acceptable_action(X,A)", REP,
-           "moved to conclusions (line 495); it was the scheme's conclusion listed as a premise"),
-    sub(908, "great_sacrifice(S,A,X)", "great_sacrifice(S,A,V)", REP,
-        "undeclared X made the premise non-ground, and the value V occurred only in the conclusion; "
+    delete(497, "      -  morally_acceptable_action(X,A)", OWN,
+           _D081 + "p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise"),
+    sub(908, "great_sacrifice(S,A,X)", "great_sacrifice(S,A,V)", OWN,
+        _D081 + "p. 322, entry 20: undeclared X made the premise non-ground, and the value V occurred only in the conclusion; "
         "the template's third argument is 'the value %s', i.e. V"),
-    sub(768, "if_treatment_required(X,A,A2,X)", "if_treatment_required(X,A,A2,X2)", REP,
-        "the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; "
-        "otherwise X2 occurs only in the conclusion (validator error)"),
-    sub(1557, "- reapplication_sequence", "- reapplication_sequence(A2,A)", REP,
-        "0-ary chaining premise: the conclusion's individual A occurred in no premise (validator error); "
-        "the chain links the clear case A2 to A"),
-    sub(306, "  reapplication_sequence:", "  reapplication_sequence/2:", REP,
-        "template for the repaired reapplication_sequence(A2,A) (line 1557)"),
-    sub(306, "from the clear area through the grey area.", "from the clear area -%s- through the grey area to %s.", REP,
-        "template for the repaired reapplication_sequence(A2,A) (line 1557), in the file's '-...-' style"),
+    sub(768, "if_treatment_required(X,A,A2,X)", "if_treatment_required(X,A,A2,X2)", OWN,
+        _D081 + "p. 318, entry 12.1: the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; "
+        "otherwise X2 occurs only in the conclusion (validator error). Preserve WAG's treatment-first variable roles."),
+    sub(1557, "- reapplication_sequence", "- reapplication_sequence(A2,A,P)", OWN,
+        _D081 + "pp. 340-341, entry 51: the chain links clear case A2 to A for the same property P. "
+        "The former binary repair bound A but could reuse chain evidence concerning a different property."),
+    sub(306, "  reapplication_sequence:", "  reapplication_sequence/3:", OWN,
+        _D081 + "pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557)"),
+    sub(306, '"A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."',
+        '"%s is linked through successive cases to %s by inferences concerning property %s."', OWN,
+        _D081 + "pp. 340-341, entry 51: new template names both endpoints and the property; original wording is not copied"),
 
     # ------------------------------------------------------------------
     # 5. Language keys without /arity (29)

@@ -24,8 +24,9 @@ book:
   pages: "312"
   parent: "4"
   match: partial
-  note: 'Same title, but the book''s conclusion is listed among the premises and conclusions:
-    is empty.'
+  note: D081 repairs the formerly empty conclusion after independent AI review of
+    entry 4.6, p. 312; this disposition approves the conclusion move only, not every
+    scope choice.
   status: generated
 families:
 - family: F02
@@ -48,9 +49,8 @@ premise_map:
   status: generated
 - entry: "4.6"
   label: Conclusion
-  formulas: []
-  note: no conclusion; the book's conclusion is the premise morally_acceptable_action(X,A)
-    (template "Therefore, my doing ...")
+  formulas: [{formula: 'morally_acceptable_action(X,A)', locus: conclusion}]
+  note: 'D081: conclusion restored from its former erroneous premise position.'
   status: generated
 critical_questions: []
 summary:
@@ -64,8 +64,9 @@ examples: []
 discrepancies:
 - kind: partial-link
   about: "4.6"
-  detail: 'walton.yml formalizes compendium 4.6 only in part: Same title, but the
-    book''s conclusion is listed among the premises and conclusions: is empty.'
+  detail: 'walton.yml formalizes compendium 4.6 only in part: D081 repairs the formerly
+    empty conclusion after independent AI review of entry 4.6, p. 312; this disposition
+    approves the conclusion move only, not every scope choice.'
   decision: ""
   status: generated
 classification:

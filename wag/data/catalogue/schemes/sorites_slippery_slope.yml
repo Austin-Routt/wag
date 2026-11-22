@@ -15,7 +15,7 @@ formulas:
   premises:
   - beyond_contention(A2,P)
   - all_has(A2,P,A1)
-  - reapplication_sequence(A2,A)
+  - reapplication_sequence(A2,A,P)
   conclusions:
   - may_have(A,P)
 book:
@@ -42,13 +42,13 @@ premise_map:
   status: generated
 - entry: "51"
   label: Reapplication Sequence
-  formulas: [{formula: 'reapplication_sequence(A2,A)', locus: premise}]
-  note: 0-ary
+  formulas: [{formula: 'reapplication_sequence(A2,A,P)', locus: premise}]
+  note: 'D081: chain evidence is specific to endpoints A2, A and property P (pp. 340-341).'
   status: generated
 - entry: "51"
   label: Conclusion
   formulas: [{formula: 'may_have(A,P)', locus: conclusion}]
-  note: A occurs only in the conclusion
+  note: A and P are bound by the property-scoped chain premise.
   status: generated
 critical_questions: []
 summary:

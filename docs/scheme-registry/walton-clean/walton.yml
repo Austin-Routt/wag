@@ -325,7 +325,7 @@ language:
   quality_defined/1: "Agent %s 's action defined well."
   realize_more_effectively/2: "There exists an action that would realize the goal %s more effectively than %s."
   really_distress/1: "%s is really in distress."
-  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s."
+  reapplication_sequence/3: "%s is linked through successive cases to %s by inferences concerning property %s."
   reason_in_favor/1: "There is a reason in favor of %s."
   reason_retaining_goal/2: "%s is a reason for retaining commitment to goal %s." 
   reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."
@@ -1601,7 +1601,7 @@ argument_schemes:
     premises:
       - beyond_contention(A2,P)
       - all_has(A2,P,A1)
-      - reapplication_sequence(A2,A)
+      - reapplication_sequence(A2,A,P)
       
   - id: verbal_slippery_slope
     meta:

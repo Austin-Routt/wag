@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 11 of them changed by the owner's decisions (`analogy`, `group_2`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `rule_physical_world_1`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 15 of them changed by the owner's decisions (`analogy`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -23,7 +23,7 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
-`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula (`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four approval-needed repairs, and the owner's decisions (below; the added scheme is listed, not compared). The six primed-variable schemes are identical apart from the variable names.
+`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula (`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four D081 repairs accepted under delegated authority, and the owner's decisions (below; the added scheme is listed, not compared). The six primed-variable schemes are identical apart from the variable names.
 
 ## Diff size
 
@@ -33,18 +33,18 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | typo | 107 | 99 |
 | variable | 24 | 22 |
 | template | 46 | 44 |
-| repair — needs approval | 7 | 6 |
-| repair — owner decision | 43 | 37 |
+| repair — needs approval | 0 | 0 |
+| repair — owner decision | 50 | 43 |
 | addition — owner decision | 95 | 20 |
 | **total** | **334** | **217** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 192 lines removed, 299 added. That is 187 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 138 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 192 lines removed, 299 added. That is 187 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 145 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
 ## Changes decided by the owner
 
-These are not cleaning edits: they change what schemes say, or add one. Each was decided by the owner, on the date given; `tools/edits.py` records them as "repair — owner decision" and "addition — owner decision" (`OWNER_REPAIRS`, `ADDITIONS`), applied after the cleaning.
+These change what schemes say, add one, or apply an authorized vocabulary migration. Earlier decisions were made by the owner on the date given. D081 was independently reviewed by an AI reviewer against the supplied book under the owner's delegated decision authority, not by a human annotator; its scoped repairs are described below. `tools/edits.py` records authorized choices as "repair — owner decision" and "addition — owner decision". Those category names do not claim that the owner personally checked every source page.
 
 | scheme | change | decided | why |
 |---|---|---|---|
@@ -61,14 +61,16 @@ These are not cleaning edits: they change what schemes say, or add one. Each was
 | `practical_analogy_positive`, `practical_analogy_negative` | variables `[A1,A2,X]` → `[A1,A2,X1,X2]`; premises `right_to_do(A1,X1)` or `wrong_to_do(A1,X1)`, `similar_to(A1,A2)`, `corresponds(X1,X2)`; conclusion `should_be_performed(X2)` or `¬should_be_performed(X2)` in place of `carry_out_right(A2,X)` and `carry_out_wrong(A2,X)`; exception `difference_against(A1,A2,X2)` or `difference_for(A1,A2,X2)` (new templates); `right_to_do/2` and `wrong_to_do/2` rewritten | 2026-10-22 | Decisions D028 and D029, with D001. The book's 8.1 and 8.2 use one action letter made relative to each situation. The old conclusions met no other scheme; now the two rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the sided exception lets a difference against one side leave the other standing when both argue from one past situation. The templates are in our own words. |
 | `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, `negative_consequences_prudential` | exception `other_consequences(A)` (or `(X)`) → `bad_outweighs(A,G)`, `good_outweighs(A,G)`, `good_outweighs(A,B)` and `bad_outweighs(X,C)` (new templates); in `negative_consequences_prudential`, assumption `strongly_occur(X)` → `strongly_occur(X,C)` (new template) and conclusion `prudential(X)` → `should_be_performed(X)` | 2026-10-23 | Decisions D055 and D059 (WAG's proposal D055-D059, version 5, after four independent reviews and a final check). The one exception for the book's 33/CQ3 was shared by the arguments for and against an action, so one argument that opposite consequences outweigh defeated every consequence argument about the action, on both sides. Each scheme now has an exception on its own side that names the consequence it cites, and so defeats only the argument it is about. The prudential form's likelihood assumption names the consequence too, and its conclusion meets the practical schemes about X. `other_consequences/1`, `prudential/1` and `strongly_occur/1` are left as orphan templates. The templates are in our own words. |
 
-## Repairs that need the owner's approval
+## D081 repairs accepted after independent source review
+
+These narrow repairs were accepted under user-delegated decision authority after an independent AI source review of the supplied book: entry 4.6 p. 312, entry 20 p. 322, entry 12.1 p. 318, and entry 51 pp. 340–341. The original binary sorites repair required the additional property scope shown here. This is not human verification or approval of every other interpretation in these records; see `docs/migrations/D081-sorites.md`.
 
 | scheme | line | before | after | why |
 |---|---|---|---|---|
 | moral_justification_ad_populum_excuse | 495, 497 | `conclusions:` empty; premise `morally_acceptable_action(X,A)` | conclusion `morally_acceptable_action(X,A)` | no conclusion, so Carneades built no argument. The formula's template starts "Therefore, …", and the category file B/4 has it as the conclusion |
 | sacrifice | 908 | `great_sacrifice(S,A,X)` | `great_sacrifice(S,A,V)` | X was undeclared (non-ground statement) and V occurred only in the conclusion; the template's third argument is "the value %s" |
 | rhetorical_oppositions_normative | 768 | `if_treatment_required(X,A,A',X)` | `if_treatment_required(X,A,A2,X2)` | the 4th argument is "the contrary treatment %s" (X'), not X. Otherwise X' occurs only in the conclusion (validator error). The A'→A2 rename on the same line is a plain variable fix |
-| sorites_slippery_slope | 1557, 306 | premise `reapplication_sequence` (0-ary) | `reapplication_sequence(A2,A)`; template `…from the clear area -%s- through the grey area to %s.` | the conclusion's individual A occurred in no premise (validator error). The chain premise is the one that links the clear case A2 to A |
+| sorites_slippery_slope | 1557, 306 | premise `reapplication_sequence` (0-ary); intermediate binary repair `reapplication_sequence(A2,A)` | `reapplication_sequence(A2,A,P)` with a template naming both endpoints and P | the chain links clear case A2 to A for the same property P. Binding only the endpoints could reuse a chain about a different property |
 
 Three more edits change a declaration without touching a formula. They are recorded as `variable`, but they depart from "leave declared-but-unused variables", so the owner should see them. In `part_in_whole` (`[Y,X,P]`→`[Y,X,A]`, as in the category file A/2) and `verbal_classification_vagueness` (`[A,P]`→`[A,F]`), the unused P was the misnamed variable that the formulas use. Leaving it would keep a validator error and an extra dummy parameter. `verbal_slippery_slope` gets F declared; see the semantic concerns.
 
@@ -399,12 +401,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  prudential: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
   - after: `  prudential/1: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
-- **306** · repair — needs approval · template for the repaired reapplication_sequence(A2,A) (line 1557) (used by: sorites_slippery_slope)
+- **306** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557) (used by: sorites_slippery_slope)
   - before: `  reapplication_sequence: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
-  - after: `  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
-- **306** · repair — needs approval · template for the repaired reapplication_sequence(A2,A) (line 1557), in the file's '-...-' style (used by: sorites_slippery_slope)
-  - before: `  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
-  - after: `  reapplication_sequence/2: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s."`
+  - after: `  reapplication_sequence/3: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
+- **306** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: new template names both endpoints and the property; original wording is not copied (used by: sorites_slippery_slope)
+  - before: `  reapplication_sequence/3: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
+  - after: `  reapplication_sequence/3: "%s is linked through successive cases to %s by inferences concerning property %s."`
 - **308** [insert after] · repair — owner decision · template for negative_value's new conclusion, in our own words (used by: negative_value)
   - before: _(none)_
   - after: `  reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."`
@@ -522,10 +524,10 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ### moral_justification_ad_populum_excuse
 
-- **495** [insert after] · repair — needs approval · empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)
+- **495** [insert after] · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: empty conclusions: Carneades built no argument; the 'Therefore, ...' formula listed as the first premise is the conclusion (as in the category file B/4)
   - before: _(none)_
   - after: `      - morally_acceptable_action(X,A)`
-- **497** [delete] · repair — needs approval · moved to conclusions (line 495); it was the scheme's conclusion listed as a premise
+- **497** [delete] · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise
   - before: `      -  morally_acceptable_action(X,A)`
   - after: _(none)_
 
@@ -741,7 +743,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **768** · variable · primed variable A' does not parse (' starts a quoted atom); renamed A2 within the scheme
   - before: `      - if_treatment_required(X,A,A',X)`
   - after: `      - if_treatment_required(X,A,A2,X)`
-- **768** · repair — needs approval · the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error)
+- **768** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 318, entry 12.1: the 4th argument repeats X where the template says 'the contrary treatment %s', i.e. X2; otherwise X2 occurs only in the conclusion (validator error). Preserve WAG's treatment-first variable roles.
   - before: `      - if_treatment_required(X,A,A2,X)`
   - after: `      - if_treatment_required(X,A,A2,X2)`
 
@@ -828,7 +830,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **901** · typo · source: 'Trtalise' (OCR)
   - before: `               Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Trtalise on Argumentation. `
   - after: `               Ch. Perelman and L. Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation. `
-- **908** · repair — needs approval · undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V
+- **908** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed p. 322, entry 20: undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V
   - before: `      - great_sacrifice(S,A,X)`
   - after: `      - great_sacrifice(S,A,V)`
 
@@ -978,9 +980,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1555** · typo · misspelled predicate
   - before: `      - beyond_contetion(A2,P)`
   - after: `      - beyond_contention(A2,P)`
-- **1557** · repair — needs approval · 0-ary chaining premise: the conclusion's individual A occurred in no premise (validator error); the chain links the clear case A2 to A
+- **1557** · repair — owner decision · D081: independent AI source review under user-delegated decision authority, Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: the chain links clear case A2 to A for the same property P. The former binary repair bound A but could reuse chain evidence concerning a different property.
   - before: `      - reapplication_sequence`
-  - after: `      - reapplication_sequence(A2,A)`
+  - after: `      - reapplication_sequence(A2,A,P)`
 
 ### verbal_slippery_slope
 

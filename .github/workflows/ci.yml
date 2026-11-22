@@ -90,6 +90,7 @@ jobs:
         run: |
           sh docs/scheme-registry/walton-clean/check/run.sh "$RUNNER_TEMP/walton.yml"
           python3 -B tools/check_d084_migration.py
+          python3 -B tools/check_d081_migration.py
           git status --porcelain
           test -z "$(git status --porcelain)" || {
             echo "::error::check/run.sh does not reproduce the committed files: run it and commit the result"

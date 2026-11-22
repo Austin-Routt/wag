@@ -763,7 +763,7 @@
     {
      "id": "moral_justification_ad_populum_excuse",
      "match": "partial",
-     "reason": "Same title, but the book's conclusion is listed among the premises and conclusions: is empty.",
+     "reason": "D081 repairs the formerly empty conclusion after independent AI review of entry 4.6, p. 312; this disposition approves the conclusion move only, not every scope choice.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -794,8 +794,13 @@
       }
      ],
      "conclusion_map": {
-      "note": "no conclusion; the book's conclusion is the premise morally_acceptable_action(X,A) (template \"Therefore, my doing ...\")",
-      "walton": []
+      "note": "D081: conclusion restored from its former erroneous premise position.",
+      "walton": [
+       {
+        "formula": "morally_acceptable_action(X,A)",
+        "locus": "conclusion"
+       }
+      ]
      },
      "cq_map": []
     }
@@ -2119,10 +2124,11 @@
        "compendium_label": "Major Premise",
        "walton": [
         {
-         "formula": "if_treatment_required(X,A,A',X)",
+         "formula": "if_treatment_required(X,A,A2,X2)",
          "locus": "premise"
         }
-       ]
+       ],
+       "note": "D081: contrary treatment X2; preserve WAG roles X=treatment, A=subject (p. 318)."
       },
       {
        "compendium_label": "Minor Premise",
@@ -2137,7 +2143,7 @@
      "conclusion_map": {
       "walton": [
        {
-        "formula": "contrary_treatment_required(X',A')",
+        "formula": "contrary_treatment_required(X2,A2)",
         "locus": "conclusion"
        }
       ]
@@ -2886,10 +2892,10 @@
       },
       {
        "compendium_label": "Premise 2",
-       "note": "X undeclared, where the value V belongs",
+       "note": "D081: the value argument V replaces undeclared X (p. 322).",
        "walton": [
         {
-         "formula": "great_sacrifice(S,A,X)",
+         "formula": "great_sacrifice(S,A,V)",
          "locus": "premise"
         }
        ]
@@ -2905,7 +2911,7 @@
       }
      ],
      "conclusion_map": {
-      "note": "template \"%s has a great value.\" drops V",
+      "note": "The repaired two-argument template names both A and value V.",
       "walton": [
        {
         "formula": "sacrifice_value(A,V)",
@@ -7219,7 +7225,7 @@
        "compendium_label": "Initial Base Premise",
        "walton": [
         {
-         "formula": "beyond_contetion(A2,P)",
+         "formula": "beyond_contention(A2,P)",
          "locus": "premise"
         }
        ]
@@ -7235,17 +7241,17 @@
       },
       {
        "compendium_label": "Reapplication Sequence",
-       "note": "0-ary",
+       "note": "D081: chain evidence is specific to endpoints A2, A and property P (pp. 340-341).",
        "walton": [
         {
-         "formula": "reapplication_sequence",
+         "formula": "reapplication_sequence(A2,A,P)",
          "locus": "premise"
         }
        ]
       }
      ],
      "conclusion_map": {
-      "note": "A occurs only in the conclusion",
+      "note": "A and P are bound by the property-scoped chain premise.",
       "walton": [
        {
         "formula": "may_have(A,P)",

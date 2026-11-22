@@ -18,7 +18,7 @@ sacrifice                                premises     ['sacrifice_made(A,S)', 'g
 negative_consequences_prudential         assumptions  ['strongly_occur(X)'] -> ['strongly_occur(X,C)']
 negative_consequences_prudential         exceptions   ['other_consequences(X)'] -> ['bad_outweighs(X,C)']
 negative_consequences_prudential         conclusions  ['prudential(X)'] -> ['should_be_performed(X)']
-sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A)']
+sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A,P)']
 verbal_slippery_slope                    variables    ['A1', 'A2', 'A', 'P'] -> ['A1', 'A2', 'A', 'P', 'F']
 analogy                                  variables    ['A', 'C'] -> ['P1', 'P2', 'C1', 'C2']
 analogy                                  premises     ['similar_case(C)', 'in_case(A,C)'] -> ['similar_to(C1,C2)', 'in_case(P1,C1)', 'corresponds(P1,P2)']
@@ -72,7 +72,7 @@ language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same ke
   +  precedent_chain/3 'From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
   +  prudential/1 'Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s.'
-  +  reapplication_sequence/2 'A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area -%s- through the grey area to %s.'
+  +  reapplication_sequence/3 '%s is linked through successive cases to %s by inferences concerning property %s.'
   +  reason_retracting_goal/2 '%s is a reason to give up commitment to goal %s.'
   +  reference_class/0 'Reference class of other agents who also might have brought about this event and also have same character is sufficient.'
   +  rule_changed/0 'The rule has changed since the publication of the rulebook.'

@@ -34,6 +34,8 @@ premise_map:
 - entry: "12.1"
   label: Major Premise
   formulas: [{formula: 'if_treatment_required(X,A,A2,X2)', locus: premise}]
+  note: 'D081: contrary treatment X2; preserve WAG roles X=treatment, A=subject (p.
+    318).'
   status: generated
 - entry: "12.1"
   label: Minor Premise
