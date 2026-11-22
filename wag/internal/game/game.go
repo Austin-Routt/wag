@@ -246,8 +246,8 @@ type Move struct {
 	Resigned bool
 	// Rejection is why an invalid move was rejected.
 	Rejection string `json:",omitempty"`
-	// Bridge is the declared bridge an answer was made through, when its
-	// scheme's conclusion is not the answer (nascq.Edge.Bridge).
+	// Bridge is retained for reading historical move logs. New moves cannot
+	// use free-text bridges to change their backing scheme's conclusion.
 	Bridge string `json:",omitempty"`
 
 	// Moderation is the moderator's verdict on a held move ("approved",
@@ -489,14 +489,10 @@ func (b *graphBridge) ArgumentExists(argID string) bool {
 	return b.gs.Adapter.Graph.Arguments[argID] != nil
 }
 
-// ArgumentSchemeID returns the Carneades scheme ID for the given argument.
-// Returns "" if the argument doesn't exist or has no scheme.
+// ArgumentSchemeID returns the recorded NASCQ identity, or an unambiguous
+// legacy mapping, only if it is compatible with the loaded profile.
 func (b *graphBridge) ArgumentSchemeID(argID string) string {
-	arg := b.gs.Adapter.Graph.Arguments[argID]
-	if arg == nil || arg.Scheme == nil {
-		return ""
-	}
-	return arg.Scheme.Id
+	return b.gs.CurrentSchemeID(b.gs.Adapter.Graph.Arguments[argID])
 }
 
 // PremiseExists returns true if the argument has a premise with the given

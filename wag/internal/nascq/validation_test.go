@@ -431,12 +431,12 @@ func TestValidateS3CQApplicable(t *testing.T) {
 	action := ProposedAction{
 		Type:        "attack",
 		AttackType:  "undercutter",
-		SchemeID:    "AS:cause_to_effect", // backup scheme for side_effects
+		SchemeID:    "AS:expert_opinion", // answers the challenged inference explicitly
 		AnswersCQID: "CQ:side_effects",
 		TargetArgID: "a1",
 		VariableBindings: map[string]string{
-			"Cause":  "carbon tax",
-			"Effect": "economic recession",
+			"Expert": "an economist",
+			"Domain": "economic policy",
 		},
 	}
 	result, err := n.Validate(action, graph)
@@ -729,12 +729,12 @@ func TestValidateCaesAttackTypeResolution(t *testing.T) {
 	action := ProposedAction{
 		Type:        "attack",
 		AttackType:  "undercutter",
-		SchemeID:    "AS:cause_to_effect",
+		SchemeID:    "AS:expert_opinion",
 		AnswersCQID: "CQ:side_effects",
 		TargetArgID: "a1",
 		VariableBindings: map[string]string{
-			"Cause":  "carbon tax",
-			"Effect": "economic downturn",
+			"Expert": "an economist",
+			"Domain": "economic policy",
 		},
 	}
 	result, err := n.Validate(action, graph)

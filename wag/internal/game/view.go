@@ -167,12 +167,7 @@ func (gs *GameState) BuildView() *View {
 		av.Owner, _ = arg.Metadata["owner"].(string)
 		av.Text, _ = arg.Metadata["text"].(string)
 		av.Evidence, _ = arg.Metadata["evidence"].([]string)
-		if arg.Scheme != nil {
-			av.Scheme = arg.Scheme.Id
-			if nid := gs.NASCQ.FindNASCQSchemeID(arg.Scheme.Id); nid != "" {
-				av.Scheme = nid
-			}
-		}
+		av.Scheme = gs.SchemeID(arg)
 		for _, p := range arg.Premises {
 			av.Premises = append(av.Premises, p.Stmt.Id)
 			shown[p.Stmt] = true

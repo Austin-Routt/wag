@@ -102,12 +102,12 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 	}
 
 	// A backup scheme without an answer variable backs only the answers its
-	// conclusion can be (S9, nascq.fitAnswer), unless its edge declares a
-	// bridge: an edge on which it can back none is an error (every answer
+	// conclusion can be (S9, nascq.fitAnswer): an edge on which it can back
+	// none is an error (every answer
 	// would be rejected), and one where it can back some is reported.
 	for _, b := range n.BackupEdges {
 		bs := n.Schemes[b.Scheme]
-		if bs == nil || bs.AnswerVariable != "" || bs.Free || b.Bridge != "" {
+		if bs == nil || bs.AnswerVariable != "" || bs.Free {
 			continue
 		}
 		bc := caesConclusions[bs.CarneadesID]

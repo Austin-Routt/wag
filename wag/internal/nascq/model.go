@@ -76,8 +76,7 @@ type ASNode struct {
 	// the answer to a critical question, it is bound to the answer, so the
 	// argument's premises are about the answer (asserts(W, ¬possible(A))).
 	// A scheme without one concludes something more specific
-	// (should_be_performed(A)): it backs only answers of that form (S9),
-	// unless its backup edge declares a bridge (Edge.Bridge).
+	// (should_be_performed(A)): it backs only answers of that form (S9).
 	AnswerVariable string `json:"answer_variable,omitempty"`
 
 	// Free marks the user-defined scheme ("Other", see EnableOther): the
@@ -158,11 +157,9 @@ type Edge struct {
 	Locus   string `json:"locus,omitempty"`
 	Pattern string `json:"pattern,omitempty"`
 
-	// Bridge (backup edges only), if not empty, declares that the scheme
-	// backs answers to the question that are not of its conclusion's form,
-	// and says why its conclusion supports such an answer: an enthymeme,
-	// stated so that it can be reviewed. Without it, a scheme without an
-	// answer variable backs only answers its conclusion can be (S9).
+	// Bridge is retained for reading historical profiles. It never grants
+	// permission to replace a scheme's conclusion. Nonempty values are lint
+	// errors; use a distinct typed answer scheme with explicit premises.
 	Bridge string `json:"bridge,omitempty"`
 }
 
@@ -271,8 +268,8 @@ type ValidatedAction struct {
 	// statement the move is about (S9). The mover need not give them.
 	Fixed map[string]string `json:"fixed,omitempty"`
 
-	// Bridge is the backup edge's declared bridge, when the answer is not of
-	// the backing scheme's conclusion form (Edge.Bridge): the move records it.
+	// Bridge is retained for decoding historical moves. New moves never
+	// use a prose bridge to waive conclusion checking.
 	Bridge string `json:"bridge,omitempty"`
 
 	// Free marks the user-defined scheme ("Other", see EnableOther): the

@@ -366,6 +366,7 @@ func TestSupportTurn(t *testing.T) {
 
 func TestUndercutterFlipsLabel(t *testing.T) {
 	gs := makeTestGame(t)
+	gs.NASCQ.EnableOther()
 
 	// Turn 1: Alice supports with practical reasoning.
 	support := nascq.ProposedAction{
@@ -393,16 +394,17 @@ func TestUndercutterFlipsLabel(t *testing.T) {
 		t.Fatalf("before attack: conclusion = %v, want In", targetArg.Conclusion.Label)
 	}
 
-	// Turn 2: Bob undercuts via CQ:side_effects using AS:cause_to_effect.
+	// Turn 2: Bob states the missing inference warrant explicitly with Other.
+	// A causal scheme alone cannot conclude that an inference is defeated.
 	attack := nascq.ProposedAction{
 		Type:        "attack",
 		AttackType:  "undercutter",
-		SchemeID:    "AS:cause_to_effect",
+		SchemeID:    nascq.OtherSchemeID,
 		AnswersCQID: "CQ:side_effects",
 		TargetArgID: targetArgID,
 		VariableBindings: map[string]string{
-			"Cause":  "carbon_tax",
-			"Effect": "economic_recession",
+			"P1": "the proposal produces a severe economic recession",
+			"P2": "that cost defeats this practical inference",
 		},
 	}
 	r2, err := gs.ExecuteTurn(attack)
@@ -425,11 +427,11 @@ func TestUndercutterFlipsLabel(t *testing.T) {
 	}
 
 	// Verify Bob's score includes undercutter bonus.
-	// Score: base_points[In] * 0.65 (for undercut statement labeled In) + 15 (bonus)
-	// = 10 * 0.65 + 15 = 6.5 + 15 = 21.5
+	// Score: base_points[In] * 0.5 (Other's weight) + 15 (bonus)
+	// = 10 * 0.5 + 15 = 20.
 	bob := gs.PlayerByID("Bob")
-	if !approxEqual(bob.Score, 21.5, 0.5) {
-		t.Errorf("Bob score = %.2f, want ~21.5", bob.Score)
+	if !approxEqual(bob.Score, 20, 0.5) {
+		t.Errorf("Bob score = %.2f, want ~20", bob.Score)
 	}
 
 	// Verify graph is still acyclic.
@@ -519,6 +521,7 @@ func TestInvalidActionRejected(t *testing.T) {
 
 func TestFullGameSequence(t *testing.T) {
 	gs := makeTestGame(t)
+	gs.NASCQ.EnableOther()
 	gs.Config.MaxTurns = 4
 
 	// Turn 1: Alice supports.
@@ -537,10 +540,10 @@ func TestFullGameSequence(t *testing.T) {
 	// Turn 2: Bob undercuts.
 	r2, _ := gs.ExecuteTurn(nascq.ProposedAction{
 		Type: "attack", AttackType: "undercutter",
-		SchemeID: "AS:cause_to_effect", AnswersCQID: "CQ:side_effects",
+		SchemeID: nascq.OtherSchemeID, AnswersCQID: "CQ:side_effects",
 		TargetArgID: r1.ArgIDs[0],
 		VariableBindings: map[string]string{
-			"Cause": "carbon_tax", "Effect": "job_losses",
+			"P1": "the proposal produces severe job losses", "P2": "those losses defeat this practical inference",
 		},
 	})
 	if !r2.Accepted {

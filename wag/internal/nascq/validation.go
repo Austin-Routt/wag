@@ -16,8 +16,9 @@ type GraphQuerier interface {
 	// ArgumentExists returns true if an argument with the given ID exists.
 	ArgumentExists(argID string) bool
 
-	// ArgumentSchemeID returns the Carneades scheme ID (e.g., "practical_reasoning1")
-	// for the given argument, or "" if the argument doesn't exist or has no scheme.
+	// ArgumentSchemeID returns the recorded NASCQ ID, or a legacy engine
+	// scheme ID whose game mapping is unambiguous. Return "" for an absent
+	// argument or an identity incompatible with the loaded game profile.
 	ArgumentSchemeID(argID string) string
 
 	// PremiseExists returns true if the argument with argID has a premise
@@ -93,20 +94,19 @@ func AttackTypeOf(cq *CQNode) string {
 // buildReverseSchemeIndex creates a mapping from CarneadesID → NASCQ ID.
 // Called during NASCQ construction so that findNASCQSchemeID is O(1).
 //
-// Multiple NASCQ schemes can map to the same Carneades ID (many-to-one).
-// In that case, the first one found wins. This is acceptable because the
-// reverse lookup is used for S3 (CQ applicability), where any matching
-// NASCQ scheme is sufficient.
+// A shared Carneades identity is ambiguous and is a lint error. Its reverse
+// entry is empty so that S3 cannot silently choose another scheme's CQs.
 func (n *NASCQ) buildReverseSchemeIndex() {
-	// Index carneadesID → nascqID. When several NASCQ schemes map to the same
-	// Carneades scheme, the one with the smallest NASCQ ID wins, so the choice
-	// does not depend on map iteration order.
+	// Keep an empty entry after the second mapping, including when a third
+	// alias is encountered. Merely deleting it would let the third alias win.
 	idx := make(map[string]string, len(n.Schemes))
 	for _, nascqID := range sortedSchemeIDs(n.Schemes) {
 		node := n.Schemes[nascqID]
 		if node.CarneadesID != "" {
 			if _, exists := idx[node.CarneadesID]; !exists {
 				idx[node.CarneadesID] = nascqID
+			} else {
+				idx[node.CarneadesID] = ""
 			}
 		}
 	}
@@ -114,7 +114,7 @@ func (n *NASCQ) buildReverseSchemeIndex() {
 }
 
 // FindNASCQSchemeID returns the NASCQ scheme ID for a given Carneades scheme ID.
-// Returns "" if no mapping exists.
+// Returns "" if no unambiguous mapping exists.
 //
 // Example: FindNASCQSchemeID("practical_reasoning1") → "AS:practical_reasoning"
 func (n *NASCQ) FindNASCQSchemeID(carneadesSchemeID string) string {
@@ -374,9 +374,9 @@ func (n *NASCQ) fit(va *ValidatedAction, scheme *ASNode, graph GraphQuerier) err
 // A scheme whose conclusion cannot be the answer cannot back it (its
 // premises would support its own conclusion, not the answer: a value
 // argument's "V is a reason to keep G" does not show that another goal
-// comes first), unless the NASCQ's backup edge declares a bridge (Edge.Bridge):
-// then the argument concludes the answer in place of the scheme's
-// conclusion, and the move records the bridge. The schemes with an answer
+// comes first). A free-text explanation on a backup edge does not supply
+// that inference. A different conclusion requires a distinct, typed scheme
+// whose premises actually establish it. The schemes with an answer
 // variable conclude any answer: the answer is in their premises (the expert
 // asserts the answer itself).
 func (n *NASCQ) fitAnswer(va *ValidatedAction, scheme *ASNode, graph GraphQuerier) error {
@@ -391,10 +391,6 @@ func (n *NASCQ) fitAnswer(va *ValidatedAction, scheme *ASNode, graph GraphQuerie
 		_, err = graph.Fits(scheme.CarneadesID, stmt, nil)
 	}
 	if err != nil {
-		if b := n.BridgeOf(scheme.ID, va.AnswersCQID); b != "" {
-			va.Bridge = b
-			return nil
-		}
 		return fmt.Errorf("S9: %s cannot conclude the answer, %s (%v); answer with Other, or with a scheme whose conclusion is any statement (%s)",
 			scheme.Name, what, err, strings.Join(n.answerSchemes(), ", "))
 	}

@@ -119,7 +119,7 @@ func (gs *GameState) ClaimUnder(w map[string]float64) string {
 		if carneades.ArgumentRole(arg) != carneades.RoleMain || moderated[arg.Id] || arg.Metadata["kialo_location"] != nil || arg.Scheme == nil {
 			return 0, false
 		}
-		id := gs.NASCQ.FindNASCQSchemeID(arg.Scheme.Id)
+		id := gs.CurrentSchemeID(arg)
 		if id == "" {
 			return 0, false
 		}

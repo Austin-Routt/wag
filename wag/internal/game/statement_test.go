@@ -136,10 +136,9 @@ func TestChallengeAnsweredByAnArgumentForThePremise(t *testing.T) {
 // backup edge stood for the missing link, let such an argument conclude an
 // answer its premises do not support.
 //
-// With a bridge the edge declares, it can, and then it concludes the
-// answer: the consequences scheme's question about its conclusion (side
-// effects of doing it) does not apply to it. The playtest of 2026-10-13
-// showed the prompt offering it, with the answers reversed.
+// A prose bridge cannot change this. An answer-variable scheme can instead
+// argue the answer explicitly; its conclusion and applicable questions
+// must then concern that answer.
 func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 	add := func(edge string) []byte {
 		return []byte(strings.Replace(string(data.EdgesJSON), `"backup_edges": [`, `"backup_edges": [ `+edge+`,`, 1))
@@ -162,12 +161,16 @@ func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 	if again := play(t, gs, prSupportAction()); again != a1 {
 		t.Fatalf("the new game's first argument is %s, not %s", again, a1)
 	}
-	a2 := play(t, gs, bad)
+	if r, err := gs.ExecuteTurn(bad); err != nil || r.Accepted || !strings.Contains(r.Error, "S9") {
+		t.Fatalf("a prose bridge changed the scheme conclusion: %+v %v", r, err)
+	}
+	a2 := play(t, gs, answer("attack", "CQ:other_means", "AS:position_to_know", a1,
+		map[string]string{"W": "an energy auditor", "D": "home insulation"}))
 	if c := gs.Adapter.Graph.Arguments[a2].Conclusion.Id; !strings.HasPrefix(c, "realize_more_effectively(") {
 		t.Fatalf("the answer concludes %s", c)
 	}
-	if b := gs.MoveHistory[len(gs.MoveHistory)-1].Bridge; !strings.HasPrefix(b, "test:") {
-		t.Fatalf("the move does not record its bridge: %q", b)
+	if b := gs.MoveHistory[len(gs.MoveHistory)-1].Bridge; b != "" {
+		t.Fatalf("new move records a prose bridge: %q", b)
 	}
 	for _, tmpl := range gs.NASCQ.EnumerateActions(gs.Bridge(), []string{a2}) {
 		if tmpl.Locus.Kind == nascq.LocusConclusion {
@@ -175,7 +178,7 @@ func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 		}
 	}
 	r, err := gs.ExecuteTurn(answer("attack", "CQ:side_effect", "AS:sign", a2, map[string]string{"A": "x"}))
-	if err != nil || r.Accepted || !strings.Contains(r.Error, "does not apply") {
+	if err != nil || r.Accepted || !strings.Contains(r.Error, "not applicable") {
 		t.Fatalf("side effects of %s: %+v %v", a2, r, err)
 	}
 	// Its other questions still apply, and its conclusion can be argued

@@ -349,10 +349,7 @@ func (s *Session) buildState() *State {
 			Weight: arg.Weight, InForce: arg.Weight > 0, Conclusion: arg.Conclusion.Id, Premises: []string{}, CQs: []CQOnArg{},
 			Move: idx(madeBy, id)}
 		if arg.Scheme != nil {
-			as.Scheme = gs.NASCQ.FindNASCQSchemeID(arg.Scheme.Id)
-			if as.Scheme == "" {
-				as.Scheme = arg.Scheme.Id
-			}
+			as.Scheme = gs.SchemeID(arg)
 			as.Free = arg.Scheme.Id == carneades.FreeSchemeID
 		}
 		as.Text, _ = arg.Metadata["text"].(string)
@@ -394,7 +391,7 @@ func (s *Session) buildState() *State {
 				if q := gs.NASCQ.GetCQ(a.AnswersCQID); q != nil {
 					as.Answers.CQName = q.Name
 				}
-				if sid := gs.NASCQ.FindNASCQSchemeID(gs.Adapter.Graph.Arguments[a.TargetArgID].Scheme.Id); sid != "" && a.AnswersCQID != "" {
+				if sid := gs.CurrentSchemeID(gs.Adapter.Graph.Arguments[a.TargetArgID]); sid != "" && a.AnswersCQID != "" {
 					as.Answers.Locus = gs.NASCQ.LocusOf(a.AnswersCQID, sid).Kind
 				}
 			}
@@ -840,7 +837,7 @@ func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) Log
 	}
 	if a.TargetArgID != "" && a.AnswersCQID != "" {
 		if t := gs.Adapter.Graph.Arguments[a.TargetArgID]; t != nil && t.Scheme != nil {
-			if sid := gs.NASCQ.FindNASCQSchemeID(t.Scheme.Id); sid != "" {
+			if sid := gs.CurrentSchemeID(t); sid != "" {
 				e.About = aboutWords(gs.NASCQ.LocusOf(a.AnswersCQID, sid).Kind)
 			}
 		}

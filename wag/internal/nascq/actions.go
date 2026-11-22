@@ -166,11 +166,11 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 
 // canAnswer reports whether the template's scheme can conclude its answer
 // (S9, fitAnswer): a question, Other and the schemes with an answer
-// variable always can; another scheme an answer of its conclusion's form,
-// or any answer through a bridge its backup edge declares.
+// variable always can; another scheme can answer only in its conclusion's
+// form. A free-text bridge does not change the conclusion it can establish.
 func (n *NASCQ) canAnswer(t ActionTemplate, graph GraphQuerier) bool {
 	s := n.Schemes[t.SchemeID]
-	if t.Type == "question" || s == nil || s.Free || s.AnswerVariable != "" || n.BridgeOf(s.ID, t.AnswersCQID) != "" {
+	if t.Type == "question" || s == nil || s.Free || s.AnswerVariable != "" {
 		return true
 	}
 	va := &ValidatedAction{ProposedAction: ProposedAction{Type: t.Type, TargetArgID: t.TargetArgID, AnswersCQID: t.AnswersCQID},

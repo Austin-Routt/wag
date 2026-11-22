@@ -433,6 +433,10 @@ func (gs *GameState) applyAction(
 		if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
 			continue // exception arguments: their premise holds only if argued for
 		}
+		if arg.Metadata == nil {
+			arg.Metadata = make(caes.Metadata)
+		}
+		arg.Metadata["nascq_scheme_id"] = va.SchemeID
 		for _, p := range arg.Premises {
 			if p.Stmt == nil {
 				continue

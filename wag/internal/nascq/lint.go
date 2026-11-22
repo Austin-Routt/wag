@@ -41,14 +41,15 @@ func Placeholders(s string) []string {
 // carneades_id, or with a base weight outside (0, 1], or a template or
 // answer_variable naming an undeclared variable; an ask edge without a locus (named on the edge or
 // implied by the CQ's caes_mapping), a premise or exception locus without a
-// pattern, or a pattern naming a variable the scheme does not declare.
+// pattern, or a pattern naming a variable the scheme does not declare;
+// a free-text bridge that would replace the backing scheme's conclusion;
+// or schemes sharing a carneades_id, which loses their distinct CQ identity.
 //
 // Warnings: a scheme no CQ is asked of (arguments made with it, including
 // attacks, can never be challenged); a CQ asked of no scheme; a CQ whose
 // question names a variable that a scheme it is asked of does not declare; a
 // thesis-dependent backup edge between different semantic types (the check
-// that move validation used to attempt as S4); and two schemes sharing a
-// carneades_id (arguments are mapped back to the smaller NASCQ ID).
+// that move validation used to attempt as S4).
 func (n *NASCQ) Lint() []LintIssue {
 	var out []LintIssue
 	add := func(isErr bool, where, format string, args ...interface{}) {
@@ -69,6 +70,9 @@ func (n *NASCQ) Lint() []LintIssue {
 	}
 	for _, e := range n.BackupEdges {
 		s, cq := n.resolveBackupEdge(e)
+		if e.Bridge != "" {
+			add(true, s, "free-text bridge to %s cannot change a scheme's conclusion; use a typed answer scheme", cq)
+		}
 		if k := "backup " + s + " " + cq; seen[k] {
 			add(true, "edges", "duplicate backup edge %s -> %s", s, cq)
 		} else {
@@ -122,7 +126,7 @@ func (n *NASCQ) Lint() []LintIssue {
 	}
 	for _, cid := range SortedStringKeys(byCarneades) {
 		if ids := byCarneades[cid]; len(ids) > 1 {
-			add(false, cid, "carneades_id of %v; its arguments map back to %s", ids, ids[0])
+			add(true, cid, "carneades_id is shared by %v; distinct game schemes require distinct engine identities", ids)
 		}
 	}
 

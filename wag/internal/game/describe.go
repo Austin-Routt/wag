@@ -298,13 +298,11 @@ func (gs *GameState) SchemeName(arg *caes.Argument) string {
 	case carneades.RoleException:
 		return "exception"
 	}
-	if arg.Scheme == nil {
-		return ""
-	}
-	if s := gs.NASCQ.GetScheme(gs.NASCQ.FindNASCQSchemeID(arg.Scheme.Id)); s != nil {
+	id := gs.SchemeID(arg)
+	if s := gs.NASCQ.GetScheme(id); s != nil {
 		return s.Name
 	}
-	return arg.Scheme.Id
+	return id
 }
 
 // ownerOf returns the owner of an argument, or "" if it has none.
