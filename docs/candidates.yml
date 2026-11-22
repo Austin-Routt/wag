@@ -183,6 +183,11 @@ candidates:
         reason, not a defeater. Its sketch is one premise from analogy's.
     group: case-comparison
     decision: D056
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D056: a WAG extension through the proposal path; decision recorded, implementation and source interpretation not approved by this bookkeeping change"
     found:
       - "the first independent review of proposal D001-D028-D029, 2026-10-22"
       - "the second independent review of that proposal: more Kialo sightings"
@@ -335,6 +340,11 @@ candidates:
         (sources).
     group: inference-attacks
     decision: D056
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D056: a WAG extension through the proposal path; decision recorded, implementation and source interpretation not approved by this bookkeeping change"
     found:
       - "the first independent review of proposal D001-D028-D029, 2026-10-22"
       - "the second independent review of that proposal: more Kialo sightings"
@@ -495,7 +505,7 @@ candidates:
       - "As a support move it never applies: the adapter files its main argument as an exception argument, with no owner and no presumed premises. The move check (S9) refuses it at the inference locus, since it has no answer variable."
       - "Bound to a description, A names no argument; A must be bound to the attacked argument's id."
     needs:
-      - "D056 chooses: (a) analogy played as an undercutter (no new scheme; templates that read well with an argument as a case; an annotation rule); or (b) a scheme of its own, which needs code so that S9 returns undercut(<target>) at the inference locus and the move check binds A to the attacked argument."
+      - "D056 selected a WAG extension of its own. Implementation still needs a reviewed proposal, a typed undercut target at the inference locus, and a move check binding the attack to the correct argument instance; the old either/or is resolved."
     open:
       - "'The premises of B are plainly acceptable' strains when B is a pattern, and is false when B shares the very principle under attack (a reductio, 2629.19533): the same candidate or another?"
       - "Ridicule by parity (2629.18591) is often a weak or fallacious use; the exception is the defence, and the dialogue type should set its weight."
