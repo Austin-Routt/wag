@@ -627,6 +627,17 @@
   "reason": "malformed verb '% i' printed '%!i(string=...)s'"
  },
  {
+  "line": 200,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  is/2: \"%s is %s.\"",
+  "after": "  is_a/2: \"%s is %s.\"",
+  "reason": "D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added."
+ },
+ {
   "line": 204,
   "change": "insert after",
   "scheme": "language",
@@ -2343,6 +2354,17 @@
   "reason": "undeclared X made the premise non-ground, and the value V occurred only in the conclusion; the template's third argument is 'the value %s', i.e. V"
  },
  {
+  "line": 933,
+  "change": "edit",
+  "scheme": "group_2",
+  "scheme_after": "group_2",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - is(M,Q)",
+  "after": "      - is_a(M,Q)",
+  "reason": "D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added."
+ },
+ {
   "line": 1024,
   "change": "edit",
   "scheme": "practical_goal",
@@ -3023,6 +3045,17 @@
   "before": "      title: Argument For Constitutive Rule Claims - Physical Worl Premise Version 1 ",
   "after": "      title: Argument For Constitutive Rule Claims - Physical World Premise Version 1 ",
   "reason": "title 'Worl'"
+ },
+ {
+  "line": 1584,
+  "change": "edit",
+  "scheme": "rule_physical_world_1",
+  "scheme_after": "rule_physical_world_1",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - is(W,D)",
+  "after": "      - is_a(W,D)",
+  "reason": "D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added."
  },
  {
   "line": 1587,

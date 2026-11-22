@@ -15,6 +15,7 @@ from edits import ADDITIONS, OPS, ID_MAP  # noqa: E402
 
 PRED_MAP = {op["old"]: op["new"] for op in OPS if op["op"] == "rename"}
 PRED_MAP["true"] = "is_true"
+PRED_MAP["is"] = "is_a"  # D084's targeted predicate rename, not an English text edit.
 VAR_MAP = {
     "opposition-descriptive_1": {"P'": "P2"},
     "opposition-descriptive_2": {"P'": "P2"},

@@ -209,7 +209,7 @@ language:
   internally_consistent/1: "%s is internally consistent."
   intervening_actions/2: "Intervening actions are needed after performing %s to achieve %s."
   intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."
-  is/2: "%s is %s."
+  is_a/2: "%s is %s."
   is_required/1: "%s is required."
   judged_negative_value/2: "Value %s is negative as judged by agent %s."
   judged_positive_value/2: "Value %s is positive as judged by agent %s."
@@ -973,7 +973,7 @@ argument_schemes:
                Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 321-326. 
     variables: [G,Q,M]
     conclusions: 
-      - is(M,Q)
+      - is_a(M,Q)
     premises: 
       - group_quality(G,Q)
       - group_member(M,G)
@@ -1655,7 +1655,7 @@ argument_schemes:
     conclusions:
       - means_same(W,D)
     premises:
-      - is(W,D)
+      - is_a(W,D)
       - synonymous
     exceptions:
       - not_necessarily_true

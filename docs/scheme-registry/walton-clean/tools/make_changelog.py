@@ -152,11 +152,10 @@ def main(outdir):
           "`ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable "
           "occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, "
           "which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning]"
-          "(#schemes-that-cannot-pass-without-a-change-of-meaning). Two more, `group_2` and `rule_physical_world_1`, and the "
-          "language key `is/2`, use `is` as a predicate, a name the engine has reserved since 2026-11-22: in a rule body GoCHR "
-          "runs `is/2` as an assignment. D084 decides to rename it `is_a/2`, the schemes library's name, with the same "
-          "template; until that is applied (plan §0, stage 2), these three problems remain, with or without the four "
-          "proposals (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not "
+          "(#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` "
+          "in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. "
+          "The engine reported three related reserved-name problems before this migration; they are now gone. "
+          "These schemes still instantiate correctly (check 3), and WAG's loader does not "
           "run the validator.")
         w("")
     w("WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) "

@@ -3027,10 +3027,10 @@
       }
      ],
      "conclusion_map": {
-      "note": "is/2 template \"% is %s.\" is malformed",
+      "note": "D084 renames the reserved predicate is/2 to is_a/2; same wording and argument order.",
       "walton": [
        {
-        "formula": "is(M,Q)",
+        "formula": "is_a(M,Q)",
         "locus": "conclusion"
        }
       ]
@@ -7448,7 +7448,7 @@
        "compendium_label": "Premise",
        "walton": [
         {
-         "formula": "is(W,D)",
+         "formula": "is_a(W,D)",
          "locus": "premise"
         }
        ]

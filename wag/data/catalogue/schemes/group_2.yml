@@ -17,7 +17,7 @@ formulas:
   - group_member(M,G)
   - group_member_quality(G,Q,M)
   conclusions:
-  - is(M,Q)
+  - is_a(M,Q)
 book:
 - entry: "21.2"
   title: 'Argumentation from the Group and Its Members: Variant 2'
@@ -47,8 +47,9 @@ premise_map:
   status: generated
 - entry: "21.2"
   label: Conclusion
-  formulas: [{formula: 'is(M,Q)', locus: conclusion}]
-  note: is/2 template "% is %s." is malformed
+  formulas: [{formula: 'is_a(M,Q)', locus: conclusion}]
+  note: D084 renames the reserved predicate is/2 to is_a/2; same wording and argument
+    order.
   status: generated
 critical_questions: []
 summary:

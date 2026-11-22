@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 9 of them changed by the owner's decisions (`analogy`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 11 of them changed by the owner's decisions (`analogy`, `group_2`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `rule_physical_world_1`, `slippery_slope_base_case`, `slippery_slope_inductive_step`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -11,15 +11,15 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 YAML / import error | yaml: line 733: mapping values are not allowe | yaml: unmarshal errors: line 56: key "biased/…; read leniently | none | none |
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
-| 2 validator problems (before / after instantiation) | – | 142 / 155 | 20 / 20 | 3 / 3 |
+| 2 validator problems (before / after instantiation) | – | 142 / 155 | 17 / 17 | 0 / 0 |
 | 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 116 | 0 of 116 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 66 of 111 | 110 of 116 | 114 of 116 |
-| **GATE** | **FAIL** | **FAIL** | **FAIL** | **FAIL** |
+| schemes passing checks 2–4 | – | 66 of 111 | 112 of 116 | 116 of 116 |
+| **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr, and 4 for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these 5.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 110. Four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). Two more, `group_2` and `rule_physical_world_1`, and the language key `is/2`, use `is` as a predicate, a name the engine has reserved since 2026-11-22: in a rule body GoCHR runs `is/2` as an assignment. D084 decides to rename it `is_a/2`, the schemes library's name, with the same template; until that is applied (plan §0, stage 2), these three problems remain, with or without the four proposals (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 112. Four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 7 | 6 |
-| repair — owner decision | 40 | 34 |
+| repair — owner decision | 43 | 37 |
 | addition — owner decision | 95 | 20 |
-| **total** | **331** | **215** distinct lines (a line can carry edits of several categories) |
+| **total** | **334** | **217** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 190 lines removed, 297 added. That is 185 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 135 of the recorded edits are the owner's decisions (below).
+Unified diff against the original (`walton.diff`): 192 lines removed, 299 added. That is 187 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 3 inserted (the templates `cannot_present_sametime/3` and `data_set/2`, and that conclusion under `conclusions:`); 138 of the recorded edits are the owner's decisions (below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -288,9 +288,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **199** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."`
-- **200** · template · malformed verb '% i' printed '%!i(string=...)s' (used by: group_2, rule_physical_world_1)
+- **200** · template · malformed verb '% i' printed '%!i(string=...)s' (used by: no scheme)
   - before: `  is/2: "% is %s."`
   - after: `  is/2: "%s is %s."`
+- **200** · repair — owner decision · D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added. (used by: group_2, rule_physical_world_1)
+  - before: `  is/2: "%s is %s."`
+  - after: `  is_a/2: "%s is %s."`
 - **204** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  leads_to_next/3: "In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links."`
@@ -829,6 +832,12 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - great_sacrifice(S,A,X)`
   - after: `      - great_sacrifice(S,A,V)`
 
+### group_2
+
+- **933** · repair — owner decision · D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added.
+  - before: `      - is(M,Q)`
+  - after: `      - is_a(M,Q)`
+
 ### practical_goal
 
 - **1024** · typo · source: 'lntelligence' (OCR l for I)
@@ -1086,6 +1095,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1576** · typo · title 'Worl'
   - before: `      title: Argument For Constitutive Rule Claims - Physical Worl Premise Version 1 `
   - after: `      title: Argument For Constitutive Rule Claims - Physical World Premise Version 1 `
+- **1584** · repair — owner decision · D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added.
+  - before: `      - is(W,D)`
+  - after: `      - is_a(W,D)`
 - **1587** · syntax · no space after '-': YAML reads a string where a list is expected
   - before: `      -not_necessarily_true`
   - after: `      - not_necessarily_true`
@@ -1342,7 +1354,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the four schemes pass the validator (`proposals-check.txt`). The validator's other 3 problems are the reserved name `is` (D084, not yet applied).
+With these 14 edits (`walton.proposals.yml`), the four schemes pass the validator (`proposals-check.txt`). The validator reports 0 problems.
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 

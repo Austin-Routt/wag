@@ -13,7 +13,7 @@ walton:
 formulas:
   variables: [W, D]
   premises:
-  - is(W,D)
+  - is_a(W,D)
   - synonymous
   exceptions:
   - not_necessarily_true
@@ -42,7 +42,7 @@ families:
 premise_map:
 - entry: "54.1"
   label: Premise
-  formulas: [{formula: 'is(W,D)', locus: premise}]
+  formulas: [{formula: 'is_a(W,D)', locus: premise}]
   status: generated
 - entry: "54.1"
   label: Warrant

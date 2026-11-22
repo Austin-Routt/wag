@@ -610,4 +610,14 @@ CONSEQUENCES = [
     sub(1897, "other_consequences(A)", "good_outweighs(A,B)", OWN, _SE, scheme="negative_consequences_reasoning"),
     sub(1925, "other_consequences(A)", "bad_outweighs(A,G)", OWN, _SE, scheme="positive_consequences"),
 ]
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES
+# D084 is an executable-vocabulary migration only. The English word "is"
+# must not be globally renamed; only these two formulas and their key change.
+_IS = ("D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary "
+       "two-place predicate, preserving its argument order and English wording. "
+       "No coextensivity premise or other source reinterpretation is added.")
+D084 = [
+    sub(200, "  is/2:", "  is_a/2:", OWN, _IS),
+    sub(933, "is(M,Q)", "is_a(M,Q)", OWN, _IS, scheme="group_2"),
+    sub(1584, "is(W,D)", "is_a(W,D)", OWN, _IS, scheme="rule_physical_world_1"),
+]
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084
