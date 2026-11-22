@@ -26,7 +26,6 @@ type EdgeCase struct {
 	// Reading the argument as it reads.
 	Concludes string   `json:"concludes"`
 	Reading   []string `json:"reading,omitempty"`
-	Bridge    string   `json:"bridge,omitempty"`
 	// Expected is what the locus and the polarity say the answer concludes;
 	// Error is why the game rejected the answer, or why it concludes
 	// something else ("" if it does as expected).
@@ -173,7 +172,7 @@ func (g *GameState) edgeCase(sid string, q *nascq.CQNode, arg string, t nascq.Ac
 		if x == nil || x.Conclusion == nil {
 			return
 		}
-		c.Concludes, c.Bridge = x.Conclusion.Id, m.Bridge
+		c.Concludes = x.Conclusion.Id
 		for _, p := range x.Premises {
 			if p.Stmt != nil {
 				c.Reading = append(c.Reading, after.SayIn(x.Id, p.Stmt.Id))
@@ -223,9 +222,6 @@ func EdgeTable(cases []EdgeCase) string {
 		check := "✓"
 		if c.Error != "" {
 			check = c.Error
-		}
-		if c.Bridge != "" {
-			check += "; bridge: " + c.Bridge
 		}
 		fmt.Fprintf(&b, "| %s | %s | %s | `%s` | %s | %s |\n", ans, c.Backer, c.Effect, c.Concludes,
 			strings.ReplaceAll(strings.Join(c.Reading, "; "), "|", "/"), strings.ReplaceAll(check, "|", "/"))

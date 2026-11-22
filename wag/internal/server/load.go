@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -95,7 +96,7 @@ func (s *Server) load(e *Export) (*Session, error) {
 	}
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
-			if e.DataHash != s.data.Hash() {
+			if e.DataHash != s.data.Hash() && !errors.Is(err, errBridgeRetired) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(e.DataHash), s.data.Hash())
 			}
@@ -110,6 +111,11 @@ func (s *Server) load(e *Export) (*Session, error) {
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
 	return ss, nil
 }
+
+// errBridgeRetired marks a recorded move that a free-text bridge let through.
+// Since D075's rule (2026-11-22) a bridge no longer stands in for an answer's
+// conclusion, with any data, so other data (--data) cannot replay it either.
+var errBridgeRetired = errors.New("it was played through a free-text bridge, which no longer stands in for an answer's conclusion (D075, since 2026-11-22)")
 
 // replay plays one recorded move again and checks that it went as recorded.
 func replay(gs *game.GameState, m game.Move) error {
@@ -138,6 +144,9 @@ func replay(gs *game.GameState, m game.Move) error {
 		}
 	}
 	if played := res.Accepted || res.Abstained; played != (len(m.ArgIDs) > 0 || m.Abstained || m.Resigned) && !m.TimedOut {
+		if m.Bridge != "" && !played {
+			return fmt.Errorf("%w: %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record", errBridgeRetired, m.Bridge)
+		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(len(m.ArgIDs) > 0 || m.Abstained), outcome(played), res.Error)
 	}
 	return nil

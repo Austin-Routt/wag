@@ -84,16 +84,18 @@ answer, so its scheme must be able to conclude it (S9).
   weigh against G?" (asked of a negative-consequences argument) against it,
   with "A should be done", about the same A. It cannot answer it in its
   favour.
-- A backup edge may declare a **bridge** (`"bridge": "why"`): then the scheme
-  backs answers of another form, its argument concludes the answer in place
-  of its own conclusion, and the move records the bridge. The scheme's
-  questions about its conclusion then do not apply to that argument
-  (`nascq.OwnConclusion`); its other questions do.
-- The shipped data declares no bridge. The audit of 2026-10-13 (§4) showed
-  why: until then an edge stood for the link silently. Value arguments
-  backing "are there other goals that should come first?" and "is V really a
-  positive value?" concluded answers their premises do not support; those
-  edges are gone.
+- A free-text **bridge** on a backup edge (`"bridge": "why"`) no longer lets
+  a scheme back answers of another form (D075, since 2026-11-22): a note
+  cannot supply the inference from the scheme's conclusion to the answer.
+  Lint refuses a bridge, and an answer of another form needs a typed answer
+  scheme whose premises establish it. The shipped data has never declared a
+  bridge; the audit of 2026-10-13 (§4) showed why: until then an edge stood
+  for the link silently. Value arguments backing "are there other goals that
+  should come first?" and "is V really a positive value?" concluded answers
+  their premises do not support; those edges are gone.
+- A saved game in which a bridge let a move through (possible only on custom
+  data) cannot be replayed: loading it stops at that move and says so. Other
+  data (`--data`) does not help; a build from before 2026-11-22 replays it.
 - `wag-cli --lint` reports a backup edge whose scheme can conclude none of its
   question's answers. `wag-cli --edges` plays every answer the NASCQ offers to
   every question and prints what each concludes:
@@ -129,8 +131,7 @@ can be accepted at once (decision D053).
 The game binds this variable to the answer, so the premises are about the
 answer (`asserts(W, not(possible(A)))`) and the player does not fill it in.
 The other schemes conclude something more specific, such as
-`should_be_performed(A)`, and back only answers of that form, unless their
-backup edge declares a bridge (above).
+`should_be_performed(A)`, and back only answers of that form (above).
 
 ## 2. Moves
 

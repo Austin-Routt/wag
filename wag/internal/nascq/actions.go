@@ -99,12 +99,13 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 		if caesSchemeID == "" {
 			continue
 		}
-		nascqSchemeID := n.FindNASCQSchemeID(caesSchemeID)
-		if nascqSchemeID == "" {
-			// Fallback: maybe carneades ID IS the NASCQ ID.
-			if _, ok := n.Schemes[caesSchemeID]; ok {
-				nascqSchemeID = caesSchemeID
-			} else {
+		// The game records the NASCQ scheme an argument was played with; a
+		// graph from before that records the engine's scheme, whose game
+		// scheme is looked up. The recorded ID comes first, so that a game
+		// scheme ID that is also another scheme's engine ID is not misread.
+		nascqSchemeID := caesSchemeID
+		if _, ok := n.Schemes[nascqSchemeID]; !ok {
+			if nascqSchemeID = n.FindNASCQSchemeID(caesSchemeID); nascqSchemeID == "" {
 				continue
 			}
 		}

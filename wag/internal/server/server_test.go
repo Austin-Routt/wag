@@ -443,3 +443,21 @@ func TestCustomWeights(t *testing.T) {
 		t.Fatalf("verdicts: %+v", mr.State.Verdicts)
 	}
 }
+
+// A game in which a free-text bridge let a move through (recorded on custom
+// data before 2026-11-22) stops at that move with a reason that names the
+// bridge, and does not send the user to --data, which cannot help (D075).
+func TestLoadBridgedGameSaysWhy(t *testing.T) {
+	ts := newTestServer(t)
+	b, err := os.ReadFile(filepath.Join("testdata", "bridged-game.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out map[string]interface{}
+	code := call(t, ts, "POST", "/api/load", string(b), &out)
+	msg, _ := out["error"].(string)
+	if code != http.StatusBadRequest || !strings.Contains(msg, "move 2 (Bob)") || !strings.Contains(msg, "free-text bridge") ||
+		!strings.Contains(msg, "a good consequence of another action shows it achieves the goal") || strings.Contains(msg, "--data") {
+		t.Fatalf("load: %d %q", code, msg)
+	}
+}

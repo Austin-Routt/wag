@@ -290,13 +290,11 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 }
 
 // OwnConclusion reports whether the argument concludes what its scheme
-// concludes. An argument that answers a critical question concludes the
-// answer: through the scheme's answer variable, which is its conclusion, or,
-// for a scheme without one that the NASCQ links to the question as a backup,
-// in place of the scheme's own conclusion (a consequences argument backing
-// "is there a better means?" concludes that another action is better, not
-// that it should be done). The scheme's questions about its conclusion are
-// not about such an argument's conclusion.
+// concludes. Every argument made since D075's rule (2026-11-22) does: an
+// answer to a critical question concludes it through the scheme's answer
+// variable or its own conclusion, never through a free-text bridge. An
+// argument from an older game that a bridge let through concludes something
+// else, and the scheme's questions about its conclusion are not about it.
 func (n *NASCQ) OwnConclusion(graph GraphQuerier, argID, schemeID string) bool {
 	s := n.Schemes[schemeID]
 	if s == nil || s.Free || s.AnswerVariable != "" {
@@ -504,11 +502,11 @@ func (n *NASCQ) validateTarget(action ProposedAction, va *ValidatedAction, graph
 	// S3: the target was made with a NASCQ scheme, and the CQ, if any, is
 	// asked of that scheme. The locus says what the move is about.
 	caesSchemeID := graph.ArgumentSchemeID(action.TargetArgID)
-	targetScheme := n.FindNASCQSchemeID(caesSchemeID)
-	if targetScheme == "" {
-		if _, ok := n.Schemes[caesSchemeID]; ok {
-			targetScheme = caesSchemeID
-		}
+	// The recorded NASCQ scheme first, then a legacy graph's engine scheme
+	// (as in EnumerateActions).
+	targetScheme := caesSchemeID
+	if _, ok := n.Schemes[targetScheme]; !ok {
+		targetScheme = n.FindNASCQSchemeID(caesSchemeID)
 	}
 	if targetScheme == "" {
 		return nil, fmt.Errorf("S3: target %q was not made with a NASCQ scheme, so no critical question applies to it",

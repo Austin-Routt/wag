@@ -145,7 +145,7 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		switch {
 		case len(not) == 0:
 		case len(fits) == 0:
-			add(true, b.Scheme, "backs %s, but its conclusion %s is none of its answers: %s. S9 rejects every such answer; remove the edge, or declare its bridge",
+			add(true, b.Scheme, "backs %s, but its conclusion %s is none of its answers: %s. S9 rejects every such answer; remove the edge, or answer with a typed answer scheme (D075)",
 				b.CQ, bc[0], strings.Join(not, "; "))
 		default:
 			add(false, b.Scheme, "backs %s on %s, but not on %s: its conclusion %s is not the answer there (S9 rejects it)",
