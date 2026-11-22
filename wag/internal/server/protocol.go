@@ -629,8 +629,9 @@ func ParseReply(reply string) (nascq.ProposedAction, error) {
 // ParseReplyFull reads a player's reply: free text that contains a JSON
 // object, either the protocol 2 envelope ({"context": …, "thoughts": …,
 // "summary": …, "action": {the move}}) or the move alone (protocol 1). The
-// last object that is one or the other counts, so a reply may think aloud
-// first, quote examples, or wrap the JSON in a code block. Common variations
+// final JSON object is authoritative; malformed final objects/arrays and
+// truncated containers are refused instead of falling back to earlier examples.
+// A reply may put prose/examples before it or wrap it in a code block. Common variations
 // of the field names are accepted ("move" for "action"; in the move,
 // "scheme" for "scheme_id", "target" for "target_arg_id", "cq" or
 // "question" for "answers_cq_id", "premise" for "target_premise_id",
@@ -638,40 +639,49 @@ func ParseReply(reply string) (nascq.ProposedAction, error) {
 // "variable_bindings", "sources" for "evidence"; "pass" for "abstain",
 // "argue" and "defend" for "support").
 func ParseReplyFull(reply string) (*Reply, error) {
-	objs := jsonObjects(reply)
-	for i := len(objs) - 1; i >= 0; i-- {
-		var m map[string]interface{}
-		if json.Unmarshal([]byte(objs[i]), &m) != nil {
+	objs := jsonCandidates(reply)
+	if len(objs) == 0 {
+		return nil, fmt.Errorf(`no move found: end the reply with one JSON object such as {"action": {"type": "abstain"}}`)
+	}
+	// The final JSON candidate is authoritative. A malformed or truncated
+	// final answer must not cause an earlier example to become a real move.
+	var m map[string]interface{}
+	if err := json.Unmarshal([]byte(objs[len(objs)-1]), &m); err != nil {
+		return nil, fmt.Errorf("final move JSON: %w", err)
+	}
+	for _, k := range []string{"action", "move"} {
+		v, exists := m[k]
+		if !exists {
 			continue
 		}
-		for _, k := range []string{"action", "move"} {
-			if am, ok := m[k].(map[string]interface{}); ok {
-				a, ok, err := moveOf(am)
-				if err != nil {
-					// The last move of the reply is malformed: say so, rather
-					// than play an earlier object (an example in its reasoning).
-					return nil, err
-				}
-				if ok {
-					r := &Reply{Action: a, Context: strs(m["context"]), Thoughts: strs(m["thoughts"]), Summary: str1(m["summary"])}
-					r.Expect = expectations(m["expect"])
-					r.Alternatives = alternatives(m["alternatives"])
-					if c, ok := number(m["confidence"]); ok {
-						r.Confidence = &c
-					}
-					return r, nil
-				}
+		if am, ok := v.(map[string]interface{}); ok {
+			a, ok, err := moveOf(am)
+			if err != nil {
+				return nil, err
 			}
+			if !ok {
+				return nil, fmt.Errorf("%q: the final move needs a nonempty type", k)
+			}
+			r := &Reply{Action: a, Context: strs(m["context"]), Thoughts: strs(m["thoughts"]), Summary: str1(m["summary"])}
+			r.Expect = expectations(m["expect"])
+			r.Alternatives = alternatives(m["alternatives"])
+			if c, ok := number(m["confidence"]); ok {
+				r.Confidence = &c
+			}
+			return r, nil
 		}
-		a, ok, err := moveOf(m)
-		if err != nil {
-			return nil, err
-		}
-		if ok {
-			return &Reply{Action: a, Bare: true}, nil
+		if _, ok := v.(string); !ok {
+			return nil, fmt.Errorf("%q: the final move must be an object or a move-type string, not %s", k, jsonKind(v))
 		}
 	}
-	return nil, fmt.Errorf(`no move found: end the reply with one JSON object such as {"action": {"type": "abstain"}}`)
+	a, ok, err := moveOf(m)
+	if err != nil {
+		return nil, err
+	}
+	if ok {
+		return &Reply{Action: a, Bare: true}, nil
+	}
+	return nil, fmt.Errorf("no move in the final JSON object: give a nonempty type or action object")
 }
 
 // moveOf reads a move object; ok is false if it has no type. err is set for
@@ -684,6 +694,13 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 			}
 		}
 		return ""
+	}
+	for _, k := range []string{"type", "move", "action"} {
+		if v, exists := m[k]; exists {
+			if _, ok := v.(string); !ok {
+				return nascq.ProposedAction{}, true, fmt.Errorf("%q must be a move-type string, not %s", k, jsonKind(v))
+			}
+		}
 	}
 	t := strings.ToLower(str("type", "move", "action"))
 	if t == "" {
@@ -931,9 +948,10 @@ func (r *refs) resolveAction(a nascq.ProposedAction) nascq.ProposedAction {
 	return a
 }
 
-// jsonObjects returns the balanced {...} spans of s, outermost only, in
-// order. Braces inside JSON strings are skipped.
-func jsonObjects(s string) []string {
+// jsonCandidates returns outermost object/array spans, including a trailing
+// unfinished span. Quoted braces/brackets inside a container are not boundaries.
+// Including unfinished candidates prevents fallback to an earlier example.
+func jsonCandidates(s string) []string {
 	var out []string
 	depth, start, inStr, esc := 0, -1, false, false
 	for i, r := range s {
@@ -951,19 +969,23 @@ func jsonObjects(s string) []string {
 			if depth > 0 {
 				inStr = true
 			}
-		case r == '{':
+		case r == '{' || r == '[':
 			if depth == 0 {
 				start = i
 			}
 			depth++
-		case r == '}':
+		case r == '}' || r == ']':
 			if depth > 0 {
 				depth--
 				if depth == 0 && start >= 0 {
 					out = append(out, s[start:i+1])
+					start = -1
 				}
 			}
 		}
+	}
+	if depth > 0 && start >= 0 {
+		out = append(out, s[start:])
 	}
 	return out
 }

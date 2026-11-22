@@ -60,6 +60,9 @@ type Dataset struct {
 	// GoldFile is the name of the gold among Hashes. The gold scores a run but
 	// is never shown to an annotator, so it is not part of a run's identity.
 	GoldFile string `json:"-"`
+	// annotationFiles identifies files actually supplied to annotators, so a
+	// file used both for claims/resources and scoring cannot be excluded.
+	annotationFiles map[string]bool
 }
 
 // manifest is a dataset's dataset.json.
@@ -127,12 +130,13 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	if m.Name == "" {
 		m.Name = m.ID
 	}
-	d := &Dataset{ID: m.ID, Name: m.Name, Description: m.Description, Source: source, Hashes: map[string]string{}}
+	d := &Dataset{ID: m.ID, Name: m.Name, Description: m.Description, Source: source, Hashes: map[string]string{}, annotationFiles: map[string]bool{}}
 	b, err := read(m.Items)
 	if err != nil {
 		return nil, fmt.Errorf("the claims: %v", err)
 	}
 	d.Hashes[m.Items] = sha(b)
+	d.annotationFiles[m.Items] = true
 	var in struct {
 		Discussion json.RawMessage   `json:"discussion"`
 		Items      []json.RawMessage `json:"items"`
@@ -171,10 +175,12 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	}
 	d.Guidelines = string(g)
 	d.Hashes[m.Guidelines] = sha(g)
+	d.annotationFiles[m.Guidelines] = true
 	// The gold annotation, if there is one.
 	if m.Gold == "" {
 		m.Gold = "gold.json"
 	}
+	d.GoldFile = m.Gold // identity of the scoring input, even when it is absent
 	if b, err := read(m.Gold); err == nil {
 		anns, err := parseAnnotations(b)
 		if err != nil {
@@ -182,7 +188,6 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		}
 		d.Gold, d.HasGold = anns, true
 		d.Hashes[m.Gold] = sha(b)
-		d.GoldFile = m.Gold
 	}
 	// The resources: the scheme collection and the game's NASCQ, and the
 	// dataset's own (a lexicon).
@@ -192,6 +197,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	add := func(name string, b []byte) {
 		d.Resources = append(d.Resources, Resource{Name: name, Text: string(b)})
 		d.Hashes[name] = sha(b)
+		d.annotationFiles[name] = true
 	}
 	hasWalton := false
 	for _, r := range m.Resources {
@@ -214,6 +220,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		}
 		d.Resources = append([]Resource{{Name: "walton.yml", Text: string(b)}}, d.Resources...)
 		d.Hashes["walton.yml"] = sha(b)
+		d.annotationFiles["walton.yml"] = true
 	}
 	add("schemes.json", data.SchemesJSON)
 	add("critical_questions.json", data.CQsJSON)

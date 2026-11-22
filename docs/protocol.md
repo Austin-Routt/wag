@@ -103,7 +103,7 @@ The move:
 | `text`, `evidence` | The argument in the player's words, and its sources. Both are shown to the other player. |
 
 **What the parser accepts.**
-- **Where the move is.** It takes the last JSON object that is an envelope (with `action`, or `move`) or a move (with `type`). A reply may think aloud, quote examples, or use a code block.
+- **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error.
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

@@ -1,6 +1,7 @@
 package annotate
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -91,6 +92,10 @@ type Verdict struct {
 	Note   string    `json:"note,omitempty"`
 	By     string    `json:"by,omitempty"`
 	At     time.Time `json:"at"`
+	// These identify the material available when this later verdict was made.
+	InputsSHA256    map[string]string `json:"inputs_sha256,omitempty"`
+	InputDrift      string            `json:"input_drift,omitempty"`
+	AssessmentBuild string            `json:"assessment_build,omitempty"`
 }
 
 // Run is an annotation run. Its folder (Dir) holds everything (readme).
@@ -120,7 +125,9 @@ type Run struct {
 	// verdicts, but not continued (begin refuses).
 	drift string
 	// builds are the WAG builds that have written this run, oldest first.
-	builds []string
+	builds        []string
+	scoringInputs []string // pinned scoring-only filenames, not model inputs
+	loadErrors    []string // damaged saved result files: inspectable, never silently overwritten
 }
 
 var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -128,11 +135,55 @@ var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
 // FileName is a name made safe for a file name.
 func FileName(name string) string { return strings.Trim(unsafe.ReplaceAllString(name, "_"), "_") }
 
+// checkResultNames prevents distinct annotators from sharing a saved file or
+// a progress key after filename sanitizing or reviewer-role qualification.
+func checkResultNames(s Settings) error {
+	files := map[string]string{}
+	for _, p := range s.Annotators {
+		filename := FileName(p.Name)
+		if filename == "" {
+			return fmt.Errorf("annotator %q has no usable result filename", p.Name)
+		}
+		if other, ok := files[filename]; ok {
+			return fmt.Errorf("annotators %q and %q share result filename %q; choose distinct names", other, p.Name, filename)
+		}
+		files[filename] = p.Name
+		if s.Reviewer != nil && p.Name == progressKey("reviewer", s.Reviewer.Name) {
+			return fmt.Errorf("annotator %q collides with the reviewer's progress key; choose another name", p.Name)
+		}
+	}
+	return nil
+}
+
 // New makes a run in dir (created), for the dataset, with the settings;
 // clients are the annotators' and the reviewer's, by profile name.
 func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*Run, error) {
 	if len(s.Annotators) == 0 {
 		return nil, fmt.Errorf("a run needs at least one annotator")
+	}
+	// Freeze schema bytes and mutable parameter maps before writing the run.
+	s.Annotators = append([]llm.Profile(nil), s.Annotators...)
+	for i, p := range s.Annotators {
+		q, err := freezeProfile(p)
+		if err != nil {
+			return nil, err
+		}
+		s.Annotators[i] = q
+	}
+	if s.Reviewer != nil {
+		q, err := freezeProfile(*s.Reviewer)
+		if err != nil {
+			return nil, err
+		}
+		s.Reviewer = &q
+	}
+	if _, err := os.Stat(filepath.Join(dir, "run.json")); err == nil {
+		return nil, fmt.Errorf("a run already exists in %s: open it instead", dir)
+	} else if !os.IsNotExist(err) {
+		return nil, err
+	}
+	if err := checkResultNames(s); err != nil {
+		return nil, err
 	}
 	names := map[string]bool{}
 	for _, p := range s.Annotators {
@@ -172,7 +223,9 @@ func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*R
 	}
 	r := newRun(dir, d, s)
 	for name, c := range clients {
-		r.clients[name] = c
+		if err := r.Attach(name, c); err != nil {
+			return nil, err
+		}
 	}
 	if err := r.saveRun(); err != nil {
 		return nil, err
@@ -186,6 +239,10 @@ func newRun(dir string, d *Dataset, s Settings) *Run {
 		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}}
 	r.inputHashes = copyHashes(d.Hashes)
 	r.promptHash = sha([]byte(d.AnnotatorSystem()))
+	r.scoringInputs = []string{}
+	if d.GoldFile != "" && !d.annotationFiles[d.GoldFile] {
+		r.scoringInputs = append(r.scoringInputs, d.GoldFile)
+	}
 	for _, p := range s.Annotators {
 		r.anns[p.Name], r.failures[p.Name] = map[string]Annotation{}, map[string]string{}
 		r.progress[p.Name] = &Progress{Name: p.Name, Role: "annotator", Total: len(s.Items)}
@@ -207,13 +264,19 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		return nil, err
 	}
 	var f struct {
-		Settings Settings                     `json:"settings"`
-		Inputs   map[string]string            `json:"inputs_sha256"`
-		Prompt   string                       `json:"annotator_system_prompt_sha256"`
-		Builds   []string                     `json:"builds"`
-		Failures map[string]map[string]string `json:"failures"`
+		Settings      Settings                     `json:"settings"`
+		Inputs        map[string]string            `json:"inputs_sha256"`
+		Prompt        string                       `json:"annotator_system_prompt_sha256"`
+		Builds        []string                     `json:"builds"`
+		ScoringInputs []string                     `json:"scoring_only_inputs"`
+		Failures      map[string]map[string]string `json:"failures"`
 	}
-	if err := json.Unmarshal(b, &f); err != nil {
+	if !json.Valid(b) {
+		return nil, fmt.Errorf("run.json: invalid JSON")
+	}
+	decoder := json.NewDecoder(bytes.NewReader(b))
+	decoder.UseNumber()
+	if err := decoder.Decode(&f); err != nil {
 		return nil, fmt.Errorf("run.json: %v", err)
 	}
 	d, err := datasets(f.Settings.Dataset, f.Settings.DatasetDir)
@@ -221,7 +284,13 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		return nil, fmt.Errorf("its dataset %s: %v", f.Settings.Dataset, err)
 	}
 	r := newRun(dir, d, f.Settings)
+	if err := checkResultNames(f.Settings); err != nil {
+		r.loadErrors = append(r.loadErrors, err.Error())
+	}
 	r.builds = f.Builds
+	if f.ScoringInputs != nil {
+		r.scoringInputs = append([]string{}, f.ScoringInputs...)
+	}
 	if len(f.Inputs) == 0 || f.Prompt == "" {
 		// A run made before its inputs were pinned: readable, not continued.
 		r.inputHashes, r.promptHash = nil, ""
@@ -235,7 +304,11 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		if b, err := os.ReadFile(r.annotationsPath(name)); err == nil {
 			if m, err := parseAnnotations(b); err == nil {
 				r.anns[name] = m
+			} else {
+				r.loadErrors = append(r.loadErrors, "annotations/"+FileName(name)+".json: "+err.Error())
 			}
+		} else if !os.IsNotExist(err) {
+			r.loadErrors = append(r.loadErrors, err.Error())
 		}
 		for id, e := range f.Failures[name] {
 			if r.anns[name][id] == nil {
@@ -246,31 +319,55 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 	if s := f.Settings.Reviewer; s != nil {
 		if b, err := os.ReadFile(r.reviewPath(s.Name)); err == nil {
 			var list []*Review
-			if json.Unmarshal(b, &list) == nil {
+			if err := json.Unmarshal(b, &list); err == nil {
 				for _, rv := range list {
+					if rv == nil || rv.Item == "" {
+						r.loadErrors = append(r.loadErrors, "review/model-"+FileName(s.Name)+".json: invalid review entry")
+						continue
+					}
 					r.reviews[rv.Item] = rv
 				}
+			} else {
+				r.loadErrors = append(r.loadErrors, "review/model-"+FileName(s.Name)+".json: "+err.Error())
 			}
+		} else if !os.IsNotExist(err) {
+			r.loadErrors = append(r.loadErrors, err.Error())
 		}
 	}
 	if b, err := os.ReadFile(filepath.Join(dir, "review", "human.json")); err == nil {
 		var list []Verdict
-		if json.Unmarshal(b, &list) == nil {
+		if err := json.Unmarshal(b, &list); err == nil {
 			for _, v := range list {
 				r.verdicts[v.Item] = v
 			}
+		} else {
+			r.loadErrors = append(r.loadErrors, "review/human.json: "+err.Error())
 		}
+	} else if !os.IsNotExist(err) {
+		r.loadErrors = append(r.loadErrors, err.Error())
 	}
+	r.refreshDrift()
 	r.recount()
 	return r, nil
 }
 
 // Attach gives the run the client of an annotator or of its reviewer (they
 // are not saved: a reopened run needs them again to continue).
-func (r *Run) Attach(name string, c *llm.Client) {
+func (r *Run) Attach(name string, c *llm.Client) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	if c != nil {
+		if name != c.Profile.Name {
+			delete(r.clients, name)
+			return fmt.Errorf("client %s cannot be attached as %s", c.Profile.Name, name)
+		}
+		if err := r.CheckProfile(c.Profile); err != nil {
+			delete(r.clients, name)
+			return err
+		}
+	}
 	r.clients[name] = c
+	return nil
 }
 
 func (r *Run) annotationsPath(name string) string {
@@ -310,7 +407,7 @@ func (r *Run) saveRun() error {
 	ps := r.progressList(false)
 	b, err := json.MarshalIndent(map[string]any{"format": RunFormat, "id": r.ID, "settings": r.Settings,
 		"dataset": r.Dataset, "inputs_sha256": r.inputHashes,
-		"annotator_system_prompt_sha256": r.promptHash, "builds": r.builds,
+		"annotator_system_prompt_sha256": r.promptHash, "builds": r.builds, "scoring_only_inputs": r.scoringInputs,
 		"progress": ps, "failures": r.failures, "saved": time.Now().UTC()}, "", " ")
 	if err != nil {
 		return err
@@ -394,12 +491,30 @@ func copyHashes(in map[string]string) map[string]string {
 // checkInputs compares the run's pinned identity with its inputs as they are
 // now, leaving out the gold, which an annotator never sees.
 func (r *Run) checkInputs() error {
+	if len(r.loadErrors) > 0 {
+		return fmt.Errorf("saved run data cannot be read (%s); inspect or recover those files before continuing", strings.Join(r.loadErrors, "; "))
+	}
+	for _, p := range r.profiles() {
+		if p.Output == "schema" && len(p.Schema) == 0 {
+			return fmt.Errorf("profile %s has no pinned schema contents; it can be read but not continued: create a new run", p.Name)
+		}
+	}
 	if r.inputHashes == nil || r.promptHash == "" {
 		return fmt.Errorf("the run was made before its inputs were pinned; it can be read but not continued: create a new run")
 	}
 	var changed []string
+	scoring := map[string]bool{}
+	for _, k := range r.scoringInputs {
+		scoring[k] = true
+	}
+	if r.Dataset.GoldFile != "" {
+		scoring[r.Dataset.GoldFile] = true
+	}
 	for _, k := range sortedUnion(r.inputHashes, r.Dataset.Hashes) {
-		if k != r.Dataset.GoldFile && r.inputHashes[k] != r.Dataset.Hashes[k] {
+		if scoring[k] && !r.Dataset.annotationFiles[k] {
+			continue
+		}
+		if r.inputHashes[k] != r.Dataset.Hashes[k] {
 			changed = append(changed, k)
 		}
 	}
@@ -432,7 +547,47 @@ func sortedUnion(a, b map[string]string) []string {
 func (r *Run) InputDrift() string {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	r.refreshDrift()
 	return r.drift
+}
+
+// refreshDrift requires r.mu or exclusive ownership of a newly opened run.
+func (r *Run) refreshDrift() {
+	r.drift = ""
+	if err := r.checkInputs(); err != nil {
+		r.drift = err.Error()
+	}
+}
+
+func (r *Run) profiles() []llm.Profile {
+	saved := append([]llm.Profile{}, r.Settings.Annotators...)
+	if r.Settings.Reviewer != nil {
+		saved = append(saved, *r.Settings.Reviewer)
+	}
+	return saved
+}
+
+// freezeProfile resolves the actual output schema and copies mutable values.
+// Saved profiles intentionally exclude the API key, which is operational.
+func freezeProfile(p llm.Profile) (llm.Profile, error) {
+	if p.Output == "schema" && len(p.Schema) == 0 {
+		b, err := os.ReadFile(p.SchemaFile)
+		if err != nil {
+			return p, fmt.Errorf("profile %s schema: %w", p.Name, err)
+		}
+		p.Schema = b
+	}
+	b, err := json.Marshal(p)
+	if err != nil {
+		return p, fmt.Errorf("profile %s: %w", p.Name, err)
+	}
+	var q llm.Profile
+	decoder := json.NewDecoder(bytes.NewReader(b))
+	decoder.UseNumber()
+	if err := decoder.Decode(&q); err != nil {
+		return p, err
+	}
+	return q, nil
 }
 
 // CheckProfile refuses a profile that would continue the run's annotator or
@@ -440,12 +595,15 @@ func (r *Run) InputDrift() string {
 // schema or parameters. Timeouts, call spacing, retries and the key's source
 // may change.
 func (r *Run) CheckProfile(p llm.Profile) error {
-	saved := append([]llm.Profile{}, r.Settings.Annotators...)
-	if r.Settings.Reviewer != nil {
-		saved = append(saved, *r.Settings.Reviewer)
+	q, err := freezeProfile(p)
+	if err != nil {
+		return err
 	}
-	for _, s := range saved {
-		if s.Name == p.Name && callerOf(s) != callerOf(p) {
+	for _, s := range r.profiles() {
+		if s.Name == p.Name && s.Output == "schema" && len(s.Schema) == 0 {
+			return fmt.Errorf("profile %s has no saved schema contents: create a new run", p.Name)
+		}
+		if s.Name == p.Name && callerOf(s) != callerOf(q) {
 			return fmt.Errorf("profile %s is not the one this run was made with (provider, model, endpoint, prompt, schema or parameters differ): create a new run", p.Name)
 		}
 	}
@@ -483,8 +641,19 @@ func buildID() string {
 func (r *Run) begin(ctx context.Context, what string) (context.Context, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	if err := r.checkInputs(); err != nil {
-		return nil, err
+	r.refreshDrift()
+	if r.drift != "" {
+		return nil, fmt.Errorf("%s", r.drift)
+	}
+	for _, p := range r.profiles() {
+		if c := r.clients[p.Name]; c != nil {
+			if c.Profile.Name != p.Name {
+				return nil, fmt.Errorf("attached client identity differs for %s", p.Name)
+			}
+			if err := r.CheckProfile(c.Profile); err != nil {
+				return nil, err
+			}
+		}
 	}
 	if r.busy != "" {
 		return nil, fmt.Errorf("the run is %s already", r.busy)
@@ -836,6 +1005,11 @@ func (r *Run) SetVerdict(v Verdict) error {
 	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	if len(r.loadErrors) > 0 {
+		return fmt.Errorf("saved run data is unreadable; recover it before writing verdicts")
+	}
+	r.refreshDrift()
+	v.InputsSHA256, v.InputDrift, v.AssessmentBuild = copyHashes(r.Dataset.Hashes), r.drift, buildID()
 	if v.Choice == "" && v.Note == "" {
 		delete(r.verdicts, v.Item)
 	} else {
@@ -901,6 +1075,7 @@ func (r *Run) progressList(copy bool) []*Progress {
 func (r *Run) Status() Status {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	r.refreshDrift()
 	s := Status{ID: r.ID, Dir: r.Dir, Dataset: r.Dataset, Settings: r.Settings, Busy: r.busy, Reviewed: len(r.reviews), Verdicts: len(r.verdicts), InputDrift: r.drift}
 	s.Progress = r.progressList(true)
 	for _, p := range r.Settings.Annotators {

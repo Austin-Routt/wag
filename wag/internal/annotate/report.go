@@ -27,12 +27,16 @@ type AnnotatorReport struct {
 
 // ReviewerReport is the reviewer's results.
 type ReviewerReport struct {
-	Name       string                    `json:"name"`
-	Reviewed   int                       `json:"reviewed"`
-	Errors     int                       `json:"errors"`
-	NeedsHuman int                       `json:"needs_human"`
-	Chosen     map[string]map[string]int `json:"chosen"` // field → annotator (or none) → times chosen
-	VsGold     *Pair                     `json:"adjudicated_vs_gold,omitempty"`
+	Name                   string                    `json:"name"`
+	Model                  string                    `json:"model"`
+	Provider               string                    `json:"provider"`
+	ServedModels           map[string]int            `json:"served_models"`
+	UnknownServedResponses int                       `json:"unknown_served_responses"`
+	Reviewed               int                       `json:"reviewed"`
+	Errors                 int                       `json:"errors"`
+	NeedsHuman             int                       `json:"needs_human"`
+	Chosen                 map[string]map[string]int `json:"chosen"` // field → annotator (or none) → times chosen
+	VsGold                 *Pair                     `json:"adjudicated_vs_gold,omitempty"`
 }
 
 // Report is what a run's annotations add up to.
@@ -47,8 +51,11 @@ type Report struct {
 	Verdicts      map[string]int      `json:"verdicts"`      // choice → claims
 	// InputDrift says why the run's inputs are no longer those it was made
 	// with ("" if they are); GoldSHA256 is the gold this report scored against.
-	InputDrift string `json:"input_drift,omitempty"`
-	GoldSHA256 string `json:"gold_sha256,omitempty"`
+	InputDrift             string            `json:"input_drift,omitempty"`
+	GoldSHA256             string            `json:"gold_sha256,omitempty"`
+	EvaluationInputsSHA256 map[string]string `json:"evaluation_inputs_sha256"`
+	EvaluationPromptSHA256 string            `json:"evaluation_prompt_sha256"`
+	EvaluationBuild        string            `json:"evaluation_build"`
 	// UnreadableCallLines counts lines of calls.jsonl that could not be read
 	// (a crash mid-write); they are left out of served_models.
 	UnreadableCallLines int       `json:"unreadable_call_lines,omitempty"`
@@ -59,8 +66,9 @@ type Report struct {
 func (r *Run) Report() (*Report, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	r.refreshDrift()
 	rep := &Report{Run: r.ID, Dataset: r.Dataset.ID, Items: len(r.Settings.Items), Disagreements: map[string][]string{},
-		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC()}
+		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC(), EvaluationInputsSHA256: copyHashes(r.Dataset.Hashes), EvaluationPromptSHA256: sha([]byte(r.Dataset.AnnotatorSystem())), EvaluationBuild: buildID()}
 	in := map[string]bool{}
 	for _, id := range r.Settings.Items {
 		in[id] = true
@@ -113,7 +121,7 @@ func (r *Run) Report() (*Report, error) {
 		}
 	}
 	if rp := r.Settings.Reviewer; rp != nil {
-		rr := &ReviewerReport{Name: rp.Name, Chosen: map[string]map[string]int{}}
+		rr := &ReviewerReport{Name: rp.Name, Model: rp.Model, Provider: rp.Provider, ServedModels: served[progressKey("reviewer", rp.Name)], UnknownServedResponses: unknown[progressKey("reviewer", rp.Name)], Chosen: map[string]map[string]int{}}
 		adj := map[string]Annotation{}
 		for id, rv := range r.reviews {
 			if !in[id] {
@@ -193,17 +201,18 @@ func (r *Run) servedModelCounts() (served map[string]map[string]int, unknown map
 			bad++
 			continue
 		}
-		if row.Role != "annotator" || row.Call.Response == nil {
+		if (row.Role != "annotator" && row.Role != "reviewer") || row.Call.Response == nil {
 			continue
 		}
+		key := progressKey(row.Role, row.Name)
 		if row.Call.Response.Model == "" {
-			unknown[row.Name]++
+			unknown[key]++
 			continue
 		}
-		if served[row.Name] == nil {
-			served[row.Name] = map[string]int{}
+		if served[key] == nil {
+			served[key] = map[string]int{}
 		}
-		served[row.Name][row.Call.Response.Model]++
+		served[key][row.Call.Response.Model]++
 	}
 	if err := sc.Err(); err != nil {
 		return nil, nil, 0, fmt.Errorf("calls.jsonl: %w", err)

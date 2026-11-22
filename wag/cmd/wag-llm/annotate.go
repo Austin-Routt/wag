@@ -140,7 +140,9 @@ func annotateCmd(ctx context.Context, args []string) error {
 		}
 	}
 	for name, c := range clients {
-		run.Attach(name, c)
+		if err := run.Attach(name, c); err != nil {
+			return err
+		}
 	}
 	fmt.Printf("Annotating %d claims of %s with %d annotators; the files are in %s.\n", len(run.Settings.Items), run.Dataset.Name,
 		len(run.Settings.Annotators), run.Dir)

@@ -49,6 +49,14 @@ Everything below can be done in the browser, with no command line and no environ
 
 The command line below (`wag-llm`) does the same, writing to the folders you give it.
 
+### Continuing and reassessing an annotation run
+
+A run preserves the input hashes and annotator profiles with which it began. Both the dashboard and the command line refuse to continue it under a changed model, provider, endpoint, system prompt, output schema or generation parameters. Schema contents are saved, so replacing a file at the same path cannot change an existing run. Timeout, spacing, retry and key settings can change. A legacy schema run that did not save its schema bytes stays readable but needs a new run for further calls.
+
+Gold annotations used only for scoring may be corrected or removed without changing the annotator's identity. A file also supplied as claims or resources remains an annotation input even if the dataset calls it gold. A drifted run can still be inspected and reassessed when its dataset remains loadable. Its report identifies the current evaluation input hashes and build; a later human verdict records that context too. Historical `run.json` input hashes are not replaced with the new ones.
+
+If an existing saved annotation, model review or human-verdict file cannot be decoded, the run opens with an explicit warning and refuses further annotation or verdict writes until the file is recovered. It does not silently treat the damaged result as unfinished work. Unreadable lines in the append-only call log are counted separately. Reported served-model counts distinguish annotator and reviewer roles, include format retries, and label responses with no provider-reported model as unknown. These are provider reports, not proof of the model's implementation or independence.
+
 ## The command line: quick start with Gemini
 
 1. **Make a key.** Create an API key in Google AI Studio.

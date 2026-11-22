@@ -85,12 +85,12 @@ func (s *Server) run(id string) (*annotate.Run, []string, error) {
 		c := s.models[p.Name]
 		switch {
 		case c == nil:
+			_ = r.Attach(p.Name, nil)
 			notes = append(notes, fmt.Sprintf("%s is not connected: add the player again in Models (%s, %s)", p.Name, p.Provider, p.Model))
-		case c.Profile.Provider != p.Provider || c.Profile.Model != p.Model:
-			notes = append(notes, fmt.Sprintf("the player %s is now %s %s, not the %s %s this run began with: add a player with the run's model to continue",
-				p.Name, c.Profile.Provider, c.Profile.Model, p.Provider, p.Model))
 		default:
-			r.Attach(p.Name, c)
+			if err := r.Attach(p.Name, c); err != nil {
+				notes = append(notes, err.Error())
+			}
 		}
 	}
 	s.mu.Unlock()
