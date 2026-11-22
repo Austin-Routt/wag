@@ -3,35 +3,43 @@
  "fields": {
   "scheme": {
    "agreement": 0.8,
-   "kappa": 0.773
+   "kappa": 0.773,
+   "all_assigned_agreement": 0.8
   },
   "fit": {
    "agreement": 0.82,
-   "kappa": 0.597
+   "kappa": 0.597,
+   "all_assigned_agreement": 0.82
   },
   "role": {
    "agreement": 0.86,
-   "kappa": 0.84
+   "kappa": 0.84,
+   "all_assigned_agreement": 0.86
   },
   "polarity": {
    "agreement": 0.96,
-   "kappa": 0.923
+   "kappa": 0.923,
+   "all_assigned_agreement": 0.96
   },
   "target_claim": {
    "agreement": 0.98,
-   "kappa": 0.978
+   "kappa": 0.978,
+   "all_assigned_agreement": 0.98
   },
   "target_part": {
    "agreement": 0.98,
-   "kappa": 0.968
+   "kappa": 0.968,
+   "all_assigned_agreement": 0.98
   },
   "re_parented": {
    "agreement": 0.74,
-   "kappa": 0.513
+   "kappa": 0.513,
+   "all_assigned_agreement": 0.74
   },
   "evidence": {
    "agreement": 0.96,
-   "kappa": 0.928
+   "kappa": 0.928,
+   "all_assigned_agreement": 0.96
   },
   "scheme_family": {
    "agreement": 0.82
@@ -279,6 +287,14 @@
     "B": "definition"
    }
   ]
+ },
+ "coverage": {
+  "assigned": 50,
+  "basis": "observed_union",
+  "annotated_A": 50,
+  "annotated_B": 50,
+  "both": 50,
+  "neither": 0
  },
  "same_scheme": {
   "items": 30,

@@ -646,7 +646,13 @@ func ParseReplyFull(reply string) (*Reply, error) {
 		}
 		for _, k := range []string{"action", "move"} {
 			if am, ok := m[k].(map[string]interface{}); ok {
-				if a, ok := moveOf(am); ok {
+				a, ok, err := moveOf(am)
+				if err != nil {
+					// The last move of the reply is malformed: say so, rather
+					// than play an earlier object (an example in its reasoning).
+					return nil, err
+				}
+				if ok {
 					r := &Reply{Action: a, Context: strs(m["context"]), Thoughts: strs(m["thoughts"]), Summary: str1(m["summary"])}
 					r.Expect = expectations(m["expect"])
 					r.Alternatives = alternatives(m["alternatives"])
@@ -657,15 +663,20 @@ func ParseReplyFull(reply string) (*Reply, error) {
 				}
 			}
 		}
-		if a, ok := moveOf(m); ok {
+		a, ok, err := moveOf(m)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
 			return &Reply{Action: a, Bare: true}, nil
 		}
 	}
 	return nil, fmt.Errorf(`no move found: end the reply with one JSON object such as {"action": {"type": "abstain"}}`)
 }
 
-// moveOf reads a move object; ok is false if it has no type.
-func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool) {
+// moveOf reads a move object; ok is false if it has no type. err is set for
+// a move whose fields cannot be read (a source that is not text).
+func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	str := func(keys ...string) string {
 		for _, k := range keys {
 			if v, ok := m[k].(string); ok && strings.TrimSpace(v) != "" {
@@ -676,7 +687,7 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool) {
 	}
 	t := strings.ToLower(str("type", "move", "action"))
 	if t == "" {
-		return nascq.ProposedAction{}, false
+		return nascq.ProposedAction{}, false, nil
 	}
 	switch t {
 	case "pass":
@@ -707,18 +718,31 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool) {
 			break
 		}
 	}
+	// Sources are text: a citation or a URL. null, absent or an empty string
+	// is no source (the evidence rule then says whether one is needed); any
+	// other value is refused, since printing it ("<nil>", "false",
+	// "map[url:...]") would pass for a citation.
 	for _, k := range []string{"evidence", "sources"} {
 		switch ev := m[k].(type) {
+		case nil:
 		case []interface{}:
 			for _, x := range ev {
-				if s := strings.TrimSpace(fmt.Sprint(x)); s != "" {
-					a.Evidence = append(a.Evidence, s)
+				switch c := x.(type) {
+				case nil:
+				case string:
+					if s := strings.TrimSpace(c); s != "" {
+						a.Evidence = append(a.Evidence, s)
+					}
+				default:
+					return a, true, fmt.Errorf("%q: each source must be text (a citation or a URL), not %s", k, jsonKind(x))
 				}
 			}
 		case string:
 			if strings.TrimSpace(ev) != "" {
 				a.Evidence = append(a.Evidence, strings.TrimSpace(ev))
 			}
+		default:
+			return a, true, fmt.Errorf("%q must be text or a list of texts (citations or URLs), not %s", k, jsonKind(ev))
 		}
 	}
 	if a.SchemeID != "" && !strings.HasPrefix(a.SchemeID, "AS:") {
@@ -727,7 +751,7 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool) {
 	if a.AnswersCQID != "" && !strings.HasPrefix(a.AnswersCQID, "CQ:") {
 		a.AnswersCQID = "CQ:" + a.AnswersCQID
 	}
-	return a, true
+	return a, true, nil
 }
 
 // strs reads a string or a list of strings.
@@ -796,7 +820,11 @@ func alternatives(v interface{}) []Alternative {
 		if !ok {
 			am = m
 		}
-		if a, ok := moveOf(am); ok {
+		// A considered move with an unreadable source is still recorded, without sources.
+		if a, ok, err := moveOf(am); ok {
+			if err != nil {
+				a.Evidence = nil
+			}
 			alt.Action = a
 			out = append(out, alt)
 		}
@@ -938,4 +966,21 @@ func jsonObjects(s string) []string {
 		}
 	}
 	return out
+}
+
+// jsonKind names the JSON type of a decoded value, for error messages.
+func jsonKind(v interface{}) string {
+	switch v.(type) {
+	case bool:
+		return "true or false"
+	case float64:
+		return "a number"
+	case map[string]interface{}:
+		return "an object"
+	case []interface{}:
+		return "a list"
+	case nil:
+		return "null"
+	}
+	return fmt.Sprintf("%T", v)
 }

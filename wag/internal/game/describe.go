@@ -8,6 +8,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/language"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -158,7 +159,7 @@ func (gs *GameState) negative(t terms.Term, words map[string]string, depth int) 
 
 func (gs *GameState) template(functor string, arity int) string {
 	if th := gs.Adapter.Graph.Theory; th != nil && th.Language != nil {
-		if tmpl := th.Language[fmt.Sprintf("%s/%d", functor, arity)]; strings.Count(strings.ReplaceAll(tmpl, "%%", ""), "%s") == arity {
+		if tmpl := th.Language[fmt.Sprintf("%s/%d", functor, arity)]; tmpl != "" && language.Validate(tmpl, arity) == nil {
 			return tmpl
 		}
 	}
@@ -168,12 +169,16 @@ func (gs *GameState) template(functor string, arity int) string {
 // fill instantiates a template with the arguments of a compound: values in
 // single quotes, statements in double quotes (see sayArg).
 func (gs *GameState) fill(tmpl string, args []terms.Term, words map[string]string, depth int) string {
-	vals := make([]interface{}, len(args))
+	vals := make([]string, len(args))
 	for i, a := range args {
 		vals[i] = gs.sayArg(a, words, depth)
 	}
-	out := strings.TrimSuffix(fmt.Sprintf(tmpl, vals...), ".")
-	if depth > 0 && !strings.HasPrefix(tmpl, "%s") { // "Doing %s ..." within a sentence
+	out, err := language.Render(tmpl, vals)
+	if err != nil {
+		return tmpl
+	}
+	out = strings.TrimSuffix(out, ".")
+	if depth > 0 && !language.StartsWithArgument(tmpl) { // "Doing %s ..." within a sentence
 		out = lowerFirst(out)
 	}
 	return out

@@ -47,7 +47,7 @@ def kappa(pairs):
     cb = collections.Counter(b for _, b in pairs)
     pe = sum(ca[k] * cb.get(k, 0) for k in ca) / (n * n)
     if pe == 1:
-        return 1.0 if po == 1 else None
+        return None  # chance agreement is 1: kappa is undefined
     return (po - pe) / (1 - pe)
 
 
@@ -138,10 +138,14 @@ def main():
     ap.add_argument("--pilot")
     ap.add_argument("--families")
     ap.add_argument("--json")
+    ap.add_argument("--assigned", help="items.json: all assigned claims, including missing replies")
     args = ap.parse_args()
     A = {i["kialo_claim_id"]: i for i in json.load(open(args.a))["items"]}
     B = {i["kialo_claim_id"]: i for i in json.load(open(args.b))["items"]}
-    ids = [k for k in A if k in B]
+    assigned = [i["kialo_claim_id"] for i in json.load(open(args.assigned))["items"]] if args.assigned else list(dict.fromkeys([*A,*B]))
+    if len(set(assigned)) != len(assigned):
+        ap.error("assignment list contains duplicate claim IDs")
+    ids = [k for k in assigned if k in A and k in B]
     fam = family_of(json.load(open(args.families))) if args.families else {}
 
     fields = {
@@ -155,10 +159,12 @@ def main():
         "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
     }
     report = {"items": len(ids), "fields": {}, "disagreements": collections.defaultdict(list)}
+    report["coverage"] = {"assigned":len(assigned), "basis":"provided_assignment" if args.assigned else "observed_union", "annotated_A":sum(k in A for k in assigned), "annotated_B":sum(k in B for k in assigned), "both":len(ids), "neither":sum(k not in A and k not in B for k in assigned)}
     for name, fn in fields.items():
         pairs = [(fn(A[k]), fn(B[k])) for k in ids]
         report["fields"][name] = {"agreement": round(sum(a == b for a, b in pairs) / len(pairs), 3) if pairs else None,
                                   "kappa": None if kappa(pairs) is None else round(kappa(pairs), 3)}
+        report["fields"][name]["all_assigned_agreement"] = sum(a == b for a,b in pairs)/len(assigned) if assigned else None
         for k, (a, b) in zip(ids, pairs):
             if a != b:
                 report["disagreements"][name].append({"claim": k, "A": a, "B": b})

@@ -6,6 +6,8 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/yourorg/wag/internal/language"
 )
 
 // term is a parsed formula: an optional negation, a name, and arguments.
@@ -150,15 +152,15 @@ func say(t *term, lang map[string]string) string {
 	return fill(tmpl, t.args, lang)
 }
 
-// fill puts the arguments into a template's %s, in order.
+// fill uses the same indexed string templates as the game renderer and lint.
 func fill(tmpl string, args []*term, lang map[string]string) string {
-	out := strings.TrimSpace(tmpl)
-	for _, a := range args {
-		i := strings.Index(out, "%s")
-		if i < 0 {
-			break
-		}
-		out = out[:i] + argument(a, lang) + out[i+2:]
+	values := make([]string, len(args))
+	for i, a := range args {
+		values[i] = argument(a, lang)
+	}
+	out, err := language.Render(strings.TrimSpace(tmpl), values)
+	if err != nil {
+		return strings.TrimSuffix(strings.TrimSpace(tmpl), ".")
 	}
 	return strings.TrimSuffix(strings.TrimSpace(out), ".")
 }

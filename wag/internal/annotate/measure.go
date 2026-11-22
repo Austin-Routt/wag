@@ -62,10 +62,12 @@ type FieldAgreement struct {
 
 // Pair is the agreement of two annotators (or an annotator and the gold).
 type Pair struct {
-	A      string                    `json:"a"`
-	B      string                    `json:"b"`
-	Items  int                       `json:"items"` // annotated by both
-	Fields map[string]FieldAgreement `json:"fields"`
+	A                    string                    `json:"a"`
+	B                    string                    `json:"b"`
+	Items                int                       `json:"items"` // annotated by both
+	Fields               map[string]FieldAgreement `json:"fields"`
+	Coverage             *AssignmentCoverage       `json:"coverage,omitempty"`
+	AllAssignedAgreement map[string]float64        `json:"all_assigned_agreement,omitempty"`
 }
 
 // Agree compares two sets of annotations field by field, over the items both
@@ -176,7 +178,7 @@ func LoadCollection(b []byte) (*Collection, error) {
 	return c, nil
 }
 
-var variable = regexp.MustCompile(`\b[A-Z][A-Z0-9]*\b`)
+var variable = regexp.MustCompile(`\b[A-Z][A-Za-z0-9_]*\b`)
 
 // compact drops the spaces of a formula: "f(a, b)" and "f(a,b)" are the
 // same formula.
@@ -307,6 +309,58 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 	}
 	if t := FieldOf(a, "target_claim"); t != "" && d != nil && d.Item(t) == nil {
 		add("its target %s is not a claim of the dataset", t)
+	}
+	return out
+}
+
+// AssignmentCoverage keeps missing replies visible without counting two missing
+// replies as label agreement. Conditional kappa remains a separate diagnostic.
+type AssignmentCoverage struct {
+	Assigned   int `json:"assigned"`
+	AnnotatedA int `json:"annotated_a"`
+	AnnotatedB int `json:"annotated_b"`
+	Both       int `json:"both"`
+	Neither    int `json:"neither"`
+}
+
+func AgreeAssigned(nameA, nameB string, a, b map[string]Annotation, assigned []string) Pair {
+	aa, bb := map[string]Annotation{}, map[string]Annotation{}
+	seen := map[string]bool{}
+	c := &AssignmentCoverage{}
+	for _, id := range assigned {
+		if seen[id] {
+			continue
+		}
+		seen[id] = true
+		c.Assigned++
+		if a[id] != nil {
+			aa[id] = a[id]
+			c.AnnotatedA++
+		}
+		if b[id] != nil {
+			bb[id] = b[id]
+			c.AnnotatedB++
+		}
+		if a[id] != nil && b[id] != nil {
+			c.Both++
+		}
+		if a[id] == nil && b[id] == nil {
+			c.Neither++
+		}
+	}
+	out := Agree(nameA, nameB, aa, bb)
+	out.Coverage = c
+	out.AllAssignedAgreement = map[string]float64{}
+	if c.Assigned > 0 {
+		for _, f := range Fields {
+			same := 0
+			for id := range aa {
+				if bb[id] != nil && FieldOf(aa[id], f) == FieldOf(bb[id], f) {
+					same++
+				}
+			}
+			out.AllAssignedAgreement[f] = float64(same) / float64(c.Assigned)
+		}
 	}
 	return out
 }

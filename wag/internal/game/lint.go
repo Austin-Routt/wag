@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/language"
 	"github.com/yourorg/wag/internal/nascq"
 
 	"github.com/carneades/carneades-4/src/engine/terms"
@@ -22,7 +23,7 @@ import (
 //     Carneades scheme, or an exception locus that names none of its
 //     exceptions (the question could never be answered there); an
 //     answer_variable that is not what the Carneades scheme concludes; a Language
-//     template whose number of %s differs from its predicate's arity;
+//     template whose string placeholders omit or exceed its predicate arguments;
 //   - warnings: a predicate used by a scheme with no Language template (its
 //     statements show as Prolog terms, and Carneades prints "Functor not
 //     defined" for each).
@@ -226,8 +227,12 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 			add(true, "language", "key %q is not predicate/arity", spec)
 			continue
 		}
-		if c := strings.Count(strings.ReplaceAll(tmpl, "%%", ""), "%s"); c != arity {
-			add(true, "language", "%s has %d %%s for %d arguments: %q", spec, c, arity, tmpl)
+		if err := language.Validate(tmpl, arity); err != nil {
+			if c := strings.Count(strings.ReplaceAll(tmpl, "%%", ""), "%s"); !strings.Contains(tmpl, "%[") && c != arity {
+				add(true, "language", "%s has %d %%s for %d arguments: %q (%v)", spec, c, arity, tmpl, err)
+			} else {
+				add(true, "language", "%s has invalid string template %q: %v", spec, tmpl, err)
+			}
 		}
 	}
 	missing := []string{}

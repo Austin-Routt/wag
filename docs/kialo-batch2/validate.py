@@ -61,7 +61,7 @@ def nows(f):
     return re.sub(r'\s+', '', f or '')
 
 def subst(f, b):
-    return re.sub(r'\b[A-Z][A-Z0-9]*\b', lambda m: b.get(m.group(0), m.group(0)), f)
+    return re.sub(r'\b[A-Z][A-Za-z0-9_]*\b', lambda m: b.get(m.group(0), m.group(0)), f)
 
 # 1. 50 items, in items.json order
 ids = [i['kialo_claim_id'] for i in items]
@@ -73,7 +73,7 @@ kp = {i['kialo_claim_id']: i['kialo_parents'] for i in items}
 def primary(it):
     p = [x for x in it['instances'] if x['primary']]
     if len(p) != 1: err(f"{it['kialo_claim_id']}: {len(p)} primary instances")
-    return p[0] if p else it['instances'][0]
+    return p[0] if p else (it['instances'][0] if it['instances'] else None)
 
 # CQ tables: walton id -> {predicate: [(cq label or game id)]}
 cq_pred = {}
@@ -118,7 +118,10 @@ for it in gold['items']:
         counts['checked_formulas'] += len(got) + 1
         # R4: hypothetical cause
         if wid == 'cause_to_effect':
-            ho = [p for p in ins['premises'] if p['formula'].startswith('has_occurred(')][0]
+            occurrences = [p for p in ins['premises'] if p['formula'].startswith('has_occurred(')]
+            if not occurrences:
+                err(f'{cid}: cause_to_effect lacks has_occurred premise'); continue
+            ho = occurrences[0]
             if ho['status'] == 'supplied':
                 if s['fit'] != 'reconstructed' or s['confidence'] > 0.5 or 'hypothetical cause (needs a modal causal scheme, audit N8)' not in (ins.get('note') or ''):
                     err(f'{cid}: R4 not applied to a hypothetical cause_to_effect')
@@ -135,10 +138,16 @@ for it in gold['items']:
         tgt_list = [(a['part'], a.get('formula'), r['kind'], r.get('cq'), a['claim'])]
         for o in t.get('other_kialo_parents') or []:
             if o.get('part') in ('premise', 'exception'):
+                if not o.get('claim_id') or not o.get('formula'):
+                    err(f'{cid}: other_kialo_parents target requires claim_id and formula'); continue
                 tgt_list.append((o['part'], o['formula'], o.get('role'), o.get('cq'), o['claim_id']))
         for part, f, kind, cq, tc in tgt_list:
             if part in ('premise', 'exception'):
+                if tc not in G:
+                    err(f'{cid}: target claim {tc} absent'); continue
                 tp = primary(G[tc])
+                if tp is None:
+                    err(f'{cid}: target {tc} has no argument instance'); continue
                 roles = {'premise': ('premise', 'assumption'), 'exception': ('exception',)}[part]
                 forms = [nows(p['formula']) for p in tp['premises'] if p['role'] in roles]
                 if nows(f) not in forms: err(f'{cid}: target {part} {f} is not a {part} of {tc} primary instance'); continue

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/yourorg/wag/internal/language"
+
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
@@ -27,12 +29,16 @@ func formulaText(lang caes.Language, t terms.Term) string {
 		return "{" + t.String() + "}"
 	}
 	tmpl := lang[fmt.Sprintf("%s/%d", c.Functor, len(c.Args))]
-	if tmpl == "" || strings.Count(strings.ReplaceAll(tmpl, "%%", ""), "%s") != len(c.Args) {
+	if tmpl == "" || language.Validate(tmpl, len(c.Args)) != nil {
 		return t.String()
 	}
-	args := make([]interface{}, len(c.Args))
+	args := make([]string, len(c.Args))
 	for i, a := range c.Args {
 		args[i] = formulaText(lang, a)
 	}
-	return strings.TrimSuffix(fmt.Sprintf(tmpl, args...), ".")
+	out, err := language.Render(tmpl, args)
+	if err != nil {
+		return t.String()
+	}
+	return strings.TrimSuffix(out, ".")
 }

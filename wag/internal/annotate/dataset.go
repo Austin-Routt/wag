@@ -57,6 +57,9 @@ type Dataset struct {
 	Gold       map[string]Annotation `json:"-"`
 	// Hashes are the SHA-256 of every input, by name.
 	Hashes map[string]string `json:"-"`
+	// GoldFile is the name of the gold among Hashes. The gold scores a run but
+	// is never shown to an annotator, so it is not part of a run's identity.
+	GoldFile string `json:"-"`
 }
 
 // manifest is a dataset's dataset.json.
@@ -179,6 +182,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		}
 		d.Gold, d.HasGold = anns, true
 		d.Hashes[m.Gold] = sha(b)
+		d.GoldFile = m.Gold
 	}
 	// The resources: the scheme collection and the game's NASCQ, and the
 	// dataset's own (a lexicon).

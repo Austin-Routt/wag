@@ -28,6 +28,7 @@ func annotateCmd(ctx context.Context, args []string) error {
 	dataset := fs.String("dataset", "kialo-13292-batch2", "a built-in dataset's ID, or a folder with items.json (and optionally guidelines.md, gold.json, lexicon.json)")
 	out := fs.String("out", "", "the run's folder (created; an existing run there continues)")
 	limit := fs.Int("limit", 0, "annotate only the first N claims (0: all)")
+	independent := fs.Bool("independent-first-pass", false, "withhold this annotator's earlier answers; preserve source context")
 	all := fs.Bool("review-all", false, "with --reviewer: review every claim two annotators annotated, not only those where they disagree")
 	_ = fs.Parse(args)
 	if *out == "" {
@@ -104,6 +105,23 @@ func annotateCmd(ctx context.Context, args []string) error {
 		}); err != nil {
 			return err
 		}
+		modeChanged := false
+		fs.Visit(func(f *flag.Flag) {
+			if f.Name == "independent-first-pass" && *independent != run.Settings.IndependentFirstPass {
+				modeChanged = true
+			}
+		})
+		if modeChanged {
+			return fmt.Errorf("annotation mode differs from the saved run; create a new run")
+		}
+		if drift := run.InputDrift(); drift != "" {
+			return fmt.Errorf("%s", drift)
+		}
+		for _, p := range ps {
+			if err := run.CheckProfile(p); err != nil {
+				return err
+			}
+		}
 		fmt.Printf("Continuing the run in %s.\n", *out)
 	} else {
 		d, err := find(*dataset)
@@ -117,7 +135,7 @@ func annotateCmd(ctx context.Context, args []string) error {
 		if *limit > 0 && *limit < len(items) {
 			items = items[:*limit]
 		}
-		if run, err = annotate.New(*out, d, annotate.Settings{Annotators: ann, Reviewer: rev, Items: items}, nil); err != nil {
+		if run, err = annotate.New(*out, d, annotate.Settings{Annotators: ann, Reviewer: rev, Items: items, IndependentFirstPass: *independent}, nil); err != nil {
 			return err
 		}
 	}

@@ -165,12 +165,13 @@ func (s *Server) handleAnnotate(w http.ResponseWriter, r *http.Request) {
 // newRun makes a run: POST /api/annotate/runs {dataset, annotators, reviewer, count | items}.
 func (s *Server) newRun(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		Dataset    string   `json:"dataset"`
-		Annotators []string `json:"annotators"`
-		Reviewer   string   `json:"reviewer"`
-		Count      int      `json:"count"`
-		Items      []string `json:"items"`
-		Note       string   `json:"note"`
+		Dataset              string   `json:"dataset"`
+		Annotators           []string `json:"annotators"`
+		IndependentFirstPass bool     `json:"independent_first_pass"`
+		Reviewer             string   `json:"reviewer"`
+		Count                int      `json:"count"`
+		Items                []string `json:"items"`
+		Note                 string   `json:"note"`
 	}
 	if !readJSON(w, r, &req) {
 		return
@@ -223,7 +224,7 @@ func (s *Server) newRun(w http.ResponseWriter, r *http.Request) {
 		}
 		id = fmt.Sprintf("%s_%d", strings.TrimSuffix(id, fmt.Sprintf("_%d", n-1)), n)
 	}
-	run, err := annotate.New(filepath.Join(base, id), d, annotate.Settings{Annotators: ann, Reviewer: rev, Items: items, Note: req.Note}, clients)
+	run, err := annotate.New(filepath.Join(base, id), d, annotate.Settings{Annotators: ann, Reviewer: rev, Items: items, Note: req.Note, IndependentFirstPass: req.IndependentFirstPass}, clients)
 	if err != nil {
 		httpError(w, err, http.StatusBadRequest)
 		return

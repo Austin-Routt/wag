@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
+	"runtime/debug"
 	"sort"
 	"strings"
 	"sync"
@@ -36,13 +38,14 @@ report.json               validation of every annotation, and agreement: between
 
 // Settings are what a run was started with.
 type Settings struct {
-	Dataset    string        `json:"dataset"`
-	DatasetDir string        `json:"dataset_dir,omitempty"` // the folder of a dataset that is not built in
-	Annotators []llm.Profile `json:"annotators"`
-	Reviewer   *llm.Profile  `json:"reviewer,omitempty"`
-	Items      []string      `json:"items"`
-	Created    time.Time     `json:"created"`
-	Note       string        `json:"note,omitempty"`
+	IndependentFirstPass bool          `json:"independent_first_pass"` // withhold earlier annotations, retaining source context
+	Dataset              string        `json:"dataset"`
+	DatasetDir           string        `json:"dataset_dir,omitempty"` // the folder of a dataset that is not built in
+	Annotators           []llm.Profile `json:"annotators"`
+	Reviewer             *llm.Profile  `json:"reviewer,omitempty"`
+	Items                []string      `json:"items"`
+	Created              time.Time     `json:"created"`
+	Note                 string        `json:"note,omitempty"`
 }
 
 // Progress is how far one annotator, or the reviewer, has got.
@@ -107,6 +110,17 @@ type Run struct {
 	busy     string // what the run is doing: "", "annotating", "reviewing"
 	cancel   context.CancelFunc
 	coll     *Collection
+	// inputHashes and promptHash are the run's identity: the hashes of the
+	// inputs and of the annotator's system prompt when the run was created.
+	// They are written to run.json unchanged for the run's life.
+	inputHashes map[string]string
+	promptHash  string
+	// drift says why the run's inputs are no longer the ones it was made
+	// with ("" if they are). Such a run can be read, reported on and given
+	// verdicts, but not continued (begin refuses).
+	drift string
+	// builds are the WAG builds that have written this run, oldest first.
+	builds []string
 }
 
 var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -130,7 +144,12 @@ func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*R
 	if len(s.Items) == 0 {
 		s.Items = d.IDs()
 	}
+	seenItems := map[string]bool{}
 	for _, id := range s.Items {
+		if seenItems[id] {
+			return nil, fmt.Errorf("claim %s assigned twice", id)
+		}
+		seenItems[id] = true
 		if d.Item(id) == nil {
 			return nil, fmt.Errorf("the dataset has no claim %s", id)
 		}
@@ -165,6 +184,8 @@ func newRun(dir string, d *Dataset, s Settings) *Run {
 	r := &Run{ID: filepath.Base(dir), Dir: dir, Dataset: d, Settings: s, clients: map[string]*llm.Client{},
 		anns: map[string]map[string]Annotation{}, failures: map[string]map[string]string{}, reviews: map[string]*Review{},
 		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}}
+	r.inputHashes = copyHashes(d.Hashes)
+	r.promptHash = sha([]byte(d.AnnotatorSystem()))
 	for _, p := range s.Annotators {
 		r.anns[p.Name], r.failures[p.Name] = map[string]Annotation{}, map[string]string{}
 		r.progress[p.Name] = &Progress{Name: p.Name, Role: "annotator", Total: len(s.Items)}
@@ -187,6 +208,9 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 	}
 	var f struct {
 		Settings Settings                     `json:"settings"`
+		Inputs   map[string]string            `json:"inputs_sha256"`
+		Prompt   string                       `json:"annotator_system_prompt_sha256"`
+		Builds   []string                     `json:"builds"`
 		Failures map[string]map[string]string `json:"failures"`
 	}
 	if err := json.Unmarshal(b, &f); err != nil {
@@ -197,6 +221,16 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		return nil, fmt.Errorf("its dataset %s: %v", f.Settings.Dataset, err)
 	}
 	r := newRun(dir, d, f.Settings)
+	r.builds = f.Builds
+	if len(f.Inputs) == 0 || f.Prompt == "" {
+		// A run made before its inputs were pinned: readable, not continued.
+		r.inputHashes, r.promptHash = nil, ""
+	} else {
+		r.inputHashes, r.promptHash = copyHashes(f.Inputs), f.Prompt
+	}
+	if err := r.checkInputs(); err != nil {
+		r.drift = err.Error()
+	}
 	for name := range r.anns {
 		if b, err := os.ReadFile(r.annotationsPath(name)); err == nil {
 			if m, err := parseAnnotations(b); err == nil {
@@ -267,12 +301,17 @@ func (r *Run) recount() {
 }
 
 // saveRun writes run.json. Caller holds r.mu or owns r.
+// The identity it writes is always the pinned one, so saving a run whose
+// inputs have drifted (a verdict recorded later) misrepresents nothing.
 func (r *Run) saveRun() error {
+	if b := buildID(); len(r.builds) == 0 || r.builds[len(r.builds)-1] != b {
+		r.builds = append(r.builds, b)
+	}
 	ps := r.progressList(false)
 	b, err := json.MarshalIndent(map[string]any{"format": RunFormat, "id": r.ID, "settings": r.Settings,
-		"dataset": r.Dataset, "inputs_sha256": r.Dataset.Hashes,
-		"annotator_system_prompt_sha256": sha([]byte(r.Dataset.AnnotatorSystem())),
-		"progress":                       ps, "failures": r.failures, "saved": time.Now().UTC()}, "", " ")
+		"dataset": r.Dataset, "inputs_sha256": r.inputHashes,
+		"annotator_system_prompt_sha256": r.promptHash, "builds": r.builds,
+		"progress": ps, "failures": r.failures, "saved": time.Now().UTC()}, "", " ")
 	if err != nil {
 		return err
 	}
@@ -344,9 +383,109 @@ func (r *Run) Busy() string {
 
 // begin marks the run busy with what, and returns the context to do it in;
 // an error if it is busy already.
+func copyHashes(in map[string]string) map[string]string {
+	out := map[string]string{}
+	for k, v := range in {
+		out[k] = v
+	}
+	return out
+}
+
+// checkInputs compares the run's pinned identity with its inputs as they are
+// now, leaving out the gold, which an annotator never sees.
+func (r *Run) checkInputs() error {
+	if r.inputHashes == nil || r.promptHash == "" {
+		return fmt.Errorf("the run was made before its inputs were pinned; it can be read but not continued: create a new run")
+	}
+	var changed []string
+	for _, k := range sortedUnion(r.inputHashes, r.Dataset.Hashes) {
+		if k != r.Dataset.GoldFile && r.inputHashes[k] != r.Dataset.Hashes[k] {
+			changed = append(changed, k)
+		}
+	}
+	if r.promptHash != sha([]byte(r.Dataset.AnnotatorSystem())) {
+		changed = append(changed, "the annotator's system prompt")
+	}
+	if len(changed) > 0 {
+		return fmt.Errorf("the run's inputs have changed since it was made (%s); it can be read but not continued: create a new run", strings.Join(changed, ", "))
+	}
+	return nil
+}
+
+func sortedUnion(a, b map[string]string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, m := range []map[string]string{a, b} {
+		for k := range m {
+			if !seen[k] {
+				seen[k] = true
+				out = append(out, k)
+			}
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+// InputDrift says why the run's inputs are no longer those it was made with,
+// or "" if they are.
+func (r *Run) InputDrift() string {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return r.drift
+}
+
+// CheckProfile refuses a profile that would continue the run's annotator or
+// reviewer of the same name with another provider, model, endpoint, prompt,
+// schema or parameters. Timeouts, call spacing, retries and the key's source
+// may change.
+func (r *Run) CheckProfile(p llm.Profile) error {
+	saved := append([]llm.Profile{}, r.Settings.Annotators...)
+	if r.Settings.Reviewer != nil {
+		saved = append(saved, *r.Settings.Reviewer)
+	}
+	for _, s := range saved {
+		if s.Name == p.Name && callerOf(s) != callerOf(p) {
+			return fmt.Errorf("profile %s is not the one this run was made with (provider, model, endpoint, prompt, schema or parameters differ): create a new run", p.Name)
+		}
+	}
+	return nil
+}
+
+func callerOf(p llm.Profile) string {
+	b, _ := json.Marshal(struct {
+		Provider, BaseURL, System, SchemaFile string
+		Command                               []string
+		Params                                llm.Params
+	}{p.Provider, p.BaseURL, p.System, p.SchemaFile, p.Command, p.Params})
+	return string(b)
+}
+
+// buildID names the WAG build that is running: its VCS revision, whether the
+// tree was modified, and the Go version ("unknown" parts when not recorded).
+func buildID() string {
+	rev, mod, gov := "unknown", "", runtime.Version()
+	if bi, ok := debug.ReadBuildInfo(); ok {
+		for _, s := range bi.Settings {
+			switch s.Key {
+			case "vcs.revision":
+				rev = s.Value
+			case "vcs.modified":
+				if s.Value == "true" {
+					mod = "+modified"
+				}
+			}
+		}
+	}
+	return rev + mod + " " + gov
+}
+
 func (r *Run) begin(ctx context.Context, what string) (context.Context, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	if err := r.checkInputs(); err != nil {
+		return nil, err
+	}
 	if r.busy != "" {
 		return nil, fmt.Errorf("the run is %s already", r.busy)
 	}
@@ -450,6 +589,9 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 		before := map[string]Annotation{}
 		var prior []string
 		for _, x := range order {
+			if r.Settings.IndependentFirstPass {
+				break
+			}
 			if x == id {
 				break
 			}
@@ -728,6 +870,8 @@ type Status struct {
 	Disagreed  int         `json:"disagreed"` // claims whose annotations differ on a field
 	Annotated2 int         `json:"annotated_by_two"`
 	Reviewable int         `json:"reviewable"` // claims with enough annotations to review (Run.Review)
+	// InputDrift says why the run can be read but not continued ("" if it can be).
+	InputDrift string `json:"input_drift,omitempty"`
 }
 
 // progressList lists the annotators' progress in their order, then the
@@ -757,7 +901,7 @@ func (r *Run) progressList(copy bool) []*Progress {
 func (r *Run) Status() Status {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	s := Status{ID: r.ID, Dir: r.Dir, Dataset: r.Dataset, Settings: r.Settings, Busy: r.busy, Reviewed: len(r.reviews), Verdicts: len(r.verdicts)}
+	s := Status{ID: r.ID, Dir: r.Dir, Dataset: r.Dataset, Settings: r.Settings, Busy: r.busy, Reviewed: len(r.reviews), Verdicts: len(r.verdicts), InputDrift: r.drift}
 	s.Progress = r.progressList(true)
 	for _, p := range r.Settings.Annotators {
 		if r.clients[p.Name] == nil {
