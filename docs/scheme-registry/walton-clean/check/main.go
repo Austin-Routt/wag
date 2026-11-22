@@ -258,8 +258,10 @@ func main() {
 		for _, s := range theory.ArgSchemes {
 			d.Schemes = append(d.Schemes, dumpScheme{s.Id, s.Metadata["title"], s.Variables, s.Premises, s.Assumptions, s.Exceptions, s.Conclusions})
 		}
-		b, _ := json.MarshalIndent(d, "", " ")
-		os.WriteFile(*dumpOut, b, 0644)
+		if err := writeJSON(*dumpOut, d, " "); err != nil {
+			fmt.Fprintln(realStderr, "write imported dump:", err)
+			os.Exit(2)
+		}
 	}
 	r.Schemes = len(theory.ArgSchemes)
 	r.LanguageKeys = len(theory.Language)
@@ -630,12 +632,22 @@ func finish(r *report, jsonOut string, realStderr *os.File) {
 		p("GATE: FAIL\n")
 	}
 	if jsonOut != "" {
-		b, _ := json.MarshalIndent(r, "", "  ")
-		os.WriteFile(jsonOut, b, 0644)
+		if err := writeJSON(jsonOut, r, "  "); err != nil {
+			fmt.Fprintln(realStderr, "write report:", err)
+			os.Exit(2)
+		}
 	}
 	if !r.Pass {
 		os.Exit(1)
 	}
+}
+
+func writeJSON(path string, value interface{}, indent string) error {
+	b, err := json.MarshalIndent(value, "", indent)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, b, 0644)
 }
 
 // lenientImport reads a scheme file as WAG's engine did before 2026-11-22: a

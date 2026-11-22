@@ -10,8 +10,15 @@ permissions:
 
 jobs:
   go:
-    name: Go tests, lint and the catalogue
+    name: Go ${{ matrix.go }} tests, lint and the catalogue
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.24.13', '1.27.4']
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: 'off'
     defaults:
       run:
         working-directory: wag
@@ -19,7 +26,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version-file: wag/go.mod
+          go-version: ${{ matrix.go }}
           cache-dependency-path: wag/go.sum
       - name: go vet
         run: go vet ./...
@@ -43,25 +50,27 @@ jobs:
         # the compendium's transcription is private (the owner's workspace).
         run: go run ./cmd/wag-cli --catalogue-check
       - name: Registry check
-        # One error is known and waits for a decision: division_generic is a
-        # copy of composition_generic. Any other error fails the build.
+        # D042 records division_generic as a copy of composition_generic.
+        # Only that debt is allowed until its scoped migration is implemented.
         run: |
-          go run ./cmd/wag-cli --registry ../docs/scheme-registry/walton-clean/walton.yml \
-            --families data/schemes/families.json > registry.txt || true
-          cat registry.txt
-          if grep '^ERROR' registry.txt | grep -v '^ERROR composition_generic = division_generic:'; then
-            echo "::error::the registry check found an error other than the known one"
-            exit 1
-          fi
+          python3 ../tools/test_registry_gate.py
+          bash ../tools/check-registry.sh
 
   data:
-    name: walton.yml rebuild and the batch-2 gold
+    name: Go ${{ matrix.go }} walton.yml rebuild and the batch-2 gold
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.24.13', '1.27.4']
+    env:
+      GOTOOLCHAIN: local
+      GOWORK: 'off'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version-file: wag/go.mod
+          go-version: ${{ matrix.go }}
           cache-dependency-path: wag/go.sum
       - uses: actions/setup-python@v5
         with:
