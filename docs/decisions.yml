@@ -1469,6 +1469,33 @@ decisions:
   status: open
   docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md", "docs/scheme-registry/walton-clean/changes.json"]
 
+- id: D084
+  title: The reserved name is/2
+  question: >-
+    The engine of 2026-11-22 reserves is, true and false: in a rule body GoCHR
+    runs is/2 as an assignment. walton.yml uses is/2 in group_2's conclusion
+    and in rule_physical_world_1's premise, so the validator now fails both
+    schemes and the language key, and Carneades' own inference never draws
+    group_2's conclusion. WAG instantiates schemes with explicit parameters,
+    which still works. Rename the predicate?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["docs/scheme-registry/walton-clean/clean-check.txt", "the external reviews of 2026-11-22 (Fable's report)", "verify/r-reviews-2026-11-22 in the workspace (agent 3, 5b)"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: is_a/2, the schemes library's name, with the template unchanged
+      ("%s is %s."), in both schemes, the language key and WAG's annotation
+      copy of walton.yml. Only the name changes. The library also adds a
+      premise to rule_physical_world_1 (referentially_coextensive(W,D)); that
+      changes the scheme and is not part of this decision. A check on both
+      engines found that the rename restores group_2's conclusion.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+
 # --- Priority 3: can wait ----------------------------------------------------
 
 - id: D040

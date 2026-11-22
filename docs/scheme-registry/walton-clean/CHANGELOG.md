@@ -4,24 +4,24 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 
 ## Gate
 
-`check/main.go` (Go, Carneades-4 fork at `carneades-4`, the repository's root), one process per file. Check 1 also decodes with yaml.v2 `UnmarshalStrict`, which rejects unknown keys (`assumption:`) and duplicate keys.
+`check/main.go` (Go, the Carneades-4 at `carneades-4`, the repository's root), one process per file. Since 2026-11-22 that is the schemes library's engine with WAG's fixes ([`CARNEADES_FORK.md`](../../../CARNEADES_FORK.md)). Check 1 also decodes with yaml.v2 `UnmarshalStrict`, which rejects unknown keys (`assumption:`) and duplicate keys. The engine's own import is now strict too. When it refuses a file, the check reads the file again leniently, as the engine before 2026-11-22 did (a duplicate key keeps its last value, an unknown field is dropped), so that checks 2–4 and the semantic diff still run; the import error stays in the report.
 
 | | original | syntax fixes only | **cleaned** | cleaned + 4 proposals (not applied) |
 |---|---|---|---|---|
-| 1 YAML / import error | yaml: line 733: mapping values are not allowe | none | none | none |
+| 1 YAML / import error | yaml: line 733: mapping values are not allowe | yaml: unmarshal errors: line 56: key "biased/…; read leniently | none | none |
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
-| 2 validator problems (before / after instantiation) | – | 138 / 147 | 17 / 17 | 0 / 0 |
+| 2 validator problems (before / after instantiation) | – | 142 / 155 | 20 / 20 | 3 / 3 |
 | 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 116 | 0 of 116 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 67 of 111 | 112 of 116 | 116 of 116 |
-| **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
+| schemes passing checks 2–4 | – | 66 of 111 | 110 of 116 | 114 of 116 |
+| **GATE** | **FAIL** | **FAIL** | **FAIL** | **FAIL** |
 
-(The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr; the audit's 137 is the same list without it.)
+(The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr, and 4 for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these 5.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 112. The other four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all 116 (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 110. Four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). Two more, `group_2` and `rule_physical_world_1`, and the language key `is/2`, use `is` as a predicate, a name the engine has reserved since 2026-11-22: in a rule body GoCHR runs `is/2` as an assignment. D084 decides to rename it `is_a/2`, the schemes library's name, with the same template; until that is applied (plan §0, stage 2), these three problems remain, with or without the four proposals (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
-WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
+WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
 `check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, after the renames below. The only scheme-level differences are the syntax fixes that restore a dropped formula (`popular_opinion`, `verbal_classification_arbitrariness`), the three variable declarations, the four approval-needed repairs, and the owner's decisions (below; the added scheme is listed, not compared). The six primed-variable schemes are identical apart from the variable names.
 
@@ -1342,7 +1342,7 @@ All four instantiate correctly (every premise, assumption and exception, a concl
 | `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the validator reports 0 problems and the gate passes for all 116 schemes (`proposals-check.txt`).
+With these 14 edits (`walton.proposals.yml`), the four schemes pass the validator (`proposals-check.txt`). The validator's other 3 problems are the reserved name `is` (D084, not yet applied).
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 

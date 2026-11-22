@@ -6,10 +6,11 @@ stderr during import: ""
 schemes: 116, language keys: 416
 
 == 2. Carneades validator ==
-before instantiation: 17 problem(s)
+before instantiation: 20 problem(s)
   [argument scheme] ad_hominem: variable declared but not used: S
   [argument scheme] ad_hominem: variable not used in premises or deletions: S
   [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
   [argument scheme] practical_necessary_condition: variable declared but not used: A2
   [argument scheme] practical_necessary_condition: variable declared but not used: P
   [argument scheme] practical_necessary_condition: variable not used in premises or deletions: A2
@@ -24,10 +25,13 @@ before instantiation: 17 problem(s)
   [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
   [argument scheme] regulative_rule: variable declared but not used: A
   [argument scheme] regulative_rule: variable not used in premises or deletions: A
-after instantiating every scheme: 17 problem(s)
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
+  [language] is/2: a reserved name, not a predicate symbol: is
+after instantiating every scheme: 20 problem(s)
   [argument scheme] ad_hominem: variable declared but not used: S
   [argument scheme] ad_hominem: variable not used in premises or deletions: S
   [argument scheme] ad_hominem: variable not used in premises or deletions: S
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
   [argument scheme] practical_necessary_condition: variable declared but not used: A2
   [argument scheme] practical_necessary_condition: variable declared but not used: P
   [argument scheme] practical_necessary_condition: variable not used in premises or deletions: A2
@@ -42,6 +46,8 @@ after instantiating every scheme: 17 problem(s)
   [argument scheme] practical_sufficient_condition: variable not used in premises or deletions: P
   [argument scheme] regulative_rule: variable declared but not used: A
   [argument scheme] regulative_rule: variable not used in premises or deletions: A
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
+  [language] is/2: a reserved name, not a predicate symbol: is
 
 == 3. InstantiateScheme ==
   1 popular_opinion                            PASS  args=1/1 premises+assumptions=3 exceptions=1
@@ -168,12 +174,14 @@ schemes failing instantiation: 0 of 116
 declared variables used in no formula (informational): 0
 
 == per scheme (checks 2-4) ==
-schemes passing every check: 112 of 116
+schemes passing every check: 110 of 116
   FAIL ad_hominem (2 problem(s))
+  FAIL group_2 (1 problem(s))
   FAIL practical_necessary_condition (4 problem(s))
   FAIL practical_sufficient_condition (4 problem(s))
   FAIL regulative_rule (2 problem(s))
-problems not tied to one scheme (language keys etc.): 0
+  FAIL rule_physical_world_1 (1 problem(s))
+problems not tied to one scheme (language keys etc.): 1
 
 == GATE ==
 1_import       PASS

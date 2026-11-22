@@ -106,17 +106,27 @@ def main(outdir):
     # ---- gate ---------------------------------------------------------------
     w("## Gate")
     w("")
-    w("`check/main.go` (Go, Carneades-4 fork at `carneades-4`, the repository's root), one process per file. "
-      "Check 1 also decodes with yaml.v2 `UnmarshalStrict`, which rejects unknown keys (`assumption:`) and duplicate keys.")
+    w("`check/main.go` (Go, the Carneades-4 at `carneades-4`, the repository's root), one process per file. Since "
+      "2026-11-22 that is the schemes library's engine with WAG's fixes ([`CARNEADES_FORK.md`](../../../CARNEADES_FORK.md)). "
+      "Check 1 also decodes with yaml.v2 `UnmarshalStrict`, which rejects unknown keys (`assumption:`) and duplicate keys. "
+      "The engine's own import is now strict too. When it refuses a file, the check reads the file again leniently, as "
+      "the engine before 2026-11-22 did (a duplicate key keeps its last value, an unknown field is dropped), so that "
+      "checks 2–4 and the semantic diff still run; the import error stays in the report.")
     w("")
     w("| | original | syntax fixes only | **cleaned** | cleaned + 4 proposals (not applied) |")
     w("|---|---|---|---|---|")
+
+    def import_cell(r):
+        e = r.get("yaml_error") or r.get("import_error")
+        if not e:
+            return "none"
+        return " ".join(e.split())[:45] + ("…; read leniently" if r.get("lenient_import") else "")
 
     def cell(r, f):
         return f(r) if r else "–"
     R = [reports.get(k) for k in ["original", "syntax-only", "clean", "proposals"]]
     lines = [
-        ("1 YAML / import error", lambda r: (r.get("yaml_error") or "none")[:45]),
+        ("1 YAML / import error", import_cell),
         ("1 strict-decode errors", lambda r: str(len(r["strict_errors"]))),
         ("1 stderr during import", lambda r: "yes" if r["import_stderr"] else "none"),
         ("2 validator problems (before / after instantiation)", lambda r: f"{len(r['validator_before_instantiation'])} / {len(r['validator_after_instantiation'])}" if r["schemes"] else "–"),
@@ -128,24 +138,32 @@ def main(outdir):
     for name, f in lines:
         w("| " + name + " | " + " | ".join(cell(r, f) for r in R) + " |")
     w("")
+    syn = reports.get("syntax-only") or {}
+    nres = sum(1 for x in syn.get("validator_before_instantiation") or [] if "a reserved name" in x)
     w("(The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors "
-      "printed to stderr; the audit's 137 is the same list without it.)")
+      f"printed to stderr, and {nres} for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the "
+      f"engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these {nres + 1}.)")
     w("")
     clean = reports.get("clean")
     if clean and not clean["pass"]:
+        nfail = len(clean.get("scheme_failures") or {})
         w(f"**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all {nschemes} schemes, and check 2 "
-          f"passes for {nschemes - 4}. The other four fail one validator rule only: every variable must occur in a premise. In "
+          f"passes for {nschemes - nfail}. Four fail one validator rule only: every variable must occur in a premise. In "
           "`ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable "
           "occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, "
           "which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning]"
-          "(#schemes-that-cannot-pass-without-a-change-of-meaning). With the four proposals there, the gate passes for all "
-          f"{nschemes} (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not "
+          "(#schemes-that-cannot-pass-without-a-change-of-meaning). Two more, `group_2` and `rule_physical_world_1`, and the "
+          "language key `is/2`, use `is` as a predicate, a name the engine has reserved since 2026-11-22: in a rule body GoCHR "
+          "runs `is/2` as an assignment. D084 decides to rename it `is_a/2`, the schemes library's name, with the same "
+          "template; until that is applied (plan §0, stage 2), these three problems remain, with or without the four "
+          "proposals (`proposals-check.txt`). These schemes still instantiate correctly (check 3), and WAG's loader does not "
           "run the validator.")
         w("")
     w("WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) "
       "reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a "
       "`¬p/n` key per negated predicate, and without one a negation reads \"it is not the case that …\". "
-      "For the syntax-only file it reports 58 language findings (`check/wag-lint-*.txt`). Its NASCQ findings come from "
+      "WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; "
+      "before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from "
       "WAG's data, which targets `core.yml`, and are not about this file.")
     w("")
     w("`check/semantic-diff.txt` compares what Carneades loads from the syntax-only file and from the cleaned file, "
@@ -400,8 +418,14 @@ def main(outdir):
     w("| `practical_sufficient_condition` | P, A2 | same | same |")
     w("| `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` (\"%s must not do what is prohibited -obligatory-.\"). This turns the general norm into a claim about A |")
     w("")
-    w(f"With these {len(PROPOSALS)} edits (`walton.proposals.yml`), the validator reports 0 problems and the gate "
-      f"passes for all {len(dump['schemes'])} schemes (`proposals-check.txt`).")
+    prop = reports.get("proposals") or {}
+    left = prop.get("validator_before_instantiation") or []
+    other = [x for x in left if "a reserved name" not in x]
+    w(f"With these {len(PROPOSALS)} edits (`walton.proposals.yml`), the four schemes pass the validator "
+      f"(`proposals-check.txt`). " + (f"The validator's other {len(left)} problems are the reserved name `is` (D084, not yet applied)."
+                                     if left and not other else
+                                     "The validator reports 0 problems." if not left else
+                                     f"It still reports {len(other)} other problem(s)."))
     w("")
 
     # ---- semantic concerns ----------------------------------------------------

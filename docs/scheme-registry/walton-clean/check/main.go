@@ -39,30 +39,30 @@ import (
 
 // strictFile mirrors every key the Carneades importer reads for a scheme file.
 type strictFile struct {
-	Meta               map[string]interface{} `yaml:"meta"`
-	Language           map[string]string      `yaml:"language"`
-	Argument_schemes   []strictScheme         `yaml:"argument_schemes"`
-	Issue_schemes      map[string][]string    `yaml:"issue_schemes"`
-	Statements         map[string]interface{} `yaml:"statements"`
-	Issues             map[string]interface{} `yaml:"issues"`
-	Arguments          map[string]interface{} `yaml:"arguments"`
-	Assumptions        []string               `yaml:"assumptions"`
-	Tests              map[string]interface{} `yaml:"tests"`
-	References         map[string]interface{} `yaml:"references"`
-	Weighing_functions map[string]interface{} `yaml:"weighing_functions"`
+	Meta               map[string]interface{} `yaml:"meta,omitempty"`
+	Language           map[string]string      `yaml:"language,omitempty"`
+	Argument_schemes   []strictScheme         `yaml:"argument_schemes,omitempty"`
+	Issue_schemes      map[string][]string    `yaml:"issue_schemes,omitempty"`
+	Statements         map[string]interface{} `yaml:"statements,omitempty"`
+	Issues             map[string]interface{} `yaml:"issues,omitempty"`
+	Arguments          map[string]interface{} `yaml:"arguments,omitempty"`
+	Assumptions        []string               `yaml:"assumptions,omitempty"`
+	Tests              map[string]interface{} `yaml:"tests,omitempty"`
+	References         map[string]interface{} `yaml:"references,omitempty"`
+	Weighing_functions map[string]interface{} `yaml:"weighing_functions,omitempty"`
 }
 
 type strictScheme struct {
-	Id          string                 `yaml:"id"`
-	Meta        map[string]interface{} `yaml:"meta"`
-	Variables   []string               `yaml:"variables"`
-	Weight      interface{}            `yaml:"weight"`
-	Premises    []string               `yaml:"premises"`
-	Assumptions []string               `yaml:"assumptions"`
-	Exceptions  []string               `yaml:"exceptions"`
-	Deletions   []string               `yaml:"deletions"`
-	Guards      []string               `yaml:"guards"`
-	Conclusions []string               `yaml:"conclusions"`
+	Id          string                 `yaml:"id,omitempty"`
+	Meta        map[string]interface{} `yaml:"meta,omitempty"`
+	Variables   []string               `yaml:"variables,omitempty"`
+	Weight      interface{}            `yaml:"weight,omitempty"`
+	Premises    []string               `yaml:"premises,omitempty"`
+	Assumptions []string               `yaml:"assumptions,omitempty"`
+	Exceptions  []string               `yaml:"exceptions,omitempty"`
+	Deletions   []string               `yaml:"deletions,omitempty"`
+	Guards      []string               `yaml:"guards,omitempty"`
+	Conclusions []string               `yaml:"conclusions,omitempty"`
 }
 
 type schemeResult struct {
@@ -83,6 +83,7 @@ type report struct {
 	StrictErrors     []string            `json:"strict_errors"`
 	ImportError      string              `json:"import_error,omitempty"`
 	ImportStderr     string              `json:"import_stderr"`
+	LenientImport    string              `json:"lenient_import,omitempty"`
 	Schemes          int                 `json:"schemes"`
 	LanguageKeys     int                 `json:"language_keys"`
 	ValidatorBefore  []string            `json:"validator_before_instantiation"`
@@ -225,6 +226,14 @@ func main() {
 	r.ImportStderr = cap.take()
 	if err != nil {
 		r.ImportError = err.Error()
+		// The engine's import is strict since 2026-11-22. Read the file as the
+		// old engine did, so that the later checks and the dump still show what
+		// it meant: the import gate stays failed.
+		if lag, lerr := lenientImport(data); lerr == nil {
+			r.LenientImport = "read leniently, as the engine before 2026-11-22 did: a duplicate key keeps its last value, an unknown field is dropped"
+			ag, err = lag, nil
+		}
+		r.ImportStderr += cap.take()
 	}
 	r.Gate["1_import"] = r.YAMLError == "" && r.ImportError == "" && r.ImportStderr == "" && len(r.StrictErrors) == 0
 	if err != nil || ag == nil || ag.Theory == nil {
@@ -555,6 +564,9 @@ func finish(r *report, jsonOut string, realStderr *os.File) {
 	if r.ImportError != "" {
 		p("import error: %s\n", r.ImportError)
 	}
+	if r.LenientImport != "" {
+		p("%s\n", r.LenientImport)
+	}
 	p("strict YAML decode (unknown or duplicate keys): %d error(s)\n", len(r.StrictErrors))
 	for _, e := range r.StrictErrors {
 		p("  %s\n", e)
@@ -624,4 +636,20 @@ func finish(r *report, jsonOut string, realStderr *os.File) {
 	if !r.Pass {
 		os.Exit(1)
 	}
+}
+
+// lenientImport reads a scheme file as WAG's engine did before 2026-11-22: a
+// duplicate key keeps its last value and an unknown field is dropped, where
+// the schemes library's engine refuses both. The cleaning's audit compares
+// what the original meant with the cleaned file, so it needs this reading.
+func lenientImport(data []byte) (*caes.ArgGraph, error) {
+	var sf strictFile
+	if err := yaml.Unmarshal(data, &sf); err != nil {
+		return nil, err
+	}
+	b, err := yaml.Marshal(&sf)
+	if err != nil {
+		return nil, err
+	}
+	return caesYaml.Import(bytes.NewReader(b))
 }

@@ -1,15 +1,20 @@
 walton-check check/walton.syntax-only.yml
 
 == 1. import ==
+import error: yaml: unmarshal errors:
+  line 56: key "biased/1" already set in map
+  line 150: key "good/1" already set in map
+  line 418: field assumption not found in type yaml.umArgScheme
+read leniently, as the engine before 2026-11-22 did: a duplicate key keeps its last value, an unknown field is dropped
 strict YAML decode (unknown or duplicate keys): 3 error(s)
   line 56: key "biased/1" already set in map
   line 150: key "good/1" already set in map
   line 418: field assumption not found in type main.strictScheme
-stderr during import: "*** Parse Error before[ <input>:1:30 ]: literal not terminated\n*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:32 ]: literal not terminated\n*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27\n*** Parse Error before[ <input>:1:33 ]: invalid char literal\n*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29\n*** Parse Error before[ <input>:1:26 ]: literal not terminated\n*** Parse Error before[ <input>:1:26 ]: invalid char literal\n*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19\n"
+stderr during import: "*** Parse Error before[ <input>:1:30 ]: literal not terminated\n*** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:28 ]: literal not terminated\n*** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23\n*** Parse Error before[ <input>:1:32 ]: literal not terminated\n*** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27\n*** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29\n*** Parse Error before[ <input>:1:26 ]: literal not terminated\n*** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19\n"
 schemes: 111, language keys: 392
 
 == 2. Carneades validator ==
-before instantiation: 138 problem(s)
+before instantiation: 142 problem(s)
   [argument scheme] abductive_backward: predicate not declared in the language: data_set/2
   [argument scheme] ad_hominem: predicate not declared in the language: attack_well_supported/0
   [argument scheme] ad_hominem: predicate not declared in the language: character_revelant/0
@@ -24,6 +29,7 @@ before instantiation: 138 problem(s)
   [argument scheme] end_and_means_2: predicate not declared in the language: means_end/1
   [argument scheme] end_and_means_2: predicate not declared in the language: more_important_ends/0
   [argument scheme] gradualism: predicate not declared in the language: proper_sequence/0
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: other_consequences/1
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: prudential/1
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: strongly_occur/1
@@ -52,6 +58,7 @@ before instantiation: 138 problem(s)
   [argument scheme] part_in_whole: variable not declared in the scheme: A
   [argument scheme] part_in_whole: variable not declared in the scheme: A
   [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] pop_scheme: a reserved name (is, true, false) used as a predicate: true(A)
   [argument scheme] position_to_know_ad_populum: predicate not declared in the language: position_to_know_group/2
   [argument scheme] practical_necessary_condition: predicate not declared in the language: conflict_goals/3
   [argument scheme] practical_necessary_condition: variable declared but not used: A2
@@ -85,6 +92,7 @@ before instantiation: 138 problem(s)
   [argument scheme] rhetorical_oppositions_normative: variable declared but not used: X'
   [argument scheme] rule_mental_world: predicate not declared in the language: same_meaning/3
   [argument scheme] rule_mental_world: predicate not declared in the language: speakers_correct/0
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
   [argument scheme] rule_physical_world_1: predicate not declared in the language: not_necessarily_true/0
   [argument scheme] rule_physical_world_1: predicate not declared in the language: synonymous/0
   [argument scheme] rule_physical_world_2: predicate not declared in the language: correctly_report/0
@@ -140,6 +148,7 @@ before instantiation: 138 problem(s)
   [language] cited_bad_consequences/1: format string has incorrect number of placeholders (verbs): 1
   [language] conflict_goals/2: format string has incorrect number of placeholders (verbs): 2
   [language] favor/1: format string has incorrect number of placeholders (verbs): 1
+  [language] is/2: a reserved name, not a predicate symbol: is
   [language] other_consequences_presumption/2: format string has incorrect number of placeholders (verbs): 2
   [language] popular_practise/1: format string has incorrect number of placeholders (verbs): 1
   [language] position_to_know_group/1: format string has incorrect number of placeholders (verbs): 1
@@ -148,25 +157,21 @@ before instantiation: 138 problem(s)
   [language] special_proposition/2: format string has incorrect number of placeholders (verbs): 2
   [language] true/1: not a predicate symbol: true
   stderr during validation: *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:27 ]: literal not terminated
 *** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20
 *** Parse Error before[ <input>:1:30 ]: literal not terminated
 *** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:31 ]: literal not terminated
 *** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24
 *** Parse Error before[ <input>:1:28 ]: literal not terminated
 *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:44 ]: literal not terminated
 *** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37
 *** Parse Error before[ <input>:1:28 ]: literal not terminated
 *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25
 *** Parse Error before[ <input>:1:26 ]: literal not terminated
@@ -174,24 +179,18 @@ before instantiation: 138 problem(s)
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
-*** Parse Error before[ <input>:1:32 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23
-*** Parse Error before[ <input>:1:33 ]: invalid char literal
 *** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:37 ]: literal not terminated
 *** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28
 *** Parse Error before[ <input>:1:26 ]: literal not terminated
-*** Parse Error before[ <input>:1:26 ]: invalid char literal
 *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
 *** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
 
-after instantiating every scheme: 147 problem(s)
+after instantiating every scheme: 155 problem(s)
   [argument scheme] abductive_backward: predicate not declared in the language: data_set/2
   [argument scheme] ad_hominem: predicate not declared in the language: attack_well_supported/0
   [argument scheme] ad_hominem: predicate not declared in the language: character_revelant/0
@@ -206,6 +205,7 @@ after instantiating every scheme: 147 problem(s)
   [argument scheme] end_and_means_2: predicate not declared in the language: means_end/1
   [argument scheme] end_and_means_2: predicate not declared in the language: more_important_ends/0
   [argument scheme] gradualism: predicate not declared in the language: proper_sequence/0
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: other_consequences/1
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: prudential/1
   [argument scheme] negative_consequences_prudential: predicate not declared in the language: strongly_occur/1
@@ -234,6 +234,7 @@ after instantiating every scheme: 147 problem(s)
   [argument scheme] part_in_whole: variable not declared in the scheme: A
   [argument scheme] part_in_whole: variable not declared in the scheme: A
   [argument scheme] part_in_whole: variable not declared in the scheme: A
+  [argument scheme] pop_scheme: a reserved name (is, true, false) used as a predicate: true(A)
   [argument scheme] position_to_know_ad_populum: predicate not declared in the language: position_to_know_group/2
   [argument scheme] practical_necessary_condition: predicate not declared in the language: conflict_goals/3
   [argument scheme] practical_necessary_condition: variable declared but not used: A2
@@ -267,6 +268,7 @@ after instantiating every scheme: 147 problem(s)
   [argument scheme] rhetorical_oppositions_normative: variable declared but not used: X'
   [argument scheme] rule_mental_world: predicate not declared in the language: same_meaning/3
   [argument scheme] rule_mental_world: predicate not declared in the language: speakers_correct/0
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
   [argument scheme] rule_physical_world_1: predicate not declared in the language: not_necessarily_true/0
   [argument scheme] rule_physical_world_1: predicate not declared in the language: synonymous/0
   [argument scheme] rule_physical_world_2: predicate not declared in the language: correctly_report/0
@@ -289,6 +291,10 @@ after instantiating every scheme: 147 problem(s)
   [argument scheme] verbal_slippery_slope: variable not declared in the scheme: F
   [argument scheme] waste: predicate not declared in the language: ought_to_continue/2
   [argument scheme] waste: predicate not declared in the language: waste_bad_thing/2
+  [argument] a23: does not carry the scheme's exceptions: each instantiated exception needs a direct, single-premise linked argument for this argument's undercutter; let inference construct the argument, or supply all exception links: smaller_part_property(Y,A,X)
+  [argument] a28: does not carry the scheme's exceptions: each instantiated exception needs a direct, single-premise linked argument for this argument's undercutter; let inference construct the argument, or supply all exception links: certainity_no_need(A,F)
+  [argument] a28: premises do not instantiate the scheme's premises and assumptions with the argument's parameters: 
+  [argument] a30: number of premises not the same as declared in the scheme, including assumptions: 
   [language] : does not have the form predicate/arity: accept_saying
   [language] : does not have the form predicate/arity: attack_well_supported
   [language] : does not have the form predicate/arity: background
@@ -322,6 +328,7 @@ after instantiating every scheme: 147 problem(s)
   [language] cited_bad_consequences/1: format string has incorrect number of placeholders (verbs): 1
   [language] conflict_goals/2: format string has incorrect number of placeholders (verbs): 2
   [language] favor/1: format string has incorrect number of placeholders (verbs): 1
+  [language] is/2: a reserved name, not a predicate symbol: is
   [language] other_consequences_presumption/2: format string has incorrect number of placeholders (verbs): 2
   [language] popular_practise/1: format string has incorrect number of placeholders (verbs): 1
   [language] position_to_know_group/1: format string has incorrect number of placeholders (verbs): 1
@@ -338,26 +345,23 @@ after instantiating every scheme: 147 problem(s)
   [statement] : key not a ground atomic formula: smaller_part_property(k21_y,A,k21_x)
   [statement] : key not a ground atomic formula: species_property(k21_x,A)
   [statement] : key not a ground atomic formula: vague_defined_property(k31_a,F)
-  stderr during validation: *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
+  stderr during validation: *** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
+*** Parse Error before[ <input>:1:3 ]: literal not terminated
 *** Parse Error before[ <input>:1:27 ]: literal not terminated
 *** Parse Error before[ <input>:1:27 ]: missing closed ')' for the open '(' at position <input>:1:20
 *** Parse Error before[ <input>:1:30 ]: literal not terminated
 *** Parse Error before[ <input>:1:30 ]: missing closed ')' for the open '(' at position <input>:1:25
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:31 ]: literal not terminated
 *** Parse Error before[ <input>:1:31 ]: missing closed ')' for the open '(' at position <input>:1:24
 *** Parse Error before[ <input>:1:28 ]: literal not terminated
 *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:44 ]: literal not terminated
 *** Parse Error before[ <input>:1:44 ]: missing closed ')' for the open '(' at position <input>:1:37
 *** Parse Error before[ <input>:1:28 ]: literal not terminated
 *** Parse Error before[ <input>:1:28 ]: missing closed ')' for the open '(' at position <input>:1:23
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:25
 *** Parse Error before[ <input>:1:26 ]: literal not terminated
@@ -365,20 +369,14 @@ after instantiating every scheme: 147 problem(s)
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:27
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: literal not terminated
-*** Parse Error before[ <input>:1:32 ]: invalid char literal
 *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23
-*** Parse Error before[ <input>:1:33 ]: invalid char literal
 *** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29
 *** Parse Error before[ <input>:1:3 ]: literal not terminated
-*** Parse Error before[ <input>:1:3 ]: invalid char literal
 *** Parse Error before[ <input>:1:37 ]: literal not terminated
 *** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28
 *** Parse Error before[ <input>:1:26 ]: literal not terminated
-*** Parse Error before[ <input>:1:26 ]: invalid char literal
 *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19
 *** Parse Error before[ <input>:1:24 ]: missing closed ')' for the open '(' at position <input>:1:22
 
@@ -439,13 +437,13 @@ after instantiating every scheme: 147 problem(s)
       - premise/assumption "recieves_evaluation(A,X')" does not parse
       - conclusion "cannot_recieve_evaluation(A,X')" does not parse
  27 rhetorical_oppositions_normative           FAIL  args=0/1 premises+assumptions=2 exceptions=0
-      - stderr: *** Parse Error before[ <input>:1:32 ]: literal not terminated | *** Parse Error before[ <input>:1:32 ]: invalid char literal | *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23 | Could not parse term: if_treatment_required(X,A,A',X) | *** Parse Error before[ <input>:1:33 ]: invalid char literal | *** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29 | Could not parse term: contrary_treatment_required(X',A') |
+      - stderr: *** Parse Error before[ <input>:1:32 ]: literal not terminated | *** Parse Error before[ <input>:1:32 ]: missing closed ')' for the open '(' at position <input>:1:23 | Could not parse term: if_treatment_required(X,A,A',X) | *** Parse Error before[ <input>:1:34 ]: missing closed ')' for the open '(' at position <input>:1:29 | Could not parse term: contrary_treatment_required(X',A') |
       - no argument built
       - 0 arguments built for 1 conclusions
       - premise/assumption "if_treatment_required(X,A,A',X)" does not parse
       - conclusion "contrary_treatment_required(X',A')" does not parse
  28 rhetorical_oppositions_descriptive         FAIL  args=0/1 premises+assumptions=2 exceptions=0
-      - stderr: *** Parse Error before[ <input>:1:37 ]: literal not terminated | *** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28 | Could not parse term: relation_converse_relation(A,R,B,R') | *** Parse Error before[ <input>:1:26 ]: literal not terminated | *** Parse Error before[ <input>:1:26 ]: invalid char literal | *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19 | Could not parse term: converse_relation(B,R',A) |
+      - stderr: *** Parse Error before[ <input>:1:37 ]: literal not terminated | *** Parse Error before[ <input>:1:37 ]: missing closed ')' for the open '(' at position <input>:1:28 | Could not parse term: relation_converse_relation(A,R,B,R') | *** Parse Error before[ <input>:1:26 ]: literal not terminated | *** Parse Error before[ <input>:1:26 ]: missing closed ')' for the open '(' at position <input>:1:19 | Could not parse term: converse_relation(B,R',A) |
       - no argument built
       - 0 arguments built for 1 conclusions
       - premise/assumption "relation_converse_relation(A,R,B,R')" does not parse
@@ -674,7 +672,7 @@ declared variables used in no formula (informational): 11
   verbal_classification_vagueness: P
 
 == per scheme (checks 2-4) ==
-schemes passing every check: 67 of 111
+schemes passing every check: 66 of 111
   FAIL abductive_backward (3 problem(s))
   FAIL ad_hominem (6 problem(s))
   FAIL alternative_normative (1 problem(s))
@@ -685,7 +683,7 @@ schemes passing every check: 67 of 111
   FAIL end_and_means_2 (5 problem(s))
   FAIL epistemic_ignorence (1 problem(s))
   FAIL gradualism (2 problem(s))
-  FAIL group_2 (1 problem(s))
+  FAIL group_2 (2 problem(s))
   FAIL moral_justification_ad_populum_excuse (1 problem(s))
   FAIL negative_consequences_prudential (7 problem(s))
   FAIL negative_normal_expectations (2 problem(s))
@@ -694,7 +692,8 @@ schemes passing every check: 67 of 111
   FAIL opposition-descriptive_2 (11 problem(s))
   FAIL opposition-descriptive_3 (11 problem(s))
   FAIL opposition-normative (16 problem(s))
-  FAIL part_in_whole (5 problem(s))
+  FAIL part_in_whole (6 problem(s))
+  FAIL pop_scheme (1 problem(s))
   FAIL popular_opinion (1 problem(s))
   FAIL popular_practise (1 problem(s))
   FAIL position_to_know_ad_populum (3 problem(s))
@@ -708,18 +707,18 @@ schemes passing every check: 67 of 111
   FAIL rhetorical_oppositions_descriptive (11 problem(s))
   FAIL rhetorical_oppositions_normative (13 problem(s))
   FAIL rule_mental_world (5 problem(s))
-  FAIL rule_physical_world_1 (5 problem(s))
+  FAIL rule_physical_world_1 (6 problem(s))
   FAIL rule_physical_world_2 (7 problem(s))
   FAIL sacrifice (5 problem(s))
   FAIL sign (2 problem(s))
   FAIL snob_appeal_ad_populum (2 problem(s))
   FAIL sorites_slippery_slope (4 problem(s))
   FAIL treat (1 problem(s))
-  FAIL verbal_classification_arbitrariness (5 problem(s))
-  FAIL verbal_classification_vagueness (6 problem(s))
+  FAIL verbal_classification_arbitrariness (6 problem(s))
+  FAIL verbal_classification_vagueness (8 problem(s))
   FAIL verbal_slippery_slope (2 problem(s))
   FAIL waste (5 problem(s))
-problems not tied to one scheme (language keys etc.): 93
+problems not tied to one scheme (language keys etc.): 94
 
 == GATE ==
 1_import       FAIL

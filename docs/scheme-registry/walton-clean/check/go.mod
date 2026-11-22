@@ -10,3 +10,5 @@ require (
 require github.com/hfried/GoCHR v0.0.0-20220823090308-ca9745cd3232 // indirect
 
 replace github.com/carneades/carneades-4 => ../../../../carneades-4
+
+replace github.com/hfried/GoCHR => ../../../../GoCHR

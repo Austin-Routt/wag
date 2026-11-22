@@ -6,8 +6,14 @@ stderr during import: ""
 schemes: 116, language keys: 417
 
 == 2. Carneades validator ==
-before instantiation: 0 problem(s)
-after instantiating every scheme: 0 problem(s)
+before instantiation: 3 problem(s)
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
+  [language] is/2: a reserved name, not a predicate symbol: is
+after instantiating every scheme: 3 problem(s)
+  [argument scheme] group_2: a reserved name (is, true, false) used as a predicate: is(M,Q)
+  [argument scheme] rule_physical_world_1: a reserved name (is, true, false) used as a predicate: is(W,D)
+  [language] is/2: a reserved name, not a predicate symbol: is
 
 == 3. InstantiateScheme ==
   1 popular_opinion                            PASS  args=1/1 premises+assumptions=3 exceptions=1
@@ -134,12 +140,14 @@ schemes failing instantiation: 0 of 116
 declared variables used in no formula (informational): 0
 
 == per scheme (checks 2-4) ==
-schemes passing every check: 116 of 116
-problems not tied to one scheme (language keys etc.): 0
+schemes passing every check: 114 of 116
+  FAIL group_2 (1 problem(s))
+  FAIL rule_physical_world_1 (1 problem(s))
+problems not tied to one scheme (language keys etc.): 1
 
 == GATE ==
 1_import       PASS
-2_validator    PASS
+2_validator    FAIL
 3_instantiate  PASS
 4_language     PASS
-GATE: PASS
+GATE: FAIL

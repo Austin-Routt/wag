@@ -32,7 +32,7 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 
 | Stage | What | State |
 |---|---|---|
-| 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open), this section, `process.md` | done 2026-11-22 |
+| 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open; D084, the reserved name `is` the engine swap brought to light, decided), this section, `process.md` | done 2026-11-22 |
 | 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text | done 2026-11-22 |
 | 2 | The first slice, practical reasoning and the consequences: D063, D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records; book text out of the public tree (D043) | next |
 | 3 | A bounded Kialo and API pilot on the owner's machine, with hard caps (D046): independent first passes, a lexicon not drawn from the gold, the moves players could not make recorded, development and held-out discussions kept apart, the size planned from the gain to detect | after stage 2 |

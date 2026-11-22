@@ -5,7 +5,7 @@ premise asserts: a variable occurs in the conclusion, an assumption or an
 exception but in no premise ("variable not used in premises or deletions";
 "variable declared but not used").  These are the smallest changes I found
 that make them pass.  They are applied only to check/walton.proposals.yml, to
-show that the gate then passes for all 111 schemes.  Each needs the owner's
+show that these four then pass the validator.  Each needs the owner's
 decision.  Line numbers refer to the ORIGINAL file.
 """
 from edits import sub, insert, REP
