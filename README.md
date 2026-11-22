@@ -88,12 +88,11 @@ In order of importance. Each issue links to the document that explains it.
    - Each annotation call sends about 41,000 tokens, one claim per call.
    - Gemini 2.5 Flash's free tier allows 20 requests a day, so 50 claims take three days for one annotator.
    - See [`docs/llm.md`](docs/llm.md#the-free-tier-privacy-and-limits).
-6. **Books in this public repository, and no licence.**
-   - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book, was deleted on 2026-10-15,** but it is still in the history (commit f891090). Purging it means rewriting the history, the owner's decision. See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository) and [part 10](docs/review-2026-10-15-part10.md).
+6. **Books in this public repository.**
+   - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book, was deleted on 2026-10-15,** but it is still in the history (commit f891090), which the owner decided on 2026-11-22 to keep as it is (D078). See [part 9 §5](docs/review-2026-10-15-part9.md#5-the-book-in-the-repository) and [part 10](docs/review-2026-10-15-part10.md).
    - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
    - **`walton.yml`'s English templates repeat the book.** 173 of its 393 templates share eight or more words in a row with the compendium (measured 2026-10-22). The catalogue does not copy them ([`wag/data/catalogue/README.md`](wag/data/catalogue/README.md)).
-   - WAG itself has no licence.
-   - All three need the owner's decision: [plan §7](docs/plan.md#7-decisions-the-owner-needs-to-make).
+   - Taking the book's text out of the current tree is D043's work in stage 2 ([plan §0](docs/plan.md#0-from-2026-11-22-the-order-of-work)); the licences do not cover it ([`LICENSING.md`](LICENSING.md)).
 7. **Every game with a central claim is a persuasion dialogue, in Walton's terms.**
    - WAG has no commitment stores, no retraction rules and no stages, and these are the base of every type in Walton's account.
    - The points modes match no dialogue type.
@@ -277,5 +276,5 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 - **Walton, Reed & Macagno, *Argumentation Schemes* (Cambridge UP, 2008):** not included. The repository cites it by scheme and question labels and pages, except `docs/book-catalogue/` (issue 6).
 - **Walton, *The New Dialectic* (University of Toronto Press, 1998):** cited by page in [`docs/dialogue-types.md`](docs/dialogue-types.md), in paraphrase. Its PDF was deleted from the repository on 2026-10-15; it remains in the history (issue 6).
 - **Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice* (arXiv:2011.13845, 2020):** cited; not included.
-- **Kialo discussions:** public; the datasets keep their claim ids.
-- **WAG's own code and data:** no licence yet. The code will be MPL-2.0 from the first release (D044); the documents' and data's licence is open (D080).
+- **Kialo discussions:** public; the datasets keep their claim ids. The claims belong to their authors, under Kialo's terms.
+- **WAG's own work,** since 2026-11-22 (D044, D080): code under MPL-2.0 ([`LICENSE`](LICENSE)), documents and annotations under CC BY 4.0 ([`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt)). Files that contain the Walton collection's material stay MPL-2.0. [`LICENSING.md`](LICENSING.md) lists which files carry which licence.
