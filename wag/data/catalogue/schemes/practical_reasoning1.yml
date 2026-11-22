@@ -317,19 +317,26 @@ discrepancies:
   about: CQ1
   detail: 22.4/CQ1 asks about the agent's other goals that conflict with G. practical_reasoning1
     has no formula for it; practical_reasoning2 has the exception incompatible_goal(G).
-  decision: 'Open: add incompatible_goal(G) to practical_reasoning1''s exceptions
-    in walton.yml, then target CQ1 and the game''s CQ:other_goals at it. Until then,
-    CQ1 targets the conclusion, as the game does: a conflicting goal is raised as
-    an argument against doing A.'
+  decision: 'Decided 2026-11-22 (D004): practical_reasoning1 gets a conflicting-goal
+    exception, with the predicate practical_reasoning2 already has (incompatible_goal),
+    scoped to the agent and the goal, so that the first question and CQ:other_goals
+    target it. (The review proposed an unnamed objection; reusing the existing predicate
+    keeps one formula for one idea.) Not yet applied. Before: open: add incompatible_goal(G)
+    to practical_reasoning1''s exceptions in walton.yml, then target CQ1 and the game''s
+    CQ:other_goals at it. Until then, CQ1 targets the conclusion, as the game does:
+    a conflicting goal is raised as an argument against doing A.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise 1
   detail: The book's first premise says that the agent has the goal G. No formula
     says so; links.json maps it, as an approximation, to the assumption worthy_goal(G),
     which says that G is worth pursuing, a different and evaluative claim.
-  decision: 'Map it to nothing, as for 22.1 in practical_reasoning2; worthy_goal(G)
-    and legitimate_value(V), which no book question asks about, keep their walton/
-    questions. Open: whether to add a goal premise like practical_inference''s have_goal(G).'
+  decision: 'Decided 2026-11-22 (D005): Both practical reasoning schemes state the
+    agent''s goal as a premise, goal_of_agent(P,G), the schemes library''s predicate.
+    The conclusion stays should_be_performed(A) (D059, D063). Not yet applied. Before:
+    Map it to nothing, as for 22.1 in practical_reasoning2; worthy_goal(G) and legitimate_value(V),
+    which no book question asks about, keep their walton/ questions. open: whether
+    to add a goal premise like practical_inference''s have_goal(G).'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise 3
@@ -356,8 +363,12 @@ discrepancies:
     (p. 96): each question shifts the burden to the proponent. walton.yml makes the
     alternatives, efficiency, values and side-effects questions exceptions, which
     the critic must prove.'
-  decision: 'The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
-    §2), and the answers say so. Open: the owner''s decision whether these questions
+  decision: 'Decided 2026-11-22 (D003): The questions stay exceptions, the critic''s
+    to support. Who must answer a question that is asked is a rule of the dialogue
+    (the request, its answer, and what holds while it is pending), set by the game''s
+    question protocol with D075, not by turning exceptions into assumptions. Not yet
+    applied. Before: The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
+    §2), and the answers say so. open: the owner''s decision whether these questions
     should shift the burden when asked, which would make them assumptions.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
@@ -371,8 +382,11 @@ discrepancies:
     the best of the alternatives, Side Effects about known bad consequences. So these
     are ch. 3 against ch. 9 differences, not only the game''s. CQ:best_means asks
     for the best way to reach G, but its pattern is efficiency in reaching S2.'
-  decision: 'Open: choose between the ch. 3 and ch. 9 wordings when the NASCQ is generated
-    from the catalogue (plan §6).'
+  decision: 'Decided 2026-11-22 (D007): The book''s ch. 9 version, the compendium,
+    which is the catalogue''s authority (plan §1). Ch. 3''s further questions are
+    kept as derived questions, each with its source (D023). (The review left the chapter
+    unchosen.) Not yet applied. Before: open: choose between the ch. 3 and ch. 9 wordings
+    when the NASCQ is generated from the catalogue (plan §6).'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Premise 2 and CQ2

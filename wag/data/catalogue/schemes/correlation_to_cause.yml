@@ -157,10 +157,12 @@ discrepancies:
     a coincidence. walton.yml''s assumption explanatory_theory(E1,E2) asks for a theory
     of how E1 causes E2, which is one such reason but not the only one: an association
     that recurs across independent samples is another.'
-  decision: 'Keep the target. Until walton.yml words the wider condition, read explanatory_theory(E1,E2)
-    as "there is some reason, beyond the co-occurrence, to think that E1 produces
-    E2", and accept any such reason as a positive answer. Open: whether the owner
-    wants the formula''s template widened.'
+  decision: 'Decided 2026-11-22 (D018): Yes: the target of correlation''s second question
+    is widened to a reason against coincidence, with a predicate of its own and its
+    migration recorded. Not yet applied. Before: Keep the target. Until walton.yml
+    words the wider condition, read explanatory_theory(E1,E2) as "there is some reason,
+    beyond the co-occurrence, to think that E1 produces E2", and accept any such reason
+    as a positive answer. open: whether the owner wants the formula''s template widened.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

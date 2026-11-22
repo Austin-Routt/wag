@@ -247,8 +247,13 @@ discrepancies:
     whether W said S; the book also asks what W''s words imply); CQ:consistency changes
     CQ5 (any credible source, and agreement rather than consistency); CQ:expertise
     ties CQ1 to the domain D.'
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
-    the game''s texts from these paraphrases.'
+  decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
+    texts from the catalogue''s paraphrases, with the changes the entries list, except
+    the backup edge that lets negative consequences answer the side-effect question,
+    which D070 and D075 replace. CQ:field is kept. Every generated question gets a
+    test that its formula target is one of its scheme''s. Not yet applied. Before:
+    open: when the NASCQ is generated from the catalogue (plan §6), take the game''s
+    texts from these paraphrases.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: dependent

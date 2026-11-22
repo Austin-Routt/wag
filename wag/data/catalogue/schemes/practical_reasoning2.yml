@@ -306,7 +306,10 @@ discrepancies:
     practical_reasoning2 says so: G enters only through would_be_realized(G,S2). links.json
     mapped the major premise to that formula, which belongs to the means; the catalogue
     maps it to nothing and gives both transition formulas to the minor premise.'
-  decision: 'Open: whether to add a goal premise, like practical_inference''s have_goal(G).
+  decision: 'Decided 2026-11-22 (D005): Both practical reasoning schemes state the
+    agent''s goal as a premise, goal_of_agent(P,G), the schemes library''s predicate.
+    The conclusion stays should_be_performed(A) (D059, D063). Not yet applied. Before:
+    open: whether to add a goal premise, like practical_inference''s have_goal(G).
     Until then, the agent''s holding G is taken from the binding of G, and a critic
     who denies it argues against the conclusion.'
   status: drafted by Claude Code, 2026-10-22
@@ -332,8 +335,12 @@ discrepancies:
     answers (p. 96): each question shifts the burden to the proponent. walton.yml
     makes the conflicting-goals, alternatives, efficiency and side-effects questions
     exceptions, which the critic must prove.'
-  decision: 'The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
-    §2), and the answers say so. Open: the owner''s decision whether these questions
+  decision: 'Decided 2026-11-22 (D003): The questions stay exceptions, the critic''s
+    to support. Who must answer a question that is asked is a rule of the dialogue
+    (the request, its answer, and what holds while it is pending), set by the game''s
+    question protocol with D075, not by turning exceptions into assumptions. Not yet
+    applied. Before: The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
+    §2), and the answers say so. open: the owner''s decision whether these questions
     should shift the burden when asked, which would make them assumptions.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
@@ -355,9 +362,16 @@ discrepancies:
     are ch. 3 against ch. 9 differences, not only the game''s. CQ:best_means asks
     for the best way to reach G, but its pattern is efficiency in reaching S2, and
     "best" is wider than efficiency.'
-  decision: 'Open: choose between the ch. 3 and ch. 9 wordings when the NASCQ is generated
-    from the catalogue (plan §6), and decide whether an equally good alternative should
-    count against A, which needs a formula walton.yml lacks.'
+  decision: 'Decided 2026-11-22 (D007): The book''s ch. 9 version, the compendium,
+    which is the catalogue''s authority (plan §1). Ch. 3''s further questions are
+    kept as derived questions, each with its source (D023). (The review left the chapter
+    unchosen.) Not yet applied. Before: Decided 2026-11-22 (D006): No. An equally
+    good alternative is not a reason against doing A; it answers only a claim that
+    A is necessary or the best (the necessary-condition schema, realize_more_effectively).
+    practical_reasoning2''s conclusion is unchanged. Not yet applied. Before: open:
+    choose between the ch. 3 and ch. 9 wordings when the NASCQ is generated from the
+    catalogue (plan §6), and decide whether an equally good alternative should count
+    against A, which needs a formula walton.yml lacks.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

@@ -516,6 +516,12 @@ candidates:
         case with Other (kialo-batch2/guidelines.md §3.1, OC1).
     group: inference-attacks
     decision: D074
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "the consequence schemes, as a question or undercutter, once its sketch passes review"
+      recorded: "docs/decisions.yml D074"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: low
@@ -597,6 +603,11 @@ candidates:
         scheme D055's exceptions lack.
     group: weighing
     decision: D064
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D064, D075: the first answer scheme, proposed in stage 2"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: high
@@ -843,7 +854,7 @@ candidates:
         net_benefit): the favourable or unfavourable balance ND describes (p.
         170).
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1008,7 +1019,7 @@ candidates:
         ND evaluates with practical reasoning, whose third course is this
         sketch's exception (pp. 160-161).
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1142,7 +1153,7 @@ candidates:
         ND's side-effects premise asks whether a goal is worth its bad
         consequences (p. 155).
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: low
@@ -1284,6 +1295,12 @@ candidates:
         weighing ND describes (pp. 158-159).
     group: magnitude-risk
     decision: D065
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "positive_consequences and negative_consequences, as a question (how serious)"
+      recorded: "docs/decisions.yml D065"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1440,7 +1457,7 @@ candidates:
         that may follow, and the danger appeal (37) is the book's case of
         negative consequences about a risk to the hearer (p. 102).
     group: magnitude-risk
-    decision: D065
+    decision: D083
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1584,6 +1601,12 @@ candidates:
         can be avoided by carrying out the same action another way.
     group: the-action
     decision: D066
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "the guidelines' action_amendment role (kialo-batch2/guidelines.md)"
+      recorded: "docs/decisions.yml D066"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1724,6 +1747,12 @@ candidates:
         whatever its consequences.
     group: values-against-consequences
     decision: D067
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "the value schemes (positive_value, negative_value)"
+      recorded: "docs/decisions.yml D067"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1982,6 +2011,11 @@ candidates:
         their arguments meet the others about the same action (D063).
     group: practical-conclusions
     decision: D063
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D063: the rule, applied to walton.yml in stage 2"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: high
@@ -2026,6 +2060,11 @@ candidates:
         what should be done, and 31.4 predicts from character.
     group: predicting-agents
     decision: D068
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D068: a scheme of its own, through the proposal path"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -2180,6 +2219,12 @@ candidates:
         are closest items, not its base.
     group: harms-of-not-acting
     decision: D069
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "the guidelines' rule OC13 (kialo-batch2/guidelines.md §3.1)"
+      recorded: "docs/decisions.yml D069"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: medium
@@ -2370,6 +2415,12 @@ candidates:
         Fear (36) has the premise (only_way_prevent).
     group: harms-of-not-acting
     decision: D069
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "negative_consequences_prudential, as a question"
+      recorded: "docs/decisions.yml D069"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: medium
@@ -2488,6 +2539,12 @@ candidates:
         p. 155; the compendium's 22.1 CQ2 and CQ3).
     group: the-action
     decision: D066
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "practical reasoning's better-means exception, answered by D075's answer scheme"
+      recorded: "docs/decisions.yml D066"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: medium
@@ -2656,6 +2713,12 @@ candidates:
         premise; walton.yml's possible(A)).
     group: the-action
     decision: D066
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "practical reasoning's possibility assumption, possible(A); against a consequence argument, a challenge to brings_about(A,G)"
+      recorded: "docs/decisions.yml D066"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -2776,7 +2839,7 @@ candidates:
         add up, which Carneades does not do. A rule for the engine, or an
         accrual argument.
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -2846,6 +2909,12 @@ candidates:
         registry check it.
     group: harms-of-not-acting
     decision: D069
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "the guidelines' rule OC12 (kialo-batch2/guidelines.md §3.1)"
+      recorded: "docs/decisions.yml D069"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -2887,6 +2956,12 @@ candidates:
         the weighing beside C005's seriousness. It may merge into C005.
     group: magnitude-risk
     decision: D065
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: merge
+      into: "positive_consequences and negative_consequences, as a question (on whom)"
+      recorded: "docs/decisions.yml D065"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -3014,6 +3089,11 @@ candidates:
         action encourages it.
     group: what-happens-anyway
     decision: D072
+    outcome:
+      date: "2026-11-22"
+      by: owner (standing rule of 2026-11-22)
+      result: add
+      recorded: "docs/decisions.yml D072: a scheme of its own, through the proposal path"
     found:
       - "the third independent review of proposal D055-D059, 2026-10-23"
     confidence: medium
@@ -3176,7 +3256,7 @@ candidates:
         guidelines code as positive consequences (§3.1, OC13): whether the
         agent must prevent the harm at all. A value premise, close to C007.
     group: harms-of-not-acting
-    decision: D069
+    decision: D083
     found:
       - "the third independent review of proposal D055-D059, 2026-10-23"
     confidence: low
@@ -3221,7 +3301,7 @@ candidates:
         likely than the cited one. ND factors the outcomes' probability into
         the weighing (p. 159).
     group: magnitude-risk
-    decision: D065
+    decision: D083
     found:
       - "the third independent review of proposal D055-D059, 2026-10-23"
     confidence: low
@@ -3277,7 +3357,7 @@ candidates:
       why: >-
         A balance claim (C004) whose costs to others are nil: a Pareto claim.
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the fourth independent review of proposal D055-D059, 2026-10-23"
     confidence: low
@@ -3346,7 +3426,7 @@ candidates:
         what matters most to them, so their choice says which consequence
         weighs more for them (C003).
     group: weighing
-    decision: D064
+    decision: D083
     found:
       - "the fourth independent review of proposal D055-D059, 2026-10-23"
     confidence: low

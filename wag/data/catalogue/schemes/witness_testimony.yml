@@ -204,10 +204,11 @@ discrepancies:
     every other scheme uses (walton-audit REPORT §3.5; walton-clean CHANGELOG). It
     is inherited from upstream Carneades, and the category file B/1 has it too. Read
     literally, its template says that D is in the domain of S.
-  decision: 'Code the roles, not the order: D is the domain and S the statement, read
-    as "S is a matter of D". Open: reorder it to in_domain(S,D) in walton.yml, so
-    that the formula is shared with position_to_know and a game question about it
-    can be asked of both.'
+  decision: 'Decided 2026-11-22 (D034): Yes: in_domain(S,D) in witness_testimony too,
+    so that one game question asks about both. Not yet applied. Before: Code the roles,
+    not the order: D is the domain and S the statement, read as "S is a matter of
+    D". open: reorder it to in_domain(S,D) in walton.yml, so that the formula is shared
+    with position_to_know and a game question about it can be asked of both.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: conclusion
@@ -223,9 +224,10 @@ discrepancies:
     the whole account; walton.yml's formulas internally_consistent(S), inconsistent_with_known_facts(S)
     and inconsistent_with_other_witnesses(S) are about S alone. A contradiction elsewhere
     in the account bears on W's reliability but is not, as written, about S.
-  decision: 'Read S in these three formulas as standing for W''s account of which
-    S is part, and say so in the coding. Open: whether walton.yml should take the
-    testimony as a variable of its own.'
+  decision: 'Decided 2026-11-22 (D035): Yes: the testimony is a variable of its own
+    (account_contains(T,S)). Not yet applied. Before: Read S in these three formulas
+    as standing for W''s account of which S is part, and say so in the coding. open:
+    whether walton.yml should take the testimony as a variable of its own.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: source

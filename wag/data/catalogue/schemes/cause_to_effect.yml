@@ -205,9 +205,11 @@ discrepancies:
     if A occurs, B will occur). causes(E1,E2) uses the same terms as the particular
     has_occurred(E1), so the kind and the instance are not told apart. walton.yml
     also cites no source, where the book cites Walton 1995, pp. 140–141.
-  decision: 'No change: read causes(E1,E2) as "events of E1''s kind generally bring
-    about events of E2''s kind", as the paraphrases do. Open: give walton.yml the
-    book''s reference as its source.'
+  decision: 'Decided 2026-11-22 (D040): Yes: cause_to_effect cites the book''s entry
+    28 (p. 328), and the reference it prints (A Pragmatic Theory of Fallacy, 1995,
+    pp. 140-141) as cited there. Not yet applied. Before: No change: read causes(E1,E2)
+    as "events of E1''s kind generally bring about events of E2''s kind", as the paraphrases
+    do. open: give walton.yml the book''s reference as its source.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: conclusion tense

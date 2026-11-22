@@ -153,10 +153,11 @@ discrepancies:
     C to the situation (written with a slash: E is justified / C is required). walton.yml
     puts both in every formula, evaluation(A,E,C) and evaluation_justified(E,C), so
     each instance must bind both.'
-  decision: 'No change for now: bind E to the evaluation and C to the conduct it calls
-    for, as the gold does; when the text gives only one, bind the other to the matching
-    statement and say so in the coding. Open: split the scheme into an evaluative
-    and a prescriptive form.'
+  decision: 'Decided 2026-11-22 (D026): Yes: an evaluative and a prescriptive form,
+    as the book prints both (55.2). Not yet applied. Before: No change for now: bind
+    E to the evaluation and C to the conduct it calls for, as the gold does; when
+    the text gives only one, bind the other to the matching statement and say so in
+    the coding. open: split the scheme into an evaluative and a prescriptive form.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: critical questions
@@ -165,9 +166,13 @@ discrepancies:
     a premise or to rebut the conclusion. The questions of its sibling 55.1 (does
     the rule cover this conduct, is there a conflicting rule, is this case an exception)
     fit it as well.
-  decision: 'Open: whether to give the scheme exceptions, or questions, taken from
-    55.1. Until then, a conflicting rule or an exceptional case is raised as a rebuttal
-    of the conclusion, or as an attack on evaluation(A,E,C).'
+  decision: 'Decided 2026-11-22 (D024): established_rule gets the two exceptions,
+    an overriding rule and an exceptional case, as the schemes library has them (55.1).
+    rule (55.2) keeps its form; questions from 55.1 apply to it only as derived questions.
+    (The review left the second half vague.) Not yet applied. Before: open: whether
+    to give the scheme exceptions, or questions, taken from 55.1. Until then, a conflicting
+    rule or an exceptional case is raised as a rebuttal of the conclusion, or as an
+    attack on evaluation(A,E,C).'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

@@ -63,7 +63,7 @@ Models draft and check. Each run follows this protocol.
    Each disposition also records the commit that carried it. Review documents take their counts from the ledger **(to build)**. Until it exists, counts are made by a script and stated with the script.
 7. **Measured reliability (to build).**
    - **Seeded faults.** Known faults are planted in a copy of some entries, and the share each checker finds is its recall.
-   - **Precision** is the share of its findings that are applied.
+   - **Acceptance rate** is the share of its findings that are applied. It is not precision: an implementer can apply a wrong finding or decline a right one. Precision needs findings judged right or wrong by someone else (a person, or an adjudication against the sources).
    - **A person verifies a random sample** of model-checked items.
 
    These figures set where model checks are accepted (§2).
@@ -119,6 +119,7 @@ The rounds now go like this.
    - **Effects that change data are scripts,** committed with the change. The numbers a proposal states come from running them.
    - **Run every check** after the edit, before the commit.
 5. **Looking for candidates is its own brief,** after the review, against the registry and its relations (§8). A review notes a candidate it meets in passing, but is not asked to find them.
+6. **An accepted finding gets an ID where it is tracked:** a decision in the register (§5), a candidate (§8), or the commit that fixes it. A review document is never its only home. WAG's review of 15 October proposed two answer schemes (part 6 §4) that no register entry carried; the external reviews of 22 November found them again (now D075).
 
 ## 4. Feedback from play (to build)
 
@@ -170,6 +171,8 @@ A decision raised in several entries is one decision that lists them all. For ex
 1. Record the outcome in the register.
 2. Update the entries it lists, so that they no longer say "Open".
 3. Make the change in the source it concerns: `edits.py` for a formula, the guidelines for annotation.
+
+**The owner's standing rule (2026-11-22).** A recommendation of an external review that the developer has checked and agrees with is the owner's decision; the developer records it with `by: owner (standing rule of 2026-11-22)` and says where and why it changed the recommendation. Where the developer disagrees and can settle the question by reasoning from the owner's earlier decisions and this plan, it records that outcome and its reason; where it cannot, it asks the owner, explicitly. Questions of fact that the register gives to a verifier stay open until a person has checked them: a model's reading is recorded in the question. A decided change to formulas still goes through a proposal check and an independent review (below) before `edits.py`; only the owner's reading of the view is replaced by the rule, and a departure from the decided text is put to the owner as a choice of its own (§3).
 
 ### Proposals: examples before a scheme changes
 

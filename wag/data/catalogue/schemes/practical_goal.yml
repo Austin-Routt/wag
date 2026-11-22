@@ -96,8 +96,10 @@ discrepancies:
   about: critical questions
   detail: Neither the book (22.5 prints no questions) nor walton.yml (no assumptions
     or exceptions) gives the scheme critical questions; both premises can be challenged.
-  decision: 'Open: whether to borrow 22.1''s questions (alternatives, conflicting
-    goals, side effects), which apply to any goal-means argument.'
+  decision: 'Decided 2026-11-22 (D023): Yes, as derived questions, each with its source
+    scheme and question recorded. Not yet applied. Before: open: whether to borrow
+    22.1''s questions (alternatives, conflicting goals, side effects), which apply
+    to any goal-means argument.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

@@ -193,10 +193,14 @@ discrepancies:
     (a conflicting or overriding rule) and CQ3 (an exceptional case, extenuating circumstances,
     an excuse) raise them. walton.yml's established_rule has no exception formula,
     so neither question targets a formula.
-  decision: 'Leave both without targets, and code such a challenge as a rebuttal of
-    C, or as an argument for an exceptional case or a plea for excuse. Open: add exceptions
-    to walton.yml, for instance one that another rule overrides R here and one that
-    the case is an exception to R; regulative_rule''s excuse is a model.'
+  decision: 'Decided 2026-11-22 (D024): established_rule gets the two exceptions,
+    an overriding rule and an exceptional case, as the schemes library has them (55.1).
+    rule (55.2) keeps its form; questions from 55.1 apply to it only as derived questions.
+    (The review left the second half vague.) Not yet applied. Before: Leave both without
+    targets, and code such a challenge as a rebuttal of C, or as an argument for an
+    exceptional case or a plea for excuse. open: add exceptions to walton.yml, for
+    instance one that another rule overrides R here and one that the case is an exception
+    to R; regulative_rule''s excuse is a model.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: encoding
@@ -205,10 +209,12 @@ discrepancies:
     do A. walton.yml encodes generic rule application, with only a rule R and a conclusion
     C: the agent, the action type and the obligation are folded into C, and the rule''s
     being established into valid(R).'
-  decision: 'No change: bind C to the obligation (that a is bound to do A) and R to
-    the rule as it applies to a; the questions read as drafted. Open: whether a formula
-    naming the agent and the action type is worth adding, so that 55.1/CQ1 could target
-    the rule''s action type directly.'
+  decision: 'Decided 2026-11-22 (D025): Yes: a variant naming the agent and the action
+    type, beside the generic form, as the schemes library''s established_rule_actor.
+    Not yet applied. Before: No change: bind C to the obligation (that a is bound
+    to do A) and R to the rule as it applies to a; the questions read as drafted.
+    open: whether a formula naming the agent and the action type is worth adding,
+    so that 55.1/CQ1 could target the rule''s action type directly.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

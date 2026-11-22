@@ -70,10 +70,19 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: sign, kind: book-walton, about: "CQ2"}
   docs: ["docs/review-2026-10-13-part5.md §4"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Sign's exception names the finding and the proposition it would
+      indicate: more_reliable(A,B), as the schemes library has it, so that an
+      alternative explanation proven against one sign argument does not defeat
+      another. The alternative event is the answer's witness.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D003
   title: Who bears the burden of practical reasoning's questions
@@ -85,11 +94,20 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: practical_reasoning1, kind: book-walton, about: "burden of the questions"}
     - {entry: practical_reasoning2, kind: book-walton, about: "burden of the questions"}
     - {entry: practical_necessary_condition, kind: book-walton, about: "burden of the questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The questions stay exceptions, the critic's to support. Who must answer
+      a question that is asked is a rule of the dialogue (the request, its
+      answer, and what holds while it is pending), set by the game's question
+      protocol with D075, not by turning exceptions into assumptions.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D004
   title: A conflicting-goal exception for practical reasoning 1
@@ -101,9 +119,19 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: practical_reasoning1, kind: book-walton, about: "CQ1"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      practical_reasoning1 gets a conflicting-goal exception, with the
+      predicate practical_reasoning2 already has (incompatible_goal), scoped
+      to the agent and the goal, so that the first question and CQ:other_goals
+      target it. (The review proposed an unnamed objection; reusing the
+      existing predicate keeps one formula for one idea.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D005
   title: A goal premise for practical reasoning
@@ -114,10 +142,18 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: practical_reasoning1, kind: book-walton, about: "Premise 1"}
     - {entry: practical_reasoning2, kind: book-walton, about: "Major Premise"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Both practical reasoning schemes state the agent's goal as a premise,
+      goal_of_agent(P,G), the schemes library's predicate. The conclusion
+      stays should_be_performed(A) (D059, D063).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D006
   title: An equally good alternative against practical reasoning 2
@@ -128,9 +164,18 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: practical_reasoning2, kind: other, about: "game questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No. An equally good alternative is not a reason against doing A; it
+      answers only a claim that A is necessary or the best (the
+      necessary-condition schema, realize_more_effectively).
+      practical_reasoning2's conclusion is unchanged.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D007
   title: Which wording of practical reasoning the game uses
@@ -141,10 +186,19 @@ decisions:
   blocks: [game]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: practical_reasoning1, kind: other, about: "game questions"}
     - {entry: practical_reasoning2, kind: other, about: "game questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The book's ch. 9 version, the compendium, which is the catalogue's
+      authority (plan §1). Ch. 3's further questions are kept as derived
+      questions, each with its source (D023). (The review left the chapter
+      unchosen.)
+    recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D008
   title: A modal form for the consequence schemes
@@ -156,10 +210,20 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: positive_consequences, kind: book-walton, about: "CQ1-CQ2"}
     - {entry: negative_consequences, kind: book-walton, about: "CQ1-CQ2"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, as schemes of their own: modal variants of the consequence schemes,
+      as cause to effect has cause_to_effect_modal, not a modality field.
+      Likelihood stays a question (33/CQ1, CQ:likelihood). (The review left
+      variant or field open and added an adequacy assumption; WAG's precedent
+      is a scheme of its own, and the likelihood question already exists.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D009
   title: The game's question texts from the catalogue
@@ -175,7 +239,7 @@ decisions:
   blocks: [game]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: expert_opinion, kind: other, about: "game questions"}
     - {entry: position_to_know, kind: other, about: "game questions"}
@@ -184,6 +248,16 @@ decisions:
     - {entry: positive_value, kind: other, about: "game"}
     - {entry: sign, kind: other, about: "game questions"}
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: the generated NASCQ takes its question texts from the catalogue's
+      paraphrases, with the changes the entries list, except the backup edge
+      that lets negative consequences answer the side-effect question, which
+      D070 and D075 replace. CQ:field is kept. Every generated question gets a
+      test that its formula target is one of its scheme's.
+    recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D010
   title: An exception for an honest but unreliable source
@@ -194,9 +268,17 @@ decisions:
   blocks: [game, verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   items:
     - {entry: position_to_know, kind: book-walton, about: "CQ2"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: position_to_know gets an exception for a source who is sincere but
+      not reliable on the claim, scoped to the claim's domain, beside
+      dishonest(W).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D045
   title: Who verifies the catalogue
@@ -207,8 +289,74 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 3"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A person verifies, as process §2 says; tier 1 is the first set. Models
+      check (the drafted and checked statuses), and work may go on from
+      checked entries, its results marked provisional, before a person has
+      verified them (plan §0). (The review proposed that model review verify;
+      that contradicts plan §1-2.)
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
+
+- id: D075
+  title: Answering a question with an argument
+  question: >-
+    How does an argument answer a critical question whose answer is an
+    exception or an assumption? Today a backup edge may carry a sentence (a
+    bridge) that lets an argument stand for an answer it does not conclude,
+    and nothing on the board can be challenged. The external reviews of
+    2026-11-22 (Fable, ChatGPT) and WAG's review of 15 October (part 6 §4, the
+    schemes bad_side_effect and better_means, never registered) propose answer
+    schemes: schemes whose conclusion is the answer.
+  category: game
+  blocks: [game]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/review-2026-10-15-part6.md §4", "docs/game-rules.md", "the external reviews of 2026-11-22 (wag-workspace reviews/2026-11-22)"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Answer schemes. An answer scheme concludes the exception or assumption
+      it answers; its premises name the witness (the harm, the other action)
+      and bind every variable of what it answers; it has its questions (the
+      book's, derived ones, or a reasoned none). A free-text bridge is a lint
+      error. Each backup edge has a test answer that must pass, one that must
+      be refused, and one bound to the wrong target. The first answer schemes
+      are C003's (D064), the side effect that outweighs (D070) and another
+      means that does better, with part 6's sketches repaired (their side
+      effect left a variable unbound). D009, D038, D057 and D063's bridges
+      follow this rule.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+
+- id: D082
+  title: What a full NASCQ means
+  question: >-
+    The goal is that every scheme and question be playable in some context.
+    What does full mean, and how is it measured?
+  category: project
+  blocks: [game]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/plan.md", "the external reviews of 2026-11-22 (Fable's addendum, ChatGPT's NASCQ review)"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Two things. Within a versioned set of schemes and questions, every
+      question can be asked and every answer the set offers has a tested
+      contract (target, binding, effect, refusal, replay): this is checked.
+      Beyond it, completeness is measured, never proven: the plan's two
+      measures, and two more: the share of the answers found in coded data and
+      in play that can be played as meant, and the share of answers that
+      should be refused that the game refuses.
+    recorded: "docs/plan.md (the goal)"
 
 # --- Priority 2: the other tier-1 schemes, shared readings, annotation ------
 
@@ -221,9 +369,17 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: popular_opinion, kind: other, about: "conclusion"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No. popular_opinion keeps reason_in_favor(A), as the book concludes.
+      Where a game needs it to meet A, a bridge scheme connects them, with its
+      own exception (D075's rule for bridges).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D012
   title: Popular opinion's general-acceptance assumption
@@ -234,9 +390,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: popular_opinion, kind: book-walton, about: "General Acceptance Premise"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The duplicate goes: one acceptance premise stays, named so that it reads
+      as accepted, not as true.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D013
   title: Whether popular acceptance is presumed
@@ -247,9 +410,17 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: popular_opinion, kind: book-walton, about: "CQ1 burden"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No: general acceptance is a premise, as the compendium prints it (4). A
+      context that presumes it is a later option of the game, not a change to
+      the scheme.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D014
   title: Repairing argument from example
@@ -261,11 +432,20 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: from_example, kind: partial-link, about: "6.1"}
     - {entry: from_example, kind: book-walton, about: "generalization"}
   docs: ["docs/review-2026-10-13-part5.md §4 and §8 item 1"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      from_example generalizes from the case: premise has_properties(A,P1,P2),
+      conclusion usually_properties(P1,P2), with the typical-example
+      assumption, as the schemes library has it after its check against the
+      book (6.1).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D015
   title: A further alternative for the cognitive alternatives scheme
@@ -274,9 +454,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: alternative_cognitive, kind: other, about: "critical questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: alternative_cognitive gets an exception for an alternative not
+      considered, the critic's to show.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D016
   title: Whether "not required" meets "should not be done"
@@ -287,9 +474,17 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: alternative_normative, kind: other, about: "conclusion"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No: not required is not should not be done. alternative_normative
+      concludes the negation of is_required(B), which meets only
+      is_required(B).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D017
   title: Exclusive alternatives as an assumption
@@ -298,9 +493,18 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: alternative_normative, kind: other, about: "critical questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Exclusiveness is stated in the premise, as the book's either-or premise
+      reads and the schemes library has it
+      (exclusive_requirement_alternatives(A,B)): the proponent's to show, not
+      an assumption.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D018
   title: Correlation to cause's second question
@@ -309,9 +513,17 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: correlation_to_cause, kind: book-walton, about: "CQ2"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: the target of correlation's second question is widened to a reason
+      against coincidence, with a predicate of its own and its migration
+      recorded.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D019
   title: An exception for defeasible modus ponens
@@ -322,9 +534,17 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: defeasible_modus_ponens, kind: other, about: "critical questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: defeasible modus ponens gets an exception for the case at hand,
+      with a template of our own; its questions are labelled derived, not the
+      book's (D021).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D020
   title: A defeasible rule premise
@@ -335,15 +555,25 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: defeasible_modus_ponens, kind: other, about: "implies"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: defeasibly_implies(A,B) is its rule premise.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D021
   title: Defeasible modus ponens in the book
   question: >-
-    A verifier with the book reads pp. 364–366, where the form is treated,
-    and confirms its two questions.
+    A verifier with the book reads pp. 364–366, where the form is treated, and
+    confirms its two questions. Checked on 2026-11-22 by two models (the
+    external review and the developer's check), not yet by a person: pp.
+    364-367 treat the form and give the extra premise that the rule has no
+    exception (p. 366), and print no numbered questions for it. If a person
+    confirms, its questions are derived (D019).
   category: book
   blocks: [verification]
   decider: verifier
@@ -361,9 +591,17 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: end_and_means_1, kind: book-walton, about: "polarity"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Both, as the book prints both readings (22.6.1): a negative variant (a
+      bad end condemns its means) and a graded one, as the schemes library has
+      them.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D023
   title: Questions borrowed from related schemes
@@ -375,11 +613,18 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: end_and_means_1, kind: other, about: "critical questions"}
     - {entry: practical_goal, kind: other, about: "critical questions"}
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, as derived questions, each with its source scheme and question
+      recorded.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D024
   title: Exceptions for the rule schemes
@@ -391,10 +636,19 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: established_rule, kind: book-walton, about: "CQ2 and CQ3"}
     - {entry: rule, kind: other, about: "critical questions"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      established_rule gets the two exceptions, an overriding rule and an
+      exceptional case, as the schemes library has them (55.1). rule (55.2)
+      keeps its form; questions from 55.1 apply to it only as derived
+      questions. (The review left the second half vague.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D025
   title: The agent and the action type in established rule
@@ -405,9 +659,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: established_rule, kind: book-walton, about: "encoding"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: a variant naming the agent and the action type, beside the generic
+      form, as the schemes library's established_rule_actor.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D026
   title: Splitting argument from rules
@@ -416,20 +677,30 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: rule, kind: book-walton, about: "E and C"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: an evaluative and a prescriptive form, as the book prints both
+      (55.2).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D027
   title: The omission case in reasoning from negative consequences
   question: >-
     Does the book's parenthetical in 33.3's first premise mean to cover not
     acting, given that the conclusion is unchanged? Since D059 (2026-10-23)
-    33.4 concludes should_be_performed(X), so a harm of not acting that
-    falls on the one who acts (whom 33.4 addresses as "you") has a home
-    there; a harm of not acting to anyone else is coded as positive
-    consequences of the action (kialo-batch2/guidelines.md §3.1, OC13;
-    candidate C015). A is never bound to the omission.
+    33.4 concludes should_be_performed(X), so a harm of not acting that falls
+    on the one who acts (whom 33.4 addresses as "you") has a home there; a
+    harm of not acting to anyone else is coded as positive consequences of the
+    action (kialo-batch2/guidelines.md §3.1, OC13; candidate C015). A is never
+    bound to the omission. Checked on 2026-11-22 by two models, not yet by a
+    person: 33.3's first premise on p. 332 carries the parenthetical and the
+    conclusion stays negative. Whatever the reading, no omission scheme is
+    added: 33.4 and OC13 cover not acting (D069).
   category: book
   blocks: [verification]
   decider: verifier
@@ -510,9 +781,17 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: practical_necessary_condition, kind: book-walton, about: "possible_action(A)"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, the means: the schema separates possible_goal and
+      possible_bring_about(P,X), as the schemes library has it, so that no
+      variable is left unbound. Its conclusion follows D063.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D031
   title: The commitment form of sunk costs
@@ -523,9 +802,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: sunk_costs, kind: book-walton, about: "time indices and Premise 1"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: the commitment form becomes a scheme of its own, as the schemes
+      library's sunk_costs_precommitment (compendium 25).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D032
   title: A doubtful classification
@@ -536,9 +822,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: verbal_classification, kind: book-walton, about: "Classification Premise"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      An exception for a doubtful classification,
+      doubtful_classification(F,G).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D033
   title: Future losses in argument from waste
@@ -549,10 +842,17 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: waste, kind: book-walton, about: "CQ2"}
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      An exception, the critic's burden, as D055's outweighing exceptions are:
+      reassessment_against_continuing(A,X), as the schemes library has it.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D034
   title: One domain formula for witnesses and positions to know
@@ -564,9 +864,16 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: witness_testimony, kind: other, about: "in_domain(D,S)"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: in_domain(S,D) in witness_testimony too, so that one game question
+      asks about both.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D035
   title: The testimony as a variable
@@ -575,9 +882,15 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: witness_testimony, kind: book-walton, about: "CQ1-CQ3"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: the testimony is a variable of its own (account_contains(T,S)).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D036
   title: How strong a causal link is
@@ -590,10 +903,22 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: cause_to_effect_modal, kind: book-walton, about: "Major Premise"}
     - {entry: slippery_slope_inductive_step, kind: book-walton, about: "Recursive Premise"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The first: causes(E1,E2) is read as a tendency, strong or weak, and each
+      scheme's first question asks whether it is strong enough for its
+      conclusion, as the book's question on the strength of the causal
+      generalization does. The modal schemes cover what may happen (D008).
+      (The review proposed links typed by strength; the book carries strength
+      in its question, and a strength argument would change every causal
+      scheme.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D037
   title: Chaining causal steps
@@ -604,9 +929,17 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: cause_to_effect_modal, kind: other, about: "chaining"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No to will_occur supporting has_occurred. will_occur may support
+      may_occur only through a scheme of its own, in the same context. Chained
+      steps meet through D038.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D038
   title: Causal chains behind consequences arguments
@@ -618,9 +951,17 @@ decisions:
   blocks: [game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: cause_to_effect_modal, kind: other, about: "consequence schemes"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A chain of causal steps backs brings_about(A,G) only through an explicit
+      scheme that keeps the steps' modality and context (a bridge under D075);
+      otherwise it stays a secondary instance, as the gold codes it.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D039
   title: Recoding the batch-2 gold's hypothetical causal steps
@@ -632,10 +973,18 @@ decisions:
   blocks: [annotation]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: cause_to_effect_modal, kind: other, about: "batch-2 gold"}
   docs: ["docs/kialo-batch2/guidelines.md item 11"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, in a new version of the gold, with guidelines item 11 and
+      validate.py's R4 changed with it; the version before is kept and scores
+      against it stay comparable.
+    recorded: "docs/decisions.yml; to apply: the guidelines, the gold and the annotation tools (plan §0, stage 2)"
 
 - id: D042
   title: Division and composition are one pattern
@@ -648,8 +997,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/scheme-registry/README.md, Results", ".github/workflows/ci.yml"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Rewrite division to run from the whole to the parts (has_property(A,P)
+      to all_parts_property(A,P)), with its own heredity assumption;
+      composition stays as it is. The registry's tolerated error goes.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D043
   title: Book text in the public repository
@@ -663,8 +1020,20 @@ decisions:
   blocks: [release]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 1"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      No book text in the public repository, as plan §1 says: the
+      transcription of pp. 1-138 moves to the private workspace; the copy
+      check keeps working from a file of hashed word sequences, which holds no
+      text; quoted questions become paraphrases; walton.yml's templates that
+      repeat the book are rewritten in our words. Rewriting the public history
+      is D078. (The review allowed scoped excerpts in public; that contradicts
+      plan §1.)
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D046
   title: Paid model access
@@ -675,8 +1044,17 @@ decisions:
   blocks: [annotation]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 4", "docs/process.md §3"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, for bounded runs after the integrity fixes of 2026-11-22: each run
+      has hard caps on calls, tokens and cost, and stop conditions, set by the
+      owner for that run; runs with the owner's keys run on the owner's
+      machine (process §3).
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D047
   title: The candidates threshold
@@ -690,8 +1068,16 @@ decisions:
   blocks: [annotation]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 5", "docs/process.md §8"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The threshold stays (three sightings in two discussions or games) as the
+      rule for bringing a candidate to the owner, who decides; archived and
+      strained sightings count, and are reported apart from clean ones.
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D053
   title: Declared polarity pairs
@@ -745,8 +1131,15 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md, semantic concerns", "docs/walton-audit/REPORT.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: falsification concludes the negation of H, and its assumption reads
+      sufficient_correlation(H,A), as verification's does.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D055
   title: The consequence schemes share an exception whose meaning depends on the side
@@ -844,10 +1237,19 @@ decisions:
   blocks: [game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   items:
     - {entry: analogy, kind: other, about: "game questions"}
   docs: ["docs/proposals/D001-D028-D029.md", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Only questions at a premise, assumption, exception or conclusion locus,
+      by explicit backup edges, and CQ:other_case by the counter-analogy; no
+      blanket thesis independence. Argument-locus questions need an explicit
+      target and a fitting rule (D075).
+    recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D061
   title: Three presets weigh a game scheme's variants differently
@@ -916,8 +1318,23 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md", "docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Recommendations of an action that name no agent but the one addressed
+      conclude should_be_performed(A) or its negation, as D059 and D029 did:
+      fear, danger, threat, the pragmatic argument from alternatives and the
+      disjunctive threat, among others. Conclusions that name an agent (help,
+      distress, two-person practical reasoning, practical_goal's
+      should_do(P,X), waste) keep the agent, and a bridge scheme with its own
+      exception (the agent is not the one deliberating) connects them to
+      should_be_performed(A). Requirements and permissions stay apart (D016).
+      (The review proposed sharing only identical propositions and bridging
+      the rest; this applies that rule with D059's precedent.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D070
   title: Practical reasoning's side effects defeat whatever the weights
@@ -936,8 +1353,18 @@ decisions:
   blocks: [verification, game]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: a plain side effect is argued as negative consequences, a rebuttal.
+      The exception is renamed for a side effect claimed to outweigh the
+      reasons for the action, with the comparison as a premise of its answer
+      (D075), so that old weak side-effect facts are not read as the stronger
+      claim. The gold's two side-effect answers are recoded in a new version.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D071
   title: Cause to effect's interference names only the cause
@@ -954,8 +1381,93 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 2
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: interference(E1,E2) in cause_to_effect and cause_to_effect_modal.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+
+- id: D076
+  title: Evidence as records
+  question: >-
+    A player's evidence is a list of strings, and the evidence rule checks
+    only that one is there. What does WAG record about a source, and what does
+    admitting it mean?
+  category: game
+  blocks: [game, annotation]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["the external reviews of 2026-11-22 (ChatGPT's evidence design)", "wag/internal/server/protocol.go"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A source is a record: what it is (a URL, a file, a book page), the
+      passage or region used, the claim drawn from it, the premise it is
+      offered for, each party's assessment, and whether it was admitted, by
+      whom and under which rule. Consent and a moderator's admission are
+      commitments, not verification. Built in slices from stage 2; the four
+      game profiles of the review (cooperative, adversarial, moderated,
+      automated) wait for Track D. A moderator's decision on a statement is a
+      hard assumption today, and is labelled so.
+    recorded: "docs/decisions.yml; to apply: the game's moves and export (plan §0, stage 2)"
+
+- id: D077
+  title: Evidence captured for research
+  question: >-
+    Should the evidence cited in the data (the links of Kialo claims, the
+    sources players cite) be captured whole, and where is it kept?
+  category: project
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["the owner's notes of 2026-11-22", "wag-workspace README.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, for research purposes, under the fair use doctrine (the owner,
+      2026-11-22): the whole source as cited, and the part each reader used,
+      with every assessment. It is kept in the private workspace, large files
+      in Git LFS, never in the public repository. First the links of the
+      claims a pilot annotates. Terms of use, privacy and injected
+      instructions are D079.
+    recorded: "wag-workspace README.md; docs/plan.md"
+
+- id: D078
+  title: Rewriting the public history
+  question: >-
+    The public repository's history still holds the deleted PDF of The New
+    Dialectic (commit f891090) and the transcription of pp. 1-138 of
+    Argumentation Schemes. Should the history be rewritten to remove them? It
+    changes every commit's identity and breaks other clones.
+  category: project
+  blocks: [release]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/decisions.yml D043", "README.md"]
+
+- id: D081
+  title: Four repairs awaiting approval
+  question: >-
+    The cleaning of walton.yml made four repairs that still await the owner's
+    approval (CHANGELOG, "Repairs that need the owner's approval"):
+    rhetorical_oppositions_normative, sorites_slippery_slope (and its
+    template), moral_justification_ad_populum_excuse and sacrifice. The
+    schemes library has its own forms of the first two. Approve, revise from
+    the library's form, or revert each?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/scheme-registry/walton-clean/CHANGELOG.md", "docs/scheme-registry/walton-clean/changes.json"]
 
 # --- Priority 3: can wait ----------------------------------------------------
 
@@ -965,15 +1477,27 @@ decisions:
   category: metadata
   decider: owner
   priority: 3
-  status: open
+  status: decided
   items:
     - {entry: cause_to_effect, kind: book-walton, about: "Major Premise"}
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: cause_to_effect cites the book's entry 28 (p. 328), and the
+      reference it prints (A Pragmatic Theory of Fallacy, 1995, pp. 140-141)
+      as cited there.
+    recorded: "docs/decisions.yml; to apply: walton.yml's meta through edits.py (plan §0, stage 2)"
 
 - id: D041
   title: Witness testimony's year
   question: >-
     Which year does the book's reference list give for witness testimony's
-    source? Correct walton.yml once it is checked.
+    source? Correct walton.yml once it is checked. Checked on 2026-11-22 by
+    two models, not yet by a person: the compendium prints 2007 (p. 311). Once
+    a person confirms, walton.yml cites 2007, as the slope's year was
+    corrected; the publisher's later printing (2008) is noted in the
+    CHANGELOG.
   category: metadata
   decider: verifier
   priority: 3
@@ -988,8 +1512,17 @@ decisions:
   blocks: [release]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 2"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      MPL-2.0 for WAG's own code, the licence of Carneades and walton.yml,
+      added at the first release. Third-party material (the book's labels and
+      paraphrases aside, Kialo data, upstream files) keeps its own terms. The
+      documents' and data's licence is D080.
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D048
   title: Scoring a negotiation
@@ -997,8 +1530,15 @@ decisions:
   category: project
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 6"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A negotiation profile of its own, scored per issue (a vector, not one
+      number), when Track D reaches negotiation.
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D049
   title: The quarrel's safeguards
@@ -1006,8 +1546,16 @@ decisions:
   category: project
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 6"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      An experimental profile of its own, played by model seats on fictional
+      scenarios; people only by choice; with plan §8's content limits, a
+      moderator, and synthetic transcripts labelled as such.
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D050
   title: Corpora for dialogue types
@@ -1015,8 +1563,18 @@ decisions:
   category: project
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 6"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Real discourse first, as plan §8 says: Kialo and other discussions whose
+      licence allows research use, each recorded with its licence; WAG's own
+      game traces only as a second source. (The review proposed WAG's traces
+      first; finding dialogue types in our own synthetic play would be
+      circular.)
+    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
 
 - id: D051
   title: Targets for the play report
@@ -1025,8 +1583,16 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §7 item 7", "docs/catalogue-alignment.md §5"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      The denominators are set now: assigned and attempted items, the moves
+      players intended, the moves made, matches, and unknowns. Target rates
+      are set after the first pilot measures them, not before.
+    recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
 
 - id: D056
   title: A fortiori and refutation by parallel argument
@@ -1051,8 +1617,15 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md", "docs/proposals/D001-D028-D029.md", "docs/process.md §8"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Two patterns of their own, labelled WAG extensions (not compendium
+      schemes), through the proposal path (process §5).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D058
   title: Argument from precedent reads a rule as a case
@@ -1068,8 +1641,15 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/proposals/D001-D028-D029.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: the exception compares the precedent case with the current one,
+      naming both, as D001's two-case analogy does.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D060
   title: Argument from threat names the wrong variables
@@ -1094,8 +1674,16 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: cited_bad_consequences(X,C), position_to_bring_about(C), and
+      assert_bad(X,C) with a template that prints C before X (indexed
+      templates, available since 2026-11-22). Its conclusion follows D063.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D062
   title: Argument from danger concludes about the danger
@@ -1113,8 +1701,15 @@ decisions:
   blocks: [verification]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: danger concludes about the action X: the negation of
+      should_be_performed(X), by D063. Its templates are corrected with it.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D064
   title: Weighing consequences
@@ -1139,8 +1734,17 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      C003 goes forward (add: a scheme that concludes D055's exceptions from a
+      consequence of the other sign that matters more, the first answer scheme
+      under D075). C004, C010, C013, C019, C025 and C026 stay candidates until
+      their premises are written; no summing of claims.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D065
   title: Magnitude and risk
@@ -1158,8 +1762,16 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      C005 and C021 go forward as questions on the consequence schemes (how
+      serious, and on whom); the likelihood question already exists. C008
+      (precaution) and C024 stay candidates.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D066
   title: Replies about the action itself
@@ -1180,8 +1792,16 @@ decisions:
   blocks: [play, annotation]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Mitigation is an amended action (C006); another action with the same
+      good at less cost (C017) is a separate alternative; feasibility (C018)
+      is a challenge to the premise.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D067
   title: Rights and values against consequences
@@ -1195,8 +1815,16 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Rights and values stay apart from consequences: C007 is argued with the
+      value schemes; a value that trumps whatever the consequences needs a
+      context rule of its own, later.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D068
   title: Prediction from an agent's incentives
@@ -1210,8 +1838,15 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A scheme of its own, with a prospective conclusion that is never a
+      practical claim, through the proposal path.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D069
   title: Harms of not acting
@@ -1233,8 +1868,20 @@ decisions:
   blocks: [annotation, play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      C015 stays a coding rule (OC13: positive consequences of the action,
+      with the harm's not happening as G), which D059 and the guidelines of
+      D055 already give; it does not become a scheme. C016 (would doing the
+      action avert the harm) becomes a question of 33.4; C020 is covered by
+      OC12; C023 (doing against allowing) stays a candidate. (The review
+      proposed a new omission scheme through D027; that duplicates 33.4 and
+      OC13, which the owner decided.)
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D072
   title: Arguments from what happens anyway
@@ -1252,8 +1899,15 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes: a scheme of its own, with an exception for the outcome being
+      preventable after all, through the proposal path (C022).
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D073
   title: The replay chooses the moving side from a claim's immediate target
@@ -1270,8 +1924,17 @@ decisions:
   blocks: [annotation]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/kialo-batch2/to_wag.py", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, in a tested replay command of the game: the moving side is composed
+      along the target chain to the thesis; ambiguous, multi-parent and cyclic
+      cases are flagged, not guessed; every argument of a claim is played; a
+      replay is a reconstruction, not an observed dialogue.
+    recorded: "docs/decisions.yml; to apply: the guidelines, the gold and the annotation tools (plan §0, stage 2)"
 
 - id: D074
   title: The appeal to consequences as an objection
@@ -1290,8 +1953,59 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/candidates.md", "docs/proposals/D055-D059.md"]
+  decided:
+    date: "2026-11-22"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      A question or undercutter for the consequence schemes, raised when a
+      consequence argument is offered for the truth of a claim; it goes
+      forward once C011's sketch and examples pass review.
+    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+
+- id: D079
+  title: Terms of use, privacy and injected instructions in captured evidence
+  question: >-
+    Captured pages come with sites' terms of use, may hold personal data, and
+    may carry instructions aimed at the models that read them. How are these
+    handled? The owner's note of 2026-11-22: to be reviewed and decided later;
+    capture for research goes on meanwhile (D077).
+  category: project
+  blocks: [release]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["the owner's notes of 2026-11-22", "docs/decisions.yml D077"]
+
+- id: D080
+  title: A licence for WAG's documents and data
+  question: >-
+    Under which licence may others use WAG's documents, catalogue and
+    annotated data (the code is MPL-2.0, D044)? Kialo data and the book keep
+    their own terms.
+  category: project
+  blocks: [release]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/decisions.yml D044"]
+
+- id: D083
+  title: Candidates kept after the decisions of 2026-11-22
+  question: >-
+    D064, D065 and D069 sent some candidates forward and kept these for later:
+    C004 (a balance of all consequences), C010 (the lesser evil), C013 (the
+    greater good), C019 (accrual), C025 (no one else made worse off), C026
+    (the chooser's own weighing), C008 (precaution), C024 (a certain harm
+    against a speculative one) and C023 (doing against allowing). Which go
+    forward, and as what, once their premises are written?
+  category: scheme
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/candidates.md", "docs/decisions.yml D064, D065, D069"]
 
 # --- Decided ------------------------------------------------------------------
 

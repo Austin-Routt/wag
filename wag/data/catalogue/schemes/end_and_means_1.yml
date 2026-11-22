@@ -95,17 +95,22 @@ discrepancies:
   detail: The book's variant 1 also runs with a bad end, which makes the means bad,
     and lets a good end make a bad means less bad. walton.yml has only good(Y) and
     good(X), so neither the negative form nor the "less bad" conclusion can be coded.
-  decision: 'Open: add a negative variant (from a bad end to a bad means) or a graded
-    conclusion to walton.yml. Until then, code only the positive form with this scheme;
-    a text that condemns a means for its bad end is negative_consequences when it
-    concludes against an action, and otherwise other, with a note.'
+  decision: 'Decided 2026-11-22 (D022): Both, as the book prints both readings (22.6.1):
+    a negative variant (a bad end condemns its means) and a graded one, as the schemes
+    library has them. Not yet applied. Before: open: add a negative variant (from
+    a bad end to a bad means) or a graded conclusion to walton.yml. Until then, code
+    only the positive form with this scheme; a text that condemns a means for its
+    bad end is negative_consequences when it concludes against an action, and otherwise
+    other, with a note.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: critical questions
   detail: Neither the book (22.6.1 prints no questions) nor walton.yml (no assumptions
     or exceptions) gives the scheme critical questions; both premises can be challenged.
-  decision: 'Open: whether to borrow questions from the consequence schemes (33/CQ1–3),
-    which apply to any argument that values something by what it leads to.'
+  decision: 'Decided 2026-11-22 (D023): Yes, as derived questions, each with its source
+    scheme and question recorded. Not yet applied. Before: open: whether to borrow
+    questions from the consequence schemes (33/CQ1–3), which apply to any argument
+    that values something by what it leads to.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

@@ -192,10 +192,14 @@ discrepancies:
     finding or which event it concerns, and its template ("the sign") refers to nothing
     in the formula. Instantiated, it is one statement for every sign argument: establishing
     it against one would count against all of them (audit REPORT §3.2 and §5).'
-  decision: 'A defect in walton.yml''s formula. Proposed repair: give the exception
+  decision: 'Decided 2026-11-22 (D002): Sign''s exception names the finding and the
+    proposition it would indicate: more_reliable(A,B), as the schemes library has
+    it, so that an alternative explanation proven against one sign argument does not
+    defeat another. The alternative event is the answer''s witness. Not yet applied.
+    Before: A defect in walton.yml''s formula. Proposed repair: give the exception
     the sign and the event, for example more_reliable(A,B) ("an event other than B
     accounts for A more reliably"); the cleaning''s CHANGELOG and the audit''s cq_drafts.json
-    suggest more_reliable(A). Open: the owner''s decision on the 0-ary atoms (docs/review-2026-10-13-part5.md
+    suggest more_reliable(A). open: the owner''s decision on the 0-ary atoms (docs/review-2026-10-13-part5.md
     §4). Until then, 30/CQ2 targets the exception as it stands.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
@@ -207,10 +211,15 @@ discrepancies:
     The game's premise text "{B} is indicated when {A} holds" drops the book's "generally".
     The game also lets sign back answers to CQ:side_effect, CQ:possibility and CQ:goal_possible,
     practical-reasoning questions the book does not connect with sign.
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), give
-    sign its own likelihood text, from 30/CQ1''s paraphrase, and keep "generally"
-    in the premise. The backup edges can stay: sign concludes that a state of affairs
-    holds, which can serve as factual evidence in an answer to those questions.'
+  decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
+    texts from the catalogue''s paraphrases, with the changes the entries list, except
+    the backup edge that lets negative consequences answer the side-effect question,
+    which D070 and D075 replace. CQ:field is kept. Every generated question gets a
+    test that its formula target is one of its scheme''s. Not yet applied. Before:
+    open: when the NASCQ is generated from the catalogue (plan §6), give sign its
+    own likelihood text, from 30/CQ1''s paraphrase, and keep "generally" in the premise.
+    The backup edges can stay: sign concludes that a state of affairs holds, which
+    can serve as factual evidence in an answer to those questions.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

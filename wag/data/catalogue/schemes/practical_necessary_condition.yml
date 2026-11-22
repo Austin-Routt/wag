@@ -240,8 +240,11 @@ discrepancies:
     so it says that the goal is possible; in practical_inference, where the predicate
     also occurs, A is the action. The book's possibility question (CQ3) is about the
     means, which possible_agent(X,P) covers.
-  decision: 'Keep it, with the question walton/possible_action, read as the goal''s
-    possibility. Open: whether walton.yml meant the means X here.'
+  decision: 'Decided 2026-11-22 (D030): Yes, the means: the schema separates possible_goal
+    and possible_bring_about(P,X), as the schemes library has it, so that no variable
+    is left unbound. Its conclusion follows D063. Not yet applied. Before: Keep it,
+    with the question walton/possible_action, read as the goal''s possibility. open:
+    whether walton.yml meant the means X here.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: P and A2
@@ -260,8 +263,12 @@ discrepancies:
     at least for a time, until the proponent answers (p. 96). walton.yml makes the
     alternative-means, side-effects and conflicting-goals questions exceptions, which
     the critic must prove.
-  decision: 'The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
-    §2), and the answers say so. Open: the owner''s decision whether these questions
+  decision: 'Decided 2026-11-22 (D003): The questions stay exceptions, the critic''s
+    to support. Who must answer a question that is asked is a rule of the dialogue
+    (the request, its answer, and what holds while it is pending), set by the game''s
+    question protocol with D075, not by turning exceptions into assumptions. Not yet
+    applied. Before: The catalogue follows walton.yml''s roles, as the game does (docs/game-rules.md
+    §2), and the answers say so. open: the owner''s decision whether these questions
     should shift the burden when asked, which would make them assumptions.'
   status: drafted by Claude Code, 2026-10-22
 classification:

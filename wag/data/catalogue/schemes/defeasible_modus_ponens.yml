@@ -97,20 +97,23 @@ discrepancies:
     questions: what backs the rule, and whether this case is an exception. walton.yml''s
     scheme has no assumption or exception, so neither can be a walton/ question, and
     no book or game question exists.'
-  decision: 'Open, for the owner: add to walton.yml an exception for the case at hand
-    (for example exception(A,B), with a template in our own words). Until then, ask
-    for the backing of the rule by challenging the premise implies(A,B), and raise
-    an exception as an undercutter.'
+  decision: 'Decided 2026-11-22 (D019): Yes: defeasible modus ponens gets an exception
+    for the case at hand, with a template of our own; its questions are labelled derived,
+    not the book''s (D021). Not yet applied. Before: open, for the owner: add to walton.yml
+    an exception for the case at hand (for example exception(A,B), with a template
+    in our own words). Until then, ask for the backing of the rule by challenging
+    the premise implies(A,B), and raise an exception as an undercutter.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: implies
   detail: The template of implies(A,B) reads as a plain conditional, which would make
     the argument deductive; the scheme's name and its use in WAG's plan make it a
     defeasible rule.
-  decision: 'No change to the formula. In coding, write the rule out as a defeasible
-    generalization ("as a rule, if A then B"), as plan §3 asks. Open, for the owner:
-    use defeasibly_implies(A,B) as the premise; walton.yml already has it, unused,
-    and its template reads as a defeasible rule.'
+  decision: 'Decided 2026-11-22 (D020): Yes: defeasibly_implies(A,B) is its rule premise.
+    Not yet applied. Before: No change to the formula. In coding, write the rule out
+    as a defeasible generalization ("as a rule, if A then B"), as plan §3 asks. open,
+    for the owner: use defeasibly_implies(A,B) as the premise; walton.yml already
+    has it, unused, and its template reads as a defeasible rule.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

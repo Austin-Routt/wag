@@ -136,11 +136,13 @@ discrepancies:
   detail: 24/CQ2 asks for a forward-looking reassessment of costs and benefits, past
     losses aside; no formula of waste encodes it. sunk_costs, which cites the same
     2002 article, has it as the exception future_losses_outweigh(A).
-  decision: 'The catalogue marks CQ2 as undercutting the inference, so asking it puts
-    the argument out of force until the proponent shows that going on pays from now.
-    Open: whether to add future_losses_outweigh(X) to waste in walton.yml, as an exception
-    (the critic''s burden, as in sunk_costs) or as an assumption (the proponent''s,
-    as asking the book''s question implies).'
+  decision: 'Decided 2026-11-22 (D033): An exception, the critic''s burden, as D055''s
+    outweighing exceptions are: reassessment_against_continuing(A,X), as the schemes
+    library has it. Not yet applied. Before: The catalogue marks CQ2 as undercutting
+    the inference, so asking it puts the argument out of force until the proponent
+    shows that going on pays from now. open: whether to add future_losses_outweigh(X)
+    to waste in walton.yml, as an exception (the critic''s burden, as in sunk_costs)
+    or as an assumption (the proponent''s, as asking the book''s question implies).'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: possible(X)

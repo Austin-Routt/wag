@@ -193,13 +193,19 @@ discrepancies:
   detail: In the book each step would plausibly lead to the next, in the circumstances
     and so far as anyone can tell, and the steps need not be causal. walton.yml's
     link is causes(E1,E2), the same unqualified causal premise as cause_to_effect's.
-  decision: 'No change for now: read causes(E1,E2) here as "E1 would plausibly lead
-    to E2 in these circumstances", and treat a weak link as a reason to answer 49/CQ3
-    against it. Open: whether causes(E1,E2) should get a weaker counterpart for the
-    slope''s links. cause_to_effect_modal (2026-10-22, audit N8) does not give one:
-    it keeps causes(E1,E2) and makes only the cause and the effect possible (its discrepancy
-    on the Major Premise). Slopes whose steps are precedents or classifications have
-    schemes of their own (50, 51, 52), only two of them in walton.yml.'
+  decision: 'Decided 2026-11-22 (D036): The first: causes(E1,E2) is read as a tendency,
+    strong or weak, and each scheme''s first question asks whether it is strong enough
+    for its conclusion, as the book''s question on the strength of the causal generalization
+    does. The modal schemes cover what may happen (D008). (The review proposed links
+    typed by strength; the book carries strength in its question, and a strength argument
+    would change every causal scheme.) Not yet applied. Before: No change for now:
+    read causes(E1,E2) here as "E1 would plausibly lead to E2 in these circumstances",
+    and treat a weak link as a reason to answer 49/CQ3 against it. open: whether causes(E1,E2)
+    should get a weaker counterpart for the slope''s links. cause_to_effect_modal
+    (2026-10-22, audit N8) does not give one: it keeps causes(E1,E2) and makes only
+    the cause and the effect possible (its discrepancy on the Major Premise). Slopes
+    whose steps are precedents or classifications have schemes of their own (50, 51,
+    52), only two of them in walton.yml.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Conclusion

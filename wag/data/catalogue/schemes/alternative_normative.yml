@@ -134,9 +134,12 @@ discrepancies:
   detail: walton.yml's conclusion not_required(B) is not the negation of should_be_performed(B),
     the conclusion of the practical schemes, so in the game an instance does not rebut
     a practical argument for B.
-  decision: 'Open: whether the game should read not_required(B) as ¬should_be_performed(B).
-    Until then, code the counterargument to a proposal with the practical scheme it
-    rests on, as the gold does for 13292.104, and this scheme as a secondary instance.'
+  decision: 'Decided 2026-11-22 (D016): No: not required is not should not be done.
+    alternative_normative concludes the negation of is_required(B), which meets only
+    is_required(B). Not yet applied. Before: open: whether the game should read not_required(B)
+    as ¬should_be_performed(B). Until then, code the counterargument to a proposal
+    with the practical scheme it rests on, as the gold does for 13292.104, and this
+    scheme as a secondary instance.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: critical questions
@@ -144,10 +147,12 @@ discrepancies:
     or exceptions) gives the scheme critical questions. Its weak points are its premises:
     whether A and B really exclude each other (both may be required, or neither, or
     a third course may do), and whether A is required.'
-  decision: 'No question added: both are premises and can be challenged directly;
-    a third course is the attack ND describes on the disjunctive premise of a dilemma
-    (ND pp. 160–1). Open: whether walton.yml should state the exclusiveness as an
-    assumption.'
+  decision: 'Decided 2026-11-22 (D017): Exclusiveness is stated in the premise, as
+    the book''s either-or premise reads and the schemes library has it (exclusive_requirement_alternatives(A,B)):
+    the proponent''s to show, not an assumption. Not yet applied. Before: No question
+    added: both are premises and can be challenged directly; a third course is the
+    attack ND describes on the disjunctive premise of a dilemma (ND pp. 160–1). open:
+    whether walton.yml should state the exclusiveness as an assumption.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

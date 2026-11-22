@@ -163,10 +163,12 @@ discrepancies:
     open to exceptions (p. 68). walton.yml writes subclass(F,G), a strict inclusion
     of classes, and gives the scheme no exceptions, which makes it the deductive form
     of ch. 2 (p. 66). It also speaks of classes where the book speaks of properties.
-  decision: 'No change for now: read subclass(F,G) as "Fs are, as a rule, counted
-    as Gs", and put any doubt about the generalisation, or about the usage behind
-    it, through 14/CQ2 against that premise. Open: whether walton.yml should mark
-    the classification premise as defeasible, or add an exception for a doubtful usage.'
+  decision: 'Decided 2026-11-22 (D032): An exception for a doubtful classification,
+    doubtful_classification(F,G). Not yet applied. Before: No change for now: read
+    subclass(F,G) as "Fs are, as a rule, counted as Gs", and put any doubt about the
+    generalisation, or about the usage behind it, through 14/CQ2 against that premise.
+    open: whether walton.yml should mark the classification premise as defeasible,
+    or add an exception for a doubtful usage.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

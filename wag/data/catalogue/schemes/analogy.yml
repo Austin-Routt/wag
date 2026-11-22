@@ -319,9 +319,13 @@ discrepancies:
   detail: 'Until the NASCQ is generated from the catalogue, the game''s AS:analogy
     keeps the old form (A and C): CQ:difference asks of relevant_differences(C), CQ:truth
     of in_case(A,C) and CQ:other_case of more_on_point(A,C), and analogy is not thesis-independent.'
-  decision: 'Open: at workstream E, AS:analogy takes P1, P2, C1, C2 and answer variable
-    P2; CQ:difference and CQ:truth are repatterned and CQ:other_case answered by a
-    counter-analogy at the conclusion; how far analogy reaches as an answer is D057.'
+  decision: 'Decided 2026-11-22 (D057): Only questions at a premise, assumption, exception
+    or conclusion locus, by explicit backup edges, and CQ:other_case by the counter-analogy;
+    no blanket thesis independence. Argument-locus questions need an explicit target
+    and a fitting rule (D075). Not yet applied. Before: open: at workstream E, AS:analogy
+    takes P1, P2, C1, C2 and answer variable P2; CQ:difference and CQ:truth are repatterned
+    and CQ:other_case answered by a counter-analogy at the conclusion; how far analogy
+    reaches as an answer is D057.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: correspondence premise

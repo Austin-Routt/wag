@@ -151,11 +151,13 @@ discrepancies:
     indices, no choice premise and no commitment: the premise map leaves the time
     definitions and Premise 1 without formulas, and maps Premise 2 to the costs only
     approximately (sunk_costs(A,C), too_high_to_waste(C)).'
-  decision: 'Open: whether to add the book''s commitment form to walton.yml as a scheme
-    of its own; the book''s ch. 4 treats sunk costs as argument from commitment applied
-    to a decision about action (p. 135). Until then, code a text that argues from
-    an earlier commitment with this scheme only if it also cites what has been spent,
-    and otherwise as other, with a note.'
+  decision: 'Decided 2026-11-22 (D031): Yes: the commitment form becomes a scheme
+    of its own, as the schemes library''s sunk_costs_precommitment (compendium 25).
+    Not yet applied. Before: open: whether to add the book''s commitment form to walton.yml
+    as a scheme of its own; the book''s ch. 4 treats sunk costs as argument from commitment
+    applied to a decision about action (p. 135). Until then, code a text that argues
+    from an earlier commitment with this scheme only if it also cites what has been
+    spent, and otherwise as other, with a note.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: feasible(A), future_losses_outweigh(A)

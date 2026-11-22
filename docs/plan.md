@@ -1,14 +1,17 @@
 # The plan: one verified scheme catalogue, then annotation on it
 
-Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue's skeleton and its checker exist ([`wag/data/catalogue/`](../wag/data/catalogue/README.md)); tier 1 is drafted and checked by models, and nothing is verified by a person yet. **Revised on 2026-10-22** after the owner's review of the goal ([part 13](review-2026-10-22-part13.md)). The owner's open questions are in §7.
+Status: proposed on 2026-10-15. **Revised on 2026-11-22:** §0 gives the order of work from then on. **Phase 1 started on 2026-10-22:** the catalogue's skeleton and its checker exist ([`wag/data/catalogue/`](../wag/data/catalogue/README.md)); tier 1 is drafted and checked by models, and nothing is verified by a person yet. **Revised on 2026-10-22** after the owner's review of the goal ([part 13](review-2026-10-22-part13.md)). The owner's open questions are in §7.
 
 **The goal,** set by the owner on 2026-10-22:
 - WAG is to become a complete dialogue system, starting with argumentation-based dialogue.
 - Every argumentation scheme and critical question is to be playable in some game context. The context (the dialogue type, the preset, and the NASCQ's fields and links) decides what a scheme can do there (§6).
 - The literature gives the first playable set and its families. Kialo and other data, and play by people and models, refine and complete it.
-- Completeness cannot be proven, only measured as it approaches. Two measures show it:
+- Completeness cannot be proven, only measured as it approaches. Four measures show it:
   - the share of arguments in new data that fit no playable scheme;
-  - the share of play reports that say a move could not be made (§5, [`process.md`](process.md) §4).
+  - the share of play reports that say a move could not be made (§5, [`process.md`](process.md) §4);
+  - the share of the answers to critical questions found in coded data and in play that can be played as meant (added 2026-11-22, D082);
+  - the share of answers that should be refused (irrelevant, wrongly bound, unsupported) that the game refuses (D082).
+- Within a versioned set of schemes and questions, completeness is checked, not measured: every question can be asked, and every answer the set offers has a tested contract (D082).
 
 **Related documents:**
 - **Why this plan,** from the first real model run: [`review-2026-10-15-part7.md`](review-2026-10-15-part7.md).
@@ -16,6 +19,24 @@ Status: proposed on 2026-10-15. **Phase 1 started on 2026-10-22:** the catalogue
 - **Dialogue types,** the second objective, are Track D (§8). It rests on the reference [`dialogue-types.md`](dialogue-types.md) and the review [`review-2026-10-15-part9.md`](review-2026-10-15-part9.md).
 - **How the work is done:** statuses, agents, feedback from play, the decision register, the private workspace, the checks: [`process.md`](process.md).
 - **Where the project stands:** [`README.md`](../README.md).
+
+## 0. From 2026-11-22: the order of work
+
+After the external reviews of 22 November 2026 (kept whole in the workspace, `reviews/2026-11-22`; checked in `verify/r-reviews-2026-11-22` and `verify/r-convergence-2026-11-22`) the owner set the direction, and a standing rule for decisions ([`process.md`](process.md) §5). Where this section and the older ones differ, this section decides the order; the principles of §1 stand.
+
+- **Data-driven development with model and human players, now.** API players and Kialo annotation produce the data that improves the game, the catalogue and a reusable dataset. Work may go on from entries models have checked, its results marked provisional; a person still verifies, and no accuracy claim or release rests on entries only models have checked (D045).
+- **Full NASCQ** is a checked contract within a versioned set and four measured rates beyond it (the goal, above; D082).
+- **Families as slices.** Each family goes through the whole path before the next: its decisions and formulas, the game's questions and answers (answer schemes, D075), annotation, replay and play. Within a slice the decisions come first.
+- **Evidence** is a record, not a string (D076); the evidence cited in the data is captured whole for research, under the fair use doctrine, and kept in the private workspace, large files in Git LFS (D077). Terms of use, privacy and injected instructions are reviewed later (D079).
+- **The engine** is the schemes library's ([`CARNEADES_FORK.md`](../CARNEADES_FORK.md)). The formulas stay WAG's own layer (§1); where WAG has decided nothing, the library's records are the draft (tier 2), and every difference is recorded.
+
+| Stage | What | State |
+|---|---|---|
+| 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open), this section, `process.md` | done 2026-11-22 |
+| 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text | done 2026-11-22 |
+| 2 | The first slice, practical reasoning and the consequences: D063, D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records; book text out of the public tree (D043) | next |
+| 3 | A bounded Kialo and API pilot on the owner's machine, with hard caps (D046): independent first passes, a lexicon not drawn from the gold, the moves players could not make recorded, development and held-out discussions kept apart, the size planned from the gain to detect | after stage 2 |
+| 4 | The other families; tier 2 from the library's records; a person's blind sample of claims; AS2 and meta-argument trials, kept only if they do better than a simpler baseline at the same cost | later |
 
 ## 1. Principles
 

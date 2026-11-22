@@ -208,11 +208,13 @@ discrepancies:
     treats honesty as a premise the audience must accept for the argument to succeed,
     which would make it an assumption (the proponent's burden), while walton.yml and
     the game make it an exception (the critic's).
-  decision: 'Follow walton.yml: the critic must back a charge of dishonesty, as for
-    expert_opinion''s trustworthiness question (p. 33). p. 17 itself leaves open where
-    premises end and questions begin. A charge of mere unreliability goes against
-    position_to_know(W,D). Open: whether walton.yml should add an exception for an
-    unreliable but honest source.'
+  decision: 'Decided 2026-11-22 (D010): Yes: position_to_know gets an exception for
+    a source who is sincere but not reliable on the claim, scoped to the claim''s
+    domain, beside dishonest(W). Not yet applied. Before: Follow walton.yml: the critic
+    must back a charge of dishonesty, as for expert_opinion''s trustworthiness question
+    (p. 33). p. 17 itself leaves open where premises end and questions begin. A charge
+    of mere unreliability goes against position_to_know(W,D). open: whether walton.yml
+    should add an exception for an unreliable but honest source.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: game questions
@@ -220,9 +222,14 @@ discrepancies:
     W can know about the domain D, where the book asks about the proposition; CQ:trustworthiness
     asks about honesty and bias, where the book asks about honesty, trustworthiness
     and reliability; CQ:field has no book question of its own.'
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
-    the game''s texts from these paraphrases. Keep CQ:field: it questions a premise
-    that the book''s major premise states.'
+  decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
+    texts from the catalogue''s paraphrases, with the changes the entries list, except
+    the backup edge that lets negative consequences answer the side-effect question,
+    which D070 and D075 replace. CQ:field is kept. Every generated question gets a
+    test that its formula target is one of its scheme''s. Not yet applied. Before:
+    open: when the NASCQ is generated from the catalogue (plan §6), take the game''s
+    texts from these paraphrases. Keep CQ:field: it questions a premise that the book''s
+    major premise states.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: conclusion

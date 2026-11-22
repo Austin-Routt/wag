@@ -193,9 +193,11 @@ discrepancies:
     the premise generally_true(A) and as the assumption generally_accepted(A), whose
     English readings say the same thing (one template lacks a verb). The premise''s
     name says "true", where the book''s premise is about acceptance.'
-  decision: 'Treat the two as one statement: 4/CQ1 targets both, and the premise map
-    now lists both. Open: drop the assumption from walton.yml, or rename generally_true
-    to say what it means.'
+  decision: 'Decided 2026-11-22 (D012): The duplicate goes: one acceptance premise
+    stays, named so that it reads as accepted, not as true. Not yet applied. Before:
+    Treat the two as one statement: 4/CQ1 targets both, and the premise map now lists
+    both. open: drop the assumption from walton.yml, or rename generally_true to say
+    what it means.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: ch. 4 forms
@@ -215,8 +217,11 @@ discrepancies:
   detail: walton.yml concludes reason_in_favor(A), as the compendium's entry does;
     it is a statement about A, not A itself, so in an argument graph it does not support
     A without a further step. pop_scheme, by contrast, concludes is_true(A) and should_accept(A).
-  decision: 'Open: whether the conclusion should be A, so that the argument can back
-    a claim directly, as a game move needs. Until then, code the conclusion as walton.yml
+  decision: 'Decided 2026-11-22 (D011): No. popular_opinion keeps reason_in_favor(A),
+    as the book concludes. Where a game needs it to meet A, a bridge scheme connects
+    them, with its own exception (D075''s rule for bridges). Not yet applied. Before:
+    open: whether the conclusion should be A, so that the argument can back a claim
+    directly, as a game move needs. Until then, code the conclusion as walton.yml
     has it and say in the coding which claim it backs.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
@@ -236,8 +241,11 @@ discrepancies:
     opponent (p. 124). The compendium's CQ1 asks what evidence supports the acceptance,
     and walton.yml makes it the premise generally_true(A), the proponent's burden
     once asked.
-  decision: 'Follow walton.yml: the formulas decide. Open: whether the acceptance
-    should be presumed, as an assumption, as ch. 4 suggests.'
+  decision: 'Decided 2026-11-22 (D013): No: general acceptance is a premise, as the
+    compendium prints it (4). A context that presumes it is a later option of the
+    game, not a change to the scheme. Not yet applied. Before: Follow walton.yml:
+    the formulas decide. open: whether the acceptance should be presumed, as an assumption,
+    as ch. 4 suggests.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: dependent

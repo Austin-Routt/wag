@@ -223,17 +223,23 @@ discrepancies:
     step chains into neither scheme: its will_occur(E2) meets neither may_occur(E1)
     nor has_occurred(E1), so a chain from an actual cause to a possible effect breaks
     at the switch (cause_to_effect records the same gap between its own steps).'
-  decision: 'Open: whether walton.yml should let will_occur(E) support may_occur(E),
-    and has_occurred(E). Until then, supply the next step''s minor premise and say
-    in the coding that it is the previous step''s conclusion.'
+  decision: 'Decided 2026-11-22 (D037): No to will_occur supporting has_occurred.
+    will_occur may support may_occur only through a scheme of its own, in the same
+    context. Chained steps meet through D038. Not yet applied. Before: open: whether
+    walton.yml should let will_occur(E) support may_occur(E), and has_occurred(E).
+    Until then, supply the next step''s minor premise and say in the coding that it
+    is the previous step''s conclusion.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: batch-2 gold
   detail: The batch-2 gold, made before this scheme, codes its 11 hypothetical causal
     steps (in 13292.9, .12, .14, .36, .180 and .192) as reconstructed cause_to_effect,
     with the note that they need a modal causal scheme (audit N8).
-  decision: 'Open: recode them with this scheme, when the owner agrees. Later batches
-    use it (batch-2 guidelines, item 11, note of 2026-10-22).'
+  decision: 'Decided 2026-11-22 (D039): Yes, in a new version of the gold, with guidelines
+    item 11 and validate.py''s R4 changed with it; the version before is kept and
+    scores against it stay comparable. Not yet applied. Before: open: recode them
+    with this scheme, when the owner agrees. Later batches use it (batch-2 guidelines,
+    item 11, note of 2026-10-22).'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: Major Premise
@@ -241,11 +247,16 @@ discrepancies:
     effect may follow from the cause. The scheme keeps causes(E1,E2), cause_to_effect''s
     unqualified causal premise, and puts the modality only on whether the cause and
     the effect occur.'
-  decision: 'Open: read causes(E1,E2), in every scheme that uses it, as a tendency
-    of events like E1 to bring about events like E2, strong or weak, each scheme''s
-    CQ1 asking whether it is strong enough for what that scheme concludes; or give
-    a weak link a formula of its own. Until then, code a weak link with this scheme
-    and say so in the coding.'
+  decision: 'Decided 2026-11-22 (D036): The first: causes(E1,E2) is read as a tendency,
+    strong or weak, and each scheme''s first question asks whether it is strong enough
+    for its conclusion, as the book''s question on the strength of the causal generalization
+    does. The modal schemes cover what may happen (D008). (The review proposed links
+    typed by strength; the book carries strength in its question, and a strength argument
+    would change every causal scheme.) Not yet applied. Before: open: read causes(E1,E2),
+    in every scheme that uses it, as a tendency of events like E1 to bring about events
+    like E2, strong or weak, each scheme''s CQ1 asking whether it is strong enough
+    for what that scheme concludes; or give a weak link a formula of its own. Until
+    then, code a weak link with this scheme and say so in the coding.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: consequence schemes
@@ -253,10 +264,13 @@ discrepancies:
     The consequence schemes need brings_about(A,G), which no step concludes and which
     claims more, so the steps explain a consequence but do not back that premise in
     the argument graph.
-  decision: 'Open: whether a causal chain should be able to back brings_about(A,G),
-    or stay a secondary instance beside the consequences argument, as the batch-2
-    gold codes it. Until then, code the steps as secondary instances of the claim,
-    not attached to brings_about(A,G).'
+  decision: 'Decided 2026-11-22 (D038): A chain of causal steps backs brings_about(A,G)
+    only through an explicit scheme that keeps the steps'' modality and context (a
+    bridge under D075); otherwise it stays a secondary instance, as the gold codes
+    it. Not yet applied. Before: open: whether a causal chain should be able to back
+    brings_about(A,G), or stay a secondary instance beside the consequences argument,
+    as the batch-2 gold codes it. Until then, code the steps as secondary instances
+    of the claim, not attached to brings_about(A,G).'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: interference

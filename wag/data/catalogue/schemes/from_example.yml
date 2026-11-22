@@ -183,7 +183,10 @@ discrepancies:
   detail: 'walton.yml formalizes compendium 6.1 only in part: Same title, but the
     premise and the conclusion are swapped: walton.yml concludes the particular case
     from the generalization.'
-  decision: 'Open: the owner''s decision on the content defects (docs/review-2026-10-13-part5.md
+  decision: 'Decided 2026-11-22 (D014): from_example generalizes from the case: premise
+    has_properties(A,P1,P2), conclusion usually_properties(P1,P2), with the typical-example
+    assumption, as the schemes library has it after its check against the book (6.1).
+    Not yet applied. Before: open: the owner''s decision on the content defects (docs/review-2026-10-13-part5.md
     §4 and §8 item 1). Two repairs fit the book: swap the two formulas'' roles (premise
     has_properties(A,P1,P2), conclusion both_properties(A,P1,P2)), or swap their English
     templates. The second is our guess at where the slip lies: the name both_properties
@@ -199,10 +202,13 @@ discrepancies:
   detail: The book's conclusion generalizes over any individual x. walton.yml's generalization
     formula has the individual A as its argument ("if A has P1 then it also has P2"),
     so it states a conditional about A alone, not a rule about whatever has P1.
-  decision: 'Open, with the partial link: a repaired scheme should drop A from the
-    generalization, giving it only the two properties (for example generally_has(P1,P2)),
-    so that the conclusion is a rule and A appears only in the premise, the assumption
-    and the exception.'
+  decision: 'Decided 2026-11-22 (D014): from_example generalizes from the case: premise
+    has_properties(A,P1,P2), conclusion usually_properties(P1,P2), with the typical-example
+    assumption, as the schemes library has it after its check against the book (6.1).
+    Not yet applied. Before: open, with the partial link: a repaired scheme should
+    drop A from the generalization, giving it only the two properties (for example
+    generally_has(P1,P2)), so that the conclusion is a rule and A appears only in
+    the premise, the assumption and the exception.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: source

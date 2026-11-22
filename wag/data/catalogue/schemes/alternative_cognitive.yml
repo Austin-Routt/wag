@@ -141,9 +141,11 @@ discrepancies:
     disjunction, which does not say that A and B are the only possibilities: a third
     one that the text overlooks, the attack ND describes on the disjunctive premise
     of a dilemma (ND pp. 160–1).'
-  decision: 'No question added: can_be_case(A,B) is a premise, so a third possibility
-    is raised as a challenge to it. Open: whether walton.yml should add an exception
-    for a further alternative.'
+  decision: 'Decided 2026-11-22 (D015): Yes: alternative_cognitive gets an exception
+    for an alternative not considered, the critic''s to show. Not yet applied. Before:
+    No question added: can_be_case(A,B) is a premise, so a third possibility is raised
+    as a challenge to it. open: whether walton.yml should add an exception for a further
+    alternative.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent

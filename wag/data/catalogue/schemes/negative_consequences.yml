@@ -327,12 +327,17 @@ discrepancies:
   detail: The book's first two questions allow the consequences to be claimed with
     different strengths (will, may, must). brings_about(A,G) has no modality, and
     Kialo cons often hedge ("could", "might").
-  decision: 'No change. Code a hedged claim with brings_about(A,G), say so in the
-    coding, and treat the hedge as a reason to press 33/CQ1: the conclusion that A
-    should not be done needs a consequence likely enough to act on. The claim''s causal
-    steps are coded beside it as secondary cause_to_effect_modal instances, which
-    conclude only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
-    the discrepancy on the consequence schemes). Open: whether brings_about should
+  decision: 'Decided 2026-11-22 (D008): Yes, as schemes of their own: modal variants
+    of the consequence schemes, as cause to effect has cause_to_effect_modal, not
+    a modality field. Likelihood stays a question (33/CQ1, CQ:likelihood). (The review
+    left variant or field open and added an adequacy assumption; WAG''s precedent
+    is a scheme of its own, and the likelihood question already exists.) Not yet applied.
+    Before: No change. Code a hedged claim with brings_about(A,G), say so in the coding,
+    and treat the hedge as a reason to press 33/CQ1: the conclusion that A should
+    not be done needs a consequence likely enough to act on. The claim''s causal steps
+    are coded beside it as secondary cause_to_effect_modal instances, which conclude
+    only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
+    the discrepancy on the consequence schemes). open: whether brings_about should
     get a modal form too.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
@@ -352,9 +357,13 @@ discrepancies:
     CQ:evidence asks the book's evidence question of the inference (locus argument),
     not of the premise brings_about(A,G). CQ:opposite_consequences matches 33/CQ3
     for the negative form.
-  decision: 'Open: when the NASCQ is generated from the catalogue (plan §6), take
-    the game''s texts from these paraphrases and sit the evidence question on 33/CQ2
-    at the premise.'
+  decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
+    texts from the catalogue''s paraphrases, with the changes the entries list, except
+    the backup edge that lets negative consequences answer the side-effect question,
+    which D070 and D075 replace. CQ:field is kept. Every generated question gets a
+    test that its formula target is one of its scheme''s. Not yet applied. Before:
+    open: when the NASCQ is generated from the catalogue (plan §6), take the game''s
+    texts from these paraphrases and sit the evidence question on 33/CQ2 at the premise.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: A_reasoning/3:511

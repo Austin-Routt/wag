@@ -22,6 +22,8 @@ WAG is a turn-based argumentation game, and a research workbench around it.
 
 The next step is therefore not more code. It is to align and verify that catalogue, then annotate against it ([the plan](docs/plan.md)).
 
+**Since 2026-11-22** the order of work is [plan §0](docs/plan.md#0-from-2026-11-22-the-order-of-work): data-driven development with model and human players, family by family, from entries models have checked (marked provisional until a person verifies them). That day WAG moved to the schemes library's engine ([`CARNEADES_FORK.md`](CARNEADES_FORK.md)), and 63 of the register's 66 open decisions were taken under the owner's standing rule ([`process.md`](docs/process.md) §5).
+
 **Contents**
 1. [How the pieces fit](#1-how-the-pieces-fit)
 2. [Where things stand](#2-where-things-stand)
@@ -134,7 +136,9 @@ The detail, with the effort and the "done when" of each phase, is in [`docs/plan
 | 5. The game takes the catalogue | Every scheme playable in some context | **Game fields** in the catalogue (derived by rule, judged with examples, calibrated by data and play). **The NASCQ and `core.yml` generated** from it. **Links across schemes** by rules. **Feedback from play,** tied to catalogue items. Derived schemes join the same way. | Code, then people and models playing |
 | Track D. Dialogue types, after phase 3 | Play every type; find every type in data | **D0:** the reference (done). **D1:** the type in exports and guidelines, and a type catalogue. **D2:** persuasion with commitments, then deliberation, inquiry, information-seeking, negotiation, shifts; detecting quarrels; a playable quarrel last. **D3:** identification by dimensions and type, with agreement measured. **D4:** corpora per type. | Code, then people with model annotators |
 
-**The next actions** ([the alignment plan §4](docs/catalogue-alignment.md#4-order), revised 2026-10-22):
+**The next actions** are now the stages of [plan §0](docs/plan.md#0-from-2026-11-22-the-order-of-work) (2026-11-22): stage 2, the first slice (practical reasoning and the consequences), then a bounded Kialo and API pilot. The list below, of 2026-10-22, is kept for its history.
+
+**The next actions of 2026-10-22** ([the alignment plan §4](docs/catalogue-alignment.md#4-order)):
 1. **Protect and organize the work:** a generated status report, and the agents' briefs and tools in WAG. The private workspace, CI and the decision register are in place since 2026-10-22.
 2. **The owner decides the open decisions** in the register, [`docs/decisions.md`](docs/decisions.md), by priority (confirmed on 2026-10-22). Decided so far: CI (D052); the analogy family in two-case form (D001, D028, D029), made on 2026-10-22 after two independent reviews of its proposal; declared polarity pairs (D053), whose check is still to build. New candidates go to the candidates registry, [`docs/candidates.yml`](docs/candidates.yml), grouped by family and pattern; its view is [`docs/candidates.md`](docs/candidates.md).
 3. **The game's fields** for the 9 game schemes, and the generator that reproduces today's NASCQ from the catalogue.
@@ -268,10 +272,10 @@ python3 -I docs/kialo-batch2/agreement.py A.json B.json
 
 ## 8. Sources and licences
 
-- **Carneades 4:** MPL-2.0 (`carneades-4/LICENSE`).
+- **Carneades 4 and GoCHR,** as the schemes library vendors them, with WAG's patches: MPL-2.0 (`carneades-4/LICENSE`, `GoCHR/LICENSE`; [`CARNEADES_FORK.md`](CARNEADES_FORK.md)).
 - **The Walton collection for Carneades 4** (`walton.yml`, from `github.com/basakkurtuldu/walton-argumentation-schemes-for-carneades-4`): MPL-2.0 (`docs/scheme-registry/walton-clean/LICENSE`).
 - **Walton, Reed & Macagno, *Argumentation Schemes* (Cambridge UP, 2008):** not included. The repository cites it by scheme and question labels and pages, except `docs/book-catalogue/` (issue 6).
 - **Walton, *The New Dialectic* (University of Toronto Press, 1998):** cited by page in [`docs/dialogue-types.md`](docs/dialogue-types.md), in paraphrase. Its PDF was deleted from the repository on 2026-10-15; it remains in the history (issue 6).
 - **Aberdein, *Dialogue Types, Argumentation Schemes, and Mathematical Practice* (arXiv:2011.13845, 2020):** cited; not included.
 - **Kialo discussions:** public; the datasets keep their claim ids.
-- **WAG's own code and data:** no licence yet (issue 6).
+- **WAG's own code and data:** no licence yet. The code will be MPL-2.0 from the first release (D044); the documents' and data's licence is open (D080).
