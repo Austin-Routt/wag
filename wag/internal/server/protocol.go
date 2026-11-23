@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"sort"
 	"strings"
 
@@ -645,8 +646,17 @@ func ParseReplyFull(reply string) (*Reply, error) {
 	}
 	// The final JSON candidate is authoritative. A malformed or truncated
 	// final answer must not cause an earlier example to become a real move.
+	final := objs[len(objs)-1]
+	if err := rejectDuplicateReplyKeys(final); err != nil {
+		return nil, fmt.Errorf("final move JSON: %w", err)
+	}
 	var m map[string]interface{}
-	if err := json.Unmarshal([]byte(objs[len(objs)-1]), &m); err != nil {
+	decoder := json.NewDecoder(strings.NewReader(final))
+	// Binding numbers are phrases: retain their exact JSON spelling instead
+	// of rounding large integers/fractions through float64. Confidence is
+	// converted separately by number; saved string bindings stay strings.
+	decoder.UseNumber()
+	if err := decoder.Decode(&m); err != nil {
 		return nil, fmt.Errorf("final move JSON: %w", err)
 	}
 	for _, k := range []string{"action", "move"} {
@@ -682,6 +692,64 @@ func ParseReplyFull(reply string) (*Reply, error) {
 		return &Reply{Action: a, Bare: true}, nil
 	}
 	return nil, fmt.Errorf("no move in the final JSON object: give a nonempty type or action object")
+}
+
+// rejectDuplicateReplyKeys checks the raw final candidate before map decoding
+// can silently overwrite an earlier member. Names are compared exactly after
+// JSON unescaping: variable bindings such as A and a remain distinct. Each
+// object has its own namespace, including objects nested inside arrays.
+func rejectDuplicateReplyKeys(raw string) error {
+	d := json.NewDecoder(strings.NewReader(raw))
+	d.UseNumber()
+	var value func() error
+	value = func() error {
+		token, err := d.Token()
+		if err != nil {
+			return err
+		}
+		delim, compound := token.(json.Delim)
+		if !compound {
+			return nil
+		}
+		switch delim {
+		case '{':
+			seen := map[string]bool{}
+			for d.More() {
+				token, err := d.Token()
+				if err != nil {
+					return err
+				}
+				key, ok := token.(string)
+				if !ok {
+					return fmt.Errorf("object member name must be a string")
+				}
+				if seen[key] {
+					return fmt.Errorf("duplicate JSON member %q", key)
+				}
+				seen[key] = true
+				if err := value(); err != nil {
+					return err
+				}
+			}
+		case '[':
+			for d.More() {
+				if err := value(); err != nil {
+					return err
+				}
+			}
+		default:
+			return fmt.Errorf("unexpected delimiter %q", delim)
+		}
+		_, err = d.Token()
+		return err
+	}
+	if err := value(); err != nil {
+		return err
+	}
+	if _, err := d.Token(); err != io.EOF {
+		return fmt.Errorf("expected one JSON value")
+	}
+	return nil
 }
 
 // moveOf reads a move object; ok is false if it has no type. err is set for
@@ -824,6 +892,9 @@ func str1(v interface{}) string {
 
 func number(v interface{}) (float64, bool) {
 	switch x := v.(type) {
+	case json.Number:
+		f, err := x.Float64()
+		return f, err == nil
 	case float64:
 		return x, true
 	case string:
@@ -1039,7 +1110,7 @@ func jsonKind(v interface{}) string {
 	switch v.(type) {
 	case bool:
 		return "true or false"
-	case float64:
+	case float64, json.Number:
 		return "a number"
 	case map[string]interface{}:
 		return "an object"
