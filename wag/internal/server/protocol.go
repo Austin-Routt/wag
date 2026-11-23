@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"sort"
 	"strings"
 
@@ -647,6 +648,14 @@ func ParseReplyFull(reply string) (*Reply, error) {
 	// The final JSON candidate is authoritative. A malformed or truncated
 	// final answer must not cause an earlier example to become a real move.
 	final := objs[len(objs)-1]
+	// Well-formed JSON first. The decoder's nesting limit then bounds the
+	// duplicate scan below, whose recursion has none of its own (on Go 1.24
+	// a reply of millions of "[" overflowed the stack, a fatal error), and a
+	// truncated move keeps the decoder's message, which is the feedback the
+	// model is given and what a recorded trace replays against.
+	if err := json.Unmarshal([]byte(final), new(json.RawMessage)); err != nil {
+		return nil, fmt.Errorf("final move JSON: %w", err)
+	}
 	if err := rejectDuplicateReplyKeys(final); err != nil {
 		return nil, fmt.Errorf("final move JSON: %w", err)
 	}
@@ -890,20 +899,29 @@ func str1(v interface{}) string {
 	return strings.Join(strs(v), " ")
 }
 
+// number reads a finite number: NaN or an infinity ("NaN", "inf", 1e400) is
+// no number, since a record holding one cannot be saved as JSON.
 func number(v interface{}) (float64, bool) {
+	var f float64
 	switch x := v.(type) {
 	case json.Number:
-		f, err := x.Float64()
-		return f, err == nil
-	case float64:
-		return x, true
-	case string:
-		var f float64
-		if _, err := fmt.Sscanf(strings.TrimSpace(x), "%g", &f); err == nil {
-			return f, true
+		var err error
+		if f, err = x.Float64(); err != nil {
+			return 0, false
 		}
+	case float64:
+		f = x
+	case string:
+		if _, err := fmt.Sscanf(strings.TrimSpace(x), "%g", &f); err != nil {
+			return 0, false
+		}
+	default:
+		return 0, false
 	}
-	return 0, false
+	if math.IsNaN(f) || math.IsInf(f, 0) {
+		return 0, false
+	}
+	return f, true
 }
 
 func expectations(v interface{}) []Expectation {
