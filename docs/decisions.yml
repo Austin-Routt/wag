@@ -1076,16 +1076,22 @@ decisions:
   decider: owner
   priority: 2
   status: decided
-  docs: ["docs/plan.md §7 item 4", "docs/process.md §3"]
+  docs: ["docs/plan.md §7 item 4", "docs/process.md §3", "docs/llm.md"]
   decided:
     date: "2026-11-22"
-    by: owner (standing rule of 2026-11-22)
+    by: owner (standing rule of 2026-11-22); amended by the owner, 2026-11-23
     decision: >-
       Yes, for bounded runs after the integrity fixes of 2026-11-22: each run
       has hard caps on calls, tokens and cost, and stop conditions, set by the
       owner for that run; runs with the owner's keys run on the owner's
-      machine (process §3).
-    recorded: "docs/decisions.yml; to apply: docs/plan.md and docs/process.md"
+      machine (process §3). Amended by the owner on 2026-11-23: limits are
+      optional, and no limit is the default, since a local model, a prepaid
+      plan or a free tier may need none; --unlimited says so explicitly, and
+      cannot be combined with a limit. The call cap is exact; token and cost
+      limits are estimates, not billing ceilings. Every run counts its calls
+      and the usage reported, and records them with its limits, or none, in
+      its output folder (docs/llm.md).
+    recorded: "docs/decisions.yml; wag-llm play and annotate, applied 2026-11-23 (docs/llm.md); to apply: the dashboard (stage 2)"
 
 - id: D047
   title: The candidates threshold

@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/yourorg/wag/internal/annotate"
 	"github.com/yourorg/wag/internal/llm"
@@ -67,15 +68,11 @@ func annotateCmd(ctx context.Context, args []string) error {
 		}
 		rev = &p
 	}
-	used := append([]llm.Profile{}, ann...)
-	if rev != nil {
-		used = append(used, *rev)
-	}
-	budget, err := limits.budget(used)
+	budget, err := limits.budget()
 	if err != nil {
 		return err
 	}
-	defer reportBudget(os.Stderr, budget)
+	started := time.Now()
 	clients := map[string]*llm.Client{}
 	for _, p := range append(append([]llm.Profile{}, ann...), ps...) {
 		if _, done := clients[p.Name]; done {
@@ -150,6 +147,21 @@ func annotateCmd(ctx context.Context, args []string) error {
 			return err
 		}
 	}
+	// The run calls its annotators and reviewer, as profiled now: a continued
+	// run, those saved in it, whatever this invocation's --annotators.
+	var called []llm.Profile
+	for _, s := range run.Settings.Annotators {
+		if p, ok := byName[s.Name]; ok {
+			called = append(called, p)
+		}
+	}
+	if r := run.Settings.Reviewer; r != nil {
+		if p, ok := byName[r.Name]; ok {
+			called = append(called, p)
+		}
+	}
+	limits.note(os.Stderr, budget, called)
+	defer limits.finish(os.Stderr, run.Dir, "annotate", budget, started)
 	for name, c := range clients {
 		if err := run.Attach(name, c); err != nil {
 			return err

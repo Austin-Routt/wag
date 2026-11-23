@@ -7,12 +7,17 @@ import (
 	"sync"
 )
 
-// Budget bounds client attempts for one invocation, retries included. Token
-// and price-table cost reservations are estimates, not provider billing ceilings:
-// hidden framing and provider behavior are not measured here. A zero limit is
-// disabled. Configuration must remain immutable while the budget is in use.
-// Pending reservations are shared safely by concurrent clients. No state is
-// restored from an earlier invocation or a resumed annotation directory.
+// Budget is one invocation's account of its model calls (D046). It always
+// counts: every client attempt, retries included; the tokens providers
+// report; their cost where the price table has the profile; and the attempts
+// with no reported usage. Limits are optional, and none is the default (the
+// owner, 2026-11-23). MaxCalls caps attempts exactly. MaxTokens and MaxCost
+// reserve an estimate of each attempt before it is sent and refuse one that
+// would pass them: estimates, not provider billing ceilings, since hidden
+// framing and provider behavior are not measured here. A zero limit is no
+// limit. The configuration must not change while the budget is in use; one
+// budget may serve concurrent clients. Nothing is restored from an earlier
+// invocation or a resumed annotation directory.
 type Budget struct {
 	MaxCalls  int
 	MaxTokens int
@@ -34,12 +39,17 @@ type Price struct {
 	Output float64 `json:"output"`
 }
 
-// Spent records calls and accounted usage/cost; absent or invalid usage uses
-// conservative reservation fallbacks. The attempt trace retains raw usage.
+// Spent is what an invocation's attempts used. Calls counts every attempt.
+// Tokens and Cost are what providers reported, priced from the table; under a
+// token or cost limit, a count that was not reported is taken at its estimate
+// (the trace keeps the raw usage). Unreported counts the attempts, failed ones
+// included, for which no usage was reported: without a token or cost limit
+// their tokens are not in Tokens.
 type Spent struct {
-	Calls  int     `json:"calls"`
-	Tokens int     `json:"tokens"`
-	Cost   float64 `json:"cost"`
+	Calls      int     `json:"calls"`
+	Tokens     int     `json:"tokens"`
+	Cost       float64 `json:"cost"`
+	Unreported int     `json:"unreported"`
 }
 
 type BudgetError struct {
@@ -76,8 +86,26 @@ func (b *Budget) Check() error {
 	return nil
 }
 
+// Limited reports whether the budget sets any limit.
 func (b *Budget) Limited() bool {
 	return b != nil && (b.MaxCalls > 0 || b.MaxTokens > 0 || b.MaxCost > 0)
+}
+
+// estimates reports whether attempts are reserved at an estimate: under a
+// token or cost limit.
+func (b *Budget) estimates() bool {
+	return b != nil && (b.MaxTokens > 0 || b.MaxCost > 0)
+}
+
+// Halted is the accounting violation that stopped the invocation's later
+// attempts ("" if none).
+func (b *Budget) Halted() string {
+	if b == nil {
+		return ""
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.halted
 }
 
 func (b *Budget) Refused() bool {
@@ -159,8 +187,10 @@ func priced(in, out int, p Price) float64 {
 	return float64(in)/1e6*p.Input + float64(out)/1e6*p.Output
 }
 
-// Reserve refuses an attempt before dispatch if its invocation call count or
-// estimated reservation would exceed a configured limit.
+// Reserve is called before each attempt. It holds the attempt (and, under a
+// token or cost limit, its estimate) until Charge, and refuses the attempt
+// before it is sent if that would pass a limit. Without limits it refuses
+// nothing.
 func (b *Budget) Reserve(p Profile, req Request) (Spent, error) {
 	if b == nil {
 		return Spent{}, nil
@@ -174,21 +204,18 @@ func (b *Budget) Reserve(p Profile, req Request) (Spent, error) {
 	if err := b.Check(); err != nil {
 		return refuse(err.Error())
 	}
-	if !b.Limited() {
-		return Spent{}, nil
-	}
 	w := Spent{Calls: 1}
-	if b.MaxTokens > 0 || b.MaxCost > 0 {
+	if b.estimates() {
 		in, out, err := estimate(p, req)
 		if err != nil {
 			return refuse(err.Error())
 		}
 		w.Tokens = in + out // estimate checked this sum
-		if b.MaxCost > 0 {
-			pr, ok := b.price(p)
-			if !ok {
-				return refuse("no price for this profile/model, so estimated cost is unknown")
-			}
+		pr, ok := b.price(p)
+		if !ok && b.MaxCost > 0 {
+			return refuse("no price for this profile/model, so estimated cost is unknown")
+		}
+		if ok {
 			w.Cost = priced(in, out, pr)
 			if !finiteNonnegative(w.Cost) {
 				return refuse("estimated cost overflows accounting")
@@ -226,8 +253,13 @@ func (b *Budget) Reserve(p Profile, req Request) (Spent, error) {
 }
 
 // reportedUsage uses reported components where coherent and reservation
-// components where absent. Gemini output excludes separately reported reasoning.
-// A reported total with a reported input can supply the full output count.
+// components where absent. Gemini counts its thoughts apart from the answer;
+// the other providers count reasoning within the completion, except that
+// reasoning larger than the completion cannot be part of it, and is counted
+// apart (xAI reports it so). A reported total with a reported input supplies
+// the output: a total below the parts that are known is a violation, and
+// what a total adds to them (reasoning reported apart, Gemini's tool-use
+// prompt) is charged as output, so a larger total never credits.
 func reportedUsage(p Profile, req Request, u Usage, in, out int) (int, int, error) {
 	for _, count := range []*int{u.InputTokens, u.OutputTokens, u.ReasoningTokens, u.CachedTokens, u.TotalTokens} {
 		if count != nil && *count < 0 {
@@ -237,48 +269,44 @@ func reportedUsage(p Profile, req Request, u Usage, in, out int) (int, int, erro
 	if u.InputTokens != nil {
 		in = *u.InputTokens
 	}
+	// known is the output the provider reported in parts.
+	known, ok := 0, true
 	if p.Provider == "gemini" {
 		answer, reasoning := req.MaxOutputTokens, *req.ThinkingBudget
 		if u.OutputTokens != nil {
 			answer = *u.OutputTokens
+			known = *u.OutputTokens
 		}
 		if u.ReasoningTokens != nil {
 			reasoning = *u.ReasoningTokens
+			if known, ok = addCount(known, *u.ReasoningTokens); !ok {
+				return 0, 0, fmt.Errorf("reported output overflows accounting")
+			}
 		}
-		var ok bool
 		if out, ok = addCount(answer, reasoning); !ok {
 			return 0, 0, fmt.Errorf("output/reasoning usage overflows accounting")
 		}
 	} else {
 		if u.OutputTokens != nil {
 			out = *u.OutputTokens
+			known = *u.OutputTokens
 		}
 		if u.ReasoningTokens != nil {
-			if u.OutputTokens != nil && *u.ReasoningTokens > out {
-				return 0, 0, fmt.Errorf("reasoning usage exceeds inclusive output usage")
+			if u.OutputTokens != nil && *u.ReasoningTokens > *u.OutputTokens {
+				if out, ok = addCount(*u.OutputTokens, *u.ReasoningTokens); !ok {
+					return 0, 0, fmt.Errorf("output/reasoning usage overflows accounting")
+				}
+				known = out
+			} else {
+				out = max(out, *u.ReasoningTokens)
+				known = max(known, *u.ReasoningTokens)
 			}
-			out = max(out, *u.ReasoningTokens)
 		}
 	}
 	if u.TotalTokens != nil {
-		minimumOut := 0
-		if u.OutputTokens != nil {
-			minimumOut = *u.OutputTokens
-		}
-		if p.Provider == "gemini" && u.ReasoningTokens != nil {
-			var ok bool
-			if minimumOut, ok = addCount(minimumOut, *u.ReasoningTokens); !ok {
-				return 0, 0, fmt.Errorf("reported output overflows accounting")
-			}
-		} else if u.ReasoningTokens != nil {
-			// Inclusive reasoning is a known part of output even when the
-			// provider omitted the aggregate output field.
-			minimumOut = max(minimumOut, *u.ReasoningTokens)
-		}
-		minimum := minimumOut
+		minimum := known
 		if u.InputTokens != nil {
-			var ok bool
-			if minimum, ok = addCount(*u.InputTokens, minimumOut); !ok {
+			if minimum, ok = addCount(*u.InputTokens, known); !ok {
 				return 0, 0, fmt.Errorf("reported usage overflows accounting")
 			}
 		}
@@ -286,12 +314,7 @@ func reportedUsage(p Profile, req Request, u Usage, in, out int) (int, int, erro
 			return 0, 0, fmt.Errorf("total usage is below reported components")
 		}
 		if u.InputTokens != nil {
-			inferredOut := *u.TotalTokens - *u.InputTokens
-			completeOut := u.OutputTokens != nil && (p.Provider != "gemini" || u.ReasoningTokens != nil)
-			if completeOut && inferredOut != out {
-				return 0, 0, fmt.Errorf("total usage disagrees with reported components")
-			}
-			out = inferredOut
+			out = *u.TotalTokens - *u.InputTokens
 		}
 	}
 	if _, ok := addCount(in, out); !ok {
@@ -300,17 +323,23 @@ func reportedUsage(p Profile, req Request, u Usage, in, out int) (int, int, erro
 	return in, out, nil
 }
 
-// Charge must be called exactly once for a successful reservation. Failed calls
-// retain their estimate; malformed usage retains at least that estimate and any
-// larger nonnegative observed components. An accounting violation stops future
-// attempts, but cannot undo already-dispatched requests or guarantee billing.
+// Charge must be called exactly once for a successful reservation. Without a
+// token or cost limit it counts what was reported, and stops nothing. Under
+// one, failed calls retain their estimate; malformed usage retains at least
+// that estimate and any larger nonnegative observed components. An
+// accounting violation stops future attempts, but cannot undo
+// already-dispatched requests or guarantee billing.
 func (b *Budget) Charge(p Profile, req Request, w Spent, resp *Response) error {
-	if !b.Limited() {
+	if b == nil {
+		return nil
+	}
+	if !b.estimates() {
+		b.count(p, w, resp)
 		return nil
 	}
 	used := w
 	why := ""
-	if resp != nil && w.Tokens > 0 {
+	if resp != nil {
 		in, out, err := estimate(p, req)
 		if err != nil {
 			why = err.Error()
@@ -328,10 +357,10 @@ func (b *Budget) Charge(p Profile, req Request, w Spent, resp *Response) error {
 					observedOut = *u.OutputTokens
 				}
 				if u.ReasoningTokens != nil && *u.ReasoningTokens > 0 {
-					if p.Provider == "gemini" {
+					// Reasoning apart from the answer (Gemini's, or larger
+					// than the completion) adds to it.
+					if p.Provider == "gemini" || *u.ReasoningTokens > observedOut {
 						observedOut, _ = addCount(observedOut, *u.ReasoningTokens)
-					} else {
-						observedOut = max(observedOut, *u.ReasoningTokens)
 					}
 				}
 				gotOut = max(gotOut, observedOut)
@@ -340,8 +369,7 @@ func (b *Budget) Charge(p Profile, req Request, w Spent, resp *Response) error {
 			if u.TotalTokens != nil && *u.TotalTokens > used.Tokens {
 				used.Tokens = *u.TotalTokens
 			}
-			if b.MaxCost > 0 {
-				pr, _ := b.price(p)
+			if pr, ok := b.price(p); ok {
 				used.Cost = priced(gotIn, gotOut, pr)
 				if u.TotalTokens != nil && *u.TotalTokens > 0 && (usageErr != nil || u.InputTokens == nil) {
 					used.Cost = math.Max(used.Cost, float64(*u.TotalTokens)/1e6*math.Max(pr.Input, pr.Output))
@@ -351,7 +379,9 @@ func (b *Budget) Charge(p Profile, req Request, w Spent, resp *Response) error {
 					why = "reported cost overflows accounting"
 				}
 			}
-			if used.Tokens > w.Tokens || used.Cost > w.Cost {
+			// The cost is compared only under a cost limit: without one it is
+			// recorded, not enforced.
+			if used.Tokens > w.Tokens || (b.MaxCost > 0 && used.Cost > w.Cost) {
 				if why == "" {
 					why = "accounted usage exceeded its reserved estimate; observed usage is retained"
 				}
@@ -375,10 +405,60 @@ func (b *Budget) Charge(p Profile, req Request, w Spent, resp *Response) error {
 		b.spent.Cost = math.MaxFloat64
 		why = "cost accounting overflow"
 	}
+	if resp == nil || !reportedAny(resp.Usage) {
+		b.spent.Unreported++
+	}
 	if why != "" {
 		b.halted = why
 		b.refused++
 		return budgetError(p, why)
 	}
 	return nil
+}
+
+func usable(n *int) bool { return n != nil && *n >= 0 }
+
+// reportedAny says whether a usage reports a count of tokens: input, output,
+// reasoning or total.
+func reportedAny(u Usage) bool {
+	return usable(u.InputTokens) || usable(u.OutputTokens) || usable(u.ReasoningTokens) || usable(u.TotalTokens)
+}
+
+// count records an attempt of a budget that estimates nothing (no limit, or
+// a call cap alone): the call, and the usage the provider reported, the
+// larger of its total and its parts, with reasoning added where it is apart
+// from the answer (as in reportedUsage), priced where the table has the
+// profile. A negative count is not usage. It refuses and stops nothing.
+func (b *Budget) count(p Profile, w Spent, resp *Response) {
+	tokens, cost := 0, 0.0
+	reported := resp != nil && reportedAny(resp.Usage)
+	if reported {
+		get := func(n *int) int {
+			if !usable(n) {
+				return 0
+			}
+			return *n
+		}
+		u := resp.Usage
+		in, out, reasoning := get(u.InputTokens), get(u.OutputTokens), get(u.ReasoningTokens)
+		if p.Provider == "gemini" || reasoning > out {
+			out, _ = addCount(out, reasoning)
+		}
+		tokens, _ = addCount(in, out)
+		tokens = max(tokens, get(u.TotalTokens))
+		if pr, ok := b.price(p); ok {
+			cost = priced(in, tokens-in, pr) // a total's excess over the parts is output
+		}
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	b.pending.Calls -= w.Calls
+	b.spent.Calls, _ = addCount(b.spent.Calls, w.Calls)
+	b.spent.Tokens, _ = addCount(b.spent.Tokens, tokens)
+	if finiteNonnegative(cost) {
+		b.spent.Cost = math.Min(b.spent.Cost+cost, math.MaxFloat64)
+	}
+	if !reported {
+		b.spent.Unreported++
+	}
 }

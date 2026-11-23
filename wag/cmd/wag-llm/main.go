@@ -285,11 +285,11 @@ func play(ctx context.Context, args []string) error {
 			used = append(used, p)
 		}
 	}
-	budget, err := limits.budget(used)
+	budget, err := limits.budget()
 	if err != nil {
 		return err
 	}
-	defer reportBudget(os.Stderr, budget)
+	started := time.Now()
 	have := map[string]bool{}
 	for _, p := range ps {
 		c, err := llm.NewClient(p)
@@ -306,6 +306,8 @@ func play(ctx context.Context, args []string) error {
 	if err := os.MkdirAll(*out, 0o755); err != nil {
 		return err
 	}
+	limits.note(os.Stderr, budget, used)
+	defer limits.finish(os.Stderr, *out, "play", budget, started)
 	ts := httptest.NewServer(srv.Handler())
 	defer ts.Close()
 	sum, err := os.OpenFile(filepath.Join(*out, "summary.jsonl"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)

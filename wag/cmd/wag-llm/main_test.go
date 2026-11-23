@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/yourorg/wag/internal/llm"
 )
 
 // A headless game with a scripted model and a rule bot writes its trace
@@ -108,40 +106,45 @@ func TestAnnotate(t *testing.T) {
 	}
 }
 
-// D046: a run that calls a provider with an API key needs a limit; mock and
-// local providers need none; a cost limit needs prices.
+// D046 as the owner amended it (2026-11-23): no limit by default, whatever
+// the profiles; --unlimited says so and cannot be combined with a limit; a
+// cost limit needs prices. A budget is always made, to count.
 func TestBudgetFlags(t *testing.T) {
 	dir := t.TempDir()
 	prices := filepath.Join(dir, "prices.json")
 	os.WriteFile(prices, []byte(`{"m": {"input": 0.3, "output": 2.5}}`), 0o644)
-	keyed := []llm.Profile{{Name: "k", Provider: "anthropic"}}
 	for _, tc := range []struct {
 		args    []string
-		used    []llm.Profile
 		limited bool
 		err     string
 	}{
-		{nil, keyed, false, "D046"},
-		{nil, []llm.Profile{{Name: "m", Provider: "mock"}, {Name: "l", Provider: "ollama"}}, false, ""},
-		{[]string{"--max-calls", "5"}, keyed, true, ""},
-		{[]string{"--max-cost", "1"}, keyed, false, "--prices"},
-		{[]string{"--max-cost", "1", "--prices", prices}, keyed, false, "--max-calls"},
-		{[]string{"--max-calls", "5", "--max-cost", "1", "--prices", prices}, keyed, true, ""},
-		{[]string{"--max-calls", "-1"}, keyed, false, "negative"},
+		{nil, false, ""},
+		{[]string{"--unlimited"}, false, ""},
+		{[]string{"--max-calls", "5"}, true, ""},
+		{[]string{"--max-tokens", "500"}, true, ""},
+		{[]string{"--max-cost", "1"}, false, "--prices"},
+		{[]string{"--max-cost", "1", "--prices", prices}, true, ""},
+		{[]string{"--max-calls", "5", "--max-cost", "1", "--prices", prices}, true, ""},
+		{[]string{"--prices", prices}, false, ""},
+		{[]string{"--unlimited", "--max-calls", "5"}, false, "--unlimited"},
+		{[]string{"--unlimited", "--max-tokens", "500"}, false, "--unlimited"},
+		{[]string{"--unlimited", "--max-cost", "1", "--prices", prices}, false, "--unlimited"},
+		{[]string{"--unlimited", "--max-calls", "0"}, false, ""},
+		{[]string{"--max-calls", "-1"}, false, "negative"},
 	} {
 		fs := flag.NewFlagSet("t", flag.ContinueOnError)
 		f := addBudgetFlags(fs)
 		if err := fs.Parse(tc.args); err != nil {
 			t.Fatal(err)
 		}
-		b, err := f.budget(tc.used)
+		b, err := f.budget()
 		if tc.err != "" {
 			if err == nil || !strings.Contains(err.Error(), tc.err) {
 				t.Errorf("%v: got %v, want an error about %s", tc.args, err, tc.err)
 			}
 			continue
 		}
-		if err != nil || b.Limited() != tc.limited {
+		if err != nil || b == nil || b.Limited() != tc.limited {
 			t.Errorf("%v: budget %+v, %v", tc.args, b, err)
 		}
 	}

@@ -44,7 +44,7 @@ Everything below can be done in the browser, with no command line and no environ
 | `players.json` | The players you added (service, model, settings; no keys). |
 | `keys.json` | The keys you asked to remember (only then). |
 | `games/DATE_gameN/` | Every game with a model seat, saved after each move: `trace.jsonl` (the trace file, below) and `export.json` (loads in the browser). The game bar's *Saved ✓* opens it. |
-| `annotation/RUN/` | One folder per annotation run; its `README.txt` says what each file is. `run.json` holds the settings, the models and the inputs' hashes. `annotations/NAME.json` holds each annotator's annotations, in the guidelines' format, which `validate.py` and `agreement.py` read. `calls.jsonl` holds every call. `review/model-NAME.json` holds the reviewer's decisions, `review/human.json` your verdicts, and `report.json` validation and agreement. |
+| `annotation/RUN/` | One folder per annotation run; its `README.txt` says what each file is. `run.json` holds the settings, the models and the inputs' hashes. `annotations/NAME.json` holds each annotator's annotations, in the guidelines' format, which `validate.py` and `agreement.py` read. `calls.jsonl` holds every call. `review/model-NAME.json` holds the reviewer's decisions, `review/human.json` your verdicts, and `report.json` validation and agreement. A folder made by `wag-llm annotate` also has `budget.jsonl`, a line for each invocation's budget ([below](#a-runs-budget-d046)). |
 | `datasets/NAME/` | Your datasets: `items.json` (claims in the batch-2 format), and optionally `guidelines.md`, `gold.json`, `lexicon.json`. |
 
 The command line below (`wag-llm`) does the same, writing to the folders you give it.
@@ -107,15 +107,16 @@ Free-tier limits are low and change; AI Studio shows your project's. They are co
 
 ### A run's budget (D046)
 
-`wag-llm play` and `wag-llm annotate` accept a **per-invocation call cap** and
-optional token/cost allowances. A resumed annotation directory starts a **fresh
-allowance**; these limits and spending are not yet persisted as a cumulative
-run budget.
+`wag-llm play` and `wag-llm annotate` count what each invocation uses, and
+can limit it. **No limit is the default** (the owner, 2026-11-23): a local
+model, a prepaid plan or a free tier may need none. `--unlimited` says so
+explicitly; it cannot be combined with a limit. The limits cover every client
+of the invocation together, both annotators of a run, say.
 
-- `--max-calls N` stops this invocation before its N+1th **client attempt**.
-  WAG's retries count separately. The cap covers calls through WAG's client;
-  it does not count a provider's hidden internal work or calls made inside an
-  external command.
+- `--max-calls N` stops the invocation before its N+1th **client attempt**.
+  WAG's retries are attempts. The cap covers calls through WAG's client; it
+  does not count a provider's hidden internal work or calls made inside a
+  `command` profile's program.
 - `--max-tokens N` refuses a call when its **estimated reservation**, plus
   accounted and in-flight usage, would exceed N. The estimate uses supplied
   system/message text bytes, supplied structured-output schema bytes, and
@@ -132,35 +133,60 @@ run budget.
   provide finite, nonnegative input and output rates; explicit zero is allowed.
   This is a price-table estimate, not an invoice ceiling. It does not discover
   current prices, tier changes, cache charges or other provider fees.
-  Rates are resolved from the configured profile/model; native callers that
-  override a request's model must keep that price mapping aligned themselves.
+  Rates are resolved from the configured profile/model, also when a provider
+  answers with another model (a fallback); native callers that override a
+  request's model must keep that price mapping aligned themselves. `--prices`
+  without `--max-cost` prices what is used without limiting it.
 
 A profile's `extra` fields can replace its messages or output limit. Therefore
-nonempty `extra` is refused when token/cost estimation is enabled. Unbudgeted
-and call-only configurations retain their custom-field support.
+nonempty `extra` is refused when token/cost estimation is enabled. Runs with no
+limit or a call cap alone keep their custom fields.
 
-After a successful attempt, coherent reported usage replaces the corresponding
-estimates. Missing components retain conservative fallbacks; failed attempts
-retain their reservation because they may be billed. Negative or inconsistent
-usage cannot create credit: the checker charges at least the reservation and
-any larger nonnegative observations, records the problem and stops later
-attempts. Usage exceeding the reservation is also retained and stops later
-attempts. The actual response and usage remain in the trace alongside the
-accounting error. Already dispatched concurrent calls cannot be undone, and a
-reported overrun demonstrates why estimates are not hard billing guarantees.
+**What is counted.** Every invocation counts its client attempts, the tokens
+the providers report, their price-table cost when `--prices` is given, and the
+attempts that reported no usage, failed ones included. Reasoning is counted as
+each provider reports it: Gemini's thoughts apart from the answer; other
+providers' reasoning within the completion, unless it is larger than the
+completion, which it then cannot be part of (xAI reports it apart). A reported
+total larger than its parts is counted whole, the excess as output; a total
+smaller than the parts that are known is malformed. Without a token or cost
+limit, an attempt with no reported usage adds no tokens, and the count says how
+many there were.
+
+Under a token or cost limit, coherent reported usage replaces the corresponding
+estimates after a successful attempt. Missing components retain conservative
+fallbacks; failed attempts retain their reservation because they may be
+billed. Negative or inconsistent usage cannot create credit: the checker
+charges at least the reservation and any larger nonnegative observations,
+records the problem and stops later attempts. Usage exceeding the reservation
+is also retained and stops later attempts; a cost is compared with its
+reservation only under a cost limit. The actual response and usage remain in
+the trace alongside the accounting error. Already dispatched concurrent calls
+cannot be undone, and a reported overrun demonstrates why estimates are not
+hard billing guarantees.
 
 A refused call or accounting violation has error kind `budget`. Annotation
 stops the affected annotator; `play` saves its trace/export and starts no further
-game. The invocation prints accounted usage at the end, explicitly labelled
-with its estimation limits.
+game.
 
-**Profiles that require an API key, or configure `api_key_env`/an explicit key,
-need a positive `--max-calls`.** This includes keyed compatible endpoints and
-keyed overrides of local provider names. Token/cost estimates can supplement
-that cap, but cannot replace it. Unkeyed local servers and mock profiles need
-no cap. As D046 says, runs with the owner's keys execute on the owner's machine
-with an allowance chosen for that invocation. No live API call was needed to
-test these controls. The dashboard does not take a budget yet (stage 2).
+**The record.** At the end the invocation prints what it used and appends one
+line to `budget.jsonl` in its output folder: the command, its start and end,
+its limits or `"unlimited": true` (with `"default": true` when no limit was
+given, rather than `--unlimited`), the price table's file name and SHA-256,
+what was counted (`spent`: `calls`, `tokens`, `cost`, `unreported`), whether a
+call was refused, and why an accounting violation stopped the invocation. Each
+invocation has its own allowance, a resumed annotation run included, and its
+own line, so a folder's lines sum to what was spent in it.
+
+**Keys.** A profile whose provider needs an API key, or that names one
+(`api_key_env`, or a key typed into the dashboard), may be billed. With no
+limit by default, the invocation prints one note naming those profiles;
+`--unlimited` drops it. A continued annotation run calls, and names, the
+annotators and reviewer saved in it, whatever the invocation's `--annotators`.
+As D046 says, runs with the owner's keys run on the owner's machine. No live
+API call was needed to test these controls: the tests use mock providers and
+local test servers. The dashboard does not take a budget yet (stage 2): its
+runs have no limit, and no record beyond their traces.
 
 ## Profiles
 
@@ -236,7 +262,7 @@ The events, in order:
 3. `decision`: every decision, with the board, the reply, the stated reasoning, the move, its result and effects, predictions checked, and alternatives tried.
 4. `game_end`: the outcome, every final label, and the verdicts under each context.
 
-`wag-llm play` also writes each game's export, which the browser can load, and a line of `summary.jsonl`. The summary line holds:
+`wag-llm play` also writes each game's export, which the browser can load, a line of `summary.jsonl` for each game, and a line of `budget.jsonl` for each invocation ([its budget](#a-runs-budget-d046)). The summary line holds:
 - the winner;
 - the decisions, how many were rejected and how many could not be parsed;
 - the calls and how many failed, by kind;

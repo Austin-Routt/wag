@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -16,7 +17,11 @@ func budgetFromArgs(t *testing.T, args []string, profiles []llm.Profile) (*llm.B
 	if err := fs.Parse(args); err != nil {
 		t.Fatal(err)
 	}
-	return f.budget(profiles)
+	b, err := f.budget()
+	if err == nil {
+		f.note(io.Discard, b, profiles)
+	}
+	return b, err
 }
 
 func TestBudgetHardeningCLILimitsAndPrices(t *testing.T) {
@@ -48,23 +53,29 @@ func TestBudgetHardeningCLILimitsAndPrices(t *testing.T) {
 	}
 }
 
-func TestBudgetHardeningKeyedProfilesNeedCallCap(t *testing.T) {
+// The patch as received required --max-calls of keyed profiles; the owner
+// decided (D046, 2026-11-23) that no limit is the default, so a keyed profile
+// starts with no flag, with --unlimited, or with any one limit.
+func TestBudgetKeyedProfilesStartWithoutALimit(t *testing.T) {
 	for _, p := range []llm.Profile{
 		{Name: "remote", Provider: "openai-compatible", BaseURL: "https://example.invalid/v1", APIKeyEnv: "UNUSED_BUDGET_TEST_KEY"},
 		{Name: "inline", Provider: "openai-compatible", BaseURL: "https://example.invalid/v1", APIKey: "not-a-real-key"},
 		{Name: "keyed", Provider: "anthropic"},
 		{Name: "overridden", Provider: "ollama", BaseURL: "https://example.invalid/v1", APIKeyEnv: "UNUSED_BUDGET_TEST_KEY"},
 	} {
-		for _, args := range [][]string{nil, {"--max-tokens", "1000"}} {
-			if _, err := budgetFromArgs(t, args, []llm.Profile{p}); err == nil {
-				t.Errorf("keyed profile %s started without a call cap: %v", p.Name, args)
+		if !keyed(p) {
+			t.Errorf("profile %s is not seen to use a key", p.Name)
+		}
+		for _, args := range [][]string{nil, {"--unlimited"}, {"--max-calls", "1"}, {"--max-tokens", "1000"}} {
+			b, err := budgetFromArgs(t, args, []llm.Profile{p})
+			if err != nil || b == nil {
+				t.Errorf("%v refused for %s: %v", args, p.Name, err)
 			}
 		}
-		if _, err := budgetFromArgs(t, []string{"--max-calls", "1"}, []llm.Profile{p}); err != nil {
-			t.Errorf("explicit call cap refused for %s: %v", p.Name, err)
-		}
 	}
-	if _, err := budgetFromArgs(t, nil, []llm.Profile{{Name: "local", Provider: "ollama"}, {Name: "mock", Provider: "mock"}}); err != nil {
-		t.Fatalf("unkeyed local/mock compatibility changed: %v", err)
+	for _, p := range []llm.Profile{{Name: "local", Provider: "ollama"}, {Name: "mock", Provider: "mock"}} {
+		if keyed(p) {
+			t.Errorf("profile %s is seen to use a key", p.Name)
+		}
 	}
 }
