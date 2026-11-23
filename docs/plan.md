@@ -34,14 +34,16 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 |---|---|---|
 | 0 | The decisions of 2026-11-22 in the register (63 decided, 8 open; D084, the reserved name `is` the engine swap brought to light, decided), this section, `process.md`. After ChatGPT's review of stages 0 and 1 ([what was adopted](review-2026-11-22-stages.md)): the owner's D078 (history kept), D044 and D080 (licences now); D081 decided; ten refinements; 6 open, four of them questions of fact for a person | done 2026-11-22 |
 | 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text. Closed after ChatGPT's review of stages 0 and 1: CI on both Go versions, a registry gate that fails closed; D084 and D081 applied through proposal [D081-D084](proposals/D081-D084.md); annotation identity at every entry point; a malformed final move refused, never replaced; typed answers instead of free-text bridges; MPL-2.0 and CC BY 4.0 | done 2026-11-22 |
-| 2 | The first slice, practical reasoning and the consequences: D063 (with positive binding), D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; one versioned game profile, its catalogue, formulas and engine pinned by content; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records and the first admission policy (D076, [evidence-records.md](evidence-records.md)); API runs with hard caps shown on mock clients first (D046); book text out of the public tree (D043) | in progress |
+| 2 | The first slice, practical reasoning and the consequences: D063 (with positive binding), D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; one versioned game profile, its catalogue, formulas and engine pinned by content; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records and the first admission policy (D076, [evidence-records.md](evidence-records.md)); the [evidence implementation plan](evidence-implementation-plan.md), whose offline record checker is implemented while native binding/consent integration remains open; API runs with hard caps shown on mock clients first (D046); book text out of the public tree (D043) | in progress |
 | 3 | A bounded Kialo and API pilot on the owner's machine, with hard caps (D046): independent first passes, a lexicon not drawn from the gold, the moves players could not make recorded, development and held-out discussions kept apart, the size planned from the gain to detect | after stage 2 |
 | 4 | The other families; tier 2 from the library's records; a person's blind sample of claims; AS2 and meta-argument trials, kept only if they do better than a simpler baseline at the same cost | later |
 
 **Stage 2 is done when**, for its slice: no known contract violation; no input changed without its record (data, prompt, profile, model); every recorded event replays without asking a model again; the wrong actor, context, polarity and evidence revision are each refused by a test; what is unresolved or unavailable is stated, not guessed; and the sources and the code are reviewed at the exact versions used. These are finite checks; they do not claim that every argument people make can be expressed (after ChatGPT's review of stages 0 and 1).
 
 **Stage 2 so far:**
-- 2026-11-22: run budgets (D046). `wag-llm play` and `annotate` take hard limits on calls, tokens and cost, refuse a call before it is sent if its worst case would pass them, count retries, and do not start a run with an API key and no limit ([`llm.md`](llm.md#a-runs-budget-d046)). Tested on mock clients. The dashboard does not take a budget yet, and the spending is printed but not yet part of a run's record.
+- 2026-11-22: invocation budgets (D046), with follow-up hardening. `wag-llm play` and `annotate` cap client attempts including WAG retries; keyed/credential-configured profiles require `--max-calls`. Optional token/cost reservations are explicitly estimates, not provider billing ceilings. Extra overrides are refused for estimated budgets; malformed prices/usage cannot create credit, and accounting overruns stop subsequent attempts while retaining observed usage ([`llm.md`](llm.md#a-runs-budget-d046)). Tested on mock clients. The dashboard does not take a budget yet. Limits and spending are printed but not persisted as a cumulative run allowance, so resuming a directory starts a fresh invocation budget.
+
+**Evidence increment (literature review of 2026-11-22).** [The theory review](evidence-theory-review.md) supports the record model and refines its semantics: source reports, interpretation/warrant, scope, dependence, assessment and procedural admission stay distinct. `wag-evidence/0.1` now checks offline records, retained bytes, selectors and two-party consent for consideration. Its pass does not verify facts, implement game admission, or close stage 2. Before the pilot, [E1 of the evidence plan](evidence-implementation-plan.md#e1-connect-the-first-slice-before-an-evidence-aware-game-pilot) must bind records to the actual game, preserve old citation-only traces, and test the specific CQ/admission/revision effects. The owner's existing capture, history and human-verification decisions remain unchanged; no new capture gate is introduced.
 
 ## 1. Principles
 
@@ -277,55 +279,70 @@ Some faults are not misused schemes: begging the question, the loaded question, 
 
 **Dialogue types:** Track D (§8). The presets were renamed on 2026-10-15 to "Policy question" and "Scientific question", since the game does not play deliberation or inquiry.
 
-## 7. Decisions the owner needs to make
+<a name="7-decisions-the-owner-needs-to-make"></a>
 
-1. **Book text in this public repository.**
-   - **`docs/The New Dialectic.pdf`, the whole of Walton's 1998 book,** was added and then deleted on 2026-10-15. It is still in the history (commit f891090) until the history is rewritten ([part 9 §5](review-2026-10-15-part9.md#5-the-book-in-the-repository)).
-   - `docs/book-catalogue/` transcribes the scheme book's pp. 1–138 as printed: 75 scheme entries and 75 distinct critical questions.
-   - `docs/walton-audit/cq_drafts.json` quotes 8 critical questions of the compendium.
-   - The game's data uses our own wording.
-   - **`walton.yml`'s English templates repeat the book more than a few times.** 173 of its 393 templates share eight or more words in a row with the compendium (measured 2026-10-22). The catalogue does not copy them. Replacing them with our own wording would settle it, since the formulas, not the English, are what `walton.yml` is the authority for.
+## 7. Decision record and remaining implementation
 
-   The options:
-   - make the repository private;
-   - or replace the quotations with labels, page references and paraphrases.
+The [decision register](decisions.md) is authoritative. On 22 November 2026 it
+contains 79 decided entries and six open entries: D021, D027, D041 and D085
+need the recorded verifier's page checks; D079 is reserved to the owner; D083
+needs constraint-satisfying candidate sketches and review. A generated
+candidate label of `ready` establishes structural readiness, not satisfaction
+of every semantic `needs` item or approval of its proposed meaning.
 
-   Removing them from the history means rewriting the history and force-pushing, which only the owner should decide. (This is not legal advice.)
+The earlier questions in this section now have these recorded dispositions:
 
-   **Since 2026-10-22** the private workspace offers a third way for `docs/book-catalogue/`: move the transcription there, and keep only labels and pages here. The catalogue's checker reads that file by default and would then be given it with `--book`.
-2. **A licence for WAG.** The repository has none, so others may not reuse it. Carneades and `walton.yml` are MPL-2.0.
-3. **Who verifies the catalogue,** and whether tier 1 above is the right first set. The other decisions on the catalogue's sources are listed in [catalogue-alignment.md §3 C](catalogue-alignment.md#c-decisions-on-the-sources-the-owner). Decided on 2026-10-22, all in `walton-clean/CHANGELOG.md` ("Changes decided by the owner"):
-   - compendium 33.3's formalization, lost from the upstream master under a duplicate id, is brought into `walton.yml` as `negative_consequences_reasoning`;
-   - it and the slippery slope's base case conclude `¬should_be_performed(A)`;
-   - `negative_value` gets its own conclusion and a corrected template;
-   - the consequence schemes get the exception `other_consequences(A)` (since replaced by D055's sided exceptions, 2026-10-23);
-   - the slippery slope's source year is 1992;
-   - compendium 10.2 and 53, formalized only in the upstream category files, are brought in as `whole_into_parts` and `full_slippery_slope` (the latter with its source filled in and arguments for its two 0-ary atoms);
-   - compendium 50, formalized nowhere, gets a scheme written for WAG, `precedent_slippery_slope`;
-   - the modal reading of compendium 28 (audit N8) gets a scheme written for WAG, `cause_to_effect_modal`.
-4. **Paid model access.** The free tier's 20 requests a day are one annotator on 20 claims. A batch on a paid tier costs cents to a few dollars per 50 claims at today's prices; check the provider's page.
-5. **The "other" threshold** (three claims in two discussions) and who reviews candidates.
-6. **Dialogue types (Track D, §8).** Decided by the owner on 2026-10-15:
-   - every type, playable and findable;
-   - a playable quarrel is needed for research, and comes last;
-   - the focus stays on schemes, critical questions and the Kialo gold, so Track D waits for phase 3.
+1. **Book text in the public tree (D043) and history (D078).** D043 assigns the
+   transcription, source quotations and repeated templates to the current-tree
+   cleanup in stage 2: retain private source material, use labels/page references
+   and paraphrases publicly, and preserve the copy check with hashed word
+   sequences. The implementation remains open. D078 preserves the existing
+   public history. The deleted *New Dialectic* PDF therefore remains in that
+   history; rewriting it is not a remaining choice in this plan. Earlier audit
+   inventories are retained in [part 9](review-2026-10-15-part9.md) and the
+   [stage-integration review](review-2026-11-22-stages.md).
+2. **Licences (D044, D080).** The repository now includes MPL-2.0 for WAG's
+   code and CC BY 4.0 for its own documents and annotations. The actual scope,
+   mixed files and excluded third-party material are recorded in
+   [LICENSING.md](../LICENSING.md). These choices are implemented, not open
+   questions for the owner.
+3. **Catalogue verification (D045).** Tier 1 remains the first set. Models can
+   draft and check, and work can proceed provisionally from checked entries;
+   a person supplies the required verified status. The formula/source
+   dispositions already adopted are in the register and
+   [walton-clean/CHANGELOG.md](scheme-registry/walton-clean/CHANGELOG.md).
+4. **Paid model access (D046).** Bounded runs use owner-set caps and stop
+   conditions on the owner's machine. The current CLI has a client-attempt cap
+   and estimated token/cost accounting, as described in §0 and
+   [llm.md](llm.md#a-runs-budget-d046). This is partial implementation of D046:
+   dashboard integration, persisted allowance/usage and a defensible provider
+   boundary for any claimed hard token/cost ceiling remain. Historical price
+   or free-tier figures are not a current allowance or benchmark.
+5. **Candidate threshold (D047).** Three verified sightings in two discussions or games
+   trigger owner review. Archived and strained sightings count but are
+   reported separately from clean sightings. Reaching the threshold is not
+   semantic approval of a sketch.
+6. **Dialogue types (D048–D050 and Track D).** Negotiation has its own profile
+   and a per-issue score vector. The experimental quarrel profile uses the
+   recorded fictional/model-seat and participation rules. Real discourse and
+   WAG traces serve distinct purposes: discourse exposes unanticipated
+   patterns; native traces test legality, answerability and the protocol.
+   Reconstructed Kialo play stays distinct from observed dialogue and
+   model-authored arguments. These are recorded directions for later
+   implementation, not new owner decisions. Candidate corpora still need
+   source-specific assessment.
+7. **Goal and authorities.** The goal remains that every scheme and critical
+   question can be played in some appropriate context. The book governs its
+   scheme meanings; WAG's fields and links are justified by coherence,
+   examples and measured data/play. The library supplies draft records where
+   WAG has no decision. Independent review, explicit provenance and the
+   [process](process.md) apply; empirical consensus does not replace required
+   source checks.
 
-   What remains to decide:
-   - how a negotiation is scored;
-   - the quarrel's safeguards, and whether people play it or only model seats;
-   - which corpora, under which licences.
-7. **The goal and the authorities.** Decided on 2026-10-22 ([part 13 §3](review-2026-10-22-part13.md#3-the-owners-decisions)):
-   - every scheme and critical question is to be playable in some context; the literature first, then data and play (the goal, above);
-   - the game's fields are decided by coherence, consistency and examples, then refined by data and play;
-   - `walton.yml` is the starting point of WAG's own formula layer, not its authority;
-   - fallacies are handled by the context's weights and the critical questions, with no system of their own;
-   - each book question names the NASCQ question it becomes; families organize the work and are not a mechanism;
-   - links are written as rules, on examples, and kept modular;
-   - feedback from play, verification with measured agreement, independent agents in a defined protocol, a register of open decisions, and a private development workspace ([`process.md`](process.md)).
-
-   **Also decided on 2026-10-22:** CI on the public repository ([`process.md`](process.md) §7).
-
-   **Every open decision,** these included, is now in the decision register, [`decisions.md`](decisions.md), with its priority, what it holds up and who decides it ([`process.md`](process.md) §5).
+Open decisions and implementation debt have different statuses. In particular,
+the six open register entries do not count every unfinished stage-2 task, and
+an adopted direction or a passing mock test does not establish full deployment
+or empirical validation.
 
 ## 8. Track D: dialogue types
 

@@ -105,6 +105,18 @@ The move:
 **What the parser accepts.**
 - **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error. A bracket in prose, such as a citation `[s3]`, a footnote `[1]` or a link, is not JSON: an array counts only when it is empty or starts with an object, an array or a string.
 - **Field types.** A target, scheme, question, attack type or text must be text, and the bindings an object of phrases (a number is read as a phrase). Any other value is refused by name, since dropping it would change the move: a defence without its target would be a new argument. `null` counts as absent.
+- **Unambiguous values.** Repeated JSON member names in the final candidate
+  are refused before decoding can overwrite a field. Names are compared after
+  JSON unescaping and remain case-sensitive. Numeric bindings retain their
+  exact JSON spelling: a large integer is not rounded through floating point,
+  and an exponent or trailing decimal zeros are preserved. This preserves a
+  phrase; it does not promise arbitrary-precision engine arithmetic.
+- **Historical numeric replies.** Saved moves already hold string bindings
+  and keep them. Replaying raw model replies reparses their JSON, so a trace
+  containing numbers affected by the earlier rounding/normalization can
+  differ under the corrected parser. Exact historical replay needs the
+  original WAG build/parser as well as the other pinned inputs; a changed
+  interpretation must be recorded as a migration or new replay result.
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

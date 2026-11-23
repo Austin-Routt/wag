@@ -1,0 +1,814 @@
+{
+  "schema": "wag-evidence-theory-sources-v1",
+  "review_date": "2026-11-22",
+  "repository_baseline": "6375ac2b29d04cc5a5602c10cd33bcb247dd3bbc",
+  "purpose": "Source-grounded literature registry for evidence-theory-review.md; bibliographic metadata, paraphrases and locators only.",
+  "reading_scope_policy": "Reviewer assignments report their actual reading scope; full-book reading is not claimed. Primary source claims, source criticisms and WAG recommendations remain distinct.",
+  "source_material_policy": "Source PDFs, rendered book pages and extracted text stay outside the public repository under D043.",
+  "verification_status": {
+    "ai_source_review": true,
+    "human_attestation": false,
+    "full_book_review": false,
+    "native_game_evidence_integration_certified": false,
+    "factual_truth_certified": false,
+    "offline_contract": "provisional v0.1; see evidence-contract.md for implementation and verification scope"
+  },
+  "sources": [
+    {
+      "id": "E01",
+      "bibliography": {
+        "title": "The Argument Interchange Format (AIF) Specification",
+        "authors": [
+          "Argumentation Research Group, School of Computing, University of Dundee"
+        ],
+        "publication_date": "2011-11-08",
+        "edition_version": "Dated supplied specification, 12 PDF pages",
+        "publisher_or_venue": "University of Dundee, School of Computing",
+        "identifiers": {},
+        "metadata_locators": {
+          "pdf_pages": [
+            1
+          ]
+        },
+        "version_caveat": "Not a claim about current AIF/AIFdb formats, APIs or extensions."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/aif-spec.pdf",
+        "review_filename": "E01_aif_spec.pdf",
+        "sha256": "da5180d3f9d38d971292a816732494402a502d59873f1b3c35eae9bc6d42503d",
+        "bytes": 785780,
+        "pdf_pages": 12,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "exchange",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "description": "All supplied pages, including references. Printed page equals PDF page minus one for PDF pages 2–12."
+        },
+        "limitations": [],
+        "human_attestation": false,
+        "implementation_approval": false,
+        "visual_pdf_pages": [
+          4,
+          7
+        ]
+      }
+    },
+    {
+      "id": "E02",
+      "bibliography": {
+        "title": "Argument Evaluation and Evidence",
+        "authors": [
+          "Douglas Walton"
+        ],
+        "bibliographic_year": 2016,
+        "copyright_year": 2016,
+        "edition_version": "Supplied Springer book, Law, Governance and Technology Series 23",
+        "publisher_or_venue": "Springer International Publishing Switzerland",
+        "identifiers": {
+          "doi": "10.1007/978-3-319-19626-8",
+          "isbn_print": "978-3-319-19625-1",
+          "isbn_ebook": "978-3-319-19626-8"
+        },
+        "metadata_locators": {
+          "pdf_pages": [
+            4,
+            5
+          ]
+        },
+        "version_caveat": "The copyright page supplies 2016; PDF production metadata is not treated as a publication-year correction. The book describes historical CAS versions, not Carneades-4."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/Argument Evaluation and Evidence.pdf",
+        "review_filename": "E02_Argument_Evaluation_and_Evidence.pdf",
+        "sha256": "961f8439168d7dfc9e36b58d1b11b5b730ca5831c7913b32fbc9edf3da27e449",
+        "bytes": 5400959,
+        "pdf_pages": 297,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "foundations",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "kind": "targeted substantive reading, not whole book",
+          "close_read_ranges": [
+            {
+              "printed": "126–134",
+              "pdf_1_based": "137–145"
+            },
+            {
+              "printed": "152–155",
+              "pdf_1_based": "163–166"
+            },
+            {
+              "printed": "168–173",
+              "pdf_1_based": "179–184"
+            },
+            {
+              "printed": "215–219",
+              "pdf_1_based": "226–230"
+            },
+            {
+              "printed": "221–224",
+              "pdf_1_based": "232–235"
+            },
+            {
+              "printed": "228–233",
+              "pdf_1_based": "239–244"
+            },
+            {
+              "printed": "244–248",
+              "pdf_1_based": "255–259"
+            },
+            {
+              "printed": "252–254",
+              "pdf_1_based": "263–265"
+            },
+            {
+              "printed": "270–276",
+              "pdf_1_based": "281–287"
+            }
+          ],
+          "additional_scope": "Title/copyright, contents, selected introduction and relevant surrounding excerpts; bibliography not independently audited.",
+          "limitations": [
+            "No cover-to-cover claim.",
+            "Earlier works reported by this source remain secondary unless separately checked.",
+            "Historical legal or empirical statements not verified as current facts."
+          ]
+        },
+        "limitations": [
+          "Targeted substantive reading, not a full-book reading.",
+          "Earlier authors reported by this source remain secondary unless separately checked.",
+          "No current legal or historical case truth was independently established."
+        ],
+        "human_attestation": false,
+        "implementation_approval": false
+      }
+    },
+    {
+      "id": "E03",
+      "bibliography": {
+        "title": "Character Evidence: An Abductive Theory",
+        "authors": [
+          "Douglas Walton"
+        ],
+        "bibliographic_year": 2006,
+        "copyright_year": 2006,
+        "edition_version": "Supplied Springer book, Argumentation Library 11",
+        "publisher_or_venue": "Springer, Dordrecht",
+        "identifiers": {
+          "isbn_hardback": "978-1-4020-4942-2",
+          "isbn_ebook_10": "1-4020-4943-9"
+        },
+        "metadata_locators": {
+          "pdf_pages": [
+            2,
+            3,
+            4
+          ]
+        },
+        "version_caveat": "Blank pages are omitted in places; use individual printed/PDF locators rather than a fixed whole-book offset."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/Character Evidence_ An Abductive Theory.pdf",
+        "review_filename": "E03_Character_Evidence_An_Abductive_Theory.pdf",
+        "sha256": "b1a355468dfc46b118d79acb5cf800b7fd2f572781570ba939ef87d919fdc4e9",
+        "bytes": 987096,
+        "pdf_pages": 248,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "sources",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "method": "Targeted text reading with visual check of the red-bean example",
+          "front_matter": true,
+          "printed_pages": [
+            "52-61",
+            "75-78",
+            "149-155",
+            "165-169",
+            "192-201"
+          ],
+          "pdf_pages": [
+            "64-73",
+            "87-90",
+            "160-166",
+            "176-180",
+            "203-212"
+          ],
+          "visual_pages": [
+            70
+          ]
+        },
+        "limitations": [
+          "Not a cover-to-cover reading",
+          "Legal examples are theoretical/historical, not current legal advice",
+          "No general reliability estimate or validated WAG aggregation function follows from the book"
+        ],
+        "human_attestation": false,
+        "implementation_approval": false
+      }
+    },
+    {
+      "id": "E04",
+      "bibliography": {
+        "title": "Computational Argumentation: Reasoning, Dynamics, and Supporting Explainability",
+        "authors": [
+          "Johannes P. Wallner"
+        ],
+        "bibliographic_year": 2024,
+        "edition_version": "Supplied six-page IJCAI-24 Early Career Track paper",
+        "publisher_or_venue": "Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence (IJCAI-24)",
+        "publication_pages": "8583–8588",
+        "identifiers": {},
+        "metadata_locators": {
+          "pdf_pages": [
+            1
+          ]
+        },
+        "version_caveat": "Research overview; this review does not audit proofs or implementations in every cited paper."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/Computational Argumentation - Reasoning, Dynamics, and Supporting Explainability.pdf",
+        "review_filename": "E04_Computational_Argumentation_Reasoning_Dynamics_and_Supporting_Explainability.pdf",
+        "sha256": "0cd4b8f9f00d6fa68e033daa710887c01d4097bf223139050de1a194d1c7ad43",
+        "bytes": 128444,
+        "pdf_pages": 6,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "exchange",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "description": "All supplied pages, including references. Printed pages 8583–8588 correspond to PDF pages 1–6. No theorem proof audit."
+        },
+        "limitations": [],
+        "human_attestation": false,
+        "implementation_approval": false,
+        "visual_pdf_pages": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "E05",
+      "bibliography": {
+        "title": "Legal Argumentation and Evidence",
+        "authors": [
+          "Douglas Walton"
+        ],
+        "bibliographic_year": 2002,
+        "copyright_year": 2002,
+        "edition_version": "Supplied 2002 book",
+        "publisher_or_venue": "The Pennsylvania State University Press, University Park, Pennsylvania",
+        "identifiers": {
+          "isbn": "0-271-02177-2"
+        },
+        "metadata_locators": {
+          "pdf_pages": [
+            4,
+            5
+          ]
+        },
+        "version_caveat": "Historical theory proposal, not a current-law survey or a universal evidence specification."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/Legal Argumentation and Evidence.pdf",
+        "review_filename": "E05_Legal_Argumentation_and_Evidence.pdf",
+        "sha256": "40adfbab81eb6a19c28aa5c97e3f1b811fb2bdfe40b9e8f3da204af405e6e8de",
+        "bytes": 1746394,
+        "pdf_pages": 393,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "foundations",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "kind": "targeted substantive reading, not whole book",
+          "close_read_ranges": [
+            {
+              "printed": "11–22",
+              "pdf_1_based": "29–40"
+            },
+            {
+              "printed": "200–205",
+              "pdf_1_based": "218–223"
+            },
+            {
+              "printed": "209–215",
+              "pdf_1_based": "227–233"
+            },
+            {
+              "printed": "234–241",
+              "pdf_1_based": "252–259"
+            },
+            {
+              "printed": "338–342",
+              "pdf_1_based": "356–360"
+            }
+          ],
+          "additional_scope": "Title/copyright, contents, selected introduction and relevant surrounding excerpts; bibliography not independently audited.",
+          "limitations": [
+            "No cover-to-cover claim.",
+            "Earlier works reported by this source remain secondary unless separately checked.",
+            "Historical legal or empirical statements not verified as current facts."
+          ]
+        },
+        "limitations": [
+          "Targeted substantive reading, not a full-book reading.",
+          "Earlier authors reported by this source remain secondary unless separately checked.",
+          "No current legal or historical case truth was independently established."
+        ],
+        "human_attestation": false,
+        "implementation_approval": false
+      }
+    },
+    {
+      "id": "E06",
+      "bibliography": {
+        "title": "When Expert Opinion Evidence Goes Wrong",
+        "authors": [
+          "Douglas Walton"
+        ],
+        "bibliographic_year": 2019,
+        "edition_version": "Supplied 28-page manuscript, with its own page numbering",
+        "publisher_or_venue": "Artificial Intelligence and Law",
+        "publication_volume": "27",
+        "publication_pages": "369–401",
+        "identifiers": {
+          "doi": "10.1007/s10506-019-09249-w"
+        },
+        "metadata_locators": {
+          "pdf_pages": [
+            1
+          ]
+        },
+        "publisher_metadata": [
+          {
+            "url": "https://link.springer.com/article/10.1007/s10506-019-09249-w",
+            "checked_by": "independent sources reviewer",
+            "checked_date": "2026-11-22",
+            "scope": "Publication metadata only: publication 2019-03-16 and December 2019 issue."
+          }
+        ],
+        "version_caveat": "Supplied header says 27(1), 369–401. Findings on text/figure discrepancies apply to this manuscript; publisher text was not compared word for word."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/When Expert Opinion Evidence Goes Wrong.pdf",
+        "review_filename": "E06_When_Expert_Opinion_Evidence_Goes_Wrong.pdf",
+        "sha256": "95c2a4eb61a6989b941e6e23cf21ef9f20493c4585ec8282980dacee7dc6a4fb",
+        "bytes": 1411636,
+        "pdf_pages": 28,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "sources",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "method": "Full substantive reading of main text, references inspected; Figures 1 and 10 visually checked",
+          "printed_pages": [
+            "1-28 (supplied manuscript pagination)"
+          ],
+          "pdf_pages": [
+            "1-28"
+          ],
+          "visual_pages": [
+            7,
+            22
+          ]
+        },
+        "limitations": [
+          "Supplied 28-page manuscript; publisher version not compared word for word",
+          "Single illustrative case, not controlled validation",
+          "Trial claims not independently checked against the whole legal record"
+        ],
+        "human_attestation": false,
+        "implementation_approval": false
+      }
+    },
+    {
+      "id": "E07",
+      "bibliography": {
+        "title": "Witness Testimony Evidence: Argumentation, Artificial Intelligence, and Law",
+        "authors": [
+          "Douglas Walton"
+        ],
+        "bibliographic_year": "2007 print / copyright 2008",
+        "copyright_year": 2008,
+        "edition_version": "Supplied PDF with first-print 2007 and copyright 2008 on its copyright page",
+        "publisher_or_venue": "Cambridge University Press",
+        "identifiers": {
+          "isbn_hardback": "978-0-521-88143-2",
+          "isbn_paperback": "978-0-521-70770-1",
+          "isbn_ebook": "978-0-511-36655-0",
+          "doi": "10.1017/CBO9780511619533"
+        },
+        "metadata_locators": {
+          "pdf_pages": [
+            5,
+            6
+          ]
+        },
+        "publisher_metadata": [
+          {
+            "url": "https://www.cambridge.org/core/books/witness-testimony-evidence/910BDA07BB7102CE7E7CC5BE353D2D77",
+            "checked_by": "independent sources reviewer",
+            "checked_date": "2026-11-22",
+            "scope": "Print date 2007-11-19 and online date 2010-02-03."
+          },
+          {
+            "url": "https://assets.cambridge.org/97805217/07701/frontmatter/9780521707701_frontmatter.pdf",
+            "checked_by": "independent sources reviewer",
+            "checked_date": "2026-11-22",
+            "scope": "Newer publisher front matter says first published 2008."
+          }
+        ],
+        "version_caveat": "Preserve supplied edition/date evidence and publisher variation. This AI metadata review does not replace the human verification required by D041/D045."
+      },
+      "supplied_file": {
+        "original_archive_member": "Evidence Theory/Witness Testimony Evidence.pdf",
+        "review_filename": "E07_Witness_Testimony_Evidence.pdf",
+        "sha256": "de5ffcb47d647a13b3ad757ffbc247e57fde33e2b9b6b9f0dc3504c17f8361e9",
+        "bytes": 2125464,
+        "pdf_pages": 385,
+        "repository_distribution": "Metadata only; source PDF and extracted text are not included in this repository."
+      },
+      "review": {
+        "reviewer_assignment": "sources",
+        "reviewer_kind": "independent AI reviewer",
+        "status": "source passages reviewed within stated scope",
+        "read_scope": {
+          "method": "Targeted text reading and visual copyright-page check",
+          "front_matter": true,
+          "printed_pages": [
+            "33-44",
+            "56-61",
+            "80-87",
+            "125-127"
+          ],
+          "pdf_pages": [
+            "53-64",
+            "76-81",
+            "100-107",
+            "145-147"
+          ],
+          "visual_pages": [
+            6
+          ]
+        },
+        "limitations": [
+          "Not a cover-to-cover reading",
+          "No current legal rules inferred",
+          "Plausibility and corroboration treatment is not a validated probability model"
+        ],
+        "human_attestation": false,
+        "implementation_approval": false
+      }
+    }
+  ],
+  "source_claims": [
+    {
+      "id": "ET-01",
+      "source_id": "E01",
+      "locator": {
+        "printed": "pp.1–2",
+        "pdf_pages_1_based": "2–3"
+      },
+      "classification": "source_claim",
+      "paraphrase": "AIF is an abstract common representation; direct mappings may better preserve specific semantics.",
+      "wag_implication": "Keep a native evidence contract and versioned interchange mappings."
+    },
+    {
+      "id": "ET-02",
+      "source_id": "E01",
+      "locator": {
+        "printed": "pp.2–6",
+        "pdf_pages_1_based": "3–7"
+      },
+      "classification": "source_requirement_within_supplied_spec",
+      "paraphrase": "Information nodes and applications of inference, conflict and preference schemes differ; edge roles and directional conflict matter.",
+      "wag_implication": "Do not identify artifacts with propositions or flatten general conflict into symmetric opposition without an explicit policy."
+    },
+    {
+      "id": "ET-03",
+      "source_id": "E01",
+      "locator": {
+        "printed": "p.3 definition; p.4 prose",
+        "pdf_pages_1_based": "4–5"
+      },
+      "classification": "source_discrepancy",
+      "paraphrase": "Exactly one conclusion-role successor in the definition differs from at most one in the prose.",
+      "wag_implication": "Name the chosen conformance profile and test it."
+    },
+    {
+      "id": "ET-04",
+      "source_id": "E01",
+      "locator": {
+        "printed": "p.3 explanation of local predecessor/successor condition",
+        "pdf_pages_1_based": "4"
+      },
+      "classification": "reviewer_logical_counterexample",
+      "paraphrase": "Local predecessor/successor constraints do not rule out a scheme-only cycle.",
+      "wag_implication": "Any global reachability or acyclicity requirement is additional and explicit."
+    },
+    {
+      "id": "ET-05",
+      "source_id": "E02",
+      "locator": {
+        "printed": "pp.252–254",
+        "pdf_pages_1_based": "263–265"
+      },
+      "classification": "source_claim_with_open_implementation",
+      "paraphrase": "Evidence criteria depend on task/domain and dialogue; a working implementation of the proposed special evidence treatment remains open.",
+      "wag_implication": "Make evidential use and policy scope explicit; admission is not unconditional truth."
+    },
+    {
+      "id": "ET-06",
+      "source_id": "E02",
+      "locator": {
+        "printed": "pp.270–271",
+        "pdf_pages_1_based": "281–282"
+      },
+      "classification": "source_claim_with_provenance_qualification",
+      "paraphrase": "A recorded sensor value differs from the world claim inferred from it.",
+      "wag_implication": "Preserve artifact, transformation and assertion identities; byte integrity alone does not establish authenticity."
+    },
+    {
+      "id": "ET-07",
+      "source_id": "E02",
+      "locator": {
+        "printed": "pp.131,133–134",
+        "pdf_pages_1_based": "142,144–145"
+      },
+      "classification": "source_internal_qualification",
+      "paraphrase": "A broad CQ-default claim is followed by distinct effects for assumption challenges and evidence-backed exception allegations.",
+      "wag_implication": "Use question-specific NASCQ burden contracts."
+    },
+    {
+      "id": "ET-08",
+      "source_id": "E02",
+      "locator": {
+        "printed": "pp.219,221–224,228–233",
+        "pdf_pages_1_based": "230,232–235,239–244"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Inquiry can revise accepted claims; absence-of-evidence reasoning needs a detection/completeness warrant.",
+      "wag_implication": "Keep history and uncertainty; failed capture is not evidence of a substantive negative."
+    },
+    {
+      "id": "ET-09",
+      "source_id": "E02",
+      "locator": {
+        "printed": "pp.153,169–170,172–173",
+        "pdf_pages_1_based": "164,180–181,183–184"
+      },
+      "classification": "source_explicit_limitation",
+      "paraphrase": "The book describes pre-version-4 CAS; the Leonardo case was not computationally evaluated and cumulative modeling is acknowledged as unresolved.",
+      "wag_implication": "Treat case reconstruction as new work, not a certified modern runtime oracle."
+    },
+    {
+      "id": "ET-10",
+      "source_id": "E02",
+      "locator": {
+        "printed": "p.245",
+        "pdf_pages_1_based": "256"
+      },
+      "classification": "critical_mathematical_correction",
+      "paraphrase": "The conjunction-fallacy discussion misleadingly invokes independence and presents the probability calculus as causing the error.",
+      "wag_implication": "Set inclusion proves the conjunction bound without independence; compare probabilistic models on their actual assumptions."
+    },
+    {
+      "id": "ET-11",
+      "source_id": "E03",
+      "locator": {
+        "printed": "pp.52–60,167–168",
+        "pdf_pages_1_based": "64–72,178–179"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Coherent explanations need evidential anchors, comparison with alternatives and a judgment about further investigation.",
+      "wag_implication": "Keep observed data, reconstructed explanations and added assumptions distinct."
+    },
+    {
+      "id": "ET-12",
+      "source_id": "E03",
+      "locator": {
+        "printed": "pp.58–59",
+        "pdf_pages_1_based": "70–71"
+      },
+      "classification": "source_anomaly_with_qualified_interpretation",
+      "paraphrase": "A red bean is described beside a bag of white beans on p.58. The next page repeats that the bag contains white beans but does not explain the color mismatch or explicitly change the individual bean to white.",
+      "wag_implication": "Record a likely textual error or unaddressed exception. Under an explicit all-white-bag assumption, treat the red observation as contrary evidence; label a corrected white-bean fixture separately.",
+      "review_note": "Root independently checked the full text of printed p.59/PDF71; the synthesis author then re-read printed pp.58–59/PDF70–71. The earlier claim that p.59 changes the individual bean to white was unsupported and has been removed."
+    },
+    {
+      "id": "ET-13",
+      "source_id": "E03",
+      "locator": {
+        "printed": "pp.194–201",
+        "pdf_pages_1_based": "205–212"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Different inferences from conduct, character and inconsistent commitments require different targets and warrants.",
+      "wag_implication": "Do not use one criticism as unrestricted global source discrediting or proof of the opposite conclusion."
+    },
+    {
+      "id": "ET-14",
+      "source_id": "E04",
+      "locator": {
+        "printed": "pp.8583–8584",
+        "pdf_pages_1_based": "1–2"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Structured argumentation separates knowledge, argument construction, acceptability evaluation and conclusions.",
+      "wag_implication": "Test extraction, mapping and runtime semantics separately."
+    },
+    {
+      "id": "ET-15",
+      "source_id": "E04",
+      "locator": {
+        "printed": "pp.8585–8586",
+        "pdf_pages_1_based": "3–4"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Enforcement, synthesis, stability under future additions and explanation are distinct tasks with formalism-specific conditions.",
+      "wag_implication": "Winning or agreement is not source verification; declare the expansion model before claiming stability."
+    },
+    {
+      "id": "ET-16",
+      "source_id": "E04",
+      "locator": {
+        "printed": "p.8586, including Figure4",
+        "pdf_pages_1_based": "4"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Abstractions can introduce spurious acceptable sets; strong explanations have scoped preservation conditions.",
+      "wag_implication": "Check outcome preservation of explanation projections; retain full traces."
+    },
+    {
+      "id": "ET-17",
+      "source_id": "E05",
+      "locator": {
+        "printed": "pp.19–22,200–205",
+        "pdf_pages_1_based": "37–40,218–223"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Evidence combines basis, inference and purpose; relevance, admissibility, weight and sufficiency differ.",
+      "wag_implication": "Preserve claim-specific bindings and distinct assessment/admission semantics."
+    },
+    {
+      "id": "ET-18",
+      "source_id": "E05",
+      "locator": {
+        "printed": "pp.214–215,237–241",
+        "pdf_pages_1_based": "232–233,255–259"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Dialogue acceptance differs from private belief, and relying on another person’s report introduces credibility questions.",
+      "wag_implication": "Record public commitments and scoped assessment reasons rather than presumed mental states or blanket credibility."
+    },
+    {
+      "id": "ET-19",
+      "source_id": "E05",
+      "locator": {
+        "printed": "pp.338–342",
+        "pdf_pages_1_based": "356–360"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Linked, convergent and serial argumentative structures have different functions.",
+      "wag_implication": "Preserve joint premises, distinct support routes and premise reuse."
+    },
+    {
+      "id": "ET-20",
+      "source_id": "E05",
+      "locator": {
+        "printed": "Introduction pp.xiii–xiv; p.200",
+        "pdf_pages_1_based": "14–15,218"
+      },
+      "classification": "source_explicit_limitation",
+      "paraphrase": "The work is a theoretical method rather than a legal treatise and does not establish a general theory of scientific evidence.",
+      "wag_implication": "Do not turn historical legal examples into universal/current evidence rules."
+    },
+    {
+      "id": "ET-21",
+      "source_id": "E06",
+      "locator": {
+        "printed": "manuscript pp.5–9,23–26",
+        "pdf_pages_1_based": "5–9,23–26"
+      },
+      "classification": "source_claim_and_scope_limit",
+      "paraphrase": "Expertise, field fit, assertion content, reliability, consistency and backup evidence differ; stronger dialogue diagnoses require a record of questioning.",
+      "wag_implication": "Keep criteria and dialogue duties distinct; an illustrative case is not controlled empirical validation."
+    },
+    {
+      "id": "ET-22",
+      "source_id": "E06",
+      "locator": {
+        "printed": "manuscript pp.7–8,23",
+        "pdf_pages_1_based": "7–8,23"
+      },
+      "classification": "source_discrepancy_visually_checked",
+      "paraphrase": "Prose conflicts with Figure1’s expertise/exception structure; later prose mixes identifiers and figure numbering.",
+      "wag_implication": "Reconstruct graph fixtures independently; the discrepancy finding is specific to the supplied manuscript."
+    },
+    {
+      "id": "ET-23",
+      "source_id": "E07",
+      "locator": {
+        "printed": "pp.33–44,56–61",
+        "pdf_pages_1_based": "53–64,76–81"
+      },
+      "classification": "source_claim",
+      "paraphrase": "Testimony depends on access, communication, consistency and credibility; agreement can reflect collusion or shared error.",
+      "wag_implication": "Preserve source assertions, account identity and evidence for independence."
+    },
+    {
+      "id": "ET-24",
+      "source_id": "E07",
+      "locator": {
+        "printed": "pp.80–87,125–127",
+        "pdf_pages_1_based": "100–107,145–147"
+      },
+      "classification": "source_claim_with_model_limits",
+      "paraphrase": "Corroborating paths and revised accounts can change support, but the diagrams and aggregation treatments are exploratory.",
+      "wag_implication": "No automatic numerical combination or inference from undercutting to substantive negation."
+    }
+  ],
+  "design_inferences": [
+    {
+      "id": "ED-01",
+      "recommendation": "Five record families with exact source/derivative/binding/context identity.",
+      "support": [
+        "ET-05",
+        "ET-06",
+        "ET-17"
+      ],
+      "status": "WAG design choice; not a schema dictated by the sources."
+    },
+    {
+      "id": "ED-02",
+      "recommendation": "Consideration-only two-participant consent/withdrawal; assessments do not confer truth or authority.",
+      "support": [
+        "ET-05",
+        "ET-17",
+        "ET-18"
+      ],
+      "status": "Bounded provisional offline contract, distinct from native runtime integration."
+    },
+    {
+      "id": "ED-03",
+      "recommendation": "Record provenance dependencies without assuming independence or aggregating numerical reliability.",
+      "support": [
+        "ET-19",
+        "ET-23",
+        "ET-24"
+      ],
+      "status": "Current metadata requirement; richer aggregation is future empirical work."
+    },
+    {
+      "id": "ED-04",
+      "recommendation": "Keep capture failures, unresolved assessments and negative-evidence arguments distinct.",
+      "support": [
+        "ET-08"
+      ],
+      "status": "Current contract requirement; domain search/detection warrants require separate modeling."
+    },
+    {
+      "id": "ED-05",
+      "recommendation": "Meta-arguments retain public review reasons but require independent checks and cannot self-certify through cycles.",
+      "support": [
+        "ET-14",
+        "ET-15",
+        "ET-16",
+        "ET-18"
+      ],
+      "status": "Methodological inference; no complete meta-review calculus is claimed."
+    }
+  ],
+  "unchanged_decision_boundaries": [
+    "D043: no book passages or source PDFs in repository",
+    "D045: required human verification remains required",
+    "D077: owner research-retention instruction preserved",
+    "D078: owner history decision preserved",
+    "D079: reserved questions remain open; no new capture gate imposed"
+  ],
+  "validation_layers": [
+    "Record structure and payload integrity",
+    "Procedural consideration reducer",
+    "Later native-game projection and NASCQ semantics",
+    "Later independent empirical source/content validity and transfer"
+  ],
+  "limitations": [
+    "No current-law or rights determination.",
+    "No source majority vote is treated as factual truth.",
+    "No scheme formula changes in this increment.",
+    "Metadata checks do not replace required human verification."
+  ]
+}
