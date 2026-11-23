@@ -32,6 +32,10 @@ jobs:
         run: go vet ./...
       - name: go test
         run: go test -count=1 ./...
+      - name: Check the synthetic offline evidence bundle
+        # Record/payload identity and procedural consideration only; no truth
+        # or native game-admission claim follows from this check.
+        run: go run ./cmd/wag-evidence ../examples/evidence/bundle.json
       - name: The vendored engine's own tests (GoCHR, carneades-4 and WAG's fork regressions)
         # Only these catch a lost engine fix; WAG's suite passes without them.
         working-directory: .

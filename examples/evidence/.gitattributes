@@ -1,0 +1,2 @@
+# This fixture's hash identifies exact retained bytes, including line endings.
+report.txt -text
