@@ -110,9 +110,9 @@ func Validate(b *Bundle, root string) Report {
 	if !nonempty(c.ID) || !nonempty(c.Profile) || c.Policy != Policy {
 		add("context", "context", "context/profile must be named and policy must be "+Policy)
 	}
-	for name, value := range map[string]string{"engine_sha256": c.EngineSHA256, "catalogue_sha256": c.CatalogueSHA256, "nascq_sha256": c.NASCQSHA256} {
-		if !digestOK(value) {
-			add("pin", "context."+name, "expected lowercase SHA-256 of the named input")
+	for _, pin := range [][2]string{{"engine_sha256", c.EngineSHA256}, {"catalogue_sha256", c.CatalogueSHA256}, {"nascq_sha256", c.NASCQSHA256}} {
+		if !digestOK(pin[1]) {
+			add("pin", "context."+pin[0], "expected lowercase SHA-256 of the named input")
 		}
 	}
 	for _, v := range b.Actors {
@@ -127,8 +127,10 @@ func Validate(b *Bundle, root string) Report {
 	participant := map[string]bool{}
 	for _, p := range c.Participants {
 		participant[p] = true
-		if _, ok := x.actors[p]; !ok {
+		if a, ok := x.actors[p]; !ok {
 			add("participants", "context", "participant is not a declared actor")
+		} else if !oneOf(a.Kind, "human", "model") {
+			add("participants", "context", "a participant must be a player, human or model (D076); a tool cannot consent")
 		}
 	}
 	for _, v := range b.Sources {
@@ -165,6 +167,8 @@ func Validate(b *Bundle, root string) Report {
 	}
 	originals := map[string]int{}
 	payloads := map[string][]string{}
+	badPayload := map[string]bool{} // representations whose retained bytes failed their check
+	texts := map[string][]byte{}    // text representations already read, by ID
 	for _, v := range b.Representations {
 		record(v.Record, "representations")
 		a, ok := x.artifacts[v.ArtifactID]
@@ -206,6 +210,7 @@ func Validate(b *Bundle, root string) Report {
 		}
 		if err := checkPayload(root, v.Payload); err != nil {
 			add("payload", v.ID, err.Error())
+			badPayload[v.ID] = true
 		}
 		payloads[v.Payload.SHA256] = append(payloads[v.Payload.SHA256], v.ID)
 	}
@@ -251,8 +256,8 @@ func Validate(b *Bundle, root string) Report {
 		if !oneOf(v.Mode, "quotation", "paraphrase", "observation", "reconstruction") || !nonempty(v.Text) || !nonempty(v.Scope) {
 			add("claim", v.ID, "claim needs a mode, text and scope")
 		}
-		if ok {
-			if err := checkSelector(v.Selector, rep, root); err != nil {
+		if ok && !badPayload[v.RepresentationID] {
+			if err := checkSelector(v.Selector, rep, root, texts); err != nil {
 				add("selector", v.ID, err.Error())
 			}
 		}
@@ -289,8 +294,13 @@ func Validate(b *Bundle, root string) Report {
 		if !nonempty(v.Rationale) || len(v.Dimensions) == 0 {
 			add("assessment", v.ID, "assessment must state dimensions and rationale")
 		}
-		for dim, status := range v.Dimensions {
-			if !oneOf(dim, "authenticity", "relevance", "competence", "observation_access", "sincerity", "probative_force", "independence") || !oneOf(status, "supported", "challenged", "unknown", "not_applicable") {
+		dims := make([]string, 0, len(v.Dimensions))
+		for dim := range v.Dimensions {
+			dims = append(dims, dim)
+		}
+		sort.Strings(dims) // a report must not depend on map order
+		for _, dim := range dims {
+			if !oneOf(dim, "authenticity", "relevance", "competence", "observation_access", "sincerity", "probative_force", "independence") || !oneOf(v.Dimensions[dim], "supported", "challenged", "unknown", "not_applicable") {
 				add("assessment", v.ID, "unknown assessment dimension/status")
 			}
 		}
@@ -299,6 +309,8 @@ func Validate(b *Bundle, root string) Report {
 		}
 		if v.ReviewLevel == "human_checked" && x.actors[v.CreatedBy].Kind != "human" {
 			add("review_level", v.ID, "human_checked requires a declared human author; identity still requires external attestation")
+		} else if v.ReviewLevel == "human_checked" {
+			warn("human_checked", v.ID, "a declared human author, not an attested check: the checker cannot confirm that a person did the review (D045)")
 		}
 		for _, p := range v.BasisClaimIDs {
 			if _, ok := x.claims[p]; !ok {
@@ -365,10 +377,23 @@ func Validate(b *Bundle, root string) Report {
 		r.BindingRevisions[v.ID] = digest
 	}
 	state := map[string]map[string]bool{}
+	var last time.Time
 	for i, v := range b.Events {
 		if v.Sequence != i+1 {
 			add("event_order", v.ID, "events must form the complete sequence starting at 1")
 			continue
+		}
+		at, _ := time.Parse(time.RFC3339Nano, v.CreatedAt) // checked by record
+		if at.Before(last) {
+			add("event_time", v.ID, "events must not go back in time along their sequence")
+			continue
+		}
+		last = at
+		if bound, ok := x.bindings[v.BindingID]; ok {
+			if bt, _ := time.Parse(time.RFC3339Nano, bound.CreatedAt); at.Before(bt) {
+				add("event_time", v.ID, "consent or withdrawal dated before the binding it concerns")
+				continue
+			}
 		}
 		if !participant[v.CreatedBy] {
 			add("authority", v.ID, "only a participant may grant/withdraw their own consent")
@@ -443,16 +468,21 @@ func bindingDigest(context Context, b Binding, x index) (string, error) {
 	sort.Slice(reps, func(i, j int) bool { return reps[i].ID < reps[j].ID })
 	// encoding/json sorts string map keys. This named version pins Go JSON
 	// serialization; it is not advertised as an independent canonical-JSON standard.
+	players := []Actor{}
+	for _, p := range context.Participants {
+		players = append(players, x.actors[p])
+	}
 	value := struct {
 		Algorithm       string
 		Context         Context
+		Participants    []Actor
 		Binding         Binding
 		Claim           Claim
 		Target          Target
 		Representations []Representation
 		Artifacts       map[string]Artifact
 		Sources         map[string]Source
-	}{"wag-binding-go-json/1", context, b, claim, x.targets[b.TargetID], reps, artifacts, sources}
+	}{"wag-binding-go-json/2", context, players, b, claim, x.targets[b.TargetID], reps, artifacts, sources}
 	raw, err := json.Marshal(value)
 	if err != nil {
 		return "", err
@@ -550,7 +580,9 @@ func checkPayload(root string, p Payload) error {
 		return err
 	}
 	h := sha256.New()
-	size, err := io.Copy(h, f)
+	// At most one byte past the declared length: a larger file is a mismatch
+	// whatever follows, and is not read to its end.
+	size, err := io.Copy(h, io.LimitReader(f, p.Bytes+1))
 	if err != nil {
 		return err
 	}
@@ -612,7 +644,7 @@ func isLFSPointer(raw []byte) bool {
 	return oid && size
 }
 
-func checkSelector(s Selector, r Representation, root string) error {
+func checkSelector(s Selector, r Representation, root string, texts map[string][]byte) error {
 	if !oneOf(s.Kind, "whole", "text", "page", "time", "region") {
 		return fmt.Errorf("unknown selector kind")
 	}
@@ -624,26 +656,32 @@ func checkSelector(s Selector, r Representation, root string) error {
 		if !strings.HasPrefix(media, "text/") {
 			return fmt.Errorf("text selector requires a retained text representation")
 		}
-		f, err := openPayload(root, r.Payload.Path)
-		if err != nil {
-			return err
+		raw, ok := texts[r.ID]
+		if !ok {
+			f, err := openPayload(root, r.Payload.Path)
+			if err != nil {
+				return err
+			}
+			// Bounded by the declared length, as in checkPayload.
+			raw, err = io.ReadAll(io.LimitReader(f, r.Payload.Bytes+1))
+			f.Close()
+			if err != nil {
+				return err
+			}
+			// Bind the selector to the exact same bytes whose identity is
+			// checked, rather than trusting a prior hash followed by a separate
+			// unchecked read.
+			sum := sha256.Sum256(raw)
+			if int64(len(raw)) != r.Payload.Bytes || hex.EncodeToString(sum[:]) != r.Payload.SHA256 {
+				return fmt.Errorf("selector payload hash/length mismatch")
+			}
+			if !utf8.Valid(raw) {
+				return fmt.Errorf("text selector needs valid UTF-8; retain normalization as a derivative")
+			}
+			texts[r.ID] = raw
 		}
-		raw, err := io.ReadAll(f)
-		f.Close()
-		if err != nil {
-			return err
-		}
-		// Bind the selector to the exact same bytes whose identity is checked,
-		// rather than trusting a prior hash followed by a separate unchecked read.
-		sum := sha256.Sum256(raw)
-		if int64(len(raw)) != r.Payload.Bytes || hex.EncodeToString(sum[:]) != r.Payload.SHA256 {
-			return fmt.Errorf("selector payload hash/length mismatch")
-		}
-		if !utf8.Valid(raw) {
-			return fmt.Errorf("text selector needs valid UTF-8; retain normalization as a derivative")
-		}
-		chars := []rune(string(raw))
-		if s.End > int64(len(chars)) || string(chars[s.Start:s.End]) != s.Quote {
+		from, to, ok := codePoints(raw, s.Start, s.End)
+		if !ok || string(raw[from:to]) != s.Quote {
 			return fmt.Errorf("text selector does not match retained code points")
 		}
 	}
@@ -671,4 +709,27 @@ func checkSelector(s Selector, r Representation, root string) error {
 		return fmt.Errorf("region fields on another selector")
 	}
 	return nil
+}
+
+// codePoints returns the byte offsets of code points [start, end) of valid
+// UTF-8 text, walking it once instead of converting it to runes.
+func codePoints(raw []byte, start, end int64) (int, int, bool) {
+	from, to := -1, -1
+	var n int64
+	for i := 0; ; {
+		if n == start {
+			from = i
+		}
+		if n == end {
+			to = i
+			break
+		}
+		if i >= len(raw) {
+			break
+		}
+		_, size := utf8.DecodeRune(raw[i:])
+		i += size
+		n++
+	}
+	return from, to, from >= 0 && to >= 0
 }

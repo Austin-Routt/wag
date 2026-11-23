@@ -165,7 +165,7 @@
       "sequence": 1,
       "type": "consent",
       "binding_id": "reading-use",
-      "binding_revision": "80ff52c3a662552a4635fe2cd7f988cce9f7b2a88c8c95e887b31b12284e977d",
+      "binding_revision": "474f7b0c26de3f030092dda1aece0e2ed88da4765d0fbf6ad7b3bfbce3056bdd",
       "purpose": "consideration"
     },
     {
@@ -175,7 +175,7 @@
       "sequence": 2,
       "type": "consent",
       "binding_id": "reading-use",
-      "binding_revision": "80ff52c3a662552a4635fe2cd7f988cce9f7b2a88c8c95e887b31b12284e977d",
+      "binding_revision": "474f7b0c26de3f030092dda1aece0e2ed88da4765d0fbf6ad7b3bfbce3056bdd",
       "purpose": "consideration"
     }
   ]

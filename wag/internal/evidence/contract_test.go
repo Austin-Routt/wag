@@ -144,12 +144,33 @@ func TestRecordAndPayloadFailures(t *testing.T) {
 			}
 		},
 	}
+	// Each case must fail for its own reason, not merely fail (added on
+	// integration: a case could otherwise pass on an unrelated error).
+	want := map[string]string{
+		"missing target": "reference", "missing source": "reference", "missing representation": "reference",
+		"duplicate ID": "id", "unrecorded author": "actor", "complete without original": "capture",
+		"complete with omissions": "capture", "unknown capture status": "capture", "hash mismatch": "payload",
+		"length mismatch": "payload", "outside root": "payload", "bad quote": "selector", "bad bounds": "selector",
+		"byte offsets for Unicode": "selector", "paraphrase declared quotation": "quotation",
+		"derivative without parent": "derivation", "one participant twice": "participants", "media bytes changed": "payload",
+	}
+	if len(want) != len(cases) {
+		t.Fatalf("%d cases, %d expected codes", len(cases), len(want))
+	}
 	for name, change := range cases {
 		t.Run(name, func(t *testing.T) {
 			b, root := fixture(t)
 			change(b, root)
-			if r := Validate(b, root); r.Valid {
+			r := Validate(b, root)
+			if r.Valid {
 				t.Fatalf("accepted %s", name)
+			}
+			found := false
+			for _, e := range r.Errors {
+				found = found || e.Code == want[name]
+			}
+			if !found {
+				t.Fatalf("%s: no %q error among %+v", name, want[name], r.Errors)
 			}
 		})
 	}

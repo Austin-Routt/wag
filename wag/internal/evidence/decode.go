@@ -17,6 +17,9 @@ func Decode(raw []byte) (*Bundle, error) {
 	if !utf8.Valid(raw) {
 		return nil, fmt.Errorf("evidence JSON is not valid UTF-8")
 	}
+	if err := nesting(raw, maxNesting); err != nil {
+		return nil, err
+	}
 	d := json.NewDecoder(bytes.NewReader(raw))
 	d.UseNumber()
 	if err := uniqueValue(d); err != nil {
@@ -44,6 +47,39 @@ func Decode(raw []byte) (*Bundle, error) {
 		return nil, err
 	}
 	return &b, nil
+}
+
+// maxNesting is encoding/json's own nesting limit. uniqueValue recurses once
+// per level, so the depth is measured first, without recursion: on Go 1.24 a
+// bundle of millions of "[" overflowed the stack, a fatal error.
+const maxNesting = 10000
+
+// nesting refuses JSON nested deeper than limit. It counts brackets outside
+// strings and does not otherwise validate; the decoders do that.
+func nesting(raw []byte, limit int) error {
+	depth, inString, escaped := 0, false, false
+	for _, c := range raw {
+		switch {
+		case inString:
+			switch {
+			case escaped:
+				escaped = false
+			case c == '\\':
+				escaped = true
+			case c == '"':
+				inString = false
+			}
+		case c == '"':
+			inString = true
+		case c == '{' || c == '[':
+			if depth++; depth > limit {
+				return fmt.Errorf("evidence JSON nests deeper than %d levels", limit)
+			}
+		case c == '}' || c == ']':
+			depth--
+		}
+	}
+	return nil
 }
 
 func uniqueValue(d *json.Decoder) error {
