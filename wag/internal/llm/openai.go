@@ -185,13 +185,15 @@ func (o *OpenAI) Complete(ctx context.Context, req Request) (*Response, error) {
 			out.Usage.ReasoningTokens = d.ReasoningTokens
 		}
 	}
+	// An unusable answer is an error, returned with the partial response:
+	// its usage may be billed, and the budget and the trace keep it.
 	if len(r.Choices) == 0 {
-		return nil, &Error{Provider: o.name, Kind: KindEmpty, Message: "no choice in the answer", RequestID: reqID}
+		return out, &Error{Provider: o.name, Kind: KindEmpty, Message: "no choice in the answer", RequestID: reqID}
 	}
 	c := r.Choices[0]
 	out.FinishReason = c.FinishReason
 	if c.Message.Refusal != nil && *c.Message.Refusal != "" {
-		return nil, &Error{Provider: o.name, Kind: KindBlocked, Message: "the model refused: " + truncate(*c.Message.Refusal, 300), RequestID: reqID}
+		return out, &Error{Provider: o.name, Kind: KindBlocked, Message: "the model refused: " + truncate(*c.Message.Refusal, 300), RequestID: reqID}
 	}
 	if c.Message.Content != nil {
 		text, stripped := stripThink(*c.Message.Content)
@@ -204,7 +206,7 @@ func (o *OpenAI) Complete(ctx context.Context, req Request) (*Response, error) {
 		out.Meta = meta
 	}
 	if strings.TrimSpace(out.Text) == "" {
-		return nil, &Error{Provider: o.name, Kind: KindEmpty, Message: "no text in the answer (finish reason " + out.FinishReason + ")", RequestID: reqID}
+		return out, &Error{Provider: o.name, Kind: KindEmpty, Message: "no text in the answer (finish reason " + out.FinishReason + ")", RequestID: reqID}
 	}
 	return out, nil
 }

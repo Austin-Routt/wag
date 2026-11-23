@@ -96,8 +96,10 @@ func (a *Anthropic) Complete(ctx context.Context, req Request) (*Response, error
 	if httpResp != nil {
 		out.RequestID = httpResp.Header.Get("Request-Id")
 	}
+	// An unusable answer is an error, returned with the partial response:
+	// its usage may be billed, and the budget and the trace keep it.
 	if resp.StopReason == anthropic.BetaStopReasonRefusal {
-		return nil, &Error{Provider: "anthropic", Kind: KindBlocked, RequestID: out.RequestID,
+		return out, &Error{Provider: "anthropic", Kind: KindBlocked, RequestID: out.RequestID,
 			Message: "Claude declined (" + string(resp.StopDetails.Category) + ")"}
 	}
 	var text strings.Builder
@@ -108,7 +110,7 @@ func (a *Anthropic) Complete(ctx context.Context, req Request) (*Response, error
 	}
 	out.Text = text.String()
 	if strings.TrimSpace(out.Text) == "" {
-		return nil, &Error{Provider: "anthropic", Kind: KindEmpty, RequestID: out.RequestID, Message: "no text in the answer (stop reason " + out.FinishReason + ")"}
+		return out, &Error{Provider: "anthropic", Kind: KindEmpty, RequestID: out.RequestID, Message: "no text in the answer (stop reason " + out.FinishReason + ")"}
 	}
 	return out, nil
 }

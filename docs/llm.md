@@ -122,7 +122,10 @@ of the invocation together, both annotators of a run, say.
   system/message text bytes, supplied structured-output schema bytes, and
   `max_output_tokens`. It is a proxy, not a tokenizer or a proven billed-token
   ceiling: provider framing, hidden prompt additions and provider behavior can
-  differ. Every estimated call needs a positive `max_output_tokens`.
+  differ. Every estimated call needs a positive `max_output_tokens`. Where a
+  provider's output limit does not cover reasoning it reports apart (check
+  its terms), one call can use more than its estimate, and that overrun stops
+  a token- or cost-limited invocation; `--max-calls` has no such problem.
 - Gemini estimates additionally require a fixed, nonnegative `thinking_budget`
   within the provider field's integer range. Missing reasoning usage retains
   that allowance unless a coherent reported total supplies it. Whether a model
@@ -144,14 +147,19 @@ limit or a call cap alone keep their custom fields.
 
 **What is counted.** Every invocation counts its client attempts, the tokens
 the providers report, their price-table cost when `--prices` is given, and the
-attempts that reported no usage, failed ones included. Reasoning is counted as
-each provider reports it: Gemini's thoughts apart from the answer; other
-providers' reasoning within the completion, unless it is larger than the
-completion, which it then cannot be part of (xAI reports it apart). A reported
-total larger than its parts is counted whole, the excess as output; a total
-smaller than the parts that are known is malformed. Without a token or cost
-limit, an attempt with no reported usage adds no tokens, and the count says how
-many there were.
+attempts that reported no usage, failed ones included. An unusable answer
+(empty, refused or blocked) still fails the call, and the usage the provider
+reported for it is counted and kept in the trace: a reasoning model can use its
+whole output limit thinking and answer nothing. Reasoning is counted as each
+provider reports it: Gemini's thoughts apart from the answer; other providers'
+reasoning within the completion, unless it is larger than the completion, which
+it then cannot be part of (xAI reports it apart). A reported total larger than
+its parts is counted whole, the excess as output; a total smaller than the parts
+that are known is malformed. Without an input count, the total less a complete
+output is the input; with neither, the total is priced at the dearer rate.
+Without a token or cost limit, an attempt with no reported usage adds no tokens,
+and the count says how many there were. Usage that a given price table has no
+rate for is counted as unpriced, with no cost.
 
 Under a token or cost limit, coherent reported usage replaces the corresponding
 estimates after a successful attempt. Missing components retain conservative
@@ -173,10 +181,12 @@ game.
 line to `budget.jsonl` in its output folder: the command, its start and end,
 its limits or `"unlimited": true` (with `"default": true` when no limit was
 given, rather than `--unlimited`), the price table's file name and SHA-256,
-what was counted (`spent`: `calls`, `tokens`, `cost`, `unreported`), whether a
-call was refused, and why an accounting violation stopped the invocation. Each
-invocation has its own allowance, a resumed annotation run included, and its
-own line, so a folder's lines sum to what was spent in it.
+what was counted (`spent`: `calls`, `tokens`, `cost`, `unreported`,
+`unpriced`), whether a call was refused before it was sent (`refused`), and
+why an accounting violation stopped later attempts (`halted`). Each invocation
+has its own allowance, a resumed annotation run included, and its own line, so
+a folder's lines sum to what `wag-llm` spent in it; the dashboard records no
+budget yet. `--unlimited` with `--max-calls 0` is accepted: 0 is no limit.
 
 **Keys.** A profile whose provider needs an API key, or that names one
 (`api_key_env`, or a key typed into the dashboard), may be billed. With no

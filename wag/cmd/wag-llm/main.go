@@ -29,6 +29,12 @@
 // annotate has models annotate a dataset's claims (the built-in Kialo batch,
 // or a folder), and a reviewer model review their disagreements; the run's
 // folder holds everything. The dashboard does the same (wag-server, Annotate).
+//
+// play and annotate have no limit by default (D046). --max-calls caps the
+// calls, retries included; --max-tokens and --max-cost refuse a call by an
+// estimate; --unlimited says no limit explicitly. Either way each invocation
+// counts its calls and the usage reported, and appends a line to budget.jsonl
+// in its output folder (docs/llm.md, "A run's budget").
 package main
 
 import (
@@ -357,7 +363,11 @@ func play(ctx context.Context, args []string) error {
 		fmt.Printf("game %d: %s (pro) vs %s (con): %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
 			s["winner_side"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
 		if budget.Refused() {
-			fmt.Fprintln(os.Stderr, "The run's budget is reached: no further game is started.")
+			if h := budget.Halted(); h != "" {
+				fmt.Fprintf(os.Stderr, "The run's accounting stopped it (%s): no further game is started.\n", h)
+			} else {
+				fmt.Fprintln(os.Stderr, "The run's budget is reached: no further game is started.")
+			}
 			break
 		}
 	}

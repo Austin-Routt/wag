@@ -150,6 +150,9 @@ func (f budgetFlags) budget() (*llm.Budget, error) {
 		return nil, err
 	}
 	if b.MaxCost > 0 && len(b.Prices) == 0 {
+		if *f.prices != "" {
+			return nil, fmt.Errorf("--max-cost needs a rate in --prices %s, which has none", *f.prices)
+		}
 		return nil, fmt.Errorf("--max-cost needs --prices")
 	}
 	return b, nil
@@ -197,8 +200,8 @@ type budgetRecord struct {
 	Prices       string    `json:"prices,omitempty"`        // the price table's file name, without its folder
 	PricesSHA256 string    `json:"prices_sha256,omitempty"` // and its content's hash
 	Spent        llm.Spent `json:"spent"`
-	Refused      bool      `json:"refused"`
-	Halted       string    `json:"halted,omitempty"`
+	Refused      bool      `json:"refused"`          // a call was refused before it was sent
+	Halted       string    `json:"halted,omitempty"` // an accounting violation stopped later attempts
 }
 
 // finish prints what the invocation used and appends its record to
@@ -211,7 +214,7 @@ func (f budgetFlags) finish(w io.Writer, dir, command string, b *llm.Budget, sta
 	}
 	rec := budgetRecord{Command: command, Started: started.UTC().Format(time.RFC3339), Ended: time.Now().UTC().Format(time.RFC3339),
 		Unlimited: !b.Limited(), Default: !b.Limited() && !*f.unlimited, MaxCalls: b.MaxCalls, MaxTokens: b.MaxTokens, MaxCost: b.MaxCost,
-		Spent: b.Spent(), Refused: b.Refused(), Halted: b.Halted()}
+		Spent: b.Spent(), Refused: b.Refusals() > 0, Halted: b.Halted()}
 	if *f.prices != "" {
 		rec.Prices, rec.PricesSHA256 = filepath.Base(*f.prices), *f.pricesSHA256
 	}
@@ -262,6 +265,9 @@ func reportBudget(w io.Writer, b *llm.Budget, explicit bool) {
 		fmt.Fprintf(w, ", estimated price-table cost %.6f of %.6f", s.Cost, b.MaxCost)
 	case len(b.Prices) > 0:
 		fmt.Fprintf(w, ", price-table cost %.6f", s.Cost)
+	}
+	if s.Unpriced > 0 {
+		fmt.Fprintf(w, "; %s had no rate in the price table, and no cost", plural(s.Unpriced, "attempt"))
 	}
 	if s.Unreported > 0 {
 		if estimated {

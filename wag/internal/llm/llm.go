@@ -97,6 +97,10 @@ type Provider interface {
 	// Name is the provider's name: gemini, anthropic, openai…
 	Name() string
 	// Complete sends the request and returns the answer. Errors are *Error.
+	// With an error the response is normally nil; an adapter returns the
+	// partial response of an unusable answer (empty, refused, blocked), so
+	// that the usage it may be billed for is counted and traced. The
+	// client never returns such a response as an answer.
 	Complete(ctx context.Context, req Request) (*Response, error)
 }
 

@@ -147,12 +147,14 @@ func (g *Gemini) Complete(ctx context.Context, req Request) (*Response, error) {
 	if pf := resp.PromptFeedback; pf != nil && pf.BlockReason != "" {
 		out.Meta = map[string]any{"block_reason": string(pf.BlockReason), "block_message": pf.BlockReasonMessage}
 	}
+	// An unusable answer is an error, returned with the partial response:
+	// its usage may be billed, and the budget and the trace keep it.
 	if len(resp.Candidates) == 0 {
 		e := &Error{Provider: "gemini", Kind: KindEmpty, Message: "no candidate in the response", RequestID: out.RequestID}
 		if out.Meta != nil {
 			e.Kind, e.Message = KindBlocked, fmt.Sprintf("the prompt was blocked (%v)", out.Meta["block_reason"])
 		}
-		return nil, e
+		return out, e
 	}
 	c := resp.Candidates[0]
 	out.FinishReason = string(c.FinishReason)
@@ -177,7 +179,7 @@ func (g *Gemini) Complete(ctx context.Context, req Request) (*Response, error) {
 		case genai.FinishReasonSafety, genai.FinishReasonProhibitedContent, genai.FinishReasonBlocklist, genai.FinishReasonSPII, genai.FinishReasonRecitation:
 			kind = KindBlocked
 		}
-		return nil, &Error{Provider: "gemini", Kind: kind, Message: "no text in the answer (finish reason " + out.FinishReason + ")", RequestID: out.RequestID}
+		return out, &Error{Provider: "gemini", Kind: kind, Message: "no text in the answer (finish reason " + out.FinishReason + ")", RequestID: out.RequestID}
 	}
 	return out, nil
 }

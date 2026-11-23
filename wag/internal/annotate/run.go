@@ -35,8 +35,9 @@ review/model-NAME.json    a reviewer model's decisions, claim by claim, field by
 review/human.json         your verdicts, claim by claim
 report.json               validation of every annotation, and agreement: between the
                           annotators, with the gold annotation, with the reviewer
-budget.jsonl              each wag-llm invocation's budget, one JSON object a line: its
-                          limits, or none, and the calls and usage it counted (D046)
+budget.jsonl              each wag-llm annotate invocation's budget, one JSON object a
+                          line: its limits, or none, and the calls and usage it counted
+                          (D046; the dashboard records none yet)
 `
 
 // Settings are what a run was started with.

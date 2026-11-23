@@ -147,12 +147,10 @@ func (c *Client) Complete(ctx context.Context, req Request, report func(Attempt)
 		resp, err := c.Provider.Complete(cctx, req)
 		a.Latency = time.Since(start)
 		cancel()
-		var chargeErr error
-		if err != nil {
-			chargeErr = c.Budget.Charge(c.Profile, req, held, nil)
-		} else {
-			chargeErr = c.Budget.Charge(c.Profile, req, held, resp)
-		}
+		// A failed attempt is charged its reported usage when the provider
+		// returned a partial response with the error (an empty or blocked
+		// answer), else its reservation.
+		chargeErr := c.Budget.Charge(c.Profile, req, held, resp)
 		// Keep observed response/usage even when accounting stops the invocation.
 		// An accounting error is not retried and does not turn the response into
 		// a playable move, but the trace must not erase what the provider returned.

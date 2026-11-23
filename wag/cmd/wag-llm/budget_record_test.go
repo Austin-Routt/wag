@@ -159,16 +159,25 @@ func TestAnnotateUnlimitedByDefault(t *testing.T) {
 func TestAnnotateContinueUsesSavedProfiles(t *testing.T) {
 	srv, hits := keyedServer(t)
 	prof, data, out := annotateFixture(t, srv.URL, 4)
-	if err := annotateCmd(context.Background(), []string{"--models", prof, "--dataset", data, "--out", out, "--max-calls", "2"}); err != nil {
+	// A keyed reviewer, r, saved in the run too.
+	raw, err := os.ReadFile(prof)
+	if err != nil {
+		t.Fatal(err)
+	}
+	withReviewer := strings.Replace(string(raw), `[{"name": "k"`, `[{"name": "r", "provider": "openai", "model": "gpt-x", "base_url": "`+srv.URL+`", "retries": -1},
+		{"name": "k"`, 1)
+	if err := os.WriteFile(prof, []byte(withReviewer), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := annotateCmd(context.Background(), []string{"--models", prof, "--dataset", data, "--out", out, "--reviewer", "r", "--max-calls", "2"}); err != nil {
 		t.Fatal(err)
 	}
 	before := *hits
-	var err error
 	stderr := stderrOf(t, func() {
 		err = annotateCmd(context.Background(), []string{"--models", prof, "--out", out, "--annotators", "l"})
 	})
-	if err != nil || !strings.Contains(stderr, "profile k ") || *hits == before {
-		t.Fatalf("err %v, keyed calls %d -> %d; the note must name the saved keyed annotator:\n%s", err, before, *hits, stderr)
+	if err != nil || !strings.Contains(stderr, "profiles k, r use an API key") || *hits == before {
+		t.Fatalf("err %v, keyed calls %d -> %d; the note must name the saved keyed annotator and reviewer:\n%s", err, before, *hits, stderr)
 	}
 	recs := budgetLines(t, out)
 	if len(recs) != 2 || recs[0].Unlimited || recs[0].MaxCalls != 2 || recs[0].Spent.Calls != 2 || !recs[0].Refused ||
@@ -304,7 +313,9 @@ func TestPlayNotesKeyedProfiles(t *testing.T) {
 	t.Setenv("OPENAI_API_KEY", "dummy-test-key")
 	dir := t.TempDir()
 	prof := filepath.Join(dir, "p.json")
-	if err := os.WriteFile(prof, []byte(`[{"name": "k", "provider": "openai", "model": "gpt-x", "base_url": "`+srv.URL+`", "retries": -1}]`), 0o644); err != nil {
+	// u uses a key too, but has no seat: the note does not name it.
+	if err := os.WriteFile(prof, []byte(`[{"name": "k", "provider": "openai", "model": "gpt-x", "base_url": "`+srv.URL+`", "retries": -1},
+		{"name": "u", "provider": "openai", "model": "gpt-y", "base_url": "`+srv.URL+`", "retries": -1}]`), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	out := filepath.Join(dir, "out")
@@ -312,6 +323,9 @@ func TestPlayNotesKeyedProfiles(t *testing.T) {
 	stderr := stderrOf(t, func() {
 		err = play(context.Background(), []string{"--models", prof, "--pro", "k", "--con", "greedy", "--out", out, "--games", "1", "--max-rounds", "1"})
 	})
+	if strings.Contains(stderr, "profiles") || strings.Contains(stderr, " u ") {
+		t.Fatalf("the note names a profile with no seat:\n%s", stderr)
+	}
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -319,5 +333,48 @@ func TestPlayNotesKeyedProfiles(t *testing.T) {
 	if !strings.Contains(stderr, "profile k uses an API key") || len(recs) != 1 || recs[0].Spent.Calls == 0 ||
 		int64(recs[0].Spent.Calls) != atomic.LoadInt64(&hits) || recs[0].Spent.Tokens != 15*recs[0].Spent.Calls || !recs[0].Default {
 		t.Fatalf("records %+v, server calls %d, stderr:\n%s", recs, hits, stderr)
+	}
+}
+
+// The record keeps every limit, and an accounting violation as a halt, not
+// as a refused call.
+func TestBudgetRecordLimitsAndHalt(t *testing.T) {
+	dir := t.TempDir()
+	prices := filepath.Join(dir, "prices.json")
+	if err := os.WriteFile(prices, []byte(`{"*":{"input":1,"output":1}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	f := flagsFrom(t, "--max-tokens", "1000", "--max-cost", "1", "--prices", prices)
+	b, err := f.budget()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// The provider reports far more input than the estimate: an overrun.
+	c := llm.WithProvider(llm.Profile{Name: "p", Provider: "mock", Params: llm.Params{MaxOutputTokens: 10}},
+		&llm.Mock{Fn: func(llm.Request) (*llm.Response, error) {
+			n := 50000
+			return &llm.Response{Text: "ok", Usage: llm.Usage{InputTokens: &n}}, nil
+		}})
+	c.Sleep, c.Budget = llm.NoWait, b
+	if _, err := c.Complete(context.Background(), c.Request("s", []llm.Message{{Role: "user", Content: "x"}}), nil); err == nil {
+		t.Fatal("the overrun was not reported")
+	}
+	var w bytes.Buffer
+	f.finish(&w, dir, "play", b, time.Now())
+	recs := budgetLines(t, dir)
+	if len(recs) != 1 || recs[0].Unlimited || recs[0].Default || recs[0].MaxTokens != 1000 || recs[0].MaxCost != 1 || recs[0].MaxCalls != 0 ||
+		recs[0].Refused || recs[0].Halted == "" || recs[0].Spent.Calls != 1 {
+		t.Fatalf("records %+v", recs)
+	}
+	if !strings.Contains(w.String(), "stopped:") {
+		t.Fatalf("the report does not say the invocation stopped: %q", w.String())
+	}
+	// An empty price table is named as such.
+	empty := filepath.Join(dir, "empty.json")
+	if err := os.WriteFile(empty, []byte(`{}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := flagsFrom(t, "--max-cost", "1", "--prices", empty).budget(); err == nil || !strings.Contains(err.Error(), "has none") {
+		t.Fatalf("an empty price table: %v", err)
 	}
 }
