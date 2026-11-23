@@ -49,7 +49,7 @@ func TestBudgetCountsRetriesAsCalls(t *testing.T) {
 	}
 }
 
-// The preflight uses the worst case: the input's bytes and the output limit.
+// The preflight uses the estimate: the input's bytes and the output limit.
 // A call that could pass the token limit is refused, however little it
 // would really use; what is charged afterwards is what was reported.
 func TestBudgetTokensPreflightAndCharge(t *testing.T) {
@@ -71,7 +71,7 @@ func TestBudgetTokensPreflightAndCharge(t *testing.T) {
 	}
 }
 
-// A provider that reports nothing is charged the worst case.
+// A provider that reports nothing is charged the estimate.
 func TestBudgetUnreportedUsageIsWorstCase(t *testing.T) {
 	p := Profile{Name: "p", Provider: "mock", Params: Params{MaxOutputTokens: 50}}
 	b := &Budget{MaxTokens: 1000}
@@ -80,11 +80,11 @@ func TestBudgetUnreportedUsageIsWorstCase(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got := b.Spent().Tokens; got != 3+3+50 {
-		t.Fatalf("charged %d, want the worst case 56", got)
+		t.Fatalf("charged %d, want the estimate 56", got)
 	}
 }
 
-// A cost limit needs a price, and refuses the call whose worst-case cost
+// A cost limit needs a price, and refuses the call whose estimated cost
 // would pass it; the reported usage is priced afterwards.
 func TestBudgetCost(t *testing.T) {
 	p := Profile{Name: "p", Provider: "mock", Params: Params{Model: "m", MaxOutputTokens: 1000}}
@@ -93,7 +93,7 @@ func TestBudgetCost(t *testing.T) {
 	if *calls != 0 {
 		t.Fatal("a call without a price reached the provider")
 	}
-	// $1 per million input and $10 per million output tokens: the worst case
+	// $1 per million input and $10 per million output tokens: the estimate
 	// of a call is about (4 + 1000*10)/1e6 = $0.01.
 	b := &Budget{MaxCost: 0.015, Prices: map[string]Price{"m": {Input: 1, Output: 10}}}
 	c, calls = budgetClient(p, b, Usage{InputTokens: intp(4), OutputTokens: intp(500)}, 0)
@@ -103,7 +103,7 @@ func TestBudgetCost(t *testing.T) {
 	if got := b.Spent().Cost; got < 0.005 || got > 0.00501 {
 		t.Fatalf("charged %.6f, want 0.005004", got)
 	}
-	// 0.005004 spent and a worst case of 0.010004 would pass 0.015.
+	// 0.005004 spent and a estimate of 0.010004 would pass 0.015.
 	refusedByBudget(t, ask(c, "x"))
 	if *calls != 1 {
 		t.Fatalf("the refused call reached the provider (%d calls)", *calls)
@@ -111,7 +111,7 @@ func TestBudgetCost(t *testing.T) {
 }
 
 // Gemini reports its reasoning apart from the answer, so a token or cost
-// limit needs a fixed thinking budget, which counts in the worst case.
+// limit needs a fixed thinking budget, which counts in the estimate.
 func TestBudgetGeminiReasoning(t *testing.T) {
 	p := Profile{Name: "g", Provider: "gemini", Params: Params{MaxOutputTokens: 100}}
 	c, _ := budgetClient(p, &Budget{MaxTokens: 10000}, Usage{}, 0)
@@ -128,18 +128,18 @@ func TestBudgetGeminiReasoning(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got := b.Spent().Tokens; got != 3+1+100+500 {
-		t.Fatalf("charged %d, want the worst case with reasoning, 604", got)
+		t.Fatalf("charged %d, want the estimate with reasoning, 604", got)
 	}
 	p.Params.MaxOutputTokens = 0
 	c, _ = budgetClient(p, &Budget{MaxTokens: 10000}, Usage{}, 0)
-	refusedByBudget(t, ask(c, "x")) // no output limit: the worst case is unknown
+	refusedByBudget(t, ask(c, "x")) // no output limit: the estimate is unknown
 }
 
-// Concurrent calls hold their worst cases while under way, so together they
+// Concurrent calls hold their estimates while under way, so together they
 // cannot pass the limit.
 func TestBudgetConcurrentReservations(t *testing.T) {
 	p := Profile{Name: "p", Provider: "mock", Params: Params{MaxOutputTokens: 97}}
-	b := &Budget{MaxTokens: 1000} // ten worst cases of 100
+	b := &Budget{MaxTokens: 1000} // ten estimates of 100
 	var wg sync.WaitGroup
 	var passed int64
 	for i := 0; i < 40; i++ {

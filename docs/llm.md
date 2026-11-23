@@ -107,15 +107,60 @@ Free-tier limits are low and change; AI Studio shows your project's. They are co
 
 ### A run's budget (D046)
 
-`wag-llm play` and `wag-llm annotate` take hard limits on what a run may spend:
+`wag-llm play` and `wag-llm annotate` accept a **per-invocation call cap** and
+optional token/cost allowances. A resumed annotation directory starts a **fresh
+allowance**; these limits and spending are not yet persisted as a cumulative
+run budget.
 
-- `--max-calls N` counts every call to a model, retries included; the run stops before the N+1th.
-- `--max-tokens N` and `--max-cost X` refuse any call whose worst case would take the run past the limit, before it is sent. The worst case is the request's size in bytes (no tokenizer makes more tokens than bytes) plus the profile's `max_output_tokens`, so these limits need `max_output_tokens` on every profile the run calls. Gemini counts its reasoning apart from the answer, so a Gemini profile also needs a fixed `thinking_budget` (0 turns thinking off); for the other providers the output limit includes reasoning.
-- `--prices FILE` gives the price per million tokens, by profile name or model (`"*"` for any other): `{"gemini-2.5-flash": {"input": 0.3, "output": 2.5}}`. `--max-cost` needs it; the currency is the file's. Reasoning tokens are priced as output.
+- `--max-calls N` stops this invocation before its N+1th **client attempt**.
+  WAG's retries count separately. The cap covers calls through WAG's client;
+  it does not count a provider's hidden internal work or calls made inside an
+  external command.
+- `--max-tokens N` refuses a call when its **estimated reservation**, plus
+  accounted and in-flight usage, would exceed N. The estimate uses supplied
+  system/message text bytes, supplied structured-output schema bytes, and
+  `max_output_tokens`. It is a proxy, not a tokenizer or a proven billed-token
+  ceiling: provider framing, hidden prompt additions and provider behavior can
+  differ. Every estimated call needs a positive `max_output_tokens`.
+- Gemini estimates additionally require a fixed, nonnegative `thinking_budget`
+  within the provider field's integer range. Missing reasoning usage retains
+  that allowance unless a coherent reported total supplies it. Whether a model
+  honors a requested thinking setting remains a provider/model contract.
+- `--max-cost X` uses `--prices FILE`, whose currency and rates the owner chooses.
+  Rates are per million tokens, by profile name, then model, then `"*"`:
+  `{"gemini-2.5-flash":{"input":0.3,"output":2.5}}`. Every entry must explicitly
+  provide finite, nonnegative input and output rates; explicit zero is allowed.
+  This is a price-table estimate, not an invoice ceiling. It does not discover
+  current prices, tier changes, cache charges or other provider fees.
+  Rates are resolved from the configured profile/model; native callers that
+  override a request's model must keep that price mapping aligned themselves.
 
-After each call the budget counts what the provider reported, or the call's worst case when it reported nothing, and a failed call counts too, since a provider may bill one. A refused call fails with the kind `budget`: an annotation run stops that annotator, and `play` stops the game there, saves its trace and export, and starts no further game. The run prints what it spent at the end.
+A profile's `extra` fields can replace its messages or output limit. Therefore
+nonempty `extra` is refused when token/cost estimation is enabled. Unbudgeted
+and call-only configurations retain their custom-field support.
 
-A run that calls a provider with an API key must have a limit: without `--max-calls`, `--max-tokens` or `--max-cost` it does not start. Mock profiles and local servers need none. As D046 says, runs with the owner's keys run on the owner's machine, with limits the owner sets for that run. The dashboard does not take a budget yet (stage 2).
+After a successful attempt, coherent reported usage replaces the corresponding
+estimates. Missing components retain conservative fallbacks; failed attempts
+retain their reservation because they may be billed. Negative or inconsistent
+usage cannot create credit: the checker charges at least the reservation and
+any larger nonnegative observations, records the problem and stops later
+attempts. Usage exceeding the reservation is also retained and stops later
+attempts. The actual response and usage remain in the trace alongside the
+accounting error. Already dispatched concurrent calls cannot be undone, and a
+reported overrun demonstrates why estimates are not hard billing guarantees.
+
+A refused call or accounting violation has error kind `budget`. Annotation
+stops the affected annotator; `play` saves its trace/export and starts no further
+game. The invocation prints accounted usage at the end, explicitly labelled
+with its estimation limits.
+
+**Profiles that require an API key, or configure `api_key_env`/an explicit key,
+need a positive `--max-calls`.** This includes keyed compatible endpoints and
+keyed overrides of local provider names. Token/cost estimates can supplement
+that cap, but cannot replace it. Unkeyed local servers and mock profiles need
+no cap. As D046 says, runs with the owner's keys execute on the owner's machine
+with an allowance chosen for that invocation. No live API call was needed to
+test these controls. The dashboard does not take a budget yet (stage 2).
 
 ## Profiles
 

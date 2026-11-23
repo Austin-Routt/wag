@@ -125,7 +125,8 @@ func TestBudgetFlags(t *testing.T) {
 		{nil, []llm.Profile{{Name: "m", Provider: "mock"}, {Name: "l", Provider: "ollama"}}, false, ""},
 		{[]string{"--max-calls", "5"}, keyed, true, ""},
 		{[]string{"--max-cost", "1"}, keyed, false, "--prices"},
-		{[]string{"--max-cost", "1", "--prices", prices}, keyed, true, ""},
+		{[]string{"--max-cost", "1", "--prices", prices}, keyed, false, "--max-calls"},
+		{[]string{"--max-calls", "5", "--max-cost", "1", "--prices", prices}, keyed, true, ""},
 		{[]string{"--max-calls", "-1"}, keyed, false, "negative"},
 	} {
 		fs := flag.NewFlagSet("t", flag.ContinueOnError)
