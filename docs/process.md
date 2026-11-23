@@ -176,7 +176,7 @@ A decision raised in several entries is one decision that lists them all. For ex
 
 ### Proposals: examples before a scheme changes
 
-A decision that changes a scheme's formulas is prepared as a proposal (the owner's decision of 2026-10-22, with D001). The proposal is written and checked first. The owner's reading requirement is applied through the standing rule immediately above: it replaces that reading where the rule authorizes it, while preserving independent proposal review and any explicitly required human source verification.
+A decision that changes a scheme's formulas is prepared as a proposal (the owner's decision of 2026-10-22, with D001). The proposal is written and checked first; `walton.yml` changes only once the owner has read it, or, under the standing rule above, once the proposal check and an independent review are done. A departure from the decided text still goes to the owner as a choice of its own (§3), and a question of fact the register gives to a verifier stays open until a person has checked it.
 
 1. **The proposal file,** `docs/proposals/<decisions>.yml`, holds:
    - the schemes as they would be;

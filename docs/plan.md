@@ -43,7 +43,7 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 **Stage 2 so far:**
 - 2026-11-22: invocation budgets (D046), with follow-up hardening. `wag-llm play` and `annotate` cap client attempts including WAG retries; keyed/credential-configured profiles require `--max-calls`. Optional token/cost reservations are explicitly estimates, not provider billing ceilings. Extra overrides are refused for estimated budgets; malformed prices/usage cannot create credit, and accounting overruns stop subsequent attempts while retaining observed usage ([`llm.md`](llm.md#a-runs-budget-d046)). Tested on mock clients. The dashboard does not take a budget yet. Limits and spending are printed but not persisted as a cumulative run allowance, so resuming a directory starts a fresh invocation budget.
 
-**Evidence increment (literature review of 2026-11-22).** [The theory review](evidence-theory-review.md) supports the record model and refines its semantics: source reports, interpretation/warrant, scope, dependence, assessment and procedural admission stay distinct. `wag-evidence/0.1` now checks offline records, retained bytes, selectors and two-party consent for consideration. Its pass does not verify facts, implement game admission, or close stage 2. Before the pilot, [E1 of the evidence plan](evidence-implementation-plan.md#e1-connect-the-first-slice-before-an-evidence-aware-game-pilot) must bind records to the actual game, preserve old citation-only traces, and test the specific CQ/admission/revision effects. The owner's existing capture, history and human-verification decisions remain unchanged; no new capture gate is introduced.
+**Evidence increment (literature review of 2026-11-22).** [The theory review](evidence-theory-review.md) supports the record model and refines its semantics: source reports, interpretation/warrant, scope, dependence, assessment and procedural admission stay distinct. `wag-evidence/0.1` now checks offline records, retained bytes, selectors and two-party consent for consideration. Its pass does not verify facts, implement game admission, or close stage 2. Within stage 2, and so before the pilot, [step 1 of the evidence plan](evidence-implementation-plan.md#step-1-connect-the-first-slice-before-an-evidence-aware-game-pilot) binds records to the actual game, keeps old citation-only traces, and tests the specific CQ, admission and revision effects; this is the evidence item of stage 2 above, as the review recommended, not a new condition. The owner's existing capture, history and human-verification decisions remain unchanged; no new capture gate is introduced.
 
 ## 1. Principles
 
@@ -283,12 +283,11 @@ Some faults are not misused schemes: begging the question, the loaded question, 
 
 ## 7. Decision record and remaining implementation
 
-The [decision register](decisions.md) is authoritative. On 22 November 2026 it
-contains 79 decided entries and six open entries: D021, D027, D041 and D085
-need the recorded verifier's page checks; D079 is reserved to the owner; D083
-needs constraint-satisfying candidate sketches and review. A generated
-candidate label of `ready` establishes structural readiness, not satisfaction
-of every semantic `needs` item or approval of its proposed meaning.
+The [decision register](decisions.md) is authoritative, and its view gives the
+counts. The open entries are questions of fact for a person (D021, D027, D041,
+D085), D079, which the owner reserved, and D083, decided when its candidates'
+sketches are ready. A candidate's `ready` in the generated view means its
+minimum is complete; the decision still judges its meaning and its `needs`.
 
 The earlier questions in this section now have these recorded dispositions:
 
@@ -298,9 +297,10 @@ The earlier questions in this section now have these recorded dispositions:
    and paraphrases publicly, and preserve the copy check with hashed word
    sequences. The implementation remains open. D078 preserves the existing
    public history. The deleted *New Dialectic* PDF therefore remains in that
-   history; rewriting it is not a remaining choice in this plan. Earlier audit
-   inventories are retained in [part 9](review-2026-10-15-part9.md) and the
-   [stage-integration review](review-2026-11-22-stages.md).
+   history; rewriting it is not a remaining choice in this plan. The measured
+   inventory (173 of `walton.yml`'s 393 templates share eight or more words with
+   the compendium) is in the [catalogue's README](../wag/data/catalogue/README.md)
+   and [catalogue-alignment.md](catalogue-alignment.md).
 2. **Licences (D044, D080).** The repository now includes MPL-2.0 for WAG's
    code and CC BY 4.0 for its own documents and annotations. The actual scope,
    mixed files and excluded third-party material are recorded in
@@ -328,10 +328,12 @@ The earlier questions in this section now have these recorded dispositions:
    WAG traces serve distinct purposes: discourse exposes unanticipated
    patterns; native traces test legality, answerability and the protocol.
    Reconstructed Kialo play stays distinct from observed dialogue and
-   model-authored arguments. These are recorded directions for later
-   implementation, not new owner decisions. Candidate corpora still need
-   source-specific assessment.
-7. **Goal and authorities.** The goal remains that every scheme and critical
+   model-authored arguments. Real discourse comes first, each corpus recorded
+   with its licence (D050). These are the owner's decisions D048-D050, for
+   later implementation; candidate corpora still need source-specific
+   assessment.
+7. **Goal and authorities,** decided on 2026-10-22 ([part 13 §3](review-2026-10-22-part13.md#3-the-owners-decisions)),
+   with CI on the public repository (D052, [`process.md`](process.md) §7). The goal remains that every scheme and critical
    question can be played in some appropriate context. The book governs its
    scheme meanings; WAG's fields and links are justified by coherence,
    examples and measured data/play. The library supplies draft records where
@@ -340,7 +342,7 @@ The earlier questions in this section now have these recorded dispositions:
    source checks.
 
 Open decisions and implementation debt have different statuses. In particular,
-the six open register entries do not count every unfinished stage-2 task, and
+the open register entries do not count every unfinished stage-2 task, and
 an adopted direction or a passing mock test does not establish full deployment
 or empirical validation.
 

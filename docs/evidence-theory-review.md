@@ -2,7 +2,7 @@
 
 Review date: 2026-11-22. Inspected baseline: `6375ac2b29d04cc5a5602c10cd33bcb247dd3bbc`.
 
-This synthesis combines three independent AI source reviews of seven supplied works. It supports the five-record design in [evidence-records.md](evidence-records.md), with stronger identity, scope and assessment contracts. The accompanying native Go offline tool targets the **provisional v0.1** [evidence contract](evidence-contract.md). Its result concerns record integrity and procedural consideration. Native game/UI/capture-client integration, factual verification and empirical validation remain separate work. This increment changes no scheme formulas.
+This synthesis combines the AI source reviews of seven supplied works, each source read by one reviewer and the key passages checked by the review's lead; a second, independent check confirmed the claims tested against the PDFs. It supports the five-record design in [evidence-records.md](evidence-records.md), with stronger identity, scope and assessment contracts. The accompanying native Go offline tool targets the **provisional v0.1** [evidence contract](evidence-contract.md). Its result concerns record integrity and procedural consideration. Native game/UI/capture-client integration, factual verification and empirical validation remain separate work. This increment changes no scheme formulas.
 
 The [source registry](evidence-theory-sources.json) records exact PDF hashes, bibliographic/version caveats, printed/PDF locators, reviewer reading scopes and limitations. The books were read selectively; no full-book review is claimed. Papers and books remain outside this repository under D043. This document contains paraphrases and locators, not reproduced passages.
 
@@ -15,8 +15,8 @@ The [source registry](evidence-theory-sources.json) records exact PDF hashes, bi
 | E03 | Douglas Walton, *Character Evidence: An Abductive Theory*, Springer, 2006 | Selected sections on explanations, alternative accounts, character and source attacks. |
 | E04 | Johannes P. Wallner, *Computational Argumentation: Reasoning, Dynamics, and Supporting Explainability*, IJCAI-24, pp.8583–8588 | All six pages reviewed; an overview, not an audit of every cited theorem or implementation. |
 | E05 | Douglas Walton, *Legal Argumentation and Evidence*, Penn State University Press, 2002 | Selected sections on relevance, credibility, proof and evidential networks. A historical theoretical account, not current legal guidance. |
-| E06 | Douglas Walton, *When Expert Opinion Evidence Goes Wrong*, 2019 | Supplied 28-page manuscript reviewed. Its pagination and some editorial details differ from the publisher record for volume27, pp.369–401. |
-| E07 | Douglas Walton, *Witness Testimony Evidence*, Cambridge University Press | Selected testimony, corroboration and account sections. Supplied front matter gives print2007 and copyright2008; preserve that distinction and the publisher metadata caveat. |
+| E06 | Douglas Walton, *When Expert Opinion Evidence Goes Wrong*, 2019 | Supplied 28-page manuscript reviewed. Its pagination and some editorial details differ from the publisher record for volume 27, pp.369–401. |
+| E07 | Douglas Walton, *Witness Testimony Evidence*, Cambridge University Press | Selected testimony, corroboration and account sections. Supplied front matter gives print 2007 and copyright 2008; preserve that distinction and the publisher metadata caveat. |
 
 ### Evidence connects material to a target through an inference
 
@@ -54,9 +54,9 @@ E04 separates construction of arguments, acceptability evaluation and conclusion
 
 The literature must be checked critically before becoming executable reference cases:
 
-- **Historical engine boundary:** E02 p.153/PDF164 describes Carneades versions1–3 and says the next version is not implemented. It cannot specify the current vendored Carneades-4 runtime.
+- **Historical engine boundary:** E02 p.153/PDF164 describes Carneades versions 1–3 and says the next version is not implemented. It cannot specify the current vendored Carneades-4 runtime.
 - **Unexecuted example:** E02 pp.169–170/PDF180–181 says its Leonardo case was not evaluated through CAS; pp.172–173/PDF183–184 acknowledges unresolved cumulative modeling. A new reconstruction needs independently stated inputs and outcomes. The artwork's actual attribution is not established by this review.
-- **Probability error:** E02 p.245/PDF256 misleadingly relates the conjunction fallacy to applying Bayesian rules and invokes independence for the conjunction bound. Set inclusion gives `P(A ∩ B) ≤ P(A), P(B)` without independence. The probability of combined evidence is also distinct from its support for a hypothesis. This passage does not justify rejecting probabilistic models wholesale.
+- **A misleading probability passage:** E02 p.245/PDF256 misleadingly relates the conjunction fallacy to applying Bayesian rules and invokes independence for the conjunction bound. Set inclusion gives `P(A ∩ B) ≤ P(A), P(B)` without independence. The probability of combined evidence is also distinct from its support for a hypothesis. This passage does not justify rejecting probabilistic models wholesale.
 - **Question-policy qualification:** broad default-on-question statements in E02 p.131/PDF142, E06 manuscript p.6 and E07 p.61/PDF81 require comparison with differentiated assumption/exception treatment. Do not encode one universal question effect.
 - **Unexplained bean color:** E03 p.58/PDF70 places a red bean near a bag described as containing white beans; p.59/PDF71 does not reconcile this color mismatch or explicitly change the individual bean to white. Treat this as a likely textual error or an unaddressed exception. A fixture assuming an all-white bag must treat the red observation as contrary evidence; label any corrected white-bean fixture separately.
 - **Manuscript diagram errors:** E06 pp.7–8 confuses the expertise-supporting PhD evidence with the reliability exception, and p.23 confuses identifiers and figure numbering. The supplied figures and prose need reconciliation before executable translation. No claim is made that the unchecked publisher PDF has identical errors. Its illustrative case and incomplete dialogue record do not establish measured accuracy. [E06 pp.23–26.]
@@ -64,7 +64,7 @@ The literature must be checked critically before becoming executable reference c
 
 These findings limit particular claims; they do not invalidate the entire works. Case studies, philosophical theories, specifications and empirical validation have different evidential roles.
 
-## 3. WAG design decisions derived from the review
+## 3. WAG design recommendations derived from the review
 
 The following are **WAG engineering recommendations**, not a schema dictated by any one paper. Details belong in [the contract](evidence-contract.md).
 
@@ -93,7 +93,7 @@ The v0.1 acceptance boundary is **structural/integrity and procedural correctnes
 | One actor repeats consent; another remains silent | No bilateral consideration outcome. |
 | Consent withdrawal and replay | Remove only the affected route; deterministic active state and retained history. |
 | Positive assessment without authorized consent | Assessment does not grant admission or factual truth. |
-| Source saysP versusP; context/definition versus support | Distinct interpretation and binding roles. |
+| Source says P versus P; context/definition versus support | Distinct interpretation and binding roles. |
 
 These are required test categories, not a claim that this document itself executed them. Use the implementation's validation receipts for actual results. Later runtime integration must separately test CQ effects, argument/statement targets, hard-assumption avoidance, dependent recomputation and preservation of independent support.
 

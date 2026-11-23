@@ -28,7 +28,7 @@ The committed example is synthetic and rerun in CI. Offline passes do not
 close stage 2, certify a live game, authenticate a person, judge a warrant or
 establish factual truth. Current game citations retain their legacy meaning.
 
-## E1: connect the first slice before an evidence-aware game pilot
+## Step 1: connect the first slice before an evidence-aware game pilot
 
 Implement this bounded path with native fixtures before scaling API calls:
 
@@ -70,18 +70,18 @@ The controller must enforce the data boundary; prompt quotation alone is not
 an acceptance test. These integration cases are **planned**, not already
 executed by the offline checker.
 
-E1's practical-reasoning slice needs evidence for empirical consequences,
+Step 1's practical-reasoning slice needs evidence for empirical consequences,
 causal links, values/preferences where asserted, relevant agent/action identity
 and comparisons. A participant's declared preference or commitment can be the
 appropriate source for that preference; it need not be external factual proof. Source scope must preserve modality, time, population,
 scenario and uncertainty when those affect the inference. AS2 can add explicit
 states/actions/goals/values later without replacing this provenance contract.
 
-## E2: source-dependent families and full NASCQ contracts
+## Step 2: source-dependent families and full NASCQ contracts
 
-Complete the already decided witness/expert changes through the normal proposal
-path, including D009, D034 and D035; they are existing pending work, not new
-regressions introduced by this patch. Do not replace the book's authority or
+Apply the already decided witness and expert changes (D034, D035) through the
+normal proposal path, and D009's question texts through the NASCQ generator;
+they are decided, and only their application is pending. Do not replace the book's authority or
 formula review procedure with examples from the supplied manuscripts.
 
 For every supported CQ, version its target locus, burden bearer, triggering
@@ -101,7 +101,7 @@ Only after these contracts work should larger model-driven play be described
 as testing the complete source-dependent family. Finite NASCQ completeness
 within a versioned set and open-world coverage remain distinct measures.
 
-## E3: multimodal fidelity and Kialo/API pilot
+## Step 3: multimodal fidelity and Kialo/API pilot
 
 The retained Kialo graph and its external citations are separate evidence
 objects. Preserve graph-export provenance, claim/version/location IDs, link
@@ -135,7 +135,7 @@ their source group. A random edge split or two mirrors of the same article do
 not supply independent train/test evidence. Use blinded first passes and
 multiple model families where available; disclose shared models/prompts/tools.
 
-## E4: review/meta-argumentation, aggregation and interchange
+## Step 4: review/meta-argumentation, aggregation and interchange
 
 Represent public review reasons with exact object/version, source selector,
 claim, warrant, alternatives, defeaters and disposition. The same Walton

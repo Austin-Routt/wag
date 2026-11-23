@@ -66,7 +66,7 @@ a stronger reading, and provide only background for another. Authenticity,
 relevance, probative force and sufficient support are distinct questions.
 See E02 and E05 in the [source registry](evidence-theory-sources.json).
 
-## The first slice's admission policy (D076, refined 2026-11-22)
+## The first slice's admission policy (D076, refined 2026-11-22 and 2026-11-23)
 
 - Two players, cooperative. A binding is admitted **for consideration** when
   both consent to its exact revision: source/representation ancestry, passage,

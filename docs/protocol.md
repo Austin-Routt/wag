@@ -111,12 +111,19 @@ The move:
   exact JSON spelling: a large integer is not rounded through floating point,
   and an exponent or trailing decimal zeros are preserved. This preserves a
   phrase; it does not promise arbitrary-precision engine arithmetic.
-- **Historical numeric replies.** Saved moves already hold string bindings
-  and keep them. Replaying raw model replies reparses their JSON, so a trace
-  containing numbers affected by the earlier rounding/normalization can
-  differ under the corrected parser. Exact historical replay needs the
-  original WAG build/parser as well as the other pinned inputs; a changed
-  interpretation must be recorded as a migration or new replay result.
+- **Historical replies.** Saved moves already hold string bindings and keep
+  them, so loading a saved game is unchanged. Replaying a trace (`wag-llm
+  replay`) reparses the raw model replies, and four changes of 22-23 November
+  2026 can make a trace recorded before them replay differently or fail:
+  a numeric binding now keeps its exact spelling; a reply with a duplicate
+  key is refused; an out-of-range number (a confidence of `1e400`) no longer
+  refuses the whole reply; and a number in a list of the reasoning's texts
+  (its context or thoughts) is kept as spelled, which replay does not compare
+  (it compares the moves and their results, not those texts). A truncated
+  reply keeps its old message.
+  Exact historical replay needs the original WAG build and parser as well as
+  the other pinned inputs; a changed reading must be recorded as a migration
+  or a new replay result.
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

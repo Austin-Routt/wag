@@ -645,7 +645,7 @@
       "id": "ET-16",
       "source_id": "E04",
       "locator": {
-        "printed": "p.8586, including Figure4",
+        "printed": "p.8586, including Figure 4",
         "pdf_pages_1_based": "4"
       },
       "classification": "source_claim",
@@ -715,7 +715,7 @@
         "pdf_pages_1_based": "7–8,23"
       },
       "classification": "source_discrepancy_visually_checked",
-      "paraphrase": "Prose conflicts with Figure1’s expertise/exception structure; later prose mixes identifiers and figure numbering.",
+      "paraphrase": "Prose conflicts with Figure 1’s expertise/exception structure; later prose mixes identifiers and figure numbering.",
       "wag_implication": "Reconstruct graph fixtures independently; the discrepancy finding is specific to the supplied manuscript."
     },
     {

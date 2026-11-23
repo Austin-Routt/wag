@@ -1438,7 +1438,7 @@ decisions:
   decider: owner
   priority: 2
   status: decided
-  docs: ["the external reviews of 2026-11-22 (ChatGPT's evidence design)", "wag/internal/server/protocol.go", "docs/review-2026-11-22-stages.md"]
+  docs: ["the external reviews of 2026-11-22 (ChatGPT's evidence design)", "wag/internal/server/protocol.go", "docs/review-2026-11-22-stages.md", "docs/evidence-contract.md", "docs/evidence-theory-review.md"]
   decided:
     date: "2026-11-22"
     by: owner (standing rule of 2026-11-22)
@@ -1456,7 +1456,15 @@ decisions:
       each consenting to the same revision of the source, one acceptance being
       one party's commitment and silence no consent; withdrawing a consent
       removes only its own route of admission. Captured content is data, never
-      instructions (this does not decide D079).
+      instructions (this does not decide D079). Refined 2026-11-23 under the
+      standing rule, on the evidence-theory review: a consent is to the exact
+      binding, that is the source and its representation, the passage, the
+      source's assertion, the offered interpretation and warrant, the target,
+      the role, the context and the policy, so agreeing on the same document
+      is not enough. Admission is for consideration only: not a stipulation, a
+      moderator's ruling, the engine's acceptance or a finding of fact.
+      wag-evidence/0.1 checks this offline, outside the game
+      (docs/evidence-contract.md).
     recorded: "docs/decisions.yml; to apply: the game's moves and export (plan §0, stage 2)"
 
 - id: D077

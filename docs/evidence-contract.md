@@ -35,11 +35,13 @@ The Go structs in `wag/internal/evidence/model.go` are the field contract.
 The committed example is a complete machine-readable instance. All record
 IDs are unique across the bundle. Every authored record names a declared
 actor and an RFC3339 creation time. Actor kinds are human, model and tool;
-these are declared identities, not authenticated credentials.
+these are declared identities, not authenticated credentials. Only players,
+human or model, can be the context's participants (D076); a tool can author
+records but cannot consent.
 
 | Object | Required meaning |
 |---|---|
-| Context | Session and profile identity, the supported policy, two distinct participants, declared SHA-256 pins for engine/catalogue/NASCQ inputs |
+| Context | Session and profile identity, the supported policy, two distinct participants (each a human or model player), declared SHA-256 pins for engine/catalogue/NASCQ inputs |
 | Source | Descriptive source identity, kind, label and reference; a source is not globally trusted or automatically an expert |
 | Artifact | Source identity, immutable revision, declared capture scope, capture status, omissions/failure where applicable |
 | Representation | One retained byte sequence, artifact revision, original/derivative kind, capture/transformation method and parents |
@@ -48,7 +50,7 @@ these are declared identities, not authenticated credentials.
 | Binding | Source claim, exact target, role, offered interpretation and an explicit inferential or use warrant |
 | Assessment | Assessor, binding, distinct assessed dimensions, public rationale, basis and declared review/fact-check status |
 | Dependency | A recorded relation among artifacts: common origin, derivation, claimed independence or unknown |
-| Event | One participant's scoped consent or withdrawal for the exact binding fingerprint, in an ordered complete log |
+| Event | One participant's scoped consent or withdrawal for the exact binding fingerprint, in an ordered complete log, dated no earlier than its binding or the event before it |
 
 The five design families remain artifact, derivative, binding, assessment and
 admission event. The additional identity/claim/target records make their
@@ -131,7 +133,8 @@ A claimed check needs a method, and a determination needs cited basis claims.
 References are checked; the checker does not independently perform the check.
 The general review level distinguishes unreviewed, model checked and human
 checked. The latter requires a declared human author, but identity and actual
-human involvement still require external attestation. D045 remains unchanged.
+human involvement still require external attestation, and the report warns so
+(`human_checked`). D045 remains unchanged.
 
 No dependency record means unknown independence. Common origin and derived
 relations remain explicit; an independence claim requires a rationale and
@@ -146,19 +149,25 @@ review than byte comparison.
 The sole implemented policy is `two-party-consideration/1`. Both distinct
 context participants must consent. One party's silence, an assessment, a
 moderator-like label, or duplicate consent by the same party is insufficient.
-Events are numbered from 1 with no gaps. Each event ID is unique. A participant
+Events are numbered from 1 with no gaps, and their times do not go back along
+that sequence; no event is dated before the binding it concerns. Each event ID
+is unique. A participant
 may withdraw only their own active consent. Duplicate active consent and
 withdrawal without active consent are invalid transitions in this profile.
 
 An event includes `binding_revision`. This is produced by the checker from
 the exact binding, claim, target, selected representation and its retained
-ancestry, relevant artifact/source records, and full context. Change the
-interpretation, target, role, source metadata, derivative, profile, participants
-or input pins, and the prior fingerprint no longer applies. Assessments do not
+ancestry, relevant artifact/source records, the full context and the
+participants' actor records. Change the interpretation, target, role, source
+metadata, derivative, profile, participants, a participant's declared kind or
+label, or input pins, and the prior fingerprint no longer applies. Assessments do not
 grant consent and do not themselves change this consideration-only identity.
 
-Fingerprints use the explicitly named `wag-binding-go-json/1` serialization
-implemented in the Go code (sorted string map keys). This is not an assertion
+Fingerprints use the explicitly named `wag-binding-go-json/2` serialization
+implemented in the Go code (sorted string map keys). Version 2 (2026-11-23)
+added the participants' actor records; a consent pinned under version 1 is
+stale and must be given again. A test pins the fixture's fingerprint, so a
+change to it is a deliberate version change. This is not an assertion
 of RFC canonical-JSON compatibility. Cross-language writers should consume the
 checker-produced fingerprints or reproduce the named algorithm against pinned
 fixtures. A future canonicalization migration needs a new algorithm version.
@@ -178,7 +187,9 @@ graph; the future adapter must prove those effects with game-level tests.
 
 ## Decode contract and limits
 
-JSON decoding rejects duplicate member names after unescaping, unknown fields,
+JSON nested deeper than 10000 levels, encoding/json's own limit, is refused
+before any recursive scan. JSON decoding rejects duplicate member names after
+unescaping, unknown fields,
 noncanonical field spelling, explicit null values, trailing JSON, invalid raw
 UTF-8 and unpaired Unicode surrogates. Valid surrogate pairs and intentional
 U+FFFD remain representable. Payload byte length and the applicable selector
@@ -191,11 +202,15 @@ numbers in programmatically constructed records; serialization errors cannot
 produce a misleading fingerprint. Native typed values have already lost JSON
 field-presence information, so file/API ingestion must use `Decode` first.
 
-Hashing of non-text payloads streams. Exact text selection currently loads
-the selected text representation into memory; very large text and concurrent
-live capture are not capacity-validated. No arbitrary size ceiling is treated
-as a semantic rule. Capacity limits and streaming text selection should be
-measured before scaling beyond the bounded pilot.
+Payloads are read no further than one byte past their declared length, so a
+larger file is a mismatch without being read to its end. Hashing streams. A
+text representation is read into memory once per check, bounded the same way,
+and a selection is found by walking its code points, so a check needs about
+the payload's size in memory; a claim on a payload that failed its check is
+not checked again. Reports are deterministic. Very large text and concurrent
+live capture are not capacity-validated; no arbitrary size ceiling is treated
+as a semantic rule, and capacity should be measured before scaling beyond the
+bounded pilot.
 
 The [implementation plan](evidence-implementation-plan.md) lists native game
 integration, CQ protocols, modality checks and empirical studies separately.
