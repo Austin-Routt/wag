@@ -16,7 +16,7 @@ It is written from two sources, both read in full:
 - **Unread sources are marked.** Works cited through ND or A20 that we have not read ourselves are marked "via ND" or "via A20". The main one is Walton & Krabbe's *Commitment in Dialogue* (1995).
 - **Disagreements are flagged.** Where the two sources differ, or WAG adds something of its own, the text says so.
 
-Written on 2026-10-15. Why: [part 9](review-2026-10-15-part9.md). The work it leads to: [plan §8, Track D](plan.md#8-track-d-dialogue-types).
+Written on 2026-10-15. Targeted source and current-code corrections on 2026-11-23 are identified in §10; they do not replace the pending human page-reference check or change Track D's order. Why: [part 9](review-2026-10-15-part9.md). The work it leads to: [plan §8, Track D](plan.md#8-track-d-dialogue-types).
 
 **Contents**
 1. [The idea](#1-the-idea)
@@ -167,7 +167,7 @@ Advocacy and action are two separate questions that cut across the types:
   - **ND** handles everything beyond the six as a subtype or a mixture (ch. 9). It offers its list to orient the reader, and says neither that the six are exhaustive nor that they are not.
   - **A20** says the list is not meant to be exhaustive, and that types may be subdivided or combined, citing ND p. 31. The subtypes are on that page; combining is ND chs. 8–9; "not exhaustive" is A20's own reading.
   - **For WAG:**
-    - **Main types:** a closed list of six. A new main type would need a new pair of initial situation and goal; none has been needed.
+    - **Initial implementation scope:** the six selected main types. This was WAG's design choice, not a claim that the literature is exhaustive. Recognition in the literature, inclusion in a plan and executable support are separate statuses; see discovery and adjudication below.
     - **Subtypes:** an open list.
     - **Mixtures:** "mixed" is recorded as several typed segments, not as a seventh type.
 
@@ -205,23 +205,23 @@ Proposals to fill the grid's three empty cells are only as good as their reading
 | Relationship × asymmetric | **Exhortation, seduction, conversion** | Same attribution, also unconfirmed. These overlap what ND treats as persuasion or negotiation carried by emotional appeals: advertisements and infomercials (pp. 122–5, 206–14). Conversion changes belief, which is persuasion's aim. | No game. Annotated by its dimensions. |
 | — | "Relationship management under information asymmetry" | The analysis's own label; not published | Not adopted |
 
-**Types proposed after ND.** We have not reviewed these; the sources are listed in §10.
+**Types described beyond ND's initial six.** Targeted passages on discovery and adjudication were checked on 2026-11-23 (§10). Recognition in those sources does not mean WAG implements their protocols.
 
 | Type | What it is | Source | In ND's terms | In WAG |
 |---|---|---|---|---|
-| **Discovery** | Finding a hypothesis, or a way to an answer, not fixed at the outset | McBurney & Parsons 2001; Walton's later lists | Close to the inquiry's discovery stage, where guesswork and abduction are proper (pp. 97–8) | Annotated as inquiry at its discovery stage, until data sets it apart |
+| **Discovery** | Finding a hypothesis or question not fixed at the outset | McBurney & Parsons 2001; Walton 2010 | ND discusses discovery as an inquiry stage (pp. 97–9); the later works specify a distinct dialogue model | Literature-described; not playable. Annotation can retain a sourced discovery hypothesis without silently relabelling it inquiry. |
 | **Examination** | Questioning someone to test what they know, often an expert | Walton 2006; Dunne, Doutre & Bench-Capon 2005 | Peirastic and exetastic dialogue: persuasion embedded in expert consultation (pp. 145–8) | The expert-opinion critical questions, in D2d |
-| **Adjudication** | A neutral third party rules on competing claims | Prakken 2008 | Close to the trial (pp. 232–5); Gordon's Pleadings Game (p. 277) | The moderator of the legal preset already plays this role; annotation gets a third-party field |
+| **Adjudication** | A neutral third party rules on competing claims | Prakken 2008 | Close to the trial (pp. 232–5); Gordon's Pleadings Game (p. 277) | Literature-described; not playable as Prakken's protocol. The moderator can approve moves, set weights and decide statements; it lacks the model's argument/decision phases, burden rulings and reasoned decision procedure. |
 
 **What WAG does with this.**
-- **The six main types stay the canonical, playable types.** No candidate becomes a main type.
+- **The six main types remain the initial implementation scope.** They are planned types, not six already playable protocols. Discovery and adjudication have literature-described status; this adds no executor or schedule change.
 - **Annotation records the dimensions as well as the type** (§9.3):
   - the aim: belief, action or relationship;
   - the situation: conflict, open problem, or asymmetric information;
   - any third party: none, audience or adjudicator.
 
   Separate judgements are easier to agree on, and to measure, than one label. A dialogue in an empty cell is recorded as it is, not forced into a type. A shift shows as a change of aim or situation.
-- **A new type needs evidence, as a new scheme does.** Suppose dialogues recur in one empty cell, or in one pattern no type covers: at least three dialogues from at least two sources. A person then reviews them as a candidate type, with their dimensions and examples.
+- **A newly proposed type needs evidence, as a new scheme does.** Suppose dialogues recur in one empty cell, or in one pattern no recognized type covers: at least three dialogues from at least two sources. A person then reviews them as a candidate type. This threshold is the Track D policy, not D047's separate threshold for schemes, questions and links; literature-described types need not be rediscovered to have their source status recorded.
 - **Example: a Kialo discussion.**
   - **Aim:** belief. Readers are asked to accept a practical thesis, and nothing is decided.
   - **Situation:** conflict.
@@ -583,32 +583,32 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 
 | ND | WAG today |
 |---|---|
-| **The dialogue type** | Implicit. Every game with a central claim (`debate`, `solo`) is a persuasion dialogue; the points modes match no type. |
-| **The modes** | **`debate`** is the simpler one-sided persuasion: pro bears the burden, and con may merely doubt (p. 38). There is no *dispute* variant, where con must prove the opposite. **The points modes** match no type. **`solo`** is one-person deliberation with a devil's advocate when the claim is practical (p. 152), and a one-person inquiry when it is factual. |
+| **The dialogue type** | Implicit. `debate` and `solo` provide bounded persuasion-oriented argument play; a named mode alone does not establish a complete dialogue protocol. The points modes have no assigned literature type. |
+| **The modes** | **`debate`** has an asymmetric burden resembling one-sided persuasion: pro bears the burden, and con may merely doubt (p. 38). There is no explicit *dispute* protocol in which both must prove a thesis. **The points modes** have no assigned type. **`solo`** can explore a practical or factual claim, but that topic does not supply deliberation's joint decision procedure or inquiry's proof and revision rules. |
 | **Commitment stores** | None. Every premise of a move is presumed, with a small fixed weight (`PresumptionWeight`, 0.01 by default); the scheme's weight goes to the argument. Rule 1 of §5.1 (premises the respondent accepts) is not enforced. |
 | **Assertions and concessions; the dark side** | None |
 | **Retraction** | None by a player. In `debate`, a losing side that passes concedes (`ConcedeOnPass`). The adapter's `RetractAssumptionsSince` is internal bookkeeping, not a move. |
 | **Burden and standard of proof** | On pro in `debate`. Each preset sets a proof standard: preponderance, clear and convincing, beyond reasonable doubt. |
 | **Stages** | None. No opening (agreeing the issue and rules), no confrontation, no closing beyond the end conditions. |
-| **Schemes and critical questions** | 9 schemes and 24 CQs in the game; 111 schemes in `walton.yml`. This is ND's relevance factor 4, and where WAG is strongest. |
+| **Schemes and critical questions** | A bounded set is playable through NASCQ; WAG's formula layer has 116 schemes. Current counts and the distinction between formula coverage, catalogue status and executable answers are in [the plan](plan.md). This is ND's relevance factor 4. |
 | **Shifts and embeddings** | None in the game. In annotation, Kialo roles mark some: `clarification` (information-seeking), `action_amendment` and `alternative_means` (deliberation). |
-| **Speech event** | The moderator in the legal preset is a small one: a judge's rules on top of the type. |
+| **Speech event** | The legal preset adds moderator approval, weights and hard statement decisions. These powers do not by themselves implement an adjudication protocol or establish the caller's authority. |
 | **Context presets** | Domain weights and standards, not types. "Policy deliberation" and "Scientific inquiry" were named after types the game does not play. In this round they became "Policy question" and "Scientific question", with descriptions that say so. |
 | **Lineage** | Carneades, by Gordon and Walton, continues the computational dialectics that ND ends with (Gordon's Pleadings Game, pp. 277–8). |
 
 ### 9.2 Can WAG play every type, and find every type in data?
 
-**Yes for both, at very different costs.** Each row is detailed, with effort and "done when", in [plan §8](plan.md#8-track-d-dialogue-types).
+**These are research and implementation goals.** A complete protocol and reliable recognition have not been established for every type. Each row is detailed, with provisional effort and "done when", in [plan §8](plan.md#8-track-d-dialogue-types).
 
 | Type | Playing it needs | Finding it in data needs | Fit to the current engine |
 |---|---|---|---|
 | **Persuasion** | Commitment stores, retraction rules, rule 1, a *dispute* variant; then permissive and rigorous variants and the maieutic outcome | Kialo has it in quantity | High: what WAG already plays |
 | **Deliberation** | A practical problem and shared goals at the opening; symmetric roles; one proposal (the simplest case), then several; a tentative joint decision; caution where harm is possible | Kialo's practical theses carry deliberation's arguments, but they are persuasion about action (p. 229), not a deliberation; meeting and town-hall transcripts are the real source | High: Carneades issues can have several positions |
-| **Inquiry** | One team; no retraction; established premises (sources); no circularity (already true); stages; outcome proven, disproven or open | Few public sources: review and replication threads, inquiry reports | High: mostly settings and rules |
+| **Inquiry** | The planned first profile is strict cumulative inquiry: one team, established premises, no retraction within that profile, stages and an explicit proven/disproven/open outcome. Revised-premise inquiry needs a separately specified revision policy; ND itself allows serious retractions (§5.2). | Review and replication threads and inquiry reports are candidates; their fit remains to be checked. | Argument evaluation is reusable; shared proof, evidence and revision obligations still need implementation and tests. |
 | **Information-seeking** | Asymmetric roles. An answerer seat that holds the knowledge: a person, a document, a model, a database. Questions with presuppositions, direct and indirect answers, challenges to a question. | Question-answer corpora and interviews; the Kialo `clarification` role | Medium: the question move exists, the answerer seat does not |
 | **Negotiation** | A new core beside the argument graph: issues with options, private interests, offers, acceptance, deadlock. Arguments about offers (practical reasoning, promises, threats) use the schemes. | Bargaining corpora; mediation transcripts | Low: a new subsystem |
 | **Eristic** | **Last of all** (the owner's decision, 2026-10-15). First, a detection exercise: mark where a dialogue slides into a quarrel, and which move did it. Then a playable quarrel, under safeguards (plan §8, D2h): scenario cards with fictional grievances; moves for blame, counter-blame and reconciliation; ending when the grievance is aired or the quarrel is broken off; model seats by default. | Corpora of conversations that derail into personal attack; Question Period transcripts | Medium. The quarrel needs few rules but careful limits. |
-| **Shifts and embeddings** | A stack of dialogues: open a subdialogue of another type by agreement; carry its results back when it is functionally joined; flag a move that belongs to another type without an agreed shift | Segment and shift annotation | Medium, once two or more types exist |
+| **Shifts and embeddings** | A stack can implement serial nesting. Specify the child's purpose, local commitments, authorized result transfer and contribution to the parent's goal. Agreement to shift is not sufficient for functional embedding; broader composition may need more than a stack. | Segment and shift annotation, including uncertainty | Depends on the supported profiles and composition rules. |
 
 ### 9.3 The model to build on (proposed)
 
@@ -681,8 +681,8 @@ Two links tie the catalogues together:
 
 ### 9.4 Open questions for the owner
 
-1. **The quarrel** (decided 2026-10-15: playable, and last). Still open: its safeguards in detail, and whether people play it or only model seats.
-2. **Negotiation's outcome:** what scores, each side's gain, the joint gain, or fairness? The subtypes need different answers.
+1. **The quarrel** (D049): an experimental profile, model seats by default on fictional scenarios, people only by choice, a moderator and plan §8's content limits; synthetic transcripts are labelled. It remains the last playable type.
+2. **Negotiation's outcome** (D048): report the profile-specific outcome vector; the implementation still needs the selected profile's concrete measures. The current decisions are in [the register](decisions.yml).
 3. **Dark-side commitments for model players:** give each seat a hidden position at the opening, so that the maieutic function can be measured?
 4. **Corpora beyond Kialo:** which ones, under which licences ([plan §8](plan.md#8-track-d-dialogue-types), D4).
 5. **The dimensions** (§2.7). Recording aim, situation and third party with the type is recommended, and is in the plan's step 0 and D3. It costs three fields per discussion, the same for every Kialo discussion.
@@ -690,7 +690,15 @@ Two links tie the catalogues together:
 
 ## 10. Further reading
 
-We have not reviewed these here. Read them before building the protocols they concern:
+The original 2026-10-15 reference had not reviewed these directly. Read the relevant protocols before implementing them. A targeted 2026-11-23 source check examined the supplied editions below; this does not attest that every page or every reference in the original document has been human-verified:
+
+- Walton & Krabbe, *Commitment in Dialogue* (1995), printed pp. 23–25, 66–67 and 79–82 (supplied PDF pp. 37–39, 80–81 and 93–96): public commitments and a provisional, non-exhaustive taxonomy.
+- McBurney & Parsons, *Chance Discovery Using Dialectical Argumentation* (2001), supplied PDF pp. 3–6, and Walton, *Types of Dialogue and Burdens of Proof* (2010), supplied manuscript pp. 1, 5–7: discovery as a distinct later model; inquiry profiles and burdens.
+- Prakken, *A Formal Model of Adjudication Dialogues* (2008), supplied PDF pp. 2–7 (manuscript pp. 1–6): third-party role, argument and decision phases, and burdens. The PDF contains a cover page; these are not asserted to be the journal's page numbers.
+- Hitchcock, McBurney & Parsons, *A Framework for Deliberation Dialogues* (2001), pp. 6–9, 15–16: proposals, assertions and acceptance have different effects. This is the supplied earlier framework, not an independent check of the 2007 publication below.
+- Walton, *Dialog Theory for Critical Argumentation* (2007), printed pp. 242–245 (supplied PDF pp. 260–263): agreement to shift does not alone establish functional embedding.
+
+The decisions and order in [plan §8](plan.md#8-track-d-dialogue-types) remain authoritative. The source observations above add no new capture gate under D079, separate fallacy subsystem or completed runtime tests.
 
 | Work | What it is for |
 |---|---|

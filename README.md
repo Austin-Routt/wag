@@ -66,7 +66,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 | Scheme catalogue | Tier 1 drafted and checked (phase 1, step 2) | **Entries:** 116, one per scheme, generated from the book links, `walton.yml`, the families and the NASCQ. **Questions:** 222, with their formulas (206 from the book, 35 with a game part, 6 that only `walton.yml` implies). **Discrepancies:** 126, 115 of them in tier 1's entries. **Tier 1:** 33 entries drafted and checked by models. **Statuses** on every work item. **Commands:** `wag-cli --catalogue-gen` and `--catalogue-check` (formulas, coverage, statuses, and a copy check against the book). | Verification by a person; tier 2's 83 entries; the owner's decisions on the scheme changes tier 1 proposes | [`wag/data/catalogue/README.md`](wag/data/catalogue/README.md), [`DRAFTING.md`](wag/data/catalogue/DRAFTING.md), [`index.md`](wag/data/catalogue/index.md), [`docs/catalogue-alignment.md`](docs/catalogue-alignment.md) |
 | Annotation | Pilot | One discussion, 50 claims: two model annotators, agreement, an adjudicated gold, validators | A gold a person stands behind; more discussions | [`docs/kialo-batch2/README.md`](docs/kialo-batch2/README.md) |
 | Evaluation | Basic | Validation; per-field agreement and Cohen's kappa; a report per run; re-scoring from recorded calls | Acceptable answers, causes of disagreement, development and test sets, a probe set | [`docs/plan.md`](docs/plan.md) §5 |
-| Dialogue types | Reference written | Every game with a central claim is a persuasion dialogue: `debate` is the one-sided form; the points modes match no type | Commitment stores; the other five types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
+| Dialogue types | Reference written; protocol expansion planned | `debate` and `solo` provide bounded persuasion-oriented argument play; the points modes have no assigned literature type | Commitment-aware persuasion; additional types; shifts; identification in data | [`docs/dialogue-types.md`](docs/dialogue-types.md), [plan §8](docs/plan.md#8-track-d-dialogue-types) |
 | Carneades 4 | Working | A fork with validator and evaluation fixes, shared with the Kialo project | | [`CARNEADES_FORK.md`](CARNEADES_FORK.md) |
 
 ## 3. Current issues
@@ -94,8 +94,8 @@ In order of importance. Each issue links to the document that explains it.
    - `docs/book-catalogue/` transcribes the scheme book's schemes and critical questions as printed.
    - **`walton.yml`'s English templates repeat the book.** 173 of its 393 templates share eight or more words in a row with the compendium (measured 2026-10-22). The catalogue does not copy them ([`wag/data/catalogue/README.md`](wag/data/catalogue/README.md)).
    - Taking the book's text out of the current tree is D043's work in stage 2 ([plan §0](docs/plan.md#0-from-2026-11-22-the-order-of-work)); the licences do not cover it ([`LICENSING.md`](LICENSING.md)).
-7. **Every game with a central claim is a persuasion dialogue, in Walton's terms.**
-   - WAG has no commitment stores, no retraction rules and no stages, and these are the base of every type in Walton's account.
+7. **Current claim-centred play does not yet implement a complete dialogue protocol.**
+   - WAG has no participant commitment stores or public claim-retraction moves; each future protocol needs explicit roles, move effects, duties, stages and outcomes. The current pass/concession rule is a game outcome.
    - The points modes match no dialogue type.
    - The second aim needs a protocol for each type and an annotation scheme for types and shifts. That is Track D, after the scheme catalogue.
    - See [`docs/dialogue-types.md`](docs/dialogue-types.md) §9 and [part 9](docs/review-2026-10-15-part9.md).
