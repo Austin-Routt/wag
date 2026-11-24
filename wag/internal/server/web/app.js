@@ -33,8 +33,24 @@ const ui = {
 // ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
+// Keys (the server's access.go): a page on another computer, opened from a
+// link the owner shared (#game=ID&key=KEY), sends that game's key with its
+// requests. The key is kept for this tab only, and leaves the address bar.
+const KEYS = {};
+function rememberKey(id, key) { KEYS[id] = key; try { sessionStorage.setItem('wag-key-' + id, key); } catch (e) { /* kept in memory */ } }
+function keyFor(id) {
+  if (!id) return '';
+  if (KEYS[id]) return KEYS[id];
+  try { return sessionStorage.getItem('wag-key-' + id) || ''; } catch (e) { return ''; }
+}
+function keyHeader(path) {
+  const m = path.match(/^\/api\/games\/(\w+)/);
+  const k = keyFor(m ? m[1] : ui.gameId);
+  return k ? { 'X-WAG-Key': k } : {};
+}
 async function api(path, body, raw) {
-  const opt = body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: raw ? body : JSON.stringify(body) };
+  const headers = keyHeader(path);
+  const opt = body === undefined ? { headers } : { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: raw ? body : JSON.stringify(body) };
   const r = await fetch(path, opt);
   const j = await r.json().catch(() => ({ error: r.statusText }));
   if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { body: j });
@@ -59,6 +75,8 @@ async function init() {
     render();
   });
   const m = location.hash.match(/game=(\w+)/);
+  const k = location.hash.match(/[#&]key=([A-Za-z0-9]+)/);
+  if (m && k) rememberKey(m[1], k[1]);
   if (m) await loadGame(m[1]);
   render();
   setInterval(poll, 1500);
@@ -67,15 +85,31 @@ async function init() {
 async function loadGame(id) {
   try {
     const st = await api('/api/games/' + id);
-    ui.gameId = id; setState(st);
+    ui.gameId = id; ui.role = null; setState(st);
   } catch (e) { toast(e.message); ui.gameId = null; G = null; }
 }
+
+// whoAmI asks the server who this page is in the game: the owner (this
+// computer), the moderator, or a seat (a key from another computer).
+async function whoAmI() {
+  const id = G && G.id;
+  try {
+    const r = await api(`/api/games/${id}/role`);
+    if (!G || G.id !== id) return;
+    ui.role = r;
+    if (r.role === 'moderator') ui.moderator = true;
+    if (r.role === 'seat') ui.moderator = false;
+    renderGamebar(); if (ui.tab === 'play') renderPlay();
+  } catch (e) { /* the state's own request said what is wrong */ }
+}
+const remoteRole = () => ui.role && ui.role.role !== 'owner';
 
 function setState(st) {
   for (const k of ['roots', 'questions', 'log', 'players']) st[k] = st[k] || [];
   const firstLoad = !G || G.id !== st.id;
   G = st;
   location.hash = 'game=' + G.id;
+  if (firstLoad || !ui.role) { ui.role = null; whoAmI(); }
   if (firstLoad) { ui.focus = G.roots[0] || Object.keys(G.statements)[0] || null; ui.crumbs = ui.focus ? [ui.focus] : []; ui.c = null; }
   if (ui.focus && !G.statements[ui.focus]) ui.focus = G.roots[0] || null;
   if (!ui.focus && G.roots.length) { ui.focus = G.roots[0]; ui.crumbs = [ui.focus]; }
@@ -97,6 +131,7 @@ async function poll() {
 function scheduleAI() {
   clearTimeout(ui.aiTimer);
   if (!G || G.over || G.inspect || G.pending || !G.active_ai || !ui.autoplay || G.thinking) return;
+  if (G.unsaved && G.active_ai === 'model') return; // the model waits until the game is saved
   ui.aiTimer = setTimeout(aiStep, G.active_ai === 'model' ? 300 : 900);
 }
 async function aiStep() {
@@ -131,21 +166,72 @@ function renderGamebar() {
   }).join('');
   const verdict = G.config.objective === 'claim'
     ? `<span class="pill">Claim <span class="lbl ${(G.verdict || 'out').toLowerCase()}">${esc(G.verdict || 'Out')}</span></span>` : '';
-  const mod = G.config.moderated ? `<label class="inline small"><input type="checkbox" id="modtoggle" ${ui.moderator ? 'checked' : ''}> I am the moderator</label>` : '';
+  const role = ui.role || { role: 'owner' };
+  const mod = G.config.moderated && role.role === 'owner' ? `<label class="inline small"><input type="checkbox" id="modtoggle" ${ui.moderator ? 'checked' : ''}> I am the moderator</label>` : '';
+  const you = role.role === 'seat' ? `<span class="pill" title="This page plays with the key its owner shared">You: ${esc(role.seat)}</span>`
+    : role.role === 'moderator' ? '<span class="pill" title="This page plays with the key its owner shared">You: the moderator</span>' : '';
+  // Downloads send the key when the page has one; plain links do not.
+  const dl = (what, label, tip) => keyFor(G.id) ? `<button class="small link" data-dl="${what}" title="${tip}">${label}</button>`
+    : `<a class="small" href="/api/games/${G.id}/${what}" target="_blank" title="${tip}">${label}</a>`;
+  const saved = G.save_error ? `<span class="warn small" title="${esc(G.save_error)}">Not saved: ${esc(short(G.save_error, 70))}. Model seats wait.</span> <button class="small" id="savenow">Save now</button>`
+    : G.unsaved ? '<span class="warn small">Not saved: the model seats wait until the owner saves the game.</span>'
+    : G.saved_rel ? `<button class="small ghost" data-open="${esc(G.saved_rel)}" title="Saved after every move in ${esc(G.saved_to)}: trace.jsonl and export.json. Click to open the folder.">Saved ✓</button>` : '';
   const views = ui.tab === 'play' ? `<span class="seg small viewseg">${[['dialogue', 'Dialogue'], ['board', 'Board']].map(([k, l]) => `<button data-view="${k}" class="${ui.view === k ? 'on' : ''}" title="${k === 'dialogue' ? 'The moves in order, each with what it answers and what it changed' : 'One claim at a time, with the arguments for and against it'}">${l}</button>`).join('')}</span>` : '';
   bar.innerHTML = `${views}
     <span class="pill" title="${esc(G.title)}">${esc(short(G.title, 38))}</span>
     <span class="pill">${esc(G.config.mode)} · round ${G.round}${G.config.max_rounds ? ' / ' + G.config.max_rounds : ''}</span>
-    ${players}${verdict}${mod}
+    ${players}${verdict}${mod}${you}
     <button class="small" id="gamenote" title="Write a note on the game: it goes into the export">Note</button>
     <button class="small" id="newgame">New game</button>
-    <a class="small" href="/api/games/${G.id}/export" target="_blank" title="Download the game as JSON: moves, notes, what you tried, and the build">Export</a>
-    <a class="small" href="/api/games/${G.id}/traces" target="_blank" title="Download the game's trace file (wag-trace/2): every model call with the whole conversation, every decision, the reasons given, predictions checked, alternatives tried">Traces</a>
-    ${G.saved_rel ? `<button class="small ghost" data-open="${esc(G.saved_rel)}" title="Saved after every move in ${esc(G.saved_to)}: trace.jsonl and export.json. Click to open the folder.">Saved ✓</button>` : ''}`;
+    ${dl('export', 'Export', 'Download the game as JSON: moves, notes, what you tried, and the build')}
+    ${dl('traces', 'Traces', "Download the game's trace file (wag-trace/2): every model call with the whole conversation, every decision, the reasons given, predictions checked, alternatives tried")}
+    ${role.role === 'owner' && ui.role ? '<button class="small" id="share" title="Links for other computers: one for each seat a person plays, and one for the moderator">Share</button>' : ''}
+    ${saved}`;
   const vs = bar.querySelector('.viewseg'); if (vs) vs.onclick = e => { const b = e.target.closest('[data-view]'); if (b) { ui.view = b.dataset.view; renderGamebar(); renderPlay(); } };
   $('#gamenote').onclick = () => { ui.view = 'dialogue'; ui.flag = 'game'; renderGamebar(); renderPlay(); };
   $('#newgame').onclick = () => { G = null; ui.gameId = null; location.hash = ''; ui.tab = 'play'; render(); };
   const mt = $('#modtoggle'); if (mt) mt.onchange = () => { ui.moderator = mt.checked; renderPlay(); };
+  const sv = $('#savenow'); if (sv) sv.onclick = async () => {
+    try { const r = await api(`/api/games/${G.id}/save`, {}); setState(r.state); toast('Saved.'); } catch (e) { toast(e.message, 8000); }
+  };
+  const sh = $('#share'); if (sh) sh.onclick = share;
+  for (const b of bar.querySelectorAll('[data-dl]')) b.onclick = () => download(`/api/games/${G.id}/${b.dataset.dl}`, `wag-game-${G.id}-${b.dataset.dl}.${b.dataset.dl === 'traces' ? 'jsonl' : 'json'}`);
+}
+
+// download saves what a path returns, sending the page's key.
+async function download(path, name) {
+  try {
+    const r = await fetch(path, { headers: keyHeader(path) });
+    if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || r.statusText); }
+    const url = URL.createObjectURL(await r.blob());
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) { toast(e.message, 6000); }
+}
+
+// share shows the owner a link for each seat a person plays and for the
+// moderator. A link is the game's page with its key; whoever opens it acts
+// in the game as that seat, or as the moderator.
+async function share() {
+  let k;
+  try { k = await api(`/api/games/${G.id}/keys`); } catch (e) { return toast(e.message, 6000); }
+  const old = $('#sharebox'); if (old) old.remove();
+  const box = document.createElement('div'); box.id = 'sharebox'; box.className = 'panel sharebox';
+  const rows = [...k.seats.map(x => [x.name, x.key]), ...(G.config.moderated ? [['the moderator', k.moderator]] : [])];
+  const draw = host => {
+    const link = key => `${location.protocol}//${host}/#game=${G.id}&key=${key}`;
+    box.querySelector('#sharelinks').innerHTML = rows.length ? rows.map(([who, key]) => `<li><b>${esc(who)}</b>: <input class="mono small" readonly value="${esc(link(key))}" onclick="this.select()"></li>`).join('')
+      : '<li class="muted">No seat here is played by a person.</li>';
+  };
+  box.innerHTML = `<h2>Share the game</h2>
+    <p class="small">Each link lets whoever opens it act in this game: a seat's link moves for that seat on its turn; the moderator's link moderates. Anyone with a link can read the game. On this computer no link is needed.</p>
+    <p class="small">Another computer reaches this one only if the server listens on the network (<span class="mono">--addr 0.0.0.0:8080</span>), at this computer's address there: <input id="sharehost" class="small" value="${esc(ui.shareHost || location.host)}"></p>
+    <p class="small muted">The keys travel unencrypted over plain HTTP: use a network you trust.</p>
+    <ul id="sharelinks"></ul><p><button class="small" id="shareclose">Close</button></p>`;
+  document.body.appendChild(box);
+  draw(ui.shareHost || location.host);
+  box.querySelector('#sharehost').oninput = e => { ui.shareHost = e.target.value.trim() || location.host; draw(ui.shareHost); };
+  box.querySelector('#shareclose').onclick = () => box.remove();
 }
 
 // ---------------------------------------------------------------------------
@@ -739,6 +825,11 @@ function renderComposer() {
   const box = $('#composer'); if (!box) return;
   const me = G.players.find(p => p.id === G.active);
   if (G.pending) { box.innerHTML = `<h2>${esc(G.active)}</h2><p class="muted">The move waits for the moderator.</p>`; return; }
+  // A page with another computer's key moves for its own seat only.
+  if (remoteRole() && !G.active_ai && !(ui.role.role === 'seat' && ui.role.seat === G.active)) {
+    box.innerHTML = `<h2>${esc(G.active)}</h2><p class="muted">${ui.role.role === 'seat' ? `It is ${esc(G.active)}'s turn; this page plays ${esc(ui.role.seat)}.` : 'The moderator moves for no seat.'}</p>`;
+    return;
+  }
   if (G.active_ai) {
     const model = G.active_ai === 'model', name = me && (me.kind === 'claude' ? 'claude' : me.model);
     box.innerHTML = `<div class="who">${esc(G.active)} <span class="muted">(${model ? 'model ' + esc(name || '') : 'rule bot, ' + esc(G.active_ai)})</span> is to move</div>
@@ -788,11 +879,11 @@ function composeLLM(box) {
     ${G.last_rejection ? `<div class="warn">Last move rejected: ${esc(G.last_rejection)}</div>` : ''}
     <p class="small">1. Copy this prompt into a language model (any chatbot).</p>
     <textarea id="llmprompt" readonly class="mono small" rows="7" placeholder="Loading the prompt…">${esc(c.prompt)}</textarea>
-    <p><button id="llmcopy">Copy the prompt</button> <a class="small" href="/api/games/${G.id}/prompt" target="_blank">open as text</a></p>
+    <p><button id="llmcopy">Copy the prompt</button> ${keyFor(G.id) ? '' : `<a class="small" href="/api/games/${G.id}/prompt" target="_blank">open as text</a>`}</p>
     <p class="small">2. Paste its whole reply here. The move is the JSON object at the end.</p>
     <textarea id="llmreply" rows="6" placeholder="The model's reply">${esc(c.reply)}</textarea>
     <p><button class="primary" id="llmplay">Play the reply</button> <button class="link small" id="llmmanual">or make the move yourself</button></p>`;
-  if (!c.prompt) fetch(`/api/games/${G.id}/prompt`).then(r => r.text()).then(t => { c.prompt = t; const el = $('#llmprompt'); if (el) el.value = t; });
+  if (!c.prompt) fetch(`/api/games/${G.id}/prompt`, { headers: keyHeader(`/api/games/${G.id}/prompt`) }).then(r => r.text()).then(t => { c.prompt = t; const el = $('#llmprompt'); if (el) el.value = t; });
   $('#llmcopy').onclick = async () => { const t = $('#llmprompt'); try { await navigator.clipboard.writeText(t.value); toast('Copied.'); } catch (e) { t.select(); document.execCommand('copy'); toast('Copied.'); } };
   $('#llmreply').oninput = e => { c.reply = e.target.value; };
   $('#llmmanual').onclick = () => { ui.manual = true; renderComposer(); };

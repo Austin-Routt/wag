@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/yourorg/wag/internal/fsutil"
 	"github.com/yourorg/wag/internal/llm"
 )
 
@@ -90,7 +90,7 @@ func (k *keyStore) set(service, key string, remember bool) error {
 		return nil
 	}
 	b, _ := json.MarshalIndent(m, "", " ")
-	return os.WriteFile(k.file, b, 0o600)
+	return fsutil.WriteFile(k.file, b, 0o600)
 }
 
 // SetStore makes dir (created) the server's data folder: games with model
@@ -103,7 +103,7 @@ func (s *Server) SetStore(dir string) error {
 		return err
 	}
 	for _, sub := range []string{"", "games", "annotation", "datasets"} {
-		if err := os.MkdirAll(filepath.Join(abs, sub), 0o755); err != nil {
+		if err := fsutil.MkdirAll(filepath.Join(abs, sub), 0o755); err != nil {
 			return err
 		}
 	}
@@ -157,7 +157,7 @@ func (s *Server) savePlayers() error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(s.store, "players.json"), b, 0o644)
+	return fsutil.WriteFile(filepath.Join(s.store, "players.json"), b, 0o644)
 }
 
 // local guards the workbench API: the request must come from this computer
@@ -165,17 +165,11 @@ func (s *Server) savePlayers() error {
 // computer as its host (no DNS rebinding), and, if it changes anything, be
 // JSON from this page's origin (no request forged by another site).
 func local(w http.ResponseWriter, r *http.Request) bool {
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if ip := net.ParseIP(host); err != nil || ip == nil || !ip.IsLoopback() {
+	if !loopbackClient(r) {
 		httpError(w, fmt.Errorf("the model workbench answers only on this computer"), http.StatusForbidden)
 		return false
 	}
-	h := r.Host
-	if hh, _, err := net.SplitHostPort(h); err == nil {
-		h = hh
-	}
-	h = strings.Trim(h, "[]")
-	if ip := net.ParseIP(h); h != "localhost" && (ip == nil || !ip.IsLoopback()) {
+	if !localHost(r) {
 		httpError(w, fmt.Errorf("the model workbench answers only at localhost"), http.StatusForbidden)
 		return false
 	}
@@ -591,33 +585,50 @@ func (s *Server) handleStore(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// autosave writes a game with a model seat to the data folder: its trace
-// file and its export, after every change. Caller holds s.mu.
-func (s *Server) autosave(ss *Session) {
-	if s.store == "" {
-		return
-	}
-	hasModel := false
-	for _, seat := range ss.Seats {
-		if seat.aiKind() == "model" {
-			hasModel = true
-		}
-	}
-	if !hasModel {
-		return
+// autosave writes a game with a model seat to the data folder after every
+// change: its trace file and its export, each replaced whole and synced
+// (fsutil). A failure is kept (saveErr), shown, and printed; meanwhile the
+// game's model seats wait, since a model's replies cannot be had again for
+// nothing, and every change, a model seat's turn and Save now (/save) try
+// again. SavedTo names the folder once a save has succeeded. Caller holds
+// s.mu.
+func (s *Server) autosave(ss *Session) error {
+	if s.store == "" || !ss.hasModelSeat() {
+		return nil
 	}
 	dir := filepath.Join(s.store, "games", ss.Created.Format("2006-01-02_150405")+"_game"+ss.ID)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	if err := s.saveGame(ss, dir); err != nil {
+		ss.saveErr = err.Error()
 		fmt.Fprintln(os.Stderr, "saving the game:", err)
-		return
+		return err
 	}
+	ss.saveErr = ""
 	ss.SavedTo = dir
+	return nil
+}
+
+func (s *Server) saveGame(ss *Session, dir string) error {
+	if err := fsutil.MkdirAll(dir, 0o755); err != nil {
+		return err
+	}
 	var tb bytes.Buffer
 	s.encodeTraces(&tb, ss)
-	eb, _ := json.MarshalIndent(ss.export(s.contexts), "", " ")
-	for name, b := range map[string][]byte{"trace.jsonl": tb.Bytes(), "export.json": eb} {
-		if err := os.WriteFile(filepath.Join(dir, name), b, 0o644); err != nil {
-			fmt.Fprintln(os.Stderr, "saving the game:", err)
+	eb, err := json.MarshalIndent(ss.export(s.contexts), "", " ")
+	if err != nil {
+		return err
+	}
+	if err := fsutil.WriteFile(filepath.Join(dir, "trace.jsonl"), tb.Bytes(), 0o644); err != nil {
+		return err
+	}
+	return fsutil.WriteFile(filepath.Join(dir, "export.json"), eb, 0o644)
+}
+
+// hasModelSeat: a seat of the game is played by a model through an API.
+func (ss *Session) hasModelSeat() bool {
+	for _, seat := range ss.Seats {
+		if seat.aiKind() == "model" {
+			return true
 		}
 	}
+	return false
 }

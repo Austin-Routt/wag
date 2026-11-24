@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/yourorg/wag/internal/annotate"
+	"github.com/yourorg/wag/internal/fsutil"
 	"github.com/yourorg/wag/internal/kialo"
 	"github.com/yourorg/wag/internal/llm"
 )
@@ -417,14 +418,14 @@ func (s *Server) kialoDataset(w http.ResponseWriter, r *http.Request) {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	if err := fsutil.MkdirAll(dir, 0o755); err != nil {
 		httpError(w, err, http.StatusInternalServerError)
 		return
 	}
 	man, _ := json.MarshalIndent(map[string]string{"name": fmt.Sprintf("Kialo %s — %s (%d claims)", d.ID, d.Title, n),
 		"description": "Made from a capture of the Kialo research visualizer (" + d.URL + "). No gold annotation: score the annotators against each other, and review."}, "", " ")
 	for f, data := range map[string][]byte{"items.json": items, "dataset.json": man} {
-		if err := os.WriteFile(filepath.Join(dir, f), data, 0o644); err != nil {
+		if err := fsutil.WriteFile(filepath.Join(dir, f), data, 0o644); err != nil {
 			httpError(w, err, http.StatusInternalServerError)
 			return
 		}

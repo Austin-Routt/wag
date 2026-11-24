@@ -6,7 +6,9 @@
 //
 // Flags:
 //
-//	--addr       address to listen on (default 127.0.0.1:8080; only this machine)
+//	--addr       address to listen on (default 127.0.0.1:8080; only this machine;
+//	             with 0.0.0.0:8080 other computers act in a game only with a key
+//	             its owner shares)
 //	--data       directory with schemes/core.yml and nascq/*.json (default: the data built in)
 //	--kialo-dir  directory of captured Kialo discussions (<dir>/<id>/graph.json, as in the
 //	             Kialo research visualizer's data folder), offered for import
@@ -41,6 +43,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"strconv"
 
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/llm"
@@ -126,8 +129,11 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
-	url := "http://" + ln.Addr().String() + "/"
+	url := "http://" + pageAddr(ln.Addr()) + "/"
 	fmt.Println("WAG is running at", url)
+	if a, ok := ln.Addr().(*net.TCPAddr); ok && !a.IP.IsLoopback() {
+		fmt.Println("Other computers can reach it: they act in a game only with a key you share (Share, in the game bar).")
+	}
 	fmt.Println("Press Ctrl+C to stop.")
 	if *open {
 		openBrowser(url)
@@ -141,6 +147,16 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
+}
+
+// pageAddr is the address to open the page at on this computer: a server
+// that listens on every interface is opened as localhost, which the server
+// takes for its owner (another name for this computer is another computer).
+func pageAddr(a net.Addr) string {
+	if t, ok := a.(*net.TCPAddr); ok && t.IP.IsUnspecified() {
+		return net.JoinHostPort("localhost", strconv.Itoa(t.Port))
+	}
+	return a.String()
 }
 
 func openBrowser(url string) {

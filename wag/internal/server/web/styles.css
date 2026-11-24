@@ -307,3 +307,8 @@ tr.differs td { background: var(--und-soft); }
 .review { background: var(--q-soft); }
 .verdict { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 6px; }
 @media (max-width: 900px) { .annotate, .grid-claims { grid-template-columns: 1fr; } }
+/* The owner's links for other computers (Share). */
+.sharebox { position: fixed; top: 64px; right: 16px; width: min(560px, calc(100vw - 32px)); z-index: 8; }
+.sharebox ul { list-style: none; padding: 0; margin: 8px 0; }
+.sharebox li { margin: 6px 0; }
+.sharebox li input { width: 100%; box-sizing: border-box; }

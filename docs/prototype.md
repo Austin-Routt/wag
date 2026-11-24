@@ -25,7 +25,7 @@ Windows SmartScreen may warn about an unsigned program. Choose *More info → Ru
 
 | Flag | Default | What it does |
 |---|---|---|
-| `--addr` | `127.0.0.1:8080` | Where to listen. For another port: `--addr 127.0.0.1:9090`. Use `--addr 0.0.0.0:8080` only on a network you trust: seats have no passwords. |
+| `--addr` | `127.0.0.1:8080` | Where to listen. For another port: `--addr 127.0.0.1:9090`. With `--addr 0.0.0.0:8080` other computers can reach the server, and act in a game only with a key its owner shares (*Share*, §3). Use it only on a network you trust: the keys travel unencrypted over plain HTTP. |
 | `--kialo-dir` | none | The visualizer's `data` folder, for example `--kialo-dir C:\kialo_visualizer_v10_release\data`. Its discussions are then listed for import. Without it, you can still upload a single `graph.json`. |
 | `--data` | built-in | A folder with `schemes\core.yml`, `nascq\*.json` and `contexts.json`. Use it to try edited scheme data without rebuilding. |
 | `--claude` | off | Offer **Claude (API)** seats. Needs `ANTHROPIC_API_KEY` set (or an `ant auth login` profile); every Claude move costs API credits. `--claude-model` (default `claude-opus-5-5`) and `--claude-effort` (default `medium`) tune it. |
@@ -149,7 +149,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 ## 3. Known limits of the prototype
 
 - **Games live in memory.** Export and load to keep them.
-- **No player accounts.** Whoever has the page open can move for the seat whose turn it is, or tick *I am the moderator*. That is fine on one machine, not on a network.
+- **No player accounts.** On the computer that runs the server (opened as `localhost`), whoever has the page open can move for the seat whose turn it is, tick *I am the moderator*, and start, load and import games. Another computer acts in a game only with a key its owner shared: *Share* in the game bar gives a link for each seat a person plays and one for the moderator. A seat's link moves for that seat on its turn; the moderator's moderates and decides; either reads the game, writes notes in its holder's name, and lets a model or rule bot take its turn. Without a key another computer sees no game. A key is not a person's password: whoever has the link acts with it, and over plain HTTP anyone who can watch the network can read it. A proxy on the server's own computer would make every request look local: do not put one in front of it.
 - **Few schemes.** 9 of the 111 Walton schemes are in the NASCQ. The registry and the compendium links (`docs/scheme-registry/`) are the way to add more.
 - **Rule bots do not understand the topic.** They reuse words already on the board and cite neutral sources. Use a language model or Claude for real play.
 - **The English is built from templates.** It reads well when the parts are short phrases like the examples. Long sentences inside parts make long statements.
@@ -177,7 +177,10 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 | `POST /api/games/{id}/note` | A tester's note, `{"target": "move:3", "kind": "confusing", "text": "…", "by": "…"}` |
 | `POST /api/load` | Start a game from an export and replay it; `?inspect=1` opens a game played with other scheme data read-only |
 | `POST /api/games/{id}/moderate`, `/decide` | Moderator actions |
+| `GET /api/games/{id}/role` | Who the request is in the game: `owner` (this computer), `moderator`, or `seat` with its name |
+| `GET /api/games/{id}/keys` | The game's keys, for the owner to share (this computer only) |
+| `POST /api/games/{id}/save` | Save a game with a model seat now (this computer only) |
 | `GET /api/games/{id}/export` | The game: settings, moves, attempts, notes, LLM replies, Other arguments, build |
 | `GET /api/kialo`, `POST /api/kialo/import` | Kialo discussions |
 
-Requests that change a game must be `POST`s with `Content-Type: application/json`. That way other web pages cannot play in a local game. A language-model player uses the text protocol; a program can also use the JSON API like the page, or the CLI's `--p1 json` pipe.
+Requests that change a game must be `POST`s with `Content-Type: application/json`. That way other web pages cannot play in a local game. A request from another computer carries its key in the header `X-WAG-Key` (the page takes it from the link it was opened with); starting, loading and importing games, the keys and *Save now* are for this computer only. A page of another site whose name points to this computer is treated as another computer. A language-model player uses the text protocol; a program can also use the JSON API like the page, or the CLI's `--p1 json` pipe.

@@ -53,9 +53,14 @@ type State struct {
 	// Notes are the testers' remarks on the game.
 	Notes []Note `json:"notes"`
 	// SavedTo is the folder the game is saved in (games with a model seat,
-	// on a server with a data folder).
+	// on a server with a data folder), once a save has succeeded.
 	SavedTo  string `json:"saved_to,omitempty"`
 	SavedRel string `json:"saved_rel,omitempty"` // the same, relative to the data folder
+	// SaveError is why the last save failed; Unsaved says so to everyone
+	// (the folder and the error are the owner's): the game's model seats
+	// wait until it is saved (Server.autosave).
+	SaveError string `json:"save_error,omitempty"`
+	Unsaved   bool   `json:"unsaved,omitempty"`
 	// SeatKind is the kind of the seat to move (human, llm, random, greedy, model, claude).
 	SeatKind string `json:"seat_kind,omitempty"`
 	// Inspect is set when the game is open read-only: it was played with
@@ -537,6 +542,17 @@ func (s *Session) buildState() *State {
 	st.SavedTo = s.SavedTo
 	if s.SavedTo != "" {
 		st.SavedRel = "games/" + filepath.Base(s.SavedTo)
+	}
+	st.SaveError, st.Unsaved = s.saveErr, s.saveErr != ""
+	return st
+}
+
+// stateFor is the state as the role sees it: where and why the game is or
+// is not saved is the owner's (the folder names their computer's user).
+func (s *Session) stateFor(who role) *State {
+	st := s.buildState()
+	if !who.owner {
+		st.SavedTo, st.SavedRel, st.SaveError = "", "", ""
 	}
 	return st
 }

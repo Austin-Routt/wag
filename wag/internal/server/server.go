@@ -151,8 +151,10 @@ type Session struct {
 	Calls   []Call          // every call of a model seat to its provider (traces.go)
 	// order counts the traced events (decisions and calls), which share it.
 	order int
-	// SavedTo is the folder a game with a model seat is saved in.
+	// SavedTo is the folder a game with a model seat is saved in, once a
+	// save has succeeded; saveErr is why the last save failed (autosave).
 	SavedTo string
+	saveErr string
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
 	contexts []game.Context
@@ -168,6 +170,8 @@ type Session struct {
 	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
+	// keys let other computers act in the game by role (access.go).
+	keys gameKeys
 }
 
 // New makes a server for the data; kialoDir, if not empty, is a directory
@@ -499,13 +503,19 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			Over                    bool
 			Created                 time.Time
 		}
-		var out []item
+		out := []item{}
 		for _, ss := range s.sessions {
+			if roleIn(r, ss).none() {
+				continue // another computer sees the games it has a key for
+			}
 			out = append(out, item{ss.ID, ss.Title, ss.GS.Config.Mode, ss.Source, ss.GS.CurrentTurn, ss.GS.Terminated, ss.Created})
 		}
 		sort.Slice(out, func(i, j int) bool { return out[i].Created.After(out[j].Created) })
 		writeJSON(w, out)
 	case http.MethodPost:
+		if !ownerOnly(w, r) {
+			return
+		}
 		var req NewGameRequest
 		if !readJSON(w, r, &req) {
 			return
@@ -573,7 +583,8 @@ func (s *Server) add(gs *game.GameState, seats []Seat, title, source string, see
 	if seed == 0 {
 		seed = time.Now().UnixNano()
 	}
-	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed, contexts: s.contexts, dataHash: s.data.Hash()}
+	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed, contexts: s.contexts, dataHash: s.data.Hash(),
+		keys: newKeys(seats)}
 	for i, seat := range seats {
 		var a game.Agent
 		switch seat.Kind {
@@ -594,6 +605,13 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	ss := s.sessions[parts[0]]
+	// Another computer without a key learns nothing, not even whether the
+	// game exists (access.go).
+	who := roleIn(r, ss)
+	if who.none() {
+		httpError(w, errNoKey, http.StatusForbidden)
+		return
+	}
 	if ss == nil {
 		httpError(w, fmt.Errorf("no game %q", parts[0]), http.StatusNotFound)
 		return
@@ -601,6 +619,10 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 	action := ""
 	if len(parts) > 1 {
 		action = parts[1]
+	}
+	if err := who.may(ss, action); err != nil {
+		httpError(w, err, http.StatusForbidden)
+		return
 	}
 	if ss.thinking && r.Method == http.MethodPost && action != "preview" {
 		httpError(w, fmt.Errorf("%s (Claude) is thinking: wait for its move", ss.GS.ActivePlayer().ID), http.StatusConflict)
@@ -616,7 +638,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			writeJSON(w, map[string]interface{}{"unchanged": true, "version": ss.Version})
 			return
 		}
-		writeJSON(w, ss.buildState())
+		writeJSON(w, ss.stateFor(who))
 	case "move":
 		var req struct {
 			Action nascq.ProposedAction `json:"action"`
@@ -634,7 +656,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		t.Why = strings.TrimSpace(req.Why)
 		res, err := ss.play(req.Action, t, nil)
 		ss.event("move", player, short(req.Action), res, err)
-		s.reply(w, ss, res, err)
+		s.reply(w, ss, who, res, err)
 	case "note":
 		var req struct {
 			Target string `json:"target"`
@@ -645,6 +667,9 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		if !readJSON(w, r, &req) {
 			return
 		}
+		if name := who.name(ss); name != "" {
+			req.By = name // a key writes in its holder's name
+		}
 		n, err := ss.addNote(req.Target, req.Kind, req.Text, req.By)
 		if err != nil {
 			httpError(w, err, http.StatusBadRequest)
@@ -652,7 +677,8 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		}
 		ss.event("note", req.By, n.Kind+" "+n.Target, nil, nil)
 		ss.Version++
-		writeJSON(w, map[string]interface{}{"note": n, "state": ss.buildState()})
+		s.autosave(ss) // notes are part of the record; a failure is in the state
+		writeJSON(w, map[string]interface{}{"note": n, "state": ss.stateFor(who)})
 	case "prompt":
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
@@ -687,7 +713,8 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		ss.Version++
-		writeJSON(w, map[string]interface{}{"result": res, "action": action, "state": ss.buildState()})
+		s.autosave(ss) // a failure is in the state
+		writeJSON(w, map[string]interface{}{"result": res, "action": action, "state": ss.stateFor(who)})
 	case "moves":
 		target := r.URL.Query().Get("target")
 		a := ss.GS.Adapter.Graph.Arguments[target]
@@ -726,6 +753,19 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 				httpError(w, fmt.Errorf("no move to make: the game is over or a move awaits the moderator"), http.StatusConflict)
 				return
 			}
+			// A model's replies are paid for and cannot be had again: it is
+			// asked nothing while the game's record cannot be written.
+			if ss.saveErr != "" {
+				if err := s.autosave(ss); err != nil {
+					msg := "the game could not be saved: its model seats wait until it is"
+					if who.owner {
+						msg += " (" + err.Error() + "; Save now tries again)"
+					}
+					httpError(w, errors.New(msg), http.StatusConflict)
+					return
+				}
+				ss.Version++
+			}
 			ss.thinking = true
 			ss.Version++ // pollers see the seat thinking
 			s.mu.Unlock()
@@ -733,12 +773,12 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			s.mu.Lock()
 			ss.thinking = false
 			ss.event("ai", player, c.Profile.Name, res, err)
-			s.reply(w, ss, res, err)
+			s.reply(w, ss, who, res, err)
 			return
 		}
 		res, err := ss.aiMove()
 		ss.event("ai", player, "", res, err)
-		s.reply(w, ss, res, err)
+		s.reply(w, ss, who, res, err)
 	case "moderate":
 		var req struct {
 			Approve bool    `json:"approve"`
@@ -750,7 +790,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		}
 		res, err := ss.GS.Moderate(req.Approve, req.Weight, req.Note)
 		ss.event("moderate", game.ModeratorID, fmt.Sprintf("approve=%v weight=%v %s", req.Approve, req.Weight, req.Note), res, err)
-		s.reply(w, ss, res, err)
+		s.reply(w, ss, who, res, err)
 	case "decide":
 		var req struct {
 			Statement string `json:"statement"`
@@ -762,7 +802,21 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		}
 		res, err := ss.GS.Decide(req.Statement, req.Decision, req.Note)
 		ss.event("decide", game.ModeratorID, req.Decision+" "+req.Statement, res, err)
-		s.reply(w, ss, res, err)
+		s.reply(w, ss, who, res, err)
+	case "save":
+		if !jsonPost(w, r) {
+			return
+		}
+		if err := s.autosave(ss); err != nil {
+			httpError(w, fmt.Errorf("the game could not be saved: %v", err), http.StatusConflict)
+			return
+		}
+		ss.Version++
+		writeJSON(w, map[string]interface{}{"state": ss.stateFor(who)})
+	case "role":
+		writeJSON(w, who.view(ss))
+	case "keys":
+		writeJSON(w, ss.keysView())
 	case "export":
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=wag-game-%s.json", ss.ID))
 		writeJSON(w, ss.export(s.contexts))
@@ -774,15 +828,16 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 }
 
 // reply answers a request that changed the game (or failed to): the result
-// and the new state. Only a change bumps the version pollers compare.
-func (s *Server) reply(w http.ResponseWriter, ss *Session, res *game.TurnResult, err error) {
+// and the new state, as the role sees it. Only a change bumps the version
+// pollers compare. A failed save is in the state (autosave).
+func (s *Server) reply(w http.ResponseWriter, ss *Session, who role, res *game.TurnResult, err error) {
 	if err != nil {
 		httpError(w, err, http.StatusConflict)
 		return
 	}
 	ss.Version++
 	s.autosave(ss)
-	writeJSON(w, map[string]interface{}{"result": res, "state": ss.buildState()})
+	writeJSON(w, map[string]interface{}{"result": res, "state": ss.stateFor(who)})
 }
 
 // aiMove lets the AI seat to move play once (retrying a rejected move up to
@@ -934,6 +989,8 @@ func (ss *Session) describeAction(a nascq.ProposedAction) string {
 // (material for mining new schemes).
 func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 	st := ss.buildState()
+	// Where the owner keeps the game is not part of it.
+	st.SavedTo, st.SavedRel, st.SaveError, st.Unsaved = "", "", "", false
 	var mined []map[string]interface{}
 	for _, id := range sortedStrings(keys(st.Arguments)) {
 		a := st.Arguments[id]
@@ -984,6 +1041,9 @@ func keys[V any](m map[string]V) []string {
 // ---------------------------------------------------------------------------
 
 func (s *Server) handleKialoList(w http.ResponseWriter, r *http.Request) {
+	if !ownerOnly(w, r) {
+		return
+	}
 	type item struct {
 		ID    string `json:"id"`
 		Title string `json:"title"`
@@ -1020,7 +1080,7 @@ func (s *Server) handleKialoList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
-	if !jsonPost(w, r) {
+	if !ownerOnly(w, r) || !jsonPost(w, r) {
 		return
 	}
 	var b []byte
@@ -1135,6 +1195,9 @@ func short(a nascq.ProposedAction) string {
 // handleLoad starts a game from an export (/export) and replays its moves;
 // ?inspect=1 opens a game played with other scheme data read-only.
 func (s *Server) handleLoad(w http.ResponseWriter, r *http.Request) {
+	if !ownerOnly(w, r) {
+		return
+	}
 	var e Export
 	if !readJSON(w, r, &e) {
 		return
