@@ -533,6 +533,12 @@ func TestARunRecordsItsFormat(t *testing.T) {
 	if err != nil || !strings.Contains(string(rb), `"format": "wag-annotation/2"`) {
 		t.Fatalf("run.json does not record the format: %v", err)
 	}
+	var head struct {
+		Case string `json:"case"`
+	}
+	if err := json.Unmarshal(b, &head); err != nil || head.Case != "kialo-13292" {
+		t.Fatalf("its annotation file names the case %q, not the dataset's: %v", head.Case, err)
+	}
 	for _, id := range items {
 		v, err := r.Item(id)
 		if err != nil {
@@ -688,4 +694,40 @@ func mustJSON(t *testing.T, v any) string {
 		t.Fatal(err)
 	}
 	return string(b)
+}
+
+// A run's annotation file is a format-2 file validate.py reads as the
+// batch-2 README says (the gold's codings, copied by a stand-in annotator,
+// so that any complaint is the file's, not the coding's).
+func TestARunsFilePassesValidatePy(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ds, err := Builtin()
+	if err != nil {
+		t.Fatal(err)
+	}
+	r, _, _ := soloRun(t, len(ds[0].IDs())-1)
+	// The thesis too: validate.py checks a whole file of the batch's claims.
+	r.Settings.Items = ds[0].IDs()
+	r.anns["solo"]["13292.1"] = ds[0].Gold["13292.1"]
+	if err := r.Annotate(context.Background(), nil); err != nil {
+		t.Fatal(err)
+	}
+	r.mu.Lock()
+	err = r.saveAnnotations("solo")
+	r.mu.Unlock()
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command(py, "-I", "-B", "validate.py", r.annotationsPath("solo"))
+	cmd.Dir = dir
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
 }

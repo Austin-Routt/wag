@@ -501,6 +501,9 @@ func (r *Run) saveAnnotations(name string) error {
 	f := map[string]any{"annotator": name, "items": list}
 	if r.format() == 2 {
 		f["format"] = Format2
+		if r.Dataset.Case != nil {
+			f["case"] = r.Dataset.Case.ID // the record its actors, actions and contexts refer to
+		}
 	}
 	b, err := json.MarshalIndent(f, "", " ")
 	if err != nil {
