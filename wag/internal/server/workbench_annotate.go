@@ -310,6 +310,17 @@ func (s *Server) runAction(w http.ResponseWriter, r *http.Request, run *annotate
 		}
 		run.Stop()
 		writeJSON(w, runStatus(run, notes))
+	case "flush":
+		// Writes what the run holds and its files lack (a write failed, or
+		// a reopened run took replies from calls.jsonl), asking nothing.
+		if !post() {
+			return
+		}
+		if err := run.Flush(); err != nil {
+			httpError(w, fmt.Errorf("the records cannot be written yet: %v", err), http.StatusConflict)
+			return
+		}
+		writeJSON(w, runStatus(run, notes))
 	case "report":
 		rep, err := run.Report()
 		if err != nil {

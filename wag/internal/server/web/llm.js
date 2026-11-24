@@ -307,8 +307,8 @@ function runPane() {
       <p class="small">${(st.files || []).map(f => `<a href="/api/store/file?path=${encodeURIComponent('annotation/' + st.id + '/' + f)}">${esc(f)}</a>`).join(' · ')}
         <span class="muted">(README.txt says what each is)</span></p>
       ${(WB.notes || []).map(n => `<p class="small warn">${esc(n)}</p>`).join('')}
-      ${st.write_error ? `<p class="small warn"><b>A record could not be written</b> (${esc(st.write_error)}). The run asks the models nothing new until its records are written: free space or fix the folder, then start it again, which writes them first. What it received is kept meanwhile, in this server's memory.</p>` : ''}
-      ${(st.unsaved || []).length ? `<p class="small warn">Not in the files yet: ${esc(st.unsaved.join('; '))}.</p>` : ''}
+      ${st.write_error ? `<p class="small warn"><b>A record could not be written</b> (${esc(st.write_error)}). The run asks the models nothing new until its records are written: free space or fix the folder, then write them, or start the run again, which writes them first. What it received is kept meanwhile, in this server's memory.</p>` : ''}
+      ${(st.unsaved || []).length ? `<p class="small warn">Not in the files yet: ${esc(st.unsaved.join('; '))}. <button class="small" id="flush" ${st.busy ? 'disabled' : ''}>Write them now</button></p>` : ''}
       ${WB.reportError ? `<p class="small warn">The report cannot be made: ${esc(WB.reportError)}</p>` : ''}
       <div class="row">
         <button id="next" ${st.busy || !st.next_item ? 'disabled' : ''} title="Every annotator annotates the next claim; then look at it">Annotate the next claim${st.next_item ? ' (' + esc(st.next_item) + ')' : ''}</button>
@@ -409,12 +409,15 @@ function wireAnnotate() {
         const r = await api('/api/annotate/runs', { dataset: f.dataset, annotators: f.annotators, reviewer: f.reviewer, count: Number(f.count) || 0 });
         WB.run = r.status.id; WB.item = null; WB.view = null; toast('Run created: annotate the next claim, or all of them.'); return renderAnnotate();
       }
-      const act = { next: 'next', startall: 'start', review: 'review', reviewall: 'review', stop: 'stop' }[b.id];
+      const act = { next: 'next', startall: 'start', review: 'review', reviewall: 'review', stop: 'stop', flush: 'flush' }[b.id];
       if (act) {
         b.disabled = true;
         const body = b.id === 'reviewall' ? { all: true } : {};
-        const r = await api(`/api/annotate/runs/${WB.run}/${act}`, body);
+        let r;
+        try { r = await api(`/api/annotate/runs/${WB.run}/${act}`, body); }
+        catch (err) { b.disabled = false; throw err; } // it can be tried again
         WB.status = r.status;
+        for (const x of WB.runs) if (x.status && x.status.id === WB.run) x.status = r.status; // the list on the left
         if (b.id === 'next' && r.status.next_item) WB.item = r.status.next_item;
         return renderAnnotate(true);
       }

@@ -9,16 +9,30 @@ import (
 // AnnotatorSystem is an annotator's system prompt: the task, the
 // guidelines, and the resources.
 func (d *Dataset) AnnotatorSystem() string {
+	return d.annotatorSystem(func(s string) string { return s })
+}
+
+// annotatorSystem is AnnotatorSystem with the files' text converted (their
+// line endings: a run made from a Windows checkout pinned that prompt).
+func (d *Dataset) annotatorSystem(conv func(string) string) string {
 	var s strings.Builder
 	s.WriteString("You annotate claims of a Kialo discussion as instances of Walton's argumentation schemes, exactly as the guidelines below say. " +
 		"You work alone: there is no other annotator to consult. For each claim, answer with exactly one JSON object, the item in the guidelines' output format " +
 		"(section 4, with the version 3 changes of section 5), with its kialo_claim_id, and nothing else.\n\n# Guidelines\n\n")
-	s.WriteString(d.Guidelines)
+	s.WriteString(conv(d.Guidelines))
 	s.WriteString("\n\n# Resources\n")
 	for _, r := range d.Resources {
-		fmt.Fprintf(&s, "\n## %s\n\n```\n%s\n```\n", r.Name, strings.TrimSpace(r.Text))
+		fmt.Fprintf(&s, "\n## %s\n\n```\n%s\n```\n", r.Name, strings.TrimSpace(conv(r.Text)))
 	}
 	return s.String()
+}
+
+// samePrompt tells whether a pinned hash is the annotator's system prompt,
+// its files' line endings read either way.
+func (d *Dataset) samePrompt(pinned string) bool {
+	lf := func(s string) string { return strings.ReplaceAll(s, "\r\n", "\n") }
+	crlf := func(s string) string { return strings.ReplaceAll(lf(s), "\n", "\r\n") }
+	return pinned == sha([]byte(d.annotatorSystem(lf))) || pinned == sha([]byte(d.annotatorSystem(crlf)))
 }
 
 // AnnotatorPrompt is the message that asks for one claim's annotation: the

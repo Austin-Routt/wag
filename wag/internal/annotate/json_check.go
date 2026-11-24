@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"slices"
+	"sort"
 	"strings"
 	"unicode/utf8"
 )
@@ -92,21 +94,36 @@ func jsonFields(v any) []string {
 	return out
 }
 
-// canonicalNames refuses an object member that spells one of the fields
-// another way. encoding/json matches a struct's fields case-insensitively,
-// so {"gold": "a.json", "Gold": ""} would decode as an empty gold: the last
-// spelling wins, silently. Other members are left alone.
+// canonicalNames refuses an object with two members that spell one of the
+// fields. encoding/json matches a struct's fields case-insensitively, so
+// {"gold": "a.json", "Gold": ""} would decode as an empty gold: the last
+// spelling wins, silently. One member is unambiguous however it is spelt;
+// members that are no field's are left alone.
 func canonicalNames(raw json.RawMessage, fields []string) error {
 	var m map[string]json.RawMessage
 	if err := json.Unmarshal(raw, &m); err != nil {
 		return fmt.Errorf("not a JSON object: %v", err)
 	}
-	for k := range m {
-		for _, f := range fields {
-			if k != f && strings.EqualFold(k, f) {
-				return fmt.Errorf("member %q is another spelling of %q", k, f)
+	for _, f := range fields {
+		var spelt []string
+		for k := range m {
+			if strings.EqualFold(k, f) {
+				spelt = append(spelt, k)
 			}
 		}
+		if len(spelt) < 2 {
+			continue
+		}
+		sort.Strings(spelt)
+		base := spelt[0]
+		if slices.Contains(spelt, f) { // the field's own spelling, if given, is the base
+			base = f
+		}
+		other := spelt[0]
+		if other == base {
+			other = spelt[1]
+		}
+		return fmt.Errorf("member %q is another spelling of %q", other, base)
 	}
 	return nil
 }

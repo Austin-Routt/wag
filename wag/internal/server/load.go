@@ -145,8 +145,10 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	ss := s.add(gs, e.Seats, title, source, req.Seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
 	if other {
-		// Its export keeps the data it was played with.
+		// Its export keeps the data it was played with, and the history as
+		// played.
 		ss.dataHash, ss.inspectedWith = e.DataHash, s.data.Hash()
+		ss.playedHistory = append([]game.Move(nil), e.History...)
 	}
 	return ss, nil
 }

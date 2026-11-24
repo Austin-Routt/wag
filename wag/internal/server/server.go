@@ -160,8 +160,11 @@ type Session struct {
 	dataHash string
 	// inspectedWith is set when a loaded game was played with other scheme
 	// data (dataHash) and opened read-only on request: it identifies this
-	// server's data, with which its moves were replayed (load).
+	// server's data, with which its moves were replayed (load). playedHistory
+	// is then the history as the export recorded it, which its own export
+	// keeps (the replay's moves carry this data's weights and labels).
 	inspectedWith string
+	playedHistory []game.Move
 	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
@@ -950,15 +953,19 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 		r.Seed = ss.Seed
 		req = &r
 	}
+	history := ss.GS.MoveHistory
+	if ss.inspectedWith != "" {
+		history = ss.playedHistory
+	}
 	out := map[string]interface{}{
 		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
 		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
-		"history": ss.GS.MoveHistory, "state": st, "other_arguments": mined, "import": ss.Import,
+		"history": history, "state": st, "other_arguments": mined, "import": ss.Import,
 		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM, "traces": ss.tracesWithoutPrompts(), "verdicts": ss.verdicts(contexts),
 	}
 	if ss.inspectedWith != "" {
-		// The history was played with data_sha256; the state and the
-		// verdicts were computed again with this data.
+		// The history is as it was played, with data_sha256; the state, the
+		// verdicts and the other arguments were computed again with this data.
 		out["inspected_with_data_sha256"] = ss.inspectedWith
 	}
 	return out

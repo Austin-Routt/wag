@@ -58,8 +58,11 @@ type Report struct {
 	EvaluationBuild        string            `json:"evaluation_build"`
 	// UnreadableCallLines counts lines of calls.jsonl that could not be read
 	// (a crash mid-write); they are left out of served_models.
-	UnreadableCallLines int       `json:"unreadable_call_lines,omitempty"`
-	Generated           time.Time `json:"generated"`
+	UnreadableCallLines int `json:"unreadable_call_lines,omitempty"`
+	// Unsaved: results the run holds that its files do not (a write failed;
+	// Run.Status): the report counts them, and the files may never hold them.
+	Unsaved   []string  `json:"unsaved,omitempty"`
+	Generated time.Time `json:"generated"`
 }
 
 // Report measures the run and writes report.json.
@@ -68,7 +71,8 @@ func (r *Run) Report() (*Report, error) {
 	defer r.mu.Unlock()
 	r.refreshDrift()
 	rep := &Report{Run: r.ID, Dataset: r.Dataset.ID, Items: len(r.Settings.Items), Disagreements: map[string][]string{},
-		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC(), EvaluationInputsSHA256: copyHashes(r.Dataset.Hashes), EvaluationPromptSHA256: r.curPrompt, EvaluationBuild: buildID()}
+		Verdicts: map[string]int{}, InputDrift: r.drift, GoldSHA256: r.Dataset.Hashes[r.Dataset.GoldFile], Generated: time.Now().UTC(), EvaluationInputsSHA256: copyHashes(r.Dataset.Hashes), EvaluationPromptSHA256: r.curPrompt, EvaluationBuild: buildID(),
+		Unsaved: r.unsaved()}
 	in := map[string]bool{}
 	for _, id := range r.Settings.Items {
 		in[id] = true

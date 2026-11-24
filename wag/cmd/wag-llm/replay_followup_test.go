@@ -206,3 +206,16 @@ func TestFollowupReplayKeepsTheRecordedPreset(t *testing.T) {
 		t.Fatalf("an invalid recorded preset: %v", err)
 	}
 }
+
+// The trace records its presets, but they do not give the game's weights (a
+// game loaded from an export keeps the weights it was played with): the
+// refusal says so, rather than that the trace records no presets.
+func TestFollowupReplaySaysWhyTheWeightsDiffer(t *testing.T) {
+	trace := traceOf(t, []server.Seat{{Name: "Pro", Kind: "model", Model: "scripted-a"}, {Name: "Con", Kind: "greedy"}}, "scientific")
+	edited := editStart(t, trace, func(start map[string]any) {
+		start["config"].(map[string]any)["Weights"].(map[string]any)["AS:consequences"] = 0.9
+	})
+	if err := replay(context.Background(), []string{edited}); err == nil || !strings.Contains(err.Error(), "the presets the trace records do not give them") {
+		t.Fatal(err)
+	}
+}

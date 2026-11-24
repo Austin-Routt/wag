@@ -314,9 +314,13 @@ func TestOtherAnnotatorsStopAfterAWriteFailure(t *testing.T) {
 	pb := llm.Profile{Name: "b", Provider: "mock", Params: llm.Params{Model: "m2"}}
 	var r *Run
 	var flushErr error
-	// b's first call waits until a's annotation has failed to be written;
-	// a Flush meanwhile is refused: the run is busy.
+	// b's first attempt is under way before a answers; it then waits until
+	// a's annotation has failed to be written. A Flush meanwhile is refused:
+	// the run is busy.
+	bSent := make(chan struct{})
+	a.before = func(string) { <-bSent }
 	b.before = func(string) {
+		close(bSent)
 		for deadline := time.Now().Add(10 * time.Second); time.Now().Before(deadline); time.Sleep(time.Millisecond) {
 			if r.Status().WriteError != "" {
 				flushErr = r.Flush()
@@ -371,11 +375,18 @@ type fakeLog struct {
 	data                         []byte
 	writeN                       int // bytes written before the write fails (-1: none fails)
 	syncErr, truncErr, closeErr  error
+	readErr                      error
 	truncatedTo                  int64
 	truncated, closed, wroteHalf bool
 }
 
 func (f *fakeLog) Stat() (os.FileInfo, error) { return fakeInfo{int64(len(f.data))}, nil }
+func (f *fakeLog) ReadAt(p []byte, off int64) (int, error) {
+	if f.readErr != nil {
+		return 0, f.readErr
+	}
+	return copy(p, f.data[off:]), nil
+}
 func (f *fakeLog) Write(b []byte) (int, error) {
 	if f.writeN >= 0 && f.writeN < len(b) {
 		f.data = append(f.data, b[:f.writeN]...)

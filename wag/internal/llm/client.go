@@ -137,6 +137,11 @@ func (c *Client) Complete(ctx context.Context, req Request, report func(Attempt)
 		if err := ctx.Err(); err != nil {
 			return nil, AsError(c.Provider.Name(), err)
 		}
+		if gate, _ := ctx.Value(gateKey{}).(func() error); gate != nil {
+			if err := gate(); err != nil {
+				return nil, &Error{Provider: c.Provider.Name(), Kind: KindCanceled, Message: err.Error(), Err: err}
+			}
+		}
 		held, err := c.Budget.Reserve(c.Profile, req)
 		if err != nil {
 			return nil, err
@@ -181,6 +186,16 @@ func (c *Client) Complete(ctx context.Context, req Request, report func(Attempt)
 			delay = MaxRetryWait
 		}
 	}
+}
+
+type gateKey struct{}
+
+// WithGate returns a context under which Complete asks gate before it sends
+// each attempt, the first and every retry: an error from gate stops the
+// call there, and no attempt is sent. (An annotation run stops a call this
+// way once one of its records cannot be written.)
+func WithGate(ctx context.Context, gate func() error) context.Context {
+	return context.WithValue(ctx, gateKey{}, gate)
 }
 
 // space waits until min_interval has passed since the previous call's

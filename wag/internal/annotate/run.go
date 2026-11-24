@@ -3,6 +3,7 @@ package annotate
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"hash/fnv"
@@ -15,6 +16,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/yourorg/wag/internal/llm"
 )
@@ -147,6 +149,7 @@ type Run struct {
 	reviewsOnDisk map[string]*Review
 	runDirty      bool
 	fromLog       map[string]bool
+	calls         map[*pendingCall]bool // the model calls under way (call)
 }
 
 var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -256,7 +259,7 @@ func newRun(dir string, d *Dataset, s Settings) *Run {
 	r := &Run{ID: filepath.Base(dir), Dir: dir, Dataset: d, Settings: s, clients: map[string]*llm.Client{},
 		anns: map[string]map[string]Annotation{}, failures: map[string]map[string]string{}, reviews: map[string]*Review{},
 		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}, onDisk: map[string]map[string]bool{},
-		reviewsOnDisk: map[string]*Review{}, fromLog: map[string]bool{}}
+		reviewsOnDisk: map[string]*Review{}, fromLog: map[string]bool{}, calls: map[*pendingCall]bool{}}
 	r.inputHashes = copyHashes(d.Hashes)
 	r.promptHash = sha([]byte(d.AnnotatorSystem()))
 	r.curPrompt = r.promptHash
@@ -396,7 +399,7 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 	if r.drift == "" {
 		// Not for a run that cannot be continued: what it could not write
 		// could never be written.
-		r.recoverFromLog()
+		r.recoverFromLog() // a call log it cannot read damages the run (loadErrors)
 	}
 	r.recount()
 	return r, nil
@@ -492,16 +495,25 @@ func (r *Run) saveAnnotations(name string) error {
 	return writeFile(r.annotationsPath(name), b)
 }
 
-// logCall appends a call to calls.jsonl (with a review's letters, which say
-// whose annotation each letter labels), and reports whether the run's
-// records are all written: a line that cannot be written is kept for the
-// next start, and the run asks nothing new meanwhile.
-func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt, letters map[string]string) bool {
+// logCall appends a call to calls.jsonl, with a review's letters, which say
+// whose annotation each letter labels. A line that cannot be written is
+// kept for the next start, and the run asks nothing new meanwhile.
+func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt, letters map[string]string) {
 	row := map[string]any{"format": "wag-annotation-call/1", "role": role, "name": name, "item": item, "attempt": attempt, "call": a}
 	if letters != nil {
 		row["letters"] = letters
 	}
-	line, merr := json.Marshal(row)
+	if a.Response != nil && !utf8.ValidString(a.Response.Text) {
+		// JSON replaces the bytes that are not UTF-8; the reply as it came
+		// is kept beside, so that what is read back is what the run read.
+		row["reply_base64"] = base64.StdEncoding.EncodeToString([]byte(a.Response.Text))
+	}
+	line, err := json.Marshal(row)
+	if err != nil {
+		// Not with what a call holds; if it were, the line says so.
+		line, _ = json.Marshal(map[string]any{"format": "wag-annotation-call/1", "role": role, "name": name, "item": item, "attempt": attempt,
+			"unrecorded": err.Error()})
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if p := r.progress[progressKey(role, name)]; p != nil {
@@ -515,13 +527,8 @@ func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt, lette
 			}
 		}
 	}
-	if merr != nil {
-		r.writeFailed("calls.jsonl", merr)
-		return false
-	}
 	r.pending = append(r.pending, line)
 	r.flushCalls()
-	return r.writeErr == nil
 }
 
 func progressKey(role, name string) string {
@@ -583,11 +590,11 @@ func (r *Run) checkInputs() error {
 		if scoring[k] && !r.Dataset.annotationFiles[k] {
 			continue
 		}
-		if r.inputHashes[k] != r.Dataset.Hashes[k] {
+		if !r.Dataset.sameInput(k, r.inputHashes[k]) {
 			changed = append(changed, k)
 		}
 	}
-	if r.promptHash != r.curPrompt {
+	if r.promptHash != r.curPrompt && !r.Dataset.samePrompt(r.promptHash) {
 		changed = append(changed, "the annotator's system prompt")
 	}
 	if len(changed) > 0 {
@@ -892,17 +899,7 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 func (r *Run) annotateOne(ctx context.Context, name string, c *llm.Client, system string, it *Item, before map[string]Annotation, prior []string) (Annotation, error) {
 	msgs := []llm.Message{{Role: "user", Content: r.Dataset.AnnotatorPrompt(it, before, prior)}}
 	for attempt := 1; attempt <= 2; attempt++ {
-		if attempt > 1 && r.hasWriteErr() {
-			return nil, errNotRecorded
-		}
-		// A call's retries stop once a record cannot be written.
-		cctx, cancel := context.WithCancel(ctx)
-		resp, err := c.Complete(cctx, c.Request(system, msgs), func(a llm.Attempt) {
-			if !r.logCall("annotator", name, it.ID, attempt, a, nil) {
-				cancel()
-			}
-		})
-		cancel()
+		resp, err := r.call(ctx, c, c.Request(system, msgs), func(a llm.Attempt) { r.logCall("annotator", name, it.ID, attempt, a, nil) })
 		if err != nil {
 			return nil, err
 		}
@@ -1036,14 +1033,8 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 	for i, n := range names {
 		rv.Letters[string(Letters[i])] = n
 	}
-	cctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-	resp, err := c.Complete(cctx, c.Request(system, []llm.Message{{Role: "user", Content: r.Dataset.ReviewerPrompt(it, names, anns)}}),
-		func(a llm.Attempt) {
-			if !r.logCall("reviewer", name, it.ID, 1, a, rv.Letters) {
-				cancel() // a call's retries stop once a record cannot be written
-			}
-		})
+	resp, err := r.call(ctx, c, c.Request(system, []llm.Message{{Role: "user", Content: r.Dataset.ReviewerPrompt(it, names, anns)}}),
+		func(a llm.Attempt) { r.logCall("reviewer", name, it.ID, 1, a, rv.Letters) })
 	if err != nil {
 		rv.Error = err.Error()
 		return rv, err

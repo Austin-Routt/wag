@@ -612,8 +612,12 @@ func replay(ctx context.Context, args []string) error {
 		return err
 	}
 	if !maps.Equal(st.Config.Weights, start.Config.Weights) {
-		return fmt.Errorf("the game was played with the scheme weights %v; its request now gives %v: the context presets have changed "+
-			"since, and the trace does not record them (use --data for that version before replaying)", start.Config.Weights, st.Config.Weights)
+		why := "the context presets have changed since, and the trace does not record them"
+		if len(start.Contexts) > 0 {
+			why = "the presets the trace records do not give them (a game loaded from an export keeps the weights it was played with)"
+		}
+		return fmt.Errorf("the game was played with the scheme weights %v; its request now gives %v: %s (use --data for that version before replaying)",
+			start.Config.Weights, st.Config.Weights, why)
 	}
 	g := &game{base: ts.URL, id: st.ID}
 	runErr := g.run(10 * (len(decisions) + 1))

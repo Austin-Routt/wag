@@ -2,6 +2,8 @@ package annotate
 
 import (
 	"bufio"
+	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -33,11 +35,61 @@ import (
 var errNotRecorded = errors.New("a record of the run could not be written")
 
 // writeFailed notes a record that could not be written: the first such
-// error stands until flushAll writes everything. Caller holds r.mu.
+// error stands until flushAll writes everything. The calls waiting for
+// their turn or for a retry stop at once; an attempt with a provider
+// finishes, and is logged (call). Caller holds r.mu.
 func (r *Run) writeFailed(what string, err error) {
 	if r.writeErr == nil {
 		r.writeErr = fmt.Errorf("%s: %w", what, err)
+		for pc := range r.calls {
+			if !pc.sending {
+				pc.cancel()
+			}
+		}
 	}
+}
+
+// pendingCall is a model call of the run under way; sending says that one
+// of its attempts is with the provider.
+type pendingCall struct {
+	cancel  context.CancelFunc
+	sending bool
+}
+
+// call makes one model call for the run; log records each attempt. No
+// attempt, the first or a retry, is sent once a record of the run could not
+// be written.
+func (r *Run) call(ctx context.Context, c *llm.Client, req llm.Request, log func(llm.Attempt)) (*llm.Response, error) {
+	cctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	pc := &pendingCall{cancel: cancel}
+	r.mu.Lock()
+	r.calls[pc] = true
+	r.mu.Unlock()
+	defer func() {
+		r.mu.Lock()
+		delete(r.calls, pc)
+		r.mu.Unlock()
+	}()
+	gate := func() error {
+		r.mu.Lock()
+		defer r.mu.Unlock()
+		if r.writeErr != nil {
+			return errNotRecorded
+		}
+		pc.sending = true
+		return nil
+	}
+	return c.Complete(llm.WithGate(cctx, gate), req, func(a llm.Attempt) {
+		log(a)
+		r.mu.Lock()
+		pc.sending = false
+		failed := r.writeErr != nil
+		r.mu.Unlock()
+		if failed {
+			cancel() // its retries stop
+		}
+	})
 }
 
 // stoppedByWrite is what Annotate and Review return after a record could
@@ -207,13 +259,19 @@ func (r *Run) unsaved() []string {
 // review, the last reply that reads as one. They are held as unsaved, and
 // the next start writes them instead of asking again. A line that cannot be
 // read (a crash mid-write) is skipped, as the report skips it; a review is
-// taken only from a line that names its letters. Caller owns r.
+// taken only from a line that names its letters. A log that cannot be read
+// through makes the run damaged, and nothing is taken from it: continuing
+// could ask again for what it holds. Caller owns r.
 func (r *Run) recoverFromLog() {
 	if !r.lacksResults() {
 		return
 	}
 	f, err := os.Open(filepath.Join(r.Dir, "calls.jsonl"))
+	if os.IsNotExist(err) {
+		return
+	}
 	if err != nil {
+		r.loadErrors = append(r.loadErrors, "calls.jsonl: "+err.Error())
 		return
 	}
 	defer f.Close()
@@ -231,6 +289,7 @@ func (r *Run) recoverFromLog() {
 			Name    string            `json:"name"`
 			Item    string            `json:"item"`
 			Letters map[string]string `json:"letters"`
+			Reply   string            `json:"reply_base64"`
 			Call    struct {
 				Error    json.RawMessage `json:"error"`
 				Response *llm.Response   `json:"response"`
@@ -239,6 +298,13 @@ func (r *Run) recoverFromLog() {
 		if json.Unmarshal(sc.Bytes(), &row) != nil || !inRun[row.Item] || row.Call.Response == nil ||
 			len(row.Call.Error) > 0 && string(row.Call.Error) != "null" {
 			continue
+		}
+		if row.Reply != "" { // the reply as it came, not as JSON could hold it
+			b, err := base64.StdEncoding.DecodeString(row.Reply)
+			if err != nil {
+				continue
+			}
+			row.Call.Response.Text = string(b)
 		}
 		switch {
 		case row.Role == "annotator" && r.anns[row.Name] != nil:
@@ -254,6 +320,10 @@ func (r *Run) recoverFromLog() {
 				reviews[row.Item] = rv
 			}
 		}
+	}
+	if err := sc.Err(); err != nil {
+		r.loadErrors = append(r.loadErrors, "calls.jsonl: "+err.Error())
+		return
 	}
 	for name, m := range anns {
 		for id, a := range m {
@@ -293,6 +363,7 @@ func (r *Run) lacksResults() bool {
 // that fails part way).
 type appendFile interface {
 	Stat() (os.FileInfo, error)
+	ReadAt([]byte, int64) (int, error)
 	Write([]byte) (int, error)
 	Truncate(int64) error
 	Sync() error
@@ -300,13 +371,16 @@ type appendFile interface {
 }
 
 var openAppend = func(path string) (appendFile, error) {
-	return os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)
+	return os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0o644)
 }
 
 // appendLines appends lines to a log, all of them or none: a write that
-// fails part way is cut off, so that the log never holds half a line and
-// the lines are written again whole. When it returns nil the lines are on
-// disk (synced); an error from closing the file after that is not a loss.
+// fails part way is cut off, and the lines are written again whole. Half a
+// line already at the end (a crash, or a failed write that could not be cut
+// off) is ended first, so that it stays a line of its own, which readers
+// skip, and joins no other. When it returns nil the lines' bytes are synced
+// (not the folder's entry for a new log); an error from closing the file
+// after that is not a loss.
 func appendLines(path string, lines [][]byte) error {
 	f, err := openAppend(path)
 	if err != nil {
@@ -318,6 +392,16 @@ func appendLines(path string, lines [][]byte) error {
 		return err
 	}
 	var buf []byte
+	if size := fi.Size(); size > 0 {
+		last := make([]byte, 1)
+		if _, err := f.ReadAt(last, size-1); err != nil {
+			f.Close()
+			return err
+		}
+		if last[0] != '\n' {
+			buf = append(buf, '\n')
+		}
+	}
 	for _, l := range lines {
 		buf = append(append(buf, l...), '\n')
 	}
@@ -337,8 +421,9 @@ func appendLines(path string, lines [][]byte) error {
 }
 
 // writeFile writes through a temporary file, so a reader never sees half a
-// file, and the file is on disk (synced) when it returns nil. A temporary
-// file it made is removed if it fails; anything else at that path is left.
+// file; when it returns nil the file's bytes are synced (not the folder's
+// entry for the rename). A temporary file it made is removed if it fails;
+// anything else at that path is left.
 func writeFile(path string, b []byte) error {
 	tmp := path + ".tmp"
 	f, err := os.OpenFile(tmp, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)

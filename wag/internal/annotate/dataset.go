@@ -10,6 +10,7 @@
 package annotate
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -63,6 +64,32 @@ type Dataset struct {
 	// annotationFiles identifies files actually supplied to annotators, so a
 	// file used both for claims/resources and scoring cannot be excluded.
 	annotationFiles map[string]bool
+	// lineHashes give, for the hash of an input's bytes, the hashes of the
+	// same text with LF and with CRLF line endings: a run made from a
+	// Windows checkout pinned the CRLF ones.
+	lineHashes map[string][2]string
+}
+
+// setHash records an input's hashes.
+func (d *Dataset) setHash(name string, b []byte) {
+	h := sha(b)
+	d.Hashes[name] = h
+	if d.lineHashes == nil {
+		d.lineHashes = map[string][2]string{}
+	}
+	lf := bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n"))
+	d.lineHashes[h] = [2]string{sha(lf), sha(bytes.ReplaceAll(lf, []byte("\n"), []byte("\r\n")))}
+}
+
+// sameInput tells whether a pinned hash is the input's, its line endings
+// read either way.
+func (d *Dataset) sameInput(name, pinned string) bool {
+	h := d.Hashes[name]
+	if pinned == h {
+		return true
+	}
+	alt, ok := d.lineHashes[h]
+	return ok && (pinned == alt[0] || pinned == alt[1])
 }
 
 // manifest is a dataset's dataset.json.
@@ -141,7 +168,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	if err != nil {
 		return nil, fmt.Errorf("the claims: %v", err)
 	}
-	d.Hashes[m.Items] = sha(b)
+	d.setHash(m.Items, b)
 	d.annotationFiles[m.Items] = true
 	var in struct {
 		Discussion json.RawMessage   `json:"discussion"`
@@ -191,7 +218,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		m.Guidelines = "guidelines.md (built in)"
 	}
 	d.Guidelines = string(g)
-	d.Hashes[m.Guidelines] = sha(g)
+	d.setHash(m.Guidelines, g)
 	d.annotationFiles[m.Guidelines] = true
 	// The gold annotation, if there is one.
 	if m.Gold == "" {
@@ -204,7 +231,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 			return nil, fmt.Errorf("%s: %v", m.Gold, err)
 		}
 		d.Gold, d.HasGold = anns, true
-		d.Hashes[m.Gold] = sha(b)
+		d.setHash(m.Gold, b)
 	} else if explicitGold || !os.IsNotExist(err) {
 		return nil, fmt.Errorf("gold %s: %v", m.Gold, err)
 	}
@@ -215,7 +242,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	}
 	add := func(name string, b []byte) {
 		d.Resources = append(d.Resources, Resource{Name: name, Text: string(b)})
-		d.Hashes[name] = sha(b)
+		d.setHash(name, b)
 		d.annotationFiles[name] = true
 	}
 	hasWalton := false
@@ -238,7 +265,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 			return nil, err
 		}
 		d.Resources = append([]Resource{{Name: "walton.yml", Text: string(b)}}, d.Resources...)
-		d.Hashes["walton.yml"] = sha(b)
+		d.setHash("walton.yml", b)
 		d.annotationFiles["walton.yml"] = true
 	}
 	add("schemes.json", data.SchemesJSON)
