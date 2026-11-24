@@ -1,0 +1,530 @@
+# Proposal for decisions D008, D065, D066, D069, D072 and D074
+# (docs/decisions.md), with D067 recorded as changing nothing: the
+# consequence family's modal forms, how serious a consequence is and on whom
+# it falls, whether acting averts the harm of not acting, the argument from
+# what happens anyway, and the appeal to consequences offered for the truth
+# of a claim. `wag-cli --proposal` checks it and writes its view,
+# D008-D074.md. How proposals work: process.md §5.
+#
+# Version 1, 2026-11-24 (step C3 of first-family.md). Not yet reviewed.
+
+decisions: [D008, D065, D066, D067, D069, D072, D074]
+title: "Consequences: the modal forms, how serious and on whom, the averted harm, what happens anyway, and the appeal to consequences"
+summary: |-
+  **What changes.**
+  - **D008.** Two schemes of their own, as cause to effect has
+    cause_to_effect_modal (D039): positive_consequences_modal and
+    negative_consequences_modal. Their causal premise is modal,
+    may_bring_about(A,G) ("the action A may bring about G"), so a possible
+    consequence cannot fill the categorical brings_about(A,G) of 33.1 and
+    33.2 (the test the decision's refinement asks for). Their conclusions
+    keep the modality: may_be_worth_performing(A) and
+    may_be_unwise_to_perform(A), weaker than should_be_performed(A) and its
+    negation. They keep the sided exceptions of their categorical schemes
+    (bad_outweighs(A,G), good_outweighs(A,G), D055). The likelihood
+    question stays a question (33/CQ1, CQ:likelihood), now at the modal
+    premise. How a modal conclusion meets the thesis, should_be_performed(A),
+    is the owner's choice (below): the proposal sketches two bridges, one for
+    each side, each with its own exception, as D011 has popular opinion's
+    reason_in_favor(A) meet a claim through a bridge, never counted as
+    evidence beside the reason it bridges.
+  - **D065.** Two questions on the four consequence schemes, at their value
+    premise good(G) or bad(G): how serious G is, and for how many (C005);
+    and on whom G falls, and whether that changes how much it counts (C021).
+    They ask how much the consequence matters; a denial that G is good or bad
+    at all is the challenge of the premise. They are the game's questions
+    (CQ:severity, CQ:bearer), as the likelihood question is, since the book
+    prints neither. Precaution (C008) and a certain harm against a
+    speculative one (C024) stay candidates.
+  - **D066.** No formula changes. Mitigation, the action done so that the
+    harm does not follow (C006), is an amended action: a claim that argues
+    for it argues for that action, coded with its own scheme and the role
+    action_amendment (guidelines §2). Another action that brings the same
+    good at less cost (C017) is a separate alternative, argued for itself
+    (move alternative_means; better_means when it is claimed better, D075).
+    That the action cannot be carried out at all (C018) challenges the causal
+    premise, brings_about(A,G), as the game's challenge does.
+  - **D067.** No change: a right, a duty or a value set against consequences
+    (C007) is argued with the value schemes; a value that trumps whatever the
+    consequences needs a context rule of its own, later.
+  - **D069.** The prudential form (33.4) gains the assumption averts(X,C):
+    doing X would avert C. Its question (walton/averts) is C016's: would
+    doing the action avert the harm? Fear (36) states the same link as a
+    premise (only_way_prevent). A harm of not acting that falls on others
+    stays a coding rule, positive consequences of the action with the harm's
+    not happening as G (OC13), not a scheme; such a coding records whether
+    the action's preventing the harm is stated, implied, unknown or
+    disputed (the causal premise's status, or a challenge record), and C016's
+    question is the challenge of that premise, whose existence does not make
+    the link a fact.
+  - **D072.** A scheme of its own, harm_reduction (C022): an outcome E will
+    happen whether or not anything is done (happens_anyway(E)), and doing A
+    would make it less harmful (less_harmful_with(A,E)), so A should be done.
+    Its exception is the decision's, that the outcome is preventable after
+    all (preventable(E)), and a second one from C022's sketch, that doing A
+    would make E happen more often (encourages(A,E)): the owner's choice,
+    since the decision names one exception.
+  - **D074.** The appeal to consequences offered for the truth of a claim
+    (C011) goes forward only once its sketch passes review. It is sketched
+    here as a candidate, never applied by this proposal: an objection that
+    concludes that a consequence argument is undercut as support for the
+    claim it is offered under, in the form WAG's candidates use for an
+    argument-level objection (D056's parallel_argument_refutation). In the
+    game, rule S9 already refuses such a move; the objection is for the
+    annotation of Kialo replies that raise it by name.
+
+  **The owner's choices.** (1) D008: the modal conclusions as proposed,
+  meeting the thesis through the two bridges (added at step C5, with the
+  game), or the bridges left out until a game needs them, or the modality
+  kept in the premise only (a departure from the decision's refinement).
+  (2) D072: the second exception, encourages(A,E). (3) D074: whether
+  C011's sketch goes forward, after its review.
+
+  **What it does not change.** The categorical schemes' formulas; the
+  likelihood question; precaution (C008), the certain against the
+  speculative harm (C024), accrual (C019) and the other weighing candidates
+  of D064; the game until step C5, which adds the new schemes and the
+  bridges to it.
+effects:
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (a block CONSEQUENCES), with CHANGELOG rows: positive_consequences_modal, negative_consequences_modal and harm_reduction added (category addition, owner decision); negative_consequences_prudential gains the assumption averts(X,C) (a repair). Templates added: may_bring_about/2, may_be_worth_performing/1, may_be_unwise_to_perform/1, averts/2, happens_anyway/1, less_harmful_with/2, preventable/1, encourages/2. positive_consequences and negative_consequences keep their formulas; they are listed below for their questions."
+  - "links.json: 33.1 and 33.2 link their modal variants (match partial: the causal premise and the conclusion in the modal mood; CQ1 and CQ2 at may_bring_about(A,G), CQ3 at the sided exception), so that the catalogue carries the book's three questions for them; 33.4's map is unchanged (averts(X,C) is asked as walton/averts). families.json: F15 gains the three new schemes. Afterwards the proposal check warns of no question whose target leaves links.json's map."
+  - "Catalogue (--catalogue-gen, then the drafted entries): the three new entries are drafted, with the book's questions and the walton/ and game questions below; the four consequence entries gain the questions of D065 (CQ:severity, CQ:bearer, drafted until the game asks them); negative_consequences_prudential's entry gains walton/averts and its discrepancy for D069 records the change as applied; the D008, D065, D069 and D072 discrepancies record the change as applied; positive_consequences' 33/CQ1 note, which says that the book's question allows for the strength the arguer claims, points to the modal variants."
+  - "The game's questions (wag/data/nascq): CQ:severity and CQ:bearer, asked by the game's two consequence schemes at their value premise; the gold pins these files, so it is re-pinned after its checks pass (validate.py --repin). The new schemes and the bridges enter the game at step C5."
+  - "The candidates registry: C005, C016, C021 and C022 recorded as applied by this proposal; C006, C017 and C018 recorded as the coding rules of D066; C007 as argued with the value schemes (D067); C011's sketch below, pending its review; C008 and C024 stay candidates."
+  - "The register: D008, D065, D066, D069 and D072 applied (with the owner's choices); D067 recorded as no change; D074 recorded with its sketch's review."
+  - "The batch-2 gold, recoded by a script the review reads, each changed item recording it (adjudication.recoded): the consequence claims that say only that their consequence may follow are coded with the modal variants: 13292.174 ('might'), 13292.121 and 13292.9 ('could'); the 'would' claims stay categorical (13292.7, .36, .56, .5, .115 and the rest), as a conditional prediction of what the action would bring about. Their targets and challenge records follow their instances (format 2). The gold has no claim from what happens anyway and no coding of the prudential form, so averts(X,C) and harm_reduction change no item."
+  - "Guidelines (§3.1, both copies) and rule cases: a rule for the mood of a consequence (may, might, could: the modal variants; would, will: the categorical schemes), with worked cases; D066's three rules (mitigation as an amended action, another action as a separate alternative, feasibility as a challenge of the causal premise); OC13's record of whether the action's preventing the harm is stated, implied, unknown or disputed; harm_reduction's rule beside OC13 (an outcome that comes anyway is not a harm of not acting). positions.json types may_bring_about/2's first place as an action, averts/2's first place and less_harmful_with/2's first place as actions."
+  - "validate.py and the Go check read the new schemes' formulas from walton.yml, as they read every scheme's; a modal instance's conclusion is its own (no rule makes it meet the thesis until the bridges); to_wag.py's replay plays the modal claims with other until step C5, and the README's counts are regenerated with what changes."
+schemes:
+  - id: positive_consequences
+    meta:
+      title: Argument from Positive Consequences
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156.
+    variables: [A, G]
+    premises: ["brings_about(A,G)", "good(G)"]
+    assumptions: []
+    exceptions: ["bad_outweighs(A,G)"]
+    conclusions: ["should_be_performed(A)"]
+  - id: negative_consequences
+    meta:
+      title: Argument from Negative Consequences
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156.
+    variables: [A, G]
+    premises: ["brings_about(A,G)", "bad(G)"]
+    assumptions: []
+    exceptions: ["good_outweighs(A,G)"]
+    conclusions: ["¬should_be_performed(A)"]
+  - id: positive_consequences_modal
+    meta:
+      title: Argument from Possible Positive Consequences
+      source: |
+        WAG's modal variant of the argument from positive consequences (decision D008), after Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156, whose question allows for the strength the arguer claims, and pp. 140-141 for the modal causal form (cause_to_effect_modal).
+    variables: [A, G]
+    premises: ["may_bring_about(A,G)", "good(G)"]
+    assumptions: []
+    exceptions: ["bad_outweighs(A,G)"]
+    conclusions: ["may_be_worth_performing(A)"]
+  - id: negative_consequences_modal
+    meta:
+      title: Argument from Possible Negative Consequences
+      source: |
+        WAG's modal variant of the argument from negative consequences (decision D008), after Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, pp. 155-156, whose question allows for the strength the arguer claims, and pp. 140-141 for the modal causal form (cause_to_effect_modal).
+    variables: [A, G]
+    premises: ["may_bring_about(A,G)", "bad(G)"]
+    assumptions: []
+    exceptions: ["good_outweighs(A,G)"]
+    conclusions: ["may_be_unwise_to_perform(A)"]
+  - id: negative_consequences_prudential
+    meta:
+      title: Argument from Negative Consequences (Prudential Inference)
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995. pp. 155- 156. Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
+    variables: [X, C]
+    premises: ["not_doing(X)", "bad_consequence(X,C)"]
+    assumptions: ["strongly_occur(X,C)", "averts(X,C)"]
+    exceptions: ["bad_outweighs(X,C)"]
+    conclusions: ["should_be_performed(X)"]
+  - id: harm_reduction
+    meta:
+      title: Argument from What Happens Anyway (harm reduction)
+      source: |
+        WAG's scheme (decision D072; candidate C022, docs/candidates.md), not in the compendium: an outcome that comes whether or not anything is done, made less harmful by the action. Sighted in Kialo (abortion, enhancement); the public-health literature on harm reduction.
+    variables: [A, E]
+    premises: ["happens_anyway(E)", "less_harmful_with(A,E)"]
+    assumptions: []
+    exceptions: ["preventable(E)", "encourages(A,E)"]
+    conclusions: ["should_be_performed(A)"]
+language:
+  may_bring_about/2: "The action %s may bring about %s."
+  may_be_worth_performing/1: "Action %s may be worth performing."
+  may_be_unwise_to_perform/1: "Action %s may be unwise to perform."
+  averts/2: "Doing %s would avert %s."
+  happens_anyway/1: "%s will happen whether or not anything is done about it."
+  less_harmful_with/2: "Doing %s would make %s less harmful."
+  preventable/1: "%s could be prevented after all."
+  encourages/2: "Doing %s would make %s happen more often."
+questions:
+  positive_consequences:
+    - {id: 33/CQ1, asks: "How likely is it that doing A would actually lead to G?", target: "brings_about(A,G)"}
+    - {id: 33/CQ2, asks: "What evidence shows that doing A would lead to G, and is it strong enough for the confidence with which the claim is made?", target: "brings_about(A,G)"}
+    - {id: 33/CQ3, asks: "Would doing A have bad consequences that outweigh G?", target: "bad_outweighs(A,G)"}
+    - {id: game/CQ:severity, asks: "Is G good enough, and for enough people, to bear on whether A should be done?", target: "good(G)"}
+    - {id: game/CQ:bearer, asks: "Who would enjoy G, and does that change how much it counts for doing A?", target: "good(G)"}
+  negative_consequences:
+    - {id: 33/CQ1, asks: "How likely is it that doing A would actually lead to G?", target: "brings_about(A,G)"}
+    - {id: 33/CQ2, asks: "What evidence shows that doing A would lead to G, and is it strong enough for the confidence with which the claim is made?", target: "brings_about(A,G)"}
+    - {id: 33/CQ3, asks: "Would doing A have good consequences that outweigh G?", target: "good_outweighs(A,G)"}
+    - {id: game/CQ:severity, asks: "Is G bad enough, and for enough people, to bear on whether A should be done?", target: "bad(G)"}
+    - {id: game/CQ:bearer, asks: "On whom would G fall, and does that change how much it counts against doing A?", target: "bad(G)"}
+  positive_consequences_modal:
+    - {id: game/CQ:likelihood, asks: "How likely is it that doing A would lead to G at all?", target: "may_bring_about(A,G)"}
+    - {id: game/CQ:evidence, asks: "What shows that doing A could lead to G, beyond its being imaginable?", target: "may_bring_about(A,G)"}
+    - {id: walton/bad_outweighs, asks: "Would doing A have bad consequences that outweigh G?", target: "bad_outweighs(A,G)"}
+    - {id: game/CQ:severity, asks: "Is G good enough, and for enough people, to bear on whether A should be done?", target: "good(G)"}
+    - {id: game/CQ:bearer, asks: "Who would enjoy G, and does that change how much it counts for doing A?", target: "good(G)"}
+  negative_consequences_modal:
+    - {id: game/CQ:likelihood, asks: "How likely is it that doing A would lead to G at all?", target: "may_bring_about(A,G)"}
+    - {id: game/CQ:evidence, asks: "What shows that doing A could lead to G, beyond its being imaginable?", target: "may_bring_about(A,G)"}
+    - {id: walton/good_outweighs, asks: "Would doing A have good consequences that outweigh G?", target: "good_outweighs(A,G)"}
+    - {id: game/CQ:severity, asks: "Is G bad enough, and for enough people, to bear on whether A should be done?", target: "bad(G)"}
+    - {id: game/CQ:bearer, asks: "On whom would G fall, and does that change how much it counts against doing A?", target: "bad(G)"}
+  negative_consequences_prudential:
+    - {id: 33/CQ1, asks: "How likely is it that C would follow if X is not done?", target: "strongly_occur(X,C)"}
+    - {id: 33/CQ2, asks: "What evidence shows that C would follow if X is not done?", target: "bad_consequence(X,C)"}
+    - {id: 33/CQ3, asks: "Would doing X have bad consequences that outweigh avoiding C?", target: "bad_outweighs(X,C)"}
+    - {id: walton/averts, asks: "Would doing X avert C, or would C follow anyway, or be averted by something else?", target: "averts(X,C)"}
+  harm_reduction:
+    - {id: walton/preventable, asks: "Could E be prevented after all, rather than only made less harmful?", target: "preventable(E)"}
+    - {id: walton/encourages, asks: "Would doing A make E happen more often, so that more harm follows overall?", target: "encourages(A,E)"}
+examples:
+  - scheme: positive_consequences
+    title: "A tax on meat would combat unhealthy meat consumption"
+    kialo: "13292.115"
+    use: argument
+    text: "A tax on meat would combat unhealthy meat consumption."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "less unhealthy meat consumption"
+    attacks:
+      - question: "33/CQ1"
+        text: "Meat eaters in the countries that tried it bought cheaper cuts rather than less meat."
+      - question: "game/CQ:severity"
+        text: "Most people already eat less meat than the guidelines' limit; the excess is a small group's."
+      - question: "game/CQ:bearer"
+        text: "The health gain would go to the heaviest eaters, who can most afford the tax and change least."
+    note: "Categorical: 'would combat'. The gold's coding; its G is phrased as the good state the tax brings about."
+  - scheme: positive_consequences
+    title: "Free school lunches"
+    invented: true
+    use: argument
+    text: "If the council paid for a hot lunch for every primary pupil, no child would start the afternoon hungry. The council should fund the lunches."
+    bindings:
+      A: "the council paying for a hot lunch for every primary pupil"
+      G: "no primary pupil starting the afternoon hungry"
+    attacks:
+      - question: "33/CQ2"
+        text: "The claim rests on one head teacher's impression; the district has no figures on afternoon hunger."
+      - question: "33/CQ3"
+        text: "The lunches would take the whole of next year's repairs budget, and leaking classrooms matter more (a weighing claim: bad_outweighs_good argues it)."
+  - scheme: positive_consequences_modal
+    title: "A four-day week might raise productivity (near miss)"
+    invented: true
+    use: near-miss
+    near_miss_of: positive_consequences
+    text: "Switching to a four-day week might raise our productivity, so it may be worth a trial."
+    bindings:
+      A: "the firm switching to a four-day week"
+      G: "higher productivity at the firm"
+    note: "It looks like positive consequences, but the consequence is claimed only possible ('might'): positive_consequences_modal, whose premise and conclusion keep the modality. Coded categorically, a 'might' would fill brings_about(A,G), which it does not claim."
+  - scheme: negative_consequences
+    title: "A sin tax on meat would make food more expensive"
+    kialo: "13292.7"
+    use: argument
+    text: "A sin tax on meat would make food more expensive, despite many people not being able to afford it."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "food becoming more expensive for people who cannot afford it"
+    attacks:
+      - question: "game/CQ:severity"
+        text: "The tax adds a few cents to a meal; it is a nuisance, not hardship."
+      - question: "game/CQ:bearer"
+        text: "Refunding the tax to low-income households, as the proposal does, takes the burden off those who cannot afford it."
+      - question: "33/CQ3"
+        text: "The health and climate gains of the tax outweigh a small rise in food prices (good_outweighs_bad argues it)."
+  - scheme: negative_consequences
+    title: "Closing the branch library"
+    invented: true
+    use: argument
+    text: "Closing the east-side branch library would leave its students with no free place to study. The council should not close it."
+    bindings:
+      A: "the council closing the east-side branch library"
+      G: "east-side students having no free place to study"
+    attacks:
+      - question: "33/CQ1"
+        text: "The community centre next door has a free study room open every evening."
+      - question: "33/CQ2"
+        text: "No one has counted how many students use the branch to study."
+  - scheme: negative_consequences_modal
+    title: "Taxing meat might force producers to cut corners (near miss)"
+    kialo: "13292.174"
+    use: near-miss
+    near_miss_of: negative_consequences
+    text: "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "producers using cheaper and more dangerous means of producing meat"
+    note: "It looks like negative consequences, but 'might' claims the consequence only possible: negative_consequences_modal."
+  - scheme: positive_consequences_modal
+    title: "A four-day week might raise productivity"
+    invented: true
+    use: argument
+    text: "Switching to a four-day week might raise our productivity, so it may be worth a trial."
+    bindings:
+      A: "the firm switching to a four-day week"
+      G: "higher productivity at the firm"
+    attacks:
+      - question: "game/CQ:likelihood"
+        text: "The trials that reported gains were in firms whose work is done at desks; ours is shift work."
+      - question: "game/CQ:evidence"
+        text: "The claim cites one press release, not a trial's results."
+      - question: "walton/bad_outweighs"
+        text: "Clients would lose a weekday of service, and losing them matters more than a possible gain in output."
+      - question: "game/CQ:severity"
+        text: "Productivity is already at the industry's best; a small gain would change little."
+      - question: "game/CQ:bearer"
+        text: "The gain would go to the owners; the staff would work the same hours in four longer days."
+  - scheme: positive_consequences_modal
+    title: "A late-night bus might get people home safely"
+    invented: true
+    use: argument
+    text: "A night bus from the town centre could get people home safely after the pubs close, so it may be worth running one."
+    bindings:
+      A: "the town running a night bus from the centre"
+      G: "people getting home safely after the pubs close"
+    attacks:
+      - question: "game/CQ:likelihood"
+        text: "Night buses in the towns nearby run almost empty: people share taxis home."
+    note: "'Could': a possible consequence, and a conclusion that keeps the modality: the bus may be worth running."
+  - scheme: positive_consequences
+    title: "A tax on meat would combat unhealthy meat consumption (near miss)"
+    kialo: "13292.115"
+    use: near-miss
+    near_miss_of: positive_consequences_modal
+    text: "A tax on meat would combat unhealthy meat consumption."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "less unhealthy meat consumption"
+    note: "It could be read as a possibility, but 'would' is a conditional prediction of what the action brings about, categorical: positive_consequences."
+  - scheme: negative_consequences_modal
+    title: "Taxing meat might force producers to cut corners"
+    kialo: "13292.174"
+    use: argument
+    text: "Taxing meat might force producers to use cheaper and more dangerous means of producing meat."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "producers using cheaper and more dangerous means of producing meat"
+    attacks:
+      - question: "game/CQ:likelihood"
+        text: "Food safety inspections already stop the dangerous methods; a tax does not lift them."
+      - question: "walton/good_outweighs"
+        text: "The tax's health and climate gains are certain and large; a possible cut corner, which inspection would catch, weighs less."
+  - scheme: negative_consequences_modal
+    title: "Taxing meat could cause an unhealthy underconsumption"
+    kialo: "13292.121"
+    use: argument
+    text: "Taxing meat could also result in an unhealthy underconsumption of meat."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "an unhealthy underconsumption of meat"
+    attacks:
+      - question: "game/CQ:evidence"
+        text: "Nobody in the countries with such taxes eats too little meat; the claim cites no case."
+      - question: "game/CQ:severity"
+        text: "Too little meat harms health only for a few, who can get iron and protein elsewhere."
+      - question: "game/CQ:bearer"
+        text: "The risk falls on the poorest, who already eat the least meat, and that makes it count for more."
+  - scheme: negative_consequences
+    title: "A sin tax on meat would make food more expensive (near miss)"
+    kialo: "13292.7"
+    use: near-miss
+    near_miss_of: negative_consequences_modal
+    text: "A sin tax on meat would make food more expensive, despite many people not being able to afford it."
+    bindings:
+      A: "governments putting a tax on meat"
+      G: "food becoming more expensive for people who cannot afford it"
+    note: "'Would' is categorical: negative_consequences, not its modal variant."
+  - scheme: negative_consequences_prudential
+    title: "The hospital trust's levy"
+    invented: true
+    use: argument
+    text: "If you do not raise the levy this year, the hospital trust will run out of cash by spring, which would be very bad for you. You should raise it."
+    bindings:
+      X: "the board raising the levy this year"
+      C: "the hospital trust running out of cash by spring"
+    attacks:
+      - question: "walton/averts"
+        text: "The levy would bring in too little, too late: the trust runs out of cash in March, and the first payments arrive in June."
+      - question: "33/CQ1"
+        text: "The trust's reserves and its overdraft would carry it to the summer even without the levy."
+      - question: "33/CQ2"
+        text: "The forecast of running out of cash is the finance director's guess, not the auditors' figure."
+      - question: "33/CQ3"
+        text: "Raising the levy would drive the trust's best surgeons to the next county, which is worse than a cash crisis the bank would cover."
+  - scheme: negative_consequences_prudential
+    title: "Insuring the harvest"
+    invented: true
+    use: argument
+    text: "If you do not insure this year's harvest, a hailstorm like last year's would ruin you. Insure it."
+    bindings:
+      X: "the farmer insuring this year's harvest"
+      C: "the farmer being ruined by a hailstorm"
+    attacks:
+      - question: "walton/averts"
+        text: "The policy pays out only after the season ends, by which time the bank will have called in your loan."
+      - question: "CQ:premise_acceptable"
+        target: "not_doing(X)"
+        text: "You have already applied for the policy; nobody is considering going without it."
+  - scheme: positive_consequences
+    title: "A harm of not acting that falls on others (near miss)"
+    invented: true
+    use: near-miss
+    near_miss_of: negative_consequences_prudential
+    text: "If the council does not fund the shelter, people in abusive relationships will have nowhere to go."
+    bindings:
+      A: "the council funding the shelter"
+      G: "people in abusive relationships being able to leave their abusers"
+    note: "The harm falls on others, not on the one who acts: positive consequences of the action, with the harm's not happening as G (OC13). C016's question is then the challenge of its causal premise."
+  - scheme: harm_reduction
+    title: "Pill testing at festivals"
+    invented: true
+    use: argument
+    text: "People will take drugs at festivals whether or not anything is done about it. Free pill testing would make that less harmful. The festival should offer it."
+    bindings:
+      A: "the festival offering free pill testing"
+      E: "people taking drugs at the festival"
+    attacks:
+      - question: "walton/preventable"
+        text: "Searches at the gate and sniffer dogs would stop most drugs coming in; the drug taking can be prevented, not only made safer."
+      - question: "walton/encourages"
+        text: "A clean test tells people a pill is safe, so more of them would take one, and the harm overall would grow."
+      - question: "CQ:premise_acceptable"
+        target: "less_harmful_with(A,E)"
+        text: "The tests miss the most dangerous adulterants, so they make nothing safer."
+  - scheme: harm_reduction
+    title: "Teaching safe drinking limits"
+    invented: true
+    use: argument
+    text: "Teenagers will drink at parties whatever schools say. Teaching them safe limits would make their drinking less harmful, so schools should teach it."
+    bindings:
+      A: "schools teaching teenagers safe drinking limits"
+      E: "teenagers drinking at parties"
+    attacks:
+      - question: "CQ:premise_acceptable"
+        target: "happens_anyway(E)"
+        text: "Teenage drinking has halved in a decade; it is not something that happens whatever is done."
+      - question: "walton/encourages"
+        text: "Talking of 'safe limits' tells them that drinking is expected, and more of them would start."
+  - scheme: positive_consequences
+    title: "A free school lunch (near miss)"
+    invented: true
+    use: near-miss
+    near_miss_of: harm_reduction
+    text: "If the council paid for a hot lunch for every primary pupil, no child would start the afternoon hungry."
+    bindings:
+      A: "the council paying for a hot lunch for every primary pupil"
+      G: "no primary pupil starting the afternoon hungry"
+    note: "Hunger is not an outcome that comes whatever is done: the lunch prevents it. That is positive consequences of the lunch, with the hunger's not happening as G."
+  - scheme: possible_reason_for_bridge
+    title: "From a possible gain to the trial"
+    invented: true
+    use: argument
+    text: "A four-day week may be worth a trial (example 7 argues it), so the firm should try it."
+    bindings:
+      A: "the firm switching to a four-day week"
+    attacks:
+      - question: "walton/too_remote_to_act_on"
+        text: "The gain is a long shot, and a failed trial would cost the firm the clients who need it open on Fridays."
+  - scheme: possible_reason_against_bridge
+    title: "From a possible harm to the rejection"
+    kialo: "13292.174"
+    use: argument
+    text: "Taxing meat may be unwise, since it might push producers to cut corners (example 10), so governments should not tax meat."
+    bindings:
+      A: "governments putting a tax on meat"
+    attacks:
+      - question: "walton/too_remote_to_act_on"
+        text: "Inspection catches the dangerous methods; a possibility that remote is no reason to give up the tax."
+  - scheme: appeal_to_consequences_objection
+    title: "Free will and good behaviour"
+    invented: true
+    use: argument
+    text: "Under the claim that free will exists, someone argues that believing in free will makes people behave better. A reply: that is an appeal to consequences; how a belief makes people behave does not show it true."
+    bindings:
+      X: "the argument that believing in free will makes people behave better"
+    attacks:
+      - question: "walton/belief_is_at_issue"
+        text: "The discussion is whether we should go on believing in free will, and there its effects on behaviour do count."
+candidates:
+  note: |-
+    Three schemes are sketched beside the proposal, never applied by it.
+
+    **The bridges** (the owner's choice 1) let a modal conclusion meet the
+    thesis, as D011 bridges popular opinion's reason_in_favor(A) to a claim
+    and D063 bridges conclusions that name an agent. Each is an explicit
+    warrant with its own challenge: a possibility counts for (or against)
+    doing the action unless it is too remote to act on. The bridge is never
+    counted as evidence beside the modal argument it bridges; it is the only
+    way the modal argument reaches should_be_performed(A). They would enter
+    walton.yml with the game, at step C5.
+
+    **The appeal to consequences** (C011, D074) concludes that a consequence
+    argument offered under a claim of what is the case is undercut as support
+    for that claim: undercut(X), X naming the argument, as D056's
+    parallel_argument_refutation does. In the game, rule S9 already refuses a
+    consequence scheme at a factual claim; the objection is for coding the
+    Kialo replies that raise it by name. Its exception is the case where the
+    claim at issue is itself whether to believe something, which consequences
+    can bear on (a pragmatic argument for belief, as in Pascal's wager).
+  schemes:
+    - id: possible_reason_for_bridge
+      meta:
+        title: Bridge from a possible good consequence to the recommendation (candidate)
+        source: "Candidate bridge for decision D008's modal conclusions (the owner's choice), on the pattern of D011 and D063."
+      variables: [A]
+      premises: ["may_be_worth_performing(A)"]
+      assumptions: []
+      exceptions: ["too_remote_to_act_on(A)"]
+      conclusions: ["should_be_performed(A)"]
+    - id: possible_reason_against_bridge
+      meta:
+        title: Bridge from a possible bad consequence to the rejection (candidate)
+        source: "Candidate bridge for decision D008's modal conclusions (the owner's choice), on the pattern of D011 and D063."
+      variables: [A]
+      premises: ["may_be_unwise_to_perform(A)"]
+      assumptions: []
+      exceptions: ["too_remote_to_act_on(A)"]
+      conclusions: ["¬should_be_performed(A)"]
+    - id: appeal_to_consequences_objection
+      meta:
+        title: The appeal to consequences, as an objection (candidate C011)
+        source: "Candidate C011 (decision D074), not in the compendium; Douglas Walton, The New Dialectic, 1998, pp. 176-177 (the argument ad consequentiam)."
+      variables: [X]
+      premises: ["argues_from_consequences(X)", "offered_for_truth(X)"]
+      assumptions: []
+      exceptions: ["belief_is_at_issue(X)"]
+      conclusions: ["undercut(X)"]
+  language:
+    too_remote_to_act_on/1: "The possibility that action %s brings about its consequence is too remote to act on."
+    argues_from_consequences/1: "Argument %s argues from the consequences of accepting or believing a claim."
+    offered_for_truth/1: "Argument %s is offered as a reason that the claim is true."
+    belief_is_at_issue/1: "What argument %s is offered for is whether to believe the claim, not whether it is true."
+    undercut/1: "Argument %s is undercut."
+  questions:
+    possible_reason_for_bridge:
+      - {id: walton/too_remote_to_act_on, asks: "Is the possibility too remote to act on, given what doing A would cost?", target: "too_remote_to_act_on(A)"}
+    possible_reason_against_bridge:
+      - {id: walton/too_remote_to_act_on, asks: "Is the possibility too remote to act on, given what not doing A would cost?", target: "too_remote_to_act_on(A)"}
+    appeal_to_consequences_objection:
+      - {id: walton/belief_is_at_issue, asks: "Is the claim at issue whether to believe something, which its consequences can bear on, rather than whether it is true?", target: "belief_is_at_issue(X)"}
