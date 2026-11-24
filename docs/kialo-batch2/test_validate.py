@@ -85,6 +85,21 @@ def rename(it, ins, old, new, records=True):
             c['formula'] = sub(c['formula'])
 
 
+def renumber(g, old, new):
+    """Give an instance another id, and every record that names it."""
+    for it in g['items']:
+        for x in it['instances']:
+            if x['id'] == old:
+                x['id'] = new
+        for c in it['challenges']:
+            if c.get('instance') == old:
+                c['instance'] = new
+        t = it['target']
+        for o in [t.get('actual') or {}] + (t.get('other_kialo_parents') or []):
+            if o.get('instance') == old:
+                o['instance'] = new
+
+
 def next_id(it):
     used = [int(x['id'].split('#')[1]) for x in it['instances']] + [int(x.split('#')[1]) for x in it.get('retired', [])]
     return f"{it['kialo_claim_id']}#{max(used) + 1}"
@@ -389,6 +404,27 @@ class Rules(unittest.TestCase):
         # 13292.12#1 do not read it (no cascade).
         self.assertEqual(errors, ['13292.12: R16 instances[0].id is not an instance id'], out)
 
+    def test_r12_an_annotators_primary_comes_first_as_1(self):
+        # An annotator's record (no adjudication) lists its primary instance
+        # first, as <claim>#1, so that a later claim can name it before it is
+        # shown; a gold's ids stay as its history made them.
+        a = copy.deepcopy(GOLD)
+        a['annotator'] = 'model-x'
+        for it in a['items']:
+            it.pop('adjudication')
+        self.passes(a)
+        b = copy.deepcopy(a)
+        insts = item(b, '13292.9')['instances']
+        insts[0], insts[1] = insts[1], insts[0]
+        self.fails(b, '13292.9', ['R12'], 'its primary instance is not listed first as 13292.9#1')
+        b = copy.deepcopy(a)
+        renumber(b, '13292.7#1', '13292.7#2')
+        self.fails(b, '13292.7', ['R12'], 'its primary instance is not listed first as 13292.7#1')
+        g = copy.deepcopy(GOLD)
+        insts = item(g, '13292.9')['instances']
+        insts[0], insts[1] = insts[1], insts[0]
+        self.passes(g)
+
     def test_r12_a_retired_number_is_not_used_again(self):
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.104')
@@ -447,6 +483,35 @@ class Rules(unittest.TestCase):
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': ''}
         self.fails(g, '13292.12', ['R16'], 'target.actual.instance is not an instance id, or {"unresolved": why}')
+
+    def test_r13_an_unresolved_part_is_kept(self):
+        # §8: a target's part may be unresolved; it is kept, not refused.
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.12')['target']['actual']['part'] = {'unresolved': 'premise or exception'}
+        out = self.passes(g)
+        self.assertIn('13292.12: its target part (premise or exception)', out)
+
+    def test_r13_another_kialo_parents_inference(self):
+        # An other parent's exact target is checked whatever its part, the
+        # inference included.
+        g = copy.deepcopy(GOLD)
+        o = item(g, '13292.180')['target']['other_kialo_parents'][0]
+        o.update(part='inference', instance='13292.121#99', formula=None)
+        self.fails(g, '13292.180', ['R13'], 'names the instance 13292.121#99, which is not an instance of 13292.121')
+        o['instance'] = '13292.121#1'
+        self.passes(g)
+
+    def test_r4_a_modal_fragment_that_leaves_its_effect_unstated(self):
+        # A modal step's unstated effect is not a cause R4 can name.
+        g = copy.deepcopy(GOLD)
+        it = item(g, '13292.11')
+        it['instances'].append({'id': next_id(it), 'primary': False,
+                                'scheme': {'walton_id': 'cause_to_effect_modal', 'compendium': '28', 'wag_id': None, 'fit': 'fragment',
+                                           'confidence': 0.4, 'alternatives': []},
+                                'bindings': {'E1': 'meat_subsidies', 'E2': {'unstated': 'the effect is not said'}},
+                                'premises': [{'role': 'premise', 'formula': 'may_occur(meat_subsidies)', 'en': 'x', 'status': 'explicit'}],
+                                'conclusion': {'formula': None, 'en': ''}})
+        self.passes(g)
 
     # R14: actors and actions.
     def test_r14_an_agent_who_is_not_an_actor(self):
@@ -603,6 +668,7 @@ class Rules(unittest.TestCase):
             'an inference target without its formula': ('13292.12', lambda g: (item(g, '13292.12')['target']['actual'].update(part='inference'),
                                                                  item(g, '13292.12')['target']['actual'].pop('formula')), 'target.actual.formula is missing'),
             'other parents for one parent': ('13292.7', lambda g: item(g, '13292.7')['target'].update(other_kialo_parents=[]), 'the claim has one Kialo parent or none (R7)'),
+            'no polarity key': ('13292.7', lambda g: item(g, '13292.7')['role'].pop('polarity'), 'role.polarity is missing'),
             'retired not a list': ('13292.7', lambda g: item(g, '13292.7').update(retired='13292.7#2'), "retired is not a list of ids of 13292.7's instances"),
             "a retired id of another claim": ('13292.7', lambda g: item(g, '13292.7').update(retired=['13292.9#9']), "retired is not a list of ids of 13292.7's instances"),
         }
@@ -614,8 +680,47 @@ class Rules(unittest.TestCase):
                 self.assertEqual(code, 1, out)
                 self.assertNotIn('Traceback', out)
                 self.assertTrue(any(e.startswith(f'{cid}: R16 ') and text in e for e in errors), f'{name}:\n{out}')
+                # A malformed item is said once and read by no other item's rule.
                 for e in errors:
-                    self.assertTrue(e.startswith(f'{cid}: R16 ') or ' R13 ' in e or ' R10 ' in e or ' R15 ' in e, f'{name}: {e}')
+                    self.assertTrue(e.startswith(f'{cid}: '), f'{name}: {e}')
+
+    def test_r16_no_traceback(self):
+        # What the schema pass does not read is read safely: a gold's
+        # adjudication, a malformed thesis, a claim items.json does not have,
+        # and items that are not objects.
+        cases = [
+            ('no adjudication', lambda g: item(g, '13292.7').pop('adjudication'), '13292.7: missing adjudication'),
+            ('a null adjudication', lambda g: item(g, '13292.7').update(adjudication=None), '13292.7: bad adjudication'),
+            ('no changed_fields', lambda g: item(g, '13292.7')['adjudication'].pop('changed_fields'), '13292.7: bad adjudication'),
+            ('a string conclusion of the thesis', lambda g: primary(item(g, '13292.1')).update(conclusion='should_be_performed(tax_meat)'),
+             '13292.1: R16 13292.1#1.conclusion is not an object'),
+            ('a claim items.json does not have', lambda g: item(g, '13292.7').update(kialo_claim_id='13292.999'),
+             '13292.999: not a claim of items.json'),
+        ]
+        for name, plant, text in cases:
+            with self.subTest(name):
+                g = copy.deepcopy(GOLD)
+                plant(g)
+                code, errors, out = run(g)
+                self.assertEqual(code, 1, out)
+                self.assertNotIn('Traceback', out)
+                self.assertTrue(any(text in e for e in errors), f'{name}:\n{out}')
+                if name.startswith('a string conclusion'):
+                    self.assertTrue(all(e.startswith('13292.1: R16 ') for e in errors), out)
+        g = copy.deepcopy(GOLD)
+        g['items'][3] = 'not an item'
+        code, errors, out = run(g)
+        self.assertEqual(code, 1, out)
+        self.assertNotIn('Traceback', out)
+        self.assertIn('the file\'s items are not a list of objects', out)
+
+    def test_r16_a_malformed_target_is_not_read(self):
+        # The claims that challenge a malformed claim's instance are not
+        # refused for it: its own errors are said once.
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.108')['role']['confidence'] = None
+        code, errors, out = run(g)
+        self.assertEqual(errors, ['13292.108: R16 role.confidence is not a number from 0 to 1'], out)
 
     def test_r16_other_parents_missing(self):
         # A claim with more than one Kialo parent lists the others (R7 then

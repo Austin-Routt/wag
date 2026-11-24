@@ -108,6 +108,8 @@ def valid_date(d):
         return False
 
 # 1. 50 items, in items.json order
+if not isinstance(gold.get('items'), list) or not all(isinstance(i, dict) for i in gold['items']):
+    print('ERRORS (1):\nthe file\'s items are not a list of objects'); sys.exit(1)
 ids = [i['kialo_claim_id'] for i in items]
 gids = [i.get('kialo_claim_id') for i in gold['items']]
 if gids != ids: err('items not in items.json order or count differs: %d' % len(gids))
@@ -444,6 +446,8 @@ MALFORMED = {cid for cid, e in SHAPE.items() if e}
 for it in gold['items']:
     cid = it.get('kialo_claim_id')
     unstated_conclusions = set()  # instances whose conclusion R16 refused (not checked for atoms again)
+    if cid not in kp:
+        err(f'{cid}: not a claim of items.json'); continue
     if F2 and SHAPE.get(cid):
         for e in SHAPE[cid]:
             err(f'{cid}: {e}')
@@ -451,16 +455,23 @@ for it in gold['items']:
     for k in REQUIRED + (('adjudication',) if IS_GOLD else ()):
         if k not in it: err(f'{cid}: missing {k}')
     if IS_GOLD:
-        ad = it['adjudication']
-        if not isinstance(ad.get('changed_fields'), list) or not ad.get('reason'): err(f'{cid}: bad adjudication')
-        if ad['changed_fields'] == [] and ad['reason'] != 'agreed': err(f'{cid}: empty changes but reason != agreed')
+        ad = it.get('adjudication')
+        if not isinstance(ad, dict) or not isinstance(ad.get('changed_fields'), list) or not ad.get('reason'):
+            err(f'{cid}: bad adjudication')
+        elif ad['changed_fields'] == [] and ad['reason'] != 'agreed':
+            err(f'{cid}: empty changes but reason != agreed')
     thesis = not kp.get(cid)
     # R12 (format 2): every instance has an id of its own claim, used once and
     # never retired.
     if F2:
-        retired = it.get('retired', [])
-        if not isinstance(retired, list) or any(not isinstance(x, str) or not ID_RE.match(x) for x in retired):
-            err(f'{cid}: R12 its retired ids are not a list of instance ids'); retired = []
+        retired = it.get('retired', [])  # its shape is the schema pass's
+        # An annotator's record (one with no adjudication: not a gold's,
+        # whose ids stay as its history made them) lists its primary
+        # instance first, as <claim>#1, so that a target can name another
+        # claim's primary instance before it is shown (§5).
+        first = it['instances'][0]
+        if 'adjudication' not in it and not (first.get('primary') is True and first.get('id') == f'{cid}#1'):
+            err(f'{cid}: R12 its primary instance is not listed first as {cid}#1, which a new record numbers it')
         seen = set()
         for ins in it['instances']:
             iid = ins.get('id')
@@ -531,7 +542,8 @@ for it in gold['items']:
                 # occurred, nor has one that a modal step of the same claim
                 # concludes may occur: both are cause_to_effect_modal's.
                 e1 = ins['bindings'].get('E1')
-                modal = {x['bindings'].get('E2') for x in it['instances'] if x['scheme']['walton_id'] == 'cause_to_effect_modal'}
+                modal = {x['bindings'].get('E2') for x in it['instances']
+                         if x['scheme']['walton_id'] == 'cause_to_effect_modal' and isinstance(x['bindings'].get('E2'), str)}
                 if isinstance(e1, str) and canon(e1) in ACTOR:
                     err(f'{cid}: R4 {iid} has the cause {e1}, an action the case deliberates, which has not occurred: cause_to_effect_modal (D039)')
                 elif isinstance(e1, str) and e1 in modal:
@@ -575,12 +587,17 @@ for it in gold['items']:
             tp = target_instance(a['claim'], None)
         tgt_list = [(a['part'], a.get('formula'), r['kind'], r.get('cq'), a['claim'], tp)]
         for o in t.get('other_kialo_parents') or []:
-            if o.get('part') in ('premise', 'exception') or (F2 and o.get('part') == 'conclusion'):
+            if F2:
+                # Any entry that names a part is an exact target (its shape is
+                # the schema pass's), the inference included.
+                if 'part' in o:
+                    otp = check_target_entry(cid, f'its target in {o["claim_id"]}', o['claim_id'], o.get('instance'), o['part'], o.get('formula'))
+                    if o['part'] in ('premise', 'exception', 'conclusion'):
+                        tgt_list.append((o['part'], o['formula'], o.get('role'), o.get('cq'), o['claim_id'], otp))
+            elif o.get('part') in ('premise', 'exception'):
                 if not o.get('claim_id') or not o.get('formula'):
                     err(f'{cid}: other_kialo_parents target requires claim_id and formula'); continue
-                otp = (check_target_entry(cid, f'its target in {o["claim_id"]}', o['claim_id'], o.get('instance'), o['part'], o['formula'])
-                       if F2 else target_instance(o['claim_id'], None))
-                tgt_list.append((o['part'], o['formula'], o.get('role'), o.get('cq'), o['claim_id'], otp))
+                tgt_list.append((o['part'], o['formula'], o.get('role'), o.get('cq'), o['claim_id'], target_instance(o['claim_id'], None)))
         for part, f, kind, cq, tc, ins_t in tgt_list:
             if part in ('premise', 'exception'):
                 if tc not in G:
@@ -651,16 +668,14 @@ for it in gold['items']:
         for c in it['challenges']:
             ref = c.get('instance')
             ci = mine.get(ref) if isinstance(ref, str) else None
-            if ci is None and tp is not None and ref == a.get('instance'):
+            if ci is None and a and ref == a.get('instance'):
+                if a.get('claim') in MALFORMED:
+                    continue  # the target claim's own errors are said; its instances are not read
                 ci = tp
             if ci is None:
                 err(f'{cid}: R10 the challenge {c.get("cq") or c.get("type")} names the instance {ref!r}, neither one of its own nor its target\'s'); continue
-            if 'formula' not in c:
-                err(f'{cid}: R16 the challenge {c.get("cq") or c.get("type")} says nothing of formula (null when it is about the whole instance)')
-            elif c['formula'] is not None and nows(c['formula']) not in all_formulas(ci):
+            if c['formula'] is not None and nows(c['formula']) not in all_formulas(ci):
                 err(f'{cid}: R10 the challenge {c.get("cq") or c.get("type")} names {c["formula"]}, which is not a formula of {ref}')
-            for k in ('cq', 'wag_cq', 'type'):
-                if k not in c: err(f'{cid}: R16 the challenge {c.get("cq") or c.get("type")} says nothing of {k}')
     else:
         names = set()
         for ins in it['instances']:
@@ -702,7 +717,7 @@ for it in gold['items']:
     for c in it['challenges']:
         if c.get('wag_cq') and c['wag_cq'] not in cqs: err(f'{cid}: unknown game CQ {c["wag_cq"]}')
 # R14 (format 2): the thesis concludes that the case's thesis action be done.
-if F2 and THESIS.get('claim') in G and THESIS.get('action') in ACTOR:
+if F2 and THESIS.get('claim') in G and THESIS.get('claim') not in MALFORMED and THESIS.get('action') in ACTOR:
     tconc = nows(((primary(G[THESIS['claim']]) or {}).get('conclusion') or {}).get('formula'))
     if tconc != f'should_be_performed({THESIS["action"]})':
         err(f'{THESIS["claim"]}: R14 the thesis concludes {tconc}, not should_be_performed({THESIS["action"]}), the case\'s thesis action')

@@ -118,11 +118,23 @@ func TestReviewFragmentCannotHideUnrelatedFormula(t *testing.T) {
 		})
 	}
 	// Fragments may still omit premises and a conclusion; they must not invent
-	// unrelated formulas in the fields they do supply.
+	// unrelated formulas in the fields they do supply. In format 2 the
+	// variables of what a fragment omits are {"unstated": why}
+	// (docs/annotation-records.md §5), as validate.py reads them; format 1
+	// left them bound.
 	a := clone()
 	in := a["instances"].([]any)[0].(map[string]any)
 	in["premises"] = []any{}
 	in["conclusion"] = nil
+	if problems := c.CheckIn(a, d, nil, 1); len(problems) != 0 {
+		t.Fatalf("partial fragment rejected in format 1: %v", problems)
+	}
+	if problems := c.Check(a, d); len(problems) == 0 {
+		t.Fatal("a format-2 fragment that states nothing passed with every variable bound")
+	}
+	for k := range in["bindings"].(map[string]any) {
+		in["bindings"].(map[string]any)[k] = map[string]any{"unstated": "the claim states none of it"}
+	}
 	if problems := c.Check(a, d); len(problems) != 0 {
 		t.Fatalf("partial fragment rejected: %v", problems)
 	}

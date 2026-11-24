@@ -701,6 +701,7 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	at["instance"], at["formula"] = "13292.12#2", "may_occur(imported_meat_relatively_cheaper)"
 	bt["instance"], bt["formula"] = "13292.12#3", "¬should_be_performed(tax_meat)"
 	actualOf(b["13292.33"])["instance"] = map[string]any{"unresolved": "which inference"}
+	actualOf(a["13292.7"])["part"] = map[string]any{"unresolved": "premise or exception"}
 	raw, err := os.ReadFile(filepath.Join(dir, "gold-format1.json"))
 	if err != nil {
 		t.Fatal(err)
@@ -749,6 +750,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	p := Agree("a", "b", a, b)
 	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 1 || tf.Unresolved != 1 || ti.Agreement != 0.98 { // 48 of 49, rounded
 		t.Errorf("target_instance %+v, target_formula %+v", ti, tf)
+	}
+	if tp := p.Fields["target_part"]; tp.Unresolved != 1 {
+		t.Errorf("target_part %+v: the unresolved part is not left out", tp)
 	}
 	if ti := Agree("old", "gold", old, d.Gold).Fields["target_instance"]; ti.Agreement != 1 {
 		t.Errorf("format 1, an unflagged lone instance: %+v", ti)
@@ -1130,5 +1134,173 @@ func TestTheCaseRecordAgainstTheDataset(t *testing.T) {
 				t.Fatalf("%v, want %q", err, c.want)
 			}
 		})
+	}
+}
+
+// Go and agreement.py round alike, ties included: 27/48 is 0.563 in both
+// (N-a of the fix check).
+func TestRoundingMatchesAgreementPy(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	xs := []float64{27.0 / 48, 0.5625, -0.5625, 0.0005, 0.0015, -0.0015, 0.1235, 2.0 / 3, 1.0 / 3, 0.98, 48.0 / 49, -1.0 / 16, 0.12345, 0.9995, 1, 0}
+	code := "import importlib.util, json, sys\n" +
+		"spec = importlib.util.spec_from_file_location('agreement', 'agreement.py')\n" +
+		"m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)\n" +
+		"print(json.dumps([m.round3(x) for x in json.loads(sys.argv[1])]))\n"
+	cmd := exec.Command(py, "-I", "-B", "-c", code, mustJSON(t, xs))
+	cmd.Dir = dir
+	out, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
+	var got []float64
+	if err := json.Unmarshal(out, &got); err != nil || len(got) != len(xs) {
+		t.Fatalf("%v: %s", err, out)
+	}
+	for i, x := range xs {
+		if got[i] != round3(x) {
+			t.Errorf("%v: agreement.py %v, Go %v", x, got[i], round3(x))
+		}
+	}
+	if round3(27.0/48) != 0.563 {
+		t.Errorf("27/48 rounds to %v", round3(27.0/48))
+	}
+}
+
+// Go reads format 2's fragments, retired ids, other parents and new records
+// as validate.py does (W-2, W-4 and N-b of the fix check).
+func TestCheckInMatchesValidatePy(t *testing.T) {
+	d, c := builtin(t)
+	cases := []struct {
+		name, claim string
+		plant       func(s map[string]Annotation)
+		want        string // "" for no problem at all
+	}{
+		{"a retired id of another claim", "13292.7", func(s map[string]Annotation) { s["13292.7"]["retired"] = []any{"13292.9#7"} },
+			"R12 its retired ids are not a list of instance ids of its own"},
+		{"a fully bound fragment without its conclusion", "13292.6", func(s map[string]Annotation) {
+			inst(s["13292.6"], 0)["conclusion"].(map[string]any)["formula"] = nil
+		}, "practical_reasoning2 concludes <nil>, not "},
+		{"a fully bound fragment that omits a premise", "13292.6", func(s map[string]Annotation) {
+			in := inst(s["13292.6"], 0)
+			in["premises"] = in["premises"].([]any)[1:]
+		}, "practical_reasoning2: missing "},
+		{"a fragment that leaves a variable out of its bindings", "13292.6", func(s map[string]Annotation) {
+			in := inst(s["13292.6"], 0)
+			bm := in["bindings"].(map[string]any)
+			s1 := bm["S1"].(string)
+			delete(bm, "S1")
+			var keep []any
+			for _, p := range in["premises"].([]any) {
+				if !strings.Contains(p.(map[string]any)["formula"].(string), s1) {
+					keep = append(keep, p)
+				}
+			}
+			in["premises"] = keep
+		}, "not the scheme's variables"},
+		{"a fragment premise that keeps its unstated variable", "13292.6", func(s map[string]Annotation) {
+			in := inst(s["13292.6"], 0)
+			bm := in["bindings"].(map[string]any)
+			s1 := bm["S1"].(string)
+			bm["S1"] = map[string]any{"unstated": "not said"}
+			for _, p := range in["premises"].([]any) {
+				pm := p.(map[string]any)
+				pm["formula"] = strings.ReplaceAll(pm["formula"].(string), s1, "S1")
+			}
+		}, "is not a formula of the scheme with these bindings"},
+		{"an other parent's inference at an instance that is not there", "13292.180", func(s map[string]Annotation) {
+			o := s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)
+			o["part"], o["instance"], o["formula"] = "inference", "13292.121#99", nil
+		}, "R13 its target in 13292.121 names the instance 13292.121#99, which is not an instance of 13292.121"},
+		{"a gold's primary listed second", "13292.9", func(s map[string]Annotation) {
+			insts := s["13292.9"]["instances"].([]any)
+			insts[0], insts[1] = insts[1], insts[0]
+		}, ""},
+		{"an annotator's record as the gold codes it", "13292.9", func(s map[string]Annotation) { delete(s["13292.9"], "adjudication") }, ""},
+		{"an annotator's primary listed second", "13292.9", func(s map[string]Annotation) {
+			delete(s["13292.9"], "adjudication")
+			insts := s["13292.9"]["instances"].([]any)
+			insts[0], insts[1] = insts[1], insts[0]
+		}, "R12 its primary instance is not listed first as 13292.9#1"},
+		{"an annotator's primary numbered #2", "13292.7", func(s map[string]Annotation) {
+			delete(s["13292.7"], "adjudication")
+			inst(s["13292.7"], 0)["id"] = "13292.7#2"
+		}, "R12 its primary instance is not listed first as 13292.7#1"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := clone(t, d.Gold)
+			tc.plant(s)
+			p := strings.Join(c.CheckIn(s[tc.claim], d, s, 2), "|")
+			if tc.want == "" && p != "" || tc.want != "" && !strings.Contains(p, tc.want) {
+				t.Errorf("%q, want %q", p, tc.want)
+			}
+		})
+	}
+}
+
+// A reviewer's target at a secondary instance is unresolved for agreement:
+// it is numbered as one annotator numbers it (W-6 of the fix check).
+func TestReviewerSecondaryTargets(t *testing.T) {
+	d, _ := builtin(t)
+	adj := clone(t, d.Gold)
+	act := actualOf(adj["13292.45"])
+	act["instance"], act["formula"] = "13292.12#3", "¬should_be_performed(tax_meat)"
+	out := reviewerTargets(adj)
+	if !isMarker(actualOf(out["13292.45"])["instance"], "unresolved") {
+		t.Errorf("a secondary target: %v", actualOf(out["13292.45"]))
+	}
+	if actualOf(adj["13292.45"])["instance"] != "13292.12#3" {
+		t.Error("the adjudication itself was changed")
+	}
+	if x, y := actualOf(out["13292.7"])["instance"], actualOf(adj["13292.7"])["instance"]; x != y {
+		t.Errorf("a primary target: %v, not %v", x, y)
+	}
+	// The run's report reads them so.
+	items := []string{}
+	for _, id := range d.IDs() {
+		if id == "13292.12" || id == "13292.45" {
+			items = append(items, id)
+		}
+	}
+	gold := func(id string) string { b, _ := json.Marshal(d.Gold[id]); return string(b) }
+	annotator := &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) { return &llm.Response{Text: gold(lastClaim(req))}, nil }}
+	reviewer := &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+		id := lastClaim(req)
+		b, _ := json.Marshal(adj[id])
+		return &llm.Response{Text: `{"kialo_claim_id": "` + id + `", "fields": {}, "adjudicated": ` + string(b) + `, "confidence": 0.8, "needs_human": false, "notes": ""}`}, nil
+	}}
+	pa := llm.Profile{Name: "one", Provider: "mock", Params: llm.Params{Model: "m1"}}
+	pb := llm.Profile{Name: "two", Provider: "mock", Params: llm.Params{Model: "m2"}}
+	pr := llm.Profile{Name: "judge", Provider: "mock", Params: llm.Params{Model: "m3"}}
+	r, err := New(filepath.Join(t.TempDir(), "run"), d, Settings{Annotators: []llm.Profile{pa, pb}, Reviewer: &pr, Items: items},
+		map[string]*llm.Client{"one": llm.WithProvider(pa, annotator), "two": llm.WithProvider(pb, annotator), "judge": llm.WithProvider(pr, reviewer)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := r.Annotate(context.Background(), nil); err != nil {
+		t.Fatal(err)
+	}
+	if err := r.Review(context.Background(), nil, false); err != nil {
+		t.Fatal(err)
+	}
+	rep, err := r.Report()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rep.Reviewer == nil || rep.Reviewer.VsGold == nil {
+		t.Fatalf("no reviewer scores: %+v", rep.Reviewer)
+	}
+	// 13292.45's secondary target is unresolved; so is 13292.12's, whose
+	// target claim the reviewer did not adjudicate (§11). Read as it is, the
+	// secondary target would be scored, against the gold's primary one.
+	if ti := rep.Reviewer.VsGold.Fields["target_instance"]; ti.Unresolved != 2 || ti.N != 0 {
+		t.Errorf("the reviewer's target_instance: %+v", ti)
 	}
 }

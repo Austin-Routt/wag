@@ -158,7 +158,7 @@ func (r *Run) Report() (*Report, error) {
 			}
 		}
 		if len(gold) > 0 && len(adj) > 0 {
-			pr := AgreeAssigned("reviewer", "gold", cs.CanonicalSet(adj), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
+			pr := AgreeAssigned("reviewer", "gold", cs.CanonicalSet(reviewerTargets(adj)), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
 			rr.VsGold = &pr
 		}
 		rep.Reviewer = rr
@@ -226,4 +226,41 @@ func (r *Run) servedModelCounts() (served map[string]map[string]int, unknown map
 		return nil, nil, 0, fmt.Errorf("calls.jsonl: %w", err)
 	}
 	return served, unknown, bad, nil
+}
+
+// reviewerTargets is a reviewer's adjudications as agreement reads them: a
+// target at an instance other than its claim's primary one (<claim>#1, as
+// every annotator's record numbers it) is unresolved. The reviewer
+// adjudicates each claim in a call of its own, so it names a secondary
+// instance as one annotator numbers it, which its adjudication of the
+// target claim may not follow (docs/annotation-records.md §11).
+func reviewerTargets(adj map[string]Annotation) map[string]Annotation {
+	out := make(map[string]Annotation, len(adj))
+	for id, a := range adj {
+		out[id] = a
+		tg, _ := a["target"].(map[string]any)
+		act, _ := tg["actual"].(map[string]any)
+		claim, _ := act["claim"].(string)
+		ref, ok := act["instance"].(string)
+		if !ok || claim == "" || ref == claim+"#1" {
+			continue
+		}
+		b := make(Annotation, len(a))
+		for k, v := range a {
+			b[k] = v
+		}
+		t2 := make(map[string]any, len(tg))
+		for k, v := range tg {
+			t2[k] = v
+		}
+		a2 := make(map[string]any, len(act))
+		for k, v := range act {
+			a2[k] = v
+		}
+		a2["instance"] = map[string]any{"unresolved": "a reviewer's target at a secondary instance, numbered as an annotator numbers it"}
+		t2["actual"] = a2
+		b["target"] = t2
+		out[id] = b
+	}
+	return out
 }

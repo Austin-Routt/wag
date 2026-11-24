@@ -101,8 +101,9 @@ The typing of predicate positions (which argument of a predicate is an agent and
 - The thesis's action is a declared action; its actor is the agent the case deliberates for. The
   thesis is a claim of the dataset, and every actor, action and alias an atom of its lexicon
   (checked when the dataset is read, and by `validate.py`).
-- **A dataset without a case record** (one made from a Kialo capture, say) is checked without R14 and
-  R15: there are no declared actors, actions or contexts to check against. Its annotators are told
+- **A dataset without a case record** (one made from a Kialo capture, say) is checked by the Go check
+  without R14 and R15: there are no declared actors, actions or contexts to check against.
+  (`validate.py`, batch 2's checker, needs one.) Its annotators are told
   so: they bind agents and actions to the atoms the claims name, and give no instance a context.
 
 Typed positions (`positions.json`): `possible_bring_about(P,A)` puts an agent in its first place and
@@ -135,12 +136,12 @@ Fields this contract does not name are allowed and not read.
 | Field | Required | What |
 |---|---|---|
 | `id` | yes | `<claim>#<n>`: the item's claim ID, `#`, and a positive number (no leading zero) |
-| `primary` | yes | `true` for exactly one instance of the item, a lone instance too; the primary instance comes first, so its id ends in `#1` |
+| `primary` | yes | `true` for exactly one instance of the item, a lone instance too. An annotator's record lists it first, as `<claim>#1`; a gold keeps the ids its history gave them (R12) |
 | `context` | no (the case's default) | A context of the case |
 | `scheme` | yes | `walton_id`, `compendium` (null if none), `wag_id` (null if none), `fit`, `confidence`, `alternatives`; `description` optional |
-| `bindings` | yes | Each variable of the scheme to an atom; in a fragment, a variable of formulas it does not state is `{"unstated": "<why>"}` |
+| `bindings` | yes | Every variable of the scheme, each to an atom; in a fragment, a variable of formulas it does not state is `{"unstated": "<why>"}` |
 | `premises` | yes | As in format 1: `role`, `formula`, `en`, `status`; `note`, `cite` optional |
-| `conclusion` | yes | `formula` (null only for `other` and `none`, and for a fragment whose conclusion names a variable it leaves unstated), `en` |
+| `conclusion` | yes | `formula` (null only for `other` and `none`, and for a fragment whose conclusion names a variable it leaves unstated: no formula can be written without it), `en` |
 | `comparison` | in `better_means` | `more surely`, `sooner` or `at lower cost` (R9) |
 | `label`, `note` | no | Free text |
 
@@ -149,9 +150,10 @@ next number after every number the item has used, its retired ones included. An 
 instance (its scheme, bindings, formulas, English, fit or confidence) keeps its id; an instance that
 is removed goes to the item's `retired`, and its number is not given again. Ids are the annotator's
 own: annotator A's `13292.108#1` and the gold's need not be the same instance. A target refers to an
-instance of the same file. A target in a claim not annotated yet names its primary instance
-`<claim>#1`, by the rule that the primary instance comes first; another instance of it is
-`{"unresolved": why}` until that claim is annotated.
+instance of the same file. A target in a claim whose annotation the annotator cannot see (one not
+annotated yet, or any earlier one in an independent first pass) names its primary instance
+`<claim>#1`, by the rule that an annotator's record numbers its primary instance `#1`; another
+instance of it is `{"unresolved": why}`.
 
 ## 6. Targets
 
@@ -188,7 +190,7 @@ circumstances, say), and it then names the claim's primary instance unless it sa
 
 | Kind | Written as | Where |
 |---|---|---|
-| Not applicable | `null` | Only where §4–§7 say: `role.cq` when the role is not `cq_answer`; the thesis's `polarity`, `kialo_parent`, `kialo_relation` and `actual`; the formula of an `inference` target, or of a challenge about a whole instance; a challenge's `cq` when the book prints no question for it, and its `wag_cq` when the game has none; `compendium`, `wag_id` and `candidate_pattern` when there are none; the conclusion formula of `other` and `none`, and of a fragment whose conclusion names a variable it leaves unstated |
+| Not applicable | `null` | Only where §4–§7 say: `role.cq` when the role is not `cq_answer`; the thesis's `polarity`, `kialo_parent`, `kialo_relation` and `actual`; the formula of an `inference` target, or of a challenge about a whole instance; a challenge's `cq` when the book prints no question for it, and its `wag_cq` when the game has none; `compendium`, `wag_id` and `candidate_pattern` when there are none; the conclusion formula of `other` and `none`, and of a fragment whose conclusion names a variable it leaves unstated (the absence is recorded once, in that variable's `{"unstated"}`) |
 | Unknown | `{"unresolved": "<why>"}` | A target's `instance`, `part` or `formula` |
 | Absent | `{"unstated": "<why>"}` | A fragment's binding of a variable of formulas it does not state; and `urls: []`, an empty list, when a claim cites nothing |
 | False | `false` | Only a real yes or no: `primary` |
@@ -218,17 +220,18 @@ R5 and R6 of the adjudication are coding conventions, not checks, and R13 replac
 primary-only targets). The field contract (R16) is checked first: a malformed item is reported once,
 never as a traceback, and no other item's rule reads it as a target. The Go check
 (`annotate.Collection.CheckIn`, given the annotator's own annotations) reports the problems of the
-rules marked Go on every annotation a run receives, in the claim's view and the report's counts; it
-refuses nothing (a reply that cannot be read is what a run refuses). A target whose claim the
+rules marked Go on each annotator's annotations, in the claim's view and the report's counts (a
+reviewer's adjudications are not checked); it refuses nothing (a reply that cannot be read is what a
+run refuses). A target whose claim the
 annotator has not annotated cannot be looked up, and is not reported.
 
 | Rule | It checks | Go |
 |---|---|---|
-| R12 | Every instance has an id `<claim>#<n>` of its own claim, unique in the item and not retired (a retired id is the item's own) | yes |
-| R13 | A target, and each `other_kialo_parents` entry that names a part, names an instance of its claim, and a formula of that instance in that part; a format-1 target names the primary instance's | yes |
+| R12 | Every instance has an id `<claim>#<n>` of its own claim, unique in the item and not retired (a retired id is the item's own); an annotator's record (one with no `adjudication`) lists its primary instance first, as `<claim>#1` | yes |
+| R13 | A target, and each `other_kialo_parents` entry that names a part (any part, the inference included), names an instance of its claim, and a formula of that instance in that part; a format-1 target names the primary instance's | yes |
 | R14 | An agent position is bound to an actor of the case, an action position to an action or an alias of one, and every action of an instance with an agent is its agent's | yes (with a case record) |
 | R15 | An instance's context is one of the case's, and a claim's primary instance is in its target instance's context | yes (with a case record) |
-| R16 | Every field of §4–§8, each of its type; nulls only where §8 allows them, markers only where it allows them; no `re_parented`; `kialo_parent` and `kialo_relation` as `items.json` has them; a gold names its case and pins every input it is checked against | in part: bindings, the target and polarity nulls, `re_parented`, one primary instance, a fragment's conclusion |
+| R16 | Every field of §4–§8, each of its type; nulls only where §8 allows them, markers only where it allows them; no `re_parented`; `kialo_parent` and `kialo_relation` as `items.json` has them; a gold names its case and pins every input it is checked against | in part: bindings (every variable, a fragment's unstated ones marked, and only formulas it binds), the target and polarity nulls, an empty target, `re_parented`, one primary instance, a fragment's conclusion |
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
 
 Rules that change in format 2:
@@ -249,7 +252,7 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 | Field | Value compared |
 |---|---|
 | `cq` | The question answered (`role.cq`), or none |
-| `target_instance` | Which inference of the target claim the claim targets: `primary`, or `secondary:` with that instance's scheme and conclusion, read in the annotator's own file (ids are the annotator's own). It measures the targeting decision, not how the target claim itself is coded, which its own fields measure: a difference in one claim's coding does not spread to the claims that target it. A format-1 target is its claim's primary instance |
+| `target_instance` | Which inference of the target claim the claim targets: `primary`, or `secondary:` with that instance's scheme and conclusion, read in the annotator's own file (ids are the annotator's own). It measures the targeting decision, not how the target claim itself is coded, which its own fields measure: a different coding of a claim's primary instance does not spread to the claims that target it. A secondary target is named by that instance's scheme and conclusion, so a different coding of it does show in the claims that target it. A format-1 target is its claim's primary instance |
 | `target_formula` | The exact formula targeted; a format-1 conclusion target is its instance's conclusion. It does depend on how the target claim is coded: the formula attacked is that coding's |
 | `bindings` | The primary instance's bindings, every variable and its atom |
 | `instances` | Every instance's scheme and conclusion: how the claim was divided into inferences |
@@ -257,7 +260,8 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 A value that is unresolved, or that cannot be read in the annotator's file (a target claim it did not
 annotate), is left out of that field's agreement and counted apart (`unresolved`): missing data is
 neither agreement nor disagreement. Only what a field itself leaves open makes it unresolved: an
-unresolved instance leaves `target_instance` out, an unresolved formula `target_formula`. With a
+unresolved instance leaves `target_instance` out, an unresolved formula `target_formula`, an
+unresolved part `target_part`. With a
 case record, aliases are read as their actions first, in agreement and in the choice of claims to
 review alike.
 
@@ -267,9 +271,11 @@ which it was not before this contract. On batch 2's two model annotations that i
 where the eight coarse fields chose 21 (the bindings and the instances above all): more than twice
 the reviewer's calls. The reviewer's reply names the fields it decides; `instances` is one of them since this
 contract, and `target`, `role` and `premises` cover the target's instance and formula, the question
-and the bindings. A reviewer's adjudicated annotation names a target's instance as the annotation it
-follows for the target claim does; its target instances are read in the reviewer's adjudications,
-so a target in a claim it did not review is unresolved for agreement.
+and the bindings. The reviewer adjudicates each claim in a call of its own, and names a target's
+instance as the annotation it follows does, which its adjudication of the target claim may not
+follow. Its targets are read in its adjudications: a primary target (`<claim>#1` in every
+annotator's numbering) as such, a target at a secondary instance as unresolved, and a target in a
+claim it did not review as unresolved too.
 
 ## 12. Limits
 

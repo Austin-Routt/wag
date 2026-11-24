@@ -295,7 +295,10 @@ func kappa(xs, ys []string) FieldAgreement {
 	return out
 }
 
-func round3(x float64) float64 { return float64(int(x*1000+0.5*sign(x))) / 1000 }
+// round3 rounds to three decimals, half away from zero. The conversion keeps
+// x*1000 from being fused with the addition (an FMA on some processors), so
+// that every build, and agreement.py's round3, gives the same figures.
+func round3(x float64) float64 { return float64(int(float64(x*1000)+0.5*sign(x))) / 1000 }
 
 func sign(x float64) float64 {
 	if x < 0 {
@@ -359,6 +362,16 @@ func LoadCollection(b []byte) (*Collection, error) {
 }
 
 var variable = regexp.MustCompile(`\b[A-Z][A-Za-z0-9_]*\b`)
+
+// namesAny tells whether a formula names one of the variables.
+func namesAny(f string, vars map[string]bool) bool {
+	for _, v := range variable.FindAllString(f, -1) {
+		if vars[v] {
+			return true
+		}
+	}
+	return false
+}
 
 // compact drops the spaces of a formula: "f(a, b)" and "f(a,b)" are the
 // same formula.
@@ -475,10 +488,25 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 				}
 			}
 		}
-		if fit != "fragment" {
+		// Format 2 (docs/annotation-records.md §5, as validate.py reads it):
+		// a fragment binds every variable of its scheme, those of the
+		// formulas it does not state {"unstated": why}, and states only
+		// formulas whose variables it binds.
+		unstated := map[string]bool{}
+		if bm, ok := in["bindings"].(map[string]any); ok && format == 2 {
+			for k, v := range bm {
+				if isMarker(v, "unstated") {
+					unstated[k] = true
+				}
+			}
+		}
+		if fit != "fragment" || format == 2 {
 			want := append([]string(nil), sc.Variables...)
 			var got []string
 			for k := range binds {
+				got = append(got, k)
+			}
+			for k := range unstated {
 				got = append(got, k)
 			}
 			sort.Strings(want)
@@ -490,7 +518,9 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 		expected := map[string]int{}
 		for role, fs := range map[string][]string{"premise": sc.Premises, "assumption": sc.Assumptions, "exception": sc.Exceptions} {
 			for _, f := range fs {
-				expected[role+" "+compact(subst(f, binds))]++
+				if !namesAny(f, unstated) {
+					expected[role+" "+compact(subst(f, binds))]++
+				}
 			}
 		}
 		ps, _ := in["premises"].([]any)
@@ -503,30 +533,25 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 				add("%s: %s is not a formula of the scheme with these bindings", wid, k)
 			}
 		}
-		if fit != "fragment" {
+		// Every formula of the scheme, but in a fragment that leaves some
+		// variables unstated (format 1: any fragment), which states some.
+		if fit != "fragment" || format == 2 && len(unstated) == 0 {
 			for k, n := range expected {
 				if n > 0 {
 					add("%s: missing %s", wid, k)
 				}
 			}
 		}
-		if len(sc.Conclusions) > 0 && format == 2 && fit == "fragment" {
-			// A fragment whose conclusion names a variable it leaves unstated
-			// has a null conclusion formula (docs/annotation-records.md §5).
-			cm, _ := in["conclusion"].(map[string]any)
-			if f, ok := cm["formula"].(string); ok && f != "" {
-				for _, v := range variable.FindAllString(sc.Conclusions[0], -1) {
-					if _, bound := binds[v]; !bound {
-						add("R16 %v is a fragment whose conclusion names a variable it leaves unstated: its formula is null", in["id"])
-						break
-					}
-				}
-			}
-		}
 		if len(sc.Conclusions) > 0 {
 			cm, _ := in["conclusion"].(map[string]any)
 			hasFormula := cm != nil && cm["formula"] != nil && cm["formula"] != ""
-			if got, want := compact(fmt.Sprint(cm["formula"])), compact(subst(sc.Conclusions[0], binds)); (fit != "fragment" || hasFormula) && got != want {
+			if namesAny(sc.Conclusions[0], unstated) {
+				// A fragment whose conclusion names a variable it leaves
+				// unstated has a null conclusion formula (§5).
+				if hasFormula {
+					add("R16 %v is a fragment whose conclusion names a variable it leaves unstated: its formula is null", in["id"])
+				}
+			} else if got, want := compact(fmt.Sprint(cm["formula"])), compact(subst(sc.Conclusions[0], binds)); (fit != "fragment" || hasFormula || format == 2) && got != want {
 				add("%s concludes %s, not %s", wid, got, want)
 			}
 		}

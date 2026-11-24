@@ -213,7 +213,15 @@ def part_kind(part):
 
 def target(item):
     a = (item.get("target") or {}).get("actual") or {}
-    return str(a.get("claim") or "none"), part_kind(a.get("part"))
+    part = a.get("part")  # {"unresolved": why} is no part: target_part says so
+    return str(a.get("claim") or "none"), part_kind(part if isinstance(part, str) else None)
+
+
+def round3(x):
+    """x to three decimals as WAG's Go measure rounds it (round3): half away
+    from zero, on the same floating-point steps, so that the two agree on a
+    tie such as 27/48."""
+    return int(x * 1000 + (-0.5 if x < 0 else 0.5)) / 1000
 
 
 def text(v):
@@ -330,8 +338,8 @@ def main():
         # and counted (docs/annotation-records.md §11).
         keep = [(k, a, b) for k, (a, b) in zip(ids, every) if UNRESOLVED not in (a, b)]
         pairs = [(a, b) for _, a, b in keep]
-        report["fields"][name] = {"agreement": round(sum(a == b for a, b in pairs) / len(pairs), 3) if pairs else None,
-                                  "kappa": None if kappa(pairs) is None else round(kappa(pairs), 3),
+        report["fields"][name] = {"agreement": round3(sum(a == b for a, b in pairs) / len(pairs)) if pairs else None,
+                                  "kappa": None if kappa(pairs) is None else round3(kappa(pairs)),
                                   "unresolved": len(every) - len(keep)}
         report["fields"][name]["all_assigned_agreement"] = sum(a == b for a,b in pairs)/len(assigned) if assigned else None
         for k, a, b in keep:
@@ -344,7 +352,7 @@ def main():
         a, b = scheme_id(A[k]), scheme_id(B[k])
         if a == b or (fam.get(a, set()) & fam.get(b, set())):
             same_fam += 1
-    report["fields"]["scheme_family"] = {"agreement": round(same_fam / len(ids), 3) if ids else None}
+    report["fields"]["scheme_family"] = {"agreement": round3(same_fam / len(ids)) if ids else None}
 
     # Premises and bindings where the scheme agrees.
     prem, bind, sup = [], [], []
@@ -360,8 +368,8 @@ def main():
         sup.append((sa.get("supplied", 0), sb.get("supplied", 0)))
     report["same_scheme"] = {
         "items": len(prem),
-        "premise_jaccard_mean": round(sum(prem) / len(prem), 3) if prem else None,
-        "binding_word_jaccard_mean": round(sum(bind) / len(bind), 3) if bind else None,
+        "premise_jaccard_mean": round3(sum(prem) / len(prem)) if prem else None,
+        "binding_word_jaccard_mean": round3(sum(bind) / len(bind)) if bind else None,
         "supplied_premises_A_B": [sum(a for a, _ in sup), sum(b for _, b in sup)],
     }
     report["scheme_counts"] = {"A": collections.Counter(scheme_id(A[k]) for k in ids),
@@ -388,9 +396,9 @@ def main():
         for who, X in (("A", A), ("B", B)):
             sp = [(pilot_scheme(P[k]), scheme_id(X[k])) for k in pid]
             rp = [(role_map.get(P[k]["role"]["kind"], P[k]["role"]["kind"]), fields["role"](X[k])) for k in pid]
-            out[who] = {"scheme_agreement": round(sum(a == b for a, b in sp) / len(sp), 3) if sp else None,
-                        "scheme_kappa": None if kappa(sp) is None else round(kappa(sp), 3),
-                        "role_agreement": round(sum(a == b for a, b in rp) / len(rp), 3) if rp else None}
+            out[who] = {"scheme_agreement": round3(sum(a == b for a, b in sp) / len(sp)) if sp else None,
+                        "scheme_kappa": None if kappa(sp) is None else round3(kappa(sp)),
+                        "role_agreement": round3(sum(a == b for a, b in rp) / len(rp)) if rp else None}
         out["items"] = len(pid)
         report["pilot"] = out
 

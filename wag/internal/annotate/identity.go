@@ -68,14 +68,24 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 		}
 		for _, x := range list {
 			s, ok := x.(string)
-			if !ok || !instanceID.MatchString(s) {
-				add("R12 its retired ids are not a list of instance ids")
+			if m := instanceID.FindStringSubmatch(s); !ok || m == nil || claim != "" && m[1] != claim {
+				add("R12 its retired ids are not a list of instance ids of its own")
 				break
 			}
 			retired[s] = true
 		}
 	}
 	insts, _ := a["instances"].([]any)
+	// An annotator's record (no adjudication: a gold's ids stay as its
+	// history made them) lists its primary instance first, as <claim>#1, so
+	// that a target can name another claim's primary instance before it is
+	// shown (docs/annotation-records.md §5).
+	if _, adj := a["adjudication"]; !adj && claim != "" && len(insts) > 0 {
+		first, _ := insts[0].(map[string]any)
+		if p, _ := first["primary"].(bool); !p || first["id"] != claim+"#1" {
+			add("R12 its primary instance is not listed first as %s#1, which a new record numbers it", claim)
+		}
+	}
 	seen := map[string]bool{}
 	var own map[string]any
 	for _, x := range insts {
@@ -145,8 +155,10 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 	}
 	if others, ok := tg["other_kialo_parents"].([]any); ok {
 		for _, x := range others {
+			// Any entry that names a part is an exact target, the inference
+			// included.
 			o, _ := x.(map[string]any)
-			if part, _ := o["part"].(string); part == "premise" || part == "exception" || part == "conclusion" {
+			if _, has := o["part"]; has {
 				c.checkTarget(&out, fmt.Sprintf("its target in %v", o["claim_id"]), o["claim_id"], o["instance"], o["part"], o["formula"], set)
 			}
 		}
