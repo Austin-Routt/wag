@@ -457,7 +457,8 @@ func TestAGuestsTraceAndExportNameNoFileOfTheOwner(t *testing.T) {
 // and &, a trace does not.
 func TestGuestCopyFindsBothSpellings(t *testing.T) {
 	s := &Server{store: "/data/a&b"}
-	got := string(s.guestCopy([]byte(`{"x":"/data/a&b/game","y":"/data/a&b/trace"}`)))
+	amp := string([]byte{92}) + "u0026" // & as an export's JSON writes it
+	got := string(s.guestCopy([]byte(`{"x":"/data/a` + amp + `b/game","y":"/data/a&b/trace"}`)))
 	if strings.Contains(got, "/data/a") || strings.Count(got, "<data folder>") != 2 {
 		t.Fatal(got)
 	}

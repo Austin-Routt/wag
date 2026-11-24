@@ -205,3 +205,31 @@ func TestAFailedSaveOnAFailedRequestReachesPollers(t *testing.T) {
 		t.Fatalf("pollers do not see the failed save: %v %v", now["unchanged"], now["unsaved"])
 	}
 }
+
+// A pasted reply whose move cannot be played (a move awaits the moderator)
+// is in the record, and so it is saved.
+func TestAReplyThatCannotBePlayedIsSaved(t *testing.T) {
+	srv, ts := newTestServerWith(t)
+	if err := srv.SetStore(t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+	srv.AddModel(llm.WithProvider(llm.Profile{Name: "m", Provider: "mock", Params: llm.Params{Model: "m-1"}}, &llm.Mock{}))
+	var st State
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "cq", Moderated: true, Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "M", Kind: "model", Model: "m"}}}, &st); code != http.StatusOK {
+		t.Fatalf("new game: %d", code)
+	}
+	pr := map[string]any{"type": "support", "scheme_id": "AS:practical_reasoning", "text": "Tax carbon to cut emissions.",
+		"variable_bindings": map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"}}
+	if mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]any{"action": pr}); mr.Result["pending"] != true || mr.State.SavedTo == "" {
+		t.Fatalf("the move is not held, or not saved: %v %q", mr.Result, mr.State.SavedTo)
+	}
+	var e map[string]string
+	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/reply", map[string]any{"reply": `REPLY-WHILE-PENDING {"action": {"type": "abstain"}}`}, &e); code != http.StatusConflict {
+		t.Fatalf("reply while a move is held: %d %v", code, e)
+	}
+	var now State
+	call(t, ts, "GET", "/api/games/"+st.ID, nil, &now)
+	if b, err := os.ReadFile(filepath.Join(now.SavedTo, "trace.jsonl")); err != nil || !strings.Contains(string(b), "REPLY-WHILE-PENDING") {
+		t.Fatalf("the refused reply is not saved: %v", err)
+	}
+}
