@@ -281,9 +281,9 @@ const answerStatements = `statements:
   "sign_of(p,s)": P is a sign of S
 `
 
-// An answer concludes the claim it answers, the opposing position ¬X bound as
-// not(X): the engine's validator reports it, and admission does not. Any other
-// conclusion is refused.
+// Authored input can spell an opposing statement ¬X as not(X) inside a bound
+// term. It cannot grant itself the runtime answer-fold waiver through metadata.
+// Genuine runtime answers are checked separately below.
 func TestAnswersConcludeTheClaimTheyAnswer(t *testing.T) {
 	for name, c := range map[string]struct {
 		arg    string
@@ -293,8 +293,8 @@ func TestAnswersConcludeTheClaimTheyAnswer(t *testing.T) {
 		"the opposing position":                  {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: ¬p", true},
 		"another claim":                          {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: q", false},
 		"the position, not the bound":            {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: p", false},
-		"a sign, folded":                         {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p\n    meta: {wag_answer_variable: B}", true},
-		"a sign, folded, opposing":               {"scheme: sign\n    parameters: [s, \"not(p)\"]\n    premises: [\"sign_of(s,not(p))\"]\n    conclusion: ¬p\n    meta: {wag_answer_variable: B}", true},
+		"a sign, folded":                         {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p\n    meta: {wag_answer_variable: B}", false},
+		"a sign, folded, opposing":               {"scheme: sign\n    parameters: [s, \"not(p)\"]\n    premises: [\"sign_of(s,not(p))\"]\n    conclusion: ¬p\n    meta: {wag_answer_variable: B}", false},
 		"a sign folded, not marked as an answer": {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p", false},
 		"a sign folded, marked for A":            {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p\n    meta: {wag_answer_variable: A}", false},
 		"a sign of another claim, marked":        {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: q\n    meta: {wag_answer_variable: B}", false},
@@ -398,7 +398,7 @@ func TestAnswerFormNeedsAParameterPerVariable(t *testing.T) {
 		"no argument":   nil,
 		"the answer":    {Scheme: s, Parameters: []string{"w", "not(p)"}, Conclusion: &caes.Statement{Id: "¬p"}},
 	} {
-		if got := answerForm(arg); got != (name == "the answer") {
+		if got := answerForm(arg, true); got != (name == "the answer") {
 			t.Errorf("%s: %v", name, got)
 		}
 	}

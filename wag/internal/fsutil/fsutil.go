@@ -199,6 +199,14 @@ func MkdirAll(dir string, perm fs.FileMode) error {
 	if err := os.MkdirAll(dir, perm); err != nil {
 		return err
 	}
+	// Register every newly created entry before attempting the first sync.
+	// If an early parent fails, a retry sees the directories as already
+	// existing and must still remember parents this loop has not reached.
+	pendingMu.Lock()
+	for _, d := range made {
+		pending[absolute(filepath.Dir(d))] = true
+	}
+	pendingMu.Unlock()
 	for i := len(made) - 1; i >= 0; i-- {
 		if err := SyncFolder(filepath.Dir(made[i])); err != nil {
 			return err

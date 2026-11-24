@@ -66,8 +66,10 @@ import (
 // The adapter's local schemeMap cache is then built from Theory.ArgSchemes.
 //
 // The graph the file authors (its statements, arguments, issues and
-// assumptions) must be admitted (Admit): a graph that is not is refused with
-// an *AdmissionError, rather than labelled.
+// assumptions) must be admitted under the authored-input profile: a graph that
+// is not is refused with an *AdmissionError, rather than labelled. Metadata
+// cannot authorize the runtime-only answer fold; issue schemes must be supplied
+// as concrete issues instead of relying on inference that WAG does not run.
 func NewAdapterFromYAML(yamlBytes []byte) (*Adapter, error) {
 	return NewAdapterFromYAMLReader(bytes.NewReader(yamlBytes))
 }
@@ -83,7 +85,7 @@ func NewAdapterFromYAMLReader(r io.Reader) (*Adapter, error) {
 	// NewArgGraph() (called by caesArgMapGraph2caes) already does this,
 	// but belt-and-suspenders is cheap.
 	ensureMapsInitialized(ag)
-	if err := admit(ag); err != nil {
+	if err := admit(ag, false); err != nil {
 		return nil, err
 	}
 	a := &Adapter{Graph: ag}

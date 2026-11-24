@@ -10,15 +10,18 @@ package carneades
 // critical review of 2026-11-23, its admission probe).
 //
 // The checks are the engine's own (package validation and CheckContext). WAG's
-// profile differs from the engine's in two ways only:
+// profile has these explicit limits and adaptations:
 //   - the theory (the language and the schemes as such) is checked by the game's
 //     lint and the catalogue's checks, not here: WAG's language declares negated
 //     predicates (¬p/1), which the engine's validator reports as not predicate
 //     symbols. The patterns of a scheme an argument names must still be terms,
 //     or the argument could not be checked against them;
-//   - an answer (D075) concludes the claim it answers, not its scheme's
-//     conclusion (answerForm); only arguments marked as answers (AnswerKey,
-//     set by AnswerQuestion) are folded so.
+//   - an answer made by the running game (D075) concludes the claim it answers,
+//     not its scheme's conclusion (answerForm). Authored input cannot authorize
+//     this waiver by setting metadata; its conclusion must fit the scheme;
+//   - issue schemes are unsupported here: CheckContext examines their closure
+//     on a private graph, but WAG does not infer that closure into the graph it
+//     labels. Authored input must supply concrete issues instead.
 
 import (
 	"errors"
@@ -35,17 +38,22 @@ import (
 // whose conclusion is not an instance of its scheme's conclusion.
 const ConclusionProblem = "conclusion does not instantiate a conclusion of the scheme with the argument's parameters."
 
-// AnswerKey marks, in an argument's metadata, an answer (D075) the game made
-// (AnswerQuestion): the scheme's variable bound to the claim it answers. A
-// YAML file can state it too, in an argument's meta: {wag_answer_variable: B}.
+// AnswerKey records, in an argument's metadata, the variable bound to the claim
+// answered by AnswerQuestion. It is descriptive metadata, not authorization:
+// an authored YAML file cannot use it to waive its scheme's conclusion check.
 const AnswerKey = "wag_answer_variable"
 
 // ProfileProblems returns what is wrong with the graph's content under WAG's
-// profile: the engine's validation of its statements, issues, arguments,
-// assumptions and expected labels, less the answers WAG concludes as the
-// claim they answer (answerForm), and the patterns of the schemes its
-// arguments name that are not terms. Problems are sorted.
+// runtime profile: the engine's validation of its statements, issues, arguments,
+// assumptions and expected labels, less the answers WAG concludes as the claim
+// they answer (answerForm), plus unreadable named patterns and unsupported issue
+// schemes. The YAML constructor uses the stricter authored profile, which never
+// takes an answer-fold waiver from input metadata. Problems are sorted.
 func ProfileProblems(ag *caes.ArgGraph) []validation.Problem {
+	return profileProblems(ag, true)
+}
+
+func profileProblems(ag *caes.ArgGraph, allowAnswerFold bool) []validation.Problem {
 	if ag == nil {
 		return nil
 	}
@@ -55,13 +63,19 @@ func ProfileProblems(ag *caes.ArgGraph) []validation.Problem {
 		case validation.LANGUAGE, validation.SCHEME, validation.ISCHEME:
 			continue // the theory: the lint's and the catalogue's
 		case validation.ARGUMENT:
-			if p.Description == ConclusionProblem && answerForm(ag.Arguments[p.Id]) {
+			if p.Description == ConclusionProblem && answerForm(ag.Arguments[p.Id], allowAnswerFold) {
 				continue
 			}
 		}
 		out = append(out, p)
 	}
 	out = append(out, unreadablePatterns(ag)...)
+	if ag.Theory != nil {
+		for id := range ag.Theory.IssueSchemes {
+			out = append(out, validation.Problem{Category: validation.ISCHEME, Id: id,
+				Description: "issue schemes are unsupported in WAG's authored-graph profile; supply concrete issues because WAG does not materialize issue schemes before labelling"})
+		}
+	}
 	sort.SliceStable(out, func(i, j int) bool {
 		a, b := out[i], out[j]
 		if a.Category != b.Category {
@@ -84,13 +98,15 @@ func ProfileProblems(ag *caes.ArgGraph) []validation.Problem {
 // concludes the statement V is bound to: the same statement, ¬X written
 // not(X) inside a term (StatementTerm). Or its scheme concludes a one-place
 // predicate of V that is not a negation (true_in_situation(B)), and the
-// argument is marked as an answer for V (AnswerKey): an answer concludes the
-// claim it answers. Only answers are folded so: an argument from positive
+// argument is marked as an answer for V (AnswerKey), and the caller permits
+// runtime answer folding: an answer concludes the claim it answers. The YAML
+// constructor does not permit that fold. Only runtime answers are folded so:
+// an authored argument from positive
 // consequences that concludes the bare action, not should_be_performed of it,
 // is not admitted (the review of 2026-11-24, R4). The engine's validator
 // expects the scheme's own conclusion and so reports these arguments; the
 // game's lint requires one of these shapes of an answer scheme.
-func answerForm(arg *caes.Argument) bool {
+func answerForm(arg *caes.Argument, allowAnswerFold bool) bool {
 	if arg == nil || arg.Scheme == nil || arg.Conclusion == nil || len(arg.Scheme.Conclusions) != 1 ||
 		len(arg.Parameters) != len(arg.Scheme.Variables) {
 		return false
@@ -101,7 +117,7 @@ func answerForm(arg *caes.Argument) bool {
 	}
 	folded := false
 	if c, ok := t.(terms.Compound); ok {
-		if len(c.Args) != 1 || IsNegationFunctor(c.Functor) {
+		if !allowAnswerFold || len(c.Args) != 1 || IsNegationFunctor(c.Functor) {
 			return false
 		}
 		t, folded = c.Args[0], true
@@ -198,11 +214,11 @@ func (a *Adapter) Admit() error {
 	}
 	a.mu.Lock()
 	defer a.mu.Unlock()
-	return admit(a.Graph)
+	return admit(a.Graph, true)
 }
 
-func admit(ag *caes.ArgGraph) error {
-	e := &AdmissionError{Problems: ProfileProblems(ag), Context: ag.CheckContext()}
+func admit(ag *caes.ArgGraph, allowAnswerFold bool) error {
+	e := &AdmissionError{Problems: profileProblems(ag, allowAnswerFold), Context: ag.CheckContext()}
 	if len(e.Problems) == 0 && e.Context == nil {
 		return nil
 	}

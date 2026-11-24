@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"hash/fnv"
 	"os"
@@ -766,9 +767,11 @@ func (r *Run) end() error {
 // finish ends what begin began: the report, then end. A record that could
 // not be written is the error returned, before any other.
 func (r *Run) finish(err *error) {
-	_, _ = r.Report() // the folder is complete even if no one asks for the report
+	if _, reportErr := r.Report(); reportErr != nil {
+		*err = errors.Join(*err, fmt.Errorf("report.json: %w", reportErr))
+	}
 	if werr := r.end(); werr != nil {
-		*err = werr
+		*err = errors.Join(*err, werr)
 	}
 }
 
@@ -1053,24 +1056,66 @@ func readReview(rv *Review, text string) error {
 		return fmt.Errorf("the review cannot be read: %v", err)
 	}
 	var parsed struct {
-		Fields      map[string]FieldChoice `json:"fields"`
-		Adjudicated Annotation             `json:"adjudicated"`
-		Confidence  float64                `json:"confidence"`
-		NeedsHuman  bool                   `json:"needs_human"`
-		Notes       string                 `json:"notes"`
+		Item        json.RawMessage            `json:"kialo_claim_id"`
+		Fields      map[string]json.RawMessage `json:"fields"`
+		Adjudicated Annotation                 `json:"adjudicated"`
+		Confidence  float64                    `json:"confidence"`
+		NeedsHuman  bool                       `json:"needs_human"`
+		Notes       string                     `json:"notes"`
 	}
 	b, _ := json.Marshal(obj)
+	if err := canonicalNames(b, jsonFields(parsed)); err != nil {
+		return fmt.Errorf("the review cannot be read: %v", err)
+	}
 	if err := json.Unmarshal(b, &parsed); err != nil {
 		return fmt.Errorf("the review cannot be read: %v", err)
 	}
-	rv.Fields, rv.Adjudicated, rv.Confidence, rv.NeedsHuman, rv.Notes = parsed.Fields, parsed.Adjudicated, parsed.Confidence, parsed.NeedsHuman, parsed.Notes
-	for f, ch := range rv.Fields {
-		ch.Annotator = rv.Letters[strings.ToUpper(strings.TrimSpace(ch.Choice))]
-		rv.Fields[f] = ch
+	// Older useful reviews omit the ID and some fields. Preserve that format,
+	// but never relabel an explicitly different claim as this one.
+	if len(parsed.Item) > 0 {
+		var id string
+		if err := json.Unmarshal(parsed.Item, &id); err != nil || id != rv.Item {
+			return fmt.Errorf("the review's kialo_claim_id must be %q", rv.Item)
+		}
 	}
-	if rv.Adjudicated != nil {
-		rv.Adjudicated["kialo_claim_id"] = rv.Item
+	if len(parsed.Fields) == 0 && parsed.Adjudicated == nil {
+		return fmt.Errorf("the review has neither field decisions nor an adjudicated annotation")
 	}
+	if parsed.Confidence < 0 || parsed.Confidence > 1 {
+		return fmt.Errorf("the review's confidence must be between 0 and 1")
+	}
+	fields := map[string]FieldChoice{}
+	for field, raw := range parsed.Fields {
+		if strings.TrimSpace(field) == "" {
+			return fmt.Errorf("the review has an unnamed field decision")
+		}
+		if err := canonicalNames(raw, jsonFields(FieldChoice{})); err != nil {
+			return fmt.Errorf("the review's %s decision: %v", field, err)
+		}
+		var ch FieldChoice
+		if err := json.Unmarshal(raw, &ch); err != nil {
+			return fmt.Errorf("the review's %s decision: %v", field, err)
+		}
+		choice := strings.ToUpper(strings.TrimSpace(ch.Choice))
+		ch.Annotator = rv.Letters[choice]
+		if choice != "NONE" && ch.Annotator == "" {
+			return fmt.Errorf("the review's %s choice %q names no offered annotation", field, ch.Choice)
+		}
+		fields[field] = ch
+	}
+	if parsed.Adjudicated != nil {
+		if value, present := parsed.Adjudicated["kialo_claim_id"]; present {
+			if id, ok := value.(string); !ok || id != rv.Item {
+				return fmt.Errorf("the adjudicated annotation's kialo_claim_id must be %q", rv.Item)
+			}
+		}
+		a, _ := json.Marshal(parsed.Adjudicated)
+		if _, err := parseAnnotation(string(a), rv.Item); err != nil {
+			return fmt.Errorf("the adjudicated annotation cannot be read: %v", err)
+		}
+		parsed.Adjudicated["kialo_claim_id"] = rv.Item
+	}
+	rv.Fields, rv.Adjudicated, rv.Confidence, rv.NeedsHuman, rv.Notes = fields, parsed.Adjudicated, parsed.Confidence, parsed.NeedsHuman, parsed.Notes
 	return nil
 }
 

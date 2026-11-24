@@ -55,6 +55,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/yourorg/wag/internal/fsutil"
 	wgame "github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/llm"
 	"github.com/yourorg/wag/internal/server"
@@ -187,7 +188,10 @@ func call(base, method, path string, body, out any) error {
 		return err
 	}
 	defer resp.Body.Close()
-	b, _ := io.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("%s %s: reading response: %w", method, path, err)
+	}
 	if resp.StatusCode/100 != 2 {
 		return fmt.Errorf("%s %s: %s", method, path, strings.TrimSpace(string(b)))
 	}
@@ -236,11 +240,14 @@ func (g *game) save(path string, what string) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	b, _ := io.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("%s: reading response: %w", what, err)
+	}
 	if resp.StatusCode/100 != 2 {
 		return nil, fmt.Errorf("%s: %s", what, b)
 	}
-	return b, os.WriteFile(path, b, 0o644)
+	return b, fsutil.WriteFile(path, b, 0o644)
 }
 
 // seat makes the seat of a SEAT argument.
@@ -364,7 +371,12 @@ func play(ctx context.Context, args []string) error {
 			s["stopped"] = runErr.Error()
 		}
 		line, _ := json.Marshal(s)
-		fmt.Fprintln(sum, string(line))
+		if _, err := fmt.Fprintln(sum, string(line)); err != nil {
+			return fmt.Errorf("summary.jsonl: %w", err)
+		}
+		if err := sum.Sync(); err != nil {
+			return fmt.Errorf("summary.jsonl: %w", err)
+		}
 		fmt.Printf("game %d: %s (pro) vs %s (con): %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
 			s["winner_side"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
 		if budget.Refused() {

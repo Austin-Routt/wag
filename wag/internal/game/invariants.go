@@ -31,9 +31,9 @@ import (
 //     them in the move history and, under ScoringLive, their live score.
 //   - Questions: each has its question argument, owned by the asker, and
 //     its answer, if any, is in the graph; the claim of a debate is at issue.
-//   - Admission: the graph is admitted as an authored graph would be
-//     (carneades.Admit): every argument an instance of its scheme, under WAG's
-//     profile, and the assumptions consistent.
+//   - Admission: the graph passes WAG's runtime profile (carneades.Admit),
+//     including runtime answer folding, and its assumptions are consistent.
+//     Authored YAML does not receive that fold from input metadata.
 func (gs *GameState) CheckInvariants() []error {
 	var errs []error
 	fail := func(format string, args ...interface{}) { errs = append(errs, fmt.Errorf(format, args...)) }
@@ -168,9 +168,9 @@ func (gs *GameState) CheckInvariants() []error {
 			fail("the claim %s is not at issue", gs.Claim)
 		}
 	}
-	// What play has made is a graph an authored one could be (carneades.Admit):
-	// its arguments are instances of their schemes, as WAG's answers are, and
-	// its assumptions are consistent.
+	// Check the runtime profile, including answers made by AnswerQuestion,
+	// and the consistency of assumptions. The YAML constructor uses stricter
+	// admission: authored metadata cannot authorize runtime answer folding.
 	if err := gs.Adapter.Admit(); err != nil {
 		fail("%v", err)
 	}
