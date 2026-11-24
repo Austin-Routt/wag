@@ -286,6 +286,8 @@ Some faults are not misused schemes: begging the question, the loaded question, 
 
 **Dialogue types:** Track D (§8). The presets were renamed on 2026-10-15 to "Policy question" and "Scientific question", since the game does not play deliberation or inquiry.
 
+**Peer-to-peer play** (no trusted host: every player runs the engine and checks every move) is not scheduled. Ideas and the steps it would take are in [peer-to-peer.md](peer-to-peer.md), noted on 2026-11-24 at the owner's request; it would build on D073's journal (§0, stage 2).
+
 <a name="7-decisions-the-owner-needs-to-make"></a>
 
 ## 7. Decision record and remaining implementation
