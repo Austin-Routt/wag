@@ -293,8 +293,11 @@ func TestAnswersConcludeTheClaimTheyAnswer(t *testing.T) {
 		"the opposing position":                  {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: ¬p", true},
 		"another claim":                          {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: q", false},
 		"the position, not the bound":            {"scheme: expert\n    parameters: [w, \"not(p)\"]\n    premises: [\"asserts(w,not(p))\"]\n    conclusion: p", false},
-		"a sign, folded":                         {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p", true},
-		"a sign, folded, opposing":               {"scheme: sign\n    parameters: [s, \"not(p)\"]\n    premises: [\"sign_of(s,not(p))\"]\n    conclusion: ¬p", true},
+		"a sign, folded":                         {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p\n    meta: {wag_answer_variable: B}", true},
+		"a sign, folded, opposing":               {"scheme: sign\n    parameters: [s, \"not(p)\"]\n    premises: [\"sign_of(s,not(p))\"]\n    conclusion: ¬p\n    meta: {wag_answer_variable: B}", true},
+		"a sign folded, not marked as an answer": {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p", false},
+		"a sign folded, marked for A":            {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: p\n    meta: {wag_answer_variable: A}", false},
+		"a sign of another claim, marked":        {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: q\n    meta: {wag_answer_variable: B}", false},
 		"a sign, its own conclusion":             {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: holds_in(p)", true},
 		"a sign of another claim":                {"scheme: sign\n    parameters: [s, p]\n    premises: [\"sign_of(s,p)\"]\n    conclusion: q", false},
 		"a denial concludes its negation":        {"scheme: deny\n    parameters: [p]\n    premises: [\"denies(p)\"]\n    conclusion: ¬p", true},
@@ -398,5 +401,34 @@ func TestAnswerFormNeedsAParameterPerVariable(t *testing.T) {
 		if got := answerForm(arg); got != (name == "the answer") {
 			t.Errorf("%s: %v", name, got)
 		}
+	}
+}
+
+// An argument from a scheme that is not an answer scheme, concluding the
+// bare action rather than its scheme's should_be_performed of it, is not
+// folded: only answers are (the review of 2026-11-24, R4).
+func TestANonAnswerSchemeIsNotFolded(t *testing.T) {
+	yml := string(data.CoreYAML) + `
+statements:
+  "brings_about(tax_meat,less_emissions)": Taxing meat brings about fewer emissions.
+  good(less_emissions): Fewer emissions are good.
+  tax_meat: Meat is taxed.
+assumptions: ["brings_about(tax_meat,less_emissions)", good(less_emissions)]
+arguments:
+  a1:
+    scheme: positive_consequences
+    parameters: [tax_meat, less_emissions]
+    premises: ["brings_about(tax_meat,less_emissions)", good(less_emissions)]
+    conclusion: tax_meat
+`
+	ae := admissionError(t, yml)
+	if !hasProblem(ae.Problems, validation.ARGUMENT, "a1", "conclusion does not instantiate") {
+		t.Fatalf("%v", ae)
+	}
+	// Its own conclusion is admitted.
+	ok := strings.Replace(strings.Replace(yml, "conclusion: tax_meat", "conclusion: should_be_performed(tax_meat)", 1),
+		"tax_meat: Meat is taxed.", "should_be_performed(tax_meat): Meat should be taxed.", 1)
+	if _, err := NewAdapterFromYAML([]byte(ok)); err != nil {
+		t.Fatal(err)
 	}
 }

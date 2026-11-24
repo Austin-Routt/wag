@@ -2,13 +2,17 @@ package server
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/yourorg/wag/internal/game"
+	"github.com/yourorg/wag/internal/llm"
 )
 
 // Who may do what in a game (access.go). The critical review of 2026-11-23
@@ -306,5 +310,159 @@ func TestKeysAreNotInTheGamesRecords(t *testing.T) {
 		if strings.Contains(list.String(), k) {
 			t.Fatal("the list holds a key")
 		}
+	}
+}
+
+// thisMachinesAddress is a network address of this computer that is not a
+// loopback address, if it has one.
+func thisMachinesAddress(t *testing.T) net.IP {
+	t.Helper()
+	addrs, _ := net.InterfaceAddrs()
+	for _, a := range addrs {
+		if n, ok := a.(*net.IPNet); ok && n.IP.To4() != nil && !n.IP.IsLoopback() {
+			return n.IP
+		}
+	}
+	t.Skip("no network address on this machine but loopback")
+	return nil
+}
+
+// A server that listens on one address of the network (--addr <address>)
+// is opened there by its owner, on this computer: that is the owner (the
+// review's R3), as long as the Host is an IP address, not a name.
+func TestThisComputerAtItsNetworkAddressIsTheOwner(t *testing.T) {
+	lan := thisMachinesAddress(t)
+	s, err := New(builtinData(), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ln, err := net.Listen("tcp", net.JoinHostPort(lan.String(), "0"))
+	if err != nil {
+		t.Skip(err)
+	}
+	ts := httptest.NewUnstartedServer(s.Handler())
+	ts.Listener.Close()
+	ts.Listener = ln
+	ts.Start()
+	defer ts.Close()
+	var st State
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: twoHumans}, &st); code != http.StatusOK {
+		t.Fatalf("listening on %s, this computer's page at %s cannot start a game: %d", ln.Addr(), ts.URL, code)
+	}
+	var keys KeysView
+	if code := call(t, ts, "GET", "/api/games/"+st.ID+"/keys", nil, &keys); code != http.StatusOK || keys.Moderator == "" {
+		t.Fatalf("keys: %d", code)
+	}
+	// The workbench too.
+	if code := call(t, ts, "GET", "/api/llm/services", nil, nil); code != http.StatusOK {
+		t.Fatalf("the workbench at this computer's address: %d", code)
+	}
+	// A name for this computer is not the owner, even from this computer.
+	req, _ := http.NewRequest("GET", ts.URL+"/api/games/"+st.ID+"/keys", nil)
+	req.Host = "wag.example"
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusForbidden {
+		t.Fatalf("this computer, named wag.example: %d", resp.StatusCode)
+	}
+}
+
+// Who counts as this computer: a loopback client, or a client at the very
+// address it reached; with a Host that is localhost or an IP address.
+func TestWhatCountsAsThisComputer(t *testing.T) {
+	at := func(remote, local, host string) bool {
+		r := httptest.NewRequest("GET", "http://"+host+"/", nil)
+		r.RemoteAddr = remote
+		if local != "" {
+			la, err := net.ResolveTCPAddr("tcp", local)
+			if err != nil {
+				t.Fatal(err)
+			}
+			r = r.WithContext(context.WithValue(r.Context(), http.LocalAddrContextKey, la))
+		}
+		return fromThisComputer(r)
+	}
+	for _, c := range []struct {
+		remote, local, host string
+		want                bool
+	}{
+		{"127.0.0.1:5000", "127.0.0.1:8080", "localhost:8080", true},
+		{"[::1]:5000", "[::1]:8080", "[::1]:8080", true},
+		{"127.0.0.1:5000", "127.0.0.1:8080", "0.0.0.0:8080", true},
+		{"192.0.2.7:5000", "192.0.2.7:8080", "192.0.2.7:8080", true},
+		{"192.0.2.7:5000", "192.0.2.7:8080", "wag.example:8080", false},
+		{"192.0.2.9:5000", "192.0.2.7:8080", "192.0.2.7:8080", false},
+		{"192.0.2.9:5000", "", "192.0.2.7:8080", false},
+		{"192.0.2.9:5000", "0.0.0.0:8080", "192.0.2.7:8080", false},
+		{"127.0.0.1:5000", "127.0.0.1:8080", "evil.example", false},
+		{"127.0.0.1:5000", "127.0.0.1:8080", "LOCALHOST", false},
+	} {
+		if got := at(c.remote, c.local, c.host); got != c.want {
+			t.Errorf("from %s to %s as %s: %v", c.remote, c.local, c.host, got)
+		}
+	}
+}
+
+// Another computer's trace and export name no file of the owner's: the model
+// profiles keep only their name, provider and parameters, and the data folder
+// and home folder, which an error may name, are placeholders (the review's
+// R5). The owner's own copies keep everything.
+func TestAGuestsTraceAndExportNameNoFileOfTheOwner(t *testing.T) {
+	srv, ts := newTestServerWith(t)
+	store := t.TempDir()
+	if err := srv.SetStore(store); err != nil {
+		t.Fatal(err)
+	}
+	schema := filepath.Join(store, "move-schema.json")
+	srv.AddModel(llm.WithProvider(llm.Profile{Name: "m", Provider: "mock", SchemaFile: schema, BaseURL: "http://127.0.0.1:1234/v1",
+		Command: []string{filepath.Join(store, "model.sh")}, Retries: -1, Params: llm.Params{Model: "m-1"}},
+		&llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+			return nil, &llm.Error{Provider: "mock", Kind: llm.KindAuth, Message: "cannot run " + filepath.Join(store, "model.sh")}
+		}}))
+	var st State
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "M", Kind: "model", Model: "m"}}}, &st); code != http.StatusOK {
+		t.Fatalf("new game: %d", code)
+	}
+	post(t, ts, "/api/games/"+st.ID+"/move", map[string]any{"action": map[string]string{"type": "abstain"}})
+	call(t, ts, "POST", "/api/games/"+st.ID+"/ai", map[string]any{}, nil) // the model's turn fails, naming the folder
+	keys := srv.sessions[st.ID].keysView()
+	for _, what := range []string{"traces", "export"} {
+		code, body := remote(t, srv, "GET", "/api/games/"+st.ID+"/"+what, keys.Seats[0].Key, nil)
+		if code != http.StatusOK || strings.Contains(string(body), store) || strings.Contains(string(body), "127.0.0.1:1234") {
+			i := strings.Index(string(body), store)
+			t.Fatalf("%s for a seat's key: %d, names the folder at %d", what, code, i)
+		}
+		if what == "traces" && (!strings.Contains(string(body), `"name":"m"`) || !strings.Contains(string(body), "<data folder>")) {
+			t.Fatalf("the guest's trace lost the profile or the error: %.300s", body)
+		}
+		// The owner's copy keeps the folder.
+		req, _ := http.NewRequest("GET", ts.URL+"/api/games/"+st.ID+"/"+what, nil)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var b bytes.Buffer
+		b.ReadFrom(resp.Body)
+		resp.Body.Close()
+		if what == "traces" && !strings.Contains(b.String(), schema) {
+			t.Fatalf("the owner's trace lost the profile's schema file")
+		}
+	}
+}
+
+// guestCopy finds the folder in either JSON spelling: an export escapes <, >
+// and &, a trace does not.
+func TestGuestCopyFindsBothSpellings(t *testing.T) {
+	s := &Server{store: "/data/a&b"}
+	got := string(s.guestCopy([]byte(`{"x":"/data/a&b/game","y":"/data/a&b/trace"}`)))
+	if strings.Contains(got, "/data/a") || strings.Count(got, "<data folder>") != 2 {
+		t.Fatal(got)
+	}
+	// Nothing to hide: unchanged.
+	if got := string((&Server{}).guestCopy([]byte(`{"x":"/"}`))); got != `{"x":"/"}` {
+		t.Fatal(got)
 	}
 }

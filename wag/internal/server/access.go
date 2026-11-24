@@ -5,9 +5,12 @@ package server
 // The critical review of 2026-11-23 showed a request from another computer,
 // with no credential, deciding a statement as the moderator. Now:
 //
-//   - A request from this computer (a loopback address, and a Host that names
-//     this computer, as the workbench requires) is the owner's: the person who
-//     runs the server may do anything in any game, as before.
+//   - A request from this computer is the owner's: the person who runs the
+//     server may do anything in any game, as before. It comes from a loopback
+//     address, or from the address it reached (this computer connecting to its
+//     own network address, as a server on one address of the network is
+//     opened), and its Host is localhost or an IP address: a name would let a
+//     page of another site whose name points to this computer pass for it.
 //   - A request from another computer acts in a game only with a key its owner
 //     shared, in the header X-WAG-Key. The moderator's key moderates and
 //     decides; a seat's key moves for that seat, on its turn. Either key reads
@@ -63,24 +66,36 @@ func (r role) none() bool { return !r.owner && !r.moderator && r.seat < 0 }
 var errNoKey = errors.New("this game answers another computer only with a key its owner shared (" + KeyHeader + ")")
 
 // fromThisComputer reports whether a request comes from this computer and
-// names this computer as its host, so that a page of another site whose name
-// resolves to this computer is not taken for the owner.
-func fromThisComputer(r *http.Request) bool { return loopbackClient(r) && localHost(r) }
+// names its host as localhost or an IP address, so that a page of another
+// site whose name resolves to this computer is not taken for the owner.
+func fromThisComputer(r *http.Request) bool { return thisComputerClient(r) && localHost(r) }
 
-func loopbackClient(r *http.Request) bool {
+// thisComputerClient: the request comes from a loopback address, or from the
+// very address it reached: a computer that connects to its own network
+// address connects from it, and a packet from another computer cannot carry
+// that address (the kernel drops such a packet, and the handshake could not
+// complete).
+func thisComputerClient(r *http.Request) bool {
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	ip := net.ParseIP(host)
-	return err == nil && ip != nil && ip.IsLoopback()
+	if err != nil || ip == nil {
+		return false
+	}
+	if ip.IsLoopback() {
+		return true
+	}
+	local, ok := r.Context().Value(http.LocalAddrContextKey).(*net.TCPAddr)
+	return ok && local.IP.Equal(ip)
 }
 
+// localHost: the Host is localhost or an IP address, never another name.
 func localHost(r *http.Request) bool {
 	h := r.Host
 	if hh, _, err := net.SplitHostPort(h); err == nil {
 		h = hh
 	}
 	h = strings.Trim(h, "[]")
-	ip := net.ParseIP(h)
-	return h == "localhost" || ip != nil && ip.IsLoopback()
+	return h == "localhost" || net.ParseIP(h) != nil
 }
 
 // roleIn returns who the request acts as in the game ss (nil if there is no

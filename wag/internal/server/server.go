@@ -628,7 +628,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		httpError(w, fmt.Errorf("%s (Claude) is thinking: wait for its move", ss.GS.ActivePlayer().ID), http.StatusConflict)
 		return
 	}
-	if ss.inspectedWith != "" && r.Method == http.MethodPost && action != "preview" && action != "note" {
+	if ss.inspectedWith != "" && r.Method == http.MethodPost && action != "preview" && action != "note" && action != "save" {
 		httpError(w, fmt.Errorf("the game is open read-only: it was played with other scheme data (%s; this server's is %s)", ss.dataHash, ss.inspectedWith), http.StatusConflict)
 		return
 	}
@@ -702,6 +702,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			t.Result.Error = err.Error()
 			ss.addTrace(t)
 			ss.event("reply", player, "", nil, err)
+			s.saveRecord(ss) // the reply is in the record, played or not
 			httpError(w, err, http.StatusBadRequest)
 			return
 		}
@@ -709,6 +710,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		action := t.Action
 		ss.event("reply", player, short(action), res, err)
 		if err != nil {
+			s.saveRecord(ss)
 			httpError(w, err, http.StatusConflict)
 			return
 		}
@@ -772,6 +774,9 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 			res, err := s.modelTurn(ss, c)
 			s.mu.Lock()
 			ss.thinking = false
+			if err != nil {
+				ss.Version++ // pollers saw the seat thinking
+			}
 			ss.event("ai", player, c.Profile.Name, res, err)
 			s.reply(w, ss, who, res, err)
 			return
@@ -819,9 +824,20 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, ss.keysView())
 	case "export":
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=wag-game-%s.json", ss.ID))
-		writeJSON(w, ss.export(s.contexts))
+		if who.owner {
+			writeJSON(w, ss.export(s.contexts))
+			break
+		}
+		var b bytes.Buffer
+		if err := json.NewEncoder(&b).Encode(ss.export(s.contexts)); err != nil {
+			httpError(w, err, http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Cache-Control", "no-store")
+		w.Write(s.guestCopy(b.Bytes()))
 	case "traces":
-		s.writeTraces(w, ss)
+		s.writeTraces(w, ss, who.owner)
 	default:
 		httpError(w, fmt.Errorf("unknown action %q", action), http.StatusNotFound)
 	}
@@ -829,15 +845,30 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 
 // reply answers a request that changed the game (or failed to): the result
 // and the new state, as the role sees it. Only a change bumps the version
-// pollers compare. A failed save is in the state (autosave).
+// pollers compare. The record changed even when the request failed (its
+// event, a model's replies): it is saved before the error is answered, so
+// that a model's paid replies are on the disk before it can be asked again,
+// or the game is unsaved and its model seats wait (autosave).
 func (s *Server) reply(w http.ResponseWriter, ss *Session, who role, res *game.TurnResult, err error) {
 	if err != nil {
+		s.saveRecord(ss)
 		httpError(w, err, http.StatusConflict)
 		return
 	}
 	ss.Version++
 	s.autosave(ss)
 	writeJSON(w, map[string]interface{}{"result": res, "state": ss.stateFor(who)})
+}
+
+// saveRecord saves a game whose record changed without a change of its state
+// (an event, a model's replies): the version is bumped only if the save
+// changed what the state says about saving.
+func (s *Server) saveRecord(ss *Session) {
+	before := ss.saveErr
+	s.autosave(ss)
+	if ss.saveErr != before {
+		ss.Version++
+	}
 }
 
 // aiMove lets the AI seat to move play once (retrying a rejected move up to

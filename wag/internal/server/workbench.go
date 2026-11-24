@@ -161,16 +161,17 @@ func (s *Server) savePlayers() error {
 }
 
 // local guards the workbench API: the request must come from this computer
-// (keys are typed here, and calls spend the account's quota), name this
-// computer as its host (no DNS rebinding), and, if it changes anything, be
-// JSON from this page's origin (no request forged by another site).
+// (keys are typed here, and calls spend the account's quota), name its host
+// as localhost or an IP address (no DNS rebinding), and, if it changes
+// anything, be JSON from this page's origin (no request forged by another
+// site). This computer is what access.go takes for the owner.
 func local(w http.ResponseWriter, r *http.Request) bool {
-	if !loopbackClient(r) {
+	if !thisComputerClient(r) {
 		httpError(w, fmt.Errorf("the model workbench answers only on this computer"), http.StatusForbidden)
 		return false
 	}
 	if !localHost(r) {
-		httpError(w, fmt.Errorf("the model workbench answers only at localhost"), http.StatusForbidden)
+		httpError(w, fmt.Errorf("the model workbench answers only at localhost or this computer's IP address"), http.StatusForbidden)
 		return false
 	}
 	if r.Method != http.MethodGet {
@@ -612,7 +613,7 @@ func (s *Server) saveGame(ss *Session, dir string) error {
 		return err
 	}
 	var tb bytes.Buffer
-	s.encodeTraces(&tb, ss)
+	s.encodeTraces(&tb, ss, true)
 	eb, err := json.MarshalIndent(ss.export(s.contexts), "", " ")
 	if err != nil {
 		return err

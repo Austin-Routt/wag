@@ -7,8 +7,9 @@
 // Flags:
 //
 //	--addr       address to listen on (default 127.0.0.1:8080; only this machine;
-//	             with 0.0.0.0:8080 other computers act in a game only with a key
-//	             its owner shares)
+//	             with 0.0.0.0:8080, or one of this computer's network addresses,
+//	             other computers act in a game only with a key its owner shares;
+//	             this computer stays the owner, at localhost or its own address)
 //	--data       directory with schemes/core.yml and nascq/*.json (default: the data built in)
 //	--kialo-dir  directory of captured Kialo discussions (<dir>/<id>/graph.json, as in the
 //	             Kialo research visualizer's data folder), offered for import

@@ -139,7 +139,13 @@ async function aiStep() {
   ui.busy = G.active_ai !== 'model'; // a model's move takes a while: keep polling meanwhile
   if (G.active_ai === 'model') { G.thinking = true; renderPlay(); }
   try { const r = await api(`/api/games/${G.id}/ai`, {}); setState(r.state); }
-  catch (e) { toast(e.message, 8000); poll(); }
+  catch (e) {
+    // A turn that failed is not tried again by itself: a failing model would
+    // be asked again and again. "Let it move now" tries once more.
+    ui.autoplay = false;
+    toast(e.message + ' Automatic play is paused: “Let it move now” tries again.', 10000);
+    poll();
+  }
   finally { ui.busy = false; }
 }
 

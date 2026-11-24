@@ -411,7 +411,7 @@ func appendLines(path string, lines [][]byte) error {
 		err = f.Sync()
 	}
 	if err == nil && fi.Size() == 0 {
-		err = fsutil.SyncDir(filepath.Dir(path))
+		err = fsutil.SyncFolder(filepath.Dir(path))
 	}
 	if err != nil {
 		if terr := f.Truncate(fi.Size()); terr != nil {

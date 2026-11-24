@@ -137,7 +137,15 @@ func (a *Adapter) AnswerQuestion(ans Answer) ([]string, error) {
 	if ans.AnswerVariable != "" {
 		bindings[ans.AnswerVariable], termVars[ans.AnswerVariable] = StatementTerm(concl.Id), true
 	}
-	return a.addSchemeArgument(ans.Owner, ans.SchemeID, bindings, termVars, concl, ans.Weight)
+	ids, err := a.addSchemeArgument(ans.Owner, ans.SchemeID, bindings, termVars, concl, ans.Weight)
+	if ans.AnswerVariable != "" && len(ids) > 0 {
+		// It concludes the claim it answers, which its scheme may conclude a
+		// predicate of: admission folds it because it is an answer (answerForm).
+		if arg := a.Graph.Arguments[ids[0]]; arg != nil && arg.Metadata != nil {
+			arg.Metadata[AnswerKey] = ans.AnswerVariable
+		}
+	}
+	return ids, err
 }
 
 // StatementTerm returns a statement ID as a term that can be the value of a

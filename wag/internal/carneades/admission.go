@@ -17,7 +17,8 @@ package carneades
 //     symbols. The patterns of a scheme an argument names must still be terms,
 //     or the argument could not be checked against them;
 //   - an answer (D075) concludes the claim it answers, not its scheme's
-//     conclusion (answerForm).
+//     conclusion (answerForm); only arguments marked as answers (AnswerKey,
+//     set by AnswerQuestion) are folded so.
 
 import (
 	"errors"
@@ -33,6 +34,11 @@ import (
 // ConclusionProblem is the engine validator's description of an argument
 // whose conclusion is not an instance of its scheme's conclusion.
 const ConclusionProblem = "conclusion does not instantiate a conclusion of the scheme with the argument's parameters."
+
+// AnswerKey marks, in an argument's metadata, an answer (D075) the game made
+// (AnswerQuestion): the scheme's variable bound to the claim it answers. A
+// YAML file can state it too, in an argument's meta: {wag_answer_variable: B}.
+const AnswerKey = "wag_answer_variable"
 
 // ProfileProblems returns what is wrong with the graph's content under WAG's
 // profile: the engine's validation of its statements, issues, arguments,
@@ -72,13 +78,18 @@ func ProfileProblems(ag *caes.ArgGraph) []validation.Problem {
 	return out
 }
 
-// answerForm reports whether an argument is an answer as WAG makes one (D075,
-// AddAnswer): its scheme concludes one variable V, or a one-place predicate of
-// it that is not a negation (true_in_situation(B)), and the argument concludes
-// the statement V is bound to, the claim it answers (an opposing position ¬X
-// bound as not(X), StatementTerm). The engine's validator expects the
-// scheme's own conclusion and so reports these arguments; the game's lint
-// requires this shape of an answer scheme.
+// answerForm reports whether an argument concludes, in WAG's own spelling,
+// what its scheme concludes, or is an answer as WAG makes one (D075,
+// AnswerQuestion). Its scheme concludes one variable V, and the argument
+// concludes the statement V is bound to: the same statement, ¬X written
+// not(X) inside a term (StatementTerm). Or its scheme concludes a one-place
+// predicate of V that is not a negation (true_in_situation(B)), and the
+// argument is marked as an answer for V (AnswerKey): an answer concludes the
+// claim it answers. Only answers are folded so: an argument from positive
+// consequences that concludes the bare action, not should_be_performed of it,
+// is not admitted (the review of 2026-11-24, R4). The engine's validator
+// expects the scheme's own conclusion and so reports these arguments; the
+// game's lint requires one of these shapes of an answer scheme.
 func answerForm(arg *caes.Argument) bool {
 	if arg == nil || arg.Scheme == nil || arg.Conclusion == nil || len(arg.Scheme.Conclusions) != 1 ||
 		len(arg.Parameters) != len(arg.Scheme.Variables) {
@@ -88,14 +99,18 @@ func answerForm(arg *caes.Argument) bool {
 	if !ok {
 		return false
 	}
+	folded := false
 	if c, ok := t.(terms.Compound); ok {
 		if len(c.Args) != 1 || IsNegationFunctor(c.Functor) {
 			return false
 		}
-		t = c.Args[0]
+		t, folded = c.Args[0], true
 	}
 	v, ok := t.(terms.Variable)
 	if !ok {
+		return false
+	}
+	if marked, _ := arg.Metadata[AnswerKey].(string); folded && marked != v.Name {
 		return false
 	}
 	for i, name := range arg.Scheme.Variables {

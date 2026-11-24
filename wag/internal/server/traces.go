@@ -1,11 +1,13 @@
 package server
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -307,6 +309,41 @@ type GameEnd struct {
 	Verdicts []Verdict         `json:"verdicts,omitempty"`
 }
 
+// publicProfile is a model profile without what names the owner's machine:
+// its endpoint, its key's variable, its command and its schema file.
+func publicProfile(p llm.Profile) llm.Profile {
+	p.BaseURL, p.APIKeyEnv, p.Command, p.SchemaFile = "", "", nil, ""
+	return p
+}
+
+// guestCopy hides, in what another computer reads (a trace, an export), the
+// owner's data folder and home folder, which an error message or a profile
+// may name: each becomes a placeholder.
+func (s *Server) guestCopy(b []byte) []byte {
+	home, _ := os.UserHomeDir()
+	for _, x := range []struct{ path, as string }{{s.store, "<data folder>"}, {home, "<home folder>"}} {
+		if len(x.path) < 2 {
+			continue
+		}
+		// The path as JSON writes it, with and without escaping <, > and &
+		// (exports escape them, traces do not).
+		for _, html := range []bool{true, false} {
+			var q bytes.Buffer
+			enc := json.NewEncoder(&q)
+			enc.SetEscapeHTML(html)
+			if enc.Encode(x.path) != nil {
+				continue
+			}
+			esc := bytes.TrimSuffix(q.Bytes(), []byte("\n"))
+			if len(esc) < 3 {
+				continue
+			}
+			b = bytes.ReplaceAll(b, esc[1:len(esc)-1], []byte(x.as))
+		}
+	}
+	return b
+}
+
 // gameStart describes the game for its trace file. Caller holds s.mu.
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
@@ -327,18 +364,33 @@ func (s *Server) gameStart(ss *Session) GameStart {
 
 // writeTraces writes the game's trace file (TraceFormat): its start, its
 // calls and decisions in the order they happened, and its end if it is
-// over. Caller holds s.mu.
-func (s *Server) writeTraces(w http.ResponseWriter, ss *Session) {
+// over. Another computer than the owner's reads it without where the owner
+// keeps things (guestCopy). Caller holds s.mu.
+func (s *Server) writeTraces(w http.ResponseWriter, ss *Session, owner bool) {
 	w.Header().Set("Content-Type", "application/x-ndjson; charset=utf-8")
 	w.Header().Set("Content-Disposition", "attachment; filename=wag-traces-"+ss.ID+".jsonl")
-	s.encodeTraces(w, ss)
+	if owner {
+		s.encodeTraces(w, ss, true)
+		return
+	}
+	var b bytes.Buffer
+	s.encodeTraces(&b, ss, false)
+	w.Write(s.guestCopy(b.Bytes()))
 }
 
-// encodeTraces writes the game's trace file to w. Caller holds s.mu.
-func (s *Server) encodeTraces(w io.Writer, ss *Session) {
+// encodeTraces writes the game's trace file to w; for another computer than
+// the owner's, its model profiles keep only their name, provider and
+// parameters (publicProfile). Caller holds s.mu.
+func (s *Server) encodeTraces(w io.Writer, ss *Session, owner bool) {
 	enc := json.NewEncoder(w)
 	enc.SetEscapeHTML(false)
-	_ = enc.Encode(s.gameStart(ss))
+	start := s.gameStart(ss)
+	if !owner {
+		for i, p := range start.Profiles {
+			start.Profiles[i] = publicProfile(p)
+		}
+	}
+	_ = enc.Encode(start)
 	i, j := 0, 0
 	for i < len(ss.Traces) || j < len(ss.Calls) {
 		if j == len(ss.Calls) || i < len(ss.Traces) && ss.Traces[i].Order < ss.Calls[j].Order {
