@@ -128,6 +128,12 @@ const (
 func (a *Adapter) Decide(stmtID, decision string) (string, error) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
+	// Refused moderator input must not withdraw an existing decision.
+	switch decision {
+	case DecisionAccepted, DecisionRejected, DecisionUndecided:
+	default:
+		return "", fmt.Errorf("unknown decision %q (accepted, rejected, undecided)", decision)
+	}
 	s := a.Graph.Statements[stmtID]
 	if s == nil {
 		return "", fmt.Errorf("statement %q not found", stmtID)
@@ -139,6 +145,14 @@ func (a *Adapter) Decide(stmtID, decision string) (string, error) {
 			opp = s.Issue.Positions[1]
 		}
 	}
+	// Resolving an opposite can fail (for example, an issue with three
+	// positions). Do it before changing the assumptions or their origins.
+	if decision == DecisionRejected && opp == nil {
+		var err error
+		if opp, err = a.opposingPosition(s, caes.PE); err != nil {
+			return "", err
+		}
+	}
 	a.unassume(s)
 	if opp != nil {
 		a.unassume(opp)
@@ -147,16 +161,8 @@ func (a *Adapter) Decide(stmtID, decision string) (string, error) {
 	case DecisionAccepted:
 		a.Graph.AddAssumption(terms.Normalize(s.Id))
 	case DecisionRejected:
-		if opp == nil {
-			var err error
-			if opp, err = a.opposingPosition(s, caes.PE); err != nil {
-				return "", err
-			}
-		}
 		a.Graph.AddAssumption(terms.Normalize(opp.Id))
 	case DecisionUndecided:
-	default:
-		return "", fmt.Errorf("unknown decision %q (accepted, rejected, undecided)", decision)
 	}
 	return s.Id, nil
 }
