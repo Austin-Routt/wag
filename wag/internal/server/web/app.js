@@ -37,7 +37,7 @@ async function api(path, body, raw) {
   const opt = body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: raw ? body : JSON.stringify(body) };
   const r = await fetch(path, opt);
   const j = await r.json().catch(() => ({ error: r.statusText }));
-  if (!r.ok) throw new Error(j.error || r.statusText);
+  if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { body: j });
   return j;
 }
 function toast(msg, ms = 3500) {
@@ -96,7 +96,7 @@ async function poll() {
 
 function scheduleAI() {
   clearTimeout(ui.aiTimer);
-  if (!G || G.over || G.pending || !G.active_ai || !ui.autoplay || G.thinking) return;
+  if (!G || G.over || G.inspect || G.pending || !G.active_ai || !ui.autoplay || G.thinking) return;
   ui.aiTimer = setTimeout(aiStep, G.active_ai === 'model' ? 300 : 900);
 }
 async function aiStep() {
@@ -275,8 +275,17 @@ function renderSetup() {
   };
   $('#lload').onclick = async () => {
     const f = $('#lfile').files[0]; if (!f) return toast('Choose an exported game first.');
-    try { const st = await api('/api/load', await f.text(), true); G = null; setState(st); toast(`Loaded “${st.title}”: ${st.log.length} moves replayed.`); render(); }
-    catch (e) { toast(e.message, 8000); }
+    const text = await f.text();
+    const open = async inspect => {
+      const st = await api('/api/load' + (inspect ? '?inspect=1' : ''), text, true); G = null; setState(st);
+      toast(`Loaded “${st.title}”: ${st.log.length} moves replayed${inspect ? ', read-only' : ''}.`); render();
+    };
+    try { await open(false); }
+    catch (e) {
+      // A game played with other scheme data: it can still be looked at.
+      if (!(e.body && e.body.inspect && confirm(e.message + '\n\nOpen it read-only, with this server\'s data?'))) return toast(e.message, 8000);
+      try { await open(true); } catch (e2) { toast(e2.message, 8000); }
+    }
   };
   $('#kimport').onclick = async () => {
     const f = $('#kfile').files[0]; if (!f) return toast('Choose a graph.json first.');
@@ -368,7 +377,7 @@ function deltasText(d) {
   return Object.entries(d).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(' · ');
 }
 function claimHead() {
-  const turn = G.over ? '<b>Game over.</b>' : G.thinking ? `<b>${esc(G.active)}</b> (Claude) is thinking…` : `<b>${esc(G.active)}</b> to move.`;
+  const turn = G.inspect ? '<b>Read-only:</b> played with other scheme data.' : G.over ? '<b>Game over.</b>' : G.thinking ? `<b>${esc(G.active)}</b> (Claude) is thinking…` : `<b>${esc(G.active)}</b> to move.`;
   if (!G.claim || !G.statements[G.claim]) return `<div class="panel claimhead"><div class="small muted">${turn}</div></div>`;
   const c = G.statements[G.claim];
   return `<div class="panel claimhead ${c.label}">
@@ -422,7 +431,7 @@ function entryCard(l, i, depth, parent) {
   }
   const eff = (l.effects || []).length ? `<ul class="effects">${l.effects.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : '';
   const notes = (G.notes || []).filter(n => n.target === 'move:' + (i + 1)).map(noteHTML).join('');
-  const canRespond = main && main.role === 'main' && main.cqs && main.cqs.length && !G.over;
+  const canRespond = main && main.role === 'main' && main.cqs && main.cqs.length && !G.over && !G.inspect;
   const actions = `<div class="eacts">${canRespond ? `<button class="small" data-respond="${i}">${ui.respond === i ? 'Hide the questions' : 'Respond…'}</button>` : ''}
     <button class="small ghost" data-flag="${i}" title="Note something wrong, confusing or good about this move: it goes into the export">⚑ Note</button>
     ${main ? `<button class="small ghost" data-board="${esc(main.conclusion)}" title="Show it on the board">Board</button>` : ''}</div>`;
@@ -555,7 +564,7 @@ function renderBoard() {
   if (s.decision) badges.push(`<span class="pill">${esc(s.decision)} by the moderator</span>`);
   if (s.presumed_by.length) badges.push(`<span class="pill" title="Premises hold until attacked or questioned">presumed by ${esc(s.presumed_by.join(', '))}</span>`);
   if (s.exception_of.length) badges.push(`<span class="pill">exception of ${esc(s.exception_of.join(', '))}</span>`);
-  const modbtns = G.config.moderated && ui.moderator && !G.over ? `<div class="badges"><span class="small muted">Moderator:</span>
+  const modbtns = G.config.moderated && ui.moderator && !G.over && !G.inspect ? `<div class="badges"><span class="small muted">Moderator:</span>
       <button class="small" data-decide="accepted">Accept</button><button class="small" data-decide="rejected">Reject</button><button class="small" data-decide="undecided">Clear</button></div>` : '';
   const opp = G.statements[s.opposite];
   const forIds = s.pro, againstIds = opp ? opp.pro : [];
@@ -662,9 +671,10 @@ async function decide(decision) {
 function renderSide() {
   const side = $('#side'); if (!side) return;
   const parts = [];
+  if (G.inspect) parts.push(inspectPanel());
   if (G.over) parts.push(outcomePanel());
   if (G.pending) parts.push(pendingPanel());
-  if (!G.over) parts.push('<div class="panel" id="composer"></div>');
+  if (!G.over && !G.inspect) parts.push('<div class="panel" id="composer"></div>');
   if (G.questions && G.questions.length) parts.push(`<div class="panel"><h2>Open questions</h2><ul class="small">${G.questions.map(q => `<li><b>${esc(q.asker)}</b> asks <b>${esc(q.owner)}</b> about <button class="link" data-goarg="${esc(q.target)}">${esc(q.target)}</button>: ${esc(q.question)}${q.turns_left ? ` <span class="req">(${q.turns_left} turn(s) left)</span>` : ''}</li>`).join('')}</ul></div>`);
   if (ui.view === 'board') parts.push(`<div class="panel"><h2>History</h2><div class="log"><ol>${G.log.map(l => `<li class="${l.accepted ? '' : 'rej'}"><span class="r">${l.round}.</span> ${esc(l.text)}${l.deltas && Object.keys(l.deltas).length ? ' <span class="muted">(' + Object.entries(l.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ') + ')</span>' : ''}${l.nl ? `<div class="muted small">“${esc(short(l.nl, 160))}”</div>` : ''}</li>`).join('') || '<li class="muted">No moves yet.</li>'}</ol></div></div>`);
   side.innerHTML = parts.join('');
@@ -672,8 +682,13 @@ function renderSide() {
     const ga = e.target.closest('[data-goarg]'); if (ga) { const a = G.arguments[ga.dataset.goarg]; if (a) focusOn(a.conclusion); }
   };
   if (G.pending) wirePending();
-  if (!G.over) renderComposer();
+  if (!G.over && !G.inspect) renderComposer();
   const log = $('.log', side); if (log) log.scrollTop = log.scrollHeight;
+}
+
+function inspectPanel() {
+  const i = G.inspect;
+  return `<div class="panel"><h2>Read-only</h2><p class="small">The game was played with scheme data ${esc(i.played_with)}; its moves were replayed with this server's, ${esc(i.replayed_with)}, so what the board shows may differ from what the players saw. It takes no move. To replay it exactly, start the server with <code>--data</code> on the data it was played with. Notes can still be added, and its export keeps the data it was played with.</p></div>`;
 }
 
 function outcomePanel() {
@@ -686,7 +701,7 @@ function outcomePanel() {
 function pendingPanel() {
   const p = G.pending, a = p.action;
   const sc = SCHEME[a.scheme_id];
-  const can = ui.moderator;
+  const can = ui.moderator && !G.inspect;
   return `<div class="panel moderator"><h2>Awaiting the moderator</h2>
     <p><b>${esc(p.player)}</b>: ${esc(p.description || a.type)}</p>
     ${a.text ? `<p class="muted">“${esc(a.text)}”</p>` : ''}

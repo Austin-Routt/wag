@@ -45,6 +45,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -54,6 +55,7 @@ import (
 	"strings"
 	"time"
 
+	wgame "github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/llm"
 	"github.com/yourorg/wag/internal/server"
 )
@@ -201,6 +203,9 @@ type stateView struct {
 	ActiveAI string `json:"active_ai"`
 	Active   string `json:"active"`
 	Pending  any    `json:"pending"`
+	Config   struct {
+		Weights map[string]float64 `json:"weights"`
+	} `json:"config"`
 }
 
 // run plays the game until it is over; the error is why it stopped early.
@@ -525,18 +530,38 @@ func replay(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
-	if h := d.Hash(); start.DataSHA256 != "" && h != start.DataSHA256 {
-		return fmt.Errorf("the game was played with scheme data %s; this data is %s (use --data for that version before replaying)", start.DataSHA256, h)
-	}
-	if start.DataSHA256 == "" {
+	switch {
+	case start.DataSHA256 == "":
 		fmt.Fprintln(os.Stderr, "Note: this legacy trace has no scheme-data fingerprint; input identity cannot be verified.")
+	case !d.Matches(start.DataSHA256):
+		return fmt.Errorf("the game was played with scheme data %s; this data is %s (use --data for that version before replaying)", start.DataSHA256, d.Hash())
 	}
 	srv, err := server.New(d, "")
 	if err != nil {
 		return err
 	}
 	srv.SetContext(ctx)
-	// Each model seat gets the calls recorded for its player, in order.
+	// The context presets as they were when the game was played: the game's
+	// request names one, and presets are not in the data's fingerprint.
+	for _, c := range start.Contexts {
+		if err := wgame.CheckWeights(c.Weights); err != nil {
+			return fmt.Errorf("the trace's context preset %q: %v", c.ID, err)
+		}
+	}
+	srv.AddContexts(start.Contexts)
+	// Each model seat gets the calls recorded for its player, in order. A
+	// player's ID is its seat's name unless another seat has that name, or
+	// it is the moderator's ("moderator#2"); the trace lists the players in
+	// the order of the seats.
+	ids := make([]string, len(start.Seats))
+	for i, s := range start.Seats {
+		ids[i] = s.Name
+		if i < len(start.Players) {
+			if id, _ := start.Players[i]["id"].(string); id != "" {
+				ids[i] = id
+			}
+		}
+	}
 	profiles := map[string]llm.Profile{}
 	for _, p := range start.Profiles {
 		profiles[p.Name] = p
@@ -572,9 +597,9 @@ func replay(ctx context.Context, args []string) error {
 			name = "claude"
 		}
 		p := profiles[name]
-		p.Name, p.MinInterval = "replay:"+s.Name, 0
-		rp := &llm.Replay{Provider: p.Provider, Recorded: calls[s.Name]}
-		replays[s.Name] = rp
+		p.Name, p.MinInterval = "replay:"+ids[i], 0
+		rp := &llm.Replay{Provider: p.Provider, Recorded: calls[ids[i]]}
+		replays[ids[i]] = rp
 		c := llm.WithProvider(p, rp)
 		c.Sleep = llm.NoWait
 		srv.AddModel(c)
@@ -585,6 +610,10 @@ func replay(ctx context.Context, args []string) error {
 	var st stateView
 	if err := call(ts.URL, "POST", "/api/games", req, &st); err != nil {
 		return err
+	}
+	if !maps.Equal(st.Config.Weights, start.Config.Weights) {
+		return fmt.Errorf("the game was played with the scheme weights %v; its request now gives %v: the context presets have changed "+
+			"since, and the trace does not record them (use --data for that version before replaying)", start.Config.Weights, st.Config.Weights)
 	}
 	g := &game{base: ts.URL, id: st.ID}
 	runErr := g.run(10 * (len(decisions) + 1))

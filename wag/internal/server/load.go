@@ -52,9 +52,12 @@ func (e *Export) requestOf() *NewGameRequest {
 
 // load starts a game from an export and replays its moves, so that a game
 // someone played can be looked at, continued, or turned into a test. Clocks
-// are not replayed: a move that timed out is replayed as a pass. Caller
-// holds s.mu.
-func (s *Server) load(e *Export) (*Session, error) {
+// are not replayed: a move that timed out is replayed as a pass. A game
+// played with other scheme data than this server's, as its fingerprint
+// says, is refused (an *OtherDataError), unless inspect asks to open it
+// read-only: its moves are then replayed with this server's data and it
+// takes no new move. Caller holds s.mu.
+func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	if len(e.Seats) == 0 {
 		return nil, fmt.Errorf("the export has no seats")
 	}
@@ -82,17 +85,25 @@ func (s *Server) load(e *Export) (*Session, error) {
 			return nil, err
 		}
 	default:
-		cfg, err := req.config(s.contexts)
+		// An export that records the scheme data (since 13 October 2026)
+		// records the weights in effect too, the context preset's and the
+		// game's own: the game is replayed with those, as it was played,
+		// whatever the preset says now (contexts are not in the data's
+		// fingerprint). An older export has only the request's context.
+		r := *req
+		recorded := e.DataHash != ""
+		if recorded {
+			r.Context, r.Weights = "", nil
+		}
+		cfg, err := r.config(s.contexts)
 		if err != nil {
 			return nil, err
 		}
-		// Modern exports contain the effective weights, including the context
-		// preset. Contexts may be changed without changing the scheme-data
-		// hash; silently replaying against them would change the experiment.
-		// Legacy exports without a recorded request/config keep their existing
-		// compatibility path; this is not a claim of exact legacy replay.
-		if e.Request != nil && e.Config.Mode != "" && !maps.Equal(cfg.Weights, e.Config.Weights) {
-			return nil, fmt.Errorf("the exported effective weights differ from the current context/request: restore the recorded context settings before replaying")
+		if recorded {
+			if err := game.CheckWeights(e.Config.Weights); err != nil {
+				return nil, fmt.Errorf("the export's weights: %v", err)
+			}
+			cfg.Context, cfg.Weights = e.Config.Context, maps.Clone(e.Config.Weights)
 		}
 		cfg.TimeLimit, cfg.MoveTimeLimit = 0, 0
 		var names []string
@@ -103,20 +114,23 @@ func (s *Server) load(e *Export) (*Session, error) {
 			return nil, err
 		}
 	}
+	same := s.data.Matches(e.DataHash)
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
-			if e.DataHash != s.data.Hash() && !errors.Is(err, errBridgeRetired) {
+			if !same && !errors.Is(err, errBridgeRetired) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(e.DataHash), s.data.Hash())
 			}
 			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
 		}
 	}
-	// Legal moves do not establish that the same data produced them. Keep
-	// the retired-bridge diagnostic above, but never register a successful
-	// replay that has a known data mismatch. Older exports lack this hash.
-	if e.DataHash != "" && e.DataHash != s.data.Hash() {
-		return nil, fmt.Errorf("the game was played with other scheme data (%s; this server's is %s): start the server with --data on the data of that version to replay it exactly", e.DataHash, s.data.Hash())
+	// Legal moves do not establish that the same data produced them: a game
+	// known to be played with other data is not registered as if it had
+	// been played with this, unless it is opened read-only. An export made
+	// before 13 October 2026 records no fingerprint.
+	other := e.DataHash != "" && !same
+	if other && !inspect {
+		return nil, &OtherDataError{PlayedWith: e.DataHash, Here: s.data.Hash()}
 	}
 	title := e.Title
 	if title == "" {
@@ -130,7 +144,20 @@ func (s *Server) load(e *Export) (*Session, error) {
 	}
 	ss := s.add(gs, e.Seats, title, source, req.Seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
+	if other {
+		// Its export keeps the data it was played with.
+		ss.dataHash, ss.inspectedWith = e.DataHash, s.data.Hash()
+	}
 	return ss, nil
+}
+
+// OtherDataError refuses to load a game played with other scheme data than
+// the server's; /api/load?inspect=1 opens it read-only.
+type OtherDataError struct{ PlayedWith, Here string }
+
+func (e *OtherDataError) Error() string {
+	return fmt.Sprintf("the game was played with other scheme data (%s; this server's is %s): start the server with --data on the data of that version "+
+		"to replay it exactly, or open it read-only to look at it with this server's data", e.PlayedWith, e.Here)
 }
 
 // errBridgeRetired marks a recorded move that a free-text bridge let through.

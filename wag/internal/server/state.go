@@ -58,6 +58,16 @@ type State struct {
 	SavedRel string `json:"saved_rel,omitempty"` // the same, relative to the data folder
 	// SeatKind is the kind of the seat to move (human, llm, random, greedy, model, claude).
 	SeatKind string `json:"seat_kind,omitempty"`
+	// Inspect is set when the game is open read-only: it was played with
+	// other scheme data than this server's, with which its moves were
+	// replayed (/api/load?inspect=1).
+	Inspect *InspectView `json:"inspect,omitempty"`
+}
+
+// InspectView names the scheme data of a game open read-only.
+type InspectView struct {
+	PlayedWith   string `json:"played_with"`   // the data the game was played with
+	ReplayedWith string `json:"replayed_with"` // this server's data
 }
 
 // ConfigView is the game's configuration, for display.
@@ -515,7 +525,10 @@ func (s *Session) buildState() *State {
 	for i, m := range gs.MoveHistory {
 		st.Log = append(st.Log, logEntry(gs, i, m, madeBy))
 	}
-	st.CanMove = !gs.Terminated && gs.Pending == nil && st.ActiveAI == "" && !s.thinking
+	st.CanMove = !gs.Terminated && gs.Pending == nil && st.ActiveAI == "" && !s.thinking && s.inspectedWith == ""
+	if s.inspectedWith != "" {
+		st.Inspect = &InspectView{PlayedWith: s.dataHash, ReplayedWith: s.inspectedWith}
+	}
 	st.Thinking = s.thinking
 	st.Notes = append([]Note{}, s.Notes...)
 	if i := gs.ActivePlayerIdx; i >= 0 && i < len(s.Seats) {

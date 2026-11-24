@@ -2,8 +2,10 @@ package server
 
 import (
 	"encoding/json"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -49,7 +51,7 @@ func TestReviewLoadRejectsKnownDataMismatch(t *testing.T) {
 	e := reviewExport(t, s, NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}})
 	e.DataHash = "different-recorded-scheme-data"
 	before := len(s.sessions)
-	_, err := s.load(e)
+	_, err := s.load(e, false)
 	if err == nil || !strings.Contains(err.Error(), "scheme data") {
 		t.Fatalf("known hash mismatch was not refused: %v", err)
 	}
@@ -59,21 +61,47 @@ func TestReviewLoadRejectsKnownDataMismatch(t *testing.T) {
 }
 
 // Data.Hash intentionally covers scheme files, not a mutable context preset.
-// The export already records the effective weights and must check them too.
-func TestReviewLoadRejectsChangedContextWeights(t *testing.T) {
-	s, _ := newTestServerWith(t)
-	e := reviewExport(t, s, NewGameRequest{Mode: "classic", Context: "scientific", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}})
-	s.AddContexts([]game.Context{{ID: "scientific", Weights: map[string]float64{"AS:analogy": 0.8}}})
-	if e.DataHash != s.data.Hash() {
-		t.Fatal("fixture must isolate un-hashed context drift")
-	}
-	before := len(s.sessions)
-	_, err := s.load(e)
-	if err == nil || !strings.Contains(err.Error(), "weights") {
-		t.Fatalf("changed effective context weights were not refused: %v", err)
-	}
-	if len(s.sessions) != before {
-		t.Fatal("failed replay registered a session")
+// The export records the weights in effect, and the game is replayed with
+// them, as it was played, whether the preset lost a weight, changed one or
+// is gone (revised: the review's patch refused the load, which kept the
+// experiment only by asking for the old preset).
+func TestReviewLoadKeepsRecordedContextWeights(t *testing.T) {
+	changed := map[string]map[string]float64{"fewer weights": {"AS:analogy": 0.8}, "one value": nil, "no preset": nil}
+	for name, preset := range changed {
+		t.Run(name, func(t *testing.T) {
+			s, _ := newTestServerWith(t)
+			e := reviewExport(t, s, NewGameRequest{Mode: "classic", Context: "scientific", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}})
+			played := e.Config.Weights
+			if played["AS:analogy"] != 0.45 || len(played) != 10 {
+				t.Fatalf("fixture: the scientific preset is %v", played)
+			}
+			switch name {
+			case "one value":
+				preset = maps.Clone(played)
+				preset["AS:analogy"] = 0.8
+				fallthrough
+			case "fewer weights":
+				s.AddContexts([]game.Context{{ID: "scientific", Weights: preset}})
+			case "no preset":
+				s.contexts = slices.DeleteFunc(slices.Clone(s.contexts), func(c game.Context) bool { return c.ID == "scientific" })
+			}
+			if e.DataHash != s.data.Hash() {
+				t.Fatal("fixture must isolate un-hashed context drift")
+			}
+			ss, err := s.load(e, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if c := ss.GS.Config; c.Context != "scientific" || !maps.Equal(c.Weights, played) {
+				t.Fatalf("replayed with %s %v, not the recorded weights", c.Context, c.Weights)
+			}
+			if w := ss.GS.NASCQ.Schemes["AS:analogy"].BaseWeight; w != 0.45 {
+				t.Fatalf("AS:analogy weighs %v in the loaded game", w)
+			}
+			if ss.Request.Context != "scientific" || ss.inspectedWith != "" {
+				t.Fatalf("request %+v, read-only %q", ss.Request, ss.inspectedWith)
+			}
+		})
 	}
 }
 
@@ -84,7 +112,7 @@ func TestReviewLoadSameContextAndLegacyHashStillWork(t *testing.T) {
 		if legacy {
 			e.DataHash = ""
 		}
-		ss, err := s.load(e)
+		ss, err := s.load(e, false)
 		if err != nil {
 			t.Fatalf("legacy=%v: %v", legacy, err)
 		}
@@ -105,7 +133,7 @@ func TestReviewPlayerNamedModeratorReplaysAsPlayer(t *testing.T) {
 	if e.History[0].PlayerID == game.ModeratorID {
 		t.Error("ordinary player received the reserved moderator identity")
 	}
-	if _, err := s.load(e); err != nil {
+	if _, err := s.load(e, false); err != nil {
 		t.Fatalf("player display name broke round trip: %v", err)
 	}
 }
@@ -139,7 +167,7 @@ func TestReviewKialoSourceSurvivesRepeatedExportLoad(t *testing.T) {
 		if err := json.Unmarshal(b, &e); err != nil {
 			t.Fatal(err)
 		}
-		ss, err = s.load(&e)
+		ss, err = s.load(&e, false)
 		if err != nil {
 			t.Fatalf("generation %d: %v", generation, err)
 		}

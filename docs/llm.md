@@ -92,7 +92,7 @@ If an existing saved annotation, model review or human-verdict file cannot be de
    ./wag-llm report runs/flash-vs-greedy             # wins and rejected moves by seat and side
    ./wag-llm replay runs/flash-self/<file>.trace.jsonl
    ```
-   `replay` uses the recorded answers, so it makes no calls. It checks that the game sent the same requests and made the same decisions.
+   `replay` uses the recorded answers, so it makes no calls. It checks that the game sent the same requests and made the same decisions. It refuses a trace played with other scheme data (give that data with `--data`) and uses the context presets the trace recorded.
 
 ### The free tier: privacy and limits
 

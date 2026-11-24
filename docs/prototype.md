@@ -141,6 +141,9 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
   - the verdicts under each preset.
 - **Traces** downloads the game's trace file (`wag-trace/2`, `docs/protocol.md`): the game's setup, every call a model seat made (the whole conversation, the answer, usage, latency), and every decision. For a language model, a decision has the prompt and its reply, the reasons it gave, its predictions checked, and its alternatives tried.
 - **Load an exported game** (on *New game*) replays an export move by move, so a game can be looked at again, continued, or turned into a test.
+  - The game keeps the scheme weights it recorded, even if its context preset has changed since (exports from 13 October 2026 on record them).
+  - A game played with other scheme data (its `data_sha256` is not this server's) is refused. Start the server with `--data` on that data to replay it exactly, or open it read-only when offered: its moves are replayed with this server's data, it takes notes but no move, and its export keeps the data it was played with (and adds `inspected_with_data_sha256`).
+  - The same data with Windows line endings (CRLF) is the same data: the fingerprint reads them as LF.
 
 ## 3. Known limits of the prototype
 
@@ -171,7 +174,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 | `POST /api/games/{id}/ai` | Let an AI seat move (a rule bot, or Claude) |
 | `GET /api/games/{id}/prompt`, `POST /api/games/{id}/reply` | The text protocol: the seat's prompt, and a reply to play (`docs/protocol.md`) |
 | `POST /api/games/{id}/note` | A tester's note, `{"target": "move:3", "kind": "confusing", "text": "…", "by": "…"}` |
-| `POST /api/load` | Start a game from an export and replay it |
+| `POST /api/load` | Start a game from an export and replay it; `?inspect=1` opens a game played with other scheme data read-only |
 | `POST /api/games/{id}/moderate`, `/decide` | Moderator actions |
 | `GET /api/games/{id}/export` | The game: settings, moves, attempts, notes, LLM replies, Other arguments, build |
 | `GET /api/kialo`, `POST /api/kialo/import` | Kialo discussions |

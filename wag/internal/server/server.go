@@ -10,11 +10,13 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"embed"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/fs"
@@ -49,14 +51,29 @@ type Data struct {
 }
 
 // Hash identifies the scheme data (schemes, questions, edges): a game can be
-// replayed exactly only with the data it was played with.
-func (d Data) Hash() string {
+// replayed exactly only with the data it was played with. It reads CRLF line
+// endings as LF, which the YAML and JSON readers do too, so that a Windows
+// checkout fingerprints the same data as any other; the fingerprint of LF
+// files is unchanged.
+func (d Data) Hash() string { return d.hash(lf) }
+
+func (d Data) hash(norm func([]byte) []byte) string {
 	h := sha256.New()
 	for _, b := range [][]byte{d.YAML, d.Schemes, d.CQs, d.Edges} {
-		h.Write(b)
+		h.Write(norm(b))
 		h.Write([]byte{0})
 	}
 	return hex.EncodeToString(h.Sum(nil))[:16]
+}
+
+func lf(b []byte) []byte   { return bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n")) }
+func crlf(b []byte) []byte { return bytes.ReplaceAll(lf(b), []byte("\n"), []byte("\r\n")) }
+
+// Matches tells whether a recorded fingerprint is this data's: its Hash, or
+// the fingerprint the same data had in a CRLF checkout, which games saved
+// before Hash read line endings as LF (24 November 2026) recorded.
+func (d Data) Matches(recorded string) bool {
+	return recorded != "" && (recorded == d.Hash() || recorded == d.hash(crlf))
 }
 
 // Server holds the games in memory.
@@ -141,6 +158,10 @@ type Session struct {
 	contexts []game.Context
 	// dataHash identifies the scheme data the game is played with.
 	dataHash string
+	// inspectedWith is set when a loaded game was played with other scheme
+	// data (dataHash) and opened read-only on request: it identifies this
+	// server's data, with which its moves were replayed (load).
+	inspectedWith string
 	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
@@ -582,6 +603,10 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		httpError(w, fmt.Errorf("%s (Claude) is thinking: wait for its move", ss.GS.ActivePlayer().ID), http.StatusConflict)
 		return
 	}
+	if ss.inspectedWith != "" && r.Method == http.MethodPost && action != "preview" && action != "note" {
+		httpError(w, fmt.Errorf("the game is open read-only: it was played with other scheme data (%s; this server's is %s)", ss.dataHash, ss.inspectedWith), http.StatusConflict)
+		return
+	}
 	switch action {
 	case "":
 		if v, err := strconv.Atoi(r.URL.Query().Get("since")); err == nil && v == ss.Version {
@@ -925,12 +950,18 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 		r.Seed = ss.Seed
 		req = &r
 	}
-	return map[string]interface{}{
+	out := map[string]interface{}{
 		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
 		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
 		"history": ss.GS.MoveHistory, "state": st, "other_arguments": mined, "import": ss.Import,
 		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM, "traces": ss.tracesWithoutPrompts(), "verdicts": ss.verdicts(contexts),
 	}
+	if ss.inspectedWith != "" {
+		// The history was played with data_sha256; the state and the
+		// verdicts were computed again with this data.
+		out["inspected_with_data_sha256"] = ss.inspectedWith
+	}
+	return out
 }
 
 func keys[V any](m map[string]V) []string {
@@ -1094,20 +1125,34 @@ func short(a nascq.ProposedAction) string {
 	return strings.Join(parts, " ")
 }
 
-// handleLoad starts a game from an export (/export) and replays its moves.
+// handleLoad starts a game from an export (/export) and replays its moves;
+// ?inspect=1 opens a game played with other scheme data read-only.
 func (s *Server) handleLoad(w http.ResponseWriter, r *http.Request) {
 	var e Export
 	if !readJSON(w, r, &e) {
 		return
 	}
+	inspect, _ := strconv.ParseBool(r.URL.Query().Get("inspect"))
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	ss, err := s.load(&e)
+	ss, err := s.load(&e, inspect)
 	if err != nil {
+		var other *OtherDataError
+		if errors.As(err, &other) {
+			// "inspect": the dashboard offers to open it read-only.
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]interface{}{"error": "cannot load the game: " + err.Error(), "inspect": true})
+			return
+		}
 		httpError(w, fmt.Errorf("cannot load the game: %v", err), http.StatusBadRequest)
 		return
 	}
-	ss.event("load", "", fmt.Sprintf("%d moves", len(e.History)), nil, nil)
+	detail := fmt.Sprintf("%d moves", len(e.History))
+	if ss.inspectedWith != "" {
+		detail += fmt.Sprintf("; read-only: played with scheme data %s, replayed with %s", ss.dataHash, ss.inspectedWith)
+	}
+	ss.event("load", "", detail, nil, nil)
 	writeJSON(w, ss.buildState())
 }
 

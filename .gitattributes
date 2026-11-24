@@ -1,0 +1,7 @@
+# The game data and the annotation datasets are built into the binaries,
+# fingerprinted (server.Data.Hash) and sent to models as they are: keep them
+# LF in every checkout, Windows included, so that a game, a prompt and an
+# annotation run are the same on every machine. The fingerprint reads CRLF
+# as LF anyway; a checkout made before this file keeps its line endings
+# until its files are written again.
+wag/data/** text=auto eol=lf

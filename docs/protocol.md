@@ -166,7 +166,7 @@ A game's **trace file** (`wag-trace/2`) is a stream of events, one JSON object a
    - **What it did.** The claim's label before and after; the effects ("a1 (Alice's) no longer holds"); each prediction against the actual label; what each named alternative would have done (legal or not, the claim's label after, the score change), from trying it on the game and undoing it.
 4. **`game_end`** (`e`), once the game is over: the outcome (winner, verdict, reason, scores), every statement's final label, and the verdict under each context preset's weights.
 
-The export keeps the decisions without their prompts, the testers' notes, every request that tried to change the game, and the verdicts. `wag-llm replay` plays a trace file again with the recorded answers and checks that the game sends the same requests and makes the same decisions.
+The export keeps the decisions without their prompts, the testers' notes, every request that tried to change the game, and the verdicts. `wag-llm replay` plays a trace file again with the recorded answers and checks that the game sends the same requests and makes the same decisions. It refuses a trace played with other scheme data (`data_sha256`; give that data with `--data`), and sets the game up with the context presets the trace recorded, since a preset can change without changing the data.
 
 ## Debugging and training: what to record, and what not to trust
 
