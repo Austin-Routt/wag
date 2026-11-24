@@ -529,13 +529,15 @@ func TestProposalFindsFaults(t *testing.T) {
 	s := sources(t)
 	base := func() *Proposal {
 		return &Proposal{Decisions: []string{"D999"}, Title: "t",
-			Schemes:   []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)", "similar_case(C)"}, Conclusions: []string{"P"}}},
-			Questions: map[string][]PQuery{"x_new": {{ID: "7/CQ2", Asks: "q", Target: "in_case(P,C)"}}},
+			Schemes: []Scheme{{ID: "x_new", Variables: []string{"P", "C"}, Premises: []string{"in_case(P,C)", "similar_case(C)"},
+				Assumptions: []string{"in_case(C,P)"}, Conclusions: []string{"P"}}},
+			Questions: map[string][]PQuery{"x_new": {{ID: "walton/in_case", Asks: "q", Target: "in_case(C,P)"}}},
 			Examples: []ProposalExample{
 				{Scheme: "x_new", Title: "a", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"},
-					Attacks: []Attack{{Question: "7/CQ2", Text: "x"}, {Question: Challenge, Target: "similar_case(C)", Text: "y"}}},
+					Attacks: []Attack{{Question: "walton/in_case", Text: "x"}, {Question: Challenge, Target: "similar_case(C)", Text: "y"}}},
 				{Scheme: "x_new", Title: "b", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p", "C": "c"}},
-				{Scheme: "x_new", Title: "c", Text: "t", Use: "answer", Answers: "CQ:x", Bindings: map[string]string{"P": "p", "C": "c"}},
+				{Scheme: "x_new", Title: "c", Text: "t", Use: "answer", Answers: "CQ:x", Bindings: map[string]string{"P": "p", "C": "c"},
+					AnswerTo: &AnswerTo{Scheme: "x_new", Question: "walton/in_case", Polarity: "attack", Bindings: map[string]string{"C": "c", "P": "p"}}},
 				{Scheme: "analogy", Title: "d", Text: "t", Use: "near-miss", Of: "x_new", Bindings: bindAll(s, "analogy")},
 				{Scheme: "x_cand", Title: "e", Text: "t", Use: "argument", Bindings: map[string]string{"P": "p"}},
 			},
@@ -560,17 +562,15 @@ func TestProposalFindsFaults(t *testing.T) {
 			p.Schemes[0].Variables = append(p.Schemes[0].Variables, "D")
 			p.Schemes[0].Conclusions = []string{"in_case(P,D)"}
 		}, "variable D occurs in no premise", true},
-		{"a question off the scheme", func(p *Proposal) { p.Questions["x_new"][0].Target = "in_case(C,P)" }, "not a formula of the scheme", true},
+		{"a question off the scheme", func(p *Proposal) { p.Questions["x_new"][0].Target = "in_case(P,P)" }, "not a formula of the scheme", true},
 		{"an unknown question", func(p *Proposal) { p.Examples[0].Attacks[0].Question = "7/CQ9" }, "7/CQ9 is not a question", true},
 		{"an answer without its question", func(p *Proposal) { p.Examples[2].Answers = "" }, "says which question", true},
 		{"one argument only", func(p *Proposal) { p.Examples = append(p.Examples[:1], p.Examples[2:]...) }, "the minimum is two", false},
 		{"no answer", func(p *Proposal) { p.Examples = append(p.Examples[:2], p.Examples[3]) }, "no example shows it", false},
 		{"no near miss", func(p *Proposal) { p.Examples = p.Examples[:3] }, "no near miss", false},
 		{"a question never pressed", func(p *Proposal) { p.Examples[0].Attacks = nil }, "pressed in no example", false},
-		{"a walton/ question on a premise", func(p *Proposal) {
-			p.Questions["x_new"][0].ID = "walton/in_case"
-			p.Examples[0].Attacks[0].Question = "walton/in_case"
-		}, "a walton/ question targets an assumption or exception", true},
+		{"a walton/ question on a premise", func(p *Proposal) { p.Questions["x_new"][0].Target = "in_case(P,C)" },
+			"a walton/ question targets an assumption or exception", true},
 		{"a challenge of a conclusion", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "P" }, "a challenge targets a premise", true},
 		{"a question with a target", func(p *Proposal) { p.Examples[0].Attacks[0].Target = "in_case(P,C)" }, "only a challenge", true},
 		{"a candidate that is in walton.yml", func(p *Proposal) {
@@ -589,7 +589,26 @@ func TestProposalFindsFaults(t *testing.T) {
 			p.Questions["x_new"][0].ID = "7/CQ9"
 			p.Examples[0].Attacks[0].Question = "7/CQ9"
 		}, "prints no CQ9 under 7", true},
-		{"a challenge of a premise a question targets", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "in_case(P,C)" }, "targeted by question 7/CQ2", true},
+		{"a challenge of a formula a question targets", func(p *Proposal) { p.Examples[0].Attacks[1].Target = "in_case(C,P)" }, "targeted by question walton/in_case", true},
+		// The catalogue must be able to carry a proposed scheme's questions.
+		{"a book label on a scheme no entry links", func(p *Proposal) {
+			p.Questions["x_new"][0].ID = "7/CQ2"
+			p.Examples[0].Attacks[0].Question = "7/CQ2"
+		}, "no compendium entry is linked to x_new", true},
+		{"an id the catalogue cannot carry", func(p *Proposal) {
+			p.Questions["x_new"][0].ID = "C999/Q1"
+			p.Examples[0].Attacks[0].Question = "C999/Q1"
+		}, "neither a book question", true},
+		// Ids, and the schemes examples name, are unique and resolve (the
+		// review of 24 November 2026).
+		{"a scheme proposed twice", func(p *Proposal) { p.Schemes = append(p.Schemes, p.Schemes[0]) }, "x_new is proposed twice", true},
+		{"a candidate sketched twice", func(p *Proposal) { p.Candidates.Schemes = append(p.Candidates.Schemes, p.Candidates.Schemes[0]) },
+			"candidate x_cand is sketched twice", true},
+		{"a near miss of nothing", func(p *Proposal) { p.Examples[3].Of = "x_typo" }, "near_miss_of names no scheme \"x_typo\"", true},
+		{"a near miss of itself", func(p *Proposal) { p.Examples[3].Of = "analogy" }, "a near miss of analogy is coded with analogy itself", true},
+		{"a near_miss_of on an argument", func(p *Proposal) { p.Examples[1].Of = "analogy" }, "only a near miss names near_miss_of", true},
+		{"an answer that names nothing it answers", func(p *Proposal) { p.Examples[2].AnswerTo = nil }, "an answer names what it answers (answer_to", true},
+		{"answer_to on an argument", func(p *Proposal) { p.Examples[1].AnswerTo = p.Examples[2].AnswerTo }, "only an answer names answer_to", true},
 	}
 	// A book label must belong to an entry linked to the scheme.
 	if w, ok := findWalton(s, "analogy"); ok {
@@ -606,12 +625,35 @@ func TestProposalFindsFaults(t *testing.T) {
 	// A challenge of an assumption is allowed: the game presumes it as a
 	// premise.
 	p := base()
-	p.Schemes[0].Assumptions = []string{"in_case(C,P)"}
-	p.Examples[0].Attacks[1].Target = "in_case(C,P)"
+	p.Schemes[0].Assumptions = append(p.Schemes[0].Assumptions, "similar_case(P)")
+	p.Examples[0].Attacks[1].Target = "similar_case(P)"
 	for _, f := range CheckProposal(p, s) {
 		if f.Error {
 			t.Errorf("a challenge of an assumption: %s", f)
 		}
+	}
+	// A candidate's sketch, which is never applied, may borrow another
+	// entry's question; a proposed scheme may not (the cases above).
+	p = base()
+	p.Candidates.Questions = map[string][]PQuery{"x_cand": {{ID: "33/CQ1", Asks: "q", Target: "x_odd(P)"}}}
+	p.Examples[4].Attacks = []Attack{{Question: "33/CQ1", Text: "z"}}
+	for _, f := range CheckProposal(p, s) {
+		if f.Error {
+			t.Errorf("a sketch's borrowed question: %s", f)
+		}
+	}
+	// A book label is any label the compendium prints for the scheme's own
+	// entry, not only CQn: 54.1 prints a rebuttal factor.
+	if w, ok := findWalton(s, "rule_physical_world_1"); ok {
+		p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
+			Questions: map[string][]PQuery{w.ID: {{ID: "54.1/Rebuttal Factor 1", Asks: "q", Target: w.Premises[0]}}}}
+		for _, f := range CheckProposal(p, s) {
+			if f.Error {
+				t.Errorf("a printed rebuttal factor of the scheme's own entry: %s", f)
+			}
+		}
+	} else {
+		t.Error("walton.yml has no rule_physical_world_1")
 	}
 	for _, c := range cases {
 		p := base()
@@ -627,6 +669,192 @@ func TestProposalFindsFaults(t *testing.T) {
 		if !found {
 			t.Errorf("%s: want a finding with %q (error %v), got %v", c.name, c.want, c.error, got)
 		}
+	}
+}
+
+// An answer example names what it answers (answer_to): the check finds the
+// formula the question targets, where it is in the argument answered, and
+// so what the answer must conclude, and compares it with the example's
+// conclusion, both instantiated (the review of 24 November 2026: a free-text
+// answers field let an unrelated answer pass).
+func TestProposalAnswerReferences(t *testing.T) {
+	s := sources(t)
+	base := func() *Proposal {
+		goal := Scheme{ID: "xg_goal", Variables: []string{"A", "G"}, Premises: []string{"xg_aim(G)", "xg_means(A,G)"},
+			Exceptions: []string{"xg_costly(A,G)"}, Conclusions: []string{"xg_do(A)"}}
+		costly := Scheme{ID: "xg_costly_answer", Variables: []string{"A", "G", "H"}, Premises: []string{"xg_harm(A,H)", "xg_worse(H,G)"},
+			Conclusions: []string{"xg_costly(A,G)"}}
+		answer := func(x ProposalExample) ProposalExample {
+			x.Scheme, x.Text, x.Use, x.Answers = "xg_costly_answer", "t", "answer", "walton/xg_costly of the goal argument"
+			if x.Bindings == nil {
+				x.Bindings = map[string]string{"A": "the plan", "G": "the aim", "H": "the harm"}
+			}
+			x.AnswerTo = &AnswerTo{Scheme: "xg_goal", Question: "walton/xg_costly", Polarity: "attack",
+				Bindings: map[string]string{"A": "the plan", "G": "the aim"}}
+			return x
+		}
+		bind := map[string]string{"A": "a", "G": "g"}
+		bind3 := map[string]string{"A": "a", "G": "g", "H": "h"}
+		return &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{goal, costly},
+			Language: map[string]string{"xg_aim/1": "%s is an aim.", "xg_means/2": "%s serves %s.", "xg_costly/2": "%s costs more than %s is worth.",
+				"xg_do/1": "%s should be done.", "xg_harm/2": "%s does the harm %s.", "xg_worse/2": "%s matters more than %s."},
+			Questions: map[string][]PQuery{"xg_goal": {{ID: "walton/xg_costly", Asks: "q", Target: "xg_costly(A,G)"}}},
+			Examples: []ProposalExample{
+				{Scheme: "xg_goal", Title: "a1", Text: "t", Use: "argument", Bindings: bind, Attacks: []Attack{{Question: "walton/xg_costly", Text: "x"}}},
+				{Scheme: "xg_goal", Title: "a2", Text: "t", Use: "argument", Bindings: bind},
+				{Scheme: "analogy", Title: "n1", Text: "t", Use: "near-miss", Of: "xg_goal", Bindings: bindAll(s, "analogy")},
+				{Scheme: "xg_costly_answer", Title: "b1", Text: "t", Use: "argument", Bindings: bind3},
+				{Scheme: "xg_costly_answer", Title: "b2", Text: "t", Use: "argument", Bindings: bind3},
+				{Scheme: "analogy", Title: "n2", Text: "t", Use: "near-miss", Of: "xg_costly_answer", Bindings: bindAll(s, "analogy")},
+				answer(ProposalExample{Title: "the answer"}),
+			},
+		}
+	}
+	errs := func(p *Proposal) []string {
+		var out []string
+		for _, f := range CheckProposal(p, s) {
+			if f.Error {
+				out = append(out, f.Msg)
+			}
+		}
+		return out
+	}
+	if e := errs(base()); len(e) != 0 {
+		t.Fatalf("a sound proposal has errors: %v", e)
+	}
+	last := func(p *Proposal) *ProposalExample { return &p.Examples[len(p.Examples)-1] }
+	cases := []struct {
+		name string
+		edit func(p *Proposal)
+		want string
+	}{
+		{"another argument's binding", func(p *Proposal) { last(p).AnswerTo.Bindings["G"] = "another aim" }, `it concludes xg_costly("the plan","the aim")`},
+		{"a defence that concludes the exception", func(p *Proposal) { last(p).AnswerTo.Polarity = "defence" }, `must conclude ¬xg_costly("the plan","the aim")`},
+		{"a polarity that is neither", func(p *Proposal) { last(p).AnswerTo.Polarity = "for" }, "polarity is attack or defence"},
+		{"an unknown scheme", func(p *Proposal) { last(p).AnswerTo.Scheme = "xg_typo" }, `answer_to: no scheme "xg_typo"`},
+		{"a question the scheme does not have", func(p *Proposal) { last(p).AnswerTo.Question = "walton/xg_other" }, "walton/xg_other is not a question of xg_goal"},
+		{"a target the question does not have", func(p *Proposal) { last(p).AnswerTo.Target = "xg_means(A,G)" }, "xg_means(A,G) is not what walton/xg_costly targets"},
+		{"a variable of the target left unbound", func(p *Proposal) { delete(last(p).AnswerTo.Bindings, "G") }, "answer_to binds no G"},
+		{"a binding of no variable of the scheme", func(p *Proposal) { last(p).AnswerTo.Bindings["H"] = "h" }, "H is not a variable of xg_goal"},
+	}
+	for _, c := range cases {
+		p := base()
+		c.edit(p)
+		e := errs(p)
+		found := false
+		for _, m := range e {
+			found = found || strings.Contains(m, c.want)
+		}
+		if !found {
+			t.Errorf("%s: want an error with %q, got %v", c.name, c.want, e)
+		}
+	}
+	// A challenge names its target, a premise of the argument; an attack on
+	// it concludes its negation.
+	p := base()
+	x := last(p)
+	x.Scheme, x.Form = "xg_goal", "negated"
+	x.Bindings = map[string]string{"A": "the plan", "G": "the aim"}
+	x.AnswerTo = &AnswerTo{Scheme: "xg_goal", Question: Challenge, Target: "xg_do(A)", Polarity: "attack", Bindings: map[string]string{"A": "the plan"}}
+	if e := errs(p); !strings.Contains(strings.Join(e, "\n"), "a challenge targets a premise or assumption") {
+		t.Errorf("a challenge of a conclusion: %v", e)
+	}
+	// A book label of a walton.yml scheme resolves through links.json: 33's
+	// CQ3, printed for positive consequences (33.1), targets its exception
+	// bad_outweighs(A,G); an answer that attacks there concludes it.
+	if w, ok := findWalton(s, "positive_consequences"); ok {
+		p := base()
+		x := last(p)
+		x.AnswerTo = &AnswerTo{Scheme: w.ID, Question: "33/CQ3", Polarity: "attack", Bindings: map[string]string{"A": "the plan", "G": "the aim"}}
+		e := errs(p)
+		want := `it concludes xg_costly("the plan","the aim")`
+		if !strings.Contains(strings.Join(e, "\n"), `must conclude bad_outweighs("the plan","the aim")`) || !strings.Contains(strings.Join(e, "\n"), want) {
+			t.Errorf("an answer to 33/CQ3 that concludes another formula: %v", e)
+		}
+		x.AnswerTo.Question = "33/CQ9"
+		if e := errs(p); !strings.Contains(strings.Join(e, "\n"), "33/CQ9 is not a question of positive_consequences") {
+			t.Errorf("an unprinted label: %v", e)
+		}
+	} else {
+		t.Error("walton.yml has no positive_consequences")
+	}
+	// A proposed scheme's book question targets what links.json maps the
+	// label to, or the proposal is warned that links.json must follow.
+	if w, ok := findWalton(s, "positive_consequences"); ok {
+		p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
+			Questions: map[string][]PQuery{w.ID: {{ID: "33/CQ3", Asks: "q", Target: w.Premises[0]}}}}
+		warned := false
+		for _, f := range CheckProposal(p, s) {
+			warned = warned || !f.Error && strings.Contains(f.Msg, "links.json maps 33/CQ3 of positive_consequences to bad_outweighs(A,G)")
+		}
+		if !warned {
+			t.Errorf("a book question retargeted without a warning: %v", CheckProposal(p, s))
+		}
+		p.Questions[w.ID][0].Target = "bad_outweighs(A,G)"
+		for _, f := range CheckProposal(p, s) {
+			if strings.Contains(f.Msg, "links.json maps") {
+				t.Errorf("a book question on its mapped target: %s", f)
+			}
+		}
+	}
+	// Phrases are compared without regard to case or spacing.
+	p = base()
+	last(p).AnswerTo.Bindings["A"] = "The  Plan"
+	if e := errs(p); len(e) != 0 {
+		t.Errorf("a binding that differs only in case and spaces: %v", e)
+	}
+	// A game question of a walton.yml scheme resolves through its ask edge:
+	// CQ:other_means targets practical_reasoning1's realize_more_effectively.
+	p = base()
+	p.Schemes = append(p.Schemes, Scheme{ID: "xg_better", Variables: []string{"A", "G"}, Premises: []string{"xg_means(A,G)"},
+		Conclusions: []string{"realize_more_effectively(G,A)"}})
+	p.Examples = append(p.Examples, ProposalExample{Scheme: "xg_better", Title: "g1", Text: "t", Use: "answer", Answers: "CQ:other_means",
+		Bindings: map[string]string{"A": "the plan", "G": "the aim"},
+		AnswerTo: &AnswerTo{Scheme: "practical_reasoning1", Question: "CQ:other_means", Polarity: "attack", Bindings: map[string]string{"G": "the aim", "A": "the plan"}}})
+	if e := errs(p); len(e) != 0 {
+		t.Errorf("an answer to a game question: %v", e)
+	}
+	last(p).AnswerTo.Question = "CQ:no_such_question"
+	if e := errs(p); !strings.Contains(strings.Join(e, "\n"), "CQ:no_such_question is not a question of practical_reasoning1") {
+		t.Errorf("an unknown game question: %v", e)
+	}
+	// A walton/ question of a walton.yml scheme outside the proposal names
+	// its exception: positive_consequences' walton/bad_outweighs.
+	p = base()
+	last(p).AnswerTo = &AnswerTo{Scheme: "positive_consequences", Question: "walton/bad_outweighs", Polarity: "attack",
+		Bindings: map[string]string{"A": "the plan", "G": "the aim"}}
+	if e := errs(p); !strings.Contains(strings.Join(e, "\n"), `must conclude bad_outweighs("the plan","the aim")`) {
+		t.Errorf("a walton/ question of a walton.yml scheme: %v", e)
+	}
+	// A question about the argument itself (evidence) has no formula to
+	// compare.
+	p = base()
+	x = last(p)
+	x.AnswerTo = &AnswerTo{Scheme: "positive_consequences", Question: "CQ:evidence", Polarity: "attack"}
+	if e := errs(p); len(e) != 0 {
+		t.Errorf("an answer to a question about the argument: %v", e)
+	}
+	// A challenge of a premise, answered by an attack, concludes the
+	// premise's negation.
+	p = base()
+	p.Schemes = append(p.Schemes, Scheme{ID: "xg_aimless", Variables: []string{"G", "H"}, Premises: []string{"xg_worse(H,G)"},
+		Conclusions: []string{"xg_aim(G)"}})
+	p.Examples = append(p.Examples, ProposalExample{Scheme: "xg_aimless", Title: "c1", Text: "t", Use: "answer", Answers: "a challenge",
+		Form: "negated", Bindings: map[string]string{"G": "the aim", "H": "h"},
+		AnswerTo: &AnswerTo{Scheme: "xg_goal", Question: Challenge, Target: "xg_aim(G)", Polarity: "attack", Bindings: map[string]string{"G": "the aim"}}})
+	if e := errs(p); len(e) != 0 {
+		t.Errorf("an attack on a challenged premise: %v", e)
+	}
+	last(p).Form = ""
+	if e := errs(p); !strings.Contains(strings.Join(e, "\n"), `must conclude ¬xg_aim("the aim")`) {
+		t.Errorf("an attack on a premise that concludes the premise: %v", e)
+	}
+	// An applied proposal, written before answer_to, is warned, not refused.
+	p = base()
+	last(p).AnswerTo = nil
+	p.Applied = "2026-10-22"
+	if e := errs(p); len(e) != 0 {
+		t.Errorf("an applied proposal's answer without answer_to: %v", e)
 	}
 }
 

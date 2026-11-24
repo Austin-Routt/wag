@@ -73,9 +73,29 @@ type ProposalExample struct {
 	Answers  string            `yaml:"answers,omitempty"`  // for an answer: the question and the statement
 	Form     string            `yaml:"form,omitempty"`     // negated, when the scheme's "(false)" form
 	Of       string            `yaml:"near_miss_of,omitempty"`
+	AnswerTo *AnswerTo         `yaml:"answer_to,omitempty"` // for an answer: what it answers, checked
 	Bindings map[string]string `yaml:"bindings"`
 	Attacks  []Attack          `yaml:"attacks,omitempty"`
 	Note     string            `yaml:"note,omitempty"`
+}
+
+// AnswerTo is what an answer example answers: the argument answered (its
+// scheme, and the bindings of the formula the question targets), the
+// question, the formula when the question does not name exactly one, and
+// whether the answer attacks the argument or defends it. CheckProposal finds
+// the formula the question targets, where it is in the argument (its locus),
+// and so what the answer must conclude (game-rules.md: an attack argues
+// against a premise, an assumption or the conclusion, and for an exception;
+// a defence the reverse), and compares it with the example's conclusion,
+// both instantiated. The answers field stays the reader's description. The
+// case an argument is about (its context) is not compared here: it is the
+// records' (the stage 2 identity contract), not the schemes'.
+type AnswerTo struct {
+	Scheme   string            `yaml:"scheme"`
+	Question string            `yaml:"question"`
+	Target   string            `yaml:"target,omitempty"`
+	Polarity string            `yaml:"polarity"` // attack or defence
+	Bindings map[string]string `yaml:"bindings"`
 }
 
 // Attack is a critical question pressed against an example, or a challenge
@@ -193,6 +213,24 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 	if len(p.Decisions) == 0 || p.Title == "" {
 		bad("a proposal names its decisions and has a title")
 	}
+	// An id given twice would hide one of its schemes (proposalSchemes keeps
+	// the last).
+	proposed := map[string]bool{}
+	for _, s := range p.Schemes {
+		if proposed[s.ID] {
+			bad("%s is proposed twice", s.ID)
+		}
+		proposed[s.ID] = true
+	}
+	if c := p.Candidates; c != nil {
+		sketched := map[string]bool{}
+		for _, s := range c.Schemes {
+			if sketched[s.ID] {
+				bad("candidate %s is sketched twice", s.ID)
+			}
+			sketched[s.ID] = true
+		}
+	}
 	all := append([]Scheme{}, p.Schemes...)
 	if c := p.Candidates; c != nil {
 		for _, s := range c.Schemes {
@@ -276,6 +314,25 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 				(!in(s.Assumptions, q.Target) && !in(s.Exceptions, q.Target) || "walton/"+predicate(q.Target) != q.ID) {
 				bad("%s: question %s: a walton/ question targets an assumption or exception whose predicate its id names (a premise is challenged, %s)", s.ID, q.ID, Challenge)
 			}
+			if in(schemeIDs(p.Schemes), s.ID) {
+				if msg := carriedQuestion(src, s.ID, q.ID); msg != "" {
+					bad("%s: question %s: %s", s.ID, q.ID, msg)
+				} else if bookLabelRE.MatchString(q.ID) {
+					// The target contract: links.json maps the book's question
+					// to formulas of walton.yml as it is; a proposal that
+					// retargets it must bring links.json along.
+					if mapped, why := questionTargets(&Proposal{}, src, s, q.ID, ""); why == "" {
+						hit := false
+						for _, m := range mapped {
+							hit = hit || compact(m.Formula) == compact(q.Target)
+						}
+						if !hit {
+							warn("%s: question %s targets %s, and links.json maps %s of %s to %s: update links.json when the proposal is applied, or target what it maps",
+								s.ID, q.ID, q.Target, q.ID, s.ID, lociFormulas(mapped))
+						}
+					}
+				}
+			}
 		}
 	}
 	type tally struct{ arguments, answers, nearMisses int }
@@ -302,8 +359,29 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		if x.Use == "answer" && x.Answers == "" {
 			bad("%s: an answer says which question and statement it answers", where)
 		}
-		if x.Use == "near-miss" && x.Of == "" {
+		switch {
+		case x.Use == "near-miss" && x.Of == "":
 			bad("%s: a near miss names the scheme it resembles (near_miss_of)", where)
+		case x.Use != "near-miss" && x.Of != "":
+			bad("%s: only a near miss names near_miss_of", where)
+		case x.Use == "near-miss":
+			if _, ok := schemes[x.Of]; !ok {
+				bad("%s: near_miss_of names no scheme %q", where, x.Of)
+			} else if x.Of == x.Scheme {
+				bad("%s: a near miss of %s is coded with %s itself", where, x.Of, x.Scheme)
+			}
+		}
+		switch {
+		case x.Use != "answer" && x.AnswerTo != nil:
+			bad("%s: only an answer names answer_to", where)
+		case x.Use == "answer" && x.AnswerTo == nil && p.Applied == "":
+			bad("%s: an answer names what it answers (answer_to: its scheme, question, polarity and bindings)", where)
+		case x.Use == "answer" && x.AnswerTo == nil:
+			warn("%s: an answer without answer_to (the proposal was applied before answer_to existed)", where)
+		case x.Use == "answer":
+			for _, m := range checkAnswer(p, src, schemes, x) {
+				bad("%s: %s", where, m)
+			}
 		}
 		for _, v := range s.Variables {
 			if strings.TrimSpace(x.Bindings[v]) == "" {
@@ -379,9 +457,232 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 	return out
 }
 
+// carriedQuestion says why a proposed scheme's question could not be carried
+// into the catalogue once the proposal is applied, or "" if it can: the
+// catalogue takes a question the book prints for the scheme's own entry (an
+// entry links.json links to the scheme, or the one its questions are
+// printed under), one the game asks (game/...), or a walton/ question of an
+// assumption or exception (checked above). A question borrowed from another
+// entry is a derived question (D023), which the catalogue cannot hold yet;
+// candidates' sketches, which are never applied, may still borrow.
+func carriedQuestion(src *Sources, scheme, id string) string {
+	if strings.HasPrefix(id, "walton/") || strings.HasPrefix(id, "game/") {
+		return ""
+	}
+	entry, label, ok := strings.Cut(id, "/")
+	l, found := src.link(entry)
+	if !ok || !found || !in(l.CQLabels, label) {
+		return "neither a book question, a game question (game/…) nor a walton/ question; the catalogue could not carry it (a question derived from another, D023, is not supported yet)"
+	}
+	es := linkedEntries(src, scheme)
+	if len(es) == 0 {
+		return fmt.Sprintf("no compendium entry is linked to %s, so %s's question is borrowed: a derived question (D023), which the catalogue cannot carry yet", scheme, entry)
+	}
+	if !in(es, entry) {
+		return fmt.Sprintf("%s is not a compendium entry of %s (%s)", entry, scheme, strings.Join(es, ", "))
+	}
+	return ""
+}
+
 // bookLabelRE matches a question labelled as the book prints it: the
 // compendium entry and the question's label.
 var bookLabelRE = regexp.MustCompile(`^([0-9]+(?:\.[0-9]+)*[a-z]?)/(CQ[0-9]+)$`)
+
+// checkAnswer checks what an answer example says it answers (AnswerTo):
+// that the scheme, the question and the formula it targets exist, that the
+// bindings bind the formula's variables and only the scheme's, and that the
+// example concludes what an answer there must conclude. A scheme whose
+// conclusion is a bare proposition is not compared: the game binds it to
+// the answer.
+func checkAnswer(p *Proposal, src *Sources, schemes map[string]Scheme, x ProposalExample) []string {
+	a := x.AnswerTo
+	var out []string
+	bad := func(f string, args ...any) { out = append(out, fmt.Sprintf(f, args...)) }
+	answered, ok := schemes[a.Scheme]
+	if !ok {
+		return []string{fmt.Sprintf("answer_to: no scheme %q", a.Scheme)}
+	}
+	if a.Polarity != "attack" && a.Polarity != "defence" {
+		bad("answer_to: polarity is attack or defence, not %q", a.Polarity)
+	}
+	targets, why := questionTargets(p, src, answered, a.Question, a.Target)
+	if why != "" {
+		return append(out, "answer_to: "+why)
+	}
+	var at FormulaLocus
+	switch {
+	case a.Target != "":
+		found := false
+		for _, t := range targets {
+			if compact(t.Formula) == compact(a.Target) {
+				at, found = t, true
+			}
+		}
+		if !found {
+			return append(out, fmt.Sprintf("answer_to: %s is not what %s targets in %s (%s)", a.Target, a.Question, a.Scheme, lociFormulas(targets)))
+		}
+	case len(targets) == 1:
+		at = targets[0]
+	default:
+		return append(out, fmt.Sprintf("answer_to: %s targets %d formulas of %s (%s): name one as its target", a.Question, len(targets), a.Scheme, lociFormulas(targets)))
+	}
+	for _, v := range sortedKeys(a.Bindings) {
+		if !in(answered.Variables, v) {
+			bad("answer_to: %s is not a variable of %s", v, a.Scheme)
+		}
+	}
+	if at.Formula == "" {
+		return out // the argument itself (an undercut): no formula to compare
+	}
+	tt, err := parseFormula(at.Formula)
+	if err != nil {
+		return append(out, "answer_to: "+err.Error())
+	}
+	unbound := map[string]bool{}
+	tt.walk(func(t *term) {
+		if t.variable() && strings.TrimSpace(a.Bindings[t.name]) == "" && !unbound[t.name] {
+			unbound[t.name] = true
+			bad("answer_to binds no %s, a variable of %s", t.name, at.Formula)
+		}
+	})
+	own := schemes[x.Scheme]
+	if len(out) > 0 || len(own.Conclusions) == 0 {
+		return out
+	}
+	ct, err := parseFormula(own.Conclusions[0])
+	if err != nil || ct.variable() {
+		return out // reported with the scheme, or a bare proposition the game binds
+	}
+	// What an answer must conclude: an attack argues against a premise, an
+	// assumption or the conclusion, and for an exception; a defence the
+	// reverse (game-rules.md, the table of loci).
+	want := tt.bound(a.Bindings)
+	if (a.Polarity == "attack") != (at.Locus == "exception") {
+		want.neg = !want.neg
+	}
+	got := ct.bound(x.Bindings)
+	if x.Form == "negated" {
+		got.neg = !got.neg
+	}
+	if got.canon() != want.canon() {
+		bad("it answers %s's %s at its %s (%s), so it must conclude %s; it concludes %s", a.Scheme, a.Question, at.Locus, a.Polarity, want.canon(), got.canon())
+	}
+	return out
+}
+
+// placeholderRE is a variable in an ask edge's pattern: {A}.
+var placeholderRE = regexp.MustCompile(`\{([A-Za-z0-9_]+)\}`)
+
+// questionTargets are the formulas a question of a scheme targets, with
+// their loci, or why there are none: a proposed or candidate scheme's
+// questions are this proposal's; a walton.yml scheme's are its walton/
+// questions, the book's (links.json's question maps, under the entry they
+// are printed under) and the game's (its ask edges); a challenge targets the
+// premise or assumption it names.
+func questionTargets(p *Proposal, src *Sources, s Scheme, q, named string) ([]FormulaLocus, string) {
+	var out []FormulaLocus
+	add := func(f string) { out = append(out, FormulaLocus{Formula: f, Locus: roleOf(s, f)}) }
+	switch {
+	case q == Challenge:
+		for _, f := range append(append([]string{}, s.Premises...), s.Assumptions...) {
+			if named != "" && compact(f) == compact(named) {
+				add(f)
+			}
+		}
+		if len(out) == 0 {
+			return nil, fmt.Sprintf("a challenge targets a premise or assumption of %s, which it names as its target", s.ID)
+		}
+		return out, ""
+	case in(schemeIDs(p.Schemes), s.ID) || p.candidate(s.ID):
+		if pq := questionByID(p.questions(s.ID), q); pq != nil {
+			add(pq.Target)
+		}
+	case strings.HasPrefix(q, "walton/"):
+		for _, f := range append(append([]string{}, s.Assumptions...), s.Exceptions...) {
+			if "walton/"+predicate(f) == q {
+				add(f)
+			}
+		}
+	case strings.HasPrefix(q, "CQ:"):
+		for as, g := range src.Game {
+			if g.CarneadesID != s.ID {
+				continue
+			}
+			for _, e := range src.AskEdges {
+				switch {
+				case e.CQ != q || e.Scheme != as:
+				case e.Pattern != "":
+					out = append(out, FormulaLocus{Formula: placeholderRE.ReplaceAllString(e.Pattern, "$1"), Locus: e.Locus})
+				case e.Locus == "conclusion":
+					for _, c := range s.Conclusions {
+						out = append(out, FormulaLocus{Formula: c, Locus: "conclusion"})
+					}
+				default:
+					out = append(out, FormulaLocus{Locus: e.Locus}) // the argument itself
+				}
+			}
+		}
+	default:
+		if entry, label, ok := strings.Cut(q, "/"); ok {
+			for _, e := range src.Links {
+				if e.Number != entry && (e.SharesCQs == nil || *e.SharesCQs != entry) {
+					continue
+				}
+				for _, l := range e.Links {
+					for _, r := range l.CQMap {
+						if l.ID == s.ID && r.CQ == label {
+							out = append(out, r.Walton...)
+						}
+					}
+				}
+			}
+		}
+	}
+	if len(out) == 0 {
+		return nil, fmt.Sprintf("%s is not a question of %s", q, s.ID)
+	}
+	sort.SliceStable(out, func(i, j int) bool { return out[i].Formula < out[j].Formula })
+	return out, ""
+}
+
+func lociFormulas(ls []FormulaLocus) string {
+	var out []string
+	for _, l := range ls {
+		out = append(out, l.Formula)
+	}
+	return strings.Join(out, ", ")
+}
+
+func sortedKeys(m map[string]string) []string {
+	var out []string
+	for k := range m {
+		out = append(out, k)
+	}
+	sort.Strings(out)
+	return out
+}
+
+// canon writes a term, its bound variables as their phrases in quotes
+// (spaces collapsed, lower case), so that two instances can be compared.
+func (t *term) canon() string {
+	var b strings.Builder
+	if t.neg {
+		b.WriteString("¬")
+	}
+	if t.phrase {
+		b.WriteString(strconv.Quote(strings.ToLower(strings.Join(strings.Fields(t.name), " "))))
+	} else {
+		b.WriteString(t.name)
+	}
+	if len(t.args) > 0 {
+		var args []string
+		for _, a := range t.args {
+			args = append(args, a.canon())
+		}
+		b.WriteString("(" + strings.Join(args, ",") + ")")
+	}
+	return b.String()
+}
 
 // linkedEntries are the compendium entries that links.json links to a
 // walton.yml scheme, with the entries their questions are printed under.

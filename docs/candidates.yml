@@ -792,6 +792,13 @@ candidates:
         kialo: "13292.127"
         use: answer
         answers: 33/CQ3 of 13292.115, the positive consequences argument for the meat tax; it concludes that argument's exception.
+        answer_to:
+          scheme: positive_consequences
+          question: 33/CQ3
+          polarity: attack
+          bindings:
+            A: governments putting a tax on meat
+            G: a fall in unhealthy meat consumption
         text: Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.
         bindings:
           A: governments putting a tax on meat
@@ -806,6 +813,13 @@ candidates:
         kialo: "13292.43"
         use: answer
         answers: 33/CQ3 of 13292.9, the negative consequences argument that the tax would cut revenue; it concludes that argument's exception.
+        answer_to:
+          scheme: negative_consequences
+          question: 33/CQ3
+          polarity: attack
+          bindings:
+            A: governments putting a tax on meat
+            G: tax revenues falling
         text: Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.
         bindings:
           A: governments putting a tax on meat
