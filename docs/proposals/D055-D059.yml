@@ -545,11 +545,12 @@ examples:
     near_miss_of: positive_consequences
     text: The city has set itself the goal of clean air by 2030, and a congestion charge is the way to get there, so it should bring one in.
     bindings:
+      P: the city
       A: bringing in a congestion charge
       S1: the city's air being dirty
       S2: the city's air being clean
       G: clean air by 2030
-    note: The action is argued for as the means to a goal the agent has set, not by a consequence judged good; practical reasoning, not positive consequences.
+    note: The action is argued for as the means to a goal the agent has set, not by a consequence judged good; practical reasoning, not positive consequences. P bound on 2026-11-24, when practical_reasoning2 came to state its agent (proposal D004-D075); the near miss is unchanged.
 
   # --- negative_consequences (33.2) ---------------------------------------
   - scheme: negative_consequences
@@ -658,11 +659,12 @@ examples:
     near_miss_of: negative_consequences_reasoning
     text: My goal is to keep the children settled, and turning down the job abroad is how I do that, so I should turn it down.
     bindings:
+      P: the speaker
       A: my turning down the job abroad
       S1: the children being at a school they love
       S2: the children staying at that school
       G: the children being settled
-    note: The agent argues from a goal to the means; 33.3 argues from a bad outcome of the action to not doing it.
+    note: The agent argues from a goal to the means; 33.3 argues from a bad outcome of the action to not doing it. P bound on 2026-11-24, when practical_reasoning2 came to state its agent (proposal D004-D075); the near miss is unchanged.
 
   # --- negative_consequences_prudential (33.4) -----------------------------
   - scheme: negative_consequences_prudential

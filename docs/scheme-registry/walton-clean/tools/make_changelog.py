@@ -113,7 +113,7 @@ def main(outdir):
       "the engine before 2026-11-22 did (a duplicate key keeps its last value, an unknown field is dropped), so that "
       "checks 2–4 and the semantic diff still run; the import error stays in the report.")
     w("")
-    w("| | original | syntax fixes only | **cleaned** | cleaned + 4 proposals (not applied) |")
+    w("| | original | syntax fixes only | **cleaned** | cleaned + 2 proposals (not applied) |")
     w("|---|---|---|---|---|")
 
     def import_cell(r):
@@ -147,10 +147,13 @@ def main(outdir):
     clean = reports.get("clean")
     if clean and not clean["pass"]:
         nfail = len(clean.get("scheme_failures") or {})
+        if sorted(clean.get("scheme_failures") or {}) != ["ad_hominem", "regulative_rule"]:
+            raise SystemExit("make_changelog.py: the schemes that fail the validator are not the two this text names: "
+                             + ", ".join(sorted(clean.get("scheme_failures") or {})))
         w(f"**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all {nschemes} schemes, and check 2 "
-          f"passes for {nschemes - nfail}. Four fail one validator rule only: every variable must occur in a premise. In "
-          "`ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable "
-          "occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, "
+          f"passes for {nschemes - nfail}. Two fail one validator rule only: every variable must occur in a premise. In "
+          "`ad_hominem` and `regulative_rule`, a variable "
+          "occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, "
           "which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning]"
           "(#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` "
           "in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. "
@@ -307,6 +310,49 @@ def main(outdir):
       "prudential form's likelihood assumption names the consequence too, and its conclusion meets the practical "
       "schemes about X. `other_consequences/1`, `prudential/1` and `strongly_occur/1` are left as orphan templates. "
       "The templates are in our own words. |")
+    w("| `practical_reasoning1`, `practical_reasoning2` | variable P; premise `goal_of_agent(P,G)` (new template); "
+      "assumptions `possible(A)` → `possible_bring_about(P,A)` and, in `practical_reasoning2`, `possible(G)` → "
+      "`possible_goal(G)`; exceptions `bring_about_more_effectively`, `realize_more_effectively` and "
+      "`promote_more_effectively` take the agent P (new templates), `side_effects(A,S1)` → `bad_outweighs(A,G)`, and "
+      "`incompatible_goal(G)` → `incompatible_goal(P,G)` (new template; added to `practical_reasoning1`) | 2026-11-24 | "
+      "Decisions D004, D005, D070, D088, D089 and D091 (WAG's proposal D004-D075, version 3, after two independent "
+      "reviews). The book's practical reasoning is an agent's, but no formula stated the goal or whose it was, so the "
+      "questions about other goals, possibility and better means could not say whose. The goal's possibility and the "
+      "agent's are two claims. Any side effect, however small, defeated the argument; the exception is now the claim "
+      "that the bad consequences outweigh the goal, D055's formula, and a plain side effect is a rebuttal. The "
+      "templates are in our own words, and the replaced ones are left as orphans. |")
+    w("| `practical_inference` | variable P; premise `have_goal(G)` → `goal_of_agent(P,G)`; assumption "
+      "`possible_action(A)` → `possible_bring_about(P,A)`; exceptions `other_goals_conflict(G)` → "
+      "`incompatible_goal(P,G)`, `more_efficient_alternative_actions(A,G)` → `realize_more_effectively(P,G,A)`, "
+      "`incompatible_consequences(A,G)` → `bad_outweighs(A,G)` and `incompatible_consequences(P,A,G)` (new template); "
+      "conclusion `carry_out_action(A)` → `should_be_performed(A)` | 2026-11-24 | Decisions D063 and D091 (the same "
+      "proposal). Its conclusion met no practical scheme. It takes practical reasoning's goal premise and exceptions, "
+      "and keeps its own objection, that the action works against its goal, stated of the agent. |")
+    w("| `practical_necessary_condition`, `practical_sufficient_condition` | variables `[X,A,A2,P]` → `[X,G,P,S]`; "
+      "the premises state the agent P, the set of means S and the goal G (`goal_of_agent(P,G)`, "
+      "`alternative_action(P,S,G)` or `alternative_action_sufficient(P,S,G)`, `necessary_action(P,X,S,G)` or "
+      "`sufficient_action(P,X,S,G)`, `practicality_action(P,X)`, `more_acceptable_bringing(P,G,X)`); assumptions "
+      "`possible_goal(G)`, `acceptable_action(P,X)`, `possible_bring_about(P,X)`; exceptions "
+      "`realize_more_effectively(P,G,X)`, in the necessary scheme `goal_achievable_without_any(P,G,S)`, "
+      "`bad_outweighs(X,G)` and `incompatible_goal(P,G)`; conclusion `bringing_about_action(X)` → "
+      "`should_be_performed(X)`; new templates | 2026-11-24 | Decisions D030, D090, D004, D063 and D091 (the same "
+      "proposal). The agent and the other goal A2 were in no premise, so the validator failed both schemes, and "
+      "`possible_action(A)` was about the goal. The sufficient scheme's alternatives premise repeated the necessary "
+      "one, where the book's ch. 3 (p. 96) says each means would be enough. Read as a best choice, a strictly better "
+      "means defeats the recommendation, and the necessary scheme's own objection is that the goal can be reached "
+      "without any means of the set. The conclusion now meets the practical schemes about X. |")
+    w("| `bad_outweighs_good`, `good_outweighs_bad` (new) | written for WAG: premises `brings_about(A,H)`, `bad(H)` "
+      "or `good(H)`, `matters_more(H,G)` (new template); conclusion `bad_outweighs(A,G)` or `good_outweighs(A,G)` | "
+      "2026-11-24 | Decisions D064 and D075 (candidate C003; the same proposal). Answer schemes: each concludes a "
+      "consequence scheme's sided exception (D055) from a consequence of the other sign that matters more, so that "
+      "the weighing is an argument that can itself be questioned. `bad_outweighs_good` is also practical reasoning's "
+      "side effect that outweighs the goal (D070). After Walton, The New Dialectic (1998), pp. 159, 170; not in the "
+      "compendium. |")
+    w("| `better_means` (new) | written for WAG: premises `goal_of_agent(P,G)`, `possible_bring_about(P,A2)`, "
+      "`brings_about(A2,G)`, `more_effective_means(P,A2,G,A)` (new template); conclusion "
+      "`realize_more_effectively(P,G,A)` | 2026-11-24 | Decisions D075 and D089 (the same proposal). The answer scheme for "
+      "another means that does better, more surely, sooner or at lower cost, for the same agent and goal, which the "
+      "agent can take. After the book's questions on other means (22.1, 22.4; ch. 3, p. 96); not in the compendium. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------
@@ -412,7 +458,7 @@ def main(outdir):
     # ---- cannot pass ----------------------------------------------------------
     w("## Schemes that cannot pass without a change of meaning")
     w("")
-    w("All four instantiate correctly (every premise, assumption and exception, a conclusion, all ground), and their "
+    w("Both instantiate correctly (every premise, assumption and exception, a conclusion, all ground), and their "
       "templates pass. They fail only the validator rule that each variable must occur in a premise. The rule exists "
       "because Carneades applies schemes by matching premises. `InstantiateScheme` with explicit parameters, which WAG "
       "uses, does not need it.")
@@ -420,18 +466,21 @@ def main(outdir):
     w("| scheme | variable(s) in no premise | where they occur | proposal (in `tools/proposals.py`, not applied) |")
     w("|---|---|---|---|")
     w("| `ad_hominem` | S (the argument) | conclusion `bad_not_accepted(A,S)`, exception `stronger_than_character(S)` | add premise `advocates(A,S)` (\"%s advocates argument %s.\"), which the conclusion \"A's argument S\" presupposes. Walton's scheme has the argument only in the conclusion, so this adds a premise |")
-    w("| `practical_necessary_condition` | P (agent), A2 (other goal) | assumption `possible_agent(X,P)`, exceptions `side_effect_action(P,X)`, `conflict_goals(P,A2,A)` | the premises are first-person (\"My goal…\", \"I have selected…\"). Proposal: `goal_is_action(P,A)` (\"The goal of %s is to bring about %s.\") and `conflict_goals(P,A)` (\"%s has some other goals that conflict with %s.\"), dropping A2 |")
-    w("| `practical_sufficient_condition` | P, A2 | same | same |")
     w("| `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` (\"%s must not do what is prohibited -obligatory-.\"). This turns the general norm into a claim about A |")
     w("")
     prop = reports.get("proposals") or {}
     left = prop.get("validator_before_instantiation") or []
     other = [x for x in left if "a reserved name" not in x]
-    w(f"With these {len(PROPOSALS)} edits (`walton.proposals.yml`), the four schemes pass the validator "
+    w(f"With these {len(PROPOSALS)} edits (`walton.proposals.yml`), the two schemes pass the validator "
       f"(`proposals-check.txt`). " + (f"The validator's other {len(left)} problems are the reserved name `is` (D084, not yet applied)."
                                      if left and not other else
                                      "The validator reports 0 problems." if not left else
                                      f"It still reports {len(other)} other problem(s)."))
+    w("")
+    w("`practical_necessary_condition` and `practical_sufficient_condition` failed the same rule until 2026-11-24: "
+      "their agent P and other goal A2 were in no premise. Proposal D004-D075 (decisions D030 and D090) states the agent "
+      "in each premise and replaces A2's exception with `incompatible_goal(P,G)`, so both pass; the repairs this file "
+      "proposed for them were withdrawn then.")
     w("")
 
     # ---- semantic concerns ----------------------------------------------------
@@ -463,7 +512,7 @@ def main(outdir):
     unused = (clean or {}).get("declared_but_unused_variables") or []
     w(f"- **Cleaned file, declared but used in no formula:** {len(unused)}.")
     w("- **Cleaned file, used but in no premise** (the validator counts these as unused): `ad_hominem` S; "
-      "`practical_necessary_condition` P, A2; `practical_sufficient_condition` P, A2; `regulative_rule` A. See above.")
+      "`regulative_rule` A. See above.")
     w("- **Undeclared variables in the original:** A in `part_in_whole`, F in `verbal_classification_vagueness`, X in "
       "`sacrifice` (repaired to V), F in `verbal_slippery_slope` (declared). The cleaned file has none.")
     w("")
@@ -526,7 +575,8 @@ CONCERNS = [
     "`biased/1` had two templates. The loaded one, \"Arguer %s is biased.\", is kept so loading is unchanged. It is also used "
     "for witnesses and sources (`credible_source`, `witness_testimony`), where upstream's deleted \"%s is biased.\" fits better.",
     "`waste` now uses `possible(X)`, whose existing template reads \"Action %s is possible.\", though X is a goal. "
-    "`practical_reasoning2`'s `possible(G)` has the same mismatch; the deleted `posible/1` read \"%s is possible.\".",
+    "`practical_reasoning2`'s `possible(G)` had the same mismatch until 2026-11-24, when it became "
+    "`possible_goal(G)` (D088); the deleted `posible/1` read \"%s is possible.\".",
     "Titles: `verbal_classification_vagueness` has the title of `definition_to_verbal_classification`; `rule_mental_world` has "
     "an empty title; `slippery_slope_base_case` and `slippery_slope_inductive_step` share a title; `abduction` has no `meta`.",
 ]

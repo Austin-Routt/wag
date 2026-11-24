@@ -164,6 +164,12 @@ contrasts:
     risk; choose the slope when the harm lies at the end of a chain of events that
     the action starts.
   status: drafted by Claude Code, 2026-10-22
+- scheme: bad_outweighs_good
+  text: ""
+  status: todo
+- scheme: good_outweighs_bad
+  text: ""
+  status: todo
 - scheme: slippery_slope_inductive_step
   text: The two halves of one book scheme. Use slippery_slope_inductive_step for each
     link between two events of the chain, and slippery_slope_base_case once, for the

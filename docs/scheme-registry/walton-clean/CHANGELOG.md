@@ -1,25 +1,25 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2176 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 15 of them changed by the owner's decisions (`analogy`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`), and 5 added by them (`cause_to_effect_modal`, `full_slippery_slope`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 116 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2246 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 20 of them changed by the owner's decisions (`analogy`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`), and 8 added by them (`bad_outweighs_good`, `better_means`, `cause_to_effect_modal`, `full_slippery_slope`, `good_outweighs_bad`, `negative_consequences_reasoning`, `precedent_slippery_slope`, `whole_into_parts`); 119 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
 `check/main.go` (Go, the Carneades-4 at `carneades-4`, the repository's root), one process per file. Since 2026-11-22 that is the schemes library's engine with WAG's fixes ([`CARNEADES_FORK.md`](../../../CARNEADES_FORK.md)). Check 1 also decodes with yaml.v2 `UnmarshalStrict`, which rejects unknown keys (`assumption:`) and duplicate keys. The engine's own import is now strict too. When it refuses a file, the check reads the file again leniently, as the engine before 2026-11-22 did (a duplicate key keeps its last value, an unknown field is dropped), so that checks 2–4 and the semantic diff still run; the import error stays in the report.
 
-| | original | syntax fixes only | **cleaned** | cleaned + 4 proposals (not applied) |
+| | original | syntax fixes only | **cleaned** | cleaned + 2 proposals (not applied) |
 |---|---|---|---|---|
 | 1 YAML / import error | yaml: line 733: mapping values are not allowe | yaml: unmarshal errors: line 56: key "biased/…; read leniently | none | none |
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
-| 2 validator problems (before / after instantiation) | – | 142 / 155 | 17 / 17 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 116 | 0 of 116 |
+| 2 validator problems (before / after instantiation) | – | 142 / 155 | 5 / 5 | 0 / 0 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 119 | 0 of 119 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 66 of 111 | 112 of 116 | 116 of 116 |
+| schemes passing checks 2–4 | – | 66 of 111 | 117 of 119 | 119 of 119 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr, and 4 for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these 5.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 116 schemes, and check 2 passes for 112. Four fail one validator rule only: every variable must occur in a premise. In `ad_hominem`, `practical_necessary_condition`, `practical_sufficient_condition` and `regulative_rule`, a variable occurs only in the conclusion, an assumption or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 119 schemes, and check 2 passes for 117. Two fail one validator rule only: every variable must occur in a premise. In `ad_hominem` and `regulative_rule`, a variable occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 0 | 0 |
-| repair — owner decision | 50 | 43 |
-| addition — owner decision | 95 | 20 |
-| **total** | **334** | **217** distinct lines (a line can carry edits of several categories) |
+| repair — owner decision | 115 | 104 |
+| addition — owner decision | 146 | 24 |
+| **total** | **450** | **280** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 192 lines removed, 299 added. That is 187 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 145 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
+Unified diff against the original (`walton.diff`): 240 lines removed, 417 added. That is 235 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 261 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -60,6 +60,11 @@ These change what schemes say, add one, or apply an authorized vocabulary migrat
 | `analogy` | variables `[A,C]` → `[P1,P2,C1,C2]`; premises `similar_to(C1,C2)`, `in_case(P1,C1)`, `corresponds(P1,P2)` (new template); conclusion `P2`; exception `difference_against(C1,C2,P2)` (new template) in place of `relevant_differences(C)`; `more_on_point(A,C)` removed | 2026-10-22 | Decision D001 (audit N12; WAG's proposal D001-D028-D029, version 3, after two independent reviews). The book's scheme 7 uses one letter for a claim made relative to each case; with one proposition, the premise asserted the target's claim of the source case, false whenever the two claims differ. The difference exception names the claim and tells against it, so it defeats only the argument it is about. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts the conclusion, so it needs no formula. |
 | `practical_analogy_positive`, `practical_analogy_negative` | variables `[A1,A2,X]` → `[A1,A2,X1,X2]`; premises `right_to_do(A1,X1)` or `wrong_to_do(A1,X1)`, `similar_to(A1,A2)`, `corresponds(X1,X2)`; conclusion `should_be_performed(X2)` or `¬should_be_performed(X2)` in place of `carry_out_right(A2,X)` and `carry_out_wrong(A2,X)`; exception `difference_against(A1,A2,X2)` or `difference_for(A1,A2,X2)` (new templates); `right_to_do/2` and `wrong_to_do/2` rewritten | 2026-10-22 | Decisions D028 and D029, with D001. The book's 8.1 and 8.2 use one action letter made relative to each situation. The old conclusions met no other scheme; now the two rebut each other and meet the practical schemes about the same action. The book prints no questions for them; the sided exception lets a difference against one side leave the other standing when both argue from one past situation. The templates are in our own words. |
 | `positive_consequences`, `negative_consequences`, `negative_consequences_reasoning`, `negative_consequences_prudential` | exception `other_consequences(A)` (or `(X)`) → `bad_outweighs(A,G)`, `good_outweighs(A,G)`, `good_outweighs(A,B)` and `bad_outweighs(X,C)` (new templates); in `negative_consequences_prudential`, assumption `strongly_occur(X)` → `strongly_occur(X,C)` (new template) and conclusion `prudential(X)` → `should_be_performed(X)` | 2026-10-23 | Decisions D055 and D059 (WAG's proposal D055-D059, version 5, after four independent reviews and a final check). The one exception for the book's 33/CQ3 was shared by the arguments for and against an action, so one argument that opposite consequences outweigh defeated every consequence argument about the action, on both sides. Each scheme now has an exception on its own side that names the consequence it cites, and so defeats only the argument it is about. The prudential form's likelihood assumption names the consequence too, and its conclusion meets the practical schemes about X. `other_consequences/1`, `prudential/1` and `strongly_occur/1` are left as orphan templates. The templates are in our own words. |
+| `practical_reasoning1`, `practical_reasoning2` | variable P; premise `goal_of_agent(P,G)` (new template); assumptions `possible(A)` → `possible_bring_about(P,A)` and, in `practical_reasoning2`, `possible(G)` → `possible_goal(G)`; exceptions `bring_about_more_effectively`, `realize_more_effectively` and `promote_more_effectively` take the agent P (new templates), `side_effects(A,S1)` → `bad_outweighs(A,G)`, and `incompatible_goal(G)` → `incompatible_goal(P,G)` (new template; added to `practical_reasoning1`) | 2026-11-24 | Decisions D004, D005, D070, D088, D089 and D091 (WAG's proposal D004-D075, version 3, after two independent reviews). The book's practical reasoning is an agent's, but no formula stated the goal or whose it was, so the questions about other goals, possibility and better means could not say whose. The goal's possibility and the agent's are two claims. Any side effect, however small, defeated the argument; the exception is now the claim that the bad consequences outweigh the goal, D055's formula, and a plain side effect is a rebuttal. The templates are in our own words, and the replaced ones are left as orphans. |
+| `practical_inference` | variable P; premise `have_goal(G)` → `goal_of_agent(P,G)`; assumption `possible_action(A)` → `possible_bring_about(P,A)`; exceptions `other_goals_conflict(G)` → `incompatible_goal(P,G)`, `more_efficient_alternative_actions(A,G)` → `realize_more_effectively(P,G,A)`, `incompatible_consequences(A,G)` → `bad_outweighs(A,G)` and `incompatible_consequences(P,A,G)` (new template); conclusion `carry_out_action(A)` → `should_be_performed(A)` | 2026-11-24 | Decisions D063 and D091 (the same proposal). Its conclusion met no practical scheme. It takes practical reasoning's goal premise and exceptions, and keeps its own objection, that the action works against its goal, stated of the agent. |
+| `practical_necessary_condition`, `practical_sufficient_condition` | variables `[X,A,A2,P]` → `[X,G,P,S]`; the premises state the agent P, the set of means S and the goal G (`goal_of_agent(P,G)`, `alternative_action(P,S,G)` or `alternative_action_sufficient(P,S,G)`, `necessary_action(P,X,S,G)` or `sufficient_action(P,X,S,G)`, `practicality_action(P,X)`, `more_acceptable_bringing(P,G,X)`); assumptions `possible_goal(G)`, `acceptable_action(P,X)`, `possible_bring_about(P,X)`; exceptions `realize_more_effectively(P,G,X)`, in the necessary scheme `goal_achievable_without_any(P,G,S)`, `bad_outweighs(X,G)` and `incompatible_goal(P,G)`; conclusion `bringing_about_action(X)` → `should_be_performed(X)`; new templates | 2026-11-24 | Decisions D030, D090, D004, D063 and D091 (the same proposal). The agent and the other goal A2 were in no premise, so the validator failed both schemes, and `possible_action(A)` was about the goal. The sufficient scheme's alternatives premise repeated the necessary one, where the book's ch. 3 (p. 96) says each means would be enough. Read as a best choice, a strictly better means defeats the recommendation, and the necessary scheme's own objection is that the goal can be reached without any means of the set. The conclusion now meets the practical schemes about X. |
+| `bad_outweighs_good`, `good_outweighs_bad` (new) | written for WAG: premises `brings_about(A,H)`, `bad(H)` or `good(H)`, `matters_more(H,G)` (new template); conclusion `bad_outweighs(A,G)` or `good_outweighs(A,G)` | 2026-11-24 | Decisions D064 and D075 (candidate C003; the same proposal). Answer schemes: each concludes a consequence scheme's sided exception (D055) from a consequence of the other sign that matters more, so that the weighing is an argument that can itself be questioned. `bad_outweighs_good` is also practical reasoning's side effect that outweighs the goal (D070). After Walton, The New Dialectic (1998), pp. 159, 170; not in the compendium. |
+| `better_means` (new) | written for WAG: premises `goal_of_agent(P,G)`, `possible_bring_about(P,A2)`, `brings_about(A2,G)`, `more_effective_means(P,A2,G,A)` (new template); conclusion `realize_more_effectively(P,G,A)` | 2026-11-24 | Decisions D075 and D089 (the same proposal). The answer scheme for another means that does better, more surely, sooner or at lower cost, for the same agent and goal, which the agent can take. After the book's questions on other means (22.1, 22.4; ch. 3, p. 96); not in the compendium. |
 
 ## D081 repairs accepted after independent source review
 
@@ -125,6 +130,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **10** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses accept_saying with 0 argument(s) and the template has 0 %s (used by: common_folks_group_ad_populum)
   - before: `  accept_saying: "Therefore, you should accept what I say."`
   - after: `  accept_saying/0: "Therefore, you should accept what I say."`
+- **11** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  acceptable_action/2: "For %s, %s is an acceptable thing to do."`
 - **13** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  accept_all_steps/2: "Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next."`
@@ -143,6 +151,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **28** · typo · template word 'commiued' (OCR) (used by: commitment2)
   - before: `  also_committed_questioned/3: "If arguer %s has commiued herself to proposition %s at some point in a dialogue, then it may be inferred that she is also committed to proposition %s, should the question of whether it is true become an issue later in the dialogue."`
   - after: `  also_committed_questioned/3: "If arguer %s has committed herself to proposition %s at some point in a dialogue, then it may be inferred that she is also committed to proposition %s, should the question of whether it is true become an issue later in the dialogue."`
+- **29** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition)
+  - before: _(none)_
+  - after: `  alternative_action/3: "%s can reasonably hold that at least one of the means %s is needed to bring about %s."`
+- **29** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  alternative_action_sufficient/3: "%s can reasonably hold that each of the means %s would be enough to bring about %s."`
 - **38** · typo · misspelled predicate (used by: pragmatic_inconsistency)
   - before: `  arguement_not_accepted/2: "Therefore, %s's argument %s should not be accepted."`
   - after: `  argument_not_accepted/2: "Therefore, %s's argument %s should not be accepted."`
@@ -161,7 +175,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **46** [insert after] · addition — owner decision · template for the 33.3 scheme added below, in our own words (the category file's repeats the book) (used by: negative_consequences_reasoning)
   - before: _(none)_
   - after: `  bad_for_goals/1: "%s would harm the agent's goals."`
-- **49** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: negative_consequences_prudential, positive_consequences)
+- **49** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: bad_outweighs_good, negative_consequences_prudential, positive_consequences, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
   - before: _(none)_
   - after: `  bad_outweighs/2: "The action %s has bad consequences that outweigh %s."`
 - **50** · template · '%v' is not a %s verb (WAG lint error) (used by: expert_opinion)
@@ -179,6 +193,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **60** · template · malformed verb '% m' printed '%!m(string=...)ore' (used by: practical_reasoning1, practical_reasoning2)
   - before: `  bring_about_more_effectively/2: "There exists an action that would bring about % more effectively than %s."`
   - after: `  bring_about_more_effectively/2: "There exists an action that would bring about %s more effectively than %s."`
+- **60** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_reasoning1, practical_reasoning2)
+  - before: _(none)_
+  - after: `  bring_about_more_effectively/3: "There is a way for %s to reach the state %s more effectively than %s."`
 - **61** · typo · misspelled predicate ('relive' for 'relief') (used by: distress)
   - before: `  bring_relive/2: "Therefore, %s ought to bring about %s."`
   - after: `  bring_relief/2: "Therefore, %s ought to bring about %s."`
@@ -218,7 +235,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **91** · typo · misspelled predicate (used by: circumstantial_ad_hominem)
   - before: `  commited_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
   - after: `  committed_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
-- **97** · template · the template has 3 %s and both schemes use conflict_goals(P,A2,A) with 3 arguments (used by: practical_necessary_condition, practical_sufficient_condition)
+- **97** · template · the template has 3 %s and both schemes use conflict_goals(P,A2,A) with 3 arguments (used by: no scheme)
   - before: `  conflict_goals/2: "%s has some other goals %s that conflict with %s." `
   - after: `  conflict_goals/3: "%s has some other goals %s that conflict with %s." `
 - **102** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses correctly_report with 0 argument(s) and the template has 0 %s (used by: rule_physical_world_2)
@@ -266,18 +283,30 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **139** · typo · template word 'truei' (used by: popular_opinion)
   - before: `  favor/1: "If %s is generally accepted as truei that gives a reason in favor of it."`
   - after: `  favor/1: "If %s is generally accepted as true that gives a reason in favor of it."`
+- **144** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition)
+  - before: _(none)_
+  - after: `  goal_achievable_without_any/3: "%s could reach %s without using any of the means %s."`
+- **146** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  goal_of_agent/2: "One of the goals of %s is %s."`
 - **147** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses goal_prestige with 0 argument(s) and the template has 0 %s (used by: snob_appeal_ad_populum)
   - before: `  goal_prestige: "Prestige is an important goal for you."`
   - after: `  goal_prestige/0: "Prestige is an important goal for you."`
-- **150** [delete] · syntax · duplicate key good/1, identical to line 149 (used by: end_and_means_1, end_and_means_3, positive_consequences)
+- **150** [delete] · syntax · duplicate key good/1, identical to line 149 (used by: end_and_means_1, end_and_means_3, good_outweighs_bad, positive_consequences)
   - before: `  good/1: "%s is good."`
   - after: _(none)_
 - **151** · typo · template word 'represen ts' (OCR) (used by: moral_justification_ad_populum)
   - before: `  good_group/2: "Everybody who is good, or who represen ts a group %s with good qualities, accepts policy %s."`
   - after: `  good_group/2: "Everybody who is good, or who represents a group %s with good qualities, accepts policy %s."`
-- **152** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: negative_consequences, negative_consequences_reasoning)
+- **152** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: good_outweighs_bad, negative_consequences, negative_consequences_reasoning)
   - before: _(none)_
   - after: `  good_outweighs/2: "The action %s has good consequences that outweigh %s."`
+- **185** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_inference)
+  - before: _(none)_
+  - after: `  incompatible_consequences/3: "For %s, %s would have consequences that work against %s."`
+- **186** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  incompatible_goal/2: "Another goal of %s is incompatible with %s."`
 - **194** · typo · misspelled predicate (used by: verbal_slippery_slope)
   - before: `  individuals_propoerty/3: "If %s, has %s then, %s has it too."`
   - after: `  individuals_property/3: "If %s, has %s then, %s has it too."`
@@ -302,6 +331,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **204** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."`
+- **206** [insert after] · addition — owner decision · template for the answer schemes (D064, D075, D089), in our own words (used by: bad_outweighs_good, good_outweighs_bad)
+  - before: _(none)_
+  - after: `  matters_more/2: "%s matters more than %s."`
 - **207** [insert after] · addition — owner decision · template for cause_to_effect_modal (audit N8), in our own words (used by: cause_to_effect_modal)
   - before: _(none)_
   - after: `  may_occur/1: "An event %s has happened, or could happen."`
@@ -311,10 +343,16 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **213** · typo · template word 'Appearence' (used by: no scheme)
   - before: `  misleading/1: "Appearence of the objects looking like it could be classified under %s is misleading for some reasons."`
   - after: `  misleading/1: "Appearance of the objects looking like it could be classified under %s is misleading for some reasons."`
-- **218** · typo · template word 'effecient' (used by: practical_inference)
+- **216** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  more_acceptable_bringing/3: "%s would rather bring about %s than leave %s undone."`
+- **217** [insert after] · addition — owner decision · template for the answer schemes (D064, D075, D089), in our own words (used by: better_means)
+  - before: _(none)_
+  - after: `  more_effective_means/4: "For %s, %s would realize %s more effectively than %s: more surely, sooner or at lower cost."`
+- **218** · typo · template word 'effecient' (used by: no scheme)
   - before: `  more_efficient_alternative_actions/2: " More effecient actions bringing about %s and that would also brin about %s."`
   - after: `  more_efficient_alternative_actions/2: " More efficient actions bringing about %s and that would also brin about %s."`
-- **218** · typo · template word 'brin' (used by: practical_inference)
+- **218** · typo · template word 'brin' (used by: no scheme)
   - before: `  more_efficient_alternative_actions/2: " More efficient actions bringing about %s and that would also brin about %s."`
   - after: `  more_efficient_alternative_actions/2: " More efficient actions bringing about %s and that would also bring about %s."`
 - **219** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses more_important_ends with 0 argument(s) and the template has 0 %s (used by: end_and_means_2)
@@ -323,6 +361,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **221** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses more_reliable with 0 argument(s) and the template has 0 %s (used by: sign)
   - before: `  more_reliable: "There are more reliable account for the sign."`
   - after: `  more_reliable/0: "There are more reliable account for the sign."`
+- **227** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition)
+  - before: _(none)_
+  - after: `  necessary_action/4: "%s chose %s, among the means %s, as an acceptable or the best means needed for %s."`
 - **229** · repair — owner decision · the template said that a bad value supports commitment to the goal, the opposite of the book's 19.2; rewritten in our own words (used by: negative_value)
   - before: `  negative_affects/3: "The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal."`
   - after: `  negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal."`
@@ -383,7 +424,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **277** · typo · misspelled predicate and scheme id ('practise' for the noun 'practice') (used by: popular_practice)
   - before: `  popular_practise/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."`
   - after: `  popular_practice/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."`
-- **278** [delete] · typo · 'posible' is a misspelling of 'possible'; renamed in its only use (line 1105), which then uses the existing template possible/1 (line 284); a second possible/1 key would be a duplicate (used by: practical_reasoning1, practical_reasoning2, waste)
+- **278** [delete] · typo · 'posible' is a misspelling of 'possible'; renamed in its only use (line 1105), which then uses the existing template possible/1 (line 284); a second possible/1 key would be a duplicate (used by: waste)
   - before: `  posible/1: "%s is possible."`
   - after: _(none)_
 - **281** · template · the template has 2 %s and the scheme uses position_to_know_group(G,A) (used by: position_to_know_ad_populum)
@@ -392,6 +433,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **290** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  precedent_chain/3: "From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s."`
+- **290** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  practicality_action/2: "As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s."`
+- **296** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_reasoning1)
+  - before: _(none)_
+  - after: `  promote_more_effectively/3: "There is a way for %s to promote the value %s more effectively than %s."`
 - **297** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses proper_sequence with 0 argument(s) and the template has 0 %s (used by: gradualism)
   - before: `  proper_sequence: "Sequence of proposition is dealt with in the appropriate order."`
   - after: `  proper_sequence/0: "Sequence of proposition is dealt with in the appropriate order."`
@@ -401,6 +448,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  prudential: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
   - after: `  prudential/1: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
+- **304** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  realize_more_effectively/3: "There is a way for %s to realize the goal %s more effectively than %s."`
 - **306** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557) (used by: sorites_slippery_slope)
   - before: `  reapplication_sequence: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
   - after: `  reapplication_sequence/3: "A sequence of modus ponens subarguments, a premise set linking premises and conclusions from the clear area through the grey area."`
@@ -479,6 +529,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **361** · typo · template word 'availablle' (used by: abductive_backward)
   - before: `  sufficient_account/2: "%s itself as an explanation of %s apart from other alternative explanations availablle so far, is sufficient."`
   - after: `  sufficient_account/2: "%s itself as an explanation of %s apart from other alternative explanations available so far, is sufficient."`
+- **362** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_sufficient_condition)
+  - before: _(none)_
+  - after: `  sufficient_action/4: "%s chose %s, among the means %s, as an acceptable or the best means that would be enough for %s."`
 - **364** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses sufficient_evidence with 0 argument(s) and the template has 0 %s (used by: negative_practical)
   - before: `  sufficient_evidence: "search for the evidence progress is sufficient."`
   - after: `  sufficient_evidence/0: "search for the evidence progress is sufficient."`
@@ -839,6 +892,120 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **933** · repair — owner decision · D084: is/2 is reserved for GoCHR assignment; use is_a/2 for the ordinary two-place predicate, preserving its argument order and English wording. No coextensivity premise or other source reinterpretation is added.
   - before: `      - is(M,Q)`
   - after: `      - is_a(M,Q)`
+
+### practical_inference
+
+- **949** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `    variables: [A,G]`
+  - after: `    variables: [A,G,P]`
+- **951** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - carry_out_action(A)`
+  - after: `      - should_be_performed(A)`
+- **953** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - have_goal(G)`
+  - after: `      - goal_of_agent(P,G)`
+- **956** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - other_goals_conflict(G)`
+  - after: `      - incompatible_goal(P,G)`
+- **957** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - more_efficient_alternative_actions(A,G)`
+  - after: `      - realize_more_effectively(P,G,A)`
+- **958** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - incompatible_consequences(A,G)`
+  - after: `      - bad_outweighs(A,G)`
+- **958** [insert after] · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - incompatible_consequences(P,A,G)`
+- **960** · repair — owner decision · D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and keeps its own objection that the action works against its goal, scoped to the agent. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - possible_action(A)`
+  - after: `     - possible_bring_about(P,A)`
+
+### practical_necessary_condition
+
+- **973** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `    variables: [X,A,A2,P]`
+  - after: `    variables: [X,G,P,S]`
+- **975** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - bringing_about_action(X)`
+  - after: `      - should_be_performed(X)`
+- **977** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - goal_is_action(A)`
+  - after: `      - goal_of_agent(P,G)`
+- **978** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - alternative_action(X,A)`
+  - after: `      - alternative_action(P,S,G)`
+- **979** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - necessary_action(X,A)`
+  - after: `      - necessary_action(P,X,S,G)`
+- **980** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - practicality_action(X)`
+  - after: `      - practicality_action(P,X)`
+- **981** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - more_acceptable_bringing(A,X)`
+  - after: `      - more_acceptable_bringing(P,G,X)`
+- **983** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - alternative_means(A,X)`
+  - after: `      - realize_more_effectively(P,G,X)`
+- **983** [insert after] · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - goal_achievable_without_any(P,G,S)`
+- **984** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - side_effect_action(P,X)`
+  - after: `      - bad_outweighs(X,G)`
+- **985** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - conflict_goals(P,A2,A)`
+  - after: `      - incompatible_goal(P,G)`
+- **987** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - possible_action(A)`
+  - after: `     - possible_goal(G)`
+- **988** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - acceptable_action(X)`
+  - after: `     - acceptable_action(P,X)`
+- **989** · repair — owner decision · D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they conclude should_be_performed(X), which meets the practical schemes. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - possible_agent(X,P)`
+  - after: `     - possible_bring_about(P,X)`
+
+### practical_sufficient_condition
+
+- **1001** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `    variables: [X,A,A2,P]`
+  - after: `    variables: [X,G,P,S]`
+- **1003** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - bringing_about_action(X)`
+  - after: `      - should_be_performed(X)`
+- **1005** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - goal_is_action(A)`
+  - after: `      - goal_of_agent(P,G)`
+- **1006** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - alternative_action(X,A)`
+  - after: `      - alternative_action_sufficient(P,S,G)`
+- **1007** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - sufficient_action(X,A)`
+  - after: `      - sufficient_action(P,X,S,G)`
+- **1008** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - practicality_action(X)`
+  - after: `      - practicality_action(P,X)`
+- **1009** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - more_acceptable_bringing(A,X)`
+  - after: `      - more_acceptable_bringing(P,G,X)`
+- **1011** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - alternative_means(A,X)`
+  - after: `      - realize_more_effectively(P,G,X)`
+- **1012** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - side_effect_action(P,X)`
+  - after: `      - bad_outweighs(X,G)`
+- **1013** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - conflict_goals(P,A2,A)`
+  - after: `      - incompatible_goal(P,G)`
+- **1015** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - possible_action(A)`
+  - after: `     - possible_goal(G)`
+- **1016** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - acceptable_action(X)`
+  - after: `     - acceptable_action(P,X)`
+- **1017** · repair — owner decision · D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no mere-alternative exception, which its own premise granted. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `     - possible_agent(X,P)`
+  - after: `     - possible_bring_about(P,X)`
 
 ### practical_goal
 
@@ -1324,6 +1491,216 @@ Format: **line** · category · reason, then the line before and after. An inser
     exceptions:
       - bad_outweighs(A,G)`
 
+### bad_outweighs_good
+
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `  - id: bad_outweighs_good`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    meta:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      title: Weighing a Bad Consequence against a Good One`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      source: >`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md),`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        after Walton's comparative weighing of good and bad consequences: Douglas Walton,`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        The New Dialectic: Conversational Contexts of Argument. University of Toronto Press,`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        1998, pp. 159, 170. Not in the compendium.`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    variables: [A,H,G]`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - bad_outweighs(A,G)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    premises:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - brings_about(A,H)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - bad(H)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - matters_more(H,G)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: _(none)_
+
+### good_outweighs_bad
+
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `  - id: good_outweighs_bad`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    meta:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      title: Weighing a Good Consequence against a Bad One`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      source: >`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md),`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        after Walton's comparative weighing of good and bad consequences: Douglas Walton,`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        The New Dialectic: Conversational Contexts of Argument. University of Toronto Press,`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        1998, pp. 159, 170. Not in the compendium.`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    variables: [A,H,G]`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - good_outweighs(A,G)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    premises:`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - brings_about(A,H)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - good(H)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - matters_more(H,G)`
+- **1926** [insert after] · addition — owner decision · D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: _(none)_
+
+### practical_reasoning1
+
+- **1935** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `    variables: [A,S1,S2,G,V]`
+  - after: `    variables: [A,S1,S2,G,V,P]`
+- **1938** [insert after] · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - goal_of_agent(P,G)`
+- **1946** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - possible(A)`
+  - after: `      - possible_bring_about(P,A)`
+- **1948** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - bring_about_more_effectively(S2,A)`
+  - after: `      - bring_about_more_effectively(P,S2,A)`
+- **1949** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - realize_more_effectively(G,A)`
+  - after: `      - realize_more_effectively(P,G,A)`
+- **1950** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - promote_more_effectively(V,A)`
+  - after: `      - promote_more_effectively(P,V,A)`
+- **1951** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - side_effects(A,S1)`
+  - after: `      - bad_outweighs(A,G)`
+- **1951** [insert after] · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - incompatible_goal(P,G)`
+
+### practical_reasoning2
+
+- **1959** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `    variables: [A,S1,S2,G]`
+  - after: `    variables: [A,S1,S2,G,P]`
+- **1962** [insert after] · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - goal_of_agent(P,G)`
+- **1967** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - possible(A)`
+  - after: `      - possible_bring_about(P,A)`
+- **1968** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - possible(G)`
+  - after: `      - possible_goal(G)`
+- **1970** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - bring_about_more_effectively(S2,A)`
+  - after: `      - bring_about_more_effectively(P,S2,A)`
+- **1971** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - realize_more_effectively(G,A)`
+  - after: `      - realize_more_effectively(P,G,A)`
+- **1973** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - side_effects(A,S1)`
+  - after: `      - bad_outweighs(A,G)`
+- **1974** · repair — owner decision · D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the exceptions that another action would do better name the agent; D070, D091: the side-effect exception side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: `      - incompatible_goal(G)`
+  - after: `      - incompatible_goal(P,G)`
+
+### better_means
+
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `  - id: better_means`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    meta:`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      title: Argument from a Better Means`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      source: >`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        WAG's answer scheme (decisions D075 and D089), the sketch better_means of WAG's review of`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        2026-10-15 (part 6, §4), repaired; after the book's questions on other means and efficiency`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        (Walton, Reed and Macagno, Argumentation Schemes, 2008: 22.1 and 22.4, and ch. 3, p. 96).`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `        Not in the compendium.`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    variables: [A,A2,G,P]`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - realize_more_effectively(P,G,A)`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `    premises:`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - goal_of_agent(P,G)`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - possible_bring_about(P,A2)`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - brings_about(A2,G)`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: `      - more_effective_means(P,A2,G,A)`
+- **1975** [insert after] · addition — owner decision · D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), the agent bound by the answered argument's goal premise and able to take the other means. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)
+  - before: _(none)_
+  - after: _(none)_
+
 ### exeption_to_rule → exception_to_rule
 
 - **1976** · typo · scheme id 'exeption'
@@ -1347,16 +1724,16 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ## Schemes that cannot pass without a change of meaning
 
-All four instantiate correctly (every premise, assumption and exception, a conclusion, all ground), and their templates pass. They fail only the validator rule that each variable must occur in a premise. The rule exists because Carneades applies schemes by matching premises. `InstantiateScheme` with explicit parameters, which WAG uses, does not need it.
+Both instantiate correctly (every premise, assumption and exception, a conclusion, all ground), and their templates pass. They fail only the validator rule that each variable must occur in a premise. The rule exists because Carneades applies schemes by matching premises. `InstantiateScheme` with explicit parameters, which WAG uses, does not need it.
 
 | scheme | variable(s) in no premise | where they occur | proposal (in `tools/proposals.py`, not applied) |
 |---|---|---|---|
 | `ad_hominem` | S (the argument) | conclusion `bad_not_accepted(A,S)`, exception `stronger_than_character(S)` | add premise `advocates(A,S)` ("%s advocates argument %s."), which the conclusion "A's argument S" presupposes. Walton's scheme has the argument only in the conclusion, so this adds a premise |
-| `practical_necessary_condition` | P (agent), A2 (other goal) | assumption `possible_agent(X,P)`, exceptions `side_effect_action(P,X)`, `conflict_goals(P,A2,A)` | the premises are first-person ("My goal…", "I have selected…"). Proposal: `goal_is_action(P,A)` ("The goal of %s is to bring about %s.") and `conflict_goals(P,A)` ("%s has some other goals that conflict with %s."), dropping A2 |
-| `practical_sufficient_condition` | P, A2 | same | same |
 | `regulative_rule` | A (agent) | conclusion `must_do(A,X)` | Grennan's scheme names the agent only in the conclusion. Proposal: apply the norm premise to A, `do_obligator(A)` ("%s must not do what is prohibited -obligatory-."). This turns the general norm into a claim about A |
 
-With these 14 edits (`walton.proposals.yml`), the four schemes pass the validator (`proposals-check.txt`). The validator reports 0 problems.
+With these 5 edits (`walton.proposals.yml`), the two schemes pass the validator (`proposals-check.txt`). The validator reports 0 problems.
+
+`practical_necessary_condition` and `practical_sufficient_condition` failed the same rule until 2026-11-24: their agent P and other goal A2 were in no premise. Proposal D004-D075 (decisions D030 and D090) states the agent in each premise and replaces A2's exception with `incompatible_goal(P,G)`, so both pass; the repairs this file proposed for them were withdrawn then.
 
 ## Semantic concerns (left unchanged: these load and instantiate)
 
@@ -1378,7 +1755,7 @@ With these 14 edits (`walton.proposals.yml`), the four schemes pass the validato
 - `exception_to_rule` (was `exeption_to_rule`): the content is upstream Carneades `precedent` with a new id and title. The README says Walton renamed the scheme, but the formulas were not changed. Check against the book (AS57). Its exception `relevant_differences(R,C)` puts the rule where a case belongs (WAG's decision D058).
 - Templates I fitted to the formula as used, where the original template suggests the formula may have lost an argument: `strongly_occur(X)` (template had the consequences C too; since D055, on 2026-10-23, the formula is `strongly_occur(X,C)`), `cited_bad_consequences(X)` (the consequences; C occurs in `assert_bad(X,C)`), `excuse` in `regulative_rule` (template had the agent; `excuse/1` is taken by `plea_for_excuse`).
 - `biased/1` had two templates. The loaded one, "Arguer %s is biased.", is kept so loading is unchanged. It is also used for witnesses and sources (`credible_source`, `witness_testimony`), where upstream's deleted "%s is biased." fits better.
-- `waste` now uses `possible(X)`, whose existing template reads "Action %s is possible.", though X is a goal. `practical_reasoning2`'s `possible(G)` has the same mismatch; the deleted `posible/1` read "%s is possible.".
+- `waste` now uses `possible(X)`, whose existing template reads "Action %s is possible.", though X is a goal. `practical_reasoning2`'s `possible(G)` had the same mismatch until 2026-11-24, when it became `possible_goal(G)` (D088); the deleted `posible/1` read "%s is possible.".
 - Titles: `verbal_classification_vagueness` has the title of `definition_to_verbal_classification`; `rule_mental_world` has an empty title; `slippery_slope_base_case` and `slippery_slope_inductive_step` share a title; `abduction` has no `meta`.
 
 ### 0-ary atoms
@@ -1411,7 +1788,7 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 
 - **Original, declared but used in no formula:** `part_in_whole` P and `verbal_classification_vagueness` P. Each was the misnamed form of a variable the formulas use but nobody declared (A and F respectively), so the declaration was corrected (lines 684, 817), not left. The primed variables P', X', A', R' (6 schemes) were declared, but the parser cannot read them; they were renamed P2, X2, A2, R2.
 - **Cleaned file, declared but used in no formula:** 0.
-- **Cleaned file, used but in no premise** (the validator counts these as unused): `ad_hominem` S; `practical_necessary_condition` P, A2; `practical_sufficient_condition` P, A2; `regulative_rule` A. See above.
+- **Cleaned file, used but in no premise** (the validator counts these as unused): `ad_hominem` S; `regulative_rule` A. See above.
 - **Undeclared variables in the original:** A in `part_in_whole`, F in `verbal_classification_vagueness`, X in `sacrifice` (repaired to V), F in `verbal_slippery_slope` (declared). The cleaned file has none.
 
 ## Left alone on purpose
@@ -1423,5 +1800,5 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 - The stray " s" in the `data_account/2` template, and the soft hyphen in "pp.429­448".
 - `langugage:` occurs only in the category file `B_source-based-arguments/1_…yml`, not in `walton.yml`.
 - Negated formulas have no `¬p/n` WAG templates (WAG lint warning, see Gate).
-- Orphan templates (no scheme uses them; 21): `action_fit_quality/0`, `another_category/2`, `bribed/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `defeasibly_implies/2`, `misleading/1`, `more_on_point/2`, `negative_consequences/1`, `other_consequences/1`, `positive_consequences/1`, `prudential/1`, `relevant_differences/1`, `strongly_occur/1`, `successful_account/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
+- Orphan templates (no scheme uses them; 41): `acceptable_action/1`, `action_fit_quality/0`, `alternative_action/2`, `another_category/2`, `bribed/1`, `bring_about_more_effectively/2`, `bringing_about_action/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `conflict_goals/3`, `defeasibly_implies/2`, `goal_is_action/1`, `have_goal/1`, `incompatible_consequences/2`, `incompatible_goal/1`, `misleading/1`, `more_acceptable_bringing/2`, `more_efficient_alternative_actions/2`, `more_on_point/2`, `necessary_action/2`, `negative_consequences/1`, `other_consequences/1`, `other_goals_conflict/1`, `positive_consequences/1`, `possible_agent/2`, `practicality_action/1`, `promote_more_effectively/2`, `prudential/1`, `realize_more_effectively/2`, `relevant_differences/1`, `side_effect_action/2`, `side_effects/2`, `strongly_occur/1`, `successful_account/2`, `sufficient_action/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
 

@@ -68,10 +68,10 @@ contrasts:
   text: 'The closest of the oppositions: it denies that a subject can receive two
     opposite evaluations at once. Choose it when the text objects that one thing is
     treated in two incompatible ways (taxed and subsidised), though while walton.yml''s
-    encoding of it is broken such a text is coded other, as the gold codes 13292.123;
-    choose alternative_normative when it argues that, since one of two exclusive measures
-    is required, the other is not.'
-  status: drafted by Claude Code, 2026-10-22
+    encoding of it is broken such a text is coded other, as the gold codes the incoherence
+    in 13292.123 (a secondary instance); choose alternative_normative when it argues
+    that, since one of two exclusive measures is required, the other is not.'
+  status: drafted by Claude Code, 2026-11-24
 - scheme: rhetorical_oppositions_normative
   text: Choose rhetorical_oppositions_normative when a required treatment of one subject
     is carried over, reversed, to the contrary subject; choose alternative_normative
@@ -93,10 +93,10 @@ contrasts:
   text: Choose pragmatic_alternative when the text argues that an action must be taken
     because otherwise something bad will happen; choose alternative_normative when
     it concludes that another course is not required because a competing one is. A
-    claim that one measure, rather than another, is the right one often carries both
-    an alternative_normative step and a practical reasoning for the measure (Kialo
-    gold, 13292.104).
-  status: drafted by Claude Code, 2026-10-22
+    claim that one measure, rather than another, is the right one often carries an
+    alternative_normative step, a practical reasoning for the measure and, when it
+    says that the measure does better, a better_means answer (Kialo gold, 13292.104).
+  status: drafted by Claude Code, 2026-11-24
 examples:
 - text: Meat is not inherently problematic. What is problematic is the animal farming
     industry, so the appropriate solution is to regulate this industry rather than
@@ -105,9 +105,11 @@ examples:
   coding: 'A = regulate the animal farming industry; B = tax meat. Stated: can_be_required(A,B)
     ("rather than"), is_required(A) ("the appropriate solution is to regulate this
     industry"). Supplied: none. Conclusion: not_required(B). The gold codes it as
-    a secondary instance; the primary is practical_reasoning2 for regulating the industry.
-    See the discrepancy on the conclusion.'
-  status: drafted by Claude Code, 2026-10-22
+    a secondary instance; since 2026-11-24 the primary is better_means, that regulating
+    the industry would reduce the harm more surely than the tax (D075, D089), and
+    practical_reasoning2 for regulating the industry is secondary too. See the discrepancy
+    on the conclusion.'
+  status: drafted by Claude Code, 2026-11-24
 - text: The grant can pay for the library repairs or the new playground, not both.
     The fire inspector has ordered the library repairs, so the playground is not what
     this grant has to fund.
@@ -121,13 +123,15 @@ examples:
   kialo: "13292.123"
   coding: 'Near miss: "instead" sets two measures against each other, but the claim
     argues for its own measure from the circumstances and from the incoherence of
-    taxing and subsidising at once, not from an either-or requirement. The gold codes
-    practical_reasoning2 (A = abolish meat subsidies, G = a price that reflects the
+    taxing and subsidising at once, not from an either-or requirement. Since 2026-11-24
+    the gold codes better_means (abolishing the subsidies removes at its source the
+    distortion the tax would only offset: more surely; D075, D089), practical_reasoning2
+    for abolishing them (A = abolish meat subsidies, G = a price that reflects the
     real costs), and the incoherence as other, describing an argument from opposition
     (11.2) that walton.yml''s opposition-normative cannot express; it sets alternative_normative
     aside.'
   near_miss: true
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-24
 discrepancies:
 - kind: other
   about: conclusion
@@ -138,9 +142,10 @@ discrepancies:
     alternative_normative concludes the negation of is_required(B), which meets only
     is_required(B). Not yet applied. Before: open: whether the game should read not_required(B)
     as ¬should_be_performed(B). Until then, code the counterargument to a proposal
-    with the practical scheme it rests on, as the gold does for 13292.104, and this
-    scheme as a secondary instance.'
-  status: drafted by Claude Code, 2026-10-22
+    with the practical scheme it rests on, as the gold did for 13292.104 until 2026-11-24
+    (since then its primary instance is better_means, D075), and this scheme as a
+    secondary instance.'
+  status: drafted by Claude Code, 2026-11-24
 - kind: other
   about: critical questions
   detail: 'Neither the book (13 prints no questions) nor walton.yml (no assumptions
@@ -196,3 +201,8 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the contrast with opposition-normative and the near miss follow what the gold
     did with 13292.123; the classification note)'
+- date: "2026-11-24"
+  by: Claude Code
+  what: The contrasts with opposition-normative and pragmatic_alternative, the codings
+    of 13292.104 and 13292.123 and the D016 discrepancy follow the gold's recode for
+    proposal D004-D075 (better_means, D075, D089).

@@ -503,9 +503,17 @@
       "A": "tax_meat",
       "S1": "meat_production_and_consumption_harm_environment",
       "S2": "reduced_meat_consumption",
-      "G": "environmental_harm_from_meat_reduced"
+      "G": "environmental_harm_from_meat_reduced",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,environmental_harm_from_meat_reduced)",
+       "en": "One of the goals of 'governments' is 'the environmental harm from meat production and consumption is reduced'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
@@ -528,31 +536,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_meat)",
-       "en": "Action 'governments put a tax on meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_meat)",
+       "en": "It is possible for 'governments' to bring about 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(environmental_harm_from_meat_reduced)",
-       "en": "Action 'the environmental harm from meat production and consumption is reduced' is possible.",
+       "formula": "possible_goal(environmental_harm_from_meat_reduced)",
+       "en": "'the environmental harm from meat production and consumption is reduced' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(reduced_meat_consumption,tax_meat)",
-       "en": "There exists an action that would bring about 'less meat is demanded and consumed (and so less is produced)' more effectively than 'governments put a tax on meat'.",
+       "formula": "bring_about_more_effectively(governments,reduced_meat_consumption,tax_meat)",
+       "en": "There is a way for 'governments' to reach the state 'less meat is demanded and consumed (and so less is produced)' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
-       "en": "There exists an action that would realize the goal 'the environmental harm from meat production and consumption is reduced' more effectively than 'governments put a tax on meat'.",
+       "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
+       "en": "There is a way for 'governments' to realize the goal 'the environmental harm from meat production and consumption is reduced' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -563,17 +571,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-       "en": "Performing 'governments put a tax on meat' in 'meat production and consumption are bad for the environment' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'the environmental harm from meat production and consumption is reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(environmental_harm_from_meat_reduced)",
-       "en": "Another goal is incompatible with 'the environmental harm from meat production and consumption is reduced'.",
+       "formula": "incompatible_goal(governments,environmental_harm_from_meat_reduced)",
+       "en": "Another goal of 'governments' is incompatible with 'the environmental harm from meat production and consumption is reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -627,24 +635,37 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
-     "formula": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
-     "note": "13292.104 (regulate the industry), 13292.147 (carbon rationing)"
+     "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
+     "note": "13292.104 (regulate the industry), 13292.147 (carbon rationing). Since 2026-11-24: 13292.147 claims no better means: a proposal of another course, not an answer here (D006)"
     },
     {
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
-     "type": "side effects",
-     "formula": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-     "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred)"
+     "type": "side effects that outweigh",
+     "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
+     "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred). Since 2026-11-24: no claim weighs a side effect against this goal but 13292.127 (starvation, bad_outweighs_good); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070)"
     }
    ],
    "notes": {
-    "text": "A fragment (R3, guidelines §3): the claim states only the circumstances S1 of a goal-based practical reasoning for the thesis. S2 and G are supplied so that later claims can target this argument's premises and exceptions (13292.13 efficacy; 13292.6 S2->G; 13292.104 and 13292.147 other means; 13292.174 and 13292.5 side effects). Goal-based because no value is stated.",
+    "text": "A fragment (R3, guidelines §3): the claim states only the circumstances S1 of a goal-based practical reasoning for the thesis. S2 and G are supplied so that later claims can target this argument's premises and exceptions (13292.13 efficacy; 13292.6 S2->G; 13292.104 and 13292.147 other means; 13292.174 and 13292.5 side effects). Goal-based because no value is stated. Since 2026-11-24 (proposal D004-D075): 13292.104 answers the other-means question with better_means; 13292.147 claims no better means, so it is a proposal of another course at the conclusion (D006); 13292.174 and 13292.5 are rebuttals at the conclusion (D070); 13292.127 weighs a side effect against the goal at the exception bad_outweighs(A,G).",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges",
+       "notes"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -803,9 +824,17 @@
       "A": "tax_meat",
       "S1": "meat_price_below_real_costs",
       "S2": "higher_meat_price",
-      "G": "meat_price_reflects_real_costs"
+      "G": "meat_price_reflects_real_costs",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_price_reflects_real_costs)",
+       "en": "One of the goals of 'governments' is 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_price_below_real_costs)",
@@ -829,31 +858,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_meat)",
-       "en": "Action 'governments put a tax on meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_meat)",
+       "en": "It is possible for 'governments' to bring about 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_price_reflects_real_costs)",
-       "en": "Action 'the consumer price of meat reflects the real costs of meat consumption' is possible.",
+       "formula": "possible_goal(meat_price_reflects_real_costs)",
+       "en": "'the consumer price of meat reflects the real costs of meat consumption' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(higher_meat_price,tax_meat)",
-       "en": "There exists an action that would bring about 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
+       "formula": "bring_about_more_effectively(governments,higher_meat_price,tax_meat)",
+       "en": "There is a way for 'governments' to reach the state 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
-       "en": "There exists an action that would realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
+       "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
+       "en": "There is a way for 'governments' to realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -864,17 +893,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_meat,meat_price_below_real_costs)",
-       "en": "Performing 'governments put a tax on meat' in 'the consumer price of meat is below the real costs of meat consumption' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_price_reflects_real_costs)",
-       "en": "Another goal is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "formula": "incompatible_goal(governments,meat_price_reflects_real_costs)",
+       "en": "Another goal of 'governments' is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -921,22 +950,22 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
-     "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
+     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "13292.123: abolish the subsidies instead"
     },
     {
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
-     "formula": "possible(tax_meat)",
+     "formula": "possible_bring_about(governments,tax_meat)",
      "note": "13292.171: removing subsidies is politically easier than taxing"
     },
     {
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
-     "type": "side effects",
-     "formula": "side_effects(tax_meat,meat_price_below_real_costs)",
-     "note": "affordability (13292.7)"
+     "type": "side effects that outweigh",
+     "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
+     "note": "affordability (13292.7). Since 2026-11-24: 13292.7's affordability is a plain side effect, a rebuttal at the conclusion; it would answer here only if claimed to outweigh the price goal (D070)"
     }
    ],
    "notes": {
@@ -945,7 +974,19 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -1545,7 +1586,7 @@
     {
      "primary": true,
      "scheme": {
-      "walton_id": "other",
+      "walton_id": "bad_outweighs_good",
       "compendium": null,
       "wag_id": null,
       "fit": "reconstructed",
@@ -1555,10 +1596,13 @@
         "walton_id": "negative_practical",
         "why_not": "uses more_serious_consequences/2, but concerns acting on a presumption under ignorance"
        }
-      ],
-      "description": "Weighing of consequences: a bad consequence of the tax (starvation) is more serious than the harms of high meat consumption that the pros cite, so the tax's bad consequences outweigh the good one 13292.115 argues: the exception of that positive consequences argument (D055; guidelines §3.1, OC3, OC4). No scheme concludes the exception (candidate C003). walton.yml has more_serious_consequences/2 only inside negative_practical (26.2), which compares the costs of acting on a presumption under ignorance and does not fit."
+      ]
      },
-     "bindings": {},
+     "bindings": {
+      "A": "tax_meat",
+      "H": "starvation_from_reduced_meat_access",
+      "G": "environmental_harm_from_meat_reduced"
+     },
      "premises": [
       {
        "role": "premise",
@@ -1569,22 +1613,22 @@
       },
       {
        "role": "premise",
-       "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
-       "en": "The action 'governments put a tax on meat' brings about 'unhealthy meat consumption is reduced'.",
+       "formula": "bad(starvation_from_reduced_meat_access)",
+       "en": "'people starve because the tax reduces their access to meat' is bad.",
        "status": "inferred",
-       "cite": "13292.115",
-       "note": "the conceded benefit that is outweighed"
+       "note": "'a more severe threat'"
       },
       {
        "role": "premise",
-       "formula": "more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)",
-       "en": "Consequences 'people starve because the tax reduces their access to meat' are more serious than consequences 'the harms of high meat consumption (those the pros of the tax cite)'.",
-       "status": "explicit"
+       "formula": "matters_more(starvation_from_reduced_meat_access,environmental_harm_from_meat_reduced)",
+       "en": "'people starve because the tax reduces their access to meat' matters more than 'the environmental harm from meat production and consumption is reduced'.",
+       "status": "explicit",
+       "note": "'a more severe threat than any consequence of high meat consumption': ranked against 13292.108's goal, the earliest argument of the class on the board (OC7)"
       }
      ],
      "conclusion": {
-      "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
-      "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'unhealthy meat consumption is reduced'."
+      "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
+      "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'the environmental harm from meat production and consumption is reduced'."
      }
     },
     {
@@ -1634,16 +1678,16 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.5,
-    "cq": "33.1 CQ3",
+    "cq": "22.1 CQ5",
     "polarity": "against"
    },
    "target": {
     "kialo_parent": "13292.7",
     "kialo_relation": "pro",
     "actual": {
-     "claim": "13292.115",
+     "claim": "13292.108",
      "part": "exception",
-     "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
+     "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
      "instance": "primary"
     },
     "re_parented": true
@@ -1683,12 +1727,12 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
-     "formula": "more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)",
+     "formula": "matters_more(starvation_from_reduced_meat_access,environmental_harm_from_meat_reduced)",
      "note": "the comparison is asserted, not argued; a reply that denies it attacks this premise (OC10)"
     }
    ],
    "notes": {
-    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link.",
+    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link. Since 2026-11-24 (D064, D075) the weighing is an instance of bad_outweighs_good, C003's answer scheme, in place of Other. Since 2026-11-24 practical reasoning is in the class (D070, D091), so the earliest argument of the class on the board is 13292.108, not 13292.115 (OC7): the answer is at its exception, 22.1 CQ5.",
     "candidate_pattern": "weighing of consequences (C003); a comparison with a class (OC7)"
    },
    "adjudication": {
@@ -1709,6 +1753,18 @@
        "notes"
       ],
       "what": "The weighing became the primary instance, an answer to 33.1 CQ3 at 13292.115's new exception; the starvation consequence is secondary. Before, negative consequences was primary, an independent pro of 13292.7."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances",
+       "challenges",
+       "notes",
+       "role.cq",
+       "target"
+      ],
+      "what": "the weighing is an instance of bad_outweighs_good (D064, D075)"
      }
     ]
    }
@@ -2152,9 +2208,9 @@
     }
    ],
    "role": {
-    "kind": "cq_answer",
+    "kind": "rebuttal",
     "confidence": 0.6,
-    "cq": "CQ:side_effect",
+    "cq": null,
     "polarity": "against",
     "move": "side_effect"
    },
@@ -2163,9 +2219,7 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
-     "part": "exception",
-     "formula": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
+     "part": "conclusion"
     },
     "re_parented": true
    },
@@ -2196,14 +2250,26 @@
     }
    ],
    "notes": {
-    "text": "Kialo files it as a pro of 13292.13 (the tax would not resolve, and might worsen, the problems of production). Its content is a further bad consequence of the action, offered against the thesis's environmental argument 13292.108 (a sibling of the Kialo parent, hence re-parented); it instantiates that argument's exception side_effects(A,S1). practical_reasoning2 has CQ:side_effect (22.1 CQ5) on exactly that exception, so the role is cq_answer (R2); role.move keeps the guidelines' finer label. What 'dangerous' means (food safety, workers, animals, environment) is unstated.",
+    "text": "Kialo files it as a pro of 13292.13 (the tax would not resolve, and might worsen, the problems of production). Its content is a further bad consequence of the action, offered against the thesis's environmental argument 13292.108 (a sibling of the Kialo parent, hence re-parented); it instantiates that argument's exception side_effects(A,S1). practical_reasoning2 has CQ:side_effect (22.1 CQ5) on exactly that exception, so the role is cq_answer (R2); role.move keeps the guidelines' finer label. What 'dangerous' means (food safety, workers, animals, environment) is unstated. Since 2026-11-24 (D070) a side effect that ranks nothing against the goal is negative consequences, a rebuttal at the conclusion of the argument it answers (guidelines §3.1, OC2), not an answer at the exception, which is now the claim that the tax's bad consequences outweigh the goal (bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)).",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [
      "role"
     ],
-    "reason": "Both coded side_effect against the exception side_effects(tax_meat,S1) of 13292.108. R2: practical_reasoning2 has CQ:side_effect (22.1 CQ5) on that exception, so role.kind is cq_answer with cq CQ:side_effect; the label side_effect is kept in role.move."
+    "reason": "Both coded side_effect against the exception side_effects(tax_meat,S1) of 13292.108. R2: practical_reasoning2 has CQ:side_effect (22.1 CQ5) on that exception, so role.kind is cq_answer with cq CQ:side_effect; the label side_effect is kept in role.move.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "role",
+       "target",
+       "notes"
+      ],
+      "what": "a plain side effect: a rebuttal at 13292.108's conclusion, no longer an answer at its side-effect exception (D070)"
+     }
+    ]
    }
   },
   {
@@ -2216,6 +2282,64 @@
    "instances": [
     {
      "primary": true,
+     "scheme": {
+      "walton_id": "better_means",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.65,
+      "alternatives": [
+       {
+        "walton_id": "practical_reasoning2",
+        "why_not": "it argues for the other course on its own; the claim is that the other course does better than the tax, the exception it answers (D075)"
+       }
+      ]
+     },
+     "bindings": {
+      "A": "tax_meat",
+      "A2": "regulate_animal_farming_industry",
+      "G": "environmental_harm_from_meat_reduced",
+      "P": "governments"
+     },
+     "comparison": "more surely",
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,environmental_harm_from_meat_reduced)",
+       "en": "One of the goals of 'governments' is 'the environmental harm from meat production and consumption is reduced'.",
+       "status": "inferred",
+       "cite": "13292.108",
+       "note": "the answered argument's own goal premise (D075, D089)"
+      },
+      {
+       "role": "premise",
+       "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
+       "en": "It is possible for 'governments' to bring about 'governments regulate the animal farming industry'.",
+       "status": "supplied",
+       "note": "a premise of the answer (D089): that governments can take the other course; the claim does not argue it"
+      },
+      {
+       "role": "premise",
+       "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
+       "en": "The action 'governments regulate the animal farming industry' brings about 'the environmental harm from meat production and consumption is reduced'.",
+       "status": "inferred",
+       "note": "the industry, not meat, is said to be the problem"
+      },
+      {
+       "role": "premise",
+       "formula": "more_effective_means(governments,regulate_animal_farming_industry,environmental_harm_from_meat_reduced,tax_meat)",
+       "en": "For 'governments', 'governments regulate the animal farming industry' would realize 'the environmental harm from meat production and consumption is reduced' more effectively than 'governments put a tax on meat': more surely, sooner or at lower cost.",
+       "status": "explicit",
+       "note": "\"what is problematic is the animal farming industry\": regulating the industry addresses what is said to be the problem, so it reaches the goal more surely; \"rather than penalize those who wish to consume meat\" prefers one value to another, which is not this comparison (D089)"
+      }
+     ],
+     "conclusion": {
+      "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
+      "en": "There is a way for 'governments' to realize the goal 'the environmental harm from meat production and consumption is reduced' more effectively than 'governments put a tax on meat'."
+     }
+    },
+    {
+     "primary": false,
      "scheme": {
       "walton_id": "practical_reasoning2",
       "compendium": "22.1",
@@ -2237,9 +2361,17 @@
       "A": "regulate_animal_farming_industry",
       "S1": "farming_industry_not_meat_is_problem",
       "S2": "animal_farming_industry_regulated",
-      "G": "meat_problems_resolved"
+      "G": "meat_problems_resolved",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_problems_resolved)",
+       "en": "One of the goals of 'governments' is 'the problems associated with meat production and consumption are resolved'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
@@ -2262,31 +2394,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(regulate_animal_farming_industry)",
-       "en": "Action 'governments regulate the animal farming industry' is possible.",
+       "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
+       "en": "It is possible for 'governments' to bring about 'governments regulate the animal farming industry'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_problems_resolved)",
-       "en": "Action 'the problems associated with meat production and consumption are resolved' is possible.",
+       "formula": "possible_goal(meat_problems_resolved)",
+       "en": "'the problems associated with meat production and consumption are resolved' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(animal_farming_industry_regulated,regulate_animal_farming_industry)",
-       "en": "There exists an action that would bring about 'the animal farming industry is regulated' more effectively than 'governments regulate the animal farming industry'.",
+       "formula": "bring_about_more_effectively(governments,animal_farming_industry_regulated,regulate_animal_farming_industry)",
+       "en": "There is a way for 'governments' to reach the state 'the animal farming industry is regulated' more effectively than 'governments regulate the animal farming industry'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_problems_resolved,regulate_animal_farming_industry)",
-       "en": "There exists an action that would realize the goal 'the problems associated with meat production and consumption are resolved' more effectively than 'governments regulate the animal farming industry'.",
+       "formula": "realize_more_effectively(governments,meat_problems_resolved,regulate_animal_farming_industry)",
+       "en": "There is a way for 'governments' to realize the goal 'the problems associated with meat production and consumption are resolved' more effectively than 'governments regulate the animal farming industry'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -2297,17 +2429,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(regulate_animal_farming_industry,farming_industry_not_meat_is_problem)",
-       "en": "Performing 'governments regulate the animal farming industry' in 'the animal farming industry, not meat itself, is what is problematic' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
+       "en": "The action 'governments regulate the animal farming industry' has bad consequences that outweigh 'the problems associated with meat production and consumption are resolved'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_problems_resolved)",
-       "en": "Another goal is incompatible with 'the problems associated with meat production and consumption are resolved'.",
+       "formula": "incompatible_goal(governments,meat_problems_resolved)",
+       "en": "Another goal of 'governments' is incompatible with 'the problems associated with meat production and consumption are resolved'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -2365,7 +2497,7 @@
     "actual": {
      "claim": "13292.108",
      "part": "exception",
-     "formula": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
+     "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
      "instance": "primary"
     },
     "re_parented": true
@@ -2380,9 +2512,23 @@
     {
      "cq": null,
      "wag_cq": null,
+     "type": "efficacy",
+     "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
+     "note": "attacked by 13292.208 (non-cultured meat production is inherently problematic: regulation changes the harm only in degree); can regulation remove harms that scale with consumption?"
+    },
+    {
+     "cq": null,
+     "wag_cq": null,
+     "type": "better means",
+     "formula": "more_effective_means(governments,regulate_animal_farming_industry,environmental_harm_from_meat_reduced,tax_meat)",
+     "note": "the comparison: more surely"
+    },
+    {
+     "cq": null,
+     "wag_cq": null,
      "type": "circumstances",
      "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
-     "note": "no printed CQ; attacked by 13292.208 (non-cultured meat production is inherently problematic)"
+     "note": "no printed CQ; attacked by 13292.208 (non-cultured meat production is inherently problematic). Since 2026-11-24: 13292.208 attacks the better_means instance's premise brings_about(A2,G) now (D075)"
     },
     {
      "cq": null,
@@ -2395,18 +2541,19 @@
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
-     "formula": "possible(regulate_animal_farming_industry)",
-     "note": "feasibility of regulating the industry"
+     "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
+     "note": "feasibility of regulating the industry. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
     {
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
-     "type": "side effects",
-     "formula": "side_effects(regulate_animal_farming_industry,farming_industry_not_meat_is_problem)"
+     "type": "side effects that outweigh",
+     "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
+     "note": "Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
     }
    ],
    "notes": {
-    "text": "Proposes another action (regulating the farming industry) as the better means to the goal the thesis's environmental argument pursues, i.e. the exception realize_more_effectively(G,tax_meat) of 13292.108 (a sibling of the Kialo parent, hence re-parented). practical_reasoning2 has CQ:other_means (22.1 CQ2) on that exception, so cq_answer (R2), with role.move alternative_means. Its own goal is the broader 'problems' of 13292.13, not only environmental harm. It also supports 13292.13 by implying that taxing consumers misses the source of the problems.",
+    "text": "Proposes another action (regulating the farming industry) as the better means to the goal the thesis's environmental argument pursues, i.e. the exception realize_more_effectively(G,tax_meat) of 13292.108 (a sibling of the Kialo parent, hence re-parented). practical_reasoning2 has CQ:other_means (22.1 CQ2) on that exception, so cq_answer (R2), with role.move alternative_means. Its own goal is the broader 'problems' of 13292.13, not only environmental harm. It also supports 13292.13 by implying that taxing consumers misses the source of the problems. Since 2026-11-24 (D075, D089) its primary instance is better_means, the answer scheme for another means that does better; the argument for the other course is secondary.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -2415,7 +2562,30 @@
      "instances.scheme.fit",
      "instances (secondary)"
     ],
-    "reason": "role: both alternative_means against 13292.108's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). fit: B (explicit): the circumstances, the analytic transition and 'the appropriate solution' are all in the text; A had supplied the trivial transition. Secondary instance: A's argument from alternatives (13.2) is kept because 'rather than' is explicit and ties the proposal to the thesis; B did not code it."
+    "reason": "role: both alternative_means against 13292.108's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). fit: B (explicit): the circumstances, the analytic transition and 'the appropriate solution' are all in the text; A had supplied the trivial transition. Secondary instance: A's argument from alternatives (13.2) is kept because 'rather than' is explicit and ties the proposal to the thesis; B did not code it.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     },
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances",
+       "target.actual.formula",
+       "challenges",
+       "notes"
+      ],
+      "what": "a primary better_means instance at the exception it answers, realize_more_effectively(P,G,tax_meat), with its comparison (D075, D089); the argument for the other course is secondary"
+     }
+    ]
    }
   },
   {
@@ -2518,9 +2688,17 @@
       "A": "tax_meat",
       "S1": "meat_price_below_real_costs",
       "S2": "higher_meat_price",
-      "G": "meat_price_reflects_real_costs"
+      "G": "meat_price_reflects_real_costs",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_price_reflects_real_costs)",
+       "en": "One of the goals of 'governments' is 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_price_below_real_costs)",
@@ -2544,31 +2722,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_meat)",
-       "en": "Action 'governments put a tax on meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_meat)",
+       "en": "It is possible for 'governments' to bring about 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_price_reflects_real_costs)",
-       "en": "Action 'the consumer price of meat reflects the real costs of meat consumption' is possible.",
+       "formula": "possible_goal(meat_price_reflects_real_costs)",
+       "en": "'the consumer price of meat reflects the real costs of meat consumption' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(higher_meat_price,tax_meat)",
-       "en": "There exists an action that would bring about 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
+       "formula": "bring_about_more_effectively(governments,higher_meat_price,tax_meat)",
+       "en": "There is a way for 'governments' to reach the state 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
-       "en": "There exists an action that would realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
+       "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
+       "en": "There is a way for 'governments' to realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -2579,17 +2757,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_meat,meat_price_below_real_costs)",
-       "en": "Performing 'governments put a tax on meat' in 'the consumer price of meat is below the real costs of meat consumption' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_price_reflects_real_costs)",
-       "en": "Another goal is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "formula": "incompatible_goal(governments,meat_price_reflects_real_costs)",
+       "en": "Another goal of 'governments' is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -2641,7 +2819,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
-     "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
+     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "13292.123: remove the subsidies"
     }
    ],
@@ -2653,7 +2831,19 @@
     "changed_fields": [
      "re_parented"
     ],
-    "reason": "re_parented: B (false), R1. Everything else agreed."
+    "reason": "re_parented: B (false), R1. Everything else agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -2676,9 +2866,17 @@
       "A": "tax_meat",
       "S1": "meat_price_below_real_costs",
       "S2": "higher_meat_price",
-      "G": "meat_price_reflects_real_costs"
+      "G": "meat_price_reflects_real_costs",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_price_reflects_real_costs)",
+       "en": "One of the goals of 'governments' is 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_price_below_real_costs)",
@@ -2701,31 +2899,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_meat)",
-       "en": "Action 'governments put a tax on meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_meat)",
+       "en": "It is possible for 'governments' to bring about 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_price_reflects_real_costs)",
-       "en": "Action 'the consumer price of meat reflects the real costs of meat consumption' is possible.",
+       "formula": "possible_goal(meat_price_reflects_real_costs)",
+       "en": "'the consumer price of meat reflects the real costs of meat consumption' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(higher_meat_price,tax_meat)",
-       "en": "There exists an action that would bring about 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
+       "formula": "bring_about_more_effectively(governments,higher_meat_price,tax_meat)",
+       "en": "There is a way for 'governments' to reach the state 'the consumer price of meat is higher' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
-       "en": "There exists an action that would realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
+       "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
+       "en": "There is a way for 'governments' to realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -2736,17 +2934,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_meat,meat_price_below_real_costs)",
-       "en": "Performing 'governments put a tax on meat' in 'the consumer price of meat is below the real costs of meat consumption' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_price_reflects_real_costs)",
-       "en": "Another goal is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "formula": "incompatible_goal(governments,meat_price_reflects_real_costs)",
+       "en": "Another goal of 'governments' is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -2848,7 +3046,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
-     "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
+     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "if subsidies are the cause, abolishing them may do better (13292.123)"
     }
    ],
@@ -2860,7 +3058,19 @@
     "changed_fields": [
      "re_parented"
     ],
-    "reason": "re_parented: both annotators set true; R1 makes it false, since the target is a premise of the Kialo parent's own argument. Everything else agreed."
+    "reason": "re_parented: both annotators set true; R1 makes it false, since the target is a premise of the Kialo parent's own argument. Everything else agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -2873,7 +3083,7 @@
     {
      "primary": true,
      "scheme": {
-      "walton_id": "other",
+      "walton_id": "good_outweighs_bad",
       "compendium": null,
       "wag_id": null,
       "fit": "reconstructed",
@@ -2883,10 +3093,13 @@
         "walton_id": "positive_value",
         "why_not": "it ranks two consequences of the tax, and the values it names are things the tax would promote, so they count as consequences (OC3, OC5)"
        }
-      ],
-      "description": "Weighing of consequences: what the tax would promote (sustainability, animal welfare) presses harder than the lost revenue 13292.9 cites, so the tax's good consequences outweigh it: the exception of that negative consequences argument (D055; guidelines §3.1, OC4, OC5). No scheme concludes the exception (candidate C003)."
+      ]
      },
-     "bindings": {},
+     "bindings": {
+      "A": "tax_meat",
+      "H": "sustainability_and_animal_welfare",
+      "G": "tax_revenue_reduced"
+     },
      "premises": [
       {
        "role": "premise",
@@ -2897,10 +3110,17 @@
       },
       {
        "role": "premise",
-       "formula": "more_pressing(sustainability_and_animal_welfare,tax_revenue_reduced)",
-       "en": "'sustainability and animal welfare' presses harder than 'tax revenues are reduced'.",
+       "formula": "good(sustainability_and_animal_welfare)",
+       "en": "'sustainability and animal welfare' is good.",
+       "status": "inferred",
+       "note": "'other, more pressing issues': what the tax would serve is good"
+      },
+      {
+       "role": "premise",
+       "formula": "matters_more(sustainability_and_animal_welfare,tax_revenue_reduced)",
+       "en": "'sustainability and animal welfare' matters more than 'tax revenues are reduced'.",
        "status": "explicit",
-       "note": "\"other, more pressing issues\""
+       "note": "'more pressing'"
       }
      ],
      "conclusion": {
@@ -2942,12 +3162,12 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
-     "formula": "more_pressing(sustainability_and_animal_welfare,tax_revenue_reduced)",
+     "formula": "matters_more(sustainability_and_animal_welfare,tax_revenue_reduced)",
      "note": "'more pressing' than revenue is asserted, not argued"
     }
    ],
    "notes": {
-    "text": "Answers 33.2 CQ3 of 13292.9 against it: the tax serves sustainability and animal welfare, which press harder than the lost revenue. It ranks two consequences, so it argues the exception of 13292.9's argument, good_outweighs(tax_meat,tax_revenue_reduced), with Other (guidelines §3.1, OC3, OC4). The values it names are things the tax would promote, so they count as consequences (OC5). Its Kialo parent cites the outweighed consequence, so it is not re-parented.",
+    "text": "Answers 33.2 CQ3 of 13292.9 against it: the tax serves sustainability and animal welfare, which press harder than the lost revenue. It ranks two consequences, so it argues the exception of 13292.9's argument, good_outweighs(tax_meat,tax_revenue_reduced), with Other (guidelines §3.1, OC3, OC4). The values it names are things the tax would promote, so they count as consequences (OC5). Its Kialo parent cites the outweighed consequence, so it is not re-parented. Since 2026-11-24 (D064, D075) the weighing is an instance of good_outweighs_bad, C003's answer scheme, in place of Other.",
     "candidate_pattern": "weighing of consequences (C003)"
    },
    "adjudication": {
@@ -2965,6 +3185,16 @@
        "notes"
       ],
       "what": "Was an argument from positive value answering CQ:opposite_consequences at 13292.9's conclusion; now Other concluding good_outweighs at 13292.9's exception, an answer to 33.2 CQ3."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances",
+       "challenges",
+       "notes"
+      ],
+      "what": "the weighing is an instance of good_outweighs_bad (D064, D075)"
      }
     ]
    }
@@ -3243,7 +3473,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
-     "formula": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
+     "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
      "note": "if read as an alternative (greener production instead of a tax), as 13292.161 does"
     }
    ],
@@ -3255,7 +3485,17 @@
     "changed_fields": [
      "re_parented"
     ],
-    "reason": "re_parented: B (false), R1. Scheme (none), role and target agreed; the conclusion is written as the claim's own proposition (B) rather than with possible/1, which walton.yml uses for actions."
+    "reason": "re_parented: B (false), R1. Scheme (none), role and target agreed; the conclusion is written as the claim's own proposition (B) rather than with possible/1, which walton.yml uses for actions.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the formulas it names follow walton.yml's renamed ones (proposal D004-D075)"
+     }
+    ]
    }
   },
   {
@@ -3485,9 +3725,17 @@
       "A": "tax_meat",
       "S1": "meat_production_and_consumption_harm_environment",
       "S2": "reduced_meat_consumption",
-      "G": "deforestation_slowed"
+      "G": "deforestation_slowed",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,deforestation_slowed)",
+       "en": "One of the goals of 'governments' is 'deforestation is slowed or reversed'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
@@ -3510,31 +3758,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_meat)",
-       "en": "Action 'governments put a tax on meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_meat)",
+       "en": "It is possible for 'governments' to bring about 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(deforestation_slowed)",
-       "en": "Action 'deforestation is slowed or reversed' is possible.",
+       "formula": "possible_goal(deforestation_slowed)",
+       "en": "'deforestation is slowed or reversed' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(reduced_meat_consumption,tax_meat)",
-       "en": "There exists an action that would bring about 'less meat is demanded and consumed (and so less is produced)' more effectively than 'governments put a tax on meat'.",
+       "formula": "bring_about_more_effectively(governments,reduced_meat_consumption,tax_meat)",
+       "en": "There is a way for 'governments' to reach the state 'less meat is demanded and consumed (and so less is produced)' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(deforestation_slowed,tax_meat)",
-       "en": "There exists an action that would realize the goal 'deforestation is slowed or reversed' more effectively than 'governments put a tax on meat'.",
+       "formula": "realize_more_effectively(governments,deforestation_slowed,tax_meat)",
+       "en": "There is a way for 'governments' to realize the goal 'deforestation is slowed or reversed' more effectively than 'governments put a tax on meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -3545,17 +3793,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-       "en": "Performing 'governments put a tax on meat' in 'meat production and consumption are bad for the environment' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_meat,deforestation_slowed)",
+       "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'deforestation is slowed or reversed'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(deforestation_slowed)",
-       "en": "Another goal is incompatible with 'deforestation is slowed or reversed'.",
+       "formula": "incompatible_goal(governments,deforestation_slowed)",
+       "en": "Another goal of 'governments' is incompatible with 'deforestation is slowed or reversed'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -3613,7 +3861,19 @@
      "re_parented",
      "instances (secondary)"
     ],
-    "reason": "re_parented: both set true; R1 makes it false (the target is the Kialo parent's own premise). A's secondary cause_to_effect instance (reduced demand -> less deforestation) is dropped: its cause is hypothetical and the primary fragment already states the same link, so a better scheme fits (R4); B did not code it. 13292.192's attack is accordingly coded against the primary instance (R5)."
+    "reason": "re_parented: both set true; R1 makes it false (the target is the Kialo parent's own premise). A's secondary cause_to_effect instance (reduced demand -> less deforestation) is dropped: its cause is hypothetical and the primary fragment already states the same link, so a better scheme fits (R4); B did not code it. 13292.192's attack is accordingly coded against the primary instance (R5).",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -4866,9 +5126,9 @@
     }
    ],
    "role": {
-    "kind": "cq_answer",
+    "kind": "action_amendment",
     "confidence": 0.65,
-    "cq": "CQ:other_means",
+    "cq": null,
     "polarity": "against",
     "move": "alternative_means"
    },
@@ -4877,9 +5137,7 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
-     "part": "exception",
-     "formula": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)",
-     "instance": "primary"
+     "part": "conclusion"
     },
     "re_parented": true
    },
@@ -4919,7 +5177,7 @@
     }
    ],
    "notes": {
-    "text": "Kialo con of 13292.2 (emissions), but it does not dispute the emissions: it proposes another instrument (progressive rationing) for the environmental goal, implicitly better than a flat tax (its children compare it with a meat tax: 13292.149, 13292.151). It instantiates the exception realize_more_effectively(G,tax_meat) of the thesis's environmental argument 13292.108 (an ancestor, hence re-parented); practical_reasoning2 has CQ:other_means (22.1 CQ2) on it, so cq_answer (R2), with role.move alternative_means. Could also be read as an action_amendment (a progressive price instead of a flat tax).",
+    "text": "Kialo con of 13292.2 (emissions), but it does not dispute the emissions: it proposes another instrument (progressive rationing) for the environmental goal, implicitly better than a flat tax (its children compare it with a meat tax: 13292.149, 13292.151). It instantiates the exception realize_more_effectively(G,tax_meat) of the thesis's environmental argument 13292.108 (an ancestor, hence re-parented); practical_reasoning2 has CQ:other_means (22.1 CQ2) on it, so cq_answer (R2), with role.move alternative_means. Could also be read as an action_amendment (a progressive price instead of a flat tax). Since 2026-11-24 (D006, D089): it claims no better means (its children compare it the other way, 13292.149, or by who bears the cost, 13292.151), so it answers nothing at the exception; it proposes another course for the same goal, a separate alternative (D066, C017), until the consequences proposal settles how alternatives are argued.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4936,6 +5194,16 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "role",
+       "target",
+       "notes"
+      ],
+      "what": "another course not claimed better: no answer at realize_more_effectively (D006); a proposal of another course, at 13292.108's conclusion"
      }
     ]
    }
@@ -5071,9 +5339,17 @@
       "A": "tax_only_highest_emitting_meats",
       "S1": "beef_causes_most_meat_ghg",
       "S2": "only_highest_emitting_meats_taxed",
-      "G": "meat_ghg_emissions_reduced"
+      "G": "meat_ghg_emissions_reduced",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_ghg_emissions_reduced)",
+       "en": "One of the goals of 'governments' is 'greenhouse gas emissions from meat are reduced'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(beef_causes_most_meat_ghg)",
@@ -5097,31 +5373,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(tax_only_highest_emitting_meats)",
-       "en": "Action 'governments tax only the highest-emitting meats, such as beef, rather than all meat' is possible.",
+       "formula": "possible_bring_about(governments,tax_only_highest_emitting_meats)",
+       "en": "It is possible for 'governments' to bring about 'governments tax only the highest-emitting meats, such as beef, rather than all meat'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_ghg_emissions_reduced)",
-       "en": "Action 'greenhouse gas emissions from meat are reduced' is possible.",
+       "formula": "possible_goal(meat_ghg_emissions_reduced)",
+       "en": "'greenhouse gas emissions from meat are reduced' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(only_highest_emitting_meats_taxed,tax_only_highest_emitting_meats)",
-       "en": "There exists an action that would bring about 'only the highest-emitting meats, such as beef, are taxed' more effectively than 'governments tax only the highest-emitting meats, such as beef, rather than all meat'.",
+       "formula": "bring_about_more_effectively(governments,only_highest_emitting_meats_taxed,tax_only_highest_emitting_meats)",
+       "en": "There is a way for 'governments' to reach the state 'only the highest-emitting meats, such as beef, are taxed' more effectively than 'governments tax only the highest-emitting meats, such as beef, rather than all meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_ghg_emissions_reduced,tax_only_highest_emitting_meats)",
-       "en": "There exists an action that would realize the goal 'greenhouse gas emissions from meat are reduced' more effectively than 'governments tax only the highest-emitting meats, such as beef, rather than all meat'.",
+       "formula": "realize_more_effectively(governments,meat_ghg_emissions_reduced,tax_only_highest_emitting_meats)",
+       "en": "There is a way for 'governments' to realize the goal 'greenhouse gas emissions from meat are reduced' more effectively than 'governments tax only the highest-emitting meats, such as beef, rather than all meat'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -5132,17 +5408,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(tax_only_highest_emitting_meats,beef_causes_most_meat_ghg)",
-       "en": "Performing 'governments tax only the highest-emitting meats, such as beef, rather than all meat' in 'most greenhouse gas emissions from meat come from beef, while pork, poultry and mutton produce significantly less' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(tax_only_highest_emitting_meats,meat_ghg_emissions_reduced)",
+       "en": "The action 'governments tax only the highest-emitting meats, such as beef, rather than all meat' has bad consequences that outweigh 'greenhouse gas emissions from meat are reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_ghg_emissions_reduced)",
-       "en": "Another goal is incompatible with 'greenhouse gas emissions from meat are reduced'.",
+       "formula": "incompatible_goal(governments,meat_ghg_emissions_reduced)",
+       "en": "Another goal of 'governments' is incompatible with 'greenhouse gas emissions from meat are reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -5190,9 +5466,9 @@
     {
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
-     "type": "side effects",
-     "formula": "side_effects(tax_only_highest_emitting_meats,beef_causes_most_meat_ghg)",
-     "note": "substitution towards untaxed meats"
+     "type": "side effects that outweigh",
+     "formula": "bad_outweighs(tax_only_highest_emitting_meats,meat_ghg_emissions_reduced)",
+     "note": "substitution towards untaxed meats. Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
     }
    ],
    "notes": {
@@ -5203,7 +5479,19 @@
     "changed_fields": [
      "role.polarity"
     ],
-    "reason": "polarity: B (for). A left it null; the amended proposal still taxes meat, so it supports the thesis's conclusion in a modified form (as 13292.46). Scheme, fit, role and target agreed."
+    "reason": "polarity: B (for). A left it null; the amended proposal still taxes meat, so it supports the thesis's conclusion in a modified form (as 13292.46). Scheme, fit, role and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     }
+    ]
    }
   },
   {
@@ -5700,7 +5988,7 @@
     "actual": {
      "claim": "13292.104",
      "part": "premise",
-     "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
+     "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
      "instance": "primary"
     },
     "re_parented": false
@@ -5728,14 +6016,25 @@
     }
    ],
    "notes": {
-    "text": "Directly contradicts 13292.104's 'meat is not inherently problematic', the circumstances premise of 104's alternative-means argument (no critical question there, so premise_attack, R2). The qualifier (the method changes only the magnitude) also implies that regulating the industry would not remove the problem, an attack on 104's would_be_realized. 'Non-cultured' exempts cultured meat.",
+    "text": "Directly contradicts 13292.104's 'meat is not inherently problematic', the circumstances premise of 104's alternative-means argument (no critical question there, so premise_attack, R2). The qualifier (the method changes only the magnitude) also implies that regulating the industry would not remove the problem, an attack on 104's would_be_realized. 'Non-cultured' exempts cultured meat. Since 2026-11-24 13292.104's primary instance is better_means (D075): the claim disputes that regulating the industry would reduce the harm, the premise brings_about(A2,G) of that instance, as its note above already read it.",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [
      "re_parented"
     ],
-    "reason": "re_parented: false (R1; both had true): the target is the Kialo parent's own premise. Scheme, role and target agreed; the conclusion is the claim's own proposition (B), since it asserts more than the bare negation of 104's premise (A)."
+    "reason": "re_parented: false (R1; both had true): the target is the Kialo parent's own premise. Scheme, role and target agreed; the conclusion is the claim's own proposition (B), since it asserts more than the bare negation of 104's premise (A).",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "target",
+       "notes"
+      ],
+      "what": "13292.104's primary instance is better_means: the target is its premise that regulating the industry brings about the goal"
+     }
+    ]
    }
   },
   {
@@ -6331,91 +6630,99 @@
      },
      "bindings": {
       "X": "raise_import_standards",
-      "A": "domestic_producers_protected_from_imports",
-      "A2": "cheap_open_meat_trade",
-      "P": "governments"
+      "G": "domestic_producers_protected_from_imports",
+      "P": "governments",
+      "S": "barriers_to_cheaper_meat_imports"
      },
      "premises": [
       {
        "role": "premise",
-       "formula": "goal_is_action(domestic_producers_protected_from_imports)",
-       "en": "My goal is to bring about 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
+       "formula": "goal_of_agent(governments,domestic_producers_protected_from_imports)",
+       "en": "One of the goals of 'governments' is 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
        "status": "inferred",
        "cite": "13292.12",
        "note": "the goal of avoiding 13292.12's outcome ('In which case')"
       },
       {
        "role": "premise",
-       "formula": "alternative_action(raise_import_standards,domestic_producers_protected_from_imports)",
-       "en": "I reasonably consider on the given information that bringing about at least one of 'governments maintain import standards for meat at a higher level' is necessary to bring about 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
-       "status": "supplied"
+       "formula": "alternative_action(governments,barriers_to_cheaper_meat_imports,domestic_producers_protected_from_imports)",
+       "en": "'governments' can reasonably hold that at least one of the means 'the barriers to cheaper meat imports (higher import standards, quotas, tariffs)' is needed to bring about 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
+       "status": "supplied",
+       "note": "the set of means is not named; S stands for the barriers to cheaper imports, of which higher standards are one (D030)"
       },
       {
        "role": "premise",
-       "formula": "necessary_action(raise_import_standards,domestic_producers_protected_from_imports)",
-       "en": "I have selected one member 'governments maintain import standards for meat at a higher level' as an acceptable, or as the most acceptable, necessary condition for 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
+       "formula": "necessary_action(governments,raise_import_standards,barriers_to_cheaper_meat_imports,domestic_producers_protected_from_imports)",
+       "en": "'governments' chose 'governments maintain import standards for meat at a higher level', among the means 'the barriers to cheaper meat imports (higher import standards, quotas, tariffs)', as an acceptable or the best means needed for 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
        "status": "explicit",
        "note": "\"have to be maintained at a higher level\""
       },
       {
        "role": "premise",
-       "formula": "practicality_action(raise_import_standards)",
-       "en": "Nothing unchangeable prevents me from bringing about 'governments maintain import standards for meat at a higher level', as far as I know.",
+       "formula": "practicality_action(governments,raise_import_standards)",
+       "en": "As far as 'governments' can tell, nothing that cannot be changed stands in the way of bringing about 'governments maintain import standards for meat at a higher level'.",
        "status": "explicit",
        "note": "\"this is manageable\""
       },
       {
        "role": "premise",
-       "formula": "more_acceptable_bringing(domestic_producers_protected_from_imports,raise_import_standards)",
-       "en": "Bringing about 'domestic meat producers are not pushed out of the market by cheaper imported meat' is more acceptable to me than not bringing about 'governments maintain import standards for meat at a higher level'.",
+       "formula": "more_acceptable_bringing(governments,domestic_producers_protected_from_imports,raise_import_standards)",
+       "en": "'governments' would rather bring about 'domestic meat producers are not pushed out of the market by cheaper imported meat' than leave 'governments maintain import standards for meat at a higher level' undone.",
        "status": "supplied"
       },
       {
        "role": "assumption",
-       "formula": "possible_action(domestic_producers_protected_from_imports)",
+       "formula": "possible_goal(domestic_producers_protected_from_imports)",
        "en": "'domestic meat producers are not pushed out of the market by cheaper imported meat' is possible.",
        "status": "supplied",
        "note": "assumption: presumed to hold unless questioned"
       },
       {
        "role": "assumption",
-       "formula": "acceptable_action(raise_import_standards)",
-       "en": "'governments maintain import standards for meat at a higher level' is an acceptable action.",
+       "formula": "acceptable_action(governments,raise_import_standards)",
+       "en": "For 'governments', 'governments maintain import standards for meat at a higher level' is an acceptable thing to do.",
        "status": "supplied",
        "note": "assumption: presumed to hold unless questioned"
       },
       {
        "role": "assumption",
-       "formula": "possible_agent(raise_import_standards,governments)",
-       "en": "'governments maintain import standards for meat at a higher level' is possible to do for agent 'governments'.",
+       "formula": "possible_bring_about(governments,raise_import_standards)",
+       "en": "It is possible for 'governments' to bring about 'governments maintain import standards for meat at a higher level'.",
        "status": "supplied",
        "note": "assumption; 'manageable' bears on it"
       },
       {
        "role": "exception",
-       "formula": "alternative_means(domestic_producers_protected_from_imports,raise_import_standards)",
-       "en": "There are alternative means of realizing 'domestic meat producers are not pushed out of the market by cheaper imported meat' other than 'governments maintain import standards for meat at a higher level'.",
+       "formula": "realize_more_effectively(governments,domestic_producers_protected_from_imports,raise_import_standards)",
+       "en": "There is a way for 'governments' to realize the goal 'domestic meat producers are not pushed out of the market by cheaper imported meat' more effectively than 'governments maintain import standards for meat at a higher level'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: a strictly better means defeats the recommendation, an equally good one does not (D090, D006)"
       },
       {
        "role": "exception",
-       "formula": "side_effect_action(governments,raise_import_standards)",
-       "en": "There are negative side effects of bringing 'governments' bringing about 'governments maintain import standards for meat at a higher level'.",
+       "formula": "goal_achievable_without_any(governments,domestic_producers_protected_from_imports,barriers_to_cheaper_meat_imports)",
+       "en": "'governments' could reach 'domestic meat producers are not pushed out of the market by cheaper imported meat' without using any of the means 'the barriers to cheaper meat imports (higher import standards, quotas, tariffs)'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: that governments could protect domestic producers without any barrier to imports, the necessary-condition scheme's objection (D090)"
       },
       {
        "role": "exception",
-       "formula": "conflict_goals(governments,cheap_open_meat_trade,domestic_producers_protected_from_imports)",
-       "en": "'governments' has some other goals 'meat imports stay cheap and trade stays open' that conflict with 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
+       "formula": "bad_outweighs(raise_import_standards,domestic_producers_protected_from_imports)",
+       "en": "The action 'governments maintain import standards for meat at a higher level' has bad consequences that outweigh 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
        "status": "supplied",
-       "note": "exception; A2 occurs only here, bound to a plausible conflicting goal (cheap, open trade)"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the measure's bad consequences outweigh the goal (D091)"
+      },
+      {
+       "role": "exception",
+       "formula": "incompatible_goal(governments,domestic_producers_protected_from_imports)",
+       "en": "Another goal of 'governments' is incompatible with 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent and the goal (D004); the plausible conflicting goal the gold bound before, cheap and open trade in meat, is what an answer would name"
       }
      ],
      "conclusion": {
-      "formula": "bringing_about_action(raise_import_standards)",
-      "en": "Therefore, it is required that I bring about 'governments maintain import standards for meat at a higher level'."
+      "formula": "should_be_performed(raise_import_standards)",
+      "en": "Action 'governments maintain import standards for meat at a higher level' should be performed."
      }
     }
    ],
@@ -6443,37 +6750,59 @@
      "cq": "22.2 CQ1",
      "wag_cq": null,
      "type": "other means",
-     "formula": "alternative_means(domestic_producers_protected_from_imports,raise_import_standards)",
-     "note": "13292.194: eco-tariffs"
+     "formula": "goal_achievable_without_any(governments,domestic_producers_protected_from_imports,barriers_to_cheaper_meat_imports)",
+     "note": "a route that uses no barrier to imports (D090); 13292.194's eco-tariffs are another barrier, a member of S, not such a route"
+    },
+    {
+     "cq": null,
+     "wag_cq": null,
+     "type": "better means",
+     "formula": "realize_more_effectively(governments,domestic_producers_protected_from_imports,raise_import_standards)",
+     "note": "walton/realize_more_effectively (D090): another barrier, such as 13292.194's eco-tariffs, claimed to do better"
     },
     {
      "cq": "22.2 CQ3",
      "wag_cq": null,
      "type": "efficacy",
-     "formula": "possible_agent(raise_import_standards,governments)",
+     "formula": "possible_bring_about(governments,raise_import_standards)",
      "note": "'manageable' is asserted, not shown"
     },
     {
      "cq": "22.2 CQ4",
      "wag_cq": null,
-     "type": "side effects",
-     "formula": "side_effect_action(governments,raise_import_standards)",
-     "note": "trade frictions; dearer imports"
+     "type": "side effects that outweigh",
+     "formula": "bad_outweighs(raise_import_standards,domestic_producers_protected_from_imports)",
+     "note": "trade frictions and dearer imports: a rebuttal at the conclusion unless claimed to outweigh protecting the producers (D070, D091)"
     },
     {
      "cq": "22.2 CQ5",
      "wag_cq": null,
      "type": "severity or value",
-     "formula": "conflict_goals(governments,cheap_open_meat_trade,domestic_producers_protected_from_imports)"
+     "formula": "incompatible_goal(governments,domestic_producers_protected_from_imports)",
+     "note": "cheap and open trade in meat"
     }
    ],
    "notes": {
-    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5).",
+    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5). Since 2026-11-24 (D030, D090): the scheme states P in each premise and has no A2; G is the goal (the atom bound to A before) and S the barriers to cheaper meat imports, of which higher standards are one.",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "instances.conclusion",
+       "challenges",
+       "notes"
+      ],
+      "what": "the necessary-condition scheme repaired (D030, D063, D088, D090, D091): G, S, the agent in each premise, realize_more_effectively and goal_achievable_without_any, bad_outweighs(X,G), incompatible_goal(P,G), should_be_performed(X); A2 leaves it; the challenge records name the new formulas, and 13292.194's eco-tariffs are a better means (walton/realize_more_effectively), not CQ1's objection"
+     }
+    ]
    }
   },
   {
@@ -6526,9 +6855,9 @@
     }
    ],
    "role": {
-    "kind": "cq_answer",
+    "kind": "rebuttal",
     "confidence": 0.55,
-    "cq": "CQ:side_effect",
+    "cq": null,
     "polarity": "against",
     "move": "side_effect"
    },
@@ -6537,9 +6866,7 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
-     "part": "exception",
-     "formula": "side_effects(tax_meat,meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
+     "part": "conclusion"
     },
     "re_parented": true
    },
@@ -6573,14 +6900,26 @@
     }
    ],
    "notes": {
-    "text": "A further bad consequence of the tax, offered against the thesis's environmental argument 13292.108 (an ancestor, hence re-parented): the tax would deter a form of meat production that benefits the environment. It instantiates the exception side_effects(tax_meat,S1) of 108, which practical_reasoning2's CQ:side_effect (22.1 CQ5) targets, so cq_answer (R2), with role.move side_effect. Its first clause also contests the generality of 13292.4 and 13292.108, as 13292.137 does; it is coded by its distinctive point, what the tax would do.",
+    "text": "A further bad consequence of the tax, offered against the thesis's environmental argument 13292.108 (an ancestor, hence re-parented): the tax would deter a form of meat production that benefits the environment. It instantiates the exception side_effects(tax_meat,S1) of 108, which practical_reasoning2's CQ:side_effect (22.1 CQ5) targets, so cq_answer (R2), with role.move side_effect. Its first clause also contests the generality of 13292.4 and 13292.108, as 13292.137 does; it is coded by its distinctive point, what the tax would do. Since 2026-11-24 (D070) a side effect that ranks nothing against the goal is negative consequences, a rebuttal at the conclusion of the argument it answers (guidelines §3.1, OC2), not an answer at the exception, which is now the claim that the tax's bad consequences outweigh the goal (bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)).",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [
      "role"
     ],
-    "reason": "Both coded side_effect against the exception side_effects(tax_meat,S1) of 13292.108. R2: practical_reasoning2 has CQ:side_effect (22.1 CQ5) on that exception, so role.kind is cq_answer with cq CQ:side_effect; the label side_effect is kept in role.move."
+    "reason": "Both coded side_effect against the exception side_effects(tax_meat,S1) of 13292.108. R2: practical_reasoning2 has CQ:side_effect (22.1 CQ5) on that exception, so role.kind is cq_answer with cq CQ:side_effect; the label side_effect is kept in role.move.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "role",
+       "target",
+       "notes"
+      ],
+      "what": "a plain side effect: a rebuttal at 13292.108's conclusion, no longer an answer at its side-effect exception (D070)"
+     }
+    ]
    }
   },
   {
@@ -6743,6 +7082,64 @@
     {
      "primary": true,
      "scheme": {
+      "walton_id": "better_means",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.65,
+      "alternatives": [
+       {
+        "walton_id": "practical_reasoning2",
+        "why_not": "it argues for the other course on its own; the claim is that the other course does better than the tax, the exception it answers (D075)"
+       }
+      ]
+     },
+     "bindings": {
+      "A": "tax_meat",
+      "A2": "abolish_meat_subsidies",
+      "G": "meat_price_reflects_real_costs",
+      "P": "governments"
+     },
+     "comparison": "more surely",
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_price_reflects_real_costs)",
+       "en": "One of the goals of 'governments' is 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "inferred",
+       "cite": "13292.118",
+       "note": "the answered argument's own goal premise (D075, D089)"
+      },
+      {
+       "role": "premise",
+       "formula": "possible_bring_about(governments,abolish_meat_subsidies)",
+       "en": "It is possible for 'governments' to bring about 'governments abolish meat subsidies (or at least exempt meat from them)'.",
+       "status": "supplied",
+       "note": "a premise of the answer (D089): that governments can take the other course; the claim does not argue it"
+      },
+      {
+       "role": "premise",
+       "formula": "brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs)",
+       "en": "The action 'governments abolish meat subsidies (or at least exempt meat from them)' brings about 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "inferred",
+       "note": "\"distortions caused by subsidies should be removed by abolishing those subsidies\""
+      },
+      {
+       "role": "premise",
+       "formula": "more_effective_means(governments,abolish_meat_subsidies,meat_price_reflects_real_costs,tax_meat)",
+       "en": "For 'governments', 'governments abolish meat subsidies (or at least exempt meat from them)' would realize 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat': more surely, sooner or at lower cost.",
+       "status": "explicit",
+       "note": "\"instead\": abolishing the subsidies removes at its source the distortion the tax would only offset"
+      }
+     ],
+     "conclusion": {
+      "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
+      "en": "There is a way for 'governments' to realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments put a tax on meat'."
+     }
+    },
+    {
+     "primary": false,
+     "scheme": {
       "walton_id": "practical_reasoning2",
       "compendium": "22.1",
       "wag_id": "AS:practical_reasoning_goal",
@@ -6759,9 +7156,17 @@
       "A": "abolish_meat_subsidies",
       "S1": "meat_price_below_real_costs",
       "S2": "subsidy_distortions_removed",
-      "G": "meat_price_reflects_real_costs"
+      "G": "meat_price_reflects_real_costs",
+      "P": "governments"
      },
      "premises": [
+      {
+       "role": "premise",
+       "formula": "goal_of_agent(governments,meat_price_reflects_real_costs)",
+       "en": "One of the goals of 'governments' is 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "status": "supplied",
+       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
+      },
       {
        "role": "premise",
        "formula": "current_circumstances(meat_price_below_real_costs)",
@@ -6786,31 +7191,31 @@
       },
       {
        "role": "assumption",
-       "formula": "possible(abolish_meat_subsidies)",
-       "en": "Action 'governments abolish meat subsidies (or at least exempt meat from them)' is possible.",
+       "formula": "possible_bring_about(governments,abolish_meat_subsidies)",
+       "en": "It is possible for 'governments' to bring about 'governments abolish meat subsidies (or at least exempt meat from them)'.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
       },
       {
        "role": "assumption",
-       "formula": "possible(meat_price_reflects_real_costs)",
-       "en": "Action 'the consumer price of meat reflects the real costs of meat consumption' is possible.",
+       "formula": "possible_goal(meat_price_reflects_real_costs)",
+       "en": "'the consumer price of meat reflects the real costs of meat consumption' is possible.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned"
+       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
       },
       {
        "role": "exception",
-       "formula": "bring_about_more_effectively(subsidy_distortions_removed,abolish_meat_subsidies)",
-       "en": "There exists an action that would bring about 'the price distortions caused by subsidies are removed' more effectively than 'governments abolish meat subsidies (or at least exempt meat from them)'.",
+       "formula": "bring_about_more_effectively(governments,subsidy_distortions_removed,abolish_meat_subsidies)",
+       "en": "There is a way for 'governments' to reach the state 'the price distortions caused by subsidies are removed' more effectively than 'governments abolish meat subsidies (or at least exempt meat from them)'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
-       "formula": "realize_more_effectively(meat_price_reflects_real_costs,abolish_meat_subsidies)",
-       "en": "There exists an action that would realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments abolish meat subsidies (or at least exempt meat from them)'.",
+       "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,abolish_meat_subsidies)",
+       "en": "There is a way for 'governments' to realize the goal 'the consumer price of meat reflects the real costs of meat consumption' more effectively than 'governments abolish meat subsidies (or at least exempt meat from them)'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
       },
       {
        "role": "exception",
@@ -6821,17 +7226,17 @@
       },
       {
        "role": "exception",
-       "formula": "side_effects(abolish_meat_subsidies,meat_price_below_real_costs)",
-       "en": "Performing 'governments abolish meat subsidies (or at least exempt meat from them)' in 'the consumer price of meat is below the real costs of meat consumption' would have side-effects which demote some value.",
+       "formula": "bad_outweighs(abolish_meat_subsidies,meat_price_reflects_real_costs)",
+       "en": "The action 'governments abolish meat subsidies (or at least exempt meat from them)' has bad consequences that outweigh 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(meat_price_reflects_real_costs)",
-       "en": "Another goal is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
+       "formula": "incompatible_goal(governments,meat_price_reflects_real_costs)",
+       "en": "Another goal of 'governments' is incompatible with 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
       }
      ],
      "conclusion": {
@@ -6892,7 +7297,7 @@
     "actual": {
      "claim": "13292.118",
      "part": "exception",
-     "formula": "realize_more_effectively(meat_price_reflects_real_costs,tax_meat)",
+     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "instance": "primary"
     },
     "re_parented": true
@@ -6903,11 +7308,25 @@
    },
    "challenges": [
     {
+     "cq": null,
+     "wag_cq": null,
+     "type": "efficacy",
+     "formula": "brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs)",
+     "note": "removing subsidies does not price in externalities (13292.218)"
+    },
+    {
+     "cq": null,
+     "wag_cq": null,
+     "type": "better means",
+     "formula": "more_effective_means(governments,abolish_meat_subsidies,meat_price_reflects_real_costs,tax_meat)",
+     "note": "the comparison: more surely; a reply that the tax gets there sooner attacks it"
+    },
+    {
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
-     "formula": "possible(abolish_meat_subsidies)",
-     "note": "13292.171: removing subsidies is politically easier than taxing"
+     "formula": "possible_bring_about(governments,abolish_meat_subsidies)",
+     "note": "13292.171: removing subsidies is politically easier than taxing. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
     {
      "cq": null,
@@ -6925,7 +7344,7 @@
     }
    ],
    "notes": {
-    "text": "Accepts 13292.11's diagnosis (subsidies keep the price below the real costs) and proposes another means to 13292.118's goal: abolish the subsidies instead of taxing. It instantiates the exception realize_more_effectively(G,tax_meat) of 118's argument (an ancestor, hence re-parented), which CQ:other_means (22.1 CQ2) targets, so cq_answer (R2), with role.move alternative_means. The incoherence sentence is a second argument, from opposition (11.2), coded as 'other' because walton.yml's 11.2 encoding is self-contradictory.",
+    "text": "Accepts 13292.11's diagnosis (subsidies keep the price below the real costs) and proposes another means to 13292.118's goal: abolish the subsidies instead of taxing. It instantiates the exception realize_more_effectively(G,tax_meat) of 118's argument (an ancestor, hence re-parented), which CQ:other_means (22.1 CQ2) targets, so cq_answer (R2), with role.move alternative_means. The incoherence sentence is a second argument, from opposition (11.2), coded as 'other' because walton.yml's 11.2 encoding is self-contradictory. Since 2026-11-24 (D075, D089) its primary instance is better_means, the answer scheme for another means that does better; the argument for the other course is secondary.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -6934,7 +7353,30 @@
      "instances (secondary)",
      "instances.bindings"
     ],
-    "reason": "role: both alternative_means against 118's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). Secondary instance: A ('other' with the corrected reading). B instantiated walton.yml's opposition-normative, whose minor premise and conclusion share X2, so B's instance concludes that meat cannot be subsidised from the premise that it is; a gold instance must not contradict itself. Primary bindings: S1 follows B (the price is below the real costs, as 13292.11 says), S2 follows A (the distortions are removed, as the text says)."
+    "reason": "role: both alternative_means against 118's exception; R2 makes it cq_answer CQ:other_means (label kept in role.move). Secondary instance: A ('other' with the corrected reading). B instantiated walton.yml's opposition-normative, whose minor premise and conclusion share X2, so B's instance concludes that meat cannot be subsidised from the premise that it is; a gold instance must not contradict itself. Primary bindings: S1 follows B (the price is below the real costs, as 13292.11 says), S2 follows A (the distortions are removed, as the text says).",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances.bindings",
+       "instances.premises",
+       "challenges"
+      ],
+      "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     },
+     {
+      "date": "2026-11-24",
+      "by": "proposal D004-D075, version 3 (recode_c2.py)",
+      "fields": [
+       "instances",
+       "target.actual.formula",
+       "challenges",
+       "notes"
+      ],
+      "what": "a primary better_means instance at the exception it answers, realize_more_effectively(P,G,tax_meat), with its comparison (D075, D089); the argument for the other course is secondary"
+     }
+    ]
    }
   }
  ]

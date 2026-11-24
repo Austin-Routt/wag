@@ -11,7 +11,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from edits import ADDITIONS, OPS, ID_MAP  # noqa: E402
+from edits import ADD, OPS, ID_MAP  # noqa: E402
 
 PRED_MAP = {op["old"]: op["new"] for op in OPS if op["op"] == "rename"}
 PRED_MAP["true"] = "is_true"
@@ -38,9 +38,10 @@ def main(a, b):
     A = json.load(open(a, encoding="utf-8"))
     B = json.load(open(b, encoding="utf-8"))
     sa, sb = A["schemes"], B["schemes"]
-    # Schemes added by the owner's decision (edits.ADDITIONS) are only in the
-    # cleaned file; they are listed, not compared.
-    added_ids = {op["scheme"] for op in ADDITIONS if op.get("scheme")}
+    # Schemes added by the owner's decisions (the ops of category ADD that name
+    # a scheme: edits.ADDITIONS and, since 2026-11-24, the block PRACTICAL's
+    # answer schemes) are only in the cleaned file; they are listed, not compared.
+    added_ids = {op["scheme"] for op in OPS if op["category"] == ADD and op.get("scheme")}
     extra = [y["id"] for y in sb if y["id"] in added_ids]
     sb = [y for y in sb if y["id"] not in added_ids]
     assert len(sa) == len(sb), (len(sa), len(sb))

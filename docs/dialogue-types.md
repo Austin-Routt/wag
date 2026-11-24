@@ -590,7 +590,7 @@ These cues are our drafts, made from ND's descriptions. They are hypotheses to t
 | **Retraction** | None by a player. In `debate`, a losing side that passes concedes (`ConcedeOnPass`). The adapter's `RetractAssumptionsSince` is internal bookkeeping, not a move. |
 | **Burden and standard of proof** | On pro in `debate`. Each preset sets a proof standard: preponderance, clear and convincing, beyond reasonable doubt. |
 | **Stages** | None. No opening (agreeing the issue and rules), no confrontation, no closing beyond the end conditions. |
-| **Schemes and critical questions** | A bounded set is playable through NASCQ; WAG's formula layer has 116 schemes. Current counts and the distinction between formula coverage, catalogue status and executable answers are in [the plan](plan.md). This is ND's relevance factor 4. |
+| **Schemes and critical questions** | A bounded set is playable through NASCQ; WAG's formula layer has 119 schemes. Current counts and the distinction between formula coverage, catalogue status and executable answers are in [the plan](plan.md). This is ND's relevance factor 4. |
 | **Shifts and embeddings** | None in the game. In annotation, Kialo roles mark some: `clarification` (information-seeking), `action_amendment` and `alternative_means` (deliberation). |
 | **Speech event** | The legal preset adds moderator approval, weights and hard statement decisions. These powers do not by themselves implement an adjudication protocol or establish the caller's authority. |
 | **Context presets** | Domain weights and standards, not types. "Policy deliberation" and "Scientific inquiry" were named after types the game does not play. In this round they became "Policy question" and "Scientific question", with descriptions that say so. |

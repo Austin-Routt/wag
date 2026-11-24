@@ -99,12 +99,12 @@ critical_questions:
     discrepancy on 33/CQ3.'
   paraphrase: Would doing A have bad consequences that matter more than G?
   answer: 'The critic, who raises it with an argument. Against: a claim that some
-    bad consequence of A matters more than G, coded with Other or a source-based scheme
-    (expert opinion, position to know), which argues bad_outweighs(A,G) and, unanswered,
-    defeats the argument whatever the weights. For: a reply that attacks that claim''s
-    own comparison, or the consequence it relies on (OC10); only a reply that nothing
-    outweighs G answers every weighing claim at once.'
-  status: drafted by Claude Code, 2026-10-23
+    bad consequence of A matters more than G, argued with C003''s bad_outweighs_good
+    or a source-based scheme (expert opinion, position to know), which argues bad_outweighs(A,G)
+    and, unanswered, defeats the argument whatever the weights. For: a reply that
+    attacks that claim''s own comparison, or the consequence it relies on (OC10);
+    only a reply that nothing outweighs G answers every weighing claim at once.'
+  status: drafted by Claude Code, 2026-11-24
 - id: game/CQ:evidence
   game:
     id: CQ:evidence
@@ -200,6 +200,12 @@ contrasts:
     action) beside a positive_consequences argument; gradualism is something else,
     leading a hearer to accept a conclusion in small steps.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: bad_outweighs_good
+  text: ""
+  status: todo
+- scheme: good_outweighs_bad
+  text: ""
+  status: todo
 - scheme: practical_reasoning2
   text: Choose practical_reasoning2 only when S2 is a state distinct from the action
     and, of S1, the step from A to S2 and the step from S2 to G, at most one has to
@@ -245,11 +251,14 @@ examples:
     Supplied: good(G), plain from "unhealthy". Conclusion: should_be_performed(A),
     the thesis. "Combat" is goal language, but no circumstances or separate goal are
     stated, so it is not practical reasoning (the gold''s note). Pressed: 33/CQ1 (heavy
-    meat eaters buy it whatever it costs); 33/CQ3 by 13292.127, which says that starvation
-    from less access to meat is worse than any harm of high meat consumption: it argues
-    bad_outweighs(A,G), re-parented to this argument from its Kialo parent 13292.7
-    (docs/kialo-batch2/guidelines.md §3.1, OC4, OC7).'
-  status: drafted by Claude Code, 2026-10-23
+    meat eaters buy it whatever it costs); 33/CQ3 by a claim that a rival consequence
+    matters more, such as 13292.127 (starvation from less access to meat is worse
+    than any harm of high meat consumption): the gold coded it against this argument''s
+    bad_outweighs(A,G) until 2026-11-24; since practical reasoning has the outweighing
+    exception too (D070, D091), OC7''s one-instance rule puts it against 13292.108,
+    the earliest argument of the class on the board (docs/kialo-batch2/guidelines.md
+    §3.1, OC4, OC7).'
+  status: drafted by Claude Code, 2026-11-24
 - text: A congestion charge would get traffic in the city centre moving again, so
     the council should bring one in.
   coding: 'A = the council bringing in a congestion charge; G = traffic in the city
@@ -291,9 +300,11 @@ examples:
   kialo: "13292.147"
   coding: 'A = rationing meat through personal carbon budgets; G = lower carbon emissions.
     Stated: brings_about(A,G). Supplied: good(G). Conclusion: should_be_performed(A).
-    A is a rival to the thesis action, so the gold also treats the claim as offering
-    a better means against the thesis''s environmental argument.'
-  status: drafted by Claude Code, 2026-10-22
+    A is a rival to the thesis action. Since 2026-11-24 the gold treats the claim
+    as a proposal of another course for the same goal (action_amendment, at 13292.108''s
+    conclusion), not as an answer to its other-means question: it does not claim that
+    rationing does better (D006, D066).'
+  status: drafted by Claude Code, 2026-11-24
 - text: Governments should put a tax on meat and use some of those tax revenues to
     encourage research into developing synthetic meats.
   kialo: "13292.145"
@@ -328,10 +339,11 @@ discrepancies:
     (plan §6; catalogue-alignment.md, workstream E). The game asks 33/CQ3's rebuttal
     route at the conclusion (CQ:side_effect) and keeps it; core.yml then gets the
     exception bad_outweighs(A,G), with a question at it for the weighing route (D055).
-    No scheme concludes the exception, so a player answers that question with Other
-    or a source-based scheme (expert opinion, position to know); whether analogy may
-    is D057.
-  status: drafted by Claude Code, 2026-10-23
+    walton.yml's answer scheme bad_outweighs_good concludes the exception (C003; D064,
+    D075, since 2026-11-24); until the game has it (step C5) a player answers that
+    question with Other or a source-based scheme (expert opinion, position to know);
+    whether analogy may is D057.
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: Premise
   detail: The compendium's single premise says that doing A will plausibly have good
@@ -377,19 +389,21 @@ discrepancies:
     per argument it answers, and one proof leaves the others standing (candidate C004);
     (2) contrary weighing claims (starvation outweighs the health gain; the health
     gain outweighs starvation) are different statements, so both can be accepted and
-    both arguments fall, since declared contraries are not enforced (D053); (3) no
-    scheme concludes the exceptions, so a weighing claim is argued with Other or a
-    source-based scheme and is not tied to the rival consequence it relies on (candidate
-    C003); (4) negative_consequences and negative_consequences_reasoning share the
-    exception when bound alike, so one weighing claim defeats both; (5) one consideration
-    framed as a gain (33.1) and as a harm averted (33.4) has two exceptions, and a
-    weighing claim reaches only one (the guidelines code it once, OC12); (6) every
-    weighing claim against one argument argues the same statement, so a reply that
-    denied the exception would cancel them all (the guidelines have a reply attack
-    the weighing claim''s own comparison, OC10); (7) an exception holds whatever the
-    weights: an unanswered weighing claim of weight 0.1 removes an argument of weight
-    0.9, and an equal denial restores it.'
-  status: drafted by Claude Code, 2026-10-23
+    both arguments fall, since declared contraries are not enforced (D053); (3) until
+    2026-11-24 a weighing claim had no scheme of its own and was argued with Other
+    or a source-based scheme, not tied to the rival consequence it relies on (candidate
+    C003); since then C003''s answer schemes, bad_outweighs_good and good_outweighs_bad
+    (D064, D075), conclude the exceptions from the rival consequence H and matters_more(H,G);
+    (4) negative_consequences and negative_consequences_reasoning share the exception
+    when bound alike, so one weighing claim defeats both; (5) one consideration framed
+    as a gain (33.1) and as a harm averted (33.4) has two exceptions, and a weighing
+    claim reaches only one (the guidelines code it once, OC12); (6) every weighing
+    claim against one argument argues the same statement, so a reply that denied the
+    exception would cancel them all (the guidelines have a reply attack the weighing
+    claim''s own comparison, OC10); (7) an exception holds whatever the weights: an
+    unanswered weighing claim of weight 0.1 removes an argument of weight 0.9, and
+    an equal denial restores it.'
+  status: drafted by Claude Code, 2026-11-24
 - kind: other
   about: game questions
   detail: 'The game''s three questions differ from the book''s: CQ:likelihood drops
@@ -479,3 +493,8 @@ history:
     is the rebuttal route; the contrast with the prudential form follows the guidelines
     (§3.1, OC13); the proposal''s examples moved here; the CQ3 discrepancy records
     D055 and the exceptions'' limits; the game-differs decision is for the new exception.'
+- date: "2026-11-24"
+  by: Claude Code
+  what: '33/CQ3''s answer, the game-differs decision and the examples follow proposal
+    D004-D075: C003''s answer schemes conclude the exceptions (D064, D075); the 33/CQ3
+    discrepancy''s limit (3) says so.'

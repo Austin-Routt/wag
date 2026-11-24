@@ -88,9 +88,11 @@ examples:
   coding: 'Near miss: "would help" is the language of contribution, but no person
     or body is said to hold the goal; the claim says that the action brings about
     a good outcome. positive_consequences (A = ration meat through carbon budgets,
-    G = lower carbon emissions), as the gold codes it.'
+    G = lower carbon emissions), as the gold codes it; since 2026-11-24 its role is
+    a proposal of another course for the thesis''s goal (action_amendment), since
+    it does not claim that rationing does better (D006, D066).'
   near_miss: true
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-24
 discrepancies:
 - kind: other
   about: critical questions
@@ -141,3 +143,6 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the dialogue-types note (ND p. 111); efficiency in the contrast with practical_inference;
     the missing questions recorded)'
+- date: "2026-11-24"
+  by: Claude Code
+  what: The 13292.147 near miss follows the gold's recode for proposal D004-D075.

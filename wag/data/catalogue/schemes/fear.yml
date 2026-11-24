@@ -84,6 +84,12 @@ contrasts:
 - scheme: slippery_slope_base_case
   text: ""
   status: todo
+- scheme: bad_outweighs_good
+  text: ""
+  status: todo
+- scheme: good_outweighs_bad
+  text: ""
+  status: todo
 examples: []
 discrepancies: []
 classification:

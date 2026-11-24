@@ -439,15 +439,11 @@ Arguments that set consequences against each other. They differ in what is set a
 
 **Kind:** scheme. **Decision:** D064 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** high.
 
-**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D064, D075: the first answer scheme, proposed in stage 2.
+**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D064, D075: added to walton.yml by proposal D004-D075 (2026-11-24), as bad_outweighs_good and good_outweighs_bad; the sketch and its examples left the registry then (the proposal keeps the examples).
 
 An argument that a consequence H of an action matters more than the consequence G that an argument of the other sign cites, so that the other argument does not carry. It is the claim behind D055's sided exceptions, argued with a scheme tied to H rather than with Other.
 
-**Relation:** variant of positive_consequences, negative_consequences (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). A consequence argument's premises and a ranking premise, concluding the other side's exception instead of that an action should or should not be done: the comparative weighing ND describes as how the two kinds of consequence argument are judged together (p. 159), and the scheme D055's exceptions lack.
-
-**Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `bad_outweighs_good` is 4 from `negative_consequences`, sharing 2 (adds premise matters_more/2, conclusion bad_outweighs/2; lacks exception good_outweighs/2, conclusion ¬should_be_performed/1).
-- `good_outweighs_bad` is 4 from `positive_consequences`, sharing 2 (adds premise matters_more/2, conclusion good_outweighs/2; lacks exception bad_outweighs/2, conclusion should_be_performed/1).
+**Relation:** variant of positive_consequences, negative_consequences (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). A consequence argument's premises and a ranking premise, concluding the other side's exception instead of that an action should or should not be done: the comparative weighing ND describes as how the two kinds of consequence argument are judged together (p. 159), and the scheme D055's exceptions lacked until proposal D004-D075 added it (2026-11-24).
 
 **Closest, and why each falls short:**
 - Other, concluding D055's exception: It carries the claim but not its link to H, so the weighing claim survives the loss of the consequence it relies on.
@@ -467,7 +463,7 @@ An argument that a consequence H of an action matters more than the consequence 
 
 | Where | Ref | Fit | What it shows | Found | Verified |
 |---|---|---|---|---|---|
-| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055). | review of D055-D059 v1 | session check, 2026-10-22 |
+| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against 13292.108's exception, since 2026-11-24, OC7). | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 13292 | 13292.43 | clean | Revenue is not why the tax is wanted; sustainability and animal welfare press harder than the lost revenue. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.12239 | clean | Good relationships also last longer without access to abortion, and that benefit may outweigh bad relationships enduring. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.14031 | strain | Bans meant to stop selective abortion cause more harm to disabled pregnant people; a comparison plus a new consequence. | review of D055-D059 v1 | session check, 2026-10-22 |
@@ -483,133 +479,15 @@ An argument that a consequence H of an action matters more than the consequence 
 | kialo 5637 | 5637.4851 (archived) | strain | Pregnancy carries a greater risk of death than abortion; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010, offered against a claim about what is natural. | review of D055-D059 v3 | session check, 2026-10-23 |
 | kialo 5637 | 5637.2372 (archived) | strain | It is not certain that the hardships cited are worse than never living, and foster care beats no life; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010. | review of D055-D059 v4 | session check, 2026-10-23 |
 
-**The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
-
-Gated and engine-tested by the review (OUT/alternative.yml there). The two are a polarity pair under D053. On D055-D059 version 2's templates.
-
-#### `bad_outweighs_good`: Weighing a bad consequence against a good one (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `A`, `H`, `G` |
-| premises | `brings_about(A,H)`, `bad(H)`, `matters_more(H,G)` |
-| conclusion | `bad_outweighs(A,G)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| 33/CQ1 | How likely is it that doing A would lead to H? | `brings_about(A,H)` (premise) |
-| C003/Q1 | Does H really matter more than G: is it more serious, does it touch more people, does it last longer? | `matters_more(H,G)` (premise) |
-
-#### `good_outweighs_bad`: Weighing a good consequence against a bad one (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `A`, `H`, `G` |
-| premises | `brings_about(A,H)`, `good(H)`, `matters_more(H,G)` |
-| conclusion | `good_outweighs(A,G)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| 33/CQ1 | How likely is it that doing A would lead to H? | `brings_about(A,H)` (premise) |
-| C003/Q1 | Does H really matter more than G: is it more serious, does it touch more people, does it last longer? | `matters_more(H,G)` (premise) |
-
-**Its templates:**
-
-- `matters_more/2`: “%s matters more than %s.”
-
-**Examples, rendered:**
-
-#### 1. Starvation against healthier eating
-
-**as an answer** in the game: 33/CQ3 of 13292.115, the positive consequences argument for the meat tax; it concludes that argument's exception; a candidate; Kialo 13292.127.
-
-> Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.
-
-Bindings: A = “governments putting a tax on meat”; H = “starvation from reduced access to meat”; G = “a fall in unhealthy meat consumption”.
-
-- The action “governments putting a tax on meat” brings about “starvation from reduced access to meat”.
-- “Starvation from reduced access to meat” is bad.
-- “Starvation from reduced access to meat” matters more than “a fall in unhealthy meat consumption”.
-- **So:** The action “governments putting a tax on meat” has bad consequences that outweigh “a fall in unhealthy meat consumption”.
-
-Pressed with its questions:
-
-- **33/CQ1**, at the premise “The action “governments putting a tax on meat” brings about “starvation from reduced access to meat””: The tax would raise the price of meat a little; in the countries that would adopt it, no one starves for lack of meat.
-
-*Note:* Its Kialo parent is 13292.7, but it weighs against 13292.115's consequence, so it is re-parented there.
-
-#### 2. Sustainability against lost revenue
-
-**as an answer** in the game: 33/CQ3 of 13292.9, the negative consequences argument that the tax would cut revenue; it concludes that argument's exception; a candidate; Kialo 13292.43.
-
-> Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.
-
-Bindings: A = “governments putting a tax on meat”; H = “progress on sustainability and animal welfare”; G = “tax revenues falling”.
-
-- The action “governments putting a tax on meat” brings about “progress on sustainability and animal welfare”.
-- “Progress on sustainability and animal welfare” is good.
-- “Progress on sustainability and animal welfare” matters more than “tax revenues falling”.
-- **So:** The action “governments putting a tax on meat” has good consequences that outweigh “tax revenues falling”.
-
-#### 3. The mobile library
-
-**as an argument**, with `bad_outweighs_good`; a candidate; our own text.
-
-> Opening on Sundays would cost the housebound their mobile library, and that matters more than a quiet room for shift workers.
-
-Bindings: A = “the council opening the branch library on Sundays”; H = “housebound readers losing the mobile library”; G = “shift workers having a quiet place to study”.
-
-- The action “the council opening the branch library on Sundays” brings about “housebound readers losing the mobile library”.
-- “Housebound readers losing the mobile library” is bad.
-- “Housebound readers losing the mobile library” matters more than “shift workers having a quiet place to study”.
-- **So:** The action “the council opening the branch library on Sundays” has bad consequences that outweigh “shift workers having a quiet place to study”.
-
-Pressed with its questions:
-
-- **C003/Q1**, at the premise ““Housebound readers losing the mobile library” matters more than “shift workers having a quiet place to study””: Twelve people use the mobile van; four hundred shift workers have asked for Sunday opening.
-
-#### 4. Attention in lessons
-
-**as an argument**, with `good_outweighs_bad`; a candidate; our own text.
-
-> Pupils paying attention in every lesson matters more than the rare day a pupil cannot reach a parent at once.
-
-Bindings: A = “the school banning phones”; H = “pupils paying better attention in lessons”; G = “pupils being unable to reach their parents in an emergency”.
-
-- The action “the school banning phones” brings about “pupils paying better attention in lessons”.
-- “Pupils paying better attention in lessons” is good.
-- “Pupils paying better attention in lessons” matters more than “pupils being unable to reach their parents in an emergency”.
-- **So:** The action “the school banning phones” has good consequences that outweigh “pupils being unable to reach their parents in an emergency”.
-
-#### 5. Farm jobs, without a comparison
-
-**a near miss** of `bad_outweighs_good`: it is `negative_consequences`; our own text.
-
-> A meat tax would cost thousands of jobs on livestock farms, so governments should not bring one in.
-
-Bindings: A = “governments putting a tax on meat”; G = “thousands of farm workers losing their jobs”.
-
-- The action “governments putting a tax on meat” brings about “thousands of farm workers losing their jobs”.
-- “Thousands of farm workers losing their jobs” is bad.
-- *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “thousands of farm workers losing their jobs”.
-- **So:** It is not the case that action “governments putting a tax on meat” should be performed.
-
-*Note:* It cites a bad consequence but compares it with nothing the other side cites, so it is a plain negative consequences argument, a rebuttal (D055's two routes).
-
 **What WAG's engine showed:**
 - The review of D055-D059 v1, test RD8: the weighing argument undercuts the positive argument; undermining brings_about(A,H) then takes down both the weighing argument and the negative argument citing H, and the positive argument is reinstated.
 
 **What implementing it needs:**
 - D055's exceptions (applied 2026-10-23) are what the weighing schemes conclude.
-- A walton.yml addition (two schemes and matters_more/2), catalogue entries in F15, a declared polarity pair (D053).
+- A walton.yml addition (two schemes and matters_more/2) and catalogue entries in F15: done by proposal D004-D075 (2026-11-24), the pair declared variants (a sided flip, not a D053 polarity pair).
 - In the game: an answer at the new exception-locus questions (workstream E), so a weighing claim is one move, not a rebuttal plus an Other argument.
 
 **Open questions:**
-- One scheme concluding D055's exception, or a form of 33/CQ3's question?
 - How is matters_more judged: seriousness, number affected, reversibility (C005, C008)?
 - A comparison with a class of consequences (13292.127) gives one instance per argument of the class: is that workable?
 
@@ -919,7 +797,7 @@ A harm is justified because it is needed for, or inseparable from, a greater goo
 **Relation:** specialization of C003 (a scheme WAG has (or a candidate) with premises added: a narrower case; usually: a domain version, or merge into the base). C003's weighing with a premise added: the harm is needed for the good. ND's side-effects premise asks whether a goal is worth its bad consequences (p. 155).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `greater_good` is 6 from `negative_consequences`, sharing 2 (adds premise good/1, premise matters_more/2, premise needed_for/2, conclusion good_outweighs/2; lacks exception good_outweighs/2, conclusion ¬should_be_performed/1).
+- `greater_good` is 2 from `good_outweighs_bad`, sharing 4 (adds premise bad/1, premise needed_for/2; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - C003, weighing: C003 compares two consequences without saying that one is needed for the other.
@@ -964,7 +842,6 @@ A sketch: not in `walton.yml`.
 
 **Its templates:**
 
-- `matters_more/2`: “%s matters more than %s.”
 - `needed_for/2`: “%s is needed for %s.”
 
 **Examples, rendered:**
@@ -1602,8 +1479,8 @@ Replies to a consequence argument about the action rather than its consequences:
 | Id | Candidate | Kind | Relation | Compares | Concludes | Closest | Seen | Stage |
 |---|---|---|---|---|---|---|---|---|
 | [C006](#c006-mitigation) | Mitigation | exception | addition to negative_consequences | the action as argued against with the action as amended | the bad consequence need not follow (an exception) | 33/CQ1; practical reasoning's alternative-means exceptions (realize_more_effectively, bring_about_more_effectively); the gold's action_amendment role | 6 verified in 2; met | decided |
-| [C017](#c017-another-action-with-better-consequences) | Another action with better consequences | exception | addition to positive_consequences | the action with another that brings the same good | an exception on positive consequences | practical reasoning's realize_more_effectively(G,A) (CQ:other_means); C006, mitigation; C010, the lesser evil | 9 verified in 2; met | decided |
-| [C018](#c018-can-the-action-be-carried-out) | Can the action be carried out? | question | addition to positive_consequences | the action with what can be done | an assumption, and its question, for positive consequences | practical reasoning's possible(A) (CQ:possibility); sunk costs' feasible(A) and waste's possible(X) | 4 verified in 1 | decided |
+| [C017](#c017-another-action-with-better-consequences) | Another action with better consequences | exception | addition to positive_consequences | the action with another that brings the same good | an exception on positive consequences | practical reasoning's realize_more_effectively(P,G,A) (CQ:other_means; (G,A) until 2026-11-24); C006, mitigation; C010, the lesser evil | 9 verified in 2; met | decided |
+| [C018](#c018-can-the-action-be-carried-out) | Can the action be carried out? | question | addition to positive_consequences | the action with what can be done | an assumption, and its question, for positive consequences | practical reasoning's possible_bring_about(P,A) (CQ:possibility; possible(A) until 2026-11-24); sunk costs' feasible(A) and waste's possible(X) | 4 verified in 1 | decided |
 
 ### C006. Mitigation
 
@@ -1757,7 +1634,7 @@ A reply to a positive consequences argument that another action would bring the 
 - `positive_consequences_alternative` is 1 from `positive_consequences`, sharing 4 (adds exception better_alternative/2; the registry's relation: extends).
 
 **Closest, and why each falls short:**
-- practical reasoning's realize_more_effectively(G,A) (CQ:other_means): The question exists, but only for practical reasoning; replies to a consequence argument have none.
+- practical reasoning's realize_more_effectively(P,G,A) (CQ:other_means; (G,A) until 2026-11-24): The question exists, but only for practical reasoning; replies to a consequence argument have none.
 - C006, mitigation: C006 changes the same action; C017 replaces it.
 - C010, the lesser evil: C010 compares two courses that are both bad.
 
@@ -1868,41 +1745,42 @@ Pressed with its questions:
 
 > The city's goal is clean air by 2030, and a congestion charge is the way to get there, so it should bring one in.
 
-Bindings: A = “bringing in a congestion charge”; S1 = “the city's air being dirty”; S2 = “the city's air being clean”; G = “clean air by 2030”.
+Bindings: A = “bringing in a congestion charge”; S1 = “the city's air being dirty”; S2 = “the city's air being clean”; G = “clean air by 2030”; P = “the city”.
 
+- One of the goals of “the city” is “clean air by 2030”.
 - “The city's air being dirty” is the case in the current circumstances.
 - Performing “bringing in a congestion charge” in “the city's air being dirty” would bring about “the city's air being clean”.
 - “Clean air by 2030” would be realized in “the city's air being clean”.
-- *Presumed:* Action “bringing in a congestion charge” is possible.
-- *Presumed:* Action “clean air by 2030” is possible.
-- *Unless:* There exists an action that would bring about “the city's air being clean” more effectively than “bringing in a congestion charge”.
-- *Unless:* There exists an action that would realize the goal “clean air by 2030” more effectively than “bringing in a congestion charge”.
+- *Presumed:* It is possible for “the city” to bring about “bringing in a congestion charge”.
+- *Presumed:* “Clean air by 2030” is possible.
+- *Unless:* There is a way for “the city” to reach the state “the city's air being clean” more effectively than “bringing in a congestion charge”.
+- *Unless:* There is a way for “the city” to realize the goal “clean air by 2030” more effectively than “bringing in a congestion charge”.
 - *Unless:* Intervening actions are needed after performing “bringing in a congestion charge” to achieve “clean air by 2030”.
-- *Unless:* Performing “bringing in a congestion charge” in “the city's air being dirty” would have side-effects which demote some value.
-- *Unless:* Another goal is incompatible with “clean air by 2030”.
+- *Unless:* The action “bringing in a congestion charge” has bad consequences that outweigh “clean air by 2030”.
+- *Unless:* Another goal of “the city” is incompatible with “clean air by 2030”.
 - **So:** Action “bringing in a congestion charge” should be performed.
 
 *Note:* Against practical reasoning the question exists already (realize_more_effectively, CQ:other_means).
 
 **Open questions:**
 - An exception on positive consequences and the prudential form only, or a question the game borrows from practical reasoning (D023)?
-- The batch-2 gold answers CQ:other_means only where the parent is practical reasoning (13292.104, 13292.123, 13292.147).
+- The batch-2 gold answers CQ:other_means only where the parent is practical reasoning (13292.104, 13292.123; 13292.147 until 2026-11-24, when it became a proposal of another course, since it claims no better means, D006).
 
 ### C018. Can the action be carried out?
 
 **Kind:** question. **Decision:** D066 (decided). **Stage:** decided. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** low.
 
-**Outcome:** merge (practical reasoning's possibility assumption, possible(A); against a consequence argument, a challenge to brings_about(A,G)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066.
+**Outcome:** merge (practical reasoning's possibility assumption, possible_bring_about(P,A) (possible(A) until 2026-11-24); against a consequence argument, a challenge to brings_about(A,G)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066.
 
 A reply that the action cannot be carried out, being impractical, politically out of reach or unaffordable, whatever its consequences. Practical reasoning presumes that the action is possible; the consequence schemes do not.
 
-**Relation:** addition to positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One assumption added to positive consequences: the action can be carried out. Practical reasoning has it (ND p. 155, the practicality premise; walton.yml's possible(A)).
+**Relation:** addition to positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One assumption added to positive consequences: the action can be carried out. Practical reasoning has it (ND p. 155, the practicality premise; walton.yml's possible_bring_about(P,A), possible(A) until 2026-11-24).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
 - `positive_consequences_feasible` is 1 from `positive_consequences`, sharing 4 (adds assumption possible/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
-- practical reasoning's possible(A) (CQ:possibility): The assumption exists, but only for practical reasoning.
+- practical reasoning's possible_bring_about(P,A) (CQ:possibility; possible(A) until 2026-11-24): The assumption exists, but only for practical reasoning.
 - sunk costs' feasible(A) and waste's possible(X): The same presumption, in other schemes.
 
 **Related candidates:**
@@ -2022,7 +1900,7 @@ A consequence set against a right, a duty or a value, not against another conseq
 
 | Id | Candidate | Kind | Relation | Compares | Concludes | Closest | Seen | Stage |
 |---|---|---|---|---|---|---|---|---|
-| [C007](#c007-a-right-or-value-against-consequences) | A right or value against consequences | exception | addition to positive_consequences, negative_consequences | a right, duty or value against a consequence | the action is ruled out (or in) whatever its consequences | practical reasoning's side_effects(A,S1); positive and negative value (19.1, 19.2); D055's bad_outweighs and good_outweighs | 9 verified in 2; met | decided |
+| [C007](#c007-a-right-or-value-against-consequences) | A right or value against consequences | exception | addition to positive_consequences, negative_consequences | a right, duty or value against a consequence | the action is ruled out (or in) whatever its consequences | practical reasoning's side-effect exception (side_effects(A,S1) until 2026-11-24, now bad_outweighs(A,G)); positive and negative value (19.1, 19.2); D055's bad_outweighs and good_outweighs | 9 verified in 2; met | decided |
 
 ### C007. A right or value against consequences
 
@@ -2038,7 +1916,7 @@ A consequence argument answered by a right, a duty or a value rather than by ano
 - `positive_consequences_rights` is 1 from `positive_consequences`, sharing 4 (adds exception forbidden/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
-- practical reasoning's side_effects(A,S1): It names a value that the action demotes, inside practical reasoning only.
+- practical reasoning's side-effect exception (side_effects(A,S1) until 2026-11-24, now bad_outweighs(A,G)): It weighed a value that the action demotes, inside practical reasoning only; since proposal D004-D075 it is the claim that the bad consequences outweigh the goal (D070, D091).
 - positive and negative value (19.1, 19.2): They argue for or against a goal from a value; they do not answer a consequence argument.
 - D055's bad_outweighs and good_outweighs: They set a consequence against a consequence.
 
@@ -2950,18 +2828,19 @@ Bindings: P = “the supermarket next door”; A = “cutting its prices”; G =
 
 > Governments want military superiority, and developing AGI is how to get it, so they should develop it.
 
-Bindings: A = “governments developing AGI”; S1 = “governments lacking military superiority”; S2 = “governments having military superiority”; G = “military superiority”.
+Bindings: A = “governments developing AGI”; S1 = “governments lacking military superiority”; S2 = “governments having military superiority”; G = “military superiority”; P = “governments”.
 
+- One of the goals of “governments” is “military superiority”.
 - “Governments lacking military superiority” is the case in the current circumstances.
 - Performing “governments developing AGI” in “governments lacking military superiority” would bring about “governments having military superiority”.
 - “Military superiority” would be realized in “governments having military superiority”.
-- *Presumed:* Action “governments developing AGI” is possible.
-- *Presumed:* Action “military superiority” is possible.
-- *Unless:* There exists an action that would bring about “governments having military superiority” more effectively than “governments developing AGI”.
-- *Unless:* There exists an action that would realize the goal “military superiority” more effectively than “governments developing AGI”.
+- *Presumed:* It is possible for “governments” to bring about “governments developing AGI”.
+- *Presumed:* “Military superiority” is possible.
+- *Unless:* There is a way for “governments” to reach the state “governments having military superiority” more effectively than “governments developing AGI”.
+- *Unless:* There is a way for “governments” to realize the goal “military superiority” more effectively than “governments developing AGI”.
 - *Unless:* Intervening actions are needed after performing “governments developing AGI” to achieve “military superiority”.
-- *Unless:* Performing “governments developing AGI” in “governments lacking military superiority” would have side-effects which demote some value.
-- *Unless:* Another goal is incompatible with “military superiority”.
+- *Unless:* The action “governments developing AGI” has bad consequences that outweigh “military superiority”.
+- *Unless:* Another goal of “governments” is incompatible with “military superiority”.
 - **So:** Action “governments developing AGI” should be performed.
 
 *Note:* It recommends the action from a goal; the candidate predicts the action from the agent's reasons.

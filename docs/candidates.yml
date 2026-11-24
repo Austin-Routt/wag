@@ -610,14 +610,15 @@ candidates:
         the other side's exception instead of that an action should or should
         not be done: the comparative weighing ND describes as how the two
         kinds of consequence argument are judged together (p. 159), and the
-        scheme D055's exceptions lack.
+        scheme D055's exceptions lacked until proposal D004-D075 added it
+        (2026-11-24).
     group: weighing
     decision: D064
     outcome:
       date: "2026-11-22"
       by: owner (standing rule of 2026-11-22)
       result: add
-      recorded: "docs/decisions.yml D064, D075: the first answer scheme, proposed in stage 2"
+      recorded: "docs/decisions.yml D064, D075: added to walton.yml by proposal D004-D075 (2026-11-24), as bad_outweighs_good and good_outweighs_bad; the sketch and its examples left the registry then (the proposal keeps the examples)"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: high
@@ -652,7 +653,7 @@ candidates:
       - source: kialo
         ref: "13292.127"
         fit: clean
-        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055).
+        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against 13292.108's exception, since 2026-11-24, OC7).
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
       - source: kialo
@@ -753,117 +754,13 @@ candidates:
         note: It is not certain that the hardships cited are worse than never living, and foster care beats no life; a consequence of the action set against a harm of not doing it, which the guidelines code as a weighing, not as another course (§3.1, OC6); moved from C010.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
-    sketch:
-      note: >-
-        Gated and engine-tested by the review (OUT/alternative.yml there). The
-        two are a polarity pair under D053. On D055-D059 version 2's
-        templates.
-      schemes:
-        - id: bad_outweighs_good
-          meta:
-            title: Weighing a bad consequence against a good one (candidate)
-            source: Candidate C003, not in the compendium.
-          variables: [A, H, G]
-          premises: ["brings_about(A,H)", "bad(H)", "matters_more(H,G)"]
-          assumptions: []
-          exceptions: []
-          conclusions: ["bad_outweighs(A,G)"]
-        - id: good_outweighs_bad
-          meta:
-            title: Weighing a good consequence against a bad one (candidate)
-            source: Candidate C003, not in the compendium.
-          variables: [A, H, G]
-          premises: ["brings_about(A,H)", "good(H)", "matters_more(H,G)"]
-          assumptions: []
-          exceptions: []
-          conclusions: ["good_outweighs(A,G)"]
-      language:
-        matters_more/2: "%s matters more than %s."
-      questions:
-        bad_outweighs_good:
-          - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
-          - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
-        good_outweighs_bad:
-          - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
-          - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
-    examples:
-      - scheme: bad_outweighs_good
-        title: Starvation against healthier eating
-        kialo: "13292.127"
-        use: answer
-        answers: 33/CQ3 of 13292.115, the positive consequences argument for the meat tax; it concludes that argument's exception.
-        answer_to:
-          scheme: positive_consequences
-          question: 33/CQ3
-          polarity: attack
-          bindings:
-            A: governments putting a tax on meat
-            G: a fall in unhealthy meat consumption
-        text: Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.
-        bindings:
-          A: governments putting a tax on meat
-          H: starvation from reduced access to meat
-          G: a fall in unhealthy meat consumption
-        attacks:
-          - question: 33/CQ1
-            text: The tax would raise the price of meat a little; in the countries that would adopt it, no one starves for lack of meat.
-        note: Its Kialo parent is 13292.7, but it weighs against 13292.115's consequence, so it is re-parented there.
-      - scheme: good_outweighs_bad
-        title: Sustainability against lost revenue
-        kialo: "13292.43"
-        use: answer
-        answers: 33/CQ3 of 13292.9, the negative consequences argument that the tax would cut revenue; it concludes that argument's exception.
-        answer_to:
-          scheme: negative_consequences
-          question: 33/CQ3
-          polarity: attack
-          bindings:
-            A: governments putting a tax on meat
-            G: tax revenues falling
-        text: Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.
-        bindings:
-          A: governments putting a tax on meat
-          H: progress on sustainability and animal welfare
-          G: tax revenues falling
-      - scheme: bad_outweighs_good
-        title: The mobile library
-        invented: true
-        use: argument
-        text: Opening on Sundays would cost the housebound their mobile library, and that matters more than a quiet room for shift workers.
-        bindings:
-          A: the council opening the branch library on Sundays
-          H: housebound readers losing the mobile library
-          G: shift workers having a quiet place to study
-        attacks:
-          - question: C003/Q1
-            text: Twelve people use the mobile van; four hundred shift workers have asked for Sunday opening.
-      - scheme: good_outweighs_bad
-        title: Attention in lessons
-        invented: true
-        use: argument
-        text: Pupils paying attention in every lesson matters more than the rare day a pupil cannot reach a parent at once.
-        bindings:
-          A: the school banning phones
-          H: pupils paying better attention in lessons
-          G: pupils being unable to reach their parents in an emergency
-      - scheme: negative_consequences
-        title: Farm jobs, without a comparison
-        invented: true
-        use: near-miss
-        near_miss_of: bad_outweighs_good
-        text: A meat tax would cost thousands of jobs on livestock farms, so governments should not bring one in.
-        bindings:
-          A: governments putting a tax on meat
-          G: thousands of farm workers losing their jobs
-        note: It cites a bad consequence but compares it with nothing the other side cites, so it is a plain negative consequences argument, a rebuttal (D055's two routes).
     engine:
       - "The review of D055-D059 v1, test RD8: the weighing argument undercuts the positive argument; undermining brings_about(A,H) then takes down both the weighing argument and the negative argument citing H, and the positive argument is reinstated."
     needs:
       - "D055's exceptions (applied 2026-10-23) are what the weighing schemes conclude."
-      - "A walton.yml addition (two schemes and matters_more/2), catalogue entries in F15, a declared polarity pair (D053)."
+      - "A walton.yml addition (two schemes and matters_more/2) and catalogue entries in F15: done by proposal D004-D075 (2026-11-24), the pair declared variants (a sided flip, not a D053 polarity pair)."
       - "In the game: an answer at the new exception-locus questions (workstream E), so a weighing claim is one move, not a rebuttal plus an Other argument."
     open:
-      - "One scheme concluding D055's exception, or a form of 33/CQ3's question?"
       - "How is matters_more judged: seriousness, number affected, reversibility (C005, C008)?"
       - "A comparison with a class of consequences (13292.127) gives one instance per argument of the class: is that workable?"
 
@@ -1257,7 +1154,6 @@ candidates:
           conclusions: ["good_outweighs(A,B)"]
       language:
         needed_for/2: "%s is needed for %s."
-        matters_more/2: "%s matters more than %s."
       questions:
         greater_good:
           - {id: C013/Q1, asks: "Could G be had without B?", target: "needed_for(B,G)"}
@@ -1796,8 +1692,8 @@ candidates:
     compares: a right, duty or value against a consequence
     concludes: the action is ruled out (or in) whatever its consequences
     closest:
-      - item: practical reasoning's side_effects(A,S1)
-        why: It names a value that the action demotes, inside practical reasoning only.
+      - item: practical reasoning's side-effect exception (side_effects(A,S1) until 2026-11-24, now bad_outweighs(A,G))
+        why: It weighed a value that the action demotes, inside practical reasoning only; since proposal D004-D075 it is the claim that the bad consequences outweigh the goal (D070, D091).
       - item: positive and negative value (19.1, 19.2)
         why: They argue for or against a goal from a value; they do not answer a consequence argument.
       - item: D055's bad_outweighs and good_outweighs
@@ -2224,6 +2120,7 @@ candidates:
         near_miss_of: incentive_prediction
         text: Governments want military superiority, and developing AGI is how to get it, so they should develop it.
         bindings:
+          P: governments
           A: governments developing AGI
           S1: governments lacking military superiority
           S2: governments having military superiority
@@ -2588,7 +2485,7 @@ candidates:
     compares: the action with another that brings the same good
     concludes: an exception on positive consequences
     closest:
-      - item: practical reasoning's realize_more_effectively(G,A) (CQ:other_means)
+      - item: practical reasoning's realize_more_effectively(P,G,A) (CQ:other_means; (G,A) until 2026-11-24)
         why: The question exists, but only for practical reasoning; replies to a consequence argument have none.
       - item: C006, mitigation
         why: C006 changes the same action; C017 replaces it.
@@ -2723,6 +2620,7 @@ candidates:
         near_miss_of: positive_consequences_alternative
         text: The city's goal is clean air by 2030, and a congestion charge is the way to get there, so it should bring one in.
         bindings:
+          P: the city
           A: bringing in a congestion charge
           S1: the city's air being dirty
           S2: the city's air being clean
@@ -2730,7 +2628,7 @@ candidates:
         note: Against practical reasoning the question exists already (realize_more_effectively, CQ:other_means).
     open:
       - "An exception on positive consequences and the prudential form only, or a question the game borrows from practical reasoning (D023)?"
-      - "The batch-2 gold answers CQ:other_means only where the parent is practical reasoning (13292.104, 13292.123, 13292.147)."
+      - "The batch-2 gold answers CQ:other_means only where the parent is practical reasoning (13292.104, 13292.123; 13292.147 until 2026-11-24, when it became a proposal of another course, since it claims no better means, D006)."
 
   - id: C018
     name: Can the action be carried out?
@@ -2741,14 +2639,14 @@ candidates:
       why: >-
         One assumption added to positive consequences: the action can be
         carried out. Practical reasoning has it (ND p. 155, the practicality
-        premise; walton.yml's possible(A)).
+        premise; walton.yml's possible_bring_about(P,A), possible(A) until 2026-11-24).
     group: the-action
     decision: D066
     outcome:
       date: "2026-11-22"
       by: owner (standing rule of 2026-11-22)
       result: merge
-      into: "practical reasoning's possibility assumption, possible(A); against a consequence argument, a challenge to brings_about(A,G)"
+      into: "practical reasoning's possibility assumption, possible_bring_about(P,A) (possible(A) until 2026-11-24); against a consequence argument, a challenge to brings_about(A,G)"
       recorded: "docs/decisions.yml D066"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
@@ -2761,7 +2659,7 @@ candidates:
     compares: the action with what can be done
     concludes: an assumption, and its question, for positive consequences
     closest:
-      - item: practical reasoning's possible(A) (CQ:possibility)
+      - item: practical reasoning's possible_bring_about(P,A) (CQ:possibility; possible(A) until 2026-11-24)
         why: The assumption exists, but only for practical reasoning.
       - item: sunk costs' feasible(A) and waste's possible(X)
         why: The same presumption, in other schemes.

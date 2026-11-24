@@ -31,6 +31,8 @@ NASCQ = REPO + 'wag/data/nascq/'
 edges = json.load(open(NASCQ + 'edges.json'))['ask_edges']
 cqs = json.load(open(NASCQ + 'critical_questions.json'))
 WAG2W = {k: v['carneades_id'] for k, v in json.load(open(NASCQ + 'schemes.json')).items()}
+# The answer schemes (D075): each concludes an exception of another scheme.
+ANSWER_SCHEMES = ('bad_outweighs_good', 'good_outweighs_bad', 'better_means')
 errors, warns = [], []
 def err(m): errors.append(m)
 
@@ -163,6 +165,50 @@ for it in gold['items']:
                     if cq not in want: err(f'{cid}: R2 cq {cq} not in {want}')
             elif part not in ('conclusion', 'inference'):
                 err(f'{cid}: bad target part {part}')
+    # R8 (D075): a claim at an exception (an answer, R2) is an argument that
+    # the exception holds, so its primary instance concludes the exception;
+    # with polarity for, a defence of the argument, it concludes the
+    # exception's negation (as to_wag.py plays it).
+    own = primary(it)
+    if a and a.get('part') == 'exception':
+        got = nows(((own or {}).get('conclusion') or {}).get('formula'))
+        want = ('¬' if r.get('polarity') == 'for' else '') + nows(a.get('formula'))
+        if got != want: err(f'{cid}: R8 an answer at the exception {a.get("formula")} concludes {got or "nothing"}, not {want} (D075)')
+    # R9 (D075, D089): a better means is another action than the one it
+    # answers, records which comparison it makes, and, as the claim's primary
+    # instance, has its target's goal premise, whatever the claim's role. A
+    # fragment, which states one premise of its parent's argument (§2, §3),
+    # is that argument's, and is checked there.
+    for ins in it['instances']:
+        if ins['scheme']['walton_id'] != 'better_means' or ins['scheme'].get('fit') == 'fragment': continue
+        b = ins['bindings']
+        if b.get('A2') == b.get('A'): err(f'{cid}: R9 better_means compares {b.get("A")} with itself')
+        if ins.get('comparison') not in ('more surely', 'sooner', 'at lower cost'):
+            err(f'{cid}: R9 better_means records no comparison (more surely, sooner or at lower cost)')
+        if ins.get('primary') and a and a.get('claim') in G:
+            goal = lambda x: sorted(nows(p['formula']) for p in (x or {}).get('premises', []) if parse(p['formula'])[1] == 'goal_of_agent')
+            want, got = goal(primary(G[a['claim']])), goal(ins)
+            if got != want: err(f'{cid}: R9 better_means goal premise {got} is not the answered argument\'s {want}')
+    # R11 (D075): an answer scheme argues the exception it concludes, so a
+    # claim whose primary instance is one is at an exception (R8 then makes
+    # it the one it concludes), unless it is a fragment that backs a premise
+    # of its parent's argument (§2, §3).
+    fragment_backing = own and own['scheme'].get('fit') == 'fragment' and a and a.get('part') == 'premise'
+    if own and own['scheme']['walton_id'] in ANSWER_SCHEMES and not (a and a.get('part') == 'exception') and not fragment_backing:
+        err(f'{cid}: R11 its primary instance is the answer scheme {own["scheme"]["walton_id"]}, but it is not at an exception')
+    # R10: a challenge record names a formula of the claim's own instances or
+    # of its target's primary instance, so that a formula renamed in
+    # walton.yml cannot stay behind in a record.
+    names = set()
+    for ins in it['instances']:
+        names |= {nows(p['formula']) for p in ins['premises']}
+        if (ins.get('conclusion') or {}).get('formula'): names.add(nows(ins['conclusion']['formula']))
+    tp = primary(G[a['claim']]) if a and a.get('claim') in G else None
+    if tp:
+        names |= {nows(p['formula']) for p in tp['premises']}
+    for c in it['challenges']:
+        if c.get('formula') and nows(c['formula']) not in names:
+            err(f'{cid}: R10 the challenge {c.get("cq") or c.get("type")} names {c["formula"]}, a formula of neither its own instances nor its target\'s primary instance')
     if r['kind'] == 'cq_answer' and not r.get('cq'): err(f'{cid}: cq_answer without cq')
     if r['kind'] != 'cq_answer' and r.get('cq'): err(f'{cid}: cq set on non-cq_answer')
     if r['polarity'] not in ('for', 'against', None): err(f'{cid}: polarity {r["polarity"]}')
@@ -183,4 +229,4 @@ for it in gold['items']:
 print('items', len(gold['items']), '| instances', counts['instances'], '| walton formulas checked', counts['checked_formulas'], '| lexicon atoms', len(lex))
 if errors:
     print('ERRORS (%d):' % len(errors)); print('\n'.join(errors)); sys.exit(1)
-print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R1, R2, R4, R7, target formulas in primary instances, atoms in lexicon')
+print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R1, R2, R4, R7, R8, R9, R10, R11, target formulas in primary instances, atoms in lexicon')

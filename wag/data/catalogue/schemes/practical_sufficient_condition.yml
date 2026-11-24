@@ -16,31 +16,35 @@ walton:
     Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments.
     Newport News, Va.: Vale Press, 1992, pp. 89-90.'
 formulas:
-  variables: [X, A, A2, P]
+  variables: [X, G, P, S]
   premises:
-  - goal_is_action(A)
-  - alternative_action(X,A)
-  - sufficient_action(X,A)
-  - practicality_action(X)
-  - more_acceptable_bringing(A,X)
+  - goal_of_agent(P,G)
+  - alternative_action_sufficient(P,S,G)
+  - sufficient_action(P,X,S,G)
+  - practicality_action(P,X)
+  - more_acceptable_bringing(P,G,X)
   assumptions:
-  - possible_action(A)
-  - acceptable_action(X)
-  - possible_agent(X,P)
+  - possible_goal(G)
+  - acceptable_action(P,X)
+  - possible_bring_about(P,X)
   exceptions:
-  - alternative_means(A,X)
-  - side_effect_action(P,X)
-  - conflict_goals(P,A2,A)
+  - realize_more_effectively(P,G,X)
+  - bad_outweighs(X,G)
+  - incompatible_goal(P,G)
   conclusions:
-  - bringing_about_action(X)
+  - should_be_performed(X)
 book:
 - entry: "22.3"
   title: Sufficient Condition Schema
   pages: 323-324
   parent: "22"
-  match: exact
-  note: Same title and references; identical to practical_necessary_condition except
-    sufficient_action(X,A).
+  match: partial
+  note: 'Same title and references. Since 2026-11-24 it differs from practical_necessary_condition
+    in its alternatives premise (each means enough), its selection premise, and its
+    exceptions (no objection that the goal can be reached without the set, D090).
+    Partial since 2026-11-24: the first-person premises are stated of the agent P
+    and the conclusion is restated in the game''s vocabulary, should_be_performed(X)
+    (D030, D063).'
   status: generated
 families:
 - family: F10
@@ -50,35 +54,41 @@ families:
 premise_map:
 - entry: "22.3"
   label: Goal Premise
-  formulas: [{formula: goal_is_action(A), locus: premise}]
+  formulas: [{formula: 'goal_of_agent(P,G)', locus: premise}]
   status: generated
 - entry: "22.3"
   label: Alternatives Premise
-  formulas: [{formula: 'alternative_action(X,A)', locus: premise}]
-  note: template says "is necessary", as in the book's misprint
+  formulas: [{formula: 'alternative_action_sufficient(P,S,G)', locus: premise}]
+  note: the set of means [B0..Bn] is S; the chosen member is X (D030, since 2026-11-24);
+    each means would be enough, as ch. 3 prints the schema (p. 96), where the compendium's
+    22.3 repeats 22.2's 'necessary' (p. 323), a misprint
   status: generated
 - entry: "22.3"
   label: Selection Premise
-  formulas: [{formula: 'sufficient_action(X,A)', locus: premise}]
+  formulas: [{formula: 'sufficient_action(P,X,S,G)', locus: premise}]
   status: generated
 - entry: "22.3"
   label: Practicality Premise
-  formulas: [{formula: practicality_action(X), locus: premise}]
+  formulas: [{formula: 'practicality_action(P,X)', locus: premise}]
   status: generated
 - entry: "22.3"
   label: Side Effects Premise
-  formulas: [{formula: 'more_acceptable_bringing(A,X)', locus: premise}]
+  formulas: [{formula: 'more_acceptable_bringing(P,G,X)', locus: premise}]
   status: generated
 - entry: "22.3"
   label: Conclusion
-  formulas: [{formula: bringing_about_action(X), locus: conclusion}]
+  formulas: [{formula: should_be_performed(X), locus: conclusion}]
+  note: 'restated as should_be_performed(X) (D063); the book: "it is required that
+    I bring about Bi"'
   status: generated
 critical_questions:
 - id: 22.3/CQ1
   book:
     entry: "22.3"
     label: CQ1
-  targets: [{formula: 'alternative_means(A,X)', locus: exception}]
+  targets: [{formula: 'realize_more_effectively(P,G,X)', locus: exception}]
+  note: 'the best-choice reading (D090): a strictly better means; an equally good
+    one is no objection (D006)'
   paraphrase: ""
   answer: ""
   status: generated
@@ -86,7 +96,7 @@ critical_questions:
   book:
     entry: "22.3"
     label: CQ2
-  targets: [{formula: acceptable_action(X), locus: assumption}]
+  targets: [{formula: 'acceptable_action(P,X)', locus: assumption}]
   paraphrase: ""
   answer: ""
   status: generated
@@ -94,7 +104,7 @@ critical_questions:
   book:
     entry: "22.3"
     label: CQ3
-  targets: [{formula: 'possible_agent(X,P)', locus: assumption}]
+  targets: [{formula: 'possible_bring_about(P,X)', locus: assumption}]
   paraphrase: ""
   answer: ""
   status: generated
@@ -102,7 +112,11 @@ critical_questions:
   book:
     entry: "22.3"
     label: CQ4
-  targets: [{formula: 'side_effect_action(P,X)', locus: exception}]
+  targets: [{formula: 'bad_outweighs(X,G)', locus: exception}]
+  note: 'since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences
+    outweigh the goal, D055''s formula; a plain side effect is a rebuttal. WAG''s
+    reading: the source''s exception is any side effect that demotes a value (Walton
+    and Gordon 2015, p. 515)'
   paraphrase: ""
   answer: ""
   status: generated
@@ -110,10 +124,19 @@ critical_questions:
   book:
     entry: "22.3"
     label: CQ5
-  targets: [{formula: 'conflict_goals(P,A2,A)', locus: exception}]
+  targets: [{formula: 'incompatible_goal(P,G)', locus: exception}]
   paraphrase: ""
   answer: ""
   status: generated
+- id: walton/possible_goal
+  targets: [{formula: possible_goal(G), locus: assumption}]
+  note: 'Neither the book nor the game asks it: the goal''s possibility, apart from
+    the means'', which is 22.3/CQ3''s (D030, D088, since 2026-11-24).'
+  paraphrase: Can G be reached at all, by any means?
+  answer: 'The proponent, once asked. Against: showing that G cannot be reached whatever
+    is done, which undermines possible_goal(G). For: cases where G, or goals like
+    it, have been reached, or a credible path to it.'
+  status: drafted by Claude Code, 2026-11-24
 summary:
   text: ""
   status: todo
@@ -125,7 +148,17 @@ contrasts:
   text: ""
   status: todo
 examples: []
-discrepancies: []
+discrepancies:
+- kind: partial-link
+  about: "22.3"
+  detail: 'walton.yml formalizes compendium 22.3 only in part: Same title and references.
+    Since 2026-11-24 it differs from practical_necessary_condition in its alternatives
+    premise (each means enough), its selection premise, and its exceptions (no objection
+    that the goal can be reached without the set, D090). Partial since 2026-11-24:
+    the first-person premises are stated of the agent P and the conclusion is restated
+    in the game''s vocabulary, should_be_performed(X) (D030, D063).'
+  decision: ""
+  status: generated
 classification:
   source: ""
   reasoning: ""
@@ -146,3 +179,6 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-24"
+  by: Claude Code
+  what: Drafted walton/possible_goal (proposal D004-D075, D030, D088).

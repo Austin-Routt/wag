@@ -21,8 +21,8 @@ WAG's schemes and their `walton.yml` IDs:
 
 | WAG | `walton.yml` | Note |
 |---|---|---|
-| `AS:practical_reasoning` | `practical_reasoning1` | Value-based (Atkinson & Bench-Capon): S1, A, S2, G, V. |
-| `AS:practical_reasoning_goal` | `practical_reasoning2` | Goal-based (Walton 2015; the book's 22.1): S1, A, S2, G. |
+| `AS:practical_reasoning` | `practical_reasoning1` | Value-based (Atkinson & Bench-Capon): the agent P, S1, A, S2, G, V. |
+| `AS:practical_reasoning_goal` | `practical_reasoning2` | Goal-based (Walton 2015; the book's 22.1): the agent P, S1, A, S2, G. |
 | `AS:consequences` | `positive_consequences` | Book 33.1. |
 | `AS:negative_consequences` | `negative_consequences` | Book 33.2. Concludes ¬should_be_performed(A). |
 | `AS:values` | `positive_value` | |
@@ -63,7 +63,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
    - `premise_backing`: an argument for a premise of the target;
    - `cq_answer`: an answer to one of the target scheme's critical questions; give which question, and whether for or against;
    - `side_effect`: a further bad consequence of the action, offered as a reply;
-   - `alternative_means`: another action is said to achieve the goal as well or better;
+   - `alternative_means`: another action is put forward for the same goal. Only one said to reach it better (more surely, sooner or at lower cost) answers practical reasoning's exception (§3); one said to be as good is no reason against the action (D006), and is coded as a proposal of another course (`action_amendment`, move `alternative_means`; D066);
    - `action_amendment`: proposes a changed action ("A plus B", "A only for X");
    - `clarification`, `none`.
 5. **Target (`target`).**
@@ -98,6 +98,12 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - Use positive consequences when the claim chiefly says that the action brings about an outcome that is good.
   - Use practical reasoning only when the claim or context states the circumstances S1, the transition from A to S2, the goal G realized in S2, and, for the value-based scheme, the value V. Use the goal-based scheme when there is no value.
   - When a claim states only S1, or only G, without the inference, code a `fragment` of its parent's argument. Do not code a full instance with three invented premises.
+- **Practical reasoning's agent, and its answers (decisions D005, D006, D088-D091, 2026-11-24).**
+  - P is the agent who would do A: in a policy debate, whoever would enact it (OC13). Bind P to the thesis's agent (`governments` in this batch). The people the action affects are others, even when its phrase names them.
+  - `goal_of_agent(P,G)` states P's goal; supply it when the claim states only the outcome. `possible_bring_about(P,A)` says that P can do A, `possible_goal(G)` that G can be reached at all.
+  - A goal that the means sets back is a consequence of the means: a rebuttal at the conclusion, or a weighing at the exception `bad_outweighs(A,G)` (§3.1, OC1-OC4). The exception `incompatible_goal(P,G)` is another goal of P that clashes with G itself.
+  - Another means that would reach G more surely, sooner or at lower cost answers the exception `realize_more_effectively(P,G,A)`: code it with `better_means`, with the P, G and A of the argument it answers and A2 the other course, and record the comparison it makes in the instance's `comparison` (`more surely`, `sooner` or `at lower cost`). Its goal premise is the answered argument's own. A claim that the other course is better because it serves another value ranks values, not means: it is not this comparison (D089; OC5). A means said to be merely as good is no reason against A (D006): code it as a proposal of another course (§2, OC6).
+  - The condition schemes (22.2, 22.3) read as a best choice: a strictly better means defeats the recommendation, an equally good one does not. Against the necessary-condition scheme, a route to G that uses none of the means S answers `goal_achievable_without_any(P,G,S)` (D090).
 - **Cons of a policy.**
   - A bad consequence of the action is negative consequences: `¬should_be_performed(A)` from `brings_about(A,G)` and `bad(G)`.
   - Bind A to the action exactly as the thesis states it, so that the con and the thesis's pros meet on one issue (§3.1, OC13).
@@ -118,9 +124,9 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
 - **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, and mark one as primary.
 - **Uncertainty.** Give `confidence` (0 to 1) separately for scheme and role: your estimate that a careful annotator would choose the same. Write what you were unsure of in `notes`.
 
-### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23)
+### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23; practical reasoning, D070 and D091, 2026-11-24)
 
-Each consequence scheme has an exception on its own side. The exception names the consequence that the argument cites.
+Each consequence scheme has an exception on its own side. The exception names the consequence that the argument cites. Practical reasoning's schemes have the same exception for a side effect that outweighs their goal (D070, D091: WAG's reading of the source's side-effect exception).
 
 | Scheme | Exception | It says |
 |---|---|---|
@@ -128,18 +134,20 @@ Each consequence scheme has an exception on its own side. The exception names th
 | `negative_consequences` (33.2) | `good_outweighs(A,G)` | A has good consequences that outweigh G. |
 | `negative_consequences_reasoning` (33.3) | `good_outweighs(A,B)` | A has good consequences that outweigh B. |
 | `negative_consequences_prudential` (33.4) | `bad_outweighs(X,C)` | X has bad consequences that outweigh C. 33.4 concludes `should_be_performed(X)`. |
+| `practical_reasoning1`, `practical_reasoning2`, `practical_inference` (22.4, 22.1) | `bad_outweighs(A,G)` | A has bad consequences that outweigh the goal G. |
+| `practical_necessary_condition`, `practical_sufficient_condition` (22.2, 22.3) | `bad_outweighs(X,G)` | X has bad consequences that outweigh the goal G. |
 
-The book's third question about consequences (33/CQ3, opposite consequences) has two routes. A further consequence that ranks nothing is a rebuttal (OC2). A claim that one consequence matters more than another argues the exception (OC3). The rules below decide which route a claim takes.
+The book's third question about consequences (33/CQ3, opposite consequences) has two routes, and so has practical reasoning's question about side effects (22.1 CQ5, 22.4 CQ7, and CQ4 of 22.2 and 22.3). A further consequence that ranks nothing is a rebuttal (OC2). A claim that one consequence matters more than another argues the exception (OC3). The rules below decide which route a claim takes.
 
 Terms:
-- *the argument it answers*: the consequence argument that a claim replies to;
+- *the argument it answers*: the consequence or practical reasoning argument that a claim replies to;
 - *a weighing claim*: a claim that one consequence matters more than another;
 - *the one who acts*: the agent who would do the action A.
 
 Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/kialo-batch2`; not given to annotators, because some cases are claims of this batch). A test checks that the codings follow `walton.yml` and the gold, that every rule has a case, and that no retired wording of a rule is used. What the exceptions cannot do is recorded once, in the catalogue entry for positive consequences (`wag/data/catalogue/schemes/positive_consequences.yml`, the discrepancy on 33/CQ3).
 
 **OC1. Scope.** These rules are for consequence claims: claims that argue from what an action would bring about (33.1–33.4).
-- A further bad consequence offered against practical reasoning answers its side-effects question, at `side_effects(A,S1)` (D070).
+- A claim against practical reasoning is coded as one against a consequence argument for A: a further bad consequence is a rebuttal at its conclusion (OC2), and a claim that a bad consequence matters more than its goal is a weighing at `bad_outweighs(A,G)` (OC3, OC4; D070, D091).
 - What the claim concludes decides, not its target or the discussion's thesis.
   - A consequence claim that concludes something about an action (doing, believing, pursuing, steering) is coded with the scheme that fits it: a consequence scheme, or practical reasoning by §3.
     - This holds when its target is a claim about what is the case too. Its conclusion then meets nothing at the target; code its role and polarity as usual. Unless it proposes a changed or another action (`action_amendment`, `alternative_means`), it is then the appeal that candidate C011 objects to: name C011 in `notes`.
@@ -152,9 +160,9 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - "A life not worth living" ranks nothing. "Both emotional and physical harms", set against emotional harms, ranks without any of those words.
 
 **OC4. How to code a weighing claim.**
-- Use `other`, unless a source-based scheme fits (expert opinion, position to know). No scheme concludes the exceptions (candidate C003).
+- Use C003's answer schemes (D064, D075): `bad_outweighs_good` against an argument for A, `good_outweighs_bad` against an argument against A, unless a source-based scheme fits (expert opinion, position to know). H is the consequence the claim ranks higher, and `matters_more(H,G)` the comparison. A balance claim names no single consequence, so it has no H: it is coded with `other` (OC14).
 - Its conclusion is the exception of the argument it answers, with that argument's own A and G (A and B for 33.3; X and C for 33.4): `bad_outweighs(A,G)` against an argument for A, `good_outweighs(A,G)` against an argument against A.
-- Its role is `cq_answer`. Its `cq` is the third question of that argument's scheme (`33.1 CQ3`, `33.2 CQ3`, `33.3 CQ3`, `33.4 CQ3`). Its target is that argument's exception. Its polarity is `against`, its stance on that argument's conclusion (§5 item 8).
+- Its role is `cq_answer`. Its `cq` is the third question of that argument's scheme (`33.1 CQ3`, `33.2 CQ3`, `33.3 CQ3`, `33.4 CQ3`), or practical reasoning's question about side effects (`22.1 CQ5`, `22.4 CQ7`, `22.2 CQ4`, `22.3 CQ4`). Its target is that argument's exception. Its polarity is `against`, its stance on that argument's conclusion (§5 item 8).
 - The argument it answers is the Kialo parent, if the parent cites the outweighed consequence. Otherwise re-parent the claim to the argument that cites it (§5 item 1).
 - If no argument on the board cites the outweighed consequence, code the claim as a consequence argument of its own sign, or as backing of its parent's premise, and name the comparison in `notes`.
 
@@ -163,12 +171,14 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - A value or a right is set against consequences only when the claim says that it rules the action in or out whatever its consequences ("no one may be watched all day"). That is not the exception. Code it with the scheme that fits it (the value schemes, the argument from rules, 55, or `other`), and name candidate C007 in `notes`.
 - Two values ranked against each other, with no consequence named, are not a weighing of consequences either (C007).
 
-**OC6. Another course is not the exception.**
-- A claim that another course is better compares two actions, not two consequences of one action ("adoption, though not perfect, is better than abortion"). Code it with `other`, and name candidate C010 or C017 in `notes`. Another course is a different action (adoption, regulation, rationing).
+**OC6. Another course.**
+- Against a consequence argument, a claim that another course is better compares two actions, not two consequences of one action ("adoption, though not perfect, is better than abortion"), so it does not argue the exception. Code it with `other`, and name candidate C010 or C017 in `notes`. Another course is a different action (adoption, regulation, rationing).
+- Against practical reasoning, a claim that another course reaches the goal better (more surely, sooner or at lower cost) answers its exception `realize_more_effectively(P,G,A)`: code it with `better_means` (§3; D075, D089).
+- A claim that only puts another course forward for the goal, without saying that it does better, answers neither (D006): code it as a proposal of another course (`action_amendment`, move `alternative_means`) at the conclusion of the argument it replies to, and name C017 in `notes` (D066). Its polarity is the stance the discussion gives it (Kialo places such a proposal as a con), though it is no reason against A; the replay plays it as an argument for the other course.
 - The action's omission is not another course. A claim that a consequence of A matters more, or less, than a harm of not doing A weighs two consequences of A: the harm of not acting counts as a good consequence of A, its not happening (OC13). Code it by OC4, with the A and G of the argument it answers.
 
 **OC7. A comparison with a class or a whole side** ("than any benefit of the curfew") weighs against every consequence argument of that class on the board: one weighing instance for each.
-- Arguments of the class that are not consequence schemes are left out. Practical reasoning has no outweighing exception (D070).
+- Arguments of the class that have no outweighing exception are left out. Practical reasoning has one since 2026-11-24 (D070, D091), so it is in the class.
 - The gold records one target per claim. Until its format takes more, code one instance: against the Kialo parent's argument if it is in the class, else against the earliest argument of the class on the board.
 
 **OC8. A concession plus a weighing** ("true, it cuts emissions, but the jobs matter more") gives two instances: the rebuttal (OC2) and the weighing (OC4). Mark one primary:
@@ -178,7 +188,7 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 
 **OC9. A claim that a cited consequence is small, rare or minor,** and names no rival consequence, attacks `good(G)` or `bad(G)`, or the consequence's likelihood (33/CQ1). It does not argue the exception.
 
-**OC10. A reply to a weighing claim** attacks that claim's own instance: its comparison (a premise of its `other` instance, such as `more_serious_consequences(...)`) or the consequence it relies on. Only a reply that nothing outweighs G argues against the exception itself, because that would cancel every other weighing claim against the argument.
+**OC10. A reply to a weighing claim** attacks that claim's own instance: its comparison (`matters_more(H,G)`, a premise of its `bad_outweighs_good` or `good_outweighs_bad` instance) or the consequence it relies on (`brings_about(A,H)`). Only a reply that nothing outweighs G argues against the exception itself, because that would cancel every other weighing claim against the argument.
 - When the weighing is the claim's secondary instance, which the gold cannot target, the reply targets the claim's primary instance and names the comparison in `notes`, until the gold's format takes a target instance.
 - When the weighing is argued from a source, the reply answers the source scheme's own questions.
 
@@ -223,7 +233,7 @@ One JSON file: `{"annotator": "A" | "B", "items": [ … ]}`, one item per claim 
 }
 ```
 
-Formulas use `walton.yml` predicates, with the values in place of the variables. Write each value as a short snake_case atom (`tax_meat`); the English in `en` uses the `language` templates. `scheme.walton_id` is `"other"` or `"none"` when no scheme applies. `role.cq` names the question (a WAG ID such as `CQ:likelihood` if one exists, else the compendium label) when the role is `cq_answer`.
+Formulas use `walton.yml` predicates, with the values in place of the variables. Write each value as a short snake_case atom (`tax_meat`); the English in `en` uses the `language` templates. `scheme.walton_id` is `"other"` or `"none"` when no scheme applies. `role.cq` names the question (a WAG ID such as `CQ:likelihood` if one exists, else the compendium label) when the role is `cq_answer`. A `better_means` instance has one more field, `comparison`: `more surely`, `sooner` or `at lower cost` (§3).
 
 ## 5. Version 3: changes after the batch-2 adjudication (2026-10-13)
 

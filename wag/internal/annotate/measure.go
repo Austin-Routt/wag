@@ -334,7 +334,50 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 	if t := FieldOf(a, "target_claim"); t != "" && d != nil && d.Item(t) == nil {
 		add("its target %s is not a claim of the dataset", t)
 	}
+	// A claim at an exception, an answer, argues that the exception holds, so
+	// its primary instance concludes it; a defence of the argument (polarity
+	// for) argues that it does not, and concludes its negation (D075; rule R8
+	// of validate.py; the replay plays it so).
+	if tg, _ := a["target"].(map[string]any); tg != nil {
+		if act, _ := tg["actual"].(map[string]any); act != nil && act["part"] == "exception" {
+			exc := ""
+			if f := act["formula"]; f != nil {
+				exc = compact(fmt.Sprint(f))
+			}
+			want := exc
+			if p, _ := r["polarity"].(string); p == "for" {
+				want = "¬" + exc
+			}
+			if got := primaryConclusion(insts); got != want {
+				if got == "" {
+					got = "nothing"
+				}
+				add("an answer at the exception %s concludes %s, not %s (D075)", exc, got, want)
+			}
+		}
+	}
 	return out
+}
+
+// primaryConclusion is the conclusion of an annotation's primary instance
+// (its only instance, if none is marked), without spaces; "" if it has none.
+func primaryConclusion(insts []any) string {
+	var own map[string]any
+	for _, x := range insts {
+		in, _ := x.(map[string]any)
+		if p, _ := in["primary"].(bool); p {
+			own = in
+			break
+		}
+	}
+	if own == nil && len(insts) == 1 {
+		own, _ = insts[0].(map[string]any)
+	}
+	cm, _ := own["conclusion"].(map[string]any)
+	if cm == nil || cm["formula"] == nil {
+		return ""
+	}
+	return compact(fmt.Sprint(cm["formula"]))
 }
 
 // AssignmentCoverage keeps missing replies visible without counting two missing

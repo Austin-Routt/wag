@@ -16,31 +16,34 @@ walton:
     Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments.
     Newport News, Va.: Vale Press, 1992, pp. 89-90.'
 formulas:
-  variables: [X, A, A2, P]
+  variables: [X, G, P, S]
   premises:
-  - goal_is_action(A)
-  - alternative_action(X,A)
-  - necessary_action(X,A)
-  - practicality_action(X)
-  - more_acceptable_bringing(A,X)
+  - goal_of_agent(P,G)
+  - alternative_action(P,S,G)
+  - necessary_action(P,X,S,G)
+  - practicality_action(P,X)
+  - more_acceptable_bringing(P,G,X)
   assumptions:
-  - possible_action(A)
-  - acceptable_action(X)
-  - possible_agent(X,P)
+  - possible_goal(G)
+  - acceptable_action(P,X)
+  - possible_bring_about(P,X)
   exceptions:
-  - alternative_means(A,X)
-  - side_effect_action(P,X)
-  - conflict_goals(P,A2,A)
+  - realize_more_effectively(P,G,X)
+  - goal_achievable_without_any(P,G,S)
+  - bad_outweighs(X,G)
+  - incompatible_goal(P,G)
   conclusions:
-  - bringing_about_action(X)
+  - should_be_performed(X)
 book:
 - entry: "22.2"
   title: Necessary Condition Schema
   pages: 323-324
   parent: "22"
-  match: exact
+  match: partial
   cqs_printed_under: "22.3"
-  note: Same title and references; all five premises have formulas.
+  note: 'Same title and references; all five premises have formulas. Partial since
+    2026-11-24: the first-person premises are stated of the agent P and the conclusion
+    is restated in the game''s vocabulary, should_be_performed(X) (D030, D063).'
   status: generated
 families:
 - family: F10
@@ -50,115 +53,147 @@ families:
 premise_map:
 - entry: "22.2"
   label: Goal Premise
-  formulas: [{formula: goal_is_action(A), locus: premise}]
+  formulas: [{formula: 'goal_of_agent(P,G)', locus: premise}]
   status: generated
 - entry: "22.2"
   label: Alternatives Premise
-  formulas: [{formula: 'alternative_action(X,A)', locus: premise}]
-  note: the set [B0..Bn] is collapsed to the selected member X
+  formulas: [{formula: 'alternative_action(P,S,G)', locus: premise}]
+  note: the set of means [B0..Bn] is S; the chosen member is X (D030, since 2026-11-24)
   status: generated
 - entry: "22.2"
   label: Selection Premise
-  formulas: [{formula: 'necessary_action(X,A)', locus: premise}]
+  formulas: [{formula: 'necessary_action(P,X,S,G)', locus: premise}]
   status: generated
 - entry: "22.2"
   label: Practicality Premise
-  formulas: [{formula: practicality_action(X), locus: premise}]
+  formulas: [{formula: 'practicality_action(P,X)', locus: premise}]
   status: generated
 - entry: "22.2"
   label: Side Effects Premise
-  formulas: [{formula: 'more_acceptable_bringing(A,X)', locus: premise}]
+  formulas: [{formula: 'more_acceptable_bringing(P,G,X)', locus: premise}]
   status: generated
 - entry: "22.2"
   label: Conclusion
-  formulas: [{formula: bringing_about_action(X), locus: conclusion}]
+  formulas: [{formula: should_be_performed(X), locus: conclusion}]
+  note: 'restated as should_be_performed(X) (D063); the book: "it is required that
+    I bring about Bi"'
   status: generated
 critical_questions:
 - id: 22.3/CQ1
   book:
     entry: "22.3"
     label: CQ1
-  targets: [{formula: 'alternative_means(A,X)', locus: exception}]
-  note: Alternative Means Question. The alternatives premise already admits other
-    members of the set; the question asks whether one of them, rather than X, could
-    serve.
-  paraphrase: Could the goal A be reached by some means other than X?
-  answer: 'The critic, who raises it with an argument. Against: another means that
-    would bring about A without X, which undercuts the argument through alternative_means(A,X):
-    X is then not required. For: showing that every route to A passes through X, or
-    that the other routes are not open.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'goal_achievable_without_any(P,G,S)', locus: exception}]
+  note: 'Alternative Means Question, read as a best choice (D090, since 2026-11-24):
+    the alternatives premise already grants other members of the set S, so another
+    member answers nothing; what answers it is a route to G that uses no means of
+    S. A means of the set that does better is asked separately (walton/realize_more_effectively).'
+  paraphrase: Could P reach G without using any of the means S?
+  answer: 'The critic, who raises it with an argument. Against: a route to G open
+    to P that uses none of the means in S, which undercuts the argument through goal_achievable_without_any(P,G,S):
+    no means of the set is then needed. It has no answer scheme yet, so it is argued
+    with Other, and the engine accepts any argument concluding it; the answer contract
+    (a route P can take that reaches G and uses no member of S, D090) is the CQ answer
+    contract''s (stage 2, item F) and the game''s (step C5). For: showing that every
+    route to G passes through some member of S.'
+  status: drafted by Claude Code, 2026-11-24
 - id: 22.3/CQ2
   book:
     entry: "22.3"
     label: CQ2
-  targets: [{formula: acceptable_action(X), locus: assumption}]
-  note: Acceptable/Best Option Question. The Selection Premise, necessary_action(X,A),
+  targets: [{formula: 'acceptable_action(P,X)', locus: assumption}]
+  note: Acceptable/Best Option Question. The Selection Premise, necessary_action(P,X,S,G),
     states the same choice as a premise, so the question bears on it too; the generated
-    target keeps the assumption. acceptable_action(X) covers acceptability only; whether
-    X is the best means bears on the Selection Premise, necessary_action(X,A), which
-    can be challenged directly.
-  paraphrase: Is X an acceptable choice among the means to A, or even the best one?
-  answer: 'The proponent, once asked. Against: showing that X is unacceptable (unlawful,
-    too costly, against the agent''s principles), which undermines acceptable_action(X).
+    target keeps the assumption, acceptable_action(P,X), for the agent P since 2026-11-24
+    (D030), which covers acceptability only. Whether X is the best means bears on
+    the Selection Premise, which can be challenged directly, and on walton/realize_more_effectively.
+  paraphrase: Is X an acceptable thing for P to do?
+  answer: 'The proponent, once asked. Against: showing that X is unacceptable for
+    P (unlawful, too costly, against P''s principles), which undermines acceptable_action(P,X).
     For: reasons why X is acceptable.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-24
 - id: 22.3/CQ3
   book:
     entry: "22.3"
     label: CQ3
-  targets: [{formula: 'possible_agent(X,P)', locus: assumption}]
-  note: Possibility Question; the agent a is P. The Practicality Premise, practicality_action(X),
-    says much the same as a premise and can be challenged directly.
-  paraphrase: Can the agent P actually do X?
+  targets: [{formula: 'possible_bring_about(P,X)', locus: assumption}]
+  note: Possibility Question; the agent a is P. Since 2026-11-24 the assumption is
+    possible_bring_about(P,X), the means' possibility (D030, D088; possible_agent(X,P)
+    before). The Practicality Premise, practicality_action(P,X), says much the same
+    as a premise and can be challenged directly.
+  paraphrase: Can P actually bring about X?
   answer: 'The proponent, once asked. Against: showing that P lacks the means, the
-    power or the authority to do X, which undermines possible_agent(X,P). For: evidence
-    that P can do X, such as resources, a plan, or having done it before.'
-  status: drafted by Claude Code, 2026-10-22
+    power or the authority to bring about X, which undermines possible_bring_about(P,X).
+    For: evidence that P can do X, such as resources, a plan, or having done it before.'
+  status: drafted by Claude Code, 2026-11-24
 - id: 22.3/CQ4
   book:
     entry: "22.3"
     label: CQ4
-  targets: [{formula: 'side_effect_action(P,X)', locus: exception}]
-  note: Negative Side Effects Question. The Side Effects Premise, more_acceptable_bringing(A,X),
-    states the weighing that this question reopens.
-  paraphrase: Would P's doing X have harmful side effects that should be weighed?
-  answer: 'The critic, who raises it with an argument. Against: a harmful side effect
-    of P''s doing X, which undercuts the argument through side_effect_action(P,X),
-    the more so if it outweighs reaching A. For: showing that X has no such effect,
-    or that reaching A is worth it, as more_acceptable_bringing(A,X) claims.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'bad_outweighs(X,G)', locus: exception}]
+  note: 'Negative Side Effects Question. Since 2026-11-24 (D091) the exception is
+    the claim that X''s bad consequences outweigh G, D055''s formula (side_effect_action(P,X),
+    any harmful side effect, before). The Side Effects Premise, more_acceptable_bringing(P,G,X),
+    states the weighing that this question reopens. The question has two routes (docs/kialo-batch2/guidelines.md
+    §3.1): a bad consequence that ranks nothing is a rebuttal, negative_consequences
+    at the conclusion (OC2); a claim that it matters more than G argues the exception,
+    with bad_outweighs_good (OC3, OC4).'
+  paraphrase: Would bringing about X have bad consequences that outweigh G?
+  answer: 'The critic, who raises it with an argument. Against: a claim that a bad
+    consequence of X matters more than G, argued with bad_outweighs_good, which concludes
+    bad_outweighs(X,G) and undercuts the argument; a bad consequence that ranks nothing
+    is a rebuttal, negative_consequences at the conclusion. For: a reply that attacks
+    the weighing''s comparison or the consequence it relies on, or showing that reaching
+    G is worth it, as more_acceptable_bringing(P,G,X) claims.'
+  status: drafted by Claude Code, 2026-11-24
 - id: 22.3/CQ5
   book:
     entry: "22.3"
     label: CQ5
-  targets: [{formula: 'conflict_goals(P,A2,A)', locus: exception}]
-  note: Conflicting Goals Question; A2 is the other goal. P and A2 occur in no premise
-    (see the discrepancy on P and A2), and upstream keyed its template conflict_goals/2;
-    the cleaning renamed it /3 (walton-clean CHANGELOG, item 97), so the formula now
-    has its English reading.
-  paraphrase: Does P have another goal A2 that reaching A could clash with?
-  answer: 'The critic, who raises it with an argument. Against: a goal A2 of P that
-    reaching A would set back, which undercuts the argument through conflict_goals(P,A2,A).
-    For: showing that P''s other goals are compatible with A, or matter less.'
-  status: drafted by Claude Code, 2026-10-22
-- id: walton/possible_action
-  targets: [{formula: possible_action(A), locus: assumption}]
-  note: Neither the book nor the game asks it. Here A is the goal (goal_is_action(A)),
-    so the assumption concerns the goal, not the means X, whose possibility is CQ3's;
-    see the discrepancy on possible_action(A).
-  paraphrase: Can the goal A be achieved at all?
-  answer: 'The proponent, once asked. Against: showing that A cannot be achieved whatever
-    means are taken, which undermines possible_action(A). For: showing that A, or
-    goals like it, have been achieved, or a credible path to it.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'incompatible_goal(P,G)', locus: exception}]
+  note: Conflicting Goals Question. Since 2026-11-24 (D004, D030) the exception is
+    practical reasoning's incompatible_goal(P,G), scoped to the agent and the goal;
+    the other goal is named by the answer, not by a variable (A2, which no premise
+    bound, left the scheme).
+  paraphrase: Is there another goal of P that G itself would clash with?
+  answer: 'The critic, who raises it with an argument. Against: another goal of P
+    that G itself clashes with, which undercuts the argument through incompatible_goal(P,G).
+    For: showing that P''s other goals are compatible with G, or matter less.'
+  status: drafted by Claude Code, 2026-11-24
+- id: walton/realize_more_effectively
+  targets: [{formula: 'realize_more_effectively(P,G,X)', locus: exception}]
+  note: 'The book''s CQ2 asks whether X is acceptable or the best of the means. walton.yml''s
+    exception, the best-choice reading (D090, since 2026-11-24), is a strictly better
+    means: one that realizes G more surely, sooner or at lower cost. An equally good
+    means does not defeat the recommendation (D006).'
+  paraphrase: 'Is there a means open to P that would realize G more effectively than
+    X: more surely, sooner or at lower cost?'
+  answer: 'The critic, who raises it with an argument. Against: another means open
+    to P that would realize G more surely, sooner or at lower cost than X, argued
+    with better_means, which concludes realize_more_effectively(P,G,X) and so undercuts
+    the argument; its goal premise is this argument''s own, and it records which comparison
+    it makes. A means that is merely as good answers nothing (D006). For: a reply
+    that attacks better_means'' premises: that P cannot take the other means, that
+    it does not reach G, or that it does no better.'
+  status: drafted by Claude Code, 2026-11-24
+- id: walton/possible_goal
+  targets: [{formula: possible_goal(G), locus: assumption}]
+  note: Neither the book nor the game asks it. Since 2026-11-24 the goal's possibility
+    is possible_goal(G) (D030, D088; possible_action(A) before, with A the goal),
+    apart from the means', which is CQ3's.
+  paraphrase: Can G be reached at all, by any means?
+  answer: 'The proponent, once asked. Against: showing that G cannot be reached whatever
+    means are taken, which undermines possible_goal(G). For: showing that G, or goals
+    like it, have been reached, or a credible path to it.'
+  status: drafted by Claude Code, 2026-11-24
 summary:
-  text: Use it when an agent with a goal A argues that a means X must be taken because
-    at least one of several means is needed for A and X has been chosen among them,
-    nothing known stands in the way of X, and reaching A is worth the cost of X. Necessity
-    sets it apart from practical_sufficient_condition, where X would be enough for
-    A, and the choice among alternatives sets it apart from the two-premise practical_inference.
-  status: drafted by Claude Code, 2026-10-22
+  text: Use it when an agent P with a goal G argues that a means X should be taken
+    because at least one of a set of means S is needed for G and X has been chosen
+    among them, nothing known stands in the way of X, and reaching G is worth the
+    cost of X. Necessity sets it apart from practical_sufficient_condition, where
+    each means of the set would be enough for G, and the choice among alternatives
+    sets it apart from the two-premise practical_inference.
+  status: drafted by Claude Code, 2026-11-24
 contrasts:
 - scheme: practical_inference
   text: practical_inference is the generic goal-means form (22.1), whose means premise
@@ -168,13 +203,15 @@ contrasts:
     for a bare goal and means.
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_sufficient_condition
-  text: Choose practical_sufficient_condition when the text says X would be enough
-    to bring A about ("would solve", "can achieve"); choose practical_necessary_condition
-    when it says A cannot be had without X ("we have to", "there is no other way").
-    The two schemas differ only in this premise (sufficient_action against necessary_action).
-    That holds in walton.yml, which follows the compendium's misprinted 22.3; in ch.
-    3 (p. 96) the alternatives premise differs too.
-  status: drafted by Claude Code, 2026-10-22
+  text: 'Choose practical_sufficient_condition when the text says X would be enough
+    to bring G about ("would solve", "can achieve"); choose practical_necessary_condition
+    when it says G cannot be had without some means of the set ("we have to", "there
+    is no other way"). Since 2026-11-24 the two schemas differ in the alternatives
+    premise (each means of S would be enough, as ch. 3 prints it, p. 96, against at
+    least one being needed), the selection premise (sufficient_action against necessary_action)
+    and the exceptions: only the necessary scheme has goal_achievable_without_any(P,G,S)
+    (D030, D090).'
+  status: drafted by Claude Code, 2026-11-24
 - scheme: practical_reasoning2
   text: 'Choose practical_reasoning2 when the text describes the present circumstances
     and a state the action would bring about in which the goal is met; choose practical_necessary_condition
@@ -185,20 +222,23 @@ examples:
 - text: In which case, importation standards have to be maintained at a higher level;
     this is manageable.
   kialo: "13292.45"
-  coding: 'X = raise import standards; A = domestic producers are protected from cheap
-    imports; P = governments; A2 = cheap, open trade in meat. Stated: necessary_action(X,A)
-    ("have to"), practicality_action(X) ("this is manageable"). Supplied: goal_is_action(A)
-    (from the parent 13292.12, whose prediction "in which case" grants), alternative_action(X,A),
-    more_acceptable_bringing(A,X). Conclusion: bringing_about_action(X). As the gold
-    notes, P and A2 must be bound although no premise uses them.'
-  status: drafted by Claude Code, 2026-10-22
+  coding: 'X = raise import standards; G = domestic producers are protected from cheap
+    imports; P = governments; S = the barriers to cheaper meat imports (higher import
+    standards, quotas, tariffs). Stated: necessary_action(P,X,S,G) ("have to"), practicality_action(P,X)
+    ("this is manageable"). Supplied: goal_of_agent(P,G) (from the parent 13292.12,
+    whose prediction "in which case" grants), alternative_action(P,S,G), more_acceptable_bringing(P,G,X).
+    Conclusion: should_be_performed(X). Since 2026-11-24 the gold binds S, which the
+    claim does not name (D030); A2, which no premise bound, left the scheme.'
+  status: drafted by Claude Code, 2026-11-24
 - text: 'To get the bridge reopened before winter, the council has to hire a second
     repair crew: no other option is fast enough, and the budget can stretch to it.'
-  coding: 'A = the bridge reopens before winter; X = hire a second repair crew; P
-    = the council. Stated: goal_is_action(A), alternative_action(X,A) and necessary_action(X,A)
-    ("has to", "no other option is fast enough"), practicality_action(X) ("the budget
-    can stretch to it"). Supplied: more_acceptable_bringing(A,X). Conclusion: bringing_about_action(X).'
-  status: drafted by Claude Code, 2026-10-22
+  coding: 'G = the bridge reopens before winter; X = hire a second repair crew; P
+    = the council; S = the ways to finish the repairs before winter (a second crew,
+    overtime, a contractor). Stated: goal_of_agent(P,G), alternative_action(P,S,G)
+    and necessary_action(P,X,S,G) ("has to", "no other option is fast enough"), practicality_action(P,X)
+    ("the budget can stretch to it"). Supplied: more_acceptable_bringing(P,G,X). Conclusion:
+    should_be_performed(X).'
+  status: drafted by Claude Code, 2026-11-24
 - text: Measures such as eco-tariffs and import-related policy can solve this issue.
     Imported meat would need to verifiably meet environmental and animal welfare standards
     and/or needs to pass a sufficiently high tax barrier.
@@ -213,6 +253,14 @@ examples:
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 discrepancies:
+- kind: partial-link
+  about: "22.2"
+  detail: 'walton.yml formalizes compendium 22.2 only in part: Same title and references;
+    all five premises have formulas. Partial since 2026-11-24: the first-person premises
+    are stated of the agent P and the conclusion is restated in the game''s vocabulary,
+    should_be_performed(X) (D030, D063).'
+  decision: ""
+  status: generated
 - kind: other
   about: A_reasoning/3_practical-reasoning.yml
   detail: 'The upstream category file A/3 has two blocks with the id practical_necessary_condition
@@ -227,35 +275,39 @@ discrepancies:
 - kind: book-walton
   about: Alternatives Premise
   detail: The book's premise is about a set of means [B0, ..., Bn], at least one of
-    which is needed for A. walton.yml's alternative_action(X,A) names only the selected
-    member X, so the set and its "at least one" are lost, although the English reading
-    still speaks of at least one of X.
-  decision: No change. Read alternative_action(X,A) as "X belongs to a set of means,
-    at least one of which is needed for A"; the other members come in through CQ1
-    (alternative_means(A,X)).
-  status: drafted by Claude Code, 2026-10-22
+    which is needed for the goal. walton.yml's alternative_action(X,A) named only
+    the selected member X, so the set and its "at least one" were lost, although the
+    English reading still spoke of at least one of X.
+  decision: 'Done: decision D030 (2026-11-24; proposal D004-D075) gave the scheme
+    the set of means S apart from the chosen means X, as the schemes library repairs
+    it: alternative_action(P,S,G), at least one of the means S is needed for G, and
+    necessary_action(P,X,S,G). Another member of S answers nothing (D090); the objection
+    is a route that uses none of them (22.3/CQ1).'
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: possible_action(A)
-  detail: The assumption possible_action(A) has no basis in 22.2. Here A is the goal,
-    so it says that the goal is possible; in practical_inference, where the predicate
-    also occurs, A is the action. The book's possibility question (CQ3) is about the
-    means, which possible_agent(X,P) covers.
-  decision: 'Decided 2026-11-22 (D030): Yes, the means: the schema separates possible_goal
-    and possible_bring_about(P,X), as the schemes library has it, so that no variable
-    is left unbound. Its conclusion follows D063. Not yet applied. Before: Keep it,
-    with the question walton/possible_action, read as the goal''s possibility. open:
-    whether walton.yml meant the means X here.'
-  status: drafted by Claude Code, 2026-10-22
+  detail: The assumption possible_action(A) had no basis in 22.2. There A was the
+    goal, so it said that the goal is possible; in practical_inference, where the
+    predicate also occurred, A was the action. The book's possibility question (CQ3)
+    is about the means, which possible_agent(X,P) covered.
+  decision: 'Done: decision D030 (2026-11-24; proposal D004-D075): the schema separates
+    possible_goal(G) and possible_bring_about(P,X), as the schemes library has it,
+    so that no variable is left unbound (D088); its conclusion is should_be_performed(X)
+    (D063). The goal''s possibility is asked as walton/possible_goal, the means''
+    as 22.3/CQ3.'
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: P and A2
   detail: The book's schema speaks in the first person, and its questions switch to
-    an agent a (p. 324). walton.yml's agent P and other goal A2 occur only in the
+    an agent a (p. 324). walton.yml's agent P and other goal A2 occurred only in the
     assumptions and exceptions, not in any premise or the conclusion, so nothing in
-    the argument itself binds them.
-  decision: No change. Bind P to the agent the text names or its context supplies,
-    and A2 to the conflicting goal when one is raised; the batch-2 gold binds a plausible
-    one (13292.45).
-  status: drafted by Claude Code, 2026-10-22
+    the argument itself bound them, and the validator failed the scheme.
+  decision: 'Done: decision D030 (2026-11-24; proposal D004-D075) states the agent
+    P in each premise, as the schemes library repairs the schema, and replaces A2''s
+    exception with incompatible_goal(P,G) (D004), whose answer names the other goal.
+    Bind P to the agent the text names or its context supplies (in a policy debate,
+    whoever would enact the policy).'
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: burden of the questions
   detail: In ch. 3, right after the necessary- and sufficient-condition schemata,
@@ -271,6 +323,21 @@ discrepancies:
     §2), and the answers say so. open: the owner''s decision whether these questions
     should shift the burden when asked, which would make them assumptions.'
   status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: best choice
+  detail: 22.2 concludes that the agent should bring about the means chosen among
+    the alternatives as acceptable or the best, and its CQ1 asks about alternative
+    means. Read literally, any other means of the set would answer CQ1, though the
+    alternatives premise grants that there are others.
+  decision: 'Decided 2026-11-24 (D090) and done (proposal D004-D075): read as a best
+    choice. A strictly better means defeats the recommendation (realize_more_effectively(P,G,X),
+    asked as walton/realize_more_effectively and argued with better_means); an equally
+    good one does not (D006); CQ1''s objection is a route to G that uses none of the
+    means S (goal_achievable_without_any(P,G,S)). The engine accepts any argument
+    concluding that exception; the answer contract (a route P can take that reaches
+    G and uses no member of S) is the CQ answer contract''s (stage 2, item F) and
+    the game''s (step C5).'
+  status: drafted by Claude Code, 2026-11-24
 classification:
   source: independent
   reasoning: practical
@@ -312,3 +379,11 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     22.3/CQ5''s note on the template; 22.3/CQ2''s answer keeps to acceptability; the
     near miss''s "would need to"; the misprint behind "differ only in this premise")'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 'Applied proposal D004-D075 (D004, D030, D063, D088, D090, D091): retargeted
+    the five book questions to the repaired scheme (22.3/CQ1 to goal_achievable_without_any(P,G,S)),
+    walton/possible_action became walton/possible_goal, and walton/realize_more_effectively
+    was added; the summary, the contrast with the sufficient-condition scheme, two
+    examples and the discrepancies on the alternatives premise, possible_action(A)
+    and P and A2 follow; a discrepancy records the best-choice reading.'

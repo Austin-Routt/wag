@@ -1,5 +1,6 @@
 # Worked cases for guidelines.md §3.1 (opposite consequences and weighing,
-# decisions D055 and D059, 2026-10-23), with their codings.
+# decisions D055 and D059, 2026-10-23; practical reasoning's side effects,
+# D070 and D091, 2026-11-24), with their codings.
 #
 # Each case names the rules it shows (OC1-OC14), the Kialo claim (or none,
 # for a constructed case), a short paraphrase in our own words, its target,
@@ -43,6 +44,27 @@ retired:
   - phrase: is a weighing, with the harm of not acting phrased as a good state
     now: the harm of not acting counts as a good consequence of A, and the weighing takes the A and G of the argument it answers (OC6)
     why: final check of D055-D059 v5, warning 2 (it put the wrong consequence in the exception)
+  - phrase: answers its side-effects question
+    now: a further bad consequence against practical reasoning is a rebuttal at its conclusion, a weighing is at bad_outweighs(A,G) (OC1)
+    why: proposal D004-D075 (D070, D091), 2026-11-24
+  - phrase: No scheme concludes the exception
+    now: C003's answer schemes conclude the consequence schemes' exceptions (OC4; D064, D075)
+    why: proposal D004-D075, 2026-11-24
+  - phrase: Practical reasoning has no outweighing exception
+    now: practical reasoning has bad_outweighs(A,G) and is in the class (OC7; D070, D091)
+    why: proposal D004-D075, 2026-11-24
+  - phrase: a premise of its `other` instance
+    now: matters_more(H,G), a premise of its bad_outweighs_good or good_outweighs_bad instance (OC10)
+    why: proposal D004-D075 (D064, D075), 2026-11-24
+  - phrase: a premise of its other instance
+    now: a premise of its bad_outweighs_good or good_outweighs_bad instance (OC10)
+    why: proposal D004-D075 (D064, D075), 2026-11-24
+  - phrase: Another course is not the exception
+    now: against practical reasoning, a better course answers realize_more_effectively(P,G,A) (OC6; D075, D089)
+    why: proposal D004-D075, 2026-11-24
+  - phrase: achieve the goal as well or better
+    now: only another action said to reach the goal better answers practical reasoning; one as good is no reason against the action (guidelines §2, §3; D006)
+    why: proposal D004-D075, 2026-11-24
 
 cases:
   - id: OC1-a
@@ -121,7 +143,7 @@ cases:
     rules: [OC1]
     kialo: "13292.174"
     claim: Taxing meat might push producers to cheaper and more dangerous ways of producing it.
-    target: 13292.108, value-based practical reasoning for the tax
+    target: 13292.108, goal-based practical reasoning for the tax
     coding:
       instances:
       - primary: true
@@ -132,12 +154,14 @@ cases:
         - {role: premise, formula: 'bad(more_dangerous_meat_production)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,more_dangerous_meat_production)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
-      role: {kind: cq_answer, cq: 'CQ:side_effect', polarity: against}
-      target: {actual: {claim: '13292.108', part: exception, formula: 'side_effects(tax_meat,meat_production_and_consumption_harm_environment)'}}
+      role: {kind: rebuttal, cq: null, polarity: against}
+      target: {actual: {claim: '13292.108', part: conclusion}}
     why: >-
-      A further bad consequence offered against practical reasoning answers its
-      side-effects question, at side_effects(A,S1), not a consequence
-      scheme's exception (D070).
+      A further bad consequence offered against practical reasoning ranks
+      nothing against its goal, so it is negative consequences, a rebuttal at
+      the conclusion (OC2), as against a consequence argument (OC1). The
+      side-effect exception is the claim that the bad consequences outweigh
+      the goal, bad_outweighs(A,G) (D070, D091).
 
   - id: OC1-e
     rules: [OC1]
@@ -186,11 +210,12 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: good_outweighs_bad, fit: reconstructed}
+        bindings: {A: access_to_abortion, H: women_spared_harms_of_forced_pregnancy, G: men_emotional_harm_from_abortion}
         premises:
         - {role: premise, formula: 'brings_about(access_to_abortion,women_spared_harms_of_forced_pregnancy)'}
-        - {role: premise, formula: 'graver_harm(harms_of_forced_pregnancy,men_emotional_harm_from_abortion)'}
+        - {role: premise, formula: 'good(women_spared_harms_of_forced_pregnancy)'}
+        - {role: premise, formula: 'matters_more(women_spared_harms_of_forced_pregnancy,men_emotional_harm_from_abortion)'}
         conclusion: {formula: 'good_outweighs(access_to_abortion,men_emotional_harm_from_abortion)'}
       role: {kind: cq_answer, cq: '33.2 CQ3', polarity: against}
       target: {actual: {claim: '5637.104', part: exception, formula: 'good_outweighs(access_to_abortion,men_emotional_harm_from_abortion)'}}
@@ -198,7 +223,8 @@ cases:
       It ranks without any cue word: both kinds of harm against one kind. The
       women's harms are a harm of not acting, so they count as a good
       consequence of access (OC6), and the weighing takes 5637.104's own A and
-      G, the men's harm, as the exception names it (OC4).
+      G, the men's harm, as the exception names it, with C003's
+      good_outweighs_bad (OC4).
 
   - id: OC3-b
     rules: [OC3, OC5]
@@ -250,17 +276,17 @@ cases:
     rules: [OC4, OC7, OC8]
     kialo: "13292.127"
     claim: Starvation from less access to meat is a worse threat than any harm of eating much meat.
-    target: 13292.115, positive consequences of the tax; its Kialo parent is 13292.7
+    target: 13292.108, goal-based practical reasoning for the tax; its Kialo parent is 13292.7
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: bad_outweighs_good, fit: reconstructed}
+        bindings: {A: tax_meat, H: starvation_from_reduced_meat_access, G: environmental_harm_from_meat_reduced}
         premises:
         - {role: premise, formula: 'brings_about(tax_meat,starvation_from_reduced_meat_access)'}
-        - {role: premise, formula: 'brings_about(tax_meat,reduced_unhealthy_meat_consumption)'}
-        - {role: premise, formula: 'more_serious_consequences(starvation_from_reduced_meat_access,harms_of_high_meat_consumption)'}
-        conclusion: {formula: 'bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)'}
+        - {role: premise, formula: 'bad(starvation_from_reduced_meat_access)'}
+        - {role: premise, formula: 'matters_more(starvation_from_reduced_meat_access,environmental_harm_from_meat_reduced)'}
+        conclusion: {formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}
       - primary: false
         scheme: {walton_id: negative_consequences, fit: reconstructed}
         bindings: {A: tax_meat, G: starvation_from_reduced_meat_access}
@@ -269,12 +295,14 @@ cases:
         - {role: premise, formula: 'bad(starvation_from_reduced_meat_access)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,starvation_from_reduced_meat_access)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
-      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
-      target: {actual: {claim: '13292.115', part: exception, formula: 'bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)'}}
+      role: {kind: cq_answer, cq: '22.1 CQ5', polarity: against}
+      target: {actual: {claim: '13292.108', part: exception, formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}}
     why: >-
-      A ranking against a class (any harm of eating much meat): its Kialo
-      parent, 13292.7, is not in the class, so it weighs against the earliest
-      argument of the class on the board, 13292.115, re-parented (OC4, OC7).
+      A ranking against a class (any harm of eating much meat), with C003's
+      bad_outweighs_good (OC4). Its Kialo parent, 13292.7, is not in the
+      class, so it weighs against the earliest argument of the class on the
+      board, re-parented (OC7): since practical reasoning has the
+      outweighing exception (D070, D091), that is 13292.108, not 13292.115.
       The words state the comparison, so the weighing is primary and the
       starvation consequence secondary (OC8).
 
@@ -286,18 +314,20 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: good_outweighs_bad, fit: reconstructed}
+        bindings: {A: tax_meat, H: sustainability_and_animal_welfare, G: tax_revenue_reduced}
         premises:
         - {role: premise, formula: 'brings_about(tax_meat,sustainability_and_animal_welfare)'}
-        - {role: premise, formula: 'more_pressing(sustainability_and_animal_welfare,tax_revenue_reduced)'}
+        - {role: premise, formula: 'good(sustainability_and_animal_welfare)'}
+        - {role: premise, formula: 'matters_more(sustainability_and_animal_welfare,tax_revenue_reduced)'}
         conclusion: {formula: 'good_outweighs(tax_meat,tax_revenue_reduced)'}
       role: {kind: cq_answer, cq: '33.2 CQ3', polarity: against}
       target: {actual: {claim: '13292.9', part: exception, formula: 'good_outweighs(tax_meat,tax_revenue_reduced)'}}
     why: >-
       It ranks ("more pressing"), and the values it names are things the tax
-      would promote, so they count as consequences (OC5). Its Kialo parent
-      cites the outweighed consequence, so it is not re-parented.
+      would promote, so they count as consequences (OC5): C003's
+      good_outweighs_bad (OC4). Its Kialo parent cites the outweighed
+      consequence, so it is not re-parented.
 
   - id: OC5-a
     rules: [OC5]
@@ -398,10 +428,11 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: bad_outweighs_good, fit: reconstructed}
+        bindings: {A: tax_meat, H: jobs_lost, G: emissions_cut}
         premises:
         - {role: premise, formula: 'brings_about(tax_meat,jobs_lost)'}
+        - {role: premise, formula: 'bad(jobs_lost)'}
         - {role: premise, formula: 'matters_more(jobs_lost,emissions_cut)'}
         conclusion: {formula: 'bad_outweighs(tax_meat,emissions_cut)'}
       - primary: false
@@ -459,8 +490,9 @@ cases:
       target: {actual: {claim: '13292.127', part: premise, formula: 'brings_about(tax_meat,starvation_from_reduced_meat_access)'}}
     why: >-
       A reply to a weighing claim attacks the consequence the weighing relies
-      on, a premise of its other instance, which no question covers: a premise
-      attack, not an argument that nothing outweighs the health gain.
+      on, a premise of its bad_outweighs_good instance, which no question
+      covers (an answer scheme's premises are challenged): a premise
+      attack, not an argument that nothing outweighs 13292.108's goal.
 
   - id: OC11-a
     rules: [OC11]

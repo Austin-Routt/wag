@@ -623,4 +623,193 @@ D084 = [
     sub(933, "is(M,Q)", "is_a(M,Q)", OWN, _IS, scheme="group_2"),
     sub(1584, "is(W,D)", "is_a(W,D)", OWN, _IS, scheme="rule_physical_world_1"),
 ]
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084
+# ----------------------------------------------------------------------
+# 2026-11-24: practical reasoning (decisions D004, D005, D030, D063, D064,
+# D070 and D075, taken under the owner's standing rule of 2026-11-22, and
+# the owner's D088-D091 of 2026-11-24; WAG's docs/proposals/D004-D075.md,
+# version 3, after two independent reviews). Practical reasoning 1 and 2
+# state the agent's goal, goal_of_agent(P,G), and the conflicting goal
+# scoped to the agent, incompatible_goal(P,G); the goal's possibility and
+# the agent's are apart (possible_goal(G), possible_bring_about(P,A)); the
+# three "another action would do better" exceptions name the agent; the
+# side-effect exception becomes the claim that A's bad consequences
+# outweigh G, D055's bad_outweighs(A,G), a plain side effect being a
+# rebuttal (WAG's reading of the source's side-effect exception). The
+# necessary- and sufficient-condition schemes take the schemes library's
+# repair (the agent P in each premise, the set of means S, G for the goal),
+# with the best-choice reading (a strictly better means defeats the
+# recommendation; the sufficient scheme has no mere-alternative exception;
+# the necessary scheme's objection is that the goal can be reached without
+# any means of the set), bad_outweighs(X,G) and incompatible_goal(P,G), and
+# conclude should_be_performed(X); practical inference takes the same
+# formulas, keeps its own incompatible_consequences, scoped, and concludes
+# should_be_performed(A). Three answer schemes conclude exceptions: C003's
+# pair, a consequence of the other sign that matters more (one of them is
+# also the side effect that outweighs), and another means that does better
+# for the same agent. Templates are our own, and read right with plural
+# agents. Templates left unused are listed as orphans by the gate.
+_PRV = "proposal D004-D075, version 3"
+_STD = "Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (" + _PRV + ")"
+_PG = ("D005: practical reasoning states the agent's goal, goal_of_agent(P,G), which no formula stated; D004: the "
+       "conflicting-goal exception is scoped to the agent and the goal, in both schemes, for one formula; D088: the "
+       "goal's possibility and the agent's are two claims, possible_goal(G) and possible_bring_about(P,A); D089: the "
+       "exceptions that another action would do better name the agent; D070, D091: the side-effect exception "
+       "side_effects(A,S1) let any side effect defeat the argument however small, and is now the claim that A's bad "
+       "consequences outweigh G, D055's bad_outweighs(A,G), a plain side effect being a rebuttal. " + _STD)
+_NC = ("D030, D090: the condition schemes' agent P and other goal A2 were in no premise, and possible_action(A) was "
+       "about the goal; now, as the schemes library repairs them, the agent in each premise, the set of means S apart "
+       "from the chosen means X, G for the goal, possible_goal(G) and possible_bring_about(P,X); the best-choice "
+       "reading, a strictly better means defeating the recommendation, realize_more_effectively(P,G,X), and the "
+       "objection that the goal can be reached without any means of the set, goal_achievable_without_any(P,G,S); "
+       "D091: the side effect is bad_outweighs(X,G); D004: the conflicting goal incompatible_goal(P,G); D063: they "
+       "conclude should_be_performed(X), which meets the practical schemes. " + _STD)
+_SC = ("D030, D090 for 22.3, the necessary-condition schema's twin: the same repair; its alternatives premise was the "
+       "necessary-condition one, where the book's ch. 3 (p. 96) says each means would be enough, and it has no "
+       "mere-alternative exception, which its own premise granted. " + _STD)
+_PI = ("D063: practical inference concluded carry_out_action(A), which no practical scheme meets; now "
+       "should_be_performed(A); D091: it takes practical reasoning's goal premise, possibility and exceptions, and "
+       "keeps its own objection that the action works against its goal, scoped to the agent. " + _STD)
+_AW = ("D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) "
+       "from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that "
+       "outweighs. " + _STD)
+_BM = ("D075, D089: the answer scheme for another means that does better, concluding realize_more_effectively(P,G,A), "
+       "the agent bound by the answered argument's goal premise and able to take the other means. " + _STD)
+_PT = ("template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, "
+       "D075, D088-D091), in our own words")
+_AT = "template for the answer schemes (D064, D075, D089), in our own words"
+PRACTICAL = [
+    insert(11, '  acceptable_action/2: "For %s, %s is an acceptable thing to do."', OWN, _PT),
+    insert(29, '  alternative_action/3: "%s can reasonably hold that at least one of the means %s is needed to bring '
+               'about %s."', OWN, _PT),
+    insert(29, '  alternative_action_sufficient/3: "%s can reasonably hold that each of the means %s would be enough '
+               'to bring about %s."', OWN, _PT),
+    insert(60, '  bring_about_more_effectively/3: "There is a way for %s to reach the state %s more effectively than '
+               '%s."', OWN, _PT),
+    insert(144, '  goal_achievable_without_any/3: "%s could reach %s without using any of the means %s."', OWN, _PT),
+    insert(146, '  goal_of_agent/2: "One of the goals of %s is %s."', OWN, _PT),
+    insert(185, '  incompatible_consequences/3: "For %s, %s would have consequences that work against %s."', OWN, _PT),
+    insert(186, '  incompatible_goal/2: "Another goal of %s is incompatible with %s."', OWN, _PT),
+    insert(206, '  matters_more/2: "%s matters more than %s."', ADD, _AT),
+    insert(216, '  more_acceptable_bringing/3: "%s would rather bring about %s than leave %s undone."', OWN, _PT),
+    insert(217, '  more_effective_means/4: "For %s, %s would realize %s more effectively than %s: more surely, sooner '
+                'or at lower cost."', ADD, _AT),
+    insert(227, '  necessary_action/4: "%s chose %s, among the means %s, as an acceptable or the best means needed '
+                'for %s."', OWN, _PT),
+    insert(290, '  practicality_action/2: "As far as %s can tell, nothing that cannot be changed stands in the way of '
+                'bringing about %s."', OWN, _PT),
+    insert(296, '  promote_more_effectively/3: "There is a way for %s to promote the value %s more effectively than '
+                '%s."', OWN, _PT),
+    insert(304, '  realize_more_effectively/3: "There is a way for %s to realize the goal %s more effectively than '
+                '%s."', OWN, _PT),
+    insert(362, '  sufficient_action/4: "%s chose %s, among the means %s, as an acceptable or the best means that '
+                'would be enough for %s."', OWN, _PT),
+    # practical_inference (22.1)
+    sub(949, "[A,G]", "[A,G,P]", OWN, _PI),
+    sub(951, "carry_out_action(A)", "should_be_performed(A)", OWN, _PI),
+    sub(953, "have_goal(G)", "goal_of_agent(P,G)", OWN, _PI),
+    sub(956, "other_goals_conflict(G)", "incompatible_goal(P,G)", OWN, _PI),
+    sub(957, "more_efficient_alternative_actions(A,G)", "realize_more_effectively(P,G,A)", OWN, _PI),
+    sub(958, "incompatible_consequences(A,G)", "bad_outweighs(A,G)", OWN, _PI),
+    insert(958, "      - incompatible_consequences(P,A,G)", OWN, _PI),
+    sub(960, "possible_action(A)", "possible_bring_about(P,A)", OWN, _PI),
+    # practical_necessary_condition (22.2)
+    sub(973, "[X,A,A2,P]", "[X,G,P,S]", OWN, _NC),
+    sub(975, "bringing_about_action(X)", "should_be_performed(X)", OWN, _NC),
+    sub(977, "goal_is_action(A)", "goal_of_agent(P,G)", OWN, _NC),
+    sub(978, "alternative_action(X,A)", "alternative_action(P,S,G)", OWN, _NC),
+    sub(979, "necessary_action(X,A)", "necessary_action(P,X,S,G)", OWN, _NC),
+    sub(980, "practicality_action(X)", "practicality_action(P,X)", OWN, _NC),
+    sub(981, "more_acceptable_bringing(A,X)", "more_acceptable_bringing(P,G,X)", OWN, _NC),
+    sub(983, "alternative_means(A,X)", "realize_more_effectively(P,G,X)", OWN, _NC),
+    insert(983, "      - goal_achievable_without_any(P,G,S)", OWN, _NC),
+    sub(984, "side_effect_action(P,X)", "bad_outweighs(X,G)", OWN, _NC),
+    sub(985, "conflict_goals(P,A2,A)", "incompatible_goal(P,G)", OWN, _NC),
+    sub(987, "possible_action(A)", "possible_goal(G)", OWN, _NC),
+    sub(988, "acceptable_action(X)", "acceptable_action(P,X)", OWN, _NC),
+    sub(989, "possible_agent(X,P)", "possible_bring_about(P,X)", OWN, _NC),
+    # practical_sufficient_condition (22.3)
+    sub(1001, "[X,A,A2,P]", "[X,G,P,S]", OWN, _SC),
+    sub(1003, "bringing_about_action(X)", "should_be_performed(X)", OWN, _SC),
+    sub(1005, "goal_is_action(A)", "goal_of_agent(P,G)", OWN, _SC),
+    sub(1006, "alternative_action(X,A)", "alternative_action_sufficient(P,S,G)", OWN, _SC),
+    sub(1007, "sufficient_action(X,A)", "sufficient_action(P,X,S,G)", OWN, _SC),
+    sub(1008, "practicality_action(X)", "practicality_action(P,X)", OWN, _SC),
+    sub(1009, "more_acceptable_bringing(A,X)", "more_acceptable_bringing(P,G,X)", OWN, _SC),
+    sub(1011, "alternative_means(A,X)", "realize_more_effectively(P,G,X)", OWN, _SC),
+    sub(1012, "side_effect_action(P,X)", "bad_outweighs(X,G)", OWN, _SC),
+    sub(1013, "conflict_goals(P,A2,A)", "incompatible_goal(P,G)", OWN, _SC),
+    sub(1015, "possible_action(A)", "possible_goal(G)", OWN, _SC),
+    sub(1016, "acceptable_action(X)", "acceptable_action(P,X)", OWN, _SC),
+    sub(1017, "possible_agent(X,P)", "possible_bring_about(P,X)", OWN, _SC),
+    # practical_reasoning1 (22.4)
+    sub(1935, "[A,S1,S2,G,V]", "[A,S1,S2,G,V,P]", OWN, _PG),
+    insert(1938, "      - goal_of_agent(P,G)", OWN, _PG),
+    sub(1946, "possible(A)", "possible_bring_about(P,A)", OWN, _PG),
+    sub(1948, "bring_about_more_effectively(S2,A)", "bring_about_more_effectively(P,S2,A)", OWN, _PG),
+    sub(1949, "realize_more_effectively(G,A)", "realize_more_effectively(P,G,A)", OWN, _PG),
+    sub(1950, "promote_more_effectively(V,A)", "promote_more_effectively(P,V,A)", OWN, _PG),
+    sub(1951, "side_effects(A,S1)", "bad_outweighs(A,G)", OWN, _PG),
+    insert(1951, "      - incompatible_goal(P,G)", OWN, _PG),
+    # practical_reasoning2 (22.1)
+    sub(1959, "[A,S1,S2,G]", "[A,S1,S2,G,P]", OWN, _PG),
+    insert(1962, "      - goal_of_agent(P,G)", OWN, _PG),
+    sub(1967, "possible(A)", "possible_bring_about(P,A)", OWN, _PG),
+    sub(1968, "possible(G)", "possible_goal(G)", OWN, _PG),
+    sub(1970, "bring_about_more_effectively(S2,A)", "bring_about_more_effectively(P,S2,A)", OWN, _PG),
+    sub(1971, "realize_more_effectively(G,A)", "realize_more_effectively(P,G,A)", OWN, _PG),
+    sub(1973, "side_effects(A,S1)", "bad_outweighs(A,G)", OWN, _PG),
+    sub(1974, "incompatible_goal(G)", "incompatible_goal(P,G)", OWN, _PG),
+] + [insert(1926, text, ADD, _AW, scheme=sid) for sid, text in [
+    ("bad_outweighs_good", "  - id: bad_outweighs_good"),
+    ("bad_outweighs_good", "    meta:"),
+    ("bad_outweighs_good", "      title: Weighing a Bad Consequence against a Good One"),
+    ("bad_outweighs_good", "      source: >"),
+    ("bad_outweighs_good", "        WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md),"),
+    ("bad_outweighs_good", "        after Walton's comparative weighing of good and bad consequences: Douglas Walton,"),
+    ("bad_outweighs_good", "        The New Dialectic: Conversational Contexts of Argument. University of Toronto Press,"),
+    ("bad_outweighs_good", "        1998, pp. 159, 170. Not in the compendium."),
+    ("bad_outweighs_good", "    variables: [A,H,G]"),
+    ("bad_outweighs_good", "    conclusions:"),
+    ("bad_outweighs_good", "      - bad_outweighs(A,G)"),
+    ("bad_outweighs_good", "    premises:"),
+    ("bad_outweighs_good", "      - brings_about(A,H)"),
+    ("bad_outweighs_good", "      - bad(H)"),
+    ("bad_outweighs_good", "      - matters_more(H,G)"),
+    ("bad_outweighs_good", ""),
+    ("good_outweighs_bad", "  - id: good_outweighs_bad"),
+    ("good_outweighs_bad", "    meta:"),
+    ("good_outweighs_bad", "      title: Weighing a Good Consequence against a Bad One"),
+    ("good_outweighs_bad", "      source: >"),
+    ("good_outweighs_bad", "        WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md),"),
+    ("good_outweighs_bad", "        after Walton's comparative weighing of good and bad consequences: Douglas Walton,"),
+    ("good_outweighs_bad", "        The New Dialectic: Conversational Contexts of Argument. University of Toronto Press,"),
+    ("good_outweighs_bad", "        1998, pp. 159, 170. Not in the compendium."),
+    ("good_outweighs_bad", "    variables: [A,H,G]"),
+    ("good_outweighs_bad", "    conclusions:"),
+    ("good_outweighs_bad", "      - good_outweighs(A,G)"),
+    ("good_outweighs_bad", "    premises:"),
+    ("good_outweighs_bad", "      - brings_about(A,H)"),
+    ("good_outweighs_bad", "      - good(H)"),
+    ("good_outweighs_bad", "      - matters_more(H,G)"),
+    ("good_outweighs_bad", ""),
+]] + [insert(1975, text, ADD, _BM, scheme="better_means") for text in [
+    "  - id: better_means",
+    "    meta:",
+    "      title: Argument from a Better Means",
+    "      source: >",
+    "        WAG's answer scheme (decisions D075 and D089), the sketch better_means of WAG's review of",
+    "        2026-10-15 (part 6, §4), repaired; after the book's questions on other means and efficiency",
+    "        (Walton, Reed and Macagno, Argumentation Schemes, 2008: 22.1 and 22.4, and ch. 3, p. 96).",
+    "        Not in the compendium.",
+    "    variables: [A,A2,G,P]",
+    "    conclusions:",
+    "      - realize_more_effectively(P,G,A)",
+    "    premises:",
+    "      - goal_of_agent(P,G)",
+    "      - possible_bring_about(P,A2)",
+    "      - brings_about(A2,G)",
+    "      - more_effective_means(P,A2,G,A)",
+    "",
+]]
+
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL

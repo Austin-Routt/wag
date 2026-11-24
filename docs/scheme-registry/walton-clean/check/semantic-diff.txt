@@ -15,6 +15,21 @@ verbal_classification_vagueness          variables    ['A', 'P'] -> ['A', 'F']
 verbal_classification_arbitrariness      premises     ['arbitrary_defined_property(A,F)', 'needed_nonarbitrary((A,F)', 'arbitrary_property(F,A)'] -> ['arbitrary_defined_property(A,F)', 'needed_nonarbitrary(A,F)', 'arbitrary_property(F,A)']
 negative_value                           conclusions  ['reason_retaining_goal(V,G)'] -> ['reason_retracting_goal(V,G)']
 sacrifice                                premises     ['sacrifice_made(A,S)', 'great_sacrifice(S,A,X)', 'great_sacrifice_made(S,A)'] -> ['sacrifice_made(A,S)', 'great_sacrifice(S,A,V)', 'great_sacrifice_made(S,A)']
+practical_inference                      variables    ['A', 'G'] -> ['A', 'G', 'P']
+practical_inference                      premises     ['have_goal(G)', 'action_realize_goal(A,G)'] -> ['goal_of_agent(P,G)', 'action_realize_goal(A,G)']
+practical_inference                      assumptions  ['possible_action(A)', 'possible_goal(G)'] -> ['possible_bring_about(P,A)', 'possible_goal(G)']
+practical_inference                      exceptions   ['other_goals_conflict(G)', 'more_efficient_alternative_actions(A,G)', 'incompatible_consequences(A,G)'] -> ['incompatible_goal(P,G)', 'realize_more_effectively(P,G,A)', 'bad_outweighs(A,G)', 'incompatible_consequences(P,A,G)']
+practical_inference                      conclusions  ['carry_out_action(A)'] -> ['should_be_performed(A)']
+practical_necessary_condition            variables    ['X', 'A', 'A2', 'P'] -> ['X', 'G', 'P', 'S']
+practical_necessary_condition            premises     ['goal_is_action(A)', 'alternative_action(X,A)', 'necessary_action(X,A)', 'practicality_action(X)', 'more_acceptable_bringing(A,X)'] -> ['goal_of_agent(P,G)', 'alternative_action(P,S,G)', 'necessary_action(P,X,S,G)', 'practicality_action(P,X)', 'more_acceptable_bringing(P,G,X)']
+practical_necessary_condition            assumptions  ['possible_action(A)', 'acceptable_action(X)', 'possible_agent(X,P)'] -> ['possible_goal(G)', 'acceptable_action(P,X)', 'possible_bring_about(P,X)']
+practical_necessary_condition            exceptions   ['alternative_means(A,X)', 'side_effect_action(P,X)', 'conflict_goals(P,A2,A)'] -> ['realize_more_effectively(P,G,X)', 'goal_achievable_without_any(P,G,S)', 'bad_outweighs(X,G)', 'incompatible_goal(P,G)']
+practical_necessary_condition            conclusions  ['bringing_about_action(X)'] -> ['should_be_performed(X)']
+practical_sufficient_condition           variables    ['X', 'A', 'A2', 'P'] -> ['X', 'G', 'P', 'S']
+practical_sufficient_condition           premises     ['goal_is_action(A)', 'alternative_action(X,A)', 'sufficient_action(X,A)', 'practicality_action(X)', 'more_acceptable_bringing(A,X)'] -> ['goal_of_agent(P,G)', 'alternative_action_sufficient(P,S,G)', 'sufficient_action(P,X,S,G)', 'practicality_action(P,X)', 'more_acceptable_bringing(P,G,X)']
+practical_sufficient_condition           assumptions  ['possible_action(A)', 'acceptable_action(X)', 'possible_agent(X,P)'] -> ['possible_goal(G)', 'acceptable_action(P,X)', 'possible_bring_about(P,X)']
+practical_sufficient_condition           exceptions   ['alternative_means(A,X)', 'side_effect_action(P,X)', 'conflict_goals(P,A2,A)'] -> ['realize_more_effectively(P,G,X)', 'bad_outweighs(X,G)', 'incompatible_goal(P,G)']
+practical_sufficient_condition           conclusions  ['bringing_about_action(X)'] -> ['should_be_performed(X)']
 negative_consequences_prudential         assumptions  ['strongly_occur(X)'] -> ['strongly_occur(X,C)']
 negative_consequences_prudential         exceptions   ['other_consequences(X)'] -> ['bad_outweighs(X,C)']
 negative_consequences_prudential         conclusions  ['prudential(X)'] -> ['should_be_performed(X)']
@@ -26,19 +41,31 @@ analogy                                  exceptions   ['relevant_differences(C)'
 analogy                                  conclusions  ['A'] -> ['P2']
 negative_consequences                    exceptions   [] -> ['good_outweighs(A,G)']
 positive_consequences                    exceptions   [] -> ['bad_outweighs(A,G)']
+practical_reasoning1                     variables    ['A', 'S1', 'S2', 'G', 'V'] -> ['A', 'S1', 'S2', 'G', 'V', 'P']
+practical_reasoning1                     premises     ['current_circumstances(S1)', 'would_bring_about(A,S1,S2)', 'would_be_realized(G,S2)', 'would_promote_value(G,V)'] -> ['goal_of_agent(P,G)', 'current_circumstances(S1)', 'would_bring_about(A,S1,S2)', 'would_be_realized(G,S2)', 'would_promote_value(G,V)']
+practical_reasoning1                     assumptions  ['legitimate_value(V)', 'worthy_goal(G)', 'possible(A)'] -> ['legitimate_value(V)', 'worthy_goal(G)', 'possible_bring_about(P,A)']
+practical_reasoning1                     exceptions   ['bring_about_more_effectively(S2,A)', 'realize_more_effectively(G,A)', 'promote_more_effectively(V,A)', 'side_effects(A,S1)'] -> ['bring_about_more_effectively(P,S2,A)', 'realize_more_effectively(P,G,A)', 'promote_more_effectively(P,V,A)', 'bad_outweighs(A,G)', 'incompatible_goal(P,G)']
+practical_reasoning2                     variables    ['A', 'S1', 'S2', 'G'] -> ['A', 'S1', 'S2', 'G', 'P']
+practical_reasoning2                     premises     ['current_circumstances(S1)', 'would_bring_about(A,S1,S2)', 'would_be_realized(G,S2)'] -> ['goal_of_agent(P,G)', 'current_circumstances(S1)', 'would_bring_about(A,S1,S2)', 'would_be_realized(G,S2)']
+practical_reasoning2                     assumptions  ['possible(A)', 'possible(G)'] -> ['possible_bring_about(P,A)', 'possible_goal(G)']
+practical_reasoning2                     exceptions   ['bring_about_more_effectively(S2,A)', 'realize_more_effectively(G,A)', 'intervening_actions(A,G)', 'side_effects(A,S1)', 'incompatible_goal(G)'] -> ['bring_about_more_effectively(P,S2,A)', 'realize_more_effectively(P,G,A)', 'intervening_actions(A,G)', 'bad_outweighs(A,G)', 'incompatible_goal(P,G)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
-29 scheme-level difference(s) after renames
-added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning
-language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same key with a changed template: 29
+52 scheme-level difference(s) after renames
+added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, better_means
+language: 392 -> 432 keys; keys only in clean: 74, only in original: 33, same key with a changed template: 29
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
+  +  acceptable_action/2 'For %s, %s is an acceptable thing to do.'
   +  action_fit_quality/0 'Description of action actually fit the quality.'
   +  agent_bring_about/2 'Bringing about %s would lead to %s.'
+  +  alternative_action/3 '%s can reasonably hold that at least one of the means %s is needed to bring about %s.'
+  +  alternative_action_sufficient/3 '%s can reasonably hold that each of the means %s would be enough to bring about %s.'
   +  attack_well_supported/0 'Allegation made in character attack premise evidence are well supported.'
   +  background/0 'The speaker is an ordinary person, that is, share a common background with the audience.'
   +  bad_for_goals/1 "%s would harm the agent's goals."
   +  bad_outweighs/2 'The action %s has bad consequences that outweigh %s.'
   +  being_credible/0 'Therefore, you ought to take what I say as being more credible or acceptable.'
+  +  bring_about_more_effectively/3 'There is a way for %s to reach the state %s more effectively than %s.'
   +  cannot_present_sametime/3 '%s cannot present %s and %s at the same time and in the same respect.'
   +  character_relevant/0 'In the type of dialogue in which the argument was used issue of character relevant.'
   +  claimed_exception/2 '%s is put forward as an exception to the rule %s.'
@@ -50,16 +77,24 @@ language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same ke
   +  difference_for/3 '%s and %s differ in a way that tells in favour of %s.'
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
+  +  goal_achievable_without_any/3 '%s could reach %s without using any of the means %s.'
+  +  goal_of_agent/2 'One of the goals of %s is %s.'
   +  goal_prestige/0 'Prestige is an important goal for you.'
   +  good_outweighs/2 'The action %s has good consequences that outweigh %s.'
+  +  incompatible_consequences/3 'For %s, %s would have consequences that work against %s.'
+  +  incompatible_goal/2 'Another goal of %s is incompatible with %s.'
   +  initial_presumption/1 'At the outset, %s is presumed acceptable.'
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
+  +  matters_more/2 '%s matters more than %s.'
   +  may_occur/1 'An event %s has happened, or could happen.'
   +  means_end/1 'Means %s should be regarded as an end.'
+  +  more_acceptable_bringing/3 '%s would rather bring about %s than leave %s undone.'
+  +  more_effective_means/4 'For %s, %s would realize %s more effectively than %s: more surely, sooner or at lower cost.'
   +  more_important_ends/0 'Ends are more important than the means used to achieve them.'
   +  more_reliable/0 'There are more reliable account for the sign.'
+  +  necessary_action/4 '%s chose %s, among the means %s, as an acceptable or the best means needed for %s.'
   +  not_acceptable_step/1 '%s cannot be accepted after all, whatever the initial presumption.'
   +  not_necessarily_true/0 'First premise not necessary true.'
   +  not_normal/0 'Therefore, the situation is not normal.'
@@ -69,9 +104,12 @@ language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same ke
   +  part_is/2 'The part %s has %s.'
   +  part_whole/5 '%s can have %s only if at least one of %s, %s and %s has it.'
   +  position_to_know_group/2 'Group %s is in a special position to know that %s is true.'
+  +  practicality_action/2 'As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s.'
   +  precedent_chain/3 'From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s.'
+  +  promote_more_effectively/3 'There is a way for %s to promote the value %s more effectively than %s.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
   +  prudential/1 'Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s.'
+  +  realize_more_effectively/3 'There is a way for %s to realize the goal %s more effectively than %s.'
   +  reapplication_sequence/3 'A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s.'
   +  reason_retracting_goal/2 '%s is a reason to give up commitment to goal %s.'
   +  reference_class/0 'Reference class of other agents who also might have brought about this event and also have same character is sufficient.'
@@ -83,6 +121,7 @@ language: 392 -> 416 keys; keys only in clean: 58, only in original: 33, same ke
   +  strong_advocate/3 '%s advocate %s in a strong way indicating her personal commitment to %s.'
   +  strongly_occur/1 "If you don't do %s consequences may strongly appear."
   +  strongly_occur/2 'If %s is not done, %s is likely to follow.'
+  +  sufficient_action/4 '%s chose %s, among the means %s, as an acceptable or the best means that would be enough for %s.'
   +  sufficient_evidence/0 'search for the evidence progress is sufficient.'
   +  synonymous/0 'Whenever expressions are referentially coextensive, they are synonymous.'
   +  waste_bad_thing/2 "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."

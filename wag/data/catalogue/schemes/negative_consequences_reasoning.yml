@@ -100,10 +100,11 @@ critical_questions:
   paraphrase: Would doing A have consequences that serve the agent's goals and matter
     more than B?
   answer: 'The critic, who raises it with an argument. Against: a claim that a consequence
-    of A that serves the agent''s goals matters more than B, coded with Other or a
-    source-based scheme, which argues good_outweighs(A,B). For: a reply that attacks
-    that claim''s own comparison, or the consequence it relies on (OC10).'
-  status: drafted by Claude Code, 2026-10-23
+    of A that serves the agent''s goals matters more than B, argued with C003''s good_outweighs_bad
+    (its G bound to B) or a source-based scheme, which argues good_outweighs(A,B).
+    For: a reply that attacks that claim''s own comparison, or the consequence it
+    relies on (OC10).'
+  status: drafted by Claude Code, 2026-11-24
 summary:
   text: 'Use it when an agent weighs an action of its own: bringing about A would
     lead to an outcome B that would harm the agent''s own goals, so the agent had
@@ -164,6 +165,12 @@ contrasts:
     chain of steps; choose negative_consequences_reasoning when the agent's own action
     leads to the bad result directly.
   status: drafted by Claude Code, 2026-10-22
+- scheme: bad_outweighs_good
+  text: ""
+  status: todo
+- scheme: good_outweighs_bad
+  text: ""
+  status: todo
 - scheme: practical_reasoning2
   text: In the book's account (p. 101), practical reasoning starts from a goal and
     looks for the action, while reasoning from consequences starts from the action
@@ -367,3 +374,6 @@ history:
     targets the sided exception good_outweighs(A,B), with its two routes; the Premise
     1 decision follows the guidelines (§3.1, OC13) and binds A to no omission; the
     proposal''s examples moved here; the CQ3, upstream and specialises texts follow.'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 33/CQ3's answer names C003's answer scheme (proposal D004-D075, D064, D075).

@@ -912,7 +912,7 @@
       }
      ],
      "conclusion_map": {
-      "note": "carry_out_action/1 is shared with practical_inference",
+      "note": "carry_out_action/1; practical_inference concluded it too until 2026-11-24, when D063 gave it should_be_performed (proposal D004-D075); this conclusion goes with the rest of the family (C4)",
       "walton": [
        {
         "formula": "carry_out_action(X)",
@@ -3081,17 +3081,18 @@
    "walton_links": [
     {
      "id": "practical_inference",
-     "match": "exact",
-     "reason": "Same title and the same four references as printed after 22.4.",
+     "match": "partial",
+     "reason": "Same title and the same four references as printed after 22.4. Partial since 2026-11-24: the book's first person is the agent P, and the conclusion is restated in the game's vocabulary, should_be_performed(A) (D063, D091), as 33.4's is under D059.",
      "premise_map": [
       {
        "compendium_label": "Major Premise",
        "walton": [
         {
-         "formula": "have_goal(G)",
+         "formula": "goal_of_agent(P,G)",
          "locus": "premise"
         }
-       ]
+       ],
+       "note": "the one deliberating is P (D091, since 2026-11-24)"
       },
       {
        "compendium_label": "Minor Premise",
@@ -3104,10 +3105,10 @@
       }
      ],
      "conclusion_map": {
-      "note": "template \"Therefore, you should carry out action A.\" (book: \"I ought (practically speaking) to carry out this action A\")",
+      "note": "restated as should_be_performed(A) (D063); the book: \"I ought (practically speaking) to carry out this action A\"",
       "walton": [
        {
-        "formula": "carry_out_action(A)",
+        "formula": "should_be_performed(A)",
         "locus": "conclusion"
        }
       ]
@@ -3117,7 +3118,7 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "other_goals_conflict(G)",
+         "formula": "incompatible_goal(P,G)",
          "locus": "exception"
         }
        ]
@@ -3127,7 +3128,7 @@
        "note": "one exception covers CQ2 and CQ3",
        "walton": [
         {
-         "formula": "more_efficient_alternative_actions(A,G)",
+         "formula": "realize_more_effectively(P,G,A)",
          "locus": "exception"
         }
        ]
@@ -3136,7 +3137,7 @@
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "more_efficient_alternative_actions(A,G)",
+         "formula": "realize_more_effectively(P,G,A)",
          "locus": "exception"
         }
        ]
@@ -3145,17 +3146,17 @@
        "cq": "CQ4",
        "walton": [
         {
-         "formula": "possible_action(A)",
+         "formula": "possible_bring_about(P,A)",
          "locus": "assumption"
         }
        ]
       },
       {
        "cq": "CQ5",
-       "note": "narrower: only consequences incompatible with G",
+       "note": "since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences outweigh the goal, D055's formula; a plain side effect is a rebuttal. WAG's reading: the source's exception is any side effect that demotes a value (Walton and Gordon 2015, p. 515); the action working against its own goal, practical inference's own objection (D091), is asked as walton/incompatible_consequences",
        "walton": [
         {
-         "formula": "incompatible_consequences(A,G)",
+         "formula": "bad_outweighs(A,G)",
          "locus": "exception"
         }
        ]
@@ -3169,10 +3170,10 @@
      "premise_map": [
       {
        "compendium_label": "Major Premise",
-       "note": "goal G realized in the resulting state",
+       "note": "the agent has the goal (D005, since 2026-11-24)",
        "walton": [
         {
-         "formula": "would_be_realized(G,S2)",
+         "formula": "goal_of_agent(P,G)",
          "locus": "premise"
         }
        ]
@@ -3182,6 +3183,10 @@
        "walton": [
         {
          "formula": "would_bring_about(A,S1,S2)",
+         "locus": "premise"
+        },
+        {
+         "formula": "would_be_realized(G,S2)",
          "locus": "premise"
         }
        ]
@@ -3200,7 +3205,7 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "incompatible_goal(G)",
+         "formula": "incompatible_goal(P,G)",
          "locus": "exception"
         }
        ]
@@ -3209,11 +3214,7 @@
        "cq": "CQ2",
        "walton": [
         {
-         "formula": "realize_more_effectively(G,A)",
-         "locus": "exception"
-        },
-        {
-         "formula": "bring_about_more_effectively(S2,A)",
+         "formula": "realize_more_effectively(P,G,A)",
          "locus": "exception"
         }
        ]
@@ -3222,16 +3223,21 @@
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "realize_more_effectively(G,A)",
+         "formula": "realize_more_effectively(P,G,A)",
+         "locus": "exception"
+        },
+        {
+         "formula": "bring_about_more_effectively(P,S2,A)",
          "locus": "exception"
         }
-       ]
+       ],
+       "note": "efficiency: in realizing G or in reaching S2, as the catalogue reads it (22.4/CQ4 likewise)"
       },
       {
        "cq": "CQ4",
        "walton": [
         {
-         "formula": "possible(A)",
+         "formula": "possible_bring_about(P,A)",
          "locus": "assumption"
         }
        ]
@@ -3240,10 +3246,11 @@
        "cq": "CQ5",
        "walton": [
         {
-         "formula": "side_effects(A,S1)",
+         "formula": "bad_outweighs(A,G)",
          "locus": "exception"
         }
-       ]
+       ],
+       "note": "since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences outweigh the goal, D055's formula; a plain side effect is a rebuttal. WAG's reading: the source's exception is any side effect that demotes a value (Walton and Gordon 2015, p. 515)"
       }
      ]
     }
@@ -3264,24 +3271,24 @@
    "walton_links": [
     {
      "id": "practical_necessary_condition",
-     "match": "exact",
-     "reason": "Same title and references; all five premises have formulas.",
+     "match": "partial",
+     "reason": "Same title and references; all five premises have formulas. Partial since 2026-11-24: the first-person premises are stated of the agent P and the conclusion is restated in the game's vocabulary, should_be_performed(X) (D030, D063).",
      "premise_map": [
       {
        "compendium_label": "Goal Premise",
        "walton": [
         {
-         "formula": "goal_is_action(A)",
+         "formula": "goal_of_agent(P,G)",
          "locus": "premise"
         }
        ]
       },
       {
        "compendium_label": "Alternatives Premise",
-       "note": "the set [B0..Bn] is collapsed to the selected member X",
+       "note": "the set of means [B0..Bn] is S; the chosen member is X (D030, since 2026-11-24)",
        "walton": [
         {
-         "formula": "alternative_action(X,A)",
+         "formula": "alternative_action(P,S,G)",
          "locus": "premise"
         }
        ]
@@ -3290,7 +3297,7 @@
        "compendium_label": "Selection Premise",
        "walton": [
         {
-         "formula": "necessary_action(X,A)",
+         "formula": "necessary_action(P,X,S,G)",
          "locus": "premise"
         }
        ]
@@ -3299,7 +3306,7 @@
        "compendium_label": "Practicality Premise",
        "walton": [
         {
-         "formula": "practicality_action(X)",
+         "formula": "practicality_action(P,X)",
          "locus": "premise"
         }
        ]
@@ -3308,16 +3315,17 @@
        "compendium_label": "Side Effects Premise",
        "walton": [
         {
-         "formula": "more_acceptable_bringing(A,X)",
+         "formula": "more_acceptable_bringing(P,G,X)",
          "locus": "premise"
         }
        ]
       }
      ],
      "conclusion_map": {
+      "note": "restated as should_be_performed(X) (D063); the book: \"it is required that I bring about Bi\"",
       "walton": [
        {
-        "formula": "bringing_about_action(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -3325,10 +3333,10 @@
      "cq_map": [
       {
        "cq": "CQ1",
-       "note": "Alternative Means Question",
+       "note": "Alternative Means Question; read as a best choice (D090), its objection is the goal reached without any means of the set",
        "walton": [
         {
-         "formula": "alternative_means(A,X)",
+         "formula": "goal_achievable_without_any(P,G,S)",
          "locus": "exception"
         }
        ]
@@ -3338,7 +3346,7 @@
        "note": "Acceptable/Best Option Question",
        "walton": [
         {
-         "formula": "acceptable_action(X)",
+         "formula": "acceptable_action(P,X)",
          "locus": "assumption"
         }
        ]
@@ -3348,27 +3356,27 @@
        "note": "Possibility Question; the agent a is P",
        "walton": [
         {
-         "formula": "possible_agent(X,P)",
+         "formula": "possible_bring_about(P,X)",
          "locus": "assumption"
         }
        ]
       },
       {
        "cq": "CQ4",
-       "note": "Negative Side Effects Question",
+       "note": "Negative Side Effects Question; since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences outweigh the goal, D055's formula; a plain side effect is a rebuttal. WAG's reading: the source's exception is any side effect that demotes a value (Walton and Gordon 2015, p. 515)",
        "walton": [
         {
-         "formula": "side_effect_action(P,X)",
+         "formula": "bad_outweighs(X,G)",
          "locus": "exception"
         }
        ]
       },
       {
        "cq": "CQ5",
-       "note": "Conflicting Goals Question; A2 is the other goal",
+       "note": "Conflicting Goals Question; scoped to the agent and the goal (D004), so no other-goal variable",
        "walton": [
         {
-         "formula": "conflict_goals(P,A2,A)",
+         "formula": "incompatible_goal(P,G)",
          "locus": "exception"
         }
        ]
@@ -3398,24 +3406,24 @@
    "walton_links": [
     {
      "id": "practical_sufficient_condition",
-     "match": "exact",
-     "reason": "Same title and references; identical to practical_necessary_condition except sufficient_action(X,A).",
+     "match": "partial",
+     "reason": "Same title and references. Since 2026-11-24 it differs from practical_necessary_condition in its alternatives premise (each means enough), its selection premise, and its exceptions (no objection that the goal can be reached without the set, D090). Partial since 2026-11-24: the first-person premises are stated of the agent P and the conclusion is restated in the game's vocabulary, should_be_performed(X) (D030, D063).",
      "premise_map": [
       {
        "compendium_label": "Goal Premise",
        "walton": [
         {
-         "formula": "goal_is_action(A)",
+         "formula": "goal_of_agent(P,G)",
          "locus": "premise"
         }
        ]
       },
       {
        "compendium_label": "Alternatives Premise",
-       "note": "template says \"is necessary\", as in the book's misprint",
+       "note": "the set of means [B0..Bn] is S; the chosen member is X (D030, since 2026-11-24); each means would be enough, as ch. 3 prints the schema (p. 96), where the compendium's 22.3 repeats 22.2's 'necessary' (p. 323), a misprint",
        "walton": [
         {
-         "formula": "alternative_action(X,A)",
+         "formula": "alternative_action_sufficient(P,S,G)",
          "locus": "premise"
         }
        ]
@@ -3424,7 +3432,7 @@
        "compendium_label": "Selection Premise",
        "walton": [
         {
-         "formula": "sufficient_action(X,A)",
+         "formula": "sufficient_action(P,X,S,G)",
          "locus": "premise"
         }
        ]
@@ -3433,7 +3441,7 @@
        "compendium_label": "Practicality Premise",
        "walton": [
         {
-         "formula": "practicality_action(X)",
+         "formula": "practicality_action(P,X)",
          "locus": "premise"
         }
        ]
@@ -3442,16 +3450,17 @@
        "compendium_label": "Side Effects Premise",
        "walton": [
         {
-         "formula": "more_acceptable_bringing(A,X)",
+         "formula": "more_acceptable_bringing(P,G,X)",
          "locus": "premise"
         }
        ]
       }
      ],
      "conclusion_map": {
+      "note": "restated as should_be_performed(X) (D063); the book: \"it is required that I bring about Bi\"",
       "walton": [
        {
-        "formula": "bringing_about_action(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -3461,16 +3470,17 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "alternative_means(A,X)",
+         "formula": "realize_more_effectively(P,G,X)",
          "locus": "exception"
         }
-       ]
+       ],
+       "note": "the best-choice reading (D090): a strictly better means; an equally good one is no objection (D006)"
       },
       {
        "cq": "CQ2",
        "walton": [
         {
-         "formula": "acceptable_action(X)",
+         "formula": "acceptable_action(P,X)",
          "locus": "assumption"
         }
        ]
@@ -3479,7 +3489,7 @@
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "possible_agent(X,P)",
+         "formula": "possible_bring_about(P,X)",
          "locus": "assumption"
         }
        ]
@@ -3488,16 +3498,17 @@
        "cq": "CQ4",
        "walton": [
         {
-         "formula": "side_effect_action(P,X)",
+         "formula": "bad_outweighs(X,G)",
          "locus": "exception"
         }
-       ]
+       ],
+       "note": "since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences outweigh the goal, D055's formula; a plain side effect is a rebuttal. WAG's reading: the source's exception is any side effect that demotes a value (Walton and Gordon 2015, p. 515)"
       },
       {
        "cq": "CQ5",
        "walton": [
         {
-         "formula": "conflict_goals(P,A2,A)",
+         "formula": "incompatible_goal(P,G)",
          "locus": "exception"
         }
        ]
@@ -3535,11 +3546,11 @@
      "premise_map": [
       {
        "compendium_label": "Premise 1",
-       "note": "approximate: the book's \"I have a goal G\" has no premise; worthy_goal(G) is an assumption",
+       "note": "the agent's goal (D005, since 2026-11-24)",
        "walton": [
         {
-         "formula": "worthy_goal(G)",
-         "locus": "assumption"
+         "formula": "goal_of_agent(P,G)",
+         "locus": "premise"
         }
        ]
       },
@@ -3578,8 +3589,12 @@
      "cq_map": [
       {
        "cq": "CQ1",
-       "note": "no formula (WAG asks it at the conclusion)",
-       "walton": []
+       "walton": [
+        {
+         "formula": "incompatible_goal(P,G)",
+         "locus": "exception"
+        }
+       ]
       },
       {
        "cq": "CQ2",
@@ -3598,7 +3613,7 @@
        "cq": "CQ3",
        "walton": [
         {
-         "formula": "realize_more_effectively(G,A)",
+         "formula": "realize_more_effectively(P,G,A)",
          "locus": "exception"
         }
        ]
@@ -3607,11 +3622,11 @@
        "cq": "CQ4",
        "walton": [
         {
-         "formula": "realize_more_effectively(G,A)",
+         "formula": "realize_more_effectively(P,G,A)",
          "locus": "exception"
         },
         {
-         "formula": "bring_about_more_effectively(S2,A)",
+         "formula": "bring_about_more_effectively(P,S2,A)",
          "locus": "exception"
         }
        ]
@@ -3620,7 +3635,7 @@
        "cq": "CQ5",
        "walton": [
         {
-         "formula": "promote_more_effectively(V,A)",
+         "formula": "promote_more_effectively(P,V,A)",
          "locus": "exception"
         }
        ]
@@ -3629,17 +3644,17 @@
        "cq": "CQ6",
        "walton": [
         {
-         "formula": "possible(A)",
+         "formula": "possible_bring_about(P,A)",
          "locus": "assumption"
         }
        ]
       },
       {
        "cq": "CQ7",
-       "note": "template \"...would have side-effects which demote some value\"",
+       "note": "since 2026-11-24 (D070, D091) the exception is the claim that the bad consequences outweigh the goal, D055's formula; a plain side effect is a rebuttal. WAG's reading: the source's exception is any side effect that demotes a value (Walton and Gordon 2015, p. 515)",
        "walton": [
         {
-         "formula": "side_effects(A,S1)",
+         "formula": "bad_outweighs(A,G)",
          "locus": "exception"
         }
        ]

@@ -42,7 +42,9 @@ premise_map:
 - entry: "4.8"
   label: Conclusion
   formulas: [{formula: carry_out_action(X), locus: conclusion}]
-  note: carry_out_action/1 is shared with practical_inference
+  note: carry_out_action/1; practical_inference concluded it too until 2026-11-24,
+    when D063 gave it should_be_performed (proposal D004-D075); this conclusion goes
+    with the rest of the family (C4)
   status: generated
 critical_questions: []
 summary:

@@ -19,7 +19,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 
 | File | What |
 |---|---|
-| `schemes/<id>.yml` | 116 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
+| `schemes/<id>.yml` | 119 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
 | This README | The format, the statuses, the commands, the checks |
 

@@ -495,6 +495,11 @@
      "relation": "related",
      "compendium": "25",
      "note": "F11"
+    },
+    {
+     "scheme": "better_means",
+     "relation": "related",
+     "note": "answer scheme (D075, D089): concludes realize_more_effectively(P,G,A) of practical reasoning; since 2026-11-24"
     }
    ]
   },
@@ -711,6 +716,16 @@
      "relation": "related",
      "compendium": "49",
      "note": "F17"
+    },
+    {
+     "scheme": "bad_outweighs_good",
+     "relation": "variant",
+     "note": "a sided flip of good_outweighs_bad, not a polarity pair (D053): the two conclude different predicates. Answer scheme (D075; candidate C003, D064): concludes bad_outweighs(A,G), the exception of positive_consequences and of practical reasoning (D070); since 2026-11-24"
+    },
+    {
+     "scheme": "good_outweighs_bad",
+     "relation": "variant",
+     "note": "a sided flip of bad_outweighs_good, not a polarity pair (D053): the two conclude different predicates. Answer scheme (D075; candidate C003, D064): concludes good_outweighs(A,G), the exception of negative_consequences; since 2026-11-24"
     }
    ]
   },

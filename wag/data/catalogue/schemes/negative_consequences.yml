@@ -96,11 +96,11 @@ critical_questions:
     33/CQ3.'
   paraphrase: Would doing A have good consequences that matter more than G?
   answer: 'The critic, who raises it with an argument. Against: a claim that some
-    good consequence of A matters more than G, coded with Other or a source-based
-    scheme, which argues good_outweighs(A,G) and, unanswered, defeats the argument
-    whatever the weights. For: a reply that attacks that claim''s own comparison,
-    or the consequence it relies on (OC10).'
-  status: drafted by Claude Code, 2026-10-23
+    good consequence of A matters more than G, argued with C003''s good_outweighs_bad
+    or a source-based scheme, which argues good_outweighs(A,G) and, unanswered, defeats
+    the argument whatever the weights. For: a reply that attacks that claim''s own
+    comparison, or the consequence it relies on (OC10).'
+  status: drafted by Claude Code, 2026-11-24
 - id: game/CQ:evidence
   game:
     id: CQ:evidence
@@ -201,6 +201,12 @@ contrasts:
     when the action leads to the bad outcome directly or through one stated intermediate
     event.
   status: drafted by Claude Code, 2026-10-22
+- scheme: bad_outweighs_good
+  text: ""
+  status: todo
+- scheme: good_outweighs_bad
+  text: ""
+  status: todo
 - scheme: cause_to_effect
   text: Choose cause_to_effect when the claim's point is that the effect will happen
     from a cause that has occurred, for instance when it explains how a consequence
@@ -262,10 +268,11 @@ examples:
   coding: 'A = a tax on meat; G = tax revenues falling. Stated: brings_about(A,G),
     with its reason. Supplied: bad(G). Pressed: 33/CQ3 by 13292.43 (revenue is not
     why the tax is wanted; sustainability and animal welfare press harder), which
-    ranks two consequences and so argues good_outweighs(A,G), with Other; the values
-    it names are things the tax would promote, so they count as consequences (docs/kialo-batch2/guidelines.md
-    §3.1, OC3, OC4, OC5).'
-  status: drafted by Claude Code, 2026-10-23
+    ranks two consequences and so argues good_outweighs(A,G), with C003''s good_outweighs_bad
+    since 2026-11-24 (Other before); the values it names are things the tax would
+    promote, so they count as consequences (docs/kialo-batch2/guidelines.md §3.1,
+    OC3, OC4, OC5).'
+  status: drafted by Claude Code, 2026-11-24
 - text: Legalising cannabis would mean more adults use it, which is bad for public
     health.
   coding: 'A = legalising cannabis; G = more adults using cannabis. Pressed: 33/CQ2,
@@ -309,10 +316,11 @@ discrepancies:
     (plan §6; catalogue-alignment.md, workstream E). The game asks 33/CQ3's rebuttal
     route at the conclusion (CQ:opposite_consequences) and keeps it, with its backup
     edge from AS:consequences, a rebuttal; core.yml then gets the exception good_outweighs(A,G),
-    with a question at it for the weighing route (D055). No scheme concludes the exception
-    (rule S9), so a player answers that question with Other or a source-based scheme;
-    whether analogy may is D057.
-  status: drafted by Claude Code, 2026-10-23
+    with a question at it for the weighing route (D055). walton.yml's answer scheme
+    good_outweighs_bad concludes the exception (C003; D064, D075, since 2026-11-24);
+    until the game has it (step C5, rule S9) a player answers that question with Other
+    or a source-based scheme; whether analogy may is D057.
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: Premise
   detail: The compendium's 33.2 has a single premise (doing A will have bad consequences)
@@ -445,3 +453,8 @@ history:
   by: Claude Code
   what: 'Revised after the independent review of the application: example 13292.121''s
     note on how the game plays it.'
+- date: "2026-11-24"
+  by: Claude Code
+  what: '33/CQ3''s answer, the game-differs decision and the 13292.9 example follow
+    proposal D004-D075: C003''s answer schemes conclude the exceptions (D064, D075);
+    positive_consequences'' 33/CQ3 discrepancy records the exceptions'' limits.'

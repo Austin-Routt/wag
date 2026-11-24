@@ -107,7 +107,7 @@ decisions:
       a question that is asked is a rule of the dialogue (the request, its
       answer, and what holds while it is pending), set by the game's question
       protocol with D075, not by turning exceptions into assumptions.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml (2026-11-24): walton.yml keeps the questions exceptions, so nothing to change there; to apply: the question protocol in the game (stage 2, item F, and step C5)"
 
 - id: D004
   title: A conflicting-goal exception for practical reasoning 1
@@ -131,7 +131,7 @@ decisions:
       to the agent and the goal, so that the first question and CQ:other_goals
       target it. (The review proposed an unnamed objection; reusing the
       existing predicate keeps one formula for one idea.)
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the game (CQ:other_goals) at step C5"
 
 - id: D005
   title: A goal premise for practical reasoning
@@ -153,7 +153,7 @@ decisions:
       Both practical reasoning schemes state the agent's goal as a premise,
       goal_of_agent(P,G), the schemes library's predicate. The conclusion
       stays should_be_performed(A) (D059, D063).
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the game at step C5"
 
 - id: D006
   title: An equally good alternative against practical reasoning 2
@@ -179,7 +179,7 @@ decisions:
       of a set is needed, so another member of the set answers nothing; what
       answers it is a route that avoids the whole set,
       goal_achievable_without_any(P,G,S).
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml (2026-11-24): walton.yml's exceptions need a strictly better means (realize_more_effectively, argued with better_means), and the guidelines (§2, §3, OC6) and the gold treat an equally good alternative as no answer; the game at step C5"
 
 - id: D007
   title: Which wording of practical reasoning the game uses
@@ -353,7 +353,7 @@ decisions:
       landed in stage 1, and a saved game a bridge let through stops at that
       move with the reason. An engine scheme shared by two game schemes is a
       lint error, since the game records which one was played.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; applied in part 2026-11-24 through edits.py: the first answer schemes (bad_outweighs_good, good_outweighs_bad, better_means) and validate.py R8 and R11; to apply: the answer contract (stage 2, item F), the other answer schemes and the game's backup edges (step C5)"
 
 - id: D082
   title: What a full NASCQ means
@@ -851,7 +851,7 @@ decisions:
       Yes, the means: the schema separates possible_goal and
       possible_bring_about(P,X), as the schemes library has it, so that no
       variable is left unbound. Its conclusion follows D063.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay)"
 
 - id: D031
   title: The commitment form of sunk costs
@@ -1406,7 +1406,7 @@ decisions:
       exception nobody raises is presumed not to hold, so an unknown agent
       would pass. Continuing an activity binds to the continuing action, not
       only to its goal.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; applied in part 2026-11-24 through edits.py: practical_inference and the two condition schemes conclude should_be_performed; to apply: the rest of the family with step C4 (appeal_to_vanity_ad_populum, the bridges) and the game at step C5"
 
 - id: D070
   title: Practical reasoning's side effects defeat whatever the weights
@@ -1441,7 +1441,7 @@ decisions:
       side-effect exception (Walton and Gordon 2015, p. 515) is any side
       effect that demotes a value. The exception is D055's bad_outweighs(A,G)
       (proposal D004-D075).
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the game (CQ:side_effect) at step C5"
 
 - id: D071
   title: Cause to effect's interference names only the cause
@@ -1897,7 +1897,7 @@ decisions:
       consequence of the other sign that matters more, the first answer scheme
       under D075). C004, C010, C013, C019, C025 and C026 stay candidates until
       their premises are written; no summing of claims.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay): bad_outweighs_good and good_outweighs_bad; the game at step C5"
 
 - id: D065
   title: Magnitude and risk
@@ -2261,7 +2261,7 @@ decisions:
       separate claims, and neither is the means being available now or sure
       to succeed. The game's CQ:goal_possible and CQ:possibility follow at
       step C5; old records keep their formulas under their version.
-    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the game (CQ:goal_possible, CQ:possibility) at step C5"
 
 - id: D089
   title: The agent and the situation in "another action would do better"
@@ -2294,7 +2294,7 @@ decisions:
       one (Walton and Gordon 2015, p. 515: "when performed in S1"): fixed per
       game or case in its profile and checked at the record level, not added
       to every formula.
-    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py; the game at step C5"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the game at step C5"
 
 - id: D090
   title: Alternatives in the necessary- and sufficient-condition schemes
@@ -2331,7 +2331,7 @@ decisions:
       acceptable means, and its pp. 96 and 323 differ on 22.3. The condition
       schemes' goal variable is G, as in practical reasoning (A was the
       book's letter for the goal).
-    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay); the answer contract with stage 2, item F, and the game at step C5"
 
 - id: D091
   title: Aligning the rest of practical reasoning
@@ -2364,7 +2364,7 @@ decisions:
       from the action's name. D070's outweighing reading is WAG's
       interpretation: the source's side-effect exception (Walton and Gordon
       2015, p. 515) is any side effect that demotes a value.
-    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
+    recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay)"
 
 # --- Decided ------------------------------------------------------------------
 
