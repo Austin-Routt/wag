@@ -1,0 +1,762 @@
+# Proposal for decisions D004, D005, D030, D063, D064, D070 and D075
+# (docs/decisions.md), with D003 and D006 recorded as changing nothing:
+# practical reasoning's agent, goal and conflicting goal; the side effect
+# that outweighs; the agent of the necessary- and sufficient-condition
+# schemes; the practical conclusions of practical reasoning's own schemes;
+# and the first answer schemes. `wag-cli --proposal` checks it and writes
+# its view, D004-D075.md. How proposals work: process.md §5.
+#
+# Version 1, 2026-11-24: stage 2, item C2 (plan §0; docs/first-family.md).
+# The decisions were taken on 2026-11-22 under the owner's standing rule;
+# what this proposal reads into them is listed under "Readings", and the
+# one change no decision covers is put to the owner under "For the owner".
+
+decisions: [D003, D004, D005, D006, D030, D063, D064, D070, D075]
+title: Practical reasoning's agent and goal, the side effect that outweighs, and the first answer schemes
+summary: |-
+  **What changes.**
+  - **D005.** practical_reasoning1 and practical_reasoning2 state the
+    agent's goal as their first premise, goal_of_agent(P,G), the schemes
+    library's predicate; it maps the book's goal premise (22.4's Premise 1,
+    22.1's Major Premise), which no formula stated. P is the agent who
+    would do A. Their conclusion stays should_be_performed(A).
+  - **D004.** practical_reasoning1 gets the conflicting-goal exception
+    incompatible_goal(P,G), scoped to the agent and the goal; 22.4/CQ1
+    targets it instead of the conclusion, and so will the game's
+    CQ:other_goals (step C5).
+    practical_reasoning2's incompatible_goal(G) becomes incompatible_goal(P,G)
+    too (Readings, 1).
+  - **D070.** The side-effect exception side_effects(A,S1) of both schemes
+    becomes bad_outweighs(A,G): that A has bad consequences that outweigh
+    the goal G. A plain side effect is argued as negative consequences, a
+    rebuttal at the argument's conclusion; the claim that it outweighs G is
+    the exception, answered by an argument that names the side effect and
+    the comparison (below). 22.4/CQ7 and 22.1/CQ5 target it, and so will
+    the game's CQ:side_effect (step C5) (Readings, 2).
+  - **D030.** The necessary-condition scheme separates the goal's
+    possibility, possible_goal(A), from the means', possible_bring_about(P,X),
+    and leaves no variable unbound: its premises name the agent P, as the
+    schemes library's repair does, and the set of means S, which walton.yml
+    had folded into X. The conflicting goal A2, which no premise bound,
+    leaves the exception, which becomes incompatible_goal(P,A): the other
+    goal is what an answer names. The sufficient-condition scheme takes the
+    same repair, and its alternatives premise says that each means would be
+    enough, as the book prints it (Readings, 3).
+  - **D063.** Practical reasoning's own schemes conclude should_be_performed:
+    practical_inference should_be_performed(A) (was carry_out_action(A)), the
+    two condition schemes should_be_performed(X) (was bringing_about_action(X)).
+    None of these conclusions names an agent but the one deliberating, so
+    no bridge is needed; their links to the book become partial, the
+    conclusion restated in the game's vocabulary, as 33.4's under D059.
+  - **D064 and D075: the first answer schemes.** An answer scheme concludes
+    the exception it answers; its premises name the witness and bind every
+    variable of the exception.
+    - bad_outweighs_good and good_outweighs_bad, C003's pair (the candidates
+      registry's sketch): a consequence H of A, bad (good), that matters more
+      than the G of an argument of the other sign. bad_outweighs_good is
+      also D075's side effect that outweighs, since D070's exception is
+      bad_outweighs(A,G) (Readings, 2).
+    - better_means: another action A2, open to the same agent, that would
+      realize G more effectively than A; it concludes
+      realize_more_effectively(G,A). Part 6's sketch, repaired: its agent
+      is bound by the answered argument's own goal premise, goal_of_agent(P,G),
+      and by possible_bring_about(P,A2).
+  - **No change.** D003: the questions stay exceptions, the critic's to
+    support; who must answer a question that is asked is the game's
+    question protocol (D075). D006: an equally good alternative is no reason
+    against A, so practical_reasoning2 gets no exception for it; it answers
+    only a claim that A is necessary (alternative_means in the condition
+    schemes) or better than the others (realize_more_effectively).
+
+  **Readings.** Each follows from a decision's text and its reasons; none
+  departs from one.
+  1. **One formula for one conflicting goal.** D004 reuses practical_reasoning2's
+    predicate "to keep one formula for one idea", scoped to the agent and the
+    goal. A scoped predicate in one scheme and an unscoped one in the other
+    would be two formulas, so both become incompatible_goal(P,G); the
+    condition schemes' conflicting goal takes the same formula, not the
+    library's conflicting_goals(P,A). incompatible_goal/1 is left as an
+    orphan template.
+  2. **The side effect that outweighs is D055's bad_outweighs(A,G).** D070
+    renames the exception "for a side effect claimed to outweigh the reasons
+    for the action". The reason for the action is its goal G (in
+    practical_reasoning1, a goal that promotes V), and a side effect is a
+    bad consequence of A; D055 already formalizes the claim that A's bad
+    consequences outweigh G, as positive_consequences' exception. By D004's
+    reason it is the same formula: a practical argument and a consequence
+    argument for the same A and G then share the exception, as they should,
+    since one comparison defeats both; with a second predicate, a weighing
+    answered at one would leave the other standing. The book's 22.4/CQ7
+    already asks only about consequences that outweigh G. It follows that
+    D075's "side effect that outweighs" is C003's bad_outweighs_good, so
+    that C003's pair (D064, planned for the consequences proposal) comes in
+    here. D075's first answer schemes are then three: C003's pair, of which
+    bad_outweighs_good is also the side effect that outweighs, and
+    better_means. S1 leaves the exception: a side effect is a consequence of doing
+    A in the game's one deliberation context. side_effects/2 is left as an
+    orphan template.
+  3. **D030's repair, and its twin.** D030 names 22.2 and adopts the
+    separation "as the schemes library has it, so that no variable is left
+    unbound"; the convergence review recommended the library's repair as the
+    starting point, without its conclusion should_do(P,X), which would
+    pre-empt D063. The repair here is the library's record, with D004's
+    conflicting goal and D063's conclusion; it states the agent in each
+    premise, so that the first-person templates ("I have selected ...") no
+    longer sit beside a third-person P, and gives the set of means its own
+    variable S. 22.3, the sufficient-condition schema, has the same unbound
+    variables and the same possibility assumption, so it takes the same
+    repair; its alternatives premise was the necessary-condition one ("at
+    least one ... is necessary"), where the book's S2 says that each one is
+    sufficient, and becomes alternative_action_sufficient(P,S,A). Templates
+    for the scoped predicates, goal_of_agent/2 among them, are in our own
+    words (the library's repeat the book's premises). alternative_means is 3-ary here and 2-ary in
+    two_person_practical until C4 brings that scheme to its library form
+    (alternative_means(A,X,Y)); the CHANGELOG lists such pairs.
+  4. **Positive binding (D063, D075 refined).** An answer to an exception
+    must not pass because nobody showed it is about another agent. The
+    consequence answers bind the action A, whose identity names its agent
+    ("governments putting a tax on meat", as the gold's bindings do), through
+    their own premise brings_about(A,H). better_means binds the agent P
+    through goal_of_agent(P,G), the answered argument's own goal premise,
+    and states that P can do A2. Neither exception names the agent, so the
+    engine cannot refuse an answer whose P is another agent; the game does,
+    with the CQ answer contract (stage 2, items C5 and F): an answer whose
+    goal premise is not the answered argument's, or whose agent is not the
+    game's deliberating agent (named in its profile), is refused, with a
+    test of each.
+  5. **Premise order.** goal_of_agent(P,G) comes first, where the book
+    prints the goal premise. Nothing reads premises by position (the gold
+    compares them as sets).
+
+  **For the owner.** One change that no decision covers, recommended:
+  practical_reasoning2's assumption possible(G) becomes possible_goal(G).
+  possible/1 reads "Action %s is possible.", and G is a goal (the
+  CHANGELOG's semantic concerns record it); practical_inference already
+  says possible_goal(G), and the condition schemes say possible_goal(A)
+  after D030, so the goal's possibility would have one formula. The game's
+  CQ:goal_possible would target it (step C5). Not part of this version's
+  schemes until the owner agrees; waste's possible(X), the same mismatch,
+  goes with its family (C4).
+
+  **Still open, and stated.**
+  - practical_inference keeps its first-person goal premise have_goal(G)
+    ("I have a goal") and its unscoped exceptions, which say again what
+    incompatible_goal(P,G) and realize_more_effectively(G,A) say; aligning
+    them with D004 and D005 is a decision of its own, for when the scheme
+    enters the game. Until then "I" reads as the deliberating agent.
+  - The condition schemes' side_effect_action(P,X) stays an exception (its
+    template is repaired). D070 names practical_reasoning1 and 2; these
+    schemes state the weighing as their fifth premise,
+    more_acceptable_bringing(P,A,X), which a critic can challenge, and
+    whether the exception should become the outweighing claim is left to
+    the owner when they enter the game.
+  - bring_about_more_effectively(S2,A), promote_more_effectively(V,A),
+    intervening_actions(A,G) and incompatible_goal(P,G) have no answer
+    scheme yet; an answer there is an Other argument concluding the
+    exception, as today. A bridge stays a lint error (D075).
+
+effects:
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (a block PRACTICAL), with CHANGELOG rows: the five schemes above as proposed; the three answer schemes added; templates added: goal_of_agent/2, incompatible_goal/2, alternative_action/3, alternative_action_sufficient/3, necessary_action/4, sufficient_action/4, practicality_action/2, more_acceptable_bringing/3, acceptable_action/2, alternative_means/3, matters_more/2, more_effective_means/3; side_effect_action/2's template repaired. Unused afterwards, kept and listed as orphan templates: side_effects/2, incompatible_goal/1, alternative_action/2, necessary_action/2, sufficient_action/2, practicality_action/1, more_acceptable_bringing/2, acceptable_action/1, possible_agent/2, goal_is_action/1, conflict_goals/3, bringing_about_action/1. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
+  - "links.json: 22.1 (practical_inference) conclusion should_be_performed(A), match partial with a note (the conclusion restated, D063); 22.1 (practical_reasoning2) CQ1 incompatible_goal(P,G), CQ5 bad_outweighs(A,G), the Major Premise goal_of_agent(P,G); 22.2 and 22.3: the premise maps to the scoped premises, CQ1 alternative_means(P,A,X), CQ2 acceptable_action(P,X), CQ3 possible_bring_about(P,X), CQ4 side_effect_action(P,X), CQ5 incompatible_goal(P,A), conclusion should_be_performed(X), match partial (restated conclusion; third person for the book's first); 22.4: Premise 1 goal_of_agent(P,G), CQ1 incompatible_goal(P,G), CQ7 bad_outweighs(A,G)."
+  - "families.json: the three answer schemes join F15 (C003's pair, polarity pair under D053) and F10 (better_means), each noted as an answer scheme (D075)."
+  - "Catalogue (--catalogue-gen, then the drafted entries): the five entries regenerate; their discrepancies on D004, D005, D030, D063 and D070 record the change as applied, with the readings above; the drafted questions are retargeted (22.4/CQ1 and CQ7, 22.1/CQ1 and CQ5, 22.3/CQ1-CQ5 of the condition schemes, walton/possible_goal for walton/possible_action), and 22.1/CQ5's and 22.4/CQ7's answers describe the two routes. Three new entries are drafted, as answer schemes. game-differs records stay: the game keeps its copies of the four schemes until step C5."
+  - "The candidates registry: C003's outcome records that it was added by this proposal; its sketch leaves the registry (its schemes and template are in walton.yml), its sightings and examples stay as the record. candidates.md is regenerated."
+  - "The batch-2 gold, guidelines and lexicon, in a new version. (1) The eight practical_reasoning2 instances (13292.108, .118, .104, .218, .11, .6, .190, .123) bind P to governments, the thesis's agent, and take goal_of_agent(governments,G), incompatible_goal(governments,G) and bad_outweighs(A,G). (2) 13292.45 is recoded on the repaired necessary-condition scheme: P governments, S the means of protecting domestic producers from cheaper imports, the conclusion should_be_performed(raise_import_standards); A2 leaves it. (3) D070: 13292.174 and 13292.5, coded today as answers at 13292.108's side-effect exception, rank nothing, so they become rebuttals, negative consequences at 13292.108's conclusion (guidelines §3.1, OC2). (4) D075: 13292.123 and 13292.104, which say that another course would do better ('instead', 'the appropriate solution ... rather than'), get a primary better_means instance at the exception they answer, realize_more_effectively(G,tax_meat); their practical_reasoning2 instance for the other course stays, secondary. (5) Guidelines §3 states the agent binding (P is the agent of A, named in A's identity); §3.1's two routes extend to practical reasoning's side effects, and OC7 no longer leaves practical reasoning out of a class comparison (its one-instance rule is unchanged, so 13292.127 keeps its one instance, against 13292.115). (6) validate.py passes; to_wag.py's replay and the README's counts are regenerated, with what changes."
+  - "Tests and views: TestGoldChecks and annotate.TestRun fail until the gold is recoded, TestCommittedCatalogueIsCurrent until the catalogue regenerates, TestCommittedProposals until this proposal's view is regenerated, and TestCommittedCandidates until C003's sketch leaves the registry. The game's own copies (core.yml) are unchanged until C5; whatever test compares them with walton.yml records the difference as the catalogue does."
+  - "The game, at step C5: AS:practical_reasoning and AS:practical_reasoning_goal take the goal premise and the exceptions above; CQ:other_goals targets incompatible_goal(P,G); CQ:side_effect targets bad_outweighs(A,G), with bad_outweighs_good as its backup edge in place of the free-text bridge D009 and D070 replace; CQ:other_means gets better_means; each backup edge has an answer that must pass, one that must be refused and one bound to the wrong target, and the agent of an answer is checked against the game's deliberating agent."
+  - "Register: D004, D005, D030, D064 and D070 applied; D063 and D075 applied in part (practical reasoning's own schemes; the first answer schemes), the rest with C4 and C5; D003 and D006 recorded; docs/first-family.md and the plan's stage 2 updated."
+
+schemes:
+  - id: practical_reasoning1
+    meta:
+      title: Argument from Value-Based Practical Reasoning
+      source: "Atkinson, K., and Bench-Capon, T. J. M. Practical reasoning as presumptive argumentation using action based alternating transition systems. Artificial Intelligence 171, 10-15 (2007), 855–874."
+    variables: [A, S1, S2, G, V, P]
+    premises: ["goal_of_agent(P,G)", "current_circumstances(S1)", "would_bring_about(A,S1,S2)", "would_be_realized(G,S2)", "would_promote_value(G,V)"]
+    assumptions: ["legitimate_value(V)", "worthy_goal(G)", "possible(A)"]
+    exceptions: ["bring_about_more_effectively(S2,A)", "realize_more_effectively(G,A)", "promote_more_effectively(V,A)", "bad_outweighs(A,G)", "incompatible_goal(P,G)"]
+    conclusions: ["should_be_performed(A)"]
+  - id: practical_reasoning2
+    meta:
+      title: Argument from Instrumental Practical Reasoning
+      source: "Walton, Douglas (2015). Goal-Based Reasoning for Argumentation. Cambridge University Press."
+    variables: [A, S1, S2, G, P]
+    premises: ["goal_of_agent(P,G)", "current_circumstances(S1)", "would_bring_about(A,S1,S2)", "would_be_realized(G,S2)"]
+    assumptions: ["possible(A)", "possible(G)"]
+    exceptions: ["bring_about_more_effectively(S2,A)", "realize_more_effectively(G,A)", "intervening_actions(A,G)", "bad_outweighs(A,G)", "incompatible_goal(P,G)"]
+    conclusions: ["should_be_performed(A)"]
+  - id: practical_inference
+    meta:
+      title: Practical Reasoning - Practical Inference
+      source: "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90."
+    variables: [A, G]
+    premises: ["have_goal(G)", "action_realize_goal(A,G)"]
+    assumptions: ["possible_action(A)", "possible_goal(G)"]
+    exceptions: ["other_goals_conflict(G)", "more_efficient_alternative_actions(A,G)", "incompatible_consequences(A,G)"]
+    conclusions: ["should_be_performed(A)"]
+  - id: practical_necessary_condition
+    meta:
+      title: Practical Reasoning - Necessary Condition Schema
+      source: "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90."
+    variables: [X, A, P, S]
+    premises: ["goal_of_agent(P,A)", "alternative_action(P,S,A)", "necessary_action(P,X,S,A)", "practicality_action(P,X)", "more_acceptable_bringing(P,A,X)"]
+    assumptions: ["possible_goal(A)", "acceptable_action(P,X)", "possible_bring_about(P,X)"]
+    exceptions: ["alternative_means(P,A,X)", "side_effect_action(P,X)", "incompatible_goal(P,A)"]
+    conclusions: ["should_be_performed(X)"]
+  - id: practical_sufficient_condition
+    meta:
+      title: Practical Reasoning - Sufficient Condition Schema
+      source: "Trevor Bench-Capon, \"Persuasion in Practical Argument Using Value-based Argumentation Frameworks.\" Journal of Logic and Computation 13 (2003), pp. 429-448. Douglas Walton, Practical Reasoning. Savage, Md.: Rowman and Littlefield, 1990. Douglas Walton, \"Actions and Inconsistency: The Closure Problem of Practical Reasoning. \"In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90."
+    variables: [X, A, P, S]
+    premises: ["goal_of_agent(P,A)", "alternative_action_sufficient(P,S,A)", "sufficient_action(P,X,S,A)", "practicality_action(P,X)", "more_acceptable_bringing(P,A,X)"]
+    assumptions: ["possible_goal(A)", "acceptable_action(P,X)", "possible_bring_about(P,X)"]
+    exceptions: ["alternative_means(P,A,X)", "side_effect_action(P,X)", "incompatible_goal(P,A)"]
+    conclusions: ["should_be_performed(X)"]
+  - id: bad_outweighs_good
+    meta:
+      title: Weighing a Bad Consequence against a Good One
+      source: "WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md), after Walton's comparative weighing of good and bad consequences: Douglas Walton, The New Dialectic: Conversational Contexts of Argument. University of Toronto Press, 1998, pp. 159, 170. Not in the compendium."
+    variables: [A, H, G]
+    premises: ["brings_about(A,H)", "bad(H)", "matters_more(H,G)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["bad_outweighs(A,G)"]
+  - id: good_outweighs_bad
+    meta:
+      title: Weighing a Good Consequence against a Bad One
+      source: "WAG's answer scheme (decisions D064 and D075; candidate C003, docs/candidates.md), after Walton's comparative weighing of good and bad consequences: Douglas Walton, The New Dialectic: Conversational Contexts of Argument. University of Toronto Press, 1998, pp. 159, 170. Not in the compendium."
+    variables: [A, H, G]
+    premises: ["brings_about(A,H)", "good(H)", "matters_more(H,G)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["good_outweighs(A,G)"]
+  - id: better_means
+    meta:
+      title: Argument from a Better Means
+      source: "WAG's answer scheme (decision D075), the sketch better_means of WAG's review of 2026-10-15 (part 6, §4), repaired; after the book's questions on other means and efficiency (Walton, Reed and Macagno, Argumentation Schemes, 2008: 22.1 and 22.4, and ch. 3, p. 96). Not in the compendium."
+    variables: [A, A2, G, P]
+    premises: ["goal_of_agent(P,G)", "brings_about(A2,G)", "more_effective_means(A2,G,A)"]
+    assumptions: ["possible_bring_about(P,A2)"]
+    exceptions: []
+    conclusions: ["realize_more_effectively(G,A)"]
+
+language:
+  goal_of_agent/2: "%s has the goal of bringing about %s."
+  incompatible_goal/2: "%s has another goal that is incompatible with %s."
+  alternative_action/3: "%s has good reason to think that at least one of the means %s is needed to bring about %s."
+  alternative_action_sufficient/3: "%s has good reason to think that each of the means %s would be enough to bring about %s."
+  necessary_action/4: "%s has chosen %s, among the means %s, as an acceptable or the most acceptable means needed for %s."
+  sufficient_action/4: "%s has chosen %s, among the means %s, as an acceptable or the most acceptable means that would be enough for %s."
+  practicality_action/2: "As far as %s knows, nothing that cannot be changed stands in the way of bringing about %s."
+  more_acceptable_bringing/3: "%s prefers bringing about %s to leaving %s undone."
+  acceptable_action/2: "For %s, %s is an acceptable thing to do."
+  alternative_means/3: "%s could bring about %s by some means other than %s."
+  side_effect_action/2: "If %s brings about %s, there will be bad side effects that should be weighed."
+  matters_more/2: "%s matters more than %s."
+  more_effective_means/3: "%s would realize the goal %s more effectively than %s."
+
+questions:
+  practical_reasoning1:
+    - {id: 22.4/CQ1, asks: "Does P have other goals that pursuing G would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.4/CQ2, asks: "How far do the values V support G, or at least fit with it?", target: "would_promote_value(G,V)"}
+    - {id: 22.4/CQ3, asks: "Is there another action that would achieve G better than A?", target: "realize_more_effectively(G,A)"}
+    - {id: 22.4/CQ4, asks: "Is there a more efficient way than A to reach S2?", target: "bring_about_more_effectively(S2,A)"}
+    - {id: 22.4/CQ5, asks: "Is there an action that would serve V better than A?", target: "promote_more_effectively(V,A)"}
+    - {id: 22.4/CQ6, asks: "Can A actually be done?", target: "possible(A)"}
+    - {id: 22.4/CQ7, asks: "Would doing A have bad consequences that outweigh G? (A bad consequence that is not claimed to outweigh G is argued against A as negative consequences, a rebuttal.)", target: "bad_outweighs(A,G)"}
+    - {id: walton/worthy_goal, asks: "Is G a goal worth pursuing?", target: "worthy_goal(G)"}
+    - {id: walton/legitimate_value, asks: "Is V a value that may properly count in this decision?", target: "legitimate_value(V)"}
+  practical_reasoning2:
+    - {id: 22.1/CQ1, asks: "Does P have other goals that pursuing G would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.1/CQ2, asks: "Is there another action that would achieve G better than A?", target: "realize_more_effectively(G,A)"}
+    - {id: 22.1/CQ3, asks: "Is there a more efficient way than A to reach S2?", target: "bring_about_more_effectively(S2,A)"}
+    - {id: 22.1/CQ4, asks: "Can A actually be done?", target: "possible(A)"}
+    - {id: 22.1/CQ5, asks: "Would doing A have bad consequences that outweigh G? (A bad consequence that is not claimed to outweigh G is argued against A as negative consequences, a rebuttal.)", target: "bad_outweighs(A,G)"}
+    - {id: game/CQ:goal_possible, asks: "Can G be reached at all, by any means?", target: "possible(G)"}
+    - {id: game/CQ:intervening_actions, asks: "Would further steps be needed after A before G is reached?", target: "intervening_actions(A,G)"}
+  practical_inference:
+    - {id: 22.1/CQ1, asks: "Are there other goals that G might conflict with?", target: "other_goals_conflict(G)"}
+    - {id: 22.1/CQ2, asks: "Are there other actions that would also bring about G, and should they be weighed?", target: "more_efficient_alternative_actions(A,G)"}
+    - {id: 22.1/CQ3, asks: "Of A and the other actions, which would bring about G most efficiently?", target: "more_efficient_alternative_actions(A,G)"}
+    - {id: 22.1/CQ4, asks: "Can A actually be done?", target: "possible_action(A)"}
+    - {id: 22.1/CQ5, asks: "Would doing A have consequences that work against G or against other goals?", target: "incompatible_consequences(A,G)"}
+    - {id: walton/possible_goal, asks: "Can G be reached at all?", target: "possible_goal(G)"}
+  practical_necessary_condition:
+    - {id: 22.3/CQ1, asks: "Could P reach A by some means other than X?", target: "alternative_means(P,A,X)"}
+    - {id: 22.3/CQ2, asks: "Is X an acceptable means for P, or even the best one?", target: "acceptable_action(P,X)"}
+    - {id: 22.3/CQ3, asks: "Can P actually bring about X?", target: "possible_bring_about(P,X)"}
+    - {id: 22.3/CQ4, asks: "Would P's bringing about X have bad side effects that should be weighed?", target: "side_effect_action(P,X)"}
+    - {id: 22.3/CQ5, asks: "Does P have another goal that A would clash with?", target: "incompatible_goal(P,A)"}
+    - {id: walton/possible_goal, asks: "Can A be reached at all, by any means?", target: "possible_goal(A)"}
+  practical_sufficient_condition:
+    - {id: 22.3/CQ1, asks: "Could P reach A by some means other than X?", target: "alternative_means(P,A,X)"}
+    - {id: 22.3/CQ2, asks: "Is X an acceptable means for P, or even the best one?", target: "acceptable_action(P,X)"}
+    - {id: 22.3/CQ3, asks: "Can P actually bring about X?", target: "possible_bring_about(P,X)"}
+    - {id: 22.3/CQ4, asks: "Would P's bringing about X have bad side effects that should be weighed?", target: "side_effect_action(P,X)"}
+    - {id: 22.3/CQ5, asks: "Does P have another goal that A would clash with?", target: "incompatible_goal(P,A)"}
+    - {id: walton/possible_goal, asks: "Can A be reached at all, by any means?", target: "possible_goal(A)"}
+  bad_outweighs_good:
+    - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
+    - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
+  good_outweighs_bad:
+    - {id: 33/CQ1, asks: "How likely is it that doing A would lead to H?", target: "brings_about(A,H)"}
+    - {id: C003/Q1, asks: "Does H really matter more than G: is it more serious, does it touch more people, does it last longer?", target: "matters_more(H,G)"}
+  better_means:
+    - {id: walton/possible_bring_about, asks: "Can P actually do A2?", target: "possible_bring_about(P,A2)"}
+    - {id: 33/CQ1, asks: "How likely is it that doing A2 would lead to G?", target: "brings_about(A2,G)"}
+    - {id: D075/Q1, asks: "Would A2 really realize G more effectively than A, all things weighed: how surely, how soon, at what cost and with what side effects? (The book's efficiency question, 22.1/CQ3 and 22.4/CQ4, asked of the comparison.)", target: "more_effective_means(A2,G,A)"}
+
+examples:
+  # --- practical_reasoning1 (22.4) ------------------------------------------
+  - scheme: practical_reasoning1
+    title: A bike lane on Main Street
+    invented: true
+    use: argument
+    text: East-side commuters now sit in traffic for an hour each way. A protected bike lane on Main Street would let many of them cycle instead, which would cut congestion, and less congestion means cleaner air for everyone. The council should build the lane.
+    bindings:
+      P: the city council
+      A: the city council building a protected bike lane on Main Street
+      S1: east-side commuters spending an hour in traffic each way
+      S2: many east-side commuters cycling to work
+      G: less congestion in the city
+      V: public health
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "goal_of_agent(P,G)"
+        text: Less congestion is not one of the council's goals; its transport plan is about road safety, and says so.
+      - question: 22.4/CQ1
+        text: The council also means to keep Main Street's shops easy to reach by car, which a lane that takes a traffic lane would set back.
+      - question: 22.4/CQ3
+        text: Re-timing the lights on the ring road would cut congestion more, at a tenth of the cost.
+      - question: 22.4/CQ7
+        text: The lane would take the street's parking and close its shops, and losing them matters more than shorter queues (example 18).
+    note: >-
+      P is the agent of A, named in A's binding. A shop owner's reply that
+      the lane would hurt trade, with no comparison, would be negative
+      consequences, a rebuttal at the conclusion; 22.4/CQ7 is the claim that
+      the harm outweighs G.
+
+  - scheme: practical_reasoning1
+    title: Saturday opening at the library
+    invented: true
+    use: argument
+    text: The library is shut on Saturdays, the only day many working parents can bring their children. Opening on Saturdays would let those children borrow books too, and every child should have the same chance to read. The library board should open on Saturdays.
+    bindings:
+      P: the library board
+      A: the library board opening the library on Saturdays
+      S1: the library being closed on Saturdays
+      S2: working parents' children borrowing books
+      G: every child having access to the library
+      V: equal opportunity
+    attacks:
+      - question: 22.4/CQ2
+        text: One more opening day does little for equal opportunity when the children who most need books cannot get to the library on any day.
+      - question: 22.4/CQ4
+        text: A mobile library calling at the estates after school would get books to those children sooner than Saturday opening.
+      - question: 22.4/CQ5
+        text: The same money spent on school libraries would do more for equal opportunity.
+      - question: 22.4/CQ6
+        text: The board has no budget for Saturday staff, and the volunteers have said no.
+      - question: walton/worthy_goal
+        text: Access for every child is the schools' task; the library's charter is adult learning.
+      - question: walton/legitimate_value
+        text: Equal opportunity is a value for public schools; a lending library serves whoever comes, and should not weigh it.
+
+  - scheme: practical_reasoning2
+    title: Saturday opening, without the value
+    invented: true
+    use: near-miss
+    near_miss_of: practical_reasoning1
+    text: The library is shut on Saturdays, when working parents could bring their children; opening then would let those children borrow books, so the board should open on Saturdays.
+    bindings:
+      P: the library board
+      A: the library board opening the library on Saturdays
+      S1: the library being closed on Saturdays
+      S2: working parents' children borrowing books
+      G: working parents' children having access to the library
+    note: No value is named that the goal promotes, so it is practical_reasoning2 (catalogue contrast; batch-2 guidelines §3).
+
+  # --- practical_reasoning2 (22.1) ------------------------------------------
+  - scheme: practical_reasoning2
+    title: A meat tax and the real cost of meat
+    kialo: "13292.118"
+    use: argument
+    text: Taxing meat would raise the consumer price of meat. The raised price would reflect the real costs of meat consumption.
+    bindings:
+      P: governments
+      A: governments putting a tax on meat
+      S1: meat being priced below its real costs
+      S2: a higher price of meat
+      G: the price of meat reflecting its real costs
+    attacks:
+      - question: 22.1/CQ2
+        text: Kialo 13292.123 says that abolishing the subsidies that keep meat cheap would let its price reflect its costs, without taxing and subsidising one good at once (example 24, a better means).
+      - question: 22.1/CQ5
+        text: A truer price for meat matters less than the poorest families keeping protein they can afford, which the tax would put out of their reach.
+      - question: game/CQ:intervening_actions
+        text: While the subsidies stay, the tax only offsets them; the price would reflect the costs only once they go too.
+    note: >-
+      The gold's coding, with P bound to governments, the thesis's agent.
+      The attack on 22.1/CQ5 is a weighing (bad_outweighs_good); a plain
+      harm to the poor would be negative consequences, a rebuttal.
+
+  - scheme: practical_reasoning2
+    title: Meat and the environment
+    kialo: "13292.108"
+    use: argument
+    text: Meat production and consumption are bad for the environment.
+    bindings:
+      P: governments
+      A: governments putting a tax on meat
+      S1: meat production and consumption harming the environment
+      S2: less meat being consumed
+      G: less environmental harm from meat
+    attacks:
+      - question: 22.1/CQ1
+        text: Governments also aim at food security, which a tax that shrinks domestic meat production would set back.
+      - question: 22.1/CQ3
+        text: Ending the subsidies to livestock farming would cut meat consumption more surely than a tax.
+      - question: 22.1/CQ4
+        text: A meat tax needs agreement across the trading bloc, which no government can get alone.
+      - question: game/CQ:goal_possible
+        text: Meat's harm to the environment cannot be brought down while demand grows with incomes, whatever governments do.
+    note: >-
+      The gold's coding, with P added. 13292.174 and 13292.5, coded today as
+      answers at the side-effect exception, rank nothing against G, so under
+      D070 they become rebuttals at this argument's conclusion (example 19).
+
+  - scheme: positive_consequences
+    title: Healthier eating, as a consequence
+    invented: true
+    use: near-miss
+    near_miss_of: practical_reasoning2
+    text: A meat tax would cut meat consumption, and that is good for everyone's health.
+    bindings:
+      A: governments putting a tax on meat
+      G: less meat being eaten
+    note: The consequence is judged good; no agent's goal is stated and reached through A, so it is positive consequences.
+
+  # --- practical_inference (22.1) -------------------------------------------
+  - scheme: practical_inference
+    title: The theory test
+    invented: true
+    use: argument
+    text: I want to pass the driving theory test next month, and doing the practice questions every evening is how to pass it, so I should do them every evening.
+    bindings:
+      A: doing the practice questions every evening
+      G: passing the driving theory test next month
+    attacks:
+      - question: 22.1/CQ1
+        text: Your evening shifts at the café are a goal too, and they leave no evenings free.
+      - question: 22.1/CQ4
+        text: You have no computer at home to do the questions on.
+      - question: walton/possible_goal
+        text: There is no test date next month; the next one is in two months.
+    note: First person, as the book prints 22.1; "I" is the one deliberating (Still open, first bullet).
+
+  - scheme: practical_inference
+    title: Closing the outfall pipe
+    invented: true
+    use: argument
+    text: We want the river clean enough to swim in again, and closing the old outfall pipe would do that, so we should close it.
+    bindings:
+      A: closing the old outfall pipe
+      G: the river being clean enough to swim in
+    attacks:
+      - question: 22.1/CQ2
+        text: Fitting a filter to the pipe would clean the river as well and keep the drain working.
+      - question: 22.1/CQ3
+        text: Diverting the pipe to the treatment works would clean the river sooner, and for less.
+      - question: 22.1/CQ5
+        text: Closing the pipe would flood the streets above it in heavy rain, and the flood water would carry more sewage into the river than the pipe does.
+
+  - scheme: practical_reasoning2
+    title: Closing the outfall, with the circumstances
+    invented: true
+    use: near-miss
+    near_miss_of: practical_inference
+    text: The old outfall is polluting the river; if the council closed it, the river would be clean, so the council should close it.
+    bindings:
+      P: the council
+      A: the council closing the old outfall pipe
+      S1: the old outfall polluting the river
+      S2: the old outfall closed
+      G: a clean river
+    note: The present circumstances and the resulting state are stated, and an agent named; practical_reasoning2, not practical_inference.
+
+  # --- practical_necessary_condition (22.2) ---------------------------------
+  - scheme: practical_necessary_condition
+    title: Import standards
+    kialo: "13292.45"
+    use: argument
+    text: If so (if the tax lets cheaper imports push out domestic producers), import standards have to be maintained at a higher level. This is manageable.
+    bindings:
+      P: governments
+      X: governments keeping import standards at a higher level
+      A: domestic meat producers protected from cheaper imports
+      S: the ways of protecting domestic meat producers from cheaper imports
+    attacks:
+      - question: 22.3/CQ1
+        text: A border adjustment on the tax would protect domestic producers without new standards.
+      - question: 22.3/CQ5
+        text: Governments are bound by trade agreements that higher import standards would breach.
+      - question: 22.3/CQ4
+        text: Higher standards would raise the price of all imported food, not only meat.
+    note: >-
+      The gold's coding on the repaired scheme. Its conflicting goal (A2,
+      cheap and open trade in meat) is now what an answer names; the
+      exception is incompatible_goal(P,A).
+
+  - scheme: practical_necessary_condition
+    title: Night nurses
+    invented: true
+    use: argument
+    text: The hospital trust's goal is to cut waiting times in A&E. Of the things that could, more nurses on night shifts is one it cannot do without; nothing it cannot change stops it hiring them, and shorter waits are worth the cost. So the trust should hire more night nurses.
+    bindings:
+      P: the hospital trust
+      X: the hospital trust hiring more night-shift nurses
+      A: shorter waiting times in A&E
+      S: the measures that could cut waiting times in A&E
+    attacks:
+      - question: 22.3/CQ2
+        text: The only nurses to be had are agency staff at three times the cost, which the trust's own rules forbid.
+      - question: 22.3/CQ3
+        text: There are no nurses to hire; the region's vacancies have been open for a year.
+      - question: walton/possible_goal
+        text: Waits cannot fall while patients wait for beds upstairs, whatever A&E does.
+
+  - scheme: practical_sufficient_condition
+    title: Night nurses, as one of several ways
+    invented: true
+    use: near-miss
+    near_miss_of: practical_necessary_condition
+    text: More night nurses, a second triage desk or a walk-in clinic next door would each be enough to cut waiting times in A&E; the trust has chosen the nurses, so it should hire them.
+    bindings:
+      P: the hospital trust
+      X: the hospital trust hiring more night-shift nurses
+      A: shorter waiting times in A&E
+      S: more night nurses, a second triage desk and a walk-in clinic
+    note: Each means is said to be enough, none to be needed; the sufficient-condition scheme.
+
+  # --- practical_sufficient_condition (22.3) --------------------------------
+  - scheme: practical_sufficient_condition
+    title: Winter tyres
+    invented: true
+    use: argument
+    text: The company's goal is to get its delivery vans through the winter without an accident on ice. Winter tyres would be enough, and so would chains or a winter-only route; it has chosen winter tyres, nothing it cannot change stops it fitting them, and safe vans are worth the cost. So it should fit winter tyres.
+    bindings:
+      P: the delivery company
+      X: the delivery company fitting winter tyres
+      A: the vans getting through the winter without an accident on ice
+      S: winter tyres, chains and a winter-only route
+    attacks:
+      - question: 22.3/CQ1
+        text: Chains would do the same for a tenth of the price.
+      - question: 22.3/CQ4
+        text: Winter tyres wear fast on the dry motorway stretches the vans drive most.
+      - question: walton/possible_goal
+        text: No van gets through a winter here without a skid; the goal cannot be met, only approached.
+
+  - scheme: practical_sufficient_condition
+    title: A second exit
+    invented: true
+    use: argument
+    text: The theatre's goal is to meet the fire code by spring. A second exit would be enough, and so would a sprinkler system; it has chosen the exit, nothing it cannot change stops it building one, and meeting the code matters more than the lost seats. So it should build the exit.
+    bindings:
+      P: the theatre
+      X: the theatre building a second exit
+      A: the theatre meeting the fire code by spring
+      S: a second exit and a sprinkler system
+    attacks:
+      - question: 22.3/CQ2
+        text: The building is listed; a new exit through the front wall would not be allowed.
+      - question: 22.3/CQ3
+        text: No builder can start before the summer.
+      - question: 22.3/CQ5
+        text: The theatre also means to reopen the balcony, which needs the same space as the exit.
+
+  - scheme: practical_necessary_condition
+    title: The only way to meet the code
+    invented: true
+    use: near-miss
+    near_miss_of: practical_sufficient_condition
+    text: The only way the theatre can meet the fire code by spring is a second exit, so it should build one.
+    bindings:
+      P: the theatre
+      X: the theatre building a second exit
+      A: the theatre meeting the fire code by spring
+      S: the ways of meeting the fire code by spring
+    note: The exit is said to be needed, not merely enough; the necessary-condition scheme.
+
+  # --- bad_outweighs_good (C003; D070's answer) -----------------------------
+  - scheme: bad_outweighs_good
+    title: Starvation against healthier eating
+    kialo: "13292.127"
+    use: answer
+    answers: 33/CQ3 of 13292.115, the positive consequences argument for the meat tax; it concludes that argument's exception, bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption).
+    text: Starvation from decreased access to meat is a more severe threat than any consequence of high meat consumption.
+    bindings:
+      A: governments putting a tax on meat
+      H: starvation from reduced access to meat
+      G: a fall in unhealthy meat consumption
+    attacks:
+      - question: 33/CQ1
+        text: The tax would raise the price of meat a little; in the countries that would adopt it, no one starves for lack of meat.
+    note: C003's sighting, as the gold codes it since D055. A goal-based argument for the tax with the same goal would share the exception and be answered by the same claim.
+
+  - scheme: bad_outweighs_good
+    title: The mobile library
+    invented: true
+    use: argument
+    text: Opening on Sundays would cost the housebound their mobile library, and that matters more than a quiet room for shift workers.
+    bindings:
+      A: the council opening the branch library on Sundays
+      H: housebound readers losing the mobile library
+      G: shift workers having a quiet place to study
+    attacks:
+      - question: C003/Q1
+        text: Twelve people use the mobile van; four hundred shift workers have asked for Sunday opening.
+
+  - scheme: bad_outweighs_good
+    title: Main Street's shops
+    invented: true
+    use: argument
+    text: The bike lane would take Main Street's parking and close its shops, and losing them matters more than shorter queues.
+    bindings:
+      A: the city council building a protected bike lane on Main Street
+      H: the shops on Main Street closing
+      G: less congestion in the city
+    note: The answer to example 1's 22.4/CQ7, D070's side effect that outweighs; it concludes bad_outweighs(A,G) of a practical_reasoning1 argument.
+
+  - scheme: negative_consequences
+    title: More dangerous meat production
+    kialo: "13292.174"
+    use: near-miss
+    near_miss_of: bad_outweighs_good
+    text: Taxing meat might force producers to use cheaper and more dangerous means of producing meat.
+    bindings:
+      A: governments putting a tax on meat
+      G: producers turning to cheaper and more dangerous ways of producing meat
+    note: >-
+      A side effect that ranks nothing against 13292.108's goal: under D070
+      a rebuttal at that argument's conclusion, not an answer at its
+      exception, where the gold codes it today. 13292.5 (regenerative farming
+      deterred) is the same case.
+
+  # --- good_outweighs_bad (C003) --------------------------------------------
+  - scheme: good_outweighs_bad
+    title: Sustainability against lost revenue
+    kialo: "13292.43"
+    use: answer
+    answers: 33/CQ3 of 13292.9, the negative consequences argument that the tax would cut revenue; it concludes that argument's exception, good_outweighs(tax_meat,tax_revenue_reduced).
+    text: Tax revenue is not the primary reason to tax meat; there are other, more pressing issues, such as sustainability or animal welfare.
+    bindings:
+      A: governments putting a tax on meat
+      H: progress on sustainability and animal welfare
+      G: tax revenues falling
+    attacks:
+      - question: 33/CQ1
+        text: People who keep eating meat would pay the tax and change nothing; the progress on sustainability would be slight.
+
+  - scheme: good_outweighs_bad
+    title: Attention in lessons
+    invented: true
+    use: argument
+    text: Pupils paying attention in every lesson matters more than the rare day a pupil cannot reach a parent at once.
+    bindings:
+      A: the school banning phones
+      H: pupils paying better attention in lessons
+      G: pupils being unable to reach their parents in an emergency
+    attacks:
+      - question: C003/Q1
+        text: The rare emergency is when it matters most; a child who cannot reach a parent then is not outweighed by better attention on other days.
+
+  - scheme: good_outweighs_bad
+    title: The night bus
+    invented: true
+    use: argument
+    text: A night bus would cost the council money, but getting shift workers home safely matters more than the cost.
+    bindings:
+      A: the council running a night bus
+      H: shift workers getting home safely
+      G: the council's transport budget running a deficit
+    attacks:
+      - question: 33/CQ1
+        text: Most shift workers drive; few would take the bus.
+
+  - scheme: positive_consequences
+    title: Phones out of lessons, without a comparison
+    invented: true
+    use: near-miss
+    near_miss_of: good_outweighs_bad
+    text: Banning phones would help pupils concentrate, so the school should ban them.
+    bindings:
+      A: the school banning phones
+      G: pupils concentrating better
+    note: A good consequence offered for the ban, set against nothing; positive consequences.
+
+  # --- better_means (D075) --------------------------------------------------
+  - scheme: better_means
+    title: Abolishing the subsidies instead
+    kialo: "13292.123"
+    use: answer
+    answers: 22.1/CQ2 of 13292.118, the goal-based argument for the meat tax; it concludes that argument's exception, realize_more_effectively(meat_price_reflects_real_costs,tax_meat).
+    text: Both taxing and subsidising a good is an incoherent policy. Instead, the price distortions caused by subsidies should be removed by abolishing those subsidies (or at least exempting meat from them).
+    bindings:
+      P: governments
+      A: governments putting a tax on meat
+      A2: governments abolishing the subsidies on meat
+      G: the price of meat reflecting its real costs
+    attacks:
+      - question: D075/Q1
+        text: Abolishing farm subsidies takes years of negotiation against the farm lobby; a tax can be passed in one budget, so the tax gets there sooner.
+    note: >-
+      "Instead" carries the comparison. The gold keeps its argument for
+      abolishing the subsidies as a course of its own (practical_reasoning2),
+      secondary.
+
+  - scheme: better_means
+    title: Park and ride
+    invented: true
+    use: argument
+    text: The council wants fewer cars in the centre. A park-and-ride with free buses, run on its own land by the ring road, would empty the centre of cars faster than a congestion charge.
+    bindings:
+      P: the city council
+      A: the city council bringing in a congestion charge
+      A2: the city council running a park-and-ride with free buses
+      G: fewer cars in the city centre
+    attacks:
+      - question: walton/possible_bring_about
+        text: The council's land by the ring road is leased to a supermarket until 2030.
+      - question: 33/CQ1
+        text: Drivers who live inside the ring road would not use a park-and-ride at all.
+
+  - scheme: better_means
+    title: Tutoring instead of a longer day
+    invented: true
+    use: argument
+    text: The school's goal is better maths results. Small-group tutoring, which its own teachers can give, would raise them more than lengthening the school day.
+    bindings:
+      P: the school
+      A: the school lengthening the school day
+      A2: the school giving small-group maths tutoring
+      G: better maths results
+    attacks:
+      - question: D075/Q1
+        text: Tutoring reaches thirty pupils a term; a longer day reaches all six hundred.
+
+  - scheme: positive_consequences
+    title: Rationing through carbon budgets
+    kialo: "13292.147"
+    use: near-miss
+    near_miss_of: better_means
+    text: Rationing meat through personal carbon budgets would help reduce carbon emissions. Under such rationing everybody in a country can consume a small amount of meat, larger amounts cost extra, and very large amounts are not allowed or are extremely expensive.
+    bindings:
+      A: governments rationing meat through personal carbon budgets
+      G: lower carbon emissions
+    note: >-
+      Another course with a good consequence, not compared with the tax.
+      Under D006 an alternative that is merely as good is no reason against
+      the tax, so it is not an answer at realize_more_effectively; it is
+      argued for the other course (D066 decides how, in the consequences
+      proposal).
