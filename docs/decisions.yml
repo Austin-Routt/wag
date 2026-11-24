@@ -372,8 +372,33 @@ decisions:
       Beyond it, completeness is measured, never proven: the plan's two
       measures, and two more: the share of the answers found in coded data and
       in play that can be played as meant, and the share of answers that
-      should be refused that the game refuses.
+      should be refused that the game refuses. Confirmed by the owner on
+      2026-11-24, the goal's wording unchanged.
     recorded: "docs/plan.md (the goal)"
+
+- id: D086
+  title: Who makes the first gold, and who verifies it
+  question: >-
+    Batch 2's reference annotation was made by models, and D045 requires a
+    person to verify. The critical review of 2026-11-23 (its answer 2): keep
+    the gold first, as a bounded first gold a person has verified rather
+    than a complete corpus; a reference made by models is development
+    material, not gold. Who makes the first gold, and who verifies it?
+  category: annotation
+  blocks: [annotation]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/plan.md §0 and §4", "docs/decisions.yml D045", "the critical review of 2026-11-23 (wag-workspace reviews/2026-11-23)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      The developer and the other independent reviewer (ChatGPT)
+      make it: the developer first, then back and forth until they converge.
+      The owner verifies it, which is D045's verification by a person. Until
+      the owner has verified an item, it is development material, not gold.
+    recorded: "docs/plan.md §0 and §4"
 
 # --- Priority 2: the other tier-1 schemes, shared readings, annotation ------
 
@@ -2100,6 +2125,9 @@ decisions:
     not adopted, since the owner reserved these questions for later review and
     capture for research goes on (D077). Stage 2 treats captured content as
     data, never as instructions (D076), which does not decide this question.
+    The owner confirmed this on 2026-11-24, after the critical review of
+    2026-11-23 agreed: capture goes on, and no gate is added before the
+    first evidence pilot.
   category: project
   blocks: [release]
   decider: owner
@@ -2167,6 +2195,24 @@ decisions:
   priority: 3
   status: open
   docs: ["docs/scheme-registry/links.json", "docs/review-2026-11-22-stages.md"]
+
+- id: D087
+  title: A first persuasion protocol after the first gold and the pilot
+  question: >-
+    The critical review of 2026-11-23 (its answer 2) proposed that, once the
+    first gold (D086) and the bounded pilot (stage 3) have shown real
+    deficiencies, a small first persuasion protocol could come next while
+    the corpus grows, recorded as how Track D's order is read. Track D's
+    order is the owner's (plan §8, 2026-10-15: schemes, critical questions
+    and the Kialo gold first) and stands until this is decided. Asked on
+    2026-11-23; the owner's answer of 2026-11-24 settled who makes and
+    verifies the first gold (D086), not this.
+  category: project
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: open
+  docs: ["docs/plan.md §8", "the critical review of 2026-11-23 (wag-workspace reviews/2026-11-23)"]
 
 # --- Decided ------------------------------------------------------------------
 
