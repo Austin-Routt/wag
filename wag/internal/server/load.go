@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"strings"
@@ -85,6 +86,14 @@ func (s *Server) load(e *Export) (*Session, error) {
 		if err != nil {
 			return nil, err
 		}
+		// Modern exports contain the effective weights, including the context
+		// preset. Contexts may be changed without changing the scheme-data
+		// hash; silently replaying against them would change the experiment.
+		// Legacy exports without a recorded request/config keep their existing
+		// compatibility path; this is not a claim of exact legacy replay.
+		if e.Request != nil && e.Config.Mode != "" && !maps.Equal(cfg.Weights, e.Config.Weights) {
+			return nil, fmt.Errorf("the exported effective weights differ from the current context/request: restore the recorded context settings before replaying")
+		}
 		cfg.TimeLimit, cfg.MoveTimeLimit = 0, 0
 		var names []string
 		for _, seat := range e.Seats {
@@ -103,11 +112,23 @@ func (s *Server) load(e *Export) (*Session, error) {
 			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
 		}
 	}
+	// Legal moves do not establish that the same data produced them. Keep
+	// the retired-bridge diagnostic above, but never register a successful
+	// replay that has a known data mismatch. Older exports lack this hash.
+	if e.DataHash != "" && e.DataHash != s.data.Hash() {
+		return nil, fmt.Errorf("the game was played with other scheme data (%s; this server's is %s): start the server with --data on the data of that version to replay it exactly", e.DataHash, s.data.Hash())
+	}
 	title := e.Title
 	if title == "" {
 		title = "WAG — " + gs.Config.Mode
 	}
-	ss := s.add(gs, e.Seats, title, "loaded", req.Seed)
+	source := "loaded"
+	if strings.HasPrefix(e.Source, "kialo:") {
+		// A later export needs this origin to reconstruct the imported graph
+		// before replaying its moves. "loaded" alone loses that distinction.
+		source = e.Source
+	}
+	ss := s.add(gs, e.Seats, title, source, req.Seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
 	return ss, nil
 }

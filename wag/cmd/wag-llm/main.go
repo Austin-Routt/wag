@@ -525,8 +525,11 @@ func replay(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
-	if h := d.Hash(); h != start.DataSHA256 {
-		fmt.Fprintf(os.Stderr, "Note: the game was played with scheme data %s; this data is %s (use --data for that version).\n", start.DataSHA256, h)
+	if h := d.Hash(); start.DataSHA256 != "" && h != start.DataSHA256 {
+		return fmt.Errorf("the game was played with scheme data %s; this data is %s (use --data for that version before replaying)", start.DataSHA256, h)
+	}
+	if start.DataSHA256 == "" {
+		fmt.Fprintln(os.Stderr, "Note: this legacy trace has no scheme-data fingerprint; input identity cannot be verified.")
 	}
 	srv, err := server.New(d, "")
 	if err != nil {

@@ -376,7 +376,9 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 	// to share an ID, so each one's attacks on the other counted as
 	// self-attacks and every score went to the first.
 	players := make([]*Player, len(playerNames))
-	used := map[string]bool{}
+	// Moderator decisions use this reserved ID in exported histories. A
+	// player's display name may be "moderator", but its ID must stay distinct.
+	used := map[string]bool{ModeratorID: true}
 	for i, name := range playerNames {
 		id := name
 		for n := 2; used[id]; n++ {
