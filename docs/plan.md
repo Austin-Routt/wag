@@ -27,6 +27,7 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 - **Data-driven development with model and human players, now.** API players and Kialo annotation produce the data that improves the game, the catalogue and a reusable dataset. Work may go on from entries models have checked, its results marked provisional; a person still verifies, and no accuracy claim or release rests on entries only models have checked (D045).
 - **Full NASCQ** is a checked contract within a versioned set and four measured rates beyond it (the goal, above; D082).
 - **The first gold** (D086, the owner, 2026-11-24), from batch 2's claims (§4): the developer drafts it, the other independent reviewer (ChatGPT) reviews it, back and forth until they converge, and the owner verifies it (D045). Until then it is development material, as batch 2's reference made by models is.
+- **Then a first persuasion protocol** (D087, the owner, 2026-11-24): once the first gold and the bounded pilot (stage 3) have shown where WAG falls short, a small first persuasion protocol is the next experiment while the corpus grows (§8, Order).
 - **Families as slices.** Each family goes through the whole path before the next: its decisions and formulas, the game's questions and answers (answer schemes, D075), annotation, replay and play. Within a slice the decisions come first.
 - **Evidence** is a record, not a string (D076); the evidence cited in the data is captured whole for research, under the fair use doctrine, and kept in the private workspace, large files in Git LFS (D077). Terms of use, privacy and injected instructions are reviewed later (D079).
 - **The engine** is the schemes library's ([`CARNEADES_FORK.md`](../CARNEADES_FORK.md)). The formulas stay WAG's own layer (§1); where WAG has decided nothing, the library's records are the draft (tier 2), and every difference is recorded.
@@ -37,7 +38,7 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 | 1 | The engine swap with WAG's fixes and the engine's tests in CI; indexed templates; annotation runs that keep their identity; sources that must be text. Closed after ChatGPT's review of stages 0 and 1: CI on both Go versions, a registry gate that fails closed; D084 and D081 applied through proposal [D081-D084](proposals/D081-D084.md); annotation identity at every entry point; a malformed final move refused, never replaced; typed answers instead of free-text bridges; MPL-2.0 and CC BY 4.0 | done 2026-11-22 |
 | 2 | The first slice, practical reasoning and the consequences: D063 (with positive binding), D070 and the answer schemes (D075); the scheme fixes decided on 2026-11-22, through proposals and `edits.py`; one versioned game profile, its catalogue, formulas and engine pinned by content; the replay as a tested command (D073); one versioned record of a reading, a move and its outcome; evidence records and the first admission policy (D076, [evidence-records.md](evidence-records.md)); the [evidence implementation plan](evidence-implementation-plan.md), whose offline record checker is implemented while native binding/consent integration remains open; API runs' budgets shown on mock clients first: no limit by default, optional limits, and a record of what each run used (D046); book text out of the public tree (D043) | in progress |
 | 3 | A bounded Kialo and API pilot on the owner's machine, its spending recorded, with the limits the owner sets, if any (D046): independent first passes, a lexicon not drawn from the gold, the moves players could not make recorded, development and held-out discussions kept apart, the size planned from the gain to detect | after stage 2 |
-| 4 | The other families; tier 2 from the library's records; a person's blind sample of claims; AS2 and meta-argument trials, kept only if they do better than a simpler baseline at the same cost | later |
+| 4 | A small first persuasion protocol, scoped by what the first gold and the pilot show (D087, §8); the other families; tier 2 from the library's records; a person's blind sample of claims; AS2 and meta-argument trials, kept only if they do better than a simpler baseline at the same cost | later |
 
 **Stage 2 is done when**, for its slice: no known contract violation; no input changed without its record (data, prompt, profile, model); every recorded event replays without asking a model again; the wrong actor, context, polarity and evidence revision are each refused by a test; what is unresolved or unavailable is stated, not guessed; and the sources and the code are reviewed at the exact versions used. These are finite checks; they do not claim that every argument people make can be expressed (after ChatGPT's review of stages 0 and 1).
 
@@ -48,7 +49,7 @@ After the external reviews of 22 November 2026 (kept whole in the workspace, `re
 
 **Evidence increment (literature review of 2026-11-22).** [The theory review](evidence-theory-review.md) supports the record model and refines its semantics: source reports, interpretation/warrant, scope, dependence, assessment and procedural admission stay distinct. `wag-evidence/0.1` now checks offline records, retained bytes, selectors and two-party consent for consideration. Its pass does not verify facts, implement game admission, or close stage 2. Within stage 2, and so before the pilot, [step 1 of the evidence plan](evidence-implementation-plan.md#step-1-connect-the-first-slice-before-an-evidence-aware-game-pilot) binds records to the actual game, keeps old citation-only traces, and tests the specific CQ, admission and revision effects; this is the evidence item of stage 2 above, as the review recommended, not a new condition. The owner's existing capture, history and human-verification decisions remain unchanged; no new capture gate is introduced.
 
-**The critical review of 2026-11-23** (in the workspace, `reviews/2026-11-23`; checked in `verify/r-critical-review-2026-11-23`) proposed an execution sheet for the next increment: ten work items (A to J) and thirteen adverse cases. It refines the checks of stages 2 and 3 without changing the register or the order. A (integrity repairs) and B (recording of annotation runs) were done on 2026-11-24. Still to do in stage 2 from it: the first family's formula closure, including the two practical-reasoning records whose variables no premise binds (`practical_necessary_condition` and `practical_sufficient_condition`: A2 and P), through a proposal (`ad_hominem`'s S and `regulative_rule`'s A go with their families); admission of authored graphs; evidence E1; the CQ answer contract; and D073's journal and replay. Remote play needs authorization of the moderator's actions first.
+**The critical review of 2026-11-23** (in the workspace, `reviews/2026-11-23`; checked in `verify/r-critical-review-2026-11-23`) proposed an execution sheet for the next increment: ten work items (A to J) and thirteen adverse cases. It refines the checks of stages 2 and 3 without changing the register or the order; its answer 2, on Track D's order, became the owner's D087. A (integrity repairs) and B (recording of annotation runs) were done on 2026-11-24. Still to do in stage 2 from it: the first family's formula closure, including the two practical-reasoning records whose variables no premise binds (`practical_necessary_condition` and `practical_sufficient_condition`: A2 and P), through a proposal (`ad_hominem`'s S and `regulative_rule`'s A go with their families); admission of authored graphs; evidence E1; the CQ answer contract; and D073's journal and replay. Remote play needs authorization of the moderator's actions first.
 
 ## 1. Principles
 
@@ -361,7 +362,7 @@ or empirical validation.
 - WAG can play a game in any established dialogue type, the quarrel included.
 - WAG can find every type in real discourse, negotiation and quarrels included, as it does for schemes.
 
-**Its place.** The project's focus stays on argumentation schemes, critical questions, and a gold standard made from Kialo (phases 1–3, measured as phase 4 describes). Track D comes after them, except for the two small pieces that phases 1 and 2 need anyway (see Order). The playable quarrel is the last step of all.
+**Its place.** The project's focus stays on argumentation schemes, critical questions, and a gold standard made from Kialo (phases 1–3, measured as phase 4 describes). Track D comes after them, except for the two small pieces that phases 1 and 2 need anyway, and a small first persuasion protocol once the first gold and the pilot have shown where WAG falls short, while the corpus grows (D087; see Order). The playable quarrel is the last step of all.
 
 **Where it is explained:**
 - **What the types are:** [`dialogue-types.md`](dialogue-types.md).
@@ -401,16 +402,17 @@ or empirical validation.
 
 ### Order
 
-Set by the owner on 2026-10-15: schemes, critical questions and the Kialo gold first.
+Set by the owner on 2026-10-15: schemes, critical questions and the Kialo gold first. Read by the owner on 2026-11-24 (D087): "the Kialo gold" is the first gold a person has verified (D086) and the bounded pilot (stage 3), not a complete corpus.
 
 1. **D0's reference is drafted.** Its existing completion condition—a person checking the page references against the book—remains open.
 2. **Only what phases 1 and 2 need anyway:**
    - **"Proper in" (D1 d)** is a field of the scheme catalogue (phase 1). It is drafted from the reference's §7.
    - **Step 0 of the guidelines (D1 b)** goes with phase 2. It is a few fields filled once per Kialo discussion.
-3. **After the Kialo gold (phase 3):**
-   1. D1 (a) and (c);
-   2. D2a to D2f, in the order shown;
-   3. D3 and D4, starting from Kialo's own data (persuasion, much of it about action), then other corpora.
+3. **After the first gold and the pilot (D087):**
+   1. a small first persuasion protocol, the next experiment while the corpus grows: the start of D2a, with what it needs of D1 (a), scoped by the deficiencies the gold and the pilot show. A run made by models is not gold;
+   2. the rest of D1 (a), and D1 (c);
+   3. the rest of D2a, then D2b to D2f, in the order shown;
+   4. D3 and D4, starting from Kialo's own data (persuasion, much of it about action), then other corpora.
 4. **Last:** D2g, then D2h, the playable quarrel.
 
 The scheme catalogue stays the first priority, because every type that argues uses it.

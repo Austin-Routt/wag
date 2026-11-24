@@ -2211,8 +2211,20 @@ decisions:
   blocks: [play]
   decider: owner
   priority: 3
-  status: open
+  status: decided
   docs: ["docs/plan.md §8", "the critical review of 2026-11-23 (wag-workspace reviews/2026-11-23)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      Yes, as the review suggested. Track D's "after the Kialo gold" is read
+      as after the first gold (D086, verified by the owner) and the bounded
+      pilot (stage 3), not after a complete corpus. A small first persuasion
+      protocol is then the next experiment, scoped by the deficiencies the
+      gold and the pilot show, while the corpus grows: the start of D2a, with
+      what it needs of D1 (a). The rest of Track D's order stands, the
+      quarrel last, and a run made by models is not gold.
+    recorded: "docs/plan.md §0 and §8"
 
 # --- Decided ------------------------------------------------------------------
 
