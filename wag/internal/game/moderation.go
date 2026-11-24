@@ -66,8 +66,13 @@ func (gs *GameState) Decide(stmtID, decision, note string) (*TurnResult, error) 
 		return nil, fmt.Errorf("game is already terminated: %s", gs.TerminationReason)
 	}
 	before := gs.Adapter.StatementLabels()
+	// A refused decision leaves no trace, as a refused move does: the
+	// adapter may have created a statement before it refused (the
+	// complement of a statement whose issue cannot be formed).
+	checkpoint := gs.Adapter.Checkpoint()
 	id, err := gs.Adapter.Decide(stmtID, decision)
 	if err != nil {
+		gs.Adapter.Restore(checkpoint)
 		return nil, err
 	}
 	gs.Adapter.Evaluate()
