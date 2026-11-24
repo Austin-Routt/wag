@@ -250,6 +250,17 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 			add("%s is not a scheme of walton.yml", wid)
 			continue
 		}
+		declared := map[string]bool{}
+		for _, v := range sc.Variables {
+			declared[v] = true
+		}
+		if bm, ok := in["bindings"].(map[string]any); ok {
+			for k := range bm {
+				if !declared[k] {
+					add("%s binds undeclared variable %s", wid, k)
+				}
+			}
+		}
 		if fit != "fragment" {
 			want := append([]string(nil), sc.Variables...)
 			var got []string
@@ -274,7 +285,7 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 			k := fmt.Sprintf("%v %v", pm["role"], compact(fmt.Sprint(pm["formula"])))
 			if expected[k] > 0 {
 				expected[k]--
-			} else if fit != "fragment" {
+			} else {
 				add("%s: %s is not a formula of the scheme with these bindings", wid, k)
 			}
 		}
@@ -287,7 +298,8 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 		}
 		if len(sc.Conclusions) > 0 {
 			cm, _ := in["conclusion"].(map[string]any)
-			if got, want := compact(fmt.Sprint(cm["formula"])), compact(subst(sc.Conclusions[0], binds)); fit != "fragment" && got != want {
+			hasFormula := cm != nil && cm["formula"] != nil && cm["formula"] != ""
+			if got, want := compact(fmt.Sprint(cm["formula"])), compact(subst(sc.Conclusions[0], binds)); (fit != "fragment" || hasFormula) && got != want {
 				add("%s concludes %s, not %s", wid, got, want)
 			}
 		}

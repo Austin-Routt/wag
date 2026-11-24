@@ -63,7 +63,7 @@ func jsonObject(s string) (map[string]any, error) {
 		return nil, fmt.Errorf("there is no JSON object in it")
 	}
 	var m map[string]any
-	if err := json.Unmarshal([]byte(s[i:j+1]), &m); err != nil {
+	if err := checkedJSON([]byte(s[i:j+1]), &m); err != nil {
 		return nil, fmt.Errorf("its JSON does not parse: %v", err)
 	}
 	return m, nil

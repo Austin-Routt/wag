@@ -114,10 +114,13 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	read := func(name string) ([]byte, error) { return fs.ReadFile(fsys, path.Clean(path.Join(dir, name))) }
 	var m manifest
 	if b, err := read("dataset.json"); err == nil {
-		if err := json.Unmarshal(b, &m); err != nil {
+		if err := checkedJSON(b, &m); err != nil {
 			return nil, fmt.Errorf("dataset.json: %v", err)
 		}
+	} else if !os.IsNotExist(err) {
+		return nil, fmt.Errorf("dataset.json: %v", err)
 	}
+	explicitGuidelines, explicitGold, explicitResources := m.Guidelines != "", m.Gold != "", len(m.Resources) != 0
 	if m.Items == "" {
 		m.Items = "items.json"
 	}
@@ -141,7 +144,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		Discussion json.RawMessage   `json:"discussion"`
 		Items      []json.RawMessage `json:"items"`
 	}
-	if err := json.Unmarshal(b, &in); err != nil {
+	if err := checkedJSON(b, &in); err != nil {
 		return nil, fmt.Errorf("%s: %v", m.Items, err)
 	}
 	d.Discussion = in.Discussion
@@ -167,6 +170,9 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	}
 	g, err := read(m.Guidelines)
 	if err != nil {
+		if explicitGuidelines || !os.IsNotExist(err) {
+			return nil, fmt.Errorf("guidelines %s: %v", m.Guidelines, err)
+		}
 		g, err = fs.ReadFile(data.Annotation, "annotation/kialo-13292-batch2/guidelines.md")
 		if err != nil {
 			return nil, err
@@ -188,6 +194,8 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		}
 		d.Gold, d.HasGold = anns, true
 		d.Hashes[m.Gold] = sha(b)
+	} else if explicitGold || !os.IsNotExist(err) {
+		return nil, fmt.Errorf("gold %s: %v", m.Gold, err)
 	}
 	// The resources: the scheme collection and the game's NASCQ, and the
 	// dataset's own (a lexicon).
@@ -203,8 +211,8 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	for _, r := range m.Resources {
 		b, err := read(r)
 		if err != nil {
-			if r == "lexicon.json" {
-				continue // optional
+			if r == "lexicon.json" && !explicitResources && os.IsNotExist(err) {
+				continue // optional only when the manifest did not request it
 			}
 			return nil, fmt.Errorf("resource %s: %v", r, err)
 		}
@@ -231,16 +239,28 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 // parseAnnotations reads an annotation file ({"annotator": …, "items": […]}).
 func parseAnnotations(b []byte) (map[string]Annotation, error) {
 	var f struct {
-		Items []Annotation `json:"items"`
+		Items json.RawMessage `json:"items"`
 	}
-	if err := json.Unmarshal(b, &f); err != nil {
+	if err := checkedJSON(b, &f); err != nil {
 		return nil, err
 	}
+	if len(f.Items) == 0 {
+		return nil, fmt.Errorf("annotation file requires an items array (legacy null means empty)")
+	}
+	var items []Annotation
+	if err := json.Unmarshal(f.Items, &items); err != nil {
+		return nil, fmt.Errorf("annotation items: %v", err)
+	}
 	out := map[string]Annotation{}
-	for _, it := range f.Items {
-		if id, _ := it["kialo_claim_id"].(string); id != "" {
-			out[id] = it
+	for i, it := range items {
+		id, ok := it["kialo_claim_id"].(string)
+		if !ok || strings.TrimSpace(id) == "" {
+			return nil, fmt.Errorf("annotation item %d needs a nonempty textual kialo_claim_id", i+1)
 		}
+		if _, exists := out[id]; exists {
+			return nil, fmt.Errorf("duplicate annotation claim ID %q", id)
+		}
+		out[id] = it
 	}
 	return out, nil
 }
