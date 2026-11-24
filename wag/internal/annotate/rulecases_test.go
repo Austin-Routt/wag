@@ -69,8 +69,15 @@ func shape(a Annotation) string {
 	}
 	r := a["role"]
 	fmt.Fprintf(&b, "role kind=%v cq=%v polarity=%v\n", get(r, "kind"), get(r, "cq"), get(r, "polarity"))
+	// The formula of a premise or an exception target; a conclusion target's
+	// is its instance's conclusion, which format 2 names and a case's coding
+	// need not. Instance ids, which a case's coding has not, are not compared.
 	t := get(a["target"], "actual")
-	fmt.Fprintf(&b, "target claim=%v part=%v formula=%s\n", get(t, "claim"), get(t, "part"), compact(fmt.Sprint(get(t, "formula"))))
+	f := ""
+	if p := get(t, "part"); p == "premise" || p == "exception" {
+		f = compact(fmt.Sprint(get(t, "formula")))
+	}
+	fmt.Fprintf(&b, "target claim=%v part=%v formula=%s\n", get(t, "claim"), get(t, "part"), f)
 	return b.String()
 }
 

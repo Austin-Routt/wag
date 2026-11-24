@@ -5,7 +5,10 @@
 # Each case names the rules it shows (OC1-OC14), the Kialo claim (or none,
 # for a constructed case), a short paraphrase in our own words, its target,
 # its coding in the gold's format (instances, role, and the target as
-# target.actual), and why.
+# target.actual), and why. The codings leave out what format 2 of the
+# annotation records adds for identity (instance ids, the target's instance,
+# a conclusion target's formula: docs/annotation-records.md); the test
+# compares what both carry.
 # A test (wag/internal/annotate, TestRuleCases) checks that:
 #   - every rule of §3.1 has a case, and every case names rules of §3.1;
 #   - every coding follows walton.yml (the gold's own checker);
@@ -65,6 +68,9 @@ retired:
   - phrase: achieve the goal as well or better
     now: only another action said to reach the goal better answers practical reasoning; one as good is no reason against the action (guidelines §2, §3; D006)
     why: proposal D004-D075, 2026-11-24
+  - phrase: which the gold cannot target
+    now: the reply targets the weighing instance by its id (OC10; guidelines §4)
+    why: "the identity contract (D092, 2026-11-24): a target names its instance, a secondary one included"
 
 cases:
   - id: OC1-a

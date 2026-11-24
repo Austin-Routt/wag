@@ -261,7 +261,7 @@ async function renderAnnotate(noLoad) {
           <button id="mkdataset">Make the dataset</button>
           <p class="small muted">It becomes a folder in <span class="mono">${esc(WB.datasetFolder || '')}</span>, with the claims top-down and their Kialo context (no gold).</p>
         </details>
-        <p class="small muted">Your own datasets: a folder with <span class="mono">items.json</span> (and optionally <span class="mono">guidelines.md</span>, <span class="mono">gold.json</span>, <span class="mono">lexicon.json</span>) in <span class="mono">${esc(WB.datasetFolder || '')}</span>.</p>
+        <p class="small muted">Your own datasets: a folder with <span class="mono">items.json</span> (and optionally <span class="mono">guidelines.md</span>, <span class="mono">gold.json</span>, <span class="mono">lexicon.json</span>, <span class="mono">case.json</span>) in <span class="mono">${esc(WB.datasetFolder || '')}</span>.</p>
         ${(WB.datasetErrors || []).map(e => `<p class="small warn">${esc(e)}</p>`).join('')}
         <div class="small"><b>Annotators</b> (one or more players)</div>
         ${ready.length ? ready.map(p => `<label class="inline small"><input type="checkbox" data-ann="${esc(p.name)}" ${WB.form.annotators.includes(p.name) ? 'checked' : ''}> ${esc(p.name)} <span class="muted">(${esc(runsOn(p))})</span></label>`).join('<br>')
@@ -288,8 +288,12 @@ function runPane() {
   const prog = (st.progress || []).map(p => `<tr><td><b>${esc(p.name)}</b> <span class="muted small">${esc(p.role)}</span></td><td>${p.done}${p.total ? ' / ' + p.total : ''}${p.unsaved ? ` <span class="warn" title="Held in memory: the file could not be written">+${p.unsaved} not saved</span>` : ''}</td><td>${p.failed || ''}</td>
     <td class="small">${p.calls} calls, ${p.input_tokens.toLocaleString()} tokens in, ${p.output_tokens.toLocaleString()} out</td>
     <td class="small">${p.running ? `working on ${esc(p.current || '')}` : ''} ${p.last_error ? `<span class="warn" title="${esc(p.last_error)}">${esc(short(p.last_error, 220))}</span>` : ''}</td></tr>`).join('');
-  const fmt = f => f ? `${f.agreement.toFixed(2)}${f.kappa != null ? ` <span class="muted">κ ${f.kappa.toFixed(2)}</span>` : ''}` : '';
-  const fields = ['scheme', 'fit', 'role', 'polarity', 'target_claim', 'target_part', 're_parented', 'evidence'];
+  // A field with nothing comparable (every value unresolved) shows a dash;
+  // unresolved values are left out and counted (docs/annotation-records.md §11).
+  const fmt = f => !f ? '' : !f.n ? `—${f.unresolved ? ` <span class="muted">(${f.unresolved} unresolved)</span>` : ''}`
+    : `${f.agreement.toFixed(2)}${f.kappa != null ? ` <span class="muted">κ ${f.kappa.toFixed(2)}</span>` : ''}${f.unresolved ? ` <span class="muted" title="left out: unresolved, or a target the annotator's file does not hold">(${f.unresolved} unresolved)</span>` : ''}`;
+  const fields = ['scheme', 'fit', 'role', 'polarity', 'target_claim', 'target_part', 're_parented', 'evidence',
+    'cq', 'target_instance', 'target_formula', 'bindings', 'instances'];
   const agreeRows = [];
   if (rep) {
     for (const p of rep.pairs || []) agreeRows.push([`${p.a} ↔ ${p.b}`, p.items, p.fields]);
@@ -325,7 +329,7 @@ function runPane() {
       ${st.busy ? `<p class="small"><b>${esc(st.busy)}…</b> This goes on in the server, in the background: you can close this page and come back.</p>` : ''}
       <table><tr><th>Who</th><th>Done</th><th>Failed</th><th>Cost</th><th></th></tr>${prog}</table>
     </div>
-    ${agreeRows.length ? `<div class="panel"><h3>Agreement</h3><div class="netwrap"><table><tr><th></th><th>claims</th>${fields.map(f => `<th>${esc(f.replace('_', ' '))}</th>`).join('')}</tr>
+    ${agreeRows.length ? `<div class="panel"><h3>Agreement</h3><div class="netwrap"><table><tr><th></th><th>claims</th>${fields.map(f => `<th>${esc(f.replaceAll('_', ' '))}</th>`).join('')}</tr>
       ${agreeRows.map(([who, n, f]) => `<tr><td>${esc(who)}</td><td>${n}</td>${fields.map(k => `<td class="small">${fmt(f[k])}</td>`).join('')}</tr>`).join('')}</table></div>
       ${rep ? `<p class="small muted">${(rep.annotators || []).map(a => `${esc(a.name)}: ${a.annotated} annotated, ${a.valid} with no problem found`).join(' · ')}. Agreement is the share of claims labelled alike; κ corrects it for chance.</p>` : ''}</div>` : ''}
     <div class="grid-claims">
@@ -336,11 +340,24 @@ function runPane() {
 
 const primaryOf = a => { const ins = (a && a.instances) || []; return ins.find(i => i.primary) || ins[0] || {}; };
 
-// cmp is the values compared (the server's FieldOf): re-parenting is derived
+// A value of the annotation records (docs/annotation-records.md §8): text,
+// or a marker that says why there is none.
+function recVal(x) {
+  if (x && typeof x === 'object') {
+    if (typeof x.unresolved === 'string') return `<span class="warn" title="${esc(x.unresolved)}">unresolved</span>`;
+    if (typeof x.unstated === 'string') return `<span class="muted" title="${esc(x.unstated)}">unstated</span>`;
+    return esc(JSON.stringify(x));
+  }
+  return esc(x);
+}
+
+// cmp is the values compared (the server's FieldIn): re-parenting is derived
 // from the target, not read from the annotation's own field.
 function annCard(name, a, problems, diff, cmp) {
   if (!a) return '';
   const p = primaryOf(a), s = p.scheme || {}, r = a.role || {}, t = (a.target || {}).actual || {};
+  const binds = Object.keys(p.bindings || {}).sort().map(k => `${esc(k)} = <span class="mono">${recVal(p.bindings[k])}</span>`).join(', ');
+  const insts = (a.instances || []).map(x => `${x.id ? '<span class="mono">' + esc(x.id) + '</span> ' : ''}${esc((x.scheme || {}).walton_id)}${x.primary ? ' <span class="muted">(primary)</span>' : ''}`).join('; ');
   const stated = (a.target || {}).re_parented, derived = (cmp || {}).re_parented;
   const mark = f => diff.includes(f) ? ' class="differs"' : '';
   const prem = (p.premises || []).map(x => `<li><span class="muted">${esc(x.role)}</span> <span class="mono">${esc(x.formula)}</span>${x.status ? ` <span class="muted small">(${esc(x.status)})</span>` : ''}</li>`).join('');
@@ -348,11 +365,13 @@ function annCard(name, a, problems, diff, cmp) {
     <table class="wtable">
       <tr${mark('scheme')}><td>Scheme</td><td><b>${esc(s.walton_id)}</b> ${s.compendium ? '<span class="muted">book ' + esc(s.compendium) + '</span>' : ''}</td></tr>
       <tr${mark('fit')}><td>Fit</td><td>${esc(s.fit)}${s.confidence != null ? ` <span class="muted">(confidence ${esc(s.confidence)})</span>` : ''}</td></tr>
-      <tr${mark('role')}><td>Role</td><td>${esc(r.kind)}${r.cq ? ' — ' + esc(r.cq) : ''}</td></tr>
+      <tr${mark('role') || mark('cq')}><td>Role</td><td>${esc(r.kind)}${r.cq ? ' — ' + esc(r.cq) : ''}</td></tr>
       <tr${mark('polarity')}><td>Polarity</td><td>${esc(r.polarity)}</td></tr>
-      <tr${mark('target_claim') || mark('target_part')}><td>Target</td><td>${esc(t.claim)} · ${esc(t.part)} ${t.formula ? '<span class="mono">' + esc(t.formula) + '</span>' : ''}</td></tr>
+      <tr${mark('target_claim') || mark('target_part') || mark('target_instance') || mark('target_formula')}><td>Target</td><td>${esc(t.claim)}${t.instance ? ' <span class="muted">instance</span> <span class="mono">' + recVal(t.instance) + '</span>' : ''} · ${recVal(t.part)} ${t.formula ? '<span class="mono">' + recVal(t.formula) + '</span>' : ''}</td></tr>
       <tr${mark('re_parented')}><td>Re-parented</td><td>${esc(derived ?? stated)}${derived != null && stated != null && String(stated) !== derived ? ` <span class="muted small">(it says ${esc(stated)}; this is derived from the target)</span>` : ''}</td></tr>
       <tr${mark('evidence')}><td>Evidence</td><td>${esc((a.evidence || {}).status)}</td></tr>
+      ${binds ? `<tr${mark('bindings')}><td>Bindings</td><td class="small">${binds}</td></tr>` : ''}
+      <tr${mark('instances')}><td>Instances</td><td class="small">${insts}</td></tr>
     </table>
     ${prem ? `<div class="small">Premises<ul class="small">${prem}</ul></div>` : ''}
     ${p.conclusion ? `<div class="small">Conclusion <span class="mono">${esc(p.conclusion.formula)}</span></div>` : ''}

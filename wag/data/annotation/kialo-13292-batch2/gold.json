@@ -1,5 +1,21 @@
 {
+ "format": "wag-annotation/2",
  "annotator": "gold",
+ "case": "kialo-13292",
+ "inputs": {
+  "items.json": "db9e8468bb41f4a0078e93f0252c615e05282ffe48fd9ab0dce5fcff8bc0771f",
+  "lexicon.json": "e4e563a89277c02b1ba49169ccf829d73c94914e948d076e5931f50d382ff688",
+  "case.json": "5857394dbd7d4f058dfa059567888fa950d51c4be9cdcd3294f8a08e8f35df80",
+  "walton.yml": "bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42"
+ },
+ "status": "Development material (D086): adjudicated by a language model, no item verified by a person. The first gold is drafted from it.",
+ "history": [
+  {
+   "date": "2026-11-24",
+   "by": "decision D092 (migrate_format2.py)",
+   "what": "Format 2 (docs/annotation-records.md): instance ids, exact targets (their instance, and a conclusion target's formula), the instance each challenge is about, re_parented dropped (derived), the inputs pinned. No coding changed. The format-1 gold is kept as gold-format1.json. Decision D039's recoding of the 11 hypothetical causal steps is recorded in their items."
+  }
+ ],
  "items": [
   {
    "kialo_claim_id": "13292.1",
@@ -8,6 +24,7 @@
    ],
    "instances": [
     {
+     "id": "13292.1#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -35,8 +52,7 @@
    "target": {
     "kialo_parent": null,
     "kialo_relation": null,
-    "actual": null,
-    "re_parented": false
+    "actual": null
    },
    "evidence": {
     "status": "assertion",
@@ -59,6 +75,7 @@
    ],
    "instances": [
     {
+     "id": "13292.13#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -93,11 +110,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
-     "instance": "primary"
-    },
-    "re_parented": true
+     "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -108,6 +124,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.13#1",
      "formula": "¬would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
      "note": "unsupported denial; the replies 13292.14 and 13292.61 argue that the tax does reduce consumption"
     }
@@ -129,6 +146,7 @@
    ],
    "instances": [
     {
+     "id": "13292.7#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -190,9 +208,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "definition",
@@ -206,6 +225,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.7#1",
      "formula": "brings_about(tax_meat,food_less_affordable_for_poor)",
      "note": "13292.33: cheaper protein lets people avoid the burden"
     },
@@ -213,12 +233,14 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.7#1",
      "formula": "brings_about(tax_meat,food_less_affordable_for_poor)"
     },
     {
      "cq": "33.2 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.7#1",
      "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)",
      "note": "the thesis's pros may outweigh it"
     },
@@ -226,6 +248,7 @@
      "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
+     "instance": "13292.7#1",
      "formula": "¬should_be_performed(tax_meat)",
      "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -233,6 +256,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.7#1",
      "formula": "bad(food_less_affordable_for_poor)",
      "note": "no printed CQ; 13292.25: the burden is small"
     }
@@ -265,6 +289,7 @@
    ],
    "instances": [
     {
+     "id": "13292.9#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -306,9 +331,10 @@
      }
     },
     {
+     "id": "13292.9#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -323,10 +349,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(tax_meat)",
-       "en": "An event 'governments put a tax on meat' has occurred.",
+       "formula": "may_occur(tax_meat)",
+       "en": "An event 'governments put a tax on meat' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted"
+       "note": "the cause is proposed or possible, not occurred (D039): the tax has not been enacted"
       },
       {
        "role": "premise",
@@ -343,15 +369,16 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(meat_industry_harmed)",
-      "en": "An event 'the meat industry is harmed' will occur."
+      "formula": "may_occur(meat_industry_harmed)",
+      "en": "An event 'the meat industry is harmed' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8). First link of the chain tax -> harm to the meat industry -> lower tax revenue."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). First link of the chain tax -> harm to the meat industry -> lower tax revenue."
     },
     {
+     "id": "13292.9#3",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -366,10 +393,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(meat_industry_harmed)",
-       "en": "An event 'the meat industry is harmed' has occurred.",
+       "formula": "may_occur(meat_industry_harmed)",
+       "en": "An event 'the meat industry is harmed' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the harm is itself predicted"
+       "note": "the cause is proposed or possible, not occurred (D039): the harm is itself predicted"
       },
       {
        "role": "premise",
@@ -387,10 +414,10 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(tax_revenue_reduced)",
-      "en": "An event 'tax revenues are reduced' will occur."
+      "formula": "may_occur(tax_revenue_reduced)",
+      "en": "An event 'tax revenues are reduced' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8). Second link: harm to an industry that pays substantial taxes lowers tax revenue."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). Second link: harm to an industry that pays substantial taxes lowers tax revenue."
     }
    ],
    "role": {
@@ -404,9 +431,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -417,6 +445,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.9#1",
      "formula": "brings_about(tax_meat,tax_revenue_reduced)",
      "note": "\"could\"; 13292.12 backs it with a mechanism"
     },
@@ -424,12 +453,14 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.9#1",
      "formula": "brings_about(tax_meat,tax_revenue_reduced)"
     },
     {
      "cq": "33.2 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.9#1",
      "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
      "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare)"
     },
@@ -437,6 +468,7 @@
      "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
+     "instance": "13292.9#1",
      "formula": "¬should_be_performed(tax_meat)",
      "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -444,6 +476,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.9#1",
      "formula": "bad(tax_revenue_reduced)",
      "note": "no printed CQ; revenue is not the purpose of the tax (13292.43)"
     },
@@ -451,12 +484,13 @@
      "cq": "28 CQ3",
      "wag_cq": null,
      "type": "causal interference",
+     "instance": "13292.9#3",
      "formula": "interference(meat_industry_harmed)",
      "note": "the meat tax's own yield may offset the lost industry taxes"
     }
    ],
    "notes": {
-    "text": "One negative-consequences argument, with its two causal links as secondary cause_to_effect steps (guidelines §3, chains). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted, so fit reconstructed and confidence lowered (R4); they are kept because no other walton.yml scheme expresses a single causal step. The net claim presupposes that lost industry taxes exceed the meat tax's own yield.",
+    "text": "One negative-consequences argument, with its two causal links as secondary cause_to_effect steps (guidelines §3, chains). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted, so fit reconstructed and confidence lowered (R4); they are kept because no other walton.yml scheme expresses a single causal step. The net claim presupposes that lost industry taxes exceed the meat tax's own yield. Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -470,6 +504,15 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "The hypothetical causal steps (instances 13292.9#2, 13292.9#3) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
      }
     ]
    }
@@ -481,6 +524,7 @@
    ],
    "instances": [
     {
+     "id": "13292.108#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -601,9 +645,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -614,6 +659,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.108#1",
      "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
      "note": "no printed CQ; attacked by 13292.135 (relative size) and 13292.137 (sustainable meat); backed by 13292.2 and 13292.4"
     },
@@ -621,6 +667,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.108#1",
      "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
      "note": "no printed CQ; denied by 13292.13"
     },
@@ -628,6 +675,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.108#1",
      "formula": "would_be_realized(environmental_harm_from_meat_reduced,reduced_meat_consumption)",
      "note": "no printed CQ; backed by 13292.6"
     },
@@ -635,6 +683,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
+     "instance": "13292.108#1",
      "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
      "note": "13292.104 (regulate the industry), 13292.147 (carbon rationing). Since 2026-11-24: 13292.147 claims no better means: a proposal of another course, not an answer here (D006)"
     },
@@ -642,6 +691,7 @@
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
      "type": "side effects that outweigh",
+     "instance": "13292.108#1",
      "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
      "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred). Since 2026-11-24: no claim weighs a side effect against this goal but 13292.127 (starvation, bad_outweighs_good); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070)"
     }
@@ -675,6 +725,7 @@
    ],
    "instances": [
     {
+     "id": "13292.115#1",
      "primary": true,
      "scheme": {
       "walton_id": "positive_consequences",
@@ -732,9 +783,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -745,6 +797,7 @@
      "cq": "33.1 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.115#1",
      "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
      "note": "13292.8 backs that there is excess consumption to reduce"
     },
@@ -752,18 +805,21 @@
      "cq": "33.1 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.115#1",
      "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)"
     },
     {
      "cq": "33.1 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.115#1",
      "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
+     "instance": "13292.115#1",
      "formula": "should_be_performed(tax_meat)",
      "note": "side effect at the conclusion: 13292.121 (unhealthy underconsumption); the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -771,6 +827,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.115#1",
      "formula": "good(reduced_unhealthy_meat_consumption)",
      "note": "no printed CQ; backed by 13292.3 (lower health care costs)"
     }
@@ -802,6 +859,7 @@
    ],
    "instances": [
     {
+     "id": "13292.118#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -923,9 +981,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -936,6 +995,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.118#1",
      "formula": "current_circumstances(meat_price_below_real_costs)",
      "note": "no printed CQ; backed by 13292.11 and 13292.224"
     },
@@ -943,6 +1003,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.118#1",
      "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
      "note": "no printed CQ; denied by 13292.169, backed by 13292.218"
     },
@@ -950,6 +1011,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
+     "instance": "13292.118#1",
      "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "13292.123: abolish the subsidies instead"
     },
@@ -957,6 +1019,7 @@
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
+     "instance": "13292.118#1",
      "formula": "possible_bring_about(governments,tax_meat)",
      "note": "13292.171: removing subsidies is politically easier than taxing"
     },
@@ -964,6 +1027,7 @@
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
      "type": "side effects that outweigh",
+     "instance": "13292.118#1",
      "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
      "note": "affordability (13292.7). Since 2026-11-24: 13292.7's affordability is a plain side effect, a rebuttal at the conclusion; it would answer here only if claimed to outweigh the price goal (D070)"
     }
@@ -996,6 +1060,7 @@
    ],
    "instances": [
     {
+     "id": "13292.25#1",
      "primary": true,
      "scheme": {
       "walton_id": "other",
@@ -1056,11 +1121,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.7",
+     "instance": "13292.7#1",
      "part": "premise",
-     "formula": "bad(food_less_affordable_for_poor)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "bad(food_less_affordable_for_poor)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -1071,6 +1135,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.25#1",
      "formula": "easy_to_achieve(change_food_consumption_pattern)",
      "note": "is a forced diet change minor for people who cannot afford food? (13292.36, 13292.180, 13292.56)"
     },
@@ -1078,6 +1143,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.25#1",
      "formula": "means_to_end(change_food_consumption_pattern,avoid_meat_tax_burden)",
      "note": "unsupported"
     }
@@ -1101,6 +1167,7 @@
    ],
    "instances": [
     {
+     "id": "13292.33#1",
      "primary": true,
      "scheme": {
       "walton_id": "other",
@@ -1153,11 +1220,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.7",
+     "instance": "13292.7#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,food_less_affordable_for_poor)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,food_less_affordable_for_poor)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -1168,6 +1234,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.33#1",
      "formula": "other_protein_cheaper_than_meat",
      "note": "true for all nutrients and all consumers? 13292.56 replies that protein intake would still suffer"
     },
@@ -1175,6 +1242,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.33#1",
      "formula": "means_to_end(switch_to_other_protein,avoid_meat_tax_burden)",
      "note": "unsupported"
     }
@@ -1202,6 +1270,7 @@
    ],
    "instances": [
     {
+     "id": "13292.180#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -1244,9 +1313,10 @@
      }
     },
     {
+     "id": "13292.180#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -1261,10 +1331,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(reduced_meat_consumption)",
-       "en": "An event 'less meat is demanded and consumed (and so less is produced)' has occurred.",
+       "formula": "may_occur(reduced_meat_consumption)",
+       "en": "An event 'less meat is demanded and consumed (and so less is produced)' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the fall in meat intake would follow the unenacted tax"
+       "note": "the cause is proposed or possible, not occurred (D039): the fall in meat intake would follow the unenacted tax"
       },
       {
        "role": "premise",
@@ -1282,10 +1352,10 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(more_anemia_cases)",
-      "en": "An event 'cases of anemia increase' will occur."
+      "formula": "may_occur(more_anemia_cases)",
+      "en": "An event 'cases of anemia increase' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8). The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit."
     }
    ],
    "role": {
@@ -1299,9 +1369,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.7",
-     "part": "conclusion"
+     "instance": "13292.7#1",
+     "part": "conclusion",
+     "formula": "¬should_be_performed(tax_meat)"
     },
-    "re_parented": false,
     "other_kialo_parents": [
      {
       "claim_id": "13292.121",
@@ -1310,6 +1381,7 @@
       "cq": "CQ:likelihood",
       "polarity": "for",
       "part": "premise",
+      "instance": "13292.121#1",
       "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
      }
     ]
@@ -1326,6 +1398,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.180#1",
      "formula": "brings_about(tax_meat,more_anemia_cases)",
      "note": "answered against by 13292.182 (supplements) and 13292.198 (iron-rich plant foods)"
     },
@@ -1333,6 +1406,7 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.180#1",
      "formula": "brings_about(tax_meat,more_anemia_cases)",
      "note": "the link shows meat is a good iron source, not that a tax raises anemia"
     },
@@ -1340,12 +1414,14 @@
      "cq": "33.2 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.180#1",
      "formula": "good_outweighs(tax_meat,more_anemia_cases)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
+     "instance": "13292.180#1",
      "formula": "¬should_be_performed(tax_meat)",
      "note": "13292.233: meat reduction improves health; the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -1353,6 +1429,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.180#2",
      "formula": "causes(reduced_meat_consumption,more_anemia_cases)",
      "note": "\"easiest\" source is not \"only\" source"
     }
@@ -1374,6 +1451,14 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "The hypothetical causal step (instance 13292.180#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
      }
     ]
    }
@@ -1387,6 +1472,7 @@
    ],
    "instances": [
     {
+     "id": "13292.36#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -1428,9 +1514,10 @@
      }
     },
     {
+     "id": "13292.36#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -1445,10 +1532,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(tax_meat)",
-       "en": "An event 'governments put a tax on meat' has occurred.",
+       "formula": "may_occur(tax_meat)",
+       "en": "An event 'governments put a tax on meat' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted"
+       "note": "the cause is proposed or possible, not occurred (D039): the tax has not been enacted"
       },
       {
        "role": "premise",
@@ -1465,15 +1552,16 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(food_production_costs_increased)",
-      "en": "An event 'the costs of food production increase' will occur."
+      "formula": "may_occur(food_production_costs_increased)",
+      "en": "An event 'the costs of food production increase' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     },
     {
+     "id": "13292.36#3",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -1488,10 +1576,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(food_production_costs_increased)",
-       "en": "An event 'the costs of food production increase' has occurred.",
+       "formula": "may_occur(food_production_costs_increased)",
+       "en": "An event 'the costs of food production increase' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the cost rise is itself predicted"
+       "note": "the cause is proposed or possible, not occurred (D039): the cost rise is itself predicted"
       },
       {
        "role": "premise",
@@ -1508,10 +1596,10 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(food_security_decreased)",
-      "en": "An event 'the country's food security decreases' will occur."
+      "formula": "may_occur(food_security_decreased)",
+      "en": "An event 'the country's food security decreases' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     }
    ],
    "role": {
@@ -1525,9 +1613,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.7",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.7#1",
+     "part": "conclusion",
+     "formula": "¬should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -1538,18 +1627,21 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.36#1",
      "formula": "brings_about(tax_meat,food_security_decreased)"
     },
     {
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.36#1",
      "formula": "brings_about(tax_meat,food_security_decreased)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.36#1",
      "formula": "bad(food_security_decreased)",
      "note": "no printed CQ"
     },
@@ -1557,6 +1649,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.36#2",
      "formula": "causes(tax_meat,food_production_costs_increased)",
      "note": "a tax on meat need not raise the cost of producing other food"
     },
@@ -1564,17 +1657,29 @@
      "cq": "28 CQ3",
      "wag_cq": null,
      "type": "causal interference",
+     "instance": "13292.36#3",
      "formula": "interference(food_production_costs_increased)",
      "note": "13292.24: tax credits or food stamps for those who cannot afford food"
     }
    ],
    "notes": {
-    "text": "A further bad consequence (food security) for the same conclusion as 13292.7, so an independent argument for it; premise_backing of 7's bad(G) is the alternative role, since the need sentence backs it. 'Taxes' generalises from the meat tax; A is bound to the thesis action. The chain tax -> production costs -> food security is coded as two causal steps with a hypothetical cause (needs a modal causal scheme, audit N8; R4).",
+    "text": "A further bad consequence (food security) for the same conclusion as 13292.7, so an independent argument for it; premise_backing of 7's bad(G) is the alternative role, since the need sentence backs it. 'Taxes' generalises from the meat tax; A is bound to the thesis action. The chain tax -> production costs -> food security is coded as two causal steps with a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "The hypothetical causal steps (instances 13292.36#2, 13292.36#3) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     }
+    ]
    }
   },
   {
@@ -1584,6 +1689,7 @@
    ],
    "instances": [
     {
+     "id": "13292.127#1",
      "primary": true,
      "scheme": {
       "walton_id": "bad_outweighs_good",
@@ -1632,6 +1738,7 @@
      }
     },
     {
+     "id": "13292.127#2",
      "primary": false,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -1686,11 +1793,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "exception",
-     "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
-     "instance": "primary"
-    },
-    "re_parented": true
+     "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -1701,6 +1807,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.127#2",
      "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
      "note": "of the secondary instance, the starvation consequence"
     },
@@ -1708,18 +1815,21 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.127#2",
      "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)"
     },
     {
      "cq": "33.2 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.127#2",
      "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
+     "instance": "13292.127#2",
      "formula": "¬should_be_performed(tax_meat)",
      "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -1727,6 +1837,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.127#1",
      "formula": "matters_more(starvation_from_reduced_meat_access,environmental_harm_from_meat_reduced)",
      "note": "the comparison is asserted, not argued; a reply that denies it attacks this premise (OC10)"
     }
@@ -1777,9 +1888,10 @@
    ],
    "instances": [
     {
+     "id": "13292.14#1",
      "primary": true,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -1803,10 +1915,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(higher_meat_price)",
-       "en": "An event 'the consumer price of meat is higher' has occurred.",
+       "formula": "may_occur(higher_meat_price)",
+       "en": "An event 'the consumer price of meat is higher' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the price rise would follow the unenacted tax"
+       "note": "the cause is proposed or possible, not occurred (D039): the price rise would follow the unenacted tax"
       },
       {
        "role": "premise",
@@ -1824,15 +1936,16 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(reduced_meat_consumption)",
-      "en": "An event 'less meat is demanded and consumed (and so less is produced)' will occur."
+      "formula": "may_occur(reduced_meat_consumption)",
+      "en": "An event 'less meat is demanded and consumed (and so less is produced)' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     },
     {
+     "id": "13292.14#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -1847,10 +1960,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(tax_meat)",
-       "en": "An event 'governments put a tax on meat' has occurred.",
+       "formula": "may_occur(tax_meat)",
+       "en": "An event 'governments put a tax on meat' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted"
+       "note": "the cause is proposed or possible, not occurred (D039): the tax has not been enacted"
       },
       {
        "role": "premise",
@@ -1868,10 +1981,10 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(higher_meat_price)",
-      "en": "An event 'the consumer price of meat is higher' will occur."
+      "formula": "may_occur(higher_meat_price)",
+      "en": "An event 'the consumer price of meat is higher' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     }
    ],
    "role": {
@@ -1885,9 +1998,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.13",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.13#1",
+     "part": "conclusion",
+     "formula": "¬would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -1900,6 +2014,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.14#1",
      "formula": "causes(higher_meat_price,reduced_meat_consumption)",
      "note": "price elasticity of meat demand; 'help decrease' is contributory"
     },
@@ -1907,6 +2022,7 @@
      "cq": "28 CQ2",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.14#1",
      "formula": "causes(higher_meat_price,reduced_meat_consumption)",
      "note": "the source is about tariffs on imports, not a domestic consumption tax"
     },
@@ -1914,17 +2030,29 @@
      "cq": "28 CQ3",
      "wag_cq": null,
      "type": "causal interference",
+     "instance": "13292.14#1",
      "formula": "interference(higher_meat_price)",
      "note": "substitution by cheaper imported or untaxed meat (13292.12)"
     }
    ],
    "notes": {
-    "text": "Rebuts 13292.13's denial with an argument for the opposite on the consumption link: the tax raises the price and so lowers consumption (the chain of guidelines §3, coded as two steps). Hypothetical cause (needs a modal causal scheme, audit N8): kept under R4 because no better walton.yml scheme expresses the causal claim the reply turns on; fit reconstructed, confidence lowered. It supports only less consumption, not that the problems are resolved, and the general premise is carried over from tariffs to a domestic tax.",
+    "text": "Rebuts 13292.13's denial with an argument for the opposite on the consumption link: the tax raises the price and so lowers consumption (the chain of guidelines §3, coded as two steps). Hypothetical cause (needs a modal causal scheme, audit N8): kept under R4 because no better walton.yml scheme expresses the causal claim the reply turns on; fit reconstructed, confidence lowered. It supports only less consumption, not that the problems are resolved, and the general premise is carried over from tariffs to a domestic tax. Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "The hypothetical causal steps (instances 13292.14#1, 13292.14#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     }
+    ]
    }
   },
   {
@@ -1934,6 +2062,7 @@
    ],
    "instances": [
     {
+     "id": "13292.61#1",
      "primary": true,
      "scheme": {
       "walton_id": "analogy",
@@ -2005,9 +2134,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.13",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.13#1",
+     "part": "conclusion",
+     "formula": "¬would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -2020,6 +2150,7 @@
      "cq": "7 CQ1",
      "wag_cq": "CQ:difference",
      "type": "analogy difference",
+     "instance": "13292.61#1",
      "formula": "difference_against(tobacco_tax_case,meat_tax_case,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
      "note": "tobacco is addictive and non-essential; meat is a staple food with close substitutes"
     },
@@ -2027,6 +2158,7 @@
      "cq": "7 CQ2",
      "wag_cq": "CQ:truth",
      "type": "evidence",
+     "instance": "13292.61#1",
      "formula": "in_case(tobacco_tax_reduced_tobacco_consumption,tobacco_tax_case)",
      "note": "the source reports that cigarette taxes cut smoking"
     },
@@ -2034,6 +2166,7 @@
      "cq": "7 CQ3",
      "wag_cq": "CQ:other_case",
      "type": "analogy difference",
+     "instance": "13292.61#1",
      "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
      "note": "a counter-analogy: a tax on a food bought by most households (sugary drinks) that barely changed consumption would rebut the conclusion"
     }
@@ -2054,6 +2187,7 @@
    ],
    "instances": [
     {
+     "id": "13292.145#1",
      "primary": true,
      "scheme": {
       "walton_id": "positive_consequences",
@@ -2117,9 +2251,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.13",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.13#1",
+     "part": "conclusion",
+     "formula": "¬would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -2130,6 +2265,7 @@
      "cq": "33.1 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.145#1",
      "formula": "brings_about(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)",
      "note": "does funded research yield viable synthetic meat?"
     },
@@ -2137,12 +2273,14 @@
      "cq": "33.1 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.145#1",
      "formula": "brings_about(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.145#1",
      "formula": "good(synthetic_meat_development_advanced)",
      "note": "no printed CQ; that synthetic meat would resolve the problems of meat production is supplied"
     }
@@ -2165,6 +2303,7 @@
    ],
    "instances": [
     {
+     "id": "13292.174#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -2219,9 +2358,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.108#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -2232,6 +2372,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.174#1",
      "formula": "brings_about(tax_meat,more_dangerous_meat_production)",
      "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices?"
     },
@@ -2239,12 +2380,14 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.174#1",
      "formula": "brings_about(tax_meat,more_dangerous_meat_production)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.174#1",
      "formula": "bad(more_dangerous_meat_production)",
      "note": "no printed CQ; dangerous to whom is unstated"
     }
@@ -2281,6 +2424,7 @@
    ],
    "instances": [
     {
+     "id": "13292.104#1",
      "primary": true,
      "scheme": {
       "walton_id": "better_means",
@@ -2339,6 +2483,7 @@
      }
     },
     {
+     "id": "13292.104#2",
      "primary": false,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -2448,6 +2593,7 @@
      }
     },
     {
+     "id": "13292.104#3",
      "primary": false,
      "scheme": {
       "walton_id": "alternative_normative",
@@ -2496,11 +2642,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "exception",
-     "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
-     "instance": "primary"
-    },
-    "re_parented": true
+     "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -2513,6 +2658,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.104#1",
      "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
      "note": "attacked by 13292.208 (non-cultured meat production is inherently problematic: regulation changes the harm only in degree); can regulation remove harms that scale with consumption?"
     },
@@ -2520,6 +2666,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "better means",
+     "instance": "13292.104#1",
      "formula": "more_effective_means(governments,regulate_animal_farming_industry,environmental_harm_from_meat_reduced,tax_meat)",
      "note": "the comparison: more surely"
     },
@@ -2527,6 +2674,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.104#2",
      "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
      "note": "no printed CQ; attacked by 13292.208 (non-cultured meat production is inherently problematic). Since 2026-11-24: 13292.208 attacks the better_means instance's premise brings_about(A2,G) now (D075)"
     },
@@ -2534,6 +2682,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.104#2",
      "formula": "would_be_realized(meat_problems_resolved,animal_farming_industry_regulated)",
      "note": "no printed CQ; can regulation remove harms that scale with consumption?"
     },
@@ -2541,6 +2690,7 @@
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
+     "instance": "13292.104#2",
      "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
      "note": "feasibility of regulating the industry. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
@@ -2548,6 +2698,7 @@
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
      "type": "side effects that outweigh",
+     "instance": "13292.104#2",
      "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
      "note": "Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
     }
@@ -2595,6 +2746,7 @@
    ],
    "instances": [
     {
+     "id": "13292.169#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -2629,11 +2781,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.118",
+     "instance": "13292.118#1",
      "part": "premise",
-     "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -2644,6 +2795,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.169#1",
      "formula": "¬would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
      "note": "unsupported; its child 13292.171 (removing subsidies is politically easier) bears on other means (22.1 CQ2) rather than on efficacy"
     }
@@ -2666,6 +2818,7 @@
    ],
    "instances": [
     {
+     "id": "13292.218#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -2787,11 +2940,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.118",
+     "instance": "13292.118#1",
      "part": "premise",
-     "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)"
+    }
    },
    "evidence": {
     "status": "definition",
@@ -2805,6 +2957,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.218#1",
      "formula": "current_circumstances(meat_price_below_real_costs)",
      "note": "no printed CQ; size of the externalities; backed by 13292.224"
     },
@@ -2812,6 +2965,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.218#1",
      "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
      "note": "no printed CQ; would a uniform tax match the size of the externalities? (cf. 13292.169)"
     },
@@ -2819,6 +2973,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
+     "instance": "13292.218#1",
      "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "13292.123: remove the subsidies"
     }
@@ -2853,6 +3008,7 @@
    ],
    "instances": [
     {
+     "id": "13292.11#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -2954,6 +3110,7 @@
      "note": "The claim states the circumstances S1 of 13292.118's goal-based argument."
     },
     {
+     "id": "13292.11#2",
      "primary": false,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -3009,11 +3166,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.118",
+     "instance": "13292.118#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_price_below_real_costs)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_price_below_real_costs)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -3026,6 +3182,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.11#1",
      "formula": "current_circumstances(meat_price_below_real_costs)",
      "note": "no printed CQ"
     },
@@ -3033,6 +3190,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.11#2",
      "formula": "causes(meat_subsidies,meat_price_below_real_costs)",
      "note": "backed by 13292.167"
     },
@@ -3040,12 +3198,14 @@
      "cq": "28 CQ2",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.11#2",
      "formula": "causes(meat_subsidies,meat_price_below_real_costs)"
     },
     {
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
+     "instance": "13292.11#1",
      "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
      "note": "if subsidies are the cause, abolishing them may do better (13292.123)"
     }
@@ -3081,6 +3241,7 @@
    ],
    "instances": [
     {
+     "id": "13292.43#1",
      "primary": true,
      "scheme": {
       "walton_id": "good_outweighs_bad",
@@ -3140,11 +3301,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.9",
+     "instance": "13292.9#1",
      "part": "exception",
-     "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "good_outweighs(tax_meat,tax_revenue_reduced)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -3155,6 +3315,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.43#1",
      "formula": "brings_about(tax_meat,sustainability_and_animal_welfare)",
      "note": "does the tax actually serve sustainability and animal welfare? (cf. 13292.13)"
     },
@@ -3162,6 +3323,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.43#1",
      "formula": "matters_more(sustainability_and_animal_welfare,tax_revenue_reduced)",
      "note": "'more pressing' than revenue is asserted, not argued"
     }
@@ -3206,6 +3368,7 @@
    ],
    "instances": [
     {
+     "id": "13292.121#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -3259,9 +3422,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.115",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.115#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -3272,6 +3436,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.121#1",
      "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)",
      "note": "answered against by 13292.233; backed by 13292.139 and 13292.180"
     },
@@ -3279,18 +3444,21 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.121#1",
      "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
     },
     {
      "cq": "33.2 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.121#1",
      "formula": "good_outweighs(tax_meat,unhealthy_meat_underconsumption)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:opposite_consequences",
      "type": "opposite consequences",
+     "instance": "13292.121#1",
      "formula": "¬should_be_performed(tax_meat)",
      "note": "13292.233: better health from meat reduction; the game asks it at the conclusion, as a rebuttal, until workstream E"
     },
@@ -3298,6 +3466,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "other means",
+     "instance": "13292.121#1",
      "formula": null,
      "note": "13292.235: accompanying measures could prevent it (an amended action)"
     }
@@ -3328,6 +3497,7 @@
    ],
    "instances": [
     {
+     "id": "13292.135#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -3362,11 +3532,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -3377,6 +3546,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.108#1",
      "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
      "note": "contests the weight of S1, not its truth; 13292.157 (fossil fuels) backs the comparison, 13292.159 (largest contributor in agriculture) attacks it"
     },
@@ -3384,6 +3554,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.135#1",
      "formula": "meat_harm_less_than_other_pollution",
      "note": "unsupported"
     }
@@ -3408,6 +3579,7 @@
    ],
    "instances": [
     {
+     "id": "13292.137#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -3442,11 +3614,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -3459,6 +3630,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.108#1",
      "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
      "note": "'can' does not deny that current production harms the environment"
     },
@@ -3466,6 +3638,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.137#1",
      "formula": "meat_can_be_produced_sustainably",
      "note": "13292.17 backs it (pasture systems carbon neutral or negative)"
     },
@@ -3473,6 +3646,7 @@
      "cq": "22.1 CQ2",
      "wag_cq": "CQ:other_means",
      "type": "other means",
+     "instance": "13292.108#1",
      "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
      "note": "if read as an alternative (greener production instead of a tax), as 13292.161 does"
     }
@@ -3506,6 +3680,7 @@
    ],
    "instances": [
     {
+     "id": "13292.2#1",
      "primary": true,
      "scheme": {
       "walton_id": "verbal_classification",
@@ -3548,6 +3723,7 @@
      "note": "The step that backs the parent: meat production is an activity that is bad for the environment, i.e. (for production) 13292.108's circumstances S1."
     },
     {
+     "id": "13292.2#2",
      "primary": false,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -3590,6 +3766,7 @@
      }
     },
     {
+     "id": "13292.2#3",
      "primary": false,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -3643,11 +3820,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -3660,6 +3836,7 @@
      "cq": "14 CQ1",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.2#1",
      "formula": "instance(meat_production,significant_ghg_source)",
      "note": "how significant? 13292.135 (less than other sources), 13292.190 (mostly beef); backed by 13292.141"
     },
@@ -3667,12 +3844,14 @@
      "cq": "14 CQ2",
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.2#1",
      "formula": "subclass(significant_ghg_source,environmentally_harmful_activity)"
     },
     {
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.2#2",
      "formula": "causes(meat_production,significant_ghg_emissions)",
      "note": "backed by 13292.141 (energy use) and 13292.46 (beef figures)"
     },
@@ -3680,6 +3859,7 @@
      "cq": "28 CQ2",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.2#2",
      "formula": "causes(meat_production,significant_ghg_emissions)"
     }
    ],
@@ -3703,6 +3883,7 @@
    ],
    "instances": [
     {
+     "id": "13292.6#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -3823,11 +4004,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "would_be_realized(environmental_harm_from_meat_reduced,reduced_meat_consumption)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "would_be_realized(environmental_harm_from_meat_reduced,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -3841,6 +4021,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.6#1",
      "formula": "would_be_realized(deforestation_slowed,reduced_meat_consumption)",
      "note": "no printed CQ; attacked by 13292.192 (crop expansion may still deforest), defended by its child 13292.200"
     },
@@ -3848,6 +4029,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.6#1",
      "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
      "note": "no printed CQ; supplied: that the tax reduces demand"
     }
@@ -3884,9 +4066,10 @@
    ],
    "instances": [
     {
+     "id": "13292.12#1",
      "primary": true,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -3906,10 +4089,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(imported_meat_relatively_cheaper)",
-       "en": "An event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' has occurred.",
+       "formula": "may_occur(imported_meat_relatively_cheaper)",
+       "en": "An event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the cheaper imports are themselves predicted"
+       "note": "the cause is proposed or possible, not occurred (D039): the cheaper imports are themselves predicted"
       },
       {
        "role": "premise",
@@ -3926,15 +4109,16 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(domestic_meat_industry_pushed_out)",
-      "en": "An event 'domestic meat producers are pushed out of the market' will occur."
+      "formula": "may_occur(domestic_meat_industry_pushed_out)",
+      "en": "An event 'domestic meat producers are pushed out of the market' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8). Kept under R4: the claim's function is the causal mechanism, which no other walton.yml scheme expresses."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). A causal scheme because the claim's function is the causal mechanism, which no other walton.yml scheme expresses."
     },
     {
+     "id": "13292.12#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -3949,10 +4133,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(tax_meat)",
-       "en": "An event 'governments put a tax on meat' has occurred.",
+       "formula": "may_occur(tax_meat)",
+       "en": "An event 'governments put a tax on meat' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted"
+       "note": "the cause is proposed or possible, not occurred (D039): the tax has not been enacted"
       },
       {
        "role": "premise",
@@ -3970,12 +4154,13 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(imported_meat_relatively_cheaper)",
-      "en": "An event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' will occur."
+      "formula": "may_occur(imported_meat_relatively_cheaper)",
+      "en": "An event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     },
     {
+     "id": "13292.12#3",
      "primary": false,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -4029,11 +4214,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.9",
+     "instance": "13292.9#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,tax_revenue_reduced)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,tax_revenue_reduced)"
+    }
    },
    "evidence": {
     "status": "definition",
@@ -4047,6 +4231,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.12#2",
      "formula": "causes(tax_meat,imported_meat_relatively_cheaper)",
      "note": "why would a tax on all meat favour imports?"
     },
@@ -4054,6 +4239,7 @@
      "cq": "28 CQ3",
      "wag_cq": null,
      "type": "causal interference",
+     "instance": "13292.12#1",
      "formula": "interference(imported_meat_relatively_cheaper)",
      "note": "answered by 13292.45 (import standards) and 13292.194 (eco-tariffs)"
     },
@@ -4061,18 +4247,20 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.12#3",
      "formula": "brings_about(tax_meat,domestic_meat_industry_pushed_out)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.12#3",
      "formula": "bad(domestic_meat_industry_pushed_out)",
      "note": "no printed CQ; 13292.131 backs it (foreign standards may be lower)"
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4).",
+    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4082,7 +4270,18 @@
      "evidence",
      "re_parented"
     ],
-    "reason": "role and target: neither. Both coded premise_backing of causes(meat_tax_imposed,meat_industry_harmed), a formula of 13292.9's secondary causal step; the target must be a formula of 9's primary instance (R5), i.e. brings_about(tax_meat,tax_revenue_reduced), and negative_consequences has CQ:likelihood on it, so cq_answer for (R2). evidence: B (definition): the link explains dumping, like the sin-tax and externality links. re_parented: B (false), R1. Primary causal step agreed; A's secondary negative-consequences instance is kept, since the children treat the outcome as bad in itself."
+    "reason": "role and target: neither. Both coded premise_backing of causes(meat_tax_imposed,meat_industry_harmed), a formula of 13292.9's secondary causal step; the target must be a formula of 9's primary instance (R5), i.e. brings_about(tax_meat,tax_revenue_reduced), and negative_consequences has CQ:likelihood on it, so cq_answer for (R2). evidence: B (definition): the link explains dumping, like the sin-tax and externality links. re_parented: B (false), R1. Primary causal step agreed; A's secondary negative-consequences instance is kept, since the children treat the outcome as bad in itself.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "The hypothetical causal steps (instances 13292.12#1, 13292.12#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     }
+    ]
    }
   },
   {
@@ -4093,6 +4292,7 @@
    ],
    "instances": [
     {
+     "id": "13292.4#1",
      "primary": true,
      "scheme": {
       "walton_id": "verbal_classification",
@@ -4135,6 +4335,7 @@
      "note": "The step that backs the parent's 'bad for the environment' (production)."
     },
     {
+     "id": "13292.4#2",
      "primary": false,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -4178,6 +4379,7 @@
      }
     },
     {
+     "id": "13292.4#3",
      "primary": false,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -4230,11 +4432,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.108",
+     "instance": "13292.108#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_production_and_consumption_harm_environment)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -4247,6 +4448,7 @@
      "cq": "14 CQ1",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.4#1",
      "formula": "instance(meat_production,soil_devastating_activity)",
      "note": "only for grain-fed animals; 13292.5 (regenerative agriculture)"
     },
@@ -4254,18 +4456,21 @@
      "cq": "14 CQ2",
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.4#1",
      "formula": "subclass(soil_devastating_activity,environmentally_harmful_activity)"
     },
     {
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.4#3",
      "formula": "causes(feed_monocultures,global_soil_health_devastated)"
     },
     {
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.4#2",
      "formula": "causes(meat_production,feed_monocultures)",
      "note": "regenerative and pasture systems do not rely on feed monocultures (13292.5)"
     }
@@ -4290,6 +4495,7 @@
    ],
    "instances": [
     {
+     "id": "13292.8#1",
      "primary": true,
      "scheme": {
       "walton_id": "verbal_classification",
@@ -4338,6 +4544,7 @@
      }
     },
     {
+     "id": "13292.8#2",
      "primary": false,
      "scheme": {
       "walton_id": "expert_opinion",
@@ -4411,11 +4618,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.115",
+     "instance": "13292.115#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -4428,12 +4634,14 @@
      "cq": "14 CQ1",
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.8#1",
      "formula": "instance(north_american_meat_consumption,meat_consumption_above_guidelines)"
     },
     {
      "cq": "14 CQ2",
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.8#1",
      "formula": "subclass(meat_consumption_above_guidelines,unhealthy_meat_consumption)",
      "note": "do the guidelines define unhealthy levels?"
     },
@@ -4441,12 +4649,14 @@
      "cq": "2 CQ1",
      "wag_cq": "CQ:expertise",
      "type": "source credibility",
+     "instance": "13292.8#2",
      "formula": "expert(dietary_guideline_authorities,nutrition_science)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.8#1",
      "formula": null,
      "note": "North America only; the thesis is general"
     }
@@ -4473,6 +4683,7 @@
    ],
    "instances": [
     {
+     "id": "13292.46#1",
      "primary": true,
      "scheme": {
       "walton_id": "rule",
@@ -4529,9 +4740,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -4545,6 +4757,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.46#1",
      "formula": "case(beef_impact_far_greater)",
      "note": "figures from one source; that venison is lower is presupposed"
     },
@@ -4552,6 +4765,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.46#1",
      "formula": "evaluation(beef_impact_far_greater,beef_warrants_higher_tax,tax_beef_more_than_wild_game)",
      "note": "is taxing by impact the right principle? administrative cost (cf. 13292.149)"
     },
@@ -4559,6 +4773,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.46#1",
      "formula": null,
      "note": "wild game cannot replace beef at scale"
     }
@@ -4584,9 +4799,10 @@
    ],
    "instances": [
     {
+     "id": "13292.192#1",
      "primary": true,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -4606,10 +4822,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(reduced_meat_consumption)",
-       "en": "An event 'less meat is demanded and consumed (and so less is produced)' has occurred.",
+       "formula": "may_occur(reduced_meat_consumption)",
+       "en": "An event 'less meat is demanded and consumed (and so less is produced)' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the fall in demand has not occurred"
+       "note": "the cause is proposed or possible, not occurred (D039): the fall in demand has not occurred"
       },
       {
        "role": "premise",
@@ -4627,15 +4843,16 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(crop_production_increased)",
-      "en": "An event 'crop production increases' will occur."
+      "formula": "may_occur(crop_production_increased)",
+      "en": "An event 'crop production increases' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8). Kept under R4: the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). A causal scheme because the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses."
     },
     {
+     "id": "13292.192#2",
      "primary": false,
      "scheme": {
-      "walton_id": "cause_to_effect",
+      "walton_id": "cause_to_effect_modal",
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
@@ -4650,10 +4867,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "has_occurred(crop_production_increased)",
-       "en": "An event 'crop production increases' has occurred.",
+       "formula": "may_occur(crop_production_increased)",
+       "en": "An event 'crop production increases' has happened, or could happen.",
        "status": "supplied",
-       "note": "hypothetical cause (needs a modal causal scheme, audit N8): the crop expansion is itself predicted"
+       "note": "the cause is proposed or possible, not occurred (D039): the crop expansion is itself predicted"
       },
       {
        "role": "premise",
@@ -4671,10 +4888,10 @@
       }
      ],
      "conclusion": {
-      "formula": "will_occur(deforestation_for_cropland)",
-      "en": "An event 'forests are cleared for crop production' will occur."
+      "formula": "may_occur(deforestation_for_cropland)",
+      "en": "An event 'forests are cleared for crop production' has happened, or could happen."
      },
-     "note": "hypothetical cause (needs a modal causal scheme, audit N8)."
+     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
     }
    ],
    "role": {
@@ -4688,11 +4905,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.6",
+     "instance": "13292.6#1",
      "part": "premise",
-     "formula": "would_be_realized(deforestation_slowed,reduced_meat_consumption)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "would_be_realized(deforestation_slowed,reduced_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -4703,6 +4919,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.192#1",
      "formula": "causes(reduced_meat_consumption,crop_production_increased)",
      "note": "13292.200: about half of cereal crops are animal feed, so less meat means less cropland"
     },
@@ -4710,11 +4927,12 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.192#2",
      "formula": "causes(crop_production_increased,deforestation_for_cropland)"
     }
    ],
    "notes": {
-    "text": "Attacks the S2 -> G link stated by 13292.6 with an offsetting causal chain (less meat -> more crops -> deforestation for crops). The target is 6's primary practical-reasoning fragment (R5); would_be_realized has no critical question there, so premise_attack (R2). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4).",
+    "text": "Attacks the S2 -> G link stated by 13292.6 with an offsetting causal chain (less meat -> more crops -> deforestation for crops). The target is 6's primary practical-reasoning fragment (R5); would_be_realized has no critical question there, so premise_attack (R2). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4723,7 +4941,18 @@
      "target.actual",
      "re_parented"
     ],
-    "reason": "role and target part: B (premise_attack on would_be_realized(deforestation_slowed,reduced_meat_consumption)). A's undercutter targeted interference(reduced_meat_demand) of a secondary causal instance of 13292.6 that the gold drops (R4) and that R5 would not allow as a target; the claim's point, that less meat demand may not mean less deforestation, denies 6's S2 -> G premise. re_parented: B (false), R1. Scheme agreed."
+    "reason": "role and target part: B (premise_attack on would_be_realized(deforestation_slowed,reduced_meat_consumption)). A's undercutter targeted interference(reduced_meat_demand) of a secondary causal instance of 13292.6 that the gold drops (R4) and that R5 would not allow as a target; the claim's point, that less meat demand may not mean less deforestation, denies 6's S2 -> G premise. re_parented: B (false), R1. Scheme agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "The hypothetical causal steps (instances 13292.192#1, 13292.192#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     }
+    ]
    }
   },
   {
@@ -4733,6 +4962,7 @@
    ],
    "instances": [
     {
+     "id": "13292.3#1",
      "primary": true,
      "scheme": {
       "walton_id": "end_and_means_1",
@@ -4786,11 +5016,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.115",
+     "instance": "13292.115#1",
      "part": "premise",
-     "formula": "good(reduced_unhealthy_meat_consumption)",
-     "instance": "primary"
-    },
-    "re_parented": true
+     "formula": "good(reduced_unhealthy_meat_consumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -4803,6 +5032,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.3#1",
      "formula": "means_to_end(reduced_meat_consumption,reduced_health_care_costs)",
      "note": "one magazine article"
     },
@@ -4810,12 +5040,14 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.3#1",
      "formula": "good(reduced_health_care_costs)"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.3#1",
      "formula": null,
      "note": "13292.121: unhealthy underconsumption"
     }
@@ -4836,6 +5068,7 @@
    ],
    "instances": [
     {
+     "id": "13292.30#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_analogy_positive",
@@ -4912,9 +5145,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -4929,6 +5163,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "analogy difference",
+     "instance": "13292.30#1",
      "formula": "difference_against(eco_damaging_business_case,meat_production_case,tax_meat)",
      "note": "meat is food, a necessity; carbon and oil taxes price fuels and emissions"
     },
@@ -4936,6 +5171,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.30#1",
      "formula": "right_to_do(eco_damaging_business_case,tax_damaging_activity)",
      "note": "that other governments did it does not show it was right"
     },
@@ -4943,6 +5179,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "analogy difference",
+     "instance": "13292.30#1",
      "formula": "corresponds(tax_damaging_activity,tax_meat)",
      "note": "a carbon tax prices emissions where a fuel is burned; a meat tax would price a food (a challenge of the correspondence premise)"
     }
@@ -4963,6 +5200,7 @@
    ],
    "instances": [
     {
+     "id": "13292.141#1",
      "primary": true,
      "scheme": {
       "walton_id": "cause_to_effect",
@@ -5025,11 +5263,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.2",
+     "instance": "13292.2#1",
      "part": "premise",
-     "formula": "instance(meat_production,significant_ghg_source)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "instance(meat_production,significant_ghg_source)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -5040,6 +5277,7 @@
      "cq": "28 CQ1",
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.141#1",
      "formula": "causes(meat_production_energy_intensive,significant_ghg_emissions)",
      "note": "depends on how the energy is produced"
     },
@@ -5047,6 +5285,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.141#1",
      "formula": "has_occurred(meat_production_energy_intensive)",
      "note": "'far exceeds' is unsupported"
     },
@@ -5054,6 +5293,7 @@
      "cq": "28 CQ3",
      "wag_cq": null,
      "type": "causal interference",
+     "instance": "13292.141#1",
      "formula": "interference(meat_production_energy_intensive)",
      "note": "renewable energy"
     }
@@ -5079,6 +5319,7 @@
    ],
    "instances": [
     {
+     "id": "13292.147#1",
      "primary": true,
      "scheme": {
       "walton_id": "positive_consequences",
@@ -5137,9 +5378,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.108#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -5153,6 +5395,7 @@
      "cq": "33.1 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.147#1",
      "formula": "brings_about(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
      "note": "'help'"
     },
@@ -5160,18 +5403,21 @@
      "cq": "33.1 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.147#1",
      "formula": "brings_about(ration_meat_via_carbon_budgets,carbon_emissions_reduced)"
     },
     {
      "cq": "33.1 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.147#1",
      "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
+     "instance": "13292.147#1",
      "formula": "should_be_performed(ration_meat_via_carbon_budgets)",
      "note": "13292.149: harder and costlier to implement than a plain meat tax; the game asks it at the conclusion, as a rebuttal, until workstream E"
     }
@@ -5215,6 +5461,7 @@
    ],
    "instances": [
     {
+     "id": "13292.182#1",
      "primary": true,
      "scheme": {
       "walton_id": "other",
@@ -5267,11 +5514,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.180",
+     "instance": "13292.180#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,more_anemia_cases)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,more_anemia_cases)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -5282,6 +5528,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.182#1",
      "formula": "means_to_end(buy_iron_supplements,adequate_iron_intake)",
      "note": "13292.184: supplements are not always a good replacement (bioavailability)"
     },
@@ -5289,6 +5536,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.182#1",
      "formula": "possible(buy_iron_supplements)",
      "note": "those who cannot afford meat may not afford supplements either"
     }
@@ -5317,6 +5565,7 @@
    ],
    "instances": [
     {
+     "id": "13292.190#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -5438,9 +5687,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.1",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.1#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -5453,6 +5703,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.190#1",
      "formula": "current_circumstances(beef_causes_most_meat_ghg)",
      "note": "no printed CQ; 13292.216: mutton has the second-highest footprint"
     },
@@ -5460,6 +5711,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.190#1",
      "formula": "would_be_realized(meat_ghg_emissions_reduced,only_highest_emitting_meats_taxed)",
      "note": "no printed CQ; 13292.196: the untaxed meats keep their welfare and pollution problems"
     },
@@ -5467,6 +5719,7 @@
      "cq": "22.1 CQ5",
      "wag_cq": "CQ:side_effect",
      "type": "side effects that outweigh",
+     "instance": "13292.190#1",
      "formula": "bad_outweighs(tax_only_highest_emitting_meats,meat_ghg_emissions_reduced)",
      "note": "substitution towards untaxed meats. Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
     }
@@ -5502,6 +5755,7 @@
    ],
    "instances": [
     {
+     "id": "13292.194#1",
      "primary": true,
      "scheme": {
       "walton_id": "positive_consequences",
@@ -5564,9 +5818,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.12",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.12#1",
+     "part": "conclusion",
+     "formula": "may_occur(domestic_meat_industry_pushed_out)"
+    }
    },
    "evidence": {
     "status": "definition",
@@ -5580,6 +5835,7 @@
      "cq": "33.1 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.194#1",
      "formula": "brings_about(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
      "note": "'can'"
     },
@@ -5587,18 +5843,21 @@
      "cq": "33.1 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.194#1",
      "formula": "brings_about(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)"
     },
     {
      "cq": "33.1 CQ3",
      "wag_cq": null,
      "type": "opposite consequences",
+     "instance": "13292.194#1",
      "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)"
     },
     {
      "cq": null,
      "wag_cq": "CQ:side_effect",
      "type": "opposite consequences",
+     "instance": "13292.194#1",
      "formula": "should_be_performed(tax_meat_with_import_safeguards)",
      "note": "trade disputes; verification costs; the game asks it at the conclusion, as a rebuttal, until workstream E"
     }
@@ -5621,6 +5880,14 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "target"
+      ],
+      "what": "Its target, the conclusion of 13292.12's causal step, is may_occur(domestic_meat_industry_pushed_out) since that step's recoding (was will_occur(domestic_meat_industry_pushed_out)); its own coding names neither formula."
      }
     ]
    }
@@ -5633,6 +5900,7 @@
    ],
    "instances": [
     {
+     "id": "13292.198#1",
      "primary": true,
      "scheme": {
       "walton_id": "other",
@@ -5685,11 +5953,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.180",
+     "instance": "13292.180#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,more_anemia_cases)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,more_anemia_cases)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -5702,6 +5969,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.198#1",
      "formula": "means_to_end(eat_iron_rich_plant_foods,adequate_iron_intake)",
      "note": "plant (non-heme) iron is less bioavailable; 13292.210 backs the substitution"
     },
@@ -5709,6 +5977,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.198#1",
      "formula": "plant_foods_iron_rich_and_healthy",
      "note": "13292.206: in some low-income countries nutritious plant foods are not available or affordable year-round"
     }
@@ -5736,6 +6005,7 @@
    ],
    "instances": [
     {
+     "id": "13292.202#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -5778,11 +6048,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.127",
+     "instance": "13292.127#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -5793,6 +6062,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.202#1",
      "formula": null,
      "note": "starvation risk may exist in poor regions of rich countries; 'third world' is vague"
     },
@@ -5800,6 +6070,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "side effects",
+     "instance": "13292.202#1",
      "formula": null,
      "note": "cross-border trade or smuggling; exemptions add administrative complexity"
     }
@@ -5834,6 +6105,7 @@
    ],
    "instances": [
     {
+     "id": "13292.204#1",
      "primary": true,
      "scheme": {
       "walton_id": "other",
@@ -5893,11 +6165,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.127",
+     "instance": "13292.127#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -5911,6 +6182,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.204#1",
      "formula": "at_risk_people_eat_little_meat",
      "note": "13292.206: where nutritious plant foods are not available year-round, animal foods matter"
     },
@@ -5918,6 +6190,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "likelihood",
+     "instance": "13292.204#1",
      "formula": "meat_tax_leaves_staple_prices",
      "note": "a meat tax could still raise other food prices (cf. 13292.36)"
     }
@@ -5953,6 +6226,7 @@
    ],
    "instances": [
     {
+     "id": "13292.208#1",
      "primary": true,
      "scheme": {
       "walton_id": "none",
@@ -5987,11 +6261,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.104",
+     "instance": "13292.104#1",
      "part": "premise",
-     "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -6004,6 +6277,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "evidence",
+     "instance": "13292.208#1",
      "formula": "noncultured_meat_inherently_problematic",
      "note": "the link is a general article on the environmental impacts of animal agriculture"
     },
@@ -6011,6 +6285,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.208#1",
      "formula": null,
      "note": "'with the contemporary human population size' concedes that the problem is one of scale"
     }
@@ -6045,6 +6320,7 @@
    ],
    "instances": [
     {
+     "id": "13292.224#1",
      "primary": true,
      "scheme": {
       "walton_id": "expert_opinion",
@@ -6112,6 +6388,7 @@
      }
     },
     {
+     "id": "13292.224#2",
      "primary": false,
      "scheme": {
       "walton_id": "expert_opinion",
@@ -6186,11 +6463,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.218",
+     "instance": "13292.218#1",
      "part": "premise",
-     "formula": "current_circumstances(meat_price_below_real_costs)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "current_circumstances(meat_price_below_real_costs)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -6203,6 +6479,7 @@
      "cq": "2 CQ2",
      "wag_cq": "CQ:field",
      "type": "source credibility",
+     "instance": "13292.224#2",
      "formula": "in_domain(policy_to_close_food_price_gap_urgent,external_costs_of_food)",
      "note": "a policy conclusion"
     },
@@ -6210,6 +6487,7 @@
      "cq": "2 CQ3",
      "wag_cq": "CQ:opinion",
      "type": "evidence",
+     "instance": "13292.224#1",
      "formula": "asserts(nature_2020_external_cost_study,external_ghg_costs_highest_for_animal_products)",
      "note": "'animal-based products' is broader than meat (it includes dairy)"
     },
@@ -6217,12 +6495,14 @@
      "cq": "2 CQ5",
      "wag_cq": "CQ:consistency",
      "type": "evidence",
+     "instance": "13292.224#1",
      "formula": "inconsistent_with_other_experts(external_ghg_costs_highest_for_animal_products)"
     },
     {
      "cq": "2 CQ6",
      "wag_cq": "CQ:backup_evidence",
      "type": "evidence",
+     "instance": "13292.224#1",
      "formula": "based_on_evidence(asserts(nature_2020_external_cost_study,external_ghg_costs_highest_for_animal_products))"
     }
    ],
@@ -6246,6 +6526,7 @@
    ],
    "instances": [
     {
+     "id": "13292.233#1",
      "primary": true,
      "scheme": {
       "walton_id": "expert_opinion",
@@ -6329,11 +6610,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.121",
+     "instance": "13292.121#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)",
-     "instance": "primary"
-    },
-    "re_parented": false
+     "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -6348,6 +6628,7 @@
      "cq": "2 CQ3",
      "wag_cq": "CQ:opinion",
      "type": "evidence",
+     "instance": "13292.233#1",
      "formula": "asserts(meat_reduction_studies,meat_reduction_improves_health)",
      "note": "the studies concern reducing high intakes; 13292.121 concerns falling below healthy intake"
     },
@@ -6355,6 +6636,7 @@
      "cq": "2 CQ5",
      "wag_cq": "CQ:consistency",
      "type": "evidence",
+     "instance": "13292.233#1",
      "formula": "inconsistent_with_other_experts(meat_reduction_improves_health)",
      "note": "'again and again' claims consistency"
     },
@@ -6362,6 +6644,7 @@
      "cq": "2 CQ6",
      "wag_cq": "CQ:backup_evidence",
      "type": "evidence",
+     "instance": "13292.233#1",
      "formula": "based_on_evidence(asserts(meat_reduction_studies,meat_reduction_improves_health))"
     }
    ],
@@ -6385,6 +6668,7 @@
    ],
    "instances": [
     {
+     "id": "13292.235#1",
      "primary": true,
      "scheme": {
       "walton_id": "positive_consequences",
@@ -6446,9 +6730,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.121",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.121#1",
+     "part": "conclusion",
+     "formula": "¬should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -6459,6 +6744,7 @@
      "cq": "33.1 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.235#1",
      "formula": "brings_about(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)",
      "note": "'likely would': will such measures be adopted, and work?"
     },
@@ -6466,6 +6752,7 @@
      "cq": "33.1 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.235#1",
      "formula": "brings_about(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)",
      "note": "13292.241 names some: health literacy on supplementation and alternatives"
     },
@@ -6473,6 +6760,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.235#1",
      "formula": null,
      "note": "the measures are unspecified in the claim"
     }
@@ -6496,6 +6784,7 @@
    ],
    "instances": [
     {
+     "id": "13292.29#1",
      "primary": true,
      "scheme": {
       "walton_id": "rule",
@@ -6555,9 +6844,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.115",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.115#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -6568,6 +6858,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.29#1",
      "formula": "evaluation(meat_eating_is_personal_choice,individual_liberty_over_meat_eating,state_stays_out_of_meat_eating)",
      "note": "13292.55: majorities accept taxes on tobacco and alcohol despite personal choice"
     },
@@ -6575,6 +6866,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "circumstances",
+     "instance": "13292.29#1",
      "formula": "case(meat_eating_is_personal_choice)",
      "note": "is meat eating purely self-regarding, given its externalities (13292.218, 13292.3)?"
     }
@@ -6610,6 +6902,7 @@
    ],
    "instances": [
     {
+     "id": "13292.45#1",
      "primary": true,
      "scheme": {
       "walton_id": "practical_necessary_condition",
@@ -6737,9 +7030,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.12",
-     "part": "conclusion"
-    },
-    "re_parented": false
+     "instance": "13292.12#1",
+     "part": "conclusion",
+     "formula": "may_occur(domestic_meat_industry_pushed_out)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -6750,6 +7044,7 @@
      "cq": "22.2 CQ1",
      "wag_cq": null,
      "type": "other means",
+     "instance": "13292.45#1",
      "formula": "goal_achievable_without_any(governments,domestic_producers_protected_from_imports,barriers_to_cheaper_meat_imports)",
      "note": "a route that uses no barrier to imports (D090); 13292.194's eco-tariffs are another barrier, a member of S, not such a route"
     },
@@ -6757,6 +7052,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "better means",
+     "instance": "13292.45#1",
      "formula": "realize_more_effectively(governments,domestic_producers_protected_from_imports,raise_import_standards)",
      "note": "walton/realize_more_effectively (D090): another barrier, such as 13292.194's eco-tariffs, claimed to do better"
     },
@@ -6764,6 +7060,7 @@
      "cq": "22.2 CQ3",
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.45#1",
      "formula": "possible_bring_about(governments,raise_import_standards)",
      "note": "'manageable' is asserted, not shown"
     },
@@ -6771,6 +7068,7 @@
      "cq": "22.2 CQ4",
      "wag_cq": null,
      "type": "side effects that outweigh",
+     "instance": "13292.45#1",
      "formula": "bad_outweighs(raise_import_standards,domestic_producers_protected_from_imports)",
      "note": "trade frictions and dearer imports: a rebuttal at the conclusion unless claimed to outweigh protecting the producers (D070, D091)"
     },
@@ -6778,6 +7076,7 @@
      "cq": "22.2 CQ5",
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.45#1",
      "formula": "incompatible_goal(governments,domestic_producers_protected_from_imports)",
      "note": "cheap and open trade in meat"
     }
@@ -6801,6 +7100,14 @@
        "notes"
       ],
       "what": "the necessary-condition scheme repaired (D030, D063, D088, D090, D091): G, S, the agent in each premise, realize_more_effectively and goal_achievable_without_any, bad_outweighs(X,G), incompatible_goal(P,G), should_be_performed(X); A2 leaves it; the challenge records name the new formulas, and 13292.194's eco-tariffs are a better means (walton/realize_more_effectively), not CQ1's objection"
+     },
+     {
+      "date": "2026-11-24",
+      "by": "decision D039 (migrate_format2.py)",
+      "fields": [
+       "target"
+      ],
+      "what": "Its target, the conclusion of 13292.12's causal step, is may_occur(domestic_meat_industry_pushed_out) since that step's recoding (was will_occur(domestic_meat_industry_pushed_out)); its own coding names neither formula."
      }
     ]
    }
@@ -6813,6 +7120,7 @@
    ],
    "instances": [
     {
+     "id": "13292.5#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -6866,9 +7174,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.108",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.108#1",
+     "part": "conclusion",
+     "formula": "should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -6881,6 +7190,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.5#1",
      "formula": "brings_about(tax_meat,regenerative_agriculture_deterred)",
      "note": "a flat tax would deter it; an impact-linked tax (13292.46) might not"
     },
@@ -6888,6 +7198,7 @@
      "cq": "33.2 CQ2",
      "wag_cq": "CQ:evidence",
      "type": "evidence",
+     "instance": "13292.5#1",
      "formula": "brings_about(tax_meat,regenerative_agriculture_deterred)",
      "note": "the link supports the environmental benefits, not the deterrence"
     },
@@ -6895,6 +7206,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.5#1",
      "formula": "bad(regenerative_agriculture_deterred)",
      "note": "no printed CQ; how much meat comes from regenerative farms?"
     }
@@ -6930,6 +7242,7 @@
    ],
    "instances": [
     {
+     "id": "13292.56#1",
      "primary": true,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -6971,6 +7284,7 @@
      }
     },
     {
+     "id": "13292.56#2",
      "primary": false,
      "scheme": {
       "walton_id": "negative_consequences",
@@ -7029,9 +7343,10 @@
     "kialo_relation": "pro",
     "actual": {
      "claim": "13292.7",
-     "part": "conclusion"
-    },
-    "re_parented": true
+     "instance": "13292.7#1",
+     "part": "conclusion",
+     "formula": "¬should_be_performed(tax_meat)"
+    }
    },
    "evidence": {
     "status": "source",
@@ -7045,6 +7360,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.56#1",
      "formula": "brings_about(tax_meat,protein_intake_of_millions_reduced)",
      "note": "13292.33: cheaper protein sources exist"
     },
@@ -7052,6 +7368,7 @@
      "cq": "33.2 CQ1",
      "wag_cq": "CQ:likelihood",
      "type": "likelihood",
+     "instance": "13292.56#2",
      "formula": "brings_about(tax_meat,government_push_for_insect_protein)",
      "note": "'inevitable'; 13292.186: insect farming lacks the infrastructure"
     },
@@ -7059,6 +7376,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.56#2",
      "formula": "bad(government_push_for_insect_protein)",
      "note": "no printed CQ; 13292.58 (insects use fewer resources), 13292.226 (better alternatives exist), 13292.239"
     }
@@ -7080,6 +7398,7 @@
    ],
    "instances": [
     {
+     "id": "13292.123#1",
      "primary": true,
      "scheme": {
       "walton_id": "better_means",
@@ -7138,6 +7457,7 @@
      }
     },
     {
+     "id": "13292.123#2",
      "primary": false,
      "scheme": {
       "walton_id": "practical_reasoning2",
@@ -7246,6 +7566,7 @@
      "note": "Practical reasoning for the alternative action; its conclusion is stated ('should be removed by abolishing')."
     },
     {
+     "id": "13292.123#3",
      "primary": false,
      "scheme": {
       "walton_id": "other",
@@ -7296,11 +7617,10 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.118",
+     "instance": "13292.118#1",
      "part": "exception",
-     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)",
-     "instance": "primary"
-    },
-    "re_parented": true
+     "formula": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
+    }
    },
    "evidence": {
     "status": "assertion",
@@ -7311,6 +7631,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.123#1",
      "formula": "brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs)",
      "note": "removing subsidies does not price in externalities (13292.218)"
     },
@@ -7318,6 +7639,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "better means",
+     "instance": "13292.123#1",
      "formula": "more_effective_means(governments,abolish_meat_subsidies,meat_price_reflects_real_costs,tax_meat)",
      "note": "the comparison: more surely; a reply that the tax gets there sooner attacks it"
     },
@@ -7325,6 +7647,7 @@
      "cq": "22.1 CQ4",
      "wag_cq": "CQ:possibility",
      "type": "efficacy",
+     "instance": "13292.123#2",
      "formula": "possible_bring_about(governments,abolish_meat_subsidies)",
      "note": "13292.171: removing subsidies is politically easier than taxing. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
@@ -7332,6 +7655,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "efficacy",
+     "instance": "13292.123#2",
      "formula": "would_be_realized(meat_price_reflects_real_costs,subsidy_distortions_removed)",
      "note": "no printed CQ; removing subsidies does not price in externalities (13292.218)"
     },
@@ -7339,6 +7663,7 @@
      "cq": null,
      "wag_cq": null,
      "type": "severity or value",
+     "instance": "13292.123#3",
      "formula": "cannot_present_sametime(meat,subsidised,taxed)",
      "note": "a tax and a subsidy can serve different ends or act at different stages"
     }

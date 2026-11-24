@@ -1,0 +1,27 @@
+{
+ "format": "wag-case/1",
+ "id": "kialo-13292",
+ "discussion": "13292",
+ "title": "Should Governments Put A Tax On Meat?",
+ "thesis": {"claim": "13292.1", "action": "tax_meat"},
+ "default_context": "present",
+ "contexts": [
+  {"id": "present", "text": "Governments deciding now whether to put a tax on meat. The thesis names no country and no time, so the decision is any government's that would enact the tax. A claim about another country's or another policy's experience (an analogy's source case, a study) is evidence about this decision: an instance in this context whose formulas name that case."}
+ ],
+ "actors": [
+  {"id": "governments", "text": "The governments that would put the tax on meat: the thesis's agent, the one who acts in a policy debate (guidelines §3, OC13). The people the tax affects are others, even when an action's phrase names them."}
+ ],
+ "actions": [
+  {"id": "tax_meat", "actor": "governments", "aliases": []},
+  {"id": "tax_meat_and_fund_synthetic_meat_research", "actor": "governments", "aliases": []},
+  {"id": "tax_only_highest_emitting_meats", "actor": "governments", "aliases": []},
+  {"id": "tax_meat_with_import_safeguards", "actor": "governments", "aliases": []},
+  {"id": "tax_meat_outside_poor_countries", "actor": "governments", "aliases": []},
+  {"id": "tax_meat_with_accompanying_measures", "actor": "governments", "aliases": []},
+  {"id": "regulate_animal_farming_industry", "actor": "governments", "aliases": []},
+  {"id": "ration_meat_via_carbon_budgets", "actor": "governments", "aliases": []},
+  {"id": "abolish_meat_subsidies", "actor": "governments", "aliases": []},
+  {"id": "raise_import_standards", "actor": "governments", "aliases": []}
+ ],
+ "status": "Drafted by Claude Code on 2026-11-24 from the thesis, the lexicon and the gold: the actions the discussion deliberates or proposes, each the governments'. What people would do in response (switching to other protein, buying iron supplements) is a consequence, a state, not a declared action. Not verified by a person (D045)."
+}

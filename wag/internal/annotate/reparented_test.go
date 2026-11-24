@@ -87,7 +87,8 @@ func TestReParentedIsDerivedAsAgreementPyDerivesIt(t *testing.T) {
 }
 
 // The claim's view carries the values compared, so that the dashboard shows
-// the derived re-parenting, not the annotation's own field.
+// the derived re-parenting, not the annotation's own field; each target is
+// read in its annotator's own annotations (and the gold's in the gold).
 func TestTheItemViewCarriesTheValuesCompared(t *testing.T) {
 	r, _, items := soloRun(t, 1)
 	if err := r.Annotate(context.Background(), nil); err != nil {
@@ -98,12 +99,15 @@ func TestTheItemViewCarriesTheValuesCompared(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, f := range Fields {
-		if got, want := v.Compared["solo"][f], FieldOf(v.Annotations["solo"], f); got != want {
+		if got, want := v.Compared["solo"][f], FieldIn(v.Annotations["solo"], f, r.anns["solo"]); got != want {
 			t.Errorf("solo's %s: %q, want %q", f, got, want)
 		}
-		if got, want := v.GoldCompared[f], FieldOf(v.Gold, f); got != want {
+		if got, want := v.GoldCompared[f], FieldIn(v.Gold, f, r.Dataset.Gold); got != want {
 			t.Errorf("the gold's %s: %q, want %q", f, got, want)
 		}
+	}
+	if v.GoldCompared["target_instance"] == Unresolved && v.Gold["target"].(map[string]any)["actual"] != nil {
+		t.Errorf("the gold's target instance is not read in the gold: %v", v.GoldCompared)
 	}
 	if v.Compared["solo"]["re_parented"] == "" {
 		t.Fatalf("%v", v.Compared)

@@ -37,7 +37,9 @@ Each claim's entry in the report keeps what the annotation intended
     of its questions or of the annotation, even when the Other move is legal;
   - duplicate: a challenge of a premise another claim already challenged;
   - cascade: its target was itself not played as intended, so the premise
-    or statement it is about is not on the board;
+    or statement it is about is not on the board; or its target is a
+    secondary instance of its claim (format 2 names it: only each claim's
+    primary instance is played);
   - not_played: a clarification, a claim with no scheme and no target, or
     no side.
 """
@@ -186,11 +188,23 @@ def main():
         side, pol = side_of(a, rel)
         entry = {"claim": cid, "scheme": wid, "role": (a.get("role") or {}).get("kind")}
         tgt0 = ((a.get("target") or {}).get("actual") or {})
+        # Format 2 (docs/annotation-records.md) names the target's instance;
+        # format 1's target is its claim's primary instance.
+        tinst = tgt0.get("instance")
         entry["intended"] = {"walton_id": wid, "wag_id": WALTON_TO_WAG.get(wid), "fit": scheme.get("fit"),
                              "role": (a.get("role") or {}).get("kind"), "cq": (a.get("role") or {}).get("cq"),
-                             "polarity": pol, "target_claim": tgt0.get("claim"), "target_part": tgt0.get("part"),
-                             "target_formula": tgt0.get("formula"),
+                             "polarity": pol, "target_claim": tgt0.get("claim"),
+                             "target_instance": tinst if isinstance(tinst, str) else ("unresolved" if tinst else None),
+                             "target_part": tgt0.get("part"), "target_formula": tgt0.get("formula"),
                              "conclusion": (inst.get("conclusion") or {}).get("formula")}
+        tprimary = primary(ann.get(str(tgt0.get("claim")), {})).get("id")
+        if isinstance(tinst, str) and tprimary and tinst != tprimary:
+            # Only each claim's primary instance is played: a secondary one's
+            # premises are not on the board.
+            entry["played"] = f"no: its target, the instance {tinst}, is a secondary instance of {tgt0.get('claim')}, which is not played"
+            entry["executed"], entry["integration"] = None, "cascade"
+            report.append(entry)
+            continue
         if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and str(tgt0.get("claim")) in played:
             # A bare denial of a premise is a challenge (audit P5): the
             # premise's author must argue for it.

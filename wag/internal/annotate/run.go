@@ -58,6 +58,10 @@ type Settings struct {
 	Items                []string      `json:"items"`
 	Created              time.Time     `json:"created"`
 	Note                 string        `json:"note,omitempty"`
+	// Format is the annotation format the run was made in
+	// (docs/annotation-records.md): wag-annotation/2 since the identity
+	// contract; a run made before has none, and is format 1.
+	Format string `json:"format,omitempty"`
 }
 
 // Progress is how far one annotator, or the reviewer, has got.
@@ -236,6 +240,9 @@ func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*R
 	s.Dataset = d.ID
 	if d.Source != "built in" {
 		s.DatasetDir = d.Source
+	}
+	if d.Format == 2 {
+		s.Format = Format2
 	}
 	if err := fsutil.MkdirAll(filepath.Join(dir, "annotations"), 0o755); err != nil {
 		return nil, err
@@ -491,11 +498,43 @@ func (r *Run) saveAnnotations(name string) error {
 			list = append(list, a)
 		}
 	}
-	b, err := json.MarshalIndent(map[string]any{"annotator": name, "items": list}, "", " ")
+	f := map[string]any{"annotator": name, "items": list}
+	if r.format() == 2 {
+		f["format"] = Format2
+	}
+	b, err := json.MarshalIndent(f, "", " ")
 	if err != nil {
 		return err
 	}
 	return writeFile(r.annotationsPath(name), b)
+}
+
+// format is the annotation format the run was made in: 2, or 1 for a run
+// that records none (made before the identity contract).
+func (r *Run) format() int {
+	if r.Settings.Format == Format2 {
+		return 2
+	}
+	return 1
+}
+
+// check is the check of one annotator's annotation, in the run's format,
+// its targets read in that annotator's own annotations. Caller holds r.mu.
+func (r *Run) check(name string, a Annotation) []string {
+	if r.coll == nil {
+		return nil
+	}
+	return r.coll.CheckIn(a, r.Dataset, r.anns[name], r.format())
+}
+
+// disagrees is Disagrees for a claim's annotations, each annotator's
+// targets read in its own annotations. Caller holds r.mu.
+func (r *Run) disagrees(names []string, anns []Annotation) []string {
+	sets := make([]map[string]Annotation, len(names))
+	for i, n := range names {
+		sets[i] = r.anns[n]
+	}
+	return Disagrees(anns, sets...)
 }
 
 // logCall appends a call to calls.jsonl, with a review's letters, which say
@@ -979,7 +1018,7 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		}
 		// With one annotator there is nothing to disagree with: the
 		// reviewer checks every annotation.
-		if onlyDisagreements && len(r.Settings.Annotators) > 1 && len(Disagrees(anns)) == 0 {
+		if onlyDisagreements && len(r.Settings.Annotators) > 1 && len(r.disagrees(names, anns)) == 0 {
 			continue
 		}
 		todo = append(todo, id)
@@ -1347,7 +1386,7 @@ func (r *Run) Status() Status {
 		names, anns := r.annotationsOf(id)
 		if len(names) >= 2 {
 			s.Annotated2++
-			if len(Disagrees(anns)) > 0 {
+			if len(r.disagrees(names, anns)) > 0 {
 				s.Disagreed++
 			}
 		}
@@ -1392,11 +1431,12 @@ type ItemView struct {
 	GoldCompared map[string]string            `json:"gold_compared,omitempty"`
 }
 
-// compared returns an annotation's values of the fields compared.
-func compared(a Annotation) map[string]string {
+// compared returns an annotation's values of the fields compared, its
+// targets read in set, the annotator's own annotations.
+func compared(a Annotation, set map[string]Annotation) map[string]string {
 	out := map[string]string{}
 	for _, f := range Fields {
-		out[f] = FieldOf(a, f)
+		out[f] = FieldIn(a, f, set)
 	}
 	return out
 }
@@ -1412,22 +1452,23 @@ func (r *Run) Item(id string) (*ItemView, error) {
 	v := &ItemView{ID: id, Item: it.Raw, Annotations: map[string]Annotation{}, Problems: map[string][]string{}, Failures: map[string]string{},
 		Gold: r.Dataset.Gold[id], Review: r.reviews[id], Compared: map[string]map[string]string{}}
 	if v.Gold != nil {
-		v.GoldCompared = compared(v.Gold)
+		v.GoldCompared = compared(v.Gold, r.Dataset.Gold)
 	}
 	var anns []Annotation
+	var names []string
 	for _, p := range r.Settings.Annotators {
 		if a := r.anns[p.Name][id]; a != nil {
 			v.Annotations[p.Name] = a
-			v.Compared[p.Name] = compared(a)
-			anns = append(anns, a)
+			v.Compared[p.Name] = compared(a, r.anns[p.Name])
+			anns, names = append(anns, a), append(names, p.Name)
 			if r.coll != nil {
-				v.Problems[p.Name] = r.coll.Check(a, r.Dataset)
+				v.Problems[p.Name] = r.check(p.Name, a)
 			}
 		} else if e := r.failures[p.Name][id]; e != "" {
 			v.Failures[p.Name] = e
 		}
 	}
-	v.Disagree = Disagrees(anns)
+	v.Disagree = r.disagrees(names, anns)
 	if x, ok := r.verdicts[id]; ok {
 		v.Verdict = &x
 	}

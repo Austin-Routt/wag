@@ -4,42 +4,80 @@
   "scheme": {
    "agreement": 0.8,
    "kappa": 0.773,
+   "unresolved": 0,
    "all_assigned_agreement": 0.8
   },
   "fit": {
    "agreement": 0.82,
    "kappa": 0.597,
+   "unresolved": 0,
    "all_assigned_agreement": 0.82
   },
   "role": {
    "agreement": 0.86,
    "kappa": 0.84,
+   "unresolved": 0,
    "all_assigned_agreement": 0.86
   },
   "polarity": {
    "agreement": 0.96,
    "kappa": 0.923,
+   "unresolved": 0,
    "all_assigned_agreement": 0.96
   },
   "target_claim": {
    "agreement": 0.98,
    "kappa": 0.978,
+   "unresolved": 0,
    "all_assigned_agreement": 0.98
   },
   "target_part": {
    "agreement": 0.98,
    "kappa": 0.968,
+   "unresolved": 0,
    "all_assigned_agreement": 0.98
   },
   "re_parented": {
    "agreement": 1.0,
    "kappa": 1.0,
+   "unresolved": 0,
    "all_assigned_agreement": 1.0
   },
   "evidence": {
    "agreement": 0.96,
    "kappa": 0.928,
+   "unresolved": 0,
    "all_assigned_agreement": 0.96
+  },
+  "cq": {
+   "agreement": 0.9,
+   "kappa": 0.271,
+   "unresolved": 0,
+   "all_assigned_agreement": 0.9
+  },
+  "target_instance": {
+   "agreement": 0.978,
+   "kappa": 0.972,
+   "unresolved": 5,
+   "all_assigned_agreement": 0.88
+  },
+  "target_formula": {
+   "agreement": 0.72,
+   "kappa": 0.697,
+   "unresolved": 0,
+   "all_assigned_agreement": 0.72
+  },
+  "bindings": {
+   "agreement": 0.22,
+   "kappa": 0.177,
+   "unresolved": 0,
+   "all_assigned_agreement": 0.22
+  },
+  "instances": {
+   "agreement": 0.36,
+   "kappa": 0.349,
+   "unresolved": 0,
+   "all_assigned_agreement": 0.36
   },
   "scheme_family": {
    "agreement": 0.82
@@ -218,6 +256,471 @@
     "claim": "13292.194",
     "A": "source",
     "B": "definition"
+   }
+  ],
+  "cq": [
+   {
+    "claim": "13292.33",
+    "A": "",
+    "B": "CQ:likelihood"
+   },
+   {
+    "claim": "13292.182",
+    "A": "",
+    "B": "28 CQ3"
+   },
+   {
+    "claim": "13292.198",
+    "A": "",
+    "B": "28 CQ3"
+   },
+   {
+    "claim": "13292.204",
+    "A": "",
+    "B": "CQ:likelihood"
+   },
+   {
+    "claim": "13292.233",
+    "A": "",
+    "B": "CQ:likelihood"
+   }
+  ],
+  "target_instance": [
+   {
+    "claim": "13292.29",
+    "A": "none:should_be_performed(tax_meat)",
+    "B": "positive_consequences:should_be_performed(tax_meat)"
+   }
+  ],
+  "target_formula": [
+   {
+    "claim": "13292.25",
+    "A": "bad(food_more_expensive_for_those_who_cannot_afford_it)",
+    "B": "bad(food_less_affordable_for_poor)"
+   },
+   {
+    "claim": "13292.33",
+    "A": "bad(food_more_expensive_for_those_who_cannot_afford_it)",
+    "B": "brings_about(tax_meat,food_less_affordable_for_poor)"
+   },
+   {
+    "claim": "13292.104",
+    "A": "realize_more_effectively(less_environmental_harm_from_meat,tax_meat)",
+    "B": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
+   },
+   {
+    "claim": "13292.169",
+    "A": "would_be_realized(meat_price_reflects_real_costs,higher_consumer_price_of_meat)",
+    "B": "would_be_realized(meat_price_reflects_real_costs,consumer_meat_price_raised)"
+   },
+   {
+    "claim": "13292.218",
+    "A": "would_be_realized(meat_price_reflects_real_costs,higher_consumer_price_of_meat)",
+    "B": "would_be_realized(meat_price_reflects_real_costs,consumer_meat_price_raised)"
+   },
+   {
+    "claim": "13292.11",
+    "A": "current_circumstances(meat_price_below_real_cost)",
+    "B": "current_circumstances(meat_price_below_real_costs)"
+   },
+   {
+    "claim": "13292.6",
+    "A": "would_be_realized(less_environmental_harm_from_meat,less_meat_produced_and_consumed)",
+    "B": "would_be_realized(environmental_harm_from_meat_reduced,less_meat_produced_and_consumed)"
+   },
+   {
+    "claim": "13292.192",
+    "A": "interference(reduced_meat_demand)",
+    "B": "would_be_realized(deforestation_slowed_or_reversed,reduced_meat_demand)"
+   },
+   {
+    "claim": "13292.141",
+    "A": "causes(meat_production,significant_ghg_emissions)",
+    "B": "causes(meat_produced_at_current_scale,significant_ghg_emitted)"
+   },
+   {
+    "claim": "13292.147",
+    "A": "realize_more_effectively(less_environmental_harm_from_meat,tax_meat)",
+    "B": "realize_more_effectively(environmental_harm_from_meat_reduced,tax_meat)"
+   },
+   {
+    "claim": "13292.204",
+    "A": "brings_about(tax_meat,starvation_from_decreased_access_to_meat)",
+    "B": "brings_about(tax_meat,starvation_from_decreased_meat_access)"
+   },
+   {
+    "claim": "13292.208",
+    "A": "current_circumstances(problem_is_farming_industry_not_meat)",
+    "B": "current_circumstances(farming_industry_not_meat_is_problem)"
+   },
+   {
+    "claim": "13292.224",
+    "A": "current_circumstances(meat_price_below_real_cost)",
+    "B": "current_circumstances(meat_price_below_real_costs)"
+   },
+   {
+    "claim": "13292.233",
+    "A": "brings_about(tax_meat,unhealthy_underconsumption_of_meat)",
+    "B": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
+   }
+  ],
+  "bindings": [
+   {
+    "claim": "13292.7",
+    "A": "A=taxing meat;G=food becoming more expensive for the many people who cannot afford it",
+    "B": "A=governments put a tax on meat;G=food becomes more expensive for the many people who cannot afford it"
+   },
+   {
+    "claim": "13292.9",
+    "A": "A=taxing meat;G=lower tax revenues",
+    "B": "A=governments put a tax on meat;G=tax revenues are reduced"
+   },
+   {
+    "claim": "13292.108",
+    "A": "A=taxing meat;G=less environmental harm from meat;S1=environmental harm from meat production and consumption;S2=less meat being produced and consumed",
+    "B": "A=governments put a tax on meat;G=the environmental harm from meat production and consumption is reduced;S1=meat production and consumption are bad for the environment;S2=less meat is produced and consumed"
+   },
+   {
+    "claim": "13292.115",
+    "A": "A=taxing meat;G=a reduction of unhealthy meat consumption",
+    "B": "A=governments put a tax on meat;G=unhealthy meat consumption is reduced"
+   },
+   {
+    "claim": "13292.118",
+    "A": "A=taxing meat;G=a consumer price of meat that reflects the real costs of meat consumption;S1=a consumer price of meat below the real costs of meat consumption;S2=a higher consumer price of meat",
+    "B": "A=governments put a tax on meat;G=the consumer price of meat reflects the real costs of meat consumption;S1=the consumer price of meat is below the real costs of meat consumption;S2=the consumer price of meat is raised"
+   },
+   {
+    "claim": "13292.180",
+    "A": "A=taxing meat;G=more cases of anemia",
+    "B": "A=governments put a tax on meat;G=cases of anemia increase"
+   },
+   {
+    "claim": "13292.36",
+    "A": "A=taxing meat;G=a decrease of the country's food security",
+    "B": "A=governments put a tax on meat;G=the country's food security decreases"
+   },
+   {
+    "claim": "13292.127",
+    "A": "A=taxing meat;G=starvation from decreased access to meat",
+    "B": "A=governments put a tax on meat;G=people starve from decreased access to meat"
+   },
+   {
+    "claim": "13292.14",
+    "A": "E1=a higher price of meat;E2=decreased meat consumption",
+    "B": "E1=the price of meat is higher;E2=meat consumption decreases"
+   },
+   {
+    "claim": "13292.61",
+    "A": "A=a meat tax significantly reducing meat consumption;C=the tobacco tax",
+    "B": "A=a tax on meat would significantly reduce meat consumption;C=the case of tobacco taxation"
+   },
+   {
+    "claim": "13292.145",
+    "A": "A=taxing meat and using some of the revenue to encourage research into synthetic meats;G=the development of synthetic meats being advanced",
+    "B": "A=governments tax meat and use some of the revenues to encourage research into synthetic meat;G=the problems associated with meat production and consumption are resolved;S1=meat production and consumption cause problems;S2=synthetic meat is developed as a substitute for conventional meat"
+   },
+   {
+    "claim": "13292.174",
+    "A": "A=taxing meat;G=producers using cheaper and more dangerous means of producing meat",
+    "B": "A=governments put a tax on meat;G=meat producers switch to cheaper and more dangerous means of producing meat"
+   },
+   {
+    "claim": "13292.104",
+    "A": "A=regulating the animal farming industry;G=the problems associated with meat production being resolved;S1=the animal farming industry, not meat itself, being what is problematic;S2=a regulated animal farming industry",
+    "B": "A=governments regulate the animal farming industry;G=the problems associated with meat production and consumption are resolved;S1=the animal farming industry, not meat itself, is the source of the problems;S2=the animal farming industry is regulated"
+   },
+   {
+    "claim": "13292.218",
+    "A": "A=taxing meat;G=a consumer price of meat that reflects the real costs of meat consumption;S1=a consumer price of meat below the real costs of meat consumption;S2=a higher consumer price of meat",
+    "B": "A=governments put a tax on meat;G=the consumer price of meat reflects the real costs of meat consumption;S1=the consumer price of meat is below the real costs of meat consumption;S2=the consumer price of meat is raised"
+   },
+   {
+    "claim": "13292.11",
+    "A": "A=taxing meat;G=a consumer price of meat that reflects the real costs of meat consumption;S1=a consumer price of meat below the real costs of meat consumption;S2=a higher consumer price of meat",
+    "B": "A=governments put a tax on meat;G=the consumer price of meat reflects the real costs of meat consumption;S1=the consumer price of meat is below the real costs of meat consumption;S2=the consumer price of meat is raised"
+   },
+   {
+    "claim": "13292.43",
+    "A": "A=the proponents of a meat tax;G=taxing meat;V=sustainability and animal welfare",
+    "B": "A=the proponents of a meat tax;G=governments put a tax on meat;V=sustainability and animal welfare"
+   },
+   {
+    "claim": "13292.121",
+    "A": "A=taxing meat;G=an unhealthy underconsumption of meat",
+    "B": "A=governments put a tax on meat;G=meat is underconsumed to an unhealthy degree"
+   },
+   {
+    "claim": "13292.2",
+    "A": "F=significant sources of greenhouse gas emissions that contribute to climate change;G=activities that are bad for the environment;O=meat production",
+    "B": "E1=meat is produced at the current scale;E2=significant greenhouse gas emissions are released"
+   },
+   {
+    "claim": "13292.6",
+    "A": "A=taxing meat;G=deforestation being slowed or reversed;S1=environmental harm from meat production and consumption;S2=reduced demand for meat",
+    "B": "A=governments put a tax on meat;G=deforestation is slowed or reversed;S1=meat production and consumption are bad for the environment;S2=demand for meat is reduced"
+   },
+   {
+    "claim": "13292.12",
+    "A": "E1=imported meat becoming relatively cheaper through dumping and predatory pricing;E2=domestic meat producers being pushed out of the market",
+    "B": "E1=imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing;E2=domestic meat producers are pushed out of the market"
+   },
+   {
+    "claim": "13292.4",
+    "A": "F=activities whose feed monocultures devastate soil health;G=activities that are bad for the environment;O=meat production",
+    "B": "E1=grain and soy monocultures are grown to feed most animals raised for food;E2=global soil health is devastated"
+   },
+   {
+    "claim": "13292.8",
+    "A": "D=consumption above the levels dietary guidelines recommend;G=unhealthy meat consumption;O=North American meat consumption",
+    "B": "F=meat consumption above what dietary guidelines recommend;G=unhealthy meat consumption;O=meat consumption by North American citizens"
+   },
+   {
+    "claim": "13292.46",
+    "A": "A=beef production having a far greater environmental impact than other meats;C=taxing beef more highly than wild game such as venison;E=a higher tax rate for beef",
+    "B": "A=governments tax meat at rates linked directly to each kind of meat's environmental impact;G=the environmental harm from meat production and consumption is reduced;S1=kinds of meat differ greatly in environmental impact; beef has several times the impact of other meats;S2=high-impact meats such as beef are taxed more heavily than low-impact meats"
+   },
+   {
+    "claim": "13292.192",
+    "A": "E1=reduced demand for meat;E2=increased crop production",
+    "B": "E1=demand for meat is reduced;E2=crop production increases"
+   },
+   {
+    "claim": "13292.3",
+    "A": "X=curbing meat consumption;Y=reduced health care costs",
+    "B": "X=meat consumption is curbed;Y=health care costs are reduced"
+   },
+   {
+    "claim": "13292.30",
+    "A": "A1=the case of ecologically damaging businesses (carbon emitters, oil);A2=the case of meat production;X=imposing a tax",
+    "B": "A1=ecologically damaging businesses elsewhere, such as carbon emitters and the oil industry;A2=meat production;X=taxing the ecologically damaging business"
+   },
+   {
+    "claim": "13292.141",
+    "A": "E1=the high energy use of meat production;E2=significant greenhouse gas emissions",
+    "B": "E1=meat production consumes far more energy than growing the same nutrients from plant sources;E2=significant greenhouse gas emissions are released"
+   },
+   {
+    "claim": "13292.147",
+    "A": "A=rationing meat via personal carbon budgets;G=reduced carbon emissions",
+    "B": "A=governments ration meat through personal carbon budgets or allowances;G=carbon emissions are reduced;S1=meat production creates significant greenhouse gas emissions;S2=each person may eat a small amount of meat, larger amounts cost extra and very large amounts are barred or very expensive"
+   },
+   {
+    "claim": "13292.190",
+    "A": "A=taxing only the largest-emitting meats (such as beef);G=meat's greenhouse gas emissions being reduced where they are largest;S1=most greenhouse gas emissions from meat coming from beef;S2=only the highest-emitting meats being taxed",
+    "B": "A=governments tax only the highest-emitting meats, such as beef, rather than all meat;G=greenhouse gas emissions from meat are reduced;S1=most greenhouse gas emissions from meat come from beef; pork, poultry and mutton produce significantly less;S2=beef is taxed and lower-emitting meats are not"
+   },
+   {
+    "claim": "13292.194",
+    "A": "A=taxing meat together with eco-tariffs and import standards on imported meat;G=imported meat no longer undercutting domestic producers",
+    "B": "A=governments tax meat and add eco-tariffs and import rules for meat;G=domestic producers are not pushed out by dumped imports;S1=imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing;S2=imported meat must verifiably meet environmental and animal welfare standards and/or pass a sufficiently high tax barrier"
+   },
+   {
+    "claim": "13292.202",
+    "A": "",
+    "B": "A=governments tax meat only in non-third-world countries, or with exceptions;G=the aims of the meat tax are pursued without causing starvation;S1=in poor countries a meat tax could cause starvation;S2=meat is taxed only where the tax poses no risk of starvation"
+   },
+   {
+    "claim": "13292.224",
+    "A": "D=environmental economics of food (life-cycle assessment);S=external greenhouse gas costs are typically highest for animal-based products;W=the authors of a 2020 scientific analysis of the external costs of foods (Nature Communications)",
+    "B": "D=external costs of food (life-cycle assessment);S=external greenhouse gas costs are typically highest for animal-based products;W=the authors of a 2020 scientific analysis of the external costs of foods (Nature Communications)"
+   },
+   {
+    "claim": "13292.233",
+    "A": "D=nutrition and epidemiology;S=reducing meat and vegetarianism result in better health, lower mortality and longer lifespans;W=meta-analyses and reviews of studies and trials (the nutrition literature)",
+    "B": "D=nutritional epidemiology;S=meat reduction and vegetarianism result in better health, lower mortality and longer lifespans, not in worse health;W=meta-analyses and reviews of studies and trials"
+   },
+   {
+    "claim": "13292.235",
+    "A": "A=taxing meat together with targeted accompanying measures;G=unhealthy underconsumption of meat being prevented",
+    "B": "A=governments tax meat together with targeted accompanying measures against unhealthy underconsumption;G=unhealthy underconsumption of meat is prevented;S1=a meat tax on its own could lead to unhealthy underconsumption of meat;S2=targeted accompanying measures are in place alongside the tax"
+   },
+   {
+    "claim": "13292.29",
+    "A": "A=eating meat being a personal choice;C=the state keeping out of individuals' meat eating;E=individuals' liberty to eat meat as they wish",
+    "B": "A=eating meat is a personal choice;C=the state stays out of individuals' meat eating;E=individuals are at liberty to decide whether and how much meat to eat"
+   },
+   {
+    "claim": "13292.45",
+    "A": "A=domestic producers protected from cheap imported meat;A2=other government goals that may conflict, such as free-trade commitments;P=governments;X=maintaining import standards at a higher level",
+    "B": "A=a meat tax does not let cheap dumped imports push domestic producers out of the market;A2=keeping meat imports cheap and trade open;P=governments;X=maintain importation standards at a higher level"
+   },
+   {
+    "claim": "13292.5",
+    "A": "A=taxing meat;G=regenerative agriculture being deterred",
+    "B": "A=governments put a tax on meat;G=regenerative agriculture, which produces both meat and environmental benefits, is deterred"
+   },
+   {
+    "claim": "13292.56",
+    "A": "A=taxing meat;G=reduced protein intake for millions of people",
+    "B": "A=governments put a tax on meat;G=the protein intake of millions of people is negatively affected"
+   },
+   {
+    "claim": "13292.123",
+    "A": "A=abolishing meat subsidies (or exempting meat from them);G=a consumer price of meat that reflects the real costs of meat consumption;S1=price distortions caused by subsidies;S2=the subsidy-induced price distortions removed",
+    "B": "A=governments abolish meat subsidies (or at least exempt meat from them);G=the consumer price of meat reflects the real costs of meat consumption;S1=the consumer price of meat is below the real costs of meat consumption;S2=meat is no longer subsidised"
+   }
+  ],
+  "instances": [
+   {
+    "claim": "13292.9",
+    "A": "cause_to_effect:will_occur(meat_industry_harmed)|cause_to_effect:will_occur(reduced_tax_revenue)|negative_consequences:¬should_be_performed(tax_meat)",
+    "B": "cause_to_effect:will_occur(meat_industry_harmed)|cause_to_effect:will_occur(tax_revenue_reduced)|negative_consequences:¬should_be_performed(tax_meat)"
+   },
+   {
+    "claim": "13292.25",
+    "A": "other:¬bad(food_more_expensive_for_those_who_cannot_afford_it)",
+    "B": "other:meat_tax_burden_minor"
+   },
+   {
+    "claim": "13292.33",
+    "A": "other:¬bad(food_more_expensive_for_those_who_cannot_afford_it)",
+    "B": "other:¬brings_about(tax_meat,food_less_affordable_for_poor)"
+   },
+   {
+    "claim": "13292.36",
+    "A": "cause_to_effect:will_occur(decreased_food_security)|cause_to_effect:will_occur(higher_food_production_costs)|negative_consequences:¬should_be_performed(tax_meat)",
+    "B": "cause_to_effect:will_occur(food_production_costs_increased)|cause_to_effect:will_occur(national_food_security_decreased)|negative_consequences:¬should_be_performed(tax_meat)"
+   },
+   {
+    "claim": "13292.14",
+    "A": "cause_to_effect:will_occur(decreased_meat_consumption)|cause_to_effect:will_occur(higher_meat_price)",
+    "B": "cause_to_effect:will_occur(meat_consumption_decreased)|cause_to_effect:will_occur(meat_price_higher)"
+   },
+   {
+    "claim": "13292.145",
+    "A": "positive_consequences:should_be_performed(tax_meat_and_fund_synthetic_meat_research)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat_and_fund_synthetic_meat_research)"
+   },
+   {
+    "claim": "13292.104",
+    "A": "alternative_normative:not_required(tax_meat)|practical_reasoning2:should_be_performed(regulate_animal_farming_industry)",
+    "B": "practical_reasoning2:should_be_performed(regulate_animal_farming_industry)"
+   },
+   {
+    "claim": "13292.169",
+    "A": "none:¬would_be_realized(meat_price_reflects_real_costs,higher_consumer_price_of_meat)",
+    "B": "none:¬would_be_realized(meat_price_reflects_real_costs,consumer_meat_price_raised)"
+   },
+   {
+    "claim": "13292.11",
+    "A": "cause_to_effect:will_occur(meat_price_below_real_cost)|practical_reasoning2:should_be_performed(tax_meat)",
+    "B": "cause_to_effect:will_occur(meat_price_below_real_costs)|practical_reasoning2:should_be_performed(tax_meat)"
+   },
+   {
+    "claim": "13292.135",
+    "A": "other:¬current_circumstances(meat_production_and_consumption_harm_environment)",
+    "B": "none:meat_harm_less_than_other_pollution"
+   },
+   {
+    "claim": "13292.137",
+    "A": "none:possible(environmentally_friendly_meat_production)",
+    "B": "none:meat_can_be_produced_sustainably"
+   },
+   {
+    "claim": "13292.2",
+    "A": "cause_to_effect:will_occur(climate_change)|cause_to_effect:will_occur(significant_ghg_emissions)|verbal_classification:instance(meat_production,environmentally_harmful_activities)",
+    "B": "cause_to_effect:will_occur(climate_change_driven_further)|cause_to_effect:will_occur(significant_ghg_emitted)"
+   },
+   {
+    "claim": "13292.6",
+    "A": "cause_to_effect:will_occur(deforestation_slowed_or_reversed)|practical_reasoning2:should_be_performed(tax_meat)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat)"
+   },
+   {
+    "claim": "13292.12",
+    "A": "cause_to_effect:will_occur(domestic_meat_industry_pushed_out)|cause_to_effect:will_occur(imported_meat_relatively_cheaper)|negative_consequences:¬should_be_performed(tax_meat)",
+    "B": "cause_to_effect:will_occur(domestic_meat_industry_pushed_out)|cause_to_effect:will_occur(imported_meat_relatively_cheaper)"
+   },
+   {
+    "claim": "13292.4",
+    "A": "cause_to_effect:will_occur(global_soil_health_devastated)|verbal_classification:instance(meat_production,environmentally_harmful_activities)",
+    "B": "cause_to_effect:will_occur(feed_monocultures)|cause_to_effect:will_occur(global_soil_health_devastated)"
+   },
+   {
+    "claim": "13292.8",
+    "A": "definition_to_verbal_classification:instance(north_american_meat_consumption,unhealthy_meat_consumption)",
+    "B": "expert_opinion:eating_more_meat_than_recommended_is_unhealthy|verbal_classification:instance(north_american_meat_consumption,unhealthy_meat_consumption)"
+   },
+   {
+    "claim": "13292.46",
+    "A": "rule:evaluation_justified(higher_tax_on_beef_justified,tax_beef_more_than_wild_game)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat_by_environmental_impact)|rule:evaluation_justified(beef_warrants_higher_tax_rate,tax_beef_higher_than_venison)"
+   },
+   {
+    "claim": "13292.192",
+    "A": "cause_to_effect:will_occur(deforestation_for_crops)|cause_to_effect:will_occur(increased_crop_production)",
+    "B": "cause_to_effect:will_occur(crop_production_increased)|cause_to_effect:will_occur(deforestation_for_cropland)"
+   },
+   {
+    "claim": "13292.3",
+    "A": "end_and_means_1:good(curbing_meat_consumption)",
+    "B": "end_and_means_1:good(meat_consumption_curbed)"
+   },
+   {
+    "claim": "13292.30",
+    "A": "practical_analogy_positive:carry_out_right(meat_production_case,impose_tax)",
+    "B": "practical_analogy_positive:carry_out_right(meat_production_case,tax_the_ecologically_damaging_business)"
+   },
+   {
+    "claim": "13292.141",
+    "A": "cause_to_effect:will_occur(significant_ghg_emissions)",
+    "B": "cause_to_effect:will_occur(significant_ghg_emitted)"
+   },
+   {
+    "claim": "13292.147",
+    "A": "positive_consequences:should_be_performed(ration_meat_via_personal_carbon_budgets)",
+    "B": "practical_reasoning2:should_be_performed(ration_meat_via_carbon_budgets)"
+   },
+   {
+    "claim": "13292.190",
+    "A": "practical_reasoning2:should_be_performed(tax_only_largest_emitting_meats)",
+    "B": "practical_reasoning2:should_be_performed(tax_only_highest_emitting_meats)"
+   },
+   {
+    "claim": "13292.194",
+    "A": "positive_consequences:should_be_performed(tax_meat_with_eco_tariffs_on_imports)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat_with_eco_tariffs)"
+   },
+   {
+    "claim": "13292.202",
+    "A": "none:should_be_performed(tax_meat_only_outside_third_world)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat_outside_poor_countries)"
+   },
+   {
+    "claim": "13292.204",
+    "A": "other:¬brings_about(tax_meat,starvation_from_decreased_access_to_meat)",
+    "B": "other:¬brings_about(tax_meat,starvation_from_decreased_meat_access)"
+   },
+   {
+    "claim": "13292.208",
+    "A": "none:¬current_circumstances(problem_is_farming_industry_not_meat)",
+    "B": "none:noncultured_meat_inherently_problematic"
+   },
+   {
+    "claim": "13292.224",
+    "A": "expert_opinion:external_ghg_costs_highest_for_animal_products|expert_opinion:policy_to_close_food_price_gap_urgent",
+    "B": "expert_opinion:external_ghg_costs_highest_for_animal_products|expert_opinion:policy_to_close_price_gap_urgent"
+   },
+   {
+    "claim": "13292.235",
+    "A": "positive_consequences:should_be_performed(tax_meat_with_accompanying_health_measures)",
+    "B": "practical_reasoning2:should_be_performed(tax_meat_with_accompanying_measures)"
+   },
+   {
+    "claim": "13292.29",
+    "A": "rule:evaluation_justified(individual_liberty_over_meat_eating,state_non_interference_in_meat_eating)",
+    "B": "rule:evaluation_justified(individual_liberty_over_meat_eating,state_stays_out_of_meat_eating)"
+   },
+   {
+    "claim": "13292.45",
+    "A": "practical_necessary_condition:bringing_about_action(maintain_higher_import_standards)",
+    "B": "practical_necessary_condition:bringing_about_action(raise_import_standards)"
+   },
+   {
+    "claim": "13292.123",
+    "A": "other:cannot_receive_evaluation(meat,taxed)|practical_reasoning2:should_be_performed(abolish_meat_subsidies)",
+    "B": "opposition-normative:cannot_receive_evaluation(meat_as_policy_object,subsidised)|practical_reasoning2:should_be_performed(abolish_meat_subsidies)"
    }
   ]
  },

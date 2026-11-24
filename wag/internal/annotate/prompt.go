@@ -36,13 +36,18 @@ func (d *Dataset) samePrompt(pinned string) bool {
 }
 
 // AnnotatorPrompt is the message that asks for one claim's annotation: the
-// discussion, the primary instances the annotator gave the claims before
-// it (so that it can target their formulas), and the claim's entry.
+// discussion, the instances the annotator gave the claims before it, each
+// by its id (so that it can target any of them and their formulas exactly;
+// in format 1, their primary instances), and the claim's entry.
 func (d *Dataset) AnnotatorPrompt(it *Item, before map[string]Annotation, order []string) string {
 	var u strings.Builder
 	fmt.Fprintf(&u, "The discussion:\n```json\n%s\n```\n\n", d.Discussion)
 	if prior := priorInstances(order, before); prior != "" {
-		fmt.Fprintf(&u, "Your annotations so far (primary instances, for targets):\n%s\n", prior)
+		if strings.Contains(prior, "#") {
+			fmt.Fprintf(&u, "Your annotations so far (every instance, by its id, for targets):\n%s\n", prior)
+		} else {
+			fmt.Fprintf(&u, "Your annotations so far (primary instances, for targets):\n%s\n", prior)
+		}
 	}
 	var pretty json.RawMessage = it.Raw
 	if b, err := json.MarshalIndent(pretty, "", " "); err == nil {
@@ -111,19 +116,13 @@ func SchemeOf(a Annotation) string {
 	return "?"
 }
 
-// priorInstances lists the primary instances of the claims annotated
-// before: id, scheme, premises, conclusion.
+// priorInstances lists the instances of the claims annotated before. An
+// annotation whose instances have ids (format 2) is listed instance by
+// instance: id, primary or not, scheme, premises, conclusion; one without
+// (format 1) by its primary instance, under its claim's id.
 func priorInstances(ids []string, done map[string]Annotation) string {
 	var b strings.Builder
-	for _, id := range ids {
-		it := done[id]
-		if it == nil {
-			continue
-		}
-		in := primary(it)
-		if in == nil {
-			continue
-		}
+	line := func(in map[string]any) string {
 		var forms []string
 		ps, _ := in["premises"].([]any)
 		for _, y := range ps {
@@ -135,7 +134,32 @@ func priorInstances(ids []string, done map[string]Annotation) string {
 		if cm, ok := in["conclusion"].(map[string]any); ok {
 			concl = fmt.Sprint(cm["formula"])
 		}
-		fmt.Fprintf(&b, "- %s: %s; %s ⇒ %s\n", id, SchemeOf(it), strings.Join(forms, "; "), concl)
+		return strings.Join(forms, "; ") + " ⇒ " + concl
+	}
+	for _, id := range ids {
+		it := done[id]
+		if it == nil {
+			continue
+		}
+		if !hasInstanceIDs(it) {
+			if in := primary(it); in != nil {
+				fmt.Fprintf(&b, "- %s: %s; %s\n", id, SchemeOf(it), line(in))
+			}
+			continue
+		}
+		insts, _ := it["instances"].([]any)
+		for _, x := range insts {
+			in, _ := x.(map[string]any)
+			if in == nil {
+				continue
+			}
+			s, _ := in["scheme"].(map[string]any)
+			tag := ""
+			if p, _ := in["primary"].(bool); p {
+				tag = ", primary"
+			}
+			fmt.Fprintf(&b, "- %v (%v (%v)%s): %s\n", in["id"], s["walton_id"], s["fit"], tag, line(in))
+		}
 	}
 	return b.String()
 }

@@ -15,6 +15,7 @@ Two annotators code the same items independently. Do not look at the other annot
 | `walton.yml` | The scheme definitions: for each scheme, its `variables`, `premises`, `assumptions`, `exceptions` and `conclusions` as formulas, and English templates under `language`. Use these IDs and formulas. This is the cleaned file: syntax and typos fixed, scheme content unchanged. |
 | `compendium.md` / `compendium.json` | The book's 60 schemes and 68 subtypes, with their premises, conclusions and critical questions as printed. Each links to the `walton.yml` scheme that formalizes it (`walton_links`), with a map from each CQ to the formula that expresses it. |
 | `families.json` | Scheme families: a generic scheme with its specializations, variants, subtypes, counterparts and context-specific forms. Use it to choose the most specific scheme the text supports. |
+| `case.json` | The case record: the decision context, the actors, and the actions the discussion deliberates, each with the one actor who would perform it (and any other atoms that name it, its aliases). Bind an agent (P) to an actor it lists, and an action (A, A2, X) to one of its actions (§3, §4). |
 | `schemes.json`, `critical_questions.json`, `edges.json`, `core.yml` | What the game (WAG) can play today. There are nine NASCQ schemes (`core.yml` has a tenth, `credible_source`, kept for old games), mapped to `walton.yml` by `carneades_id`, with their critical questions and the scheme→question (ask) and question→scheme (backup) links. |
 
 WAG's schemes and their `walton.yml` IDs:
@@ -68,13 +69,14 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
    - `clarification`, `none`.
 5. **Target (`target`).**
    - The Kialo parent, and separately what the claim actually attacks or supports (audit §7.3).
-   - The actual target is a claim, plus which part of its argument:
-     - the conclusion;
-     - a premise, by its formula;
+   - The actual target is a claim, which of its argument instances (by its id, §4), and which part of that instance:
+     - its conclusion;
+     - a premise or an assumption, by its formula;
      - an exception, by its formula;
      - the inference.
-   - It may be the parent, a sibling, an ancestor, or a premise you reconstructed for one of them.
-   - Set `re_parented` when the actual target is not the Kialo parent's conclusion.
+   - It may be the parent, a sibling, an ancestor, or a premise you reconstructed for one of them, and any instance of that claim, a secondary one included.
+   - When you cannot tell which instance, part or formula is meant, say so (`{"unresolved": "why"}`, §4) rather than guess.
+   - Whether the claim is re-parented (its actual target is not the Kialo parent) is computed by the tooling: do not record it.
 6. **Evidence status (`evidence`).**
    - One of:
      - `source`: it cites one;
@@ -100,6 +102,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - When a claim states only S1, or only G, without the inference, code a `fragment` of its parent's argument. Do not code a full instance with three invented premises.
 - **Practical reasoning's agent, and its answers (decisions D005, D006, D088-D091, 2026-11-24).**
   - P is the agent who would do A: in a policy debate, whoever would enact it (OC13). Bind P to the thesis's agent (`governments` in this batch). The people the action affects are others, even when its phrase names them.
+  - The case record (`case.json`) says who performs each action. Bind P to an actor it lists, and A (A2 in `better_means`, X in the condition schemes) to that actor's actions. An action the record does not list, or another actor's, is no action of P's: two names of one action (an alias) are one action, not another course.
   - `goal_of_agent(P,G)` states P's goal; supply it when the claim states only the outcome. `possible_bring_about(P,A)` says that P can do A, `possible_goal(G)` that G can be reached at all.
   - A goal that the means sets back is a consequence of the means: a rebuttal at the conclusion, or a weighing at the exception `bad_outweighs(A,G)` (§3.1, OC1-OC4). The exception `incompatible_goal(P,G)` is another goal of P that clashes with G itself.
   - Another means that would reach G more surely, sooner or at lower cost answers the exception `realize_more_effectively(P,G,A)`: code it with `better_means`, with the P, G and A of the argument it answers and A2 the other course, and record the comparison it makes in the instance's `comparison` (`more surely`, `sooner` or `at lower cost`). Its goal premise is the answered argument's own. A claim that the other course is better because it serves another value ranks values, not means: it is not this comparison (D089; OC5). A means said to be merely as good is no reason against A (D006): code it as a proposal of another course (§2, OC6).
@@ -121,7 +124,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - `cause_to_effect` asserts that the cause has occurred. For a policy not yet enacted, say so in `notes` and lower the confidence. Do not use it as if the tax had happened.
   - Code a chain (tax → higher price → less consumption) as separate steps, each its own instance in `instances`.
 - **New patterns.** Do not invent schemes. If you see a recurring inference no scheme covers, name it in `notes.candidate_pattern`.
-- **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, and mark one as primary.
+- **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, with its own id (§4), and mark one as primary.
 - **Uncertainty.** Give `confidence` (0 to 1) separately for scheme and role: your estimate that a careful annotator would choose the same. Write what you were unsure of in `notes`.
 
 ### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23; practical reasoning, D070 and D091, 2026-11-24)
@@ -189,7 +192,7 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 **OC9. A claim that a cited consequence is small, rare or minor,** and names no rival consequence, attacks `good(G)` or `bad(G)`, or the consequence's likelihood (33/CQ1). It does not argue the exception.
 
 **OC10. A reply to a weighing claim** attacks that claim's own instance: its comparison (`matters_more(H,G)`, a premise of its `bad_outweighs_good` or `good_outweighs_bad` instance) or the consequence it relies on (`brings_about(A,H)`). Only a reply that nothing outweighs G argues against the exception itself, because that would cancel every other weighing claim against the argument.
-- When the weighing is the claim's secondary instance, which the gold cannot target, the reply targets the claim's primary instance and names the comparison in `notes`, until the gold's format takes a target instance.
+- When the weighing is the claim's secondary instance, the reply targets that instance by its id (§4).
 - When the weighing is argued from a source, the reply answers the source scheme's own questions.
 
 **OC11. Split a compound consequence** ("cleaner air and fewer accidents") into one argument per consequence when a reply weighs only one of them.
@@ -207,31 +210,41 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 
 ## 4. Output
 
-One JSON file: `{"annotator": "A" | "B", "items": [ … ]}`, one item per claim in `items.json` order:
+The format of the annotation records, version 2 (decision D092, 2026-11-24). One JSON file: `{"format": "wag-annotation/2", "annotator": "A" | "B", "case": "kialo-13292", "items": [ … ]}`, one item per claim in `items.json` order:
 
 ```json
 {
   "kialo_claim_id": "13292.7",
   "literal": ["A meat tax would make meat less affordable for poor households."],
   "instances": [{
+    "id": "13292.7#1",
     "primary": true,
     "scheme": {"walton_id": "negative_consequences", "compendium": "33.2", "wag_id": "AS:negative_consequences",
                "fit": "reconstructed", "confidence": 0.8,
                "alternatives": [{"walton_id": "practical_reasoning1", "why_not": "…"}]},
-    "bindings": {"A": "tax meat", "G": "meat becomes unaffordable for poor households"},
+    "bindings": {"A": "tax_meat", "G": "meat_unaffordable_for_poor"},
     "premises": [
-      {"role": "premise", "formula": "brings_about(tax_meat, meat_unaffordable_for_poor)", "en": "Taxing meat brings about …", "status": "explicit"},
-      {"role": "premise", "formula": "bad(meat_unaffordable_for_poor)", "en": "That is bad.", "status": "supplied"}
+      {"role": "premise", "formula": "brings_about(tax_meat,meat_unaffordable_for_poor)", "en": "Taxing meat brings about …", "status": "explicit"},
+      {"role": "premise", "formula": "bad(meat_unaffordable_for_poor)", "en": "That is bad.", "status": "supplied"},
+      {"role": "exception", "formula": "good_outweighs(tax_meat,meat_unaffordable_for_poor)", "en": "…", "status": "supplied"}
     ],
     "conclusion": {"formula": "¬should_be_performed(tax_meat)", "en": "Meat should not be taxed."}
   }],
   "role": {"kind": "independent_con", "confidence": 0.85, "cq": null, "polarity": "against"},
-  "target": {"kialo_parent": "13292.1", "kialo_relation": "con", "actual": {"claim": "13292.1", "part": "conclusion"}, "re_parented": false},
+  "target": {"kialo_parent": "13292.1", "kialo_relation": "con",
+             "actual": {"claim": "13292.1", "instance": "13292.1#1", "part": "conclusion", "formula": "should_be_performed(tax_meat)"}},
   "evidence": {"status": "assertion", "urls": []},
-  "challenges": [{"cq": "33.2 CQ1", "type": "likelihood", "formula": "brings_about(tax_meat, meat_unaffordable_for_poor)"}],
+  "challenges": [{"cq": "33.2 CQ1", "wag_cq": "CQ:likelihood", "type": "likelihood", "instance": "13292.7#1",
+                  "formula": "brings_about(tax_meat,meat_unaffordable_for_poor)"}],
   "notes": {"text": "…", "candidate_pattern": null}
 }
 ```
+
+- **Ids.** Every instance has an `id`: the claim's ID, `#`, and a number (`13292.7#1`, `13292.7#2`, …), in the order you give them. An id stays with its instance: when you change an instance, keep its id; when you remove one, list its id in the item's `retired` and do not give its number again.
+- **Targets** name the claim, the instance (its id, in your own annotation of that claim: the prompt lists them), the part, and the formula exactly as that instance has it. A conclusion target's formula is that instance's conclusion; an inference target's formula is null. An entry of `other_kialo_parents` that names a part names its instance and formula the same way.
+- **Challenges** name the instance they are about (`instance`: one of the claim's own, or the instance its target names) and a formula of that instance; the formula is null when the challenge is about the whole instance.
+- **Agent, actions and context.** Bind agents and actions as the case record says (§3). An instance is in the case's default context unless it names another of the record's contexts in `"context"`: give one only for an argument made about another decision.
+- **No value.** Never leave a field out. `null` means not applicable, and only where it is: `role.cq` when the role is not `cq_answer`; the thesis's polarity and target; an inference target's formula; a challenge's formula when it is about the whole instance; `compendium`, `wag_id`, `wag_cq` and `candidate_pattern` when there is none; the conclusion formula of `other` and `none`. A target's instance, part or formula that you cannot determine is `{"unresolved": "why"}`. A fragment's variable that the claim does not state is `{"unstated": "why"}` in its bindings (§5, item 6). `false` is only a real no (`primary`). Do not record `re_parented`: the tooling computes it.
 
 Formulas use `walton.yml` predicates, with the values in place of the variables. Write each value as a short snake_case atom (`tax_meat`); the English in `en` uses the `language` templates. `scheme.walton_id` is `"other"` or `"none"` when no scheme applies. `role.cq` names the question (a WAG ID such as `CQ:likelihood` if one exists, else the compendium label) when the role is `cq_answer`. A `better_means` instance has one more field, `comparison`: `more surely`, `sooner` or `at lower cost` (§3).
 
@@ -239,8 +252,8 @@ Formulas use `walton.yml` predicates, with the values in place of the variables.
 
 The two annotators and the adjudicator found these gaps. Batch 3 applies them; `gold.json` already does (rules R1–R7 of the adjudication).
 
-1. **Re-parenting.** `re_parented` is true exactly when the actual target claim is not the Kialo parent. Attacking a premise or exception of the parent's own argument is recorded in `target.actual.part` and `formula`, not as re-parenting. The tooling computes it.
-2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target premise or exception is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the target's primary instance. Further Kialo parents go in `target.other_kialo_parents`.
+1. **Re-parenting.** A claim is re-parented exactly when the actual target claim is not the Kialo parent. Attacking a premise or exception of the parent's own argument is recorded in `target.actual.part` and `formula`, not as re-parenting. The tooling computes it; since format 2 (§4) it is not recorded.
+2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the instance the target names (`target.actual.instance`, §4; in format 1, of the target's primary instance). Further Kialo parents go in `target.other_kialo_parents`.
 3. **CQ answer or direct attack.**
    - `cq_answer` exactly when the targeted formula is one that a critical question of the target's scheme is about.
    - `validate.py` builds the table of (scheme, formula) → (compendium CQ, game CQ) from `docs/scheme-registry/links.json` and `edges.json` each time it runs. Since D055 (2026-10-23) it maps 33/CQ3 to each consequence scheme's own exception.
@@ -254,12 +267,10 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 5. **The primary instance** is the one whose conclusion reaches the target. Causal facts that back an evaluative premise make the classification primary and the causal chain secondary.
 6. **Fit.**
    - `explicit` when every premise-role formula is explicit.
-   - A `fragment` binds only the variables of the formulas it states; the others are null.
+   - A `fragment` binds only the variables of the formulas it states; the others are `{"unstated": "why"}` (§4; null in format 1).
 7. **Exceptions and assumptions** are listed under `premises` with their `role` (exception, assumption).
 8. **Polarity** is the stance on the target's conclusion; there is no "none". A link that explains a term is `definition` evidence.
 9. **The shared vocabulary** (`lexicon.json`) is issued with the batch. One atom per entity or proposition; the action is always `tax_meat`.
 10. **Challenge types** add possibility and conflicting goals.
-11. **Causal steps of an un-enacted policy.** Use `cause_to_effect` only if nothing better fits, with fit `reconstructed` and the note "hypothetical cause (needs a modal causal scheme, audit N8)".
-    - *Note of 2026-10-22.* `walton.yml` now has that modal scheme, `cause_to_effect_modal` (the owner's decision on audit N8).
-      - **Batch 2:** its gold still codes its 11 such steps by the rule above, with confidence at most 0.5, so an annotation of batch 2 that is scored against the gold follows it too, until the gold is recoded. `validate.py`'s rule R4 changes with the recoding.
-      - **Batch 3 and later:** code a causal step whose cause is only proposed or possible with `cause_to_effect_modal`, with fit and confidence as for any other instance and without the N8 note.
+11. **Causal steps of an un-enacted policy.** Code a causal step whose cause is only proposed or possible with `cause_to_effect_modal` (`may_occur(E1)` and `causes(E1,E2)`, concluding `may_occur(E2)`), with fit and confidence as for any other instance. `cause_to_effect` is for a cause that has occurred (`validate.py`'s rule R4).
+    - *History.* Until 2026-11-24 such steps were coded with `cause_to_effect`, fit `reconstructed`, confidence at most 0.5 and the note "hypothetical cause (needs a modal causal scheme, audit N8)", because `walton.yml` had no modal scheme until 2026-10-22 (audit N8). The batch-2 gold's 11 such steps are recoded with `cause_to_effect_modal` (D039, 2026-11-24); the gold before, in format 1, is `gold-format1.json`.

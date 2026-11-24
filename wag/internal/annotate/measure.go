@@ -11,12 +11,29 @@ import (
 )
 
 // Fields are the decisions the guidelines keep apart (§2), compared field
-// by field.
-var Fields = []string{"scheme", "fit", "role", "polarity", "target_claim", "target_part", "re_parented", "evidence"}
+// by field: the eight of format 1, then, since the identity contract
+// (docs/annotation-records.md §11, D092), the question answered, the exact
+// target (the instance it names, read in the annotator's own file, and the
+// formula), the primary instance's bindings, and every instance.
+var Fields = []string{"scheme", "fit", "role", "polarity", "target_claim", "target_part", "re_parented", "evidence",
+	"cq", "target_instance", "target_formula", "bindings", "instances"}
+
+// Unresolved is the value of a field that cannot be compared: an annotator's
+// {"unresolved": why}, or a target its own file does not hold. It is left
+// out of the field's agreement and counted apart, neither agreement nor
+// disagreement.
+const Unresolved = "?"
 
 // FieldOf returns an annotation's value for a field, as a string ("" if it
-// has none).
-func FieldOf(a Annotation, field string) string {
+// has none). It reads the target instance without the annotator's other
+// annotations, so target_instance (and a format-1 conclusion target's
+// formula) is Unresolved: FieldIn reads them.
+func FieldOf(a Annotation, field string) string { return FieldIn(a, field, nil) }
+
+// FieldIn is FieldOf with the annotator's own annotations (set), in which a
+// target's instance is read: ids are the annotator's own, so the instance
+// is compared by what it names, its scheme and its conclusion.
+func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 	str := func(v any) string {
 		if v == nil {
 			return ""
@@ -29,6 +46,7 @@ func FieldOf(a Annotation, field string) string {
 		}
 		return nil
 	}
+	actual, _ := get(a["target"], "actual").(map[string]any)
 	switch field {
 	case "scheme":
 		return str(get(primary(a)["scheme"], "walton_id"))
@@ -41,7 +59,11 @@ func FieldOf(a Annotation, field string) string {
 	case "target_claim":
 		return str(get(get(a["target"], "actual"), "claim"))
 	case "target_part":
-		p := str(get(get(a["target"], "actual"), "part"))
+		pv := get(get(a["target"], "actual"), "part")
+		if isMarker(pv, "unresolved") {
+			return Unresolved
+		}
+		p := str(pv)
 		if i := strings.IndexAny(p, ":("); i > 0 { // "premise: f(x)" → premise
 			p = strings.TrimSpace(p[:i])
 		}
@@ -52,7 +74,6 @@ func FieldOf(a Annotation, field string) string {
 		// annotation's own value is not read; agreement.py's re_parented
 		// derives it alike, reading only text as a claim.
 		t, _ := a["target"].(map[string]any)
-		actual, _ := t["actual"].(map[string]any)
 		if len(actual) == 0 {
 			return "false"
 		}
@@ -61,15 +82,130 @@ func FieldOf(a Annotation, field string) string {
 		return strconv.FormatBool(claim != parent)
 	case "evidence":
 		return str(get(a["evidence"], "status"))
+	case "cq":
+		cq, _ := get(a["role"], "cq").(string)
+		return cq
+	case "bindings":
+		bm, _ := primary(a)["bindings"].(map[string]any)
+		keys := make([]string, 0, len(bm))
+		for k := range bm {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		parts := make([]string, len(keys))
+		for i, k := range keys {
+			v := bm[k]
+			switch {
+			case isMarker(v, "unstated"):
+				parts[i] = k + "=(unstated)"
+			case isMarker(v, "unresolved"):
+				return Unresolved
+			default:
+				parts[i] = k + "=" + str(v)
+			}
+		}
+		return strings.Join(parts, ";")
+	case "instances":
+		insts, _ := a["instances"].([]any)
+		sigs := make([]string, 0, len(insts))
+		for _, x := range insts {
+			in, _ := x.(map[string]any)
+			sigs = append(sigs, signature(in))
+		}
+		sort.Strings(sigs)
+		return strings.Join(sigs, "|")
+	case "target_instance", "target_formula":
+		if len(actual) == 0 {
+			return ""
+		}
+		ref, f := actual["instance"], actual["formula"]
+		if isMarker(ref, "unresolved") || isMarker(f, "unresolved") || isMarker(actual["part"], "unresolved") {
+			return Unresolved
+		}
+		if field == "target_formula" {
+			if s, ok := f.(string); ok && s != "" {
+				return compact(s)
+			}
+			switch str(actual["part"]) {
+			case "inference":
+				return ""
+			case "conclusion": // a format-1 conclusion target names no formula
+			default:
+				return Unresolved
+			}
+		}
+		claim, _ := actual["claim"].(string)
+		in := targetInstance(set, claim, ref)
+		if in == nil {
+			return Unresolved
+		}
+		if field == "target_formula" {
+			cm, _ := in["conclusion"].(map[string]any)
+			if s, ok := cm["formula"].(string); ok {
+				return compact(s)
+			}
+			return Unresolved
+		}
+		return signature(in)
 	}
 	return ""
 }
 
+// signature is what an instance names: its scheme and its conclusion.
+func signature(in map[string]any) string {
+	s, _ := in["scheme"].(map[string]any)
+	cm, _ := in["conclusion"].(map[string]any)
+	concl := ""
+	if f, ok := cm["formula"].(string); ok {
+		concl = compact(f)
+	}
+	wid, _ := s["walton_id"].(string)
+	return wid + ":" + concl
+}
+
+// targetInstance is the instance a target names, in the annotator's own
+// annotation of its claim: the instance with that id (format 2), or the
+// claim's primary instance (format 1, whose targets name none, or name it in
+// words beginning "primary"); nil if the set does not hold it, or the target
+// names another instance in words (format 1 has no ids for them).
+func targetInstance(set map[string]Annotation, claim string, ref any) map[string]any {
+	t := set[claim]
+	if t == nil {
+		return nil
+	}
+	id, ok := ref.(string)
+	if ref == nil || ok && (id == "" || strings.HasPrefix(id, "primary")) {
+		return primary(t)
+	}
+	if !ok || !instanceID.MatchString(id) {
+		return nil
+	}
+	insts, _ := t["instances"].([]any)
+	for _, x := range insts {
+		if in, _ := x.(map[string]any); in != nil && in["id"] == id {
+			return in
+		}
+	}
+	return nil
+}
+
+// isMarker tells whether a value is {"unresolved": why} or {"unstated": why}
+// (docs/annotation-records.md §8): one key, a reason that is not blank.
+func isMarker(v any, kind string) bool {
+	m, ok := v.(map[string]any)
+	if !ok || len(m) != 1 {
+		return false
+	}
+	why, ok := m[kind].(string)
+	return ok && strings.TrimSpace(why) != ""
+}
+
 // FieldAgreement is the agreement of two annotators on one field.
 type FieldAgreement struct {
-	N         int      `json:"n"`
-	Agreement float64  `json:"agreement"`
-	Kappa     *float64 `json:"kappa"` // Cohen's; nil when undefined (one category only)
+	N          int      `json:"n"`
+	Agreement  float64  `json:"agreement"`
+	Kappa      *float64 `json:"kappa"`                // Cohen's; nil when undefined (one category only)
+	Unresolved int      `json:"unresolved,omitempty"` // claims left out: a value Unresolved on either side
 }
 
 // Pair is the agreement of two annotators (or an annotator and the gold).
@@ -83,8 +219,13 @@ type Pair struct {
 }
 
 // Agree compares two sets of annotations field by field, over the items both
-// have.
+// have; each annotator's targets are read in its own set.
 func Agree(nameA, nameB string, a, b map[string]Annotation) Pair {
+	return agree(nameA, nameB, a, b, a, b)
+}
+
+// agree compares a and b, reading their targets in setA and setB.
+func agree(nameA, nameB string, a, b, setA, setB map[string]Annotation) Pair {
 	p := Pair{A: nameA, B: nameB, Fields: map[string]FieldAgreement{}}
 	var ids []string
 	for id := range a {
@@ -97,28 +238,35 @@ func Agree(nameA, nameB string, a, b map[string]Annotation) Pair {
 	for _, f := range Fields {
 		var xs, ys []string
 		for _, id := range ids {
-			xs, ys = append(xs, FieldOf(a[id], f)), append(ys, FieldOf(b[id], f))
+			xs, ys = append(xs, FieldIn(a[id], f, setA)), append(ys, FieldIn(b[id], f, setB))
 		}
 		p.Fields[f] = kappa(xs, ys)
 	}
 	return p
 }
 
-// kappa is raw agreement and Cohen's kappa of two label lists.
+// kappa is raw agreement and Cohen's kappa of two label lists, over the
+// pairs neither of whose values is Unresolved.
 func kappa(xs, ys []string) FieldAgreement {
-	n := len(xs)
-	out := FieldAgreement{N: n}
+	var rx, ry []string
+	for i := range xs {
+		if xs[i] != Unresolved && ys[i] != Unresolved {
+			rx, ry = append(rx, xs[i]), append(ry, ys[i])
+		}
+	}
+	n := len(rx)
+	out := FieldAgreement{N: n, Unresolved: len(xs) - n}
 	if n == 0 {
 		return out
 	}
 	same := 0
 	ca, cb := map[string]int{}, map[string]int{}
-	for i := range xs {
-		if xs[i] == ys[i] {
+	for i := range rx {
+		if rx[i] == ry[i] {
 			same++
 		}
-		ca[xs[i]]++
-		cb[ys[i]]++
+		ca[rx[i]]++
+		cb[ry[i]]++
 	}
 	po := float64(same) / float64(n)
 	pe := 0.0
@@ -142,13 +290,19 @@ func sign(x float64) float64 {
 	return 1
 }
 
-// Disagrees lists the fields on which the annotations of one claim differ.
-func Disagrees(anns []Annotation) []string {
+// Disagrees lists the fields on which the annotations of one claim differ;
+// sets, when given, are each annotator's annotations (in the order of anns),
+// in which its target is read. An Unresolved value differs from any other.
+func Disagrees(anns []Annotation, sets ...map[string]Annotation) []string {
 	var out []string
 	for _, f := range Fields {
 		seen := map[string]bool{}
-		for _, a := range anns {
-			seen[FieldOf(a, f)] = true
+		for i, a := range anns {
+			var set map[string]Annotation
+			if i < len(sets) {
+				set = sets[i]
+			}
+			seen[FieldIn(a, f, set)] = true
 		}
 		if len(seen) > 1 {
 			out = append(out, f)
@@ -212,14 +366,33 @@ var (
 	evidence = map[string]bool{"source": true, "definition": true, "example": true, "assertion": true}
 )
 
-// Check lists what is wrong with an annotation of a claim of the dataset:
+// Check lists what is wrong with an annotation of a claim of the dataset,
+// in the dataset's format (CheckIn without the annotator's other
+// annotations, so a target's instance is not looked for).
+func (c *Collection) Check(a Annotation, d *Dataset) []string { return c.CheckIn(a, d, nil, 0) }
+
+// CheckIn lists what is wrong with an annotation of a claim of the dataset:
 // its shape; its scheme, which must be one of the collection's (or other,
 // none); bindings for exactly the scheme's variables; premises,
 // assumptions, exceptions and conclusion that are the scheme's formulas
-// with the bindings put in; a target that is a claim of the dataset. It is
-// the core of docs/kialo-batch2/validate.py (which also checks the
-// lexicon and the adjudication rules).
-func (c *Collection) Check(a Annotation, d *Dataset) []string {
+// with the bindings put in; a target that is a claim of the dataset. In
+// format 2 (docs/annotation-records.md) also its instances' ids (R12), its
+// exact target (R13: the instance, read in set, the annotator's own
+// annotations, and the formula), its actors and actions (R14) and contexts
+// (R15) by the dataset's case record, and the field contract's nulls and
+// markers (R16, in part). It is the core of docs/kialo-batch2/validate.py
+// (which also checks the lexicon and the adjudication rules). format is 1
+// or 2; 0 means the dataset's, or with no dataset the annotation's own
+// (format 2 when its instances have ids).
+func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation, format int) []string {
+	if format == 0 {
+		format = 1
+		if d != nil {
+			format = d.Format
+		} else if hasInstanceIDs(a) {
+			format = 2
+		}
+	}
 	var out []string
 	add := func(f string, x ...any) { out = append(out, fmt.Sprintf(f, x...)) }
 	insts, _ := a["instances"].([]any)
@@ -243,8 +416,20 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 			add("fit %q is not explicit, reconstructed, fragment or none", fit)
 		}
 		binds := map[string]string{}
+		badBinding := false
 		if bm, ok := in["bindings"].(map[string]any); ok {
 			for k, v := range bm {
+				if format == 2 {
+					// Format 2: an atom, or a fragment's {"unstated": why}
+					// (R16); null is not a binding.
+					if sv, ok := v.(string); ok && sv != "" {
+						binds[k] = sv
+					} else if !(isMarker(v, "unstated") && fit == "fragment") {
+						add("R16 %v binds %s to %s: an atom, or in a fragment {\"unstated\": why}", in["id"], k, jsonText(v))
+						badBinding = true
+					}
+					continue
+				}
 				if v == nil {
 					continue // a fragment's unstated variables are null
 				}
@@ -256,6 +441,9 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 				add("an instance has no walton_id")
 			}
 			continue
+		}
+		if badBinding {
+			continue // its formulas cannot be compared: said once, above
 		}
 		sc, ok := c.schemes[wid]
 		if !ok {
@@ -339,7 +527,7 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 	// for) argues that it does not, and concludes its negation (D075; rule R8
 	// of validate.py; the replay plays it so).
 	if tg, _ := a["target"].(map[string]any); tg != nil {
-		if act, _ := tg["actual"].(map[string]any); act != nil && act["part"] == "exception" {
+		if act, _ := tg["actual"].(map[string]any); act != nil && act["part"] == "exception" && !isMarker(act["formula"], "unresolved") {
 			exc := ""
 			if f := act["formula"]; f != nil {
 				exc = compact(fmt.Sprint(f))
@@ -355,6 +543,9 @@ func (c *Collection) Check(a Annotation, d *Dataset) []string {
 				add("an answer at the exception %s concludes %s, not %s (D075)", exc, got, want)
 			}
 		}
+	}
+	if format == 2 {
+		out = append(out, c.checkIdentity(a, d, set)...)
 	}
 	return out
 }
@@ -415,14 +606,19 @@ func AgreeAssigned(nameA, nameB string, a, b map[string]Annotation, assigned []s
 			c.Neither++
 		}
 	}
-	out := Agree(nameA, nameB, aa, bb)
+	// Each annotator's targets are read in its whole set, not only in the
+	// claims assigned.
+	out := agree(nameA, nameB, aa, bb, a, b)
 	out.Coverage = c
 	out.AllAssignedAgreement = map[string]float64{}
 	if c.Assigned > 0 {
 		for _, f := range Fields {
 			same := 0
 			for id := range aa {
-				if bb[id] != nil && FieldOf(aa[id], f) == FieldOf(bb[id], f) {
+				if bb[id] == nil {
+					continue
+				}
+				if x := FieldIn(aa[id], f, a); x != Unresolved && x == FieldIn(bb[id], f, b) {
 					same++
 				}
 			}

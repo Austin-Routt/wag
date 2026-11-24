@@ -26,7 +26,7 @@ func annotateCmd(ctx context.Context, args []string) error {
 	specs, file := profilesFlags(fs)
 	annotators := fs.String("annotators", "", "the profiles that annotate, comma-separated (default: every profile given, but the reviewer)")
 	reviewer := fs.String("reviewer", "", "a profile that reviews the annotations where the annotators disagree")
-	dataset := fs.String("dataset", "kialo-13292-batch2", "a built-in dataset's ID, or a folder with items.json (and optionally guidelines.md, gold.json, lexicon.json)")
+	dataset := fs.String("dataset", "kialo-13292-batch2", "a built-in dataset's ID, or a folder with items.json (and optionally guidelines.md, gold.json, lexicon.json, case.json)")
 	out := fs.String("out", "", "the run's folder (created; an existing run there continues)")
 	limit := fs.Int("limit", 0, "annotate only the first N claims (0: all)")
 	independent := fs.Bool("independent-first-pass", false, "withhold this annotator's earlier answers; preserve source context")

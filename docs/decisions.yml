@@ -1044,7 +1044,7 @@ decisions:
       Yes, in a new version of the gold, with guidelines item 11 and
       validate.py's R4 changed with it; the version before is kept and scores
       against it stay comparable.
-    recorded: "docs/decisions.yml; to apply: the guidelines, the gold and the annotation tools (plan §0, stage 2)"
+    recorded: "docs/kialo-batch2: applied 2026-11-24 with the gold's format 2 (migrate_format2.py; the version before kept as gold-format1.json), guidelines §5 item 11, validate.py R4"
 
 - id: D042
   title: Division and composition are one pattern
@@ -2365,6 +2365,43 @@ decisions:
       interpretation: the source's side-effect exception (Walton and Gordon
       2015, p. 515) is any side effect that demotes a value.
     recorded: "docs/proposals/D004-D075.yml; walton.yml through edits.py, applied 2026-11-24; links.json, families.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c2.py, guidelines §3 and §3.1, rule-cases.yml, validate.py R8-R11, the replay)"
+
+- id: D092
+  title: The identity contract of annotation records
+  question: >-
+    The independent reviews of 2026-11-24 found that a target names a claim
+    and a part, not the inference it challenges; that who performs an action
+    is read from the action's name; that one null stands for unknown, absent
+    and not applicable; and that agreement on eight coarse fields measures
+    neither exact targets nor bindings nor how a claim is divided into
+    inferences. The owner is to verify the first gold (D086) on objects that
+    stay the same. Should annotation records take an identity contract
+    before the first gold is drafted, and what should it hold?
+  category: annotation
+  blocks: [annotation]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/annotation-records.md", "the independent reviews of 2026-11-24 (wag-workspace reviews/2026-11-24)", "wag-workspace verify/r-review-2026-11-24/ASSESSMENT-2.md"]
+  decided:
+    date: "2026-11-24"
+    by: owner (standing rule of 2026-11-22)
+    decision: >-
+      Yes, as format 2 of the annotation records (docs/annotation-records.md),
+      before the first gold draft: an id for every argument instance that
+      edits do not change; targets that name the claim, the instance, the
+      part and the formula itself; a case record with its contexts, actors
+      and actions, each action with its one actor and its aliases, so that
+      who performs an action comes from the mapping (D063, D091) and an
+      answer stays in its target's context; unknown, absent, not applicable
+      and false kept apart, and re-parenting derived, not stored; the inputs
+      a gold was checked against pinned, and an item's revision for its
+      verification; agreement on the exact target, the question, the
+      bindings and every instance, unresolved values counted apart.
+      Format-1 files stay readable and are checked as they were made. (The
+      reviewers' recommendation and the developer's assessment agreed; source
+      spans are left for when argument mining is taken up.)
+    recorded: "docs/annotation-records.md; docs/kialo-batch2 (case.json, the gold by migrate_format2.py, gold-format1.json kept, guidelines §2, §4 and §5, validate.py R12-R17, agreement.py, to_wag.py); wag/data/annotation (positions.json, the dataset's copy); wag/internal/annotate (the reader, the check, the agreement, the prompt)"
 
 # --- Decided ------------------------------------------------------------------
 

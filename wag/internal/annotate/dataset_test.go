@@ -18,6 +18,7 @@ func TestBuiltinIsTheDocsCopy(t *testing.T) {
 		"annotation/kialo-13292-batch2/guidelines.md": "../../../docs/kialo-batch2/guidelines.md",
 		"annotation/kialo-13292-batch2/lexicon.json":  "../../../docs/kialo-batch2/lexicon.json",
 		"annotation/kialo-13292-batch2/gold.json":     "../../../docs/kialo-batch2/gold.json",
+		"annotation/kialo-13292-batch2/case.json":     "../../../docs/kialo-batch2/case.json",
 		"annotation/walton.yml":                       "../../../docs/scheme-registry/walton-clean/walton.yml",
 	} {
 		a, err := data.Annotation.ReadFile(emb)
@@ -49,7 +50,9 @@ func TestGoldChecks(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, id := range d.IDs() {
-		if p := c.Check(d.Gold[id], d); len(p) > 0 {
+		// With the gold's own annotations, in which its exact targets are
+		// read (format 2, docs/annotation-records.md).
+		if p := c.CheckIn(d.Gold[id], d, d.Gold, 0); len(p) > 0 {
 			t.Errorf("%s: %v", id, p)
 		}
 	}

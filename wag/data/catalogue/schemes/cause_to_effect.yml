@@ -175,10 +175,11 @@ examples:
   kialo: "13292.14"
   coding: 'Near miss: the cause, a price rise from a tax not yet adopted, is hypothetical,
     and "would help" says the effect may follow; cause_to_effect_modal (E1 = a higher
-    price of meat, E2 = lower meat consumption). The gold, made before that scheme,
-    codes cause_to_effect with the N8 note.'
+    price of meat, E2 = lower meat consumption). The gold codes it so since 2026-11-24
+    (D039); made before that scheme, it coded cause_to_effect with the N8 note until
+    then.'
   near_miss: true
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-24
 discrepancies:
 - kind: book-walton
   about: conclusion
@@ -276,3 +277,8 @@ history:
     (findings: the consequence and slope contrasts send hypothetical steps to cause_to_effect_modal;
     the 13292.2 coding follows the gold (both causes explicit); a forward example;
     the conclusion tense and chaining recorded; the summary covers explanations)'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 'Revised for D039, applied with the batch-2 gold''s format 2 (docs/kialo-batch2/migrate_format2.py,
+    decision D092): the gold codes its 11 hypothetical causal steps with cause_to_effect_modal
+    now; the near miss 13292.14 says so, dated, and the version before is docs/kialo-batch2/gold-format1.json.'

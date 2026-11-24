@@ -50,6 +50,13 @@ type Dataset struct {
 	Source      string `json:"source"` // "built in", or the folder it was read from
 	NItems      int    `json:"items"`
 	HasGold     bool   `json:"has_gold"`
+	// Format is the annotation format its guidelines ask for: 2 (the
+	// identity contract, docs/annotation-records.md), or 1 for a dataset
+	// whose manifest says wag-annotation/1.
+	Format int `json:"format"`
+	// Case is its case record (case.json), nil if it has none: the contexts,
+	// actors and actions the format-2 checks read.
+	Case *Case `json:"-"`
 
 	Discussion json.RawMessage       `json:"-"`
 	Items      []Item                `json:"-"`
@@ -101,6 +108,7 @@ type manifest struct {
 	Guidelines  string   `json:"guidelines"`
 	Gold        string   `json:"gold"`
 	Resources   []string `json:"resources"`
+	Format      string   `json:"format"`
 }
 
 func sha(b []byte) string { h := sha256.Sum256(b); return hex.EncodeToString(h[:]) }
@@ -127,8 +135,8 @@ func Builtin() ([]*Dataset, error) {
 
 // FromDir reads a dataset from a folder: items.json (required), and
 // optionally dataset.json, guidelines.md (else the built-in guidelines),
-// gold.json and lexicon.json. The annotators are also given walton.yml and
-// the game's NASCQ files.
+// gold.json, lexicon.json and case.json. The annotators are also given
+// walton.yml and the game's NASCQ files.
 func FromDir(dir string) (*Dataset, error) {
 	if abs, err := filepath.Abs(dir); err == nil {
 		dir = abs
@@ -164,6 +172,17 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		m.Name = m.ID
 	}
 	d := &Dataset{ID: m.ID, Name: m.Name, Description: m.Description, Source: source, Hashes: map[string]string{}, annotationFiles: map[string]bool{}}
+	// A manifest that names no format means its gold's format, or format 2,
+	// the built-in guidelines', for a dataset without a gold
+	// (docs/annotation-records.md §1).
+	d.Format = 2
+	if m.Format != "" {
+		n, err := formatNumber(m.Format)
+		if err != nil {
+			return nil, fmt.Errorf("dataset.json: %v", err)
+		}
+		d.Format = n
+	}
 	b, err := read(m.Items)
 	if err != nil {
 		return nil, fmt.Errorf("the claims: %v", err)
@@ -226,9 +245,15 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	}
 	d.GoldFile = m.Gold // identity of the scoring input, even when it is absent
 	if b, err := read(m.Gold); err == nil {
-		anns, err := parseAnnotations(b)
+		format, anns, err := parseAnnotationFile(b)
 		if err != nil {
 			return nil, fmt.Errorf("%s: %v", m.Gold, err)
+		}
+		if m.Format == "" {
+			d.Format = format
+		} else if format != d.Format {
+			return nil, fmt.Errorf("%s is in format %d, but the dataset's guidelines ask for format %d: name its format in dataset.json (\"format\": \"wag-annotation/%d\"), or migrate the gold (docs/annotation-records.md)",
+				m.Gold, format, d.Format, format)
 		}
 		d.Gold, d.HasGold = anns, true
 		d.setHash(m.Gold, b)
@@ -236,9 +261,9 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		return nil, fmt.Errorf("gold %s: %v", m.Gold, err)
 	}
 	// The resources: the scheme collection and the game's NASCQ, and the
-	// dataset's own (a lexicon).
+	// dataset's own (a lexicon, a case record).
 	if len(m.Resources) == 0 {
-		m.Resources = []string{"lexicon.json"}
+		m.Resources = []string{"lexicon.json", "case.json"}
 	}
 	add := func(name string, b []byte) {
 		d.Resources = append(d.Resources, Resource{Name: name, Text: string(b)})
@@ -249,13 +274,20 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	for _, r := range m.Resources {
 		b, err := read(r)
 		if err != nil {
-			if r == "lexicon.json" && !explicitResources && os.IsNotExist(err) {
+			if (r == "lexicon.json" || r == "case.json") && !explicitResources && os.IsNotExist(err) {
 				continue // optional only when the manifest did not request it
 			}
 			return nil, fmt.Errorf("resource %s: %v", r, err)
 		}
 		if path.Base(r) == "walton.yml" {
 			hasWalton = true
+		}
+		if path.Base(r) == "case.json" {
+			c, err := parseCase(b)
+			if err != nil {
+				return nil, fmt.Errorf("the case record %s: %v", r, err)
+			}
+			d.Case = c
 		}
 		add(path.Base(r), b)
 	}
@@ -274,36 +306,60 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	return d, nil
 }
 
+// FormatName is the name of the dataset's annotation format.
+func (d *Dataset) FormatName() string {
+	if d.Format == 2 {
+		return Format2
+	}
+	return Format1
+}
+
 // parseAnnotations reads an annotation file ({"annotator": …, "items": […]}).
 func parseAnnotations(b []byte) (map[string]Annotation, error) {
+	_, m, err := parseAnnotationFile(b)
+	return m, err
+}
+
+// parseAnnotationFile reads an annotation file and its format: 2 when it
+// says "format": "wag-annotation/2", 1 when it names none (or format 1).
+func parseAnnotationFile(b []byte) (int, map[string]Annotation, error) {
 	var f struct {
-		Items json.RawMessage `json:"items"`
+		Format *string         `json:"format"`
+		Items  json.RawMessage `json:"items"`
 	}
 	if err := checkedJSON(b, &f); err != nil {
-		return nil, err
+		return 0, nil, err
 	}
-	if err := canonicalNames(b, []string{"items"}); err != nil {
-		return nil, err
+	if err := canonicalNames(b, []string{"items", "format"}); err != nil {
+		return 0, nil, err
+	}
+	format := 1
+	if f.Format != nil {
+		n, err := formatNumber(*f.Format)
+		if err != nil || *f.Format == "" {
+			return 0, nil, fmt.Errorf("annotation file: its format %q is not %s or %s", *f.Format, Format1, Format2)
+		}
+		format = n
 	}
 	if len(f.Items) == 0 {
-		return nil, fmt.Errorf("annotation file requires an items array (legacy null means empty)")
+		return 0, nil, fmt.Errorf("annotation file requires an items array (legacy null means empty)")
 	}
 	var items []Annotation
 	if err := json.Unmarshal(f.Items, &items); err != nil {
-		return nil, fmt.Errorf("annotation items: %v", err)
+		return 0, nil, fmt.Errorf("annotation items: %v", err)
 	}
 	out := map[string]Annotation{}
 	for i, it := range items {
 		id, ok := it["kialo_claim_id"].(string)
 		if !ok || strings.TrimSpace(id) == "" {
-			return nil, fmt.Errorf("annotation item %d needs a nonempty textual kialo_claim_id", i+1)
+			return 0, nil, fmt.Errorf("annotation item %d needs a nonempty textual kialo_claim_id", i+1)
 		}
 		if _, exists := out[id]; exists {
-			return nil, fmt.Errorf("duplicate annotation claim ID %q", id)
+			return 0, nil, fmt.Errorf("duplicate annotation claim ID %q", id)
 		}
 		out[id] = it
 	}
-	return out, nil
+	return format, out, nil
 }
 
 // WaltonYAML is the scheme collection the dataset gives its annotators.

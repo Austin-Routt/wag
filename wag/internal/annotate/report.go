@@ -87,6 +87,7 @@ func (r *Run) Report() (*Report, error) {
 		return out
 	}
 	gold := only(r.Dataset.Gold)
+	cs := r.Dataset.Case
 	served, unknown, bad, err := r.servedModelCounts()
 	if err != nil {
 		return nil, err
@@ -99,7 +100,7 @@ func (r *Run) Report() (*Report, error) {
 		for _, a := range anns {
 			ar.Schemes[FieldOf(a, "scheme")]++
 			if r.coll != nil {
-				if n := len(r.coll.Check(a, r.Dataset)); n == 0 {
+				if n := len(r.check(p.Name, a)); n == 0 {
 					ar.Valid++
 				} else {
 					ar.Problems += n
@@ -107,19 +108,22 @@ func (r *Run) Report() (*Report, error) {
 			}
 		}
 		if len(gold) > 0 && len(anns) > 0 {
-			pr := AgreeAssigned(p.Name, "gold", anns, gold, r.Settings.Items)
+			// The whole sets, in which targets are read; AgreeAssigned
+			// compares the claims assigned. Aliases read as their actions
+			// (docs/annotation-records.md §11).
+			pr := AgreeAssigned(p.Name, "gold", cs.CanonicalSet(r.anns[p.Name]), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
 			ar.VsGold = &pr
 		}
 		rep.Annotators = append(rep.Annotators, ar)
 	}
 	for i, a := range r.Settings.Annotators {
 		for _, b := range r.Settings.Annotators[i+1:] {
-			rep.Pairs = append(rep.Pairs, AgreeAssigned(a.Name, b.Name, only(r.anns[a.Name]), only(r.anns[b.Name]), r.Settings.Items))
+			rep.Pairs = append(rep.Pairs, AgreeAssigned(a.Name, b.Name, cs.CanonicalSet(r.anns[a.Name]), cs.CanonicalSet(r.anns[b.Name]), r.Settings.Items))
 		}
 	}
 	for _, id := range r.Settings.Items {
 		if names, anns := r.annotationsOf(id); len(names) >= 2 {
-			if d := Disagrees(anns); len(d) > 0 {
+			if d := r.disagrees(names, anns); len(d) > 0 {
 				rep.Disagreements[id] = d
 			}
 		}
@@ -154,7 +158,7 @@ func (r *Run) Report() (*Report, error) {
 			}
 		}
 		if len(gold) > 0 && len(adj) > 0 {
-			pr := AgreeAssigned("reviewer", "gold", adj, gold, r.Settings.Items)
+			pr := AgreeAssigned("reviewer", "gold", cs.CanonicalSet(adj), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
 			rr.VsGold = &pr
 		}
 		rep.Reviewer = rr

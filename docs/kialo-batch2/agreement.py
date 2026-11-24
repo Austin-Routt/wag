@@ -10,12 +10,20 @@ For each field the guidelines keep apart (guidelines.md, section 2), it reports 
 agreement and Cohen's kappa over the items both annotators coded: the
 primary scheme, its fit, the role, the polarity, the actual target (claim and
 part), whether the claim was re-parented (derived from the target, as the
-guidelines say the tooling computes it), and the evidence status. Where
-both chose the same scheme it also compares the premises (by predicate and
-role) and the bindings (by the words of each value). The scheme is also
-compared at the level of families (families.json): two schemes of one family
-agree there. With --pilot, the first pilot's 20 items are compared with each
-annotator on the scheme (mapped to walton.yml IDs) and the role.
+guidelines say the tooling computes it), and the evidence status; and, since
+the identity contract (docs/annotation-records.md §11, D092), the question
+answered, the exact target (the instance it names, read in the annotator's
+own file and compared by its scheme and conclusion, and the formula), the
+primary instance's bindings, and every instance. A value that is unresolved,
+or a target the annotator's own file does not hold, is left out of its
+field and counted ("unresolved"). With --case, aliases are read as their
+actions first. Both formats are read; WAG's Go measure (annotate.Agree)
+computes the same figures. Where both chose the same scheme it also compares
+the premises (by predicate and role) and the bindings (by the words of each
+value). The scheme is also compared at the level of families
+(families.json): two schemes of one family agree there. With --pilot, the
+first pilot's 20 items are compared with each annotator on the scheme
+(mapped to walton.yml IDs) and the role.
 """
 
 import argparse
@@ -36,6 +44,121 @@ WAG_TO_WALTON = {
     "AS:analogy": "analogy",
     "AS:other": "other",
 }
+
+
+UNRESOLVED = "?"
+
+
+def is_marker(v, kind):
+    """{"unresolved": why} or {"unstated": why} (docs/annotation-records.md §8)."""
+    return isinstance(v, dict) and len(v) == 1 and isinstance(v.get(kind), str) and v[kind].strip() != ""
+
+
+def compact(f):
+    return re.sub(r"\s+", "", f)
+
+
+def signature(ins):
+    """What an instance names: its scheme and its conclusion (as Go's signature)."""
+    s = ins.get("scheme") if isinstance(ins.get("scheme"), dict) else {}
+    c = ins.get("conclusion") if isinstance(ins.get("conclusion"), dict) else {}
+    wid = s.get("walton_id") if isinstance(s.get("walton_id"), str) else ""
+    f = c.get("formula") if isinstance(c.get("formula"), str) else ""
+    return wid + ":" + compact(f)
+
+
+INSTANCE_ID = re.compile(r"^(.+)#([1-9][0-9]*)$")
+
+
+def target_instance(S, claim, ref):
+    """The instance a target names, in the annotator's own file S: the one
+    with that id (format 2), or the claim's primary (format 1, whose targets
+    name none, or name it in words beginning "primary"); None if S does not
+    hold it, or the target names another instance in words."""
+    t = S.get(claim) if isinstance(claim, str) else None
+    if t is None:
+        return None
+    if ref is None or isinstance(ref, str) and (ref == "" or ref.startswith("primary")):
+        return primary(t)
+    if not isinstance(ref, str) or not INSTANCE_ID.match(ref):
+        return None
+    for ins in t.get("instances") or []:
+        if isinstance(ins, dict) and ins.get("id") == ref:
+            return ins
+    return None
+
+
+def exact(item, which, S):
+    """target_instance or target_formula, read in S (Go's FieldIn)."""
+    a = (item.get("target") or {}).get("actual") if isinstance(item.get("target"), dict) else None
+    if not isinstance(a, dict) or not a:
+        return ""
+    ref, f = a.get("instance"), a.get("formula")
+    if is_marker(ref, "unresolved") or is_marker(f, "unresolved") or is_marker(a.get("part"), "unresolved"):
+        return UNRESOLVED
+    if which == "target_formula":
+        if isinstance(f, str) and f:
+            return compact(f)
+        part = a.get("part") if isinstance(a.get("part"), str) else ""
+        if part == "inference":
+            return ""
+        if part != "conclusion":
+            return UNRESOLVED
+    ins = target_instance(S, a.get("claim"), ref)
+    if ins is None:
+        return UNRESOLVED
+    if which == "target_formula":
+        c = ins.get("conclusion") if isinstance(ins.get("conclusion"), dict) else {}
+        return compact(c["formula"]) if isinstance(c.get("formula"), str) else UNRESOLVED
+    return signature(ins)
+
+
+def question(item):
+    """The question answered (role.cq): text, or none."""
+    cq = (item.get("role") or {}).get("cq") if isinstance(item.get("role"), dict) else None
+    return cq if isinstance(cq, str) else ""
+
+
+def bindings(item):
+    b = primary(item).get("bindings")
+    if not isinstance(b, dict):
+        return ""
+    out = []
+    for k in sorted(b):
+        v = b[k]
+        if is_marker(v, "unstated"):
+            out.append(k + "=(unstated)")
+        elif is_marker(v, "unresolved"):
+            return UNRESOLVED
+        else:
+            out.append(k + "=" + ("" if v is None else str(v)))
+    return ";".join(out)
+
+
+def instances(item):
+    return "|".join(sorted(signature(i) for i in item.get("instances") or [] if isinstance(i, dict)))
+
+
+def canonical(S, case):
+    """The annotations with each alias of the case's actions put back to its
+    action, in bindings and formulas (Go's Case.CanonicalSet)."""
+    canon = {}
+    for a in case.get("actions") or []:
+        canon[a["id"]] = a["id"]
+        for al in a.get("aliases") or []:
+            canon[al] = a["id"]
+    if not canon:
+        return S
+    atom = re.compile(r"(?<![A-Za-z0-9_])[a-z_][A-Za-z0-9_]*(?![A-Za-z0-9_])(?!\s*\()")
+    def walk(v, key):
+        if isinstance(v, dict):
+            return {k: (canon.get(y, y) if key == "bindings" and isinstance(y, str) else walk(y, k)) for k, y in v.items()}
+        if isinstance(v, list):
+            return [walk(y, key) for y in v]
+        if isinstance(v, str) and key == "formula":
+            return atom.sub(lambda m: canon.get(m.group(0), m.group(0)), v)
+        return v
+    return {k: walk(v, "") for k, v in S.items()}
 
 
 def kappa(pairs):
@@ -157,9 +280,13 @@ def main():
     ap.add_argument("--families")
     ap.add_argument("--json")
     ap.add_argument("--assigned", help="items.json: all assigned claims, including missing replies")
+    ap.add_argument("--case", help="case.json: read the aliases of its actions as the actions")
     args = ap.parse_args()
     A = {i["kialo_claim_id"]: i for i in json.load(open(args.a))["items"]}
     B = {i["kialo_claim_id"]: i for i in json.load(open(args.b))["items"]}
+    if args.case:
+        case = json.load(open(args.case))
+        A, B = canonical(A, case), canonical(B, case)
     assigned = [i["kialo_claim_id"] for i in json.load(open(args.assigned))["items"]] if args.assigned else list(dict.fromkeys([*A,*B]))
     if len(set(assigned)) != len(assigned):
         ap.error("assignment list contains duplicate claim IDs")
@@ -172,18 +299,32 @@ def main():
         "role": lambda i: (i.get("role") or {}).get("kind") or "none",
         "polarity": lambda i: (i.get("role") or {}).get("polarity") or "none",
         "target_claim": lambda i: target(i)[0],
-        "target_part": lambda i: target(i)[1],
+        "target_part": lambda i: UNRESOLVED if is_marker(((i.get("target") or {}).get("actual") or {}).get("part"), "unresolved") else target(i)[1],
         "re_parented": re_parented,
         "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
+        "cq": lambda i: question(i),
+        "target_instance": lambda i, S: exact(i, "target_instance", S),
+        "target_formula": lambda i, S: exact(i, "target_formula", S),
+        "bindings": bindings,
+        "instances": instances,
     }
+
+    def value(name, item, S):
+        fn = fields[name]
+        return fn(item, S) if name in ("target_instance", "target_formula") else fn(item)
     report = {"items": len(ids), "fields": {}, "disagreements": collections.defaultdict(list)}
     report["coverage"] = {"assigned":len(assigned), "basis":"provided_assignment" if args.assigned else "observed_union", "annotated_A":sum(k in A for k in assigned), "annotated_B":sum(k in B for k in assigned), "both":len(ids), "neither":sum(k not in A and k not in B for k in assigned)}
-    for name, fn in fields.items():
-        pairs = [(fn(A[k]), fn(B[k])) for k in ids]
+    for name in fields:
+        every = [(value(name, A[k], A), value(name, B[k], B)) for k in ids]
+        # An unresolved value is neither agreement nor disagreement: left out,
+        # and counted (docs/annotation-records.md §11).
+        keep = [(k, a, b) for k, (a, b) in zip(ids, every) if UNRESOLVED not in (a, b)]
+        pairs = [(a, b) for _, a, b in keep]
         report["fields"][name] = {"agreement": round(sum(a == b for a, b in pairs) / len(pairs), 3) if pairs else None,
-                                  "kappa": None if kappa(pairs) is None else round(kappa(pairs), 3)}
+                                  "kappa": None if kappa(pairs) is None else round(kappa(pairs), 3),
+                                  "unresolved": len(every) - len(keep)}
         report["fields"][name]["all_assigned_agreement"] = sum(a == b for a,b in pairs)/len(assigned) if assigned else None
-        for k, (a, b) in zip(ids, pairs):
+        for k, a, b in keep:
             if a != b:
                 report["disagreements"][name].append({"claim": k, "A": a, "B": b})
 

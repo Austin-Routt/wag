@@ -156,9 +156,10 @@ examples:
     (tariffs, through price, reduce consumption). Supplied: may_occur(E1), the price
     rise a tax not yet adopted would bring. Conclusion: may_occur(E2). The first link
     (the tax raises the price) is a second instance, whose may_occur(E2) is this one''s
-    may_occur(E1). The batch-2 gold, made before this scheme, codes both as reconstructed
-    cause_to_effect with the N8 note.'
-  status: drafted by Claude Code, 2026-10-22
+    may_occur(E1). The batch-2 gold codes both so since 2026-11-24 (D039); made before
+    this scheme, it coded them as reconstructed cause_to_effect with the N8 note until
+    then.'
+  status: drafted by Claude Code, 2026-11-24
 - text: Deforestation may still occur for crop production, and declining demand of
     meat would require increasing crop production to balance supply and demand.
   kialo: "13292.192"
@@ -167,8 +168,8 @@ examples:
     ("may still occur"). In each, stated: causes(E1,E2); may_occur(E1) is supplied
     for the first (consumption falls only if the measure comes in) and carried from
     the first''s conclusion for the second; conclusion: may_occur(E2). The gold codes
-    them as cause_to_effect, with the N8 note.'
-  status: drafted by Claude Code, 2026-10-22
+    them so since 2026-11-24 (D039); before, as cause_to_effect with the N8 note.'
+  status: drafted by Claude Code, 2026-11-24
 - text: A tax on meat could actually reduce tax revenues by harming the trillion-dollar
     meat industry, which pays substantial taxes.
   kialo: "13292.9"
@@ -232,15 +233,17 @@ discrepancies:
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: batch-2 gold
-  detail: The batch-2 gold, made before this scheme, codes its 11 hypothetical causal
+  detail: The batch-2 gold, made before this scheme, coded its 11 hypothetical causal
     steps (in 13292.9, .12, .14, .36, .180 and .192) as reconstructed cause_to_effect,
     with the note that they need a modal causal scheme (audit N8).
   decision: 'Decided 2026-11-22 (D039): Yes, in a new version of the gold, with guidelines
     item 11 and validate.py''s R4 changed with it; the version before is kept and
-    scores against it stay comparable. Not yet applied. Before: open: recode them
-    with this scheme, when the owner agrees. Later batches use it (batch-2 guidelines,
-    item 11, note of 2026-10-22).'
-  status: drafted by Claude Code, 2026-10-22
+    scores against it stay comparable. Applied 2026-11-24, with the gold''s format
+    2 (docs/kialo-batch2/migrate_format2.py): the 11 steps are cause_to_effect_modal,
+    R4 refuses a supplied occurrence, and the version before is gold-format1.json.
+    Before: open: recode them with this scheme, when the owner agrees. Later batches
+    use it (batch-2 guidelines, item 11, note of 2026-10-22).'
+  status: drafted by Claude Code, 2026-11-24
 - kind: book-walton
   about: Major Premise
   detail: 'In the book''s weak reading the causal generalization is weak too: the
@@ -319,3 +322,9 @@ history:
     summary and the 13292.9 coding made consistent with them; the contrasts no longer
     say the steps back a consequences argument; a contrast with negative_consequences_reasoning;
     the partial link justified by the causal premise; the interference template recorded)'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 'Revised for D039, applied with the batch-2 gold''s format 2 (docs/kialo-batch2/migrate_format2.py,
+    decision D092): the gold codes its 11 hypothetical causal steps with cause_to_effect_modal
+    now; the examples and the batch-2 discrepancy say so, dated, and the version before
+    is docs/kialo-batch2/gold-format1.json.'
