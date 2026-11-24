@@ -7,14 +7,23 @@
 # rest; and the first answer schemes. `wag-cli --proposal` checks it and
 # writes its view, D004-D075.md. How proposals work: process.md §5.
 #
-# Version 2, 2026-11-24. Version 1 is commit 798231f. An internal
-# independent review approved version 1 with changes (three errors, ten
-# warnings and notes); an external review of the same day agreed on the
-# defects and sharpened four formula questions, which the owner answered as
-# D088-D091. This version applies the four answers, fixes each finding,
-# and passes the proposal checker as hardened after that review (every
-# answer example names the argument and question it answers, and the check
-# compares what it concludes with what the question targets).
+# Version 3, 2026-11-24. Version 1 is commit 798231f, version 2 9b5c7ab.
+# An internal independent review approved version 1 with changes (three
+# errors, ten warnings and notes); an external review of the same day
+# agreed on the defects and sharpened four formula questions, which the
+# owner answered as D088-D091. Version 2 applied the answers and fixed each
+# finding. A second independent review approved it with changes (four
+# errors, six warnings, notes; its 30 engine graphs all behave as the
+# decisions require): this version fixes them. 13292.147 offers another
+# course without claiming it better, so it is no answer (D006); links.json's
+# effect matches the questions; example 15's set of means is the one the
+# text claims; the effects list every guideline, catalogue text and
+# challenge record that changes, and the checks that guard them. The
+# rehearsed application added what it found: the unapproved repairs of the
+# condition schemes in walton-clean's proposals.py are withdrawn, with the
+# changelog's and the semantic diff's tooling; the docs that count the
+# schemes follow; 13292.45's challenge labels stay 22.2's; challenge records
+# are renamed instance by instance; and a planted-defect test guards R8-R10.
 
 decisions: [D003, D004, D005, D006, D030, D063, D064, D070, D075, D088, D089, D090, D091]
 title: Practical reasoning's agent and goal, the side effect that outweighs, and the first answer schemes
@@ -133,36 +142,51 @@ summary: |-
   4. **Positive binding, in part a deferral.** The exceptions now name the
     agent, so an answer for another agent no longer concludes the same
     formula. What the formulas cannot do is tie an answer to the answered
-    argument: that an answer's goal premise is the answered argument's own,
-    that A2 is P's action, that the argument's P is the agent the case
-    deliberates for, and the situation. These are checks at the record
-    level, listed in the effects (the identity contract before the first
-    gold draft; the game at C5; the validators now).
+    argument. The validators check now that a better means is another action
+    than A, that its goal premise is the answered argument's own, and that it
+    records its comparison (rule R9). That A2 is P's action, that the
+    argument's P is the agent the case deliberates for, and the situation
+    compared wait for the identity contract (before the first gold draft) and
+    the game (C5). The engine's own inference would derive arguments for
+    another agent from presumed premises (the review's graph E2c); WAG's play
+    runs no inference, so only these record checks guard against it.
   5. **Premise order.** goal_of_agent(P,G) comes first, where the book prints
     the goal premise. Nothing reads premises by position.
 
-  **Limits, recorded.** Both of two contrary comparisons can be accepted
-  (matters_more(H,G) and matters_more(G,H): D053's contraries are not
-  enforced, limit (2) of positive_consequences). An answer that names
-  another agent's means is refused by the record checks, not by the engine.
+  **Limits, recorded.**
+  - Both of two contrary comparisons can be accepted (matters_more(H,G) and
+    matters_more(G,H): D053's contraries are not enforced, limit (2) of
+    positive_consequences), and a comparison names no one whose ordering it
+    is.
+  - An answer that names another agent's means is refused by the record
+    checks, not by the engine.
+  - One claim that the action works against its own goal defeats practical
+    inference, whose exception it is, and leaves practical_reasoning2 for the
+    same A, G and P standing (D091 kept the two objections apart).
+  - D090's answer contract (the answer names a route the agent can take that
+    reaches G and uses no member of S) is decided, but the engine accepts any
+    argument concluding goal_achievable_without_any(P,G,S); the CQ answer
+    contract (stage 2, item F) and the game (C5) enforce it.
 
-  **Still open, and stated.** bring_about_more_effectively(P,S2,A),
-  promote_more_effectively(P,V,A), intervening_actions(A,G),
-  incompatible_goal(P,G), goal_achievable_without_any(P,G,S) and
-  incompatible_consequences(P,A,G) have no answer scheme yet; an answer
-  there is an Other argument concluding the exception, as today. A bridge
-  stays a lint error (D075).
+  **Still open, and stated.**
+  - bring_about_more_effectively(P,S2,A), promote_more_effectively(P,V,A),
+    intervening_actions(A,G), incompatible_goal(P,G),
+    goal_achievable_without_any(P,G,S) and incompatible_consequences(P,A,G)
+    have no answer scheme yet; an answer there is an Other argument concluding
+    the exception, as today. A bridge stays a lint error (D075).
+  - carry_out_action(A) remains only in appeal_to_vanity_ad_populum, whose
+    conclusion D063 settles with the rest of the family (C4).
 
 effects:
-  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (a block PRACTICAL), with CHANGELOG rows: the five schemes above as proposed; the three answer schemes added; templates added: goal_of_agent/2, incompatible_goal/2, realize_more_effectively/3, bring_about_more_effectively/3, promote_more_effectively/3, incompatible_consequences/3, goal_achievable_without_any/3, alternative_action/3, alternative_action_sufficient/3, necessary_action/4, sufficient_action/4, practicality_action/2, more_acceptable_bringing/3, acceptable_action/2, matters_more/2, more_effective_means/4, each agreement-free (plural agents read right). Templates left unused are kept and listed as orphans by the gate. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
-  - "links.json: 22.1 (practical_inference) Major Premise goal_of_agent(P,G), conclusion should_be_performed(A) (match partial, the conclusion restated, D063), CQ1 incompatible_goal(P,G), CQ2 and CQ3 realize_more_effectively(P,G,A), CQ4 possible_bring_about(P,A), CQ5 bad_outweighs(A,G) and incompatible_consequences(P,A,G); 22.1 (practical_reasoning2) Major Premise goal_of_agent(P,G), CQ1 incompatible_goal(P,G), CQ2 realize_more_effectively(P,G,A) and bring_about_more_effectively(P,S2,A), CQ3 realize_more_effectively(P,G,A), CQ4 possible_bring_about(P,A), CQ5 bad_outweighs(A,G); 22.2 and 22.3: the premises map to the scoped premises, CQ1 goal_achievable_without_any(P,G,S) (22.2) and realize_more_effectively(P,G,X) (22.3), CQ2 acceptable_action(P,X), CQ3 possible_bring_about(P,X), CQ4 bad_outweighs(X,G), CQ5 incompatible_goal(P,G), conclusion should_be_performed(X), match partial (restated conclusion; third person for the book's first); 22.4: Premise 1 goal_of_agent(P,G), CQ1 incompatible_goal(P,G), CQ3 realize_more_effectively(P,G,A), CQ4 realize_more_effectively(P,G,A) and bring_about_more_effectively(P,S2,A), CQ5 promote_more_effectively(P,V,A), CQ6 possible_bring_about(P,A), CQ7 bad_outweighs(A,G). The proposal check's warnings list each question whose target leaves links.json's map."
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (a block PRACTICAL), with CHANGELOG rows: the five schemes above as proposed; the three answer schemes added; templates added: goal_of_agent/2, incompatible_goal/2, realize_more_effectively/3, bring_about_more_effectively/3, promote_more_effectively/3, incompatible_consequences/3, goal_achievable_without_any/3, alternative_action/3, alternative_action_sufficient/3, necessary_action/4, sufficient_action/4, practicality_action/2, more_acceptable_bringing/3, acceptable_action/2, matters_more/2, more_effective_means/4, each agreement-free (plural agents read right). Templates left unused are kept; make_changelog.py lists them as orphans (twenty: acceptable_action/1, alternative_action/2, bring_about_more_effectively/2, bringing_about_action/1, conflict_goals/3, goal_is_action/1, have_goal/1, incompatible_consequences/2, incompatible_goal/1, more_acceptable_bringing/2, more_efficient_alternative_actions/2, necessary_action/2, other_goals_conflict/1, possible_agent/2, practicality_action/1, promote_more_effectively/2, realize_more_effectively/2, side_effect_action/2, side_effects/2, sufficient_action/2). The answer schemes and their two templates are additions (category addition — owner decision), the rest repairs. The validator repairs that walton-clean/tools/proposals.py proposed for the two condition schemes, unapproved and applied only to walton.proposals.yml, are withdrawn, since this block repairs those schemes otherwise; make_changelog.py then names the two schemes that still fail the validator (ad_hominem, regulative_rule), gets the block's rows in its table of the owner's changes, and corrects its note on possible(G); semantic_diff.py lists every scheme an owner's decision adds, not only those of the block ADDITIONS. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys (119 schemes, 118 patterns, every related pair declared). The annotation engine's copy, wag/data/annotation/walton.yml, is copied. The docs that count walton.yml's schemes say 119 (README.md, docs/plan.md, docs/catalogue-alignment.md, docs/dialogue-types.md, docs/scheme-registry/README.md, whose row for walton.proposals.yml names two proposals)."
+  - "links.json: 22.1 (practical_inference) Major Premise goal_of_agent(P,G), conclusion should_be_performed(A) (match partial, the conclusion restated, D063), CQ1 incompatible_goal(P,G), CQ2 and CQ3 realize_more_effectively(P,G,A), CQ4 possible_bring_about(P,A), CQ5 bad_outweighs(A,G) (incompatible_consequences(P,A,G), practical inference's own objection, is asked as walton/incompatible_consequences); 22.1 (practical_reasoning2) Major Premise goal_of_agent(P,G), CQ1 incompatible_goal(P,G), CQ2 realize_more_effectively(P,G,A), CQ3 realize_more_effectively(P,G,A) and bring_about_more_effectively(P,S2,A), as the catalogue's entry already reads them, CQ4 possible_bring_about(P,A), CQ5 bad_outweighs(A,G); 22.2 and 22.3: the premises map to the scoped premises, CQ1 goal_achievable_without_any(P,G,S) (22.2) and realize_more_effectively(P,G,X) (22.3), CQ2 acceptable_action(P,X), CQ3 possible_bring_about(P,X), CQ4 bad_outweighs(X,G), CQ5 incompatible_goal(P,G), conclusion should_be_performed(X), match partial (restated conclusion; third person for the book's first); 22.4: Premise 1 goal_of_agent(P,G), CQ1 incompatible_goal(P,G), CQ3 realize_more_effectively(P,G,A), CQ4 realize_more_effectively(P,G,A) and bring_about_more_effectively(P,S2,A), CQ5 promote_more_effectively(P,V,A), CQ6 possible_bring_about(P,A), CQ7 bad_outweighs(A,G). The notes the change makes wrong are replaced (22.2's Alternatives Premise and CQ5, 22.3's alternatives template, 22.4's Premise 1 and CQ1, 22.1's Major Premise, practical inference's CQ5); 22.3's link reason no longer calls it identical to 22.2 but for its selection premise. Afterwards the proposal check warns of no question whose target leaves links.json's map."
   - "families.json: bad_outweighs_good and good_outweighs_bad join F15 as variants (a sided flip, not a D053 polarity pair, whose conclusions would be p and ¬p), better_means joins F10; each is noted as an answer scheme (D075)."
-  - "Catalogue (--catalogue-gen, then the drafted entries): the five entries regenerate; their discrepancies on D004, D005, D030, D063, D070 and D088-D091 record the change as applied, with the readings above; the drafted questions are retargeted as in the questions below, and 22.1/CQ5's, 22.4/CQ7's and 22.3/CQ4's answers describe the two routes. Texts that become wrong are corrected: positive_consequences.yml and negative_consequences.yml say that no scheme concludes their exception (C003's pair now does), practical_reasoning1.yml's V discrepancy says it is raised through side_effects(A,S1), and its specialises note says it lacks incompatible_goal(G). Three new entries are drafted as answer schemes, with no questions (their premises are challenged) and limit (2) recorded. game-differs records stay: the game keeps its copies of the four schemes until step C5."
+  - "Catalogue (--catalogue-gen, then the drafted entries): the five entries regenerate; their discrepancies on D004, D005, D030, D063, D070 and D088-D091 record the change as applied, with the readings above; the drafted questions are retargeted as in the questions below, and 22.1/CQ5's, 22.4/CQ7's and 22.3/CQ4's answers describe the two routes. Texts that become wrong are corrected: positive_consequences.yml and negative_consequences.yml say that no scheme concludes their exception (C003's pair now does), and their 33/CQ3 answers, with negative_consequences_reasoning.yml's, code a weighing claim with Other; positive_consequences' 33/CQ3 discrepancy states its limit (3) as it was; practical_reasoning1.yml's V discrepancy says it is raised through side_effects(A,S1), its specialises note says it lacks incompatible_goal(G), two of its contrasts send a harmed value to side_effects(A,S1), and its examples bind no P; practical_necessary_condition.yml's summary, contrast with the sufficient scheme and examples speak of the goal A. The drafted premise-map corrections of 22.1's major premise and 22.4's Premise 1 are dropped, since links.json now makes them, and a discrepancy on the necessary-condition scheme records the best-choice reading (D090). Three new entries are drafted as answer schemes, with no questions (their premises are challenged) and limit (2) recorded. The walton/ questions are drafted where the entries are generated (practical_inference: walton/incompatible_consequences and walton/possible_goal; practical_sufficient_condition: walton/possible_goal) and where they change (practical_necessary_condition: walton/realize_more_effectively, and walton/possible_goal for walton/possible_action). Texts that the gold's recode makes wrong are corrected: positive_consequences.yml's 13292.115 example (13292.127 now weighs against 13292.108), negative_consequences.yml's 13292.9 example (13292.43 is no longer Other), positive_consequences.yml's 13292.147 example and practical_reasoning1.yml's 13292.43 near miss, alternative_normative.yml's codings of 13292.104 and 13292.123 and its D016 text, practical_goal.yml's 13292.147 near miss, and practical_reasoning2.yml's codings of 13292.104 and 13292.118. game-differs records stay: the game keeps its copies of the four schemes until step C5."
   - "The candidates registry: C003's outcome records that it was added by this proposal, and its sketch leaves the registry (its schemes and template are in walton.yml); C013 no longer sketches matters_more/2, which walton.yml then has; C009's and C017's practical_reasoning2 examples bind P. candidates.md is regenerated."
   - "The applied proposal D055-D059: its two practical_reasoning2 near misses (examples 4 and 11) bind P, with a dated note, since applied proposals are checked against walton.yml as it is."
-  - "The batch-2 gold, guidelines, lexicon and rule cases, in a new version, recoded by a script that the review reads. (1) The practical_reasoning2 instances (13292.108, .118, .104, .218, .11, .6, .190, .123) bind P to governments, the thesis's agent, and take goal_of_agent, possible_bring_about(P,A), possible_goal(G), the scoped exceptions and bad_outweighs(A,G). (2) 13292.45 is recoded on the repaired necessary-condition scheme (G for its goal, S the barriers to cheaper meat imports). (3) D070: 13292.174 and 13292.5, coded today as answers at 13292.108's side-effect exception, rank nothing, so they become rebuttals, negative consequences at its conclusion (guidelines §3.1, OC2). (4) D075: 13292.123, .104 and .147 say that another course would do better ('instead', 'the appropriate solution ... rather than', a carbon budget compared with a flat tax by its children 13292.149 and .151); each gets a primary better_means instance at the exception it answers, realize_more_effectively(governments,G,tax_meat), the comparison inferred where it is not explicit, and records which comparison it is (more surely, sooner or at lower cost); the other course's own instance stays, secondary. 13292.208, which attacks 13292.104's circumstances premise, is retargeted to the premise of 104's new primary instance that it disputes, that regulating the industry brings about the goal. (5) The weighing claims coded Other become instances of C003's pair: 13292.43 good_outweighs_bad at 13292.9's exception; 13292.127 bad_outweighs_good, against 13292.108 by OC7's one-instance rule, since practical reasoning is now in the class and 108 is the earliest on the board (its note, rule case OC4-a and C003's sighting follow). (6) Challenge records naming side_effects(...) (13292.108, .118, .104, .190) name bad_outweighs(...); 13292.45's challenge label 22.2 CQ4 becomes 22.3/CQ4, where the compendium prints it. (7) Guidelines §3 states the agent binding and that a goal set back by the means is a consequence of it; §3.1's two routes extend to practical reasoning's side effects; OC1, OC4, OC7 and OC10 are corrected; rule cases OC1-c, OC4-a and OC4-b follow. (8) validate.py gains R8 (an answer at an exception concludes it; it fails today on 13292.174, .104, .147, .5 and .123, which this recode fixes) and R9 (a better_means answer's A2 is not the A it answers, its goal premise is the answered argument's, and it records its comparison). (9) to_wag.py's replay and the README's counts are regenerated, with what changes. (10) The annotation engine's copies (wag/data/annotation/kialo-13292-batch2: gold.json, guidelines.md, lexicon.json) are copied."
+  - "The batch-2 gold, guidelines, lexicon and rule cases, in a new version, recoded by a script that the review reads. (1) The practical_reasoning2 instances (13292.108, .118, .104, .218, .11, .6, .190, .123) bind P to governments, the thesis's agent, and take goal_of_agent, possible_bring_about(P,A), possible_goal(G), the scoped exceptions and bad_outweighs(A,G). (2) 13292.45 is recoded on the repaired necessary-condition scheme (G for its goal, S the barriers to cheaper meat imports). (3) D070: 13292.174 and 13292.5, coded today as answers at 13292.108's side-effect exception, rank nothing, so they become rebuttals, negative consequences at its conclusion (guidelines §3.1, OC2). (4) D075: 13292.123 and .104 say that another course would do better: abolishing the subsidies removes the distortion at its source ('instead'); regulating the industry addresses what is said to be the problem ('the appropriate solution ... rather than'). Each gets a primary better_means instance at the exception it answers, realize_more_effectively(governments,G,tax_meat), recording its comparison, more surely, on those grounds (not on 'incoherent' or 'rather than penalize consumers', which prefer one value to another, D089); the other course's own instance stays, secondary. 13292.208, which attacks 13292.104's circumstances premise, is retargeted to the premise of 104's new primary instance that it disputes, that regulating the industry brings about the goal. 13292.147 proposes rationing without claiming it better (its children compare it the other way, 13292.149, or by who bears the cost, 13292.151), so under D006 it is no answer: its positive consequences instance stays primary, and its role becomes a proposal of another course (action_amendment, move alternative_means), as D066 has a separate alternative argued (C017), not at the exception. (5) The weighing claims coded Other become instances of C003's pair: 13292.43 good_outweighs_bad at 13292.9's exception; 13292.127 bad_outweighs_good, against 13292.108 by OC7's one-instance rule, since practical reasoning is now in the class and 108 is the earliest on the board (its note, rule case OC4-a and C003's sighting follow). (6) Every challenge record that names a renamed formula follows (side_effects, possible, realize_more_effectively and the rest; 13292.108, .118, .218, .11, .137, .190 and others), 13292.45's records name the repaired scheme's formulas under their labels (22.2's, the scheme's own number, as the guidelines label 33.2's questions), and 13292.194's eco-tariffs, another barrier, become a better-means record (walton/realize_more_effectively) rather than CQ1's objection; the notes that cite a plain side effect as if it answered the outweighing exception (13292.45's CQ4, 13292.108's and 13292.118's CQ5) say that it is a rebuttal unless claimed to outweigh the goal. (7) Guidelines: §2's alternative_means says better, not as well (D006); §3 states the agent binding, that a goal set back by the means is a consequence of it, and how to code a better means; §3.1's table and two routes extend to practical reasoning; OC1, OC4, OC6, OC7 and OC10 are corrected, each old wording retired; §4 gives better_means' comparison field. Rule cases OC1-c, OC4-a and OC4-b follow the gold, and the constructed weighing cases coded with Other take C003's schemes. (8) validate.py gains R8 (an answer at an exception concludes it; it fails today on 13292.174, .104, .147, .5 and .123, which this recode fixes; the Go check gets it too), R9 (a better_means instance's A2 is not its A, it records its comparison, more surely, sooner or at lower cost, and as an answer its goal premise is the answered argument's) and R10 (a challenge record names a formula of the claim's own instances or of its target's primary instance, as all 152 of the 160 records that name a formula do today, so that a stale formula fails); planted-defect tests (test_validate.py, which CI's data job runs) show that each rule catches what it is for. (9) to_wag.py's replay and the README's counts are regenerated, with what changes. (10) The annotation engine's copies (wag/data/annotation/kialo-13292-batch2: gold.json, guidelines.md, lexicon.json) are copied."
   - "Tests and views: TestGoldChecks fails until the gold is recoded; TestReviewFragmentCannotHideUnrelatedFormula until 13292.108 is; TestBuiltinIsTheDocsCopy until the annotation copies are made; TestRuleCases until the rule cases follow; TestCommittedCatalogueIsCurrent until the catalogue regenerates; TestCommittedProposals until D055-D059's examples bind P and this proposal's view is regenerated; TestCommittedCandidates until C003's sketch leaves the registry and C009, C013 and C017 follow. The game's own copies (core.yml) are unchanged until C5; whatever test compares them with walton.yml records the difference as the catalogue does."
-  - "The game, at step C5: AS:practical_reasoning and AS:practical_reasoning_goal take the goal premise and the exceptions above; CQ:other_goals targets incompatible_goal(P,G); CQ:side_effect targets bad_outweighs(A,G), with bad_outweighs_good as its backup edge in place of the free-text bridge D009 and D070 replace; CQ:other_means gets better_means; CQ:goal_possible and CQ:possibility target possible_goal(G) and possible_bring_about(P,A) (D088). Each backup edge has an answer that must pass, one that must be refused and one bound to the wrong target. The game refuses an answer whose goal premise is not the answered argument's, whose A2 is A or not P's action, or whose P is not the agent the game's profile names, which also names the situation compared (D089)."
+  - "The game, at step C5: AS:practical_reasoning and AS:practical_reasoning_goal take the goal premise and the exceptions above; CQ:other_goals targets incompatible_goal(P,G); CQ:side_effect targets bad_outweighs(A,G), with bad_outweighs_good as its backup edge in place of the free-text bridge D009 and D070 replace; CQ:other_means gets better_means; CQ:goal_possible and CQ:possibility target possible_goal(G) and possible_bring_about(P,A) (D088); CQ:conflicting_goals targets incompatible_goal(P,G) and CQ:best_means bring_about_more_effectively(P,S2,A) (D089). Each backup edge has an answer that must pass, one that must be refused and one bound to the wrong target. The game refuses an answer whose goal premise is not the answered argument's, whose A2 is A or not P's action, or whose P is not the agent the game's profile names, which also names the situation compared (D089)."
   - "Register: D004, D005, D030, D064, D070 and D088-D091 applied; D063 and D075 applied in part (practical reasoning's own schemes; the first answer schemes), the rest with C4 and C5; D003 and D006 recorded; docs/first-family.md and the plan's stage 2 updated."
 
 schemes:
@@ -259,7 +283,7 @@ language:
 
 questions:
   practical_reasoning1:
-    - {id: 22.4/CQ1, asks: "Does P have another goal that G itself would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.4/CQ1, asks: "Is there another goal of P that G itself would clash with?", target: "incompatible_goal(P,G)"}
     - {id: 22.4/CQ2, asks: "How far does reaching G serve the values V, or at least fit with them?", target: "would_promote_value(G,V)"}
     - {id: 22.4/CQ3, asks: "Could P realize G more effectively by another action than A: more surely, sooner or at lower cost?", target: "realize_more_effectively(P,G,A)"}
     - {id: 22.4/CQ4, asks: "Could P reach S2 more effectively than by doing A?", target: "bring_about_more_effectively(P,S2,A)"}
@@ -269,7 +293,7 @@ questions:
     - {id: walton/worthy_goal, asks: "Is G a goal worth pursuing?", target: "worthy_goal(G)"}
     - {id: walton/legitimate_value, asks: "Is V a value that may properly count in this decision?", target: "legitimate_value(V)"}
   practical_reasoning2:
-    - {id: 22.1/CQ1, asks: "Does P have another goal that G itself would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.1/CQ1, asks: "Is there another goal of P that G itself would clash with?", target: "incompatible_goal(P,G)"}
     - {id: 22.1/CQ2, asks: "Could P realize G more effectively by another action than A: more surely, sooner or at lower cost?", target: "realize_more_effectively(P,G,A)"}
     - {id: 22.1/CQ3, asks: "Could P reach S2 more effectively than by doing A?", target: "bring_about_more_effectively(P,S2,A)"}
     - {id: 22.1/CQ4, asks: "Can P actually do A?", target: "possible_bring_about(P,A)"}
@@ -277,7 +301,7 @@ questions:
     - {id: game/CQ:goal_possible, asks: "Can G be reached at all, by any means?", target: "possible_goal(G)"}
     - {id: game/CQ:intervening_actions, asks: "Would further steps be needed after A before G is reached?", target: "intervening_actions(A,G)"}
   practical_inference:
-    - {id: 22.1/CQ1, asks: "Does P have another goal that G itself would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.1/CQ1, asks: "Is there another goal of P that G itself would clash with?", target: "incompatible_goal(P,G)"}
     - {id: 22.1/CQ2, asks: "Is there another action open to P that would realize G better than A?", target: "realize_more_effectively(P,G,A)"}
     - {id: 22.1/CQ3, asks: "Of A and the other actions open to P, which would realize G most surely, soonest or at least cost?", target: "realize_more_effectively(P,G,A)"}
     - {id: 22.1/CQ4, asks: "Can P actually do A?", target: "possible_bring_about(P,A)"}
@@ -288,16 +312,16 @@ questions:
     - {id: 22.3/CQ1, asks: "Could P reach G without using any of the means S?", target: "goal_achievable_without_any(P,G,S)"}
     - {id: 22.3/CQ2, asks: "Is X an acceptable thing for P to do?", target: "acceptable_action(P,X)"}
     - {id: 22.3/CQ3, asks: "Can P actually bring about X?", target: "possible_bring_about(P,X)"}
-    - {id: 22.3/CQ4, asks: "Would P's bringing about X have bad consequences that outweigh G?", target: "bad_outweighs(X,G)"}
-    - {id: 22.3/CQ5, asks: "Does P have another goal that G itself would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.3/CQ4, asks: "Would bringing about X have bad consequences that outweigh G?", target: "bad_outweighs(X,G)"}
+    - {id: 22.3/CQ5, asks: "Is there another goal of P that G itself would clash with?", target: "incompatible_goal(P,G)"}
     - {id: walton/realize_more_effectively, asks: "Is there a means open to P that would realize G more effectively than X: more surely, sooner or at lower cost?", target: "realize_more_effectively(P,G,X)"}
     - {id: walton/possible_goal, asks: "Can G be reached at all, by any means?", target: "possible_goal(G)"}
   practical_sufficient_condition:
     - {id: 22.3/CQ1, asks: "Is there a means open to P that would realize G more effectively than X: more surely, sooner or at lower cost?", target: "realize_more_effectively(P,G,X)"}
     - {id: 22.3/CQ2, asks: "Is X an acceptable thing for P to do?", target: "acceptable_action(P,X)"}
     - {id: 22.3/CQ3, asks: "Can P actually bring about X?", target: "possible_bring_about(P,X)"}
-    - {id: 22.3/CQ4, asks: "Would P's bringing about X have bad consequences that outweigh G?", target: "bad_outweighs(X,G)"}
-    - {id: 22.3/CQ5, asks: "Does P have another goal that G itself would clash with?", target: "incompatible_goal(P,G)"}
+    - {id: 22.3/CQ4, asks: "Would bringing about X have bad consequences that outweigh G?", target: "bad_outweighs(X,G)"}
+    - {id: 22.3/CQ5, asks: "Is there another goal of P that G itself would clash with?", target: "incompatible_goal(P,G)"}
     - {id: walton/possible_goal, asks: "Can G be reached at all, by any means?", target: "possible_goal(G)"}
 
 examples:
@@ -350,7 +374,7 @@ examples:
       - question: 22.4/CQ4
         text: The board's mobile library, calling at the estates after school, would get books to those children sooner than Saturday opening.
       - question: 22.4/CQ5
-        text: Lending boxes of books to the primary schools would do more for equal opportunity, at the same cost.
+        text: Lending boxes of books to the primary schools would promote equal opportunity as much, at half the cost.
       - question: 22.4/CQ6
         text: The board has no budget for Saturday staff, and the volunteers have said no.
       - question: walton/worthy_goal
@@ -419,9 +443,10 @@ examples:
     note: >-
       The gold's coding, with P added. 13292.174 and 13292.5, coded today as
       answers at the side-effect exception, rank nothing against G, so under
-      D070 they become rebuttals at this argument's conclusion (example 19);
-      13292.127 weighs against it (example 16), and 13292.104 and 13292.147
-      answer it with better means (example 27).
+      D070 they become rebuttals at this argument's conclusion (example 20);
+      13292.127 weighs against it (example 16); 13292.104 answers it with a
+      better means, and 13292.147 offers another course without claiming it
+      better (example 26, a near miss of better_means).
 
   - scheme: positive_consequences
     title: Healthier eating, as a consequence
@@ -488,7 +513,7 @@ examples:
       P: the town council
       A: the town council closing the old outfall pipe
       S1: the old outfall polluting the river
-      S2: the old outfall closed
+      S2: no sewage reaching the river from the outfall
       G: a clean river
     note: The present circumstances and the state the action brings about are stated, so practical_reasoning2, not practical_inference.
 
@@ -566,7 +591,7 @@ examples:
       - question: 22.3/CQ4
         text: Winter tyres wear out fast on the dry motorway stretches the vans drive most, and replacing them every month costs more than the accidents they would prevent.
       - question: walton/possible_goal
-        text: No van gets through a winter here without a skid; the goal cannot be met, only approached.
+        text: Every winter here some van has an accident on ice, whatever it is fitted with; the goal cannot be met, only approached.
     note: >-
       Chains are a member of S. Under the best-choice reading (D090) they
       defeat the recommendation only because they are said to do better (at
@@ -587,7 +612,7 @@ examples:
       - question: 22.3/CQ2
         text: The building is listed; a new exit through the front wall would not be allowed.
       - question: 22.3/CQ3
-        text: No builder can start before the summer.
+        text: The exit would have to cross the neighbour's yard, and the neighbour refuses; the theatre cannot build it.
       - question: 22.3/CQ5
         text: The theatre has pledged to keep the building untouched until its centenary in June, which rules out meeting the code by spring.
 
@@ -601,8 +626,8 @@ examples:
       P: the theatre
       X: the theatre building a second exit
       G: the theatre meeting the fire code by spring
-      S: the ways of meeting the fire code by spring
-    note: The exit is said to be needed, not merely enough; the necessary-condition scheme.
+      S: a second exit
+    note: The exit is said to be needed, not merely enough; the necessary-condition scheme, its set of means the one member the text claims.
 
   # --- bad_outweighs_good (C003; D070's answer) -----------------------------
   - scheme: bad_outweighs_good
@@ -727,7 +752,7 @@ examples:
     title: Attention in lessons
     invented: true
     use: argument
-    text: Pupils paying attention in every lesson matters more than the rare day a pupil cannot reach a parent at once.
+    text: Banning phones would have pupils pay attention in every lesson, and that matters more than the rare day a pupil cannot reach a parent at once.
     bindings:
       A: the school banning phones
       H: pupils paying better attention in lessons
@@ -791,36 +816,23 @@ examples:
       at its source. The gold keeps its argument for abolishing the subsidies
       as a course of its own (practical_reasoning2), secondary.
 
-  - scheme: better_means
+  - scheme: positive_consequences
     title: Rationing through carbon budgets
     kialo: "13292.147"
-    use: answer
-    answers: 22.1/CQ2 of 13292.108, the goal-based argument for the meat tax on environmental grounds; it concludes that argument's exception, realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat).
-    answer_to:
-      scheme: practical_reasoning2
-      question: 22.1/CQ2
-      polarity: attack
-      bindings:
-        P: governments
-        G: less environmental harm from meat
-        A: governments putting a tax on meat
+    use: near-miss
+    near_miss_of: better_means
     text: Rationing meat through personal carbon budgets would help reduce carbon emissions. Under such rationing everybody in a country can consume a small amount of meat, larger amounts cost extra, and very large amounts are not allowed or are extremely expensive.
     bindings:
-      P: governments
-      A: governments putting a tax on meat
-      A2: governments rationing meat through personal carbon budgets
-      G: less environmental harm from meat
-    attacks:
-      - question: CQ:premise_acceptable
-        target: "possible_bring_about(P,A2)"
-        text: No government has run personal carbon budgets for a whole population; the records it would need do not exist.
+      A: governments rationing meat through personal carbon budgets
+      G: lower carbon emissions
     note: >-
-      The comparison is inferred, not stated: its children compare the
-      budgets with a flat tax (13292.149, 13292.151), and it is offered
-      under the tax's environmental argument as another instrument for the
-      same goal. The gold records the comparison as more surely (the large
-      eaters, who a flat tax barely moves, are capped), with the premise
-      inferred.
+      Another course with a good consequence, not claimed better than the
+      tax: its children compare it the other way (13292.149, harder and
+      costlier to run) or by who bears the cost (13292.151, a preference
+      across values, which D089 excludes). Under D006 an alternative that is
+      merely as good is no reason against the tax, so it is not an answer at
+      realize_more_effectively: the gold keeps it as positive consequences
+      of the other course, a proposal (D066, C017).
 
   - scheme: better_means
     title: Park and ride
