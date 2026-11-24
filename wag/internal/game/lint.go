@@ -74,7 +74,9 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 	}
 
 	// An answer variable is what the Carneades scheme concludes: the variable
-	// itself (S) or a one-place predicate of it (true_in_situation(B)).
+	// itself (S) or a one-place predicate of it (true_in_situation(B)), not its
+	// negation (¬S): the answer concludes the claim it answers, which a scheme
+	// concluding ¬S would oppose (carneades.ProfileProblems allows this shape).
 	caesConclusions := map[string][]string{}
 	for _, s := range theory.ArgSchemes {
 		caesConclusions[s.Id] = s.Conclusions
@@ -93,7 +95,7 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		if len(concl) == 1 {
 			if t, parsed := terms.ReadString(concl[0]); parsed {
 				c, isCompound := t.(terms.Compound)
-				ok = isVar(t) || isCompound && len(c.Args) == 1 && isVar(c.Args[0])
+				ok = isVar(t) || isCompound && len(c.Args) == 1 && isVar(c.Args[0]) && !carneades.IsNegationFunctor(c.Functor)
 			}
 		}
 		if !ok {

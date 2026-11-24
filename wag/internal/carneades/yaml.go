@@ -64,20 +64,12 @@ import (
 // schemeIndex map used by InstantiateScheme.
 //
 // The adapter's local schemeMap cache is then built from Theory.ArgSchemes.
+//
+// The graph the file authors (its statements, arguments, issues and
+// assumptions) must be admitted (Admit): a graph that is not is refused with
+// an *AdmissionError, rather than labelled.
 func NewAdapterFromYAML(yamlBytes []byte) (*Adapter, error) {
-	ag, err := caesYaml.Import(bytes.NewReader(yamlBytes))
-	if err != nil {
-		return nil, fmt.Errorf("yaml import failed: %w", err)
-	}
-
-	// Defensive: ensure all maps are initialized.
-	// NewArgGraph() (called by caesArgMapGraph2caes) already does this,
-	// but belt-and-suspenders is cheap.
-	ensureMapsInitialized(ag)
-
-	a := &Adapter{Graph: ag}
-	a.buildSchemeMap()
-	return a, nil
+	return NewAdapterFromYAMLReader(bytes.NewReader(yamlBytes))
 }
 
 // NewAdapterFromYAMLReader loads from an io.Reader instead of bytes.
@@ -87,7 +79,13 @@ func NewAdapterFromYAMLReader(r io.Reader) (*Adapter, error) {
 	if err != nil {
 		return nil, fmt.Errorf("yaml import failed: %w", err)
 	}
+	// Defensive: ensure all maps are initialized.
+	// NewArgGraph() (called by caesArgMapGraph2caes) already does this,
+	// but belt-and-suspenders is cheap.
 	ensureMapsInitialized(ag)
+	if err := admit(ag); err != nil {
+		return nil, err
+	}
 	a := &Adapter{Graph: ag}
 	a.buildSchemeMap()
 	return a, nil

@@ -2,6 +2,7 @@ package kialo
 
 import (
 	"encoding/json"
+	"errors"
 	"strings"
 	"testing"
 
@@ -198,5 +199,31 @@ func TestSameTextClaimsStayApart(t *testing.T) {
 	// text, which here closes a loop.
 	if _, err := build(KeysByText); err == nil || !strings.Contains(err.Error(), "cycle") {
 		t.Fatalf("keyed by text: %v", err)
+	}
+}
+
+// An imported graph is labelled only if it is admitted (carneades.Admit): an
+// adapter whose assumptions contradict each other yields no game.
+func TestAnImportedGraphIsAdmittedBeforeItIsLabelled(t *testing.T) {
+	d, err := Parse([]byte(sample))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rels, rep := d.Plan(0)
+	ad, err := carneades.NewAdapterFromYAML(data.CoreYAML)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ad.Graph.Assumptions = append(ad.Graph.Assumptions, "p", "¬p")
+	n, _ := nascq.LoadFromBytes(data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+	gs, err := Build(d, rels, rep, Config(), ad, n)
+	var ae *carneades.AdmissionError
+	if gs != nil || !errors.As(err, &ae) || ae.Context == nil {
+		t.Fatalf("game %v, error %v", gs != nil, err)
+	}
+	for _, s := range ad.Graph.Statements {
+		if s.Label != caes.Undecided {
+			t.Fatalf("%s was labelled %v", s.Id, s.Label)
+		}
 	}
 }

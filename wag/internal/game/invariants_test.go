@@ -2,7 +2,11 @@ package game
 
 import (
 	"encoding/json"
+	"fmt"
+	"strings"
 	"testing"
+
+	caes "github.com/carneades/carneades-4/src/engine/caes"
 
 	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
@@ -130,4 +134,36 @@ func TestBatchStatisticsAddUp(t *testing.T) {
 		t.Fatalf("panics %d, seat wins + ties %d of %d games, move kinds %d of %d moves, %d mean scores",
 			br.Panics, seats, br.GamesPlayed, kinds, br.TotalMoves, len(br.AvgScores))
 	}
+}
+
+// The invariants include admission: an argument play made, changed so that it
+// is no longer an instance of its scheme, is reported, and so are
+// contradictory assumptions.
+func TestInvariantsReportWhatIsNotAdmitted(t *testing.T) {
+	for seed := int64(0); seed < 40; seed++ {
+		gs := newShippedGame(t, everyCQAsksEverySchemeEdges(t), "A", "B")
+		playCheckingInvariants(t, gs, []Agent{NewRandomAgent("A", seed, 0.05, 0.3), NewRandomAgent("B", seed+1000, 0.05, 0.3)})
+		ag := gs.Adapter.Graph
+		for _, id := range carneades.SortedKeys(ag.Arguments) {
+			arg := ag.Arguments[id]
+			if carneades.ArgumentRole(arg) != carneades.RoleMain || arg.Scheme == nil || len(arg.Premises) == 0 || len(arg.Parameters) == 0 {
+				continue
+			}
+			unrelated := &caes.Statement{Id: "zz_unrelated", Text: "unrelated"}
+			ag.Statements[unrelated.Id] = unrelated
+			arg.Premises[0].Stmt = unrelated
+			joined := fmt.Sprint(gs.CheckInvariants())
+			if !strings.Contains(joined, "not admitted") || !strings.Contains(joined, "argument "+id+": premises do not instantiate") {
+				t.Fatalf("argument %s with premise %s: %s", id, unrelated.Id, joined)
+			}
+			// Contradictory assumptions, on a fresh game.
+			gs = newShippedGame(t, data.EdgesJSON, "A", "B")
+			gs.Adapter.Graph.Assumptions = append(gs.Adapter.Graph.Assumptions, "p", "¬p")
+			if joined := fmt.Sprint(gs.CheckInvariants()); !strings.Contains(joined, "the assumptions are not consistent") {
+				t.Fatalf("contradictory assumptions: %s", joined)
+			}
+			return
+		}
+	}
+	t.Fatal("fixture: no game made a main argument with premises")
 }

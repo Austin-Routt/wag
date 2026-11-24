@@ -75,6 +75,11 @@ func Build(d *Discussion, rels []Relation, rep *Report, cfg game.GameConfig, ad 
 	if !ad.IsAcyclic() {
 		return nil, fmt.Errorf("the imported graph has a cycle")
 	}
+	// The imported graph is authored, not played: its labels count only if
+	// it is admitted (carneades.Admit).
+	if err := ad.Admit(); err != nil {
+		return nil, fmt.Errorf("the imported graph: %w", err)
+	}
 	ad.Evaluate()
 	return gs, nil
 }

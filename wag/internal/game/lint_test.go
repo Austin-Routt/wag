@@ -54,6 +54,8 @@ func TestLintFindsDataErrors(t *testing.T) {
 	c, _ := json.Marshal(cqs)
 	edges, _ := json.Marshal(edgeData)
 	yaml := strings.Replace(string(data.CoreYAML), `good/1: "%s is good."`, `good/1: "%s is good for %s."`, 1)
+	// An answer scheme that concludes the negation of its answer variable.
+	yaml = strings.Replace(yaml, "    variables: [A,C]\n    conclusions: [A]\n", "    variables: [A,C]\n    conclusions: [\"¬A\"]\n", 1)
 
 	issues, err := LintData([]byte(yaml), s, c, edges)
 	if err != nil {
@@ -78,6 +80,7 @@ func TestLintFindsDataErrors(t *testing.T) {
 		`CQ:other_goals: asked of AS:values: exception locus biased/1 is not an exception of Carneades scheme positive_value`,
 		`AS:position_to_know: answer_variable W is not what Carneades scheme position_to_know concludes ([S])`,
 		`AS:expert_opinion: answer_variable "Q" is not a declared variable`,
+		`AS:analogy: answer_variable A is not what Carneades scheme analogy concludes ([¬A])`,
 	} {
 		if !strings.Contains(joined, want) {
 			t.Errorf("missing lint error %q in:\n%s", want, joined)

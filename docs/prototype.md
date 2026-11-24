@@ -122,6 +122,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
   - Every pro becomes an *Other* argument for its parent; every con becomes one against it.
   - Arguments are weighted by the mean impact vote.
   - The thesis is the central claim.
+  - The graph is labelled only if it is admitted, as an authored graph is (`CARNEADES_FORK.md`, *Admission*); otherwise the import is refused with the reason.
 - **What to check.**
   - The labels Carneades computes for the imported debate.
   - That every imported argument now has critical questions you can press.

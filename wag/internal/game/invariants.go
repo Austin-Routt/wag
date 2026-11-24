@@ -11,7 +11,8 @@ import (
 
 // CheckInvariants verifies properties that must hold between turns and returns
 // one error per violation (none if the state is sound). The tests run it after
-// every move of many random games; it is also cheap enough for a debug flag.
+// every move of many random games; it is also cheap enough for a debug flag (a
+// few milliseconds, most of it the admission check).
 //
 //   - Graph links: every argument's conclusion and premises are statements of
 //     the graph, and every conclusion lists the argument among its Args.
@@ -30,6 +31,9 @@ import (
 //     them in the move history and, under ScoringLive, their live score.
 //   - Questions: each has its question argument, owned by the asker, and
 //     its answer, if any, is in the graph; the claim of a debate is at issue.
+//   - Admission: the graph is admitted as an authored graph would be
+//     (carneades.Admit): every argument an instance of its scheme, under WAG's
+//     profile, and the assumptions consistent.
 func (gs *GameState) CheckInvariants() []error {
 	var errs []error
 	fail := func(format string, args ...interface{}) { errs = append(errs, fmt.Errorf(format, args...)) }
@@ -163,6 +167,12 @@ func (gs *GameState) CheckInvariants() []error {
 		if c := ag.Statements[gs.Claim]; c == nil || c.Issue == nil {
 			fail("the claim %s is not at issue", gs.Claim)
 		}
+	}
+	// What play has made is a graph an authored one could be (carneades.Admit):
+	// its arguments are instances of their schemes, as WAG's answers are, and
+	// its assumptions are consistent.
+	if err := gs.Adapter.Admit(); err != nil {
+		fail("%v", err)
 	}
 	return errs
 }
