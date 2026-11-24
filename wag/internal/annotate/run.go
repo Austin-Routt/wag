@@ -321,29 +321,51 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 			}
 		}
 	}
+	// Reviews and verdicts are read as strictly as annotations: a review or
+	// verdict that names no claim, or a second one for the same claim, makes
+	// the run damaged instead of being dropped or silently replacing the
+	// first. The person's verdicts are the human judgments a gold is made of.
 	if s := f.Settings.Reviewer; s != nil {
+		name := "review/model-" + FileName(s.Name) + ".json"
 		if b, err := os.ReadFile(r.reviewPath(s.Name)); err == nil {
 			var list []*Review
-			if err := json.Unmarshal(b, &list); err == nil {
-				for _, rv := range list {
-					if rv == nil || rv.Item == "" {
-						r.loadErrors = append(r.loadErrors, "review/model-"+FileName(s.Name)+".json: invalid review entry")
-						continue
+			err := checkedJSON(b, &list)
+			if err == nil {
+				err = canonicalEach(b, jsonFields(Review{}))
+			}
+			if err == nil {
+				for i, rv := range list {
+					switch {
+					case rv == nil || strings.TrimSpace(rv.Item) == "":
+						r.loadErrors = append(r.loadErrors, fmt.Sprintf("%s: review %d names no claim (invalid review entry)", name, i+1))
+					case r.reviews[rv.Item] != nil:
+						r.loadErrors = append(r.loadErrors, fmt.Sprintf("%s: two reviews of %s", name, rv.Item))
+					default:
+						r.reviews[rv.Item] = rv
 					}
-					r.reviews[rv.Item] = rv
 				}
 			} else {
-				r.loadErrors = append(r.loadErrors, "review/model-"+FileName(s.Name)+".json: "+err.Error())
+				r.loadErrors = append(r.loadErrors, name+": "+err.Error())
 			}
 		} else if !os.IsNotExist(err) {
 			r.loadErrors = append(r.loadErrors, err.Error())
 		}
 	}
 	if b, err := os.ReadFile(filepath.Join(dir, "review", "human.json")); err == nil {
-		var list []Verdict
-		if err := json.Unmarshal(b, &list); err == nil {
-			for _, v := range list {
-				r.verdicts[v.Item] = v
+		var list []*Verdict
+		err := checkedJSON(b, &list)
+		if err == nil {
+			err = canonicalEach(b, jsonFields(Verdict{}))
+		}
+		if err == nil {
+			for i, v := range list {
+				if v == nil || strings.TrimSpace(v.Item) == "" {
+					r.loadErrors = append(r.loadErrors, fmt.Sprintf("review/human.json: verdict %d names no claim", i+1))
+				} else if _, dup := r.verdicts[v.Item]; dup {
+					r.loadErrors = append(r.loadErrors, fmt.Sprintf("review/human.json: two verdicts for %s", v.Item))
+				} else {
+					r.verdicts[v.Item] = *v
+				}
 			}
 		} else {
 			r.loadErrors = append(r.loadErrors, "review/human.json: "+err.Error())

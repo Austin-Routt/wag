@@ -117,6 +117,9 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		if err := checkedJSON(b, &m); err != nil {
 			return nil, fmt.Errorf("dataset.json: %v", err)
 		}
+		if err := canonicalNames(b, jsonFields(manifest{})); err != nil {
+			return nil, fmt.Errorf("dataset.json: %v", err)
+		}
 	} else if !os.IsNotExist(err) {
 		return nil, fmt.Errorf("dataset.json: %v", err)
 	}
@@ -147,6 +150,9 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	if err := checkedJSON(b, &in); err != nil {
 		return nil, fmt.Errorf("%s: %v", m.Items, err)
 	}
+	if err := canonicalNames(b, []string{"discussion", "items"}); err != nil {
+		return nil, fmt.Errorf("%s: %v", m.Items, err)
+	}
 	d.Discussion = in.Discussion
 	seen := map[string]bool{}
 	for i, raw := range in.Items {
@@ -154,8 +160,13 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 			ID   string `json:"kialo_claim_id"`
 			Text string `json:"text"`
 		}
-		if err := json.Unmarshal(raw, &it); err != nil || it.ID == "" {
+		// The same rule as an annotation file's (parseAnnotations): an ID of
+		// spaces is no ID, so a run never refuses claims it was given.
+		if err := json.Unmarshal(raw, &it); err != nil || strings.TrimSpace(it.ID) == "" {
 			return nil, fmt.Errorf("%s: item %d has no kialo_claim_id", m.Items, i+1)
+		}
+		if err := canonicalNames(raw, []string{"kialo_claim_id", "text"}); err != nil {
+			return nil, fmt.Errorf("%s: item %d: %v", m.Items, i+1, err)
 		}
 		if seen[it.ID] {
 			return nil, fmt.Errorf("%s: two items are %s", m.Items, it.ID)
@@ -242,6 +253,9 @@ func parseAnnotations(b []byte) (map[string]Annotation, error) {
 		Items json.RawMessage `json:"items"`
 	}
 	if err := checkedJSON(b, &f); err != nil {
+		return nil, err
+	}
+	if err := canonicalNames(b, []string{"items"}); err != nil {
 		return nil, err
 	}
 	if len(f.Items) == 0 {
