@@ -383,8 +383,10 @@ function renderSetup() {
     if (!$('#gamelist')) return;
     $('#gamelist').innerHTML = (list || []).map(g => `<li><a href="#game=${g.ID}" data-load="${g.ID}">${esc(g.Title)}</a> <span class="muted small">${esc(g.Mode)} · round ${g.Round}${g.Over ? ' · over' : ''}</span></li>`).join('') || '<li class="muted">None yet.</li>';
     $('#gamelist').onclick = async e => { const a = e.target.closest('[data-load]'); if (!a) return; e.preventDefault(); await loadGame(a.dataset.load); render(); };
-  });
-  if (META.kialo) api('/api/kialo').then(list => {
+  }).catch(() => { /* the server may be restarting */ });
+  // Another computer gets no list: discussions are imported where the server runs.
+  if (META.kialo) api('/api/kialo').catch(e => { const k = $('#kialolist'); if (k) k.textContent = e.message; return null; }).then(list => {
+    if (!list) return;
     if (!$('#kialolist')) return;
     $('#kialolist').innerHTML = list.length ? '<ul>' + list.map(d => `<li><button class="link" data-k="${esc(d.id)}">${esc(d.title)}</button> <span class="muted">(${(d.size / 1e6).toFixed(1)} MB)</span></li>`).join('') + '</ul>' : 'No graph.json found.';
     $('#kialolist').onclick = async e => {
