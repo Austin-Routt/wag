@@ -174,7 +174,11 @@ decisions:
       No. An equally good alternative is not a reason against doing A; it
       answers only a claim that A is necessary or the best (the
       necessary-condition schema, realize_more_effectively).
-      practical_reasoning2's conclusion is unchanged.
+      practical_reasoning2's conclusion is unchanged. Refined 2026-11-24 by
+      the owner (D090): the necessary-condition schema claims that some means
+      of a set is needed, so another member of the set answers nothing; what
+      answers it is a route that avoids the whole set,
+      goal_achievable_without_any(P,G,S).
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D007
@@ -1432,6 +1436,11 @@ decisions:
       reasons for the action, with the comparison as a premise of its answer
       (D075), so that old weak side-effect facts are not read as the stronger
       claim. The gold's two side-effect answers are recoded in a new version.
+      Refined 2026-11-24 by the owner (D091):
+      the outweighing reading is WAG's interpretation; the source's
+      side-effect exception (Walton and Gordon 2015, p. 515) is any side
+      effect that demotes a value. The exception is D055's bad_outweighs(A,G)
+      (proposal D004-D075).
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D071
@@ -2225,6 +2234,137 @@ decisions:
       what it needs of D1 (a). The rest of Track D's order stands, the
       quarrel last, and a run made by models is not gold.
     recorded: "docs/plan.md §0 and §8"
+
+- id: D088
+  title: The possibility of the goal and of the agent's means
+  question: >-
+    practical_reasoning1 and practical_reasoning2 state the action's
+    possibility as possible(A), and practical_reasoning2 the goal's as
+    possible(G), whose template reads "Action %s is possible." After D030 the
+    condition schemes say possible_goal for the goal and possible_bring_about
+    for the agent's means. Should practical reasoning use the same formulas?
+    Put to the owner with proposal D004-D075 (version 1) and the independent
+    reviews of 2026-11-24.
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/proposals/D004-D075.md", "the independent reviews of 2026-11-24 (wag-workspace reviews/2026-11-24)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      Both. possible(G) becomes possible_goal(G), and possible(A) becomes
+      possible_bring_about(P,A), with P bound by the goal premise (D005). That
+      a goal can be reached and that this agent can carry out the means are
+      separate claims, and neither is the means being available now or sure
+      to succeed. The game's CQ:goal_possible and CQ:possibility follow at
+      step C5; old records keep their formulas under their version.
+    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
+
+- id: D089
+  title: The agent and the situation in "another action would do better"
+  question: >-
+    The answer scheme better_means concludes practical reasoning's exception
+    realize_more_effectively(G,A), which names no agent, so an answer about
+    another agent's action still defeats the argument (the independent
+    review's engine test of 2026-11-24, E2c). Should the exceptions and the
+    answer's comparison name the agent?
+  category: scheme
+  blocks: [game, verification]
+  decider: owner
+  priority: 1
+  status: decided
+  docs: ["docs/proposals/D004-D075.md", "the independent reviews of 2026-11-24 (wag-workspace reviews/2026-11-24)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      Yes. Practical reasoning's three exceptions become
+      realize_more_effectively(P,G,A), bring_about_more_effectively(P,S2,A)
+      and promote_more_effectively(P,V,A), and better_means compares for the
+      agent, more_effective_means(P,A2,G,A), with the agent's ability to take
+      the alternative, possible_bring_about(P,A2), a premise of the answer,
+      not a presumption. The alternative must be a different action, checked
+      by the game and the validators (a Carneades guard would not act in
+      WAG's play). "More effectively" means reaching the goal more surely,
+      sooner or at lower cost, and an answer records which; a preference
+      across values is not this claim. The situation compared is the current
+      one (Walton and Gordon 2015, p. 515: "when performed in S1"): fixed per
+      game or case in its profile and checked at the record level, not added
+      to every formula.
+    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py; the game at step C5"
+
+- id: D090
+  title: Alternatives in the necessary- and sufficient-condition schemes
+  question: >-
+    The sufficient-condition scheme (22.3) keeps the exception that the agent
+    could reach the goal by another means, which its own premise grants
+    whenever its set of means has a second member, and the
+    necessary-condition scheme (22.2) has the same fault: another member of
+    a necessary set refutes nothing (a badge or an escort). D006 says an
+    equally good alternative answers only a claim that an action is
+    necessary or the best. What should their alternative-means objections
+    be? Raised by the independent reviews of 2026-11-24.
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["docs/proposals/D004-D075.md", "the independent reviews of 2026-11-24 (wag-workspace reviews/2026-11-24)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      WAG declares the best-choice reading for both schemes: a strictly better
+      means the agent can take defeats the recommendation,
+      realize_more_effectively(P,G,X) (D089), and an equally good one does
+      not (D006). The sufficient-condition scheme has no mere-alternative
+      exception. The necessary-condition scheme's objection is that the goal
+      can be reached without any means of the set: a new, typed predicate,
+      goal_achievable_without_any(P,G,S), whose answer must name a route the
+      agent can take that reaches the goal and uses no member of the set;
+      alternative_means is not reused with a set in place of an action.
+      Defeating the recommendation does not disprove that X would reach the
+      goal. The reading is WAG's: the book allows an acceptable or the most
+      acceptable means, and its pp. 96 and 323 differ on 22.3. The condition
+      schemes' goal variable is G, as in practical reasoning (A was the
+      book's letter for the goal).
+    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
+
+- id: D091
+  title: Aligning the rest of practical reasoning
+  question: >-
+    Practical inference keeps a first-person goal premise ("I have a goal")
+    and exceptions worded differently from practical reasoning's, so a
+    weighing that defeats practical reasoning leaves it standing; and the
+    condition schemes' side-effect exception defeats them however small the
+    side effect (D070's fault). D063 now makes their conclusions meet the
+    game's practical claims. Should the decided formulas apply to them now?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["docs/proposals/D004-D075.md", "the independent reviews of 2026-11-24 (wag-workspace reviews/2026-11-24)"]
+  decided:
+    date: "2026-11-24"
+    by: owner
+    decision: >-
+      Both, now. Practical inference takes goal_of_agent(P,G),
+      possible_bring_about(P,A), incompatible_goal(P,G),
+      realize_more_effectively(P,G,A) and bad_outweighs(A,G), as practical
+      reasoning has them, and keeps its own objection that the action works
+      against its goal, scoped to the agent, incompatible_consequences(P,A,G):
+      it is not merged with the outweighing claim. The condition schemes'
+      side-effect exception becomes bad_outweighs(X,G), still an exception
+      (D003). One-place conclusions stay (D005, D063); who performs an action
+      comes from a structured action-to-actor mapping with its aliases, not
+      from the action's name. D070's outweighing reading is WAG's
+      interpretation: the source's side-effect exception (Walton and Gordon
+      2015, p. 515) is any side effect that demotes a value.
+    recorded: "docs/decisions.yml; to apply: proposal D004-D075, version 2, through edits.py"
 
 # --- Decided ------------------------------------------------------------------
 
