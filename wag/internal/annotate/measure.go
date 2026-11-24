@@ -119,34 +119,48 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 			return ""
 		}
 		ref, f := actual["instance"], actual["formula"]
-		if isMarker(ref, "unresolved") || isMarker(f, "unresolved") || isMarker(actual["part"], "unresolved") {
-			return Unresolved
-		}
+		claim, _ := actual["claim"].(string)
 		if field == "target_formula" {
+			// Only what the formula itself leaves open makes it unresolved
+			// (docs/annotation-records.md §11).
+			if isMarker(f, "unresolved") {
+				return Unresolved
+			}
 			if s, ok := f.(string); ok && s != "" {
 				return compact(s)
 			}
 			switch str(actual["part"]) {
 			case "inference":
 				return ""
-			case "conclusion": // a format-1 conclusion target names no formula
-			default:
-				return Unresolved
+			case "conclusion": // a format-1 conclusion target names no formula: its instance's conclusion
+				if in := targetInstance(set, claim, ref); in != nil && !isMarker(ref, "unresolved") {
+					cm, _ := in["conclusion"].(map[string]any)
+					if s, ok := cm["formula"].(string); ok {
+						return compact(s)
+					}
+				}
 			}
+			return Unresolved
 		}
-		claim, _ := actual["claim"].(string)
+		// Which inference of the target claim: its primary one, or which
+		// secondary one. The targeting decision, not the target's own coding:
+		// how the target claim is coded is its own fields' business.
+		if isMarker(ref, "unresolved") {
+			return Unresolved
+		}
 		in := targetInstance(set, claim, ref)
 		if in == nil {
 			return Unresolved
 		}
-		if field == "target_formula" {
-			cm, _ := in["conclusion"].(map[string]any)
-			if s, ok := cm["formula"].(string); ok {
-				return compact(s)
-			}
-			return Unresolved
+		// A format-1 target names no instance (or names it in words that
+		// begin "primary"): it is its claim's primary instance.
+		if id, ok := ref.(string); ref == nil || ok && (id == "" || strings.HasPrefix(id, "primary")) {
+			return "primary"
 		}
-		return signature(in)
+		if p, _ := in["primary"].(bool); p {
+			return "primary"
+		}
+		return "secondary:" + signature(in)
 	}
 	return ""
 }
@@ -496,6 +510,19 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 				}
 			}
 		}
+		if len(sc.Conclusions) > 0 && format == 2 && fit == "fragment" {
+			// A fragment whose conclusion names a variable it leaves unstated
+			// has a null conclusion formula (docs/annotation-records.md §5).
+			cm, _ := in["conclusion"].(map[string]any)
+			if f, ok := cm["formula"].(string); ok && f != "" {
+				for _, v := range variable.FindAllString(sc.Conclusions[0], -1) {
+					if _, bound := binds[v]; !bound {
+						add("R16 %v is a fragment whose conclusion names a variable it leaves unstated: its formula is null", in["id"])
+						break
+					}
+				}
+			}
+		}
 		if len(sc.Conclusions) > 0 {
 			cm, _ := in["conclusion"].(map[string]any)
 			hasFormula := cm != nil && cm["formula"] != nil && cm["formula"] != ""
@@ -504,7 +531,7 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 			}
 		}
 	}
-	if nprim != 1 && len(insts) > 1 {
+	if nprim != 1 && (len(insts) > 1 || format == 2) {
 		add("%d primary instances, not 1", nprim)
 	}
 	r, _ := a["role"].(map[string]any)

@@ -7,9 +7,11 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/yourorg/wag/data"
+	"github.com/yourorg/wag/internal/llm"
 	"gopkg.in/yaml.v2"
 )
 
@@ -168,6 +170,11 @@ func TestFormat2Refusals(t *testing.T) {
 			return nil
 		},
 			"R16 its actual target is null"},
+		{"an empty actual target", "13292.7", func(s map[string]Annotation) *Dataset {
+			s["13292.7"]["target"].(map[string]any)["actual"] = map[string]any{}
+			return nil
+		},
+			"R16 its actual target is {}"},
 		{"a target for the thesis", "13292.1", func(s map[string]Annotation) *Dataset {
 			s["13292.1"]["target"].(map[string]any)["actual"] = actualOf(s["13292.7"])
 			return nil
@@ -229,7 +236,10 @@ func TestFormat2Refusals(t *testing.T) {
 			}
 			rule := strings.Fields(tc.want)[0]
 			for _, p := range got {
-				if !strings.HasPrefix(p, rule+" ") && !(rule == "R12" && strings.HasPrefix(p, "R16 the instance")) {
+				// A lone instance without its primary flag also has no
+				// primary instance (format 2 needs exactly one).
+				if !strings.HasPrefix(p, rule+" ") && !(rule == "R12" && strings.HasPrefix(p, "R16 the instance")) &&
+					!(tc.name == "no primary flag" && p == "0 primary instances, not 1") {
 					t.Errorf("another problem than %s: %s", rule, p)
 				}
 			}
@@ -299,7 +309,10 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 		t.Fatal(err)
 	}
 	p := Agree("format 1", "format 2", old, d.Gold)
-	want := map[string]float64{"scheme": 0.94, "instances": 0.88, "target_instance": 0.96, "target_formula": 0.96}
+	// target_instance is the targeting decision (the primary instance, or
+	// which secondary one): D039 changed the coding of 13292.12's primary,
+	// not which of its instances 13292.194 and .45 target.
+	want := map[string]float64{"scheme": 0.94, "instances": 0.88, "target_formula": 0.96}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -310,8 +323,15 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 			t.Errorf("%s: %+v, want agreement %v over 50", f, fa, w)
 		}
 	}
-	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "negative_consequences:¬should_be_performed(tax_meat)" {
+	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "primary" {
 		t.Errorf("13292.12's target instance: %q", v)
+	}
+	// A target at a secondary instance says which.
+	a := clone(t, d.Gold)
+	act := actualOf(a["13292.12"])
+	act["instance"], act["formula"] = "13292.9#3", "causes(meat_industry_harmed,tax_revenue_reduced)"
+	if v := FieldIn(a["13292.12"], "target_instance", a); v != "secondary:cause_to_effect_modal:may_occur(tax_revenue_reduced)" {
+		t.Errorf("a secondary target: %q", v)
 	}
 	if v := FieldIn(d.Gold["13292.45"], "target_formula", d.Gold); v != "may_occur(domestic_meat_industry_pushed_out)" {
 		t.Errorf("13292.45's target formula: %q", v)
@@ -331,7 +351,9 @@ func TestAgreementLeavesUnresolvedOut(t *testing.T) {
 	actualOf(a["13292.12"])["instance"] = map[string]any{"unresolved": "which inference"}
 	inst(a["13292.7"], 0)["bindings"].(map[string]any)["G"] = map[string]any{"unresolved": "which harm"}
 	p := Agree("a", "gold", a, d.Gold)
-	for f, want := range map[string]int{"target_instance": 1, "target_formula": 1, "bindings": 1, "scheme": 0} {
+	// Only what a field itself leaves open makes it unresolved: the formula
+	// 13292.12 names is still compared.
+	for f, want := range map[string]int{"target_instance": 1, "target_formula": 0, "bindings": 1, "scheme": 0} {
 		if fa := p.Fields[f]; fa.Unresolved != want || fa.N != 50-want || fa.Agreement != 1 {
 			t.Errorf("%s: %+v, want %d unresolved and full agreement on the rest", f, fa, want)
 		}
@@ -340,8 +362,48 @@ func TestAgreementLeavesUnresolvedOut(t *testing.T) {
 	if q.AllAssignedAgreement["bindings"] != 49.0/50 {
 		t.Errorf("all-assigned agreement counts an unresolved value as agreeing: %v", q.AllAssignedAgreement["bindings"])
 	}
-	if dis := Disagrees([]Annotation{a["13292.12"], d.Gold["13292.12"]}, a, d.Gold); strings.Join(dis, ",") != "target_instance,target_formula" {
-		t.Errorf("an unresolved target and a resolved one differ: %v", dis)
+	if dis := Disagrees([]Annotation{a["13292.12"], d.Gold["13292.12"]}, a, d.Gold); strings.Join(dis, ",") != "target_instance" {
+		t.Errorf("an unresolved target instance and a resolved one differ: %v", dis)
+	}
+	// An unresolved formula is unresolved, even of a conclusion target whose
+	// instance has one conclusion.
+	act := actualOf(a["13292.45"])
+	if act["part"] != "conclusion" {
+		t.Fatalf("13292.45's target is not a conclusion: %v", act)
+	}
+	act["formula"] = map[string]any{"unresolved": "which step"}
+	if v := FieldIn(a["13292.45"], "target_formula", a); v != Unresolved {
+		t.Errorf("an unresolved conclusion formula: %q", v)
+	}
+}
+
+// A format-1 target names no instance: it is its claim's primary one, also
+// where a lone instance carries no primary flag (format 1 allows that).
+func TestFormat1TargetOfAnUnflaggedLoneInstance(t *testing.T) {
+	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
+	if err != nil {
+		t.Skip("the docs are not here:", err)
+	}
+	_, old, err := parseAnnotationFile(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if n := len(old["13292.108"]["instances"].([]any)); n != 1 {
+		t.Fatalf("13292.108 has %d instances", n)
+	}
+	delete(inst(old["13292.108"], 0), "primary")
+	if act := actualOf(old["13292.104"]); act["claim"] != "13292.108" || act["instance"] != nil && !strings.HasPrefix(jsonText(act["instance"]), `"primary`) {
+		t.Fatalf("13292.104's format-1 target: %v", act)
+	}
+	if v := FieldIn(old["13292.104"], "target_instance", old); v != "primary" {
+		t.Errorf("%q", v)
+	}
+	// Format 1's check admits it too (format 2 needs the flag).
+	d, c := builtin(t)
+	for _, p := range c.CheckIn(old["13292.108"], d, old, 1) {
+		if strings.Contains(p, "primary instances") {
+			t.Errorf("format 1: %s", p)
+		}
 	}
 }
 
@@ -603,6 +665,96 @@ func TestTwoUnresolvedValuesDoNotAgree(t *testing.T) {
 	}
 }
 
+// agreement.py and the Go measure agree on the target fields' edge cases: an
+// unresolved formula of a conclusion target, two different secondary
+// instances, an unresolved instance, and (format 1) a target whose lone
+// instance carries no primary flag.
+func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	d, _ := builtin(t)
+	tmp := t.TempDir()
+	write := func(name, format string, set map[string]Annotation) string {
+		var items []Annotation
+		for _, id := range d.IDs() {
+			items = append(items, set[id])
+		}
+		head := map[string]any{"annotator": name, "items": items}
+		if format != "" {
+			head["format"] = format
+		}
+		p := filepath.Join(tmp, name+".json")
+		if err := os.WriteFile(p, []byte(mustJSON(t, head)), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		return p
+	}
+	a, b := clone(t, d.Gold), clone(t, d.Gold)
+	actualOf(a["13292.45"])["formula"] = map[string]any{"unresolved": "which step"}
+	at, bt := actualOf(a["13292.194"]), actualOf(b["13292.194"])
+	at["instance"], at["formula"] = "13292.12#2", "may_occur(imported_meat_relatively_cheaper)"
+	bt["instance"], bt["formula"] = "13292.12#3", "¬should_be_performed(tax_meat)"
+	actualOf(b["13292.33"])["instance"] = map[string]any{"unresolved": "which inference"}
+	raw, err := os.ReadFile(filepath.Join(dir, "gold-format1.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, old, err := parseAnnotationFile(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	delete(inst(old["13292.108"], 0), "primary")
+	pairs := []struct {
+		name   string
+		x, y   map[string]Annotation
+		px, py string
+	}{
+		{"two format-2 sets", a, b, write("a", Format2, a), write("b", Format2, b)},
+		{"format 1, an unflagged lone instance", old, d.Gold, write("old", "", old), filepath.Join(dir, "gold.json")},
+	}
+	for _, pr := range pairs {
+		out := filepath.Join(tmp, "out.json")
+		cmd := exec.Command(py, "-I", "-B", "agreement.py", pr.px, pr.py, "--json", out)
+		cmd.Dir = dir
+		if b, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("%s: %v: %s", pr.name, err, b)
+		}
+		var res struct {
+			Fields map[string]struct {
+				Agreement  float64  `json:"agreement"`
+				Kappa      *float64 `json:"kappa"`
+				Unresolved int      `json:"unresolved"`
+			} `json:"fields"`
+		}
+		rb, _ := os.ReadFile(out)
+		if err := json.Unmarshal(rb, &res); err != nil {
+			t.Fatal(err)
+		}
+		p := Agree("x", "y", pr.x, pr.y)
+		for _, f := range Fields {
+			g, w := p.Fields[f], res.Fields[f]
+			if g.Agreement != w.Agreement || g.Unresolved != w.Unresolved || (g.Kappa == nil) != (w.Kappa == nil) || g.Kappa != nil && *g.Kappa != *w.Kappa {
+				t.Errorf("%s, %s: go %+v, agreement.py %+v", pr.name, f, g, w)
+			}
+		}
+	}
+	// The plants are seen: the secondary instances differ, the unresolved
+	// values are counted, and the unflagged instance is its claim's primary.
+	p := Agree("a", "b", a, b)
+	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 1 || tf.Unresolved != 1 || ti.Agreement != 0.98 { // 48 of 49, rounded
+		t.Errorf("target_instance %+v, target_formula %+v", ti, tf)
+	}
+	if ti := Agree("old", "gold", old, d.Gold).Fields["target_instance"]; ti.Agreement != 1 {
+		t.Errorf("format 1, an unflagged lone instance: %+v", ti)
+	}
+}
+
 // agreement.py and the Go measure agree when an annotator uses an alias the
 // case lists (read as its action with --case, and as another atom without)
 // and leaves a fragment's variable unstated.
@@ -729,5 +881,254 @@ func TestARunsFilePassesValidatePy(t *testing.T) {
 	cmd.Dir = dir
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("%v: %s", err, out)
+	}
+}
+
+// target_instance compares the targeting decision, not the target's own
+// coding: a coding difference in 13292.108 does not spread to the eleven
+// claims that target its primary instance (the review of the identity
+// contract, W3).
+func TestTargetInstanceDoesNotSpread(t *testing.T) {
+	d, _ := builtin(t)
+	a := clone(t, d.Gold)
+	cm := inst(a["13292.108"], 0)["conclusion"].(map[string]any)
+	cm["formula"] = "should_be_performed(abolish_meat_subsidies)"
+	for _, id := range d.IDs() {
+		if id == "13292.108" {
+			continue
+		}
+		if x, y := FieldIn(a[id], "target_instance", a), FieldIn(d.Gold[id], "target_instance", d.Gold); x != y {
+			t.Errorf("%s: %q, %q", id, x, y)
+		}
+	}
+}
+
+// The review choice reads aliases as their actions, as agreement does (W1).
+func TestReviewChoiceReadsAliases(t *testing.T) {
+	r, _, _ := soloRun(t, 1)
+	d := r.Dataset
+	cs := *d.Case
+	cs.canon = map[string]string{}
+	for k, v := range d.Case.canon {
+		cs.canon[k] = v
+	}
+	cs.canon["meat_tax_case"] = "tax_meat"
+	dd := *d
+	dd.Case = &cs
+	r.Dataset = &dd
+	a, b := clone(t, d.Gold), clone(t, d.Gold)
+	renameIn(inst(a["13292.7"], 0), "tax_meat", "meat_tax_case")
+	r.anns["x"], r.anns["y"] = a, b
+	if dis := r.disagrees([]string{"x", "y"}, []Annotation{a["13292.7"], b["13292.7"]}); len(dis) > 0 {
+		t.Errorf("an alias makes a disagreement: %v", dis)
+	}
+	if dis := Disagrees([]Annotation{a["13292.7"], b["13292.7"]}, a, b); len(dis) == 0 {
+		t.Error("the plant did not change the bindings")
+	}
+	// The targets are read in canonical sets too: a target at a secondary
+	// instance whose conclusion one annotator writes with an alias.
+	a, b = clone(t, d.Gold), clone(t, d.Gold)
+	for _, s := range []map[string]Annotation{a, b} {
+		act := actualOf(s["13292.45"])
+		act["claim"], act["instance"], act["part"], act["formula"] = "13292.12", "13292.12#3", "conclusion", "¬should_be_performed(tax_meat)"
+	}
+	renameIn(targetInstance(a, "13292.12", "13292.12#3"), "tax_meat", "meat_tax_case")
+	r.anns["x"], r.anns["y"] = a, b
+	if dis := r.disagrees([]string{"x", "y"}, []Annotation{a["13292.45"], b["13292.45"]}); len(dis) > 0 {
+		t.Errorf("an alias in a target makes a disagreement: %v", dis)
+	}
+	if x, y := FieldIn(a["13292.45"], "target_instance", a), FieldIn(b["13292.45"], "target_instance", b); x == y {
+		t.Errorf("the plant did not change the target instance: %q", x)
+	}
+}
+
+// An instance with two agents binds an action of either of them (R14, as
+// validate.py reads it). No scheme of walton.yml has two agent places yet:
+// the test makes one.
+func TestR14TwoAgents(t *testing.T) {
+	d, c := builtin(t)
+	c.schemes["two_agents"] = waltonScheme{ID: "two_agents", Variables: []string{"P", "Q", "A", "B", "G"},
+		Premises:    []string{"goal_of_agent(P,G)", "goal_of_agent(Q,G)", "acceptable_action(P,A)", "acceptable_action(Q,B)"},
+		Conclusions: []string{"should_be_performed(A)"}}
+	cs := *d.Case
+	cs.actors = map[string]bool{"governments": true, "people": true, "farmers": true}
+	cs.canon = map[string]string{"tax_meat": "tax_meat", "eat_less_meat": "eat_less_meat", "raise_cattle": "raise_cattle"}
+	cs.actorOf = map[string]string{"tax_meat": "governments", "eat_less_meat": "people", "raise_cattle": "farmers"}
+	in := func(b string) map[string]any {
+		return map[string]any{"scheme": map[string]any{"walton_id": "two_agents"},
+			"bindings": map[string]any{"P": "governments", "Q": "people", "A": "tax_meat", "B": b, "G": "lower_emissions"}}
+	}
+	if p := c.checkActors(in("eat_less_meat"), "x#1", &cs); len(p) > 0 {
+		t.Errorf("an action of the second agent: %v", p)
+	}
+	if p := c.checkActors(in("raise_cattle"), "x#1", &cs); strings.Join(p, "|") != "R14 x#1 binds B to raise_cattle, which is farmers's action, not governments or people's" {
+		t.Errorf("an action of neither agent: %v", p)
+	}
+}
+
+// One primary instance in format 2, a lone instance too; a fragment whose
+// conclusion names an unstated variable has a null conclusion formula.
+func TestFormat2OnePrimaryAndFragmentConclusions(t *testing.T) {
+	d, c := builtin(t)
+	set := clone(t, d.Gold)
+	inst(set["13292.7"], 0)["primary"] = false
+	if p := c.CheckIn(set["13292.7"], d, set, 0); strings.Join(p, "|") != "0 primary instances, not 1" {
+		t.Errorf("a lone instance that is not primary: %v", p)
+	}
+	set = clone(t, d.Gold)
+	frag := inst(set["13292.6"], 0)
+	frag["bindings"].(map[string]any)["A"] = map[string]any{"unstated": "the claim states the goal's link only"}
+	var keep []any
+	for _, x := range frag["premises"].([]any) {
+		if !strings.Contains(x.(map[string]any)["formula"].(string), "tax_meat") {
+			keep = append(keep, x)
+		}
+	}
+	frag["premises"] = keep
+	if p := c.CheckIn(set["13292.6"], d, set, 0); !strings.Contains(strings.Join(p, "|"), "is a fragment whose conclusion names a variable it leaves unstated") {
+		t.Errorf("%v", p)
+	}
+	frag["conclusion"].(map[string]any)["formula"] = nil
+	if p := c.CheckIn(set["13292.6"], d, set, 0); len(p) > 0 {
+		t.Errorf("with a null conclusion: %v", p)
+	}
+}
+
+// Format 1 has no such rule: its fragments wrote their conclusion's formula
+// (docs/annotation-records.md §5 is format 2's).
+func TestFormat1FragmentConclusions(t *testing.T) {
+	d, c := builtin(t)
+	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
+	if err != nil {
+		t.Skip("the docs are not here:", err)
+	}
+	_, old, err := parseAnnotationFile(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	frag := inst(old["13292.6"], 0)
+	if fit := frag["scheme"].(map[string]any)["fit"]; fit != "fragment" {
+		t.Fatalf("13292.6 is %v", fit)
+	}
+	delete(frag["bindings"].(map[string]any), "A")
+	var keep []any
+	for _, x := range frag["premises"].([]any) {
+		if !strings.Contains(x.(map[string]any)["formula"].(string), "tax_meat") {
+			keep = append(keep, x)
+		}
+	}
+	frag["premises"] = keep
+	for _, p := range c.CheckIn(old["13292.6"], d, old, 1) {
+		if strings.Contains(p, "is a fragment whose conclusion names a variable it leaves unstated") {
+			t.Errorf("format 1: %s", p)
+		}
+	}
+}
+
+// The thesis has no polarity; a case record lists aliases for every action
+// and declares each actor once (N1 of the review).
+func TestThesisPolarityAndCaseRecordGaps(t *testing.T) {
+	d, c := builtin(t)
+	set := clone(t, d.Gold)
+	set["13292.1"]["role"].(map[string]any)["polarity"] = "for"
+	if p := c.CheckIn(set["13292.1"], d, set, 0); strings.Join(p, "|") != "R16 the thesis has no polarity (null)" {
+		t.Errorf("%v", p)
+	}
+	b, err := data.Annotation.ReadFile("annotation/kialo-13292-batch2/case.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(b)
+	for name, tc := range map[string]struct{ old, new, want string }{
+		"no list of aliases": {`"tax_meat", "actor": "governments", "aliases": []`, `"tax_meat", "actor": "governments"`, "has no list of aliases"},
+		"an actor twice":     {`"actors": [`, `"actors": [{"id": "governments", "text": "again"}, `, `already used ("governments")`},
+	} {
+		if strings.Count(s, tc.old) != 1 {
+			t.Fatalf("%s: %q is not in case.json once", name, tc.old)
+		}
+		if _, err := parseCase([]byte(strings.Replace(s, tc.old, tc.new, 1))); err == nil || !strings.Contains(err.Error(), tc.want) {
+			t.Errorf("%s: %v, want %q", name, err, tc.want)
+		}
+	}
+}
+
+// A format-2 run on a dataset without a case record tells the annotators so,
+// in each claim's prompt: the guidelines bind agents and actions by one (W10
+// of the review). A format-1 run, or a dataset with one, says nothing.
+func TestADatasetWithoutACaseRecordSaysSo(t *testing.T) {
+	items := `{"discussion": {"thesis_claim_id": "1.1"}, "items": [{"kialo_claim_id": "1.1", "text": "A."}]}`
+	runOn := func(files map[string]string) *Run {
+		d, err := FromDir(dataset(t, files))
+		if err != nil {
+			t.Fatal(err)
+		}
+		r, err := New(filepath.Join(t.TempDir(), "run"), d, Settings{Annotators: []llm.Profile{{Name: "ann", Provider: "mock"}}}, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return r
+	}
+	const note = "This dataset has no case record (case.json)"
+	// What the annotator is sent, on a format-2 dataset without one.
+	d, err := FromDir(dataset(t, map[string]string{"items.json": items}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var mu sync.Mutex
+	var sent []llm.Request
+	p := llm.Profile{Name: "ann", Provider: "mock", Params: llm.Params{Model: "m1"}}
+	c := llm.WithProvider(p, &llm.Mock{Fn: func(req llm.Request) (*llm.Response, error) {
+		mu.Lock()
+		sent = append(sent, req)
+		mu.Unlock()
+		return &llm.Response{Text: `{"kialo_claim_id": "1.1"}`, Model: "m1"}, nil
+	}})
+	c.Sleep = llm.NoWait
+	r, err := New(filepath.Join(t.TempDir(), "run"), d, Settings{Annotators: []llm.Profile{p}}, map[string]*llm.Client{"ann": c})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = r.Annotate(context.Background(), nil) // its reply is not an annotation: only the request matters
+	mu.Lock()
+	defer mu.Unlock()
+	if r.format() != 2 || len(sent) == 0 || len(sent[0].Messages) == 0 || !strings.Contains(sent[0].Messages[0].Content, note) {
+		t.Fatalf("format %d: the annotator is not told the dataset has no case record: %+v", r.format(), sent)
+	}
+	if strings.Contains(sent[0].System, note) {
+		t.Error("the note is in the system prompt, which the run pins")
+	}
+	old := runOn(map[string]string{"items.json": items, "gold.json": `{"annotator": "gold", "items": [{"kialo_claim_id": "1.1", "instances": [{"primary": true}]}]}`})
+	if p := old.annotatorPrompt(old.Dataset.Item("1.1"), nil, nil); old.format() != 1 || strings.Contains(p, note) {
+		t.Errorf("a format-%d run says the dataset has no case record", old.format())
+	}
+	b, _, ids := soloRun(t, 1)
+	if p := b.annotatorPrompt(b.Dataset.Item(ids[0]), nil, nil); strings.Contains(p, note) {
+		t.Error("the built-in dataset has a case record, but its prompt says it has none")
+	}
+}
+
+// The case record is checked against the dataset when it is read: its
+// thesis is a claim, its atoms are the lexicon's (W10 of the review).
+func TestTheCaseRecordAgainstTheDataset(t *testing.T) {
+	items := `{"discussion": {"thesis_claim_id": "1.1"}, "items": [{"kialo_claim_id": "1.1", "text": "A."}]}`
+	lexicon := `{"tax_meat": "governments put a tax on meat", "governments": "governments"}`
+	caseOf := func(thesis, action, alias string) string {
+		return `{"format": "wag-case/1", "id": "c", "thesis": {"claim": "` + thesis + `", "action": "` + action + `"},
+ "default_context": "now", "contexts": [{"id": "now", "text": "now"}], "actors": [{"id": "governments", "text": "g"}],
+ "actions": [{"id": "` + action + `", "actor": "governments", "aliases": [` + alias + `]}]}`
+	}
+	for _, c := range []struct{ name, cas, want string }{
+		{"sound", caseOf("1.1", "tax_meat", ""), ""},
+		{"a thesis that is not a claim", caseOf("9.9", "tax_meat", ""), `its thesis "9.9" is not a claim of the dataset`},
+		{"an action outside the lexicon", caseOf("1.1", "tax_fish", ""), "the action tax_fish is not an atom of the lexicon"},
+		{"an alias outside the lexicon", caseOf("1.1", "tax_meat", `"meat_tax"`), "the alias meat_tax is not an atom of the lexicon"},
+		{"an actor outside the lexicon", strings.ReplaceAll(caseOf("1.1", "tax_meat", ""), `"governments"`, `"farmers"`), "the actor farmers is not an atom of the lexicon"},
+	} {
+		t.Run(c.name, func(t *testing.T) {
+			_, err := FromDir(dataset(t, map[string]string{"items.json": items, "lexicon.json": lexicon, "case.json": c.cas}))
+			if c.want == "" && err != nil || c.want != "" && (err == nil || !strings.Contains(err.Error(), c.want)) {
+				t.Fatalf("%v, want %q", err, c.want)
+			}
+		})
 	}
 }

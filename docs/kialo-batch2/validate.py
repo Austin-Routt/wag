@@ -25,6 +25,9 @@ import yaml
 DOC = os.path.dirname(os.path.abspath(__file__)) + '/'
 REPO = os.path.normpath(DOC + '../..') + '/'
 ARGS = sys.argv[1:]
+REPIN = '--repin' in ARGS
+if REPIN:
+    ARGS.remove('--repin')
 CASE = DOC + 'case.json'
 if '--case' in ARGS:
     i = ARGS.index('--case')
@@ -34,8 +37,8 @@ ANN = ARGS[0] if ARGS else DOC + 'gold.json'
 gold = json.load(open(ANN, encoding='utf-8'))
 IS_GOLD = gold.get('annotator') == 'gold'
 FORMAT = gold.get('format')
-if FORMAT not in (None, 'wag-annotation/2'):
-    print(f'ERRORS (1):\nthe file is in format {FORMAT!r}: this reads format 1 (no "format") and wag-annotation/2')
+if FORMAT not in (None, 'wag-annotation/1', 'wag-annotation/2'):
+    print(f'ERRORS (1):\nthe file is in format {FORMAT!r}: this reads format 1 (no "format", or wag-annotation/1) and wag-annotation/2')
     sys.exit(1)
 F2 = FORMAT == 'wag-annotation/2'
 WALTON_PATH = REPO + 'docs/scheme-registry/walton-clean/walton.yml'
@@ -97,17 +100,27 @@ def item_rev(it):
 def sha256_file(p):
     return hashlib.sha256(open(p, 'rb').read()).hexdigest()
 
+def valid_date(d):
+    import datetime
+    try:
+        return isinstance(d, str) and re.match(r'^\d{4}-\d{2}-\d{2}$', d) and bool(datetime.date.fromisoformat(d))
+    except ValueError:
+        return False
+
 # 1. 50 items, in items.json order
 ids = [i['kialo_claim_id'] for i in items]
-gids = [i['kialo_claim_id'] for i in gold['items']]
+gids = [i.get('kialo_claim_id') for i in gold['items']]
 if gids != ids: err('items not in items.json order or count differs: %d' % len(gids))
-G = {i['kialo_claim_id']: i for i in gold['items']}
+G = {i.get('kialo_claim_id'): i for i in gold['items']}
 kp = {i['kialo_claim_id']: i['kialo_parents'] for i in items}
+# A claim's text revision (docs/annotation-records.md §9): the SHA-256 of its text in items.json.
+TEXT_REV = {i['kialo_claim_id']: hashlib.sha256(i['text'].encode('utf-8')).hexdigest() for i in items}
 
 def primary(it):
-    p = [x for x in it['instances'] if x.get('primary') is True]
-    if len(p) != 1: err(f"{it['kialo_claim_id']}: {len(p)} primary instances")
-    return p[0] if p else (it['instances'][0] if it['instances'] else None)
+    insts = [x for x in it.get('instances') or [] if isinstance(x, dict)]
+    p = [x for x in insts if x.get('primary') is True]
+    if len(p) != 1: err(f"{it.get('kialo_claim_id')}: {len(p)} primary instances")
+    return p[0] if p else (insts[0] if insts else None)
 
 def formulas(ins, part):
     """An instance's formulas in a part of a target: premise (its premises and
@@ -116,7 +129,8 @@ def formulas(ins, part):
         f = (ins.get('conclusion') or {}).get('formula')
         return [nows(f)] if isinstance(f, str) and f else []
     roles = {'premise': ('premise', 'assumption'), 'exception': ('exception',)}.get(part, ())
-    return [nows(p['formula']) for p in ins.get('premises') or [] if p.get('role') in roles]
+    return [nows(p.get('formula')) for p in ins.get('premises') or []
+            if isinstance(p, dict) and p.get('role') in roles and isinstance(p.get('formula'), str)]
 
 def all_formulas(ins):
     return formulas(ins, 'premise') + formulas(ins, 'exception') + formulas(ins, 'conclusion')
@@ -125,7 +139,15 @@ def all_formulas(ins):
 POS = {'agent': {}, 'action': {}}
 ACTORS, ACTOR, CANON, CONTEXTS, DEFAULT_CTX, THESIS = set(), {}, {}, set(), None, {}
 INST = {}  # instance id -> (claim, instance)
+MALFORMED = set()  # format 2: items that break the field contract (R16)
 ID_RE = re.compile(r'^(.+)#([1-9][0-9]*)$')
+# Every input this check reads, which a gold pins (R16; docs/annotation-records.md §2).
+PINNED = {'items.json': DOC + 'items.json', 'lexicon.json': DOC + 'lexicon.json', 'case.json': CASE,
+          'walton.yml': WALTON_PATH, 'id-migrations.json': REPO + 'docs/scheme-registry/walton-clean/id-migrations.json',
+          'links.json': REPO + 'docs/scheme-registry/links.json', 'positions.json': REPO + 'wag/data/annotation/positions.json',
+          'nascq/schemes.json': REPO + 'wag/data/nascq/schemes.json',
+          'nascq/critical_questions.json': REPO + 'wag/data/nascq/critical_questions.json',
+          'nascq/edges.json': REPO + 'wag/data/nascq/edges.json'}
 if F2:
     POS = json.load(open(REPO + 'wag/data/annotation/positions.json', encoding='utf-8'))
     case = None
@@ -171,23 +193,23 @@ if F2:
         if THESIS.get('claim') not in G:
             err(f'case.json: R14 the thesis {THESIS.get("claim")!r} is not a claim of the file')
     for it in gold['items']:
-        for ins in it.get('instances') or []:
-            if isinstance(ins.get('id'), str) and ins['id'] not in INST:
-                INST[ins['id']] = (it['kialo_claim_id'], ins)
+        for ins in it.get('instances') if isinstance(it.get('instances'), list) else []:
+            if isinstance(ins, dict) and isinstance(ins.get('id'), str) and ins['id'] not in INST:
+                INST[ins['id']] = (it.get('kialo_claim_id'), ins)
     if IS_GOLD:
         pins = gold.get('inputs')
-        files = {'items.json': DOC + 'items.json', 'lexicon.json': DOC + 'lexicon.json', 'case.json': CASE, 'walton.yml': WALTON_PATH}
-        if not isinstance(pins, dict) or set(pins) != set(files):
-            err(f'inputs: R16 a gold pins exactly {sorted(files)}, not {sorted(pins) if isinstance(pins, dict) else pins!r}')
+        if not isinstance(pins, dict) or set(pins) != set(PINNED):
+            err(f'inputs: R16 a gold pins exactly {sorted(PINNED)}, not {sorted(pins) if isinstance(pins, dict) else pins!r}')
         else:
-            for name, p in files.items():
+            for name, p in PINNED.items():
                 if os.path.exists(p) and pins[name] != sha256_file(p):
                     err(f'inputs: R16 the gold was checked against another {name} (pinned {pins[name][:12]}…, it is '
-                        f'{sha256_file(p)[:12]}…): check it again and pin the new one')
+                        f'{sha256_file(p)[:12]}…): check it again, and pin the new one (validate.py --repin)')
 
 def target_instance(claim, ref):
     """The instance a target names: in format 1, its claim's primary instance;
-    in format 2, the instance with that id, if it is one of that claim's."""
+    in format 2, the instance with that id, if it is one of that claim's
+    (check_target_entry does not look in a malformed item)."""
     if claim not in G:
         return None
     if not F2:
@@ -237,6 +259,8 @@ def check_target_entry(cid, where, claim, ref, part, formula):
         return None
     if not isinstance(ref, str):
         err(f'{cid}: R16 {where} names no instance (an instance id, or {{"unresolved": why}})'); return None
+    if claim in MALFORMED:
+        return None  # its own errors are said; its instances are not read
     tp = target_instance(claim, ref)
     if tp is None:
         err(f'{cid}: R13 {where} names the instance {ref}, which is not an instance of {claim}'); return None
@@ -253,17 +277,184 @@ def check_target_entry(cid, where, claim, ref, part, formula):
         err(f'{cid}: bad target part {part}')
     return tp
 
+
+ROLES = ('independent_pro', 'independent_con', 'rebuttal', 'undercutter', 'premise_attack', 'premise_backing',
+         'cq_answer', 'side_effect', 'alternative_means', 'action_amendment', 'clarification', 'none')
+FITS = ('explicit', 'reconstructed', 'fragment', 'none')
+PARTS = ('premise', 'exception', 'conclusion', 'inference')
+EVIDENCE = ('source', 'definition', 'example', 'assertion')
+
+def text(v):
+    return isinstance(v, str) and v.strip() != ''
+
+def target_shape(a_, claim_key='claim'):
+    """R16 for one exact target: its claim, instance, part and formula
+    (docs/annotation-records.md §6)."""
+    out = []
+    if not text(a_.get(claim_key)): out.append(f'.{claim_key} is not a claim')
+    ref, part, f = a_.get('instance'), a_.get('part'), a_.get('formula')
+    if not (text(ref) or marker(ref, 'unresolved')): out.append('.instance is not an instance id, or {"unresolved": why}')
+    if not (part in PARTS or marker(part, 'unresolved')): out.append(f'.part is {part!r}: premise, exception, conclusion, inference, or {{"unresolved": why}}')
+    if 'formula' not in a_:
+        out.append('.formula is missing (null for an inference, §8)')
+    elif part == 'inference':
+        if f is not None: out.append('.formula is not null: an inference target has no formula')
+    elif not (text(f) or marker(f, 'unresolved')):
+        out.append('.formula is not a formula, or {"unresolved": why}')
+    return out
+
+def shape_errors(it):
+    """R16 (format 2): the field contract of docs/annotation-records.md §4-§8,
+    before any rule reads the record: every required field, each of its type;
+    null only where §8 lists it; a marker only where it is allowed. A record
+    with any of these is reported and not checked further, so that a
+    malformed record is said, not a traceback."""
+    out = []
+    def bad(path, what):
+        out.append(f'R16 {path} {what}')
+    def num01(v):
+        return isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= 1
+    cid = it.get('kialo_claim_id')
+    parents = kp.get(cid) or []
+    thesis = not parents
+    lit = it.get('literal')
+    if not isinstance(lit, list) or not lit or not all(text(x) for x in lit):
+        bad('literal', "is not a list of the claim's propositions")
+    if 'retired' in it:
+        ok = isinstance(it['retired'], list) and all(isinstance(x, str) and ID_RE.match(x) and ID_RE.match(x).group(1) == cid
+                                                       for x in it['retired'])
+        if not ok: bad('retired', f"is not a list of ids of {cid}'s instances")
+    insts = it.get('instances')
+    if not isinstance(insts, list) or not insts or not all(isinstance(x, dict) for x in insts):
+        bad('instances', 'is not a list of instances (at least one)')
+        insts = []
+    for n, ins in enumerate(insts):
+        where = ins['id'] if text(ins.get('id')) else f'instances[{n}]'
+        if not text(ins.get('id')): bad(f'{where}.id', 'is not an instance id')
+        if not isinstance(ins.get('primary'), bool): bad(f'{where}.primary', 'is not true or false')
+        if 'context' in ins and not text(ins['context']): bad(f'{where}.context', 'is not a context id')
+        sc = ins.get('scheme')
+        if not isinstance(sc, dict):
+            bad(f'{where}.scheme', 'is not an object')
+            continue
+        if not text(sc.get('walton_id')): bad(f'{where}.scheme.walton_id', 'is not a scheme id, other or none')
+        for k in ('compendium', 'wag_id'):
+            if k not in sc or not (sc[k] is None or text(sc[k])): bad(f'{where}.scheme.{k}', 'is not text, or null when there is none')
+        if sc.get('fit') not in FITS: bad(f'{where}.scheme.fit', f'is {sc.get("fit")!r}: explicit, reconstructed, fragment or none')
+        if not num01(sc.get('confidence')): bad(f'{where}.scheme.confidence', 'is not a number from 0 to 1')
+        if not isinstance(sc.get('alternatives'), list): bad(f'{where}.scheme.alternatives', 'is not a list')
+        bm = ins.get('bindings')
+        if not isinstance(bm, dict):
+            bad(f'{where}.bindings', 'is not an object')
+        else:
+            for v, x in bm.items():
+                if not (text(x) or (marker(x, 'unstated') and sc.get('fit') == 'fragment')):
+                    bad(f'{where}.bindings.{v}', f'is {x!r}: an atom, or in a fragment {{"unstated": why}}')
+        ps = ins.get('premises')
+        if not isinstance(ps, list) or not all(isinstance(x, dict) for x in ps):
+            bad(f'{where}.premises', 'is not a list of premises')
+        else:
+            for k, pm in enumerate(ps):
+                if pm.get('role') not in ('premise', 'assumption', 'exception'): bad(f'{where}.premises[{k}].role', f'is {pm.get("role")!r}')
+                if not text(pm.get('formula')): bad(f'{where}.premises[{k}].formula', 'is not a formula')
+                if not isinstance(pm.get('en'), str): bad(f'{where}.premises[{k}].en', 'is not text')
+                if pm.get('status') not in ('explicit', 'inferred', 'supplied'):
+                    bad(f'{where}.premises[{k}].status', f'is {pm.get("status")!r}: explicit, inferred or supplied')
+        cm = ins.get('conclusion')
+        if not isinstance(cm, dict) or 'formula' not in cm or not isinstance(cm.get('en'), str):
+            bad(f'{where}.conclusion', 'is not an object with a formula and its English')
+        elif not (text(cm['formula']) or cm['formula'] is None):
+            bad(f'{where}.conclusion.formula', 'is not a formula, or null')
+        elif cm['formula'] is None and sc.get('walton_id') not in ('other', 'none') and sc.get('fit') != 'fragment':
+            bad(f'{where}.conclusion.formula', 'is null, which only other, none and a fragment whose conclusion is unstated may be')
+        for k in ('label', 'note', 'comparison'):
+            if k in ins and not isinstance(ins[k], str): bad(f'{where}.{k}', 'is not text')
+    r_ = it.get('role')
+    if not isinstance(r_, dict):
+        bad('role', 'is not an object')
+    else:
+        kind = r_.get('kind')
+        if kind not in ROLES: bad('role.kind', f"is {kind!r}, not one of the guidelines' roles")
+        if 'move' in r_ and r_['move'] not in ('side_effect', 'alternative_means'): bad('role.move', f'is {r_["move"]!r}: side_effect or alternative_means')
+        if 'cq' not in r_: bad('role.cq', 'is missing (null when the role is not cq_answer)')
+        elif kind == 'cq_answer' and not text(r_['cq']): bad('role.cq', 'names no question, but the role is cq_answer')
+        elif kind != 'cq_answer' and r_['cq'] is not None: bad('role.cq', f'is {r_["cq"]!r}: null, as the role is not cq_answer')
+        if 'polarity' not in r_: bad('role.polarity', 'is missing')
+        elif thesis and r_['polarity'] is not None: bad('role.polarity', 'is not null: the thesis has no polarity')
+        elif not thesis and r_['polarity'] not in ('for', 'against'): bad('role.polarity', f'is {r_["polarity"]!r}: for or against, null only for the thesis')
+        if not num01(r_.get('confidence')): bad('role.confidence', 'is not a number from 0 to 1')
+    t_ = it.get('target')
+    if not isinstance(t_, dict):
+        bad('target', 'is not an object')
+    else:
+        if 're_parented' in t_: bad('target.re_parented', 'is recorded: it is derived from the target, not recorded')
+        for k in ('kialo_parent', 'kialo_relation', 'actual'):
+            if k not in t_: bad(f'target.{k}', 'is missing (null only for the thesis)')
+        if thesis:
+            if any(t_.get(k) is not None for k in ('kialo_parent', 'kialo_relation', 'actual')):
+                bad('target', 'is not null: the thesis has no target (its kialo_parent, kialo_relation and actual are null)')
+        else:
+            if t_.get('kialo_parent') != parents[0].get('claim_id'):
+                bad('target.kialo_parent', f'is {t_.get("kialo_parent")!r}, not {parents[0].get("claim_id")!r}')
+            if t_.get('kialo_relation') != parents[0].get('relation'):
+                bad('target.kialo_relation', f'is {t_.get("kialo_relation")!r}, not {parents[0].get("relation")!r}')
+            a_ = t_.get('actual')
+            if not isinstance(a_, dict) or not a_:
+                bad('target.actual', f'is {a_!r}: only the thesis has no actual target')
+            else:
+                out += [f'R16 target.actual{e}' for e in target_shape(a_)]
+        others = t_.get('other_kialo_parents')
+        if len(parents) > 1 and not isinstance(others, list):
+            bad('target.other_kialo_parents', 'is missing: the claim has more than one Kialo parent (R7)')
+        if len(parents) <= 1 and 'other_kialo_parents' in t_:
+            bad('target.other_kialo_parents', 'is recorded, but the claim has one Kialo parent or none (R7)')
+        for k, o in enumerate(others if isinstance(others, list) else []):
+            if not isinstance(o, dict) or not text(o.get('claim_id')) or o.get('relation') not in ('pro', 'con'):
+                bad(f'target.other_kialo_parents[{k}]', 'needs claim_id and relation (pro or con)')
+            elif 'part' in o:
+                out += [f'R16 target.other_kialo_parents[{k}]{e}' for e in target_shape(o, claim_key='claim_id')]
+    ev = it.get('evidence')
+    if not (isinstance(ev, dict) and ev.get('status') in EVIDENCE and isinstance(ev.get('urls'), list)
+            and all(isinstance(u, str) for u in ev['urls'])):
+        bad('evidence', 'needs status (source, definition, example or assertion) and a list of urls (empty when it cites none)')
+    ch = it.get('challenges')
+    if not isinstance(ch, list) or not all(isinstance(x, dict) for x in ch):
+        bad('challenges', 'is not a list of challenges')
+    else:
+        for k, c in enumerate(ch):
+            for key in ('cq', 'wag_cq'):
+                if key not in c or not (c[key] is None or text(c[key])):
+                    bad(f'challenges[{k}].{key}', "is not a question's label, or null when there is none")
+            if not text(c.get('type')): bad(f'challenges[{k}].type', 'is not a type')
+            if not text(c.get('instance')): bad(f'challenges[{k}].instance', 'names no instance')
+            if 'formula' not in c or not (c['formula'] is None or text(c['formula'])):
+                bad(f'challenges[{k}].formula', 'is not a formula, or null for the whole instance')
+    no = it.get('notes')
+    if not (isinstance(no, dict) and isinstance(no.get('text'), str) and 'candidate_pattern' in no
+            and (no['candidate_pattern'] is None or text(no['candidate_pattern']))):
+        bad('notes', 'needs text and candidate_pattern (null when it names none)')
+    return out
+
 counts = {'instances': 0, 'checked_formulas': 0}
 REQUIRED = ('literal', 'instances', 'role', 'target', 'evidence', 'challenges', 'notes')
+# The field contract first, for every item: a malformed item is reported once,
+# and no other item's rule reads it as a target.
+SHAPE = {it.get('kialo_claim_id'): shape_errors(it) for it in gold['items']} if F2 else {}
+MALFORMED = {cid for cid, e in SHAPE.items() if e}
 for it in gold['items']:
-    cid = it['kialo_claim_id']
+    cid = it.get('kialo_claim_id')
+    unstated_conclusions = set()  # instances whose conclusion R16 refused (not checked for atoms again)
+    if F2 and SHAPE.get(cid):
+        for e in SHAPE[cid]:
+            err(f'{cid}: {e}')
+        continue
     for k in REQUIRED + (('adjudication',) if IS_GOLD else ()):
         if k not in it: err(f'{cid}: missing {k}')
     if IS_GOLD:
         ad = it['adjudication']
         if not isinstance(ad.get('changed_fields'), list) or not ad.get('reason'): err(f'{cid}: bad adjudication')
         if ad['changed_fields'] == [] and ad['reason'] != 'agreed': err(f'{cid}: empty changes but reason != agreed')
-    thesis = not kp[cid]
+    thesis = not kp.get(cid)
     # R12 (format 2): every instance has an id of its own claim, used once and
     # never retired.
     if F2:
@@ -321,7 +512,10 @@ for it in gold['items']:
         elif sorted(exp) != sorted(got): err(f'{cid}: {wid} premises differ from walton.yml: {set(exp) ^ set(got)}')
         concl = (ins.get('conclusion') or {}).get('formula')
         open_concl = bool(set(re.findall(r'\b[A-Z][A-Za-z0-9_]*\b', sch['conclusions'][0])) & unstated)
-        if not (open_concl and concl is None) and nows(concl) != nows(subst(sch['conclusions'][0], ins['bindings'])):
+        if F2 and open_concl and concl is not None:
+            err(f'{cid}: R16 {iid} is a fragment whose conclusion names a variable it leaves unstated: its formula is null')
+            unstated_conclusions.add(id(ins))
+        elif not (open_concl and concl is None) and nows(concl) != nows(subst(sch['conclusions'][0], ins['bindings'])):
             err(f'{cid}: {wid} conclusion differs')
         counts['checked_formulas'] += len(got) + 1
         # R4: hypothetical cause. Format 1: under the N8 note; format 2: a
@@ -331,19 +525,27 @@ for it in gold['items']:
             if not occurrences:
                 err(f'{cid}: cause_to_effect lacks has_occurred premise'); continue
             ho = occurrences[0]
-            if ho['status'] == 'supplied':
-                if F2:
-                    err(f'{cid}: R4 {iid} supplies has_occurred: a cause that is only proposed or possible is cause_to_effect_modal (D039)')
-                elif s['fit'] != 'reconstructed' or s['confidence'] > 0.5 or 'hypothetical cause (needs a modal causal scheme, audit N8)' not in (ins.get('note') or ''):
+            if F2:
+                # Format 2 (D039): by the record, not by a premise's status. A
+                # cause that is an action the case deliberates has not
+                # occurred, nor has one that a modal step of the same claim
+                # concludes may occur: both are cause_to_effect_modal's.
+                e1 = ins['bindings'].get('E1')
+                modal = {x['bindings'].get('E2') for x in it['instances'] if x['scheme']['walton_id'] == 'cause_to_effect_modal'}
+                if isinstance(e1, str) and canon(e1) in ACTOR:
+                    err(f'{cid}: R4 {iid} has the cause {e1}, an action the case deliberates, which has not occurred: cause_to_effect_modal (D039)')
+                elif isinstance(e1, str) and e1 in modal:
+                    err(f'{cid}: R4 {iid} has the cause {e1}, which a modal step of the claim says only may occur: cause_to_effect_modal (D039)')
+            elif ho['status'] == 'supplied':
+                if s['fit'] != 'reconstructed' or s['confidence'] > 0.5 or 'hypothetical cause (needs a modal causal scheme, audit N8)' not in (ins.get('note') or ''):
                     err(f'{cid}: R4 not applied to a hypothetical cause_to_effect')
         # R14 (format 2): an agent's place holds an actor of the case, an
         # action's place an action (or an alias of one), and an instance with
-        # an agent binds only that agent's actions (the case's mapping, not
+        # an agent binds only its agent's actions (the case's mapping, not
         # the action's name: D063, D091).
         if F2:
             t = typed(sch)
             agents = {ins['bindings'][v] for v, k in t.items() if k == 'agent' and isinstance(ins['bindings'].get(v), str)}
-            if len(agents) > 1: err(f'{cid}: R14 {iid} names more than one agent: {sorted(agents)}')
             for v, k in sorted(t.items()):
                 b = ins['bindings'].get(v)
                 if not isinstance(b, str): continue
@@ -352,29 +554,11 @@ for it in gold['items']:
                 elif k == 'action':
                     if b not in CANON:
                         err(f'{cid}: R14 {iid} binds the action {v} to {b}, which is not an action of the case')
-                    elif len(agents) == 1 and ACTOR[canon(b)] not in agents:
-                        err(f'{cid}: R14 {iid} binds {v} to {b}, which is {ACTOR[canon(b)]}\'s action, not {next(iter(agents))}\'s')
-    # R16 (format 2): no value without its kind.
+                    elif agents and ACTOR[canon(b)] not in agents:
+                        err(f'{cid}: R14 {iid} binds {v} to {b}, which is {ACTOR[canon(b)]}\'s action, not {" or ".join(sorted(agents))}\'s')
+    # R16's field contract (format 2) is the schema pass's (shape_errors):
+    # a malformed item does not reach this point.
     t = it['target']; a = t.get('actual'); r = it['role']
-    if F2:
-        if 're_parented' in t: err(f'{cid}: R16 it records re_parented, which is derived from the target, not recorded')
-        if thesis:
-            if t.get('kialo_parent') is not None or t.get('kialo_relation') is not None or a is not None:
-                err(f'{cid}: R16 the thesis has no target: its kialo_parent, kialo_relation and actual are null')
-            if r.get('polarity') is not None: err(f'{cid}: R16 the thesis has no polarity (null)')
-        else:
-            if not isinstance(a, dict): err(f'{cid}: R16 its actual target is {a!r}: only the thesis has none'); a = None
-            if r.get('polarity') not in ('for', 'against'): err(f'{cid}: R16 its polarity is {r.get("polarity")!r}: for or against, null only for the thesis')
-        for k in ('kialo_parent', 'kialo_relation', 'actual'):
-            if k not in t: err(f'{cid}: R16 its target says nothing of {k}')
-        for k in ('kind', 'cq', 'polarity', 'confidence'):
-            if k not in r: err(f'{cid}: R16 its role says nothing of {k}')
-        n = it.get('notes')
-        if not isinstance(n, dict) or not isinstance(n.get('text'), str) or 'candidate_pattern' not in n:
-            err(f'{cid}: R16 its notes need text and candidate_pattern (null when it names none)')
-        ev = it.get('evidence')
-        if not isinstance(ev, dict) or not isinstance(ev.get('urls'), list) or not isinstance(ev.get('status'), str):
-            err(f'{cid}: R16 its evidence needs a status and a list of urls (empty when it cites none)')
     # 3. target formula in the target instance; R1; R2
     parents = kp[cid]
     if t['kialo_parent'] != (parents[0]['claim_id'] if parents else None): err(f'{cid}: kialo_parent mismatch')
@@ -494,18 +678,21 @@ for it in gold['items']:
     # with nothing left unresolved.
     if F2 and 'verified' in it:
         v = it['verified']
-        if not (isinstance(v, dict) and isinstance(v.get('by'), str) and v['by'] and isinstance(v.get('date'), str)
-                and re.match(r'^\d{4}-\d{2}-\d{2}$', v['date']) and isinstance(v.get('item_rev'), str)):
-            err(f'{cid}: R17 its verification needs by, a date (YYYY-MM-DD) and the item_rev verified')
+        if not (isinstance(v, dict) and v.get('by') == 'owner' and valid_date(v.get('date'))
+                and isinstance(v.get('item_rev'), str) and isinstance(v.get('text_sha256'), str)):
+            err(f'{cid}: R17 its verification needs by "owner" (D086), a date (YYYY-MM-DD), the item_rev and the text_sha256 verified')
         elif v['item_rev'] != item_rev(it):
             err(f'{cid}: R17 it was verified at revision {v["item_rev"][:12]}…, but it is {item_rev(it)[:12]}… now: verify it again')
+        elif v['text_sha256'] != TEXT_REV.get(cid):
+            err(f"{cid}: R17 it was verified on another text of the claim (items.json's text has changed): verify it again")
         if any(u.startswith(cid + ':') for u in unresolved_values):
             err(f'{cid}: R17 it is verified, but some of its values are unresolved')
     # 4. atoms
     fs = []
     for ins in it['instances']:
         fs += [v for v in ins['bindings'].values() if isinstance(v, str) and v] + [p['formula'] for p in ins['premises']]
-        if (ins.get('conclusion') or {}).get('formula'): fs.append(ins['conclusion']['formula'])  # none/other may have no formula
+        if (ins.get('conclusion') or {}).get('formula') and id(ins) not in unstated_conclusions:
+            fs.append(ins['conclusion']['formula'])  # none/other may have no formula
     if a and isinstance(a.get('formula'), str) and a.get('formula'): fs.append(a['formula'])
     fs += [o['formula'] for o in t.get('other_kialo_parents') or [] if isinstance(o.get('formula'), str) and o.get('formula')]
     fs += [c['formula'] for c in it['challenges'] if c.get('formula')]
@@ -525,6 +712,14 @@ print('items', len(gold['items']), '| instances', counts['instances'], '| walton
 if unresolved_values:
     print('UNRESOLVED (%d), kept as development material, not scored (docs/annotation-records.md §6):' % len(unresolved_values))
     print('\n'.join('  ' + u for u in unresolved_values))
+if REPIN and F2 and IS_GOLD and errors and all(e.startswith('inputs: R16 ') for e in errors):
+    # Only the pins are stale: everything else holds on the current inputs,
+    # so pin them (written as the gold is: indent 1, no newline at the end).
+    gold['inputs'] = {name: sha256_file(p) for name, p in PINNED.items()}
+    with open(ANN, 'w', encoding='utf-8') as fh:
+        fh.write(json.dumps(gold, indent=1, ensure_ascii=False))
+    print('re-pinned the inputs of', ANN, 'after checking everything else on them')
+    errors = []
 if errors:
     print('ERRORS (%d):' % len(errors)); print('\n'.join(errors)); sys.exit(1)
 if F2:

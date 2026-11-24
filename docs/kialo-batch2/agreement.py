@@ -89,28 +89,38 @@ def target_instance(S, claim, ref):
 
 
 def exact(item, which, S):
-    """target_instance or target_formula, read in S (Go's FieldIn)."""
+    """target_instance or target_formula, read in S (Go's FieldIn). The
+    instance is compared as the targeting decision: the target claim's
+    primary instance, or which secondary one; only what a field itself leaves
+    open makes it unresolved."""
     a = (item.get("target") or {}).get("actual") if isinstance(item.get("target"), dict) else None
     if not isinstance(a, dict) or not a:
         return ""
-    ref, f = a.get("instance"), a.get("formula")
-    if is_marker(ref, "unresolved") or is_marker(f, "unresolved") or is_marker(a.get("part"), "unresolved"):
-        return UNRESOLVED
+    ref, f, claim = a.get("instance"), a.get("formula"), a.get("claim")
     if which == "target_formula":
+        if is_marker(f, "unresolved"):
+            return UNRESOLVED
         if isinstance(f, str) and f:
             return compact(f)
         part = a.get("part") if isinstance(a.get("part"), str) else ""
         if part == "inference":
             return ""
-        if part != "conclusion":
-            return UNRESOLVED
-    ins = target_instance(S, a.get("claim"), ref)
+        if part == "conclusion" and not is_marker(ref, "unresolved"):
+            ins = target_instance(S, claim, ref)
+            c = (ins or {}).get("conclusion") if isinstance((ins or {}).get("conclusion"), dict) else {}
+            if isinstance(c.get("formula"), str):
+                return compact(c["formula"])
+        return UNRESOLVED
+    if is_marker(ref, "unresolved"):
+        return UNRESOLVED
+    ins = target_instance(S, claim, ref)
     if ins is None:
         return UNRESOLVED
-    if which == "target_formula":
-        c = ins.get("conclusion") if isinstance(ins.get("conclusion"), dict) else {}
-        return compact(c["formula"]) if isinstance(c.get("formula"), str) else UNRESOLVED
-    return signature(ins)
+    if ref is None or isinstance(ref, str) and (ref == "" or ref.startswith("primary")):
+        return "primary"
+    if ins.get("primary") is True:
+        return "primary"
+    return "secondary:" + signature(ins)
 
 
 def question(item):

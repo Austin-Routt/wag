@@ -174,9 +174,10 @@ examples:
   kialo: "13292.14"
   coding: 'Near miss: a chain of causal steps (a tariff raises the price, the price
     cuts consumption), but its end is what the arguer wants, and no badness is carried
-    back along it; two cause_to_effect instances, as the gold codes them.'
+    back along it; two causal steps, which the gold codes as cause_to_effect_modal
+    since 2026-11-24 (D039; cause_to_effect before).'
   near_miss: true
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-24
 discrepancies:
 - kind: partial-link
   about: "49"
@@ -284,3 +285,9 @@ history:
   what: 'Revised after the independent model check of cause_to_effect_modal, 2026-10-22
     (findings: the contrasts with both causal schemes; the Recursive Premise decision
     describes the modal scheme rightly)'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 'Dated for D039, applied with the batch-2 gold''s format 2 (docs/kialo-batch2/migrate_format2.py):
+    the example of 13292.14 says how the gold codes the claim''s causal steps now
+    (cause_to_effect_modal), after the independent review of the identity contract
+    (E5).'

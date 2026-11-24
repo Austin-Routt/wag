@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strings"
 )
 
 // The identity contract's checks (docs/annotation-records.md, D092) on a
@@ -129,7 +130,7 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 				add("R16 the thesis has no polarity (null)")
 			}
 		} else {
-			if !isMap {
+			if !isMap || len(actual) == 0 {
 				add("R16 its actual target is %s: only the thesis has none", jsonText(tg["actual"]))
 			}
 			if p := role["polarity"]; p != "for" && p != "against" {
@@ -272,9 +273,6 @@ func (c *Collection) checkActors(in map[string]any, id string, cs *Case) []strin
 		}
 	}
 	var out []string
-	if len(agents) > 1 {
-		out = append(out, fmt.Sprintf("R14 %s names more than one agent: %v", id, sortedSet(agents)))
-	}
 	vars := make([]string, 0, len(t))
 	for v := range t {
 		vars = append(vars, v)
@@ -296,12 +294,8 @@ func (c *Collection) checkActors(in map[string]any, id string, cs *Case) []strin
 				out = append(out, fmt.Sprintf("R14 %s binds the action %s to %s, which is not an action of the case", id, v, b))
 				continue
 			}
-			if len(agents) == 1 {
-				for ag := range agents {
-					if cs.actorOf[act] != ag {
-						out = append(out, fmt.Sprintf("R14 %s binds %s to %s, which is %s's action, not %s's", id, v, b, cs.actorOf[act], ag))
-					}
-				}
+			if len(agents) > 0 && !agents[cs.actorOf[act]] {
+				out = append(out, fmt.Sprintf("R14 %s binds %s to %s, which is %s's action, not %s's", id, v, b, cs.actorOf[act], strings.Join(sortedSet(agents), " or ")))
 			}
 		}
 	}

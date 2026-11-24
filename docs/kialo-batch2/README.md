@@ -43,6 +43,7 @@ python3 -I test_validate.py                 # each rule from R8 on catches the d
 python3 -I validate.py gold-format1.json    # the format-1 gold, by the rules it was made under (R1–R11)
 python3 -I validate.py annotator-A.json     # any annotation file (an annotator's, or a model's)
 python3 -I agreement.py annotator-A.json annotator-B.json --pilot ../kialo-pilot/pilot.json --families ../../wag/data/schemes/families.json --json agreement.json
+# add --case case.json to read the aliases the case record lists as their actions (none in batch 2)
 # the game: start wag-server, then
 python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-report.json --export wag-game.json
 ```
@@ -91,4 +92,4 @@ The dashboard computes the same agreement figures itself; `report.json` has them
     --reviewer a --limit 5 --out runs/batch2-try
 ```
 
-Each call sends the guidelines, `walton.yml`, the lexicon, the case record and the game's NASCQ files: about 130,000 characters (35,000–40,000 tokens). On a free tier, start with a few claims. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).
+Each call sends the guidelines, `walton.yml`, the lexicon, the case record and the game's NASCQ files: about 164,000 characters (2026-11-24; Gemini counted about 41,000 tokens for an earlier, shorter prompt). On a free tier, start with a few claims. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).

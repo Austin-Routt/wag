@@ -27,6 +27,13 @@ func (d *Dataset) annotatorSystem(conv func(string) string) string {
 	return s.String()
 }
 
+// noCaseRecord ends each claim's prompt in a format-2 run on a dataset
+// without a case record: the guidelines bind agents and actions by one
+// (docs/annotation-records.md §3). It is not in the system prompt, which a
+// run pins: a dataset's default format follows its gold, which scoring may
+// remove.
+const noCaseRecord = "\nThis dataset has no case record (case.json): bind agents and actions to the atoms the claims name, and give no instance a context.\n"
+
 // samePrompt tells whether a pinned hash is the annotator's system prompt,
 // its files' line endings read either way.
 func (d *Dataset) samePrompt(pinned string) bool {
@@ -173,12 +180,12 @@ func (d *Dataset) ReviewerSystem() string {
 Answer with exactly one JSON object, and nothing else:
 {"kialo_claim_id": "…",
  "fields": {"scheme": {"choice": "A" | "B" | … | "none", "why": "…"},
-            "fit": {…}, "role": {…}, "target": {…}, "polarity": {…}, "premises": {…}, "evidence": {…}},
+            "fit": {…}, "role": {…}, "target": {…}, "polarity": {…}, "premises": {…}, "evidence": {…}, "instances": {…}},
  "adjudicated": { the claim's annotation as it should be, in the guidelines' output format },
  "confidence": 0 to 1,
  "needs_human": true | false,
  "notes": "what a person should check"}
-"choice" names the annotation that is right for that field, or "none" if none is (then "adjudicated" has your own). Set needs_human when the guidelines do not settle it, or you are unsure.
+"choice" names the annotation that is right for that field, or "none" if none is (then "adjudicated" has your own). "role" includes the question answered, "target" the target's instance and formula, "premises" the bindings, and "instances" how the claim is divided into inferences. In "adjudicated", a target's instance is named as in the annotation you follow for the target. Set needs_human when the guidelines do not settle it, or you are unsure.
 
 # Guidelines
 

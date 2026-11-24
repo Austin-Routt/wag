@@ -531,13 +531,17 @@ func (r *Run) check(name string, a Annotation) []string {
 }
 
 // disagrees is Disagrees for a claim's annotations, each annotator's
-// targets read in its own annotations. Caller holds r.mu.
+// targets read in its own annotations, and the aliases the case record lists
+// read as their actions, as agreement reads them. Caller holds r.mu.
 func (r *Run) disagrees(names []string, anns []Annotation) []string {
+	cs := r.Dataset.Case
 	sets := make([]map[string]Annotation, len(names))
+	canon := make([]Annotation, len(anns))
 	for i, n := range names {
-		sets[i] = r.anns[n]
+		sets[i] = cs.CanonicalSet(r.anns[n])
+		canon[i] = cs.Canonical(anns[i])
 	}
-	return Disagrees(anns, sets...)
+	return Disagrees(canon, sets...)
 }
 
 // logCall appends a call to calls.jsonl, with a review's letters, which say
@@ -965,10 +969,20 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 	}
 }
 
+// annotatorPrompt is the dataset's prompt for one claim, in the run's
+// format: a format-2 run on a dataset without a case record says it has none.
+func (r *Run) annotatorPrompt(it *Item, before map[string]Annotation, prior []string) string {
+	p := r.Dataset.AnnotatorPrompt(it, before, prior)
+	if r.format() == 2 && r.Dataset.Case == nil {
+		p += noCaseRecord
+	}
+	return p
+}
+
 // annotateOne asks one annotator for one claim's annotation; a reply that
 // is not an annotation of the claim is sent back once, with the reason.
 func (r *Run) annotateOne(ctx context.Context, name string, c *llm.Client, system string, it *Item, before map[string]Annotation, prior []string) (Annotation, error) {
-	msgs := []llm.Message{{Role: "user", Content: r.Dataset.AnnotatorPrompt(it, before, prior)}}
+	msgs := []llm.Message{{Role: "user", Content: r.annotatorPrompt(it, before, prior)}}
 	for attempt := 1; attempt <= 2; attempt++ {
 		resp, err := r.call(ctx, c, c.Request(system, msgs), func(a llm.Attempt) { r.logCall("annotator", name, it.ID, attempt, a, nil) })
 		if err != nil {

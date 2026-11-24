@@ -102,7 +102,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - When a claim states only S1, or only G, without the inference, code a `fragment` of its parent's argument. Do not code a full instance with three invented premises.
 - **Practical reasoning's agent, and its answers (decisions D005, D006, D088-D091, 2026-11-24).**
   - P is the agent who would do A: in a policy debate, whoever would enact it (OC13). Bind P to the thesis's agent (`governments` in this batch). The people the action affects are others, even when its phrase names them.
-  - The case record (`case.json`) says who performs each action. Bind P to an actor it lists, and A (A2 in `better_means`, X in the condition schemes) to that actor's actions. An action the record does not list, or another actor's, is no action of P's: two names of one action (an alias) are one action, not another course.
+  - The case record (`case.json`) says who performs each action. An agent (P; B in the scheme from distress) is an actor it lists, and every action a scheme recommends, compares, weighs or says an agent can do (A, A2 in `better_means`, X in the condition schemes, X2 in the practical analogies) is one of its actions, and the agent's own. An action the record does not list, or another actor's, is no action of P's: two names of one action (an alias) are one action, not another course. Write each action by its own atom, not an alias. When the dataset gives no case record, bind P to the agent the thesis names, and the actions as atoms of the lexicon.
   - `goal_of_agent(P,G)` states P's goal; supply it when the claim states only the outcome. `possible_bring_about(P,A)` says that P can do A, `possible_goal(G)` that G can be reached at all.
   - A goal that the means sets back is a consequence of the means: a rebuttal at the conclusion, or a weighing at the exception `bad_outweighs(A,G)` (§3.1, OC1-OC4). The exception `incompatible_goal(P,G)` is another goal of P that clashes with G itself.
   - Another means that would reach G more surely, sooner or at lower cost answers the exception `realize_more_effectively(P,G,A)`: code it with `better_means`, with the P, G and A of the argument it answers and A2 the other course, and record the comparison it makes in the instance's `comparison` (`more surely`, `sooner` or `at lower cost`). Its goal premise is the answered argument's own. A claim that the other course is better because it serves another value ranks values, not means: it is not this comparison (D089; OC5). A means said to be merely as good is no reason against A (D006): code it as a proposal of another course (§2, OC6).
@@ -121,7 +121,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - A case like the source in which the claim failed is a counter-analogy: code it as an analogy for the opposite claim, a rebuttal, from the third case to the target (C1 = the third case, C2 = the target, P2 = the opposite of the claim attacked). A difference between the cases that tells against the conclusion is the exception: `difference_against`, or `difference_for` in the negative practical analogy.
   - Several source cases, proportional comparisons, a fortiori arguments and refutations by parallel argument fit the form badly or not at all. Code what fits with strain and say so in `notes`; for the rest use the near miss or `other`, and name the pattern in `notes.candidate_pattern` (`docs/candidates.md`).
 - **Causal claims.**
-  - `cause_to_effect` asserts that the cause has occurred. For a policy not yet enacted, say so in `notes` and lower the confidence. Do not use it as if the tax had happened.
+  - `cause_to_effect` asserts that the cause has occurred. A step whose cause is only proposed or possible (a policy not yet enacted, or an effect of one) is `cause_to_effect_modal`: `may_occur(E1)` and `causes(E1,E2)`, concluding `may_occur(E2)` (§5 item 11). Do not use `cause_to_effect` as if the tax had happened.
   - Code a chain (tax → higher price → less consumption) as separate steps, each its own instance in `instances`.
 - **New patterns.** Do not invent schemes. If you see a recurring inference no scheme covers, name it in `notes.candidate_pattern`.
 - **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, with its own id (§4), and mark one as primary.
@@ -222,11 +222,11 @@ The format of the annotation records, version 2 (decision D092, 2026-11-24). One
     "scheme": {"walton_id": "negative_consequences", "compendium": "33.2", "wag_id": "AS:negative_consequences",
                "fit": "reconstructed", "confidence": 0.8,
                "alternatives": [{"walton_id": "practical_reasoning1", "why_not": "…"}]},
-    "bindings": {"A": "tax_meat", "G": "meat_unaffordable_for_poor"},
+    "bindings": {"A": "tax_meat", "G": "food_less_affordable_for_poor"},
     "premises": [
-      {"role": "premise", "formula": "brings_about(tax_meat,meat_unaffordable_for_poor)", "en": "Taxing meat brings about …", "status": "explicit"},
-      {"role": "premise", "formula": "bad(meat_unaffordable_for_poor)", "en": "That is bad.", "status": "supplied"},
-      {"role": "exception", "formula": "good_outweighs(tax_meat,meat_unaffordable_for_poor)", "en": "…", "status": "supplied"}
+      {"role": "premise", "formula": "brings_about(tax_meat,food_less_affordable_for_poor)", "en": "Taxing meat brings about …", "status": "explicit"},
+      {"role": "premise", "formula": "bad(food_less_affordable_for_poor)", "en": "That is bad.", "status": "supplied"},
+      {"role": "exception", "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)", "en": "…", "status": "supplied"}
     ],
     "conclusion": {"formula": "¬should_be_performed(tax_meat)", "en": "Meat should not be taxed."}
   }],
@@ -235,22 +235,22 @@ The format of the annotation records, version 2 (decision D092, 2026-11-24). One
              "actual": {"claim": "13292.1", "instance": "13292.1#1", "part": "conclusion", "formula": "should_be_performed(tax_meat)"}},
   "evidence": {"status": "assertion", "urls": []},
   "challenges": [{"cq": "33.2 CQ1", "wag_cq": "CQ:likelihood", "type": "likelihood", "instance": "13292.7#1",
-                  "formula": "brings_about(tax_meat,meat_unaffordable_for_poor)"}],
+                  "formula": "brings_about(tax_meat,food_less_affordable_for_poor)"}],
   "notes": {"text": "…", "candidate_pattern": null}
 }
 ```
 
-- **Ids.** Every instance has an `id`: the claim's ID, `#`, and a number (`13292.7#1`, `13292.7#2`, …), in the order you give them. An id stays with its instance: when you change an instance, keep its id; when you remove one, list its id in the item's `retired` and do not give its number again.
-- **Targets** name the claim, the instance (its id, in your own annotation of that claim: the prompt lists them), the part, and the formula exactly as that instance has it. When the prompt does not show your annotation of the target claim (an independent first pass), write the instance as `{"unresolved": "not shown"}` rather than guess its id. A conclusion target's formula is that instance's conclusion; an inference target's formula is null. An entry of `other_kialo_parents` that names a part names its instance and formula the same way.
-- **Challenges** name the instance they are about (`instance`: one of the claim's own, or the instance its target names) and a formula of that instance; the formula is null when the challenge is about the whole instance.
+- **Ids.** Every instance has an `id`: the claim's ID, `#`, and a number (`13292.7#1`, `13292.7#2`, …), in the order you give them. Give the primary instance first, so that its id ends in `#1`. An id stays with its instance: when you change an instance, keep its id; when you remove one, list its id in the item's `retired` and do not give its number again.
+- **Targets** name the claim, the instance (its id, in your own annotation of that claim: the prompt lists them), the part, and the formula exactly as that instance has it. When the target claim comes later and you have not annotated it yet, its primary instance is `<claim>#1`, and another of its instances `{"unresolved": "not yet annotated"}`. When the prompt does not show your annotation of the target claim (an independent first pass), write the instance as `{"unresolved": "not shown"}` rather than guess its id. A conclusion target's formula is that instance's conclusion; an inference target's formula is null. An entry of `other_kialo_parents` that names a part names its instance and formula the same way.
+- **Challenges** name the instance they are about (`instance`: one of the claim's own, or the instance its target names) and a formula of that instance; the formula is null when the challenge is about the whole instance. `cq` is the book's question, null when the book prints none for it; `wag_cq` the game's, null when the game has none.
 - **Agent, actions and context.** Bind agents and actions as the case record says (§3). An instance is in the case's default context unless it names another of the record's contexts in `"context"`: give one only for an argument made about another decision.
-- **No value.** Never leave a field out. `null` means not applicable, and only where it is: `role.cq` when the role is not `cq_answer`; the thesis's polarity and target; an inference target's formula; a challenge's formula when it is about the whole instance; `compendium`, `wag_id`, `wag_cq` and `candidate_pattern` when there is none; the conclusion formula of `other` and `none`. A target's instance, part or formula that you cannot determine is `{"unresolved": "why"}`. A fragment's variable that the claim does not state is `{"unstated": "why"}` in its bindings (§5, item 6). `false` is only a real no (`primary`). Do not record `re_parented`: the tooling computes it.
+- **No value.** Never leave a field out. `null` means not applicable, and only where it is: `role.cq` when the role is not `cq_answer`; the thesis's polarity and target; an inference target's formula; a challenge's formula when it is about the whole instance, its `cq` when the book prints no question for it, its `wag_cq` when the game has none; `compendium`, `wag_id` and `candidate_pattern` when there is none; the conclusion formula of `other` and `none`, and of a fragment whose conclusion names a variable it leaves unstated. A target's instance, part or formula that you cannot determine is `{"unresolved": "why"}`. A fragment's variable that the claim does not state is `{"unstated": "why"}` in its bindings (§5, item 6). `false` is only a real no (`primary`). Do not record `re_parented`: the tooling computes it.
 
 Formulas use `walton.yml` predicates, with the values in place of the variables. Write each value as a short snake_case atom (`tax_meat`); the English in `en` uses the `language` templates. `scheme.walton_id` is `"other"` or `"none"` when no scheme applies. `role.cq` names the question (a WAG ID such as `CQ:likelihood` if one exists, else the compendium label) when the role is `cq_answer`. A `better_means` instance has one more field, `comparison`: `more surely`, `sooner` or `at lower cost` (§3).
 
 ## 5. Version 3: changes after the batch-2 adjudication (2026-10-13)
 
-The two annotators and the adjudicator found these gaps. Batch 3 applies them; `gold.json` already does (rules R1–R7 of the adjudication).
+The two annotators and the adjudicator found these gaps. Batch 3 applies them; `gold.json` already does (rules R1–R7 of the adjudication). R5's rule that a target is a formula of the target's primary instance is format 1's: since format 2 (§4) a target names its instance, a secondary one included.
 
 1. **Re-parenting.** A claim is re-parented exactly when the actual target claim is not the Kialo parent. Attacking a premise or exception of the parent's own argument is recorded in `target.actual.part` and `formula`, not as re-parenting. The tooling computes it; since format 2 (§4) it is not recorded.
 2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the instance the target names (`target.actual.instance`, §4; in format 1, of the target's primary instance). Further Kialo parents go in `target.other_kialo_parents`.

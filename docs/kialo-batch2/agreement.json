@@ -56,10 +56,10 @@
    "all_assigned_agreement": 0.9
   },
   "target_instance": {
-   "agreement": 0.978,
-   "kappa": 0.972,
+   "agreement": 1.0,
+   "kappa": 1.0,
    "unresolved": 5,
-   "all_assigned_agreement": 0.88
+   "all_assigned_agreement": 0.9
   },
   "target_formula": {
    "agreement": 0.72,
@@ -283,13 +283,6 @@
     "claim": "13292.233",
     "A": "",
     "B": "CQ:likelihood"
-   }
-  ],
-  "target_instance": [
-   {
-    "claim": "13292.29",
-    "A": "none:should_be_performed(tax_meat)",
-    "B": "positive_consequences:should_be_performed(tax_meat)"
    }
   ],
   "target_formula": [

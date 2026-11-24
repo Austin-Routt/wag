@@ -28,6 +28,10 @@ with open(os.path.join(DOC, 'gold-format1.json'), encoding='utf-8') as fh:
 with open(os.path.join(DOC, 'case.json'), encoding='utf-8') as fh:
     CASE = json.load(fh)
 ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs): ')
+# The walton.yml the format-1 gold was made with (WAG 96c3c5a), and today's.
+WALTON_OF_FORMAT1 = 'bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42'
+with open(os.path.join(DOC, '..', 'scheme-registry', 'walton-clean', 'walton.yml'), 'rb') as fh:
+    WALTON_NOW = hashlib.sha256(fh.read()).hexdigest()
 
 
 def run(gold, case=None, pin=True):
@@ -114,8 +118,25 @@ class Rules(unittest.TestCase):
         self.assertNotIn('UNRESOLVED', out)
 
     def test_the_format1_gold_passes_as_format1(self):
+        # The format-1 gold is kept as it was (D039); it is checked against
+        # the walton.yml it was made with only while that is the current
+        # one. After a change to walton.yml, it is read as format 1 and its
+        # verdict said, but formulas that changed since are not its fault.
+        if WALTON_NOW != WALTON_OF_FORMAT1:
+            code, errors, out = run(GOLD1)
+            self.assertIn('format 1', out)
+            self.assertNotIn('Traceback', out)
+            return
         out = self.passes(GOLD1)
         self.assertIn('format 1', out)
+
+    def test_format1_named(self):
+        g = copy.deepcopy(GOLD1)
+        g['format'] = 'wag-annotation/1'
+        code, errors, out = run(g)
+        self.assertIn('format 1', out)
+        if WALTON_NOW == WALTON_OF_FORMAT1:
+            self.assertEqual((code, errors), (0, []), out)
 
     # R8: a claim at an exception concludes it.
     def test_r8_an_argument_for_another_course(self):
@@ -299,13 +320,38 @@ class Rules(unittest.TestCase):
 
     # R4 (D039): in format 2 a cause that has not occurred is the modal
     # scheme's; format 1 keeps the rule of the N8 note.
-    def test_r4_a_supplied_occurrence_in_format2(self):
+    def test_r4_a_cause_the_case_deliberates(self):
+        # The deliberated action has not occurred, whatever the status says.
+        g = copy.deepcopy(GOLD)
+        it = item(g, '13292.9')
+        step = next(x for x in it['instances'] if x['bindings'].get('E1') == 'tax_meat')
+        step['scheme']['walton_id'] = 'cause_to_effect'
+        p0 = next(p for p in step['premises'] if p['formula'].startswith('may_occur('))
+        p0['formula'], p0['status'] = 'has_occurred(tax_meat)', 'inferred'
+        step['conclusion']['formula'] = 'will_occur(' + step['bindings']['E2'] + ')'
+        self.fails(g, '13292.9', ['R4'], 'an action the case deliberates, which has not occurred')
+
+    def test_r4_a_cause_a_modal_step_concludes(self):
+        g = copy.deepcopy(GOLD)
+        it = item(g, '13292.9')
+        step = next(x for x in it['instances'] if x['bindings'].get('E1') == 'meat_industry_harmed')
+        step['scheme']['walton_id'] = 'cause_to_effect'
+        p0 = next(p for p in step['premises'] if p['formula'].startswith('may_occur('))
+        p0['formula'], p0['status'] = 'has_occurred(meat_industry_harmed)', 'explicit'
+        step['conclusion']['formula'] = 'will_occur(tax_revenue_reduced)'
+        self.fails(g, '13292.9', ['R4'], 'which a modal step of the claim says only may occur')
+
+    def test_r4_a_supplied_occurrence_that_has_occurred(self):
+        # "supplied" says who states the premise, not that the cause is
+        # hypothetical: subsidies exist, so cause_to_effect stands.
         g = copy.deepcopy(GOLD)
         ins = next(x for x in item(g, '13292.11')['instances'] if x['scheme']['walton_id'] == 'cause_to_effect')
         next(p for p in ins['premises'] if p['formula'].startswith('has_occurred('))['status'] = 'supplied'
-        self.fails(g, '13292.11', ['R4'], 'is cause_to_effect_modal (D039)')
+        self.passes(g)
 
     def test_r4_in_format1_is_the_n8_rule(self):
+        if WALTON_NOW != WALTON_OF_FORMAT1:
+            self.skipTest('walton.yml has changed since the format-1 gold was made')
         g = copy.deepcopy(GOLD1)
         ins = item(g, '13292.36')['instances'][1]
         self.assertEqual(ins['scheme']['walton_id'], 'cause_to_effect')
@@ -315,7 +361,6 @@ class Rules(unittest.TestCase):
     # R12: ids.
     def test_r12_ids(self):
         cases = {
-            'no id': lambda it: it['instances'][0].pop('id'),
             'another claim': lambda it: it['instances'][0].update(id='13292.9#9'),
             'a leading zero': lambda it: it['instances'][0].update(id='13292.12#01'),
             'zero': lambda it: it['instances'][0].update(id='13292.12#0'),
@@ -335,6 +380,14 @@ class Rules(unittest.TestCase):
                 self.assertTrue(any(e.startswith('13292.12: R12 ') for e in errors), out)
                 for e in errors:
                     self.assertTrue(e.startswith('13292.12: R12 ') or re.match(r'13292\.(194|45|12): R1[03] ', e), e)
+
+    def test_r12_no_id(self):
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.12')['instances'][0].pop('id')
+        code, errors, out = run(g)
+        # The item is malformed: said once, and the two claims that target
+        # 13292.12#1 do not read it (no cascade).
+        self.assertEqual(errors, ['13292.12: R16 instances[0].id is not an instance id'], out)
 
     def test_r12_a_retired_number_is_not_used_again(self):
         g = copy.deepcopy(GOLD)
@@ -383,7 +436,7 @@ class Rules(unittest.TestCase):
         self.fails(g, '13292.180', ['R13'], 'names the instance 13292.121#2, which is not an instance of 13292.121')
         g = copy.deepcopy(GOLD)
         del item(g, '13292.180')['target']['other_kialo_parents'][0]['instance']
-        self.fails(g, '13292.180', ['R16'], 'its target in 13292.121 names no instance')
+        self.fails(g, '13292.180', ['R16'], 'target.other_kialo_parents[0].instance is not an instance id')
 
     def test_r13_unresolved_is_kept_not_refused(self):
         g = copy.deepcopy(GOLD)
@@ -393,7 +446,7 @@ class Rules(unittest.TestCase):
         self.assertIn('13292.12: its target instance (the step or the consequence argument)', out)
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': ''}
-        self.fails(g, '13292.12', ['R16'], 'names no instance')
+        self.fails(g, '13292.12', ['R16'], 'target.actual.instance is not an instance id, or {"unresolved": why}')
 
     # R14: actors and actions.
     def test_r14_an_agent_who_is_not_an_actor(self):
@@ -430,11 +483,13 @@ class Rules(unittest.TestCase):
 
     def test_r14_an_alias_is_its_action(self):
         case = copy.deepcopy(CASE)
-        next(a for a in case['actions'] if a['id'] == 'abolish_meat_subsidies')['aliases'] = ['meat_subsidies']
+        # An atom of the lexicon the gold does not use (meat_subsidies, the
+        # state, is a cause in 13292.11: no alias of an action).
+        next(a for a in case['actions'] if a['id'] == 'abolish_meat_subsidies')['aliases'] = ['cheap_open_meat_trade']
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.123')
         ins = next(x for x in it['instances'] if x['scheme']['walton_id'] == 'practical_reasoning2')
-        rename(it, ins, 'abolish_meat_subsidies', 'meat_subsidies')
+        rename(it, ins, 'abolish_meat_subsidies', 'cheap_open_meat_trade')
         out = self.passes(g, case=case)
         self.assertIn('format 2', out)
 
@@ -492,26 +547,64 @@ class Rules(unittest.TestCase):
         case['default_context'] = 'denmark_2005'
         self.fails(copy.deepcopy(GOLD), 'case.json', ['R15'], "its default context 'denmark_2005' is not one of its contexts", case=case)
 
-    # R16: no value without its kind.
+    # R16: no value without its kind. The field contract is checked first; a
+    # malformed record is reported, never a traceback, and not checked further.
     def test_r16_the_field_contract(self):
-        def thesis(g):
-            item(g, '13292.1')['target']['actual'] = conclusion_target(g, '13292.7')
+        def ins7(g):
+            return primary(item(g, '13292.7'))
         cases = {
-            're_parented': ('13292.7', lambda g: item(g, '13292.7')['target'].update(re_parented=False), 'records re_parented'),
-            'no polarity': ('13292.7', lambda g: item(g, '13292.7')['role'].update(polarity=None), "its polarity is None"),
-            'no actual target': ('13292.7', lambda g: item(g, '13292.7')['target'].update(actual=None), 'only the thesis has none'),
-            'a target for the thesis': ('13292.1', thesis, 'the thesis has no target'),
-            'a binding left null': ('13292.7', lambda g: primary(item(g, '13292.7'))['bindings'].update(G=None), 'binds G to None'),
-            'unstated outside a fragment': ('13292.7', lambda g: primary(item(g, '13292.7'))['bindings'].update(
-                G={'unstated': 'not said'}), "binds G to {'unstated': 'not said'}"),
-            'unresolved in a binding': ('13292.7', lambda g: primary(item(g, '13292.7'))['bindings'].update(
-                G={'unresolved': 'which harm'}), "binds G to {'unresolved': 'which harm'}"),
-            'no primary flag': ('13292.7', lambda g: primary(item(g, '13292.7')).pop('primary'), 'says nothing of primary'),
-            'no compendium': ('13292.7', lambda g: primary(item(g, '13292.7'))['scheme'].pop('compendium'), 'says nothing of compendium'),
-            'a challenge without formula': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].pop('formula'), 'says nothing of formula'),
-            'no candidate_pattern': ('13292.7', lambda g: item(g, '13292.7')['notes'].pop('candidate_pattern'), 'its notes need text and candidate_pattern'),
+            're_parented': ('13292.7', lambda g: item(g, '13292.7')['target'].update(re_parented=False), 'target.re_parented is recorded'),
+            'no polarity': ('13292.7', lambda g: item(g, '13292.7')['role'].update(polarity=None), 'role.polarity is None'),
+            'a polarity for the thesis': ('13292.1', lambda g: item(g, '13292.1')['role'].update(polarity='for'), 'the thesis has no polarity'),
+            'no actual target': ('13292.7', lambda g: item(g, '13292.7')['target'].update(actual=None), 'only the thesis has no actual target'),
+            'an empty actual target': ('13292.7', lambda g: item(g, '13292.7')['target'].update(actual={}), 'target.actual is {}'),
+            'a target for the thesis': ('13292.1', lambda g: item(g, '13292.1')['target'].update(actual=conclusion_target(g, '13292.7')), 'the thesis has no target'),
+            'another relation': ('13292.7', lambda g: item(g, '13292.7')['target'].update(kialo_relation='pro'), "target.kialo_relation is 'pro', not 'con'"),
+            'no relation': ('13292.7', lambda g: item(g, '13292.7')['target'].update(kialo_relation=None), 'target.kialo_relation is None'),
+            'no kialo_parent': ('13292.7', lambda g: item(g, '13292.7')['target'].pop('kialo_parent'), 'target.kialo_parent is missing'),
+            'a binding left null': ('13292.7', lambda g: ins7(g)['bindings'].update(G=None), '13292.7#1.bindings.G is None'),
+            'unstated outside a fragment': ('13292.7', lambda g: ins7(g)['bindings'].update(G={'unstated': 'not said'}), "13292.7#1.bindings.G is {'unstated'"),
+            'unresolved in a binding': ('13292.7', lambda g: ins7(g)['bindings'].update(G={'unresolved': 'which harm'}), "13292.7#1.bindings.G is {'unresolved'"),
+            'no primary flag': ('13292.7', lambda g: ins7(g).pop('primary'), '13292.7#1.primary is not true or false'),
+            'no compendium': ('13292.7', lambda g: ins7(g)['scheme'].pop('compendium'), '13292.7#1.scheme.compendium is not text, or null'),
+            'no fit': ('13292.7', lambda g: ins7(g)['scheme'].pop('fit'), '13292.7#1.scheme.fit is None'),
+            'a null confidence': ('13292.7', lambda g: ins7(g)['scheme'].update(confidence=None), '13292.7#1.scheme.confidence is not a number'),
+            'null alternatives': ('13292.7', lambda g: ins7(g)['scheme'].update(alternatives=None), '13292.7#1.scheme.alternatives is not a list'),
+            'a marker for a scheme': ('13292.7', lambda g: ins7(g)['scheme'].update(walton_id={'unresolved': 'x'}), '13292.7#1.scheme.walton_id is not a scheme id'),
+            'a marker for an id': ('13292.7', lambda g: ins7(g).update(id={'unresolved': 'x'}), 'instances[0].id is not an instance id'),
+            'a marker for a context': ('13292.7', lambda g: ins7(g).update(context={'unresolved': 'x'}), '13292.7#1.context is not a context id'),
+            'no bindings': ('13292.7', lambda g: ins7(g).pop('bindings'), '13292.7#1.bindings is not an object'),
+            'no premises': ('13292.7', lambda g: ins7(g).pop('premises'), '13292.7#1.premises is not a list'),
+            'a marker for a premise formula': ('13292.7', lambda g: ins7(g)['premises'][0].update(formula={'unresolved': 'x'}), '13292.7#1.premises[0].formula is not a formula'),
+            'a null premise status': ('13292.7', lambda g: ins7(g)['premises'][0].update(status=None), '13292.7#1.premises[0].status is None'),
+            'a null premise English': ('13292.7', lambda g: ins7(g)['premises'][0].update(en=None), '13292.7#1.premises[0].en is not text'),
+            'a conclusion without English': ('13292.7', lambda g: ins7(g)['conclusion'].pop('en'), '13292.7#1.conclusion is not an object'),
+            'a null conclusion': ('13292.7', lambda g: ins7(g)['conclusion'].update(formula=None), 'only other, none and a fragment'),
+            'a null literal': ('13292.7', lambda g: item(g, '13292.7').update(literal=None), "literal is not a list of the claim's propositions"),
+            'no role kind': ('13292.7', lambda g: item(g, '13292.7')['role'].pop('kind'), 'role.kind is None'),
+            'an unknown role kind': ('13292.7', lambda g: item(g, '13292.7')['role'].update(kind='banana'), "role.kind is 'banana'"),
+            'a marker for a role': ('13292.7', lambda g: item(g, '13292.7')['role'].update(kind={'unresolved': 'x'}), "role.kind is {'unresolved'"),
+            'a null role confidence': ('13292.7', lambda g: item(g, '13292.7')['role'].update(confidence=None), 'role.confidence is not a number'),
+            'an empty cq off cq_answer': ('13292.7', lambda g: item(g, '13292.7')['role'].update(cq=''), "role.cq is '': null"),
+            'no cq': ('13292.7', lambda g: item(g, '13292.7')['role'].pop('cq'), 'role.cq is missing'),
+            'no challenges': ('13292.7', lambda g: item(g, '13292.7').pop('challenges'), 'challenges is not a list'),
+            'a challenge without formula': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].pop('formula'), 'challenges[0].formula is not a formula, or null'),
+            'a marker for a challenge formula': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].update(formula={'unresolved': 'x'}), 'challenges[0].formula is not a formula'),
+            'a null challenge type': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].update(type=None), 'challenges[0].type is not a type'),
+            'a challenge without cq': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].pop('cq'), "challenges[0].cq is not a question's label, or null when there is none"),
+            'a marker for a wag_cq': ('13292.7', lambda g: item(g, '13292.7')['challenges'][0].update(wag_cq={'unresolved': 'x'}), "challenges[0].wag_cq is not a question's label"),
+            'no evidence urls': ('13292.7', lambda g: item(g, '13292.7')['evidence'].pop('urls'), 'evidence needs status'),
+            'no candidate_pattern': ('13292.7', lambda g: item(g, '13292.7')['notes'].pop('candidate_pattern'), 'notes needs text and candidate_pattern'),
+            'no actual claim': ('13292.12', lambda g: item(g, '13292.12')['target']['actual'].pop('claim'), 'target.actual.claim is not a claim'),
+            'no actual part': ('13292.12', lambda g: item(g, '13292.12')['target']['actual'].pop('part'), 'target.actual.part is None'),
+            'a marker for an actual claim': ('13292.12', lambda g: item(g, '13292.12')['target']['actual'].update(claim={'unresolved': 'x'}), 'target.actual.claim is not a claim'),
             'an inference with a formula': ('13292.12', lambda g: item(g, '13292.12')['target']['actual'].update(part='inference'),
-                                            'is the inference, which has no formula'),
+                                            'an inference target has no formula'),
+            'an inference target without its formula': ('13292.12', lambda g: (item(g, '13292.12')['target']['actual'].update(part='inference'),
+                                                                 item(g, '13292.12')['target']['actual'].pop('formula')), 'target.actual.formula is missing'),
+            'other parents for one parent': ('13292.7', lambda g: item(g, '13292.7')['target'].update(other_kialo_parents=[]), 'the claim has one Kialo parent or none (R7)'),
+            'retired not a list': ('13292.7', lambda g: item(g, '13292.7').update(retired='13292.7#2'), "retired is not a list of ids of 13292.7's instances"),
+            "a retired id of another claim": ('13292.7', lambda g: item(g, '13292.7').update(retired=['13292.9#9']), "retired is not a list of ids of 13292.7's instances"),
         }
         for name, (cid, plant, text) in cases.items():
             with self.subTest(name):
@@ -519,14 +612,42 @@ class Rules(unittest.TestCase):
                 plant(g)
                 code, errors, out = run(g)
                 self.assertEqual(code, 1, out)
+                self.assertNotIn('Traceback', out)
                 self.assertTrue(any(e.startswith(f'{cid}: R16 ') and text in e for e in errors), f'{name}:\n{out}')
-                if name.startswith(('a binding', 'unstated', 'unresolved in')):
-                    self.assertEqual(len(errors), 1, f'a malformed binding is said once:\n{out}')
+                for e in errors:
+                    self.assertTrue(e.startswith(f'{cid}: R16 ') or ' R13 ' in e or ' R10 ' in e or ' R15 ' in e, f'{name}: {e}')
+
+    def test_r16_other_parents_missing(self):
+        # A claim with more than one Kialo parent lists the others (R7 then
+        # checks the list is complete).
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.180')['target'].pop('other_kialo_parents')
+        self.fails(g, '13292.180', ['R16'], 'target.other_kialo_parents is missing: the claim has more than one Kialo parent (R7)')
+
+    def test_r16_a_challenge_without_a_printed_question(self):
+        # A challenge the book prints no question for has cq null (§7, §8).
+        g = copy.deepcopy(GOLD)
+        self.assertTrue(any(c['cq'] is None for i in g['items'] for c in i['challenges']))
+        self.passes(g)
+
+    def test_r16_the_cases_id(self):
+        g = copy.deepcopy(GOLD)
+        g['case'] = 'kialo-99999'
+        self.fails(g, 'case.json', ['R16'], "the file names the case 'kialo-99999'")
+
+    def test_r13_another_kialo_parents_conclusion(self):
+        g = copy.deepcopy(GOLD)
+        o = item(g, '13292.180')['target']['other_kialo_parents'][0]
+        o.update(part='conclusion', formula='should_be_performed(tax_meat)', role='rebuttal', cq=None)
+        self.fails(g, '13292.180', ['R13'], 'should_be_performed(tax_meat), which is not a conclusion of 13292.121#1')
 
     def test_r16_the_pinned_inputs(self):
         g = copy.deepcopy(GOLD)
+        self.assertEqual(len(g['inputs']), 10, 'every input validate.py reads is pinned')
         g['inputs']['walton.yml'] = '0' * 64
         self.fails(g, 'inputs', ['R16'], 'the gold was checked against another walton.yml')
+        g['inputs']['positions.json'] = '0' * 64
+        self.fails(g, 'inputs', ['R16'], 'another positions.json')
         g = copy.deepcopy(GOLD)
         del g['inputs']['lexicon.json']
         self.fails(g, 'inputs', ['R16'], 'a gold pins exactly')
@@ -559,7 +680,7 @@ class Rules(unittest.TestCase):
         self.passes(g)
         frag['scheme']['fit'] = 'reconstructed'
         code, errors, out = run(g)
-        self.assertTrue(any(e.startswith('13292.137: R16 ') and "binds A to {'unstated'" in e for e in errors), out)
+        self.assertTrue(any(e.startswith('13292.137: R16 ') and ".bindings.A is {'unstated'" in e for e in errors), out)
 
     def test_a_fragment_states_some_of_its_bound_formulas(self):
         # A fragment that binds P, G and S1 may state goal_of_agent(P,G)
@@ -587,22 +708,47 @@ class Rules(unittest.TestCase):
         def rev(it):
             x = {k: v for k, v in it.items() if k not in ('adjudication', 'verified')}
             return hashlib.sha256(json.dumps(x, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8')).hexdigest()
+        with open(os.path.join(DOC, 'items.json'), encoding='utf-8') as fh:
+            text = next(i['text'] for i in json.load(fh)['items'] if i['kialo_claim_id'] == '13292.25')
+        tsha = hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+        def verify(it, **kw):
+            it['verified'] = dict({'by': 'owner', 'date': '2026-11-30', 'item_rev': rev(it), 'text_sha256': tsha}, **kw)
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.25')
-        it['verified'] = {'by': 'owner', 'date': '2026-11-30', 'item_rev': rev(it)}
+        verify(it)
         self.passes(g)
         it['adjudication']['reason'] += ' (checked again)'
         self.passes(g)  # the adjudication record is not the item's content
         it['literal'][0] += ' (edited)'
         self.fails(g, '13292.25', ['R17'], 'verify it again')
+        # The claim's text changed since: the verification does not hold.
+        g = copy.deepcopy(GOLD)
+        verify(item(g, '13292.25'), text_sha256='0' * 64)
+        self.fails(g, '13292.25', ['R17'], "verified on another text of the claim")
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.25')
         it['target']['actual']['formula'] = {'unresolved': 'which premise'}
-        it['verified'] = {'by': 'owner', 'date': '2026-11-30', 'item_rev': rev(it)}
+        verify(it)
         self.fails(g, '13292.25', ['R17'], 'some of its values are unresolved')
+        for bad in ({'date': '30 November'}, {'date': '2026-13-45'}, {'by': 'claude-opus'}, {'text_sha256': None}):
+            with self.subTest(bad=bad):
+                g = copy.deepcopy(GOLD)
+                verify(item(g, '13292.25'), **bad)
+                self.fails(g, '13292.25', ['R17'], 'needs by "owner" (D086), a date')
+
+    def test_a_fragment_conclusion_that_names_an_unstated_variable(self):
         g = copy.deepcopy(GOLD)
-        item(g, '13292.25')['verified'] = {'by': 'owner', 'date': '30 November', 'item_rev': 'x'}
-        self.fails(g, '13292.25', ['R17'], 'needs by, a date')
+        it = item(g, '13292.137')
+        frag = copy.deepcopy(primary(item(g, '13292.108')))
+        frag.update(id=next_id(it), primary=False)
+        frag['scheme'] = {'walton_id': 'practical_reasoning2', 'compendium': '22.1', 'wag_id': 'AS:practical_reasoning_goal',
+                          'fit': 'fragment', 'confidence': 0.5, 'alternatives': []}
+        frag['bindings']['A'] = {'unstated': 'the claim states the circumstances only'}
+        frag['premises'] = [p for p in frag['premises'] if p['formula'].startswith('current_circumstances(')]
+        frag['conclusion'] = {'formula': 'should_be_performed(A)', 'en': ''}
+        it['instances'].append(frag)
+        self.fails(g, '13292.137', ['R16'], 'whose conclusion names a variable it leaves unstated')
 
     def test_an_unknown_format(self):
         g = copy.deepcopy(GOLD)
@@ -610,6 +756,34 @@ class Rules(unittest.TestCase):
         code, errors, out = run(g)
         self.assertEqual(code, 1, out)
         self.assertIn("the file is in format 'wag-annotation/3'", out)
+
+
+class Repin(unittest.TestCase):
+    """--repin pins the inputs only when nothing else is wrong."""
+    def repin(self, g):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'gold.json')
+            with open(path, 'w', encoding='utf-8') as fh:
+                fh.write(json.dumps(g, indent=1, ensure_ascii=False))
+            r = subprocess.run([sys.executable, '-I', '-B', os.path.join(DOC, 'validate.py'), path, '--repin'], capture_output=True, text=True)
+            with open(path, encoding='utf-8') as fh:
+                return r.returncode, r.stdout, json.load(fh)
+
+    def test_stale_pins_are_repinned(self):
+        g = copy.deepcopy(GOLD)
+        g['inputs']['links.json'] = '0' * 64
+        code, out, after = self.repin(g)
+        self.assertEqual(code, 0, out)
+        self.assertEqual(after['inputs'], GOLD['inputs'])
+        self.assertEqual(after['items'], GOLD['items'])
+
+    def test_no_repin_while_something_else_is_wrong(self):
+        g = copy.deepcopy(GOLD)
+        g['inputs']['links.json'] = '0' * 64
+        item(g, '13292.7')['role']['polarity'] = None
+        code, out, after = self.repin(g)
+        self.assertEqual(code, 1, out)
+        self.assertEqual(after['inputs']['links.json'], '0' * 64)
 
 
 if __name__ == '__main__':

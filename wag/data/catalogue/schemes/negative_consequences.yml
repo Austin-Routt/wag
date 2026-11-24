@@ -287,9 +287,10 @@ examples:
   coding: 'A = a tax on meat (the "financial restrictions"); G = more cases of anemia.
     Stated: brings_about(A,G). Supplied: bad(G). Conclusion: ¬should_be_performed(A).
     The first sentence backs the link; the gold codes the step from less meat to anemia
-    as a secondary cause_to_effect instance. Its cause is hypothetical, so under the
-    N8 decision it is a cause_to_effect_modal step (recoding the gold is open).'
-  status: drafted by Claude Code, 2026-10-22
+    as a secondary instance. Its cause is hypothetical, so it is a cause_to_effect_modal
+    step, as the gold codes it since 2026-11-24 (D039; cause_to_effect with the N8
+    note before).'
+  status: drafted by Claude Code, 2026-11-24
 - text: Taxes on meat would not resolve the problems associated with its production
     and consumption.
   kialo: "13292.13"
@@ -458,3 +459,9 @@ history:
   what: '33/CQ3''s answer, the game-differs decision and the 13292.9 example follow
     proposal D004-D075: C003''s answer schemes conclude the exceptions (D064, D075);
     positive_consequences'' 33/CQ3 discrepancy records the exceptions'' limits.'
+- date: "2026-11-24"
+  by: Claude Code
+  what: 'Dated for D039, applied with the batch-2 gold''s format 2 (docs/kialo-batch2/migrate_format2.py):
+    the example of 13292.180 says how the gold codes the claim''s causal steps now
+    (cause_to_effect_modal), after the independent review of the identity contract
+    (E5).'

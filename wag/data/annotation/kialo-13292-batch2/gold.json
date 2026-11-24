@@ -6,7 +6,13 @@
   "items.json": "db9e8468bb41f4a0078e93f0252c615e05282ffe48fd9ab0dce5fcff8bc0771f",
   "lexicon.json": "e4e563a89277c02b1ba49169ccf829d73c94914e948d076e5931f50d382ff688",
   "case.json": "5857394dbd7d4f058dfa059567888fa950d51c4be9cdcd3294f8a08e8f35df80",
-  "walton.yml": "bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42"
+  "walton.yml": "bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42",
+  "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
+  "links.json": "a6d953fd8ffb397608479715b3fb6a0a7c1fd96b831b54c2a95e174b8b3db332",
+  "positions.json": "ef4792b953202e4f6f665b39febd35a3a6e8a4473e9584ea7bdb4c6d0ac50961",
+  "nascq/schemes.json": "8616f56cde01fbb4372adb745410f7766cfda756889a4ce422d5979a8cb398b5",
+  "nascq/critical_questions.json": "cbc86ff8be867a5ae21376da4403e566306e9c294e0fb1255ecb133720ab5227",
+  "nascq/edges.json": "6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8"
  },
  "status": "Development material (D086): adjudicated by a language model, no item verified by a person. The first gold is drafted from it.",
  "history": [

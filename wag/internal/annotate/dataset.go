@@ -303,7 +303,53 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	add("schemes.json", data.SchemesJSON)
 	add("critical_questions.json", data.CQsJSON)
 	add("edges.json", data.EdgesJSON)
+	if err := d.checkCase(); err != nil {
+		return nil, fmt.Errorf("the case record: %v", err)
+	}
 	return d, nil
+}
+
+// checkCase checks the case record against the rest of the dataset, as
+// validate.py does: its thesis is a claim of the dataset, and its actors,
+// actions and aliases are atoms of the lexicon, when there is one.
+func (d *Dataset) checkCase() error {
+	c := d.Case
+	if c == nil {
+		return nil
+	}
+	if d.Item(c.Thesis.Claim) == nil {
+		return fmt.Errorf("its thesis %q is not a claim of the dataset", c.Thesis.Claim)
+	}
+	for _, r := range d.Resources {
+		if r.Name != "lexicon.json" {
+			continue
+		}
+		var lex map[string]json.RawMessage
+		if err := json.Unmarshal([]byte(r.Text), &lex); err != nil {
+			return nil // a lexicon of another shape: the atoms are not checked
+		}
+		atoms := map[string]string{}
+		for _, a := range c.Actors {
+			atoms[a.ID] = "actor"
+		}
+		for _, a := range c.Actions {
+			atoms[a.ID] = "action"
+			for _, al := range a.Aliases {
+				atoms[al] = "alias"
+			}
+		}
+		names := make([]string, 0, len(atoms))
+		for k := range atoms {
+			names = append(names, k)
+		}
+		sort.Strings(names)
+		for _, k := range names {
+			if _, ok := lex[k]; !ok {
+				return fmt.Errorf("the %s %s is not an atom of the lexicon", atoms[k], k)
+			}
+		}
+	}
+	return nil
 }
 
 // FormatName is the name of the dataset's annotation format.
