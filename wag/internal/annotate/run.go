@@ -18,6 +18,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/yourorg/wag/internal/fsutil"
 	"github.com/yourorg/wag/internal/llm"
 )
 
@@ -234,13 +235,13 @@ func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*R
 	if d.Source != "built in" {
 		s.DatasetDir = d.Source
 	}
-	if err := os.MkdirAll(filepath.Join(dir, "annotations"), 0o755); err != nil {
+	if err := fsutil.MkdirAll(filepath.Join(dir, "annotations"), 0o755); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(filepath.Join(dir, "review"), 0o755); err != nil {
+	if err := fsutil.MkdirAll(filepath.Join(dir, "review"), 0o755); err != nil {
 		return nil, err
 	}
-	if err := os.WriteFile(filepath.Join(dir, "README.txt"), []byte(readme), 0o644); err != nil {
+	if err := fsutil.WriteFile(filepath.Join(dir, "README.txt"), []byte(readme), 0o644); err != nil {
 		return nil, err
 	}
 	r := newRun(dir, d, s)

@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/yourorg/wag/internal/fsutil"
 	"github.com/yourorg/wag/internal/llm"
 )
 
@@ -378,9 +379,9 @@ var openAppend = func(path string) (appendFile, error) {
 // fails part way is cut off, and the lines are written again whole. Half a
 // line already at the end (a crash, or a failed write that could not be cut
 // off) is ended first, so that it stays a line of its own, which readers
-// skip, and joins no other. When it returns nil the lines' bytes are synced
-// (not the folder's entry for a new log); an error from closing the file
-// after that is not a loss.
+// skip, and joins no other. When it returns nil the lines' bytes are synced,
+// and so is the folder's entry for a log that was empty (new); an error from
+// closing the file after that is not a loss.
 func appendLines(path string, lines [][]byte) error {
 	f, err := openAppend(path)
 	if err != nil {
@@ -409,6 +410,9 @@ func appendLines(path string, lines [][]byte) error {
 	if err == nil {
 		err = f.Sync()
 	}
+	if err == nil && fi.Size() == 0 {
+		err = fsutil.SyncDir(filepath.Dir(path))
+	}
 	if err != nil {
 		if terr := f.Truncate(fi.Size()); terr != nil {
 			err = fmt.Errorf("%v; the lines written in part could not be cut off (%v)", err, terr)
@@ -421,27 +425,7 @@ func appendLines(path string, lines [][]byte) error {
 }
 
 // writeFile writes through a temporary file, so a reader never sees half a
-// file; when it returns nil the file's bytes are synced (not the folder's
-// entry for the rename). A temporary file it made is removed if it fails;
-// anything else at that path is left.
-func writeFile(path string, b []byte) error {
-	tmp := path + ".tmp"
-	f, err := os.OpenFile(tmp, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
-	if err != nil {
-		return err
-	}
-	_, err = f.Write(b)
-	if err == nil {
-		err = f.Sync()
-	}
-	if cerr := f.Close(); err == nil {
-		err = cerr
-	}
-	if err == nil {
-		err = os.Rename(tmp, path)
-	}
-	if err != nil {
-		os.Remove(tmp)
-	}
-	return err
-}
+// file; when it returns nil the file's bytes and the folder's entry for the
+// rename are synced (fsutil.WriteFile). A temporary file it made is removed
+// if it fails; anything else at that path is left.
+func writeFile(path string, b []byte) error { return fsutil.WriteFile(path, b, 0o644) }
