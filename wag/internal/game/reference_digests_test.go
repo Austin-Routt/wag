@@ -100,7 +100,8 @@ func TestReferenceDigests(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%v (WAG_UPDATE_REFERENCE=1 writes it)", err)
 	}
-	want := strings.Split(strings.TrimRight(string(b), "\n"), "\n")
+	// A checkout with CRLF line endings (Windows) reads the same digests.
+	want := strings.Split(strings.TrimRight(strings.ReplaceAll(string(b), "\r\n", "\n"), "\n"), "\n")
 	if len(want) != len(got) {
 		t.Fatalf("%d reference games stored, %d played", len(want), len(got))
 	}

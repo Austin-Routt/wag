@@ -8,3 +8,5 @@
 # file keeps its line endings until its files are written again.
 wag/data/** text=auto eol=lf
 docs/** text=auto eol=lf
+# Test fixtures are compared byte for byte too (the reference games' digests).
+wag/**/testdata/** text=auto eol=lf
