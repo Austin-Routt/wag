@@ -176,7 +176,11 @@ async function runLoad() {
   const r = await api('/api/annotate/runs/' + WB.run);
   WB.status = r.status; WB.notes = r.notes || [];
   for (const x of WB.runs) if (x.status && x.status.id === WB.run) x.status = r.status; // the list on the left
-  if (!WB.status.busy) WB.report = await api(`/api/annotate/runs/${WB.run}/report`);
+  // A run whose report cannot be made (its call log unreadable) is still shown.
+  if (!WB.status.busy) {
+    try { WB.report = await api(`/api/annotate/runs/${WB.run}/report`); WB.reportError = ''; }
+    catch (e) { WB.report = null; WB.reportError = e.message; }
+  }
   if (WB.item) WB.view = await api(`/api/annotate/runs/${WB.run}/item/${WB.item}`);
 }
 
@@ -231,7 +235,7 @@ function runList() {
   return WB.runs.map(x => {
     const st = x.status; if (!st) return `<button disabled>${esc(x.id)}: ${esc(x.error)}</button>`;
     const done = (st.progress || []).filter(p => p.role === 'annotator').map(p => `${p.done}/${p.total}`).join(' · ');
-    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}</span></button>`;
+    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}${st.write_error ? ' · <b class="warn">not saved</b>' : ''}</span></button>`;
   }).join('') || '<p class="small muted">None yet.</p>';
 }
 
@@ -281,7 +285,7 @@ async function renderAnnotate(noLoad) {
 function runPane() {
   const st = WB.status, rep = WB.report;
   const ann = st.settings.annotators.map(a => a.name);
-  const prog = (st.progress || []).map(p => `<tr><td><b>${esc(p.name)}</b> <span class="muted small">${esc(p.role)}</span></td><td>${p.done}${p.total ? ' / ' + p.total : ''}</td><td>${p.failed || ''}</td>
+  const prog = (st.progress || []).map(p => `<tr><td><b>${esc(p.name)}</b> <span class="muted small">${esc(p.role)}</span></td><td>${p.done}${p.total ? ' / ' + p.total : ''}${p.unsaved ? ` <span class="warn" title="Held in memory: the file could not be written">+${p.unsaved} not saved</span>` : ''}</td><td>${p.failed || ''}</td>
     <td class="small">${p.calls} calls, ${p.input_tokens.toLocaleString()} tokens in, ${p.output_tokens.toLocaleString()} out</td>
     <td class="small">${p.running ? `working on ${esc(p.current || '')}` : ''} ${p.last_error ? `<span class="warn" title="${esc(p.last_error)}">${esc(short(p.last_error, 220))}</span>` : ''}</td></tr>`).join('');
   const fmt = f => f ? `${f.agreement.toFixed(2)}${f.kappa != null ? ` <span class="muted">κ ${f.kappa.toFixed(2)}</span>` : ''}` : '';
@@ -303,6 +307,9 @@ function runPane() {
       <p class="small">${(st.files || []).map(f => `<a href="/api/store/file?path=${encodeURIComponent('annotation/' + st.id + '/' + f)}">${esc(f)}</a>`).join(' · ')}
         <span class="muted">(README.txt says what each is)</span></p>
       ${(WB.notes || []).map(n => `<p class="small warn">${esc(n)}</p>`).join('')}
+      ${st.write_error ? `<p class="small warn"><b>A record could not be written</b> (${esc(st.write_error)}). The run asks the models nothing new until its records are written: free space or fix the folder, then start it again, which writes them first. What it received is kept meanwhile, in this server's memory.</p>` : ''}
+      ${(st.unsaved || []).length ? `<p class="small warn">Not in the files yet: ${esc(st.unsaved.join('; '))}.</p>` : ''}
+      ${WB.reportError ? `<p class="small warn">The report cannot be made: ${esc(WB.reportError)}</p>` : ''}
       <div class="row">
         <button id="next" ${st.busy || !st.next_item ? 'disabled' : ''} title="Every annotator annotates the next claim; then look at it">Annotate the next claim${st.next_item ? ' (' + esc(st.next_item) + ')' : ''}</button>
         <button class="primary" id="startall" ${st.busy || !st.next_item ? 'disabled' : ''} title="Runs in the server: you can close this page">Annotate all the rest</button>

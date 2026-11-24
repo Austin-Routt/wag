@@ -170,12 +170,12 @@ func annotateCmd(ctx context.Context, args []string) error {
 	fmt.Printf("Annotating %d claims of %s with %d annotators; the files are in %s.\n", len(run.Settings.Items), run.Dataset.Name,
 		len(run.Settings.Annotators), run.Dir)
 	if err := run.Annotate(ctx, nil); err != nil {
-		return err
+		return unsavedNote(run, err)
 	}
 	if run.Settings.Reviewer != nil {
 		fmt.Printf("Reviewing with %s.\n", run.Settings.Reviewer.Name)
 		if err := run.Review(ctx, nil, !*all); err != nil {
-			return err
+			return unsavedNote(run, err)
 		}
 	}
 	rep, err := run.Report()
@@ -195,4 +195,21 @@ func annotateCmd(ctx context.Context, args []string) error {
 	b, _ := json.Marshal(rep.Verdicts)
 	fmt.Printf("Report: %s (verdicts %s)\n", filepath.Join(run.Dir, "report.json"), b)
 	return ctx.Err()
+}
+
+// unsavedNote tries once more to write what the run could not write, and
+// says what this command's end loses if it still cannot.
+func unsavedNote(run *annotate.Run, err error) error {
+	if run.Status().WriteError == "" {
+		return err
+	}
+	if run.Flush() == nil {
+		fmt.Fprintln(os.Stderr, "Its records are written now: continue the run to carry on.")
+		return err
+	}
+	if u := run.Status().Unsaved; len(u) > 0 {
+		fmt.Fprintf(os.Stderr, "Not saved: %s. What did not reach calls.jsonl is lost when this command ends; "+
+			"a reply that did is taken from it when the run is continued.\n", strings.Join(u, "; "))
+	}
+	return err
 }

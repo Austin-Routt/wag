@@ -38,6 +38,10 @@ report.json               validation of every annotation, and agreement: between
 budget.jsonl              each wag-llm annotate invocation's budget, one JSON object a
                           line: its limits, or none, and the calls and usage it counted
                           (D046; the dashboard records none yet)
+
+If a file cannot be written, the run asks the models nothing new and says so; what it
+received is kept until the next start writes it, before asking anything. A reply that
+reached calls.jsonl is taken from it when the run is opened again, not asked again.
 `
 
 // Settings are what a run was started with.
@@ -57,7 +61,8 @@ type Progress struct {
 	Name         string `json:"name"`
 	Role         string `json:"role"` // annotator, reviewer
 	Total        int    `json:"total"`
-	Done         int    `json:"done"`
+	Done         int    `json:"done"`    // results in the files
+	Unsaved      int    `json:"unsaved"` // results held in memory that the files lack (a write failed)
 	Failed       int    `json:"failed"`
 	Current      string `json:"current,omitempty"`
 	Running      bool   `json:"running"`
@@ -132,6 +137,16 @@ type Run struct {
 	scoringInputs []string // pinned scoring-only filenames, not model inputs
 	loadErrors    []string // damaged saved result files: inspectable, never silently overwritten
 	curPrompt     string   // digest of the loaded dataset's annotator system prompt (immutable after load)
+	// The records the files lack (durable.go): the first write that failed
+	// since they were last all written, the call lines not written, what
+	// each annotator's file and the reviewer's file hold, whether run.json
+	// is older than the run, and the results taken from calls.jsonl.
+	writeErr      error
+	pending       [][]byte
+	onDisk        map[string]map[string]bool
+	reviewsOnDisk map[string]*Review
+	runDirty      bool
+	fromLog       map[string]bool
 }
 
 var unsafe = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
@@ -240,7 +255,8 @@ func New(dir string, d *Dataset, s Settings, clients map[string]*llm.Client) (*R
 func newRun(dir string, d *Dataset, s Settings) *Run {
 	r := &Run{ID: filepath.Base(dir), Dir: dir, Dataset: d, Settings: s, clients: map[string]*llm.Client{},
 		anns: map[string]map[string]Annotation{}, failures: map[string]map[string]string{}, reviews: map[string]*Review{},
-		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}}
+		verdicts: map[string]Verdict{}, progress: map[string]*Progress{}, onDisk: map[string]map[string]bool{},
+		reviewsOnDisk: map[string]*Review{}, fromLog: map[string]bool{}}
 	r.inputHashes = copyHashes(d.Hashes)
 	r.promptHash = sha([]byte(d.AnnotatorSystem()))
 	r.curPrompt = r.promptHash
@@ -249,7 +265,7 @@ func newRun(dir string, d *Dataset, s Settings) *Run {
 		r.scoringInputs = append(r.scoringInputs, d.GoldFile)
 	}
 	for _, p := range s.Annotators {
-		r.anns[p.Name], r.failures[p.Name] = map[string]Annotation{}, map[string]string{}
+		r.anns[p.Name], r.failures[p.Name], r.onDisk[p.Name] = map[string]Annotation{}, map[string]string{}, map[string]bool{}
 		r.progress[p.Name] = &Progress{Name: p.Name, Role: "annotator", Total: len(s.Items)}
 	}
 	if s.Reviewer != nil {
@@ -309,6 +325,9 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		if b, err := os.ReadFile(r.annotationsPath(name)); err == nil {
 			if m, err := parseAnnotations(b); err == nil {
 				r.anns[name] = m
+				for id := range m {
+					r.onDisk[name][id] = true
+				}
 			} else {
 				r.loadErrors = append(r.loadErrors, "annotations/"+FileName(name)+".json: "+err.Error())
 			}
@@ -341,7 +360,7 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 					case r.reviews[rv.Item] != nil:
 						r.loadErrors = append(r.loadErrors, fmt.Sprintf("%s: two reviews of %s", name, rv.Item))
 					default:
-						r.reviews[rv.Item] = rv
+						r.reviews[rv.Item], r.reviewsOnDisk[rv.Item] = rv, rv
 					}
 				}
 			} else {
@@ -374,6 +393,11 @@ func Open(dir string, datasets func(id, dir string) (*Dataset, error)) (*Run, er
 		r.loadErrors = append(r.loadErrors, err.Error())
 	}
 	r.refreshDrift()
+	if r.drift == "" {
+		// Not for a run that cannot be continued: what it could not write
+		// could never be written.
+		r.recoverFromLog()
+	}
 	r.recount()
 	return r, nil
 }
@@ -410,16 +434,26 @@ func (r *Run) reviewPath(name string) string {
 func (r *Run) recount() {
 	for name, p := range r.progress {
 		if p.Role == "annotator" {
-			p.Done, p.Failed = 0, 0
+			p.Done, p.Unsaved, p.Failed = 0, 0, 0
 			for _, id := range r.Settings.Items {
-				if r.anns[name][id] != nil {
+				switch {
+				case r.anns[name][id] != nil && r.onDisk[name][id]:
 					p.Done++
-				} else if r.failures[name][id] != "" {
+				case r.anns[name][id] != nil:
+					p.Unsaved++
+				case r.failures[name][id] != "":
 					p.Failed++
 				}
 			}
 		} else {
-			p.Done = len(r.reviews)
+			p.Done, p.Unsaved = 0, 0
+			for id, rv := range r.reviews {
+				if r.reviewsOnDisk[id] == rv {
+					p.Done++
+				} else {
+					p.Unsaved++
+				}
+			}
 		}
 	}
 }
@@ -442,15 +476,6 @@ func (r *Run) saveRun() error {
 	return writeFile(filepath.Join(r.Dir, "run.json"), b)
 }
 
-// writeFile writes through a temporary file, so a reader never sees half.
-func writeFile(path string, b []byte) error {
-	tmp := path + ".tmp"
-	if err := os.WriteFile(tmp, b, 0o644); err != nil {
-		return err
-	}
-	return os.Rename(tmp, path)
-}
-
 // saveAnnotations writes an annotator's file, in the dataset's order.
 // Caller holds r.mu.
 func (r *Run) saveAnnotations(name string) error {
@@ -467,9 +492,16 @@ func (r *Run) saveAnnotations(name string) error {
 	return writeFile(r.annotationsPath(name), b)
 }
 
-// logCall appends a call to calls.jsonl.
-func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt) {
-	line, _ := json.Marshal(map[string]any{"format": "wag-annotation-call/1", "role": role, "name": name, "item": item, "attempt": attempt, "call": a})
+// logCall appends a call to calls.jsonl (with a review's letters, which say
+// whose annotation each letter labels), and reports whether the run's
+// records are all written: a line that cannot be written is kept for the
+// next start, and the run asks nothing new meanwhile.
+func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt, letters map[string]string) bool {
+	row := map[string]any{"format": "wag-annotation-call/1", "role": role, "name": name, "item": item, "attempt": attempt, "call": a}
+	if letters != nil {
+		row["letters"] = letters
+	}
+	line, merr := json.Marshal(row)
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if p := r.progress[progressKey(role, name)]; p != nil {
@@ -483,12 +515,13 @@ func (r *Run) logCall(role, name, item string, attempt int, a llm.Attempt) {
 			}
 		}
 	}
-	f, err := os.OpenFile(filepath.Join(r.Dir, "calls.jsonl"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)
-	if err != nil {
-		return
+	if merr != nil {
+		r.writeFailed("calls.jsonl", merr)
+		return false
 	}
-	defer f.Close()
-	f.Write(append(line, '\n'))
+	r.pending = append(r.pending, line)
+	r.flushCalls()
+	return r.writeErr == nil
 }
 
 func progressKey(role, name string) string {
@@ -694,12 +727,20 @@ func (r *Run) begin(ctx context.Context, what string) (context.Context, error) {
 	if r.busy != "" {
 		return nil, fmt.Errorf("the run is %s already", r.busy)
 	}
+	if r.needsFlush() {
+		if err := r.flushAll(); err != nil {
+			return nil, fmt.Errorf("the run cannot write its records, so it asks the models nothing new: %v. "+
+				"What it received is kept until they are written: free space or fix the folder, then start again", err)
+		}
+	}
 	ctx, r.cancel = context.WithCancel(ctx)
 	r.busy = what
 	return ctx, nil
 }
 
-func (r *Run) end() {
+// end marks the run idle and writes run.json; it returns the error of a
+// record that could not be written while the run was busy, or now.
+func (r *Run) end() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.cancel != nil {
@@ -710,7 +751,17 @@ func (r *Run) end() {
 		p.Running, p.Current = false, ""
 	}
 	r.recount()
-	_ = r.saveRun()
+	r.persistRun()
+	return r.stoppedByWrite()
+}
+
+// finish ends what begin began: the report, then end. A record that could
+// not be written is the error returned, before any other.
+func (r *Run) finish(err *error) {
+	_, _ = r.Report() // the folder is complete even if no one asks for the report
+	if werr := r.end(); werr != nil {
+		*err = werr
+	}
 }
 
 // Stop stops what the run is doing, after the calls under way.
@@ -727,13 +778,12 @@ func (r *Run) Stop() {
 // annotated; the annotators work in parallel. It returns when they are
 // done, or stopped. A claim that fails is recorded and retried by the
 // next call; an annotator whose key or model is refused stops.
-func (r *Run) Annotate(ctx context.Context, items []string) error {
-	ctx, err := r.begin(ctx, "annotating")
+func (r *Run) Annotate(ctx context.Context, items []string) (err error) {
+	ctx, err = r.begin(ctx, "annotating")
 	if err != nil {
 		return err
 	}
-	defer r.end()
-	defer func() { _, _ = r.Report() }() // the folder is complete even if no one asks for the report
+	defer r.finish(&err)
 	if len(items) == 0 {
 		items = r.Settings.Items
 	}
@@ -776,7 +826,7 @@ func (r *Run) fail(name, item, msg string) {
 		p.LastError = msg
 	}
 	r.recount()
-	_ = r.saveRun()
+	r.persistRun()
 }
 
 func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items []string) {
@@ -790,6 +840,10 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 			return
 		}
 		r.mu.Lock()
+		if r.writeErr != nil {
+			r.mu.Unlock()
+			return
+		}
 		done := r.anns[name][id] != nil
 		before := map[string]Annotation{}
 		var prior []string
@@ -812,8 +866,8 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 		it := r.Dataset.Item(id)
 		a, err := r.annotateOne(ctx, name, c, system, it, before, prior)
 		if err != nil {
-			if ctx.Err() != nil {
-				return
+			if ctx.Err() != nil || r.hasWriteErr() {
+				return // stopped: the claim is not failed, it is still to do
 			}
 			e, _ := err.(*llm.Error)
 			r.fail(name, id, failure(e, err))
@@ -826,9 +880,9 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 		r.anns[name][id] = a
 		delete(r.failures[name], id)
 		r.progress[name].LastError = ""
+		r.persistAnnotations(name) // a failure stops the loop at its next claim
 		r.recount()
-		_ = r.saveAnnotations(name)
-		_ = r.saveRun()
+		r.persistRun()
 		r.mu.Unlock()
 	}
 }
@@ -838,7 +892,17 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 func (r *Run) annotateOne(ctx context.Context, name string, c *llm.Client, system string, it *Item, before map[string]Annotation, prior []string) (Annotation, error) {
 	msgs := []llm.Message{{Role: "user", Content: r.Dataset.AnnotatorPrompt(it, before, prior)}}
 	for attempt := 1; attempt <= 2; attempt++ {
-		resp, err := c.Complete(ctx, c.Request(system, msgs), func(a llm.Attempt) { r.logCall("annotator", name, it.ID, attempt, a) })
+		if attempt > 1 && r.hasWriteErr() {
+			return nil, errNotRecorded
+		}
+		// A call's retries stop once a record cannot be written.
+		cctx, cancel := context.WithCancel(ctx)
+		resp, err := c.Complete(cctx, c.Request(system, msgs), func(a llm.Attempt) {
+			if !r.logCall("annotator", name, it.ID, attempt, a, nil) {
+				cancel()
+			}
+		})
+		cancel()
 		if err != nil {
 			return nil, err
 		}
@@ -859,7 +923,7 @@ func (r *Run) annotateOne(ctx context.Context, name string, c *llm.Client, syste
 // the run's if none) that at least two annotators annotated; with
 // onlyDisagreements, only those whose annotations differ on a field. It
 // skips claims it has reviewed.
-func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool) error {
+func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool) (err error) {
 	rp := r.Settings.Reviewer
 	if rp == nil {
 		return fmt.Errorf("the run has no reviewer")
@@ -870,12 +934,11 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 	if c == nil {
 		return fmt.Errorf("no model client for the reviewer %s: connect its service in Models", rp.Name)
 	}
-	ctx, err := r.begin(ctx, "reviewing")
+	ctx, err = r.begin(ctx, "reviewing")
 	if err != nil {
 		return err
 	}
-	defer r.end()
-	defer func() { _, _ = r.Report() }()
+	defer r.finish(&err)
 	if len(items) == 0 {
 		items = r.Settings.Items
 	}
@@ -903,6 +966,10 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 			return ctx.Err()
 		}
 		r.mu.Lock()
+		if werr := r.stoppedByWrite(); werr != nil {
+			r.mu.Unlock()
+			return werr
+		}
 		names, _ := r.annotationsOf(id)
 		anns := map[string]Annotation{}
 		for _, n := range names {
@@ -914,6 +981,9 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		if ctx.Err() != nil {
 			return ctx.Err()
 		}
+		if err != nil && r.hasWriteErr() {
+			continue // stopped: the claim is still to review (the loop returns the error)
+		}
 		e, _ := err.(*llm.Error)
 		if err != nil {
 			rv.Error = failure(e, err)
@@ -923,8 +993,8 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		if rv.Error != "" {
 			p.LastError = rv.Error
 		}
+		r.persistReviews()
 		r.recount()
-		_ = r.saveReviews()
 		r.mu.Unlock()
 		if e != nil && !e.Retryable() {
 			return err // a refused key or model, or a quota used up, will not pass on the next claim
@@ -966,16 +1036,29 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 	for i, n := range names {
 		rv.Letters[string(Letters[i])] = n
 	}
-	resp, err := c.Complete(ctx, c.Request(system, []llm.Message{{Role: "user", Content: r.Dataset.ReviewerPrompt(it, names, anns)}}),
-		func(a llm.Attempt) { r.logCall("reviewer", name, it.ID, 1, a) })
+	cctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	resp, err := c.Complete(cctx, c.Request(system, []llm.Message{{Role: "user", Content: r.Dataset.ReviewerPrompt(it, names, anns)}}),
+		func(a llm.Attempt) {
+			if !r.logCall("reviewer", name, it.ID, 1, a, rv.Letters) {
+				cancel() // a call's retries stop once a record cannot be written
+			}
+		})
 	if err != nil {
 		rv.Error = err.Error()
 		return rv, err
 	}
-	obj, err := jsonObject(resp.Text)
+	if err := readReview(rv, resp.Text); err != nil {
+		rv.Error, rv.Raw = err.Error(), resp.Text
+	}
+	return rv, nil
+}
+
+// readReview fills a review from the reviewer's reply.
+func readReview(rv *Review, text string) error {
+	obj, err := jsonObject(text)
 	if err != nil {
-		rv.Error, rv.Raw = "the review cannot be read: "+err.Error(), resp.Text
-		return rv, nil
+		return fmt.Errorf("the review cannot be read: %v", err)
 	}
 	var parsed struct {
 		Fields      map[string]FieldChoice `json:"fields"`
@@ -986,8 +1069,7 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 	}
 	b, _ := json.Marshal(obj)
 	if err := json.Unmarshal(b, &parsed); err != nil {
-		rv.Error, rv.Raw = "the review cannot be read: "+err.Error(), resp.Text
-		return rv, nil
+		return fmt.Errorf("the review cannot be read: %v", err)
 	}
 	rv.Fields, rv.Adjudicated, rv.Confidence, rv.NeedsHuman, rv.Notes = parsed.Fields, parsed.Adjudicated, parsed.Confidence, parsed.NeedsHuman, parsed.Notes
 	for f, ch := range rv.Fields {
@@ -995,9 +1077,9 @@ func (r *Run) reviewOne(ctx context.Context, name string, c *llm.Client, system 
 		rv.Fields[f] = ch
 	}
 	if rv.Adjudicated != nil {
-		rv.Adjudicated["kialo_claim_id"] = it.ID
+		rv.Adjudicated["kialo_claim_id"] = rv.Item
 	}
-	return rv, nil
+	return nil
 }
 
 // toReview is how many annotations a claim needs to be reviewed: two to
@@ -1046,10 +1128,21 @@ func (r *Run) SetVerdict(v Verdict) error {
 	}
 	r.refreshDrift()
 	v.InputsSHA256, v.InputDrift, v.AssessmentBuild = copyHashes(r.Dataset.Hashes), r.drift, buildID()
+	prev, had := r.verdicts[v.Item]
 	if v.Choice == "" && v.Note == "" {
 		delete(r.verdicts, v.Item)
 	} else {
 		r.verdicts[v.Item] = v
+	}
+	// A verdict that is not written is not kept: the run holds what its
+	// file holds, and the person is told to give it again.
+	undo := func(err error) error {
+		if had {
+			r.verdicts[v.Item] = prev
+		} else {
+			delete(r.verdicts, v.Item)
+		}
+		return fmt.Errorf("the verdict is not saved: %v", err)
 	}
 	var list []Verdict
 	for _, id := range r.Dataset.IDs() {
@@ -1059,9 +1152,12 @@ func (r *Run) SetVerdict(v Verdict) error {
 	}
 	b, err := json.MarshalIndent(list, "", " ")
 	if err != nil {
-		return err
+		return undo(err)
 	}
-	return writeFile(filepath.Join(r.Dir, "review", "human.json"), b)
+	if err := writeFile(filepath.Join(r.Dir, "review", "human.json"), b); err != nil {
+		return undo(err)
+	}
+	return nil
 }
 
 // Status is a run at a glance.
@@ -1082,6 +1178,11 @@ type Status struct {
 	Reviewable int         `json:"reviewable"` // claims with enough annotations to review (Run.Review)
 	// InputDrift says why the run can be read but not continued ("" if it can be).
 	InputDrift string `json:"input_drift,omitempty"`
+	// WriteError is a record the run could not write: it asks the models
+	// nothing new until its next start has written what the files lack
+	// (Unsaved), which can also be what a reopened run took from calls.jsonl.
+	WriteError string   `json:"write_error,omitempty"`
+	Unsaved    []string `json:"unsaved,omitempty"`
 }
 
 // progressList lists the annotators' progress in their order, then the
@@ -1112,7 +1213,11 @@ func (r *Run) Status() Status {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.refreshDrift()
-	s := Status{ID: r.ID, Dir: r.Dir, Dataset: r.Dataset, Settings: r.Settings, Busy: r.busy, Reviewed: len(r.reviews), Verdicts: len(r.verdicts), InputDrift: r.drift}
+	s := Status{ID: r.ID, Dir: r.Dir, Dataset: r.Dataset, Settings: r.Settings, Busy: r.busy, Reviewed: len(r.reviews), Verdicts: len(r.verdicts), InputDrift: r.drift,
+		Unsaved: r.unsaved()}
+	if r.writeErr != nil {
+		s.WriteError = r.writeErr.Error()
+	}
 	s.Progress = r.progressList(true)
 	for _, p := range r.Settings.Annotators {
 		if r.clients[p.Name] == nil {

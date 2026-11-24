@@ -59,6 +59,8 @@ A dataset is read strictly, so that nothing ambiguous decides a result in silenc
 
 If an existing saved annotation, model review or human-verdict file cannot be decoded, names no claim, holds two entries for one claim or spells a field two ways, the run opens with an explicit warning and refuses further annotation or verdict writes until the file is recovered. It does not silently treat the damaged result as unfinished work. The dashboard does not keep such a run open, so it is read again once the file is repaired, without a restart. Unreadable lines in the append-only call log are counted separately. Reported served-model counts distinguish annotator and reviewer roles, include format retries, and label responses with no provider-reported model as unknown. These are provider reports, not proof of the model's implementation or independence.
 
+When a file of a run cannot be written (a full disk, a folder that cannot be written to), the run asks the models nothing new: the annotators and the reviewer finish the call under way, and its retries stop. `wag-llm annotate` and the dashboard say which record failed and what the files lack. What was received is kept in memory, counted as not saved rather than done, and the next start writes it before it asks anything; it does not start until it can. The command line tries once more before it ends: what it still cannot write is lost then, except a reply that reached `calls.jsonl`, which a continued run takes from there instead of asking again. A verdict that cannot be written is not kept: give it again. A line of `calls.jsonl` is written whole or not at all.
+
 ## The command line: quick start with Gemini
 
 1. **Make a key.** Create an API key in Google AI Studio.
