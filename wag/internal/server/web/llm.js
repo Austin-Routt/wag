@@ -235,7 +235,7 @@ function runList() {
   return WB.runs.map(x => {
     const st = x.status; if (!st) return `<button disabled>${esc(x.id)}: ${esc(x.error)}</button>`;
     const done = (st.progress || []).filter(p => p.role === 'annotator').map(p => `${p.done}/${p.total}`).join(' · ');
-    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}${st.write_error ? ' · <b class="warn">not saved</b>' : ''}</span></button>`;
+    return `<button data-run="${esc(st.id)}" class="${st.id === WB.run ? 'on' : ''}"><b>${esc(st.id)}</b><br><span class="small muted">${esc(st.settings.annotators.map(a => a.name).join(', '))}${st.settings.reviewer ? ' · reviewer ' + esc(st.settings.reviewer.name) : ''} · ${done}${st.busy ? ' · <b>' + esc(st.busy) + '…</b>' : ''}${st.write_error ? ' · <b class="warn">not saved</b>' : ''}${st.verdicts_not_synced ? ' · <b class="warn">verdicts not synced</b>' : ''}</span></button>`;
   }).join('') || '<p class="small muted">None yet.</p>';
 }
 
@@ -309,6 +309,7 @@ function runPane() {
       ${(WB.notes || []).map(n => `<p class="small warn">${esc(n)}</p>`).join('')}
       ${st.write_error ? `<p class="small warn"><b>A record could not be written</b> (${esc(st.write_error)}). The run asks the models nothing new until its records are written: free space or fix the folder, then write them, or start the run again, which writes them first. What it received is kept meanwhile, in this server's memory.</p>` : ''}
       ${(st.unsaved || []).length ? `<p class="small warn">Not in the files yet: ${esc(st.unsaved.join('; '))}. <button class="small" id="flush" ${st.busy ? 'disabled' : ''}>Write them now</button></p>` : ''}
+      ${st.verdicts_not_synced ? `<p class="small warn"><b>Your verdicts are in <span class="mono">review/human.json</span>, but its folder could not be synced</b> (${esc(st.verdicts_not_synced)}), so they may not survive a power loss yet. The folder is synced again with your next verdict. <button class="small" id="syncverdicts" ${st.busy ? 'disabled' : ''}>Sync it now</button></p>` : ''}
       ${WB.reportError ? `<p class="small warn">The report cannot be made: ${esc(WB.reportError)}</p>` : ''}
       <div class="row">
         <button id="next" ${st.busy || !st.next_item ? 'disabled' : ''} title="Every annotator annotates the next claim; then look at it">Annotate the next claim${st.next_item ? ' (' + esc(st.next_item) + ')' : ''}</button>
@@ -335,9 +336,12 @@ function runPane() {
 
 const primaryOf = a => { const ins = (a && a.instances) || []; return ins.find(i => i.primary) || ins[0] || {}; };
 
-function annCard(name, a, problems, diff) {
+// cmp is the values compared (the server's FieldOf): re-parenting is derived
+// from the target, not read from the annotation's own field.
+function annCard(name, a, problems, diff, cmp) {
   if (!a) return '';
   const p = primaryOf(a), s = p.scheme || {}, r = a.role || {}, t = (a.target || {}).actual || {};
+  const stated = (a.target || {}).re_parented, derived = (cmp || {}).re_parented;
   const mark = f => diff.includes(f) ? ' class="differs"' : '';
   const prem = (p.premises || []).map(x => `<li><span class="muted">${esc(x.role)}</span> <span class="mono">${esc(x.formula)}</span>${x.status ? ` <span class="muted small">(${esc(x.status)})</span>` : ''}</li>`).join('');
   return `<div class="anncard"><h4>${esc(name)}</h4>
@@ -347,7 +351,7 @@ function annCard(name, a, problems, diff) {
       <tr${mark('role')}><td>Role</td><td>${esc(r.kind)}${r.cq ? ' — ' + esc(r.cq) : ''}</td></tr>
       <tr${mark('polarity')}><td>Polarity</td><td>${esc(r.polarity)}</td></tr>
       <tr${mark('target_claim') || mark('target_part')}><td>Target</td><td>${esc(t.claim)} · ${esc(t.part)} ${t.formula ? '<span class="mono">' + esc(t.formula) + '</span>' : ''}</td></tr>
-      <tr${mark('re_parented')}><td>Re-parented</td><td>${esc((a.target || {}).re_parented)}</td></tr>
+      <tr${mark('re_parented')}><td>Re-parented</td><td>${esc(derived ?? stated)}${derived != null && stated != null && String(stated) !== derived ? ` <span class="muted small">(it says ${esc(stated)}; this is derived from the target)</span>` : ''}</td></tr>
       <tr${mark('evidence')}><td>Evidence</td><td>${esc((a.evidence || {}).status)}</td></tr>
     </table>
     ${prem ? `<div class="small">Premises<ul class="small">${prem}</ul></div>` : ''}
@@ -362,7 +366,7 @@ function itemPane() {
   const names = Object.keys(v.annotations);
   const parent = (it.kialo_parents || [])[0];
   const parentText = parent && ((it.ancestors || []).find(x => x.claim_id === parent.claim_id) || {}).text;
-  const cards = names.map(n => annCard(n, v.annotations[n], v.problems[n], v.disagree || [])).join('');
+  const cards = names.map(n => annCard(n, v.annotations[n], v.problems[n], v.disagree || [], (v.compared || {})[n])).join('');
   const fails = Object.entries(v.failures || {}).map(([n, e]) => `<p class="small warn">${esc(n)} failed: ${esc(e)}</p>`).join('');
   const rv = v.review;
   const review = rv && WB.reveal ? `<div class="panel review"><h4>The reviewer (${esc(rv.reviewer)})</h4>
@@ -377,7 +381,7 @@ function itemPane() {
     <div class="anncards">${cards || '<p class="small muted">Not annotated yet.</p>'}</div>${fails}
     <label class="inline small"><input type="checkbox" id="reveal" ${WB.reveal ? 'checked' : ''}> Show the reviewer${v.gold ? ' and the gold' : ''} (leave it off to judge first)</label>
     ${review}
-    ${v.gold && WB.reveal ? `<div class="anncards">${annCard('Gold (adjudicated)', v.gold, [], v.disagree || [])}</div>` : ''}
+    ${v.gold && WB.reveal ? `<div class="anncards">${annCard('Gold (adjudicated)', v.gold, [], v.disagree || [], v.gold_compared)}</div>` : ''}
     <div class="verdict"><h4>Your verdict</h4>
       <div class="seg">${opts.map(([k, l]) => `<button data-choice="${esc(k)}" class="${choice === k ? 'on' : ''}">${esc(l)}</button>`).join('')}</div>
       <input type="text" id="vnote" placeholder="Why (optional)" value="${esc((v.verdict || {}).note || '')}">
@@ -409,7 +413,7 @@ function wireAnnotate() {
         const r = await api('/api/annotate/runs', { dataset: f.dataset, annotators: f.annotators, reviewer: f.reviewer, count: Number(f.count) || 0 });
         WB.run = r.status.id; WB.item = null; WB.view = null; toast('Run created: annotate the next claim, or all of them.'); return renderAnnotate();
       }
-      const act = { next: 'next', startall: 'start', review: 'review', reviewall: 'review', stop: 'stop', flush: 'flush' }[b.id];
+      const act = { next: 'next', startall: 'start', review: 'review', reviewall: 'review', stop: 'stop', flush: 'flush', syncverdicts: 'flush' }[b.id];
       if (act) {
         b.disabled = true;
         const body = b.id === 'reviewall' ? { all: true } : {};
@@ -422,8 +426,9 @@ function wireAnnotate() {
         return renderAnnotate(true);
       }
       if (b.dataset.choice !== undefined) {
-        await api(`/api/annotate/runs/${WB.run}/verdict`, { item: WB.item, choice: b.dataset.choice, note: $('#vnote').value });
-        await runLoad(); toast('Verdict saved.'); return renderAnnotate(true);
+        // A warning: the verdict is kept, but its folder could not be synced.
+        const r = await api(`/api/annotate/runs/${WB.run}/verdict`, { item: WB.item, choice: b.dataset.choice, note: $('#vnote').value });
+        await runLoad(); toast(r.warning || 'Verdict saved.', r.warning ? 10000 : 3500); return renderAnnotate(true);
       }
     } catch (err) { toast(err.message, 8000); }
   };

@@ -633,20 +633,12 @@ func replay(ctx context.Context, args []string) error {
 	}
 	g := &game{base: ts.URL, id: st.ID}
 	runErr := g.run(10 * (len(decisions) + 1))
-	resp, err := http.Get(ts.URL + "/api/games/" + st.ID + "/traces")
+	again, err := replayedDecisions(ts.URL, st.ID)
 	if err != nil {
-		return err
-	}
-	nb, _ := io.ReadAll(resp.Body)
-	resp.Body.Close()
-	nevs, _ := readEvents(nb)
-	var again []server.Trace
-	for _, e := range nevs {
-		if str(e, "type") == "decision" {
-			var t server.Trace
-			_ = json.Unmarshal(mustJSON(e), &t)
-			again = append(again, t)
+		if runErr != nil {
+			err = fmt.Errorf("%w (and the replay stopped: %v)", err, runErr)
 		}
+		return err
 	}
 	var problems []string
 	for name, rp := range replays {
@@ -676,6 +668,39 @@ func replay(ctx context.Context, args []string) error {
 	}
 	fmt.Println("The replay matches the trace: the same requests, the same decisions, the same results.")
 	return nil
+}
+
+// replayedDecisions reads the decisions of the replayed game's trace, all
+// of it: a trace that cannot be read in full is an error, not fewer
+// decisions to compare.
+func replayedDecisions(base, id string) ([]server.Trace, error) {
+	resp, err := http.Get(base + "/api/games/" + id + "/traces")
+	if err != nil {
+		return nil, err
+	}
+	b, err := io.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("the replay's trace: reading it: %w", err)
+	}
+	if resp.StatusCode/100 != 2 {
+		return nil, fmt.Errorf("the replay's trace: %s: %s", resp.Status, strings.TrimSpace(string(b)))
+	}
+	evs, err := readEvents(b)
+	if err != nil {
+		return nil, fmt.Errorf("the replay's trace: %w", err)
+	}
+	var out []server.Trace
+	for i, e := range evs {
+		if str(e, "type") == "decision" {
+			var t server.Trace
+			if err := json.Unmarshal(mustJSON(e), &t); err != nil {
+				return nil, fmt.Errorf("the replay's trace: event %d, a decision: %w", i+1, err)
+			}
+			out = append(out, t)
+		}
+	}
+	return out, nil
 }
 
 func countType(evs []map[string]json.RawMessage, t string) int {

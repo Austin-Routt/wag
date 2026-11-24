@@ -146,6 +146,7 @@ type Run struct {
 	// each annotator's file and the reviewer's file hold, whether run.json
 	// is older than the run, and the results taken from calls.jsonl.
 	writeErr      error
+	verdictSync   error // why review/human.json's folder is not synced yet (nil: it is)
 	pending       [][]byte
 	onDisk        map[string]map[string]bool
 	reviewsOnDisk map[string]*Review
@@ -764,8 +765,9 @@ func (r *Run) end() error {
 	return r.stoppedByWrite()
 }
 
-// finish ends what begin began: the report, then end. A record that could
-// not be written is the error returned, before any other.
+// finish ends what begin began: the report, then end. The error returned
+// joins what stopped the work, the report's failure and a record that could
+// not be written.
 func (r *Run) finish(err *error) {
 	if _, reportErr := r.Report(); reportErr != nil {
 		*err = errors.Join(*err, fmt.Errorf("report.json: %w", reportErr))
@@ -817,6 +819,19 @@ func (r *Run) Annotate(ctx context.Context, items []string) (err error) {
 	return ctx.Err()
 }
 
+// badRepliesStop is how many claims in a row may have replies that cannot
+// be used (an annotation that fails the check after it was sent back once,
+// a review that cannot be read) before the annotator or the reviewer is
+// stopped: more calls would most likely fail the same way, at a cost. A
+// reply that can be used, or a call that fails otherwise, ends the row.
+const badRepliesStop = 3
+
+// badRepliesStopped says why an annotator or the reviewer was stopped.
+func badRepliesStopped(last string) string {
+	return fmt.Sprintf("stopped after %d claims in a row whose replies could not be used (the last: %s): more calls would most likely fail the same way. "+
+		"Look at the replies in calls.jsonl; change the model, its settings or the prompt; then start again", badRepliesStop, last)
+}
+
 // failure says why a call failed, first in plain words if a quota is used
 // up (the provider's own message is long, and says it last).
 func failure(e *llm.Error, err error) string {
@@ -846,6 +861,7 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 	r.mu.Lock()
 	r.progress[name].Running = true
 	r.mu.Unlock()
+	bad := 0 // claims in a row whose replies could not be used
 	for _, id := range items {
 		if ctx.Err() != nil {
 			return
@@ -885,8 +901,17 @@ func (r *Run) annotateAll(ctx context.Context, name string, c *llm.Client, items
 			if e != nil && !e.Retryable() && e.Kind != llm.KindBadReply {
 				return // a refused key or model, or a quota used up, will not pass on the next claim
 			}
+			if e == nil || e.Kind != llm.KindBadReply {
+				bad = 0 // a call that failed otherwise ends the row
+				continue
+			}
+			if bad++; bad >= badRepliesStop {
+				r.fail(name, "", badRepliesStopped(failure(e, err)))
+				return
+			}
 			continue
 		}
+		bad = 0
 		r.mu.Lock()
 		r.anns[name][id] = a
 		delete(r.failures[name], id)
@@ -962,6 +987,7 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 	p := r.progress[key]
 	p.Total, p.Running = len(r.reviews)+len(todo), true
 	r.mu.Unlock()
+	bad := 0 // claims in a row whose reviews could not be read
 	for _, id := range todo {
 		if ctx.Err() != nil {
 			return ctx.Err()
@@ -989,16 +1015,30 @@ func (r *Run) Review(ctx context.Context, items []string, onlyDisagreements bool
 		if err != nil {
 			rv.Error = failure(e, err)
 		}
+		// A reply that cannot be read is a failed review (err is nil).
+		if err == nil && rv.Error != "" {
+			bad++
+		} else {
+			bad = 0
+		}
 		r.mu.Lock()
 		r.reviews[id] = rv
 		if rv.Error != "" {
 			p.LastError = rv.Error
+		} else {
+			p.LastError = "" // as an annotator's: a review made ends what the last failure said
+		}
+		if bad >= badRepliesStop {
+			p.LastError = badRepliesStopped(rv.Error)
 		}
 		r.persistReviews()
 		r.recount()
 		r.mu.Unlock()
 		if e != nil && !e.Retryable() {
 			return err // a refused key or model, or a quota used up, will not pass on the next claim
+		}
+		if bad >= badRepliesStop {
+			return fmt.Errorf("the reviewer %s was %s", rp.Name, badRepliesStopped(rv.Error))
 		}
 	}
 	return nil
@@ -1192,10 +1232,32 @@ func (r *Run) SetVerdict(v Verdict) error {
 		return undo(err)
 	}
 	if err := writeFile(filepath.Join(r.Dir, "review", "human.json"), b); err != nil {
+		// The file holds the verdict once only its folder's sync failed: it
+		// is kept, as the file and a reopened run keep it, and said to be
+		// not yet durable until a later sync of the folder succeeds.
+		var fe *fsutil.FolderError
+		if errors.As(err, &fe) {
+			r.verdictSync = err
+			return &NotDurableError{Err: err}
+		}
 		return undo(err)
 	}
+	r.verdictSync = nil
 	return nil
 }
+
+// NotDurableError is a verdict that is in review/human.json, and kept, but
+// whose folder could not be synced after the file was written: it may not
+// survive a power loss until a later sync of the folder succeeds (the next
+// verdict, or Flush). Status says so until then (VerdictsNotSynced).
+type NotDurableError struct{ Err error }
+
+func (e *NotDurableError) Error() string {
+	return "the verdict is saved in review/human.json, but it may not survive a power loss yet: " + e.Err.Error() +
+		"; the folder is synced again with the next verdict, or when the run's records are written"
+}
+
+func (e *NotDurableError) Unwrap() error { return e.Err }
 
 // Status is a run at a glance.
 type Status struct {
@@ -1220,6 +1282,11 @@ type Status struct {
 	// (Unsaved), which can also be what a reopened run took from calls.jsonl.
 	WriteError string   `json:"write_error,omitempty"`
 	Unsaved    []string `json:"unsaved,omitempty"`
+	// VerdictsNotSynced says why review/human.json, which holds the
+	// person's verdicts, may not survive a power loss yet: its folder could
+	// not be synced after it was written. The verdicts are kept; Flush, or
+	// the next verdict, syncs the folder again.
+	VerdictsNotSynced string `json:"verdicts_not_synced,omitempty"`
 }
 
 // progressList lists the annotators' progress in their order, then the
@@ -1254,6 +1321,9 @@ func (r *Run) Status() Status {
 		Unsaved: r.unsaved()}
 	if r.writeErr != nil {
 		s.WriteError = r.writeErr.Error()
+	}
+	if r.verdictSync != nil {
+		s.VerdictsNotSynced = r.verdictSync.Error()
 	}
 	s.Progress = r.progressList(true)
 	for _, p := range r.Settings.Annotators {
@@ -1315,6 +1385,20 @@ type ItemView struct {
 	Gold        Annotation            `json:"gold,omitempty"`
 	Review      *Review               `json:"review,omitempty"`
 	Verdict     *Verdict              `json:"verdict,omitempty"`
+	// Compared and GoldCompared are the values compared, field by field
+	// (FieldOf): each annotator's, and the gold's. Some are derived, as
+	// re_parented is, rather than the annotation's own field.
+	Compared     map[string]map[string]string `json:"compared"`
+	GoldCompared map[string]string            `json:"gold_compared,omitempty"`
+}
+
+// compared returns an annotation's values of the fields compared.
+func compared(a Annotation) map[string]string {
+	out := map[string]string{}
+	for _, f := range Fields {
+		out[f] = FieldOf(a, f)
+	}
+	return out
 }
 
 // Item returns the view of a claim.
@@ -1326,11 +1410,15 @@ func (r *Run) Item(id string) (*ItemView, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	v := &ItemView{ID: id, Item: it.Raw, Annotations: map[string]Annotation{}, Problems: map[string][]string{}, Failures: map[string]string{},
-		Gold: r.Dataset.Gold[id], Review: r.reviews[id]}
+		Gold: r.Dataset.Gold[id], Review: r.reviews[id], Compared: map[string]map[string]string{}}
+	if v.Gold != nil {
+		v.GoldCompared = compared(v.Gold)
+	}
 	var anns []Annotation
 	for _, p := range r.Settings.Annotators {
 		if a := r.anns[p.Name][id]; a != nil {
 			v.Annotations[p.Name] = a
+			v.Compared[p.Name] = compared(a)
 			anns = append(anns, a)
 			if r.coll != nil {
 				v.Problems[p.Name] = r.coll.Check(a, r.Dataset)

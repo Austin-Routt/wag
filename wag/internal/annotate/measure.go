@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -46,7 +47,18 @@ func FieldOf(a Annotation, field string) string {
 		}
 		return p
 	case "re_parented":
-		return str(get(a["target"], "re_parented"))
+		// Derived, as the guidelines say the tooling computes it (§5, item
+		// 1): the actual target claim is not the Kialo parent. The
+		// annotation's own value is not read; agreement.py's re_parented
+		// derives it alike, reading only text as a claim.
+		t, _ := a["target"].(map[string]any)
+		actual, _ := t["actual"].(map[string]any)
+		if len(actual) == 0 {
+			return "false"
+		}
+		claim, _ := actual["claim"].(string)
+		parent, _ := t["kialo_parent"].(string)
+		return strconv.FormatBool(claim != parent)
 	case "evidence":
 		return str(get(a["evidence"], "status"))
 	}

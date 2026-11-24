@@ -1,8 +1,11 @@
 package annotate
 
 import (
+	"bytes"
 	"encoding/json"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"testing"
 )
 
@@ -50,4 +53,35 @@ func deref(p *float64) any {
 		return nil
 	}
 	return *p
+}
+
+// agreement.json is what agreement.py makes, with the README's command: the
+// figures the Go measure is compared with above are the script's own.
+func TestAgreementJSONIsWhatAgreementPyMakes(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	out := filepath.Join(t.TempDir(), "agreement.json")
+	cmd := exec.Command(py, "-I", "-B", "agreement.py", "annotator-A.json", "annotator-B.json",
+		"--pilot", "../kialo-pilot/pilot.json", "--families", "../../wag/data/schemes/families.json", "--json", out)
+	cmd.Dir = dir
+	if b, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("%v: %s", err, b)
+	}
+	got, err := os.ReadFile(out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := os.ReadFile(filepath.Join(dir, "agreement.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(got, bytes.ReplaceAll(want, []byte("\r\n"), []byte("\n"))) {
+		t.Fatal("agreement.json is not what agreement.py makes: run the README's command")
+	}
 }

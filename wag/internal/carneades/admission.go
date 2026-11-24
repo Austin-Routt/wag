@@ -73,7 +73,7 @@ func profileProblems(ag *caes.ArgGraph, allowAnswerFold bool) []validation.Probl
 	if ag.Theory != nil {
 		for id := range ag.Theory.IssueSchemes {
 			out = append(out, validation.Problem{Category: validation.ISCHEME, Id: id,
-				Description: "issue schemes are unsupported in WAG's authored-graph profile; supply concrete issues because WAG does not materialize issue schemes before labelling"})
+				Description: "issue schemes are unsupported in WAG's admission profile (authored and runtime graphs); supply concrete issues because WAG does not materialize issue schemes before labelling"})
 		}
 	}
 	sort.SliceStable(out, func(i, j int) bool {

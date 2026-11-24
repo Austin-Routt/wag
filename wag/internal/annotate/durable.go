@@ -136,6 +136,9 @@ func (r *Run) persistReviews() {
 		held[id] = rv
 	}
 	r.reviewsOnDisk = held
+	// The reviewer's file is in review/ too: its write synced the folder,
+	// and with it the entry of human.json.
+	r.verdictSync = nil
 }
 
 // persistRun writes run.json. Caller holds r.mu or owns r.
@@ -184,17 +187,33 @@ func (r *Run) flushAll() error {
 	return r.writeErr
 }
 
-// Flush writes the records the run could not write before, if it can now.
+// Flush writes the records the run could not write before, if it can now,
+// and syncs the verdicts' folder if its sync failed (VerdictsNotSynced).
 func (r *Run) Flush() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	verr := r.syncVerdicts()
 	if !r.needsFlush() {
-		return nil
+		return verr
 	}
 	if r.busy != "" {
-		return fmt.Errorf("the run is %s", r.busy)
+		return errors.Join(verr, fmt.Errorf("the run is %s", r.busy))
 	}
-	return r.flushAll()
+	return errors.Join(verr, r.flushAll())
+}
+
+// syncVerdicts syncs again the folder of review/human.json, whose sync
+// failed after the file was written (SetVerdict). Caller holds r.mu.
+func (r *Run) syncVerdicts() error {
+	if r.verdictSync == nil {
+		return nil
+	}
+	if err := fsutil.SyncFolder(filepath.Join(r.Dir, "review")); err != nil {
+		r.verdictSync = err
+		return fmt.Errorf("the verdicts' folder: %w", err)
+	}
+	r.verdictSync = nil
+	return nil
 }
 
 // unsavedAnnotations lists, in the dataset's order, the claims whose

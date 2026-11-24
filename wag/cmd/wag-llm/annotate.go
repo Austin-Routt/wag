@@ -172,6 +172,14 @@ func annotateCmd(ctx context.Context, args []string) error {
 	if err := run.Annotate(ctx, nil); err != nil {
 		return unsavedNote(run, err)
 	}
+	// An annotator that stopped before the end (a quota used up, a refused
+	// key, replies that keep failing the check) says why: it left claims it
+	// did not try.
+	for _, p := range run.Status().Progress {
+		if p.Role == "annotator" && p.Done+p.Unsaved+p.Failed < p.Total && p.LastError != "" {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", p.Name, p.LastError)
+		}
+	}
 	if run.Settings.Reviewer != nil {
 		fmt.Printf("Reviewing with %s.\n", run.Settings.Reviewer.Name)
 		if err := run.Review(ctx, nil, !*all); err != nil {

@@ -32,9 +32,9 @@
    "all_assigned_agreement": 0.98
   },
   "re_parented": {
-   "agreement": 0.74,
-   "kappa": 0.513,
-   "all_assigned_agreement": 0.74
+   "agreement": 1.0,
+   "kappa": 1.0,
+   "all_assigned_agreement": 1.0
   },
   "evidence": {
    "agreement": 0.96,
@@ -206,73 +206,6 @@
     "claim": "13292.192",
     "A": "exception",
     "B": "premise"
-   }
-  ],
-  "re_parented": [
-   {
-    "claim": "13292.33",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.169",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.218",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.135",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.137",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.2",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.12",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.4",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.8",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.192",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.141",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.224",
-    "A": true,
-    "B": false
-   },
-   {
-    "claim": "13292.233",
-    "A": true,
-    "B": false
    }
   ],
   "evidence": [

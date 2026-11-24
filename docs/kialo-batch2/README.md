@@ -26,6 +26,7 @@ The second round of formalizing Kialo claims as Walton scheme instances, as the 
 - **Agreement.** It is reported per field, because the audit's point was that one label (scheme) hid several decisions:
   - scheme, fit, role, polarity, actual target, re-parenting, evidence;
   - premises and bindings where the scheme agrees.
+  - Re-parenting is derived from the target (actual target ≠ Kialo parent, as the guidelines say the tooling computes it), not read from the annotators' own field: since 24 November 2026 in `agreement.py` and the Go measure alike. The annotators' own values, which followed an older reading (set whenever the target was a premise), agreed at 0.74 (κ 0.513); derived, they agree at 1.0. Their 13 disagreements were all that older reading (`adjudication.md`, R1).
 - **Adjudication.** Each disagreement was resolved against the guidelines and the sources, with the reason recorded. The adjudicator was a third language-model agent, not a person. No human expert has reviewed the gold annotations yet. They are a consistent, checked reading of the discussion, not a validated gold standard (`docs/review-2026-10-15-part6.md`, §5).
 - **One discussion.** All 50 claims come from one Kialo discussion. Nothing here shows how the schemes and guidelines carry over to other topics.
 - **Playing it.** The converter plays the result. Every move goes through the game's validation, including the scheme-fit rule (S9).
@@ -35,7 +36,7 @@ The second round of formalizing Kialo claims as Walton scheme instances, as the 
 ```sh
 python3 -I validate.py                      # gold.json: walton.yml instantiation, targets, rules R1–R7, lexicon
 python3 -I validate.py annotator-A.json     # any annotation file (an annotator's, or a model's)
-python3 -I agreement.py annotator-A.json annotator-B.json --families ../../wag/data/schemes/families.json
+python3 -I agreement.py annotator-A.json annotator-B.json --pilot ../kialo-pilot/pilot.json --families ../../wag/data/schemes/families.json --json agreement.json
 # the game: start wag-server, then
 python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-report.json --export wag-game.json
 ```

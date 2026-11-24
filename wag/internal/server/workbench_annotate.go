@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -349,12 +350,24 @@ func (s *Server) runAction(w http.ResponseWriter, r *http.Request, run *annotate
 			return
 		}
 		v.At = time.Time{}
-		if err := run.SetVerdict(v); err != nil {
+		// A verdict in its file whose folder could not be synced is given and
+		// kept (annotate.NotDurableError): the answer is the claim, with a
+		// warning that the verdict may not survive a power loss yet.
+		err := run.SetVerdict(v)
+		var nd *annotate.NotDurableError
+		if err != nil && !errors.As(err, &nd) {
 			httpError(w, err, http.StatusBadRequest)
 			return
 		}
 		item, _ := run.Item(v.Item)
-		writeJSON(w, item)
+		out := struct {
+			*annotate.ItemView
+			Warning string `json:"warning,omitempty"`
+		}{ItemView: item}
+		if nd != nil {
+			out.Warning = nd.Error()
+		}
+		writeJSON(w, out)
 	case "open":
 		if !post() {
 			return

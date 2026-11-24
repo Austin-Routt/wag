@@ -9,7 +9,8 @@ Usage (standard library only):
 For each field the guidelines keep apart (guidelines.md, section 2), it reports raw
 agreement and Cohen's kappa over the items both annotators coded: the
 primary scheme, its fit, the role, the polarity, the actual target (claim and
-part), whether the claim was re-parented, and the evidence status. Where
+part), whether the claim was re-parented (derived from the target, as the
+guidelines say the tooling computes it), and the evidence status. Where
 both chose the same scheme it also compares the premises (by predicate and
 role) and the bindings (by the words of each value). The scheme is also
 compared at the level of families (families.json): two schemes of one family
@@ -80,6 +81,23 @@ def part_kind(part):
 def target(item):
     a = (item.get("target") or {}).get("actual") or {}
     return str(a.get("claim") or "none"), part_kind(a.get("part"))
+
+
+def text(v):
+    """A claim ID as WAG's Go measure reads it: text, or else none."""
+    return v if isinstance(v, str) else ""
+
+
+def re_parented(item):
+    """Whether the claim is re-parented: its actual target claim is not its
+    Kialo parent (guidelines §5, item 1). Derived, as the guidelines say the
+    tooling computes it: the item's own re_parented is not read. WAG's Go
+    measure (annotate.FieldOf) derives it alike."""
+    t = item.get("target")
+    a = t.get("actual") if isinstance(t, dict) else None
+    if not isinstance(a, dict) or not a:
+        return False
+    return text(a.get("claim")) != text(t.get("kialo_parent"))
 
 
 def predicates(item):
@@ -155,7 +173,7 @@ def main():
         "polarity": lambda i: (i.get("role") or {}).get("polarity") or "none",
         "target_claim": lambda i: target(i)[0],
         "target_part": lambda i: target(i)[1],
-        "re_parented": lambda i: bool((i.get("target") or {}).get("re_parented")),
+        "re_parented": re_parented,
         "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
     }
     report = {"items": len(ids), "fields": {}, "disagreements": collections.defaultdict(list)}
