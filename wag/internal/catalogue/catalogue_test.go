@@ -902,6 +902,28 @@ func TestProposalAppliedChangedSince(t *testing.T) {
 	if v := string(ProposalView(p, s, "x.yml")); strings.Contains(v, mark) {
 		t.Errorf("a proposal not yet applied is marked:\n%s", v)
 	}
+	// The check of version 3 of proposal D008-D074 (N2): a premise
+	// changed since is marked too, and a scheme walton.yml no longer has is
+	// marked removed, not shown as a new one.
+	p.Applied = "2026-10-23"
+	other := w
+	other.Premises = append([]string(nil), w.Premises...)
+	other.Premises[len(other.Premises)-1] = "bad(G)"
+	p.Schemes = []Scheme{other}
+	if v := string(ProposalView(p, s, "x.yml")); !strings.Contains(v, mark) {
+		t.Errorf("a scheme whose premise walton.yml has changed since is not marked:\n%s", v)
+	}
+	gone := w
+	gone.ID = "gone_since_applied"
+	p.Schemes = []Scheme{gone}
+	const removed = "*Removed since this proposal was applied:*"
+	if v := string(ProposalView(p, s, "x.yml")); !strings.Contains(v, removed) || strings.Contains(v, "A new scheme.") {
+		t.Errorf("a scheme walton.yml no longer has is not marked removed:\n%s", v)
+	}
+	p.Applied = ""
+	if v := string(ProposalView(p, s, "x.yml")); strings.Contains(v, removed) || !strings.Contains(v, "A new scheme.") {
+		t.Errorf("a new scheme of a proposal not yet applied is marked removed:\n%s", v)
+	}
 }
 
 // Every committed proposal checks without errors, and its view is current.
@@ -1239,6 +1261,13 @@ examples: []
 			"33.1 prints 1 premise(s), and the link maps 0", true},
 		{"a premise label the entry's links do not use", "compendium_label: Premise", "compendium_label: Major Premise",
 			`33.1 prints no premise "Major Premise"`, true},
+		// The check of version 3 (N1): a label mapped more often than the
+		// entry's links map it, and a question mapped twice.
+		{"a premise label mapped twice", "      - compendium_label: Premise\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}, {formula: \"good(G)\", locus: premise}]\n",
+			"      - compendium_label: Premise\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n      - compendium_label: Premise\n        walton: [{formula: \"good(G)\", locus: premise}]\n",
+			`the link maps 33.1's premise "Premise" 2 times, and the entry's links map it 1`, true},
+		{"a question mapped twice", "      - cq: CQ3\n", "      - cq: CQ1\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n      - cq: CQ3\n",
+			"the link maps CQ1 twice", true},
 	}
 	for _, c := range cases {
 		text := sound
@@ -1367,5 +1396,99 @@ examples: []
 		}
 	} else {
 		t.Error("walton.yml has no positive_consequences")
+	}
+}
+
+// The check of version 3 of proposal D008-D074 (N1): a link maps every
+// premise the entry's links name, so a label mapped twice cannot stand for
+// one never mapped.
+func TestProposalLinksMapEveryPremise(t *testing.T) {
+	s := sources(t)
+	e, ok := s.link("33.3")
+	if !ok || e.NPremises != 2 {
+		t.Fatalf("33.3 is not in links.json with two premises")
+	}
+	mk := func(second string) *Proposal {
+		x := Scheme{ID: "x_mod", Variables: []string{"A", "G"}, Premises: []string{"brings_about(A,G)", "good(G)"},
+			Exceptions: []string{"bad_outweighs(A,G)"}, Conclusions: []string{"should_be_performed(A)"}}
+		x.Meta.Title, x.Meta.Source = "x", "s"
+		l := ProposedLink{Entry: "33.3"}
+		l.ID, l.Match, l.Reason = "x_mod", "partial", "the reason"
+		l.PremiseMap = []MapItem{
+			{Label: "Premise 1", Walton: []FormulaLocus{{Formula: "brings_about(A,G)", Locus: "premise"}}},
+			{Label: second, Walton: []FormulaLocus{{Formula: "good(G)", Locus: "premise"}}},
+		}
+		l.Conclusion = &MapItem{Walton: []FormulaLocus{{Formula: "should_be_performed(A)", Locus: "conclusion"}}}
+		return &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{x}, Links: []ProposedLink{l}}
+	}
+	errs := func(p *Proposal) []string {
+		var out []string
+		for _, f := range CheckProposal(p, s) {
+			if f.Error && strings.Contains(f.Msg, "the link of x_mod to 33.3") {
+				out = append(out, f.Msg)
+			}
+		}
+		return out
+	}
+	if got := errs(mk("Premise 2")); len(got) != 0 {
+		t.Errorf("a link that maps both premises: %v", got)
+	}
+	// A label's count is the most any one of the entry's links maps it, not
+	// their total: with a second link that maps each premise once, a third
+	// that maps Premise 1 twice still maps it too often.
+	p := mk("Premise 2")
+	q := mk("Premise 1")
+	q.Schemes[0].ID, q.Links[0].ID = "x_two", "x_two"
+	p.Schemes, p.Links = append(p.Schemes, q.Schemes[0]), append(p.Links, q.Links[0])
+	two := false
+	for _, f := range CheckProposal(p, s) {
+		two = two || f.Error && strings.Contains(f.Msg, `the link of x_two to 33.3: the link maps 33.3's premise "Premise 1" 2 times, and the entry's links map it 1`)
+	}
+	if !two {
+		t.Error("a link that maps a premise more often than any of the entry's links is accepted when the entry has two links")
+	}
+	got := strings.Join(errs(mk("Premise 1")), "\n")
+	for _, want := range []string{`33.3 prints premise "Premise 2", which the link does not map`,
+		`the link maps 33.3's premise "Premise 1" 2 times, and the entry's links map it 1`} {
+		if !strings.Contains(got, want) {
+			t.Errorf("a link that maps Premise 1 twice and Premise 2 never: want %q, got:\n%s", want, got)
+		}
+	}
+}
+
+// The check of version 3 of proposal D008-D074 (W3): a printed question
+// that the link maps to no formula (the catalogue's undercutting question)
+// is not asked of the proposal, which could give it no target.
+func TestProposalPrintedQuestionsWithoutFormula(t *testing.T) {
+	s := sources(t)
+	w, ok := findWalton(s, "memory")
+	if !ok {
+		t.Fatal("walton.yml has no memory")
+	}
+	e, ok := s.link("60")
+	if !ok {
+		t.Fatal("links.json has no 60")
+	}
+	empty := map[string]bool{}
+	for _, l := range e.Links {
+		if l.ID != "memory" {
+			continue
+		}
+		for _, r := range l.CQMap {
+			if len(r.Walton) == 0 {
+				empty[r.CQ] = true
+			}
+		}
+	}
+	if len(empty) == 0 {
+		t.Skip("links.json now maps every question of 60 to a formula")
+	}
+	p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w}}
+	for _, f := range CheckProposal(p, s) {
+		for label := range empty {
+			if strings.Contains(f.Msg, "60/"+label+" is printed for 60") {
+				t.Errorf("a printed question that links.json maps to no formula is asked of the proposal: %s", f)
+			}
+		}
 	}
 }

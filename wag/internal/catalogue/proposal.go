@@ -378,8 +378,18 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 					continue
 				}
 				under, labels := src.printedCQs(e)
+				mapped := map[string]bool{}
+				for _, r := range l.CQMap {
+					if len(r.Walton) > 0 {
+						mapped[r.CQ] = true
+					}
+				}
 				for _, label := range labels {
-					if !given[under+"/"+label] {
+					// A printed question the link maps to no formula is the
+					// catalogue's undercutting question: it has no formula to
+					// target, so the proposal cannot give it (the check of
+					// D008-D074 v3, W3).
+					if mapped[label] && !given[under+"/"+label] {
 						warn("%s: %s/%s is printed for %s, and the catalogue will carry it for %s: give it among the scheme's questions", s.ID, under, label, e.Number, s.ID)
 					}
 				}
@@ -600,16 +610,49 @@ func proposedLinks(p *Proposal, src *Sources, bad func(string, ...any)) *Sources
 			}
 			maps("premise "+strconv.Quote(m.Label), m.Walton)
 		}
+		// Every premise the entry's links name is mapped, and none more
+		// often than they map it, so that a label mapped twice cannot stand
+		// for one never mapped (the check of D008-D074 v3, N1). The book
+		// prints some labels twice (43), so a label's count is its links'.
+		most, mine := map[string]int{}, map[string]int{}
+		for _, o := range e.Links {
+			n := map[string]int{}
+			for _, m := range o.PremiseMap {
+				n[m.Label]++
+			}
+			for k, v := range n {
+				if v > most[k] {
+					most[k] = v
+				}
+			}
+		}
+		for _, m := range l.PremiseMap {
+			mine[m.Label]++
+		}
+		for _, label := range known {
+			switch {
+			case mine[label] == 0:
+				bad("%s: %s prints premise %q, which the link does not map", where, l.Entry, label)
+			case mine[label] > most[label]:
+				bad("%s: the link maps %s's premise %q %d times, and the entry's links map it %d", where, l.Entry, label, mine[label], most[label])
+			}
+		}
 		if l.Conclusion == nil || len(l.Conclusion.Walton) == 0 {
 			bad("%s: the link maps no conclusion", where)
 		} else {
 			maps("the conclusion", l.Conclusion.Walton)
 		}
 		under, labels := src.printedCQs(e)
+		rows := map[string]bool{}
 		for _, r := range l.CQMap {
 			if !in(labels, r.CQ) {
 				bad("%s: the compendium prints no %s under %s", where, r.CQ, under)
 			}
+			if rows[r.CQ] {
+				// The catalogue keeps one row per question (generate.go).
+				bad("%s: the link maps %s twice", where, r.CQ)
+			}
+			rows[r.CQ] = true
 			maps(r.CQ, r.Walton)
 		}
 		e.Links = append([]WaltonLink(nil), e.Links...)
@@ -1235,7 +1278,13 @@ func writeScheme(b *bytes.Buffer, src *Sources, s Scheme, qs []PQuery, isNew str
 			fmt.Fprintf(b, "| %s | %s | %s |\n", r.name, code(r.old), code(r.new))
 		}
 	} else {
-		fmt.Fprintf(b, "%s\n\n| Role | Proposed |\n|---|---|\n", isNew)
+		if applied {
+			// Not new: a later decision removed it (the check of D008-D074
+			// v3, N2).
+			b.WriteString("*Removed since this proposal was applied:* `walton.yml` no longer has this scheme (a later decision; `walton-clean/CHANGELOG.md`).\n\n| Role | Proposed |\n|---|---|\n")
+		} else {
+			fmt.Fprintf(b, "%s\n\n| Role | Proposed |\n|---|---|\n", isNew)
+		}
 		fmt.Fprintf(b, "| variables | %s |\n| premises | %s |\n", code(s.Variables), code(s.Premises))
 		if len(s.Assumptions) > 0 {
 			fmt.Fprintf(b, "| assumptions | %s |\n", code(s.Assumptions))
@@ -1256,7 +1305,9 @@ func writeScheme(b *bytes.Buffer, src *Sources, s Scheme, qs []PQuery, isNew str
 }
 
 // sameFormulas reports whether two versions of a scheme have the same
-// variables and formulas, spacing aside.
+// variables and formulas, spacing aside, in the same order: the view's two
+// columns list them in order, and the applied view's banner says that they
+// are equal.
 func sameFormulas(a, b Scheme) bool {
 	key := func(s Scheme) string {
 		var parts []string
