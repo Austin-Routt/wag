@@ -184,12 +184,14 @@ A decision that changes a scheme's formulas is prepared as a proposal (the owner
    - each scheme's questions after the change;
    - what else changes if it is decided;
    - examples, each with its variables bound to phrases;
-   - optionally, candidates: schemes sketched beside the proposal but not proposed, to test that its vocabulary extends to neighbouring patterns. They are checked and rendered like the proposed schemes, and never applied to `walton.yml`.
+   - optionally, candidates: schemes sketched beside the proposal but not proposed, to test that its vocabulary extends to neighbouring patterns. They are checked and rendered like the proposed schemes, and never applied to `walton.yml`;
+   - optionally, links: links of `docs/scheme-registry/links.json` that the proposal adds or replaces, written with that file's keys (a proposed scheme, the compendium entry it formalizes, `exact` or `partial`, a reason, and the premise, conclusion and question maps). A new scheme can carry the book's questions only through such a link (D008's modal variants carry the questions printed under 33); applying the proposal writes them into `links.json`.
 2. **`wag-cli --proposal FILE`** checks it:
    - every variable is declared, used, in a premise, and bound in every example;
    - every predicate has a template;
    - every question targets a formula of its scheme, and a `walton/` question an assumption or exception, as in the catalogue;
-   - a book label (`7/CQ1`) is one the compendium prints for an entry linked to the scheme, and no id is given twice;
+   - a book label (`7/CQ1`) is one the compendium prints for an entry linked to the scheme, in `links.json` or by the proposal, and no id is given twice;
+   - a proposed link names a proposed scheme, once per entry, an entry that `links.json` has and that is not a heading, a match and a reason; each formula it maps is the scheme's, at the locus the map gives, and each question it maps is one the compendium prints for the entry; the proposal's book questions target what the proposed maps give them (or the check warns), and an applied proposal's links are in `links.json` as proposed;
    - questions are given only for the proposed and candidate schemes, each under its own heading;
    - an example challenges only a premise or assumption that no question of its scheme targets (`CQ:premise_acceptable`, with the formula as its target), as the game allows.
 

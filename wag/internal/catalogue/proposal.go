@@ -34,6 +34,23 @@ type Proposal struct {
 	Questions map[string][]PQuery `yaml:"questions,omitempty"` // by scheme: the questions after the change
 	// Candidates are sketched beside the proposal, never applied (below).
 	Candidates *Candidates `yaml:"candidates,omitempty"`
+	// Links are links of links.json that the proposal adds or replaces
+	// (ProposedLink); applying the proposal writes them there.
+	Links []ProposedLink `yaml:"links,omitempty"`
+}
+
+// ProposedLink is a link of links.json (docs/scheme-registry/links.json)
+// that a proposal adds or replaces, written with links.json's keys: a
+// scheme of the proposal formalizes a compendium entry, how closely, and
+// which of its formulas each printed premise, the conclusion and each
+// printed question map to. The check reads links.json with the proposal's
+// links in place, so that a new scheme can carry the questions the book
+// prints for its entry (D008's modal variants and 33's questions), and the
+// target contract holds the proposal's questions to the maps it proposes.
+// An applied proposal's links are in links.json as proposed.
+type ProposedLink struct {
+	Entry      string `yaml:"entry"`
+	WaltonLink `yaml:",inline"`
 }
 
 // Candidates are schemes sketched beside a proposal but not proposed. They
@@ -209,6 +226,7 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 	var out []Finding
 	bad := func(f string, a ...any) { out = append(out, Finding{Error: true, Msg: fmt.Sprintf(f, a...)}) }
 	warn := func(f string, a ...any) { out = append(out, Finding{Msg: fmt.Sprintf(f, a...)}) }
+	src = proposedLinks(p, src, bad)
 	schemes, lang := proposalSchemes(p, src)
 	if len(p.Decisions) == 0 || p.Title == "" {
 		bad("a proposal names its decisions and has a title")
@@ -455,6 +473,139 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		}
 	}
 	return out
+}
+
+// proposedLinks checks the links a proposal adds or replaces, and returns
+// walton.yml's sources with them in place of the scheme's own link to the
+// entry, if it has one, other schemes' links kept. Each links a proposed
+// scheme, once, to an entry of links.json that is not a heading, exactly or
+// partly, with a reason; each formula it maps is the scheme's, at the locus
+// the map gives; each question it maps is one the compendium prints for the
+// entry (or under the entry its questions are printed under). An applied
+// proposal's links are in links.json as proposed.
+func proposedLinks(p *Proposal, src *Sources, bad func(string, ...any)) *Sources {
+	if len(p.Links) == 0 {
+		return src
+	}
+	proposed := map[string]Scheme{}
+	for _, s := range p.Schemes {
+		proposed[s.ID] = s
+	}
+	out := *src
+	out.Links = append([]LinkEntry(nil), src.Links...)
+	seen := map[string]bool{}
+	for _, l := range p.Links {
+		where := fmt.Sprintf("the link of %s to %s", l.ID, l.Entry)
+		s, ok := proposed[l.ID]
+		if !ok {
+			bad("%s: %s is not a proposed scheme", where, l.ID)
+			continue
+		}
+		at := -1
+		for i, e := range out.Links {
+			if e.Number == l.Entry {
+				at = i
+			}
+		}
+		if at < 0 {
+			bad("%s: links.json has no compendium entry %s", where, l.Entry)
+			continue
+		}
+		e := out.Links[at]
+		if e.HeadingOnly {
+			bad("%s: %s is a heading, which no scheme formalizes", where, l.Entry)
+		}
+		if seen[l.Entry+" "+l.ID] {
+			bad("%s: %s is linked twice to %s", where, l.ID, l.Entry)
+		}
+		seen[l.Entry+" "+l.ID] = true
+		if l.Match != "exact" && l.Match != "partial" {
+			bad("%s: match is exact or partial, not %q", where, l.Match)
+		}
+		if strings.TrimSpace(l.Reason) == "" {
+			bad("%s: a link gives its reason", where)
+		}
+		maps := func(what string, fls []FormulaLocus) {
+			if len(fls) == 0 {
+				bad("%s: %s maps to no formula", where, what)
+			}
+			for _, fl := range fls {
+				role := "?"
+				for _, locus := range Loci {
+					for _, f := range s.role(locus) {
+						if compact(f) == compact(fl.Formula) {
+							role = locus
+						}
+					}
+				}
+				switch {
+				case role == "?":
+					bad("%s: %s maps to %s, not a formula of %s", where, what, fl.Formula, l.ID)
+				case role != fl.Locus:
+					bad("%s: %s maps to %s as its %s, but it is %s's %s", where, what, fl.Formula, fl.Locus, l.ID, role)
+				}
+			}
+		}
+		for _, m := range l.PremiseMap {
+			maps("premise "+strconv.Quote(m.Label), m.Walton)
+		}
+		if l.Conclusion != nil {
+			maps("the conclusion", l.Conclusion.Walton)
+		}
+		under, labels := src.printedCQs(e)
+		for _, r := range l.CQMap {
+			if !in(labels, r.CQ) {
+				bad("%s: the compendium prints no %s under %s", where, r.CQ, under)
+			}
+			maps(r.CQ, r.Walton)
+		}
+		e.Links = append([]WaltonLink(nil), e.Links...)
+		had := -1
+		for i := range e.Links {
+			if e.Links[i].ID == l.ID {
+				had = i
+			}
+		}
+		switch {
+		case p.Applied != "" && had < 0:
+			bad("%s: the proposal is applied, but links.json does not have its link of %s to %s", where, l.ID, l.Entry)
+		case p.Applied != "" && linkKey(e.Links[had]) != linkKey(l.WaltonLink):
+			bad("%s: the proposal is applied, but links.json does not have its link of %s to %s as proposed", where, l.ID, l.Entry)
+		}
+		if had < 0 {
+			e.Links = append(e.Links, l.WaltonLink)
+		} else {
+			e.Links[had] = l.WaltonLink
+		}
+		out.Links[at] = e
+	}
+	return &out
+}
+
+// linkKey writes what a link says, so that a proposed link can be compared
+// with links.json's: its id, match and reason, and each map's label, note
+// and formulas with their loci (spacing aside).
+func linkKey(l WaltonLink) string {
+	var b strings.Builder
+	item := func(label, note string, fls []FormulaLocus) {
+		fmt.Fprintf(&b, "|%s|%s|", strings.TrimSpace(label), strings.Join(strings.Fields(note), " "))
+		for _, fl := range fls {
+			fmt.Fprintf(&b, "%s@%s,", compact(fl.Formula), fl.Locus)
+		}
+	}
+	fmt.Fprintf(&b, "%s|%s|%s", l.ID, l.Match, strings.Join(strings.Fields(l.Reason), " "))
+	for _, m := range l.PremiseMap {
+		item(m.Label, m.Note, m.Walton)
+	}
+	b.WriteString("|conclusion")
+	if l.Conclusion != nil {
+		item(l.Conclusion.Label, l.Conclusion.Note, l.Conclusion.Walton)
+	}
+	b.WriteString("|questions")
+	for _, r := range l.CQMap {
+		item(r.CQ, r.Note, r.Walton)
+	}
+	return b.String()
 }
 
 // carriedQuestion says why a proposed scheme's question could not be carried
@@ -872,6 +1023,34 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 		writeScheme(&b, src, s, p.Questions[s.ID], "A new scheme.")
 	}
 	writeTemplates(&b, "**Templates added or changed:**", p.Language)
+	if len(p.Links) > 0 {
+		b.WriteString("## Links to the compendium, as proposed\n\n")
+		b.WriteString("Written into `docs/scheme-registry/links.json` when the proposal is applied, in place of the scheme's own link to the entry if it has one. The labels refer to the book's printed text, which is not reproduced here.\n\n")
+		for _, l := range p.Links {
+			fmt.Fprintf(&b, "- **%s** formalizes %s (%s): %s\n", l.ID, l.Entry, l.Match, strings.Join(strings.Fields(l.Reason), " "))
+			row := func(label, note string, fls []FormulaLocus) {
+				var fs []string
+				for _, fl := range fls {
+					fs = append(fs, fmt.Sprintf("`%s` (%s)", fl.Formula, fl.Locus))
+				}
+				fmt.Fprintf(&b, "  - %s: %s", label, strings.Join(fs, ", "))
+				if note = strings.Join(strings.Fields(note), " "); note != "" {
+					fmt.Fprintf(&b, "; %s", note)
+				}
+				b.WriteString("\n")
+			}
+			for _, m := range l.PremiseMap {
+				row(m.Label, m.Note, m.Walton)
+			}
+			if l.Conclusion != nil {
+				row("the conclusion", l.Conclusion.Note, l.Conclusion.Walton)
+			}
+			for _, r := range l.CQMap {
+				row(r.CQ, r.Note, r.Walton)
+			}
+		}
+		b.WriteString("\n")
+	}
 	if c := p.Candidates; c != nil {
 		b.WriteString("## Candidates: sketched, not proposed\n\n")
 		if c.Note != "" {

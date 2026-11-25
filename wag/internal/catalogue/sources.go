@@ -128,33 +128,34 @@ type LinkEntry struct {
 }
 
 // WaltonLink links a compendium entry to a walton.yml scheme.
+// A proposal writes one with links.json's keys (ProposedLink).
 type WaltonLink struct {
-	ID         string     `json:"id"`
-	Match      string     `json:"match"`
-	Reason     string     `json:"reason"`
-	PremiseMap []MapItem  `json:"premise_map"`
-	Conclusion *MapItem   `json:"conclusion_map"`
-	CQMap      []CQMapRow `json:"cq_map"`
+	ID         string     `json:"id" yaml:"id"`
+	Match      string     `json:"match" yaml:"match"`
+	Reason     string     `json:"reason" yaml:"reason"`
+	PremiseMap []MapItem  `json:"premise_map" yaml:"premise_map"`
+	Conclusion *MapItem   `json:"conclusion_map" yaml:"conclusion_map"`
+	CQMap      []CQMapRow `json:"cq_map" yaml:"cq_map"`
 }
 
 // MapItem maps a printed premise (or the conclusion) to formulas.
 type MapItem struct {
-	Label  string         `json:"compendium_label"`
-	Note   string         `json:"note"`
-	Walton []FormulaLocus `json:"walton"`
+	Label  string         `json:"compendium_label" yaml:"compendium_label,omitempty"`
+	Note   string         `json:"note" yaml:"note,omitempty"`
+	Walton []FormulaLocus `json:"walton" yaml:"walton"`
 }
 
 // CQMapRow maps a printed critical question to formulas.
 type CQMapRow struct {
-	CQ     string         `json:"cq"`
-	Note   string         `json:"note"`
-	Walton []FormulaLocus `json:"walton"`
+	CQ     string         `json:"cq" yaml:"cq"`
+	Note   string         `json:"note" yaml:"note,omitempty"`
+	Walton []FormulaLocus `json:"walton" yaml:"walton"`
 }
 
 // FormulaLocus is a formula and its role, as links.json gives them.
 type FormulaLocus struct {
-	Formula string `json:"formula"`
-	Locus   string `json:"locus"`
+	Formula string `json:"formula" yaml:"formula"`
+	Locus   string `json:"locus" yaml:"locus"`
 }
 
 // Family is a family of families.json.
