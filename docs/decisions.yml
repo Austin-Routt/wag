@@ -235,6 +235,18 @@ decisions:
       stages 0 and 1: a test shows that a possible or weak causal premise
       cannot fill a categorical one; the modal variants keep their modality in
       premises and conclusion.
+      Refined 2026-11-25 by the owner, on the two reviews of proposal
+      D008-D074 version 1 (an internal one and an external one): the modal
+      conclusions name the consequence, may_be_worth_performing(A,G) and
+      may_be_unwise_to_perform(A,G). They meet the thesis through two bridges,
+      one for each side, added to walton.yml now and played from step C5: each
+      has a premise its arguer must support, that the possibility matters to
+      the decision, and an exception of its own, both naming A and G. The
+      bridge is an entry condition, not a weight: equal weights are declared
+      in the tests, and no multiplier is set. That the conclusion keeps the
+      modality is WAG's design: the book concludes 'A should be brought about'
+      and carries the strength in its questions (Walton, Reed and Macagno
+      2008, pp. 102, 332).
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D009
@@ -1924,6 +1936,14 @@ decisions:
       C005 and C021 go forward as questions on the consequence schemes (how
       serious, and on whom); the likelihood question already exists. C008
       (precaution) and C024 stay candidates.
+      Refined 2026-11-25 by the owner, on the reviews of proposal D008-D074
+      version 1: the two questions are formulas of the consequence schemes,
+      kept apart from good(G) and bad(G), so that a real but slight
+      consequence is not a denied one. They are exceptions, the critic's to
+      support (D003: who must answer an asked question is a rule of the
+      dialogue, not an assumption), asked as walton/ questions; the game asks
+      them from step C5. There is no threshold of how many people a
+      consequence affects: one grave consequence can decide.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D066
@@ -2039,6 +2059,9 @@ decisions:
       harm is explicit, implicit, unknown or disputed; C016's question
       challenges it, and its existence does not make the link a fact. The
       guidelines gain rule cases for this in stage 2.
+      Refined 2026-11-25 by the owner, on the reviews of proposal D008-D074
+      version 1: C016's question is an exception of the prudential form, the
+      critic's to support (D003), not an assumption.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D072
@@ -2065,6 +2088,14 @@ decisions:
     decision: >-
       Yes: a scheme of its own, with an exception for the outcome being
       preventable after all, through the proposal path (C022).
+      Refined 2026-11-25 by the owner, on the reviews of proposal D008-D074
+      version 1: the premise is scoped to the action (E happens whether or not
+      A is done), and A makes each occurrence of E less harmful. Its
+      exceptions are that a course open to whoever would do A could prevent E
+      (an answer names that course), and that the harm overall would not fall
+      (a more frequent E can offset the gain per occurrence, though it need
+      not). A's other harms are argued as its negative consequences. C022's
+      steering form ('it is coming anyway, so shape it') is not covered.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D073
