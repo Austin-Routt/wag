@@ -742,7 +742,7 @@ examples:
     title: "Keeping a belief in an afterlife (an appeal to consequences)"
     invented: true
     use: argument
-    text: "Under the claim that there is an afterlife: you were thinking of giving up your belief in one. If you do, you will face death without hope, which will be very bad for you. So keep believing."
+    text: "Under the claim that there is an afterlife: you were thinking of giving up your belief in one. If you do, you will face death without hope, and that would be terrible for you. So keep believing."
     bindings:
       X: "keeping your belief in an afterlife"
       C: "your facing death without hope"
