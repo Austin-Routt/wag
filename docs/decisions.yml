@@ -247,6 +247,14 @@ decisions:
       modality is WAG's design: the book concludes 'A should be brought about'
       and carries the strength in its questions (Walton, Reed and Macagno
       2008, pp. 102, 332).
+      Refined again 2026-11-25 by the owner, on an external assessment of
+      proposal D008-D074 version 4: the bridges' exception is that it is worth
+      finding out first whether A brings about G (it can be found out before
+      A must be decided, reliably enough to settle the question, at a cost
+      and risk worth bearing), not bare knowability, which does not justify
+      deferring a decision. It is the critic's to support (D003), shared by
+      the two bridges about the same G, and declared neutral by the owner once
+      proposal D008-D074 version 5 has been reviewed (D053).
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D009
@@ -1195,6 +1203,16 @@ decisions:
       Yes, as revised: declared and checked, never merged, with the sided
       flip and the tested neutrality declaration. The registry's check is
       to build.
+      Declared 2026-11-25 by the owner, on an external assessment of proposal
+      D008-D074 version 4 and the developer's analysis of it: too_slight(A,G)
+      is neutral as to polarity in the pair 33.1 and 33.2 and in their modal
+      variants. Its scope: G, as a consequence of A, judged by the criteria
+      that bear on the decision on A, is too slight to count; not merely that
+      G reaches few, is small in number, or seems minor to one side (one grave
+      consequence can decide, D065). The declaration is tested in the engine,
+      one example per side. The bridges' information-first exception is
+      declared once proposal D008-D074 version 5 has been reviewed; the
+      appeal to consequences (D074) shares no formula, so it needs none.
     recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md"
 
 - id: D054
@@ -1944,6 +1962,10 @@ decisions:
       dialogue, not an assumption), asked as walton/ questions; the game asks
       them from step C5. There is no threshold of how many people a
       consequence affects: one grave consequence can decide.
+      The scope of too_slight(A,G), declared by the owner under D053 on
+      2026-11-25: G, as a consequence of A, judged by the criteria that bear
+      on the decision on A, is too slight to count; not merely that G reaches
+      few, is small in number, or seems minor to one side.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D066
@@ -2151,6 +2173,17 @@ decisions:
       A question or undercutter for the consequence schemes, raised when a
       consequence argument is offered for the truth of a claim; it goes
       forward once C011's sketch and examples pass review.
+      Refined 2026-11-25 by the owner, on an external assessment of proposal
+      D008-D074 version 4 and the developer's analysis of it: the objection is
+      an undercutter of the specific argument whose consequences are offered
+      for the truth of a claim, not an exception of the consequence schemes.
+      An exception names only the action, so proving it against a misplaced
+      argument would also defeat a legitimate argument about the same action
+      in the same discussion (in Carneades a statement can serve several
+      arguments, in different roles). In annotation a reply targets that
+      argument's inference; in the game, from step C5, the objection is a
+      question about the argument itself or a direct undercutter. No formula
+      is shared, so D053 needs no declaration for it.
     recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
 
 - id: D079
