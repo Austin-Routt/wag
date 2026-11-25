@@ -216,6 +216,14 @@ func TestFormat2Refusals(t *testing.T) {
 			s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)["instance"] = "13292.121#3"
 			return nil
 		}, "R13 its target in 13292.121 names the instance 13292.121#3"},
+		{"a secondary Kialo parent's relation", "13292.180", func(s map[string]Annotation) *Dataset {
+			s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)["relation"] = "con"
+			return nil
+		}, "R7 its other Kialo parents are [13292.121 con]; items.json has [13292.121 pro]"},
+		{"the Kialo parent's relation", "13292.180", func(s map[string]Annotation) *Dataset {
+			s["13292.180"]["target"].(map[string]any)["kialo_relation"] = "con"
+			return nil
+		}, "R7 its Kialo parent is 13292.7 con; items.json has 13292.7 pro"},
 		{"re_parented recorded", "13292.7", func(s map[string]Annotation) *Dataset {
 			s["13292.7"]["target"].(map[string]any)["re_parented"] = false
 			return nil
@@ -532,6 +540,8 @@ func TestCaseRecordChecks(t *testing.T) {
 	}
 	for name, tc := range map[string]struct{ old, new, want string }{
 		"an alias that is an action": {`"tax_meat", "actor": "governments", "aliases": []`, `"tax_meat", "actor": "governments", "aliases": ["raise_import_standards"]`, "cannot be an alias of tax_meat"},
+		"an alias that is an actor":  {`"tax_meat", "actor": "governments", "aliases": []`, `"tax_meat", "actor": "governments", "aliases": ["governments"]`, `"governments" is an actor, so it cannot be an alias of tax_meat`},
+		"an action that is an actor": {`"raise_import_standards", "actor": "governments"`, `"governments", "actor": "governments"`, `"governments" is an actor, so it cannot be an action`},
 		"an actor the case lacks":    {`"raise_import_standards", "actor": "governments"`, `"raise_import_standards", "actor": "people"`, `performed by "people"`},
 		"no default context":         {`"default_context": "present"`, `"default_context": "past"`, `its default context "past"`},
 		"the thesis's action":        {`"action": "tax_meat"}`, `"action": "tax_fish"}`, `the thesis's action "tax_fish"`},

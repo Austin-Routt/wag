@@ -571,6 +571,30 @@ class Rules(unittest.TestCase):
         rename(it, ins, ins['bindings']['A2'], 'switch_to_other_protein')
         self.fails(g, '13292.123', ['R14'], "which is meat_tax_proponents's action, not governments's", case=case)
 
+    def test_r7_another_parents_relation(self):
+        # The source's pro or con of each Kialo parent, as items.json has it
+        # (an external review of 2026-11-25): a reversed relation of a
+        # secondary parent is refused, as the primary's always was.
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.180')['target']['other_kialo_parents'][0]['relation'] = 'con'
+        self.fails(g, '13292.180', ['R7'], 'R7 other_kialo_parents record 13292.121 con; items.json has 13292.121 pro')
+
+    def test_r14_an_actor_is_no_action_and_no_alias(self):
+        # An actor's id names the actor: as an alias of an action, it would be
+        # read as that action wherever it stands (an external review of
+        # 2026-11-25).
+        for name, plant, text in (
+                ('an alias', lambda c: next(a for a in c['actions'] if a['id'] == 'tax_meat').update(aliases=['governments']),
+                 "'governments' is an actor, so it cannot be an alias of tax_meat"),
+                ('an action', lambda c: next(a for a in c['actions'] if a['id'] == 'raise_import_standards').update(id='governments'),
+                 "'governments' is an actor, so it cannot be an action")):
+            with self.subTest(name):
+                case = copy.deepcopy(CASE)
+                plant(case)
+                code, errors, out = run(copy.deepcopy(GOLD), case)
+                self.assertEqual(code, 1, out)
+                self.assertTrue(any('case.json: R14 ' in e and text in e for e in errors), out)
+
     def test_r14_a_consequence_scheme_binds_an_action(self):
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.7')

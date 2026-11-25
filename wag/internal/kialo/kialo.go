@@ -55,6 +55,13 @@ func Parse(b []byte) (*Discussion, error) {
 	if d.ThesisClaimID == "" || d.Claims[d.ThesisClaimID].Text == "" {
 		return nil, fmt.Errorf("no thesis claim: is this a graph.json of the Kialo research visualizer?")
 	}
+	// A relation is a support or an attack: anything else would be read as a
+	// support (Plan, build), so it is refused here.
+	for _, e := range d.Edges {
+		if e.Active && e.Relation != "support" && e.Relation != "attack" {
+			return nil, fmt.Errorf("the edge from %s to %s has the relation %q: support or attack", e.To, e.From, e.Relation)
+		}
+	}
 	return &d, nil
 }
 

@@ -95,6 +95,9 @@ func parseCase(b []byte) (*Case, error) {
 		if x.ID == "" || c.canon[x.ID] != "" {
 			return nil, fmt.Errorf("an action has no id, or one already used (%q)", x.ID)
 		}
+		if c.actors[x.ID] {
+			return nil, fmt.Errorf("%q is an actor, so it cannot be an action", x.ID)
+		}
 		if !c.actors[x.Actor] {
 			return nil, fmt.Errorf("the action %s is performed by %q, not an actor of the case", x.ID, x.Actor)
 		}
@@ -107,6 +110,9 @@ func parseCase(b []byte) (*Case, error) {
 		for _, al := range x.Aliases {
 			if al == "" || c.canon[al] != "" {
 				return nil, fmt.Errorf("%q is an action or an alias already, so it cannot be an alias of %s", al, x.ID)
+			}
+			if c.actors[al] {
+				return nil, fmt.Errorf("%q is an actor, so it cannot be an alias of %s", al, x.ID)
 			}
 			c.canon[al] = x.ID
 		}

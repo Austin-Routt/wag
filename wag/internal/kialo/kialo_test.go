@@ -90,6 +90,24 @@ func TestImport(t *testing.T) {
 	}
 }
 
+// An active relation is a support or an attack; anything else is refused,
+// not read as a support.
+func TestParseRefusesAnUnknownRelation(t *testing.T) {
+	bad := strings.Replace(sample, `"relation": "attack", "vote_vector": [1,1,1,0,0], "active": true`,
+		`"relation": "rebut", "vote_vector": [1,1,1,0,0], "active": true`, 1)
+	if bad == sample {
+		t.Fatal("the fixture's relation is not where the test expects it")
+	}
+	if _, err := Parse([]byte(bad)); err == nil || !strings.Contains(err.Error(), `the relation "rebut"`) {
+		t.Fatalf("an unknown relation: %v", err)
+	}
+	inactive := strings.Replace(bad, `"relation": "rebut", "vote_vector": [1,1,1,0,0], "active": true`,
+		`"relation": "rebut", "vote_vector": [1,1,1,0,0], "active": false`, 1)
+	if _, err := Parse([]byte(inactive)); err != nil {
+		t.Fatalf("an inactive edge is not imported, so its relation is not read: %v", err)
+	}
+}
+
 func TestWeight(t *testing.T) {
 	for _, c := range []struct {
 		votes []int

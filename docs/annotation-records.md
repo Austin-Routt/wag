@@ -91,7 +91,8 @@ The typing of predicate positions (which argument of a predicate is an agent and
 - **Actors.** Who can act in the case. Each is an atom of the lexicon.
 - **Actions.** The actions the discussion deliberates, each with the one actor who would perform it.
   An action is an atom of the lexicon. `aliases` lists other atoms for the same action; no atom is
-  the alias of two actions or both an action and an alias. What others would do in response
+  the alias of two actions, both an action and an alias, or an actor's id and an action's or an
+  alias (since 2026-11-25: an actor's id names the actor). What others would do in response
   (people switching to other protein) is a consequence, a state, not a declared action.
 - **What an alias is for.** A file writes each action by one atom. Aliases let other vocabularies be
   read as the same action: who performs it (R14) and whether a better means is another course (R9)
@@ -239,7 +240,10 @@ Rules that change in format 2:
   checks it by the record, not by a premise's status: a `cause_to_effect` whose cause is an action
   the case deliberates (which has not occurred), or the effect a modal step of the same claim says
   only may occur, is refused. Format 1 keeps the rule of the N8 note.
-- **R7**: `other_kialo_parents` is there exactly when the claim has more than one Kialo parent.
+- **R7**: `other_kialo_parents` is there exactly when the claim has more than one Kialo parent, and
+  the parents, each with its relation, are `items.json`'s, each as often as it has it: the source's
+  pro or con, not the interpreted polarity (`role.polarity`), which may differ (since 2026-11-25,
+  in `validate.py` and the Go check alike, after an external review).
 - **R9**: A2 is another action than A as the case maps them, so an alias of A is not another course;
   the goal premise compared is the targeted instance's.
 - **R10**: a challenge names an instance, its own or its target's, and a formula of that instance.

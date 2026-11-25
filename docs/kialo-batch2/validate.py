@@ -183,6 +183,8 @@ if F2:
             aid = a.get('id') if isinstance(a, dict) else None
             if not isinstance(aid, str) or aid in CANON:
                 err(f'case.json: R14 an action with no id, or an id already used: {a!r}'); continue
+            if aid in ACTORS:
+                err(f'case.json: R14 {aid!r} is an actor, so it cannot be an action'); continue
             if aid not in lex: err(f'case.json: R14 the action {aid} is not an atom of the lexicon')
             if a.get('actor') not in ACTORS: err(f'case.json: R14 the action {aid} is performed by {a.get("actor")!r}, not an actor of the case')
             CANON[aid], ACTOR[aid] = aid, a.get('actor')
@@ -192,6 +194,8 @@ if F2:
             for al in a['aliases']:
                 if not isinstance(al, str) or al in CANON:
                     err(f'case.json: R14 {al!r} is an action or an alias already, so it cannot be an alias of {a.get("id")}'); continue
+                if al in ACTORS:
+                    err(f'case.json: R14 {al!r} is an actor, so it cannot be an alias of {a.get("id")}'); continue
                 if al not in lex: err(f'case.json: R14 the alias {al} is not an atom of the lexicon')
                 CANON[al] = a['id']
         THESIS = case.get('thesis') or {}
@@ -580,8 +584,17 @@ for it in gold['items']:
     parents = kp[cid]
     if t['kialo_parent'] != (parents[0]['claim_id'] if parents else None): err(f'{cid}: kialo_parent mismatch')
     if len(parents) > 1:
-        others = {o.get('claim_id') for o in t.get('other_kialo_parents') or []}
-        if others != {p['claim_id'] for p in parents[1:]}: err(f'{cid}: other_kialo_parents incomplete (R7)')
+        got = [o for o in t.get('other_kialo_parents') or [] if isinstance(o, dict)]
+        if {o.get('claim_id') for o in got} != {p['claim_id'] for p in parents[1:]}:
+            err(f'{cid}: other_kialo_parents incomplete (R7)')
+        else:
+            # Each other parent with its relation, as items.json has them, each
+            # as often as it has it: the source's pro or con, not the
+            # interpreted polarity (role.polarity), which may differ.
+            pairs = lambda xs: sorted((str(x.get('claim_id')), str(x.get('relation'))) for x in xs)
+            if pairs(got) != pairs(parents[1:]):
+                err(f'{cid}: R7 other_kialo_parents record ' + ', '.join(' '.join(x) for x in pairs(got)) +
+                    '; items.json has ' + ', '.join(' '.join(x) for x in pairs(parents[1:])))
     tp = None
     if a:
         if not F2 and t['re_parented'] != (a['claim'] != t['kialo_parent']): err(f'{cid}: R1 re_parented inconsistent')

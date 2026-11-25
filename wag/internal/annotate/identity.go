@@ -50,6 +50,31 @@ func (d *Dataset) thesisID() string {
 	return x.Thesis
 }
 
+// kialoParents are a claim's Kialo parents in items.json, each "claim_id
+// relation", in its order; false if the dataset has no such item.
+func (d *Dataset) kialoParents(claim string) ([]string, bool) {
+	for _, it := range d.Items {
+		if it.ID != claim {
+			continue
+		}
+		var x struct {
+			Parents []struct {
+				ClaimID  string `json:"claim_id"`
+				Relation string `json:"relation"`
+			} `json:"kialo_parents"`
+		}
+		if json.Unmarshal(it.Raw, &x) != nil {
+			return nil, false
+		}
+		out := make([]string, len(x.Parents))
+		for i, p := range x.Parents {
+			out[i] = p.ClaimID + " " + p.Relation
+		}
+		return out, true
+	}
+	return nil, false
+}
+
 // checkIdentity is CheckIn's format-2 part.
 func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Annotation) []string {
 	var out []string
@@ -160,6 +185,28 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 			o, _ := x.(map[string]any)
 			if _, has := o["part"]; has {
 				c.checkTarget(&out, fmt.Sprintf("its target in %v", o["claim_id"]), o["claim_id"], o["instance"], o["part"], o["formula"], set)
+			}
+		}
+	}
+	// R7: the Kialo parents, each with its relation, as items.json has them:
+	// the source's pro or con, not the interpreted polarity (role.polarity),
+	// which may differ.
+	if d != nil && claim != "" && claim != d.thesisID() {
+		if want, ok := d.kialoParents(claim); ok && len(want) > 0 {
+			if first := fmt.Sprintf("%v %v", tg["kialo_parent"], tg["kialo_relation"]); first != want[0] {
+				add("R7 its Kialo parent is %s; items.json has %s", first, want[0])
+			}
+			var got []string
+			others, _ := tg["other_kialo_parents"].([]any)
+			for _, x := range others {
+				o, _ := x.(map[string]any)
+				got = append(got, fmt.Sprintf("%v %v", o["claim_id"], o["relation"]))
+			}
+			rest := append([]string(nil), want[1:]...)
+			sort.Strings(got)
+			sort.Strings(rest)
+			if strings.Join(got, ", ") != strings.Join(rest, ", ") {
+				add("R7 its other Kialo parents are [%s]; items.json has [%s]", strings.Join(got, ", "), strings.Join(rest, ", "))
 			}
 		}
 	}

@@ -119,7 +119,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 - **Import a discussion.** Use *Import a Kialo discussion* with an uploaded `graph.json`, or with `--kialo-dir`.
 - **How it is converted.**
   - Every claim becomes a statement.
-  - Every pro becomes an *Other* argument for its parent; every con becomes one against it.
+  - Every pro becomes an *Other* argument for its parent; every con becomes one against it. An active relation that is neither a support nor an attack is refused, not read as a pro (since 2026-11-25).
   - Arguments are weighted by the mean impact vote.
   - The thesis is the central claim.
   - The graph is labelled only if it is admitted, as an authored graph is (`CARNEADES_FORK.md`, *Admission*); otherwise the import is refused with the reason.
