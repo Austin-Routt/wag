@@ -812,4 +812,157 @@ PRACTICAL = [
     "",
 ]]
 
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL
+# ----------------------------------------------------------------------
+# 2026-11-25: the consequences (decisions D008, D065, D066, D069, D072 and
+# D074, taken under the owner's standing rule of 2026-11-22 and refined by
+# the owner on 2026-11-25; WAG's docs/proposals/D008-D074.md, version 5 as
+# amended, after independent reviews of versions 1 and 2, a check of version
+# 3, a review of version 4's application, the owner's answer on D053, D074
+# and D008, and a check of version 5 and its application). The modal variants of 33.1
+# and 33.2 conclude may_be_worth_performing(A,G) and may_be_unwise_to_perform(A,G)
+# from may_bring_about(A,G), and meet should_be_performed(A) only through a
+# bridge, one per side, whose premise matters_to_decision(A,G) its arguer
+# supports and whose exception worth_finding_out_first(A,G) is the critic's
+# (D008). 33.1 and 33.2 and their modal variants gain too_slight(A,G),
+# neutral as to polarity (D053, the owner's declaration), and the sided
+# bearer pair, gain_discounted_by_bearer(A,G) for A and
+# harm_discounted_by_bearer(A,G) against it (D065); 33.4 gains
+# fails_to_avert(X,C) (D069). D074's objection is an undercutter of the
+# specific argument, not a formula, so 33.3 does not change. harm_reduction is
+# WAG's argument from what happens anyway (D072). Templates are our own.
+_C3V = "proposal D008-D074, version 5"
+_C3 = ("Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (" + _C3V + ")")
+_MOD = ("D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps "
+        "the modality in its premise and its conclusion, which names the consequence, and meets the thesis only "
+        "through its bridge. " + _C3)
+_BR = ("D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its "
+       "arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth "
+       "finding out first), both naming A and G; an entry condition, not a weight. " + _C3)
+_HR = ("D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each "
+       "occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm "
+       "overall would not fall. " + _C3)
+_EX = ("D065: the consequence schemes gain too_slight(A,G) (how serious), neutral as to polarity (D053, declared "
+       "by the owner), and the bearer exception of their side (on whom), a sided flip. " + _C3)
+_P33 = "D069: the prudential form (33.4) gains fails_to_avert(X,C), the critic's to support. " + _C3
+_TA = "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+CONSEQUENCES_C3 = [
+    insert(138, '  fails_to_avert/2: "Doing %s would fail to avert %s."', OWN, _TA),
+    insert(142, '  gain_discounted_by_bearer/2: "In deciding on action %s, the gain %s counts for less because of whom it would go to."', OWN, _TA),
+    insert(164, '  happens_anyway/2: "Whether or not %s is done, %s will happen."', ADD, _TA),
+    insert(164, '  harm_discounted_by_bearer/2: "In deciding on action %s, the harm %s counts for less because of whom it would fall on."', OWN, _TA),
+    insert(205, '  less_harmful_per_occurrence/2: "Doing %s would make each occurrence of %s less harmful."', ADD, _TA),
+    insert(206, '  matters_to_decision/2: "The chance that action %s brings about %s is large enough, given what that consequence would be, to bear on whether the action should be performed."', ADD, _TA),
+    insert(206, '  may_be_unwise_to_perform/2: "Action %s may be unwise to perform because of %s."', ADD, _TA),
+    insert(206, '  may_be_worth_performing/2: "Action %s may be worth performing for the sake of %s."', ADD, _TA),
+    insert(206, '  may_bring_about/2: "The action %s may bring about %s."', ADD, _TA),
+    insert(230, '  no_net_reduction/2: "Doing %s would not lower the harm that %s does overall."', ADD, _TA),
+    insert(295, '  preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."', ADD, _TA),
+    insert(370, '  too_slight/2: "In deciding on action %s, %s is too slight a consequence to count."', OWN, _TA),
+    insert(392, '  worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."', ADD, _TA),
+    # negative_consequences_prudential (33.4)
+    insert(1294, "      - fails_to_avert(X,C)", OWN, _P33, scheme="negative_consequences_prudential"),
+    # negative_consequences (33.2)
+    insert(1896, "      - too_slight(A,G)", OWN, _EX, scheme="negative_consequences"),
+    insert(1896, "      - harm_discounted_by_bearer(A,G)", OWN, _EX, scheme="negative_consequences"),
+    # positive_consequences (33.1)
+    insert(1925, "      - too_slight(A,G)", OWN, _EX, scheme="positive_consequences"),
+    insert(1925, "      - gain_discounted_by_bearer(A,G)", OWN, _EX, scheme="positive_consequences"),
+]
+CONSEQUENCES_C3 += [insert(1926, text, ADD, _MOD, scheme='positive_consequences_modal') for text in [
+    '  - id: positive_consequences_modal',
+    '    meta:',
+    '      title: Argument from Possible Positive Consequences',
+    '      source: >',
+    "        WAG's modal variant of the argument from positive consequences (decision D008), after Douglas",
+    '        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,',
+    '        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,',
+    '        2008, pp. 332-333, which allow that a consequence will, may or must occur.',
+    '    variables: [A,G]',
+    '    conclusions:',
+    '      - may_be_worth_performing(A,G)',
+    '    premises:',
+    '      - may_bring_about(A,G)',
+    '      - good(G)',
+    '    exceptions:',
+    '      - bad_outweighs(A,G)',
+    '      - too_slight(A,G)',
+    '      - gain_discounted_by_bearer(A,G)',
+    '',
+]]
+CONSEQUENCES_C3 += [insert(1926, text, ADD, _MOD, scheme='negative_consequences_modal') for text in [
+    '  - id: negative_consequences_modal',
+    '    meta:',
+    '      title: Argument from Possible Negative Consequences',
+    '      source: >',
+    "        WAG's modal variant of the argument from negative consequences (decision D008), after Douglas",
+    '        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,',
+    '        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,',
+    '        2008, pp. 332-333, which allow that a consequence will, may or must occur.',
+    '    variables: [A,G]',
+    '    conclusions:',
+    '      - may_be_unwise_to_perform(A,G)',
+    '    premises:',
+    '      - may_bring_about(A,G)',
+    '      - bad(G)',
+    '    exceptions:',
+    '      - good_outweighs(A,G)',
+    '      - too_slight(A,G)',
+    '      - harm_discounted_by_bearer(A,G)',
+    '',
+]]
+CONSEQUENCES_C3 += [insert(1926, text, ADD, _BR, scheme='bridge_from_possible_good') for text in [
+    '  - id: bridge_from_possible_good',
+    '    meta:',
+    '      title: From a Possible Good Consequence to the Action (bridge)',
+    '      source: >',
+    "        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an",
+    '        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal',
+    '        conclusion of positive_consequences_modal to the recommendation. Not in the compendium.',
+    '    variables: [A,G]',
+    '    conclusions:',
+    '      - should_be_performed(A)',
+    '    premises:',
+    '      - may_be_worth_performing(A,G)',
+    '      - matters_to_decision(A,G)',
+    '    exceptions:',
+    '      - worth_finding_out_first(A,G)',
+    '',
+]]
+CONSEQUENCES_C3 += [insert(1926, text, ADD, _BR, scheme='bridge_from_possible_harm') for text in [
+    '  - id: bridge_from_possible_harm',
+    '    meta:',
+    '      title: From a Possible Bad Consequence to Not Acting (bridge)',
+    '      source: >',
+    "        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an",
+    '        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal',
+    '        conclusion of negative_consequences_modal to the rejection. Not in the compendium.',
+    '    variables: [A,G]',
+    '    conclusions:',
+    '      - ¬should_be_performed(A)',
+    '    premises:',
+    '      - may_be_unwise_to_perform(A,G)',
+    '      - matters_to_decision(A,G)',
+    '    exceptions:',
+    '      - worth_finding_out_first(A,G)',
+    '',
+]]
+CONSEQUENCES_C3 += [insert(1926, text, ADD, _HR, scheme='harm_reduction') for text in [
+    '  - id: harm_reduction',
+    '    meta:',
+    '      title: Argument from What Happens Anyway (harm reduction)',
+    '      source: >',
+    "        WAG's scheme (decision D072, refined 2026-11-25; candidate C022), not in the compendium: an outcome",
+    '        that happens whether or not the action is done, made less harmful each time by the action.',
+    '    variables: [A,E]',
+    '    conclusions:',
+    '      - should_be_performed(A)',
+    '    premises:',
+    '      - happens_anyway(A,E)',
+    '      - less_harmful_per_occurrence(A,E)',
+    '    exceptions:',
+    '      - preventable_otherwise(A,E)',
+    '      - no_net_reduction(A,E)',
+    '',
+]]
+
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3

@@ -155,10 +155,12 @@ language:
   expert_in_knowledge/1: "%s is a group of experts in a domain of knowledge"
   explanation/2: "Theory %s explains %s."
   explanatory_theory/2: "There exists a theory explaining how event %s causes event %s."
+  fails_to_avert/2: "Doing %s would fail to avert %s."
   favor/1: "If %s is generally accepted as true that gives a reason in favor of it."
   feasible/1: "It is feasible to perform the action %s."
   finding_true/1: "Finding %s is true in this situation."
   future_losses_outweigh/1: "Future losses of completing the action %s outweigh its value."
+  gain_discounted_by_bearer/2: "In deciding on action %s, the gain %s counts for less because of whom it would go to."
   generally_accepted/1: "%s generally accepted as true."
   generally_true/1: "%s is generally accepted as true."
   goal_achievable_without_any/3: "%s could reach %s without using any of the means %s."
@@ -183,6 +185,8 @@ language:
   group_member/2: "%s is a member,idea, habit, custom, product or method of %s."
   group_member_quality/3: "If %s has %s, its members ideas, habits, customs, products or methods %s will have it as well."
   group_quality/2: "Group %s has the quality %s."
+  happens_anyway/2: "Whether or not %s is done, %s will happen."
+  harm_discounted_by_bearer/2: "In deciding on action %s, the harm %s counts for less because of whom it would fall on."
   has/2: "%s has %s"
   has_conclusion/2: "Rule %s has conclusion %s."
   has_occurred/1: "An event %s has occurred."
@@ -230,8 +234,13 @@ language:
   leads_to_next/3: "In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links."
   led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."
   legitimate_value/1: "%s is a legitimate value."
+  less_harmful_per_occurrence/2: "Doing %s would make each occurrence of %s less harmful."
   looks_like/2: "%s looks like a %s."
   matters_more/2: "%s matters more than %s."
+  matters_to_decision/2: "The chance that action %s brings about %s is large enough, given what that consequence would be, to bear on whether the action should be performed."
+  may_be_unwise_to_perform/2: "Action %s may be unwise to perform because of %s."
+  may_be_worth_performing/2: "Action %s may be worth performing for the sake of %s."
+  may_bring_about/2: "The action %s may bring about %s."
   may_have/2: "%s, may have %s, for all we know or can prove."
   may_occur/1: "An event %s has happened, or could happen."
   means_end/1: "Means %s should be regarded as an end."
@@ -260,6 +269,7 @@ language:
   needed_nonarbitrary/2: " %s occurs in a context of dialogue that requires a nonarbitrary definition for a key property %s that occurs in argument."
   negative_affects/3: "That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal."
   negative_consequences/1: "Performing action %s would have negative consequences."
+  no_net_reduction/2: "Doing %s would not lower the harm that %s does overall."
   normal_true/1: "If the situation were normal, %s would be true."
   not_acceptable_step/1: "%s cannot be accepted after all, whatever the initial presumption."
   not_bring_about/1: "Therefore, you had better not bring about %s"
@@ -329,6 +339,7 @@ language:
   prestigious_individual/2: "Individual %s is prestigious for -admired by- individuals %s."
   presumption/1: "I have to act on the presumption that %s is true or not true."
   prevent/1: "Therefore, you ought to prevent %s if possible."
+  preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."
   promote_more_effectively/2: "There exists an action that would promote the value %s more effectively than %s."
   promote_more_effectively/3: "There is a way for %s to promote the value %s more effectively than %s."
   proper_sequence/0: "Sequence of proposition is dealt with in the appropriate order."
@@ -410,6 +421,7 @@ language:
   therefore_true/1: "Therefore %s is true."
   to_think_acceptable/1: "That gives a reason to think that %s is acceptable."
   too_high_to_waste/1: "The sunk costs of %s are too high to waste."
+  too_slight/2: "In deciding on action %s, %s is too slight a consequence to count."
   treatment_required/2: "The treatment %s is required for the subject %s."
   is_true/1: "%s is true." 
   true_acceptable/1: "Proposition %s is true, acceptable to the respondent."
@@ -434,6 +446,7 @@ language:
   whole_of/4: "%s is made up of the parts %s, %s and %s."
   will_occur/1: "An event %s will occur."
   without_correcting/1: "Speakers are able to use the word %s in the correct physical and grammatical context without being correct about the nature of its referent or property."
+  worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."
   worth_imitated/2: "Then %s worth being imitated by %s."
   worthy_goal/1: "%s is a worthy goal."
   would_achieve/2: "Performing action %s would achieve goal %s."
@@ -1358,6 +1371,7 @@ argument_schemes:
       - bad_consequence(X,C)
     exceptions:
       - bad_outweighs(X,C)
+      - fails_to_avert(X,C)
     assumptions: 
      -  strongly_occur(X,C)
 
@@ -2007,6 +2021,8 @@ argument_schemes:
       - bad(G)
     exceptions:
       - good_outweighs(A,G)
+      - too_slight(A,G)
+      - harm_discounted_by_bearer(A,G)
       
   - id: negative_consequences_reasoning
     meta:
@@ -2054,6 +2070,8 @@ argument_schemes:
       - good(G)
     exceptions:
       - bad_outweighs(A,G)
+      - too_slight(A,G)
+      - gain_discounted_by_bearer(A,G)
 
   - id: bad_outweighs_good
     meta:
@@ -2086,6 +2104,92 @@ argument_schemes:
       - brings_about(A,H)
       - good(H)
       - matters_more(H,G)
+
+  - id: positive_consequences_modal
+    meta:
+      title: Argument from Possible Positive Consequences
+      source: >
+        WAG's modal variant of the argument from positive consequences (decision D008), after Douglas
+        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,
+        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,
+        2008, pp. 332-333, which allow that a consequence will, may or must occur.
+    variables: [A,G]
+    conclusions:
+      - may_be_worth_performing(A,G)
+    premises:
+      - may_bring_about(A,G)
+      - good(G)
+    exceptions:
+      - bad_outweighs(A,G)
+      - too_slight(A,G)
+      - gain_discounted_by_bearer(A,G)
+
+  - id: negative_consequences_modal
+    meta:
+      title: Argument from Possible Negative Consequences
+      source: >
+        WAG's modal variant of the argument from negative consequences (decision D008), after Douglas
+        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,
+        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,
+        2008, pp. 332-333, which allow that a consequence will, may or must occur.
+    variables: [A,G]
+    conclusions:
+      - may_be_unwise_to_perform(A,G)
+    premises:
+      - may_bring_about(A,G)
+      - bad(G)
+    exceptions:
+      - good_outweighs(A,G)
+      - too_slight(A,G)
+      - harm_discounted_by_bearer(A,G)
+
+  - id: bridge_from_possible_good
+    meta:
+      title: From a Possible Good Consequence to the Action (bridge)
+      source: >
+        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an
+        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal
+        conclusion of positive_consequences_modal to the recommendation. Not in the compendium.
+    variables: [A,G]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - may_be_worth_performing(A,G)
+      - matters_to_decision(A,G)
+    exceptions:
+      - worth_finding_out_first(A,G)
+
+  - id: bridge_from_possible_harm
+    meta:
+      title: From a Possible Bad Consequence to Not Acting (bridge)
+      source: >
+        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an
+        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal
+        conclusion of negative_consequences_modal to the rejection. Not in the compendium.
+    variables: [A,G]
+    conclusions:
+      - ¬should_be_performed(A)
+    premises:
+      - may_be_unwise_to_perform(A,G)
+      - matters_to_decision(A,G)
+    exceptions:
+      - worth_finding_out_first(A,G)
+
+  - id: harm_reduction
+    meta:
+      title: Argument from What Happens Anyway (harm reduction)
+      source: >
+        WAG's scheme (decision D072, refined 2026-11-25; candidate C022), not in the compendium: an outcome
+        that happens whether or not the action is done, made less harmful each time by the action.
+    variables: [A,E]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - happens_anyway(A,E)
+      - less_harmful_per_occurrence(A,E)
+    exceptions:
+      - preventable_otherwise(A,E)
+      - no_net_reduction(A,E)
 
   - id: practical_reasoning1
     meta:

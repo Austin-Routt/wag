@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -91,9 +92,11 @@ func flat(s string) string {
 // The worked cases of the guidelines' rules on opposite consequences and
 // weighing (docs/kialo-batch2/rule-cases.yml, guidelines §3.1): every rule
 // has a case and every case names rules that exist; every coding follows
-// walton.yml; a case that is a claim of the batch is coded as the gold codes
-// it; and no retired wording of a rule is left in the guidelines, the cases,
-// the catalogue's entries or the candidates registry.
+// walton.yml, and every formula that uses one of its predicates (an other
+// instance's too) gives it as many arguments as walton.yml does; a case that
+// is a claim of the batch is coded as the gold codes it; and no retired
+// wording of a rule is left in the guidelines, the cases, the catalogue's
+// entries or the candidates registry.
 func TestRuleCases(t *testing.T) {
 	const docs = "../../../docs/"
 	raw, err := os.ReadFile(docs + "kialo-batch2/rule-cases.yml")
@@ -141,6 +144,10 @@ func TestRuleCases(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	ar, err := arities(w)
+	if err != nil {
+		t.Fatal(err)
+	}
 	ds, err := Builtin()
 	if err != nil {
 		t.Fatal(err)
@@ -165,6 +172,11 @@ func TestRuleCases(t *testing.T) {
 		}
 		a, _ := plain(cs.Coding).(map[string]any)
 		for _, p := range c.Check(a, nil) {
+			t.Errorf("%s: %s", cs.ID, p)
+		}
+		// The check reads no formula of other, so a case's other instance
+		// concluding an exception is held to walton.yml's arities here.
+		for _, p := range arityFaults(a, ar) {
 			t.Errorf("%s: %s", cs.ID, p)
 		}
 		_, inGold := gold[cs.Kialo]
@@ -213,6 +225,170 @@ func TestRuleCases(t *testing.T) {
 			if strings.Contains(flat(s), flat(r.Phrase)) {
 				t.Errorf("%s still says %q, a retired wording: now %s", name, r.Phrase, r.Now)
 			}
+		}
+	}
+}
+
+// arities are walton.yml's predicates, from its language templates and its
+// schemes' formulas, with the numbers of arguments each takes.
+func arities(w []byte) (map[string]map[int]bool, error) {
+	var f struct {
+		Schemes  []waltonScheme    `yaml:"argument_schemes"`
+		Language map[string]string `yaml:"language"`
+	}
+	if err := yaml.Unmarshal(w, &f); err != nil {
+		return nil, err
+	}
+	out := map[string]map[int]bool{}
+	put := func(p string, n int) {
+		if out[p] == nil {
+			out[p] = map[int]bool{}
+		}
+		out[p][n] = true
+	}
+	for k := range f.Language {
+		if i := strings.LastIndex(k, "/"); i > 0 {
+			if n, err := strconv.Atoi(k[i+1:]); err == nil {
+				put(k[:i], n)
+			}
+		}
+	}
+	for _, s := range f.Schemes {
+		for _, fs := range [][]string{s.Premises, s.Assumptions, s.Exceptions, s.Conclusions} {
+			for _, x := range fs {
+				for _, t := range terms(x, true) {
+					put(t.name, t.n)
+				}
+			}
+		}
+	}
+	if len(out) == 0 {
+		return nil, fmt.Errorf("walton.yml has no predicates")
+	}
+	return out, nil
+}
+
+type term struct {
+	name string
+	n    int
+}
+
+// terms are the compound terms of a formula, nested ones included, with
+// their numbers of arguments; at the top level (top) a bare atom is a
+// proposition and is listed with none. A leading negation is dropped.
+func terms(f string, top bool) []term {
+	f = strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(f), "¬"))
+	i := strings.IndexByte(f, '(')
+	if i < 0 || !strings.HasSuffix(f, ")") {
+		if top && f != "" {
+			return []term{{f, 0}}
+		}
+		return nil
+	}
+	var args []string
+	depth, from := 0, i+1
+	for k := i + 1; k < len(f)-1; k++ {
+		switch f[k] {
+		case '(':
+			depth++
+		case ')':
+			depth--
+		case ',':
+			if depth == 0 {
+				args = append(args, f[from:k])
+				from = k + 1
+			}
+		}
+	}
+	args = append(args, f[from:len(f)-1])
+	out := []term{{strings.TrimSpace(f[:i]), len(args)}}
+	for _, a := range args {
+		out = append(out, terms(a, false)...)
+	}
+	return out
+}
+
+// arityFaults lists the formulas of a coding, its other instances'
+// included, that use a walton.yml predicate with a number of arguments it
+// does not take.
+func arityFaults(a map[string]any, ar map[string]map[int]bool) []string {
+	var out []string
+	check := func(where string, f any) {
+		s, ok := f.(string)
+		if !ok {
+			return
+		}
+		for _, t := range terms(s, true) {
+			if ns, known := ar[t.name]; known && !ns[t.n] {
+				out = append(out, fmt.Sprintf("%s %s uses %s with %d arguments, which walton.yml does not", where, s, t.name, t.n))
+			}
+		}
+	}
+	insts, _ := a["instances"].([]any)
+	for _, x := range insts {
+		in, _ := x.(map[string]any)
+		ps, _ := in["premises"].([]any)
+		for _, y := range ps {
+			pm, _ := y.(map[string]any)
+			check(fmt.Sprint(pm["role"]), pm["formula"])
+		}
+		if cm, ok := in["conclusion"].(map[string]any); ok {
+			check("conclusion", cm["formula"])
+		}
+	}
+	return out
+}
+
+// The arity check's own test: its counts are checked against formulas whose
+// arities are known, and a fixture walton.yml whose arities come from its
+// language keys, so that a check that miscounted (and counted walton.yml's
+// formulas the same wrong way) would not pass unseen.
+func TestRuleCasesArityCheck(t *testing.T) {
+	for f, want := range map[string]string{
+		"may_bring_about(tax,g)":           "may_bring_about/2",
+		"¬should_be_performed(tax)":        "should_be_performed/1",
+		"good_outweighs(a, f(b,c))":        "good_outweighs/2 f/2",
+		"should_irrelevant_to_can":         "should_irrelevant_to_can/0",
+		"too_slight(tax,meat_price_rise)":  "too_slight/2",
+		"fails_to_avert(levy, g(h(x)), y)": "fails_to_avert/3 g/1 h/1",
+	} {
+		var got []string
+		for _, x := range terms(f, true) {
+			got = append(got, fmt.Sprintf("%s/%d", x.name, x.n))
+		}
+		if strings.Join(got, " ") != want {
+			t.Errorf("terms(%q) = %v, want %s", f, got, want)
+		}
+	}
+	w := []byte("language:\n  may_bring_about/2: \"The action %s may bring about %s.\"\n" +
+		"  too_slight/2: \"In deciding on action %s, %s is too slight a consequence to count.\"\n" +
+		"argument_schemes:\n  - id: s\n    variables: [A,G]\n    conclusions:\n      - may_be_worth_performing(A,G)\n" +
+		"    premises:\n      - may_bring_about(A,G)\n")
+	ar, err := arities(w)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ar["may_bring_about"][2] || len(ar["may_bring_about"]) != 1 || !ar["may_be_worth_performing"][2] || !ar["too_slight"][2] {
+		t.Fatalf("the fixture's arities: %v", ar)
+	}
+	coding := func(premise, other string) map[string]any {
+		return map[string]any{"instances": []any{
+			map[string]any{"premises": []any{map[string]any{"role": "premise", "formula": premise}},
+				"conclusion": map[string]any{"formula": "may_be_worth_performing(tax,g)"}},
+			map[string]any{"premises": []any{map[string]any{"role": "premise", "formula": "other_reason"}},
+				"conclusion": map[string]any{"formula": other}},
+		}}
+	}
+	if f := arityFaults(coding("may_bring_about(tax,g)", "¬may_bring_about(tax,g)"), ar); len(f) != 0 {
+		t.Errorf("a sound coding has faults: %v", f)
+	}
+	// too_slight is only in the fixture's language: its arity comes from there.
+	for _, bad := range []string{"may_bring_about(tax,g,h)", "¬may_bring_about(tax)", "may_bring_about", "outer(may_be_worth_performing(tax))", "too_slight(tax)"} {
+		if f := arityFaults(coding("may_bring_about(tax,g)", bad), ar); len(f) != 1 {
+			t.Errorf("%s in another instance's conclusion: %d faults (%v), want 1", bad, len(f), f)
+		}
+		if f := arityFaults(coding(bad, "may_be_worth_performing(tax,g)"), ar); len(f) != 1 {
+			t.Errorf("%s in a premise: %d faults (%v), want 1", bad, len(f), f)
 		}
 	}
 }

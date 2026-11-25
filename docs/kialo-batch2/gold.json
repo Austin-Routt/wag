@@ -6,10 +6,10 @@
   "items.json": "db9e8468bb41f4a0078e93f0252c615e05282ffe48fd9ab0dce5fcff8bc0771f",
   "lexicon.json": "e4e563a89277c02b1ba49169ccf829d73c94914e948d076e5931f50d382ff688",
   "case.json": "5857394dbd7d4f058dfa059567888fa950d51c4be9cdcd3294f8a08e8f35df80",
-  "walton.yml": "bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42",
+  "walton.yml": "5cda0fb8439a809c10756edc97ed109de2d52e21d8246a48880027efd6281cc9",
   "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
-  "links.json": "a6d953fd8ffb397608479715b3fb6a0a7c1fd96b831b54c2a95e174b8b3db332",
-  "positions.json": "ef4792b953202e4f6f665b39febd35a3a6e8a4473e9584ea7bdb4c6d0ac50961",
+  "links.json": "864a47c2ab53b406aede731d40df5d6a5bdc14d5211ae51c6bf9f3b3b1905a9a",
+  "positions.json": "ce62492493b653247058136e8610964b970ae9cbd7b43ea17a63c27bfacee5b3",
   "nascq/schemes.json": "8616f56cde01fbb4372adb745410f7766cfda756889a4ce422d5979a8cb398b5",
   "nascq/critical_questions.json": "cbc86ff8be867a5ae21376da4403e566306e9c294e0fb1255ecb133720ab5227",
   "nascq/edges.json": "6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8"
@@ -195,6 +195,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'food becomes more expensive for the many people who cannot afford it'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,food_less_affordable_for_poor)",
+       "en": "In deciding on action 'governments put a tax on meat', 'food becomes more expensive for the many people who cannot afford it' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,food_less_affordable_for_poor)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'food becomes more expensive for the many people who cannot afford it' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -261,10 +275,10 @@
     {
      "cq": null,
      "wag_cq": null,
-     "type": "severity or value",
+     "type": "severity",
      "instance": "13292.7#1",
-     "formula": "bad(food_less_affordable_for_poor)",
-     "note": "no printed CQ; 13292.25: the burden is small"
+     "formula": "too_slight(tax_meat,food_less_affordable_for_poor)",
+     "note": "no printed CQ; 13292.25: the burden is small. Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065)"
     }
    ],
    "notes": {
@@ -282,6 +296,15 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "challenges"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -296,14 +319,19 @@
    "instances": [
     {
      "id": "13292.9#1",
-     "primary": true,
+     "primary": false,
      "scheme": {
-      "walton_id": "negative_consequences",
+      "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": "AS:negative_consequences",
+      "wag_id": null,
       "fit": "reconstructed",
       "confidence": 0.8,
-      "alternatives": []
+      "alternatives": [
+       {
+        "walton_id": "negative_consequences",
+        "why_not": "'could actually': a possibility: the categorical premise brings_about(A,G) would claim more than the claim does (D008)"
+       }
+      ]
      },
      "bindings": {
       "A": "tax_meat",
@@ -312,10 +340,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "brings_about(tax_meat,tax_revenue_reduced)",
-       "en": "The action 'governments put a tax on meat' brings about 'tax revenues are reduced'.",
+       "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
+       "en": "The action 'governments put a tax on meat' may bring about 'tax revenues are reduced'.",
        "status": "explicit",
-       "note": "\"could actually\" marks a possibility, not a firm prediction (33.2 CQ1)"
+       "note": "\"could actually\" marks a possibility, not a firm prediction (33.2 CQ1). Since 2026-11-25: the modal premise of negative_consequences_modal (D008)"
       },
       {
        "role": "premise",
@@ -329,12 +357,27 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'tax revenues are reduced'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,tax_revenue_reduced)",
+       "en": "In deciding on action 'governments put a tax on meat', 'tax revenues are reduced' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,tax_revenue_reduced)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'tax revenues are reduced' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
-      "formula": "¬should_be_performed(tax_meat)",
-      "en": "'governments put a tax on meat' should not be done."
-     }
+      "formula": "may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)",
+      "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'tax revenues are reduced'."
+     },
+     "label": "the possible consequence, which the bridge carries to the target (D008)"
     },
     {
      "id": "13292.9#2",
@@ -424,6 +467,50 @@
       "en": "An event 'tax revenues are reduced' has happened, or could happen."
      },
      "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). Second link: harm to an industry that pays substantial taxes lowers tax revenue."
+    },
+    {
+     "id": "13292.9#4",
+     "primary": true,
+     "scheme": {
+      "walton_id": "bridge_from_possible_harm",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.8,
+      "alternatives": []
+     },
+     "label": "the bridge to the thesis (D008)",
+     "bindings": {
+      "A": "tax_meat",
+      "G": "tax_revenue_reduced"
+     },
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)",
+       "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'tax revenues are reduced'.",
+       "status": "supplied",
+       "note": "the conclusion of this claim's own modal argument, 13292.9#1"
+      },
+      {
+       "role": "premise",
+       "formula": "matters_to_decision(tax_meat,tax_revenue_reduced)",
+       "en": "The chance that action 'governments put a tax on meat' brings about 'tax revenues are reduced' is large enough, given what that consequence would be, to bear on whether the action should be performed.",
+       "status": "supplied",
+       "note": "the claim offers the possibility as a reason against the tax"
+      },
+      {
+       "role": "exception",
+       "formula": "worth_finding_out_first(tax_meat,tax_revenue_reduced)",
+       "en": "It is worth finding out first whether action 'governments put a tax on meat' would bring about 'tax revenues are reduced', and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown"
+      }
+     ],
+     "conclusion": {
+      "formula": "¬should_be_performed(tax_meat)",
+      "en": "'governments put a tax on meat' should not be done."
+     }
     }
    ],
    "role": {
@@ -449,18 +536,19 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": "CQ:likelihood",
+     "wag_cq": null,
      "type": "likelihood",
      "instance": "13292.9#1",
-     "formula": "brings_about(tax_meat,tax_revenue_reduced)",
-     "note": "\"could\"; 13292.12 backs it with a mechanism"
+     "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
+     "note": "\"could\"; 13292.12 backs it with a mechanism. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": "CQ:evidence",
+     "wag_cq": null,
      "type": "evidence",
      "instance": "13292.9#1",
-     "formula": "brings_about(tax_meat,tax_revenue_reduced)"
+     "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": "33.2 CQ3",
@@ -472,11 +560,11 @@
     },
     {
      "cq": null,
-     "wag_cq": "CQ:opposite_consequences",
+     "wag_cq": null,
      "type": "opposite consequences",
-     "instance": "13292.9#1",
+     "instance": "13292.9#4",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E. Since 2026-11-25: at the bridge's conclusion, which meets the target (D008); the game asks nothing of the bridge until step C5, so the record has no game question"
     },
     {
      "cq": null,
@@ -496,7 +584,7 @@
     }
    ],
    "notes": {
-    "text": "One negative-consequences argument, with its two causal links as secondary cause_to_effect steps (guidelines §3, chains). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted, so fit reconstructed and confidence lowered (R4); they are kept because no other walton.yml scheme expresses a single causal step. The net claim presupposes that lost industry taxes exceed the meat tax's own yield. Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
+    "text": "One negative-consequences argument, with its two causal links as secondary cause_to_effect steps (guidelines §3, chains). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted, so fit reconstructed and confidence lowered (R4); they are kept because no other walton.yml scheme expresses a single causal step. The net claim presupposes that lost industry taxes exceed the meat tax's own yield. Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json). Since 2026-11-25: 'could actually' claims the consequence only possible (the mood rule, D008): 13292.9#1 is the modal variant, secondary, and the bridge 13292.9#4, primary, carries its conclusion to the target, so the role and the target stand.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -519,6 +607,24 @@
        "notes"
       ],
       "what": "The hypothetical causal steps (instances 13292.9#2, 13292.9#3) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "challenges",
+       "notes"
+      ],
+      "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
      }
     ]
    }
@@ -770,6 +876,20 @@
        "en": "The action 'governments put a tax on meat' has bad consequences that outweigh 'unhealthy meat consumption is reduced'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,reduced_unhealthy_meat_consumption)",
+       "en": "In deciding on action 'governments put a tax on meat', 'unhealthy meat consumption is reduced' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(tax_meat,reduced_unhealthy_meat_consumption)",
+       "en": "In deciding on action 'governments put a tax on meat', the gain 'unhealthy meat consumption is reduced' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -853,6 +973,14 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -1084,7 +1212,7 @@
         "why_not": "the claim gives a reason (the burden can be met by a diet change), so it is more than a bare denial"
        }
       ],
-      "description": "Mitigation by adaptation: those affected can avoid most of a cited cost by a cheap change of behaviour (their diet), so the cited consequence is not seriously bad. No walton.yml scheme concludes ¬bad(G) from a low-cost way of avoiding G; the parts use walton.yml predicates (means_to_end/2, easy_to_achieve/1, bad/1)."
+      "description": "Mitigation by adaptation: those affected can avoid most of a cited cost by a cheap change of behaviour (their diet), so the cited consequence is too slight to count, not denied (D065). No walton.yml scheme concludes too_slight(A,G) from a low-cost way of avoiding G; the parts use walton.yml predicates (means_to_end/2, easy_to_achieve/1, too_slight/2)."
      },
      "bindings": {},
      "premises": [
@@ -1111,13 +1239,13 @@
       }
      ],
      "conclusion": {
-      "formula": "¬bad(food_less_affordable_for_poor)",
-      "en": "'food becomes more expensive for the many people who cannot afford it' is not bad."
+      "formula": "too_slight(tax_meat,food_less_affordable_for_poor)",
+      "en": "In deciding on action 'governments put a tax on meat', 'food becomes more expensive for the many people who cannot afford it' is too slight a consequence to count."
      }
     }
    ],
    "role": {
-    "kind": "premise_attack",
+    "kind": "undercutter",
     "confidence": 0.6,
     "cq": null,
     "polarity": "against"
@@ -1128,8 +1256,8 @@
     "actual": {
      "claim": "13292.7",
      "instance": "13292.7#1",
-     "part": "premise",
-     "formula": "bad(food_less_affordable_for_poor)"
+     "part": "exception",
+     "formula": "too_slight(tax_meat,food_less_affordable_for_poor)"
     }
    },
    "evidence": {
@@ -1155,14 +1283,27 @@
     }
    ],
    "notes": {
-    "text": "Concedes the burden ('the additional burden') and attacks its severity, the supplied premise bad(G) of 13292.7's negative-consequences argument. premise_attack, not cq_answer: no critical question of 33.2 or of the game targets bad(G) (R2). Unlike its sibling 13292.33 it does not say the consequence is avoided by a substitute; it says the cost is small.",
+    "text": "Concedes the burden ('the additional burden') and attacks its severity, the supplied premise bad(G) of 13292.7's negative-consequences argument. premise_attack, not cq_answer: no critical question of 33.2 or of the game targets bad(G) (R2). Unlike its sibling 13292.33 it does not say the consequence is avoided by a substitute; it says the cost is small. Since 2026-11-25: it says the burden is small, not that it is not bad: an undercutter at 13292.7#1's exception too_slight (OC9, D065). Its own words hedge (\"could be as small as\"); fit and confidence say so.",
     "candidate_pattern": "mitigation by substitution or adaptation (also 13292.33, 13292.182, 13292.198)"
    },
    "adjudication": {
     "changed_fields": [
      "instances.premises"
     ],
-    "reason": "Scheme (other), role and target agreed. Premises and conclusion follow A, who states them with walton.yml predicates and records the conceded consequence; B's free atoms (meat_tax_burden_only_diet_change, diet_change_minor_cost) say the same less precisely."
+    "reason": "Scheme (other), role and target agreed. Premises and conclusion follow A, who states them with walton.yml predicates and records the conceded consequence; B's free atoms (meat_tax_burden_only_diet_change, diet_change_minor_cost) say the same less precisely.",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "role",
+       "target",
+       "notes"
+      ],
+      "what": "too slight, not denied: an undercutter at too_slight (D065)"
+     }
+    ]
    }
   },
   {
@@ -1254,7 +1395,7 @@
     }
    ],
    "notes": {
-    "text": "Answers 33.2 CQ1 (CQ:likelihood) of 13292.7 against: with cheaper protein available, a meat tax need not make food unaffordable for the poor. Coded against brings_about(A,G) rather than bad(G) because the claim offers a way to avoid the consequence, not a reason why it would be mild; the severity point is its sibling 13292.25's.",
+    "text": "Answers 33.2 CQ1 (CQ:likelihood) of 13292.7 against: with cheaper protein available, a meat tax need not make food unaffordable for the poor. Coded against brings_about(A,G) rather than bad(G) because the claim offers a way to avoid the consequence, not a reason why it would be mild; the severity point is its sibling 13292.25's. Since 2026-11-25: a claim that the consequence would be mild argues too_slight(A,G), not bad(G) (OC9, D065), as its sibling 13292.25 now does; this claim still answers the likelihood question.",
     "candidate_pattern": "mitigation by substitution (also 13292.182, 13292.198; by adaptation 13292.25)"
    },
    "adjudication": {
@@ -1265,7 +1406,17 @@
      "instances.premises",
      "instances.conclusion"
     ],
-    "reason": "role and target: B. The claim says a substitute lets people avoid the cited consequence, which denies that the tax brings it about; negative_consequences has CQ:likelihood (33.2 CQ1) on brings_about(A,G), so cq_answer (R2). A read it as an attack on bad(G), which fits 13292.25 (the burden is small) but not a claim about avoiding the burden. re_parented: B (the target is the Kialo parent's own premise, R1). Premises restated with walton.yml predicates (means_to_end/2) and lexicon atoms."
+    "reason": "role and target: B. The claim says a substitute lets people avoid the cited consequence, which denies that the tax brings it about; negative_consequences has CQ:likelihood (33.2 CQ1) on brings_about(A,G), so cq_answer (R2). A read it as an attack on bad(G), which fits 13292.25 (the burden is small) but not a claim about avoiding the burden. re_parented: B (the target is the Kialo parent's own premise, R1). Premises restated with walton.yml predicates (means_to_end/2) and lexicon atoms.",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "a dated addendum where the recode makes its note stale (D008, D065)"
+     }
+    ]
    }
   },
   {
@@ -1311,6 +1462,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'cases of anemia increase'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,more_anemia_cases)",
+       "en": "In deciding on action 'governments put a tax on meat', 'cases of anemia increase' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,more_anemia_cases)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'cases of anemia increase' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -1384,11 +1549,11 @@
       "claim_id": "13292.121",
       "relation": "pro",
       "role": "cq_answer",
-      "cq": "CQ:likelihood",
+      "cq": "33.2 CQ1",
       "polarity": "for",
       "part": "premise",
       "instance": "13292.121#1",
-      "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
+      "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)"
      }
     ]
    },
@@ -1441,7 +1606,7 @@
     }
    ],
    "notes": {
-    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer, hence an independent argument for 13292.7's conclusion. Toward 13292.121 it backs that the tax brings about an unhealthy underconsumption; that function is recorded in other_kialo_parents as a cq_answer to CQ:likelihood (R2). 'Organic iron' presumably means heme iron; 13292.184 raises bioavailability against the substitutes.",
+    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer, hence an independent argument for 13292.7's conclusion. Toward 13292.121 it backs that the tax brings about an unhealthy underconsumption; that function is recorded in other_kialo_parents as a cq_answer to CQ:likelihood (R2). 'Organic iron' presumably means heme iron; 13292.184 raises bioavailability against the substitutes. Since 2026-11-25: toward 13292.121 it backs the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, the modal argument (D008), with the book's question 33.2 CQ1.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -1465,6 +1630,23 @@
        "instances"
       ],
       "what": "The hypothetical causal step (instance 13292.180#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "target",
+       "notes"
+      ],
+      "what": "its second parent's target is the modal premise of 13292.121#1, with the book's question (D008)"
      }
     ]
    }
@@ -1512,6 +1694,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'the country's food security decreases'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,food_security_decreased)",
+       "en": "In deciding on action 'governments put a tax on meat', 'the country's food security decreases' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,food_security_decreased)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'the country's food security decreases' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -1684,6 +1880,14 @@
        "notes"
       ],
       "what": "The hypothetical causal steps (instances 13292.36#2, 13292.36#3) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -1780,6 +1984,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'people starve because the tax reduces their access to meat'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,starvation_from_reduced_meat_access)",
+       "en": "In deciding on action 'governments put a tax on meat', 'people starve because the tax reduces their access to meat' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,starvation_from_reduced_meat_access)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'people starve because the tax reduces their access to meat' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -1849,7 +2067,7 @@
     }
    ],
    "notes": {
-    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link. Since 2026-11-24 (D064, D075) the weighing is an instance of bad_outweighs_good, C003's answer scheme, in place of Other. Since 2026-11-24 practical reasoning is in the class (D070, D091), so the earliest argument of the class on the board is 13292.108, not 13292.115 (OC7): the answer is at its exception, 22.1 CQ5.",
+    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link. Since 2026-11-24 (D064, D075) the weighing is an instance of bad_outweighs_good, C003's answer scheme, in place of Other. Since 2026-11-24 practical reasoning is in the class (D070, D091), so the earliest argument of the class on the board is 13292.108, not 13292.115 (OC7): the answer is at its exception, 22.1 CQ5. Since 2026-11-25: the mood rule (D008) leaves its link categorical: 'a more severe threat than' ranks how bad starvation is, and its link from the tax to starvation is its own, inferred from 13292.7's firm 'would make food more expensive' (cited).",
     "candidate_pattern": "weighing of consequences (C003); a comparison with a class (OC7)"
    },
    "adjudication": {
@@ -1882,6 +2100,15 @@
        "target"
       ],
       "what": "the weighing is an instance of bad_outweighs_good (D064, D075)"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "notes"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied; its note says why its link stays categorical (D008)"
      }
     ]
    }
@@ -2237,6 +2464,20 @@
        "en": "The action 'governments tax meat and use some of the revenue to encourage research into synthetic meats' has bad consequences that outweigh 'the development of synthetic meats is advanced'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)",
+       "en": "In deciding on action 'governments tax meat and use some of the revenue to encourage research into synthetic meats', 'the development of synthetic meats is advanced' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)",
+       "en": "In deciding on action 'governments tax meat and use some of the revenue to encourage research into synthetic meats', the gain 'the development of synthetic meats is advanced' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -2299,7 +2540,17 @@
     "changed_fields": [
      "instances.scheme"
     ],
-    "reason": "scheme: A (positive_consequences). R3: the claim states the amended action and its purpose; the circumstances and the goal (resolving the problems) come only from the parent, and B had to supply both transition premises, so practical reasoning would be a full instance built on invented premises. Role, polarity and target agreed."
+    "reason": "scheme: A (positive_consequences). R3: the claim states the amended action and its purpose; the circumstances and the goal (resolving the problems) come only from the parent, and B had to supply both transition premises, so practical reasoning would be a full instance built on invented premises. Role, polarity and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     }
+    ]
    }
   },
   {
@@ -2310,14 +2561,19 @@
    "instances": [
     {
      "id": "13292.174#1",
-     "primary": true,
+     "primary": false,
      "scheme": {
-      "walton_id": "negative_consequences",
+      "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": "AS:negative_consequences",
+      "wag_id": null,
       "fit": "reconstructed",
       "confidence": 0.75,
-      "alternatives": []
+      "alternatives": [
+       {
+        "walton_id": "negative_consequences",
+        "why_not": "'might force': a possibility: the categorical premise brings_about(A,G) would claim more than the claim does (D008)"
+       }
+      ]
      },
      "bindings": {
       "A": "tax_meat",
@@ -2326,10 +2582,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "brings_about(tax_meat,more_dangerous_meat_production)",
-       "en": "The action 'governments put a tax on meat' brings about 'meat producers switch to cheaper and more dangerous means of producing meat'.",
+       "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
+       "en": "The action 'governments put a tax on meat' may bring about 'meat producers switch to cheaper and more dangerous means of producing meat'.",
        "status": "explicit",
-       "note": "\"might force\": a possibility"
+       "note": "\"might force\": a possibility. Since 2026-11-25: the modal premise of negative_consequences_modal (D008)"
       },
       {
        "role": "premise",
@@ -2344,6 +2600,65 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'meat producers switch to cheaper and more dangerous means of producing meat'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,more_dangerous_meat_production)",
+       "en": "In deciding on action 'governments put a tax on meat', 'meat producers switch to cheaper and more dangerous means of producing meat' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,more_dangerous_meat_production)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'meat producers switch to cheaper and more dangerous means of producing meat' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      }
+     ],
+     "conclusion": {
+      "formula": "may_be_unwise_to_perform(tax_meat,more_dangerous_meat_production)",
+      "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'meat producers switch to cheaper and more dangerous means of producing meat'."
+     },
+     "label": "the possible consequence, which the bridge carries to the target (D008)"
+    },
+    {
+     "id": "13292.174#2",
+     "primary": true,
+     "scheme": {
+      "walton_id": "bridge_from_possible_harm",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.75,
+      "alternatives": []
+     },
+     "label": "the bridge to 13292.108's conclusion (D008)",
+     "bindings": {
+      "A": "tax_meat",
+      "G": "more_dangerous_meat_production"
+     },
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "may_be_unwise_to_perform(tax_meat,more_dangerous_meat_production)",
+       "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'meat producers switch to cheaper and more dangerous means of producing meat'.",
+       "status": "supplied",
+       "note": "the conclusion of this claim's own modal argument, 13292.174#1"
+      },
+      {
+       "role": "premise",
+       "formula": "matters_to_decision(tax_meat,more_dangerous_meat_production)",
+       "en": "The chance that action 'governments put a tax on meat' brings about 'meat producers switch to cheaper and more dangerous means of producing meat' is large enough, given what that consequence would be, to bear on whether the action should be performed.",
+       "status": "supplied",
+       "note": "the claim offers the possibility as a reason against the tax"
+      },
+      {
+       "role": "exception",
+       "formula": "worth_finding_out_first(tax_meat,more_dangerous_meat_production)",
+       "en": "It is worth finding out first whether action 'governments put a tax on meat' would bring about 'meat producers switch to cheaper and more dangerous means of producing meat', and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown"
       }
      ],
      "conclusion": {
@@ -2376,30 +2691,31 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": "CQ:likelihood",
+     "wag_cq": null,
      "type": "likelihood",
      "instance": "13292.174#1",
-     "formula": "brings_about(tax_meat,more_dangerous_meat_production)",
-     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices?"
+     "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
+     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices? Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": "CQ:evidence",
+     "wag_cq": null,
      "type": "evidence",
      "instance": "13292.174#1",
-     "formula": "brings_about(tax_meat,more_dangerous_meat_production)"
+     "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": null,
      "wag_cq": null,
-     "type": "severity or value",
+     "type": "bearer",
      "instance": "13292.174#1",
-     "formula": "bad(more_dangerous_meat_production)",
-     "note": "no printed CQ; dangerous to whom is unstated"
+     "formula": "harm_discounted_by_bearer(tax_meat,more_dangerous_meat_production)",
+     "note": "no printed CQ; dangerous to whom is unstated. Since 2026-11-25: on whom the harm falls has its own exception, harm_discounted_by_bearer (D065)"
     }
    ],
    "notes": {
-    "text": "Kialo files it as a pro of 13292.13 (the tax would not resolve, and might worsen, the problems of production). Its content is a further bad consequence of the action, offered against the thesis's environmental argument 13292.108 (a sibling of the Kialo parent, hence re-parented); it instantiates that argument's exception side_effects(A,S1). practical_reasoning2 has CQ:side_effect (22.1 CQ5) on exactly that exception, so the role is cq_answer (R2); role.move keeps the guidelines' finer label. What 'dangerous' means (food safety, workers, animals, environment) is unstated. Since 2026-11-24 (D070) a side effect that ranks nothing against the goal is negative consequences, a rebuttal at the conclusion of the argument it answers (guidelines §3.1, OC2), not an answer at the exception, which is now the claim that the tax's bad consequences outweigh the goal (bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)).",
+    "text": "Kialo files it as a pro of 13292.13 (the tax would not resolve, and might worsen, the problems of production). Its content is a further bad consequence of the action, offered against the thesis's environmental argument 13292.108 (a sibling of the Kialo parent, hence re-parented); it instantiates that argument's exception side_effects(A,S1). practical_reasoning2 has CQ:side_effect (22.1 CQ5) on exactly that exception, so the role is cq_answer (R2); role.move keeps the guidelines' finer label. What 'dangerous' means (food safety, workers, animals, environment) is unstated. Since 2026-11-24 (D070) a side effect that ranks nothing against the goal is negative consequences, a rebuttal at the conclusion of the argument it answers (guidelines §3.1, OC2), not an answer at the exception, which is now the claim that the tax's bad consequences outweigh the goal (bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)). Since 2026-11-25: 'might force' claims the consequence only possible (the mood rule, D008): 13292.174#1 is the modal variant, secondary, and the bridge 13292.174#2, primary, carries its conclusion to the target, so the role and the target stand.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -2417,6 +2733,24 @@
        "notes"
       ],
       "what": "a plain side effect: a rebuttal at 13292.108's conclusion, no longer an answer at its side-effect exception (D070)"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "challenges",
+       "notes"
+      ],
+      "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
      }
     ]
    }
@@ -3375,14 +3709,19 @@
    "instances": [
     {
      "id": "13292.121#1",
-     "primary": true,
+     "primary": false,
      "scheme": {
-      "walton_id": "negative_consequences",
+      "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": "AS:negative_consequences",
+      "wag_id": null,
       "fit": "reconstructed",
       "confidence": 0.8,
-      "alternatives": []
+      "alternatives": [
+       {
+        "walton_id": "negative_consequences",
+        "why_not": "'could also result in': a possibility: the categorical premise brings_about(A,G) would claim more than the claim does (D008)"
+       }
+      ]
      },
      "bindings": {
       "A": "tax_meat",
@@ -3391,10 +3730,10 @@
      "premises": [
       {
        "role": "premise",
-       "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)",
-       "en": "The action 'governments put a tax on meat' brings about 'meat is underconsumed to an unhealthy degree'.",
+       "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "The action 'governments put a tax on meat' may bring about 'meat is underconsumed to an unhealthy degree'.",
        "status": "explicit",
-       "note": "\"could\": a possibility"
+       "note": "\"could\": a possibility. Since 2026-11-25: the modal premise of negative_consequences_modal (D008)"
       },
       {
        "role": "premise",
@@ -3409,6 +3748,65 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'meat is underconsumed to an unhealthy degree'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "In deciding on action 'governments put a tax on meat', 'meat is underconsumed to an unhealthy degree' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'meat is underconsumed to an unhealthy degree' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      }
+     ],
+     "conclusion": {
+      "formula": "may_be_unwise_to_perform(tax_meat,unhealthy_meat_underconsumption)",
+      "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'meat is underconsumed to an unhealthy degree'."
+     },
+     "label": "the possible consequence, which the bridge carries to the target (D008)"
+    },
+    {
+     "id": "13292.121#2",
+     "primary": true,
+     "scheme": {
+      "walton_id": "bridge_from_possible_harm",
+      "compendium": null,
+      "wag_id": null,
+      "fit": "reconstructed",
+      "confidence": 0.8,
+      "alternatives": []
+     },
+     "label": "the bridge to 13292.115's conclusion (D008)",
+     "bindings": {
+      "A": "tax_meat",
+      "G": "unhealthy_meat_underconsumption"
+     },
+     "premises": [
+      {
+       "role": "premise",
+       "formula": "may_be_unwise_to_perform(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "Action 'governments put a tax on meat' may be unwise to perform because of 'meat is underconsumed to an unhealthy degree'.",
+       "status": "supplied",
+       "note": "the conclusion of this claim's own modal argument, 13292.121#1"
+      },
+      {
+       "role": "premise",
+       "formula": "matters_to_decision(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "The chance that action 'governments put a tax on meat' brings about 'meat is underconsumed to an unhealthy degree' is large enough, given what that consequence would be, to bear on whether the action should be performed.",
+       "status": "supplied",
+       "note": "the claim offers the possibility as a reason against the tax"
+      },
+      {
+       "role": "exception",
+       "formula": "worth_finding_out_first(tax_meat,unhealthy_meat_underconsumption)",
+       "en": "It is worth finding out first whether action 'governments put a tax on meat' would bring about 'meat is underconsumed to an unhealthy degree', and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown"
       }
      ],
      "conclusion": {
@@ -3440,18 +3838,19 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": "CQ:likelihood",
+     "wag_cq": null,
      "type": "likelihood",
      "instance": "13292.121#1",
-     "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)",
-     "note": "answered against by 13292.233; backed by 13292.139 and 13292.180"
+     "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)",
+     "note": "answered against by 13292.233; backed by 13292.139 and 13292.180. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": "CQ:evidence",
+     "wag_cq": null,
      "type": "evidence",
      "instance": "13292.121#1",
-     "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
+     "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)",
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
     },
     {
      "cq": "33.2 CQ3",
@@ -3462,23 +3861,23 @@
     },
     {
      "cq": null,
-     "wag_cq": "CQ:opposite_consequences",
+     "wag_cq": null,
      "type": "opposite consequences",
-     "instance": "13292.121#1",
+     "instance": "13292.121#2",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "13292.233: better health from meat reduction; the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "13292.233: better health from meat reduction; the game asks it at the conclusion, as a rebuttal, until workstream E. Since 2026-11-25: at the bridge's conclusion, which meets the target (D008); the game asks nothing of the bridge until step C5, so the record has no game question"
     },
     {
      "cq": null,
      "wag_cq": null,
      "type": "other means",
-     "instance": "13292.121#1",
+     "instance": "13292.121#2",
      "formula": null,
-     "note": "13292.235: accompanying measures could prevent it (an amended action)"
+     "note": "13292.235: accompanying measures could prevent it (an amended action). Since 2026-11-25: about the bridge, whose conclusion the amended action answers (D008)"
     }
    ],
    "notes": {
-    "text": "'Also' marks a further consequence offered against the health pro 13292.115, its mirror image (under- vs over-consumption). It targets 115's conclusion; the game's CQ:side_effect for AS:consequences sits at the conclusion, which R2 (premises and exceptions) does not cover, so the agreed side_effect role is kept.",
+    "text": "'Also' marks a further consequence offered against the health pro 13292.115, its mirror image (under- vs over-consumption). It targets 115's conclusion; the game's CQ:side_effect for AS:consequences sits at the conclusion, which R2 (premises and exceptions) does not cover, so the agreed side_effect role is kept. Since 2026-11-25: 'could also result in' claims the consequence only possible (the mood rule, D008): 13292.121#1 is the modal variant, secondary, and the bridge 13292.121#2, primary, carries its conclusion to the target, so the role and the target stand.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -3492,6 +3891,24 @@
        "challenges"
       ],
       "what": "33/CQ3's challenge split: the book's question at the sided exception (D055), the game's at the conclusion."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "challenges",
+       "notes"
+      ],
+      "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
      }
     ]
    }
@@ -4200,6 +4617,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'domestic meat producers are pushed out of the market'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,domestic_meat_industry_pushed_out)",
+       "en": "In deciding on action 'governments put a tax on meat', 'domestic meat producers are pushed out of the market' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,domestic_meat_industry_pushed_out)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'domestic meat producers are pushed out of the market' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -4212,7 +4643,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.55,
-    "cq": "CQ:likelihood",
+    "cq": "33.2 CQ1",
     "polarity": "for"
    },
    "target": {
@@ -4222,7 +4653,7 @@
      "claim": "13292.9",
      "instance": "13292.9#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,tax_revenue_reduced)"
+     "formula": "may_bring_about(tax_meat,tax_revenue_reduced)"
     }
    },
    "evidence": {
@@ -4266,7 +4697,7 @@
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json).",
+    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json). Since 2026-11-25: 13292.9 is now coded as claiming its consequence only possible (D008): the target is 13292.9#1, its modal argument, now secondary (the bridge 13292.9#4 is primary), and its premise may_bring_about(A,G), which the game does not ask until step C5: the question is the book's, 33.2 CQ1.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4286,6 +4717,24 @@
        "notes"
       ],
       "what": "The hypothetical causal steps (instances 13292.12#1, 13292.12#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "role.cq",
+       "target",
+       "notes"
+      ],
+      "what": "its target is the modal premise of 13292.9#1, with the book's question (D008)"
      }
     ]
    }
@@ -5364,6 +5813,20 @@
        "en": "The action 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)' has bad consequences that outweigh 'carbon emissions are reduced'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
+       "en": "In deciding on action 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)', 'carbon emissions are reduced' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
+       "en": "In deciding on action 'governments ration meat through personal carbon budgets (a small amount for everyone, larger amounts at extra cost, very large amounts barred or very expensive)', the gain 'carbon emissions are reduced' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -5456,6 +5919,14 @@
        "notes"
       ],
       "what": "another course not claimed better: no answer at realize_more_effectively (D006); a proposal of another course, at 13292.108's conclusion"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -5805,6 +6276,20 @@
        "en": "The action 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier' has bad consequences that outweigh 'domestic meat producers are not pushed out of the market by cheaper imported meat'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
+       "en": "In deciding on action 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier', 'domestic meat producers are not pushed out of the market by cheaper imported meat' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
+       "en": "In deciding on action 'governments tax meat and require imported meat to meet environmental and animal-welfare standards or to pass a high tariff barrier', the gain 'domestic meat producers are not pushed out of the market by cheaper imported meat' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -5894,6 +6379,14 @@
        "target"
       ],
       "what": "Its target, the conclusion of 13292.12's causal step, is may_occur(domestic_meat_industry_pushed_out) since that step's recoding (was will_occur(domestic_meat_industry_pushed_out)); its own coding names neither formula."
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -6608,7 +7101,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.6,
-    "cq": "CQ:likelihood",
+    "cq": "33.2 CQ1",
     "polarity": "against"
    },
    "target": {
@@ -6618,7 +7111,7 @@
      "claim": "13292.121",
      "instance": "13292.121#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,unhealthy_meat_underconsumption)"
+     "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)"
     }
    },
    "evidence": {
@@ -6655,7 +7148,7 @@
     }
    ],
    "notes": {
-    "text": "Denies that the reduction a tax would cause is unhealthy, i.e. the premise brings_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121, which 33.2 CQ1 targets, so cq_answer CQ:likelihood against (R2); it even suggests the opposite consequence (better health). Its own qualifier ('especially when high intakes ... are reduced') leaves open people who already eat little meat, which is 121's worry.",
+    "text": "Denies that the reduction a tax would cause is unhealthy, i.e. the premise brings_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121, which 33.2 CQ1 targets, so cq_answer CQ:likelihood against (R2); it even suggests the opposite consequence (better health). Its own qualifier ('especially when high intakes ... are reduced') leaves open people who already eat little meat, which is 121's worry. Since 2026-11-25: 13292.121 is now coded as claiming its consequence only possible (D008): the target is the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, its modal argument, and the question is the book's, 33.2 CQ1 (the game asks nothing of the modal variant until step C5).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -6664,7 +7157,19 @@
      "instances.scheme.fit",
      "re_parented"
     ],
-    "reason": "role: B (cq_answer CQ:likelihood): the claim denies the brings_about premise of 121's negative-consequences argument, which 33.2 CQ1 targets (R2); A had premise_attack. fit: A (reconstructed): in_domain(S,D) is supplied by both. re_parented: B (false), R1. Scheme and target agreed."
+    "reason": "role: B (cq_answer CQ:likelihood): the claim denies the brings_about premise of 121's negative-consequences argument, which 33.2 CQ1 targets (R2); A had premise_attack. fit: A (reconstructed): in_domain(S,D) is supplied by both. re_parented: B (false), R1. Scheme and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "role.cq",
+       "target",
+       "notes"
+      ],
+      "what": "its target is the modal premise of 13292.121#1, with the book's question (D008)"
+     }
+    ]
    }
   },
   {
@@ -6717,6 +7222,20 @@
        "en": "The action 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption' has bad consequences that outweigh 'unhealthy underconsumption of meat is prevented'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)",
+       "en": "In deciding on action 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption', 'unhealthy underconsumption of meat is prevented' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)",
+       "en": "In deciding on action 'governments tax meat together with targeted accompanying measures against unhealthy underconsumption', the gain 'unhealthy underconsumption of meat is prevented' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -6736,7 +7255,7 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.121",
-     "instance": "13292.121#1",
+     "instance": "13292.121#2",
      "part": "conclusion",
      "formula": "¬should_be_performed(tax_meat)"
     }
@@ -6772,14 +7291,33 @@
     }
    ],
    "notes": {
-    "text": "'A plus B' amendment ('there can be'): it answers 13292.121's side effect by adding targeted measures to the tax. Its 'likely would' also predicts that a real tax would come with such measures, which bears on 121's likelihood (cq_answer CQ:likelihood is the alternative coding). 'That' = unhealthy underconsumption.",
+    "text": "'A plus B' amendment ('there can be'): it answers 13292.121's side effect by adding targeted measures to the tax. Its 'likely would' also predicts that a real tax would come with such measures, which bears on 121's likelihood (cq_answer CQ:likelihood is the alternative coding). 'That' = unhealthy underconsumption. Since 2026-11-25: its target is the conclusion of 13292.121's bridge, 13292.121#2 (D008); the alternative coding would answer 33.2 CQ1 at the modal premise of 13292.121#1, not CQ:likelihood.",
     "candidate_pattern": null
    },
    "adjudication": {
     "changed_fields": [
      "instances.scheme"
     ],
-    "reason": "scheme: A (positive_consequences). R3: the claim says the amended action prevents the bad outcome; B's resulting state (measures in place) restates the action and its circumstances come from the target, so practical reasoning adds nothing the text states. Role, polarity and target agreed."
+    "reason": "scheme: A (positive_consequences). R3: the claim says the amended action prevents the bad outcome; B's resulting state (measures in place) restates the action and its circumstances come from the target, so practical reasoning adds nothing the text states. Role, polarity and target agreed.",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "target",
+       "notes"
+      ],
+      "what": "its target is the conclusion of 13292.121's bridge, which meets 13292.115 (D008)"
+     }
+    ]
    }
   },
   {
@@ -7160,6 +7698,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'regenerative agriculture, which produces both meat and environmental benefits, is deterred'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,regenerative_agriculture_deterred)",
+       "en": "In deciding on action 'governments put a tax on meat', 'regenerative agriculture, which produces both meat and environmental benefits, is deterred' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,regenerative_agriculture_deterred)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'regenerative agriculture, which produces both meat and environmental benefits, is deterred' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -7211,10 +7763,10 @@
     {
      "cq": null,
      "wag_cq": null,
-     "type": "severity or value",
+     "type": "severity",
      "instance": "13292.5#1",
-     "formula": "bad(regenerative_agriculture_deterred)",
-     "note": "no printed CQ; how much meat comes from regenerative farms?"
+     "formula": "too_slight(tax_meat,regenerative_agriculture_deterred)",
+     "note": "no printed CQ; how much meat comes from regenerative farms? Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065); the amount asked about bears on the decision as the share of the tax's environmental aim that deterring regenerative farms would cost, not as how few farms it reaches (the owner's scope, D053)"
     }
    ],
    "notes": {
@@ -7236,6 +7788,15 @@
        "notes"
       ],
       "what": "a plain side effect: a rebuttal at 13292.108's conclusion, no longer an answer at its side-effect exception (D070)"
+     },
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances",
+       "challenges"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
      }
     ]
    }
@@ -7282,6 +7843,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'the protein intake of millions of people is reduced'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,protein_intake_of_millions_reduced)",
+       "en": "In deciding on action 'governments put a tax on meat', 'the protein intake of millions of people is reduced' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,protein_intake_of_millions_reduced)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'the protein intake of millions of people is reduced' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -7330,6 +7905,20 @@
        "en": "The action 'governments put a tax on meat' has good consequences that outweigh 'governments push to incentivize eating insects as a protein alternative'.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
+      },
+      {
+       "role": "exception",
+       "formula": "too_slight(tax_meat,government_push_for_insect_protein)",
+       "en": "In deciding on action 'governments put a tax on meat', 'governments push to incentivize eating insects as a protein alternative' is too slight a consequence to count.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "harm_discounted_by_bearer(tax_meat,government_push_for_insect_protein)",
+       "en": "In deciding on action 'governments put a tax on meat', the harm 'governments push to incentivize eating insects as a protein alternative' counts for less because of whom it would fall on.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -7393,7 +7982,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-25",
+      "by": "proposal D008-D074, version 5 (recode_c3.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the new exceptions of its consequence scheme (D065), supplied"
+     }
+    ]
    }
   },
   {

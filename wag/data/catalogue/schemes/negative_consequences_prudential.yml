@@ -20,6 +20,7 @@ formulas:
   - strongly_occur(X,C)
   exceptions:
   - bad_outweighs(X,C)
+  - fails_to_avert(X,C)
   conclusions:
   - should_be_performed(X)
 book:
@@ -86,6 +87,21 @@ critical_questions:
   paraphrase: ""
   answer: ""
   status: generated
+- id: walton/fails_to_avert
+  targets: [{formula: 'fails_to_avert(X,C)', locus: exception}]
+  note: Neither the book nor the game asks it. Since 2026-11-25 walton.yml has it
+    as an exception (D069, candidate C016), the critic's to support (D003); fear (36)
+    states the converse as a premise (only_way_prevent). A harm of not acting that
+    falls on others is positive consequences of the action (docs/kialo-batch2/guidelines.md
+    §3.1, OC13), whose coding records whether the action's preventing it is explicit,
+    implicit, unknown or disputed.
+  paraphrase: 'Would doing X fail to avert C: would C follow even if X were done?'
+  answer: 'The critic, who raises it with an argument. Against: showing that C would
+    follow even if X were done (renewals take three months, so renewing would not
+    bring the passport back before the wedding), which undercuts the argument through
+    fails_to_avert(X,C); it grants that C would be bad. Coded with Other (docs/kialo-batch2/guidelines.md
+    §3.1, OC13). For: showing that doing X does avert C, or makes it unlikely.'
+  status: drafted by Claude Code, 2026-11-25
 summary:
   text: ""
   status: todo
@@ -123,6 +139,21 @@ contrasts:
 - scheme: good_outweighs_bad
   text: ""
   status: todo
+- scheme: positive_consequences_modal
+  text: ""
+  status: todo
+- scheme: negative_consequences_modal
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_good
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_harm
+  text: ""
+  status: todo
+- scheme: harm_reduction
+  text: ""
+  status: todo
 examples:
 - text: You were thinking of not backing up your thesis. But if you don't, one disk
     failure could lose a year's work, which would be very bad for you. So you should
@@ -155,6 +186,44 @@ examples:
     that follows of itself. Its conclusion meets no should_be_performed claim (D063).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-23
+- text: If you do not raise the levy this year, the hospital trust will run out of
+    cash by spring, which would be very bad for you. You should raise it.
+  coding: 'X = the board raising the levy this year; C = the hospital trust running
+    out of cash by spring. Pressed: walton/fails_to_avert (The levy would bring in
+    too little, too late: the trust runs out of cash in March, and the first payments
+    arrive in June); 33/CQ1 (The trust''s reserves and its overdraft would carry it
+    to the summer even without the levy); 33/CQ2 (The forecast of running out of cash
+    is the finance director''s guess, not the auditors'' figure); 33/CQ3 (Raising
+    the levy would drive the trust''s best surgeons to the next county, which matters
+    more than a cash crisis the bank would cover). (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: If you do not insure this year's harvest, a hailstorm like last year's, which
+    the forecasters expect, will ruin you. Insure it.
+  coding: 'X = the farmer insuring this year''s harvest; C = the farmer being ruined
+    by a hailstorm. Pressed: walton/fails_to_avert (The policy pays out only after
+    the season ends, by which time the bank will have called in your loan); a challenge
+    of not_doing(X) (You have already applied for the policy; nobody is considering
+    going without it). (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: 'Under the claim that there is an afterlife: you were thinking of giving up
+    your belief in one. If you do, you will face death without hope, and that would
+    be terrible for you. So keep believing.'
+  coding: 'X = keeping your belief in an afterlife; C = your facing death without
+    hope. A reply that raises D074''s objection undercuts this argument''s inference
+    (an undercutter of the specific argument, not an exception, as the owner refined
+    D074 on 2026-11-25): ''Hope is a reason to want an afterlife, not evidence that
+    there is one, and the discussion is whether there is.'' (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: If the council does not fund the shelter, people in abusive relationships
+    will have nowhere to go.
+  coding: 'Near miss: A = the council funding the shelter; G = people in abusive relationships
+    having somewhere to go. The harm falls on others, not on the one who acts: positive
+    consequences of the action, with the harm''s not happening as G (OC13). Whether
+    funding the shelter would give them somewhere to go is its causal premise, whose
+    status and note record whether that is explicit, implicit or unknown, and a reply
+    against it whether it is disputed (D069). (proposal D008-D074)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 discrepancies:
 - kind: partial-link
   about: "33.4"
@@ -202,6 +271,26 @@ discrepancies:
     acts: docs/kialo-batch2/guidelines.md §3.1, OC13 (D027). The game does not have
     this scheme yet, so it is played with Other.'
   status: drafted by Claude Code, 2026-10-23
+- kind: book-walton
+  about: the exception of D069
+  detail: 'walton.yml has an exception for which the book''s 33.4 prints no question,
+    since 2026-11-25: fails_to_avert(X,C), whether doing X would avert C (D069, candidate
+    C016; fear, 36, states the converse as a premise).'
+  decision: 'Done (proposal D008-D074): WAG''s exception, the critic''s to support
+    (D003), asked as a walton/ question.'
+  status: drafted by Claude Code, 2026-11-25
+- kind: other
+  about: D074
+  detail: 'The appeal to consequences offered for the truth of a claim (D074, candidate
+    C011) has no formula here: it is an undercutter of the specific argument whose
+    consequences are offered for the truth of a claim (the owner''s refinement of
+    2026-11-25). An exception would name only the action, so proving it against a
+    misplaced argument would also defeat a legitimate argument about the same action.'
+  decision: 'Done (proposal D008-D074): in annotation a reply that raises the objection
+    targets that argument''s inference (docs/kialo-batch2/guidelines.md §3.1, OC18);
+    the game asks it from step C5, as a question about the argument itself or a direct
+    undercutter.'
+  status: drafted by Claude Code, 2026-11-25
 classification:
   source: ""
   reasoning: ""
@@ -232,3 +321,7 @@ history:
   what: 'Revised after the independent review of the application: the flu-jab example''s
     second warning cites a harm to the reader (OC13); what is ours is recorded for
     33/CQ2 and 33/CQ3.'
+- date: "2026-11-25"
+  by: Claude Code
+  what: walton/fails_to_avert (D069), with the discrepancy on it; D074's objection;
+    the proposal's examples, after proposal D008-D074

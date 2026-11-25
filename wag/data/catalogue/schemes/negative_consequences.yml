@@ -19,6 +19,8 @@ formulas:
   - bad(G)
   exceptions:
   - good_outweighs(A,G)
+  - too_slight(A,G)
+  - harm_discounted_by_bearer(A,G)
   conclusions:
   - ¬should_be_performed(A)
 book:
@@ -135,6 +137,44 @@ critical_questions:
     A claim that the good consequence outweighs G answers 33/CQ3 instead. For: showing
     that A has no such consequence.'
   status: drafted by Claude Code, 2026-10-23
+- id: walton/too_slight
+  targets: [{formula: 'too_slight(A,G)', locus: exception}]
+  note: Neither the book nor the game asks it. Since 2026-11-25 walton.yml has it
+    as an exception (D065, candidate C005), apart from bad(G), so that a real but
+    slight consequence is not a denied one. Slight means slight by what bears on the
+    decision on A, not merely that G reaches few, is small in number, or seems minor
+    to one side; so scoped, it is neutral as to polarity (D053, the owner's declaration
+    of 2026-11-25). The game asks it from step C5.
+  paraphrase: Granted that doing A would bring about G and that G is bad, is G too
+    slight a harm to count in deciding on A? (A grave consequence is not slight, however
+    few it reaches.)
+  answer: 'The critic, who raises it with an argument. Against: showing that G, though
+    real and bad, is too small to weigh in the decision on A (a burden as small as
+    a change of diet, 13292.25), which undercuts the argument through too_slight(A,G);
+    a grave harm is not slight, however few it reaches. No scheme concludes it: a
+    claim that argues it is coded with Other (docs/kialo-batch2/guidelines.md §3.1,
+    OC9). For: showing that G is large enough to count: its size, how long it lasts,
+    or how much it matters to those it reaches.'
+  status: drafted by Claude Code, 2026-11-25
+- id: walton/harm_discounted_by_bearer
+  targets: [{formula: 'harm_discounted_by_bearer(A,G)', locus: exception}]
+  note: 'Neither the book nor the game asks it. Since 2026-11-25 walton.yml has it
+    as an exception (D065, candidate C021): the side of an argument against A of the
+    bearer pair, whose other side, gain_discounted_by_bearer(A,G), is the positive
+    schemes'' (a sided flip, D053: that a cost falls on the polluters who cause the
+    harm discounts it as a harm and is the very reason it is a gain). The game asks
+    it from step C5.'
+  paraphrase: On whom would G fall, and does that make it count for less in deciding
+    on A?
+  answer: 'The critic, who raises it with an argument. Against: showing that the harm
+    falls on those who cause what A is meant to remedy (the cost falls on the producers
+    whose farms cause the harm the tax is for), so that it counts for less, which
+    undercuts the argument through harm_discounted_by_bearer(A,G); it grants the harm.
+    Coded with Other (docs/kialo-batch2/guidelines.md §3.1, OC16). A right or a value
+    that rules A out whatever its consequences is not this question (OC5). For: showing
+    that those it falls on have no part in what A remedies, or that on whom it falls
+    does not lessen it here.'
+  status: drafted by Claude Code, 2026-11-25
 summary:
   text: Use it when an action A is argued against because doing it would bring about
     an outcome G that is bad. It concludes that A should not be done; it is the mirror
@@ -207,6 +247,29 @@ contrasts:
 - scheme: good_outweighs_bad
   text: ""
   status: todo
+- scheme: positive_consequences_modal
+  text: ""
+  status: todo
+- scheme: negative_consequences_modal
+  text: The categorical scheme claims that A brings about G (would, will, can of capability);
+    the modal variant only that it may (may, might, could, can of possibility), and
+    concludes no more than that A may be unwise because of G, which reaches ¬should_be_performed(A)
+    through bridge_from_possible_harm. The mood is the causal link's; when it cannot
+    be told, code the modal variant, which claims less (docs/kialo-batch2/guidelines.md
+    §3).
+  status: drafted by Claude Code, 2026-11-25
+- scheme: bridge_from_possible_good
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_harm
+  text: The categorical scheme concludes ¬should_be_performed(A) directly, from brings_about(A,G);
+    the bridge reaches it from a possible consequence, through the modal variant's
+    conclusion and matters_to_decision(A,G). The bridge's exception leaves the categorical
+    argument standing.
+  status: drafted by Claude Code, 2026-11-25
+- scheme: harm_reduction
+  text: ""
+  status: todo
 - scheme: cause_to_effect
   text: Choose cause_to_effect when the claim's point is that the effect will happen
     from a cause that has occurred, for instance when it explains how a consequence
@@ -248,31 +311,33 @@ examples:
     by a claim that the health gains of eating less meat, above all among the poor,
     outweigh a higher price for one food, which argues good_outweighs(A,G). A plain
     counter (the tax cuts emissions) would be a positive_consequences argument, a
-    rebuttal (docs/kialo-batch2/guidelines.md §3.1, OC2, OC3).'
-  status: drafted by Claude Code, 2026-10-23
+    rebuttal (docs/kialo-batch2/guidelines.md §3.1, OC2, OC3). Since 2026-11-25, 13292.25
+    (the extra burden could be no more than a change of diet) argues walton/too_slight,
+    the exception too_slight(A,G), as an undercutter: it says the burden is small,
+    not that it is not bad (OC9).'
+  status: drafted by Claude Code, 2026-11-25
 - text: Taxing meat could also result in an unhealthy underconsumption of meat.
   kialo: "13292.121"
-  coding: 'A = a tax on meat; G = unhealthy underconsumption of meat. Stated: brings_about(A,G),
-    and bad(G) ("unhealthy"). Conclusion: ¬should_be_performed(A). "Could" claims
-    a weaker link than brings_about(A,G) states, a reason to press 33/CQ1. Offered
-    as a reply to the pro 13292.115, it is a further bad consequence that ranks nothing,
-    so it rebuts that argument''s conclusion and does not argue its exception (docs/kialo-batch2/guidelines.md
-    §3.1, OC2); it is 33/CQ3''s rebuttal route, which the game asks as CQ:side_effect.
-    In the game it is played as a direct rebuttal of 13292.115''s conclusion: the
-    NASCQ does not let negative_consequences back CQ:side_effect (see positive_consequences''
-    discrepancy on the game''s questions).'
-  status: drafted by Claude Code, 2026-10-23
+  coding: 'Near miss: "could also result in" claims the consequence only possible
+    (the mood of the link, D008): negative_consequences_modal (A = a tax on meat;
+    G = unhealthy underconsumption of meat), secondary, with bridge_from_possible_harm,
+    primary, which keeps the claim''s role and target: a further bad consequence that
+    ranks nothing, at the conclusion of the pro 13292.115 (docs/kialo-batch2/guidelines.md
+    §3.1, OC2, OC15). As the gold codes it since 2026-11-25; until then it was coded
+    here, with brings_about(A,G).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 - text: A tax on meat could reduce tax revenues, since it would harm the meat industry,
     which pays substantial taxes.
   kialo: "13292.9"
-  coding: 'A = a tax on meat; G = tax revenues falling. Stated: brings_about(A,G),
-    with its reason. Supplied: bad(G). Pressed: 33/CQ3 by 13292.43 (revenue is not
-    why the tax is wanted; sustainability and animal welfare press harder), which
-    ranks two consequences and so argues good_outweighs(A,G), with C003''s good_outweighs_bad
-    since 2026-11-24 (Other before); the values it names are things the tax would
-    promote, so they count as consequences (docs/kialo-batch2/guidelines.md §3.1,
-    OC3, OC4, OC5).'
-  status: drafted by Claude Code, 2026-11-24
+  coding: 'Near miss: "could actually" claims the consequence only possible (D008):
+    negative_consequences_modal (A = a tax on meat; G = tax revenues falling) with
+    its bridge, the claim''s primary instance, and its causal steps two cause_to_effect_modal
+    instances. 13292.43 (revenue is not why the tax is wanted) weighs against the
+    modal instance''s good_outweighs(A,G), which the categorical scheme shares (docs/kialo-batch2/guidelines.md
+    §3.1, OC4, OC15). As the gold codes it since 2026-11-25.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 - text: Legalising cannabis would mean more adults use it, which is bad for public
     health.
   coding: 'A = legalising cannabis; G = more adults using cannabis. Pressed: 33/CQ2,
@@ -309,6 +374,35 @@ examples:
     costs back to the first step.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-23
+- text: Closing the high street for the Saturday market would delay deliveries to
+    its shops, so the council should not close it.
+  coding: 'A = the council closing the high street for the Saturday market; G = deliveries
+    to the high street''s shops being delayed. Pressed: 33/CQ1 (The shops take their
+    deliveries before eight, and the market opens at nine); 33/CQ2 (No shop has said
+    that a delivery was ever late on a market day); walton/harm_discounted_by_bearer
+    (The delays would fall on the shops that asked the council for the market, since
+    it brings them customers). (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: 'Under the claim that free will is an illusion: believing that it is an illusion
+    would make people give up trying, so no one should believe it.'
+  coding: 'A = people believing that free will is an illusion; G = people giving up
+    trying. As Kialo 27150.12 replies to an argument from the risks of AGI offered
+    on whether AGI is possible: whether we should do something has no bearing on whether
+    it is so. A reply that raises D074''s objection undercuts this argument''s inference
+    (an undercutter of the specific argument, not an exception, as the owner refined
+    D074 on 2026-11-25): ''Whether a belief makes people give up is no evidence about
+    whether it is true, and the discussion is whether free will is an illusion.''
+    (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: A congestion charge might drive shoppers to the out-of-town malls, so it may
+    be unwise to bring one in.
+  coding: 'Near miss: A = the council bringing in a congestion charge; G = shoppers
+    going to the out-of-town malls instead. It looks like negative consequences, but
+    ''might'' claims the consequence only possible (the mood rule): negative_consequences_modal.
+    Coded categorically, the ''might'' would fill brings_about(A,G), which it does
+    not claim. (proposal D008-D074)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 discrepancies:
 - kind: game-differs
   about: exception good_outweighs(A,G)
@@ -322,6 +416,21 @@ discrepancies:
     until the game has it (step C5, rule S9) a player answers that question with Other
     or a source-based scheme; whether analogy may is D057.
   status: drafted by Claude Code, 2026-11-24
+- kind: game-differs
+  about: exception too_slight(A,G)
+  detail: The game's core.yml lacks the exception too_slight(A,G) of walton.yml.
+  decision: Keep the game as it is until step C5, which gives the game's copy of the
+    scheme this exception with a game question (proposal D008-D074, effects); until
+    then a player raises it with Other.
+  status: drafted by Claude Code, 2026-11-25
+- kind: game-differs
+  about: exception harm_discounted_by_bearer(A,G)
+  detail: The game's core.yml lacks the exception harm_discounted_by_bearer(A,G) of
+    walton.yml.
+  decision: Keep the game as it is until step C5, which gives the game's copy of the
+    scheme this exception with a game question (proposal D008-D074, effects); until
+    then a player raises it with Other.
+  status: drafted by Claude Code, 2026-11-25
 - kind: book-walton
   about: Premise
   detail: The compendium's 33.2 has a single premise (doing A will have bad consequences)
@@ -340,15 +449,20 @@ discrepancies:
     of the consequence schemes, as cause to effect has cause_to_effect_modal, not
     a modality field. Likelihood stays a question (33/CQ1, CQ:likelihood). (The review
     left variant or field open and added an adequacy assumption; WAG''s precedent
-    is a scheme of its own, and the likelihood question already exists.) Not yet applied.
-    Before: No change. Code a hedged claim with brings_about(A,G), say so in the coding,
-    and treat the hedge as a reason to press 33/CQ1: the conclusion that A should
-    not be done needs a consequence likely enough to act on. The claim''s causal steps
-    are coded beside it as secondary cause_to_effect_modal instances, which conclude
-    only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
-    the discrepancy on the consequence schemes). open: whether brings_about should
-    get a modal form too.'
-  status: drafted by Claude Code, 2026-10-22
+    is a scheme of its own, and the likelihood question already exists.) Applied 2026-11-25
+    (proposal D008-D074): negative_consequences_modal, which concludes may_be_unwise_to_perform(A,G)
+    from may_bring_about(A,G) and meets ¬should_be_performed(A) only through bridge_from_possible_harm,
+    whose premise matters_to_decision(A,G) its arguer supports. A hedged claim is
+    coded with them (docs/kialo-batch2/guidelines.md §3, the mood of the link; §3.1,
+    OC15). Before: No change. Code a hedged claim with brings_about(A,G), say so in
+    the coding, and treat the hedge as a reason to press 33/CQ1: the conclusion that
+    A should not be done needs a consequence likely enough to act on. The claim''s
+    causal steps are coded beside it as secondary cause_to_effect_modal instances,
+    which conclude only that the effect may occur and do not back brings_about(A,G)
+    (cause_to_effect_modal, the discrepancy on the consequence schemes). The question
+    whether brings_about should get a modal form is answered: the modal variants''
+    premise, may_bring_about(A,G) (D008).'
+  status: drafted by Claude Code, 2026-11-25
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
@@ -383,6 +497,26 @@ discrepancies:
     (the owner''s decision of 2026-10-22, docs/scheme-registry/walton-clean/CHANGELOG.md,
     "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-22
+- kind: book-walton
+  about: the exceptions of D065
+  detail: 'walton.yml has two exceptions for which the book''s 33.2 prints no question,
+    since 2026-11-25: too_slight(A,G), how serious G is (D065, candidate C005), and
+    harm_discounted_by_bearer(A,G), on whom it falls (D065, candidate C021).'
+  decision: 'Done (proposal D008-D074): WAG''s exceptions, the critic''s to support
+    (D003), asked as walton/ questions; the game asks them from step C5.'
+  status: drafted by Claude Code, 2026-11-25
+- kind: other
+  about: D074
+  detail: 'The appeal to consequences offered for the truth of a claim (D074, candidate
+    C011) has no formula here: it is an undercutter of the specific argument whose
+    consequences are offered for the truth of a claim (the owner''s refinement of
+    2026-11-25). An exception would name only the action, so proving it against a
+    misplaced argument would also defeat a legitimate argument about the same action.'
+  decision: 'Done (proposal D008-D074): in annotation a reply that raises the objection
+    targets that argument''s inference (docs/kialo-batch2/guidelines.md §3.1, OC18);
+    the game asks it from step C5, as a question about the argument itself or a direct
+    undercutter.'
+  status: drafted by Claude Code, 2026-11-25
 classification:
   source: independent
   reasoning: practical
@@ -465,3 +599,10 @@ history:
     the example of 13292.180 says how the gold codes the claim''s causal steps now
     (cause_to_effect_modal), after the independent review of the identity contract
     (E5).'
+- date: "2026-11-25"
+  by: Claude Code
+  what: walton/too_slight and walton/harm_discounted_by_bearer (D065), with their
+    game-differs decisions; the D008 discrepancy as applied, one for the new exceptions
+    and one for D074's objection; the contrasts with the modal variant and the bridge;
+    the proposal's examples; 13292.121 and 13292.9 as near misses (the recoded gold),
+    after proposal D008-D074

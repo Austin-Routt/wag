@@ -550,6 +550,17 @@
   "reason": "excuse is used with 0 arguments, so the template may not contain %s"
  },
  {
+  "line": 138,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  fails_to_avert/2: \"Doing %s would fail to avert %s.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
   "line": 139,
   "change": "edit",
   "scheme": "language",
@@ -570,6 +581,17 @@
   "before": "  favor/1: \"If %s is generally accepted as truei that gives a reason in favor of it.\"",
   "after": "  favor/1: \"If %s is generally accepted as true that gives a reason in favor of it.\"",
   "reason": "template word 'truei'"
+ },
+ {
+  "line": 142,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  gain_discounted_by_bearer/2: \"In deciding on action %s, the gain %s counts for less because of whom it would go to.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 144,
@@ -636,6 +658,28 @@
   "before": "",
   "after": "  good_outweighs/2: \"The action %s has good consequences that outweigh %s.\"",
   "reason": "template for the consequence schemes' sided exceptions (D055, D059), in our own words"
+ },
+ {
+  "line": 164,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  happens_anyway/2: \"Whether or not %s is done, %s will happen.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
+  "line": 164,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  harm_discounted_by_bearer/2: \"In deciding on action %s, the harm %s counts for less because of whom it would fall on.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 185,
@@ -748,6 +792,17 @@
   "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
  },
  {
+  "line": 205,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  less_harmful_per_occurrence/2: \"Doing %s would make each occurrence of %s less harmful.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
   "line": 206,
   "change": "insert after",
   "scheme": "language",
@@ -757,6 +812,50 @@
   "before": "",
   "after": "  matters_more/2: \"%s matters more than %s.\"",
   "reason": "template for the answer schemes (D064, D075, D089), in our own words"
+ },
+ {
+  "line": 206,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  matters_to_decision/2: \"The chance that action %s brings about %s is large enough, given what that consequence would be, to bear on whether the action should be performed.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
+  "line": 206,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  may_be_unwise_to_perform/2: \"Action %s may be unwise to perform because of %s.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
+  "line": 206,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  may_be_worth_performing/2: \"Action %s may be worth performing for the sake of %s.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
+  "line": 206,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  may_bring_about/2: \"The action %s may bring about %s.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 207,
@@ -878,6 +977,17 @@
   "before": "  negative_affects/3: \"The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal.\"",
   "after": "  negative_affects/3: \"That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal.\"",
   "reason": "the template said that a bad value supports commitment to the goal, the opposite of the book's 19.2; rewritten in our own words"
+ },
+ {
+  "line": 230,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  no_net_reduction/2: \"Doing %s would not lower the harm that %s does overall.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 231,
@@ -1131,6 +1241,17 @@
   "before": "",
   "after": "  practicality_action/2: \"As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s.\"",
   "reason": "template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words"
+ },
+ {
+  "line": 295,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  preventable_otherwise/2: \"A course open to whoever would do %s could prevent %s.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 296,
@@ -1507,6 +1628,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses synonymous with 0 argument(s) and the template has 0 %s"
  },
  {
+  "line": 370,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  too_slight/2: \"In deciding on action %s, %s is too slight a consequence to count.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
   "line": 372,
   "change": "edit",
   "scheme": "language",
@@ -1571,6 +1703,17 @@
   "before": "",
   "after": "  whole_of/4: \"%s is made up of the parts %s, %s and %s.\"",
   "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
+ },
+ {
+  "line": 392,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  worth_finding_out_first/2: \"It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.\"",
+  "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
   "line": 402,
@@ -3091,6 +3234,17 @@
   "reason": "D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
  },
  {
+  "line": 1294,
+  "change": "insert after",
+  "scheme": "negative_consequences_prudential",
+  "scheme_after": "negative_consequences_prudential",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - fails_to_avert(X,C)",
+  "reason": "D069: the prudential form (33.4) gains fails_to_avert(X,C), the critic's to support. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
   "line": 1296,
   "change": "edit",
   "scheme": "negative_consequences_prudential",
@@ -3971,6 +4125,28 @@
   "reason": "D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
  },
  {
+  "line": 1896,
+  "change": "insert after",
+  "scheme": "negative_consequences",
+  "scheme_after": "negative_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - too_slight(A,G)",
+  "reason": "D065: the consequence schemes gain too_slight(A,G) (how serious), neutral as to polarity (D053, declared by the owner), and the bearer exception of their side (on whom), a sided flip. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1896,
+  "change": "insert after",
+  "scheme": "negative_consequences",
+  "scheme_after": "negative_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - harm_discounted_by_bearer(A,G)",
+  "reason": "D065: the consequence schemes gain too_slight(A,G) (how serious), neutral as to polarity (D053, declared by the owner), and the bearer exception of their side (on whom), a sided flip. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
   "line": 1897,
   "change": "insert after",
   "scheme": "negative_consequences_reasoning",
@@ -4189,6 +4365,28 @@
   "before": "      - good(G)\n    exceptions:\n      - other_consequences(A)",
   "after": "      - good(G)\n    exceptions:\n      - bad_outweighs(A,G)",
   "reason": "D055: the exception other_consequences(A), shared by the arguments for and against A, let one argument that opposite consequences outweigh defeat every consequence argument about A on both sides; now an exception on the scheme's own side that names the consequence it cites, so that it defeats only the argument it is about. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
+ },
+ {
+  "line": 1925,
+  "change": "insert after",
+  "scheme": "positive_consequences",
+  "scheme_after": "positive_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - too_slight(A,G)",
+  "reason": "D065: the consequence schemes gain too_slight(A,G) (how serious), neutral as to polarity (D053, declared by the owner), and the bearer exception of their side (on whom), a sided flip. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1925,
+  "change": "insert after",
+  "scheme": "positive_consequences",
+  "scheme_after": "positive_consequences",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - gain_discounted_by_bearer(A,G)",
+  "reason": "D065: the consequence schemes gain too_slight(A,G) (how serious), neutral as to polarity (D053, declared by the owner), and the bearer exception of their side (on whom), a sided flip. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
  },
  {
   "line": 1926,
@@ -4541,6 +4739,952 @@
   "before": "",
   "after": "",
   "reason": "D064, D075: candidate C003's answer schemes, which conclude the consequence schemes' sided exceptions (D055) from a consequence of the other sign that matters more; bad_outweighs_good is also D070's side effect that outweighs. Decided under the owner's standing rule of 2026-11-22 and the owner's answers of 2026-11-24 (proposal D004-D075, version 3)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: positive_consequences_modal",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument from Possible Positive Consequences",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's modal variant of the argument from positive consequences (decision D008), after Douglas",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        2008, pp. 332-333, which allow that a consequence will, may or must occur.",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,G]",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_be_worth_performing(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_bring_about(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - good(G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad_outweighs(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - too_slight(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - gain_discounted_by_bearer(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "positive_consequences_modal",
+  "scheme_after": "positive_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: negative_consequences_modal",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument from Possible Negative Consequences",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's modal variant of the argument from negative consequences (decision D008), after Douglas",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995,",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        pp. 155-156, and the questions on consequences in Walton, Reed and Macagno, Argumentation Schemes,",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        2008, pp. 332-333, which allow that a consequence will, may or must occur.",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,G]",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_be_unwise_to_perform(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_bring_about(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad(G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - good_outweighs(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - too_slight(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - harm_discounted_by_bearer(A,G)",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "negative_consequences_modal",
+  "scheme_after": "negative_consequences_modal",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D008: a consequence the claim says only may follow cannot fill brings_about(A,G); the modal variant keeps the modality in its premise and its conclusion, which names the consequence, and meets the thesis only through its bridge. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: bridge_from_possible_good",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: From a Possible Good Consequence to the Action (bridge)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        conclusion of positive_consequences_modal to the recommendation. Not in the compendium.",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,G]",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_be_performed(A)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_be_worth_performing(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - matters_to_decision(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - worth_finding_out_first(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_good",
+  "scheme_after": "bridge_from_possible_good",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: bridge_from_possible_harm",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: From a Possible Bad Consequence to Not Acting (bridge)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's bridge (decision D008, refined 2026-11-25), on the pattern of decisions D011 and D063: an",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        explicit warrant, with a premise its arguer supports and an exception of its own, from the modal",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        conclusion of negative_consequences_modal to the rejection. Not in the compendium.",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,G]",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - ¬should_be_performed(A)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - may_be_unwise_to_perform(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - matters_to_decision(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - worth_finding_out_first(A,G)",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "bridge_from_possible_harm",
+  "scheme_after": "bridge_from_possible_harm",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D008: the bridge from a modal conclusion to should_be_performed(A) or its negation, with a premise its arguer supports (the chance matters, given what G would be) and an exception of its own (it is worth finding out first), both naming A and G; an entry condition, not a weight. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: harm_reduction",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument from What Happens Anyway (harm reduction)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's scheme (decision D072, refined 2026-11-25; candidate C022), not in the compendium: an outcome",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        that happens whether or not the action is done, made less harmful each time by the action.",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [A,E]",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_be_performed(A)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - happens_anyway(A,E)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - less_harmful_per_occurrence(A,E)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - preventable_otherwise(A,E)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - no_net_reduction(A,E)",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
+ },
+ {
+  "line": 1926,
+  "change": "insert after",
+  "scheme": "harm_reduction",
+  "scheme_after": "harm_reduction",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)"
  },
  {
   "line": 1935,

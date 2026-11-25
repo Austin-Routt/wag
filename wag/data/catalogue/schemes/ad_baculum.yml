@@ -81,6 +81,21 @@ contrasts:
 - scheme: good_outweighs_bad
   text: ""
   status: todo
+- scheme: positive_consequences_modal
+  text: ""
+  status: todo
+- scheme: negative_consequences_modal
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_good
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_harm
+  text: ""
+  status: todo
+- scheme: harm_reduction
+  text: ""
+  status: todo
 examples: []
 discrepancies: []
 classification:

@@ -387,7 +387,7 @@ Bindings: P1 = “destroying the acorn is not as bad as felling an oak”; P2 = 
 
 **Kind:** question. **Decision:** D074 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** low.
 
-**Outcome:** merge (the consequence schemes, as a question or undercutter, once its sketch passes review), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D074.
+**Outcome:** merge (the consequence schemes, as a question or undercutter, once its sketch passes review), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D074: applied by proposal D008-D074 (2026-11-25) as an undercutter of the specific argument whose consequences are offered for the truth of a claim, not an exception (the owner's refinement of D074): a reply that raises it targets that argument's inference (kialo-batch2/guidelines.md §3.1, OC18); the game asks it from step C5.
 
 The objection that a consequence argument is offered for the truth of a claim: that one should believe something, or that it would be bad if it were false, is no reason to think it true. In the game, S9 already keeps a consequence scheme from concluding a factual statement, but no question lets a player raise the objection, which Kialo users raise by name.
 
@@ -416,8 +416,8 @@ The objection that a consequence argument is offered for the truth of a claim: t
 | kialo 2629 | 2629.4247 | clean | Pragmatic reasons do not bear on philosophy or truth; it answers 2629.22855, a pragmatic argument for belief. | review of D055-D059 v4 | session check, 2026-10-23 |
 
 **Open questions:**
-- A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion.
-- Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1).
+- A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion. Answered by D074 as the owner refined it (2026-11-25): neither; an undercutter of the specific argument.
+- Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. The guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1).
 
 ## Weighing consequences
 
@@ -500,8 +500,8 @@ A claim that, all told, an action's costs outweigh its benefits, or the reverse,
 **Relation:** addition to positive_consequences, negative_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). A side-level exception added to each consequence scheme (net_cost, net_benefit): the favourable or unfavourable balance ND describes (p. 170).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `positive_consequences_balance` is 1 from `positive_consequences`, sharing 4 (adds exception net_cost/1; the registry's relation: extends).
-- `negative_consequences_balance` is 1 from `negative_consequences`, sharing 4 (adds exception net_benefit/1; the registry's relation: extends).
+- `positive_consequences_balance` is 1 from `positive_consequences`, sharing 6 (adds exception net_cost/1; the registry's relation: extends).
+- `negative_consequences_balance` is 1 from `negative_consequences`, sharing 6 (adds exception net_benefit/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - D055's bad_outweighs(A,G) and good_outweighs(A,G): Each names one consequence, so a global claim is many instances.
@@ -528,7 +528,7 @@ A claim that, all told, an action's costs outweigh its benefits, or the reverse,
 
 **The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
 
-Sided side-level exceptions beside D055's, on D055-D059 version 2's forms.
+Sided side-level exceptions beside D055's, on D055-D059 version 2's forms, with the exceptions of proposal D008-D074 since 2026-11-25.
 
 #### `positive_consequences_balance`: Positive consequences with a balance exception (candidate)
 
@@ -538,7 +538,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `good(G)` |
-| exceptions | `bad_outweighs(A,G)`, `net_cost(A)` |
+| exceptions | `bad_outweighs(A,G)`, `too_slight(A,G)`, `gain_discounted_by_bearer(A,G)`, `net_cost(A)` |
 | conclusion | `should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -553,7 +553,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `bad(G)` |
-| exceptions | `good_outweighs(A,G)`, `net_benefit(A)` |
+| exceptions | `good_outweighs(A,G)`, `too_slight(A,G)`, `harm_discounted_by_bearer(A,G)`, `net_benefit(A)` |
 | conclusion | `¬should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -578,6 +578,8 @@ Bindings: A = “the county building the bypass”; G = “lorries kept out of t
 - The action “the county building the bypass” brings about “lorries kept out of the town centre”.
 - “Lorries kept out of the town centre” is good.
 - *Unless:* The action “the county building the bypass” has bad consequences that outweigh “lorries kept out of the town centre”.
+- *Unless:* In deciding on action “the county building the bypass”, “lorries kept out of the town centre” is too slight a consequence to count.
+- *Unless:* In deciding on action “the county building the bypass”, the gain “lorries kept out of the town centre” counts for less because of whom it would go to.
 - *Unless:* All told, the costs of the action “the county building the bypass” outweigh its benefits.
 - **So:** Action “the county building the bypass” should be performed.
 
@@ -596,6 +598,8 @@ Bindings: A = “people enhancing their bodies with technology”; G = “people
 - The action “people enhancing their bodies with technology” brings about “people living far longer”.
 - “People living far longer” is good.
 - *Unless:* The action “people enhancing their bodies with technology” has bad consequences that outweigh “people living far longer”.
+- *Unless:* In deciding on action “people enhancing their bodies with technology”, “people living far longer” is too slight a consequence to count.
+- *Unless:* In deciding on action “people enhancing their bodies with technology”, the gain “people living far longer” counts for less because of whom it would go to.
 - *Unless:* All told, the costs of the action “people enhancing their bodies with technology” outweigh its benefits.
 - **So:** Action “people enhancing their bodies with technology” should be performed.
 
@@ -614,6 +618,8 @@ Bindings: A = “the school opening on Saturdays”; G = “the teachers being w
 - The action “the school opening on Saturdays” brings about “the teachers being worn out”.
 - “The teachers being worn out” is bad.
 - *Unless:* The action “the school opening on Saturdays” has good consequences that outweigh “the teachers being worn out”.
+- *Unless:* In deciding on action “the school opening on Saturdays”, “the teachers being worn out” is too slight a consequence to count.
+- *Unless:* In deciding on action “the school opening on Saturdays”, the harm “the teachers being worn out” counts for less because of whom it would fall on.
 - *Unless:* All told, the benefits of the action “the school opening on Saturdays” outweigh its costs.
 - **So:** It is not the case that action “the school opening on Saturdays” should be performed.
 
@@ -632,6 +638,8 @@ Bindings: A = “the city building the stadium”; G = “forty home games a yea
 - The action “the city building the stadium” brings about “forty home games a year bringing trade to local businesses”.
 - “Forty home games a year bringing trade to local businesses” is good.
 - *Unless:* The action “the city building the stadium” has bad consequences that outweigh “forty home games a year bringing trade to local businesses”.
+- *Unless:* In deciding on action “the city building the stadium”, “forty home games a year bringing trade to local businesses” is too slight a consequence to count.
+- *Unless:* In deciding on action “the city building the stadium”, the gain “forty home games a year bringing trade to local businesses” counts for less because of whom it would go to.
 - **So:** Action “the city building the stadium” should be performed.
 
 *Note:* It uses the words of a balance claim but argues from one consequence, so it is positive consequences; the weighing words are its own claim about its exception.
@@ -656,7 +664,7 @@ Of two courses, one of which must be taken and both of which have bad consequenc
 **Relation:** composition of pragmatic_alternative, C003 (two schemes or candidates chained or combined; usually: merge, as a rule for coding the chain, or reject). A forced choice between two courses (the alternatives of 34, or a dilemma) combined with a weighing of their bad consequences (C003): Aristotle's topic of the lesser evil (ND p. 168), and the dilemma that ND evaluates with practical reasoning, whose third course is this sketch's exception (pp. 160-161).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `lesser_evil` is 8 from `negative_consequences`, sharing 2 (adds exception third_option/2, premise bad/1, premise brings_about/2, premise either/2, premise less_bad/2, conclusion should_be_performed/1; lacks exception good_outweighs/2, conclusion ¬should_be_performed/1).
+- `lesser_evil` is 8 from `bad_outweighs_good`, sharing 2 (adds exception third_option/2, premise bad/1, premise brings_about/2, premise either/2, premise less_bad/2, conclusion should_be_performed/1; lacks premise matters_more/2, conclusion bad_outweighs/2).
 
 **Closest, and why each falls short:**
 - pragmatic argument from alternatives (34): It says that one course is bad, so the other should be taken; it compares nothing.
@@ -910,6 +918,8 @@ Bindings: A = “the parents having the child vaccinated”; G = “the child be
 - The action “the parents having the child vaccinated” brings about “the child being protected from measles”.
 - “The child being protected from measles” is good.
 - *Unless:* The action “the parents having the child vaccinated” has bad consequences that outweigh “the child being protected from measles”.
+- *Unless:* In deciding on action “the parents having the child vaccinated”, “the child being protected from measles” is too slight a consequence to count.
+- *Unless:* In deciding on action “the parents having the child vaccinated”, the gain “the child being protected from measles” counts for less because of whom it would go to.
 - **So:** Action “the parents having the child vaccinated” should be performed.
 
 *Note:* It cites a good consequence but sets it against no harm, so it is positive consequences.
@@ -1041,14 +1051,11 @@ How bad a consequence is, beside how likely it is. The book's questions on conse
 
 **Kind:** question. **Decision:** D065 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** medium.
 
-**Outcome:** merge (positive_consequences and negative_consequences, as a question (how serious)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D065.
+**Outcome:** merge (positive_consequences and negative_consequences, as a question (how serious)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D065: applied by proposal D008-D074 (2026-11-25), as the exception too_slight(A,G) of 33.1, 33.2 and their modal variants, neutral as to polarity (D053); the sketch and its examples left the registry then (the proposal keeps examples of its kind).
 
 A question that the book's three questions on consequences do not ask: is the cited consequence good or bad enough, and for enough people, to bear on whether the action should be done? In WAG good(G) and bad(G) are yes-or-no, so a minimising reply ("the burden is small") can only deny them or be a bare challenge.
 
 **Relation:** addition to negative_consequences, positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). A question at bad(G) or good(G), formulas the schemes already have, so its sketch is the scheme itself. Seriousness is one respect of the weighing ND describes (pp. 158-159).
-
-**Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `negative_consequences_severity` is 0 from `negative_consequences`, sharing 4 (the same formulas; the registry's relation: identical).
 
 **Closest, and why each falls short:**
 - 33/CQ1: It asks how likely the consequence is, not how much it matters.
@@ -1074,100 +1081,10 @@ A question that the book's three questions on consequences do not ask: is the ci
 | kialo 5637 | 5637.376 (archived) | strain | Support for groups that help new mothers strains the budget no more than other safety-net programmes; minimising by comparison with accepted costs. | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.151 (archived); also C017 | strain | The good cited, a smaller population, is called insignificant beside what other changes could do. | review of D055-D059 v4 | session check, 2026-10-23 |
 
-**The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
-
-The question on negative consequences, on D055-D059 version 2's form; the mirror on positive consequences targets good(G).
-
-#### `negative_consequences_severity`: Negative consequences with a severity question (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `A`, `G` |
-| premises | `brings_about(A,G)`, `bad(G)` |
-| exceptions | `good_outweighs(A,G)` |
-| conclusion | `¬should_be_performed(A)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| C005/Q1 | Is G bad enough, and for enough people, to count against doing A? | `bad(G)` (premise) |
-
-**Examples, rendered:**
-
-#### 1. A small burden
-
-**as an argument**, with `negative_consequences_severity`; a candidate; Kialo 13292.7.
-
-> A sin tax on meat would make food more expensive, despite many people not being able to afford it.
-
-Bindings: A = “governments putting a tax on meat”; G = “food becoming less affordable for the poor”.
-
-- The action “governments putting a tax on meat” brings about “food becoming less affordable for the poor”.
-- “Food becoming less affordable for the poor” is bad.
-- *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “food becoming less affordable for the poor”.
-- **So:** It is not the case that action “governments putting a tax on meat” should be performed.
-
-Pressed with its questions:
-
-- **C005/Q1**, at the premise ““Food becoming less affordable for the poor” is bad”: Kialo 13292.25 replies that the extra burden may be no more than changing what one eats.
-
-#### 2. Childcare on Fridays
-
-**as an argument**, with `negative_consequences_severity`; a candidate; our own text.
-
-> A four-day school week would leave parents finding childcare one more day a week, so the school should not adopt it.
-
-Bindings: A = “the school adopting a four-day week”; G = “parents finding childcare one more day a week”.
-
-- The action “the school adopting a four-day week” brings about “parents finding childcare one more day a week”.
-- “Parents finding childcare one more day a week” is bad.
-- *Unless:* The action “the school adopting a four-day week” has good consequences that outweigh “parents finding childcare one more day a week”.
-- **So:** It is not the case that action “the school adopting a four-day week” should be performed.
-
-Pressed with its questions:
-
-- **C005/Q1**, at the premise ““Parents finding childcare one more day a week” is bad”: The school would run a club that day for a small fee; for most families the cost is a few pounds a week.
-
-#### 3. Motorway noise
-
-**as an argument**, with `negative_consequences_severity`; a candidate; our own text.
-
-> Raising the motorway's speed limit would add noise for the homes nearby, so it should not be raised.
-
-Bindings: A = “raising the motorway's speed limit”; G = “more noise for the homes nearby”.
-
-- The action “raising the motorway's speed limit” brings about “more noise for the homes nearby”.
-- “More noise for the homes nearby” is bad.
-- *Unless:* The action “raising the motorway's speed limit” has good consequences that outweigh “more noise for the homes nearby”.
-- **So:** It is not the case that action “raising the motorway's speed limit” should be performed.
-
-Pressed with its questions:
-
-- **C005/Q1**, at the premise ““More noise for the homes nearby” is bad”: The nearest houses are a kilometre away behind a bank; the extra noise would be below what anyone can hear.
-
-#### 4. Dogs on the beach
-
-**a near miss** of `negative_consequences_severity`: it is `negative_consequences`; our own text.
-
-> Allowing dogs on the beach would mean more litter, so it should not be allowed.
-
-Bindings: A = “allowing dogs on the beach”; G = “more litter on the beach”.
-
-- The action “allowing dogs on the beach” brings about “more litter on the beach”.
-- “More litter on the beach” is bad.
-- *Unless:* The action “allowing dogs on the beach” has good consequences that outweigh “more litter on the beach”.
-- **So:** It is not the case that action “allowing dogs on the beach” should be performed.
-
-Pressed with its questions:
-
-- **Challenge** (CQ:premise_acceptable), at the premise “The action “allowing dogs on the beach” brings about “more litter on the beach””: The beaches that already allow dogs have no more litter than the others; owners there clean up.
-
-*Note:* The reply denies that the consequence will follow, a question of likelihood (33/CQ1), not of how bad it is.
-
 **Open questions:**
 - A question at the premise, or a graded premise (how bad) that the weights could read?
 - Do annotators tell 'small' (C005) from 'unlikely' (33/CQ1) reliably?
+- Do reasoning from negative consequences (33.3) and the prudential form (33.4) need the exception too? They argue from the agent's own goals or welfare; none is sighted yet (proposal D008-D074).
 
 ### C008. Precaution against a catastrophic, irreversible risk
 
@@ -1226,7 +1143,6 @@ A sketch: not in `walton.yml`.
 
 - `catastrophic/1`: “%s would be catastrophic.”
 - `irreversible/1`: “%s could not be undone.”
-- `may_bring_about/2`: “The action %s may bring about %s.”
 - `negligible_risk/2`: “The chance that the action %s brings about %s is too small to count.”
 - `precaution_costs_outweigh/1`: “Not doing %s would cost more than the risk it avoids.”
 
@@ -1299,6 +1215,8 @@ Bindings: A = “building the dam”; G = “the valley's farms being flooded”
 - The action “building the dam” brings about “the valley's farms being flooded”.
 - “The valley's farms being flooded” is bad.
 - *Unless:* The action “building the dam” has good consequences that outweigh “the valley's farms being flooded”.
+- *Unless:* In deciding on action “building the dam”, “the valley's farms being flooded” is too slight a consequence to count.
+- *Unless:* In deciding on action “building the dam”, the harm “the valley's farms being flooded” counts for less because of whom it would fall on.
 - **So:** It is not the case that action “building the dam” should be performed.
 
 *Note:* The harm is certain and not catastrophic; nothing is weighed against a small chance, so it is negative consequences.
@@ -1309,19 +1227,17 @@ Bindings: A = “building the dam”; G = “the valley's farms being flooded”
 **Open questions:**
 - A scheme of its own, or a question for 33.2 ('Is the consequence irreversible?') feeding C003's comparison?
 - How does it meet a likelihood objection (33/CQ1), which it concedes in advance?
+- Under D008 a possible harm reaches should_be_performed(A) only through a bridge (bridge_from_possible_harm, whose premise matters_to_decision(A,G) asks whether the chance is large enough, given what G would be). Is precaution's catastrophe and irreversibility a bridge of its own, or a premise that matters_to_decision already asks for? Its sketch, which concludes from may_bring_about(A,G) directly, stays a sketch until then (proposal D008-D074).
 
 ### C021. On whom does the consequence fall?
 
 **Kind:** question. **Decision:** D065 (decided). **Stage:** decided. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** low.
 
-**Outcome:** merge (positive_consequences and negative_consequences, as a question (on whom)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D065.
+**Outcome:** merge (positive_consequences and negative_consequences, as a question (on whom)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D065: applied by proposal D008-D074 (2026-11-25), as a sided pair: gain_discounted_by_bearer(A,G) on the schemes for A, harm_discounted_by_bearer(A,G) on those against it, since who bears a consequence is not neutral between the sides (D053); the sketch and its examples left the registry then (the proposal keeps examples of its kind).
 
 A reply that weighs a consequence by who bears it: the agent, a third party, those who chose it or did not. C005 asks how bad a consequence is and for how many, not for whom.
 
 **Relation:** addition to negative_consequences, positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). A question at bad(G) or good(G), formulas the schemes have, so its sketch is the scheme itself: who bears the consequence, one respect of the weighing beside C005's seriousness. It may merge into C005.
-
-**Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `negative_consequences_bearer` is 0 from `negative_consequences`, sharing 4 (the same formulas; the registry's relation: identical).
 
 **Closest, and why each falls short:**
 - C005, how serious the consequence is: It asks how bad and for how many; this asks who. It may merge into C005 as a third respect.
@@ -1342,99 +1258,8 @@ A reply that weighs a consequence by who bears it: the agent, a third party, tho
 | kialo 5637 | 5637.11001 | strain | Harm to one person does not justify controlling another; who bears it, said as a right. | review of D055-D059 v2 | session check, 2026-10-22 |
 | kialo 5637 | 5637.315 (archived); also C007 | clean | When the two disagree, her view counts for more, since she is the one forced to carry the child or undergo a procedure. | review of D055-D059 v3 | session check, 2026-10-23 |
 
-**The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
-
-The question on negative consequences, on D055-D059 version 2's form.
-
-#### `negative_consequences_bearer`: Negative consequences with a question of who bears them (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `A`, `G` |
-| premises | `brings_about(A,G)`, `bad(G)` |
-| exceptions | `good_outweighs(A,G)` |
-| conclusion | `¬should_be_performed(A)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| C021/Q1 | Who bears G, and does that change how much it counts against doing A? | `bad(G)` (premise) |
-
-**Examples, rendered:**
-
-#### 1. Whose harm
-
-**as an argument**, with `negative_consequences_bearer`; a candidate; our own text.
-
-> An abortion can cause the man involved real emotional harm, so it should not be done without him.
-
-Bindings: A = “a pregnant person having an abortion without the man's agreement”; G = “the man suffering emotional harm”.
-
-- The action “a pregnant person having an abortion without the man's agreement” brings about “the man suffering emotional harm”.
-- “The man suffering emotional harm” is bad.
-- *Unless:* The action “a pregnant person having an abortion without the man's agreement” has good consequences that outweigh “the man suffering emotional harm”.
-- **So:** It is not the case that action “a pregnant person having an abortion without the man's agreement” should be performed.
-
-Pressed with its questions:
-
-- **C021/Q1**, at the premise ““The man suffering emotional harm” is bad”: As Kialo 5637.188 replies, if the pregnancy goes on it is the woman who bears both the emotional and the physical harm.
-
-#### 2. A sugar tax
-
-**as an argument**, with `negative_consequences_bearer`; a candidate; our own text.
-
-> A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
-
-Bindings: A = “bringing in a tax on sugary drinks”; G = “the weekly shop costing more”.
-
-- The action “bringing in a tax on sugary drinks” brings about “the weekly shop costing more”.
-- “The weekly shop costing more” is bad.
-- *Unless:* The action “bringing in a tax on sugary drinks” has good consequences that outweigh “the weekly shop costing more”.
-- **So:** It is not the case that action “bringing in a tax on sugary drinks” should be performed.
-
-Pressed with its questions:
-
-- **C021/Q1**, at the premise ““The weekly shop costing more” is bad”: The cost falls on those who drink a lot of them, the very people whose health the tax protects.
-
-#### 3. The festival road
-
-**as an argument**, with `negative_consequences_bearer`; a candidate; our own text.
-
-> Closing the high street for the festival would delay deliveries, so it should stay open.
-
-Bindings: A = “closing the high street for the festival”; G = “deliveries being delayed”.
-
-- The action “closing the high street for the festival” brings about “deliveries being delayed”.
-- “Deliveries being delayed” is bad.
-- *Unless:* The action “closing the high street for the festival” has good consequences that outweigh “deliveries being delayed”.
-- **So:** It is not the case that action “closing the high street for the festival” should be performed.
-
-Pressed with its questions:
-
-- **C021/Q1**, at the premise ““Deliveries being delayed” is bad”: The delays fall on the festival's own suppliers, who asked for the closure.
-
-#### 4. A dearer shop, denied
-
-**a near miss** of `negative_consequences_bearer`: it is `negative_consequences`; our own text.
-
-> A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
-
-Bindings: A = “bringing in a tax on sugary drinks”; G = “the weekly shop costing more”.
-
-- The action “bringing in a tax on sugary drinks” brings about “the weekly shop costing more”.
-- “The weekly shop costing more” is bad.
-- *Unless:* The action “bringing in a tax on sugary drinks” has good consequences that outweigh “the weekly shop costing more”.
-- **So:** It is not the case that action “bringing in a tax on sugary drinks” should be performed.
-
-Pressed with its questions:
-
-- **Challenge** (CQ:premise_acceptable), at the premise “The action “bringing in a tax on sugary drinks” brings about “the weekly shop costing more””: Most shoppers would switch to the untaxed drinks, so their weekly shop would cost the same.
-
-*Note:* The reply denies that the consequence follows, a question of likelihood (33/CQ1), not of who bears it.
-
 **Open questions:**
-- Merge into C005 as a third respect (how bad, for how many, for whom)?
+- Merge into C005 as a third respect (how bad, for how many, for whom)? Answered by D065 (proposal D008-D074): kept apart, a sided pair beside C005's neutral exception.
 
 ### C024. A certain harm against a speculative one
 
@@ -1486,14 +1311,14 @@ Replies to a consequence argument about the action rather than its consequences:
 
 **Kind:** exception. **Decision:** D066 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** medium.
 
-**Outcome:** merge (the guidelines' action_amendment role (kialo-batch2/guidelines.md)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066.
+**Outcome:** merge (the guidelines' action_amendment role (kialo-batch2/guidelines.md)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): a measure added so that the harm does not follow is an amended action, coded with its own scheme and the role action_amendment (kialo-batch2/guidelines.md §3.1, OC6).
 
 A reply to a negative consequence argument that keeps the action but adds a measure or narrows its scope, so that the bad consequence no longer follows. The batch-2 gold codes it with the role action_amendment, with no scheme question behind it.
 
 **Relation:** addition to negative_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One exception added to negative consequences: the cited consequence can be avoided by carrying out the same action another way.
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `negative_consequences_mitigation` is 1 from `negative_consequences`, sharing 4 (adds exception avoidable/2; the registry's relation: extends).
+- `negative_consequences_mitigation` is 1 from `negative_consequences`, sharing 6 (adds exception avoidable/2; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - 33/CQ1: It doubts that the consequence follows from the action as it is, not that it follows from the action as it could be done.
@@ -1530,7 +1355,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `bad(G)` |
-| exceptions | `good_outweighs(A,G)`, `avoidable(A,G)` |
+| exceptions | `good_outweighs(A,G)`, `too_slight(A,G)`, `harm_discounted_by_bearer(A,G)`, `avoidable(A,G)` |
 | conclusion | `¬should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -1554,6 +1379,8 @@ Bindings: A = “governments putting a tax on meat”; G = “poor communities l
 - The action “governments putting a tax on meat” brings about “poor communities losing secure access to food”.
 - “Poor communities losing secure access to food” is bad.
 - *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “poor communities losing secure access to food”.
+- *Unless:* In deciding on action “governments putting a tax on meat”, “poor communities losing secure access to food” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments putting a tax on meat”, the harm “poor communities losing secure access to food” counts for less because of whom it would fall on.
 - *Unless:* The action “governments putting a tax on meat” can be carried out so that “poor communities losing secure access to food” does not follow.
 - **So:** It is not the case that action “governments putting a tax on meat” should be performed.
 
@@ -1574,6 +1401,8 @@ Bindings: A = “governments putting a tax on meat”; G = “cheap imports push
 - The action “governments putting a tax on meat” brings about “cheap imports pushing domestic farms out of the market”.
 - “Cheap imports pushing domestic farms out of the market” is bad.
 - *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “cheap imports pushing domestic farms out of the market”.
+- *Unless:* In deciding on action “governments putting a tax on meat”, “cheap imports pushing domestic farms out of the market” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments putting a tax on meat”, the harm “cheap imports pushing domestic farms out of the market” counts for less because of whom it would fall on.
 - *Unless:* The action “governments putting a tax on meat” can be carried out so that “cheap imports pushing domestic farms out of the market” does not follow.
 - **So:** It is not the case that action “governments putting a tax on meat” should be performed.
 
@@ -1594,6 +1423,8 @@ Bindings: A = “building a new runway”; G = “planes flying over the town al
 - The action “building a new runway” brings about “planes flying over the town all night”.
 - “Planes flying over the town all night” is bad.
 - *Unless:* The action “building a new runway” has good consequences that outweigh “planes flying over the town all night”.
+- *Unless:* In deciding on action “building a new runway”, “planes flying over the town all night” is too slight a consequence to count.
+- *Unless:* In deciding on action “building a new runway”, the harm “planes flying over the town all night” counts for less because of whom it would fall on.
 - *Unless:* The action “building a new runway” can be carried out so that “planes flying over the town all night” does not follow.
 - **So:** It is not the case that action “building a new runway” should be performed.
 
@@ -1612,6 +1443,8 @@ Bindings: A = “governments funding cheaper plant protein”; G = “people eat
 - The action “governments funding cheaper plant protein” brings about “people eating less meat without food prices rising”.
 - “People eating less meat without food prices rising” is good.
 - *Unless:* The action “governments funding cheaper plant protein” has bad consequences that outweigh “people eating less meat without food prices rising”.
+- *Unless:* In deciding on action “governments funding cheaper plant protein”, “people eating less meat without food prices rising” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments funding cheaper plant protein”, the gain “people eating less meat without food prices rising” counts for less because of whom it would go to.
 - **So:** Action “governments funding cheaper plant protein” should be performed.
 
 *Note:* It proposes another action, argued for on its own, not the same action changed; an alternative, not a mitigation.
@@ -1624,14 +1457,14 @@ Bindings: A = “governments funding cheaper plant protein”; G = “people eat
 
 **Kind:** exception. **Decision:** D066 (decided). **Stage:** decided. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** medium.
 
-**Outcome:** merge (practical reasoning's better-means exception, answered by D075's answer scheme), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066.
+**Outcome:** merge (practical reasoning's better-means exception, answered by D075's answer scheme), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): against practical reasoning, better_means; against a consequence argument, Other naming C017 for a course said to be better, and a proposal of another course (action_amendment, move alternative_means) for one only put forward (kialo-batch2/guidelines.md §3.1, OC6).
 
 A reply to a positive consequences argument that another action would bring the same good at less cost, or more easily. ND lists alternative courses of action among the questions on consequences; the book's three questions do not ask it, and walton.yml gives it only to practical reasoning.
 
 **Relation:** addition to positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One exception added to positive consequences: another action brings the same good at less cost. Practical reasoning has the question (ND p. 155; the compendium's 22.1 CQ2 and CQ3).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `positive_consequences_alternative` is 1 from `positive_consequences`, sharing 4 (adds exception better_alternative/2; the registry's relation: extends).
+- `positive_consequences_alternative` is 1 from `positive_consequences`, sharing 6 (adds exception better_alternative/2; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - practical reasoning's realize_more_effectively(P,G,A) (CQ:other_means; (G,A) until 2026-11-24): The question exists, but only for practical reasoning; replies to a consequence argument have none.
@@ -1672,7 +1505,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `good(G)` |
-| exceptions | `bad_outweighs(A,G)`, `better_alternative(A,G)` |
+| exceptions | `bad_outweighs(A,G)`, `too_slight(A,G)`, `gain_discounted_by_bearer(A,G)`, `better_alternative(A,G)` |
 | conclusion | `should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -1696,6 +1529,8 @@ Bindings: A = “governments putting a tax on meat”; G = “lower emissions fr
 - The action “governments putting a tax on meat” brings about “lower emissions from farming”.
 - “Lower emissions from farming” is good.
 - *Unless:* The action “governments putting a tax on meat” has bad consequences that outweigh “lower emissions from farming”.
+- *Unless:* In deciding on action “governments putting a tax on meat”, “lower emissions from farming” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments putting a tax on meat”, the gain “lower emissions from farming” counts for less because of whom it would go to.
 - *Unless:* Some action other than “governments putting a tax on meat” would bring about “lower emissions from farming” at less cost.
 - **So:** Action “governments putting a tax on meat” should be performed.
 
@@ -1714,6 +1549,8 @@ Bindings: A = “the region building a new motorway lane”; G = “shorter jour
 - The action “the region building a new motorway lane” brings about “shorter journey times”.
 - “Shorter journey times” is good.
 - *Unless:* The action “the region building a new motorway lane” has bad consequences that outweigh “shorter journey times”.
+- *Unless:* In deciding on action “the region building a new motorway lane”, “shorter journey times” is too slight a consequence to count.
+- *Unless:* In deciding on action “the region building a new motorway lane”, the gain “shorter journey times” counts for less because of whom it would go to.
 - *Unless:* Some action other than “the region building a new motorway lane” would bring about “shorter journey times” at less cost.
 - **So:** Action “the region building a new motorway lane” should be performed.
 
@@ -1732,6 +1569,8 @@ Bindings: A = “the state paying a bonus for each child”; G = “a higher bir
 - The action “the state paying a bonus for each child” brings about “a higher birth rate”.
 - “A higher birth rate” is good.
 - *Unless:* The action “the state paying a bonus for each child” has bad consequences that outweigh “a higher birth rate”.
+- *Unless:* In deciding on action “the state paying a bonus for each child”, “a higher birth rate” is too slight a consequence to count.
+- *Unless:* In deciding on action “the state paying a bonus for each child”, the gain “a higher birth rate” counts for less because of whom it would go to.
 - *Unless:* Some action other than “the state paying a bonus for each child” would bring about “a higher birth rate” at less cost.
 - **So:** Action “the state paying a bonus for each child” should be performed.
 
@@ -1770,14 +1609,14 @@ Bindings: A = “bringing in a congestion charge”; S1 = “the city's air bein
 
 **Kind:** question. **Decision:** D066 (decided). **Stage:** decided. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** low.
 
-**Outcome:** merge (practical reasoning's possibility assumption, possible_bring_about(P,A) (possible(A) until 2026-11-24); against a consequence argument, a challenge to brings_about(A,G)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066.
+**Outcome:** merge (practical reasoning's possibility assumption, possible_bring_about(P,A) (possible(A) until 2026-11-24); against a consequence argument, a challenge to brings_about(A,G)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): that the action cannot be carried out at all answers 33/CQ1 at brings_about(A,G) (CQ:likelihood); the guidelines code a claim that it is hard or costly as a further consequence (kialo-batch2/guidelines.md §3.1, OC2, OC6).
 
 A reply that the action cannot be carried out, being impractical, politically out of reach or unaffordable, whatever its consequences. Practical reasoning presumes that the action is possible; the consequence schemes do not.
 
 **Relation:** addition to positive_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One assumption added to positive consequences: the action can be carried out. Practical reasoning has it (ND p. 155, the practicality premise; walton.yml's possible_bring_about(P,A), possible(A) until 2026-11-24).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `positive_consequences_feasible` is 1 from `positive_consequences`, sharing 4 (adds assumption possible/1; the registry's relation: extends).
+- `positive_consequences_feasible` is 1 from `positive_consequences`, sharing 6 (adds assumption possible/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - practical reasoning's possible_bring_about(P,A) (CQ:possibility; possible(A) until 2026-11-24): The assumption exists, but only for practical reasoning.
@@ -1811,7 +1650,7 @@ A sketch: not in `walton.yml`.
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `good(G)` |
 | assumptions | `possible(A)` |
-| exceptions | `bad_outweighs(A,G)` |
+| exceptions | `bad_outweighs(A,G)`, `too_slight(A,G)`, `gain_discounted_by_bearer(A,G)` |
 | conclusion | `should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -1832,6 +1671,8 @@ Bindings: A = “governments taxing meat and greening its production at once”;
 - “The fastest cut in emissions from meat” is good.
 - *Presumed:* Action “governments taxing meat and greening its production at once” is possible.
 - *Unless:* The action “governments taxing meat and greening its production at once” has bad consequences that outweigh “the fastest cut in emissions from meat”.
+- *Unless:* In deciding on action “governments taxing meat and greening its production at once”, “the fastest cut in emissions from meat” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments taxing meat and greening its production at once”, the gain “the fastest cut in emissions from meat” counts for less because of whom it would go to.
 - **So:** Action “governments taxing meat and greening its production at once” should be performed.
 
 Pressed with its questions:
@@ -1850,6 +1691,8 @@ Bindings: A = “building a high-speed line to the north”; G = “journey time
 - “Journey times to the north being halved” is good.
 - *Presumed:* Action “building a high-speed line to the north” is possible.
 - *Unless:* The action “building a high-speed line to the north” has bad consequences that outweigh “journey times to the north being halved”.
+- *Unless:* In deciding on action “building a high-speed line to the north”, “journey times to the north being halved” is too slight a consequence to count.
+- *Unless:* In deciding on action “building a high-speed line to the north”, the gain “journey times to the north being halved” counts for less because of whom it would go to.
 - **So:** Action “building a high-speed line to the north” should be performed.
 
 Pressed with its questions:
@@ -1868,6 +1711,8 @@ Bindings: A = “the council providing free school meals for every pupil”; G =
 - “No pupil being hungry in class” is good.
 - *Presumed:* Action “the council providing free school meals for every pupil” is possible.
 - *Unless:* The action “the council providing free school meals for every pupil” has bad consequences that outweigh “no pupil being hungry in class”.
+- *Unless:* In deciding on action “the council providing free school meals for every pupil”, “no pupil being hungry in class” is too slight a consequence to count.
+- *Unless:* In deciding on action “the council providing free school meals for every pupil”, the gain “no pupil being hungry in class” counts for less because of whom it would go to.
 - **So:** Action “the council providing free school meals for every pupil” should be performed.
 
 Pressed with its questions:
@@ -1885,6 +1730,8 @@ Bindings: A = “building a high-speed line to the north”; G = “the line cos
 - The action “building a high-speed line to the north” brings about “the line costing billions”.
 - “The line costing billions” is bad.
 - *Unless:* The action “building a high-speed line to the north” has good consequences that outweigh “the line costing billions”.
+- *Unless:* In deciding on action “building a high-speed line to the north”, “the line costing billions” is too slight a consequence to count.
+- *Unless:* In deciding on action “building a high-speed line to the north”, the harm “the line costing billions” counts for less because of whom it would fall on.
 - **So:** It is not the case that action “building a high-speed line to the north” should be performed.
 
 *Note:* A cost is a consequence of doing the action, argued against it; it does not say that the action cannot be done.
@@ -1906,14 +1753,14 @@ A consequence set against a right, a duty or a value, not against another conseq
 
 **Kind:** exception. **Decision:** D067 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** medium.
 
-**Outcome:** merge (the value schemes (positive_value, negative_value)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D067.
+**Outcome:** merge (the value schemes (positive_value, negative_value)), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D067: no change (proposal D008-D074, 2026-11-25): a right, a duty or a value set against consequences is argued with the value schemes (kialo-batch2/guidelines.md §3.1, OC5).
 
 A consequence argument answered by a right, a duty or a value rather than by another consequence: liberty against health costs, a right to life against hardship. D055's exceptions compare consequences only; nothing in walton.yml lets a right or a value defeat, or outweigh, a consequence argument.
 
 **Relation:** addition to positive_consequences, negative_consequences (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One exception added: a right or a duty rules the action in or out whatever its consequences.
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `positive_consequences_rights` is 1 from `positive_consequences`, sharing 4 (adds exception forbidden/1; the registry's relation: extends).
+- `positive_consequences_rights` is 1 from `positive_consequences`, sharing 6 (adds exception forbidden/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - practical reasoning's side-effect exception (side_effects(A,S1) until 2026-11-24, now bad_outweighs(A,G)): It weighed a value that the action demotes, inside practical reasoning only; since proposal D004-D075 it is the claim that the bad consequences outweigh the goal (D070, D091).
@@ -1952,7 +1799,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `G` |
 | premises | `brings_about(A,G)`, `good(G)` |
-| exceptions | `bad_outweighs(A,G)`, `forbidden(A)` |
+| exceptions | `bad_outweighs(A,G)`, `too_slight(A,G)`, `gain_discounted_by_bearer(A,G)`, `forbidden(A)` |
 | conclusion | `should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -1976,6 +1823,8 @@ Bindings: A = “the state reading everyone's email”; G = “more criminals be
 - The action “the state reading everyone's email” brings about “more criminals being caught”.
 - “More criminals being caught” is good.
 - *Unless:* The action “the state reading everyone's email” has bad consequences that outweigh “more criminals being caught”.
+- *Unless:* In deciding on action “the state reading everyone's email”, “more criminals being caught” is too slight a consequence to count.
+- *Unless:* In deciding on action “the state reading everyone's email”, the gain “more criminals being caught” counts for less because of whom it would go to.
 - *Unless:* Doing “the state reading everyone's email” would violate a right or a duty that no good consequence outweighs.
 - **So:** Action “the state reading everyone's email” should be performed.
 
@@ -1994,6 +1843,8 @@ Bindings: A = “the surgeon taking one healthy patient's organs”; G = “five
 - The action “the surgeon taking one healthy patient's organs” brings about “five dying patients being saved”.
 - “Five dying patients being saved” is good.
 - *Unless:* The action “the surgeon taking one healthy patient's organs” has bad consequences that outweigh “five dying patients being saved”.
+- *Unless:* In deciding on action “the surgeon taking one healthy patient's organs”, “five dying patients being saved” is too slight a consequence to count.
+- *Unless:* In deciding on action “the surgeon taking one healthy patient's organs”, the gain “five dying patients being saved” counts for less because of whom it would go to.
 - *Unless:* Doing “the surgeon taking one healthy patient's organs” would violate a right or a duty that no good consequence outweighs.
 - **So:** Action “the surgeon taking one healthy patient's organs” should be performed.
 
@@ -2012,6 +1863,8 @@ Bindings: A = “governments putting a tax on meat”; G = “a fall in unhealth
 - The action “governments putting a tax on meat” brings about “a fall in unhealthy meat consumption”.
 - “A fall in unhealthy meat consumption” is good.
 - *Unless:* The action “governments putting a tax on meat” has bad consequences that outweigh “a fall in unhealthy meat consumption”.
+- *Unless:* In deciding on action “governments putting a tax on meat”, “a fall in unhealthy meat consumption” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments putting a tax on meat”, the gain “a fall in unhealthy meat consumption” counts for less because of whom it would go to.
 - *Unless:* Doing “governments putting a tax on meat” would violate a right or a duty that no good consequence outweighs.
 - **So:** Action “governments putting a tax on meat” should be performed.
 
@@ -2030,6 +1883,8 @@ Bindings: A = “governments putting a tax on meat”; G = “people resenting t
 - The action “governments putting a tax on meat” brings about “people resenting the state for policing their food”.
 - “People resenting the state for policing their food” is bad.
 - *Unless:* The action “governments putting a tax on meat” has good consequences that outweigh “people resenting the state for policing their food”.
+- *Unless:* In deciding on action “governments putting a tax on meat”, “people resenting the state for policing their food” is too slight a consequence to count.
+- *Unless:* In deciding on action “governments putting a tax on meat”, the harm “people resenting the state for policing their food” counts for less because of whom it would fall on.
 - **So:** It is not the case that action “governments putting a tax on meat” should be performed.
 
 *Note:* It cites a consequence of the tax, people's resentment, not a right that rules it out, so it is negative consequences.
@@ -2062,7 +1917,7 @@ An action should be done because, if it is not, a bad outcome befalls others or 
 **Relation:** variant of positive_consequences, negative_consequences_prudential (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Positive consequences with the harm of not acting cited as such (omission_leads_to, bad) instead of its not happening as a good; or the prudential form for a harm to others. The guidelines code it as positive consequences (kialo-batch2/guidelines.md §3.1, OC13). Need for help (38) and distress (39) argue from a third party's harm too (the book p. 101), but their conclusions meet nothing (D063), so they are closest items, not its base.
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `harm_of_inaction` is 4 from `positive_consequences`, sharing 2 (adds premise bad/1, premise omission_leads_to/2; lacks premise brings_about/2, premise good/1).
+- `harm_of_inaction` is 4 from `positive_consequences`, sharing 4 (adds premise bad/1, premise omission_leads_to/2; lacks premise brings_about/2, premise good/1).
 
 **Closest, and why each falls short:**
 - positive consequences (33.1), with G the harm's not happening: It fits, but restates the harm as a good ("the streets staying dry"), and its likelihood question then asks about the action's effect, not about what happens without it.
@@ -2107,7 +1962,7 @@ A sketch: not in `walton.yml`.
 |---|---|
 | variables | `A`, `C` |
 | premises | `omission_leads_to(A,C)`, `bad(C)` |
-| exceptions | `bad_outweighs(A,C)` |
+| exceptions | `bad_outweighs(A,C)`, `too_slight(A,C)`, `gain_discounted_by_bearer(A,C)` |
 | conclusion | `should_be_performed(A)` |
 
 | Question | Asks | Targets |
@@ -2132,6 +1987,8 @@ Bindings: A = “pregnant people having access to abortion services”; C = “p
 - If “pregnant people having access to abortion services” is not done, “parents without the means raising disabled children to shorter, harder lives” will follow.
 - “Parents without the means raising disabled children to shorter, harder lives” is bad.
 - *Unless:* The action “pregnant people having access to abortion services” has bad consequences that outweigh “parents without the means raising disabled children to shorter, harder lives”.
+- *Unless:* In deciding on action “pregnant people having access to abortion services”, “parents without the means raising disabled children to shorter, harder lives” is too slight a consequence to count.
+- *Unless:* In deciding on action “pregnant people having access to abortion services”, the gain “parents without the means raising disabled children to shorter, harder lives” counts for less because of whom it would go to.
 - **So:** Action “pregnant people having access to abortion services” should be performed.
 
 *Note:* The Kialo text is condensed.
@@ -2147,6 +2004,8 @@ Bindings: A = “abortion being legal”; C = “people seeking illegal and unsa
 - If “abortion being legal” is not done, “people seeking illegal and unsafe abortions” will follow.
 - “People seeking illegal and unsafe abortions” is bad.
 - *Unless:* The action “abortion being legal” has bad consequences that outweigh “people seeking illegal and unsafe abortions”.
+- *Unless:* In deciding on action “abortion being legal”, “people seeking illegal and unsafe abortions” is too slight a consequence to count.
+- *Unless:* In deciding on action “abortion being legal”, the gain “people seeking illegal and unsafe abortions” counts for less because of whom it would go to.
 - **So:** Action “abortion being legal” should be performed.
 
 Pressed with its questions:
@@ -2164,6 +2023,8 @@ Bindings: A = “the county raising the river wall”; C = “the riverside stre
 - If “the county raising the river wall” is not done, “the riverside streets flooding every winter” will follow.
 - “The riverside streets flooding every winter” is bad.
 - *Unless:* The action “the county raising the river wall” has bad consequences that outweigh “the riverside streets flooding every winter”.
+- *Unless:* In deciding on action “the county raising the river wall”, “the riverside streets flooding every winter” is too slight a consequence to count.
+- *Unless:* In deciding on action “the county raising the river wall”, the gain “the riverside streets flooding every winter” counts for less because of whom it would go to.
 - **So:** Action “the county raising the river wall” should be performed.
 
 Pressed with its questions:
@@ -2182,6 +2043,7 @@ Bindings: X = “insuring your house”; C = “losing everything in a fire”.
 - But, if you do not do “insuring your house”, some consequence “losing everything in a fire”, which will be very bad for you, will occur, or is likely to occur.
 - *Presumed:* If “insuring your house” is not done, “losing everything in a fire” is likely to follow.
 - *Unless:* The action “insuring your house” has bad consequences that outweigh “losing everything in a fire”.
+- *Unless:* Doing “insuring your house” would fail to avert “losing everything in a fire”.
 - **So:** Action “insuring your house” should be performed.
 
 *Note:* The harm falls on the one who would act, the addressee who was considering not insuring, so it is the prudential form (33.4).
@@ -2190,6 +2052,7 @@ Bindings: X = “insuring your house”; C = “losing everything in a fire”.
 - D027 settled (33.3's omission case); D055's exception is applied.
 
 **Open questions:**
+- Its sketch takes positive consequences' exceptions (proposal D008-D074), the bearer exception among them, gain_discounted_by_bearer(A,C), whose template names a gain where this scheme cites a harm: if it is added, which bearer exception, and with what template?
 - A scheme of its own, or a coding rule (positive consequences with the harm's not happening as G), as proposal D055-D059 has it?
 - Does it merge with need for help (38) once D063 gives that scheme a practical conclusion?
 
@@ -2197,14 +2060,11 @@ Bindings: X = “insuring your house”; C = “losing everything in a fire”.
 
 **Kind:** question. **Decision:** D069 (decided). **Stage:** decided. **Found:** the second independent review of proposal D055-D059, 2026-10-22. **Finder's confidence:** medium.
 
-**Outcome:** merge (negative_consequences_prudential, as a question), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D069.
+**Outcome:** merge (negative_consequences_prudential, as a question), 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D069: applied by proposal D008-D074 (2026-11-25), as the exception fails_to_avert(X,C) of 33.4, the critic's to support (D003); the sketch and its examples left the registry then (the proposal keeps examples of its kind).
 
 The prudential form (33.4) says that not doing X leads to C, but not that doing X would avert C. A reply that C would follow anyway, or that something else is what averts it, has no question to answer and no formula to attack. Fear (36) states the premise: the action is the only way to prevent the harm.
 
 **Relation:** addition to negative_consequences_prudential (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One assumption added to the prudential form: doing X would avert C. Fear (36) has the premise (only_way_prevent).
-
-**Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `prudential_averts` is 1 from `negative_consequences_prudential`, sharing 5 (adds assumption averts/2; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - 33/CQ1: It asks how likely C is without X, not whether X stops C.
@@ -2226,107 +2086,8 @@ The prudential form (33.4) says that not doing X leads to C, but not that doing 
 | kialo 5637 | 5637.2803; also C017 | strain | Education, not legalisation, is what would reduce the harm of illegal abortions; another remedy averts it. | review of D055-D059 v2 | session check, 2026-10-22 |
 | kialo 13292 | 13292.196; also C015 | strain | A tax on beef alone leaves the other meats' harms; the narrower action does not avert all of the harm. | review of D055-D059 v2 | session check, 2026-10-22 |
 
-**The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
-
-On D055-D059 version 2's form of the prudential argument.
-
-#### `prudential_averts`: The prudential form with an averting assumption (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `X`, `C` |
-| premises | `not_doing(X)`, `bad_consequence(X,C)` |
-| assumptions | `strongly_occur(X,C)`, `averts(X,C)` |
-| exceptions | `bad_outweighs(X,C)` |
-| conclusion | `should_be_performed(X)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| C016/Q1 | Would doing X actually avert C? | `averts(X,C)` (assumption) |
-
-**Its templates:**
-
-- `averts/2`: “Doing %s would avert %s.”
-
-**Examples, rendered:**
-
-#### 1. A backup in the same bag
-
-**as an argument**, with `prudential_averts`; a candidate; our own text.
-
-> You were thinking of not backing up your thesis. But if you don't, a theft could lose a year's work, which would be very bad for you. So back it up.
-
-Bindings: X = “backing up your thesis”; C = “losing a year's work to a theft”.
-
-- You were considering not doing “backing up your thesis”.
-- But, if you do not do “backing up your thesis”, some consequence “losing a year's work to a theft”, which will be very bad for you, will occur, or is likely to occur.
-- *Presumed:* If “backing up your thesis” is not done, “losing a year's work to a theft” is likely to follow.
-- *Presumed:* Doing “backing up your thesis” would avert “losing a year's work to a theft”.
-- *Unless:* The action “backing up your thesis” has bad consequences that outweigh “losing a year's work to a theft”.
-- **So:** Action “backing up your thesis” should be performed.
-
-Pressed with its questions:
-
-- **C016/Q1**, at the assumption “Doing “backing up your thesis” would avert “losing a year's work to a theft””: The only backup you plan is a drive kept in the same bag as the laptop; a thief takes both.
-
-#### 2. The wrong strain
-
-**as an argument**, with `prudential_averts`; a candidate; our own text.
-
-> You were going to skip the flu jab. But if you don't get it, you may catch the flu that is going round, which would be very bad for you. So get it.
-
-Bindings: X = “getting the flu jab”; C = “catching the flu that is going round”.
-
-- You were considering not doing “getting the flu jab”.
-- But, if you do not do “getting the flu jab”, some consequence “catching the flu that is going round”, which will be very bad for you, will occur, or is likely to occur.
-- *Presumed:* If “getting the flu jab” is not done, “catching the flu that is going round” is likely to follow.
-- *Presumed:* Doing “getting the flu jab” would avert “catching the flu that is going round”.
-- *Unless:* The action “getting the flu jab” has bad consequences that outweigh “catching the flu that is going round”.
-- **So:** Action “getting the flu jab” should be performed.
-
-Pressed with its questions:
-
-- **C016/Q1**, at the assumption “Doing “getting the flu jab” would avert “catching the flu that is going round””: This year's jab was made for a different strain from the one going round.
-
-#### 3. A smoke alarm
-
-**as an argument**, with `prudential_averts`; a candidate; our own text.
-
-> You were thinking of not fitting a smoke alarm. But if you don't, a fire at night could kill you in your sleep, which would be very bad for you. So fit one.
-
-Bindings: X = “fitting a smoke alarm”; C = “dying in a night-time fire”.
-
-- You were considering not doing “fitting a smoke alarm”.
-- But, if you do not do “fitting a smoke alarm”, some consequence “dying in a night-time fire”, which will be very bad for you, will occur, or is likely to occur.
-- *Presumed:* If “fitting a smoke alarm” is not done, “dying in a night-time fire” is likely to follow.
-- *Presumed:* Doing “fitting a smoke alarm” would avert “dying in a night-time fire”.
-- *Unless:* The action “fitting a smoke alarm” has bad consequences that outweigh “dying in a night-time fire”.
-- **So:** Action “fitting a smoke alarm” should be performed.
-
-Pressed with its questions:
-
-- **C016/Q1**, at the assumption “Doing “fitting a smoke alarm” would avert “dying in a night-time fire””: You sleep with earplugs in; an ordinary alarm would not wake you.
-
-#### 4. Locking the shed
-
-**a near miss** of `prudential_averts`: it is `fear`; our own text.
-
-> If you don't lock the shed, it will be broken into; that would be very bad for you; you ought to prevent it, and locking it is the only way. So lock it.
-
-Bindings: X = “locking the shed”; Y = “the shed being broken into”.
-
-- If you do not bring about “locking the shed”, then “the shed being broken into” will occur.
-- “The shed being broken into” is very bad for you.
-- Therefore, you ought to prevent “the shed being broken into” if possible.
-- But the only way for you to prevent “the shed being broken into” is bring about “locking the shed”.
-- **So:** You ought to bring about “locking the shed”.
-
-*Note:* Fear states that the action is the only way to prevent the harm, the premise the prudential form lacks.
-
 **Open questions:**
-- An assumption (the proponent's burden once asked) or an exception (the critic's)?
+- An assumption (the proponent's burden once asked) or an exception (the critic's)? Answered by D069 and D003 (proposal D008-D074): an exception.
 - Does it belong to C015's scheme as well, if that is added?
 
 ### C020. One consideration as a gain and as an averted harm
@@ -2399,14 +2160,11 @@ Arguments whose baseline is an outcome that happens whatever is done: the action
 
 **Kind:** scheme. **Decision:** D072 (decided). **Stage:** decided. **Found:** the third independent review of proposal D055-D059, 2026-10-23. **Finder's confidence:** medium.
 
-**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D072: a scheme of its own, through the proposal path.
+**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D072: added to walton.yml by proposal D008-D074 (2026-11-25), as harm_reduction, its premises scoped to the action, with the owner's two exceptions (preventable_otherwise, no_net_reduction); the steering form is not covered; the sketch and its examples left the registry then (the proposal keeps examples of its kind).
 
 An outcome will happen whether or not the action is taken, and the action makes it less harmful, or lets it be steered, so the action should be taken: abortions happen whether legal or not, so make them safe; enhancement is coming anyway, so shape it. The comparison is with a baseline in which the outcome still happens, not with one in which it does not.
 
 **Relation:** variant of positive_consequences (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Positive consequences whose good is a harm made less harmful, with a premise that the outcome happens anyway and an exception that the action encourages it.
-
-**Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `harm_reduction` is 6 from `positive_consequences`, sharing 1 (adds exception encourages/2, premise happens_anyway/1, premise less_harmful_with/2; lacks exception bad_outweighs/2, premise brings_about/2, premise good/1).
 
 **Closest, and why each falls short:**
 - positive consequences (33.1): It cites a good consequence (safer abortions) but has no premise that the outcome happens anyway, which is what its replies dispute.
@@ -2436,98 +2194,8 @@ An outcome will happen whether or not the action is taken, and the action makes 
 | kialo 5637 | 5637.739 (archived) | strain | Many women in Texas induced their own abortions with black-market pills; evidence that abortions happen anyway, offered for 5637.1583 (unsafe methods). | review of D055-D059 v4 | session check, 2026-10-23 |
 | kialo 5637 | 5637.3751 (archived) | strain | Women who end a pregnancy can have children later, so the lives come anyway, only later; the premise about timing, not occurrence. | review of D055-D059 v4 | session check, 2026-10-23 |
 
-**The sketch** (checked as a proposal's candidates are; not in `walton.yml`):
-
-A first form, drafted by the third review and checked here.
-
-#### `harm_reduction`: Argument from inevitability (candidate)
-
-A sketch: not in `walton.yml`.
-
-| Role | Proposed |
-|---|---|
-| variables | `A`, `E` |
-| premises | `happens_anyway(E)`, `less_harmful_with(A,E)` |
-| exceptions | `encourages(A,E)` |
-| conclusion | `should_be_performed(A)` |
-
-| Question | Asks | Targets |
-|---|---|---|
-| C022/Q1 | Would E happen whatever is done, or could it be prevented? | `happens_anyway(E)` (premise) |
-| C022/Q2 | Would doing A make E happen more often? | `encourages(A,E)` (exception) |
-
-**Its templates:**
-
-- `encourages/2`: “Doing %s would make %s happen more often.”
-- `happens_anyway/1`: “%s will happen whether or not anything is done about it.”
-- `less_harmful_with/2`: “Doing %s would make %s less harmful.”
-
-**Examples, rendered:**
-
-#### 1. Pill testing at festivals
-
-**as an argument**, with `harm_reduction`; a candidate; our own text.
-
-> People will take pills at festivals whatever the rules say, and testing stalls catch the dangerous batches, so festivals should offer them.
-
-Bindings: A = “festivals offering pill testing”; E = “people taking pills at festivals”.
-
-- “People taking pills at festivals” will happen whether or not anything is done about it.
-- Doing “festivals offering pill testing” would make “people taking pills at festivals” less harmful.
-- *Unless:* Doing “festivals offering pill testing” would make “people taking pills at festivals” happen more often.
-- **So:** Action “festivals offering pill testing” should be performed.
-
-Pressed with its questions:
-
-- **C022/Q2**, at the exception “Doing “festivals offering pill testing” would make “people taking pills at festivals” happen more often”: Where testing is offered, more first-timers try pills, reassured by the stall.
-
-#### 2. Driving lessons at school
-
-**as an argument**, with `harm_reduction`; a candidate; our own text.
-
-> Teenagers in the countryside will drive at seventeen whatever we think, so the school should run proper driving lessons.
-
-Bindings: A = “the school running driving lessons”; E = “rural teenagers driving at seventeen”.
-
-- “Rural teenagers driving at seventeen” will happen whether or not anything is done about it.
-- Doing “the school running driving lessons” would make “rural teenagers driving at seventeen” less harmful.
-- *Unless:* Doing “the school running driving lessons” would make “rural teenagers driving at seventeen” happen more often.
-- **So:** Action “the school running driving lessons” should be performed.
-
-#### 3. Shaping what is coming
-
-**as an argument**, with `harm_reduction`; a candidate; our own text.
-
-> Automation of the warehouse will come whether the union likes it or not, so the union should negotiate how it is brought in.
-
-Bindings: A = “the union negotiating how automation is brought in”; E = “the warehouse being automated”.
-
-- “The warehouse being automated” will happen whether or not anything is done about it.
-- Doing “the union negotiating how automation is brought in” would make “the warehouse being automated” less harmful.
-- *Unless:* Doing “the union negotiating how automation is brought in” would make “the warehouse being automated” happen more often.
-- **So:** Action “the union negotiating how automation is brought in” should be performed.
-
-Pressed with its questions:
-
-- **C022/Q1**, at the premise ““The warehouse being automated” will happen whether or not anything is done about it”: The owners shelved automation twice for cost; it is far from certain.
-
-#### 4. Safer roads
-
-**a near miss** of `harm_reduction`: it is `positive_consequences`; our own text.
-
-> A speed camera on the school road would make drivers slow down, so the council should install one.
-
-Bindings: A = “the council installing a speed camera on the school road”; G = “drivers slowing down on the school road”.
-
-- The action “the council installing a speed camera on the school road” brings about “drivers slowing down on the school road”.
-- “Drivers slowing down on the school road” is good.
-- *Unless:* The action “the council installing a speed camera on the school road” has bad consequences that outweigh “drivers slowing down on the school road”.
-- **So:** Action “the council installing a speed camera on the school road” should be performed.
-
-*Note:* Nothing is said to happen anyway; the action is argued from its consequence, so it is positive consequences.
-
 **Open questions:**
-- One scheme for both forms (harm reduction, steering), or two?
+- One scheme for both forms (harm reduction, steering), or two? harm_reduction covers the first (D072, proposal D008-D074); the steering form (13564.84, 13564.224) is coded with Other, naming C022, until it has a scheme of its own, or is found not to need one.
 - Its replies in 5637 are parallel refutations (5637.4558, guns; 5637.4457, burglaries) and the objection that inevitability is no reason to permit (5637.94, 13564.260): an exception, or a question?
 
 ## Threat or warning
@@ -2549,7 +2217,7 @@ A prudential warning (33.4) can carry an indirect threat when the speaker can br
 **Relation:** addition to negative_consequences_prudential (one premise, assumption, exception or question added to a scheme WAG has; usually: merge into the base). One exception added to the prudential form: the speaker means to bring the harm about. The book tells a warning from a threat by that commitment (pp. 102-104), and ND describes the indirect threat put as a warning (p. 114).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `prudential_indirect_threat` is 1 from `negative_consequences_prudential`, sharing 5 (adds exception speaker_brings_about/1; the registry's relation: extends).
+- `prudential_indirect_threat` is 1 from `negative_consequences_prudential`, sharing 6 (adds exception speaker_brings_about/1; the registry's relation: extends).
 
 **Closest, and why each falls short:**
 - argument from threat (35) and the disjunctive threat (35.1): They code an explicit threat; a veiled one looks like a warning.
@@ -2573,7 +2241,7 @@ A sketch: not in `walton.yml`.
 | variables | `X`, `C` |
 | premises | `not_doing(X)`, `bad_consequence(X,C)` |
 | assumptions | `strongly_occur(X,C)` |
-| exceptions | `bad_outweighs(X,C)`, `speaker_brings_about(C)` |
+| exceptions | `bad_outweighs(X,C)`, `fails_to_avert(X,C)`, `speaker_brings_about(C)` |
 | conclusion | `should_be_performed(X)` |
 
 | Question | Asks | Targets |
@@ -2598,6 +2266,7 @@ Bindings: X = “paying for protection”; C = “the shop's windows being broke
 - But, if you do not do “paying for protection”, some consequence “the shop's windows being broken”, which will be very bad for you, will occur, or is likely to occur.
 - *Presumed:* If “paying for protection” is not done, “the shop's windows being broken” is likely to follow.
 - *Unless:* The action “paying for protection” has bad consequences that outweigh “the shop's windows being broken”.
+- *Unless:* Doing “paying for protection” would fail to avert “the shop's windows being broken”.
 - *Unless:* The one giving the warning can bring about “the shop's windows being broken”, and means to if the warning is ignored.
 - **So:** Action “paying for protection” should be performed.
 
@@ -2617,6 +2286,7 @@ Bindings: X = “giving up smoking”; C = “getting lung disease”.
 - But, if you do not do “giving up smoking”, some consequence “getting lung disease”, which will be very bad for you, will occur, or is likely to occur.
 - *Presumed:* If “giving up smoking” is not done, “getting lung disease” is likely to follow.
 - *Unless:* The action “giving up smoking” has bad consequences that outweigh “getting lung disease”.
+- *Unless:* Doing “giving up smoking” would fail to avert “getting lung disease”.
 - *Unless:* The one giving the warning can bring about “getting lung disease”, and means to if the warning is ignored.
 - **So:** Action “giving up smoking” should be performed.
 
@@ -2636,6 +2306,7 @@ Bindings: X = “signing the new lease by Friday”; C = “losing the flat”.
 - But, if you do not do “signing the new lease by Friday”, some consequence “losing the flat”, which will be very bad for you, will occur, or is likely to occur.
 - *Presumed:* If “signing the new lease by Friday” is not done, “losing the flat” is likely to follow.
 - *Unless:* The action “signing the new lease by Friday” has bad consequences that outweigh “losing the flat”.
+- *Unless:* Doing “signing the new lease by Friday” would fail to avert “losing the flat”.
 - *Unless:* The one giving the warning can bring about “losing the flat”, and means to if the warning is ignored.
 - **So:** Action “signing the new lease by Friday” should be performed.
 

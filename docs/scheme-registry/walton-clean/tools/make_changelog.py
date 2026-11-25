@@ -353,6 +353,40 @@ def main(outdir):
       "`realize_more_effectively(P,G,A)` | 2026-11-24 | Decisions D075 and D089 (the same proposal). The answer scheme for "
       "another means that does better, more surely, sooner or at lower cost, for the same agent and goal, which the "
       "agent can take. After the book's questions on other means (22.1, 22.4; ch. 3, p. 96); not in the compendium. |")
+    w("| `positive_consequences`, `negative_consequences`, `negative_consequences_prudential` | exceptions added: "
+      "`too_slight(A,G)` and `gain_discounted_by_bearer(A,G)` to `positive_consequences`, `too_slight(A,G)` and "
+      "`harm_discounted_by_bearer(A,G)` to `negative_consequences`, `fails_to_avert(X,C)` to "
+      "`negative_consequences_prudential` (new templates) | 2026-11-25 | Decisions D065, D069 and D053 (WAG's "
+      "proposal D008-D074, version 5 as amended, after independent reviews, with the owner's declarations under "
+      "D053). The consequence schemes had no exception for a consequence too slight to count, or one that counts "
+      "for less because of who bears it, and the prudential form had none for an action that would not avert the "
+      "harm. `too_slight` is shared by the arguments for and against the action that cite the same consequence: the "
+      "owner declared it neutral as to polarity, with its scope (D053). Who bears a consequence is not neutral, so "
+      "the bearer exceptions are sided, one on each side. `negative_consequences_reasoning` (33.3) is unchanged. "
+      "The templates are in our own words. |")
+    w("| `positive_consequences_modal`, `negative_consequences_modal` (new) | written for WAG: premises "
+      "`may_bring_about(A,G)` (new template) and `good(G)` or `bad(G)`; the exceptions of the categorical scheme of "
+      "the same side; conclusion `may_be_worth_performing(A,G)` or `may_be_unwise_to_perform(A,G)` (new templates) "
+      "| 2026-11-25 | Decision D008 (the same proposal). A claim that an action may bring about a consequence could "
+      "only be coded with `brings_about(A,G)`, which asserts more than the claim does. The modal variants assert "
+      "the possibility only, and they conclude no recommendation: a bridge carries them to it. After the "
+      "compendium's 33.1 and 33.2. |")
+    w("| `bridge_from_possible_good`, `bridge_from_possible_harm` (new) | written for WAG: premises the modal "
+      "variant's conclusion and `matters_to_decision(A,G)`; exception `worth_finding_out_first(A,G)`; conclusion "
+      "`should_be_performed(A)` or `¬should_be_performed(A)` (new templates) | 2026-11-25 | Decisions D008 and D053 "
+      "(the same proposal; the owner declared the exception neutral as to polarity, with its scope, after the "
+      "review of version 5 as amended). A possibility reaches the recommendation only through an explicit warrant: "
+      "its arguer supports the premise that the chance matters to the decision, given what G would be, and the "
+      "bridge has an exception of its own, that it is worth finding out first whether A would bring about G, so "
+      "that until then the possibility does not count. The exception takes the bridge away, not the decision. The "
+      "bridge is an entry condition, not a weight. On the pattern of decisions D011 and D063; not in the "
+      "compendium. |")
+    w("| `harm_reduction` (new) | written for WAG: premises `happens_anyway(A,E)` and "
+      "`less_harmful_per_occurrence(A,E)`; exceptions `preventable_otherwise(A,E)` and `no_net_reduction(A,E)`; "
+      "conclusion `should_be_performed(A)` (new templates) | 2026-11-25 | Decision D072 (the same proposal; "
+      "candidate C022). That E happens whether or not A is done, and that A makes each occurrence less harmful, had "
+      "no scheme: it is not the prudential form (33.4), since E happens anyway, nor a weighing of consequences. The "
+      "form that steers what is coming anyway is not covered. Not in the compendium. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------

@@ -25,10 +25,11 @@
 # application-v4/review.md), version 3 (8adb3b3) and its check, version 2
 # (380ae77) and its independent review, version 1 (7ec96d8) and its review,
 # an external review the owner sent, and the owner's answers of 2026-11-25
-# (refinements of D008, D065, D069 and D072) came before. Not yet applied.
+# (refinements of D008, D065, D069 and D072) came before. Applied 2026-11-25.
 
 decisions: [D008, D065, D066, D067, D069, D072, D074]
 title: "Consequences: the modal forms and their bridges, how serious and on whom, the averted harm, what happens anyway, and the appeal to consequences"
+applied: 2026-11-25, through walton-clean/tools/edits.py (the owner's decisions D008, D065, D066, D069, D072 and D074, under the owner's standing rule and answers of 2026-11-25, and the owner's declarations under D053 the same day); the annotation rules are guidelines §3 and §3.1
 summary: |-
   **What changes.**
   - **D008.** Two schemes of their own, modal variants of 33.1 and 33.2, as

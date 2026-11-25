@@ -28,10 +28,12 @@ with open(os.path.join(DOC, 'gold-format1.json'), encoding='utf-8') as fh:
 with open(os.path.join(DOC, 'case.json'), encoding='utf-8') as fh:
     CASE = json.load(fh)
 ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs): ')
-# The walton.yml the format-1 gold was made with (WAG 96c3c5a), and today's.
+# The walton.yml the format-1 gold was made with (WAG 96c3c5a), and the copy
+# of it that validate.py reads for a format-1 file (format1/walton.yml; D092:
+# checked as it was made; proposal D008-D074).
 WALTON_OF_FORMAT1 = 'bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42'
-with open(os.path.join(DOC, '..', 'scheme-registry', 'walton-clean', 'walton.yml'), 'rb') as fh:
-    WALTON_NOW = hashlib.sha256(fh.read()).hexdigest()
+with open(os.path.join(DOC, 'format1', 'walton.yml'), 'rb') as fh:
+    WALTON_FORMAT1_COPY = hashlib.sha256(fh.read()).hexdigest()
 
 
 def run(gold, case=None, pin=True):
@@ -100,6 +102,26 @@ def renumber(g, old, new):
                 o['instance'] = new
 
 
+def as_annotator(g, name='model-x'):
+    """The gold as an annotator's record: no adjudication, and each claim's
+    primary instance first, as <claim>#1, as an annotator numbers it (R12); a
+    gold keeps the ids its history gave them (a recoded claim's bridge is #2
+    or #4), so the primary and #1 swap ids, and every record that names them
+    follows."""
+    g['annotator'] = name
+    for it in g['items']:
+        it.pop('adjudication', None)
+        first = it['kialo_claim_id'] + '#1'
+        pid = next(x['id'] for x in it['instances'] if x['primary'])
+        if pid != first:
+            tmp = it['kialo_claim_id'] + '#0'
+            renumber(g, pid, tmp)
+            renumber(g, first, pid)
+            renumber(g, tmp, first)
+        it['instances'].sort(key=lambda x: not x['primary'])
+    return g
+
+
 def next_id(it):
     used = [int(x['id'].split('#')[1]) for x in it['instances']] + [int(x.split('#')[1]) for x in it.get('retired', [])]
     return f"{it['kialo_claim_id']}#{max(used) + 1}"
@@ -132,16 +154,13 @@ class Rules(unittest.TestCase):
         self.assertIn('format 2', out)
         self.assertNotIn('UNRESOLVED', out)
 
+    def test_the_format1_copy_is_the_walton_it_was_made_with(self):
+        self.assertEqual(WALTON_FORMAT1_COPY, WALTON_OF_FORMAT1,
+                         'format1/walton.yml is not the walton.yml the format-1 gold was made with')
+
     def test_the_format1_gold_passes_as_format1(self):
-        # The format-1 gold is kept as it was (D039); it is checked against
-        # the walton.yml it was made with only while that is the current
-        # one. After a change to walton.yml, it is read as format 1 and its
-        # verdict said, but formulas that changed since are not its fault.
-        if WALTON_NOW != WALTON_OF_FORMAT1:
-            code, errors, out = run(GOLD1)
-            self.assertIn('format 1', out)
-            self.assertNotIn('Traceback', out)
-            return
+        # The format-1 gold is kept as it was (D039) and checked as it was
+        # made (D092): against the copy of the walton.yml it was made with.
         out = self.passes(GOLD1)
         self.assertIn('format 1', out)
 
@@ -150,8 +169,7 @@ class Rules(unittest.TestCase):
         g['format'] = 'wag-annotation/1'
         code, errors, out = run(g)
         self.assertIn('format 1', out)
-        if WALTON_NOW == WALTON_OF_FORMAT1:
-            self.assertEqual((code, errors), (0, []), out)
+        self.assertEqual((code, errors), (0, []), out)
 
     # R8: a claim at an exception concludes it.
     def test_r8_an_argument_for_another_course(self):
@@ -311,13 +329,16 @@ class Rules(unittest.TestCase):
     def test_r10_the_targets_other_instance(self):
         g = copy.deepcopy(GOLD)
         it, target = item(g, '13292.43'), item(g, '13292.9')
-        other = next(x for x in target['instances'] if not x['primary'])
+        # Its target instance (since D008, 13292.9's modal argument, not its
+        # primary bridge) and another instance of the target claim.
+        tinst = next(x for x in target['instances'] if x['id'] == it['target']['actual']['instance'])
+        other = next(x for x in target['instances'] if x['id'] != tinst['id'])
         f = other['premises'][0]['formula']
-        self.assertNotIn(f, [p['formula'] for p in primary(target)['premises']])
+        self.assertNotIn(f, [p['formula'] for p in tinst['premises']])
         it['challenges'].append({'cq': None, 'wag_cq': None, 'type': 'causal interference', 'instance': other['id'], 'formula': f})
         self.fails(g, '13292.43', ['R10'], f"names the instance '{other['id']}', neither one of its own nor its target's")
-        it['challenges'][-1]['instance'] = primary(target)['id']
-        self.fails(g, '13292.43', ['R10'], f"names {f}, which is not a formula of {primary(target)['id']}")
+        it['challenges'][-1]['instance'] = tinst['id']
+        self.fails(g, '13292.43', ['R10'], f"names {f}, which is not a formula of {tinst['id']}")
 
     def test_r10_the_wrong_one_of_its_own_instances(self):
         g = copy.deepcopy(GOLD)
@@ -365,8 +386,6 @@ class Rules(unittest.TestCase):
         self.passes(g)
 
     def test_r4_in_format1_is_the_n8_rule(self):
-        if WALTON_NOW != WALTON_OF_FORMAT1:
-            self.skipTest('walton.yml has changed since the format-1 gold was made')
         g = copy.deepcopy(GOLD1)
         ins = item(g, '13292.36')['instances'][1]
         self.assertEqual(ins['scheme']['walton_id'], 'cause_to_effect')
@@ -408,10 +427,7 @@ class Rules(unittest.TestCase):
         # An annotator's record (no adjudication) lists its primary instance
         # first, as <claim>#1, so that a later claim can name it before it is
         # shown; a gold's ids stay as its history made them.
-        a = copy.deepcopy(GOLD)
-        a['annotator'] = 'model-x'
-        for it in a['items']:
-            it.pop('adjudication')
+        a = as_annotator(copy.deepcopy(GOLD))
         self.passes(a)
         b = copy.deepcopy(a)
         insts = item(b, '13292.9')['instances']
@@ -448,8 +464,23 @@ class Rules(unittest.TestCase):
 
     def test_r13_a_formula_of_another_instance_of_the_claim(self):
         g = copy.deepcopy(GOLD)
-        item(g, '13292.12')['target']['actual']['instance'] = '13292.9#2'
-        self.fails(g, '13292.12', ['R13'], 'brings_about(tax_meat,tax_revenue_reduced), which is not a premise of 13292.9#2')
+        a = item(g, '13292.12')['target']['actual']
+        a['instance'] = '13292.9#2'
+        self.fails(g, '13292.12', ['R13'], f"{a['formula']}, which is not a premise of 13292.9#2")
+
+    def test_d008_a_possible_consequence_concludes_no_more_than_it_may(self):
+        # D008: a modal argument concludes that the action may be unwise
+        # because of G; the thesis is reached only through its bridge. A modal
+        # instance that concludes the categorical negation is refused.
+        g = copy.deepcopy(GOLD)
+        ins = next(x for x in item(g, '13292.174')['instances'] if x['scheme']['walton_id'] == 'negative_consequences_modal')
+        ins['conclusion']['formula'] = '¬should_be_performed(tax_meat)'
+        self.fails(g, '13292.174', ['negative_consequences_modal'], 'negative_consequences_modal conclusion differs')
+        # Nor can a possible consequence fill the categorical premise.
+        g = copy.deepcopy(GOLD)
+        ins = next(x for x in item(g, '13292.174')['instances'] if x['scheme']['walton_id'] == 'negative_consequences_modal')
+        ins['scheme']['walton_id'] = 'negative_consequences'
+        self.fails(g, '13292.174', ['negative_consequences'], 'negative_consequences premises differ from walton.yml')
 
     def test_r13_the_wrong_conclusion(self):
         g = copy.deepcopy(GOLD)
@@ -468,8 +499,9 @@ class Rules(unittest.TestCase):
 
     def test_r13_another_kialo_parent(self):
         g = copy.deepcopy(GOLD)
-        item(g, '13292.180')['target']['other_kialo_parents'][0]['instance'] = '13292.121#2'
-        self.fails(g, '13292.180', ['R13'], 'names the instance 13292.121#2, which is not an instance of 13292.121')
+        missing = next_id(item(g, '13292.121'))
+        item(g, '13292.180')['target']['other_kialo_parents'][0]['instance'] = missing
+        self.fails(g, '13292.180', ['R13'], f'names the instance {missing}, which is not an instance of 13292.121')
         g = copy.deepcopy(GOLD)
         del item(g, '13292.180')['target']['other_kialo_parents'][0]['instance']
         self.fails(g, '13292.180', ['R16'], 'target.other_kialo_parents[0].instance is not an instance id')
@@ -761,11 +793,8 @@ class Rules(unittest.TestCase):
         self.fails(copy.deepcopy(GOLD), 'inputs', ['R16'], 'another case.json', case=case, pin=False)
 
     def test_r16_an_annotators_file_pins_nothing(self):
-        g = copy.deepcopy(GOLD)
-        g['annotator'] = 'A'
+        g = as_annotator(copy.deepcopy(GOLD), 'A')
         del g['inputs']
-        for it in g['items']:
-            del it['adjudication']
         self.passes(g)
 
     def test_r16_a_fragment_leaves_variables_unstated(self):

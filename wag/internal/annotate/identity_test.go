@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"testing"
@@ -31,6 +32,65 @@ func builtin(t *testing.T) (*Dataset, *Collection) {
 		t.Fatal(err)
 	}
 	return d, c
+}
+
+// asAnnotator makes a gold's claim an annotator's record: no adjudication,
+// and its primary instance first, as <claim>#1, as an annotator numbers it
+// (R12); a gold keeps the ids its history gave them (since D008-D074,
+// 13292.9's bridge is #4), so the primary and #1 swap ids, and every record
+// in the set that names them follows.
+func asAnnotator(s map[string]Annotation, claim string) {
+	delete(s[claim], "adjudication")
+	insts := s[claim]["instances"].([]any)
+	first, primary := claim+"#1", ""
+	for _, x := range insts {
+		if p, _ := x.(map[string]any)["primary"].(bool); p {
+			primary = x.(map[string]any)["id"].(string)
+		}
+	}
+	if primary == "" || primary == first {
+		return
+	}
+	swap := func(v any) any {
+		switch v {
+		case primary:
+			return first
+		case first:
+			return primary
+		}
+		return v
+	}
+	for _, a := range s {
+		for _, x := range a["instances"].([]any) {
+			m := x.(map[string]any)
+			m["id"] = swap(m["id"])
+		}
+		for _, c := range a["challenges"].([]any) {
+			m := c.(map[string]any)
+			if _, ok := m["instance"]; ok {
+				m["instance"] = swap(m["instance"])
+			}
+		}
+		t := a["target"].(map[string]any)
+		if act, ok := t["actual"].(map[string]any); ok {
+			if _, has := act["instance"]; has {
+				act["instance"] = swap(act["instance"])
+			}
+		}
+		if others, ok := t["other_kialo_parents"].([]any); ok {
+			for _, o := range others {
+				m := o.(map[string]any)
+				if _, has := m["instance"]; has {
+					m["instance"] = swap(m["instance"])
+				}
+			}
+		}
+	}
+	sort.SliceStable(insts, func(i, j int) bool {
+		pi, _ := insts[i].(map[string]any)["primary"].(bool)
+		pj, _ := insts[j].(map[string]any)["primary"].(bool)
+		return pi && !pj
+	})
 }
 
 // clone is a deep copy of a set of annotations (by JSON, as they are read).
@@ -134,7 +194,7 @@ func TestFormat2Refusals(t *testing.T) {
 		{"an instance of another claim", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["instance"] = "13292.7#1"; return nil },
 			"R13 its target names the instance 13292.7#1, which is not an instance of 13292.9"},
 		{"a formula of another instance", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["instance"] = "13292.9#2"; return nil },
-			"R13 its target names brings_about(tax_meat,tax_revenue_reduced), which is not a premise of 13292.9#2"},
+			"R13 its target names may_bring_about(tax_meat,tax_revenue_reduced), which is not a premise of 13292.9#2"},
 		{"the wrong conclusion", "13292.9", func(s map[string]Annotation) *Dataset {
 			actualOf(s["13292.9"])["formula"] = "¬should_be_performed(tax_meat)"
 			return nil
@@ -153,9 +213,9 @@ func TestFormat2Refusals(t *testing.T) {
 		{"an inference with a formula", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["part"] = "inference"; return nil },
 			"R16 its target is the inference, which has no formula"},
 		{"another Kialo parent", "13292.180", func(s map[string]Annotation) *Dataset {
-			s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)["instance"] = "13292.121#2"
+			s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)["instance"] = "13292.121#3"
 			return nil
-		}, "R13 its target in 13292.121 names the instance 13292.121#2"},
+		}, "R13 its target in 13292.121 names the instance 13292.121#3"},
 		{"re_parented recorded", "13292.7", func(s map[string]Annotation) *Dataset {
 			s["13292.7"]["target"].(map[string]any)["re_parented"] = false
 			return nil
@@ -267,10 +327,20 @@ func TestAnInstanceOfAnotherClaimWithoutTheSet(t *testing.T) {
 // made before the identity contract, the kept format-1 gold passes; checked
 // as format 2 it has no ids.
 func TestFormat1IsCheckedAsMade(t *testing.T) {
-	d, c := builtin(t)
+	d, _ := builtin(t)
 	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
 	if err != nil {
 		t.Skip("the docs are not here:", err)
+	}
+	// It is checked against the walton.yml it was made with, which format1/
+	// keeps beside it (D039: kept as it was), not as walton.yml is since.
+	w1, err := os.ReadFile("../../../docs/kialo-batch2/format1/walton.yml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := LoadCollection(w1)
+	if err != nil {
+		t.Fatal(err)
 	}
 	format, old, err := parseAnnotationFile(b)
 	if err != nil || format != 1 {
@@ -297,7 +367,8 @@ func TestFormat1IsCheckedAsMade(t *testing.T) {
 
 // The agreement fields read each annotator's targets in its own set: the
 // format-1 gold and the format-2 gold, the same codings but for D039's
-// eleven causal steps, agree on every field but where D039 changed them.
+// eleven causal steps and proposal D008-D074's recode (2026-11-25), agree on
+// every field but where those changed them.
 func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	d, _ := builtin(t)
 	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
@@ -311,8 +382,15 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	p := Agree("format 1", "format 2", old, d.Gold)
 	// target_instance is the targeting decision (the primary instance, or
 	// which secondary one): D039 changed the coding of 13292.12's primary,
-	// not which of its instances 13292.194 and .45 target.
-	want := map[string]float64{"scheme": 0.94, "instances": 0.88, "target_formula": 0.96}
+	// not which of its instances 13292.194 and .45 target. D008-D074 made
+	// 13292.174, .121 and .9 a modal argument carried by a bridge (scheme,
+	// instances), so the claims at their causal premise or exception
+	// (13292.12, .233, .43) target that secondary argument (target_instance),
+	// at may_bring_about with the book's question (target_formula, cq: .12,
+	// .233); 13292.25 is an undercutter at 13292.7's too_slight (role,
+	// target_part, target_formula).
+	want := map[string]float64{"scheme": 0.88, "instances": 0.82, "target_formula": 0.9, "role": 0.98,
+		"target_part": 0.98, "cq": 0.96, "target_instance": 0.94}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -323,7 +401,7 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 			t.Errorf("%s: %+v, want agreement %v over 50", f, fa, w)
 		}
 	}
-	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "primary" {
+	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "secondary:negative_consequences_modal:may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)" {
 		t.Errorf("13292.12's target instance: %q", v)
 	}
 	// A target at a secondary instance says which.
@@ -518,7 +596,7 @@ func TestThePromptListsEveryInstance(t *testing.T) {
 	d, _ := builtin(t)
 	it := d.Item("13292.43")
 	u := d.AnnotatorPrompt(it, d.Gold, []string{"13292.1", "13292.7", "13292.9"})
-	for _, want := range []string{"every instance, by its id", "- 13292.9#2 (cause_to_effect_modal (reconstructed)):", "- 13292.9#1 (negative_consequences (reconstructed), primary):"} {
+	for _, want := range []string{"every instance, by its id", "- 13292.9#2 (cause_to_effect_modal (reconstructed)):", "- 13292.9#1 (negative_consequences_modal (reconstructed)):", "- 13292.9#4 (bridge_from_possible_harm (reconstructed), primary):"} {
 		if !strings.Contains(u, want) {
 			t.Errorf("the prompt lacks %q:\n%s", want, u)
 		}
@@ -754,8 +832,16 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	if tp := p.Fields["target_part"]; tp.Unresolved != 1 {
 		t.Errorf("target_part %+v: the unresolved part is not left out", tp)
 	}
-	if ti := Agree("old", "gold", old, d.Gold).Fields["target_instance"]; ti.Agreement != 1 {
-		t.Errorf("format 1, an unflagged lone instance: %+v", ti)
+	// The unflagged instance reads as its claim's primary: format 1 and
+	// format 2 name the same target instance everywhere but where
+	// D008-D074's recode moved a target to the modal argument a bridge
+	// carries (13292.12, .233, .43).
+	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true}
+	for _, id := range d.IDs() {
+		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
+		if (x != y) != moved[id] {
+			t.Errorf("format 1, an unflagged lone instance: %s's target instance %q, format 2 %q", id, x, y)
+		}
 	}
 }
 
@@ -1218,13 +1304,18 @@ func TestCheckInMatchesValidatePy(t *testing.T) {
 			o := s["13292.180"]["target"].(map[string]any)["other_kialo_parents"].([]any)[0].(map[string]any)
 			o["part"], o["instance"], o["formula"] = "inference", "13292.121#99", nil
 		}, "R13 its target in 13292.121 names the instance 13292.121#99, which is not an instance of 13292.121"},
+		// D008: a possible consequence concludes no more than that the action
+		// may be unwise; the thesis is reached only through its bridge.
+		{"a modal argument that concludes the thesis", "13292.174", func(s map[string]Annotation) {
+			inst(s["13292.174"], 0)["conclusion"].(map[string]any)["formula"] = "¬should_be_performed(tax_meat)"
+		}, "negative_consequences_modal concludes ¬should_be_performed(tax_meat), not may_be_unwise_to_perform(tax_meat,more_dangerous_meat_production)"},
 		{"a gold's primary listed second", "13292.9", func(s map[string]Annotation) {
 			insts := s["13292.9"]["instances"].([]any)
 			insts[0], insts[1] = insts[1], insts[0]
 		}, ""},
-		{"an annotator's record as the gold codes it", "13292.9", func(s map[string]Annotation) { delete(s["13292.9"], "adjudication") }, ""},
+		{"an annotator's record as the gold codes it", "13292.9", func(s map[string]Annotation) { asAnnotator(s, "13292.9") }, ""},
 		{"an annotator's primary listed second", "13292.9", func(s map[string]Annotation) {
-			delete(s["13292.9"], "adjudication")
+			asAnnotator(s, "13292.9")
 			insts := s["13292.9"]["instances"].([]any)
 			insts[0], insts[1] = insts[1], insts[0]
 		}, "R12 its primary instance is not listed first as 13292.9#1"},

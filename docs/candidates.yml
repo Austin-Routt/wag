@@ -531,7 +531,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "the consequence schemes, as a question or undercutter, once its sketch passes review"
-      recorded: "docs/decisions.yml D074"
+      recorded: "docs/decisions.yml D074: applied by proposal D008-D074 (2026-11-25) as an undercutter of the specific argument whose consequences are offered for the truth of a claim, not an exception (the owner's refinement of D074): a reply that raises it targets that argument's inference (kialo-batch2/guidelines.md §3.1, OC18); the game asks it from step C5"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: low
@@ -595,8 +595,8 @@ candidates:
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
     open:
-      - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion."
-      - "Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. Until D074 is decided, the guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1)."
+      - "A sketch: an exception on the consequence schemes when the action is holding a belief, or a link rule that a practical conclusion about believing P does not support P? 2629.10311 defends the opposite, pragmatist, view in the same discussion. Answered by D074 as the owner refined it (2026-11-25): neither; an undercutter of the specific argument."
+      - "Two discussions so far (God's existence; 27150, on AGI); the practical debates rarely raise it. The guidelines name C011 on such a claim: one with a practical conclusion is coded with the consequence scheme it fits, its conclusion meeting nothing at a factual target; one that concludes what is the case is coded with Other (kialo-batch2/guidelines.md §3.1, OC1)."
 
   # --- weighing ----------------------------------------------------------------
   - id: C003
@@ -847,7 +847,7 @@ candidates:
         found: review of D055-D059 v2
         verified: session check, 2026-10-23
     sketch:
-      note: Sided side-level exceptions beside D055's, on D055-D059 version 2's forms.
+      note: Sided side-level exceptions beside D055's, on D055-D059 version 2's forms, with the exceptions of proposal D008-D074 since 2026-11-25.
       schemes:
         - id: positive_consequences_balance
           meta:
@@ -856,7 +856,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "good(G)"]
           assumptions: []
-          exceptions: ["bad_outweighs(A,G)", "net_cost(A)"]
+          exceptions: ["bad_outweighs(A,G)", "too_slight(A,G)", "gain_discounted_by_bearer(A,G)", "net_cost(A)"]
           conclusions: ["should_be_performed(A)"]
         - id: negative_consequences_balance
           meta:
@@ -865,7 +865,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "bad(G)"]
           assumptions: []
-          exceptions: ["good_outweighs(A,G)", "net_benefit(A)"]
+          exceptions: ["good_outweighs(A,G)", "too_slight(A,G)", "harm_discounted_by_bearer(A,G)", "net_benefit(A)"]
           conclusions: ["¬should_be_performed(A)"]
       language:
         net_cost/1: "All told, the costs of the action %s outweigh its benefits."
@@ -1225,7 +1225,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "positive_consequences and negative_consequences, as a question (how serious)"
-      recorded: "docs/decisions.yml D065"
+      recorded: "docs/decisions.yml D065: applied by proposal D008-D074 (2026-11-25), as the exception too_slight(A,G) of 33.1, 33.2 and their modal variants, neutral as to polarity (D053); the sketch and its examples left the registry then (the proposal keeps examples of its kind)"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1301,72 +1301,10 @@ candidates:
         note: The good cited, a smaller population, is called insignificant beside what other changes could do.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
-    sketch:
-      note: The question on negative consequences, on D055-D059 version 2's form; the mirror on positive consequences targets good(G).
-      schemes:
-        - id: negative_consequences_severity
-          meta:
-            title: Negative consequences with a severity question (candidate)
-            source: Candidate C005.
-          variables: [A, G]
-          premises: ["brings_about(A,G)", "bad(G)"]
-          assumptions: []
-          exceptions: ["good_outweighs(A,G)"]
-          conclusions: ["¬should_be_performed(A)"]
-      questions:
-        negative_consequences_severity:
-          - {id: C005/Q1, asks: "Is G bad enough, and for enough people, to count against doing A?", target: "bad(G)"}
-    examples:
-      - scheme: negative_consequences_severity
-        title: A small burden
-        kialo: "13292.7"
-        use: argument
-        text: A sin tax on meat would make food more expensive, despite many people not being able to afford it.
-        bindings:
-          A: governments putting a tax on meat
-          G: food becoming less affordable for the poor
-        attacks:
-          - question: C005/Q1
-            text: Kialo 13292.25 replies that the extra burden may be no more than changing what one eats.
-      - scheme: negative_consequences_severity
-        title: Childcare on Fridays
-        invented: true
-        use: argument
-        text: A four-day school week would leave parents finding childcare one more day a week, so the school should not adopt it.
-        bindings:
-          A: the school adopting a four-day week
-          G: parents finding childcare one more day a week
-        attacks:
-          - question: C005/Q1
-            text: The school would run a club that day for a small fee; for most families the cost is a few pounds a week.
-      - scheme: negative_consequences_severity
-        title: Motorway noise
-        invented: true
-        use: argument
-        text: Raising the motorway's speed limit would add noise for the homes nearby, so it should not be raised.
-        bindings:
-          A: raising the motorway's speed limit
-          G: more noise for the homes nearby
-        attacks:
-          - question: C005/Q1
-            text: The nearest houses are a kilometre away behind a bank; the extra noise would be below what anyone can hear.
-      - scheme: negative_consequences
-        title: Dogs on the beach
-        invented: true
-        use: near-miss
-        near_miss_of: negative_consequences_severity
-        text: Allowing dogs on the beach would mean more litter, so it should not be allowed.
-        bindings:
-          A: allowing dogs on the beach
-          G: more litter on the beach
-        attacks:
-          - question: CQ:premise_acceptable
-            target: brings_about(A,G)
-            text: The beaches that already allow dogs have no more litter than the others; owners there clean up.
-        note: The reply denies that the consequence will follow, a question of likelihood (33/CQ1), not of how bad it is.
     open:
       - "A question at the premise, or a graded premise (how bad) that the weights could read?"
       - "Do annotators tell 'small' (C005) from 'unlikely' (33/CQ1) reliably?"
+      - "Do reasoning from negative consequences (33.3) and the prudential form (33.4) need the exception too? They argue from the agent's own goals or welfare; none is sighted yet (proposal D008-D074)."
 
   - id: C008
     name: Precaution against a catastrophic, irreversible risk
@@ -1457,7 +1395,6 @@ candidates:
           exceptions: ["negligible_risk(A,G)", "precaution_costs_outweigh(A)"]
           conclusions: ["¬should_be_performed(A)"]
       language:
-        may_bring_about/2: "The action %s may bring about %s."
         catastrophic/1: "%s would be catastrophic."
         irreversible/1: "%s could not be undone."
         negligible_risk/2: "The chance that the action %s brings about %s is too small to count."
@@ -1515,6 +1452,7 @@ candidates:
     open:
       - "A scheme of its own, or a question for 33.2 ('Is the consequence irreversible?') feeding C003's comparison?"
       - "How does it meet a likelihood objection (33/CQ1), which it concedes in advance?"
+      - "Under D008 a possible harm reaches should_be_performed(A) only through a bridge (bridge_from_possible_harm, whose premise matters_to_decision(A,G) asks whether the chance is large enough, given what G would be). Is precaution's catastrophe and irreversibility a bridge of its own, or a premise that matters_to_decision already asks for? Its sketch, which concludes from may_bring_about(A,G) directly, stays a sketch until then (proposal D008-D074)."
 
   # --- changing-the-action -----------------------------------------------------
   - id: C006
@@ -1533,7 +1471,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "the guidelines' action_amendment role (kialo-batch2/guidelines.md)"
-      recorded: "docs/decisions.yml D066"
+      recorded: "docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): a measure added so that the harm does not follow is an amended action, coded with its own scheme and the role action_amendment (kialo-batch2/guidelines.md §3.1, OC6)"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1605,7 +1543,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "bad(G)"]
           assumptions: []
-          exceptions: ["good_outweighs(A,G)", "avoidable(A,G)"]
+          exceptions: ["good_outweighs(A,G)", "too_slight(A,G)", "harm_discounted_by_bearer(A,G)", "avoidable(A,G)"]
           conclusions: ["¬should_be_performed(A)"]
       language:
         avoidable/2: "The action %s can be carried out so that %s does not follow."
@@ -1679,7 +1617,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "the value schemes (positive_value, negative_value)"
-      recorded: "docs/decisions.yml D067"
+      recorded: "docs/decisions.yml D067: no change (proposal D008-D074, 2026-11-25): a right, a duty or a value set against consequences is argued with the value schemes (kialo-batch2/guidelines.md §3.1, OC5)"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: medium
@@ -1772,7 +1710,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "good(G)"]
           assumptions: []
-          exceptions: ["bad_outweighs(A,G)", "forbidden(A)"]
+          exceptions: ["bad_outweighs(A,G)", "too_slight(A,G)", "gain_discounted_by_bearer(A,G)", "forbidden(A)"]
           conclusions: ["should_be_performed(A)"]
       language:
         forbidden/1: "Doing %s would violate a right or a duty that no good consequence outweighs."
@@ -1869,7 +1807,7 @@ candidates:
           variables: [X, C]
           premises: ["not_doing(X)", "bad_consequence(X,C)"]
           assumptions: ["strongly_occur(X,C)"]
-          exceptions: ["bad_outweighs(X,C)", "speaker_brings_about(C)"]
+          exceptions: ["bad_outweighs(X,C)", "fails_to_avert(X,C)", "speaker_brings_about(C)"]
           conclusions: ["should_be_performed(X)"]
       language:
         speaker_brings_about/1: "The one giving the warning can bring about %s, and means to if the warning is ignored."
@@ -2276,7 +2214,7 @@ candidates:
           variables: [A, C]
           premises: ["omission_leads_to(A,C)", "bad(C)"]
           assumptions: []
-          exceptions: ["bad_outweighs(A,C)"]
+          exceptions: ["bad_outweighs(A,C)", "too_slight(A,C)", "gain_discounted_by_bearer(A,C)"]
           conclusions: ["should_be_performed(A)"]
       language:
         omission_leads_to/2: "If %s is not done, %s will follow."
@@ -2329,6 +2267,7 @@ candidates:
     needs:
       - "D027 settled (33.3's omission case); D055's exception is applied."
     open:
+      - "Its sketch takes positive consequences' exceptions (proposal D008-D074), the bearer exception among them, gain_discounted_by_bearer(A,C), whose template names a gain where this scheme cites a harm: if it is added, which bearer exception, and with what template?"
       - "A scheme of its own, or a coding rule (positive consequences with the harm's not happening as G), as proposal D055-D059 has it?"
       - "Does it merge with need for help (38) once D063 gives that scheme a practical conclusion?"
 
@@ -2348,7 +2287,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "negative_consequences_prudential, as a question"
-      recorded: "docs/decisions.yml D069"
+      recorded: "docs/decisions.yml D069: applied by proposal D008-D074 (2026-11-25), as the exception fails_to_avert(X,C) of 33.4, the critic's to support (D003); the sketch and its examples left the registry then (the proposal keeps examples of its kind)"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: medium
@@ -2390,69 +2329,8 @@ candidates:
         note: A tax on beef alone leaves the other meats' harms; the narrower action does not avert all of the harm.
         found: review of D055-D059 v2
         verified: session check, 2026-10-22
-    sketch:
-      note: On D055-D059 version 2's form of the prudential argument.
-      schemes:
-        - id: prudential_averts
-          meta:
-            title: The prudential form with an averting assumption (candidate)
-            source: Candidate C016.
-          variables: [X, C]
-          premises: ["not_doing(X)", "bad_consequence(X,C)"]
-          assumptions: ["strongly_occur(X,C)", "averts(X,C)"]
-          exceptions: ["bad_outweighs(X,C)"]
-          conclusions: ["should_be_performed(X)"]
-      language:
-        averts/2: "Doing %s would avert %s."
-      questions:
-        prudential_averts:
-          - {id: C016/Q1, asks: "Would doing X actually avert C?", target: "averts(X,C)"}
-    examples:
-      - scheme: prudential_averts
-        title: A backup in the same bag
-        invented: true
-        use: argument
-        text: You were thinking of not backing up your thesis. But if you don't, a theft could lose a year's work, which would be very bad for you. So back it up.
-        bindings:
-          X: backing up your thesis
-          C: losing a year's work to a theft
-        attacks:
-          - question: C016/Q1
-            text: The only backup you plan is a drive kept in the same bag as the laptop; a thief takes both.
-      - scheme: prudential_averts
-        title: The wrong strain
-        invented: true
-        use: argument
-        text: You were going to skip the flu jab. But if you don't get it, you may catch the flu that is going round, which would be very bad for you. So get it.
-        bindings:
-          X: getting the flu jab
-          C: catching the flu that is going round
-        attacks:
-          - question: C016/Q1
-            text: This year's jab was made for a different strain from the one going round.
-      - scheme: prudential_averts
-        title: A smoke alarm
-        invented: true
-        use: argument
-        text: You were thinking of not fitting a smoke alarm. But if you don't, a fire at night could kill you in your sleep, which would be very bad for you. So fit one.
-        bindings:
-          X: fitting a smoke alarm
-          C: dying in a night-time fire
-        attacks:
-          - question: C016/Q1
-            text: You sleep with earplugs in; an ordinary alarm would not wake you.
-      - scheme: fear
-        title: Locking the shed
-        invented: true
-        use: near-miss
-        near_miss_of: prudential_averts
-        text: If you don't lock the shed, it will be broken into; that would be very bad for you; you ought to prevent it, and locking it is the only way. So lock it.
-        bindings:
-          X: locking the shed
-          Y: the shed being broken into
-        note: Fear states that the action is the only way to prevent the harm, the premise the prudential form lacks.
     open:
-      - "An assumption (the proponent's burden once asked) or an exception (the critic's)?"
+      - "An assumption (the proponent's burden once asked) or an exception (the critic's)? Answered by D069 and D003 (proposal D008-D074): an exception."
       - "Does it belong to C015's scheme as well, if that is added?"
 
   - id: C017
@@ -2472,7 +2350,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "practical reasoning's better-means exception, answered by D075's answer scheme"
-      recorded: "docs/decisions.yml D066"
+      recorded: "docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): against practical reasoning, better_means; against a consequence argument, Other naming C017 for a course said to be better, and a proposal of another course (action_amendment, move alternative_means) for one only put forward (kialo-batch2/guidelines.md §3.1, OC6)"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: medium
@@ -2572,7 +2450,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "good(G)"]
           assumptions: []
-          exceptions: ["bad_outweighs(A,G)", "better_alternative(A,G)"]
+          exceptions: ["bad_outweighs(A,G)", "too_slight(A,G)", "gain_discounted_by_bearer(A,G)", "better_alternative(A,G)"]
           conclusions: ["should_be_performed(A)"]
       language:
         better_alternative/2: "Some action other than %s would bring about %s at less cost."
@@ -2647,7 +2525,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "practical reasoning's possibility assumption, possible_bring_about(P,A) (possible(A) until 2026-11-24); against a consequence argument, a challenge to brings_about(A,G)"
-      recorded: "docs/decisions.yml D066"
+      recorded: "docs/decisions.yml D066; its coding rule in the guidelines since 2026-11-25 (proposal D008-D074): that the action cannot be carried out at all answers 33/CQ1 at brings_about(A,G) (CQ:likelihood); the guidelines code a claim that it is hard or costly as a further consequence (kialo-batch2/guidelines.md §3.1, OC2, OC6)"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -2705,7 +2583,7 @@ candidates:
           variables: [A, G]
           premises: ["brings_about(A,G)", "good(G)"]
           assumptions: ["possible(A)"]
-          exceptions: ["bad_outweighs(A,G)"]
+          exceptions: ["bad_outweighs(A,G)", "too_slight(A,G)", "gain_discounted_by_bearer(A,G)"]
           conclusions: ["should_be_performed(A)"]
       questions:
         positive_consequences_feasible:
@@ -2891,7 +2769,7 @@ candidates:
       by: owner (standing rule of 2026-11-22)
       result: merge
       into: "positive_consequences and negative_consequences, as a question (on whom)"
-      recorded: "docs/decisions.yml D065"
+      recorded: "docs/decisions.yml D065: applied by proposal D008-D074 (2026-11-25), as a sided pair: gain_discounted_by_bearer(A,G) on the schemes for A, harm_discounted_by_bearer(A,G) on those against it, since who bears a consequence is not neutral between the sides (D053); the sketch and its examples left the registry then (the proposal keeps examples of its kind)"
     found:
       - "the second independent review of proposal D055-D059, 2026-10-22"
     confidence: low
@@ -2940,71 +2818,8 @@ candidates:
         note: When the two disagree, her view counts for more, since she is the one forced to carry the child or undergo a procedure.
         found: review of D055-D059 v3
         verified: session check, 2026-10-23
-    sketch:
-      note: The question on negative consequences, on D055-D059 version 2's form.
-      schemes:
-        - id: negative_consequences_bearer
-          meta:
-            title: Negative consequences with a question of who bears them (candidate)
-            source: Candidate C021.
-          variables: [A, G]
-          premises: ["brings_about(A,G)", "bad(G)"]
-          assumptions: []
-          exceptions: ["good_outweighs(A,G)"]
-          conclusions: ["¬should_be_performed(A)"]
-      questions:
-        negative_consequences_bearer:
-          - {id: C021/Q1, asks: "Who bears G, and does that change how much it counts against doing A?", target: "bad(G)"}
-    examples:
-      - scheme: negative_consequences_bearer
-        title: Whose harm
-        invented: true
-        use: argument
-        text: An abortion can cause the man involved real emotional harm, so it should not be done without him.
-        bindings:
-          A: a pregnant person having an abortion without the man's agreement
-          G: the man suffering emotional harm
-        attacks:
-          - question: C021/Q1
-            text: As Kialo 5637.188 replies, if the pregnancy goes on it is the woman who bears both the emotional and the physical harm.
-      - scheme: negative_consequences_bearer
-        title: A sugar tax
-        invented: true
-        use: argument
-        text: A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
-        bindings:
-          A: bringing in a tax on sugary drinks
-          G: the weekly shop costing more
-        attacks:
-          - question: C021/Q1
-            text: The cost falls on those who drink a lot of them, the very people whose health the tax protects.
-      - scheme: negative_consequences_bearer
-        title: The festival road
-        invented: true
-        use: argument
-        text: Closing the high street for the festival would delay deliveries, so it should stay open.
-        bindings:
-          A: closing the high street for the festival
-          G: deliveries being delayed
-        attacks:
-          - question: C021/Q1
-            text: The delays fall on the festival's own suppliers, who asked for the closure.
-      - scheme: negative_consequences
-        title: A dearer shop, denied
-        invented: true
-        use: near-miss
-        near_miss_of: negative_consequences_bearer
-        text: A tax on sugary drinks would make the weekly shop dearer, so it should not be brought in.
-        bindings:
-          A: bringing in a tax on sugary drinks
-          G: the weekly shop costing more
-        attacks:
-          - question: CQ:premise_acceptable
-            target: brings_about(A,G)
-            text: Most shoppers would switch to the untaxed drinks, so their weekly shop would cost the same.
-        note: The reply denies that the consequence follows, a question of likelihood (33/CQ1), not of who bears it.
     open:
-      - "Merge into C005 as a third respect (how bad, for how many, for whom)?"
+      - "Merge into C005 as a third respect (how bad, for how many, for whom)? Answered by D065 (proposal D008-D074): kept apart, a sided pair beside C005's neutral exception."
 
   # --- found by the third review of D055-D059 ----------------------------------
   - id: C022
@@ -3023,7 +2838,7 @@ candidates:
       date: "2026-11-22"
       by: owner (standing rule of 2026-11-22)
       result: add
-      recorded: "docs/decisions.yml D072: a scheme of its own, through the proposal path"
+      recorded: "docs/decisions.yml D072: added to walton.yml by proposal D008-D074 (2026-11-25), as harm_reduction, its premises scoped to the action, with the owner's two exceptions (preventable_otherwise, no_net_reduction); the steering form is not covered; the sketch and its examples left the registry then (the proposal keeps examples of its kind)"
     found:
       - "the third independent review of proposal D055-D059, 2026-10-23"
     confidence: medium
@@ -3110,69 +2925,8 @@ candidates:
         note: Women who end a pregnancy can have children later, so the lives come anyway, only later; the premise about timing, not occurrence.
         found: review of D055-D059 v4
         verified: session check, 2026-10-23
-    sketch:
-      note: A first form, drafted by the third review and checked here.
-      schemes:
-        - id: harm_reduction
-          meta:
-            title: Argument from inevitability (candidate)
-            source: Candidate C022, not in the compendium.
-          variables: [A, E]
-          premises: ["happens_anyway(E)", "less_harmful_with(A,E)"]
-          assumptions: []
-          exceptions: ["encourages(A,E)"]
-          conclusions: ["should_be_performed(A)"]
-      language:
-        happens_anyway/1: "%s will happen whether or not anything is done about it."
-        less_harmful_with/2: "Doing %s would make %s less harmful."
-        encourages/2: "Doing %s would make %s happen more often."
-      questions:
-        harm_reduction:
-          - {id: C022/Q1, asks: "Would E happen whatever is done, or could it be prevented?", target: "happens_anyway(E)"}
-          - {id: C022/Q2, asks: "Would doing A make E happen more often?", target: "encourages(A,E)"}
-    examples:
-      - scheme: harm_reduction
-        title: Pill testing at festivals
-        invented: true
-        use: argument
-        text: People will take pills at festivals whatever the rules say, and testing stalls catch the dangerous batches, so festivals should offer them.
-        bindings:
-          A: festivals offering pill testing
-          E: people taking pills at festivals
-        attacks:
-          - question: C022/Q2
-            text: Where testing is offered, more first-timers try pills, reassured by the stall.
-      - scheme: harm_reduction
-        title: Driving lessons at school
-        invented: true
-        use: argument
-        text: Teenagers in the countryside will drive at seventeen whatever we think, so the school should run proper driving lessons.
-        bindings:
-          A: the school running driving lessons
-          E: rural teenagers driving at seventeen
-      - scheme: harm_reduction
-        title: Shaping what is coming
-        invented: true
-        use: argument
-        text: Automation of the warehouse will come whether the union likes it or not, so the union should negotiate how it is brought in.
-        bindings:
-          A: the union negotiating how automation is brought in
-          E: the warehouse being automated
-        attacks:
-          - question: C022/Q1
-            text: The owners shelved automation twice for cost; it is far from certain.
-      - scheme: positive_consequences
-        title: Safer roads
-        invented: true
-        use: near-miss
-        near_miss_of: harm_reduction
-        text: A speed camera on the school road would make drivers slow down, so the council should install one.
-        bindings:
-          A: the council installing a speed camera on the school road
-          G: drivers slowing down on the school road
-        note: Nothing is said to happen anyway; the action is argued from its consequence, so it is positive consequences.
     open:
-      - "One scheme for both forms (harm reduction, steering), or two?"
+      - "One scheme for both forms (harm reduction, steering), or two? harm_reduction covers the first (D072, proposal D008-D074); the steering form (13564.84, 13564.224) is coded with Other, naming C022, until it has a scheme of its own, or is found not to need one."
       - "Its replies in 5637 are parallel refutations (5637.4558, guns; 5637.4457, burglaries) and the objection that inevitability is no reason to permit (5637.94, 13564.260): an exception, or a question?"
 
   - id: C023

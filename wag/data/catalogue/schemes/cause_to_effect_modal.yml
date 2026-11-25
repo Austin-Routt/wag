@@ -173,13 +173,15 @@ examples:
 - text: A tax on meat could actually reduce tax revenues by harming the trillion-dollar
     meat industry, which pays substantial taxes.
   kialo: "13292.9"
-  coding: 'Secondary instances: the claim''s primary scheme in the gold is negative_consequences
-    (the tax should not be adopted). Two chained instances: E1 = a tax on meat, E2
-    = harm to the meat industry; then E1 = that harm, E2 = lower tax revenue. In each,
-    stated: causes(E1,E2); may_occur(E1), supplied for the tax and carried for the
-    harm; conclusion: may_occur(E2). "Could" marks the effect as only possible, which
-    is what may_occur(E2) concludes.'
-  status: drafted by Claude Code, 2026-10-22
+  coding: 'Secondary instances: the claim''s primary instance in the gold is bridge_from_possible_harm
+    (the tax should not be adopted), which carries its negative_consequences_modal
+    argument to the thesis (since 2026-11-25, D008). Two chained instances: E1 = a
+    tax on meat, E2 = harm to the meat industry; then E1 = that harm, E2 = lower tax
+    revenue. In each, stated: causes(E1,E2); may_occur(E1), supplied for the tax and
+    carried for the harm; conclusion: may_occur(E2). "Could" marks the consequence
+    as only possible, which the claim''s modal argument carries (D008); each step
+    concludes only that its effect may occur, may_occur(E2).'
+  status: drafted by Claude Code, 2026-11-25
 - text: The price of meat does not reflect its true cost due to subsidies.
   kialo: "13292.11"
   coding: 'Near miss: the cause, the subsidies, is in place and the effect already
@@ -328,3 +330,6 @@ history:
     decision D092): the gold codes its 11 hypothetical causal steps with cause_to_effect_modal
     now; the examples and the batch-2 discrepancy say so, dated, and the version before
     is docs/kialo-batch2/gold-format1.json.'
+- date: "2026-11-25"
+  by: Claude Code
+  what: the 13292.9 example follows the recoded gold (proposal D008-D074, D008)

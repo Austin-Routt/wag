@@ -985,7 +985,7 @@ func TestCandidatesFindFaults(t *testing.T) {
 	}
 	sketch := &Sketch{
 		Schemes: []Scheme{{ID: "sketch_x", Variables: []string{"A", "G"},
-			Premises: []string{"brings_about(A,G)", "good(G)"}, Exceptions: []string{"bad_outweighs(A,G)", "tested_x(A)"},
+			Premises: []string{"brings_about(A,G)", "good(G)"}, Exceptions: []string{"bad_outweighs(A,G)", "too_slight(A,G)", "gain_discounted_by_bearer(A,G)", "tested_x(A)"},
 			Conclusions: []string{"should_be_performed(A)"}}},
 		Language:  map[string]string{"tested_x/1": "%s is tested."},
 		Questions: map[string][]PQuery{"sketch_x": {{ID: "C001/Q1", Asks: "Tested?", Target: "tested_x(A)"}}},
@@ -1068,7 +1068,8 @@ func TestCandidatesFindFaults(t *testing.T) {
 		{"a new pattern near a walton.yml scheme", func(c *Candidate) {
 			s := *sketch
 			s.Schemes = []Scheme{s.Schemes[0]}
-			s.Schemes[0].Exceptions = []string{"tested_x(A)"}
+			// two formulas from positive_consequences: it lacks bad_outweighs
+			s.Schemes[0].Exceptions = []string{"too_slight(A,G)", "gain_discounted_by_bearer(A,G)", "tested_x(A)"}
 			c.Sketch = &s
 			c.Kind = "scheme"
 			c.Relation = &Relation{Kind: "new", Why: "w"}
@@ -1076,7 +1077,7 @@ func TestCandidatesFindFaults(t *testing.T) {
 		{"a variant far from its base", func(c *Candidate) {
 			c.Kind = "scheme"
 			c.Relation = &Relation{Kind: "variant", Base: []string{"negative_consequences"}, Why: "w"}
-		}, "a variant changes or adds a few formulas of its base, but its sketch is 7 from the nearest", false},
+		}, "a variant changes or adds a few formulas of its base, but its sketch is 9 from the nearest", false},
 		{"a composition that shares nothing with a base", func(c *Candidate) {
 			c.Kind = "scheme"
 			c.Relation = &Relation{Kind: "composition", Base: []string{"positive_consequences", "analogy"}, Why: "w"}

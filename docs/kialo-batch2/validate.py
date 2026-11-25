@@ -42,6 +42,11 @@ if FORMAT not in (None, 'wag-annotation/1', 'wag-annotation/2'):
     sys.exit(1)
 F2 = FORMAT == 'wag-annotation/2'
 WALTON_PATH = REPO + 'docs/scheme-registry/walton-clean/walton.yml'
+# A format-1 file is a kept version (D039: the gold before format 2 is kept as
+# it was): it is checked against the walton.yml it was made with, which
+# format1/ keeps, so that a later change to a scheme does not fail it.
+if not F2 and os.path.exists(DOC + 'format1/walton.yml'):
+    WALTON_PATH = DOC + 'format1/walton.yml'
 lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
 items = json.load(open(DOC + 'items.json', encoding='utf-8'))['items']
 W = {s['id']: s for s in yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))['argument_schemes']}

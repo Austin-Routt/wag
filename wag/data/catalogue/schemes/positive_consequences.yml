@@ -20,6 +20,8 @@ formulas:
   - good(G)
   exceptions:
   - bad_outweighs(A,G)
+  - too_slight(A,G)
+  - gain_discounted_by_bearer(A,G)
   conclusions:
   - should_be_performed(A)
 book:
@@ -62,13 +64,15 @@ critical_questions:
   note: The book's question also allows for the strength the arguer claims (that G
     will, may or must follow); the paraphrase asks for the likelihood whatever strength
     is claimed. The game's CQ:likelihood drops that modality and speaks of "the claimed
-    link".
+    link". Since 2026-11-25 a claim that G only may follow (may, might, could, can
+    of possibility) is coded with positive_consequences_modal and its bridge (D008),
+    and the question is asked there of may_bring_about(A,G).
   paraphrase: How likely is it that doing A would actually lead to G?
   answer: 'The proponent, once asked. Against: reasons why G is unlikely to follow
     from A, or would follow only under conditions this case lacks, which undermines
     brings_about(A,G). For: a record, a known mechanism or a forecast showing that
     actions like A reliably produce outcomes like G.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-25
 - id: 33/CQ2
   book:
     entry: "33"
@@ -140,6 +144,42 @@ critical_questions:
     that the bad effect outweighs G answers 33/CQ3 instead. For: showing that A has
     no such effect.'
   status: drafted by Claude Code, 2026-10-23
+- id: walton/too_slight
+  targets: [{formula: 'too_slight(A,G)', locus: exception}]
+  note: Neither the book nor the game asks it. Since 2026-11-25 walton.yml has it
+    as an exception (D065, candidate C005), apart from good(G), so that a real but
+    slight consequence is not a denied one. Slight means slight by what bears on the
+    decision on A, not merely that G reaches few, is small in number, or seems minor
+    to one side; so scoped, it is neutral as to polarity (D053, the owner's declaration
+    of 2026-11-25). The game asks it from step C5.
+  paraphrase: Granted that doing A would bring about G and that G is good, is G too
+    slight a gain to count in deciding on A? (A great gain is not slight, however
+    few it reaches.)
+  answer: 'The critic, who raises it with an argument. Against: showing that G, though
+    real and good, is too small to weigh in the decision on A (a few minutes saved,
+    a trivial convenience), which undercuts the argument through too_slight(A,G);
+    a great gain is not slight, however few it reaches. No scheme concludes it: a
+    claim that argues it is coded with Other (docs/kialo-batch2/guidelines.md §3.1,
+    OC9). For: showing that G is large enough to count: its size, how long it lasts,
+    or how much it matters to those it reaches.'
+  status: drafted by Claude Code, 2026-11-25
+- id: walton/gain_discounted_by_bearer
+  targets: [{formula: 'gain_discounted_by_bearer(A,G)', locus: exception}]
+  note: 'Neither the book nor the game asks it. Since 2026-11-25 walton.yml has it
+    as an exception (D065, candidate C021): the side of an argument for A of the bearer
+    pair, whose other side, harm_discounted_by_bearer(A,G), is the negative schemes''
+    (a sided flip, D053: who bears a consequence is not neutral between the sides).
+    The game asks it from step C5.'
+  paraphrase: Who would gain G, and does that make it count for less in deciding on
+    A?
+  answer: 'The critic, who raises it with an argument. Against: showing that the gain
+    goes to those who need it least or have no claim to it (the savings go to well-off
+    homeowners), so that it counts for less, which undercuts the argument through
+    gain_discounted_by_bearer(A,G); it grants the gain. Coded with Other (docs/kialo-batch2/guidelines.md
+    §3.1, OC16). A right or a value that rules A out whatever its consequences is
+    not this question (OC5). For: showing that those who gain have a claim to it,
+    or that who gains does not matter here.'
+  status: drafted by Claude Code, 2026-11-25
 summary:
   text: 'Use it when an action A is recommended because doing it would bring about
     an outcome G that is good, and the claim offers nothing more: no circumstances,
@@ -206,6 +246,32 @@ contrasts:
 - scheme: good_outweighs_bad
   text: ""
   status: todo
+- scheme: positive_consequences_modal
+  text: The categorical scheme claims that A brings about G (would, will, can of capability);
+    the modal variant only that it may (may, might, could, can of possibility), and
+    concludes no more than that A may be worth doing for G, which reaches should_be_performed(A)
+    through bridge_from_possible_good. The mood is the causal link's; when it cannot
+    be told, code the modal variant, which claims less (docs/kialo-batch2/guidelines.md
+    §3).
+  status: drafted by Claude Code, 2026-11-25
+- scheme: negative_consequences_modal
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_good
+  text: The categorical scheme concludes should_be_performed(A) directly, from brings_about(A,G);
+    the bridge reaches it from a possible consequence, through the modal variant's
+    conclusion and matters_to_decision(A,G). The bridge's exception leaves the categorical
+    argument standing.
+  status: drafted by Claude Code, 2026-11-25
+- scheme: bridge_from_possible_harm
+  text: ""
+  status: todo
+- scheme: harm_reduction
+  text: Positive consequences cites a good that A brings about, a harm of not acting
+    that A prevents included (G the harm's not happening, OC13); harm_reduction cites
+    an outcome that happens whether or not A is done, which A only makes less harmful
+    each time (OC17). A claim that A prevents E is positive consequences.
+  status: drafted by Claude Code, 2026-11-25
 - scheme: practical_reasoning2
   text: Choose practical_reasoning2 only when S2 is a state distinct from the action
     and, of S1, the step from A to S2 and the step from S2 to G, at most one has to
@@ -257,8 +323,11 @@ examples:
     bad_outweighs(A,G) until 2026-11-24; since practical reasoning has the outweighing
     exception too (D070, D091), OC7''s one-instance rule puts it against 13292.108,
     the earliest argument of the class on the board (docs/kialo-batch2/guidelines.md
-    §3.1, OC4, OC7).'
-  status: drafted by Claude Code, 2026-11-24
+    §3.1, OC4, OC7). Since 2026-11-25 also pressed: walton/too_slight (most people
+    already eat less meat than the guidelines'' limit, so the gain would be a small
+    change in a few diets) and walton/gain_discounted_by_bearer (the gain would go
+    to the heaviest eaters, who chose their diet and could change it without a tax).'
+  status: drafted by Claude Code, 2026-11-25
 - text: A congestion charge would get traffic in the city centre moving again, so
     the council should bring one in.
   coding: 'A = the council bringing in a congestion charge; G = traffic in the city
@@ -331,6 +400,36 @@ examples:
     clean, G = clean air by 2030).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-23
+- text: If the council paid for a hot lunch for every primary pupil, no child would
+    start the afternoon hungry. The council should fund the lunches.
+  coding: 'A = the council paying for a hot lunch for every primary pupil; G = no
+    primary pupil starting the afternoon hungry. Pressed: 33/CQ2 (The claim rests
+    on one head teacher''s impression; the district has no figures on afternoon hunger);
+    33/CQ3 (The lunches would take the whole of next year''s repairs budget, and leaking
+    classrooms matter more (a weighing claim: bad_outweighs_good argues it)). (proposal
+    D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: 'Under the claim that free will exists: believing in free will makes people
+    behave better, so believing in it is the thing to do.'
+  coding: 'A = people believing in free will; G = people behaving better. Coded by
+    OC1: its conclusion is about an action (believing), so it meets nothing at the
+    factual claim it is placed under. A reply that raises D074''s objection undercuts
+    this argument''s inference (an undercutter of the specific argument, not an exception,
+    as the owner refined D074 on 2026-11-25): ''How a belief makes people behave says
+    nothing about whether it is true, and the discussion is whether free will exists.''
+    (candidate C011; Kialo 2629.18670 and 2629.22816 raise it so). A legitimate argument
+    about believing in free will, under a claim about whether to believe it, is not
+    touched by that reply. (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: Opening the library on Sundays could bring in new readers, so it may be worth
+    doing.
+  coding: 'Near miss: A = the library opening on Sundays; G = new readers coming to
+    the library. It looks like positive consequences, but ''could'' claims the consequence
+    only possible (the mood rule): positive_consequences_modal, whose premise and
+    conclusion keep the modality. Coded categorically, the ''could'' would fill brings_about(A,G),
+    which it does not claim. (proposal D008-D074)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 discrepancies:
 - kind: game-differs
   about: exception bad_outweighs(A,G)
@@ -344,6 +443,21 @@ discrepancies:
     question with Other or a source-based scheme (expert opinion, position to know);
     whether analogy may is D057.
   status: drafted by Claude Code, 2026-11-24
+- kind: game-differs
+  about: exception too_slight(A,G)
+  detail: The game's core.yml lacks the exception too_slight(A,G) of walton.yml.
+  decision: Keep the game as it is until step C5, which gives the game's copy of the
+    scheme this exception with a game question (proposal D008-D074, effects); until
+    then a player raises it with Other.
+  status: drafted by Claude Code, 2026-11-25
+- kind: game-differs
+  about: exception gain_discounted_by_bearer(A,G)
+  detail: The game's core.yml lacks the exception gain_discounted_by_bearer(A,G) of
+    walton.yml.
+  decision: Keep the game as it is until step C5, which gives the game's copy of the
+    scheme this exception with a game question (proposal D008-D074, effects); until
+    then a player raises it with Other.
+  status: drafted by Claude Code, 2026-11-25
 - kind: book-walton
   about: Premise
   detail: The compendium's single premise says that doing A will plausibly have good
@@ -363,15 +477,20 @@ discrepancies:
     of the consequence schemes, as cause to effect has cause_to_effect_modal, not
     a modality field. Likelihood stays a question (33/CQ1, CQ:likelihood). (The review
     left variant or field open and added an adequacy assumption; WAG''s precedent
-    is a scheme of its own, and the likelihood question already exists.) Not yet applied.
-    Before: No change. Code a hedged claim with brings_about(A,G), say so in the coding,
-    and treat the hedge as a reason to press 33/CQ1: the conclusion that A should
-    be done needs a consequence likely enough to act on. The claim''s causal steps
-    are coded beside it as secondary cause_to_effect_modal instances, which conclude
-    only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
-    the discrepancy on the consequence schemes). open: whether brings_about should
-    get a modal form too.'
-  status: drafted by Claude Code, 2026-10-22
+    is a scheme of its own, and the likelihood question already exists.) Applied 2026-11-25
+    (proposal D008-D074): positive_consequences_modal, which concludes may_be_worth_performing(A,G)
+    from may_bring_about(A,G) and meets should_be_performed(A) only through bridge_from_possible_good,
+    whose premise matters_to_decision(A,G) its arguer supports. A hedged claim is
+    coded with them (docs/kialo-batch2/guidelines.md §3, the mood of the link; §3.1,
+    OC15). Before: No change. Code a hedged claim with brings_about(A,G), say so in
+    the coding, and treat the hedge as a reason to press 33/CQ1: the conclusion that
+    A should be done needs a consequence likely enough to act on. The claim''s causal
+    steps are coded beside it as secondary cause_to_effect_modal instances, which
+    conclude only that the effect may occur and do not back brings_about(A,G) (cause_to_effect_modal,
+    the discrepancy on the consequence schemes). The question whether brings_about
+    should get a modal form is answered: the modal variants'' premise, may_bring_about(A,G)
+    (D008).'
+  status: drafted by Claude Code, 2026-11-25
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
@@ -424,6 +543,26 @@ discrepancies:
     33/CQ3 at the exception bad_outweighs(A,G), beside CQ:side_effect at the conclusion
     (D055).'
   status: drafted by Claude Code, 2026-10-23
+- kind: book-walton
+  about: the exceptions of D065
+  detail: 'walton.yml has two exceptions for which the book''s 33.1 prints no question,
+    since 2026-11-25: too_slight(A,G), how serious G is (D065, candidate C005), and
+    gain_discounted_by_bearer(A,G), on whom it falls (D065, candidate C021).'
+  decision: 'Done (proposal D008-D074): WAG''s exceptions, the critic''s to support
+    (D003), asked as walton/ questions; the game asks them from step C5.'
+  status: drafted by Claude Code, 2026-11-25
+- kind: other
+  about: D074
+  detail: 'The appeal to consequences offered for the truth of a claim (D074, candidate
+    C011) has no formula here: it is an undercutter of the specific argument whose
+    consequences are offered for the truth of a claim (the owner''s refinement of
+    2026-11-25). An exception would name only the action, so proving it against a
+    misplaced argument would also defeat a legitimate argument about the same action.'
+  decision: 'Done (proposal D008-D074): in annotation a reply that raises the objection
+    targets that argument''s inference (docs/kialo-batch2/guidelines.md §3.1, OC18);
+    the game asks it from step C5, as a question about the argument itself or a direct
+    undercutter.'
+  status: drafted by Claude Code, 2026-11-25
 classification:
   source: independent
   reasoning: practical
@@ -498,3 +637,9 @@ history:
   what: '33/CQ3''s answer, the game-differs decision and the examples follow proposal
     D004-D075: C003''s answer schemes conclude the exceptions (D064, D075); the 33/CQ3
     discrepancy''s limit (3) says so.'
+- date: "2026-11-25"
+  by: Claude Code
+  what: walton/too_slight and walton/gain_discounted_by_bearer (D065), with their
+    game-differs decisions; the D008 discrepancy as applied, one for the new exceptions
+    and one for D074's objection; the contrasts with the modal variant, the bridge
+    and harm_reduction; the proposal's examples; 33/CQ1's note, after proposal D008-D074

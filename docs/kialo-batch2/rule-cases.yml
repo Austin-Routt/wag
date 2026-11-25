@@ -1,8 +1,10 @@
 # Worked cases for guidelines.md §3.1 (opposite consequences and weighing,
 # decisions D055 and D059, 2026-10-23; practical reasoning's side effects,
-# D070 and D091, 2026-11-24), with their codings.
+# D070 and D091, 2026-11-24; possible consequences, how serious, on whom,
+# what happens anyway and consequences offered for truth, D008, D065,
+# D066, D069, D072 and D074, 2026-11-25), with their codings.
 #
-# Each case names the rules it shows (OC1-OC14), the Kialo claim (or none,
+# Each case names the rules it shows (OC1-OC18), the Kialo claim (or none,
 # for a constructed case), a short paraphrase in our own words, its target,
 # its coding in the gold's format (instances, role, and the target as
 # target.actual), and why. The codings leave out what format 2 of the
@@ -71,6 +73,15 @@ retired:
   - phrase: which the gold cannot target
     now: the reply targets the weighing instance by its id (OC10; guidelines §4)
     why: "the identity contract (D092, 2026-11-24): a target names its instance, a secondary one included"
+  - phrase: "attacks `good(G)` or `bad(G)`, or the consequence's likelihood"
+    now: a slight consequence argues too_slight(A,G); a rare or unlikely one answers 33/CQ1 (against a modal argument, the bridge's matters_to_decision unless it denies that the chance is real); one not bad at all attacks bad(G) or good(G) (OC9; D065)
+    why: proposal D008-D074 (D065), 2026-11-25
+  - phrase: offered_for_truth
+    now: the objection that consequences are offered for the truth of a claim undercuts the specific argument's inference (OC18)
+    why: the owner's refinement of D074, 2026-11-25 (proposal D008-D074, version 5)
+  - phrase: knowable_before_deciding
+    now: worth_finding_out_first(A,G), the bridges' exception (OC15)
+    why: the owner's refinement of D008, 2026-11-25 (proposal D008-D074, version 5)
 
 cases:
   - id: OC1-a
@@ -87,6 +98,8 @@ cases:
         - {role: premise, formula: 'brings_about(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
         - {role: premise, formula: 'bad(resources_wasted_on_unforeseeable_risks)'}
         - {role: exception, formula: 'good_outweighs(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
+        - {role: exception, formula: 'too_slight(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(pursuing_agi,resources_wasted_on_unforeseeable_risks)'}
         conclusion: {formula: '¬should_be_performed(pursuing_agi)'}
       role: {kind: independent_con, cq: null, polarity: against}
       target: {actual: {claim: '27150.1', part: conclusion}}
@@ -96,7 +109,7 @@ cases:
       AGI is possible, says what is the case. Its conclusion meets nothing
       there, and it proposes no other action, so it is the appeal C011
       names: its reply 27150.12 (whether we should is irrelevant to whether
-      we can) is that objection.
+      we can) is that objection, which undercuts its inference (OC18-a).
 
   - id: OC1-b
     rules: [OC1]
@@ -112,6 +125,8 @@ cases:
         - {role: premise, formula: 'brings_about(believing_in_god,psychosocial_benefits_of_religion)'}
         - {role: premise, formula: 'good(psychosocial_benefits_of_religion)'}
         - {role: exception, formula: 'bad_outweighs(believing_in_god,psychosocial_benefits_of_religion)'}
+        - {role: exception, formula: 'too_slight(believing_in_god,psychosocial_benefits_of_religion)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(believing_in_god,psychosocial_benefits_of_religion)'}
         conclusion: {formula: 'should_be_performed(believing_in_god)'}
       role: {kind: independent_con, cq: null, polarity: against}
       target: {actual: {claim: '2629.9032', part: conclusion}}
@@ -135,6 +150,8 @@ cases:
         - {role: premise, formula: 'brings_about(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)'}
         - {role: premise, formula: 'good(synthetic_meat_development_advanced)'}
         - {role: exception, formula: 'bad_outweighs(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)'}
+        - {role: exception, formula: 'too_slight(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(tax_meat_and_fund_synthetic_meat_research,synthetic_meat_development_advanced)'}
         conclusion: {formula: 'should_be_performed(tax_meat_and_fund_synthetic_meat_research)'}
       role: {kind: action_amendment, cq: null, polarity: against}
       target: {actual: {claim: '13292.13', part: conclusion}}
@@ -146,28 +163,40 @@ cases:
       Contrast OC1-a.
 
   - id: OC1-c
-    rules: [OC1]
+    rules: [OC1, OC15]
     kialo: "13292.174"
     claim: Taxing meat might push producers to cheaper and more dangerous ways of producing it.
     target: 13292.108, goal-based practical reasoning for the tax
     coding:
       instances:
-      - primary: true
-        scheme: {walton_id: negative_consequences, fit: reconstructed}
+      - primary: false
+        scheme: {walton_id: negative_consequences_modal, fit: reconstructed}
         bindings: {A: tax_meat, G: more_dangerous_meat_production}
         premises:
-        - {role: premise, formula: 'brings_about(tax_meat,more_dangerous_meat_production)'}
+        - {role: premise, formula: 'may_bring_about(tax_meat,more_dangerous_meat_production)'}
         - {role: premise, formula: 'bad(more_dangerous_meat_production)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,more_dangerous_meat_production)'}
+        - {role: exception, formula: 'too_slight(tax_meat,more_dangerous_meat_production)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,more_dangerous_meat_production)'}
+        conclusion: {formula: 'may_be_unwise_to_perform(tax_meat,more_dangerous_meat_production)'}
+      - primary: true
+        scheme: {walton_id: bridge_from_possible_harm, fit: reconstructed}
+        bindings: {A: tax_meat, G: more_dangerous_meat_production}
+        premises:
+        - {role: premise, formula: 'may_be_unwise_to_perform(tax_meat,more_dangerous_meat_production)'}
+        - {role: premise, formula: 'matters_to_decision(tax_meat,more_dangerous_meat_production)'}
+        - {role: exception, formula: 'worth_finding_out_first(tax_meat,more_dangerous_meat_production)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: rebuttal, cq: null, polarity: against}
       target: {actual: {claim: '13292.108', part: conclusion}}
     why: >-
       A further bad consequence offered against practical reasoning ranks
-      nothing against its goal, so it is negative consequences, a rebuttal at
-      the conclusion (OC2), as against a consequence argument (OC1). The
-      side-effect exception is the claim that the bad consequences outweigh
-      the goal, bad_outweighs(A,G) (D070, D091).
+      nothing against its goal, so it is a rebuttal at the conclusion (OC2), as
+      against a consequence argument (OC1). The side-effect exception is the
+      claim that the bad consequences outweigh the goal, bad_outweighs(A,G)
+      (D070, D091). "Might push" makes the consequence only possible (guidelines
+      §3, the mood of the link): the modal variant, secondary, and its bridge,
+      primary, whose conclusion is the rebuttal's (OC15, D008).
 
   - id: OC1-e
     rules: [OC1]
@@ -187,26 +216,38 @@ cases:
       it is not coded with a consequence scheme: other, naming C011.
 
   - id: OC2-a
-    rules: [OC2]
+    rules: [OC2, OC15]
     kialo: "13292.121"
     claim: Taxing meat could also lead people to eat too little meat, which is unhealthy.
     target: 13292.115, positive consequences of the tax (less unhealthy meat consumption)
     coding:
       instances:
-      - primary: true
-        scheme: {walton_id: negative_consequences, fit: reconstructed}
+      - primary: false
+        scheme: {walton_id: negative_consequences_modal, fit: reconstructed}
         bindings: {A: tax_meat, G: unhealthy_meat_underconsumption}
         premises:
-        - {role: premise, formula: 'brings_about(tax_meat,unhealthy_meat_underconsumption)'}
+        - {role: premise, formula: 'may_bring_about(tax_meat,unhealthy_meat_underconsumption)'}
         - {role: premise, formula: 'bad(unhealthy_meat_underconsumption)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,unhealthy_meat_underconsumption)'}
+        - {role: exception, formula: 'too_slight(tax_meat,unhealthy_meat_underconsumption)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,unhealthy_meat_underconsumption)'}
+        conclusion: {formula: 'may_be_unwise_to_perform(tax_meat,unhealthy_meat_underconsumption)'}
+      - primary: true
+        scheme: {walton_id: bridge_from_possible_harm, fit: reconstructed}
+        bindings: {A: tax_meat, G: unhealthy_meat_underconsumption}
+        premises:
+        - {role: premise, formula: 'may_be_unwise_to_perform(tax_meat,unhealthy_meat_underconsumption)'}
+        - {role: premise, formula: 'matters_to_decision(tax_meat,unhealthy_meat_underconsumption)'}
+        - {role: exception, formula: 'worth_finding_out_first(tax_meat,unhealthy_meat_underconsumption)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: side_effect, cq: null, polarity: against}
       target: {actual: {claim: '13292.115', part: conclusion}}
     why: >-
       A further bad consequence with no ranking against the health gain that
-      13292.115 cites: negative consequences, at that argument's conclusion,
-      not its exception.
+      13292.115 cites: a consequence argument at that argument's conclusion, not
+      its exception. "Could also lead" makes it only possible, so it is the
+      modal variant and its bridge, the bridge primary: the bridge concludes
+      ¬should_be_performed(tax_meat), at 13292.115's conclusion (OC15, D008).
 
   - id: OC3-a
     rules: [OC3, OC6]
@@ -267,6 +308,8 @@ cases:
         - {role: premise, formula: 'brings_about(access_to_abortion,seekers_avoid_worse_outcomes)'}
         - {role: premise, formula: 'good(seekers_avoid_worse_outcomes)'}
         - {role: exception, formula: 'bad_outweighs(access_to_abortion,seekers_avoid_worse_outcomes)'}
+        - {role: exception, formula: 'too_slight(access_to_abortion,seekers_avoid_worse_outcomes)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(access_to_abortion,seekers_avoid_worse_outcomes)'}
         conclusion: {formula: 'should_be_performed(access_to_abortion)'}
       role: {kind: independent_pro, cq: null, polarity: for}
       target: {actual: {claim: '5637.1', part: conclusion}}
@@ -300,6 +343,8 @@ cases:
         - {role: premise, formula: 'brings_about(tax_meat,starvation_from_reduced_meat_access)'}
         - {role: premise, formula: 'bad(starvation_from_reduced_meat_access)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,starvation_from_reduced_meat_access)'}
+        - {role: exception, formula: 'too_slight(tax_meat,starvation_from_reduced_meat_access)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,starvation_from_reduced_meat_access)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: cq_answer, cq: '22.1 CQ5', polarity: against}
       target: {actual: {claim: '13292.108', part: exception, formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}}
@@ -410,6 +455,8 @@ cases:
         - {role: premise, formula: 'brings_about(ration_meat_via_carbon_budgets,rationing_costs_more_than_it_raises)'}
         - {role: premise, formula: 'bad(rationing_costs_more_than_it_raises)'}
         - {role: exception, formula: 'good_outweighs(ration_meat_via_carbon_budgets,rationing_costs_more_than_it_raises)'}
+        - {role: exception, formula: 'too_slight(ration_meat_via_carbon_budgets,rationing_costs_more_than_it_raises)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(ration_meat_via_carbon_budgets,rationing_costs_more_than_it_raises)'}
         conclusion: {formula: '¬should_be_performed(ration_meat_via_carbon_budgets)'}
       - primary: false
         scheme: {walton_id: other, fit: reconstructed}
@@ -426,6 +473,53 @@ cases:
       cites, so it is a further bad consequence of rationing, a rebuttal (OC2),
       not a balance claim (OC14). The rebuttal reaches the target's
       conclusion, so it is primary (§5 item 5).
+
+  - id: OC6-b
+    rules: [OC6]
+    kialo: "13292.235"
+    claim: Measures could, and likely would, be added to the tax to prevent people eating too little meat.
+    target: 13292.121, a possible bad consequence of the tax (unhealthy underconsumption); the conclusion of its bridge
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: positive_consequences, fit: reconstructed}
+        bindings: {A: tax_meat_with_accompanying_measures, G: unhealthy_underconsumption_prevented}
+        premises:
+        - {role: premise, formula: 'brings_about(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)'}
+        - {role: premise, formula: 'good(unhealthy_underconsumption_prevented)'}
+        - {role: exception, formula: 'bad_outweighs(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)'}
+        - {role: exception, formula: 'too_slight(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(tax_meat_with_accompanying_measures,unhealthy_underconsumption_prevented)'}
+        conclusion: {formula: 'should_be_performed(tax_meat_with_accompanying_measures)'}
+      role: {kind: action_amendment, cq: null, polarity: against}
+      target: {actual: {claim: '13292.121', part: conclusion}}
+    why: >-
+      Mitigation, a measure added so that the cited harm does not follow (C006).
+      It argues for the amended action, the tax with accompanying measures, with
+      its own scheme, and its role is action_amendment, at the conclusion of the
+      argument it answers (D066): 13292.121's bridge, its primary instance
+      (OC15). "Can and likely would be" hedges whether the measures will be
+      taken, not their link, so the scheme is categorical (guidelines §3).
+
+  - id: OC6-c
+    rules: [OC6]
+    claim: (constructed) Against "a meat tax would cut emissions, so it should be introduced" - no tax office could collect a levy on every sale of meat, so the tax could not be carried out at all.
+    target: that positive consequences argument; its causal premise
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'meat_tax_cannot_be_collected'}
+        conclusion: {formula: '¬brings_about(tax_meat,emissions_cut)'}
+      role: {kind: cq_answer, cq: 'CQ:likelihood', polarity: against}
+    why: >-
+      An action that cannot be done brings nothing about, so the claim answers
+      the likelihood question at brings_about(A,G) (33/CQ1; the game's
+      CQ:likelihood), not an exception (C018, D066). A claim that the tax would
+      be hard or costly to collect would be a further bad consequence (OC2), as
+      in OC6-a.
 
   - id: OC8-a
     rules: [OC8]
@@ -448,6 +542,8 @@ cases:
         - {role: premise, formula: 'brings_about(tax_meat,jobs_lost)'}
         - {role: premise, formula: 'bad(jobs_lost)'}
         - {role: exception, formula: 'good_outweighs(tax_meat,jobs_lost)'}
+        - {role: exception, formula: 'too_slight(tax_meat,jobs_lost)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,jobs_lost)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
     why: >-
@@ -459,7 +555,7 @@ cases:
     rules: [OC9]
     kialo: "13292.25"
     claim: The extra burden could be no more than a change of diet.
-    target: 13292.7, negative consequences of the tax (food less affordable for the poor)
+    target: 13292.7, negative consequences of the tax (food less affordable for the poor); its exception too_slight
     coding:
       instances:
       - primary: true
@@ -469,13 +565,17 @@ cases:
         - {role: premise, formula: 'brings_about(tax_meat,food_less_affordable_for_poor)'}
         - {role: premise, formula: 'means_to_end(change_food_consumption_pattern,avoid_meat_tax_burden)'}
         - {role: premise, formula: 'easy_to_achieve(change_food_consumption_pattern)'}
-        conclusion: {formula: '¬bad(food_less_affordable_for_poor)'}
-      role: {kind: premise_attack, cq: null, polarity: against}
-      target: {actual: {claim: '13292.7', part: premise, formula: 'bad(food_less_affordable_for_poor)'}}
+        conclusion: {formula: 'too_slight(tax_meat,food_less_affordable_for_poor)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+      target: {actual: {claim: '13292.7', part: exception, formula: 'too_slight(tax_meat,food_less_affordable_for_poor)'}}
     why: >-
-      It makes the cited harm small and names no rival consequence, so it
-      attacks bad(G), not the exception (C005). No question targets bad(G), so
-      it is a premise attack (R2).
+      It grants the burden, says that it is small, and names no rival
+      consequence: not a denial that the burden is bad, and not the outweighing
+      exception, but too_slight(A,G), the exception of 13292.7's argument
+      (D065). No scheme concludes it, so it is other, concluding the exception,
+      an undercutter: no question of the book or the game targets too_slight
+      (R2). Its own hedge ("could be") is in its note and confidence. Until
+      2026-11-25 it was coded as an attack on bad(G), as OC9 then said.
 
   - id: OC10-a
     rules: [OC10]
@@ -513,6 +613,8 @@ cases:
         - {role: premise, formula: 'brings_about(congestion_charge,cleaner_air)'}
         - {role: premise, formula: 'good(cleaner_air)'}
         - {role: exception, formula: 'bad_outweighs(congestion_charge,cleaner_air)'}
+        - {role: exception, formula: 'too_slight(congestion_charge,cleaner_air)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(congestion_charge,cleaner_air)'}
         conclusion: {formula: 'should_be_performed(congestion_charge)'}
       - primary: false
         scheme: {walton_id: positive_consequences, fit: explicit}
@@ -521,6 +623,8 @@ cases:
         - {role: premise, formula: 'brings_about(congestion_charge,fewer_accidents)'}
         - {role: premise, formula: 'good(fewer_accidents)'}
         - {role: exception, formula: 'bad_outweighs(congestion_charge,fewer_accidents)'}
+        - {role: exception, formula: 'too_slight(congestion_charge,fewer_accidents)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(congestion_charge,fewer_accidents)'}
         conclusion: {formula: 'should_be_performed(congestion_charge)'}
       role: {kind: independent_pro, cq: null, polarity: for}
     why: >-
@@ -541,6 +645,8 @@ cases:
         - {role: premise, formula: 'brings_about(fix_roof_now,attic_staying_dry)'}
         - {role: premise, formula: 'good(attic_staying_dry)'}
         - {role: exception, formula: 'bad_outweighs(fix_roof_now,attic_staying_dry)'}
+        - {role: exception, formula: 'too_slight(fix_roof_now,attic_staying_dry)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(fix_roof_now,attic_staying_dry)'}
         conclusion: {formula: 'should_be_performed(fix_roof_now)'}
       role: {kind: independent_pro, cq: null, polarity: for}
     why: >-
@@ -560,9 +666,11 @@ cases:
         scheme: {walton_id: positive_consequences, fit: reconstructed}
         bindings: {A: access_to_abortion, G: abuse_victims_able_to_leave}
         premises:
-        - {role: premise, formula: 'brings_about(access_to_abortion,abuse_victims_able_to_leave)'}
+        - {role: premise, formula: 'brings_about(access_to_abortion,abuse_victims_able_to_leave)', status: inferred, note: 'implicit: the claim states the harm of having no access; that access ends it is implied (D069)'}
         - {role: premise, formula: 'good(abuse_victims_able_to_leave)'}
         - {role: exception, formula: 'bad_outweighs(access_to_abortion,abuse_victims_able_to_leave)'}
+        - {role: exception, formula: 'too_slight(access_to_abortion,abuse_victims_able_to_leave)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(access_to_abortion,abuse_victims_able_to_leave)'}
         conclusion: {formula: 'should_be_performed(access_to_abortion)'}
       role: {kind: independent_pro, cq: null, polarity: for}
       target: {actual: {claim: '5637.1', part: conclusion}}
@@ -572,7 +680,9 @@ cases:
       people other than the one who acts, so it is positive consequences of
       access, with G the harm's not happening, phrased as a good state. Its
       reply 5637.12239 says outright that a bad consequence of access may
-      outweigh this one: bad_outweighs, by OC4.
+      outweigh this one: bad_outweighs, by OC4. The claim states the harm
+      of having no access, not that access ends it: the link is implicit,
+      status inferred (D069).
 
   - id: OC13-b
     rules: [OC13]
@@ -588,6 +698,7 @@ cases:
         - {role: premise, formula: 'bad_consequence(renew_passport,miss_sisters_wedding)'}
         - {role: assumption, formula: 'strongly_occur(renew_passport,miss_sisters_wedding)'}
         - {role: exception, formula: 'bad_outweighs(renew_passport,miss_sisters_wedding)'}
+        - {role: exception, formula: 'fails_to_avert(renew_passport,miss_sisters_wedding)'}
         conclusion: {formula: 'should_be_performed(renew_passport)'}
       role: {kind: independent_pro, cq: null, polarity: for}
     why: >-
@@ -595,6 +706,24 @@ cases:
       "you": the prudential form for renewing, not reasoning from negative
       consequences with A bound to letting the passport lapse, whose
       conclusion would meet nothing about renewing it (D027).
+
+  - id: OC13-c
+    rules: [OC13]
+    claim: (constructed) Against the advice to renew the passport (OC13-b) - renewals now take three months, so renewing would not get it back before the wedding.
+    target: that prudential argument; its exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'renewal_takes_three_months'}
+        conclusion: {formula: 'fails_to_avert(renew_passport,miss_sisters_wedding)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      It grants that missing the wedding would be bad, and denies only that
+      renewing would avert it: 33.4's exception fails_to_avert(X,C) (D069), the
+      critic's to support. No scheme concludes it: other, an undercutter.
 
   - id: OC14-a
     rules: [OC14, OC7]
@@ -614,3 +743,359 @@ cases:
       positive argument about the four-day week on the board, one instance
       each; one proof leaves the others standing (C004). Under the gold's one
       target, one instance, against the argument it replies to.
+
+  - id: OC15-a
+    rules: [OC15]
+    kialo: "13292.233"
+    claim: Reviews of studies show again and again that eating less meat leads to better health, not worse.
+    target: 13292.121, a possible bad consequence of the tax; the premise of its modal instance
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: expert_opinion, fit: reconstructed}
+        bindings: {W: meat_reduction_studies, D: nutritional_epidemiology, S: meat_reduction_improves_health}
+        premises:
+        - {role: premise, formula: 'expert(meat_reduction_studies,nutritional_epidemiology)'}
+        - {role: premise, formula: 'in_domain(meat_reduction_improves_health,nutritional_epidemiology)'}
+        - {role: premise, formula: 'asserts(meat_reduction_studies,meat_reduction_improves_health)'}
+        - {role: assumption, formula: 'based_on_evidence(asserts(meat_reduction_studies,meat_reduction_improves_health))'}
+        - {role: exception, formula: 'untrustworthy(meat_reduction_studies)'}
+        - {role: exception, formula: 'inconsistent_with_other_experts(meat_reduction_improves_health)'}
+        conclusion: {formula: 'meat_reduction_improves_health'}
+      role: {kind: cq_answer, cq: '33.2 CQ1', polarity: against}
+      target: {actual: {claim: '13292.121', part: premise, formula: 'may_bring_about(tax_meat,unhealthy_meat_underconsumption)'}}
+    why: >-
+      It denies that the possibility is real (less meat brings better health,
+      not worse), so it answers 33.2 CQ1 at the modal instance's
+      may_bring_about(A,G): a cq_answer naming the book's question, since the
+      game asks nothing of the modal variants yet. It argues from expert
+      opinion, so its own instance is that source scheme's.
+
+  - id: OC15-b
+    rules: [OC15]
+    claim: (constructed) Against "the tax might make a few butchers close, so it should not be introduced" - granted that it might, so remote a chance of so modest a loss is no reason to decide against the tax.
+    target: the bridge of that possible bad consequence; its premise matters_to_decision
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'butcher_closures_remote'}
+        - {role: premise, formula: 'butcher_closures_modest_loss'}
+        conclusion: {formula: '¬matters_to_decision(tax_meat,butchers_close)'}
+      role: {kind: premise_attack, cq: null, polarity: against}
+    why: >-
+      It grants the possibility and denies that its chance, given what the loss
+      would be, bears on the decision: the bridge's premise
+      matters_to_decision(A,G), a premise attack (no question targets it). A
+      denial that the possibility is real would answer 33.2 CQ1 at the modal
+      instance (OC15-a), and one that the loss is slight, whatever its chance,
+      would argue too_slight(A,G) (OC9).
+
+  - id: OC15-c
+    rules: [OC15]
+    claim: (constructed) Against "the tax might send shoppers across the border for meat, so it should not be introduced" - a year's trial in two regions would show, in time and at little cost, whether it does, before the tax must be decided.
+    target: the bridge of that possible bad consequence; its exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'regional_trial_would_settle_cross_border_buying'}
+        conclusion: {formula: 'worth_finding_out_first(tax_meat,meat_bought_across_border)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      It names a way to find out, in time and at little cost, whether the tax
+      brings the harm about, so that finding out first is worth it: the bridge's
+      exception worth_finding_out_first(A,G), an undercutter. It grants the
+      possibility and what it would weigh: the bridge falls, the modal argument
+      stands. A reply that showed only that a study could be done, at a cost or
+      a delay the decision cannot bear, would argue the exception without making
+      it out (OC15-g), and be answered that finding out first is not worth it
+      (OC15-f).
+
+  - id: OC15-d
+    rules: [OC15]
+    claim: (constructed) If you take the night shift you might lose touch with your friends, which would set back your own wish for a fuller social life; so do not take it.
+    target: the advice to take the night shift
+    coding:
+      instances:
+      - primary: false
+        scheme: {walton_id: negative_consequences_modal, fit: reconstructed}
+        bindings: {A: take_night_shift, G: lose_touch_with_friends}
+        premises:
+        - {role: premise, formula: 'may_bring_about(take_night_shift,lose_touch_with_friends)'}
+        - {role: premise, formula: 'bad(lose_touch_with_friends)'}
+        - {role: exception, formula: 'good_outweighs(take_night_shift,lose_touch_with_friends)'}
+        - {role: exception, formula: 'too_slight(take_night_shift,lose_touch_with_friends)'}
+        - {role: exception, formula: 'harm_discounted_by_bearer(take_night_shift,lose_touch_with_friends)'}
+        conclusion: {formula: 'may_be_unwise_to_perform(take_night_shift,lose_touch_with_friends)'}
+      - primary: true
+        scheme: {walton_id: bridge_from_possible_harm, fit: reconstructed}
+        bindings: {A: take_night_shift, G: lose_touch_with_friends}
+        premises:
+        - {role: premise, formula: 'may_be_unwise_to_perform(take_night_shift,lose_touch_with_friends)'}
+        - {role: premise, formula: 'matters_to_decision(take_night_shift,lose_touch_with_friends)'}
+        - {role: exception, formula: 'worth_finding_out_first(take_night_shift,lose_touch_with_friends)'}
+        conclusion: {formula: '¬should_be_performed(take_night_shift)'}
+      role: {kind: independent_con, cq: null, polarity: against}
+    why: >-
+      A possible consequence for the agent's own goals is 33.3's kind, and 33.3
+      has no modal variant (D008 names 33.1 and 33.2): it is coded with
+      negative_consequences_modal and its bridge, the bridge primary, and 33.3
+      is named in notes.
+
+  - id: OC15-e
+    rules: [OC15, OC4]
+    claim: (constructed) Against "a meat tax would cut emissions, so it should be introduced" - the tax might only move meat production abroad, and that would matter more than the emissions it cuts at home.
+    target: that positive consequences argument; its exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'may_bring_about(tax_meat,production_moved_abroad)'}
+        - {role: premise, formula: 'matters_more(production_moved_abroad,emissions_cut)'}
+        conclusion: {formula: 'bad_outweighs(tax_meat,emissions_cut)'}
+      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
+    why: >-
+      A weighing, but its rival consequence is only possible ("might only
+      move"), and C003's answer schemes take a categorical brings_about(A,H):
+      other, concluding the exception of the argument it answers (D075), with
+      candidate C024 (a certain against a speculative harm) named in notes.
+
+  - id: OC15-f
+    rules: [OC15]
+    claim: (constructed) Against the reply in OC15-c - the trial would end only after the budget that sets the tax has been passed.
+    target: that reply, an undercutter at the bridge's exception; its conclusion
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'regional_trial_ends_after_budget_vote'}
+        conclusion: {formula: '¬worth_finding_out_first(tax_meat,meat_bought_across_border)'}
+      role: {kind: rebuttal, cq: null, polarity: against}
+    why: >-
+      It grants that the trial would settle the question and denies that it
+      would do so in time, a condition of the exception itself: a rebuttal of
+      the reply's conclusion, worth_finding_out_first(A,G). At equal weight the
+      exception then no longer holds, since a tie goes against the critic
+      (D003), and the bridge stands: a test that comes too late does not make
+      out the exception.
+
+  - id: OC15-g
+    rules: [OC15]
+    claim: (constructed) Against "a night bus could get people home safely after the pubs close, so the town should run one" - the town could run the bus for a year as a pilot first and see whether people ride it.
+    target: the bridge of that possible good consequence; its exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'night_bus_year_pilot_possible'}
+        conclusion: {formula: 'worth_finding_out_first(run_night_bus,people_home_safely)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      It names a way to find out, but not one worth taking: a year's pilot costs
+      what a year of the service would, so finding out first costs what the
+      decision does. It still argues the bridge's exception, without making it
+      out: code it as the exception, an undercutter, and say in notes what it
+      leaves unshown. That G could be found out is not enough (D008): it does
+      not meet the critic's burden of production (the owner's declaration under
+      D053), and the game's answer contract is to refuse it (item F, step C5);
+      in play it stands until the bridge's defender answers that finding out
+      first is not worth it, as OC15-f does, and a tie goes against the critic
+      (D003).
+
+  - id: OC15-h
+    rules: [OC15]
+    claim: (constructed) Switching to a four-day week might raise our productivity, and even the chance of that matters for a firm our size, so we should switch.
+    target: the firm's choice whether to switch
+    coding:
+      instances:
+      - primary: false
+        scheme: {walton_id: positive_consequences_modal, fit: reconstructed}
+        bindings: {A: switch_to_four_day_week, G: higher_productivity}
+        premises:
+        - {role: premise, formula: 'may_bring_about(switch_to_four_day_week,higher_productivity)'}
+        - {role: premise, formula: 'good(higher_productivity)'}
+        - {role: exception, formula: 'bad_outweighs(switch_to_four_day_week,higher_productivity)'}
+        - {role: exception, formula: 'too_slight(switch_to_four_day_week,higher_productivity)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(switch_to_four_day_week,higher_productivity)'}
+        conclusion: {formula: 'may_be_worth_performing(switch_to_four_day_week,higher_productivity)'}
+      - primary: true
+        scheme: {walton_id: bridge_from_possible_good, fit: reconstructed}
+        bindings: {A: switch_to_four_day_week, G: higher_productivity}
+        premises:
+        - {role: premise, formula: 'may_be_worth_performing(switch_to_four_day_week,higher_productivity)'}
+        - {role: premise, formula: 'matters_to_decision(switch_to_four_day_week,higher_productivity)'}
+        - {role: exception, formula: 'worth_finding_out_first(switch_to_four_day_week,higher_productivity)'}
+        conclusion: {formula: 'should_be_performed(switch_to_four_day_week)'}
+      role: {kind: independent_pro, cq: null, polarity: for}
+    why: >-
+      A possible good consequence ("might raise"): the modal variant, secondary,
+      carries it, and its bridge, primary, takes it to the recommendation with
+      the premise the claim states ("even the chance of that matters for a firm
+      our size"). The positive side's forms, as OC15-d shows the negative
+      side's.
+
+  - id: OC15-i
+    rules: [OC15]
+    claim: (constructed) Against "the tax would send shoppers across the border for their meat, so it should not be introduced" - it is worth finding out first whether it would; a year's trial in two regions would show it in time, at little cost.
+    target: that negative consequences argument; its premise brings_about(A,G)
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'regional_trial_would_settle_cross_border_buying'}
+        conclusion: {formula: null}
+      role: {kind: cq_answer, cq: '33.2 CQ2', polarity: against}
+    why: >-
+      The argument it answers asserts the link ("would"), so it is categorical,
+      and the bridges' exception does not reach it. The reply doubts that the
+      link is shown and names how to settle it: a challenge of
+      brings_about(A,G), the book's 33.2 CQ2 (what evidence shows it?), which
+      the argument's proponent must answer. Against a modal argument the same
+      words argue the bridges' exception (OC15-c); coded that way here, they
+      would leave the categorical argument standing and favour the side that
+      claims the link more firmly.
+
+  - id: OC16-a
+    rules: [OC16]
+    claim: (constructed) Against "a meat tax would raise costs for the large meat producers, so it should not be introduced" - those costs fall on the producers whose farms cause the harm the tax is for, so they count for little.
+    target: that negative consequences argument; its bearer exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'costs_fall_on_polluting_producers'}
+        conclusion: {formula: 'harm_discounted_by_bearer(tax_meat,costs_raised_for_large_producers)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      It grants the cost and discounts it because of whom it falls on: the
+      bearer exception of the argument's side, harm_discounted_by_bearer(A,G)
+      (D065, C021). The same fact is a reason for the tax, which is why the
+      exception is sided: an argument for the tax has no harm to discount
+      (D053).
+
+  - id: OC16-b
+    rules: [OC16]
+    claim: (constructed) Against "a grant for heat pumps would cut households' energy bills, so it should be introduced" - the savings would go mostly to well-off homeowners, so they count for little.
+    target: that positive consequences argument; its bearer exception
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'savings_go_to_well_off_homeowners'}
+        conclusion: {formula: 'gain_discounted_by_bearer(heat_pump_grant,energy_bills_cut)'}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      It grants the gain and discounts it because of whom it goes to: the
+      exception of an argument for A, gain_discounted_by_bearer(A,G). A claim
+      that the poor have a right to such help whatever its effects would be
+      OC5's, naming C007.
+
+  - id: OC17-a
+    rules: [OC17]
+    kialo: "5637.26"
+    claim: If abortions happen anyway, it is better to make them safe, so that at least the women survive.
+    target: 5637.1, that pregnant people should have the right to choose abortion (its conclusion is the thesis's)
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: harm_reduction, fit: reconstructed}
+        bindings: {A: access_to_abortion, E: abortions_performed}
+        premises:
+        - {role: premise, formula: 'happens_anyway(access_to_abortion,abortions_performed)'}
+        - {role: premise, formula: 'less_harmful_per_occurrence(access_to_abortion,abortions_performed)'}
+        - {role: exception, formula: 'preventable_otherwise(access_to_abortion,abortions_performed)'}
+        - {role: exception, formula: 'no_net_reduction(access_to_abortion,abortions_performed)'}
+        conclusion: {formula: 'should_be_performed(access_to_abortion)'}
+      role: {kind: independent_pro, cq: null, polarity: for}
+      target: {actual: {claim: '5637.1', part: conclusion}}
+    why: >-
+      Abortions happen with or without access; access makes each one safer. The
+      claim does not say that access prevents a harm (OC13), and it ranks no
+      consequence: harm_reduction (D072, C022). A reply that more abortions
+      would follow, so that the harm overall would not fall, argues
+      no_net_reduction(A,E); one that support for mothers could prevent them
+      argues preventable_otherwise(A,E).
+
+  - id: OC18-a
+    rules: [OC18, OC1]
+    kialo: "27150.12"
+    claim: Whether we should do something has no bearing on whether we can, so the risks of AGI say nothing about whether it is possible.
+    target: 27150.9, negative consequences of pursuing AGI (OC1-a); its inference
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'should_irrelevant_to_can'}
+        conclusion: {formula: null}
+      role: {kind: undercutter, cq: null, polarity: against}
+      target: {actual: {claim: '27150.9', part: inference}}
+    why: >-
+      The objection C011 names, against a consequence argument coded by OC1 (its
+      practical conclusion meets nothing at the factual thesis): an undercutter
+      of that argument's inference, not an exception (D074, as the owner refined
+      it on 2026-11-25), so a legitimate argument about pursuing AGI, under a
+      claim about whether to pursue it, is not touched (OC18-c shows such a
+      case). No label changes at 27150.9, since that argument already meets
+      nothing; the coding records the objection.
+
+  - id: OC18-b
+    rules: [OC18]
+    claim: (constructed) Against "believing in free will makes people behave better, so free will exists" (OC1-e) - that a belief does good is no sign that it is true.
+    target: that argument's inference
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: other, fit: reconstructed}
+        bindings: {}
+        premises:
+        - {role: premise, formula: 'usefulness_no_sign_of_truth'}
+        conclusion: {formula: null}
+      role: {kind: undercutter, cq: null, polarity: against}
+    why: >-
+      The argument it answers concludes what is the case from consequences, so
+      it is coded with other (OC1): the objection undercuts its inference (part
+      inference, formula null), as it does a consequence argument's (OC18-a).
+
+  - id: OC18-c
+    rules: [OC18]
+    claim: (constructed) In a debate on whether God exists, under the claim that one should believe anyway - believing in God gives comfort in hard times, so one should believe.
+    target: that claim about whether to believe
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: positive_consequences, fit: reconstructed}
+        bindings: {A: believing_in_god, G: comfort_in_hard_times}
+        premises:
+        - {role: premise, formula: 'brings_about(believing_in_god,comfort_in_hard_times)'}
+        - {role: premise, formula: 'good(comfort_in_hard_times)'}
+        - {role: exception, formula: 'bad_outweighs(believing_in_god,comfort_in_hard_times)'}
+        - {role: exception, formula: 'too_slight(believing_in_god,comfort_in_hard_times)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(believing_in_god,comfort_in_hard_times)'}
+        conclusion: {formula: 'should_be_performed(believing_in_god)'}
+      role: {kind: independent_pro, cq: null, polarity: for}
+    why: >-
+      A legitimate consequence argument about believing, offered for a claim
+      about whether to believe. The objection that consequences are no reason to
+      think God exists, raised against a misplaced argument about believing in
+      the same debate (OC1-b), undercuts that argument alone and does not reach
+      this one, as an exception about believing would have (D074, as the owner
+      refined it on 2026-11-25).

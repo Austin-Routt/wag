@@ -171,6 +171,24 @@ contrasts:
 - scheme: good_outweighs_bad
   text: ""
   status: todo
+- scheme: positive_consequences_modal
+  text: ""
+  status: todo
+- scheme: negative_consequences_modal
+  text: '33.3 argues from a consequence that is bad for the agent''s own goals, and
+    has no modal variant (D008 names 33.1 and 33.2): a possible consequence for the
+    agent''s own goals is coded with negative_consequences_modal and its bridge, with
+    33.3 named in notes (docs/kialo-batch2/guidelines.md §3.1, OC15).'
+  status: drafted by Claude Code, 2026-11-25
+- scheme: bridge_from_possible_good
+  text: ""
+  status: todo
+- scheme: bridge_from_possible_harm
+  text: ""
+  status: todo
+- scheme: harm_reduction
+  text: ""
+  status: todo
 - scheme: practical_reasoning2
   text: In the book's account (p. 101), practical reasoning starts from a goal and
     looks for the action, while reasoning from consequences starts from the action
@@ -239,6 +257,32 @@ examples:
     May; docs/kialo-batch2/guidelines.md §3.1, OC13; D027).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-23
+- text: If I take the night shift, I will miss my children's evenings, which would
+    harm what I most want for my life, so I should not take it.
+  coding: 'A = my taking the night shift; B = my missing my children''s evenings.
+    Pressed: 33/CQ1 (The night shift is three nights a week; you would still have
+    four evenings with them); 33/CQ3 (The extra pay would let you stop working years
+    sooner, which matters more to your time with them). (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: 'Under the claim that the universe has no purpose: if I accept it, my life''s
+    work will seem pointless to me, which would harm my goals, so I should not accept
+    it.'
+  coding: 'A = my accepting that the universe has no purpose; B = my life''s work
+    seeming pointless to me. A reply that raises D074''s objection undercuts this
+    argument''s inference (an undercutter of the specific argument, not an exception,
+    as the owner refined D074 on 2026-11-25): ''How accepting it would make you feel
+    is no evidence about whether the universe has a purpose.'' Pressed: 33/CQ2 (Nothing
+    shows that people who accept it find their work pointless; many find it more their
+    own). (proposal D008-D074)'
+  status: drafted by Claude Code, 2026-11-25
+- text: Closing the plant would put four hundred people out of work, so the company
+    should not close it.
+  coding: 'Near miss: A = the company closing the plant; G = four hundred people losing
+    their jobs. The harm falls on others, not on the goals of the one who acts: negative
+    consequences (33.2), not reasoning from negative consequences (33.3). (proposal
+    D008-D074)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-25
 discrepancies:
 - kind: book-walton
   about: Premise 1
@@ -286,10 +330,11 @@ discrepancies:
   about: CQ1-CQ2
   detail: The book's first two questions allow the consequences to be claimed with
     different strengths (will, may, must). agent_bring_about(A,B) has no modality.
-  decision: 'No change for now, as for positive_consequences and negative_consequences:
-    code a hedged claim with the formula, say so in the coding, and treat the weaker
-    link as a reason to answer 33/CQ1 against it.'
-  status: drafted by Claude Code, 2026-10-22
+  decision: 'No change: 33.3 gets no modal variant (D008 names 33.1 and 33.2; proposal
+    D008-D074, 2026-11-25). A hedged consequence for the agent''s own goals is coded
+    with negative_consequences_modal and its bridge, 33.3 named in notes (docs/kialo-batch2/guidelines.md
+    §3.1, OC15).'
+  status: drafted by Claude Code, 2026-11-25
 - kind: book-walton
   about: CQ3
   detail: 33/CQ3 asks whether consequences of the opposite kind should be weighed.
@@ -314,6 +359,18 @@ discrepancies:
   decision: 'No change: the owner''s decisions of 2026-10-22 and D055 of 2026-10-23
     (docs/scheme-registry/walton-clean/CHANGELOG.md, "Changes decided by the owner").'
   status: drafted by Claude Code, 2026-10-23
+- kind: other
+  about: D074
+  detail: 'The appeal to consequences offered for the truth of a claim (D074, candidate
+    C011) has no formula here: it is an undercutter of the specific argument whose
+    consequences are offered for the truth of a claim (the owner''s refinement of
+    2026-11-25). An exception would name only the action, so proving it against a
+    misplaced argument would also defeat a legitimate argument about the same action.'
+  decision: 'Done (proposal D008-D074): in annotation a reply that raises the objection
+    targets that argument''s inference (docs/kialo-batch2/guidelines.md §3.1, OC18);
+    the game asks it from step C5, as a question about the argument itself or a direct
+    undercutter.'
+  status: drafted by Claude Code, 2026-11-25
 classification:
   source: independent
   reasoning: practical
@@ -377,3 +434,8 @@ history:
 - date: "2026-11-24"
   by: Claude Code
   what: 33/CQ3's answer names C003's answer scheme (proposal D004-D075, D064, D075).
+- date: "2026-11-25"
+  by: Claude Code
+  what: 'the CQ1-CQ2 discrepancy (no modal variant: negative_consequences_modal, 33.3
+    named); D074''s objection; the contrast with the modal variant; the proposal''s
+    examples, after proposal D008-D074'

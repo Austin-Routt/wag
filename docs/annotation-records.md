@@ -180,7 +180,7 @@ instance of it is `{"unresolved": why}`.
 
 Each challenge (guidelines §2 item 7) names the instance it is about, by its `instance` id, and a
 formula of that instance: `{"cq": "33.2 CQ1", "wag_cq": "CQ:likelihood", "type": "likelihood",
-"instance": "13292.9#1", "formula": "brings_about(tax_meat,tax_revenue_reduced)"}`. The instance is
+"instance": "13292.7#1", "formula": "brings_about(tax_meat,food_less_affordable_for_poor)"}`. The instance is
 one of the claim's own, or the instance its target names. `cq` is null when the book prints no
 question for it (a type of challenge of WAG's own: "no printed CQ"), `wag_cq` when the game has no
 such question; `formula` is null when the challenge is about the instance as a whole (its
@@ -296,7 +296,8 @@ claim it did not review as unresolved too.
 - **Open for the first gold's draft (D086)**, which the migration left as coded:
   - four targets that format 1 forced onto a claim's primary instance (13292.12, .141, .182 and
     .198; `adjudication.md`, R5) may name the causal step they answer, now that a target can name a
-    secondary instance;
+    secondary instance (13292.12's, 13292.9#1, is a secondary instance itself since proposal
+    D008-D074 made the bridge 13292.9's primary, 2026-11-25, but not the causal step);
   - the gold's four fragments (13292.6, .11, .108 and .218) bind every variable of the scheme, where
     guidelines §5 item 6 leaves those of formulas the fragment does not state unstated: annotators
     who follow the guidelines disagree with the gold on their bindings until one of the two changes.

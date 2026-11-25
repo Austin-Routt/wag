@@ -726,6 +726,33 @@
      "scheme": "good_outweighs_bad",
      "relation": "variant",
      "note": "a sided flip of bad_outweighs_good, not a polarity pair (D053): the two conclude different predicates. Answer scheme (D075; candidate C003, D064): concludes good_outweighs(A,G), the exception of negative_consequences; since 2026-11-24"
+    },
+    {
+     "scheme": "positive_consequences_modal",
+     "relation": "variant",
+     "compendium": "33.1",
+     "note": "of positive_consequences in the modal mood (decision D008, 2026-11-25), as cause_to_effect_modal is of 28; to negative_consequences_modal a sided flip, not a D053 polarity pair (they conclude two predicates)"
+    },
+    {
+     "scheme": "negative_consequences_modal",
+     "relation": "variant",
+     "compendium": "33.2",
+     "note": "of negative_consequences in the modal mood (decision D008, 2026-11-25); to positive_consequences_modal a sided flip, not a D053 polarity pair"
+    },
+    {
+     "scheme": "bridge_from_possible_good",
+     "relation": "related",
+     "note": "a bridge (decision D008, 2026-11-25): from positive_consequences_modal's conclusion to should_be_performed(A)"
+    },
+    {
+     "scheme": "bridge_from_possible_harm",
+     "relation": "counterpart",
+     "note": "of bridge_from_possible_good, a declared D053 polarity pair: conclusions p and not-p, first premises a sided flip, matters_to_decision shared, worth_finding_out_first a shared exception declared neutral (proposal D008-D074)"
+    },
+    {
+     "scheme": "harm_reduction",
+     "relation": "related",
+     "note": "WAG's argument from what happens anyway (decision D072, candidate C022, 2026-11-25)"
     }
    ]
   },

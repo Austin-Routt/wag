@@ -255,7 +255,7 @@ decisions:
       deferring a decision. It is the critic's to support (D003), shared by
       the two bridges about the same G, and declared neutral by the owner once
       proposal D008-D074 version 5 has been reviewed (D053).
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5); walton.yml through edits.py (CONSEQUENCES_C3), applied 2026-11-25; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c3.py, guidelines §3 and §3.1, rule-cases.yml, the replay): positive_consequences_modal, negative_consequences_modal and their bridges, whose exception is worth_finding_out_first(A,G), which sets the possibility aside until it is found out, not the decision; the game at step C5"
 
 - id: D009
   title: The game's question texts from the catalogue
@@ -1213,7 +1213,40 @@ decisions:
       one example per side. The bridges' information-first exception is
       declared once proposal D008-D074 version 5 has been reviewed; the
       appeal to consequences (D074) shares no formula, so it needs none.
-    recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md"
+      Declared 2026-11-25 by the owner, after the reviews of version 5
+      and its amendments, in the words of a reviewer's draft the owner
+      adopted: "I declare `worth_finding_out_first(A,G)` neutral as to
+      polarity between `bridge_from_possible_good` and
+      `bridge_from_possible_harm`, when both concern the same action A,
+      consequence G, and decision context. The exception means that it is
+      worthwhile to determine whether A would bring about G before allowing
+      that possibility to influence the decision. The investigation must be
+      sufficiently timely and reliable to resolve the relevant question, and
+      its costs and risks must justify obtaining the information first. The
+      critic bears the burden of establishing the exception. Merely asserting
+      that the consequence could be investigated, without establishing the
+      stronger conditions, does not satisfy that burden. An unresolved tie
+      goes against the critic under the declared evaluation rule. When
+      established, the exception defeats both applicable modal bridges,
+      regardless of which side supports it. It does not defeat the modal
+      consequence arguments themselves, independent categorical arguments,
+      bridges concerning different consequences, or arguments in other
+      decision contexts. It does not suspend the decision on A; remaining
+      arguments continue to determine the outcome under the game's rules.
+      This is a deliberate WAG formalization consistent with D003, D008, D053
+      and the revised C3 proposal." How WAG applies it: a reply addressed to
+      a categorical argument about the same link challenges its
+      brings_about(A,G) (33/CQ1 or CQ2; guidelines OC15). A bare claim of
+      knowability is coded as arguing the exception without making it out
+      (OC15), and the game's CQ answer contract (item F, with step C5) is to
+      refuse it as an answer, the burden of production not met (Walton and
+      Gordon 2015, p. 525; "Types of Dialogue and Burdens of Proof", p. 5);
+      until then the engine lets it stand, as any argument, until it is
+      answered (the tactical burden), and a tie goes against the critic under
+      the preponderance standard. Tested in the engine, one example per side,
+      each side proving it for a reason of its own
+      (wag/internal/carneades/consequences_c3_test.go).
+    recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md; docs/proposals/D008-D074.md (the declarations of 2026-11-25)"
 
 - id: D054
   title: Falsification's conclusion
@@ -1966,7 +1999,7 @@ decisions:
       2026-11-25: G, as a consequence of A, judged by the criteria that bear
       on the decision on A, is too slight to count; not merely that G reaches
       few, is small in number, or seems minor to one side.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5); walton.yml through edits.py (CONSEQUENCES_C3), applied 2026-11-25; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c3.py, guidelines §3 and §3.1, rule-cases.yml, the replay): too_slight(A,G), declared neutral with its scope, and the sided pair gain_discounted_by_bearer(A,G), harm_discounted_by_bearer(A,G); the game's questions at step C5"
 
 - id: D066
   title: Replies about the action itself
@@ -1996,7 +2029,7 @@ decisions:
       Mitigation is an amended action (C006); another action with the same
       good at less cost (C017) is a separate alternative; feasibility (C018)
       is a challenge to the premise.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5), applied 2026-11-25: no formula change; the guidelines (docs/kialo-batch2/guidelines.md §3.1, OC6) and the candidates registry (C006, C017, C018)"
 
 - id: D067
   title: Rights and values against consequences
@@ -2019,7 +2052,7 @@ decisions:
       Rights and values stay apart from consequences: C007 is argued with the
       value schemes; a value that trumps whatever the consequences needs a
       context rule of its own, later.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5), 2026-11-25: no change; recorded on C007 (the candidates registry) and in the guidelines (§3.1, OC5)"
 
 - id: D068
   title: Prediction from an agent's incentives
@@ -2084,7 +2117,7 @@ decisions:
       Refined 2026-11-25 by the owner, on the reviews of proposal D008-D074
       version 1: C016's question is an exception of the prudential form, the
       critic's to support (D003), not an assumption.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5); walton.yml through edits.py (CONSEQUENCES_C3), applied 2026-11-25; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c3.py, guidelines §3 and §3.1, rule-cases.yml, the replay): fails_to_avert(X,C) on 33.4, and the four values of the coding rule (guidelines §3.1, OC13)"
 
 - id: D072
   title: Arguments from what happens anyway
@@ -2118,7 +2151,7 @@ decisions:
       (a more frequent E can offset the gain per occurrence, though it need
       not). A's other harms are argued as its negative consequences. C022's
       steering form ('it is coming anyway, so shape it') is not covered.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5); walton.yml through edits.py (CONSEQUENCES_C3), applied 2026-11-25; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (gold by recode_c3.py, guidelines §3 and §3.1, rule-cases.yml, the replay): harm_reduction"
 
 - id: D073
   title: The replay chooses the moving side from a claim's immediate target
@@ -2184,7 +2217,7 @@ decisions:
       argument's inference; in the game, from step C5, the objection is a
       question about the argument itself or a direct undercutter. No formula
       is shared, so D053 needs no declaration for it.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D008-D074.yml (version 5), applied 2026-11-25: no formula; an undercutter of the specific argument in the guidelines (docs/kialo-batch2/guidelines.md §3.1, OC18) and the catalogue's consequence entries; the game's question about the argument itself at step C5"
 
 - id: D079
   title: Terms of use, privacy and injected instructions in captured evidence

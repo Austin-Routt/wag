@@ -99,10 +99,12 @@ examples:
     of producing meat.
   kialo: "13292.174"
   coding: 'Near miss: what counts against the tax is a bad result it would bring about,
-    not a value the speaker judges bad that the goal involves; negative_consequences
-    (A = a tax on meat, G = more dangerous meat production), as the gold codes it.'
+    not a value the speaker judges bad that the goal involves; negative_consequences_modal
+    (A = a tax on meat, G = more dangerous meat production), since "might force" claims
+    the consequence only possible, carried to 13292.108''s conclusion by bridge_from_possible_harm,
+    as the gold codes it since 2026-11-25 (D008).'
   near_miss: true
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-25
 discrepancies:
 - kind: book-walton
   about: Conclusion
@@ -176,3 +178,6 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the contrast with positive_value no longer allows a good value against a goal;
     the category file''s difference recorded; the second example''s agent)'
+- date: "2026-11-25"
+  by: Claude Code
+  what: the 13292.174 near miss follows the recoded gold (proposal D008-D074, D008)

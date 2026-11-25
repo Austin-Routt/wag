@@ -90,7 +90,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
      - likelihood, evidence, efficacy;
      - circumstances, other means, best means;
      - side effects, opposite consequences;
-     - severity or value, analogy difference, causal interference;
+     - severity or value (how much something weighs or is worth: at `good(G)` or `bad(G)`, a comparison, a classification or an evaluation; value objections among them), analogy difference, causal interference; since 2026-11-25 also severity (that a consequence is too slight to count: `too_slight(A,G)`) and bearer (on whom it falls: the bearer exception of the scheme's side);
      - source credibility.
    - Use the compendium's CQ labels (for example "33.2 CQ1") and the formula each one targets.
 
@@ -108,9 +108,15 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
   - Another means that would reach G more surely, sooner or at lower cost answers the exception `realize_more_effectively(P,G,A)`: code it with `better_means`, with the P, G and A of the argument it answers and A2 the other course, and record the comparison it makes in the instance's `comparison` (`more surely`, `sooner` or `at lower cost`). Its goal premise is the answered argument's own. A claim that the other course is better because it serves another value ranks values, not means: it is not this comparison (D089; OC5). A means said to be merely as good is no reason against A (D006): code it as a proposal of another course (§2, OC6).
   - The condition schemes (22.2, 22.3) read as a best choice: a strictly better means defeats the recommendation, an equally good one does not. Against the necessary-condition scheme, a route to G that uses none of the means S answers `goal_achievable_without_any(P,G,S)` (D090).
 - **Cons of a policy.**
-  - A bad consequence of the action is negative consequences: `¬should_be_performed(A)` from `brings_about(A,G)` and `bad(G)`.
+  - A bad consequence of the action is negative consequences: `¬should_be_performed(A)` from `brings_about(A,G)` and `bad(G)`. A consequence that is only possible is coded with the modal variant (below).
   - Bind A to the action exactly as the thesis states it, so that the con and the thesis's pros meet on one issue (§3.1, OC13).
   - A further consequence offered as a reply, and a claim that one consequence outweighs another, follow §3.1.
+- **Possible consequences: the mood of the link (decision D008, 2026-11-25).**
+  - The mood that counts is the causal link's, from the action to the consequence. *May*, *might*, *could*, and *can* of possibility (can lead to, can result in, can cause: G may or may not follow when A is done) make G a possible consequence: code it with the modal variant, `positive_consequences_modal` or `negative_consequences_modal`, and its bridge (§3.1, OC15). *Would*, *will*, and *can* of capability (the measures can solve this: A, when done, brings G about) call for the categorical schemes, with `brings_about(A,G)`.
+  - A noun of danger that says G may follow (the risk of G, a threat of G) is modal. One that ranks how bad G is (a more severe threat than) leaves the link as the claim or its context states it.
+  - A hedge on whether the action will be taken, not on its link (such measures can and likely would be taken), leaves the link categorical.
+  - When the mood cannot be told, code the modal variant, which claims less, and say why in `notes`.
+  - The modal variants are about the link. A causal step whose cause is only proposed and whose link is firm (the tax, once enacted, would make imports cheaper) is `cause_to_effect_modal` (below; §5 item 11); the consequence argument that such steps back takes the mood of the claim's own link.
 - **Bare denials.** "The tax would not resolve the problems" is a `premise_attack` or a `cq_answer` against the efficacy premise of the arguments it denies, with `fit: none` or `other`. It is not a new scheme.
 - **Analogy and the practical analogies** (`analogy`, `practical_analogy_positive`, `practical_analogy_negative`; two-case form since 2026-10-22, decisions D001, D028, D029).
   - Each case has its own claim or action, joined by `corresponds`: P1 in the source case C1 and P2 in the target case C2; X1 in situation A1 and X2 in A2. P2 says of C2 what P1 says of C1, and X2 is to A2 what X1 was to A1.
@@ -127,7 +133,7 @@ Annotate each claim as it functions in the discussion, in seven separate fields 
 - **Several instances.** A claim can contain more than one argument. Give each its own entry in `instances`, with its own id (§4), and mark one as primary.
 - **Uncertainty.** Give `confidence` (0 to 1) separately for scheme and role: your estimate that a careful annotator would choose the same. Write what you were unsure of in `notes`.
 
-### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23; practical reasoning, D070 and D091, 2026-11-24)
+### 3.1 Opposite consequences and weighing (decisions D055 and D059, 2026-10-23; practical reasoning, D070 and D091, 2026-11-24); possible consequences, how serious, on whom, and what happens anyway (D008, D065, D066, D069, D072 and D074, 2026-11-25)
 
 Each consequence scheme has an exception on its own side. The exception names the consequence that the argument cites. Practical reasoning's schemes have the same exception for a side effect that outweighs their goal (D070, D091: WAG's reading of the source's side-effect exception).
 
@@ -135,10 +141,14 @@ Each consequence scheme has an exception on its own side. The exception names th
 |---|---|---|
 | `positive_consequences` (33.1) | `bad_outweighs(A,G)` | A has bad consequences that outweigh G. |
 | `negative_consequences` (33.2) | `good_outweighs(A,G)` | A has good consequences that outweigh G. |
+| `positive_consequences_modal` (33.1, a possible G) | `bad_outweighs(A,G)` | A has bad consequences that outweigh G. |
+| `negative_consequences_modal` (33.2, a possible G) | `good_outweighs(A,G)` | A has good consequences that outweigh G. |
 | `negative_consequences_reasoning` (33.3) | `good_outweighs(A,B)` | A has good consequences that outweigh B. |
 | `negative_consequences_prudential` (33.4) | `bad_outweighs(X,C)` | X has bad consequences that outweigh C. 33.4 concludes `should_be_performed(X)`. |
 | `practical_reasoning1`, `practical_reasoning2`, `practical_inference` (22.4, 22.1) | `bad_outweighs(A,G)` | A has bad consequences that outweigh the goal G. |
 | `practical_necessary_condition`, `practical_sufficient_condition` (22.2, 22.3) | `bad_outweighs(X,G)` | X has bad consequences that outweigh the goal G. |
+
+Since 2026-11-25 the consequence schemes also have exceptions that are not weighings (D065, D069). 33.1, 33.2 and their modal variants have `too_slight(A,G)`, that G is too slight to count (OC9), and the bearer exception of their side, `gain_discounted_by_bearer(A,G)` for A and `harm_discounted_by_bearer(A,G)` against it (OC16); 33.4 has `fails_to_avert(X,C)` (OC13). The bridges of possible consequences have `worth_finding_out_first(A,G)` (OC15), and `harm_reduction` its own two (OC17). No scheme concludes any of them: a claim that argues one is coded with `other`, concluding it, as an `undercutter`, since no question of the book or the game targets them (§5 item 3). The objection that consequences are offered for the truth of a claim is not an exception: a reply that raises it undercuts the specific argument (OC18).
 
 The book's third question about consequences (33/CQ3, opposite consequences) has two routes, and so has practical reasoning's question about side effects (22.1 CQ5, 22.4 CQ7, and CQ4 of 22.2 and 22.3). A further consequence that ranks nothing is a rebuttal (OC2). A claim that one consequence matters more than another argues the exception (OC3). The rules below decide which route a claim takes.
 
@@ -153,10 +163,10 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - A claim against practical reasoning is coded as one against a consequence argument for A: a further bad consequence is a rebuttal at its conclusion (OC2), and a claim that a bad consequence matters more than its goal is a weighing at `bad_outweighs(A,G)` (OC3, OC4; D070, D091).
 - What the claim concludes decides, not its target or the discussion's thesis.
   - A consequence claim that concludes something about an action (doing, believing, pursuing, steering) is coded with the scheme that fits it: a consequence scheme, or practical reasoning by §3.
-    - This holds when its target is a claim about what is the case too. Its conclusion then meets nothing at the target; code its role and polarity as usual. Unless it proposes a changed or another action (`action_amendment`, `alternative_means`), it is then the appeal that candidate C011 objects to: name C011 in `notes`.
+    - This holds when its target is a claim about what is the case too. Its conclusion then meets nothing at the target; code its role and polarity as usual. Unless it proposes a changed or another action (`action_amendment`, `alternative_means`), it is then the appeal that candidate C011 objects to: name C011 in `notes`. A reply that raises the objection undercuts that argument's inference (OC18).
   - A claim that concludes what is the case from consequences (that God exists, because believing it does good) is not coded with a consequence scheme. Code it with `other`, and name C011 in `notes`.
 
-**OC2. A further consequence that ranks nothing is a rebuttal.** A claim that cites a further consequence of the action, without ranking it against one already argued, is a consequence argument of its own sign at the conclusion of the argument it answers. This holds however grave the claim calls the consequence. It holds after a concession with a bare "but" ("poultry is healthier, but means more miserable lives").
+**OC2. A further consequence that ranks nothing is a rebuttal.** A claim that cites a further consequence of the action, without ranking it against one already argued, is a consequence argument of its own sign at the conclusion of the argument it answers. This holds however grave the claim calls the consequence. It holds after a concession with a bare "but" ("poultry is healthier, but means more miserable lives"). A further consequence that is only possible (§3, the mood of the link) is coded with the modal variant and its bridge, the bridge primary (OC15): the bridge's conclusion is the one that meets the argument it answers.
 
 **OC3. A ranking argues the exception.** A claim that names a consequence of the action and a consequence that the argument it answers cites, and says that one matters more than the other, argues that argument's exception.
 - Words such as outweigh, worse, more serious, more pressing, not worth, the price of and net benefit are hints, not the test.
@@ -178,6 +188,8 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - Against a consequence argument, a claim that another course is better compares two actions, not two consequences of one action ("adoption, though not perfect, is better than abortion"), so it does not argue the exception. Code it with `other`, and name candidate C010 or C017 in `notes`. Another course is a different action (adoption, regulation, rationing).
 - Against practical reasoning, a claim that another course reaches the goal better (more surely, sooner or at lower cost) answers its exception `realize_more_effectively(P,G,A)`: code it with `better_means` (§3; D075, D089).
 - A claim that only puts another course forward for the goal, without saying that it does better, answers neither (D006): code it as a proposal of another course (`action_amendment`, move `alternative_means`) at the conclusion of the argument it replies to, and name C017 in `notes` (D066). Its polarity is the stance the discussion gives it (Kialo places such a proposal as a con), though it is no reason against A; the replay plays it as an argument for the other course.
+- Mitigation, a measure added so that a cited harm does not follow (tax credits for those who could no longer afford food), is an amended action (C006): code the claim for the amended action, with its own scheme, and the role `action_amendment` (§2), at the conclusion of the argument it answers (D066).
+- That A cannot be carried out at all (C018) denies that A brings anything about: it answers the likelihood question at `brings_about(A,G)` (33/CQ1; `CQ:likelihood`). That A would be hard or costly to carry out is a further bad consequence of A (OC2), not this.
 - The action's omission is not another course. A claim that a consequence of A matters more, or less, than a harm of not doing A weighs two consequences of A: the harm of not acting counts as a good consequence of A, its not happening (OC13). Code it by OC4, with the A and G of the argument it answers.
 
 **OC7. A comparison with a class or a whole side** ("than any benefit of the curfew") weighs against every consequence argument of that class on the board: one weighing instance for each.
@@ -189,7 +201,10 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - the opposite consequence, when they state that consequence;
 - when they state both alike, the instance whose target the claim's last sentence addresses.
 
-**OC9. A claim that a cited consequence is small, rare or minor,** and names no rival consequence, attacks `good(G)` or `bad(G)`, or the consequence's likelihood (33/CQ1). It does not argue the exception.
+**OC9. A claim that a cited consequence is slight, rare or not bad at all,** and names no rival consequence, does not argue the outweighing exception. What it says decides what it attacks (D065):
+- that the consequence is real but slight (a small burden, a minor cost): the exception `too_slight(A,G)` of the argument it answers. It grants `good(G)` or `bad(G)`. No scheme concludes `too_slight(A,G)`: code the claim with `other`, concluding it, as an `undercutter`. Slight means slight by what bears on the decision on A: not merely that G reaches few, is small in number, or seems minor to one side (D065; D053, the owner's declaration of 2026-11-25). A grave consequence is not slight, however few it reaches.
+- that it is rare or unlikely: against a categorical argument, its likelihood, 33/CQ1, at `brings_about(A,G)` (`CQ:likelihood`). A modal argument claims only that G may follow: that the chance is small attacks its bridge's `matters_to_decision(A,G)` (OC15), and only a denial that the chance is real answers `33.1 CQ1` or `33.2 CQ1` at its `may_bring_about(A,G)` (the game does not ask the modal variants yet).
+- that it is not bad, or not good, at all: `bad(G)` or `good(G)`, a `premise_attack` (no question targets them).
 
 **OC10. A reply to a weighing claim** attacks that claim's own instance: its comparison (`matters_more(H,G)`, a premise of its `bad_outweighs_good` or `good_outweighs_bad` instance) or the consequence it relies on (`brings_about(A,H)`). Only a reply that nothing outweighs G argues against the exception itself, because that would cancel every other weighing claim against the argument.
 - When the weighing is the claim's secondary instance, the reply targets that instance by its id (§4).
@@ -204,9 +219,41 @@ Each rule has worked cases, with their codings, in `rule-cases.yml` (in `docs/ki
 - In a policy debate, the one who acts is whoever would enact the policy as the thesis states it. The people it affects are others, even when the action's phrase names them.
 - A reason against doing A is a negative consequence of A (33.2).
 - A harm of not doing A that falls on the one who acts is the prudential form (33.4) for A, unless the claim also states the consideration as a gain (then OC12). Its templates address the one who acts as "you" (a government whose revenue falls without the tax); a first-person claim reads "I". The game does not have 33.4 yet, so it is played with `other`.
+  - A reply that doing A would not avert the harm (it would follow even if A were done) argues 33.4's exception `fails_to_avert(X,C)` (D069): `other`, concluding it, an `undercutter`.
 - A harm of not doing A that falls on anyone else, the reader included when the reader does not act, is positive consequences of A (33.1). Its G is the harm's not happening, phrased as a good state ("people in abusive relationships being able to leave their abusers"; candidate C015).
+  - Record whether the claim says that A prevents the harm (D069): *explicit*, the causal premise's `status` is `explicit`; *implicit*, it is `inferred`, or `supplied` with a note that begins "implicit:"; *unknown*, `supplied` with a note that begins "unknown:"; *disputed*, a reply in the discussion against that premise (a claim that targets it, polarity `against`). A challenge record is not one: it lists the questions an instance is open to. A supplied link is not a stated one: its likelihood can still be asked (33/CQ1).
 
 **OC14. A balance claim** that names no single consequence ("all told, the costs outweigh the benefits") is a comparison with a whole side: code it by OC7, and name candidate C004 in `notes`.
+
+**OC15. A possible consequence, and its bridge (D008).** A claim that A may bring about G (§3, the mood of the link) has two instances:
+- the modal variant, secondary: `positive_consequences_modal` (`may_bring_about(A,G)` and `good(G)`, concluding `may_be_worth_performing(A,G)`) or `negative_consequences_modal` (`may_bring_about(A,G)` and `bad(G)`, concluding `may_be_unwise_to_perform(A,G)`), with the exceptions of the categorical scheme of its side;
+- its bridge, primary: `bridge_from_possible_good` or `bridge_from_possible_harm`, concluding `should_be_performed(A)` or `¬should_be_performed(A)`. Its first premise is the modal instance's conclusion (`supplied`, with a note that names that instance). Its second, `matters_to_decision(A,G)`, says that the chance is large enough, given what G would be, to bear on the decision: a remote chance of a modest G does not, a small chance of a grave one may. Supply it unless the claim states it. Its exception is `worth_finding_out_first(A,G)`. The claim's role and target are those its conclusion would have in the categorical scheme.
+
+What the reply says decides what it attacks:
+- that the possibility is not real, or that the evidence is not enough for it: the modal instance's `may_bring_about(A,G)`, 33/CQ1 or CQ2 (`cq_answer`, `33.1 CQ1`, `33.2 CQ2` and so on);
+- that G would be slight if it came: the modal instance's `too_slight(A,G)` (OC9);
+- that the chance, though real, is too small for what G would be: the bridge's `matters_to_decision(A,G)`, a `premise_attack`;
+- that it is worth finding out first whether A brings about G, since it can be found out before A must be decided, reliably enough to settle the question, at a cost and risk worth bearing (a trial, a pilot, a study): the bridge's exception `worth_finding_out_first(A,G)`, an `undercutter` that names the way to find out. Until it is found out, the possibility does not count: the exception takes the bridge away, not the decision, which the other arguments about A still settle. A reply that shows only that G could be found out argues the exception without making it out (D008): it does not meet the critic's burden of producing the exception (D003; the owner's declaration under D053), and the game's answer contract is to refuse it (item F, with step C5). Code it as the exception all the same, and say in `notes` what it leaves unshown: until the contract refuses it, it stands in play, as any argument does, until the bridge's defender answers that finding out first is not worth it (too costly, too slow, too risky, or not reliable enough to settle it), a `rebuttal` of the reply's conclusion, and at equal weight a tie goes against the critic;
+- that other consequences of A matter more than G: the modal instance's outweighing exception (OC3, OC4).
+
+Against a categorical argument that asserts the same link (`brings_about(A,G)`), a reply that it is worth finding out first whether A brings about G challenges that premise: 33/CQ1 or CQ2, whichever its words ask (`cq_answer`, against), which the argument's proponent must then answer. The bridges' exception does not reach a categorical argument: a reply addressed only to the bridge leaves a firm claim of the link on the other side standing, and coded as that exception a reply to the categorical argument would favour whichever side claims the link more firmly.
+
+33.3 has no modal variant: a possible consequence for the agent's own goals is coded with `negative_consequences_modal` and its bridge, and 33.3 is named in `notes`. A weighing claim whose rival consequence is only possible has no answer scheme (C003's take `brings_about(A,H)`): code it with `other`, concluding the exception of the argument it answers (D075), and name candidate C024 in `notes`.
+
+**OC16. On whom a consequence falls (D065, C021).** A claim that a cited consequence counts for less because of whom it falls on, or goes to, grants the consequence and argues the bearer exception of the argument it answers: `harm_discounted_by_bearer(A,G)` against an argument against A (the cost falls on those who cause the harm the action is for), `gain_discounted_by_bearer(A,G)` against an argument for A (the gain goes to those who need it least). No scheme concludes them: code the claim with `other`, concluding the exception, as an `undercutter`.
+- The exception is always the side's of the argument answered: the same fact about who bears a consequence can discount it as a harm and be a gain's very reason (D053).
+- A right or a value that rules A out whatever its consequences is not this: OC5, naming C007.
+- How many a consequence reaches is not who bears it, nor alone how serious it is: a grave consequence is not slight, however few it reaches (OC9).
+
+**OC17. What happens anyway (D072, C022).** A claim that an outcome E happens whether or not A is done, and that A makes each occurrence of E less harmful, is `harm_reduction`: `happens_anyway(A,E)` and `less_harmful_per_occurrence(A,E)`, concluding `should_be_performed(A)` ("abortions happen anyway, so make them safe").
+- If the claim says that A prevents E, it is a harm of not acting (OC13), not this: there E's not happening is A's good consequence; here E happens either way.
+- A reply that a course open to whoever would do A could prevent E argues `preventable_otherwise(A,E)`, and names the course. A reply that E would become more frequent, so that the harm it does overall would not fall, argues `no_net_reduction(A,E)`. Both are undercutters (`other`, concluding the exception). A more frequent E need not offset the gain: 15 occurrences at a harm of 20 are less than 10 at 100.
+- A claim that A's other harms matter more than the reduction is a negative consequences argument against A, a rebuttal at the conclusion: the scheme has no outweighing exception. Name the comparison in `notes`.
+- The steering form ("it is coming anyway, so we should shape it") is not this scheme: code it with `other`, naming C022.
+
+**OC18. Consequences offered for the truth of a claim (D074, C011).** A reply that consequences are no reason to think a claim true (whether we should is irrelevant to whether we can) raises the objection that candidate C011 names. It undercuts the specific argument it answers: target that argument's inference (part `inference`, the instance named, formula null, §4), with role `undercutter`, and code the reply with `other`, its conclusion formula null. This holds against a consequence argument coded by OC1 (its practical conclusion meets nothing at a factual target) and against a claim coded with `other` by OC1 (it concludes what is the case from consequences).
+- It is not an exception of the consequence schemes (D074, as the owner refined it on 2026-11-25): a legitimate argument about the same action, offered for a claim about whether to do or believe it, is not touched by it.
+- In a discussion of whether to believe something, the objection does not hold: there the consequences of believing bear on the question.
 
 ## 4. Output
 
@@ -226,7 +273,9 @@ The format of the annotation records, version 2 (decision D092, 2026-11-24). One
     "premises": [
       {"role": "premise", "formula": "brings_about(tax_meat,food_less_affordable_for_poor)", "en": "Taxing meat brings about …", "status": "explicit"},
       {"role": "premise", "formula": "bad(food_less_affordable_for_poor)", "en": "That is bad.", "status": "supplied"},
-      {"role": "exception", "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)", "en": "…", "status": "supplied"}
+      {"role": "exception", "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)", "en": "…", "status": "supplied"},
+      {"role": "exception", "formula": "too_slight(tax_meat,food_less_affordable_for_poor)", "en": "…", "status": "supplied"},
+      {"role": "exception", "formula": "harm_discounted_by_bearer(tax_meat,food_less_affordable_for_poor)", "en": "…", "status": "supplied"}
     ],
     "conclusion": {"formula": "¬should_be_performed(tax_meat)", "en": "Meat should not be taxed."}
   }],
@@ -256,7 +305,7 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 2. **Targets.** The actual target may be any claim of the discussion, the parent's siblings included. A target is given as `part` (premise, exception, conclusion, inference) plus `formula`, and the formula must be one of the instance the target names (`target.actual.instance`, §4; in format 1, of the target's primary instance). Further Kialo parents go in `target.other_kialo_parents`.
 3. **CQ answer or direct attack.**
    - `cq_answer` exactly when the targeted formula is one that a critical question of the target's scheme is about.
-   - `validate.py` builds the table of (scheme, formula) → (compendium CQ, game CQ) from `docs/scheme-registry/links.json` and `edges.json` each time it runs. Since D055 (2026-10-23) it maps 33/CQ3 to each consequence scheme's own exception.
+   - `validate.py` builds the table of (scheme, formula) → (compendium CQ, game CQ) from `docs/scheme-registry/links.json` and `edges.json` each time it runs. Since D055 (2026-10-23) it maps 33/CQ3 to each consequence scheme's own exception. Since D008 (2026-11-25) it maps 33.1's and 33.2's questions to the modal variants too (CQ1 and CQ2 to `may_bring_about(A,G)`, CQ3 to the outweighing exception). The exceptions of D065 and D069, and the bridges' and `harm_reduction`'s formulas, have no question there: a claim at one of them is an `undercutter` or a `premise_attack`. D074's objection, an undercutter of the specific argument's inference (§3.1, OC18), has none either.
    - Otherwise the role is `premise_attack`, `premise_backing` or `undercutter`.
    - `side_effect` and `alternative_means` become values of `role.move`, a finer label beside the kind.
    - A question about the conclusion (opposite consequences, side effects of a consequences argument) is a `cq_answer` too.
@@ -273,4 +322,5 @@ The two annotators and the adjudicator found these gaps. Batch 3 applies them; `
 9. **The shared vocabulary** (`lexicon.json`) is issued with the batch. One atom per entity or proposition; the action is always `tax_meat`.
 10. **Challenge types** add possibility and conflicting goals.
 11. **Causal steps of an un-enacted policy.** Code a causal step whose cause is only proposed or possible with `cause_to_effect_modal` (`may_occur(E1)` and `causes(E1,E2)`, concluding `may_occur(E2)`), with fit and confidence as for any other instance. `cause_to_effect` is for a cause that has occurred (`validate.py`'s rule R4).
+    - *A possible consequence* (the tax could reduce revenue) is a modal link, not a modal cause: its consequence argument is the modal variant of 33.1 or 33.2 with its bridge (§3; §3.1, OC15; D008, 2026-11-25). The causal steps that back it are still `cause_to_effect_modal`.
     - *History.* Until 2026-11-24 such steps were coded with `cause_to_effect`, fit `reconstructed`, confidence at most 0.5 and the note "hypothetical cause (needs a modal causal scheme, audit N8)", because `walton.yml` had no modal scheme until 2026-10-22 (audit N8). The batch-2 gold's 11 such steps are recoded with `cause_to_effect_modal` (D039, 2026-11-24); the gold before, in format 1, is `gold-format1.json`.
