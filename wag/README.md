@@ -3,11 +3,16 @@
 The project's overview, status, issues and plan are in the central [`README.md`](../README.md).
 
 A turn-based argumentation game: players put forward arguments built from
-Walton's argumentation schemes, and attack, defend and question each other's
-arguments through their critical questions, to any depth. A NASCQ graph
+Walton's argumentation schemes, argue for or against any statement on the
+board (rebutting a conclusion, undermining a premise, undercutting an
+inference), and ask and answer the schemes' critical questions, for as many
+moves as the rules and the game's limits allow. The rules
+(`../docs/game-rules.md`) decide which moves are legal; a NASCQ graph
 (schemes, critical questions, ask and backup edges, after Pyon & Ri 2022)
-decides which moves are legal; Carneades-4 (the fork in `../carneades-4`)
-labels every statement In, Out or Undecided after each move. Eight modes
+gives each scheme its questions and the schemes that can answer them, and an
+argument needs no question to be made. Carneades-4 (the fork in
+`../carneades-4`) labels every statement In, Out or Undecided after each
+move. Eight modes
 (points races, timed and speed play, critical-question duels, debates on a
 central claim, solo belief revision) are combinations of a few settings.
 
@@ -104,14 +109,21 @@ Everything else the CLI prints goes to standard error.
 The rulebook is `../docs/game-rules.md`; in brief:
 
 - **Moves.** *Argue*: instantiate a scheme; its premises are presumed (they
-  hold until attacked). *Attack* or *defend*: answer a critical question about
+  hold until attacked). *For or against a statement*: an argument for any
+  statement on the board, or for its opposite (a rebuttal of a conclusion, an
+  undermining of a premise), with a scheme that can conclude it (S9); it
+  names no question. *Attack* or *defend*: answer a critical question about
   an argument negatively or positively, with a scheme that can back the
   answer; the question's locus decides what the answer argues (against or
-  for a premise, an exception, the conclusion, or the inference). Answers
-  are arguments with their own critical questions, so disputes go as deep
-  as the players take them. *Question*: ask without answering; the premise
-  (or inference) is out until the proponent answers. *Pass*, *resign*.
-- **Validity.** NASCQ checks S0–S8 and Q1 (see `nascq.Validate`), no cycles,
+  for a premise, an exception, the conclusion, or the inference). An attack
+  that names no question is a direct rebuttal, undercutter or undermining.
+  Answers are arguments with their own critical questions, so a dispute goes
+  on as long as the players take it, within the game's limits (turns, no
+  cycles, G1). *Question*: ask without answering, or challenge a premise;
+  the premise (or inference) is out until the proponent answers. *Other*,
+  where the game allows it (`AllowOther`): premises and a conclusion the
+  player writes. *Pass*, *resign*.
+- **Validity.** NASCQ checks S0–S9 and Q1 (see `nascq.Validate`), no cycles,
   no restating an argument already in the graph (G1), no asking a question
   twice (Q2). An invalid move costs 5 points and the player moves again.
 - **Score.** 10 × weight for an argument whose conclusion is In (2 × weight

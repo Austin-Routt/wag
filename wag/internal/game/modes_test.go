@@ -461,7 +461,7 @@ func TestHumanWizardDefendQuestionResign(t *testing.T) {
 	gs := modeGame(t, "cq", "Alice", "Bob")
 	a1 := play(t, gs, prSupportAction())
 	var out strings.Builder
-	bob := NewHumanAgent("Bob", strings.NewReader("4\n1\n1\n"), &out) // question → a1 → possibility, the only question about a premise
+	bob := NewHumanAgent("Bob", strings.NewReader("5\n1\n1\n"), &out) // question → a1 → possibility, the only question about a premise
 	act := bob.ChooseAction(gs.BuildObservation())
 	if act.Type != "question" || act.TargetArgID != a1 || act.AnswersCQID != "CQ:possibility" {
 		t.Fatalf("question: %+v\n%s", act, out.String())
@@ -469,7 +469,7 @@ func TestHumanWizardDefendQuestionResign(t *testing.T) {
 	play(t, gs, act)
 
 	out.Reset()
-	alice := NewHumanAgent("Alice", strings.NewReader("3\n1\n4\n2\ndr yes\npolitics\n"), &out) // defend → a1 → possibility → expert
+	alice := NewHumanAgent("Alice", strings.NewReader("4\n1\n4\n2\ndr yes\npolitics\n"), &out) // defend → a1 → possibility → expert
 	act = alice.ChooseAction(gs.BuildObservation())
 	shown := out.String()
 	for _, want := range []string{
@@ -490,7 +490,7 @@ func TestHumanWizardDefendQuestionResign(t *testing.T) {
 		t.Fatal("the defence did not answer the question")
 	}
 
-	bob = NewHumanAgent("Bob", strings.NewReader("6\n"), &out)
+	bob = NewHumanAgent("Bob", strings.NewReader("7\n"), &out)
 	if act = bob.ChooseAction(gs.BuildObservation()); act.Type != "resign" {
 		t.Fatalf("resign: %+v", act)
 	}

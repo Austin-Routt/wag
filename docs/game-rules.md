@@ -283,8 +283,9 @@ types are planned: [`dialogue-types.md`](dialogue-types.md) §9,
   - a won game is worth 10⁶, a lost one −10⁶;
   - otherwise its lead in score;
   - plus 100 while the verdict favours its side.
-- `HumanAgent` is the CLI wizard: Argue, Attack, Defend, Question, Pass and
-  Resign.
+- `HumanAgent` is the CLI wizard: Argue; For or against a statement (no
+  question named); Attack, Defend and Question through a critical question;
+  Pass and Resign.
 - Language models play through the text protocol (`docs/protocol.md`): a
   prompt in English, a free-text reply ending in one JSON move. In the browser
   a seat can be a language model (copy and paste) or Claude (the API).

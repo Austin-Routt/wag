@@ -2,8 +2,8 @@
 
 WAG is a turn-based argumentation game, and a research workbench around it.
 
-- **The game.** Players put forward arguments built from Walton's argumentation schemes. They attack, defend and question each other's arguments through the schemes' critical questions, to any depth.
-- **What decides the moves.** A network of schemes and critical questions (the NASCQ, after Pyon & Ri 2022) decides which moves are legal. Carneades 4 labels every statement In, Out or Undecided after each move.
+- **The game.** Players put forward arguments built from Walton's argumentation schemes. They argue for or against any statement on the board (rebutting a conclusion, undermining a premise, undercutting an inference), and ask and answer the schemes' critical questions, for as many moves as the rules and the game's limits allow.
+- **What decides the moves.** The game's rules ([`docs/game-rules.md`](docs/game-rules.md)) decide which moves are legal. A network of schemes and critical questions (the NASCQ, after Pyon & Ri 2022) gives each scheme its questions and the schemes that can answer them; an argument needs no question to be made. Carneades 4 labels every statement In, Out or Undecided after each move.
 - **Who plays.** A seat can be a person, a rule bot, or a language model.
 - **The research aims.**
   1. **Schemes.** Ground the game's schemes in real debate: annotate Kialo discussions as scheme instances, with models and people, and grow the scheme network from what the data shows.

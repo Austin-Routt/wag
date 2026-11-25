@@ -6,11 +6,17 @@ package game
 //
 // The wizard guides the player step-by-step:
 //   1. Show game state (arguments, scores, round, open questions)
-//   2. Choose what to do (argue / attack / defend / question / pass / resign)
+//   2. Choose what to do (argue / for or against a statement / attack /
+//      defend / question / pass / resign)
 //   3. To argue: select scheme → fill variables
-//   4. To attack or defend: select target → select CQ → select backup scheme
-//      → fill variables; to question: select target → select CQ
-//   5. Return ProposedAction
+//   4. To argue for or against a statement on the board: select the
+//      statement → the side → a scheme that can conclude it → fill variables
+//      (no critical question: a rebuttal of a conclusion or an undermining
+//      of a premise, docs/game-rules.md)
+//   5. To attack or defend through a critical question: select target →
+//      select CQ → select backup scheme → fill variables; to question:
+//      select target → select CQ
+//   6. Return ProposedAction
 //
 // IO is injectable (io.Reader / io.Writer) for testability. Pass os.Stdin
 // and os.Stdout for real CLI use.
@@ -66,8 +72,11 @@ func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 
 	has := map[string]bool{}
 	for _, tmpl := range obs.AvailableActions {
-		if tmpl.TargetArgID != "" { // the wizard offers the moves about arguments
+		if tmpl.TargetArgID != "" { // the moves about arguments, through their questions
 			has[tmpl.Type] = true
+		}
+		if tmpl.TargetStmtID != "" { // the moves about statements, with no question
+			has["statement"] = true
 		}
 	}
 	none := func(typ string) string {
@@ -78,22 +87,25 @@ func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	}
 	h.print("\n  What would you like to do?\n")
 	h.print("    [1] Argue    — put forward a new argument\n")
-	h.printf("    [2] Attack   — answer a critical question against an argument%s\n", none("attack"))
-	h.printf("    [3] Defend   — answer a critical question in an argument's favour%s\n", none("support"))
-	h.printf("    [4] Question — ask a critical question; its proponent must answer%s\n", none("question"))
-	h.print("    [5] Pass\n")
-	h.print("    [6] Resign\n")
+	h.printf("    [2] For or against — argue for or against a statement on the board, no question needed%s\n", none("statement"))
+	h.printf("    [3] Attack   — answer a critical question against an argument%s\n", none("attack"))
+	h.printf("    [4] Defend   — answer a critical question in an argument's favour%s\n", none("support"))
+	h.printf("    [5] Question — ask a critical question; its proponent must answer%s\n", none("question"))
+	h.print("    [6] Pass\n")
+	h.print("    [7] Resign\n")
 
-	switch h.readChoice(1, 6) {
+	switch h.readChoice(1, 7) {
 	case 1:
 		return h.chooseSupportAction(obs)
 	case 2:
-		return h.chooseTargeted(obs, "attack")
+		return h.chooseStatementAction(obs)
 	case 3:
-		return h.chooseTargeted(obs, "support")
+		return h.chooseTargeted(obs, "attack")
 	case 4:
+		return h.chooseTargeted(obs, "support")
+	case 5:
 		return h.chooseTargeted(obs, "question")
-	case 6:
+	case 7:
 		return nascq.ProposedAction{Type: "resign"}
 	default:
 		return nascq.ProposedAction{Type: "abstain"}
@@ -233,6 +245,88 @@ func (h *HumanAgent) chooseTargeted(obs *Observation, typ string) nascq.Proposed
 }
 
 // -------------------------------------------------------------------------
+// Statement wizard: statement → side → scheme → variables
+// -------------------------------------------------------------------------
+
+// chooseStatementAction builds a move about a statement on the board: an
+// argument for it, or for its opposite (a rebuttal of a conclusion, an
+// undermining of a premise), with a scheme that can conclude it (S9). No
+// critical question is named: such moves are the game's as much as the
+// answers to questions are (docs/game-rules.md).
+func (h *HumanAgent) chooseStatementAction(obs *Observation) nascq.ProposedAction {
+	gs := obs.GameState
+	var stmts []string
+	seen := map[string]bool{}
+	for _, tmpl := range obs.AvailableActions {
+		if tmpl.TargetStmtID != "" && !seen[tmpl.TargetStmtID] {
+			seen[tmpl.TargetStmtID] = true
+			stmts = append(stmts, tmpl.TargetStmtID)
+		}
+	}
+	if len(stmts) == 0 {
+		h.print("\n  There is no statement on the board yet: argue instead.\n")
+		return h.chooseSupportAction(obs)
+	}
+
+	// --- Step 1: the statement ---
+	h.print("\n  Which statement?\n")
+	for i, id := range stmts {
+		label := ""
+		if st := gs.Adapter.Graph.Statements[id]; st != nil {
+			label = " (" + strings.TrimSpace(labelString(st.Label)) + ")"
+		}
+		h.printf("    [%d] %s%s\n", i+1, gs.Say(id), label)
+	}
+	stmt := stmts[h.readChoice(1, len(stmts))-1]
+
+	// --- Step 2: the side ---
+	var sides []string
+	for _, typ := range []string{"support", "attack"} {
+		for _, tmpl := range obs.AvailableActions {
+			if tmpl.TargetStmtID == stmt && tmpl.Type == typ {
+				sides = append(sides, typ)
+				break
+			}
+		}
+	}
+	if len(sides) == 0 {
+		h.print("\n  No scheme can argue about that statement.\n")
+		return nascq.ProposedAction{Type: "abstain"}
+	}
+	typ := sides[0]
+	if len(sides) == 2 {
+		h.print("\n  For it or against it?\n    [1] For it\n    [2] Against it\n")
+		typ = sides[h.readChoice(1, 2)-1]
+	} else if typ == "support" {
+		h.print("\n  Only an argument for it is possible here.\n")
+	} else {
+		h.print("\n  Only an argument against it is possible here.\n")
+	}
+
+	// --- Step 3: the scheme ---
+	var schemes []nascq.ActionTemplate
+	for _, tmpl := range obs.AvailableActions {
+		if tmpl.TargetStmtID == stmt && tmpl.Type == typ {
+			schemes = append(schemes, tmpl)
+		}
+	}
+	h.printf("\n  Argue with which scheme? The argument: %s\n", gs.Effect(schemes[0], nil))
+	for i, b := range schemes {
+		weight := 0.0
+		if scheme := gs.NASCQ.GetScheme(b.SchemeID); scheme != nil {
+			weight = scheme.BaseWeight
+		}
+		h.printf("    [%d] %s  (weight %.2f)\n", i+1, b.SchemeName, weight)
+	}
+	selected := schemes[h.readChoice(1, len(schemes))-1]
+
+	// --- Step 4: the variables ---
+	bindings := h.fillVariables(selected)
+	h.preview(gs, selected, bindings)
+	return selected.Action(bindings)
+}
+
+// -------------------------------------------------------------------------
 // Variable filling
 // -------------------------------------------------------------------------
 
@@ -274,7 +368,7 @@ func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings 
 	for _, p := range rd.Premises {
 		h.printf("      %s\n", p)
 	}
-	if tmpl.TargetArgID != "" {
+	if tmpl.TargetArgID != "" || tmpl.TargetStmtID != "" {
 		h.printf("    therefore: %s\n", gs.Effect(tmpl, bindings))
 	}
 }
