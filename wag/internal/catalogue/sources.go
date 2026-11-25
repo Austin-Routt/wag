@@ -122,6 +122,7 @@ type LinkEntry struct {
 	BookPages   string       `json:"book_pages"`
 	Parent      *string      `json:"parent"`
 	HeadingOnly bool         `json:"heading_only"`
+	NPremises   int          `json:"n_premises"`
 	CQLabels    []string     `json:"cq_labels"`
 	SharesCQs   *string      `json:"shares_cqs_printed_under"`
 	Links       []WaltonLink `json:"walton_links"`

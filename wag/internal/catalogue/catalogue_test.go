@@ -878,6 +878,32 @@ func TestProposalApplied(t *testing.T) {
 	}
 }
 
+// An applied proposal's view marks each scheme that walton.yml has changed
+// since (a later decision), so that its "Now" column is not read as the
+// proposed one (the review of proposal D008-D074, version 2, E7).
+func TestProposalAppliedChangedSince(t *testing.T) {
+	s := sources(t)
+	w, ok := findWalton(s, "positive_consequences")
+	if !ok {
+		t.Fatal("walton.yml has no positive_consequences")
+	}
+	const mark = "*Changed since this proposal was applied:*"
+	p := &Proposal{Decisions: []string{"D999"}, Title: "t", Applied: "2026-10-23", Schemes: []Scheme{w}}
+	if v := string(ProposalView(p, s, "x.yml")); strings.Contains(v, mark) {
+		t.Errorf("a scheme as walton.yml has it is marked changed:\n%s", v)
+	}
+	old := w
+	old.Exceptions = nil
+	p.Schemes = []Scheme{old}
+	if v := string(ProposalView(p, s, "x.yml")); !strings.Contains(v, mark) {
+		t.Errorf("a scheme walton.yml has changed since is not marked:\n%s", v)
+	}
+	p.Applied = ""
+	if v := string(ProposalView(p, s, "x.yml")); strings.Contains(v, mark) {
+		t.Errorf("a proposal not yet applied is marked:\n%s", v)
+	}
+}
+
 // Every committed proposal checks without errors, and its view is current.
 func TestCommittedProposals(t *testing.T) {
 	s := sources(t)
@@ -1131,6 +1157,7 @@ schemes:
 questions:
   x_mod:
     - {id: 33/CQ1, asks: q, target: "brings_about(A,G)"}
+    - {id: 33/CQ2, asks: q, target: "brings_about(A,G)"}
     - {id: 33/CQ3, asks: q, target: "bad_outweighs(A,G)"}
 links:
   - entry: "33.1"
@@ -1144,6 +1171,8 @@ links:
       walton: [{formula: "should_be_performed(A)", locus: conclusion}]
     cq_map:
       - cq: CQ1
+        walton: [{formula: "brings_about(A,G)", locus: premise}]
+      - cq: CQ2
         walton: [{formula: "brings_about(A,G)", locus: premise}]
       - cq: CQ3
         walton: [{formula: "bad_outweighs(A,G)", locus: exception}]
@@ -1163,7 +1192,7 @@ examples: []
 	}
 	p := load(sound)
 	for _, f := range CheckProposal(p, s) {
-		if f.Error || strings.Contains(f.Msg, "links.json maps") {
+		if f.Error || strings.Contains(f.Msg, "links.json maps") || strings.Contains(f.Msg, "is printed for") {
 			t.Errorf("a sound link: %s", f)
 		}
 	}
@@ -1198,6 +1227,18 @@ examples: []
 			"links.json maps 33/CQ1 of x_mod to brings_about(A,G)", false},
 		{"an applied proposal whose link links.json lacks", "examples: []", "applied: 2026-11-25\nexamples: []",
 			"the proposal is applied, but links.json does not have its link of x_mod to 33.1", true},
+		// The review of version 2 (CW1-CW3): a question no link maps, a
+		// printed question left out, and maps that are incomplete.
+		{"a book question the proposed link does not map", "      - cq: CQ2\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n", "",
+			"the proposal's link of x_mod to 33.1 maps no CQ2", true},
+		{"a printed question the proposal does not give", "    - {id: 33/CQ2, asks: q, target: \"brings_about(A,G)\"}\n", "",
+			"33/CQ2 is printed for 33.1", false},
+		{"a link that maps no conclusion", "    conclusion_map:\n      walton: [{formula: \"should_be_performed(A)\", locus: conclusion}]\n", "",
+			"the link maps no conclusion", true},
+		{"a link that maps fewer premises than the entry prints", "    premise_map:\n      - compendium_label: Premise\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}, {formula: \"good(G)\", locus: premise}]\n", "",
+			"33.1 prints 1 premise(s), and the link maps 0", true},
+		{"a premise label the entry's links do not use", "compendium_label: Premise", "compendium_label: Major Premise",
+			`33.1 prints no premise "Major Premise"`, true},
 	}
 	for _, c := range cases {
 		text := sound
@@ -1263,13 +1304,61 @@ examples: []
 		if n != 1 {
 			t.Errorf("links.json links positive_consequences to 33.1 %d times", n)
 		}
+		// A question that links.json's own link does not map is a warning:
+		// links.json must follow when the proposal is applied.
+		gap := *s
+		gap.Links = append([]LinkEntry(nil), s.Links...)
+		for i, en := range gap.Links {
+			if en.Number != "33.1" {
+				continue
+			}
+			en.Links = append([]WaltonLink(nil), en.Links...)
+			for j, l := range en.Links {
+				if l.ID == w.ID {
+					var rows []CQMapRow
+					for _, r := range l.CQMap {
+						if r.CQ != "CQ2" {
+							rows = append(rows, r)
+						}
+					}
+					l.CQMap = rows
+					en.Links[j] = l
+				}
+			}
+			gap.Links[i] = en
+		}
+		q := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
+			Questions: map[string][]PQuery{w.ID: {{ID: "33/CQ2", Asks: "q", Target: "brings_about(A,G)"}}}}
+		warned := false
+		for _, f := range CheckProposal(q, &gap) {
+			if f.Error && strings.Contains(f.Msg, "CQ2") {
+				t.Errorf("links.json's own gap is an error: %s", f)
+			}
+			warned = warned || !f.Error && strings.Contains(f.Msg, "links.json maps no CQ2 of positive_consequences")
+		}
+		if !warned {
+			t.Errorf("a question links.json does not map passes silently: %v", CheckProposal(q, &gap))
+		}
+		// A relinked scheme keeps the book's premise labels, which its own
+		// link to the entry gives when no other link does.
+		relabel := have
+		relabel.PremiseMap = []MapItem{{Label: "Major Premise", Walton: have.PremiseMap[0].Walton}}
+		rp := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
+			Links: []ProposedLink{{Entry: "33.1", WaltonLink: relabel}}}
+		found = false
+		for _, f := range CheckProposal(rp, s) {
+			found = found || f.Error && strings.Contains(f.Msg, `33.1 prints no premise "Major Premise" (its links name Premise)`)
+		}
+		if !found {
+			t.Errorf("a relinked scheme's premise label the book does not print passes: %v", CheckProposal(rp, s))
+		}
 		// A proposed link replaces the scheme's own: its questions are held
 		// to the new map, not the old one as well.
 		p = &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w},
 			Questions: map[string][]PQuery{w.ID: {{ID: "33/CQ3", Asks: "q", Target: "bad_outweighs(A,G)"}}},
 			Links: []ProposedLink{{Entry: "33.1", WaltonLink: WaltonLink{ID: w.ID, Match: "exact", Reason: "r",
 				CQMap: []CQMapRow{{CQ: "CQ3", Walton: []FormulaLocus{{Formula: "good(G)", Locus: "premise"}}}}}}}}
-		warned := false
+		warned = false
 		for _, f := range CheckProposal(p, s) {
 			warned = warned || !f.Error && strings.Contains(f.Msg, "links.json maps 33/CQ3 of positive_consequences to good(G)")
 		}

@@ -979,7 +979,7 @@ func writeCandidate(b *bytes.Buffer, c *Candidate, th Threshold, status map[stri
 		}
 		var hb bytes.Buffer
 		for _, sc := range s.Schemes {
-			writeScheme(&hb, src, sc, s.Questions[sc.ID], "A sketch: not in `walton.yml`.")
+			writeScheme(&hb, src, sc, s.Questions[sc.ID], "A sketch: not in `walton.yml`.", false)
 		}
 		writeTemplates(&hb, "**Its templates:**", s.Language)
 		// One level down: the candidate is ###.
