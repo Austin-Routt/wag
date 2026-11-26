@@ -1,7 +1,8 @@
 # Step C5: the game takes the first family
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
-owner, 2026-11-26), so C5.2 follows the answer scheme's proposal for `worth_finding_out_first`. The
+owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
+(proposal D095, applied 2026-11-26): C5.2 is next. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; this is version 4, with
 D095 as decided and item F's cases from the independent review of 26 November. Its implementation
@@ -243,8 +244,9 @@ Recording-1 (a paid reply recovered after a crash, with no second call), belongs
 
 1. This plan and D094, checked independently; D095 put to the owner.
 2. C5.1 (it depends on no part of D095); gates on both toolchains; independent review; push.
-3. D095 decided (2026-11-26): the answer scheme for `worth_finding_out_first` through the proposal
-   process; then C5.2, one data identity; gates; independent review; push.
+3. D095 decided (2026-11-26); the answer scheme for `worth_finding_out_first` applied the same day through
+   the proposal process (proposal D095, version 2); then C5.2, one data identity; gates; independent review;
+   push.
 
 ## Not in C5
 

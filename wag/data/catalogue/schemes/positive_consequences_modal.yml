@@ -213,6 +213,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: Switching to a four-day week might raise our productivity, so it may be worth
     doing.

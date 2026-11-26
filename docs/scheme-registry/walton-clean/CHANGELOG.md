@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2454 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 30 of them changed by the owner's decisions (`ad_baculum`, `analogy`, `appeal_to_vanity_ad_populum`, `danger`, `end_and_means_1`, `fear`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_goal`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `pragmatic_alternative`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`, `threat`, `two_person_practical`, `waste`), and 18 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_agent`, `bridge_from_continuing`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `end_and_means_bad`, `end_and_means_less_bad`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `sunk_costs_precommitment`, `whole_into_parts`); 129 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2476 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 30 of them changed by the owner's decisions (`ad_baculum`, `analogy`, `appeal_to_vanity_ad_populum`, `danger`, `end_and_means_1`, `fear`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_goal`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `pragmatic_alternative`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`, `threat`, `two_person_practical`, `waste`), and 19 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_agent`, `bridge_from_continuing`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `end_and_means_bad`, `end_and_means_less_bad`, `finding_out_first`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `sunk_costs_precommitment`, `whole_into_parts`); 130 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 142 / 155 | 5 / 5 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 129 | 0 of 129 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 130 | 0 of 130 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 66 of 111 | 127 of 129 | 129 of 129 |
+| schemes passing checks 2–4 | – | 66 of 111 | 128 of 130 | 130 of 130 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr, and 4 for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these 5.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 129 schemes, and check 2 passes for 127. Two fail one validator rule only: every variable must occur in a premise. In `ad_hominem` and `regulative_rule`, a variable occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 130 schemes, and check 2 passes for 128. Two fail one validator rule only: every variable must occur in a premise. In `ad_hominem` and `regulative_rule`, a variable occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -35,10 +35,10 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | template | 46 | 44 |
 | repair — needs approval | 0 | 0 |
 | repair — owner decision | 160 | 137 |
-| addition — owner decision | 333 | 36 |
-| **total** | **682** | **313** distinct lines (a line can carry edits of several categories) |
+| addition — owner decision | 355 | 38 |
+| **total** | **704** | **315** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 261 lines removed, 646 added. That is 256 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 493 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
+Unified diff against the original (`walton.diff`): 261 lines removed, 668 added. That is 256 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 515 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -73,6 +73,7 @@ These change what schemes say, add one, or apply an authorized vocabulary migrat
 | `practical_goal`, `two_person_practical`, `waste`, `end_and_means_1` | `practical_goal`: goal premise `goal_of_agent(P,G)`, exceptions `realize_more_effectively(P,G,X)`, `incompatible_goal(P,G)`, `bad_outweighs(X,G)`; `two_person_practical`: conclusion `should_do(A,Y)`, assumption `possible_bring_about(A,Y)`, exceptions `realize_more_effectively(A,X,Y)`, `incompatible_goal(A,X)`, `bad_outweighs(Y,X)`; `waste`: assumption `possible_goal(X)`, exception `reassessment_against_continuing(A,X)`; `end_and_means_1`: exception `means_bad_outweighs(X,Y)` | 2026-11-26 | Decisions D023, D033, D063 and D093 (the same proposal). The argument from goal borrows practical reasoning's questions in its formulas (D023); two-person practical reasoning asks four of the book's five questions in them, the fifth keeping no formula, where its exceptions named the advisor for the action and left the means out (D093); waste's second question is the critic's exception (D033) and its assumption a goal's possibility; end and means borrows the consequences' question of the opposite value, in a formula of its own, since a means may be a state (D023). |
 | `sunk_costs_precommitment`, `end_and_means_bad`, `end_and_means_less_bad` (new) | the commitment form of sunk costs: premises `choice_at(T2,A)` and `precommitted(P,A,T1,T2)`, conclusion `should_do(P,A)`; the negative and graded readings of 22.6.1: `means_to_end(X,Y)`, `bad(Y)`, so `bad(X)`, with the exception `means_good_outweighs(X,Y)`; and `means_to_end(X,Y)`, `good(Y)`, `bad(X)`, so `less_bad_as_means(X,Y)` (new templates) | 2026-11-26 | Decisions D031 and D022, with D093's borrowed question for the negative reading (the same proposal). As the schemes library has them; 25 and 22.6.1 in the compendium (2008, pp. 135-136, 325-327; Walton 2002, pp. 488-491). |
 | `bridge_from_agent`, `bridge_from_continuing` (new) | written for WAG: premises `should_do(P,A)` and `deliberating_agent(P,A)`; and `ought_to_continue(P,G)`, `continues_trying(A,G)` and `deliberating_agent(P,A)`, with the assumption `possible_bring_about(P,A)` and the exceptions `realize_more_effectively(P,G,A)` and `bad_outweighs(A,G)`; conclusion `should_be_performed(A)` (new templates) | 2026-11-26 | Decisions D063 and D093 (the same proposal). A conclusion that names an agent reaches the recommendation only when the decision is that agent's, a premise its arguer supports, for the exception D063's text names (an exception nobody raises would let an agent nobody checked pass); continuing binds to an action that continues the effort, a means for the goal, which practical reasoning's questions test. Not in the compendium. |
+| `finding_out_first` (new) | written for WAG: premises `settles_whether(I,A,G)`, `done_in_time(I,A)` and `worth_its_costs(I,A,G)`; conclusion `worth_finding_out_first(A,G)` (new templates) | 2026-11-26 | Decision D095 (3), taken by the owner (WAG's proposal D095, version 2, after an independent review). The answer scheme for the bridges' exception: it concludes the exception from the conditions of the owner's declaration under D053, that an investigation I would settle whether A brings about G, reliably enough, before the decision on A must be taken, at a cost and risk worth bearing, so that the game can tell a made-out answer from a bare claim of knowability. No premise makes the decision wait. After Walton, The New Dialectic (1998), p. 203, and Fundamentals of Critical Argumentation (2006), p. 85; not in the compendium. |
 
 ## D081 repairs accepted after independent source review
 
@@ -285,6 +286,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **118** · typo · template words 'prohibite -obligator-' (cf. obligatory/1: 'prohibited -obligatory-') (used by: regulative_rule)
   - before: `  do_obligator/0: "One must not do what is prohibite -obligator-."`
   - after: `  do_obligator/0: "One must not do what is prohibited -obligatory-."`
+- **119** [insert after] · addition — owner decision · template for the answer scheme's premises (D095), in our own words (used by: finding_out_first)
+  - before: _(none)_
+  - after: `  done_in_time/2: "%s can be done before the decision on action %s must be taken."`
 - **121** · typo · template word 'achive' (used by: end_and_means_3)
   - before: `  easy_to_achive/1: "%s is easy to achive."`
   - after: `  easy_to_achive/1: "%s is easy to achieve."`
@@ -578,6 +582,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **332** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s."`
+- **332** [insert after] · addition — owner decision · template for the answer scheme's premises (D095), in our own words (used by: finding_out_first)
+  - before: _(none)_
+  - after: `  settles_whether/3: "%s would settle, reliably enough for the decision, whether action %s brings about %s."`
 - **337** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses should_not with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  should_not: "Therefore you should not bring about %s."`
   - after: `  should_not/1: "Therefore you should not bring about %s."`
@@ -663,9 +670,12 @@ Format: **line** · category · reason, then the line before and after. An inser
   - after: `  waste_bad_thing/2: "If all the previous efforts of %s to realize %s were wasted, that would be a bad thing."
   whole_is/2: "The whole %s has %s."
   whole_of/4: "%s is made up of the parts %s, %s and %s."`
-- **392** [insert after] · addition — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: bridge_from_possible_good, bridge_from_possible_harm)
+- **392** [insert after] · addition — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: bridge_from_possible_good, bridge_from_possible_harm, finding_out_first)
   - before: _(none)_
   - after: `  worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."`
+- **393** [insert after] · addition — owner decision · template for the answer scheme's premises (D095), in our own words (used by: finding_out_first)
+  - before: _(none)_
+  - after: `  worth_its_costs/3: "The costs and risks of %s are worth bearing to know whether action %s brings about %s before that possibility counts in the decision."`
 - **402** · repair — owner decision · the template nearly repeated the book's premise and had a stray comma; rewritten in our own words for the two-case form (D028, D029) (used by: practical_analogy_negative)
   - before: `  wrong_to_do/2: "The wrong thing to do in %s, was to carry out action %s."`
   - after: `  wrong_to_do/2: "In %s, %s was the wrong course."`
@@ -2297,6 +2307,66 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: _(none)_
   - after: `      - no_net_reduction(A,E)`
 - **1926** [insert after] · addition — owner decision · D072: the argument from what happens anyway: E happens whether or not A is done, and A makes each occurrence less harmful; its exceptions, a course open to whoever would do A could prevent E, and the harm overall would not fall. Decided under the owner's standing rule of 2026-11-22, refined by the owner on 2026-11-25 (proposal D008-D074, version 5)
+  - before: _(none)_
+  - after: _(none)_
+
+### finding_out_first
+
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `  - id: finding_out_first`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `    meta:`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      title: Argument for Finding Out First`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      source: >`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        WAG's answer scheme (decision D095 (3), 2026-11-26), on the owner's declaration under D053`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        (2026-11-25) of the bridges' exception worth_finding_out_first(A,G): it concludes the exception`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        from the conditions the declaration names. Not in the compendium. After Douglas Walton, The New`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        Dialectic: Conversational Contexts of Argument, University of Toronto Press, Toronto, 1998, p. 203`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        (a shift to information-seeking within a critical discussion), and Douglas Walton, Fundamentals of`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        Critical Argumentation, Cambridge University Press, Cambridge, 2006, p. 85 (delaying a decision to`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `        collect information).`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `    variables: [A,G,I]`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      - worth_finding_out_first(A,G)`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `    premises:`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      - settles_whether(I,A,G)`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      - done_in_time(I,A)`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
+  - before: _(none)_
+  - after: `      - worth_its_costs(I,A,G)`
+- **1926** [insert after] · addition — owner decision · D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)
   - before: _(none)_
   - after: _(none)_
 

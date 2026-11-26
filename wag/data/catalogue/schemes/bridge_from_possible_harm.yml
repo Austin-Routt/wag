@@ -55,17 +55,20 @@ critical_questions:
   paraphrase: 'Should the possibility that doing A brings about G be left out of the
     decision on A until it is found out: can it be found out in time, reliably enough
     to settle the question, at a cost and risk worth bearing? Which way?'
-  answer: 'The critic, who raises it with an argument. Against: a way to find out
-    in time whether A brings G about, reliably enough to settle the question, at a
-    cost and risk worth bearing (a trial, a pilot, a study), named in the answer,
-    which undercuts the bridge through worth_finding_out_first(A,G); the modal argument
-    stands. A reply that shows only that G could be found out argues the exception
-    without making it out: it does not meet the critic''s burden (D053, the owner''s
-    declaration), and the game''s answer contract is to refuse it (item F, step C5).
-    Coded with Other (docs/kialo-batch2/guidelines.md §3.1, OC15). For: showing that
-    the decision cannot wait, that no such test would settle it, or that finding out
-    first would cost or risk more than it is worth.'
-  status: drafted by Claude Code, 2026-11-25
+  answer: 'The critic, who raises it with an argument. Against: an argument of finding_out_first
+    (D095), which names the investigation and argues that it would settle whether
+    A brings G about, in time and at a cost and risk worth bearing (a trial, a pilot,
+    a study), and so undercuts the bridge through worth_finding_out_first(A,G); a
+    source-based scheme that asserts the exception (expert opinion, position to know)
+    answers too, with its own questions. The modal argument stands. A reply that shows
+    only that G could be found out argues the exception without making it out: it
+    does not meet the critic''s burden (D053, the owner''s declaration); it is coded
+    with Other (docs/kialo-batch2/guidelines.md OC15), and the game refuses it at
+    this question from step C5.2 (D095 (3)). For: against an answer of finding_out_first,
+    a challenge of the premise it denies (the investigation would end after the decision
+    must be taken, would not settle the question, or would cost or risk more than
+    it is worth); against a reply coded with Other, a rebuttal of its conclusion.'
+  status: drafted by Claude Code, 2026-11-26
 summary:
   text: 'WAG''s bridge (D008, refined 2026-11-25) from negative_consequences_modal''s
     conclusion to ¬should_be_performed(A), on the pattern of D011 and D063: an explicit
@@ -138,6 +141,12 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: 'finding_out_first is the answer scheme for this bridge''s exception, worth_finding_out_first(A,G)
+    (D095): it names an investigation that would settle whether A brings about G,
+    in time and at a cost and risk worth bearing. Established, the exception takes
+    this bridge away, and the other bridge about the same A and G, not the decision.'
+  status: drafted by Claude Code, 2026-11-26
 examples:
 - text: Taxing meat might force producers to use cheaper and more dangerous means
     of producing meat.
@@ -209,3 +218,7 @@ history:
   by: Claude Code
   what: 'drafted after proposal D008-D074: the questions, summary, the contrasts with
     its close relatives, the decisions on its discrepancies and the proposal''s examples'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D095: its summary, contrasts, answers and examples, as the
+    proposal gives them'

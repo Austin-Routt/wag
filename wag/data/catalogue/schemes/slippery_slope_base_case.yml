@@ -190,6 +190,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 - scheme: slippery_slope_inductive_step
   text: The two halves of one book scheme. Use slippery_slope_inductive_step for each
     link between two events of the chain, and slippery_slope_base_case once, for the

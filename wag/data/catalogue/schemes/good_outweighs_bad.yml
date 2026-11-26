@@ -96,6 +96,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples: []
 discrepancies:
 - kind: not-in-book

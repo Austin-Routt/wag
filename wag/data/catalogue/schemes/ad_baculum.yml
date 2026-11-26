@@ -105,6 +105,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: Pay the parking fine by Friday, or I will have your car towed. You don't want
     that. So pay by Friday.

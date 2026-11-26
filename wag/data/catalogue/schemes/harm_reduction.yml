@@ -130,6 +130,9 @@ contrasts:
 - scheme: bridge_from_possible_harm
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: People will take drugs at the festival whether or not it offers pill testing.
     Free pill testing would make each time less dangerous. The festival should offer

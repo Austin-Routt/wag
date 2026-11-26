@@ -82,6 +82,12 @@ retired:
   - phrase: knowable_before_deciding
     now: worth_finding_out_first(A,G), the bridges' exception (OC15)
     why: the owner's refinement of D008, 2026-11-25 (proposal D008-D074, version 5)
+  - phrase: No scheme concludes any of them
+    now: finding_out_first concludes the bridges' exception; no scheme concludes the others (§3.1, OC15; D095)
+    why: proposal D095, 2026-11-26
+  - phrase: Coded with Other (docs/kialo-batch2/guidelines.md §3.1, OC15)
+    now: a reply that makes the conditions out is coded with finding_out_first, a bare one with Other (OC15; D095)
+    why: proposal D095, 2026-11-26
 
 cases:
   - id: OC1-a
@@ -800,21 +806,25 @@ cases:
     coding:
       instances:
       - primary: true
-        scheme: {walton_id: other, fit: reconstructed}
-        bindings: {}
+        scheme: {walton_id: finding_out_first, fit: explicit}
+        bindings: {A: tax_meat, G: meat_bought_across_border, I: regional_trial}
         premises:
-        - {role: premise, formula: 'regional_trial_would_settle_cross_border_buying'}
+        - {role: premise, formula: 'settles_whether(regional_trial,tax_meat,meat_bought_across_border)'}
+        - {role: premise, formula: 'done_in_time(regional_trial,tax_meat)'}
+        - {role: premise, formula: 'worth_its_costs(regional_trial,tax_meat,meat_bought_across_border)'}
         conclusion: {formula: 'worth_finding_out_first(tax_meat,meat_bought_across_border)'}
       role: {kind: undercutter, cq: null, polarity: against}
     why: >-
-      It names a way to find out, in time and at little cost, whether the tax
-      brings the harm about, so that finding out first is worth it: the bridge's
-      exception worth_finding_out_first(A,G), an undercutter. It grants the
-      possibility and what it would weigh: the bridge falls, the modal argument
-      stands. A reply that showed only that a study could be done, at a cost or
-      a delay the decision cannot bear, would argue the exception without making
-      it out (OC15-g), and be answered that finding out first is not worth it
-      (OC15-f).
+      It names the investigation, a year's trial in two regions, and makes out
+      the three conditions: the trial would show whether the tax sends shoppers
+      across the border, in time, before the tax must be decided, and at little
+      cost. So it is an argument of finding_out_first (D095), concluding the
+      bridge's exception worth_finding_out_first(A,G), an undercutter. It grants
+      the possibility and what it would weigh: the bridge falls, the modal
+      argument stands. A reply that showed only that a study could be done, at
+      a cost or a delay the decision cannot bear, would argue the exception
+      without making it out, coded with other (OC15-g); this one is answered at
+      the premise its critic denies (OC15-f).
 
   - id: OC15-d
     rules: [OC15]
@@ -870,7 +880,7 @@ cases:
   - id: OC15-f
     rules: [OC15]
     claim: (constructed) Against the reply in OC15-c - the trial would end only after the budget that sets the tax has been passed.
-    target: that reply, an undercutter at the bridge's exception; its conclusion
+    target: that reply, an argument of finding_out_first; its premise done_in_time
     coding:
       instances:
       - primary: true
@@ -878,15 +888,16 @@ cases:
         bindings: {}
         premises:
         - {role: premise, formula: 'regional_trial_ends_after_budget_vote'}
-        conclusion: {formula: '¬worth_finding_out_first(tax_meat,meat_bought_across_border)'}
-      role: {kind: rebuttal, cq: null, polarity: against}
+        conclusion: {formula: '¬done_in_time(regional_trial,tax_meat)'}
+      role: {kind: premise_attack, cq: null, polarity: against}
     why: >-
       It grants that the trial would settle the question and denies that it
-      would do so in time, a condition of the exception itself: a rebuttal of
-      the reply's conclusion, worth_finding_out_first(A,G). At equal weight the
-      exception then no longer holds, since a tie goes against the critic
-      (D003), and the bridge stands: a test that comes too late does not make
-      out the exception.
+      would do so in time: the reply's premise done_in_time(I,A), a premise
+      attack (no question targets it). At equal weight the premise no longer
+      holds, so the exception is not proved, since a tie goes against the
+      critic (D003), and the bridge stands: a test that comes too late does
+      not make out the exception. Against a bare reply coded with other, the
+      same objection rebuts its conclusion (OC15-g).
 
   - id: OC15-g
     rules: [OC15]
@@ -908,10 +919,11 @@ cases:
       out: code it as the exception, an undercutter, and say in notes what it
       leaves unshown. That G could be found out is not enough (D008): it does
       not meet the critic's burden of production (the owner's declaration under
-      D053), and the game's answer contract is to refuse it (item F, step C5);
-      in play it stands until the bridge's defender answers that finding out
-      first is not worth it, as OC15-f does, and a tie goes against the critic
-      (D003).
+      D053), and the game refuses it at the question from step C5.2 (D095
+      (3)); until then it stands in play until the bridge's defender answers
+      that finding out first is not worth it, a rebuttal of its conclusion (a
+      reply coded with finding_out_first is answered at the premise it
+      denies, OC15-f), and a tie goes against the critic (D003).
 
   - id: OC15-h
     rules: [OC15]

@@ -194,6 +194,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 - scheme: practical_reasoning2
   text: In the book's account (p. 101), practical reasoning starts from a goal and
     looks for the action, while reasoning from consequences starts from the action

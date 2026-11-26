@@ -219,6 +219,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: Taxing meat might force producers to use cheaper and more dangerous means
     of producing meat.

@@ -364,6 +364,21 @@ class Rules(unittest.TestCase):
                 it['target']['actual'] = conclusion_target(g, a['claim'], a['instance'])
                 self.fails(g, cid, ['R11'], 'is not at an exception')
 
+    def test_r11_lists_every_scheme_that_concludes_an_exception(self):
+        # R11's answer schemes are the schemes of walton.yml that conclude
+        # another scheme's exception, and only those: a new answer scheme
+        # (proposal D095's finding_out_first) is not left out of R11.
+        import yaml
+        src = open(os.path.join(DOC, 'validate.py'), encoding='utf-8').read()
+        listed = set(re.findall(r"'(\w+)'", re.search(r'ANSWER_SCHEMES = \(([^)]*)\)', src).group(1)))
+        with open(os.path.join(DOC, '..', 'scheme-registry', 'walton-clean', 'walton.yml'), encoding='utf-8') as fh:
+            schemes = yaml.safe_load(fh)['argument_schemes']
+        pred = lambda f: f.lstrip('¬').split('(')[0]
+        exceptions = {pred(e) for s in schemes for e in (s.get('exceptions') or [])}
+        concluding = {s['id'] for s in schemes if any(pred(c) in exceptions for c in (s.get('conclusions') or []))}
+        self.assertIn('finding_out_first', concluding)
+        self.assertEqual(listed, concluding)
+
     def test_r11_a_fragment_backing_an_answer_schemes_premise(self):
         # A claim that states one premise of its parent's answer carries the
         # parent's scheme as a fragment (§2, §3), at that premise: no R9 or

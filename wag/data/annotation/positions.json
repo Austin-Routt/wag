@@ -39,6 +39,7 @@
   "continues_trying/2": [1],
   "contributing_action/2": [1],
   "deliberating_agent/2": [2],
+  "done_in_time/2": [2],
   "fails_to_avert/2": [1],
   "gain_discounted_by_bearer/2": [1],
   "good_outweighs/2": [1],
@@ -62,6 +63,7 @@
   "preventable_otherwise/2": [1],
   "promote_more_effectively/3": [3],
   "realize_more_effectively/3": [3],
+  "settles_whether/3": [2],
   "should_be_performed/1": [1],
   "should_do/2": [2],
   "situation_necessity/4": [2],
@@ -69,6 +71,7 @@
   "sufficient_action/4": [2],
   "too_slight/2": [1],
   "worth_finding_out_first/2": [1],
+  "worth_its_costs/3": [2],
   "would_bring_about/3": [1]
  }
 }

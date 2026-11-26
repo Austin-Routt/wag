@@ -19,7 +19,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 
 | File | What |
 |---|---|
-| `schemes/<id>.yml` | 129 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
+| `schemes/<id>.yml` | 130 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
 | [`game/`](game/) | The game's data that no single entry holds: the questions, which several schemes share (`questions.yml`); the order of the schemes and edges, which is behaviour, the order of the offered moves (`order.yml`); and `core.yml` but the game schemes' blocks (`core.yml.in`). Since step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)) the game's files are generated from them and the entries. |
 | This README | The format, the statuses, the commands, the checks |

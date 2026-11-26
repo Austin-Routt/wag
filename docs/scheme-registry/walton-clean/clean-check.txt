@@ -3,7 +3,7 @@ walton-check walton.yml
 == 1. import ==
 strict YAML decode (unknown or duplicate keys): 0 error(s)
 stderr during import: ""
-schemes: 129, language keys: 455
+schemes: 130, language keys: 458
 
 == 2. Carneades validator ==
 before instantiation: 5 problem(s)
@@ -139,17 +139,18 @@ after instantiating every scheme: 5 problem(s)
 117 bridge_from_possible_good                  PASS  args=1/1 premises+assumptions=2 exceptions=1
 118 bridge_from_possible_harm                  PASS  args=1/1 premises+assumptions=2 exceptions=1
 119 harm_reduction                             PASS  args=1/1 premises+assumptions=2 exceptions=2
-120 practical_reasoning1                       PASS  args=1/1 premises+assumptions=8 exceptions=5
-121 practical_reasoning2                       PASS  args=1/1 premises+assumptions=6 exceptions=5
-122 better_means                               PASS  args=1/1 premises+assumptions=4 exceptions=0
-123 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2
-124 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
-125 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
-126 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
-127 sunk_costs_precommitment                   PASS  args=1/1 premises+assumptions=2 exceptions=0
-128 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
-129 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
-schemes failing instantiation: 0 of 129
+120 finding_out_first                          PASS  args=1/1 premises+assumptions=3 exceptions=0
+121 practical_reasoning1                       PASS  args=1/1 premises+assumptions=8 exceptions=5
+122 practical_reasoning2                       PASS  args=1/1 premises+assumptions=6 exceptions=5
+123 better_means                               PASS  args=1/1 premises+assumptions=4 exceptions=0
+124 exception_to_rule                          PASS  args=1/1 premises+assumptions=3 exceptions=2
+125 slippery_slope_base_case                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+126 slippery_slope_inductive_step              PASS  args=1/1 premises+assumptions=2 exceptions=0
+127 sunk_costs                                 PASS  args=1/1 premises+assumptions=3 exceptions=1
+128 sunk_costs_precommitment                   PASS  args=1/1 premises+assumptions=2 exceptions=0
+129 verbal_classification                      PASS  args=1/1 premises+assumptions=2 exceptions=0
+130 witness_testimony                          PASS  args=1/1 premises+assumptions=5 exceptions=4
+schemes failing instantiation: 0 of 130
 
 == 4. language ==
 0 problem(s)
@@ -157,7 +158,7 @@ schemes failing instantiation: 0 of 129
 declared variables used in no formula (informational): 0
 
 == per scheme (checks 2-4) ==
-schemes passing every check: 127 of 129
+schemes passing every check: 128 of 130
   FAIL ad_hominem (2 problem(s))
   FAIL regulative_rule (2 problem(s))
 problems not tied to one scheme (language keys etc.): 0

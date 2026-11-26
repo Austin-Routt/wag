@@ -1141,4 +1141,43 @@ PRACTICAL_C4 += [insert(2033, text, ADD, _D031, scheme='sunk_costs_precommitment
     '',
 ]]
 
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3 + PRACTICAL_C4
+# ----------------------------------------------------------------------
+# 2026-11-26: the answer scheme for the bridges' exception (decision D095 (3),
+# taken by the owner on 2026-11-26; WAG's docs/proposals/D095.md, version 2,
+# after an independent review). It concludes worth_finding_out_first(A,G)
+# from the conditions of the owner's declaration under D053 (2026-11-25): an
+# investigation I that would settle whether A brings about G, done before the
+# decision on A must be taken, whose costs and risks are worth bearing.
+# Templates are our own.
+_D095 = ("D095 (3): WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the "
+         "conditions of the owner's declaration under D053 (2026-11-25): the investigation would settle the "
+         "question, in time, at a cost and risk worth bearing. Decided by the owner on 2026-11-26 (proposal D095)")
+_TD = "template for the answer scheme's premises (D095), in our own words"
+FINDING_OUT_D095 = [
+    insert(119, '  done_in_time/2: "%s can be done before the decision on action %s must be taken."', ADD, _TD),
+    insert(332, '  settles_whether/3: "%s would settle, reliably enough for the decision, whether action %s brings about %s."', ADD, _TD),
+    insert(393, '  worth_its_costs/3: "The costs and risks of %s are worth bearing to know whether action %s brings about %s before that possibility counts in the decision."', ADD, _TD),
+]
+FINDING_OUT_D095 += [insert(1926, text, ADD, _D095, scheme='finding_out_first') for text in [
+    '  - id: finding_out_first',
+    '    meta:',
+    '      title: Argument for Finding Out First',
+    '      source: >',
+    "        WAG's answer scheme (decision D095 (3), 2026-11-26), on the owner's declaration under D053",
+    "        (2026-11-25) of the bridges' exception worth_finding_out_first(A,G): it concludes the exception",
+    '        from the conditions the declaration names. Not in the compendium. After Douglas Walton, The New',
+    '        Dialectic: Conversational Contexts of Argument, University of Toronto Press, Toronto, 1998, p. 203',
+    '        (a shift to information-seeking within a critical discussion), and Douglas Walton, Fundamentals of',
+    '        Critical Argumentation, Cambridge University Press, Cambridge, 2006, p. 85 (delaying a decision to',
+    '        collect information).',
+    '    variables: [A,G,I]',
+    '    conclusions:',
+    '      - worth_finding_out_first(A,G)',
+    '    premises:',
+    '      - settles_whether(I,A,G)',
+    '      - done_in_time(I,A)',
+    '      - worth_its_costs(I,A,G)',
+    '',
+]]
+
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3 + PRACTICAL_C4 + FINDING_OUT_D095

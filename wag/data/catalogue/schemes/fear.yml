@@ -114,6 +114,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: If you don't get the brakes fixed before the trip, you could crash on the
     mountain descent. That would be terrible for you, and you ought to avoid it if

@@ -109,6 +109,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: 'If you build the extension, I will take you to court over the boundary. I
     can: my deeds cover that strip. And I tell you now that I will sue if you build.

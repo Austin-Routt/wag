@@ -133,7 +133,7 @@
    counts_as/2: "%s counts as %s." 
    credibility_questioned/1: "%s's credibility as a sincere person who believes in his own argument has been put into question by the two premises above."
    credible_source/2: "Witness %s is a credible source for the domain %s."
-@@ -108,17 +121,21 @@
+@@ -108,17 +121,22 @@
    danger/1: "%s is a danger to you."
    data_account/2: "Each one of a set of accounts %s s is successful in explaining %s."
    data_set/1: "%s is a set of data or supposed facts in a case."
@@ -151,13 +151,14 @@
 -  do_obligator: "One must not do what is prohibite -obligator-."
 +  do_obligator/0: "One must not do what is prohibited -obligatory-."
    do_other/1: "Therefore, you should -ought to, practically speaking- bring about %s."
++  done_in_time/2: "%s can be done before the decision on action %s must be taken."
    doubting_general/1: "There are some strong reasons for doubting %s is generally true."
 -  easy_to_achive/1: "%s is easy to achive."
 +  easy_to_achieve/1: "%s is easy to achieve."
    elite_group/1: "This group %s is elite, that is, everyone who belongs to it has prestige."
    ends_important/1: "%s should be regarded as highly important."
    evaluation/3: "If %s is the case, then an evaluation %s is justified/conduct %s is required."
-@@ -127,29 +144,33 @@
+@@ -127,29 +145,33 @@
    event_quality/1: "The bringing about of this event fits a certain character quality %s."
    event_question/1: "%s brought about the event in question"
    event_true/1: "%s has been observed to be true, in a given instance."
@@ -197,7 +198,7 @@
    great_sacrifice/3: "If a great sacrifice %s has been made for %s, then the value %s of it will be greater."
    great_sacrifice_made/2: "A great sacrifice %s has been made for %s."
    great_side_effects/2: "There will be too great negative side effects of %s bringing about %s."
-@@ -162,6 +183,8 @@
+@@ -162,6 +184,8 @@
    group_member/2: "%s is a member,idea, habit, custom, product or method of %s."
    group_member_quality/3: "If %s has %s, its members ideas, habits, customs, products or methods %s will have it as well."
    group_quality/2: "Group %s has the quality %s."
@@ -206,7 +207,7 @@
    has/2: "%s has %s"
    has_conclusion/2: "Rule %s has conclusion %s."
    has_occurred/1: "An event %s has occurred."
-@@ -183,7 +206,9 @@
+@@ -183,7 +207,9 @@
    inadequate_definition/2: "%s is an inadequate definition of %s."
    inapplicable_rule/1: "Rule %s is inapplicable in this case."
    incompatible_consequences/2: "Bringing about %s has incompatible consequences with %s."
@@ -216,7 +217,7 @@
    inconsistent_commitment/1: "%s's commitments are inconsistent."
    inconsistent_with_known_facts/1: "%s is inconsistent with the known facts."
    inconsistent_with_other_experts/1:  "%s is inconsistent with what other experts assert."
-@@ -191,44 +216,63 @@
+@@ -191,44 +217,63 @@
    indicated_true/2: "%s is generally indicated as true when its sign %s is true."
    individual_property/2: "Individual %s, has property %s."
    individual_property_false/2: "But quite clearly it is false that %s has %s."
@@ -290,7 +291,7 @@
    not_bring_about/1: "Therefore, you had better not bring about %s"
    not_character_action/1: "Agent %s has some actions that don't fit into defined character."  
    not_do_appear/2: "If you do not bring about %s, then %s will occur."
-@@ -236,30 +280,32 @@
+@@ -236,30 +281,32 @@
    not_excuse/1: "%s does not fall under a recognized category and this pose a problem in future cases." 
    not_fit_action/1: "Agent %s actions definition fit the definition of quality." 
    not_given_credibility/1: "Therefore, %s should not be given as much credibility as it would have without the bias."
@@ -334,7 +335,7 @@
    person_act/2: "Person %s done act %s." 
    person_acts_value/3: "%s acts %s will be %s."
    person_goal/2: "Person %s has goal %s."
-@@ -274,11 +320,11 @@
+@@ -274,11 +321,11 @@
    plausibly_not_case/1: "%s is plausibly not the case."
    plausibly_true/1: "Therefore, %s is plausibly true."
    pleader_committed/1: "I -the pleader- have committed %s."
@@ -349,7 +350,7 @@
    positive_affects/3: "The fact that value %s is positive affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is good, it supports commitment to goal."
    positive_consequences/1: "Performing action %s would have positive consequences."
    possible/1: "Action %s is possible."
-@@ -288,29 +334,37 @@
+@@ -288,29 +335,37 @@
    possible_carry_out/2: "It is possible for %s to carry out %s." 
    possible_goal/1: "%s is possible."
    practicality_action/1: "Nothing unchangeable prevents me from bringing about %s, as far as I know."
@@ -395,7 +396,7 @@
    reference_group_accepted/2: "Everybody in particular group %s accepts %s"
    relation_converse_relation/4: "If %s is in relation %s with %s they can be in the converse relation %s."
    relation_with/3: "%s is in relation %s with %s."
-@@ -318,78 +372,85 @@
+@@ -318,79 +373,88 @@
    relevant_differences/2: "There are relevant differences between case %s and case %s."
    relieve/2: "If %s brings about %s, it will relieve or help to relieve this distress."
    respondent_member/1: "You, the respondent are a member of this audience, group %s."
@@ -417,6 +418,7 @@
    satisfies_definition/2: "%s satisfies definition %s."
    sequence/4: "There is an intervening sequence of propositions, %s, %s,...,%s, %s such that the conditionals must be in proper order."
 +  sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s."
++  settles_whether/3: "%s would settle, reliably enough for the decision, whether action %s brings about %s."
    should_accept/1: "You should accept %s"
    should_be_performed/1: "Action %s should be performed."
    should_carry_out/2: "Therefore, %s should carry out %s, unless he has better reasons not to."
@@ -501,9 +503,11 @@
    without_correcting/1: "Speakers are able to use the word %s in the correct physical and grammatical context without being correct about the nature of its referent or property."
 +  worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."
    worth_imitated/2: "Then %s worth being imitated by %s."
++  worth_its_costs/3: "The costs and risks of %s are worth bearing to know whether action %s brings about %s before that possibility counts in the decision."
    worthy_goal/1: "%s is a worthy goal."
    would_achieve/2: "Performing action %s would achieve goal %s."
-@@ -399,7 +460,7 @@
+   would_be_known/1: "%s would be known if it were true."
+@@ -399,7 +463,7 @@
    would_demote_value/2: "Achieving the goal %s would demote the value %s."
    would_promote_value/2:  "Achieving the goal %s would promote the value %s."
    would_realize/2: "Performing %s would realize event %s."
@@ -512,7 +516,7 @@
    
  argument_schemes:
    - id: popular_opinion
-@@ -407,7 +468,7 @@
+@@ -407,7 +471,7 @@
        title: Argument From Popular Opinion
        source: >
                Douglas Walton, Fundamentals of Critical Argumentation. New York: Cambridge University Press, 2006, p. 91.
@@ -521,7 +525,7 @@
                Douglas Walton, Appeal to Popular Opinion. University Park: Pennsylvania State University Press, 1999, pp. 223-226.
      variables: [A]
      conclusions:
-@@ -415,7 +476,7 @@
+@@ -415,7 +479,7 @@
      premises:
        - generally_true(A)
        - favor(A)
@@ -530,7 +534,7 @@
        - generally_accepted(A)
      exceptions:
        - doubting_general(A)
-@@ -428,7 +489,7 @@
+@@ -428,7 +492,7 @@
                Argumentation Schemes. Cambridge University Press, p. 311. 
      variables: [A,G]
      conclusions:
@@ -539,7 +543,7 @@
        - should_accept(A)
      premises:
        - reference_group_accepted(G,A)
-@@ -493,8 +554,8 @@
+@@ -493,8 +557,8 @@
                Argumentation Schemes. Cambridge University Press, p. 312.
      variables: [G,X,A]
      conclusions:
@@ -549,7 +553,7 @@
        - group_does(G,X,A)
        - acceptable_norm(X,A,G)
        - group_member(G)
-@@ -522,7 +583,7 @@
+@@ -522,7 +586,7 @@
                Argumentation Schemes. Cambridge University Press, p. 312.
      variables: [G,A,X]
      conclusions:
@@ -558,7 +562,7 @@
      premises:
        - admired_people(G,A)
        - group_action(X,G)
-@@ -566,9 +627,9 @@
+@@ -566,9 +630,9 @@
        - group_background(G)
        - respondent_member(G)
        
@@ -570,7 +574,7 @@
        source: >
                Douglas Walton , Fundamentals of Critical Argumentation. New York: Cambridge
                University Press, 2006, p. 93.
-@@ -576,7 +637,7 @@
+@@ -576,7 +640,7 @@
      conclusions:
        - acceptable_in_case(A)
      premises:
@@ -579,7 +583,7 @@
        - to_think_acceptable(A)
      assumptions: 
       - have_grounds_think(A)
-@@ -642,36 +703,42 @@
+@@ -642,36 +706,42 @@
      meta:
        title: Practical Reasoning From Analogy - Positive Schema
        source: >
@@ -632,7 +636,7 @@
      assumptions: 
       - all_parts_has(A,P)
  
-@@ -681,14 +748,14 @@
+@@ -681,14 +751,14 @@
        source: >
               Ch. Perelman and L.Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation.
               Notre Dame, Ind.: University of Notre Dame Press, 1969, pp.231-233,234-241.
@@ -650,7 +654,7 @@
    
    - id: division_generic
      meta:
-@@ -699,21 +766,35 @@
+@@ -699,21 +769,35 @@
      conclusions:
        - has_property(A,P)
      premises:
@@ -690,7 +694,7 @@
        - presents(A,P)
   
    - id: opposition-descriptive_2
-@@ -722,24 +803,24 @@
+@@ -722,24 +806,24 @@
        source: >
                Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
                Argumentation Schemes. Cambridge University Press, p. 317.
@@ -723,7 +727,7 @@
        - ¬presents(A,P)
  
    - id: opposition-normative
-@@ -748,12 +829,12 @@
+@@ -748,12 +832,12 @@
        source: >
                Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
                Argumentation Schemes. Cambridge University Press, p. 318.
@@ -740,7 +744,7 @@
  
    - id: rhetorical_oppositions_normative
      meta:
-@@ -761,11 +842,11 @@
+@@ -761,11 +845,11 @@
        source: >
               Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
               Argumentation Schemes. Cambridge University Press, p. 318.
@@ -755,7 +759,7 @@
        - treatment_required(X,A)
  
    - id: rhetorical_oppositions_descriptive
-@@ -774,18 +855,18 @@
+@@ -774,18 +858,18 @@
        source: >
               Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
               Argumentation Schemes. Cambridge University Press, p. 318.
@@ -778,7 +782,7 @@
                Stuttgart-Bad Cannstatt: Frommann-Holzboog, 1992, p.306.
               
      variables: [A,B]
-@@ -799,7 +880,7 @@
+@@ -799,7 +883,7 @@
      meta:
        title: Argument From Alternatives - Normative Schemes
        source: >
@@ -787,7 +791,7 @@
                Stuttgart-Bad Cannstatt: Frommann-Holzboog, 1992, p.306.
      variables: [A,B]
      conclusions:
-@@ -812,30 +893,30 @@
+@@ -812,30 +896,30 @@
      meta: 
        title: Argument From Definition to Verbal Classification 
        source: >
@@ -825,7 +829,7 @@
        - arbitrary_property(F,A)
  
    - id: interaction_act_person_1
-@@ -866,12 +947,12 @@
+@@ -866,12 +950,12 @@
  
    - id: positive_value
      meta: 
@@ -841,7 +845,7 @@
      variables: [V,A,G]
      conclusions: 
        - reason_retaining_goal(V,G)
-@@ -881,15 +962,15 @@
+@@ -881,15 +965,15 @@
  
    - id: negative_value
      meta:
@@ -861,7 +865,7 @@
      premises: 
        - judged_negative_value(V,A)
        - negative_affects(V,G,A)
-@@ -898,14 +979,14 @@
+@@ -898,14 +982,14 @@
      meta:
        title: Argumentation From Sacrifice 
        source: >
@@ -878,7 +882,7 @@
        - great_sacrifice_made(S,A)
  
    - id: group_1
-@@ -930,7 +1011,7 @@
+@@ -930,7 +1014,7 @@
                 Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 321-326. 
      variables: [G,Q,M]
      conclusions: 
@@ -887,7 +891,7 @@
      premises: 
        - group_quality(G,Q)
        - group_member(M,G)
-@@ -946,18 +1027,19 @@
+@@ -946,18 +1030,19 @@
               Douglas Walton, "Actions and Inconsistency: The Closure Problem of Practical Reasoning.
               "In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164.
               Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.
@@ -914,7 +918,7 @@
       - possible_goal(G)
       
    - id: practical_necessary_condition
-@@ -970,23 +1052,24 @@
+@@ -970,23 +1055,24 @@
               Douglas Walton, "Actions and Inconsistency: The Closure Problem of Practical Reasoning.
               "In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164.
               Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.
@@ -954,7 +958,7 @@
  
    - id: practical_sufficient_condition
      meta:
-@@ -998,43 +1081,47 @@
+@@ -998,43 +1084,47 @@
               Douglas Walton, "Actions and Inconsistency: The Closure Problem of Practical Reasoning.
               "In Contemporary Action Theory, vol.1 , ed. Ghita Holmstrom-Hintikka and Raimo Tuomela. Dordrecht: Kluwer, 1997, p. 164.
               Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 89-90.
@@ -1020,7 +1024,7 @@
                Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278.
      variables: [X,Y]
      conclusions:
-@@ -1042,12 +1129,48 @@
+@@ -1042,12 +1132,48 @@
      premises:
        - means_to_end(X,Y)
        - good(Y)
@@ -1070,7 +1074,7 @@
                Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278.
      variables: [X]
      conclusions:
-@@ -1060,14 +1183,14 @@
+@@ -1060,14 +1186,14 @@
      meta:
        title: Practical Reasoning - Argument From Ends and Means 3
        source: >
@@ -1087,7 +1091,7 @@
  
    - id: two_person_practical
      meta:
-@@ -1077,16 +1200,16 @@
+@@ -1077,16 +1203,16 @@
               Pennsylvania State University Press. 1997 p. 163.
      variables: [A,B,X,Y]
      conclusions:
@@ -1110,7 +1114,7 @@
       
    - id: waste
      meta:
-@@ -1102,13 +1225,52 @@
+@@ -1102,13 +1228,52 @@
        - stop_realize_wasted(A,X)
        - waste_bad_thing(A,X)
      assumptions: 
@@ -1165,7 +1169,7 @@
               Pennsylvania State University Press, 1996, pp. 84,86.
               Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: 
               University of Alabama Press, 1995. p. 150.
-@@ -1124,7 +1286,7 @@
+@@ -1124,7 +1289,7 @@
      meta:
        title: Negative Practical Reasoning
        source: >
@@ -1174,7 +1178,7 @@
               Pennsylvania State University Press, 1996, pp. 84,86.
               Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: 
               University of Alabama Press, 1995. p. 150.
-@@ -1140,12 +1302,12 @@
+@@ -1140,12 +1305,12 @@
      assumptions: 
       - sufficient_evidence   
       
@@ -1190,7 +1194,7 @@
      variables: [A,D,K]
      conclusions:
        - plausible_false(D,A)
-@@ -1200,7 +1362,7 @@
+@@ -1200,7 +1365,7 @@
      premises:
        - data_set(D)
        - diagram_set(G,D,C)
@@ -1199,7 +1203,7 @@
  
    - id: abductive_action_to_character
      meta:
-@@ -1286,14 +1448,15 @@
+@@ -1286,14 +1451,15 @@
               Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 123.
      variables: [X,C]
      conclusions:
@@ -1218,7 +1222,7 @@
  
    - id: pragmatic_alternative
      meta:
-@@ -1302,33 +1465,33 @@
+@@ -1302,33 +1468,33 @@
               Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 142.
      variables: [A,B]
      conclusions:
@@ -1260,7 +1264,7 @@
      premises:
        - alternative_bad(X,Y)
        - undesirable(Y)
-@@ -1340,7 +1503,7 @@
+@@ -1340,7 +1506,7 @@
               Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 22.             
      variables: [X,Y]
      conclusions:
@@ -1269,7 +1273,7 @@
      premises:
        - not_do_appear(X,Y)
        - bad_for_you(Y)
-@@ -1354,7 +1517,7 @@
+@@ -1354,7 +1520,7 @@
               Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 173.             
      variables: [X,Y]
      conclusions:
@@ -1278,7 +1282,7 @@
      premises:
        - occur(X,Y)
        - danger(Y)
-@@ -1385,7 +1548,7 @@
+@@ -1385,7 +1551,7 @@
               Douglas Walton, Appeal to Pity. Albany: State University of New York Press, 1991, pp. 105,155.
      variables: [B,X,A]
      conclusions:
@@ -1287,7 +1291,7 @@
      premises:
        - distress(A)
        - relieve(B,X)
-@@ -1405,7 +1568,7 @@
+@@ -1405,7 +1571,7 @@
               Argumentation 16 (2002), p. 490.
      variables: [A,X,Y]
      conclusions:
@@ -1296,7 +1300,7 @@
      premises:
        - committed(A,X)
        - also_committed(X,Y)
-@@ -1448,7 +1611,7 @@
+@@ -1448,7 +1614,7 @@
        - stronger_than_character(S)
      assumptions: 
       - attack_well_supported
@@ -1305,7 +1309,7 @@
  
    - id: pragmatic_inconsistency
      meta:
-@@ -1458,7 +1621,7 @@
+@@ -1458,7 +1624,7 @@
               Tuscaloosa: University of Alabama Press, 1998, pp. 218, 251.
      variables: [A,S,X]
      conclusions:
@@ -1314,7 +1318,7 @@
      premises:
        - advocates_conclusion(A,S,X)
        - opposite_action(A,S,¬X)
-@@ -1479,7 +1642,7 @@
+@@ -1479,7 +1645,7 @@
        - initial_commitment(A,S)
        - opposed_commitment(A,S)
      exceptions:
@@ -1323,7 +1327,7 @@
  
    - id: circumstantial_ad_hominem
      meta:
-@@ -1494,7 +1657,7 @@
+@@ -1494,7 +1660,7 @@
        - plausibility_decreased(A,S)
      premises:
        - advocates_conclusion(A,S,C)
@@ -1332,7 +1336,7 @@
        - credibility_questioned(A)
      assumptions: 
       - character_issue(A)  
-@@ -1547,14 +1710,14 @@
+@@ -1547,14 +1713,14 @@
      meta:
        title: Sorites Slippery Slope Argument
        source: >
@@ -1350,7 +1354,7 @@
        
    - id: verbal_slippery_slope
      meta:
-@@ -1562,18 +1725,48 @@
+@@ -1562,18 +1728,48 @@
        source: >
               Douglas Walton, A Pragmatic Theory of Fallacy. 
               Tuscaloosa and London: University of Alabama Press, 1995, p. 160.
@@ -1403,7 +1407,7 @@
        source: >
                Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
                Argumentation Schemes. Cambridge University Press, p. 342.             
-@@ -1581,14 +1774,14 @@
+@@ -1581,14 +1777,14 @@
      conclusions:
        - means_same(W,D)
      premises:
@@ -1421,7 +1425,7 @@
        source: >
                Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). 
                Argumentation Schemes. Cambridge University Press, p. 342.             
-@@ -1596,16 +1789,16 @@
+@@ -1596,16 +1792,16 @@
      conclusions:
        - counts_as(D,W)
      premises:
@@ -1441,7 +1445,7 @@
      variables: [W,D,L]
      conclusions:
        - means_same(W,D)
-@@ -1642,7 +1835,7 @@
+@@ -1642,7 +1838,7 @@
      exceptions:
        - excuse
  
@@ -1450,7 +1454,7 @@
      meta:
        title: Argument For An Exceptional Case
        source: >
-@@ -1696,7 +1889,7 @@
+@@ -1696,7 +1892,7 @@
               J.L. Pollock, "Defeasible Reasoning." Cognitive Science 11 (1987), pp. 481-518.
      variables: [P,M]
      conclusions:
@@ -1459,7 +1463,7 @@
      premises:
        - recalls(P,M)
        - believe_it(M)
-@@ -1716,14 +1909,14 @@
+@@ -1716,14 +1912,14 @@
        source: >
          Douglas Walton, Fundamentals of Critical Argumentation,
          Cambridge University Press, New York 2006, p. 96-97.
@@ -1480,7 +1484,7 @@
  
    - id: appearance
      meta:
-@@ -1747,6 +1940,21 @@
+@@ -1747,6 +1943,21 @@
      exceptions:
        - interference(E1)
  
@@ -1502,7 +1506,7 @@
    - id: correlation_to_cause
      meta:
        title: Argument from Correlation to Cause
-@@ -1894,6 +2102,26 @@
+@@ -1894,6 +2105,26 @@
      premises:
        - brings_about(A,G)
        - bad(G)
@@ -1529,7 +1533,7 @@
        
    - id: position_to_know
      meta:
-@@ -1923,6 +2151,128 @@
+@@ -1923,6 +2154,147 @@
      premises:
        - brings_about(A,G)
        - good(G)
@@ -1655,10 +1659,29 @@
 +    exceptions:
 +      - preventable_otherwise(A,E)
 +      - no_net_reduction(A,E)
++
++  - id: finding_out_first
++    meta:
++      title: Argument for Finding Out First
++      source: >
++        WAG's answer scheme (decision D095 (3), 2026-11-26), on the owner's declaration under D053
++        (2026-11-25) of the bridges' exception worth_finding_out_first(A,G): it concludes the exception
++        from the conditions the declaration names. Not in the compendium. After Douglas Walton, The New
++        Dialectic: Conversational Contexts of Argument, University of Toronto Press, Toronto, 1998, p. 203
++        (a shift to information-seeking within a critical discussion), and Douglas Walton, Fundamentals of
++        Critical Argumentation, Cambridge University Press, Cambridge, 2006, p. 85 (delaying a decision to
++        collect information).
++    variables: [A,G,I]
++    conclusions:
++      - worth_finding_out_first(A,G)
++    premises:
++      - settles_whether(I,A,G)
++      - done_in_time(I,A)
++      - worth_its_costs(I,A,G)
  
    - id: practical_reasoning1
      meta:
-@@ -1932,10 +2282,11 @@
+@@ -1932,10 +2304,11 @@
          Practical reasoning as presumptive argumentation using action
          based alternating transition systems. Artificial Intelligence 171,
          10-15 (2007), 855–874.
@@ -1671,7 +1694,7 @@
        - current_circumstances(S1)
        - would_bring_about(A,S1,S2)
        - would_be_realized(G,S2)
-@@ -1943,12 +2294,13 @@
+@@ -1943,12 +2316,13 @@
      assumptions:
        - legitimate_value(V)
        - worthy_goal(G)
@@ -1690,7 +1713,7 @@
  
    - id: practical_reasoning2
      meta:
-@@ -1956,24 +2308,42 @@
+@@ -1956,24 +2330,42 @@
        source: >
          Walton, Douglas (2015). Goal-Based Reasoning for Argumentation. 
          Cambridge University Press.
@@ -1741,7 +1764,7 @@
      meta:
        title: Argument From Exception to a Rule
        source: >
-@@ -1994,10 +2364,10 @@
+@@ -1994,10 +2386,10 @@
      meta:
        title: Slippery Slope Argument
        source: >
@@ -1754,7 +1777,7 @@
      premises:
        - would_realize(A,E)
        - horrible_costs(E)
-@@ -2006,7 +2376,7 @@
+@@ -2006,7 +2398,7 @@
      meta:
        title: Slippery Slope Argument
        source: >
@@ -1763,7 +1786,7 @@
      variables: [E1,E2]
      conclusions:
        - horrible_costs(E1)
-@@ -2031,6 +2401,21 @@
+@@ -2031,6 +2423,21 @@
      exceptions:
        - future_losses_outweigh(A)
          

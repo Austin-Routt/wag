@@ -325,6 +325,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 - scheme: cause_to_effect
   text: Choose cause_to_effect when the claim's point is that the effect will happen
     from a cause that has occurred, for instance when it explains how a consequence

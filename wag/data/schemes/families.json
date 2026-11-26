@@ -787,6 +787,11 @@
      "scheme": "harm_reduction",
      "relation": "related",
      "note": "WAG's argument from what happens anyway (decision D072, candidate C022, 2026-11-25)"
+    },
+    {
+     "scheme": "finding_out_first",
+     "relation": "related",
+     "note": "WAG's answer scheme for the bridges' exception worth_finding_out_first(A,G), from the conditions of the owner's declaration under D053 (decision D095, 2026-11-26)"
     }
    ]
   },

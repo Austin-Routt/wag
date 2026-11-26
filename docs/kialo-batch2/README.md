@@ -83,6 +83,8 @@ Since 2026-11-25 the gold is recoded for proposal D008-D074 (`recode_c3.py`). 13
 
 Since 2026-11-26 the gold is recoded for proposal D022-D093 (`recode_c4.py`). 13292.3, coded with `end_and_means_1`, lists the exception that scheme borrows from the consequences, `means_bad_outweighs(X,Y)`; its challenge record of 13292.121's further consequence keeps no formula, since that claim ranks nothing and so is a rebuttal (OC2), not the exception. No other instance uses a changed scheme, and the game has none of them, so the replay is the same, move by move, as before. `validate.py`'s R9 reads two-person practical reasoning's goal from `tells_intend(A,X,B)` and the continuing bridge's from `ought_to_continue(P,G)` (D093), and the guidelines' table of outweighing exceptions (§3.1) has the new ones.
 
+Since 2026-11-26 `walton.yml` has the answer scheme for the bridges' exception, `finding_out_first` (proposal D095), and the guidelines code a reply that makes its conditions out with it (OC15). No claim of the batch argues that exception, so no item changes: the gold is re-pinned (R16), since `walton.yml` and `positions.json` changed, and R11 lists the new answer scheme (`validate.py`, with a test that every scheme concluding an exception is listed).
+
 ## Annotating with models
 
 The dashboard's *Annotate* tab (`docs/llm.md`) has models annotate these claims under these guidelines, one claim per call, top-down, several models in parallel. A reviewer model compares their annotations, and you give your verdicts, claim by claim. The dataset is built into WAG (`wag/data/annotation/kialo-13292-batch2`, a copy of this folder, kept equal by a test).
@@ -101,4 +103,4 @@ The dashboard computes the same agreement figures itself; `report.json` has them
     --reviewer a --limit 5 --out runs/batch2-try
 ```
 
-Each call sends the guidelines, `walton.yml`, the lexicon, the case record and the game's NASCQ files: about 164,000 characters (2026-11-24; Gemini counted about 41,000 tokens for an earlier, shorter prompt). On a free tier, start with a few claims. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).
+Each call sends the guidelines, `walton.yml`, the lexicon, the case record and the game's NASCQ files: about 190,355 characters (2026-11-26; Gemini counted about 41,000 tokens for an earlier, shorter prompt of 2026-11-24). On a free tier, start with a few claims. Results are in `docs/review-2026-10-13-part5.md` §3 (batch 2) and `docs/review-2026-10-15-part6.md` (this round).

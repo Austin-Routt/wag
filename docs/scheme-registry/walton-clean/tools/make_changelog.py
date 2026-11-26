@@ -426,6 +426,15 @@ def main(outdir):
       "exception D063's text names (an exception nobody raises would let an agent nobody checked pass); continuing "
       "binds to an action that continues the effort, a means for the goal, which practical reasoning's questions "
       "test. Not in the compendium. |")
+    w("| `finding_out_first` (new) | written for WAG: premises `settles_whether(I,A,G)`, `done_in_time(I,A)` and "
+      "`worth_its_costs(I,A,G)`; conclusion `worth_finding_out_first(A,G)` (new templates) | 2026-11-26 | Decision "
+      "D095 (3), taken by the owner (WAG's proposal D095, version 2, after an independent review). The answer "
+      "scheme for the bridges' exception: it concludes the exception from the conditions of the owner's "
+      "declaration under D053, that an investigation I would settle whether A brings about G, reliably enough, "
+      "before the decision on A must be taken, at a cost and risk worth bearing, so that the game can tell a "
+      "made-out answer from a bare claim of knowability. No premise makes the decision wait. After Walton, The "
+      "New Dialectic (1998), p. 203, and Fundamentals of Critical Argumentation (2006), p. 85; not in the "
+      "compendium. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------

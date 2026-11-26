@@ -132,6 +132,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: Either we reinforce the dyke this autumn or the polder floods in the winter
     storms. Flooding would be a disaster for us. So we must reinforce it.

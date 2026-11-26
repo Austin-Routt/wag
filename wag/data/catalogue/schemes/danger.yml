@@ -104,6 +104,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: If you take the boat out in this storm, it will capsize. Capsizing in this
     sea is a danger to you. So, on balance, you should not take it out.

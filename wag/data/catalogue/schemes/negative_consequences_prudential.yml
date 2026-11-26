@@ -159,6 +159,9 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: finding_out_first
+  text: ""
+  status: todo
 examples:
 - text: You were thinking of not backing up your thesis. But if you don't, one disk
     failure could lose a year's work, which would be very bad for you. So you should

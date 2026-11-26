@@ -66,7 +66,7 @@ edges = json.load(open(NASCQ + 'edges.json'))['ask_edges']
 cqs = json.load(open(NASCQ + 'critical_questions.json'))
 WAG2W = {k: v['carneades_id'] for k, v in json.load(open(NASCQ + 'schemes.json')).items()}
 # The answer schemes (D075): each concludes an exception of another scheme.
-ANSWER_SCHEMES = ('bad_outweighs_good', 'good_outweighs_bad', 'better_means')
+ANSWER_SCHEMES = ('bad_outweighs_good', 'good_outweighs_bad', 'better_means', 'finding_out_first')
 errors, unresolved_values = [], []
 def err(m): errors.append(m)
 

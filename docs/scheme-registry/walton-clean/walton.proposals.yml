@@ -135,6 +135,7 @@ language:
   distress/1: "Individual %s is in distress, is suffering."
   do_obligator/1: "%s must not do what is prohibited -obligatory-."
   do_other/1: "Therefore, you should -ought to, practically speaking- bring about %s."
+  done_in_time/2: "%s can be done before the decision on action %s must be taken."
   doubting_general/1: "There are some strong reasons for doubting %s is generally true."
   easy_to_achieve/1: "%s is easy to achieve."
   elite_group/1: "This group %s is elite, that is, everyone who belongs to it has prestige."
@@ -386,6 +387,7 @@ language:
   satisfies_definition/2: "%s satisfies definition %s."
   sequence/4: "There is an intervening sequence of propositions, %s, %s,...,%s, %s such that the conditionals must be in proper order."
   sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s."
+  settles_whether/3: "%s would settle, reliably enough for the decision, whether action %s brings about %s."
   should_accept/1: "You should accept %s"
   should_be_performed/1: "Action %s should be performed."
   should_carry_out/2: "Therefore, %s should carry out %s, unless he has better reasons not to."
@@ -453,6 +455,7 @@ language:
   without_correcting/1: "Speakers are able to use the word %s in the correct physical and grammatical context without being correct about the nature of its referent or property."
   worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."
   worth_imitated/2: "Then %s worth being imitated by %s."
+  worth_its_costs/3: "The costs and risks of %s are worth bearing to know whether action %s brings about %s before that possibility counts in the decision."
   worthy_goal/1: "%s is a worthy goal."
   would_achieve/2: "Performing action %s would achieve goal %s."
   would_be_known/1: "%s would be known if it were true."
@@ -2275,6 +2278,25 @@ argument_schemes:
     exceptions:
       - preventable_otherwise(A,E)
       - no_net_reduction(A,E)
+
+  - id: finding_out_first
+    meta:
+      title: Argument for Finding Out First
+      source: >
+        WAG's answer scheme (decision D095 (3), 2026-11-26), on the owner's declaration under D053
+        (2026-11-25) of the bridges' exception worth_finding_out_first(A,G): it concludes the exception
+        from the conditions the declaration names. Not in the compendium. After Douglas Walton, The New
+        Dialectic: Conversational Contexts of Argument, University of Toronto Press, Toronto, 1998, p. 203
+        (a shift to information-seeking within a critical discussion), and Douglas Walton, Fundamentals of
+        Critical Argumentation, Cambridge University Press, Cambridge, 2006, p. 85 (delaying a decision to
+        collect information).
+    variables: [A,G,I]
+    conclusions:
+      - worth_finding_out_first(A,G)
+    premises:
+      - settles_whether(I,A,G)
+      - done_in_time(I,A)
+      - worth_its_costs(I,A,G)
 
   - id: practical_reasoning1
     meta:

@@ -66,8 +66,8 @@ practical_reasoning2                     assumptions  ['possible(A)', 'possible(
 practical_reasoning2                     exceptions   ['bring_about_more_effectively(S2,A)', 'realize_more_effectively(G,A)', 'intervening_actions(A,G)', 'side_effects(A,S1)', 'incompatible_goal(G)'] -> ['bring_about_more_effectively(P,S2,A)', 'realize_more_effectively(P,G,A)', 'intervening_actions(A,G)', 'bad_outweighs(A,G)', 'incompatible_goal(P,G)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
 67 scheme-level difference(s) after renames
-added by the owner's decision (not compared): whole_into_parts, end_and_means_bad, end_and_means_less_bad, bridge_from_agent, bridge_from_continuing, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm, harm_reduction, better_means, sunk_costs_precommitment
-language: 392 -> 455 keys; keys only in clean: 97, only in original: 33, same key with a changed template: 34
+added by the owner's decision (not compared): whole_into_parts, end_and_means_bad, end_and_means_less_bad, bridge_from_agent, bridge_from_continuing, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm, harm_reduction, finding_out_first, better_means, sunk_costs_precommitment
+language: 392 -> 458 keys; keys only in clean: 100, only in original: 33, same key with a changed template: 34
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  acceptable_action/2 'For %s, %s is an acceptable thing to do.'
@@ -95,6 +95,7 @@ language: 392 -> 455 keys; keys only in clean: 97, only in original: 33, same ke
   +  difference_against/3 '%s and %s differ in a way that tells against %s.'
   +  difference_for/3 '%s and %s differ in a way that tells in favour of %s.'
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
+  +  done_in_time/2 '%s can be done before the decision on action %s must be taken.'
   +  excuse/0 'The agent has an adequate excuse or an overriding duty.'
   +  fails_to_avert/2 'Doing %s would fail to avert %s.'
   +  gain_discounted_by_bearer/2 'In deciding on action %s, the gain %s counts for less because of whom it would go to.'
@@ -152,6 +153,7 @@ language: 392 -> 455 keys; keys only in clean: 97, only in original: 33, same ke
   +  rule_changed/0 'The rule has changed since the publication of the rulebook.'
   +  same_meaning/3 'Speakers of %s believe that %s means the same as %s.'
   +  sets_precedent/3 'Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s.'
+  +  settles_whether/3 '%s would settle, reliably enough for the decision, whether action %s brings about %s.'
   +  should_not/1 'Therefore you should not bring about %s.'
   +  speakers_correct/0 'Speakers of a language are generally correct about word definitions in that language.'
   +  strong_advocate/3 '%s advocate %s in a strong way indicating her personal commitment to %s.'
@@ -165,6 +167,7 @@ language: 392 -> 455 keys; keys only in clean: 97, only in original: 33, same ke
   +  whole_is/2 'The whole %s has %s.'
   +  whole_of/4 '%s is made up of the parts %s, %s and %s.'
   +  worth_finding_out_first/2 'It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.'
+  +  worth_its_costs/3 'The costs and risks of %s are worth bearing to know whether action %s brings about %s before that possibility counts in the decision.'
   -  accept_saying 'Therefore, you should accept what I say.'
   -  action_fit_quality/1 'Description of action actually fit the quality.'
   -  attack_well_supported 'Allegration made in character attack premise evidence are well supported.'

@@ -324,6 +324,9 @@ contrasts:
     an outcome that happens whether or not A is done, which A only makes less harmful
     each time (OC17). A claim that A prevents E is positive consequences.
   status: drafted by Claude Code, 2026-11-25
+- scheme: finding_out_first
+  text: ""
+  status: todo
 - scheme: practical_reasoning2
   text: Choose practical_reasoning2 only when S2 is a state distinct from the action
     and, of S1, the step from A to S2 and the step from S2 to G, at most one has to

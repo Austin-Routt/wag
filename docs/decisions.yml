@@ -1245,8 +1245,13 @@ decisions:
       answered (the tactical burden), and a tie goes against the critic under
       the preponderance standard. Tested in the engine, one example per side,
       each side proving it for a reason of its own
-      (wag/internal/carneades/consequences_c3_test.go).
-    recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md; docs/proposals/D008-D074.md (the declarations of 2026-11-25)"
+      (wag/internal/carneades/consequences_c3_test.go). Since 2026-11-26 an
+      answer that makes the conditions out is an argument of
+      finding_out_first (D095 (3), proposal D095), tested in the engine one
+      premise at a time (wag/internal/carneades/finding_out_first_test.go);
+      from step C5.2 the game accepts it at the question and refuses Other
+      there.
+    recorded: "docs/decisions.yml; docs/proposals/D001-D028-D029.md; docs/proposals/D008-D074.md (the declarations of 2026-11-25); docs/proposals/D095.md (the answer scheme, 2026-11-26)"
 
 - id: D054
   title: Falsification's conclusion
@@ -2697,7 +2702,7 @@ decisions:
       profile. (4) D093 (e), (f) and (g) are confirmed as applied, with tests
       for a wrong actor, action, goal and context, unrelated consequences, and
       surviving independent support.
-    recorded: "docs/c5-game.md (version 4); to apply: the answer scheme's proposal for worth_finding_out_first, then step C5.2"
+    recorded: "docs/c5-game.md (version 4); (3)'s answer scheme applied 2026-11-26: docs/proposals/D095.yml (version 2, after an independent review), walton.yml through edits.py (FINDING_OUT_D095), families.json, positions.json, the catalogue entries, docs/kialo-batch2 (guidelines OC15, rule cases OC15-c and OC15-f, validate.py's R11); the rest at step C5.2"
 
 # --- Decided ------------------------------------------------------------------
 
