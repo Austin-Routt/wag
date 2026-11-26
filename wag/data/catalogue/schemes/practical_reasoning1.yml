@@ -13,6 +13,82 @@ walton:
     171, 10-15 (2007), 855–874.
 game:
   id: AS:practical_reasoning
+  nascq:
+    carneades_id: practical_reasoning1
+    name: Practical Reasoning
+    semantic_type: action
+    thesis_independent: false
+    base_weight: 0.7
+    variables:
+      A:
+        type: action
+        description: Action to be performed
+        example_en: introduce a carbon tax
+      S1:
+        type: state
+        description: Current circumstances
+        example_en: emissions are rising
+      S2:
+        type: state
+        description: Future state after action
+        example_en: lower emissions
+      G:
+        type: goal
+        description: Goal to be realized
+        example_en: a stable climate
+      V:
+        type: value
+        description: Value promoted by the goal
+        example_en: public health
+    premise_templates_en:
+    - The current situation is {S1}
+    - Doing {A} in the situation {S1} would lead to {S2}
+    - The goal {G} would be achieved in {S2}
+    - Achieving {G} would promote the value {V}
+    conclusion_template_en: '{A} should be done'
+    description_en: An agent should do an action because, in the current circumstances,
+      it brings about a state that realizes a goal, which promotes a value.
+    cues_en:
+    - should
+    - ought to
+    - we must
+    - in order to
+    - so that
+    - goal
+    - aim
+    - achieve
+    - promote
+    - policy
+    - plan to
+    evidence: ""
+    evidence_note_en: ""
+  core:
+    meta:
+      title: Argument from Value-Based Practical Reasoning
+      source: Atkinson & Bench-Capon (2007)
+    variables:
+    - A
+    - S1
+    - S2
+    - G
+    - V
+    conclusions:
+    - should_be_performed(A)
+    premises:
+    - current_circumstances(S1)
+    - would_bring_about(A,S1,S2)
+    - would_be_realized(G,S2)
+    - would_promote_value(G,V)
+    assumptions:
+    - legitimate_value(V)
+    - worthy_goal(G)
+    - possible(A)
+    exceptions:
+    - bring_about_more_effectively(S2,A)
+    - realize_more_effectively(G,A)
+    - promote_more_effectively(V,A)
+    - side_effects(A,S1)
+  status: generated
 formulas:
   variables: [A, S1, S2, G, V, P]
   premises:

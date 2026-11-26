@@ -90,7 +90,7 @@ func main() {
 	closeShare := flag.Float64("close", registry.CloseShare, "with --registry: the share of formulas in common from which two schemes with the same conclusion are reported as close")
 	games := flag.Int("games", 0, "play this many AI-vs-AI games and print statistics")
 	alternate := flag.Bool("alternate", false, "with --games: swap the seats every other game, as colours alternate in chess")
-	catGen := flag.Bool("catalogue-gen", false, "generate the scheme catalogue's skeleton from walton.yml, links.json, families.json and the NASCQ, keeping what people and models have written; write its index and exit")
+	catGen := flag.Bool("catalogue-gen", false, "generate the scheme catalogue's skeleton from walton.yml, links.json, families.json and the NASCQ, keeping what people and models have written; write its index and game/ and exit")
 	catCheck := flag.Bool("catalogue-check", false, "check the scheme catalogue against its sources (formulas, book links, critical questions, statuses) and that no text reproduces the book; print the findings and exit (status 1 on an error)")
 	catDir := flag.String("catalogue", "", "with --catalogue-gen or --catalogue-check: the catalogue's directory (default: wag/data/catalogue of the repository)")
 	repoDir := flag.String("repo", "", "with the --catalogue commands: the repository's root (default: found from the working directory)")

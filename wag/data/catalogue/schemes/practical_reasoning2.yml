@@ -12,6 +12,75 @@ walton:
     University Press.
 game:
   id: AS:practical_reasoning_goal
+  nascq:
+    carneades_id: practical_reasoning2
+    name: Instrumental Practical Reasoning
+    semantic_type: action
+    thesis_independent: false
+    base_weight: 0.65
+    variables:
+      S1:
+        type: state
+        description: Current circumstances
+        example_en: emissions are rising
+      A:
+        type: action
+        description: Action to be performed
+        example_en: introduce a carbon tax
+      S2:
+        type: state
+        description: Future state after the action
+        example_en: lower emissions
+      G:
+        type: goal
+        description: Goal to be realized
+        example_en: meet the 2030 climate target
+    premise_templates_en:
+    - The current situation is {S1}
+    - Doing {A} in the situation {S1} would lead to {S2}
+    - The goal {G} would be achieved in {S2}
+    conclusion_template_en: '{A} should be done'
+    description_en: 'An agent should do an action because, in the current circumstances,
+      it brings about a state in which the agent''s goal is realized (goal-based,
+      without values: Walton 2015; the book''s practical inference, 22.1). For an
+      argument that also names the value the goal promotes, use Practical Reasoning.'
+    cues_en:
+    - in order to
+    - so that
+    - so as to
+    - means to
+    - the way to
+    - to achieve
+    - to reach
+    - our goal
+    - the aim
+    evidence: recommended
+    evidence_note_en: a source showing the action would bring about the state
+  core:
+    meta:
+      title: Argument from Instrumental Practical Reasoning
+      source: Walton (2015), Goal-Based Reasoning for Argumentation
+    variables:
+    - A
+    - S1
+    - S2
+    - G
+    conclusions:
+    - should_be_performed(A)
+    premises:
+    - current_circumstances(S1)
+    - would_bring_about(A,S1,S2)
+    - would_be_realized(G,S2)
+    assumptions:
+    - possible(A)
+    - possible(G)
+    exceptions:
+    - bring_about_more_effectively(S2,A)
+    - realize_more_effectively(G,A)
+    - intervening_actions(A,G)
+    - side_effects(A,S1)
+    - incompatible_goal(G)
+  status: generated
 formulas:
   variables: [A, S1, S2, G, P]
   premises:

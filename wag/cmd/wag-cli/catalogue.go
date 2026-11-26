@@ -45,7 +45,7 @@ func runCatalogueGen(repo, dir, by string) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	fmt.Printf("%s: %d entries created, %d updated, %d unchanged; %s written\n", dir, r.Created, r.Updated, r.Unchanged, catalogue.IndexFile)
+	fmt.Printf("%s: %d entries created, %d updated, %d unchanged; %s and %s/ written\n", dir, r.Created, r.Updated, r.Unchanged, catalogue.IndexFile, catalogue.GameDir)
 	for _, o := range r.Orphans {
 		fmt.Printf("note: %s is not made from the sources any more; left in place (the check reports it)\n", o)
 	}

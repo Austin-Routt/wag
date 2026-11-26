@@ -12,6 +12,56 @@ walton:
     Press, Tuscaloosa and London, 1995, pp. 155-156.
 game:
   id: AS:negative_consequences
+  nascq:
+    carneades_id: negative_consequences
+    name: Argument from Negative Consequences
+    semantic_type: action
+    thesis_independent: false
+    base_weight: 0.65
+    variables:
+      A:
+        type: action
+        description: Action
+        example_en: introduce a carbon tax
+      G:
+        type: event
+        description: Bad consequence
+        example_en: higher heating bills for poor households
+    premise_templates_en:
+    - Doing {A} brings about {G}
+    - '{G} is bad'
+    conclusion_template_en: '{A} should not be done'
+    description_en: An action should not be performed because it brings about bad
+      consequences (the counterpart of positive consequences).
+    cues_en:
+    - bad consequence
+    - bad consequences
+    - would cause
+    - would harm
+    - harm
+    - harmful
+    - danger
+    - dangerous
+    - risk
+    - backfire
+    - should not
+    - shouldn't
+    - downside
+    evidence: recommended
+    evidence_note_en: a source showing the action brings about the consequence
+  core:
+    meta:
+      title: Argument from Negative Consequences
+      source: Walton (1995)
+    variables:
+    - A
+    - G
+    conclusions:
+    - ¬should_be_performed(A)
+    premises:
+    - brings_about(A,G)
+    - bad(G)
+  status: generated
 formulas:
   variables: [A, G]
   premises:

@@ -15,6 +15,50 @@ walton:
     -245.'
 game:
   id: AS:values
+  nascq:
+    carneades_id: positive_value
+    name: Argument from Values
+    semantic_type: value
+    thesis_independent: false
+    base_weight: 0.6
+    variables:
+      V:
+        type: value
+        description: Value being invoked
+        example_en: fairness
+      A:
+        type: entity
+        description: Agent or judger
+        example_en: most voters
+      G:
+        type: goal
+        description: Goal affected
+        example_en: equal pay
+    premise_templates_en:
+    - '{V} is a positive value for {A}'
+    - '{V} supports the goal {G} for {A}'
+    conclusion_template_en: '{V} is a reason to keep the goal {G}'
+    description_en: A goal is worth keeping because it promotes a value the agent
+      holds.
+    cues_en:
+    - value
+    - values
+    - freedom
+    - fairness
+    - justice
+    - equality
+    - dignity
+    - important to
+    - matters
+    - principle
+    - right thing
+    evidence: ""
+    evidence_note_en: ""
+  core:
+    meta:
+      title: Argument from Values (Positive)
+      source: Bench-Capon (2003)
+  status: generated
 formulas:
   variables: [V, A, G]
   premises:

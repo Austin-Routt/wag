@@ -13,6 +13,56 @@ walton:
 game:
   id: AS:sign
   backs: ['CQ:side_effect', 'CQ:possibility', 'CQ:goal_possible']
+  nascq:
+    carneades_id: sign
+    name: Argument from Sign
+    semantic_type: causality
+    thesis_independent: false
+    base_weight: 0.6
+    variables:
+      A:
+        type: event
+        description: Observable sign or indicator
+        example_en: wet streets
+      B:
+        type: event
+        description: Indicated condition
+        example_en: it rained
+    premise_templates_en:
+    - '{A} is observed'
+    - '{B} is indicated when {A} holds'
+    conclusion_template_en: '{B} holds in the current situation'
+    answer_variable: B
+    description_en: Something is probably true because an observed sign usually indicates
+      it.
+    cues_en:
+    - sign
+    - signs
+    - indicates
+    - indication
+    - suggests
+    - symptom
+    - evidence of
+    - shows that
+    - points to
+    - observed
+    evidence: recommended
+    evidence_note_en: where the sign was observed
+  core:
+    meta:
+      title: Argument from Sign
+      source: Walton (2006)
+    variables:
+    - A
+    - B
+    conclusions:
+    - true_in_situation(B)
+    premises:
+    - finding_true(A)
+    - indicated_true(B,A)
+    assumptions:
+    - strong_correlation(A,B)
+  status: generated
 formulas:
   variables: [A, B]
   premises:

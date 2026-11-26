@@ -12,6 +12,54 @@ walton:
     University Park, Albany, 1997, p.211-225.
 game:
   id: AS:expert_opinion
+  nascq:
+    carneades_id: expert_opinion
+    name: Argument from Expert Opinion
+    semantic_type: truth
+    thesis_independent: true
+    base_weight: 0.7
+    variables:
+      W:
+        type: entity
+        description: Expert or credible source
+        example_en: the IPCC
+      D:
+        type: domain
+        description: Field of expertise
+        example_en: climate science
+      S:
+        type: proposition
+        description: Proposition asserted
+        example_en: human activity is warming the planet
+    premise_templates_en:
+    - '{W} is an expert in {D}'
+    - '{S} is a matter of {D}'
+    - '{W} says that {S}'
+    conclusion_template_en: '{S}'
+    answer_variable: S
+    description_en: A claim is plausible because an expert in its field asserts it.
+    cues_en:
+    - expert
+    - experts
+    - scientist
+    - scientists
+    - according to
+    - study
+    - studies
+    - research
+    - professor
+    - doctor
+    - dr
+    - researchers
+    - ipcc
+    - peer reviewed
+    evidence: required
+    evidence_note_en: where the expert asserts it (a citation or a link)
+  core:
+    meta:
+      title: Argument from Expert Opinion
+      source: Walton (1997), Appeal to Expert Opinion, pp. 211-225
+  status: generated
 formulas:
   variables: [W, D, S]
   premises:

@@ -25,6 +25,8 @@ import (
 	"fmt"
 	"regexp"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Entry is one scheme of the catalogue, stored as schemes/<id>.yml.
@@ -68,6 +70,14 @@ type WaltonRef struct {
 type GameScheme struct {
 	ID    string   `yaml:"id"`
 	Backs []string `yaml:"backs,flow,omitempty"`
+	// NASCQ is the game's record of the scheme (nascq/schemes.json): the
+	// fields no text defines (plan §6), as written there (step C5.1).
+	NASCQ yaml.MapSlice `yaml:"nascq,omitempty"`
+	// Core is the game's block of the scheme in core.yml, but its id, and
+	// but its formulas where they are walton.yml's, in the same order.
+	Core yaml.MapSlice `yaml:"core,omitempty"`
+	// Status is the status of NASCQ and Core.
+	Status string `yaml:"status,omitempty"`
 }
 
 // Formulas are a scheme's variables and formulas by role, in walton.yml's

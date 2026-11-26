@@ -144,6 +144,18 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 		gen[e.ID] = e
 		order = append(order, e.ID)
 	}
+	// The game's data in the catalogue (step C5.1): GameDir's files.
+	if files, err := g.GameFiles(); err != nil {
+		r.Findings = append(r.Findings, Finding{File: GameDir, Error: true, Msg: err.Error()})
+	} else {
+		for _, name := range sortedKeys(files) {
+			cur, err := os.ReadFile(filepath.Join(dir, GameDir, name))
+			if err != nil || string(cur) != files[name] {
+				r.Findings = append(r.Findings, Finding{File: GameDir + "/" + name, Error: true,
+					Msg: "not what wag-cli --catalogue-gen makes of the game's files; run it"})
+			}
+		}
+	}
 	byID := map[string]*Entry{}
 	ids := map[string]bool{}
 	for name, e := range entries {

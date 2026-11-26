@@ -12,6 +12,57 @@ walton:
     Press, New York 2006, p. 96-97.
 game:
   id: AS:analogy
+  nascq:
+    carneades_id: analogy
+    name: Argument from Analogy
+    semantic_type: truth
+    thesis_independent: false
+    base_weight: 0.55
+    variables:
+      A:
+        type: proposition
+        description: Proposition claimed to hold
+        example_en: a carbon tax cuts emissions
+      C:
+        type: case
+        description: Similar case
+        example_en: Sweden's carbon tax
+    premise_templates_en:
+    - '{C} is a similar case'
+    - '{A} is true in the case of {C}'
+    conclusion_template_en: '{A}'
+    answer_variable: A
+    description_en: A claim holds here because it holds in a similar case.
+    cues_en:
+    - like
+    - similar
+    - similarly
+    - just as
+    - analogous
+    - analogy
+    - same as
+    - compare
+    - as in
+    - in the case of
+    - precedent
+    evidence: recommended
+    evidence_note_en: the similar case
+  core:
+    meta:
+      title: Argument from Analogy
+      source: Walton (2006)
+    variables:
+    - A
+    - C
+    conclusions:
+    - A
+    premises:
+    - similar_case(C)
+    - in_case(A,C)
+    exceptions:
+    - relevant_differences(C)
+    - more_on_point(A,C)
+  status: generated
 formulas:
   variables: [P1, P2, C1, C2]
   premises:

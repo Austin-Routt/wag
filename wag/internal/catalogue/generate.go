@@ -81,6 +81,19 @@ func (g *Generator) entry(w Scheme) *Entry {
 				e.Game.Backs = append(e.Game.Backs, b.CQ)
 			}
 		}
+		// The game's record of the scheme and its core.yml block (step
+		// C5.1), from the game's files until they are generated from here.
+		if r := s.gameRaw; r != nil {
+			for _, x := range r.schemes {
+				if x.ID == gid {
+					e.Game.NASCQ = x.Record
+				}
+			}
+			if b, ok := r.core[s.Game[gid].CarneadesID]; ok {
+				e.Game.Core = gameCore(b, w)
+			}
+			e.Game.Status = Generated
+		}
 	}
 	// The compendium entries the scheme formalizes.
 	for _, l := range s.Links {
@@ -632,6 +645,22 @@ func (g *Generator) Write(dir string) (Result, error) {
 	idx := Index(entries)
 	if err := os.WriteFile(filepath.Join(dir, IndexFile), idx, 0o644); err != nil {
 		return r, err
+	}
+	files, err := g.GameFiles()
+	if err != nil {
+		return r, err
+	}
+	if err := os.MkdirAll(filepath.Join(dir, GameDir), 0o755); err != nil {
+		return r, err
+	}
+	for _, name := range sortedKeys(files) {
+		path := filepath.Join(dir, GameDir, name)
+		if cur, err := os.ReadFile(path); err == nil && string(cur) == files[name] {
+			continue
+		}
+		if err := os.WriteFile(path, []byte(files[name]), 0o644); err != nil {
+			return r, err
+		}
 	}
 	return r, nil
 }

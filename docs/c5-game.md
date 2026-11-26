@@ -79,7 +79,9 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    analogy), its formulas as a recorded override with its reason (status `generated`). The shared
    questions are one file, `wag/data/catalogue/game/questions.yml`; the edge order is data,
    `game/order.yml`; core.yml's comments, language and the scheme kept for old games,
-   `game/core.yml.in`.
+   `game/core.yml.in`. Done: `--catalogue-gen` records them from today's files (each game scheme's
+   entry has `game.nascq`, `game.core` and `game.status`; the reasons are its `game-differs`
+   discrepancies), and the check requires them current.
 3. **The rules.** A game question's locus is its target's role in the formulas the game plays (its
    override where there is one; an assumption is asked at the premise), its pattern that formula;
    where a question has several targets, its game part names the one asked; a question asked of the
@@ -89,7 +91,8 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    carries the hash of a canonical form of the values the generator reads, so that drafting the
    entries' other parts changes nothing. The check requires the committed files to equal its
    output; `--catalogue-gen` and the check turn round in the same commit.
-5. **Reproduction.** The pre-C5 files are frozen in testdata with their hash; a test requires the
+5. **Reproduction.** The pre-C5 files are frozen in `wag/data/frozen/e7141ec8dea379bc`, a `--data`
+   folder named by its fingerprint (done; a test requires the two to agree); a test requires the
    generator's output to equal them as JSON and YAML trees (every field, the order of the edges and
    of the premises), not through the loader.
 6. **The switch:** the bytes change once, the meaning not (D094 a). In the same commit both gold

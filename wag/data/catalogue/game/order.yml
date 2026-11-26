@@ -1,0 +1,93 @@
+# The game's data in the catalogue (step C5.1, docs/c5-game.md). Made by
+# wag-cli --catalogue-gen from the game's files until the switch, when it
+# becomes the source the game's files are generated from.
+schemes:
+- AS:practical_reasoning
+- AS:consequences
+- AS:values
+- AS:sign
+- AS:expert_opinion
+- AS:position_to_know
+- AS:analogy
+- AS:practical_reasoning_goal
+- AS:negative_consequences
+ask_edges:
+- cq: CQ:other_goals
+  scheme: AS:practical_reasoning
+- cq: CQ:other_means
+  scheme: AS:practical_reasoning
+- cq: CQ:side_effect
+  scheme: AS:practical_reasoning
+- cq: CQ:possibility
+  scheme: AS:practical_reasoning
+- cq: CQ:best_means
+  scheme: AS:practical_reasoning
+- cq: CQ:evidence
+  scheme: AS:consequences
+- cq: CQ:side_effect
+  scheme: AS:consequences
+- cq: CQ:likelihood
+  scheme: AS:consequences
+- cq: CQ:conflicting_goals
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:other_means
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:best_means
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:possibility
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:goal_possible
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:intervening_actions
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:side_effect
+  scheme: AS:practical_reasoning_goal
+- cq: CQ:likelihood
+  scheme: AS:negative_consequences
+- cq: CQ:evidence
+  scheme: AS:negative_consequences
+- cq: CQ:opposite_consequences
+  scheme: AS:negative_consequences
+- cq: CQ:likelihood
+  scheme: AS:sign
+- cq: CQ:other_event
+  scheme: AS:sign
+- cq: CQ:expertise
+  scheme: AS:expert_opinion
+- cq: CQ:field
+  scheme: AS:expert_opinion
+- cq: CQ:opinion
+  scheme: AS:expert_opinion
+- cq: CQ:trustworthiness
+  scheme: AS:expert_opinion
+- cq: CQ:consistency
+  scheme: AS:expert_opinion
+- cq: CQ:backup_evidence
+  scheme: AS:expert_opinion
+- cq: CQ:position
+  scheme: AS:position_to_know
+- cq: CQ:opinion
+  scheme: AS:position_to_know
+- cq: CQ:field
+  scheme: AS:position_to_know
+- cq: CQ:trustworthiness
+  scheme: AS:position_to_know
+- cq: CQ:difference
+  scheme: AS:analogy
+- cq: CQ:other_case
+  scheme: AS:analogy
+- cq: CQ:truth
+  scheme: AS:analogy
+- cq: CQ:legitimate_value
+  scheme: AS:values
+- cq: CQ:value_effect
+  scheme: AS:values
+backup_edges:
+- cq: CQ:side_effect
+  scheme: AS:sign
+- cq: CQ:possibility
+  scheme: AS:sign
+- cq: CQ:goal_possible
+  scheme: AS:sign
+- cq: CQ:opposite_consequences
+  scheme: AS:consequences

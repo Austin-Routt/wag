@@ -12,6 +12,53 @@ walton:
     University Press, University Park, 2002, p.46.
 game:
   id: AS:position_to_know
+  nascq:
+    carneades_id: position_to_know
+    name: Argument from Position to Know
+    semantic_type: truth
+    thesis_independent: true
+    base_weight: 0.65
+    variables:
+      W:
+        type: entity
+        description: Knowledgeable source
+        example_en: a local resident
+      D:
+        type: domain
+        description: Domain of knowledge
+        example_en: what happens in the village
+      S:
+        type: proposition
+        description: Proposition asserted
+        example_en: the road floods every spring
+    premise_templates_en:
+    - '{W} is in a position to know about {D}'
+    - '{W} says that {S}'
+    - '{S} is a matter of {D}'
+    conclusion_template_en: '{S}'
+    answer_variable: S
+    description_en: A claim is plausible because someone in a position to know asserts
+      it.
+    cues_en:
+    - witness
+    - saw
+    - eyewitness
+    - insider
+    - told me
+    - reported
+    - was there
+    - first hand
+    - firsthand
+    - knows
+    - in a position to know
+    - official
+    evidence: required
+    evidence_note_en: where they assert it (a citation or a link)
+  core:
+    meta:
+      title: Argument from Position to Know
+      source: Walton (2002)
+  status: generated
 formulas:
   variables: [W, D, S]
   premises:

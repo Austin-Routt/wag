@@ -67,6 +67,8 @@ type Sources struct {
 	AskEdges []AskEdge
 	Backups  []BackupEdge
 	Core     map[string]Scheme // the game's core.yml, by id
+	// gameRaw is the game's files read in their order (step C5.1).
+	gameRaw *gameRaw
 	// Close pairs walton.yml's schemes whose patterns the registry finds
 	// related (internal/registry: the same form, one formula apart, one
 	// extending the other, close).
@@ -305,6 +307,11 @@ func Parse(f Files) (*Sources, error) {
 	for _, c := range core.Schemes {
 		s.Core[c.ID] = c
 	}
+	g, err := parseGameRaw(f)
+	if err != nil {
+		return nil, err
+	}
+	s.gameRaw = g
 	ad, err := carneades.NewAdapterFromYAML(f.Walton)
 	if err != nil {
 		return nil, fmt.Errorf("walton.yml (Carneades): %v", err)

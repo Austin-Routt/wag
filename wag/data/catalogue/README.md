@@ -21,6 +21,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 |---|---|
 | `schemes/<id>.yml` | 129 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
+| [`game/`](game/) | The game's data that no single entry holds: the questions, which several schemes share (`questions.yml`); the order of the schemes and edges, which is behaviour, the order of the offered moves (`order.yml`); and `core.yml` but the game schemes' blocks (`core.yml.in`). Generated from the game's files until step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)); after it, the game's files are generated from them and the entries. |
 | This README | The format, the statuses, the commands, the checks |
 
 **Who decides what** (the owner's decision of 2026-10-15):
@@ -55,7 +56,11 @@ id: expert_opinion
 name: Argument from Expert Opinion
 tier: 1
 walton: {id: expert_opinion, title: ..., source: ...}       # source: walton.yml
-game: {id: AS:expert_opinion}                                # source: the NASCQ
+game:                                                        # source: the NASCQ and core.yml, until C5's switch
+  id: AS:expert_opinion
+  nascq: {carneades_id: expert_opinion, name: ..., base_weight: 0.7, ...}   # its record in nascq/schemes.json
+  core: {meta: {title: ..., source: ...}}                    # its block in core.yml; formulas only where they are not walton.yml's
+  status: generated
 formulas:                                                    # source: walton.yml
   variables: [W, D, S]
   premises: [expert(W,D), in_domain(S,D), asserts(W,S)]

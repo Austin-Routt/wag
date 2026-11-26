@@ -13,6 +13,53 @@ walton:
 game:
   id: AS:consequences
   backs: ['CQ:opposite_consequences']
+  nascq:
+    carneades_id: positive_consequences
+    name: Argument from Positive Consequences
+    semantic_type: action
+    thesis_independent: false
+    base_weight: 0.65
+    variables:
+      A:
+        type: action
+        description: Action
+        example_en: introduce a carbon tax
+      G:
+        type: event
+        description: Good consequence
+        example_en: cleaner air
+    premise_templates_en:
+    - Doing {A} brings about {G}
+    - '{G} is good'
+    conclusion_template_en: '{A} should be done'
+    description_en: An action should be performed because it brings about good consequences.
+    cues_en:
+    - consequence
+    - consequences
+    - would lead to
+    - will lead to
+    - leads to
+    - result in
+    - results in
+    - benefit
+    - benefits
+    - good outcome
+    - because it would
+    evidence: recommended
+    evidence_note_en: a source showing the action brings about the consequence
+  core:
+    meta:
+      title: Argument from Positive Consequences
+      source: Walton (1995)
+    variables:
+    - A
+    - G
+    conclusions:
+    - should_be_performed(A)
+    premises:
+    - brings_about(A,G)
+    - good(G)
+  status: generated
 formulas:
   variables: [A, G]
   premises:
