@@ -2500,6 +2500,68 @@ decisions:
       spans are left for when argument mining is taken up.)
     recorded: "docs/annotation-records.md; docs/kialo-batch2 (case.json, the gold by migrate_format2.py, gold-format1.json kept, guidelines §2, §4 and §5, validate.py R12-R17, agreement.py, to_wag.py); wag/data/annotation (positions.json, the dataset's copy); wag/internal/annotate (the reader, the check, the agreement, the prompt)"
 
+- id: D093
+  title: Repairs and choices found in drafting the rest of the first family
+  question: >-
+    Drafting proposal D022-D093, and the independent review of its first
+    version, found faults and choices that no decision covered.
+    practical_goal's goal premise, person_goal(P,G), is not practical
+    reasoning's goal_of_agent(P,G), so the questions it borrows (D023) would
+    speak of another goal. two_person_practical's exceptions named the
+    advisor where the action belongs (side_effect_other_act(B,A)) and left
+    the means out (alternative_means(A,X)). waste's assumption, possible(X),
+    printed "Action X is possible" of a goal. The templates of the changed
+    schemes began a premise or a conclusion with "Therefore", and some read
+    right of a singular agent only. D063's decided text gives the bridges
+    "a bridge scheme with its own exception (the agent is not the one
+    deliberating)"; its refinement says "the bridge needs the agent and the
+    deliberation context positively the same, or explicitly mapped. The
+    exception alone is not enough". The continuing bridge chooses a means
+    for a goal, which practical reasoning questions, and end_and_means_bad
+    lacks the question of the opposite value that D023 gives
+    end_and_means_1. Should they be repaired with the proposal, and how?
+  category: scheme
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["docs/proposals/D022-D093.md", "the independent review of version 1 (wag-workspace verify/p-C4/review-v1)"]
+  decided:
+    date: "2026-11-26"
+    by: owner (instruction of 2026-11-25 to go with the recommended choices)
+    decision: >-
+      Yes, with the proposal; the owner can reverse any part before it is
+      applied. (a) practical_goal's goal premise becomes goal_of_agent(P,G);
+      person_goal/2 is left an orphan. (b) two_person_practical asks four of
+      the book's five questions (23) in practical reasoning's formulas:
+      incompatible_goal(A,X), realize_more_effectively(A,X,Y) (D089),
+      bad_outweighs(Y,X) (D070, WAG's reading, D091) and
+      possible_bring_about(A,Y) (D088). The fifth, whether other actions are
+      required too, keeps no formula, as links.json has it: under the
+      premise's necessary reading another required step is no reason against
+      the advised one (D090's reasoning), and a formula without the agent
+      would reach other agents' arguments (D089). It concludes should_do(A,Y)
+      (D063), and the gold's R9 reads its goal, tells_intend(A,X,B), as
+      goal_of_agent(A,X). (c) waste's assumption becomes possible_goal(X).
+      (d) The templates of the changed schemes are rewritten in WAG's own
+      words, and read right of a plural agent. (e) The bridges take the
+      premise deliberating_agent(P,A), that it falls to P to decide whether
+      to go ahead with A, which their arguer supports, in place of the
+      exception D063's decided text names: the refinement asks for the
+      positive claim, and a critic who denies it attacks the premise, so the
+      exception would add nothing. R14 checks that A is P's action in the
+      case record; that the decision is P's is the premise's claim. (f)
+      bridge_from_continuing asks practical reasoning's questions of the
+      means it chooses: realize_more_effectively(P,G,A) and bad_outweighs(A,G)
+      as exceptions, possible_bring_about(P,A) as an assumption (D004, D070,
+      D088, D089). (g) end_and_means_bad borrows means_good_outweighs(X,Y),
+      the question of the opposite value, as end_and_means_1 borrows
+      means_bad_outweighs(X,Y) (D023): beyond D022's "as the schemes library
+      has them", since without it a means condemned by a bad end could be
+      defended only by a rebuttal. The replaced formulas' templates stay as
+      orphans.
+    recorded: "docs/proposals/D022-D093.yml (version 2); to apply: with the proposal (step C4), walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+
 # --- Decided ------------------------------------------------------------------
 
 - id: D052

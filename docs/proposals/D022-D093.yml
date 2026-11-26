@@ -5,8 +5,14 @@
 # means, waste and sunk costs. `wag-cli --proposal` checks it and writes its
 # view, D022-D093.md. How proposals work: process.md §5.
 #
-# Version 1, 2026-11-26. The sources, quoted with their pages, are in the
-# workspace (verify/p-C4/quotes.md); this file cites author, year and page.
+# Version 2, 2026-11-26, from the independent review of version 1 (08d3afe;
+# the review and the exact edits, v2.py, in the workspace, verify/p-C4): the
+# continuing bridge takes practical reasoning's questions; 23/CQ5 keeps no
+# formula; the links whose conclusion is restated are partial; D093 is
+# registered first, with the bridge's premise and the borrowed questions;
+# templates without agreement; examples corrected. The sources, quoted with
+# their pages, are in the workspace (verify/p-C4/quotes.md); this file cites
+# author, year and page.
 
 decisions: [D022, D023, D031, D033, D060, D062, D063, D093]
 title: "The rest of the first family: practical conclusions and their bridges, threat and danger, ends and means, waste and sunk costs"
@@ -17,11 +23,12 @@ summary: |-
     pragmatic_alternative); danger and threat conclude its negation. Each
     recommends an action to the one addressed, the claim WAG's thesis and
     the consequence and practical-reasoning schemes state as
-    should_be_performed(A) (D059, D063). Until now each concluded a
-    predicate of its own (ought_to_bring_about, should_not, not_bring_about,
-    do_other, carry_out_action) that no other scheme concluded or used, so
-    in the engine an appeal to fear for doing A never met an argument from
-    negative consequences against A. Walton's account of these forms reads
+    should_be_performed(A) (D059, D063). Until now they concluded predicates
+    that no consequence or practical-reasoning scheme concluded or used
+    (ought_to_bring_about, should_not, not_bring_about, carry_out_action, and
+    do_other, which the two forms from alternatives shared), so in the
+    engine an appeal to fear for doing A never met an argument from negative
+    consequences against A. Walton's account of these forms reads
     them so: the fear, danger and threat appeals are species of argument from
     negative consequences, and so of practical reasoning, and their
     conclusion is a practical ought about the respondent's action (Walton
@@ -31,7 +38,11 @@ summary: |-
     threat a special case of it (p. 142). What is particular to each (the
     speaker's threat, the fear, the alternative, the admired group) stays in
     its premises. The old conclusion templates are kept and listed as
-    orphans.
+    orphans. Their links to the compendium become partial, as D029's, D059's
+    and C2's restated conclusions did: the book's second person and its
+    hedges (35's "had better", 37's "on balance", which Walton calls
+    important, Scare Tactics p. 173) are left to the premises and the
+    weights.
   - **D060.** threat's premises name what the book's 35 names (Walton, Reed
     and Macagno 2008, p. 333): cited_bad_consequences(X,C), which had lost
     the consequence; position_to_bring_about(C), for position_to_know(X),
@@ -54,20 +65,29 @@ summary: |-
     and the deliberation to be positively the same, or explicitly mapped: an
     exception nobody raises is presumed not to hold, so an agent nobody
     checked would pass. So each bridge has a premise its arguer supports,
-    deliberating_agent(P,A), that P is the agent who deliberates in this
-    discussion whether to do A; positions.json types its places, so the case
-    record's mapping of actions to actors checks it (R14). That premise is
-    the exception D063 first named (the agent is not the one deliberating),
-    stated positively and so the arguer's burden: a critic who denies it
-    challenges it as a premise, and the bridge needs no exception besides.
+    deliberating_agent(P,A), that it falls to P to decide whether to go
+    ahead with A: the agent the case deliberates for (annotation records,
+    §3). positions.json types its places, so R14 checks that A is P's action
+    in the case record; that the decision is P's is the premise's claim,
+    which a critic challenges. D063's text named an exception (the agent is
+    not the one deliberating); its refinement asks for the positive claim,
+    which makes the exception redundant (a critic who denies it attacks the
+    premise), so the bridges have none for it: a departure from the text,
+    recorded as D093(e).
     D063 also says that continuing an activity binds to the continuing
     action, not only to its goal: waste concludes that the agent ought to
     continue trying to realize a goal, so bridge_from_continuing takes a
-    second premise, continues_trying(A,G), that doing A is continuing to try
-    to realize G, and recommends A. Neither bridge has a negative form: no
-    scheme of the family concludes the negation of should_do or of
-    ought_to_continue. The bridges enter walton.yml now; the game has none of
-    these schemes, and takes them up with their family.
+    second premise, continues_trying(A,G), that A would continue the effort
+    to realize G, and recommends A. That chooses a means for a goal, as
+    practical inference does, so the bridge takes practical reasoning's
+    questions for it: realize_more_effectively(P,G,A) and bad_outweighs(A,G)
+    as exceptions, possible_bring_about(P,A) as an assumption (D004, D070,
+    D088, D089; D093(f)). Neither bridge has a negative form: no scheme of
+    the family concludes the negation of should_do or of ought_to_continue.
+    Outside the family, from_model (F03) concludes should_do(B,X) too, and
+    bridge_from_agent takes it; from_antimodel's ¬should_do(B,X) has no
+    bridge until its family is taken up. The bridges enter walton.yml now;
+    the game has none of these schemes, and takes them up with their family.
   - **D031.** sunk_costs_precommitment, the commitment form of sunk costs, a
     scheme of its own (2008, pp. 135-136 and entry 25, pp. 326-327; Walton
     2002, pp. 488-489): at a time T2 there is a choice between doing A and
@@ -88,7 +108,10 @@ summary: |-
     has them: end_and_means_bad, a bad end condemns its means
     (means_to_end(X,Y), bad(Y), so bad(X)), and end_and_means_less_bad, a good
     end makes a bad means less bad (means_to_end(X,Y), good(Y), bad(X), so
-    less_bad_as_means(X,Y)).
+    less_bad_as_means(X,Y)). bad(X) is not the negation of end_and_means_1's
+    good(X), so the readings do not meet in the engine: each meets the
+    arguments about its own claim. end_and_means_1's link to 22.6.1 becomes
+    partial with them, the entry's positive reading.
   - **D023.** end_and_means_1 borrows the consequence schemes' question of
     the opposite value (33/CQ3) as the exception means_bad_outweighs(X,Y),
     that the means has bad consequences that matter more than its good end;
@@ -98,34 +121,58 @@ summary: |-
     first place is an action (positions.json): a means may be a state, as
     13292.3's is (less meat consumed), and typed as an action it would have
     to be an action of the case (R14). The likelihood and evidence questions
-    (33/CQ1 and CQ2) press means_to_end(X,Y), a premise, which the game
-    challenges. The graded
+    (33/CQ1 and CQ2) derive to the premise means_to_end(X,Y), which the game
+    challenges (CQ:premise_acceptable), so they need no formula of their own.
+    end_and_means_bad's borrowed question goes beyond D022's "as the schemes
+    library has them": D093(g). The graded
     variant borrows none: its conclusion is a comparison, which an opposite
     value does not defeat. practical_goal borrows practical reasoning's
     alternatives, conflicting goals and side effects (22.1, CQ1, CQ2, CQ5;
     22.4, CQ1, CQ3, CQ7; Walton 2000, pp. 137-138, 191), in the formulas C2
     gave practical reasoning: realize_more_effectively(P,G,X) (D089's
-    reading of alternatives as better means), incompatible_goal(P,G), and
-    bad_outweighs(X,G) (D070's reading of the side effect). Each is asked as
+    reading of alternatives as a better means, more surely, sooner or at
+    lower cost), incompatible_goal(P,G), and bad_outweighs(X,G) (D070's
+    reading of the side effect, WAG's, D091). Each is asked as
     a walton/ question, its source recorded here and in the register.
-  - **D093 (new: found in drafting).** (a) practical_goal's goal premise
-    becomes goal_of_agent(P,G), practical reasoning's, so that its borrowed
+  - **D093 (registered with this version; found in drafting and in the
+    review of version 1).** (a) practical_goal's goal premise becomes
+    goal_of_agent(P,G), practical reasoning's, so that its borrowed
     questions speak of the same goal; person_goal/2 is left an orphan. (b)
-    two_person_practical's questions are the book's five (2008, pp. 325-326)
-    in practical reasoning's formulas: the conflicting goal
+    two_person_practical asks four of the book's five questions (2008, pp.
+    325-326) in practical reasoning's formulas: the conflicting goal
     incompatible_goal(A,X); the better means realize_more_effectively(A,X,Y)
-    (D089); the side effect bad_outweighs(Y,X) (D070); the possibility
-    possible_bring_about(A,Y) (D088); and, for the fifth, which walton.yml
-    lacked, intervening_actions(Y,X). Its exceptions named the advisor where
-    the action belongs (side_effect_other_act(B,A)) and left the means out
-    (alternative_means(A,X)). It concludes should_do(A,Y), D063's agent
-    conclusion, for should_carry_out(A,Y). (c) waste's assumption reads
-    possible_goal(X): possible/1's template said of a goal that an action is
-    possible. (d) The templates of the changed schemes, in our own words:
-    occur/2 (D062), only_way_prevent/2, prevent/1, situation_necessity/4
-    ("sees", for "sets"), waste_bad_thing/2 and ought_to_continue/2: a
-    premise's template does not begin "Therefore", nor does a conclusion's,
-    which the views put after "So".
+    (D089); the side effect that outweighs, bad_outweighs(Y,X) (D070, WAG's
+    reading); the possibility possible_bring_about(A,Y) (D088). The fifth,
+    whether other actions are required too, keeps no formula, an undercutting
+    question: its premise claims a necessary or a sufficient condition, and
+    under the necessary reading another required step is no reason against
+    the advised one (D090's reasoning), while an agent-free formula such as
+    intervening_actions would reach other agents' arguments (D089). Its
+    exceptions named the advisor where the action belongs
+    (side_effect_other_act(B,A)) and left the means out (alternative_means(A,X)).
+    It concludes should_do(A,Y), D063's agent conclusion, for
+    should_carry_out(A,Y). R9, which holds a better means to the goal of the
+    argument it answers, reads its first premise's goal, tells_intend(A,X,B),
+    as goal_of_agent(A,X). (c) waste's assumption reads possible_goal(X):
+    possible/1's template said of a goal that an action is possible. (d) The
+    templates of the changed schemes, in our own words and free of
+    agreement (a plural agent reads right): occur/2 (D062), only_way_prevent/2,
+    prevent/1, situation_necessity/4, waste_bad_thing/2 and
+    ought_to_continue/2; a premise's template does not begin "Therefore", nor
+    does a conclusion's, which the views put after "So". (e) The bridges'
+    premise deliberating_agent(P,A), for the exception D063's text names
+    (above). (f) bridge_from_continuing's questions (above). (g)
+    end_and_means_bad borrows the question of the opposite value as
+    end_and_means_1 does, means_good_outweighs(X,Y): 22.6.1's negative reading
+    answers to it as the positive one does, and without it a means condemned
+    by a bad end could be defended only by a rebuttal.
+
+  **The owner's choices.** D093 was found in drafting and in the review of
+  version 1, which no decision covered: (e) departs from D063's text, and
+  (b), (f) and (g) go beyond the decisions they extend. It is decided under
+  the owner's instruction of 2026-11-25 to go with the recommended choices,
+  and registered before the proposal is applied, so that the owner can
+  reverse any part of it first.
 
   **What stays.** help and distress (family F16) name an agent too; D063's
   bridge applies to them when their family is taken up. end_and_means_2 and
@@ -142,7 +189,10 @@ summary: |-
   (D043).
 
   **The gold.** 13292.3 is coded with end_and_means_1: its instance lists
-  the new exception means_bad_outweighs(X,Y). No other instance of the batch-2 gold
+  the new exception means_bad_outweighs(X,Y). Its challenge record of the
+  opposite consequences keeps no formula: the point it records, 13292.121's
+  unhealthy underconsumption, ranks nothing, so it is a rebuttal (OC2), not
+  the exception. No other instance of the batch-2 gold
   uses a changed scheme (13292.25 names end_and_means_3, which does not
   change, among its alternatives).
 
@@ -150,14 +200,18 @@ summary: |-
   run on walton.yml with this proposal applied before it is): each scheme's
   own conclusion, instantiated, meets an argument of the other side about
   the same action, and a tie leaves neither in (on today's walton.yml each
-  of the six concludes a predicate that meets nothing, and the test fails); each bridge carries an agent's conclusion to the
-  recommendation only with deliberating_agent(P,A), and the continuing
-  bridge only with continues_trying(A,G) too; each new exception defeats
-  the arguments it is on and no other; the schemes' shapes are pinned.
+  of the six concludes a predicate that meets nothing, and the test fails);
+  each bridge carries an agent's conclusion to the recommendation only with
+  deliberating_agent(P,A), and the continuing bridge only with
+  continues_trying(A,G) and its assumption possible_bring_about(P,A) too,
+  and its questions defeat it; each new exception defeats the arguments it
+  is on and no other (a better means for one agent leaves another agent's
+  advice standing, and a better means than one continuing action leaves the
+  bridge to its rival); the schemes' shapes are pinned.
 effects:
-  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, in a block of its own, PRACTICAL_C4, with CHANGELOG rows: sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing added (category addition, owner decision); fear, danger, threat, ad_baculum, pragmatic_alternative, appeal_to_vanity_ad_populum, practical_goal, two_person_practical, waste and end_and_means_1 changed as above (repairs). Their meta (title and source) is walton.yml's, unchanged. Templates added: cited_bad_consequences/2, position_to_bring_about/1, reassessment_against_continuing/2, choice_at/2, precommitted/4, less_bad_as_means/2, means_bad_outweighs/2, means_good_outweighs/2, deliberating_agent/2, continues_trying/2; changed: assert_bad/2, occur/2, only_way_prevent/2, prevent/1, situation_necessity/4, waste_bad_thing/2, ought_to_continue/2; each agreement-free. Templates left unused are kept and listed as orphans: ought_to_bring_about/1, should_not/1, not_bring_about/1, do_other/1, carry_out_action/1, cited_bad_consequences/1, position_to_know/1, should_carry_out/2, person_goal/2, possible_action/1, goals_higher_priority/2, alternative_means/2 and side_effect_other_act/2, where no other scheme uses them. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys (129 schemes), every related pair declared. The cleaning's gate reads indexed templates as WAG's renderer reads them (walton-clean/check: a template with %[n]s verbs covers each argument, each index in range), which D060 needs for assert_bad/2 and this proposal for precommitted/4; plain templates are checked as before. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
-  - "links.json: 4.8, 22.5, 23, 24, 34, 35, 35.1, 36 and 37 as proposed below, for the changed formulas; 25 links sunk_costs_precommitment exactly (sunk_costs stays linked partly); 22.6.1 links end_and_means_bad and end_and_means_less_bad partly, each one reading of the entry. families.json: F10 (practical reasoning) gains sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing; F11 (waste and sunk costs) gains sunk_costs_precommitment. positions.json types the agent's and the action's places of should_do/2, deliberating_agent/2, precommitted/4, situation_necessity/4 and tells_intend/3, the agent's of ought_to_continue/2, stop_realize_wasted/2, waste_bad_thing/2 and reassessment_against_continuing/2, and the action's of continues_trying/2, choice_at/2 and contributing_action/2."
-  - "The catalogue regenerates the entries of the changed and added schemes (wag/data/catalogue), and the candidates registry records what these decisions closed; the register records the decisions as applied, D093 with its source (the owner's instruction of 2026-11-25 to go with the recommended choices). The batch-2 gold: 13292.3's instance lists means_bad_outweighs(X,Y) (recode_c4.py), validate.py and the Go check pass, and the replay accounts for every claim as before. The docs that count walton.yml's schemes say 129."
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, in a block of its own, PRACTICAL_C4, with CHANGELOG rows: sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing added (category addition, owner decision); fear, danger, threat, ad_baculum, pragmatic_alternative, appeal_to_vanity_ad_populum, practical_goal, two_person_practical, waste and end_and_means_1 changed as above (repairs). Their meta (title and source) is walton.yml's, unchanged. Templates added: cited_bad_consequences/2, position_to_bring_about/1, reassessment_against_continuing/2, choice_at/2, precommitted/4, less_bad_as_means/2, means_bad_outweighs/2, means_good_outweighs/2, deliberating_agent/2, continues_trying/2; changed: assert_bad/2, occur/2, only_way_prevent/2, prevent/1, situation_necessity/4, waste_bad_thing/2, ought_to_continue/2; each agreement-free (a plural agent reads right). Templates left unused are kept and listed as orphans: ought_to_bring_about/1, should_not/1, not_bring_about/1, do_other/1, carry_out_action/1, cited_bad_consequences/1, position_to_know/1, should_carry_out/2, person_goal/2, possible/1, possible_action/1, goals_higher_priority/2, alternative_means/2 and side_effect_other_act/2, where no other scheme uses them. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys (129 schemes), every related pair declared. The cleaning's gate reads indexed templates as WAG's renderer reads them (walton-clean/check: a template with %[n]s verbs covers each argument, each index in range), which D060 needs for assert_bad/2 and this proposal for precommitted/4 and less_bad_as_means/2 (each place once, as Carneades' validator counts the verbs); plain templates are checked as before. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
+  - "links.json: 4.8, 22.5, 23, 24, 34, 35, 35.1, 36 and 37 as proposed below, for the changed formulas; end_and_means_1's link to 22.6.1 becomes partial, the entry's positive reading beside its two others; 35's link keeps links.json's upstream id treat (id-migrations.json), which the proposed link of threat replaces; 25 links sunk_costs_precommitment partly (sunk_costs stays linked partly); 22.6.1 links end_and_means_bad and end_and_means_less_bad partly, each one reading of the entry. families.json: F10 (practical reasoning) gains sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing; F11 (waste and sunk costs) gains sunk_costs_precommitment. positions.json, by place: should_do/2 agent 1, action 2; deliberating_agent/2 agent 1, action 2; precommitted/4 agent 1, action 2; situation_necessity/4 agent 4 (the advised), action 2 (the advisor, place 1, untyped); tells_intend/3 agent 1 (its goal and its advisor untyped); ought_to_continue/2, stop_realize_wasted/2, waste_bad_thing/2 and reassessment_against_continuing/2 agent 1; continues_trying/2 and contributing_action/2 action 1; choice_at/2 action 2. No variable becomes both an agent and an action in any scheme."
+  - "The catalogue regenerates the entries of the changed and added schemes (wag/data/catalogue), and its drafted texts follow: waste's 24/CQ1 and 24/CQ2 target possible_goal(X) and the exception, the critic's (D033); the discrepancies decided on 2026-11-22 are applied; the new entries' summaries and contrasts; the proposal's examples. The candidates registry records what these decisions closed (C014, C012); the register records the decisions as applied. validate.py's R9 reads two_person_practical's goal from tells_intend(A,X,B), with a planted test. The guidelines' table of outweighing exceptions (§3.1) gains the new ones. The batch-2 gold: 13292.3's instance lists means_bad_outweighs(X,Y) (recode_c4.py), validate.py and the Go check pass, and the replay accounts for every claim as before. The docs that count walton.yml's schemes say 129; links.json's counts and first-family.md follow; the views of the earlier proposals are regenerated, and D055-D059's note on the disjunctive threat, which the change makes stale, is dated."
 schemes:
   - id: fear
     meta:
@@ -229,7 +283,7 @@ schemes:
     variables: [A, B, X, Y]
     premises: ["tells_intend(A,X,B)", "situation_necessity(B,Y,X,A)"]
     assumptions: ["possible_bring_about(A,Y)"]
-    exceptions: ["incompatible_goal(A,X)", "realize_more_effectively(A,X,Y)", "bad_outweighs(Y,X)", "intervening_actions(Y,X)"]
+    exceptions: ["realize_more_effectively(A,X,Y)", "incompatible_goal(A,X)", "bad_outweighs(Y,X)"]
     conclusions: ["should_do(A,Y)"]
   - id: waste
     meta:
@@ -283,7 +337,7 @@ schemes:
     meta:
       title: "From What an Agent Should Do to the Action (bridge)"
       source: |
-        WAG's bridge (decision D063, refined 2026-11-22): an explicit warrant, with a premise its arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation should_be_performed(A), when P is the agent who deliberates whether to do A. Not in the compendium.
+        WAG's bridge (decision D063, refined 2026-11-22; D093): an explicit warrant, with a premise its arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation should_be_performed(A), when it falls to P to decide whether to go ahead with A. Not in the compendium.
     variables: [P, A]
     premises: ["should_do(P,A)", "deliberating_agent(P,A)"]
     assumptions: []
@@ -293,11 +347,11 @@ schemes:
     meta:
       title: "From Continuing to Try to the Action (bridge)"
       source: |
-        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing action, not only to its goal): from waste's conclusion, that an agent ought to continue trying to realize a goal, to the recommendation of the action that continues the effort, when the agent is the one who deliberates whether to do it. Not in the compendium.
+        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing action, not only to its goal; D093): from waste's conclusion, that an agent ought to continue trying to realize a goal, to the recommendation of an action that continues the effort, when the decision is the agent's, with practical reasoning's questions for the means it chooses. Not in the compendium.
     variables: [P, G, A]
     premises: ["ought_to_continue(P,G)", "continues_trying(A,G)", "deliberating_agent(P,A)"]
-    assumptions: []
-    exceptions: []
+    assumptions: ["possible_bring_about(P,A)"]
+    exceptions: ["realize_more_effectively(P,G,A)", "bad_outweighs(A,G)"]
     conclusions: ["should_be_performed(A)"]
 language:
   cited_bad_consequences/2: "If you go ahead with %s, the cited bad consequence %s will follow."
@@ -306,22 +360,22 @@ language:
   occur/2: "If the respondent goes ahead with %s, then %s will occur."
   only_way_prevent/2: "The only way for you to prevent %s is %s."
   prevent/1: "You ought to prevent %s if you can."
-  situation_necessity/4: "As %s sees the situation, %s is a necessary or sufficient condition for realizing %s, and tells %s this."
-  waste_bad_thing/2: "If all of %s's previous efforts to realize %s were wasted, that would be a bad thing."
+  situation_necessity/4: "In the view of %s, %s is a necessary or sufficient condition for realizing %s, a view reported to %s."
+  waste_bad_thing/2: "If all the previous efforts of %s to realize %s were wasted, that would be a bad thing."
   ought_to_continue/2: "%s ought to continue trying to realize %s."
   reassessment_against_continuing/2: "Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s."
-  choice_at/2: "At %s, there is a choice between doing %s and not doing it."
-  precommitted/4: "At %[4]s, %[1]s is committed in advance to doing %[2]s by what that agent did or undertook at %[3]s."
-  less_bad_as_means/2: "%s is less bad for being a means to the good end %s."
-  means_bad_outweighs/2: "%s, as a means, has bad consequences that matter more than its end %s."
-  means_good_outweighs/2: "%s, as a means, has good consequences that matter more than its end %s."
-  deliberating_agent/2: "%s is the agent who deliberates in this discussion whether to do %s."
-  continues_trying/2: "%s is a way of continuing to try to realize %s."
+  choice_at/2: "%s, there is a choice between %s and not doing so."
+  precommitted/4: "What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s."
+  less_bad_as_means/2: "Being a means to the good end %[2]s would make %[1]s less bad."
+  means_bad_outweighs/2: "As a means, %s would have bad consequences that matter more than its end %s."
+  means_good_outweighs/2: "As a means, %s would have good consequences that matter more than its end %s."
+  deliberating_agent/2: "It falls to %s to decide whether to go ahead with %s."
+  continues_trying/2: "%s would continue the effort to realize %s."
 links:
   - entry: "4.8"
     id: appeal_to_vanity_ad_populum
-    match: exact
-    reason: "Same title; source cites the 2008 book, p. 312. Since 2026-11-26 (decision D063) it concludes should_be_performed(X), the recommendation the other practical schemes conclude."
+    match: partial
+    reason: "Same title; source cites the 2008 book, p. 312. Partial since 2026-11-26: it concludes should_be_performed(X), the recommendation the other practical schemes conclude (D063), for the book's second-person 'you should carry out action x'."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "admired_people(G,A)", locus: premise}]
@@ -346,7 +400,7 @@ links:
   - entry: "23"
     id: two_person_practical
     match: exact
-    reason: "Same title and source (Appeal to Expert Opinion 1997, p. 163). Since 2026-11-26 its five questions are in practical reasoning's formulas (D093) and it concludes should_do(A,Y) (D063)."
+    reason: "Same title and source (Appeal to Expert Opinion 1997, p. 163). Since 2026-11-26 four of its five questions are in practical reasoning's formulas (D093) and it concludes should_do(A,Y) (D063)."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "tells_intend(A,X,B)", locus: premise}]
@@ -360,17 +414,17 @@ links:
         note: "a conflicting goal, practical reasoning's formula"
         walton: [{formula: "incompatible_goal(A,X)", locus: exception}]
       - cq: CQ2
-        note: "alternative means read as a better means (D089)"
+        note: "alternative means read as a better means, scoped to the agent (D089); under the premise's necessary reading an alternative no better would deny the necessity too (D090), which this formula leaves to a rebuttal"
         walton: [{formula: "realize_more_effectively(A,X,Y)", locus: exception}]
       - cq: CQ3
-        note: "the side effect that outweighs (D070)"
+        note: "the side effect that outweighs: WAG's reading (D070, D091)"
         walton: [{formula: "bad_outweighs(Y,X)", locus: exception}]
       - cq: CQ4
         note: "scoped to the agent (D088)"
         walton: [{formula: "possible_bring_about(A,Y)", locus: assumption}]
       - cq: CQ5
-        note: "other actions needed besides Y"
-        walton: [{formula: "intervening_actions(Y,X)", locus: exception}]
+        note: "no formula, an undercutting question (D093): under the premise's necessary reading another required step is no reason against the advised one"
+        walton: []
   - entry: "24"
     id: waste
     match: exact
@@ -391,8 +445,8 @@ links:
         walton: [{formula: "reassessment_against_continuing(A,X)", locus: exception}]
   - entry: "25"
     id: sunk_costs_precommitment
-    match: exact
-    reason: "The compendium's form of argument from sunk costs (decision D031), as the schemes library has it: the choice at t2 and the pre-commitment at t1 (2008, pp. 326-327; Walton 2002, p. 489). sunk_costs, the form with costs already incurred, stays linked partly."
+    match: partial
+    reason: "The compendium's form of argument from sunk costs (decision D031), as the schemes library has it: the choice at t2 and the pre-commitment at t1 (2008, pp. 326-327; Walton 2002, p. 489). Partial: the book's first person 'I' is the agent P, as for 22.1-22.3. sunk_costs, the form with costs already incurred, stays linked partly."
     premise_map:
       - compendium_label: Time definitions
         note: "t1 and t2 are the variables T1 and T2"
@@ -405,6 +459,19 @@ links:
     conclusion_map:
       note: "'I should choose A': names the agent, so bridge_from_agent carries it to should_be_performed(A) (D063)"
       walton: [{formula: "should_do(P,A)", locus: conclusion}]
+  - entry: "22.6.1"
+    id: end_and_means_1
+    match: partial
+    reason: "Same title and Perelman reference. Partial since 2026-11-26: the entry prints its readings in its parentheses, and this scheme is the positive one, y good and x good; end_and_means_bad and end_and_means_less_bad are the others (D022)."
+    premise_map:
+      - compendium_label: Premise 1
+        walton: [{formula: "means_to_end(X,Y)", locus: premise}]
+      - compendium_label: Premise 2
+        note: "the reading 'y is good'"
+        walton: [{formula: "good(Y)", locus: premise}]
+    conclusion_map:
+      note: "the reading 'x is good'"
+      walton: [{formula: "good(X)", locus: conclusion}]
   - entry: "22.6.1"
     id: end_and_means_bad
     match: partial
@@ -432,8 +499,8 @@ links:
       walton: [{formula: "less_bad_as_means(X,Y)", locus: conclusion}]
   - entry: "34"
     id: pragmatic_alternative
-    match: exact
-    reason: "Same title and source (Scare Tactics 2000, p. 142). Since 2026-11-26 (decision D063) it concludes should_be_performed(A)."
+    match: partial
+    reason: "Same title and source (Scare Tactics 2000, p. 142). Partial since 2026-11-26: it concludes should_be_performed(A) (D063), for the book's second-person ought, 'practically speaking'."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "alternatives(A,B)", locus: premise}]
@@ -444,8 +511,8 @@ links:
       walton: [{formula: "should_be_performed(A)", locus: conclusion}]
   - entry: "35"
     id: threat
-    match: exact
-    reason: "Same scheme; source A Pragmatic Theory of Fallacy 1995, p. 157. Since 2026-11-26 its premises name the threatened consequence where the book does (decision D060), and it concludes ¬should_be_performed(X) (D063)."
+    match: partial
+    reason: "Same scheme; source A Pragmatic Theory of Fallacy 1995, p. 157. Since 2026-11-26 its premises name the threatened consequence where the book does (D060); partial: it concludes ¬should_be_performed(X) (D063), for the book's 'you had better not bring about A'."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "cited_bad_consequences(X,C)", locus: premise}]
@@ -458,8 +525,8 @@ links:
       walton: [{formula: "¬should_be_performed(X)", locus: conclusion}]
   - entry: "35.1"
     id: ad_baculum
-    match: exact
-    reason: "Same title and source (Scare Tactics 2000, p. 140). Since 2026-11-26 (decision D063) it concludes should_be_performed(X)."
+    match: partial
+    reason: "Same title and source (Scare Tactics 2000, p. 140). Partial since 2026-11-26: it concludes should_be_performed(X) (D063), for the book's second-person ought, 'practically speaking'."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "alternative_bad(X,Y)", locus: premise}]
@@ -470,8 +537,8 @@ links:
       walton: [{formula: "should_be_performed(X)", locus: conclusion}]
   - entry: "36"
     id: fear
-    match: exact
-    reason: "Same title and source (Scare Tactics 2000, p. 22). Since 2026-11-26 (decision D063) it concludes should_be_performed(X)."
+    match: partial
+    reason: "Same title and source (Scare Tactics 2000, p. 22). Partial since 2026-11-26: it concludes should_be_performed(X) (D063), for the book's 'you ought to bring about A'."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "not_do_appear(X,Y)", locus: premise}]
@@ -487,8 +554,8 @@ links:
       walton: [{formula: "should_be_performed(X)", locus: conclusion}]
   - entry: "37"
     id: danger
-    match: exact
-    reason: "Same title and source (Scare Tactics 2000, p. 173). Since 2026-11-26 it concludes about the action (decisions D062 and D063)."
+    match: partial
+    reason: "Same title and source (Scare Tactics 2000, p. 173). Partial since 2026-11-26: it concludes about the action (D062), ¬should_be_performed(X) (D063), without the book's 'on balance', which Walton calls important: the weights and the other arguments about X do that work."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "occur(X,Y)", locus: premise}]
@@ -499,15 +566,14 @@ links:
       walton: [{formula: "¬should_be_performed(X)", locus: conclusion}]
 questions:
   practical_goal:
-    - {id: walton/realize_more_effectively, asks: "Is there a way for P to realize G more effectively than by doing X?", target: "realize_more_effectively(P,G,X)"}
+    - {id: walton/realize_more_effectively, asks: "Is there a way for P to realize G more surely, sooner or at lower cost than by doing X?", target: "realize_more_effectively(P,G,X)"}
     - {id: walton/incompatible_goal, asks: "Does P have another goal that G works against?", target: "incompatible_goal(P,G)"}
     - {id: walton/bad_outweighs, asks: "Would doing X have bad consequences that matter more than G?", target: "bad_outweighs(X,G)"}
   two_person_practical:
     - {id: 23/CQ1, asks: "Does A have another goal, perhaps more important, that the goal X works against?", target: "incompatible_goal(A,X)"}
-    - {id: 23/CQ2, asks: "Is there a better way for A to realize X than doing Y?", target: "realize_more_effectively(A,X,Y)"}
+    - {id: 23/CQ2, asks: "Is there a way for A to realize X more surely, sooner or at lower cost than doing Y?", target: "realize_more_effectively(A,X,Y)"}
     - {id: 23/CQ3, asks: "Would doing Y have side effects that matter more than X?", target: "bad_outweighs(Y,X)"}
     - {id: 23/CQ4, asks: "Can A do Y?", target: "possible_bring_about(A,Y)"}
-    - {id: 23/CQ5, asks: "Would A have to do other things besides Y to realize X?", target: "intervening_actions(Y,X)"}
   waste:
     - {id: 24/CQ1, asks: "Can X be realized at all?", target: "possible_goal(X)"}
     - {id: 24/CQ2, asks: "Leaving aside what is already lost, do the costs and benefits from now on go against continuing to try to realize X?", target: "reassessment_against_continuing(A,X)"}
@@ -515,6 +581,10 @@ questions:
     - {id: walton/means_bad_outweighs, asks: "Does X have bad consequences that matter more than the good end Y?", target: "means_bad_outweighs(X,Y)"}
   end_and_means_bad:
     - {id: walton/means_good_outweighs, asks: "Does X have good consequences that matter more than the bad end Y?", target: "means_good_outweighs(X,Y)"}
+  bridge_from_continuing:
+    - {id: walton/realize_more_effectively, asks: "Is there a way for P to realize G more surely, sooner or at lower cost than by doing A?", target: "realize_more_effectively(P,G,A)"}
+    - {id: walton/bad_outweighs, asks: "Would doing A have bad consequences that matter more than G?", target: "bad_outweighs(A,G)"}
+    - {id: walton/possible_bring_about, asks: "Can P do A?", target: "possible_bring_about(P,A)"}
 examples:
   # --- fear ---
   - scheme: fear
@@ -557,17 +627,17 @@ examples:
     note: "A bad consequence of the action, with no appeal to the respondent's fear and no claim that acting is the only way to avoid it: negative consequences, not fear. The gold's coding."
   # --- danger ---
   - scheme: danger
-    title: "Do not open the quarry by the school"
+    title: "Do not take the boat out in the storm"
     invented: true
     use: argument
-    text: "If the council opens the quarry next to the primary school, blasting will throw rock over the playground. That is a danger to the children. So, on balance, the council should not open it."
+    text: "If you take the boat out in this storm, it will capsize. Capsizing in this sea is a danger to you. So, on balance, you should not take it out."
     bindings:
-      X: "the council opening the quarry next to the school"
-      Y: "rock thrown over the school playground"
+      X: "taking the boat out in the storm"
+      Y: "capsizing in a storm sea"
     attacks:
       - question: "CQ:premise_acceptable"
         target: "occur(X,Y)"
-        text: "The plan keeps blasting 400 metres from the school and behind a berm."
+        text: "The storm passes before noon, and the crossing is at three."
   - scheme: danger
     title: "Do not swim in the flooded river"
     invented: true
@@ -578,8 +648,8 @@ examples:
       Y: "being dragged under the weir"
     attacks:
       - question: "CQ:premise_acceptable"
-        target: "danger(Y)"
-        text: "The weir gates are open this week, so there is no undertow."
+        target: "occur(X,Y)"
+        text: "The weir gates are open this week, so there is no undertow to drag anyone under."
     note: "Since 2026-11-26 it concludes about the action, ¬should_be_performed(X), not about the danger (D062)."
   - scheme: negative_consequences
     title: "The tax would raise the price of a burger"
@@ -618,14 +688,14 @@ examples:
         text: "The union's own rules need a ballot after the cut is announced; the leadership cannot promise a strike in advance."
     note: "The speaker undertakes to bring about the consequence (D060: position_to_bring_about(C), and assert_bad(X,C) printed C first)."
   - scheme: danger
-    title: "Cut the night shift and the line will jam"
+    title: "Cut the night shift and the boilers go unwatched"
     invented: true
     use: near-miss
     near_miss_of: threat
-    text: "If management cuts the night shift, the line will jam with unfinished orders by Friday. That is a danger to the plant. So management should not cut it."
+    text: "If management cuts the night shift, no one will watch the boilers at night, and one could explode. An explosion is a danger to everyone in the plant, managers included. So management should not cut it."
     bindings:
       X: "management cutting the night shift"
-      Y: "the line jamming with unfinished orders"
+      Y: "an unwatched boiler exploding at night"
     note: "A warning, not a threat: the speaker does not undertake to bring about the consequence."
   # --- ad_baculum ---
   - scheme: ad_baculum
@@ -688,7 +758,7 @@ examples:
         target: "alternatives(A,B)"
         text: "The express service renews a passport in three days."
   - scheme: ad_baculum
-    title: "Reinforce the dyke or I flood your fields"
+    title: "Pay your share or I flood your fields"
     invented: true
     use: near-miss
     near_miss_of: pragmatic_alternative
@@ -794,8 +864,6 @@ examples:
         text: "Her knee would flare up; months without running matter more than one race."
       - question: "23/CQ4"
         text: "She works double shifts; she cannot run sixty kilometres a week."
-      - question: "23/CQ5"
-        text: "She would also have to change how she eats and sleeps."
   - scheme: two_person_practical
     title: "The accountant's advice on the loan"
     invented: true
@@ -862,12 +930,12 @@ examples:
     title: "Priya signed up for the race"
     invented: true
     use: argument
-    text: "In March Priya signed up to run the charity race and told everyone she would. Now, in October, she can run it or not. She is committed to running it by what she did in March. So she should run it."
+    text: "In March Priya signed up to run the charity race and told everyone she would. Now, in October, she can run it or not. What she did in March is a commitment, binding now, to running it. So she should run it."
     bindings:
       P: "Priya"
       A: "running the charity race"
-      T1: "March"
-      T2: "October"
+      T1: "in March"
+      T2: "in October"
     attacks:
       - question: "CQ:premise_acceptable"
         target: "precommitted(P,A,T1,T2)"
@@ -880,7 +948,7 @@ examples:
     bindings:
       P: "the town"
       A: "hosting the folk festival"
-      T1: "2024"
+      T1: "in 2024"
       T2: "this spring"
     attacks:
       - question: "CQ:premise_acceptable"
@@ -908,8 +976,8 @@ examples:
       Y: "health care costs being reduced"
     attacks:
       - question: "walton/means_bad_outweighs"
-        text: "Less meat in poor households means less protein and iron where diets are already short of them."
-    note: "The gold's coding (reconstructed; good(Y) supplied); since 2026-11-26 its instance lists the borrowed exception."
+        text: "Less meat in poor households means less protein and iron where diets are already short of them, which matters more than the savings on health care."
+    note: "The gold's coding (reconstructed; good(Y) supplied); since 2026-11-26 its instance lists the borrowed exception. The gold records 13292.121's further consequence, unhealthy underconsumption, without a formula: it ranks nothing, so it is a rebuttal (OC2); the attack here ranks, and so argues the exception."
   - scheme: end_and_means_1
     title: "Learning to cook"
     invented: true
@@ -920,7 +988,7 @@ examples:
       Y: "eating well"
     attacks:
       - question: "walton/means_bad_outweighs"
-        text: "For him it would mean dropping the evening course his job depends on."
+        text: "For him it would mean dropping the evening course his job depends on, which matters more than eating well."
   - scheme: positive_consequences
     title: "Cooking classes would improve diets"
     invented: true
@@ -977,7 +1045,7 @@ examples:
     attacks:
       - question: "CQ:premise_acceptable"
         target: "means_to_end(X,Y)"
-        text: "The tablets cure the infection as well; the injection is not needed for her recovery."
+        text: "The injection treats the pain, not the infection: it does nothing for her recovery."
   - scheme: end_and_means_less_bad
     title: "Closing the road for the new bridge"
     invented: true
@@ -1005,7 +1073,7 @@ examples:
     title: "Maya's walk to school, in the decision"
     invented: true
     use: argument
-    text: "Maya should walk to school, and Maya is the one deciding whether she walks to school. So walking to school should be done."
+    text: "Maya should walk to school, and it is Maya's to decide whether she walks. So walking to school should be done."
     bindings:
       P: "Maya"
       A: "walking to school"
@@ -1018,7 +1086,7 @@ examples:
     title: "Lena's training, in the decision"
     invented: true
     use: argument
-    text: "Lena should build up to sixty kilometres a week, and Lena is the one deciding whether to. So building up to sixty kilometres a week should be done."
+    text: "Lena should build up to sixty kilometres a week, and it is hers to decide. So building up to sixty kilometres a week should be done."
     bindings:
       P: "Lena"
       A: "building up to sixty kilometres a week"
@@ -1041,7 +1109,7 @@ examples:
     title: "The tram works contract"
     invented: true
     use: argument
-    text: "The council ought to continue trying to build the tram line; renewing the works contract is continuing to try to build it; and the council is the one deciding whether to renew it. So the works contract should be renewed."
+    text: "The council ought to continue trying to build the tram line; renewing the works contract would continue that effort; and the decision is the council's. So the works contract should be renewed."
     bindings:
       P: "the council"
       G: "building the tram line"
@@ -1050,11 +1118,15 @@ examples:
       - question: "CQ:premise_acceptable"
         target: "continues_trying(A,G)"
         text: "The contract is for the depot, which the line does not need until year five."
+      - question: "walton/realize_more_effectively"
+        text: "Tendering the remaining works anew would get the line built sooner and for less."
+      - question: "walton/bad_outweighs"
+        text: "Renewing it ties the city to the contractor's overruns for ten more years, which matters more than the line."
   - scheme: bridge_from_continuing
     title: "Ravi's writing sabbatical"
     invented: true
     use: argument
-    text: "Ravi ought to keep trying to finish his novel; taking another year's sabbatical is continuing to try; and Ravi is the one deciding whether to take it. So he should take it."
+    text: "Ravi ought to keep trying to finish his novel; taking another year's sabbatical would continue that effort; and the decision is his. So he should take it."
     bindings:
       P: "Ravi"
       G: "finishing his novel"
@@ -1063,6 +1135,8 @@ examples:
       - question: "CQ:premise_acceptable"
         target: "deliberating_agent(P,A)"
         text: "The sabbatical is his employer's to grant, not his to take."
+      - question: "walton/possible_bring_about"
+        text: "His employer has already refused him a second year."
   - scheme: bridge_from_agent
     title: "The council should renew the contract"
     invented: true
