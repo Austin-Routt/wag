@@ -51,9 +51,6 @@ contrasts:
 - scheme: practical_inference
   text: ""
   status: todo
-- scheme: end_and_means_1
-  text: ""
-  status: todo
 examples: []
 discrepancies: []
 classification:

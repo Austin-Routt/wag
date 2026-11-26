@@ -179,6 +179,21 @@ contrasts:
 - scheme: better_means
   text: ""
   status: todo
+- scheme: end_and_means_bad
+  text: ""
+  status: todo
+- scheme: end_and_means_less_bad
+  text: ""
+  status: todo
+- scheme: sunk_costs_precommitment
+  text: ""
+  status: todo
+- scheme: bridge_from_agent
+  text: ""
+  status: todo
+- scheme: bridge_from_continuing
+  text: ""
+  status: todo
 examples: []
 discrepancies:
 - kind: partial-link

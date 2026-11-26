@@ -43,7 +43,7 @@ language:
   arbitrary_rejected/1: "Therefore, %s ought to be rejected as deficient."
   argument_not_accepted/2: "Therefore, %s's argument %s should not be accepted."
   arguer_not_taken_both/2: "Arguer %s is less likely to have taken the evidence on both sides into account in arriving at conclusion %s."
-  assert_bad/2: "I hereby assert that in fact I will see to it that %s occurs if you bring about %s."
+  assert_bad/2: "I will bring about %[2]s if you go ahead with %[1]s."
   asserts/2: "%s asserts that %s is true."
   attack_well_supported/0: "Allegation made in character attack premise evidence are well supported."
   background/0: "The speaker is an ordinary person, that is, share a common background with the audience."
@@ -94,8 +94,10 @@ language:
   character_issue/1: "Character is an issue in dialogue, and more specifically, %s 's argument depends on his/her credibility."
   character_quality/1: "Therefore, %s has this character quality."
   character_relevant/0: "In the type of dialogue in which the argument was used issue of character relevant."
+  choice_at/2: "%s, there is a choice between %s and not doing so."
   cited_bad_consequences/1: "If you bring about %s, some cited bad consequences will follow."
   claimed_exception/2: "%s is put forward as an exception to the rule %s."
+  cited_bad_consequences/2: "If you go ahead with %s, the bad consequence cited, %s, will follow."
   classified_as/2: "Objects which satisfy definition %s are classified as instances of class %s."
   classified_under/1: "Therefore, this object can be classified under verbal category %s."
   committed_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."
@@ -106,6 +108,7 @@ language:
   committed_to/2: "In this case, %s is committed to %s."
   conflict_goals/3: "%s has some other goals %s that conflict with %s." 
   consequences_presumption/2: "If I act on the presumption that %s is true, and is not true, consequences %s will follow."
+  continues_trying/2: "%s would continue the effort to realize %s."
   contrary_treatment_required/2: " The contrary treatment %s is required for the subject %s."
   contributing_action/2: "Doing act %s contributes to goal %s."
   converse_relation/3: "%s can be in converse relation %s with %s."
@@ -122,6 +125,7 @@ language:
   data_set/2: "%s is a set of data or supposed facts in case %s."
   defeasibly_implies/2: "If %s is true then presumably %s is also true."
   deliberate/2: "Group %s has deliberated intelligently and extensively on whether to accept proposition %s or not."
+  deliberating_agent/2: "It falls to %s to decide whether to go ahead with %s."
   descriptions_opposite/2: " Description of action imply that %s is personally committed to the opposite of %s."
   diagram_set/3: "There is a set of argument diagrams %s and in each argument diagram %s represents premises of an argument that, supplemented by plausible conditionals and other statements that function as missing parts of enthymemes, leads to a respective conclusion %s."
   dialog_committed/2: "Arguer %s has committed herself to proposition %s at some point in a dialogue."
@@ -230,6 +234,7 @@ language:
   led_to_step/2: "Accepting a case in the series from %s to %s will in fact carry people on to the next one."
   legitimate_value/1: "%s is a legitimate value."
   less_harmful_per_occurrence/2: "Doing %s would make each occurrence of %s less harmful."
+  less_bad_as_means/2: "Being a means to the good end %[2]s would make %[1]s less bad."
   looks_like/2: "%s looks like a %s."
   matters_more/2: "%s matters more than %s."
   matters_to_decision/2: "The chance that action %s brings about %s is large enough, given what that consequence would be, to bear on whether the action should be performed."
@@ -238,7 +243,9 @@ language:
   may_bring_about/2: "The action %s may bring about %s."
   may_have/2: "%s, may have %s, for all we know or can prove."
   may_occur/1: "An event %s has happened, or could happen."
+  means_bad_outweighs/2: "As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end."
   means_end/1: "Means %s should be regarded as an end."
+  means_good_outweighs/2: "As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end."
   means_same/2: "%s means the same as %s"
   means_to_end/2: "%s is means to the end %s."
   member_group_quality/3: "If the member %s quality %s then %s will have it as well."
@@ -285,9 +292,9 @@ language:
   not_too_costly/2: "%s 's carrying out %s would not be too costly that is the negative side effects would not be too great."
   obligatory/1: "%s is prohibited -obligatory-."
   observed/1:  "%s has been observed."
-  occur/2: "If the respondent bring about %s then %s will occur."
+  occur/2: "If the respondent goes ahead with %s, then %s will occur."
   official_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."
-  only_way_prevent/2: "But the only way for you to prevent %s is bring about %s."
+  only_way_prevent/2: "The only way for you to prevent %s is %s."
   opposed_commitment/2: "Other evidence in this particular case shows that %s is not really committed to %s."
   opposite_action/3: "%s has carried out an action, or set of actions, that imply that %s is personally committed to %s."
   other_consequences/1: "Doing %s also has consequences of the opposite kind that outweigh the ones cited."
@@ -295,7 +302,7 @@ language:
   other_credible_sources_disagree/1: "Other credible source disagree with %s."
   other_goals_conflict/1: "Other goals that might conflict with %s."
   ought_to_bring_about/1: "Therefore, you ought to bring about %s."
-  ought_to_continue/2: "Therefore, %s ought to continue trying to realize %s."
+  ought_to_continue/2: "%s ought to continue trying to realize %s."
   out_group_not_accept/2: "If you do not accept %s, you will be out of this group %s."
   part_is/2: "The part %s has %s."
   part_property/2: "%s is %s." 
@@ -315,6 +322,7 @@ language:
   plausibly_true/1: "Therefore, %s is plausibly true."
   pleader_committed/1: "I -the pleader- have committed %s."
   popular_practice/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."
+  position_to_bring_about/1: "I am in a position to bring about %s."
   position_to_know/1: "I am in position to bring about %s."
   position_to_know/2: "%s is in a position to know about things in a certain subject domain %s."
   position_to_know_group/2: "Group %s is in a special position to know that %s is true."
@@ -329,11 +337,12 @@ language:
   practicality_action/1: "Nothing unchangeable prevents me from bringing about %s, as far as I know."
   precedent_chain/3: "From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s."
   practicality_action/2: "As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s."
+  precommitted/4: "What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s."
   presents/2: "%s presents %s."
   presents_predicate/3: "If %s presents the predicate %s, it cannot present the contradictory, contrary, converse, incompatible, predicate %s at the same time and in the same respect."
   prestigious_individual/2: "Individual %s is prestigious for -admired by- individuals %s."
   presumption/1: "I have to act on the presumption that %s is true or not true."
-  prevent/1: "Therefore, you ought to prevent %s if possible."
+  prevent/1: "You ought to prevent %s if you can."
   preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."
   promote_more_effectively/2: "There exists an action that would promote the value %s more effectively than %s."
   promote_more_effectively/3: "There is a way for %s to promote the value %s more effectively than %s."
@@ -353,6 +362,7 @@ language:
   reason_retracting_goal/2: "%s is a reason to give up commitment to goal %s."
   reasonable_believe/1: "It is reasonable to believe %s."
   reasonable_case/1: "It is reasonable to believe that %s is the case."
+  reassessment_against_continuing/2: "Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s."
   recalls/2: "Person %s recalls %s."
   receives_evaluation/2: "%s receives the evaluation %s." 
   reference_class/0: "Reference class of other agents who also might have brought about this event and also have same character is sufficient."
@@ -387,7 +397,7 @@ language:
   similar_case/1: "Case %s is similar to the current case."
   similar_to/2: "%s is similar to %s."
   situation_help/3: "%s is in a situation where some action %s by %s would help."
-  situation_necessity/4: "As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this."
+  situation_necessity/4: "In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s."
   smaller_part_property/3: " %s is less %s then %s because it's a smaller part of it."
   speakers_correct/0: "Speakers of a language are generally correct about word definitions in that language."
   special_circumstances/1: "But I can cite special circumstances that constitute an excuse %s."
@@ -396,7 +406,7 @@ language:
   special_proposition/2: "%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."
   species_of/2: "%s is a species of %s."
   species_property/2: "%s is %s."
-  stop_realize_wasted/2: "If %s stops trying to realize %s now, all previous efforts will be wasted."
+  stop_realize_wasted/2: "If %s stopped trying to realize %s now, all the previous efforts would be wasted."
   strong_advocate/3: "%s advocate %s in a strong way indicating her personal commitment to %s."
   strong_correlation/2: "Correlation of %s and %s is strong."
   stronger_than_character/1: "There are some strong evidences that supported %s more than than the character issue."
@@ -412,7 +422,7 @@ language:
   sufficient_evidence/0: "search for the evidence progress is sufficient."
   sunk_costs/2:  "The costs incurred performing %s thus far are %s."
   synonymous/0: "Whenever expressions are referentially coextensive, they are synonymous."
-  tells_intend/3: "%s intends to realize %s, and tells %s this."
+  tells_intend/3: "%s, intending to realize %s, told %s so."
   therefore_true/1: "Therefore %s is true."
   to_think_acceptable/1: "That gives a reason to think that %s is acceptable."
   too_high_to_waste/1: "The sunk costs of %s are too high to waste."
@@ -436,7 +446,7 @@ language:
   valid_rule/1: "The rule is valid for %s."
   valued_to_be_member/1: "Being a member of this group %s is highly valued for you."
   want_to_be_different/2: "%s want to be different from %s."
-  waste_bad_thing/2: "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
+  waste_bad_thing/2: "If all the previous efforts of %s to realize %s were wasted, that would be a bad thing."
   whole_is/2: "The whole %s has %s."
   whole_of/4: "%s is made up of the parts %s, %s and %s."
   will_occur/1: "An event %s will occur."
@@ -574,7 +584,7 @@ argument_schemes:
               Argumentation Schemes. Cambridge University Press, p. 312.
     variables: [G,A,X]
     conclusions:
-      - carry_out_action(X)
+      - should_be_performed(X)
     premises:
       - admired_people(G,A)
       - group_action(X,G)
@@ -1102,7 +1112,11 @@ argument_schemes:
       - should_do(P,X)
     premises:
       - contributing_action(X,G)
-      - person_goal(P,G)
+      - goal_of_agent(P,G)
+    exceptions:
+      - realize_more_effectively(P,G,X)
+      - incompatible_goal(P,G)
+      - bad_outweighs(X,G)
       
   - id: end_and_means_1
     meta:
@@ -1116,6 +1130,42 @@ argument_schemes:
     premises:
       - means_to_end(X,Y)
       - good(Y)
+    exceptions:
+      - means_bad_outweighs(X,Y)
+
+  - id: end_and_means_bad
+    meta:
+      title: Ends and Means - a Bad End Condemns Its Means
+      source: >
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge
+        University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie
+        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of
+        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022), with the
+        question of the opposite value that end and means 1 borrows (D093).
+    variables: [X,Y]
+    conclusions:
+      - bad(X)
+    premises:
+      - means_to_end(X,Y)
+      - bad(Y)
+    exceptions:
+      - means_good_outweighs(X,Y)
+
+  - id: end_and_means_less_bad
+    meta:
+      title: Ends and Means - a Good End Makes a Bad Means Less Bad
+      source: >
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge
+        University Press, ch. 9, entry 22.6.1 (its graded reading), p. 325. Chaim Perelman and Lucie
+        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of
+        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022).
+    variables: [X,Y]
+    conclusions:
+      - less_bad_as_means(X,Y)
+    premises:
+      - means_to_end(X,Y)
+      - good(Y)
+      - bad(X)
 
   - id: end_and_means_2
     meta:
@@ -1151,16 +1201,16 @@ argument_schemes:
              Pennsylvania State University Press. 1997 p. 163.
     variables: [A,B,X,Y]
     conclusions:
-      - should_carry_out(A,Y)
+      - should_do(A,Y)
     premises:
       - tells_intend(A,X,B)
       - situation_necessity(B,Y,X,A)
     exceptions:
-      - alternative_means(A,X)
-      - goals_higher_priority(A,X)
-      - side_effect_other_act(B,A)
+      - realize_more_effectively(A,X,Y)
+      - incompatible_goal(A,X)
+      - bad_outweighs(Y,X)
     assumptions: 
-     - possible_action(Y)
+     - possible_bring_about(A,Y)
      
   - id: waste
     meta:
@@ -1176,8 +1226,47 @@ argument_schemes:
       - stop_realize_wasted(A,X)
       - waste_bad_thing(A,X)
     assumptions: 
-     - possible(X)
+     - possible_goal(X)
+    exceptions:
+      - reassessment_against_continuing(A,X)
      
+  - id: bridge_from_agent
+    meta:
+      title: From What an Agent Should Do to the Action (bridge)
+      source: >
+        WAG's bridge (decision D063, refined 2026-11-22; D093): an explicit warrant, with a premise its
+        arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation
+        should_be_performed(A), when it falls to P to decide whether to go ahead with A. Not in the
+        compendium.
+    variables: [P,A]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - should_do(P,A)
+      - deliberating_agent(P,A)
+
+  - id: bridge_from_continuing
+    meta:
+      title: From Continuing to Try to the Action (bridge)
+      source: >
+        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing
+        action, not only to its goal; D093): from waste's conclusion, that an agent ought to continue trying
+        to realize a goal, to the recommendation of an action that continues the effort, when the decision
+        is the agent's, with practical reasoning's questions for the means it chooses. Not in the
+        compendium.
+    variables: [P,G,A]
+    conclusions:
+      - should_be_performed(A)
+    premises:
+      - ought_to_continue(P,G)
+      - continues_trying(A,G)
+      - deliberating_agent(P,A)
+    assumptions:
+      - possible_bring_about(P,A)
+    exceptions:
+      - realize_more_effectively(P,G,A)
+      - bad_outweighs(A,G)
+
   - id: negative_normal_expectations
     meta:
       title: Negative Reasoning from Normal Expectations
@@ -1377,7 +1466,7 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 142.
     variables: [A,B]
     conclusions:
-      - do_other(A) 
+      - should_be_performed(A) 
     premises:
       - alternatives(A,B)
       - undesirable(B)
@@ -1390,10 +1479,10 @@ argument_schemes:
              University of Alabama Press, 1995, p. 157.
     variables: [X,C]
     conclusions:
-      - not_bring_about(X)
+      - ¬should_be_performed(X)
     premises:
-      - cited_bad_consequences(X)
-      - position_to_know(X)
+      - cited_bad_consequences(X,C)
+      - position_to_bring_about(C)
       - assert_bad(X,C)
       
   - id: ad_baculum
@@ -1403,7 +1492,7 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 140.
     variables: [X,Y]
     conclusions:
-      - do_other(X)
+      - should_be_performed(X)
     premises:
       - alternative_bad(X,Y)
       - undesirable(Y)
@@ -1415,7 +1504,7 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 22.             
     variables: [X,Y]
     conclusions:
-      - ought_to_bring_about(X)
+      - should_be_performed(X)
     premises:
       - not_do_appear(X,Y)
       - bad_for_you(Y)
@@ -1429,7 +1518,7 @@ argument_schemes:
              Douglas Walton, Scare Tactics. Dordrecht: Kluwer, 2000, p. 173.             
     variables: [X,Y]
     conclusions:
-      - should_not(Y)
+      - ¬should_be_performed(X)
     premises:
       - occur(X,Y)
       - danger(Y)
@@ -2314,6 +2403,21 @@ argument_schemes:
     exceptions:
       - future_losses_outweigh(A)
         
+  - id: sunk_costs_precommitment
+    meta:
+      title: Argument from Sunk Costs (the commitment form)
+      source: >
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge
+        University Press, pp. 135-136, and ch. 9, entry 25, pp. 326-327. Douglas Walton, 'The Sunk Costs
+        Fallacy or Argument from Waste', Argumentation 16 (2002), pp. 488-489. As the schemes library has it
+        (decision D031).
+    variables: [P,A,T1,T2]
+    conclusions:
+      - should_do(P,A)
+    premises:
+      - choice_at(T2,A)
+      - precommitted(P,A,T1,T2)
+
   - id: verbal_classification
     meta:
       title: Argument from Verbal Classification

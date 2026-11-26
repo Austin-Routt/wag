@@ -387,6 +387,45 @@ def main(outdir):
       "candidate C022). That E happens whether or not A is done, and that A makes each occurrence less harmful, had "
       "no scheme: it is not the prudential form (33.4), since E happens anyway, nor a weighing of consequences. The "
       "form that steers what is coming anyway is not covered. Not in the compendium. |")
+    w("| `fear`, `danger`, `threat`, `ad_baculum`, `pragmatic_alternative`, `appeal_to_vanity_ad_populum` | "
+      "conclusions `should_be_performed(X)` (fear, ad_baculum, pragmatic_alternative with A, the appeal to vanity) "
+      "or `¬should_be_performed(X)` (danger, threat), for `ought_to_bring_about`, `should_not(Y)`, "
+      "`not_bring_about`, `do_other` and `carry_out_action`; threat's premises `cited_bad_consequences(X,C)` and "
+      "`position_to_bring_about(C)`, and `assert_bad(X,C)`'s template printing C first (indexed) | 2026-11-26 | "
+      "Decisions D063, D060 and D062 (WAG's proposal D022-D093, after an independent review). Each recommends an "
+      "action to the one addressed but concluded a predicate no other scheme concluded or used, so in the engine an "
+      "appeal to fear for an action never met an argument from negative consequences against it; Walton reads these "
+      "forms as species of argument from consequences, whose conclusion is a practical ought (Scare Tactics, 2000, "
+      "pp. 140-143, 173, 191). Threat put the action where the threatened consequence belongs, and danger concluded "
+      "about the danger, not the action (2008, pp. 333-334). The old conclusion templates are kept as orphans. |")
+    w("| `practical_goal`, `two_person_practical`, `waste`, `end_and_means_1` | `practical_goal`: goal premise "
+      "`goal_of_agent(P,G)`, exceptions `realize_more_effectively(P,G,X)`, `incompatible_goal(P,G)`, "
+      "`bad_outweighs(X,G)`; `two_person_practical`: conclusion `should_do(A,Y)`, assumption "
+      "`possible_bring_about(A,Y)`, exceptions `realize_more_effectively(A,X,Y)`, `incompatible_goal(A,X)`, "
+      "`bad_outweighs(Y,X)`; `waste`: assumption `possible_goal(X)`, exception "
+      "`reassessment_against_continuing(A,X)`; `end_and_means_1`: exception `means_bad_outweighs(X,Y)` | 2026-11-26 "
+      "| Decisions D023, D033, D063 and D093 (the same proposal). The argument from goal borrows practical "
+      "reasoning's questions in its formulas (D023); two-person practical reasoning asks four of the book's five "
+      "questions in them, the fifth keeping no formula, where its exceptions named the advisor for the action and "
+      "left the means out (D093); waste's second question is the critic's exception (D033) and its assumption a "
+      "goal's possibility; end and means borrows the consequences' question of the opposite value, in a formula of "
+      "its own, since a means may be a state (D023). |")
+    w("| `sunk_costs_precommitment`, `end_and_means_bad`, `end_and_means_less_bad` (new) | the commitment form of "
+      "sunk costs: premises `choice_at(T2,A)` and `precommitted(P,A,T1,T2)`, conclusion `should_do(P,A)`; the "
+      "negative and graded readings of 22.6.1: `means_to_end(X,Y)`, `bad(Y)`, so `bad(X)`, with the exception "
+      "`means_good_outweighs(X,Y)`; and `means_to_end(X,Y)`, `good(Y)`, `bad(X)`, so `less_bad_as_means(X,Y)` (new "
+      "templates) | 2026-11-26 | Decisions D031 and D022, with D093's borrowed question for the negative reading "
+      "(the same proposal). As the schemes library has them; 25 and 22.6.1 in the compendium (2008, pp. 135-136, "
+      "325-327; Walton 2002, pp. 488-491). |")
+    w("| `bridge_from_agent`, `bridge_from_continuing` (new) | written for WAG: premises `should_do(P,A)` and "
+      "`deliberating_agent(P,A)`; and `ought_to_continue(P,G)`, `continues_trying(A,G)` and "
+      "`deliberating_agent(P,A)`, with the assumption `possible_bring_about(P,A)` and the exceptions "
+      "`realize_more_effectively(P,G,A)` and `bad_outweighs(A,G)`; conclusion `should_be_performed(A)` (new "
+      "templates) | 2026-11-26 | Decisions D063 and D093 (the same proposal). A conclusion that names an agent "
+      "reaches the recommendation only when the decision is that agent's, a premise its arguer supports, for the "
+      "exception D063's text names (an exception nobody raises would let an agent nobody checked pass); continuing "
+      "binds to an action that continues the effort, a means for the goal, which practical reasoning's questions "
+      "test. Not in the compendium. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------

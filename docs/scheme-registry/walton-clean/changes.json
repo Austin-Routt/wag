@@ -132,6 +132,17 @@
   "reason": "template word 'wil l'"
  },
  {
+  "line": 40,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  assert_bad/2: \"I hereby assert that in fact I will see to it that %s occurs if you bring about %s.\"",
+  "after": "  assert_bad/2: \"I will bring about %[2]s if you go ahead with %[1]s.\"",
+  "reason": "D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 42,
   "change": "edit",
   "scheme": "language",
@@ -363,6 +374,17 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 87,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  choice_at/2: \"%s, there is a choice between %s and not doing so.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 88,
   "change": "edit",
   "scheme": "language",
@@ -385,6 +407,17 @@
   "reason": "template for precedent_slippery_slope (50), in our own words"
  },
  {
+  "line": 88,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  cited_bad_consequences/2: \"If you go ahead with %s, the bad consequence cited, %s, will follow.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 91,
   "change": "edit",
   "scheme": "language",
@@ -405,6 +438,17 @@
   "before": "  conflict_goals/2: \"%s has some other goals %s that conflict with %s.\" ",
   "after": "  conflict_goals/3: \"%s has some other goals %s that conflict with %s.\" ",
   "reason": "the template has 3 %s and both schemes use conflict_goals(P,A2,A) with 3 arguments"
+ },
+ {
+  "line": 98,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  continues_trying/2: \"%s would continue the effort to realize %s.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
  },
  {
   "line": 102,
@@ -449,6 +493,17 @@
   "before": "",
   "after": "  data_set/2: \"%s is a set of data or supposed facts in case %s.\"",
   "reason": "abductive_backward uses data_set(D,A) with 2 arguments; only data_set/1 had a template"
+ },
+ {
+  "line": 112,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  deliberating_agent/2: \"It falls to %s to decide whether to go ahead with %s.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
  },
  {
   "line": 115,
@@ -803,6 +858,17 @@
   "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
  },
  {
+  "line": 205,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  less_bad_as_means/2: \"Being a means to the good end %[2]s would make %[1]s less bad.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 206,
   "change": "insert after",
   "scheme": "language",
@@ -869,6 +935,17 @@
   "reason": "template for cause_to_effect_modal (audit N8), in our own words"
  },
  {
+  "line": 207,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  means_bad_outweighs/2: \"As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 208,
   "change": "edit",
   "scheme": "language",
@@ -878,6 +955,17 @@
   "before": "  means_end: \"Means %s should be regarded as an end.\"",
   "after": "  means_end/1: \"Means %s should be regarded as an end.\"",
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses means_end with 1 argument(s) and the template has 1 %s"
+ },
+ {
+  "line": 208,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  means_good_outweighs/2: \"As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
  },
  {
   "line": 213,
@@ -1067,6 +1155,17 @@
   "reason": "malformed verb '%i' printed '%!i(string=...)s'"
  },
  {
+  "line": 250,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  occur/2: \"If the respondent bring about %s then %s will occur.\"",
+  "after": "  occur/2: \"If the respondent goes ahead with %s, then %s will occur.\"",
+  "reason": "D062: danger concludes about the action, not the danger (37). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 251,
   "change": "edit",
   "scheme": "language",
@@ -1087,6 +1186,17 @@
   "before": "  oficcial_rulebook/3: \"In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s.\"",
   "after": "  official_rulebook/3: \"In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s.\"",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 252,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  only_way_prevent/2: \"But the only way for you to prevent %s is bring about %s.\"",
+  "after": "  only_way_prevent/2: \"The only way for you to prevent %s is %s.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
  },
  {
   "line": 255,
@@ -1144,6 +1254,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses ought_to_continue with 2 argument(s) and the template has 2 %s"
  },
  {
+  "line": 260,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  ought_to_continue/2: \"Therefore, %s ought to continue trying to realize %s.\"",
+  "after": "  ought_to_continue/2: \"%s ought to continue trying to realize %s.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 261,
   "change": "insert after",
   "scheme": "language",
@@ -1199,6 +1320,17 @@
   "reason": "misspelled predicate and scheme id ('practise' for the noun 'practice')"
  },
  {
+  "line": 277,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  position_to_bring_about/1: \"I am in a position to bring about %s.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 278,
   "change": "delete",
   "scheme": "language",
@@ -1243,6 +1375,17 @@
   "reason": "template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words"
  },
  {
+  "line": 290,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  precommitted/4: \"What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
+ },
+ {
   "line": 295,
   "change": "insert after",
   "scheme": "language",
@@ -1252,6 +1395,17 @@
   "before": "",
   "after": "  preventable_otherwise/2: \"A course open to whoever would do %s could prevent %s.\"",
   "reason": "template for the consequences' new formulas (D008, D065, D069, D072), in our own words"
+ },
+ {
+  "line": 295,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  prevent/1: \"Therefore, you ought to prevent %s if possible.\"\n  preventable_otherwise/2: \"A course open to whoever would do %s could prevent %s.\"",
+  "after": "  prevent/1: \"You ought to prevent %s if you can.\"\n  preventable_otherwise/2: \"A course open to whoever would do %s could prevent %s.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
  },
  {
   "line": 296,
@@ -1351,6 +1505,17 @@
   "before": "  reasonable_belive/1: \"It is reasonable to believe %s.\"",
   "after": "  reasonable_believe/1: \"It is reasonable to believe %s.\"",
   "reason": "misspelled predicate"
+ },
+ {
+  "line": 310,
+  "change": "insert after",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  reassessment_against_continuing/2: \"Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s.\"",
+  "reason": "template for the formulas of proposal D022-D093, in our own words"
  },
  {
   "line": 312,
@@ -1485,6 +1650,17 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 344,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  situation_necessity/4: \"As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this.\"",
+  "after": "  situation_necessity/4: \"In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 346,
   "change": "edit",
   "scheme": "language",
@@ -1505,6 +1681,17 @@
   "before": "  special_proposition/2: \"A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.\"",
   "after": "  special_proposition/2: \"%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.\"",
   "reason": "special_proposition is used with 2 arguments (A,K); the first was written as the letter A"
+ },
+ {
+  "line": 353,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  stop_realize_wasted/2: \"If %s stops trying to realize %s now, all previous efforts will be wasted.\"",
+  "after": "  stop_realize_wasted/2: \"If %s stopped trying to realize %s now, all the previous efforts would be wasted.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
  },
  {
   "line": 354,
@@ -1628,6 +1815,17 @@
   "reason": "language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses synonymous with 0 argument(s) and the template has 0 %s"
  },
  {
+  "line": 367,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  tells_intend/3: \"%s intends to realize %s, and tells %s this.\"",
+  "after": "  tells_intend/3: \"%s, intending to realize %s, told %s so.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 370,
   "change": "insert after",
   "scheme": "language",
@@ -1705,6 +1903,17 @@
   "reason": "template for whole_into_parts (10.2), in our own words (the category file's repeats the book)"
  },
  {
+  "line": 390,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  waste_bad_thing/2: \"If all %s 's previous attempts to realize %s are wasted, that would be a bad thing.\"\n  whole_is/2: \"The whole %s has %s.\"\n  whole_of/4: \"%s is made up of the parts %s, %s and %s.\"",
+  "after": "  waste_bad_thing/2: \"If all the previous efforts of %s to realize %s were wasted, that would be a bad thing.\"\n  whole_is/2: \"The whole %s has %s.\"\n  whole_of/4: \"%s is made up of the parts %s, %s and %s.\"",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words."
+ },
+ {
   "line": 392,
   "change": "insert after",
   "scheme": "language",
@@ -1780,6 +1989,17 @@
   "before": "      -  morally_acceptable_action(X,A)",
   "after": "",
   "reason": "D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise"
+ },
+ {
+  "line": 525,
+  "change": "edit",
+  "scheme": "appeal_to_vanity_ad_populum",
+  "scheme_after": "appeal_to_vanity_ad_populum",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - carry_out_action(X)",
+  "after": "      - should_be_performed(X)",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
  },
  {
   "line": 569,
@@ -3080,6 +3300,61 @@
   "reason": "source: 'lntelligence' (OCR l for I)"
  },
  {
+  "line": 1031,
+  "change": "edit",
+  "scheme": "practical_goal",
+  "scheme_after": "practical_goal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - person_goal(P,G)",
+  "after": "      - goal_of_agent(P,G)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1031,
+  "change": "insert after",
+  "scheme": "practical_goal",
+  "scheme_after": "practical_goal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1031,
+  "change": "insert after",
+  "scheme": "practical_goal",
+  "scheme_after": "practical_goal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - realize_more_effectively(P,G,X)",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1031,
+  "change": "insert after",
+  "scheme": "practical_goal",
+  "scheme_after": "practical_goal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - incompatible_goal(P,G)",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1031,
+  "change": "insert after",
+  "scheme": "practical_goal",
+  "scheme_after": "practical_goal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad_outweighs(X,G)",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
   "line": 1037,
   "change": "edit",
   "scheme": "end_and_means_1",
@@ -3089,6 +3364,402 @@
   "before": "              Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Trtatise on Argumentation ",
   "after": "              Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation ",
   "reason": "source: 'Trtatise' (OCR)"
+ },
+ {
+  "line": 1044,
+  "change": "insert after",
+  "scheme": "end_and_means_1",
+  "scheme_after": "end_and_means_1",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1044,
+  "change": "insert after",
+  "scheme": "end_and_means_1",
+  "scheme_after": "end_and_means_1",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - means_bad_outweighs(X,Y)",
+  "reason": "D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: end_and_means_bad",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Ends and Means - a Bad End Condemns Its Means",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022), with the",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        question of the opposite value that end and means 1 borrows (D093).",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [X,Y]",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad(X)",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - means_to_end(X,Y)",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad(Y)",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - means_good_outweighs(X,Y)",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_bad",
+  "scheme_after": "end_and_means_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: end_and_means_less_bad",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Ends and Means - a Good End Makes a Bad Means Less Bad",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        University Press, ch. 9, entry 22.6.1 (its graded reading), p. 325. Chaim Perelman and Lucie",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022).",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [X,Y]",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - less_bad_as_means(X,Y)",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - means_to_end(X,Y)",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - good(Y)",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad(X)",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1045,
+  "change": "insert after",
+  "scheme": "end_and_means_less_bad",
+  "scheme_after": "end_and_means_less_bad",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
  },
  {
   "line": 1050,
@@ -3124,6 +3795,17 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 1080,
+  "change": "edit",
+  "scheme": "two_person_practical",
+  "scheme_after": "two_person_practical",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - should_carry_out(A,Y)",
+  "after": "      - should_do(A,Y)",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
   "line": 1083,
   "change": "edit",
   "scheme": "two_person_practical",
@@ -3135,6 +3817,50 @@
   "reason": "misspelled predicate"
  },
  {
+  "line": 1085,
+  "change": "edit",
+  "scheme": "two_person_practical",
+  "scheme_after": "two_person_practical",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - alternative_means(A,X)",
+  "after": "      - realize_more_effectively(A,X,Y)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1086,
+  "change": "edit",
+  "scheme": "two_person_practical",
+  "scheme_after": "two_person_practical",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - goals_higher_priority(A,X)",
+  "after": "      - incompatible_goal(A,X)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1087,
+  "change": "edit",
+  "scheme": "two_person_practical",
+  "scheme_after": "two_person_practical",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - side_effect_other_act(B,A)",
+  "after": "      - bad_outweighs(Y,X)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1089,
+  "change": "edit",
+  "scheme": "two_person_practical",
+  "scheme_after": "two_person_practical",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "     - possible_action(Y)",
+  "after": "     - possible_bring_about(A,Y)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
   "line": 1105,
   "change": "edit",
   "scheme": "waste",
@@ -3144,6 +3870,446 @@
   "before": "     - posible(X)",
   "after": "     - possible(X)",
   "reason": "misspelled predicate 'posible'"
+ },
+ {
+  "line": 1105,
+  "change": "edit",
+  "scheme": "waste",
+  "scheme_after": "waste",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "     - possible(X)",
+  "after": "     - possible_goal(X)",
+  "reason": "D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1105,
+  "change": "insert after",
+  "scheme": "waste",
+  "scheme_after": "waste",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D033: the reassessment from now on (24, CQ2), an exception, the critic's. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1105,
+  "change": "insert after",
+  "scheme": "waste",
+  "scheme_after": "waste",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - reassessment_against_continuing(A,X)",
+  "reason": "D033: the reassessment from now on (24, CQ2), an exception, the critic's. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: bridge_from_agent",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: From What an Agent Should Do to the Action (bridge)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's bridge (decision D063, refined 2026-11-22; D093): an explicit warrant, with a premise its",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        should_be_performed(A), when it falls to P to decide whether to go ahead with A. Not in the",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        compendium.",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [P,A]",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_be_performed(A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_do(P,A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - deliberating_agent(P,A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_agent",
+  "scheme_after": "bridge_from_agent",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: bridge_from_continuing",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: From Continuing to Try to the Action (bridge)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        action, not only to its goal; D093): from waste's conclusion, that an agent ought to continue trying",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        to realize a goal, to the recommendation of an action that continues the effort, when the decision",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        is the agent's, with practical reasoning's questions for the means it chooses. Not in the",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        compendium.",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [P,G,A]",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_be_performed(A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - ought_to_continue(P,G)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - continues_trying(A,G)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - deliberating_agent(P,A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    assumptions:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - possible_bring_about(P,A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    exceptions:",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - realize_more_effectively(P,G,A)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - bad_outweighs(A,G)",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
+ },
+ {
+  "line": 1106,
+  "change": "insert after",
+  "scheme": "bridge_from_continuing",
+  "scheme_after": "bridge_from_continuing",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)"
  },
  {
   "line": 1111,
@@ -3256,6 +4422,17 @@
   "reason": "D055, D059: the prudential form's likelihood assumption named only the action, so two warnings about one action shared it; its conclusion prudential(X) met no other scheme. Now strongly_occur(X,C), the sided exception bad_outweighs(X,C), and the conclusion should_be_performed(X), which meets the practical schemes about X. Owner decision of 2026-10-23 (proposal D055-D059, version 5)"
  },
  {
+  "line": 1305,
+  "change": "edit",
+  "scheme": "pragmatic_alternative",
+  "scheme_after": "pragmatic_alternative",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - do_other(A) ",
+  "after": "      - should_be_performed(A) ",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
   "line": 1310,
   "change": "edit",
   "scheme": "treat",
@@ -3278,6 +4455,39 @@
   "reason": "title 'Treat' for 'Threat'"
  },
  {
+  "line": 1318,
+  "change": "edit",
+  "scheme": "threat",
+  "scheme_after": "threat",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - not_bring_about(X)",
+  "after": "      - ¬should_be_performed(X)",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1320,
+  "change": "edit",
+  "scheme": "threat",
+  "scheme_after": "threat",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - cited_bad_consequences(X)",
+  "after": "      - cited_bad_consequences(X,C)",
+  "reason": "D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1321,
+  "change": "edit",
+  "scheme": "threat",
+  "scheme_after": "threat",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - position_to_know(X)",
+  "after": "      - position_to_bring_about(C)",
+  "reason": "D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
   "line": 1326,
   "change": "edit",
   "scheme": "ad_baculum",
@@ -3287,6 +4497,39 @@
   "before": "      title: Argument From Disjunctive Ad Baculum Treat",
   "after": "      title: Argument From Disjunctive Ad Baculum Threat",
   "reason": "title 'Treat' for 'Threat'"
+ },
+ {
+  "line": 1331,
+  "change": "edit",
+  "scheme": "ad_baculum",
+  "scheme_after": "ad_baculum",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - do_other(X)",
+  "after": "      - should_be_performed(X)",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1343,
+  "change": "edit",
+  "scheme": "fear",
+  "scheme_after": "fear",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - ought_to_bring_about(X)",
+  "after": "      - should_be_performed(X)",
+  "reason": "D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 1357,
+  "change": "edit",
+  "scheme": "danger",
+  "scheme_after": "danger",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - should_not(Y)",
+  "after": "      - ¬should_be_performed(X)",
+  "reason": "D062: danger concludes about the action, not the danger (37). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
  },
  {
   "line": 1388,
@@ -6092,5 +7335,170 @@
   "before": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.",
   "after": "        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.",
   "reason": "the book's compendium cites these pages (49, pp. 93, 95) as 1992, as do walton.yml's three other citations of the same book, and booksellers' listings date the Vale Press edition 1992; the book's ch. 4 (p. 114) cites p. 93 for gradualism as 'Walton, 1999', which the book's reference list (not checked) may give as another work"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "  - id: sunk_costs_precommitment",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    meta:",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      title: Argument from Sunk Costs (the commitment form)",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        University Press, pp. 135-136, and ch. 9, entry 25, pp. 326-327. Douglas Walton, 'The Sunk Costs",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        Fallacy or Argument from Waste', Argumentation 16 (2002), pp. 488-489. As the schemes library has it",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "        (decision D031).",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    variables: [P,A,T1,T2]",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    conclusions:",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - should_do(P,A)",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "    premises:",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - choice_at(T2,A)",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      - precommitted(P,A,T1,T2)",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
+ },
+ {
+  "line": 2033,
+  "change": "insert after",
+  "scheme": "sunk_costs_precommitment",
+  "scheme_after": "sunk_costs_precommitment",
+  "category": "addition — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "",
+  "reason": "D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)"
  }
 ]

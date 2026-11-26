@@ -453,11 +453,8 @@ func main() {
 		if t, ok := terms.ReadString(name); !ok || t.Type() != terms.AtomType {
 			lp = append(lp, fmt.Sprintf("key %q: %q is not a predicate symbol", k, name))
 		}
-		plain := strings.ReplaceAll(tmpl, "%%", "")
-		ns := strings.Count(plain, "%s")
-		np := strings.Count(plain, "%")
-		if ns != arity || np != arity {
-			lp = append(lp, fmt.Sprintf("key %q: template has %d %%s and %d %% for arity %d: %q", k, ns, np, arity, tmpl))
+		if msg := templateProblem(tmpl, arity); msg != "" {
+			lp = append(lp, fmt.Sprintf("key %q: %s: %q", k, msg, tmpl))
 		}
 	}
 	for _, s := range theory.ArgSchemes {
@@ -547,6 +544,71 @@ func main() {
 		}
 	}
 	finish(&r, *jsonOut, realStderr)
+}
+
+// templateProblem says what is wrong with a language template of the given
+// arity, or "". A plain template has exactly one %s per argument, in order. A
+// template with indexed verbs (%[n]s, decision D060: a template may print its
+// arguments in another order) is read as WAG's renderer reads it
+// (wag/internal/language): each verb is %s or %[n]s with n in 1..arity, a %s
+// takes the argument after the previous verb's, and every argument occurs at
+// least once. %% is a literal percent sign in both.
+func templateProblem(tmpl string, arity int) string {
+	plain := strings.ReplaceAll(tmpl, "%%", "")
+	if !strings.Contains(plain, "%[") {
+		ns := strings.Count(plain, "%s")
+		np := strings.Count(plain, "%")
+		if ns != arity || np != arity {
+			return fmt.Sprintf("template has %d %%s and %d %% for arity %d", ns, np, arity)
+		}
+		return ""
+	}
+	used := map[int]bool{}
+	next := 0
+	for i := 0; i < len(tmpl); i++ {
+		if tmpl[i] != '%' {
+			continue
+		}
+		start := i
+		i++
+		if i >= len(tmpl) {
+			return fmt.Sprintf("template ends in %% at %d", start)
+		}
+		if tmpl[i] == '%' {
+			continue
+		}
+		index := next
+		if tmpl[i] == '[' {
+			i++
+			begin := i
+			for i < len(tmpl) && tmpl[i] >= '0' && tmpl[i] <= '9' {
+				i++
+			}
+			if begin == i || i >= len(tmpl) || tmpl[i] != ']' {
+				return fmt.Sprintf("template has an invalid index at %d", start)
+			}
+			n, err := strconv.Atoi(tmpl[begin:i])
+			if err != nil || n < 1 || n > arity {
+				return fmt.Sprintf("template index outside 1..%d at %d", arity, start)
+			}
+			index = n - 1
+			i++
+		}
+		if i >= len(tmpl) || tmpl[i] != 's' {
+			return fmt.Sprintf("template has a verb other than %%s or %%[n]s at %d", start)
+		}
+		if index >= arity {
+			return fmt.Sprintf("template argument outside 1..%d at %d", arity, start)
+		}
+		used[index] = true
+		next = index + 1
+	}
+	for a := 0; a < arity; a++ {
+		if !used[a] {
+			return fmt.Sprintf("template omits argument %d of %d", a+1, arity)
+		}
+	}
+	return ""
 }
 
 func finish(r *report, jsonOut string, realStderr *os.File) {

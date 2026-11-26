@@ -4,7 +4,7 @@
 
 ## The slice
 
-The first family is two of the scheme families (`wag/data/schemes/families.json`): **F10, practical reasoning**, and **F15, consequences, alternatives, threat and fear**. Together they have 33 schemes in `walton.yml`, three of them the answer schemes C2 added and five the schemes C3 added: the modal variants of 33.1 and 33.2, their two bridges, and the argument from what happens anyway. The game plays four of them.
+The first family is two of the scheme families (`wag/data/schemes/families.json`): **F10, practical reasoning**, and **F15, consequences, alternatives, threat and fear**. Together they have 38 schemes in `walton.yml`, three of them the answer schemes C2 added, five the schemes C3 added (the modal variants of 33.1 and 33.2, their two bridges, and the argument from what happens anyway) and five the schemes C4 added (the negative and graded readings of ends and means, the commitment form of sunk costs, and two bridges from conclusions that name an agent). The game plays four of them.
 
 | Family | Scheme | Compendium | In the game | Native diagnostics | Decisions still to apply |
 |---|---|---|---|---|---|
@@ -14,25 +14,25 @@ The first family is two of the scheme families (`wag/data/schemes/families.json`
 | F10 | practical_reasoning1 | 22.4 | AS:practical_reasoning | — | D003, D007; D004, D005, D070, D088, D089, D091 in the game's copy (C5) |
 | F10 | practical_reasoning2 | 22.1 | AS:practical_reasoning_goal | — | D003, D007; D004, D005, D006, D070, D088, D089, D091 in the game's copy (C5) |
 | F10 | better_means | — | — | — | — (an answer scheme, C2) |
-| F10 | practical_goal | 22.5 | — | — | D023, D063 |
-| F10 | end_and_means_1 | 22.6.1 | — | — | D022, D023 |
+| F10 | practical_goal | 22.5 | — | — | — (C4) |
+| F10 | end_and_means_1 | 22.6.1 | — | — | — (C4) |
 | F10 | end_and_means_2 | 22.6.2 | — | — | — |
 | F10 | end_and_means_3 | 22.6.3 | — | — | — |
-| F10 | two_person_practical | 23 | — | — | D063 |
+| F10 | two_person_practical | 23 | — | — | — (C4) |
 | F10 | practical_analogy_positive | 8.1 | — | — | — |
 | F10 | practical_analogy_negative | 8.2 | — | — | — |
 | F10 | negative_practical | 26.2 | — | — | — |
-| F10 | waste | 24 | — | — | D033, D063 |
-| F10 | sunk_costs | 25 | — | — | D031 |
+| F10 | waste | 24 | — | — | — (C4) |
+| F10 | sunk_costs | 25 | — | — | — (D031 by a scheme of its own, C4) |
 | F15 | positive_consequences | 33.1 | AS:consequences | — | D009; D065 in the game's copy, and D074's question (C5) |
 | F15 | negative_consequences | 33.2 | AS:negative_consequences | — | D009; D065 in the game's copy, and D074's question (C5) |
 | F15 | negative_consequences_reasoning | 33.3 | — | — | — |
 | F15 | negative_consequences_prudential | 33.4 | — | — | — (C3) |
-| F15 | pragmatic_alternative | 34 | — | — | D063 |
-| F15 | threat | 35 | — | — | D060, D063 |
-| F15 | ad_baculum | 35.1 | — | — | D063 |
-| F15 | fear | 36 | — | — | D063 |
-| F15 | danger | 37 | — | — | D062, D063 |
+| F15 | pragmatic_alternative | 34 | — | — | — (C4) |
+| F15 | threat | 35 | — | — | — (C4) |
+| F15 | ad_baculum | 35.1 | — | — | — (C4) |
+| F15 | fear | 36 | — | — | — (C4) |
+| F15 | danger | 37 | — | — | — (C4) |
 | F15 | slippery_slope_base_case | 49 | — | — | — |
 | F15 | bad_outweighs_good | — | — | — | — (an answer scheme, C2) |
 | F15 | good_outweighs_bad | — | — | — | — (an answer scheme, C2) |
@@ -41,6 +41,11 @@ The first family is two of the scheme families (`wag/data/schemes/families.json`
 | F15 | bridge_from_possible_good | — | — | — | — (a bridge, C3; the game at C5) |
 | F15 | bridge_from_possible_harm | — | — | — | — (a bridge, C3; the game at C5) |
 | F15 | harm_reduction | — | — | — | — (C3) |
+| F10 | end_and_means_bad | 22.6.1 (in part) | — | — | — (a variant, C4) |
+| F10 | end_and_means_less_bad | 22.6.1 (in part) | — | — | — (a variant, C4) |
+| F10 | sunk_costs_precommitment | 25 | — | — | — (C4) |
+| F10 | bridge_from_agent | — | — | — | — (a bridge, C4) |
+| F10 | bridge_from_continuing | — | — | — | — (a bridge, C4) |
 
 The diagnostics are the engine's own (its automatic-inference profile): a variable that no premise binds. The two condition schemes had the slice's only ones, as the critical review of 2026-11-23 found, and C2 removed them on 2026-11-24; outside the slice, `ad_hominem` (S) and `regulative_rule` (A) have the same problem and go with their families.
 
@@ -51,7 +56,7 @@ Decisions that apply to the slice as a whole: D063 (practical conclusions meet `
 What the bounded pilot (stage 3) can play and measure, once stage 2 is done.
 
 - **Included:** the four schemes the game plays: `practical_reasoning1`, `practical_reasoning2`, `positive_consequences`, `negative_consequences`; and the answer schemes D075 names for them, in `walton.yml` since C2: `bad_outweighs_good` (C003's consequence of the other sign, D064, which is also the side effect that outweighs, D070), `good_outweighs_bad` and `better_means`; and the modal variants of the two consequence schemes with their bridges, in `walton.yml` since C3 (D008), which join the game at step C5.
-- **Left out, and said so:** the other 22 schemes of the two families. Their decided changes are applied all the same (proposals C3 and C4 below), so that the family's formulas are closed; they are not yet questions and moves of the game, and a pilot that reports on the first profile reports nothing about them. Taking one into the game is the next slice's step (plan §6, order 2).
+- **Left out, and said so:** the other 27 schemes of the two families. Their decided changes are applied all the same (proposals C3 and C4 below), so that the family's formulas are closed; they are not yet questions and moves of the game, and a pilot that reports on the first profile reports nothing about them. Taking one into the game is the next slice's step (plan §6, order 2).
 - **Outside the slice, still in the game:** expert opinion, position to know, sign, analogy, values and Other. They stay playable; their results are not the first family's, and a report keeps them apart.
 
 ## The questions of the included schemes, today
@@ -89,7 +94,7 @@ The game's `core.yml` holds its own copies of the four schemes. `positive_conseq
 |---|---|---|
 | C2, practical reasoning: **done 2026-11-24** ([proposal D004-D075](proposals/D004-D075.md)) | D004, D005, D030 (with D063 for the two condition schemes and practical inference), D064 and D070, D075's first answer schemes, and the owner's D088-D091; D003 and D006 change nothing in `walton.yml` and are recorded so | practical_reasoning1, practical_reasoning2, practical_necessary_condition, practical_sufficient_condition, practical_inference, and the new answer schemes |
 | C3, consequences: **done 2026-11-25** ([proposal D008-D074](proposals/D008-D074.md)) | D008, D065, D066, D069, D072, D074 (D064 was applied with C2); D067 changes nothing; D053's declarations, by the owner | positive_consequences, negative_consequences, negative_consequences_prudential, and the new schemes positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm and harm_reduction |
-| C4, the rest | D063's conclusions and bridges, D022, D023, D031, D033 | fear, danger, threat, ad_baculum, pragmatic_alternative, practical_goal, two_person_practical, waste, sunk_costs, end_and_means_1 |
+| C4, the rest: **done 2026-11-26** ([proposal D022-D093](proposals/D022-D093.md)) | D063's conclusions and bridges, D022, D023, D031, D033, with D060, D062 and D093 | fear, danger, threat, ad_baculum, pragmatic_alternative, practical_goal, two_person_practical, waste, sunk_costs, end_and_means_1 |
 | C5, the game | D007, D009, D075's backup edges; game questions for C3's exceptions (too_slight, the bearer pair, worth_finding_out_first) and D074's question about the argument itself; the answer contract's refusal of a bare claim of knowability as an answer to worth_finding_out_first (D053, item F) | the four game schemes and their answer schemes; the modal variants and their bridges (D008) |
 
 Each proposal goes the way of process.md §5: the proposal file and its view, `wag-cli --proposal`, the cleaning's gate and the registry with it applied, independent review until it is clean, then `edits.py`, the catalogue and the register. The decisions are taken (most under the owner's standing rule of 2026-11-22); a departure from a decision's text goes to the owner as a choice of its own.

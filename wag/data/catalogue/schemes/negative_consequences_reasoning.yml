@@ -138,11 +138,11 @@ contrasts:
     an agent rejects one of its own options for a result that would harm its goals.
   status: drafted by Claude Code, 2026-10-22
 - scheme: threat
-  text: Threat concludes not_bring_about(A), this scheme ¬should_be_performed(A).
-    Choose threat when the speaker undertakes to cause the bad outcome if the hearer
-    acts; choose negative_consequences_reasoning when the agent itself foresees the
-    bad outcome of its own action and no one undertakes to cause it.
-  status: drafted by Claude Code, 2026-10-22
+  text: Since 2026-11-26 threat concludes ¬should_be_performed(A) too (D063). Choose
+    threat when the speaker undertakes to cause the bad outcome if the hearer acts;
+    choose negative_consequences_reasoning when the agent itself foresees the bad
+    outcome of its own action and no one undertakes to cause it.
+  status: drafted by Claude Code, 2026-11-26
 - scheme: ad_baculum
   text: 'Not a close relative: the disjunctive threat demands an action of the hearer
     on pain of a harm the speaker will cause, while this scheme is an agent''s own
@@ -439,3 +439,7 @@ history:
   what: 'the CQ1-CQ2 discrepancy (no modal variant: negative_consequences_modal, 33.3
     named); D074''s objection; the contrast with the modal variant; the proposal''s
     examples, after proposal D008-D074'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

@@ -13,18 +13,20 @@ walton:
 formulas:
   variables: [X, C]
   premises:
-  - cited_bad_consequences(X)
-  - position_to_know(X)
+  - cited_bad_consequences(X,C)
+  - position_to_bring_about(C)
   - assert_bad(X,C)
   conclusions:
-  - not_bring_about(X)
+  - ¬should_be_performed(X)
 book:
 - entry: "35"
   title: Argument From Threat
   pages: "333"
-  match: exact
-  note: Same scheme ("Treat" for "Threat"); source A Pragmatic Theory of Fallacy 1995,
-    p. 157.
+  match: partial
+  note: 'Same scheme; source A Pragmatic Theory of Fallacy 1995, p. 157. Since 2026-11-26
+    its premises name the threatened consequence where the book does (D060); partial:
+    it concludes ¬should_be_performed(X) (D063), for the book''s ''you had better
+    not bring about A''.'
   status: generated
 families:
 - family: F15
@@ -34,22 +36,20 @@ families:
 premise_map:
 - entry: "35"
   label: Premise 1
-  formulas: [{formula: cited_bad_consequences(X), locus: premise}]
-  note: B is not passed
+  formulas: [{formula: 'cited_bad_consequences(X,C)', locus: premise}]
   status: generated
 - entry: "35"
   label: Premise 2
-  formulas: [{formula: position_to_know(X), locus: premise}]
-  note: the action X is passed where the threatened consequence B belongs
+  formulas: [{formula: position_to_bring_about(C), locus: premise}]
   status: generated
 - entry: "35"
   label: Premise 3
   formulas: [{formula: 'assert_bad(X,C)', locus: premise}]
-  note: arguments reversed
   status: generated
 - entry: "35"
   label: Conclusion
-  formulas: [{formula: not_bring_about(X), locus: conclusion}]
+  formulas: [{formula: ¬should_be_performed(X), locus: conclusion}]
+  note: '''you had better not bring about A'', in WAG''s vocabulary (D063)'
   status: generated
 critical_questions: []
 summary:
@@ -104,8 +104,40 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
-examples: []
-discrepancies: []
+examples:
+- text: 'If you build the extension, I will take you to court over the boundary. I
+    can: my deeds cover that strip. And I tell you now that I will sue if you build.
+    So you had better not build it.'
+  coding: 'X = building the extension; C = a lawsuit over the boundary. Pressed: a
+    challenge of position_to_bring_about(C) (The land registry shows the strip on
+    your neighbour''s title, not yours: you have nothing to sue on). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: If management cuts the night shift, the union will strike. We have the votes
+    to call one, and we are telling you now that we will. So management had better
+    not cut it.
+  coding: 'X = management cutting the night shift; C = a strike. The speaker undertakes
+    to bring about the consequence (D060: position_to_bring_about(C), and assert_bad(X,C)
+    printed C first). Pressed: a challenge of assert_bad(X,C) (The union''s own rules
+    need a ballot after the cut is announced; the leadership cannot promise a strike
+    in advance). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: If management cuts the night shift, no one will watch the boilers at night,
+    and sooner or later one will explode. An explosion is a danger to everyone in
+    the plant, managers included. So management should not cut it.
+  coding: 'Near miss: X = management cutting the night shift; Y = an unwatched boiler
+    exploding at night. A warning, not a threat: the speaker does not undertake to
+    bring about the consequence. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
+discrepancies:
+- kind: partial-link
+  about: "35"
+  detail: 'walton.yml formalizes compendium 35 only in part: Same scheme; source A
+    Pragmatic Theory of Fallacy 1995, p. 157. Since 2026-11-26 its premises name the
+    threatened consequence where the book does (D060); partial: it concludes ¬should_be_performed(X)
+    (D063), for the book''s ''you had better not bring about A''.'
+  decision: ""
+  status: generated
 classification:
   source: ""
   reasoning: ""
@@ -126,3 +158,7 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

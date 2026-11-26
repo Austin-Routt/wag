@@ -1,6 +1,7 @@
 popular_opinion                          assumptions  [] -> ['generally_accepted(A)']
 moral_justification_ad_populum_excuse    premises     ['morally_acceptable_action(X,A)', 'group_does(G,X,A)', 'acceptable_norm(X,A,G)', 'group_member(G)'] -> ['group_does(G,X,A)', 'acceptable_norm(X,A,G)', 'group_member(G)']
 moral_justification_ad_populum_excuse    conclusions  [] -> ['morally_acceptable_action(X,A)']
+appeal_to_vanity_ad_populum              conclusions  ['carry_out_action(X)'] -> ['should_be_performed(X)']
 practical_analogy_positive               variables    ['A1', 'A2', 'X'] -> ['A1', 'A2', 'X1', 'X2']
 practical_analogy_positive               premises     ['right_to_do(A1,X)', 'similar_to(A1,A2)'] -> ['right_to_do(A1,X1)', 'similar_to(A1,A2)', 'corresponds(X1,X2)']
 practical_analogy_positive               exceptions   [] -> ['difference_against(A1,A2,X2)']
@@ -30,9 +31,23 @@ practical_sufficient_condition           premises     ['goal_is_action(A)', 'alt
 practical_sufficient_condition           assumptions  ['possible_action(A)', 'acceptable_action(X)', 'possible_agent(X,P)'] -> ['possible_goal(G)', 'acceptable_action(P,X)', 'possible_bring_about(P,X)']
 practical_sufficient_condition           exceptions   ['alternative_means(A,X)', 'side_effect_action(P,X)', 'conflict_goals(P,A2,A)'] -> ['realize_more_effectively(P,G,X)', 'bad_outweighs(X,G)', 'incompatible_goal(P,G)']
 practical_sufficient_condition           conclusions  ['bringing_about_action(X)'] -> ['should_be_performed(X)']
+practical_goal                           premises     ['contributing_action(X,G)', 'person_goal(P,G)'] -> ['contributing_action(X,G)', 'goal_of_agent(P,G)']
+practical_goal                           exceptions   [] -> ['realize_more_effectively(P,G,X)', 'incompatible_goal(P,G)', 'bad_outweighs(X,G)']
+end_and_means_1                          exceptions   [] -> ['means_bad_outweighs(X,Y)']
+two_person_practical                     assumptions  ['possible_action(Y)'] -> ['possible_bring_about(A,Y)']
+two_person_practical                     exceptions   ['alternative_means(A,X)', 'goals_higher_priority(A,X)', 'side_effect_other_act(B,A)'] -> ['realize_more_effectively(A,X,Y)', 'incompatible_goal(A,X)', 'bad_outweighs(Y,X)']
+two_person_practical                     conclusions  ['should_carry_out(A,Y)'] -> ['should_do(A,Y)']
+waste                                    assumptions  ['possible(X)'] -> ['possible_goal(X)']
+waste                                    exceptions   [] -> ['reassessment_against_continuing(A,X)']
 negative_consequences_prudential         assumptions  ['strongly_occur(X)'] -> ['strongly_occur(X,C)']
 negative_consequences_prudential         exceptions   ['other_consequences(X)'] -> ['bad_outweighs(X,C)', 'fails_to_avert(X,C)']
 negative_consequences_prudential         conclusions  ['prudential(X)'] -> ['should_be_performed(X)']
+pragmatic_alternative                    conclusions  ['do_other(A)'] -> ['should_be_performed(A)']
+threat                                   premises     ['cited_bad_consequences(X)', 'position_to_know(X)', 'assert_bad(X,C)'] -> ['cited_bad_consequences(X,C)', 'position_to_bring_about(C)', 'assert_bad(X,C)']
+threat                                   conclusions  ['not_bring_about(X)'] -> ['¬should_be_performed(X)']
+ad_baculum                               conclusions  ['do_other(X)'] -> ['should_be_performed(X)']
+fear                                     conclusions  ['ought_to_bring_about(X)'] -> ['should_be_performed(X)']
+danger                                   conclusions  ['should_not(Y)'] -> ['¬should_be_performed(X)']
 sorites_slippery_slope                   premises     ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence'] -> ['beyond_contention(A2,P)', 'all_has(A2,P,A1)', 'reapplication_sequence(A2,A,P)']
 verbal_slippery_slope                    variables    ['A1', 'A2', 'A', 'P'] -> ['A1', 'A2', 'A', 'P', 'F']
 analogy                                  variables    ['A', 'C'] -> ['P1', 'P2', 'C1', 'C2']
@@ -50,9 +65,9 @@ practical_reasoning2                     premises     ['current_circumstances(S1
 practical_reasoning2                     assumptions  ['possible(A)', 'possible(G)'] -> ['possible_bring_about(P,A)', 'possible_goal(G)']
 practical_reasoning2                     exceptions   ['bring_about_more_effectively(S2,A)', 'realize_more_effectively(G,A)', 'intervening_actions(A,G)', 'side_effects(A,S1)', 'incompatible_goal(G)'] -> ['bring_about_more_effectively(P,S2,A)', 'realize_more_effectively(P,G,A)', 'intervening_actions(A,G)', 'bad_outweighs(A,G)', 'incompatible_goal(P,G)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
-52 scheme-level difference(s) after renames
-added by the owner's decision (not compared): whole_into_parts, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm, harm_reduction, better_means
-language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same key with a changed template: 29
+67 scheme-level difference(s) after renames
+added by the owner's decision (not compared): whole_into_parts, end_and_means_bad, end_and_means_less_bad, bridge_from_agent, bridge_from_continuing, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm, harm_reduction, better_means, sunk_costs_precommitment
+language: 392 -> 455 keys; keys only in clean: 97, only in original: 33, same key with a changed template: 34
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  acceptable_action/2 'For %s, %s is an acceptable thing to do.'
@@ -68,11 +83,15 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  bring_about_more_effectively/3 'There is a way for %s to reach the state %s more effectively than %s.'
   +  cannot_present_sametime/3 '%s cannot present %s and %s at the same time and in the same respect.'
   +  character_relevant/0 'In the type of dialogue in which the argument was used issue of character relevant.'
+  +  choice_at/2 '%s, there is a choice between %s and not doing so.'
+  +  cited_bad_consequences/2 'If you go ahead with %s, the bad consequence cited, %s, will follow.'
   +  claimed_exception/2 '%s is put forward as an exception to the rule %s.'
   +  conflict_goals/3 '%s has some other goals %s that conflict with %s.'
+  +  continues_trying/2 '%s would continue the effort to realize %s.'
   +  correctly_report/0 'Official rulebooks correctly report the rules in force.'
   +  corresponds/2 'In the other case, the counterpart of %s is %s.'
   +  data_set/2 '%s is a set of data or supposed facts in case %s.'
+  +  deliberating_agent/2 'It falls to %s to decide whether to go ahead with %s.'
   +  difference_against/3 '%s and %s differ in a way that tells against %s.'
   +  difference_for/3 '%s and %s differ in a way that tells in favour of %s.'
   +  do_obligator/0 'One must not do what is prohibited -obligatory-.'
@@ -91,6 +110,7 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
+  +  less_bad_as_means/2 'Being a means to the good end %[2]s would make %[1]s less bad.'
   +  less_harmful_per_occurrence/2 'Doing %s would make each occurrence of %s less harmful.'
   +  matters_more/2 '%s matters more than %s.'
   +  matters_to_decision/2 'The chance that action %s brings about %s is large enough, given what that consequence would be, to bear on whether the action should be performed.'
@@ -98,7 +118,9 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  may_be_worth_performing/2 'Action %s may be worth performing for the sake of %s.'
   +  may_bring_about/2 'The action %s may bring about %s.'
   +  may_occur/1 'An event %s has happened, or could happen.'
+  +  means_bad_outweighs/2 'As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end.'
   +  means_end/1 'Means %s should be regarded as an end.'
+  +  means_good_outweighs/2 'As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end.'
   +  more_acceptable_bringing/3 '%s would rather bring about %s than leave %s undone.'
   +  more_effective_means/4 'For %s, %s would realize %s more effectively than %s: more surely, sooner or at lower cost.'
   +  more_important_ends/0 'Ends are more important than the means used to achieve them.'
@@ -110,12 +132,14 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  not_normal/0 'Therefore, the situation is not normal.'
   +  official_rulebook/3 'In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s.'
   +  other_consequences/1 'Doing %s also has consequences of the opposite kind that outweigh the ones cited.'
-  +  ought_to_continue/2 'Therefore, %s ought to continue trying to realize %s.'
+  +  ought_to_continue/2 '%s ought to continue trying to realize %s.'
   +  part_is/2 'The part %s has %s.'
   +  part_whole/5 '%s can have %s only if at least one of %s, %s and %s has it.'
+  +  position_to_bring_about/1 'I am in a position to bring about %s.'
   +  position_to_know_group/2 'Group %s is in a special position to know that %s is true.'
   +  practicality_action/2 'As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s.'
   +  precedent_chain/3 'From %s to %s runs a chain of cases, each so like the next that an exception for one commits us to an exception for the next under the rule %s.'
+  +  precommitted/4 'What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s.'
   +  preventable_otherwise/2 'A course open to whoever would do %s could prevent %s.'
   +  promote_more_effectively/3 'There is a way for %s to promote the value %s more effectively than %s.'
   +  proper_sequence/0 'Sequence of proposition is dealt with in the appropriate order.'
@@ -123,6 +147,7 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  realize_more_effectively/3 'There is a way for %s to realize the goal %s more effectively than %s.'
   +  reapplication_sequence/3 'A chain of modus ponens steps leads from %s, in the clear area, through the grey area to %s, each step concerning %s.'
   +  reason_retracting_goal/2 '%s is a reason to give up commitment to goal %s.'
+  +  reassessment_against_continuing/2 'Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s.'
   +  reference_class/0 'Reference class of other agents who also might have brought about this event and also have same character is sufficient.'
   +  rule_changed/0 'The rule has changed since the publication of the rulebook.'
   +  same_meaning/3 'Speakers of %s believe that %s means the same as %s.'
@@ -136,7 +161,7 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   +  sufficient_evidence/0 'search for the evidence progress is sufficient.'
   +  synonymous/0 'Whenever expressions are referentially coextensive, they are synonymous.'
   +  too_slight/2 'In deciding on action %s, %s is too slight a consequence to count.'
-  +  waste_bad_thing/2 "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
+  +  waste_bad_thing/2 'If all the previous efforts of %s to realize %s were wasted, that would be a bad thing.'
   +  whole_is/2 'The whole %s has %s.'
   +  whole_of/4 '%s is made up of the parts %s, %s and %s.'
   +  worth_finding_out_first/2 'It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.'
@@ -175,7 +200,7 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   -  waste_bad_thing "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
   ~  also_committed/2 'Generally, when an arguer is committed to %s, it can be inferred that he is also commined to %s.' -> 'Generally, when an arguer is committed to %s, it can be inferred that he is also committed to %s.'
   ~  also_committed_questioned/3 'If arguer %s has commiued herself to proposition %s at some point in a dialogue, then it may be inferred that she is also committed to proposition %s, should the question of whether it is true become an issue later in the dialogue.' -> 'If arguer %s has committed herself to proposition %s at some point in a dialogue, then it may be inferred that she is also committed to proposition %s, should the question of whether it is true become an issue later in the dialogue.'
-  ~  assert_bad/2 'I hereby assert that in fact I wil l see to it that %s occurs if you bring about %s.' -> 'I hereby assert that in fact I will see to it that %s occurs if you bring about %s.'
+  ~  assert_bad/2 'I hereby assert that in fact I wil l see to it that %s occurs if you bring about %s.' -> 'I will bring about %[2]s if you go ahead with %[1]s.'
   ~  based_on_evidence/1 'The assertion %v is based on evidence.' -> 'The assertion %s is based on evidence.'
   ~  bring_about_more_effectively/2 'There exists an action that would bring about % more effectively than %s.' -> 'There exists an action that would bring about %s more effectively than %s.'
   ~  certainty_no_need/2 "In arguement %s property %s doesn't need to be certain for the sake of the argument." -> "In argument %s property %s doesn't need to be certain for the sake of the argument."
@@ -191,14 +216,19 @@ language: 392 -> 445 keys; keys only in clean: 87, only in original: 33, same ke
   ~  negative_affects/3 'The fact that value %s is negative affects the interpretation and therefore the evaluation of goal %s of agent %s, if value is bad, it supports commitment to goal.' -> 'That value %s is negative bears on how goal %s of agent %s is judged: a bad value counts against commitment to the goal.'
   ~  normal_true/1 'If thte situation were normal, %s would he true.' -> 'If the situation were normal, %s would be true.'
   ~  not_required/1 '%is not required.' -> '%s is not required.'
+  ~  occur/2 'If the respondent bring about %s then %s will occur.' -> 'If the respondent goes ahead with %s, then %s will occur.'
+  ~  only_way_prevent/2 'But the only way for you to prevent %s is bring about %s.' -> 'The only way for you to prevent %s is %s.'
   ~  other_consequences_presumption/2 'If I act on the presum ption that %s is not true, and A %s true, consequences %s will follow.' -> 'If I act on the presumption that %s is not true, and it is true, consequences %s will follow.'
   ~  popular_practice/1 '%s is a popular practice among those who are familiar with what is acceptable or not in regard to %s.' -> '%s is a popular practice among those who are familiar with what is acceptable or not in regard to it.'
+  ~  prevent/1 'Therefore, you ought to prevent %s if possible.' -> 'You ought to prevent %s if you can.'
   ~  receives_evaluation/2 '%s recieves the evaluation %s.' -> '%s receives the evaluation %s.'
   ~  right_to_do/2 'The right thing to do in %s, was to carry out action %s.' -> 'In %s, %s was the right course.'
   ~  rule_require/3 'Normally, rule %s requires or forbids a type o f action or inaction %s, which carries with it a sanction - penalty- %s.' -> 'Normally, rule %s requires or forbids a type of action or inaction %s, which carries with it a sanction - penalty- %s.'
   ~  sacrifice_value/2 '%s has a great value.' -> '%s has a great value %s.'
-  ~  situation_necessity/4 'As %s sets the situation, %s is a necessary or sufficient condition for caryying out %s, and tells %s this.' -> 'As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this.'
+  ~  situation_necessity/4 'As %s sets the situation, %s is a necessary or sufficient condition for caryying out %s, and tells %s this.' -> 'In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s.'
   ~  special_proposition/2 'A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.' -> '%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s.'
+  ~  stop_realize_wasted/2 'If %s stops trying to realize %s now, all previous efforts will be wasted.' -> 'If %s stopped trying to realize %s now, all the previous efforts would be wasted.'
   ~  sufficient_account/2 '%s itself as an explanation of %s apart from other alternative explanations availablle so far, is sufficient.' -> '%s itself as an explanation of %s apart from other alternative explanations available so far, is sufficient.'
+  ~  tells_intend/3 '%s intends to realize %s, and tells %s this.' -> '%s, intending to realize %s, told %s so.'
   ~  typical_example/1 'Example %s is an typical example of the kinds of cases the generalzation covers.' -> 'Example %s is an typical example of the kinds of cases the generalization covers.'
   ~  wrong_to_do/2 'The wrong thing to do in %s, was to carry out action %s.' -> 'In %s, %s was the wrong course.'

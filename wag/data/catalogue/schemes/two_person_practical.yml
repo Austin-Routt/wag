@@ -16,19 +16,21 @@ formulas:
   - tells_intend(A,X,B)
   - situation_necessity(B,Y,X,A)
   assumptions:
-  - possible_action(Y)
+  - possible_bring_about(A,Y)
   exceptions:
-  - alternative_means(A,X)
-  - goals_higher_priority(A,X)
-  - side_effect_other_act(B,A)
+  - realize_more_effectively(A,X,Y)
+  - incompatible_goal(A,X)
+  - bad_outweighs(Y,X)
   conclusions:
-  - should_carry_out(A,Y)
+  - should_do(A,Y)
 book:
 - entry: "23"
   title: Two-Person Practical Reasoning
   pages: 325-326
   match: exact
-  note: Same title and source (Appeal to Expert Opinion 1997, p. 163).
+  note: Same title and source (Appeal to Expert Opinion 1997, p. 163). Since 2026-11-26
+    four of its five questions are in practical reasoning's formulas (D093) and it
+    concludes should_do(A,Y) (D063).
   status: generated
 families:
 - family: F10
@@ -47,52 +49,76 @@ premise_map:
   status: generated
 - entry: "23"
   label: Conclusion
-  formulas: [{formula: 'should_carry_out(A,Y)', locus: conclusion}]
+  formulas: [{formula: 'should_do(A,Y)', locus: conclusion}]
+  note: '''unless he has better reasons not to'' is the exceptions'' and the questions''
+    work; names the agent, so bridge_from_agent carries it to should_be_performed(Y)
+    (D063)'
   status: generated
 critical_questions:
 - id: 23/CQ1
   book:
     entry: "23"
     label: CQ1
-  targets: [{formula: 'goals_higher_priority(A,X)', locus: exception}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'incompatible_goal(A,X)', locus: exception}]
+  note: a conflicting goal, practical reasoning's formula
+  paraphrase: Does A have another goal, perhaps more important, that the goal X works
+    against?
+  answer: 'The critic, who raises it with an argument. Against: another goal of A,
+    perhaps more important, that X works against, which undercuts the advice through
+    incompatible_goal(A,X). For: showing that the goals fit together, or that X comes
+    first.'
+  status: drafted by Claude Code, 2026-11-26
 - id: 23/CQ2
   book:
     entry: "23"
     label: CQ2
-  targets: [{formula: 'alternative_means(A,X)', locus: exception}]
-  note: arguments in the wrong order (see defects)
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'realize_more_effectively(A,X,Y)', locus: exception}]
+  note: alternative means read as a better means, scoped to the agent (D089); under
+    the premise's necessary reading an alternative no better denies the premise that
+    Y is necessary, and is an attack on that premise, not on the advice (D090, D006)
+  paraphrase: Is there a way for A to realize X more surely, sooner or at lower cost
+    than doing Y?
+  answer: 'The critic, who raises it with an argument. Against: a way for A to realize
+    X more surely, sooner or at lower cost than the advised Y, which undercuts the
+    advice through realize_more_effectively(A,X,Y). For: showing that Y is the best
+    way open to A.'
+  status: drafted by Claude Code, 2026-11-26
 - id: 23/CQ3
   book:
     entry: "23"
     label: CQ3
-  targets: [{formula: 'side_effect_other_act(B,A)', locus: exception}]
-  note: arguments in the wrong order (see defects)
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'bad_outweighs(Y,X)', locus: exception}]
+  note: 'the side effect that outweighs: WAG''s reading (D070, D091)'
+  paraphrase: Would doing Y have side effects that matter more than X?
+  answer: 'The critic, who raises it with an argument. Against: side effects of doing
+    Y that matter more than X, which undercuts the advice through bad_outweighs(Y,X).
+    For: showing that they are smaller than X, or avoidable.'
+  status: drafted by Claude Code, 2026-11-26
 - id: 23/CQ4
   book:
     entry: "23"
     label: CQ4
-  targets: [{formula: possible_action(Y), locus: assumption}]
-  paraphrase: ""
-  answer: ""
-  status: generated
+  targets: [{formula: 'possible_bring_about(A,Y)', locus: assumption}]
+  note: scoped to the agent (D088)
+  paraphrase: Can A do Y?
+  answer: 'The proponent, once asked. Against: showing that A cannot do Y, which undermines
+    possible_bring_about(A,Y). For: showing that A can.'
+  status: drafted by Claude Code, 2026-11-26
 - id: 23/CQ5
   book:
     entry: "23"
     label: CQ5
   targets: []
-  note: no formula
-  paraphrase: ""
-  answer: ""
-  status: generated
+  undercuts: true
+  note: 'no formula, an undercutting question (D093): under the premise''s necessary
+    reading another required step is no reason against the advised one'
+  paraphrase: Would A have to do other things besides Y to realize X?
+  answer: 'The critic, who raises it with an argument. Against: other actions A would
+    have to take besides Y, where the advice claims that Y is enough to realize X,
+    which undercuts the advice; where it claims that Y is needed, another required
+    step is no reason against Y (D093). For: showing that Y is enough, or that the
+    other actions are in hand.'
+  status: drafted by Claude Code, 2026-11-26
 summary:
   text: ""
   status: todo
@@ -100,7 +126,33 @@ contrasts:
 - scheme: practical_inference
   text: ""
   status: todo
-examples: []
+examples:
+- text: Lena tells her coach she wants to run a marathon in the spring. As the coach
+    sees it, building up to sixty kilometres a week is necessary for that, and he
+    tells her so. So Lena should build up to sixty kilometres a week, unless she has
+    better reasons not to.
+  coding: 'A = Lena; B = her coach; X = running a marathon in the spring; Y = building
+    up to sixty kilometres a week. Pressed: 23/CQ1 (She also wants to finish her degree
+    in the spring, and the training would take the evenings it needs); 23/CQ2 (Fewer,
+    longer runs get runners like her to a first marathon with less risk); 23/CQ3 (Her
+    knee would flare up; months without running matter more than one race); 23/CQ4
+    (She works double shifts; she cannot run sixty kilometres a week). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Sam tells his accountant he wants to open a second shop next year. As the
+    accountant sees it, paying off the van loan first is necessary for that, and she
+    tells him so. So Sam should pay off the van loan first.
+  coding: 'A = Sam; B = his accountant; X = opening a second shop next year; Y = paying
+    off the van loan first. It concludes should_do(A,Y) (D063); its exceptions are
+    practical reasoning''s formulas (D093). Pressed: 23/CQ4 (The loan has a penalty
+    for paying it off early that Sam cannot cover this year). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Saving each month contributes to opening a second shop, and that is Sam's
+    goal. So Sam should save each month.
+  coding: 'Near miss: P = Sam; X = saving each month; G = opening a second shop. One
+    person''s reasoning, with no advisor who tells the agent what the goal needs:
+    the argument from goal, not two-person practical reasoning. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
 discrepancies: []
 classification:
   source: ""
@@ -122,3 +174,7 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

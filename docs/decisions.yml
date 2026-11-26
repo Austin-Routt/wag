@@ -675,7 +675,7 @@ decisions:
       Both, as the book prints both readings (22.6.1): a negative variant (a
       bad end condemns its means) and a graded one, as the schemes library has
       them.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries: end_and_means_bad and end_and_means_less_bad, the negative and graded readings of 22.6.1, each linked partly, as end_and_means_1, the positive one, now is"
 
 - id: D023
   title: Questions borrowed from related schemes
@@ -698,7 +698,7 @@ decisions:
     decision: >-
       Yes, as derived questions, each with its source scheme and question
       recorded.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (13292.3's instance by recode_c4.py): end_and_means_1's means_bad_outweighs(X,Y), the consequence schemes' question of the opposite value (33/CQ3), and end_and_means_bad's means_good_outweighs(X,Y) (D093(g)); practical_goal's realize_more_effectively(P,G,X), incompatible_goal(P,G) and bad_outweighs(X,G), practical reasoning's questions on alternatives, conflicting goals and side effects (22.1 CQ1, CQ2, CQ5; 22.4 CQ1, CQ3, CQ7)"
 
 - id: D024
   title: Exceptions for the rule schemes
@@ -891,7 +891,7 @@ decisions:
     decision: >-
       Yes: the commitment form becomes a scheme of its own, as the schemes
       library's sunk_costs_precommitment (compendium 25).
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries: sunk_costs_precommitment, linked partly to 25 (the first person read as the agent P); sunk_costs stays, linked partly"
 
 - id: D032
   title: A doubtful classification
@@ -932,7 +932,7 @@ decisions:
     decision: >-
       An exception, the critic's burden, as D055's outweighing exceptions are:
       reassessment_against_continuing(A,X), as the schemes library has it.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries: waste's exception reassessment_against_continuing(A,X), 24/CQ2"
 
 - id: D034
   title: One domain formula for witnesses and positions to know
@@ -1469,7 +1469,7 @@ decisions:
       exception nobody raises is presumed not to hold, so an unknown agent
       would pass. Continuing an activity binds to the continuing action, not
       only to its goal.
-    recorded: "docs/proposals/D004-D075.yml; applied in part 2026-11-24 through edits.py: practical_inference and the two condition schemes conclude should_be_performed; to apply: the rest of the family with step C4 (appeal_to_vanity_ad_populum, the bridges) and the game at step C5"
+    recorded: "docs/proposals/D004-D075.yml, applied in part 2026-11-24 (practical_inference and the two condition schemes); docs/proposals/D022-D093.yml (version 2), applied 2026-11-26 through edits.py (PRACTICAL_C4): fear, danger, threat, ad_baculum, pragmatic_alternative and appeal_to_vanity_ad_populum conclude should_be_performed or its negation, their links partial; the bridges bridge_from_agent and bridge_from_continuing, with deliberating_agent(P,A) a premise (D093(e)) and the continuing bridge with practical reasoning's questions (D093(f)); help and distress (F16) with their family; the game at step C5"
 
 - id: D070
   title: Practical reasoning's side effects defeat whatever the weights
@@ -1899,7 +1899,7 @@ decisions:
       Yes: cited_bad_consequences(X,C), position_to_bring_about(C), and
       assert_bad(X,C) with a template that prints C before X (indexed
       templates, available since 2026-11-22). Its conclusion follows D063.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries: cited_bad_consequences(X,C), position_to_bring_about(C), and assert_bad(X,C) with an indexed template that prints C first, which the cleaning's gate reads since the same day"
 
 - id: D062
   title: Argument from danger concludes about the danger
@@ -1925,7 +1925,7 @@ decisions:
     decision: >-
       Yes: danger concludes about the action X: the negation of
       should_be_performed(X), by D063. Its templates are corrected with it.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries: danger concludes ¬should_be_performed(X); occur/2's template corrected"
 
 - id: D064
   title: Weighing consequences
@@ -2572,7 +2572,7 @@ decisions:
       has them", since without it a means condemned by a bad end could be
       defended only by a rebuttal. The replaced formulas' templates stay as
       orphans.
-    recorded: "docs/proposals/D022-D093.yml (version 2); to apply: with the proposal (step C4), walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (validate.py's R9 reads two_person_practical's goal from tells_intend(A,X,B) and bridge_from_continuing's from ought_to_continue(P,G), with planted tests; guidelines §3.1 and OC6)"
 
 # --- Decided ------------------------------------------------------------------
 

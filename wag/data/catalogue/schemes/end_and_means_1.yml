@@ -15,6 +15,8 @@ formulas:
   premises:
   - means_to_end(X,Y)
   - good(Y)
+  exceptions:
+  - means_bad_outweighs(X,Y)
   conclusions:
   - good(X)
 book:
@@ -22,8 +24,10 @@ book:
   title: Variant 1
   pages: "325"
   parent: "22.6"
-  match: exact
-  note: Same title and Perelman reference.
+  match: partial
+  note: 'Same title and Perelman reference. Partial since 2026-11-26: the entry prints
+    its readings in its parentheses, and this scheme is the positive one, y good and
+    x good; end_and_means_bad and end_and_means_less_bad are the others (D022).'
   status: generated
 families:
 - family: F10
@@ -38,12 +42,26 @@ premise_map:
 - entry: 22.6.1
   label: Premise 2
   formulas: [{formula: good(Y), locus: premise}]
+  note: the reading 'y is good'
   status: generated
 - entry: 22.6.1
   label: Conclusion
   formulas: [{formula: good(X), locus: conclusion}]
+  note: the reading 'x is good'
   status: generated
-critical_questions: []
+critical_questions:
+- id: walton/means_bad_outweighs
+  targets: [{formula: 'means_bad_outweighs(X,Y)', locus: exception}]
+  note: 'Borrowed from the consequence schemes (D023): 33/CQ3, whether consequences
+    of the opposite value should be taken into account, in a formula of its own: the
+    consequences'' bad_outweighs(A,G) types its first place as an action (positions.json),
+    and a means may be a state, as 13292.3''s is.'
+  paraphrase: Does X have bad consequences that matter more than the good end Y?
+  answer: 'The critic, who raises it with an argument. Against: bad consequences of
+    the means X that matter more than its good end Y, which undercuts the argument
+    through means_bad_outweighs(X,Y). For: showing that they are smaller than the
+    end''s good, or avoidable.'
+  status: drafted by Claude Code, 2026-11-26
 summary:
   text: Use it when a thing or measure X is valued because it is the means to an end
     Y that is good, to conclude that X is good as well. It concludes an evaluation
@@ -73,10 +91,14 @@ examples:
 - text: Curbing meat consumption would reduce health care costs.
   kialo: "13292.3"
   coding: 'X = reduced meat consumption; Y = reduced health-care costs. Stated: means_to_end(X,Y).
-    Supplied: good(Y). Conclusion: good(X). In Kialo it backs the claim that less
-    meat eating is good (13292.115''s good(G)), so the conclusion is an evaluation,
-    not an action.'
-  status: drafted by Claude Code, 2026-10-22
+    Supplied: good(Y). Conclusion: good(X). Since 2026-11-26 the instance lists the
+    exception means_bad_outweighs(X,Y) (D023); pressed: less meat in poor households
+    means less protein and iron where diets are already short of them, which matters
+    more than the savings on health care. The gold records 13292.121''s further consequence
+    without a formula: it ranks nothing, so it is a rebuttal (OC2). In Kialo it backs
+    the claim that less meat eating is good (13292.115''s good(G)), so the conclusion
+    is an evaluation, not an action.'
+  status: drafted by Claude Code, 2026-11-26
 - text: 'The new water-treatment plant is a good thing: it is how the bay will get
     clean again, and a clean bay benefits everyone who lives here.'
   coding: 'X = the new water-treatment plant; Y = a clean bay. Stated: means_to_end(X,Y),
@@ -89,7 +111,28 @@ examples:
     week, G = lower heating costs).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: Learning to cook is a means to eating well, and eating well is good. So learning
+    to cook is good.
+  coding: 'X = learning to cook; Y = eating well. Pressed: walton/means_bad_outweighs
+    (For him it would mean dropping the evening course his job depends on, which matters
+    more than eating well). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Free cooking classes would improve diets in the town, which is good. So the
+    town should offer them.
+  coding: 'Near miss: A = the town offering free cooking classes; G = better diets
+    in the town. A recommended action and its good consequence: positive consequences,
+    not the evaluation of a means by its end. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
 discrepancies:
+- kind: partial-link
+  about: 22.6.1
+  detail: 'walton.yml formalizes compendium 22.6.1 only in part: Same title and Perelman
+    reference. Partial since 2026-11-26: the entry prints its readings in its parentheses,
+    and this scheme is the positive one, y good and x good; end_and_means_bad and
+    end_and_means_less_bad are the others (D022).'
+  decision: ""
+  status: generated
 - kind: book-walton
   about: polarity
   detail: The book's variant 1 also runs with a bad end, which makes the means bad,
@@ -97,20 +140,22 @@ discrepancies:
     good(X), so neither the negative form nor the "less bad" conclusion can be coded.
   decision: 'Decided 2026-11-22 (D022): Both, as the book prints both readings (22.6.1):
     a negative variant (a bad end condemns its means) and a graded one, as the schemes
-    library has them. Not yet applied. Before: open: add a negative variant (from
-    a bad end to a bad means) or a graded conclusion to walton.yml. Until then, code
-    only the positive form with this scheme; a text that condemns a means for its
-    bad end is negative_consequences when it concludes against an action, and otherwise
-    other, with a note.'
+    library has them. Applied 2026-11-26 (proposal D022-D093): end_and_means_bad and
+    end_and_means_less_bad. Before: open: add a negative variant (from a bad end to
+    a bad means) or a graded conclusion to walton.yml. Until then, code only the positive
+    form with this scheme; a text that condemns a means for its bad end is negative_consequences
+    when it concludes against an action, and otherwise other, with a note.'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: critical questions
   detail: Neither the book (22.6.1 prints no questions) nor walton.yml (no assumptions
     or exceptions) gives the scheme critical questions; both premises can be challenged.
   decision: 'Decided 2026-11-22 (D023): Yes, as derived questions, each with its source
-    scheme and question recorded. Not yet applied. Before: open: whether to borrow
-    questions from the consequence schemes (33/CQ1–3), which apply to any argument
-    that values something by what it leads to.'
+    scheme and question recorded. Applied 2026-11-26 (proposal D022-D093): the exception
+    means_bad_outweighs(X,Y), the consequence schemes'' question of the opposite value
+    (33/CQ3), in a formula of its own, since a means may be a state. Before: open:
+    whether to borrow questions from the consequence schemes (33/CQ1–3), which apply
+    to any argument that values something by what it leads to.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -150,3 +195,7 @@ history:
   by: Claude Code
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     placed with the consequences (value-based); the missing questions recorded)'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

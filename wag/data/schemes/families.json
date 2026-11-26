@@ -500,6 +500,34 @@
      "scheme": "better_means",
      "relation": "related",
      "note": "answer scheme (D075, D089): concludes realize_more_effectively(P,G,A) of practical reasoning; since 2026-11-24"
+    },
+    {
+     "scheme": "end_and_means_bad",
+     "relation": "variant",
+     "compendium": "22.6.1",
+     "note": "of end_and_means_1, the entry's negative reading: a bad end condemns its means (decision D022, 2026-11-26); to end_and_means_1 a flip of the end's value, not a D053 polarity pair (they conclude two predicates)"
+    },
+    {
+     "scheme": "end_and_means_less_bad",
+     "relation": "variant",
+     "compendium": "22.6.1",
+     "note": "of end_and_means_1, the entry's graded reading: a good end makes a bad means less bad (decision D022, 2026-11-26)"
+    },
+    {
+     "scheme": "sunk_costs_precommitment",
+     "relation": "variant",
+     "compendium": "25",
+     "note": "of sunk_costs, the compendium's commitment form: a choice at T2, a commitment made at T1 (decision D031, 2026-11-26)"
+    },
+    {
+     "scheme": "bridge_from_agent",
+     "relation": "related",
+     "note": "a bridge (decision D063, 2026-11-26): from a conclusion that names an agent, should_do(P,A), to should_be_performed(A), with deliberating_agent(P,A) (D093)"
+    },
+    {
+     "scheme": "bridge_from_continuing",
+     "relation": "related",
+     "note": "a bridge (decision D063, 2026-11-26): from waste's ought_to_continue(P,G) to should_be_performed(A) for an action that continues the effort, with deliberating_agent(P,A) and practical reasoning's questions of the means (D093)"
     }
    ]
   },
@@ -520,6 +548,12 @@
      "scheme": "sunk_costs",
      "relation": "variant",
      "compendium": "25"
+    },
+    {
+     "scheme": "sunk_costs_precommitment",
+     "relation": "variant",
+     "compendium": "25",
+     "note": "of sunk_costs, the compendium's commitment form (decision D031, 2026-11-26)"
     }
    ]
   },

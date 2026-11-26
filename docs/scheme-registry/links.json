@@ -1,5 +1,5 @@
 {
- "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision. Also changed 2026-10-22: 28 also links, partly, to cause_to_effect_modal (audit N8). Changed 2026-10-22: 7, 8.1 and 8.2 link to the two-case forms of analogy and the practical analogies (decisions D001, D028 and D029, 2026-10-22); 8.1 and 8.2 are partial, their conclusions restated as should (not) be performed. Changed 2026-10-23: 33.1-33.4's CQ3 maps to each scheme's own sided exception (bad_outweighs or good_outweighs, naming the consequence the argument cites), which replaced the shared other_consequences (decision D055); 33.4 concludes should_be_performed(X), so it is partial, its conclusion restated in the game's vocabulary (decision D059), and its CQ1 and CQ2 map to strongly_occur(X,C) and bad_consequence(X,C). Changed 2026-11-25: 33.1 and 33.2 also link, partly, to their modal variants positive_consequences_modal and negative_consequences_modal (decision D008, proposal D008-D074): the premise in the modal mood, the conclusion kept modal, CQ1 and CQ2 at may_bring_about(A,G), CQ3 at the sided exception.",
+ "_note": "Links between the schemes of Walton, Reed & Macagno (2008), ch. 9 (the compendium, numbered as printed), and the schemes of walton.yml (walton-clean/walton.yml): for each compendium entry, which walton.yml scheme formalizes it, how closely (exact, partial, none), which walton.yml formula expresses each premise, the conclusion and each critical question. The book's text is not reproduced here: the labels (Major Premise, CQ1, ...) refer to it. Made from a transcription of the compendium pages, 2026-10-13. Changed 2026-10-22: 33.3 links to negative_consequences_reasoning, which the owner's decision added to walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"); it was linked partly to negative_consequences. Also changed 2026-10-22, after the owner's decisions on walton.yml (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"): 33.1-33.3's CQ3 maps to the new exception other_consequences(A); 33.3's and 49's base-case conclusions map to ¬should_be_performed(A); 19.2 links exactly, with its corrected conclusion. Also changed 2026-10-22: 10.2 links to whole_into_parts and 53 to full_slippery_slope, which the owner's decision brought into walton.yml from the upstream category files. Also changed 2026-10-22: 50 links to precedent_slippery_slope, written for WAG by the owner's decision. Also changed 2026-10-22: 28 also links, partly, to cause_to_effect_modal (audit N8). Changed 2026-10-22: 7, 8.1 and 8.2 link to the two-case forms of analogy and the practical analogies (decisions D001, D028 and D029, 2026-10-22); 8.1 and 8.2 are partial, their conclusions restated as should (not) be performed. Changed 2026-10-23: 33.1-33.4's CQ3 maps to each scheme's own sided exception (bad_outweighs or good_outweighs, naming the consequence the argument cites), which replaced the shared other_consequences (decision D055); 33.4 concludes should_be_performed(X), so it is partial, its conclusion restated in the game's vocabulary (decision D059), and its CQ1 and CQ2 map to strongly_occur(X,C) and bad_consequence(X,C). Changed 2026-11-25: 33.1 and 33.2 also link, partly, to their modal variants positive_consequences_modal and negative_consequences_modal (decision D008, proposal D008-D074): the premise in the modal mood, the conclusion kept modal, CQ1 and CQ2 at may_bring_about(A,G), CQ3 at the sided exception. Changed 2026-11-26 (proposal D022-D093, version 2): the recommendations to the one addressed (4.8, 34, 35, 35.1, 36, 37) conclude should_be_performed or its negation (D063, D062), so their links are partial, the conclusion restated; 35 names the threatened consequence (D060); 22.5 and 23 take practical reasoning's formulas (D093), 23 concluding should_do(A,Y) and keeping CQ5 without a formula; 24 maps CQ1 to possible_goal(X) and CQ2 to the exception reassessment_against_continuing(A,X) (D033); 25 links sunk_costs_precommitment partly, the first person read as the agent P (D031); 22.6.1 links its three readings partly, end_and_means_1 the positive one, end_and_means_bad and end_and_means_less_bad the others (D022).",
  "entries": [
   {
    "number": "1",
@@ -889,8 +889,8 @@
    "walton_links": [
     {
      "id": "appeal_to_vanity_ad_populum",
-     "match": "exact",
-     "reason": "Same title; source cites the 2008 book, p. 312.",
+     "match": "partial",
+     "reason": "Same title; source cites the 2008 book, p. 312. Partial since 2026-11-26: it concludes should_be_performed(X), the recommendation the other practical schemes conclude (D063), for the book's second-person 'you should carry out action x'.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -912,10 +912,10 @@
       }
      ],
      "conclusion_map": {
-      "note": "carry_out_action/1; practical_inference concluded it too until 2026-11-24, when D063 gave it should_be_performed (proposal D004-D075); this conclusion goes with the rest of the family (C4)",
+      "note": "'you should carry out action x', in WAG's vocabulary (D063); carry_out_action/1 is an orphan",
       "walton": [
        {
-        "formula": "carry_out_action(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -3679,7 +3679,7 @@
     {
      "id": "practical_goal",
      "match": "exact",
-     "reason": "Same title (\"Argument From Goal\") and source (Verheij 2003, p. 169).",
+     "reason": "Same title (\"Argument From Goal\") and source (Verheij 2003, p. 169). Since 2026-11-26 its goal premise is practical reasoning's goal_of_agent(P,G) (D093), and it borrows practical reasoning's questions (D023).",
      "premise_map": [
       {
        "compendium_label": "Major Premise",
@@ -3692,15 +3692,17 @@
       },
       {
        "compendium_label": "Minor Premise",
+       "note": "practical reasoning's goal premise (D093)",
        "walton": [
         {
-         "formula": "person_goal(P,G)",
+         "formula": "goal_of_agent(P,G)",
          "locus": "premise"
         }
        ]
       }
      ],
      "conclusion_map": {
+      "note": "names the agent; bridge_from_agent carries it to should_be_performed(X) (D063)",
       "walton": [
        {
         "formula": "should_do(P,X)",
@@ -3741,8 +3743,80 @@
    "walton_links": [
     {
      "id": "end_and_means_1",
-     "match": "exact",
-     "reason": "Same title and Perelman reference.",
+     "match": "partial",
+     "reason": "Same title and Perelman reference. Partial since 2026-11-26: the entry prints its readings in its parentheses, and this scheme is the positive one, y good and x good; end_and_means_bad and end_and_means_less_bad are the others (D022).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "means_to_end(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "the reading 'y is good'",
+       "walton": [
+        {
+         "formula": "good(Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the reading 'x is good'",
+      "walton": [
+       {
+        "formula": "good(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    },
+    {
+     "id": "end_and_means_bad",
+     "match": "partial",
+     "reason": "The entry's negative reading, y bad and x bad, as a scheme of its own (decision D022), as the schemes library has it, with the question of the opposite value borrowed as end_and_means_1's (D093(g)).",
+     "premise_map": [
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "means_to_end(X,Y)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "the reading 'y is bad'",
+       "walton": [
+        {
+         "formula": "bad(Y)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "the reading 'x is bad'",
+      "walton": [
+       {
+        "formula": "bad(X)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    },
+    {
+     "id": "end_and_means_less_bad",
+     "match": "partial",
+     "reason": "The entry's graded reading, y good and x less bad, as a scheme of its own (decision D022), as the schemes library has it; that x is bad is a premise the entry leaves implicit.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -3764,9 +3838,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "the reading 'x is less bad'",
       "walton": [
        {
-        "formula": "good(X)",
+        "formula": "less_bad_as_means(X,Y)",
         "locus": "conclusion"
        }
       ]
@@ -3896,7 +3971,7 @@
     {
      "id": "two_person_practical",
      "match": "exact",
-     "reason": "Same title and source (Appeal to Expert Opinion 1997, p. 163).",
+     "reason": "Same title and source (Appeal to Expert Opinion 1997, p. 163). Since 2026-11-26 four of its five questions are in practical reasoning's formulas (D093) and it concludes should_do(A,Y) (D063).",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -3911,16 +3986,17 @@
        "compendium_label": "Premise 2",
        "walton": [
         {
-         "formula": "situation_necessiy(B,Y,X,A)",
+         "formula": "situation_necessity(B,Y,X,A)",
          "locus": "premise"
         }
        ]
       }
      ],
      "conclusion_map": {
+      "note": "'unless he has better reasons not to' is the exceptions' and the questions' work; names the agent, so bridge_from_agent carries it to should_be_performed(Y) (D063)",
       "walton": [
        {
-        "formula": "should_carry_out(A,Y)",
+        "formula": "should_do(A,Y)",
         "locus": "conclusion"
        }
       ]
@@ -3928,45 +4004,47 @@
      "cq_map": [
       {
        "cq": "CQ1",
+       "note": "a conflicting goal, practical reasoning's formula",
        "walton": [
         {
-         "formula": "goals_higher_priority(A,X)",
+         "formula": "incompatible_goal(A,X)",
          "locus": "exception"
         }
        ]
       },
       {
        "cq": "CQ2",
-       "note": "arguments in the wrong order (see defects)",
+       "note": "alternative means read as a better means, scoped to the agent (D089); under the premise's necessary reading an alternative no better denies the premise that Y is necessary, and is an attack on that premise, not on the advice (D090, D006)",
        "walton": [
         {
-         "formula": "alternative_means(A,X)",
+         "formula": "realize_more_effectively(A,X,Y)",
          "locus": "exception"
         }
        ]
       },
       {
        "cq": "CQ3",
-       "note": "arguments in the wrong order (see defects)",
+       "note": "the side effect that outweighs: WAG's reading (D070, D091)",
        "walton": [
         {
-         "formula": "side_effect_other_act(B,A)",
+         "formula": "bad_outweighs(Y,X)",
          "locus": "exception"
         }
        ]
       },
       {
        "cq": "CQ4",
+       "note": "scoped to the agent (D088)",
        "walton": [
         {
-         "formula": "possible_action(Y)",
+         "formula": "possible_bring_about(A,Y)",
          "locus": "assumption"
         }
        ]
       },
       {
        "cq": "CQ5",
-       "note": "no formula",
+       "note": "no formula, an undercutting question (D093): under the premise's necessary reading another required step is no reason against the advised one",
        "walton": []
       }
      ]
@@ -3993,7 +4071,7 @@
     {
      "id": "waste",
      "match": "exact",
-     "reason": "Same title and both references.",
+     "reason": "Same title and both references. Since 2026-11-26 the book's second question is an exception (D033), and the goal's possibility reads possible_goal(X) (D093).",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -4015,6 +4093,7 @@
       }
      ],
      "conclusion_map": {
+      "note": "names the agent and the goal; bridge_from_continuing carries it to the continuing action (D063)",
       "walton": [
        {
         "formula": "ought_to_continue(A,X)",
@@ -4027,15 +4106,20 @@
        "cq": "CQ1",
        "walton": [
         {
-         "formula": "posible(X)",
+         "formula": "possible_goal(X)",
          "locus": "assumption"
         }
        ]
       },
       {
        "cq": "CQ2",
-       "note": "no formula",
-       "walton": []
+       "note": "the reassessment from now on, the critic's (D033)",
+       "walton": [
+        {
+         "formula": "reassessment_against_continuing(A,X)",
+         "locus": "exception"
+        }
+       ]
       }
      ]
     }
@@ -4089,6 +4173,56 @@
       "walton": [
        {
         "formula": "should_be_performed(A)",
+        "locus": "conclusion"
+       }
+      ]
+     },
+     "cq_map": []
+    },
+    {
+     "id": "sunk_costs_precommitment",
+     "match": "partial",
+     "reason": "The compendium's form of argument from sunk costs (decision D031), as the schemes library has it: the choice at t2 and the pre-commitment at t1 (2008, pp. 326-327; Walton 2002, p. 489). Partial: the book's first person 'I' is the agent P, as for 22.1-22.3. sunk_costs, the form with costs already incurred, stays linked partly.",
+     "premise_map": [
+      {
+       "compendium_label": "Time definitions",
+       "note": "t1 and t2 are the variables T1 and T2",
+       "walton": [
+        {
+         "formula": "choice_at(T2,A)",
+         "locus": "premise"
+        },
+        {
+         "formula": "precommitted(P,A,T1,T2)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 1",
+       "walton": [
+        {
+         "formula": "choice_at(T2,A)",
+         "locus": "premise"
+        }
+       ]
+      },
+      {
+       "compendium_label": "Premise 2",
+       "note": "the book's 'I' is the agent P",
+       "walton": [
+        {
+         "formula": "precommitted(P,A,T1,T2)",
+         "locus": "premise"
+        }
+       ]
+      }
+     ],
+     "conclusion_map": {
+      "note": "'I should choose A': names the agent, so bridge_from_agent carries it to should_be_performed(A) (D063)",
+      "walton": [
+       {
+        "formula": "should_do(P,A)",
         "locus": "conclusion"
        }
       ]
@@ -5802,8 +5936,8 @@
    "walton_links": [
     {
      "id": "pragmatic_alternative",
-     "match": "exact",
-     "reason": "Same title and source (Scare Tactics 2000, p. 142).",
+     "match": "partial",
+     "reason": "Same title and source (Scare Tactics 2000, p. 142). Partial since 2026-11-26: it concludes should_be_performed(A) (D063), for the book's second-person ought, 'practically speaking'.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -5825,9 +5959,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "'you should (ought to, practically speaking) bring about A', in WAG's vocabulary (D063)",
       "walton": [
        {
-        "formula": "do_other(A)",
+        "formula": "should_be_performed(A)",
         "locus": "conclusion"
        }
       ]
@@ -5851,32 +5986,29 @@
    "walton_links": [
     {
      "id": "treat",
-     "match": "exact",
-     "reason": "Same scheme (\"Treat\" for \"Threat\"); source A Pragmatic Theory of Fallacy 1995, p. 157.",
+     "match": "partial",
+     "reason": "Same scheme; source A Pragmatic Theory of Fallacy 1995, p. 157. Since 2026-11-26 its premises name the threatened consequence where the book does (D060); partial: it concludes ¬should_be_performed(X) (D063), for the book's 'you had better not bring about A'.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
-       "note": "B is not passed",
        "walton": [
         {
-         "formula": "cited_bad_consequences(X)",
+         "formula": "cited_bad_consequences(X,C)",
          "locus": "premise"
         }
        ]
       },
       {
        "compendium_label": "Premise 2",
-       "note": "the action X is passed where the threatened consequence B belongs",
        "walton": [
         {
-         "formula": "position_to_know(X)",
+         "formula": "position_to_bring_about(C)",
          "locus": "premise"
         }
        ]
       },
       {
        "compendium_label": "Premise 3",
-       "note": "arguments reversed",
        "walton": [
         {
          "formula": "assert_bad(X,C)",
@@ -5886,9 +6018,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "'you had better not bring about A', in WAG's vocabulary (D063)",
       "walton": [
        {
-        "formula": "not_bring_about(X)",
+        "formula": "¬should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -5912,8 +6045,8 @@
    "walton_links": [
     {
      "id": "ad_baculum",
-     "match": "exact",
-     "reason": "Same title (\"Treat\" for \"Threat\") and source (Scare Tactics 2000, p. 140).",
+     "match": "partial",
+     "reason": "Same title and source (Scare Tactics 2000, p. 140). Partial since 2026-11-26: it concludes should_be_performed(X) (D063), for the book's second-person ought, 'practically speaking'.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -5935,9 +6068,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "'you should (ought to, practically speaking) bring about A', in WAG's vocabulary (D063)",
       "walton": [
        {
-        "formula": "do_other(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -5961,8 +6095,8 @@
    "walton_links": [
     {
      "id": "fear",
-     "match": "exact",
-     "reason": "Same title and source (Scare Tactics 2000, p. 22).",
+     "match": "partial",
+     "reason": "Same title and source (Scare Tactics 2000, p. 22). Partial since 2026-11-26: it concludes should_be_performed(X) (D063), for the book's 'you ought to bring about A'.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -5984,7 +6118,7 @@
       },
       {
        "compendium_label": "Premise 3",
-       "note": "the \"Therefore\" template mirrors the book's Premise 3",
+       "note": "the book prints it as an intermediate conclusion ('Therefore'); its template no longer says so (D093)",
        "walton": [
         {
          "formula": "prevent(Y)",
@@ -6003,9 +6137,10 @@
       }
      ],
      "conclusion_map": {
+      "note": "'you ought to bring about A', in WAG's vocabulary (D063)",
       "walton": [
        {
-        "formula": "ought_to_bring_about(X)",
+        "formula": "should_be_performed(X)",
         "locus": "conclusion"
        }
       ]
@@ -6029,8 +6164,8 @@
    "walton_links": [
     {
      "id": "danger",
-     "match": "exact",
-     "reason": "Same title and source (Scare Tactics 2000, p. 173).",
+     "match": "partial",
+     "reason": "Same title and source (Scare Tactics 2000, p. 173). Partial since 2026-11-26: it concludes about the action (D062), ¬should_be_performed(X) (D063), without the book's 'on balance', which Walton calls important: the weights and the other arguments about X do that work.",
      "premise_map": [
       {
        "compendium_label": "Premise 1",
@@ -6052,10 +6187,10 @@
       }
      ],
      "conclusion_map": {
-      "note": "takes the danger Y, not the action X",
+      "note": "'(on balance) you should not bring about A': about the action X, not the danger Y (D062)",
       "walton": [
        {
-        "formula": "should_not(Y)",
+        "formula": "¬should_be_performed(X)",
         "locus": "conclusion"
        }
       ]

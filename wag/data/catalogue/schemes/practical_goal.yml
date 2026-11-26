@@ -14,7 +14,11 @@ formulas:
   variables: [P, X, G]
   premises:
   - contributing_action(X,G)
-  - person_goal(P,G)
+  - goal_of_agent(P,G)
+  exceptions:
+  - realize_more_effectively(P,G,X)
+  - incompatible_goal(P,G)
+  - bad_outweighs(X,G)
   conclusions:
   - should_do(P,X)
 book:
@@ -23,7 +27,9 @@ book:
   pages: "325"
   parent: "22"
   match: exact
-  note: Same title ("Argument From Goal") and source (Verheij 2003, p. 169).
+  note: Same title ("Argument From Goal") and source (Verheij 2003, p. 169). Since
+    2026-11-26 its goal premise is practical reasoning's goal_of_agent(P,G) (D093),
+    and it borrows practical reasoning's questions (D023).
   status: generated
 families:
 - family: F10
@@ -38,13 +44,48 @@ premise_map:
   status: generated
 - entry: "22.5"
   label: Minor Premise
-  formulas: [{formula: 'person_goal(P,G)', locus: premise}]
+  formulas: [{formula: 'goal_of_agent(P,G)', locus: premise}]
+  note: practical reasoning's goal premise (D093)
   status: generated
 - entry: "22.5"
   label: Conclusion
   formulas: [{formula: 'should_do(P,X)', locus: conclusion}]
+  note: names the agent; bridge_from_agent carries it to should_be_performed(X) (D063)
   status: generated
-critical_questions: []
+critical_questions:
+- id: walton/realize_more_effectively
+  targets: [{formula: 'realize_more_effectively(P,G,X)', locus: exception}]
+  note: 'Borrowed from practical reasoning (D023): its questions on other means (22.1
+    CQ2 and CQ3, 22.4 CQ3 and CQ4), read as a better means and scoped to the agent
+    (D089), in its formula. 22.5 prints no questions.'
+  paraphrase: Is there a way for P to realize G more surely, sooner or at lower cost
+    than by doing X?
+  answer: 'The critic, who raises it with an argument. Against: a way for P to reach
+    G more surely, sooner or at lower cost than X, which undercuts the argument through
+    realize_more_effectively(P,G,X). For: showing that X is the best way open to P,
+    or that the other way is not open to P.'
+  status: drafted by Claude Code, 2026-11-26
+- id: walton/incompatible_goal
+  targets: [{formula: 'incompatible_goal(P,G)', locus: exception}]
+  note: 'Borrowed from practical reasoning (D023): its question on conflicting goals
+    (22.1 CQ1, 22.4 CQ1), in its formula, with the agent P.'
+  paraphrase: Does P have another goal that G works against?
+  answer: 'The critic, who raises it with an argument. Against: another goal of P
+    that G works against, and that matters to P, which undercuts the argument through
+    incompatible_goal(P,G). For: showing that the goals can be pursued together, or
+    that the other goal gives way.'
+  status: drafted by Claude Code, 2026-11-26
+- id: walton/bad_outweighs
+  targets: [{formula: 'bad_outweighs(X,G)', locus: exception}]
+  note: 'Borrowed from practical reasoning (D023): its question on consequences (22.1
+    CQ5, 22.4 CQ7), read as the side effect that outweighs, WAG''s reading (D070,
+    D091), in its formula. A side effect that does not outweigh G is a rebuttal, not
+    this exception.'
+  paraphrase: Would doing X have bad consequences that matter more than G?
+  answer: 'The critic, who raises it with an argument. Against: bad consequences of
+    X that matter more than G, which undercuts the argument through bad_outweighs(X,G).
+    For: showing that they are smaller than G, or can be avoided.'
+  status: drafted by Claude Code, 2026-11-26
 summary:
   text: Use it when a person or body P is said to have a goal G and an act X helps
     toward G, to conclude that P should do X. It is a third-person form of practical
@@ -73,14 +114,14 @@ examples:
     evening clinic for minor injuries would help with that, so the hospital should
     open one.
   coding: 'P = the hospital; G = shorter waiting times in the emergency department;
-    X = open an evening clinic for minor injuries. Stated: person_goal(P,G), contributing_action(X,G)
+    X = open an evening clinic for minor injuries. Stated: goal_of_agent(P,G), contributing_action(X,G)
     ("would help"). Supplied: none. Conclusion: should_do(P,X).'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-26
 - text: Maria wants to run a marathon next year. Joining a running club would get
     her training on track, so she ought to sign up.
   coding: 'P = Maria; G = run a marathon next year; X = join a running club. Stated:
-    person_goal(P,G), contributing_action(X,G). Supplied: none. Conclusion: should_do(P,X).'
-  status: drafted by Claude Code, 2026-10-22
+    goal_of_agent(P,G), contributing_action(X,G). Supplied: none. Conclusion: should_do(P,X).'
+  status: drafted by Claude Code, 2026-11-26
 - text: Rationing meat via personal carbon budgets/allowances (credits) where everybody
     in a country can consume a small amount of meat but larger amounts cost extra
     … would help reduce carbon emissions.
@@ -93,13 +134,39 @@ examples:
     it does not claim that rationing does better (D006, D066).'
   near_miss: true
   status: drafted by Claude Code, 2026-11-24
+- text: Walking to school contributes to getting more exercise. Maya's goal is to
+    get more exercise. So Maya should walk to school.
+  coding: 'P = Maya; X = walking to school; G = getting more exercise. Pressed: walton/realize_more_effectively
+    (Joining the swimming club would give her the same exercise in half the time);
+    walton/incompatible_goal (She also wants to sleep longer, and walking means leaving
+    forty minutes earlier); walton/bad_outweighs (The road has no pavement for a mile:
+    the risk matters more than the exercise). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Learning Spanish contributes to working in Madrid, and Jo's goal is to work
+    in Madrid. So Jo should learn Spanish.
+  coding: 'P = Jo; X = learning Spanish; G = working in Madrid. It concludes should_do(P,X),
+    naming the agent; bridge_from_agent carries it to the recommendation when Jo is
+    the one deciding (D063). Pressed: walton/incompatible_goal (Jo also wants to finish
+    the engineering degree this year, and evening classes would take the time it needs).
+    (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Walking to school brings more exercise, and more exercise is good. So children
+    should walk to school.
+  coding: 'Near miss: A = children walking to school; G = more exercise. A good consequence,
+    with no agent''s goal: positive consequences, not the argument from goal. (proposal
+    D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
 discrepancies:
 - kind: other
   about: critical questions
   detail: Neither the book (22.5 prints no questions) nor walton.yml (no assumptions
     or exceptions) gives the scheme critical questions; both premises can be challenged.
   decision: 'Decided 2026-11-22 (D023): Yes, as derived questions, each with its source
-    scheme and question recorded. Not yet applied. Before: open: whether to borrow
+    scheme and question recorded. Applied 2026-11-26 (proposal D022-D093): realize_more_effectively(P,G,X),
+    incompatible_goal(P,G) and bad_outweighs(X,G), practical reasoning''s questions
+    on other means, conflicting goals and side effects, asked as walton/ questions,
+    with the goal premise goal_of_agent(P,G) (D093). Before: open: whether to borrow
     22.1''s questions (alternatives, conflicting goals, side effects), which apply
     to any goal-means argument.'
   status: drafted by Claude Code, 2026-10-22
@@ -146,3 +213,7 @@ history:
 - date: "2026-11-24"
   by: Claude Code
   what: The 13292.147 near miss follows the gold's recode for proposal D004-D075.
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

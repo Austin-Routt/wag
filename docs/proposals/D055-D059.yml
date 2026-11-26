@@ -717,8 +717,9 @@ examples:
     note: >-
       The bad consequence is one the arguer undertakes to bring about, the
       disjunctive threat (35.1); the prudential form cites a consequence that
-      follows of itself. Its conclusion meets no should_be_performed claim
-      (D063). Version 1 coded
+      follows of itself. Its conclusion met no should_be_performed claim
+      (D063); since 2026-11-26 it concludes should_be_performed(X), and so
+      meets them (proposal D022-D093). Version 1 coded
       this text as threat (35), whose formulas name the wrong variables
       (D060).
 

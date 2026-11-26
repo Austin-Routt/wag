@@ -6,10 +6,10 @@
   "items.json": "db9e8468bb41f4a0078e93f0252c615e05282ffe48fd9ab0dce5fcff8bc0771f",
   "lexicon.json": "e4e563a89277c02b1ba49169ccf829d73c94914e948d076e5931f50d382ff688",
   "case.json": "5857394dbd7d4f058dfa059567888fa950d51c4be9cdcd3294f8a08e8f35df80",
-  "walton.yml": "5cda0fb8439a809c10756edc97ed109de2d52e21d8246a48880027efd6281cc9",
+  "walton.yml": "be58e2c0d09f712f84104ae209dd3bb2b160f950eb7191e50b1d3baeb455f426",
   "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
-  "links.json": "864a47c2ab53b406aede731d40df5d6a5bdc14d5211ae51c6bf9f3b3b1905a9a",
-  "positions.json": "ce62492493b653247058136e8610964b970ae9cbd7b43ea17a63c27bfacee5b3",
+  "links.json": "a2d3f08a789873229fd003fa1a0f4538c71d367b297dcf2c35fd15d9e3c02124",
+  "positions.json": "a31e0139a85cee88aebcf41861c2527b50ad74293a9c8ac1f53cc1fd85773792",
   "nascq/schemes.json": "8616f56cde01fbb4372adb745410f7766cfda756889a4ce422d5979a8cb398b5",
   "nascq/critical_questions.json": "cbc86ff8be867a5ae21376da4403e566306e9c294e0fb1255ecb133720ab5227",
   "nascq/edges.json": "6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8"
@@ -5452,6 +5452,13 @@
        "formula": "good(reduced_health_care_costs)",
        "en": "'health care costs are reduced' is good.",
        "status": "supplied"
+      },
+      {
+       "role": "exception",
+       "formula": "means_bad_outweighs(reduced_meat_consumption,reduced_health_care_costs)",
+       "en": "As a means to the good end 'health care costs are reduced', 'less meat is demanded and consumed (and so less is produced)' would have bad consequences that matter more than that end.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-26 (decision D023, proposal D022-D093): end_and_means_1 borrows the consequence schemes' question of the opposite value, the critic's to support."
       }
      ],
      "conclusion": {
@@ -5513,7 +5520,17 @@
    },
    "adjudication": {
     "changed_fields": [],
-    "reason": "agreed"
+    "reason": "agreed",
+    "recoded": [
+     {
+      "date": "2026-11-26",
+      "by": "proposal D022-D093 (recode_c4.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "end_and_means_1's new exception, means_bad_outweighs (D023), supplied"
+     }
+    ]
    }
   },
   {

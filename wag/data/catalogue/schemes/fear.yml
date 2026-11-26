@@ -17,13 +17,15 @@ formulas:
   - prevent(Y)
   - only_way_prevent(Y,X)
   conclusions:
-  - ought_to_bring_about(X)
+  - should_be_performed(X)
 book:
 - entry: "36"
   title: Argument From Fear Appeal
   pages: 333-334
-  match: exact
-  note: Same title and source (Scare Tactics 2000, p. 22).
+  match: partial
+  note: 'Same title and source (Scare Tactics 2000, p. 22). Partial since 2026-11-26:
+    it concludes should_be_performed(X) (D063), for the book''s ''you ought to bring
+    about A''.'
   status: generated
 families:
 - family: F15
@@ -42,7 +44,8 @@ premise_map:
 - entry: "36"
   label: Premise 3
   formulas: [{formula: prevent(Y), locus: premise}]
-  note: the "Therefore" template mirrors the book's Premise 3
+  note: the book prints it as an intermediate conclusion ('Therefore'); its template
+    no longer says so (D093)
   status: generated
 - entry: "36"
   label: Premise 4
@@ -50,7 +53,8 @@ premise_map:
   status: generated
 - entry: "36"
   label: Conclusion
-  formulas: [{formula: ought_to_bring_about(X), locus: conclusion}]
+  formulas: [{formula: should_be_performed(X), locus: conclusion}]
+  note: '''you ought to bring about A'', in WAG''s vocabulary (D063)'
   status: generated
 critical_questions: []
 summary:
@@ -105,8 +109,41 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
-examples: []
-discrepancies: []
+examples:
+- text: If you don't get the brakes fixed before the trip, you could crash on the
+    mountain descent. That would be terrible for you, and you ought to avoid it if
+    you can; fixing the brakes is the only way. Get them fixed.
+  coding: 'X = getting the brakes fixed before the trip; Y = a crash on the mountain
+    descent. Pressed: a challenge of only_way_prevent(Y,X) (You could take the valley
+    road and avoid the descent altogether); a challenge of not_do_appear(X,Y) (The
+    garage checked them last week; they are worn but within the limits). (proposal
+    D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: If you don't back up your thesis, one disk failure will wipe out two years
+    of work. Losing it would be a disaster for you, and you should prevent that if
+    you can; a backup is the only way. Back it up.
+  coding: 'X = backing up the thesis files; Y = losing two years of thesis work. Since
+    2026-11-26 the conclusion is the recommendation itself, should_be_performed(X),
+    which an argument from negative consequences against backing up would meet. Pressed:
+    a challenge of not_do_appear(X,Y) (The university''s server already keeps nightly
+    copies of the thesis folder). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: A meat tax would make food less affordable for the poor.
+  kialo: "13292.7"
+  coding: 'Near miss: A = governments putting a tax on meat; G = food becoming less
+    affordable for the poor. A bad consequence of the action, with no appeal to the
+    respondent''s fear and no claim that acting is the only way to avoid it: negative
+    consequences, not fear. The gold''s coding. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
+discrepancies:
+- kind: partial-link
+  about: "36"
+  detail: 'walton.yml formalizes compendium 36 only in part: Same title and source
+    (Scare Tactics 2000, p. 22). Partial since 2026-11-26: it concludes should_be_performed(X)
+    (D063), for the book''s ''you ought to bring about A''.'
+  decision: ""
+  status: generated
 classification:
   source: ""
   reasoning: ""
@@ -127,3 +164,7 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

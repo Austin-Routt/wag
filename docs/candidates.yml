@@ -1859,7 +1859,7 @@ candidates:
           Y: the photos being sent to your employer
         note: The threat is stated outright, so it is the disjunctive threat (35.1), not a warning.
     needs:
-      - "D060 (threat's variables) and D063 (threat's and ad baculum's conclusions) first, so that a warning recoded as a threat meets the debate."
+      - "D060 (threat's variables) and D063 (threat's and ad baculum's conclusions) first, so that a warning recoded as a threat meets the debate. Met on 2026-11-26 (proposal D022-D093)."
     open:
       - "An exception that defeats the prudential argument, or a link that recodes it as a threat? Not yet looked for in Kialo."
 
@@ -1880,7 +1880,7 @@ candidates:
       date: "2026-11-22"
       by: owner (standing rule of 2026-11-22)
       result: add
-      recorded: "docs/decisions.yml D063: the rule, applied to walton.yml in stage 2"
+      recorded: "docs/decisions.yml D063: the rule, applied to walton.yml in part on 2026-11-24 (proposal D004-D075: practical_inference and the condition schemes) and on 2026-11-26 (proposal D022-D093: fear, danger, threat, ad_baculum, pragmatic_alternative and the appeal to vanity conclude should_be_performed or its negation; practical_goal, two_person_practical, waste and the commitment form of sunk costs through the bridges bridge_from_agent and bridge_from_continuing); help and distress with their family (F16)"
     found:
       - "the independent review of proposal D055-D059, version 1, 2026-10-22"
     confidence: high
@@ -1910,7 +1910,7 @@ candidates:
     engine:
       - "The review of D055-D059 v1, test RD5: a prudential argument for X meets negative consequences, the slippery slope's base case and the negative practical analogy on one issue, and has no contact with danger, threat, fear or the pragmatic argument from alternatives."
     needs:
-      - "D062 (danger's variable) and D060 (threat's) first; help, distress and two-person practical reasoning name an agent, which should_be_performed does not."
+      - "D062 (danger's variable) and D060 (threat's) first; help, distress and two-person practical reasoning name an agent, which should_be_performed does not. Met on 2026-11-26 (proposal D022-D093): D060 and D062 applied, and the agent's conclusions reach should_be_performed through a bridge whose premise is that the decision is the agent's (D093)."
 
   # --- predicting-agents -------------------------------------------------------
   - id: C009

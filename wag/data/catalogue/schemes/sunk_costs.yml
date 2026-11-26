@@ -103,6 +103,10 @@ contrasts:
     as too much to write off; choose waste when it says that stopping would make the
     agent''s efforts toward a goal come to nothing.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: sunk_costs_precommitment
+  text: Choose sunk_costs_precommitment when the text cites a commitment made at an
+    earlier time, not the amount spent.
+  status: drafted by Claude Code, 2026-11-26
 - scheme: sacrifice
   text: Choose sacrifice when the text infers that something is valuable because much
     was given up for it; choose sunk_costs when it infers that an action should be
@@ -153,11 +157,13 @@ discrepancies:
     approximately (sunk_costs(A,C), too_high_to_waste(C)).'
   decision: 'Decided 2026-11-22 (D031): Yes: the commitment form becomes a scheme
     of its own, as the schemes library''s sunk_costs_precommitment (compendium 25).
-    Not yet applied. Before: open: whether to add the book''s commitment form to walton.yml
-    as a scheme of its own; the book''s ch. 4 treats sunk costs as argument from commitment
-    applied to a decision about action (p. 135). Until then, code a text that argues
-    from an earlier commitment with this scheme only if it also cites what has been
-    spent, and otherwise as other, with a note.'
+    Applied 2026-11-26 (proposal D022-D093): sunk_costs_precommitment, linked partly
+    to 25 (the first person read as the agent P). Before: open: whether to add the
+    book''s commitment form to walton.yml as a scheme of its own; the book''s ch.
+    4 treats sunk costs as argument from commitment applied to a decision about action
+    (p. 135). Until then, code a text that argues from an earlier commitment with
+    this scheme only if it also cites what has been spent, and otherwise as other,
+    with a note.'
   status: drafted by Claude Code, 2026-10-22
 - kind: book-walton
   about: feasible(A), future_losses_outweigh(A)
@@ -213,3 +219,7 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the contrast with waste cites p. 135 as well as pp. 10–11; the near miss is the
     prudential form)'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

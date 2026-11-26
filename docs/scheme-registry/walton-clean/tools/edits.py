@@ -965,4 +965,180 @@ CONSEQUENCES_C3 += [insert(1926, text, ADD, _HR, scheme='harm_reduction') for te
     '',
 ]]
 
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3
+# ----------------------------------------------------------------------
+# 2026-11-26: the rest of the first family (decisions D022, D023, D031,
+# D033, D060, D062 and D063, taken under the owner's standing rule of
+# 2026-11-22, and D093, found in drafting and in the review of the
+# proposal's first version, decided under the owner's instruction of
+# 2026-11-25 to go with the recommended choices; WAG's
+# docs/proposals/D022-D093.md, version 2, after independent reviews). The
+# recommendations to the one addressed conclude should_be_performed(A) or
+# its negation (D063); threat names the threatened consequence (D060);
+# danger concludes about the action (D062); conclusions that name an agent
+# keep it and meet the recommendation through a bridge whose premise its
+# arguer supports (D063); the commitment form of sunk costs (D031); waste's
+# reassessment (D033); end and means, negative and graded (D022), with
+# borrowed questions (D023); and the repairs of D093. Templates are our own.
+_C4V = "proposal D022-D093"
+_C4 = "Decided under the owner's standing rule of 2026-11-22 (" + _C4V + ")"
+_C4N = "Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (" + _C4V + ")"
+_D063 = ("D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim "
+         "the consequence and practical-reasoning schemes conclude, so that it meets them. " + _C4)
+_D060 = "D060: the threat names the threatened consequence C where the book does (35). " + _C4
+_D062 = "D062: danger concludes about the action, not the danger (37). " + _C4
+_D022 = "D022: a variant of end and means 1, one reading of 22.6.1. " + _C4
+_D022G = ("D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the "
+          "question of the opposite value, as end and means 1 does (D093(g)). " + _C4 + "; D093: " + _C4N)
+_D023 = "D023: a question borrowed from a related scheme, its source recorded in the proposal. " + _C4
+_D031 = "D031: the commitment form of sunk costs (25), a scheme of its own. " + _C4
+_D033 = "D033: the reassessment from now on (24, CQ2), an exception, the critic's. " + _C4
+_D093 = ("D093: found in drafting step C4 and in the review of its first version: practical reasoning's "
+         "formulas for the goal and the questions, the goal's possibility, and the templates of the changed "
+         "schemes. " + _C4N)
+_BR = ("D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its "
+       "arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the "
+       "continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). " + _C4 + "; "
+       "D093: " + _C4N)
+_TA = "template for the formulas of proposal D022-D093, in our own words"
+PRACTICAL_C4 = [
+    sub(40, 'I hereby assert that in fact I will see to it that %s occurs if you bring about %s.', 'I will bring about %[2]s if you go ahead with %[1]s.', OWN, _D060 + " The template, in our own words."),
+    sub(250, 'If the respondent bring about %s then %s will occur.', 'If the respondent goes ahead with %s, then %s will occur.', OWN, _D062 + " The template, in our own words."),
+    sub(252, 'But the only way for you to prevent %s is bring about %s.', 'The only way for you to prevent %s is %s.', OWN, _D093 + " The template, in our own words."),
+    sub(260, 'Therefore, %s ought to continue trying to realize %s.', '%s ought to continue trying to realize %s.', OWN, _D093 + " The template, in our own words."),
+    sub(295, 'Therefore, you ought to prevent %s if possible.', 'You ought to prevent %s if you can.', OWN, _D093 + " The template, in our own words."),
+    sub(344, 'As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this.', 'In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s.', OWN, _D093 + " The template, in our own words."),
+    sub(353, 'If %s stops trying to realize %s now, all previous efforts will be wasted.', 'If %s stopped trying to realize %s now, all the previous efforts would be wasted.', OWN, _D093 + " The template, in our own words."),
+    sub(367, '%s intends to realize %s, and tells %s this.', '%s, intending to realize %s, told %s so.', OWN, _D093 + " The template, in our own words."),
+    sub(390, "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing.", 'If all the previous efforts of %s to realize %s were wasted, that would be a bad thing.', OWN, _D093 + " The template, in our own words."),
+    insert(87, '  choice_at/2: "%s, there is a choice between %s and not doing so."', ADD, _TA),
+    insert(88, '  cited_bad_consequences/2: "If you go ahead with %s, the bad consequence cited, %s, will follow."', OWN, _TA),
+    insert(98, '  continues_trying/2: "%s would continue the effort to realize %s."', ADD, _TA),
+    insert(112, '  deliberating_agent/2: "It falls to %s to decide whether to go ahead with %s."', ADD, _TA),
+    insert(205, '  less_bad_as_means/2: "Being a means to the good end %[2]s would make %[1]s less bad."', ADD, _TA),
+    insert(207, '  means_bad_outweighs/2: "As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end."', OWN, _TA),
+    insert(208, '  means_good_outweighs/2: "As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end."', ADD, _TA),
+    insert(277, '  position_to_bring_about/1: "I am in a position to bring about %s."', OWN, _TA),
+    insert(290, '  precommitted/4: "What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s."', ADD, _TA),
+    insert(310, '  reassessment_against_continuing/2: "Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s."', OWN, _TA),
+    sub(1343, 'ought_to_bring_about(X)', 'should_be_performed(X)', OWN, _D063, scheme='fear'),
+    sub(1357, 'should_not(Y)', '¬should_be_performed(X)', OWN, _D062, scheme='danger'),
+    sub(1318, 'not_bring_about(X)', '¬should_be_performed(X)', OWN, _D063, scheme='threat'),
+    sub(1320, 'cited_bad_consequences(X)', 'cited_bad_consequences(X,C)', OWN, _D060, scheme='threat'),
+    sub(1321, 'position_to_know(X)', 'position_to_bring_about(C)', OWN, _D060, scheme='threat'),
+    sub(1331, 'do_other(X)', 'should_be_performed(X)', OWN, _D063, scheme='ad_baculum'),
+    sub(1305, 'do_other(A)', 'should_be_performed(A)', OWN, _D063, scheme='pragmatic_alternative'),
+    sub(525, 'carry_out_action(X)', 'should_be_performed(X)', OWN, _D063, scheme='appeal_to_vanity_ad_populum'),
+    sub(1031, 'person_goal(P,G)', 'goal_of_agent(P,G)', OWN, _D093, scheme='practical_goal'),
+    sub(1080, 'should_carry_out(A,Y)', 'should_do(A,Y)', OWN, _D063, scheme='two_person_practical'),
+    sub(1085, 'alternative_means(A,X)', 'realize_more_effectively(A,X,Y)', OWN, _D093, scheme='two_person_practical'),
+    sub(1086, 'goals_higher_priority(A,X)', 'incompatible_goal(A,X)', OWN, _D093, scheme='two_person_practical'),
+    sub(1087, 'side_effect_other_act(B,A)', 'bad_outweighs(Y,X)', OWN, _D093, scheme='two_person_practical'),
+    sub(1089, 'possible_action(Y)', 'possible_bring_about(A,Y)', OWN, _D093, scheme='two_person_practical'),
+    sub(1105, 'possible(X)', 'possible_goal(X)', OWN, _D093, scheme='waste'),
+    insert(1031, '    exceptions:', OWN, _D023, scheme='practical_goal'),
+    insert(1031, '      - realize_more_effectively(P,G,X)', OWN, _D023, scheme='practical_goal'),
+    insert(1031, '      - incompatible_goal(P,G)', OWN, _D023, scheme='practical_goal'),
+    insert(1031, '      - bad_outweighs(X,G)', OWN, _D023, scheme='practical_goal'),
+    insert(1105, '    exceptions:', OWN, _D033, scheme='waste'),
+    insert(1105, '      - reassessment_against_continuing(A,X)', OWN, _D033, scheme='waste'),
+    insert(1044, '    exceptions:', OWN, _D023, scheme='end_and_means_1'),
+    insert(1044, '      - means_bad_outweighs(X,Y)', OWN, _D023, scheme='end_and_means_1'),
+]
+PRACTICAL_C4 += [insert(1045, text, ADD, _D022G, scheme='end_and_means_bad') for text in [
+    '  - id: end_and_means_bad',
+    '    meta:',
+    '      title: Ends and Means - a Bad End Condemns Its Means',
+    '      source: >',
+    '        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge',
+    '        University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie',
+    '        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of',
+    '        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022), with the',
+    '        question of the opposite value that end and means 1 borrows (D093).',
+    '    variables: [X,Y]',
+    '    conclusions:',
+    '      - bad(X)',
+    '    premises:',
+    '      - means_to_end(X,Y)',
+    '      - bad(Y)',
+    '    exceptions:',
+    '      - means_good_outweighs(X,Y)',
+    '',
+]]
+PRACTICAL_C4 += [insert(1045, text, ADD, _D022, scheme='end_and_means_less_bad') for text in [
+    '  - id: end_and_means_less_bad',
+    '    meta:',
+    '      title: Ends and Means - a Good End Makes a Bad Means Less Bad',
+    '      source: >',
+    '        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge',
+    '        University Press, ch. 9, entry 22.6.1 (its graded reading), p. 325. Chaim Perelman and Lucie',
+    '        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of',
+    '        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022).',
+    '    variables: [X,Y]',
+    '    conclusions:',
+    '      - less_bad_as_means(X,Y)',
+    '    premises:',
+    '      - means_to_end(X,Y)',
+    '      - good(Y)',
+    '      - bad(X)',
+    '',
+]]
+PRACTICAL_C4 += [insert(1106, text, ADD, _BR, scheme='bridge_from_agent') for text in [
+    '  - id: bridge_from_agent',
+    '    meta:',
+    '      title: From What an Agent Should Do to the Action (bridge)',
+    '      source: >',
+    "        WAG's bridge (decision D063, refined 2026-11-22; D093): an explicit warrant, with a premise its",
+    '        arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation',
+    '        should_be_performed(A), when it falls to P to decide whether to go ahead with A. Not in the',
+    '        compendium.',
+    '    variables: [P,A]',
+    '    conclusions:',
+    '      - should_be_performed(A)',
+    '    premises:',
+    '      - should_do(P,A)',
+    '      - deliberating_agent(P,A)',
+    '',
+]]
+PRACTICAL_C4 += [insert(1106, text, ADD, _BR, scheme='bridge_from_continuing') for text in [
+    '  - id: bridge_from_continuing',
+    '    meta:',
+    '      title: From Continuing to Try to the Action (bridge)',
+    '      source: >',
+    "        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing",
+    "        action, not only to its goal; D093): from waste's conclusion, that an agent ought to continue trying",
+    '        to realize a goal, to the recommendation of an action that continues the effort, when the decision',
+    "        is the agent's, with practical reasoning's questions for the means it chooses. Not in the",
+    '        compendium.',
+    '    variables: [P,G,A]',
+    '    conclusions:',
+    '      - should_be_performed(A)',
+    '    premises:',
+    '      - ought_to_continue(P,G)',
+    '      - continues_trying(A,G)',
+    '      - deliberating_agent(P,A)',
+    '    assumptions:',
+    '      - possible_bring_about(P,A)',
+    '    exceptions:',
+    '      - realize_more_effectively(P,G,A)',
+    '      - bad_outweighs(A,G)',
+    '',
+]]
+PRACTICAL_C4 += [insert(2033, text, ADD, _D031, scheme='sunk_costs_precommitment') for text in [
+    '  - id: sunk_costs_precommitment',
+    '    meta:',
+    '      title: Argument from Sunk Costs (the commitment form)',
+    '      source: >',
+    '        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge',
+    "        University Press, pp. 135-136, and ch. 9, entry 25, pp. 326-327. Douglas Walton, 'The Sunk Costs",
+    "        Fallacy or Argument from Waste', Argumentation 16 (2002), pp. 488-489. As the schemes library has it",
+    '        (decision D031).',
+    '    variables: [P,A,T1,T2]',
+    '    conclusions:',
+    '      - should_do(P,A)',
+    '    premises:',
+    '      - choice_at(T2,A)',
+    '      - precommitted(P,A,T1,T2)',
+    '',
+]]
+
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3 + PRACTICAL_C4

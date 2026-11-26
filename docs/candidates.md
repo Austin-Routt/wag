@@ -784,7 +784,7 @@ Bindings: A = “your leaving now”; B = “your missing the last train”.
 
 - Either you must bring about “your leaving now”, or “your missing the last train” will occur.
 - “Your missing the last train” is bad or undesirable, from your point of view.
-- **So:** You should -ought to, practically speaking- bring about “your leaving now”.
+- **So:** Action “your leaving now” should be performed.
 
 *Note:* Only one course is said to be bad; nothing is compared, so it is the pragmatic argument from alternatives (34).
 
@@ -1095,7 +1095,7 @@ An action should not be taken because it may bring about a harm that would be ca
 **Relation:** variant of negative_consequences, negative_practical (a scheme WAG has with a premise, the conclusion or the modality changed; usually: a domain version, or add it to the base's family). Negative consequences with a consequence that may follow, two premises of severity and an exception for negligible risk; close too to negative practical reasoning (26.2), which acts on the worst possibility when a fact is unknown. 33/CQ1 already allows consequences that may follow, and the danger appeal (37) is the book's case of negative consequences about a risk to the hearer (p. 102).
 
 **Nearest in `walton.yml`** (computed from the sketch's formulas):
-- `precaution` is 7 from `slippery_slope_base_case`, sharing 1 (adds exception negligible_risk/2, exception precaution_costs_outweigh/1, premise catastrophic/1, premise irreversible/1, premise may_bring_about/2; lacks premise horrible_costs/1, premise would_realize/2).
+- `precaution` is 7 from `danger`, sharing 1 (adds exception negligible_risk/2, exception precaution_costs_outweigh/1, premise catastrophic/1, premise irreversible/1, premise may_bring_about/2; lacks premise danger/1, premise occur/2).
 
 **Closest, and why each falls short:**
 - negative consequences (33.2): It cites a consequence that will follow, and a doubt about its likelihood defeats it.
@@ -2324,12 +2324,12 @@ Bindings: X = “your paying me by Friday”; Y = “the photos being sent to yo
 
 - The respondent must bring about “your paying me by Friday”, or the proponent will undertake to see to it that “the photos being sent to your employer” will occur.
 - “The photos being sent to your employer” is bad or undesirable, from your point of view.
-- **So:** You should -ought to, practically speaking- bring about “your paying me by Friday”.
+- **So:** Action “your paying me by Friday” should be performed.
 
 *Note:* The threat is stated outright, so it is the disjunctive threat (35.1), not a warning.
 
 **What implementing it needs:**
-- D060 (threat's variables) and D063 (threat's and ad baculum's conclusions) first, so that a warning recoded as a threat meets the debate.
+- D060 (threat's variables) and D063 (threat's and ad baculum's conclusions) first, so that a warning recoded as a threat meets the debate. Met on 2026-11-26 (proposal D022-D093).
 
 **Open questions:**
 - An exception that defeats the prudential argument, or a link that recodes it as a threat? Not yet looked for in Kialo.
@@ -2348,7 +2348,7 @@ Practical schemes whose conclusions no other scheme concludes or uses, so that t
 
 **Kind:** link. **Decision:** D063 (decided). **Stage:** decided. **Found:** the independent review of proposal D055-D059, version 1, 2026-10-22. **Finder's confidence:** high.
 
-**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D063: the rule, applied to walton.yml in stage 2.
+**Outcome:** add, 2026-11-22, by owner (standing rule of 2026-11-22); recorded in docs/decisions.yml D063: the rule, applied to walton.yml in part on 2026-11-24 (proposal D004-D075: practical_inference and the condition schemes) and on 2026-11-26 (proposal D022-D093: fear, danger, threat, ad_baculum, pragmatic_alternative and the appeal to vanity conclude should_be_performed or its negation; practical_goal, two_person_practical, waste and the commitment form of sunk costs through the bridges bridge_from_agent and bridge_from_continuing); help and distress with their family (F16).
 
 D059's reasoning reaches beyond the prudential form: fear (ought_to_bring_about), danger (should_not), threat (not_bring_about), the pragmatic argument from alternatives and the disjunctive threat (do_other), waste (ought_to_continue), help (carry_out), distress (bring_relief) and two-person practical reasoning (should_carry_out) conclude predicates that no other scheme concludes or uses, so their arguments meet nothing about the same action.
 
@@ -2370,7 +2370,7 @@ D059's reasoning reaches beyond the prudential form: fear (ought_to_bring_about)
 - The review of D055-D059 v1, test RD5: a prudential argument for X meets negative consequences, the slippery slope's base case and the negative practical analogy on one issue, and has no contact with danger, threat, fear or the pragmatic argument from alternatives.
 
 **What implementing it needs:**
-- D062 (danger's variable) and D060 (threat's) first; help, distress and two-person practical reasoning name an agent, which should_be_performed does not.
+- D062 (danger's variable) and D060 (threat's) first; help, distress and two-person practical reasoning name an agent, which should_be_performed does not. Met on 2026-11-26 (proposal D022-D093): D060 and D062 applied, and the agent's conclusions reach should_be_performed through a bridge whose premise is that the decision is the agent's (D093).
 
 ## Predicting what agents will do
 

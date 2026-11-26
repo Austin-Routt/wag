@@ -131,6 +131,60 @@ def next_id(it):
     return f"{it['kialo_claim_id']}#{max(used) + 1}"
 
 
+def plant_two_person(g, goal):
+    """Plant in 13292.108 a secondary instance of two-person practical
+    reasoning (governments, who intend to realize the goal, told by
+    nutrition science that the tax is the way), and retarget 13292.104, a
+    better means, at its better-means exception, 23/CQ2 (D093(b))."""
+    it = item(g, '13292.108')
+    iid = next_id(it)
+    A, B, X, Y = 'governments', 'nutrition_science', goal, 'tax_meat'
+    p = lambda role, f: {'role': role, 'formula': f, 'en': f, 'status': 'supplied'}
+    it['instances'].append({
+        'id': iid, 'primary': False,
+        'scheme': {'walton_id': 'two_person_practical', 'compendium': '23', 'wag_id': None, 'fit': 'reconstructed',
+                   'confidence': 0.4, 'alternatives': []},
+        'bindings': {'A': A, 'B': B, 'X': X, 'Y': Y},
+        'premises': [p('premise', f'tells_intend({A},{X},{B})'), p('premise', f'situation_necessity({B},{Y},{X},{A})'),
+                     p('assumption', f'possible_bring_about({A},{Y})'),
+                     p('exception', f'realize_more_effectively({A},{X},{Y})'), p('exception', f'incompatible_goal({A},{X})'),
+                     p('exception', f'bad_outweighs({Y},{X})')],
+        'conclusion': {'formula': f'should_do({A},{Y})', 'en': f'should_do({A},{Y})'},
+    })
+    ans = item(g, '13292.104')
+    ans['target']['actual'] = {'claim': '13292.108', 'instance': iid, 'part': 'exception',
+                               'formula': f'realize_more_effectively({A},{X},{Y})'}
+    ans['role']['cq'] = '23 CQ2'
+    return g
+
+
+def plant_bridge(g, goal):
+    """Plant in 13292.108 a secondary instance of the bridge from continuing
+    (governments ought to continue trying to realize the goal, and the tax
+    would continue the effort), and retarget 13292.104, a better means, at its
+    borrowed better-means exception: an undercutter, with no cq, since no
+    question of the book or the game targets it (guidelines §3.1, OC6)."""
+    it = item(g, '13292.108')
+    iid = next_id(it)
+    P_, G, A = 'governments', goal, 'tax_meat'
+    p = lambda role, f: {'role': role, 'formula': f, 'en': f, 'status': 'supplied'}
+    it['instances'].append({
+        'id': iid, 'primary': False,
+        'scheme': {'walton_id': 'bridge_from_continuing', 'compendium': None, 'wag_id': None, 'fit': 'reconstructed',
+                   'confidence': 0.4, 'alternatives': []},
+        'bindings': {'P': P_, 'G': G, 'A': A},
+        'premises': [p('premise', f'ought_to_continue({P_},{G})'), p('premise', f'continues_trying({A},{G})'),
+                     p('premise', f'deliberating_agent({P_},{A})'), p('assumption', f'possible_bring_about({P_},{A})'),
+                     p('exception', f'realize_more_effectively({P_},{G},{A})'), p('exception', f'bad_outweighs({A},{G})')],
+        'conclusion': {'formula': f'should_be_performed({A})', 'en': f'should_be_performed({A})'},
+    })
+    ans = item(g, '13292.104')
+    ans['target']['actual'] = {'claim': '13292.108', 'instance': iid, 'part': 'exception',
+                               'formula': f'realize_more_effectively({P_},{G},{A})'}
+    ans['role']['kind'], ans['role']['cq'] = 'undercutter', None
+    return g
+
+
 def conclusion_target(g, claim, iid=None):
     """A format-2 target at an instance's conclusion (the claim's primary
     instance unless another is named)."""
@@ -277,6 +331,28 @@ class Rules(unittest.TestCase):
         rename(it, dup, dup['bindings']['G'], 'deforestation_slowed', records=False)
         it['instances'].append(dup)
         self.passes(g)
+
+    def test_r9_the_continuing_bridge_states_its_goal_in_ought_to_continue(self):
+        # A better means for the bridge's goal, at its borrowed exception
+        # (D093(f)): ought_to_continue(P,G) is its goal premise.
+        g = plant_bridge(copy.deepcopy(GOLD), 'environmental_harm_from_meat_reduced')
+        self.passes(g)
+
+    def test_r9_the_continuing_bridge_another_goal(self):
+        g = plant_bridge(copy.deepcopy(GOLD), 'meat_problems_resolved')
+        self.fails(g, '13292.104', ['R8', 'R9'], "is not the answered argument's ['goal_of_agent(governments,meat_problems_resolved)']")
+
+    def test_r9_two_person_practical_states_its_goal_in_tells_intend(self):
+        # A better means for two-person practical reasoning's goal (23/CQ2):
+        # tells_intend(A,X,B) is its goal premise, goal_of_agent(A,X) (D093(b)).
+        g = plant_two_person(copy.deepcopy(GOLD), 'environmental_harm_from_meat_reduced')
+        self.passes(g)
+
+    def test_r9_two_person_practical_another_goal(self):
+        # The same answer to an argument whose agent intends another goal: R8
+        # (the answer concludes another exception) and R9 (another goal).
+        g = plant_two_person(copy.deepcopy(GOLD), 'meat_problems_resolved')
+        self.fails(g, '13292.104', ['R8', 'R9'], "is not the answered argument's ['goal_of_agent(governments,meat_problems_resolved)']")
 
     # R11: an answer scheme's primary instance is at an exception.
     def test_r11_an_answer_scheme_away_from_the_exception(self):

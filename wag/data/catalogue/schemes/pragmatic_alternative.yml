@@ -15,13 +15,15 @@ formulas:
   - alternatives(A,B)
   - undesirable(B)
   conclusions:
-  - do_other(A)
+  - should_be_performed(A)
 book:
 - entry: "34"
   title: Pragmatic Argument From Alternatives
   pages: "333"
-  match: exact
-  note: Same title and source (Scare Tactics 2000, p. 142).
+  match: partial
+  note: 'Same title and source (Scare Tactics 2000, p. 142). Partial since 2026-11-26:
+    it concludes should_be_performed(A) (D063), for the book''s second-person ought,
+    ''practically speaking''.'
   status: generated
 families:
 - family: F06
@@ -44,7 +46,9 @@ premise_map:
   status: generated
 - entry: "34"
   label: Conclusion
-  formulas: [{formula: do_other(A), locus: conclusion}]
+  formulas: [{formula: should_be_performed(A), locus: conclusion}]
+  note: '''you should (ought to, practically speaking) bring about A'', in WAG''s
+    vocabulary (D063)'
   status: generated
 critical_questions: []
 summary:
@@ -123,8 +127,35 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
-examples: []
-discrepancies: []
+examples:
+- text: Either we reinforce the dyke this autumn or the polder floods in the winter
+    storms. Flooding would be a disaster for us. So we must reinforce it.
+  coding: 'A = reinforcing the dyke this autumn; B = the polder flooding in the winter
+    storms. Pressed: a challenge of alternatives(A,B) (The pumps can keep the polder
+    dry for one winter; reinforcing can wait for spring). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Either you renew your passport this month or you will miss the trip in June.
+    Missing it would be bad for you. So renew it this month.
+  coding: 'A = renewing the passport this month; B = missing the June trip. Pressed:
+    a challenge of alternatives(A,B) (The express service renews a passport in three
+    days). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Either you pay your share for the dyke, or I will open the sluice onto your
+    fields. You don't want that. So pay your share.
+  coding: 'Near miss: X = paying a share for the dyke; Y = the sluice being opened
+    onto the fields. The speaker undertakes the bad alternative: the disjunctive threat,
+    a case of the argument from alternatives but not one of its plain warnings. (proposal
+    D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
+discrepancies:
+- kind: partial-link
+  about: "34"
+  detail: 'walton.yml formalizes compendium 34 only in part: Same title and source
+    (Scare Tactics 2000, p. 142). Partial since 2026-11-26: it concludes should_be_performed(A)
+    (D063), for the book''s second-person ought, ''practically speaking''.'
+  decision: ""
+  status: generated
 classification:
   source: ""
   reasoning: ""
@@ -145,3 +176,7 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

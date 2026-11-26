@@ -96,6 +96,24 @@ def nows(f):
     """A formula without spaces: 'f(a, b)' and 'f(a,b)' are the same formula."""
     return re.sub(r'\s+', '', f or '')
 
+def goals(ins):
+    """An instance's goal premises, as goal_of_agent(P,G) (R9). Two-person
+    practical reasoning states its agent's goal in its first premise,
+    tells_intend(A,X,B), that A intends to realize X, read as
+    goal_of_agent(A,X) (D093(b)); the bridge from continuing in
+    ought_to_continue(P,G), that P ought to continue trying to realize G,
+    read as goal_of_agent(P,G) (D093(f))."""
+    out = []
+    for p in (ins or {}).get('premises', []):
+        neg, name, args = parse(p['formula'])
+        if name == 'goal_of_agent':
+            out.append(nows(p['formula']))
+        elif name == 'tells_intend' and len(args) == 3:
+            out.append(('¬' if neg else '') + nows(f'goal_of_agent({args[0]},{args[1]})'))
+        elif name == 'ought_to_continue' and len(args) == 2:
+            out.append(('¬' if neg else '') + nows(f'goal_of_agent({args[0]},{args[1]})'))
+    return sorted(out)
+
 def subst(f, b):
     return re.sub(r'\b[A-Z][A-Za-z0-9_]*\b', lambda m: b[m.group(0)] if isinstance(b.get(m.group(0)), str) else m.group(0), f)
 
@@ -662,9 +680,11 @@ for it in gold['items']:
     # R9 (D075, D089): a better means is another action than the one it
     # answers (in format 2, as the case maps them: an alias of A is A),
     # records which comparison it makes, and, as the claim's primary
-    # instance, has its target's goal premise, whatever the claim's role. A
-    # fragment, which states one premise of its parent's argument (§2, §3),
-    # is that argument's, and is checked there.
+    # instance, has its target's goal premise, whatever the claim's role
+    # (two-person practical reasoning's is in tells_intend(A,X,B), D093(b),
+    # the continuing bridge's in ought_to_continue(P,G), D093(f)).
+    # A fragment, which states one premise of its parent's argument (§2,
+    # §3), is that argument's, and is checked there.
     for ins in it['instances']:
         if ins['scheme']['walton_id'] != 'better_means' or ins['scheme'].get('fit') == 'fragment': continue
         b = ins['bindings']
@@ -674,8 +694,7 @@ for it in gold['items']:
         if ins.get('comparison') not in ('more surely', 'sooner', 'at lower cost'):
             err(f'{cid}: R9 better_means records no comparison (more surely, sooner or at lower cost)')
         if ins.get('primary') and tp is not None:
-            goal = lambda x: sorted(nows(p['formula']) for p in (x or {}).get('premises', []) if parse(p['formula'])[1] == 'goal_of_agent')
-            want, got = goal(tp), goal(ins)
+            want, got = goals(tp), goals(ins)
             if got != want: err(f'{cid}: R9 better_means goal premise {got} is not the answered argument\'s {want}')
     # R11 (D075): an answer scheme argues the exception it concludes, so a
     # claim whose primary instance is one is at an exception (R8 then makes

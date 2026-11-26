@@ -17,7 +17,9 @@ formulas:
   - stop_realize_wasted(A,X)
   - waste_bad_thing(A,X)
   assumptions:
-  - possible(X)
+  - possible_goal(X)
+  exceptions:
+  - reassessment_against_continuing(A,X)
   conclusions:
   - ought_to_continue(A,X)
 book:
@@ -25,7 +27,8 @@ book:
   title: Argument From Waste
   pages: "326"
   match: exact
-  note: Same title and both references.
+  note: Same title and both references. Since 2026-11-26 the book's second question
+    is an exception (D033), and the goal's possibility reads possible_goal(X) (D093).
   status: generated
 families:
 - family: F10
@@ -49,40 +52,42 @@ premise_map:
 - entry: "24"
   label: Conclusion
   formulas: [{formula: 'ought_to_continue(A,X)', locus: conclusion}]
+  note: names the agent and the goal; bridge_from_continuing carries it to the continuing
+    action (D063)
   status: generated
 critical_questions:
 - id: 24/CQ1
   book:
     entry: "24"
     label: CQ1
-  targets: [{formula: possible(X), locus: assumption}]
+  targets: [{formula: possible_goal(X), locus: assumption}]
   note: Possibility. In walton.yml's letters A is the agent and X the goal (the book's
-    a and A). walton.yml's English reads "Action X is possible", although X is a goal;
-    upstream spells the predicate posible (see the discrepancy).
-  paraphrase: Can the goal X still be reached at all?
+    a and A). Since 2026-11-26 the assumption is possible_goal(X), whose English speaks
+    of a goal (D093); it was possible(X), whose English spoke of an action (upstream
+    posible; see the discrepancy).
+  paraphrase: Can X be realized at all?
   answer: 'The proponent, once asked. Against: showing that X can no longer be reached,
-    whatever more A does, which undermines possible(X): further effort would then
-    be wasted too. For: evidence that X is still within reach, such as the progress
+    whatever more A does, which undermines possible_goal(X): further effort would
+    then be wasted too. For: evidence that X is still within reach, such as the progress
     so far or a clear path to the end.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-26
 - id: 24/CQ2
   book:
     entry: "24"
     label: CQ2
-  targets: []
-  undercuts: true
-  note: Reassessment. No formula of waste encodes the forward-looking balance; sunk_costs
-    has it as the exception future_losses_outweigh(A). Marked as undercutting, since
-    it asks whether past effort is a reason to go on at all; see the discrepancy on
-    CQ2.
-  paraphrase: Should the agent leave aside the losses so far, which cannot be got
-    back, and weigh afresh what pursuing X will cost and yield from now on?
-  answer: 'The proponent, once asked: the argument is out of force until answered.
-    Against: showing that, from now on, continuing toward X would cost more than it
-    would yield, so that only the past effort speaks for it, which undercuts the argument.
+  targets: [{formula: 'reassessment_against_continuing(A,X)', locus: exception}]
+  note: Reassessment. Since 2026-11-26 an exception, reassessment_against_continuing(A,X),
+    the critic's to make out, as D055's outweighing exceptions are (D033); until then
+    no formula encoded it and the question was marked as undercutting. sunk_costs
+    has the like exception future_losses_outweigh(A).
+  paraphrase: Leaving aside what is already lost, do the costs and benefits from now
+    on go against continuing to try to realize X?
+  answer: 'The critic, who raises it with an argument. Against: showing that, leaving
+    aside what is lost and cannot be recovered, continuing toward X from now on would
+    cost more than it would yield, which undercuts the argument through reassessment_against_continuing(A,X).
     For: showing that the remaining costs of reaching X are worth its benefits, judged
     from now on.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-26
 summary:
   text: Use it when an agent A has already put effort into pursuing a goal X, and
     the argument is that stopping now would let that effort go for nothing, which
@@ -106,6 +111,10 @@ contrasts:
     a goal come to nothing; choose sunk_costs when it cites the amount already spent
     on an action (money, time) as too much to write off.'
   status: drafted by Claude Code, 2026-10-22
+- scheme: sunk_costs_precommitment
+  text: Choose sunk_costs_precommitment when the text cites a commitment made earlier,
+    not effort that stopping would waste.
+  status: drafted by Claude Code, 2026-11-26
 examples:
 - text: We've spent four summers restoring this old sailing boat. If we give up now,
     all that work goes for nothing, and that would be a real shame, so let's keep
@@ -130,6 +139,29 @@ examples:
     negative_consequences against dropping it.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: If the council stops trying to build the tram line now, the four years and
+    millions already spent will be wasted. That would be a bad thing. So the council
+    ought to continue trying to build it.
+  coding: 'A = the council; X = building the tram line. Pressed: 24/CQ1 (The line
+    cannot be built: the bridge it needs was refused permission for good); 24/CQ2
+    (Leaving aside what is spent, finishing would cost more than the line will ever
+    return). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: If Ravi gives up on his novel now, six years of writing will have been for
+    nothing, which would be a shame. So Ravi ought to keep trying to finish it.
+  coding: 'A = Ravi; X = finishing his novel. It concludes ought_to_continue(A,X),
+    the agent and the goal; bridge_from_continuing carries it to the action that continues
+    the effort (D063). Pressed: 24/CQ2 (Leaving the six years aside, another year
+    of unpaid writing costs him more than the book is likely to bring). (proposal
+    D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: The council has spent millions on the tram line so far, too much to waste.
+    So the line should be finished.
+  coding: 'Near miss: A = finishing the tram line; C = millions spent on the tram
+    line so far. WAG''s sunk costs form: the costs incurred, with no agent''s efforts
+    or goal: not the argument from waste. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
 discrepancies:
 - kind: book-walton
   about: CQ2
@@ -138,11 +170,12 @@ discrepancies:
     2002 article, has it as the exception future_losses_outweigh(A).
   decision: 'Decided 2026-11-22 (D033): An exception, the critic''s burden, as D055''s
     outweighing exceptions are: reassessment_against_continuing(A,X), as the schemes
-    library has it. Not yet applied. Before: The catalogue marks CQ2 as undercutting
-    the inference, so asking it puts the argument out of force until the proponent
-    shows that going on pays from now. open: whether to add future_losses_outweigh(X)
-    to waste in walton.yml, as an exception (the critic''s burden, as in sunk_costs)
-    or as an assumption (the proponent''s, as asking the book''s question implies).'
+    library has it. Applied 2026-11-26 (proposal D022-D093): the exception reassessment_against_continuing(A,X),
+    which 24/CQ2 targets. Before: The catalogue marks CQ2 as undercutting the inference,
+    so asking it puts the argument out of force until the proponent shows that going
+    on pays from now. open: whether to add future_losses_outweigh(X) to waste in walton.yml,
+    as an exception (the critic''s burden, as in sunk_costs) or as an assumption (the
+    proponent''s, as asking the book''s question implies).'
   status: drafted by Claude Code, 2026-10-22
 - kind: other
   about: possible(X)
@@ -150,7 +183,8 @@ discrepancies:
     the cleaned walton.yml corrects it to possible(X) (walton-clean/changes.json),
     whose English template speaks of an action, although X is a goal.
   decision: No change; the catalogue uses the cleaned spelling and reads possible(X)
-    as "the goal X can be reached".
+    as "the goal X can be reached". Since 2026-11-26 the assumption is possible_goal(X),
+    whose English speaks of a goal (D093, proposal D022-D093).
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -191,3 +225,7 @@ history:
   what: 'Revised after the independent model check of 2026-10-22 (findings applied:
     the contrast with sunk_costs cites p. 135 as well as pp. 10–11; the near miss
     is the prudential form)'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

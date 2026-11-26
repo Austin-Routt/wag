@@ -151,3 +151,35 @@ func runCheckerFixture(t *testing.T, input string) (report, int) {
 	}
 	return r, status
 }
+
+// The language check reads indexed templates as WAG's renderer does (D060),
+// and plain ones as before.
+func TestTemplateProblem(t *testing.T) {
+	for _, c := range []struct {
+		tmpl  string
+		arity int
+		ok    bool
+	}{
+		{"%s is good.", 1, true},
+		{"%s is good, %s too.", 1, false},
+		{"100%% of %s.", 1, true},
+		{"%s and %d.", 2, false},
+		{"I will see to it that %[2]s happens if you go ahead with %[1]s.", 2, true},
+		{"At %[4]s, %[1]s is committed to %[2]s by what was done at %[3]s.", 4, true},
+		{"%[2]s, then %s, after %[1]s.", 3, true},
+		{"%[2]s, then %s.", 3, false},
+		{"%[2]s, then %s.", 2, false},
+		{"%[1]s twice: %[1]s.", 2, false},
+		{"%[1]s and %[1]s and %[2]s.", 2, true},
+		{"%[3]s and %[1]s.", 2, false},
+		{"%[0]s and %[1]s.", 1, false},
+		{"%[]s and %s.", 2, false},
+		{"%[1]d and %[2]s.", 2, false},
+		{"%[1]s and %[2]s %", 2, false},
+		{"100%% of %[1]s.", 1, true},
+	} {
+		if got := templateProblem(c.tmpl, c.arity); (got == "") != c.ok {
+			t.Errorf("%q, arity %d: %q, want ok=%v", c.tmpl, c.arity, got, c.ok)
+		}
+	}
+}

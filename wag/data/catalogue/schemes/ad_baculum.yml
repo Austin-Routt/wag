@@ -15,14 +15,16 @@ formulas:
   - alternative_bad(X,Y)
   - undesirable(Y)
   conclusions:
-  - do_other(X)
+  - should_be_performed(X)
 book:
 - entry: "35.1"
   title: Argument from Disjunctive Ad Baculum Threat
   pages: "333"
   parent: "35"
-  match: exact
-  note: Same title ("Treat" for "Threat") and source (Scare Tactics 2000, p. 140).
+  match: partial
+  note: 'Same title and source (Scare Tactics 2000, p. 140). Partial since 2026-11-26:
+    it concludes should_be_performed(X) (D063), for the book''s second-person ought,
+    ''practically speaking''.'
   status: generated
 families:
 - family: F15
@@ -41,7 +43,9 @@ premise_map:
   status: generated
 - entry: "35.1"
   label: Conclusion
-  formulas: [{formula: do_other(X), locus: conclusion}]
+  formulas: [{formula: should_be_performed(X), locus: conclusion}]
+  note: '''you should (ought to, practically speaking) bring about A'', in WAG''s
+    vocabulary (D063)'
   status: generated
 critical_questions: []
 summary:
@@ -96,8 +100,34 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
-examples: []
-discrepancies: []
+examples:
+- text: Pay the parking fine by Friday, or I will have your car towed. You don't want
+    that. So pay by Friday.
+  coding: 'X = paying the parking fine by Friday; Y = the car being towed. Pressed:
+    a challenge of alternative_bad(X,Y) (The warden has no power to order a tow for
+    an unpaid fine; only the court does). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Hand in the report today, or I will tell the director you missed the deadline.
+    You would not want that. So hand it in.
+  coding: 'X = handing in the report today; Y = the director hearing that the deadline
+    was missed. Pressed: a challenge of undesirable(Y) (The director agreed the new
+    deadline herself). (proposal D022-D093)'
+  status: drafted by Claude Code, 2026-11-26
+- text: Either you pay the fine by Friday or it doubles. That would be bad for you.
+    So pay by Friday.
+  coding: 'Near miss: A = paying the fine by Friday; B = the fine doubling. The bad
+    alternative comes by the rules, not by the speaker''s undertaking: an argument
+    from alternatives, not the disjunctive threat. (proposal D022-D093)'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-26
+discrepancies:
+- kind: partial-link
+  about: "35.1"
+  detail: 'walton.yml formalizes compendium 35.1 only in part: Same title and source
+    (Scare Tactics 2000, p. 140). Partial since 2026-11-26: it concludes should_be_performed(X)
+    (D063), for the book''s second-person ought, ''practically speaking''.'
+  decision: ""
+  status: generated
 classification:
   source: ""
   reasoning: ""
@@ -118,3 +148,7 @@ history:
   by: wag-cli --catalogue-gen
   what: skeleton generated from walton.yml, links.json, families.json and the game's
     NASCQ
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after proposal D022-D093: its questions, summary, contrasts, discrepancies
+    and examples, as the proposal changed them'

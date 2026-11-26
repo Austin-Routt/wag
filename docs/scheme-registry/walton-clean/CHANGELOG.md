@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2350 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 20 of them changed by the owner's decisions (`analogy`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`), and 13 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `whole_into_parts`); 124 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2454 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 30 of them changed by the owner's decisions (`ad_baculum`, `analogy`, `appeal_to_vanity_ad_populum`, `danger`, `end_and_means_1`, `fear`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_goal`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `pragmatic_alternative`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`, `threat`, `two_person_practical`, `waste`), and 18 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_agent`, `bridge_from_continuing`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `end_and_means_bad`, `end_and_means_less_bad`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `sunk_costs_precommitment`, `whole_into_parts`); 129 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -12,14 +12,14 @@ Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (
 | 1 strict-decode errors | 1 | 3 | 0 | 0 |
 | 1 stderr during import | none | yes | none | none |
 | 2 validator problems (before / after instantiation) | – | 142 / 155 | 5 / 5 | 0 / 0 |
-| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 124 | 0 of 124 |
+| 3 schemes failing InstantiateScheme checks | – | 34 of 111 | 0 of 129 | 0 of 129 |
 | 4 language problems | – | 93 | 0 | 0 |
-| schemes passing checks 2–4 | – | 66 of 111 | 122 of 124 | 124 of 124 |
+| schemes passing checks 2–4 | – | 66 of 111 | 127 of 129 | 129 of 129 |
 | **GATE** | **FAIL** | **FAIL** | **FAIL** | **PASS** |
 
 (The validator count before instantiation for the syntax-only file includes one entry for the term-parser errors printed to stderr, and 4 for the reserved names `is` (D084) and `true` (repaired by the cleaning), which the engine's validator has reported since 2026-11-22; the audit's 137 is the same list without these 5.)
 
-**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 124 schemes, and check 2 passes for 122. Two fail one validator rule only: every variable must occur in a premise. In `ad_hominem` and `regulative_rule`, a variable occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
+**The cleaned file does not pass the whole gate.** Checks 1, 3 and 4 pass for all 129 schemes, and check 2 passes for 127. Two fail one validator rule only: every variable must occur in a premise. In `ad_hominem` and `regulative_rule`, a variable occurs only in the conclusion or an exception. Fixing that means adding or changing a premise, which the rules for this cleanup forbid. See [Schemes that cannot pass without a change of meaning](#schemes-that-cannot-pass-without-a-change-of-meaning). D084 renamed the reserved predicate `is/2` to `is_a/2` in `group_2`, `rule_physical_world_1` and the language key, preserving the template and argument order. The engine reported three related reserved-name problems before this migration; they are now gone. These schemes still instantiate correctly (check 3), and WAG's loader does not run the validator.
 
 WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/core.yml` and a copy of WAG's NASCQ data) reports **0 errors and 1 warning** for the cleaned file. The warning is `no template for ¬/1`: WAG's convention is a `¬p/n` key per negated predicate, and without one a negation reads "it is not the case that …". WAG's lint no longer loads the syntax-only file, since the engine's import became strict (`check/wag-lint-syntax-only.txt`; before 2026-11-22 it reported 58 language findings). Its NASCQ findings come from WAG's data, which targets `core.yml`, and are not about this file.
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 0 | 0 |
-| repair — owner decision | 124 | 108 |
-| addition — owner decision | 241 | 29 |
-| **total** | **554** | **288** distinct lines (a line can carry edits of several categories) |
+| repair — owner decision | 160 | 137 |
+| addition — owner decision | 333 | 36 |
+| **total** | **682** | **313** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 240 lines removed, 521 added. That is 235 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 365 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
+Unified diff against the original (`walton.diff`): 261 lines removed, 646 added. That is 256 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 493 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -69,6 +69,10 @@ These change what schemes say, add one, or apply an authorized vocabulary migrat
 | `positive_consequences_modal`, `negative_consequences_modal` (new) | written for WAG: premises `may_bring_about(A,G)` (new template) and `good(G)` or `bad(G)`; the exceptions of the categorical scheme of the same side; conclusion `may_be_worth_performing(A,G)` or `may_be_unwise_to_perform(A,G)` (new templates) | 2026-11-25 | Decision D008 (the same proposal). A claim that an action may bring about a consequence could only be coded with `brings_about(A,G)`, which asserts more than the claim does. The modal variants assert the possibility only, and they conclude no recommendation: a bridge carries them to it. After the compendium's 33.1 and 33.2. |
 | `bridge_from_possible_good`, `bridge_from_possible_harm` (new) | written for WAG: premises the modal variant's conclusion and `matters_to_decision(A,G)`; exception `worth_finding_out_first(A,G)`; conclusion `should_be_performed(A)` or `¬should_be_performed(A)` (new templates) | 2026-11-25 | Decisions D008 and D053 (the same proposal; the owner declared the exception neutral as to polarity, with its scope, after the review of version 5 as amended). A possibility reaches the recommendation only through an explicit warrant: its arguer supports the premise that the chance matters to the decision, given what G would be, and the bridge has an exception of its own, that it is worth finding out first whether A would bring about G, so that until then the possibility does not count. The exception takes the bridge away, not the decision. The bridge is an entry condition, not a weight. On the pattern of decisions D011 and D063; not in the compendium. |
 | `harm_reduction` (new) | written for WAG: premises `happens_anyway(A,E)` and `less_harmful_per_occurrence(A,E)`; exceptions `preventable_otherwise(A,E)` and `no_net_reduction(A,E)`; conclusion `should_be_performed(A)` (new templates) | 2026-11-25 | Decision D072 (the same proposal; candidate C022). That E happens whether or not A is done, and that A makes each occurrence less harmful, had no scheme: it is not the prudential form (33.4), since E happens anyway, nor a weighing of consequences. The form that steers what is coming anyway is not covered. Not in the compendium. |
+| `fear`, `danger`, `threat`, `ad_baculum`, `pragmatic_alternative`, `appeal_to_vanity_ad_populum` | conclusions `should_be_performed(X)` (fear, ad_baculum, pragmatic_alternative with A, the appeal to vanity) or `¬should_be_performed(X)` (danger, threat), for `ought_to_bring_about`, `should_not(Y)`, `not_bring_about`, `do_other` and `carry_out_action`; threat's premises `cited_bad_consequences(X,C)` and `position_to_bring_about(C)`, and `assert_bad(X,C)`'s template printing C first (indexed) | 2026-11-26 | Decisions D063, D060 and D062 (WAG's proposal D022-D093, after an independent review). Each recommends an action to the one addressed but concluded a predicate no other scheme concluded or used, so in the engine an appeal to fear for an action never met an argument from negative consequences against it; Walton reads these forms as species of argument from consequences, whose conclusion is a practical ought (Scare Tactics, 2000, pp. 140-143, 173, 191). Threat put the action where the threatened consequence belongs, and danger concluded about the danger, not the action (2008, pp. 333-334). The old conclusion templates are kept as orphans. |
+| `practical_goal`, `two_person_practical`, `waste`, `end_and_means_1` | `practical_goal`: goal premise `goal_of_agent(P,G)`, exceptions `realize_more_effectively(P,G,X)`, `incompatible_goal(P,G)`, `bad_outweighs(X,G)`; `two_person_practical`: conclusion `should_do(A,Y)`, assumption `possible_bring_about(A,Y)`, exceptions `realize_more_effectively(A,X,Y)`, `incompatible_goal(A,X)`, `bad_outweighs(Y,X)`; `waste`: assumption `possible_goal(X)`, exception `reassessment_against_continuing(A,X)`; `end_and_means_1`: exception `means_bad_outweighs(X,Y)` | 2026-11-26 | Decisions D023, D033, D063 and D093 (the same proposal). The argument from goal borrows practical reasoning's questions in its formulas (D023); two-person practical reasoning asks four of the book's five questions in them, the fifth keeping no formula, where its exceptions named the advisor for the action and left the means out (D093); waste's second question is the critic's exception (D033) and its assumption a goal's possibility; end and means borrows the consequences' question of the opposite value, in a formula of its own, since a means may be a state (D023). |
+| `sunk_costs_precommitment`, `end_and_means_bad`, `end_and_means_less_bad` (new) | the commitment form of sunk costs: premises `choice_at(T2,A)` and `precommitted(P,A,T1,T2)`, conclusion `should_do(P,A)`; the negative and graded readings of 22.6.1: `means_to_end(X,Y)`, `bad(Y)`, so `bad(X)`, with the exception `means_good_outweighs(X,Y)`; and `means_to_end(X,Y)`, `good(Y)`, `bad(X)`, so `less_bad_as_means(X,Y)` (new templates) | 2026-11-26 | Decisions D031 and D022, with D093's borrowed question for the negative reading (the same proposal). As the schemes library has them; 25 and 22.6.1 in the compendium (2008, pp. 135-136, 325-327; Walton 2002, pp. 488-491). |
+| `bridge_from_agent`, `bridge_from_continuing` (new) | written for WAG: premises `should_do(P,A)` and `deliberating_agent(P,A)`; and `ought_to_continue(P,G)`, `continues_trying(A,G)` and `deliberating_agent(P,A)`, with the assumption `possible_bring_about(P,A)` and the exceptions `realize_more_effectively(P,G,A)` and `bad_outweighs(A,G)`; conclusion `should_be_performed(A)` (new templates) | 2026-11-26 | Decisions D063 and D093 (the same proposal). A conclusion that names an agent reaches the recommendation only when the decision is that agent's, a premise its arguer supports, for the exception D063's text names (an exception nobody raises would let an agent nobody checked pass); continuing binds to an action that continues the effort, a means for the goal, which practical reasoning's questions test. Not in the compendium. |
 
 ## D081 repairs accepted after independent source review
 
@@ -167,6 +171,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **40** · typo · template word 'wil l' (used by: threat)
   - before: `  assert_bad/2: "I hereby assert that in fact I wil l see to it that %s occurs if you bring about %s."`
   - after: `  assert_bad/2: "I hereby assert that in fact I will see to it that %s occurs if you bring about %s."`
+- **40** · repair — owner decision · D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093) The template, in our own words. (used by: threat)
+  - before: `  assert_bad/2: "I hereby assert that in fact I will see to it that %s occurs if you bring about %s."`
+  - after: `  assert_bad/2: "I will bring about %[2]s if you go ahead with %[1]s."`
 - **42** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses attack_well_supported with 0 argument(s) and the template has 0 %s (used by: ad_hominem)
   - before: `  attack_well_supported: "Allegration made in character attack premise evidence are well supported."`
   - after: `  attack_well_supported/0: "Allegration made in character attack premise evidence are well supported."`
@@ -179,7 +186,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **46** [insert after] · addition — owner decision · template for the 33.3 scheme added below, in our own words (the category file's repeats the book) (used by: negative_consequences_reasoning)
   - before: _(none)_
   - after: `  bad_for_goals/1: "%s would harm the agent's goals."`
-- **49** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: bad_outweighs_good, negative_consequences_prudential, positive_consequences, positive_consequences_modal, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+- **49** [insert after] · repair — owner decision · template for the consequence schemes' sided exceptions (D055, D059), in our own words (used by: bad_outweighs_good, bridge_from_continuing, negative_consequences_prudential, positive_consequences, positive_consequences_modal, practical_goal, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition, two_person_practical)
   - before: _(none)_
   - after: `  bad_outweighs/2: "The action %s has bad consequences that outweigh %s."`
 - **50** · template · '%v' is not a %s verb (WAG lint error) (used by: expert_opinion)
@@ -230,18 +237,27 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **87** · typo · misspelled predicate (used by: ad_hominem)
   - before: `  character_revelant/0: "In the type of dialogue in which the argument was used issue of character relevant."`
   - after: `  character_relevant/0: "In the type of dialogue in which the argument was used issue of character relevant."`
+- **87** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: sunk_costs_precommitment)
+  - before: _(none)_
+  - after: `  choice_at/2: "%s, there is a choice between %s and not doing so."`
 - **88** · template · cited_bad_consequences is used with 1 argument (X); the second %s printed '%!s(MISSING)' (used by: threat)
   - before: `  cited_bad_consequences/1: "If you bring about %s, some cited bad consequences, %s, will follow."`
   - after: `  cited_bad_consequences/1: "If you bring about %s, some cited bad consequences will follow."`
 - **88** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  claimed_exception/2: "%s is put forward as an exception to the rule %s."`
+- **88** [insert after] · repair — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: threat)
+  - before: _(none)_
+  - after: `  cited_bad_consequences/2: "If you go ahead with %s, the bad consequence cited, %s, will follow."`
 - **91** · typo · misspelled predicate (used by: circumstantial_ad_hominem)
   - before: `  commited_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
   - after: `  committed_opposite/2: "%s is personally committed to the opposite of %s, as shown by commitments expressed in her/ his personal actions or personal circumstances expressing such commitments."`
 - **97** · template · the template has 3 %s and both schemes use conflict_goals(P,A2,A) with 3 arguments (used by: no scheme)
   - before: `  conflict_goals/2: "%s has some other goals %s that conflict with %s." `
   - after: `  conflict_goals/3: "%s has some other goals %s that conflict with %s." `
+- **98** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: bridge_from_continuing)
+  - before: _(none)_
+  - after: `  continues_trying/2: "%s would continue the effort to realize %s."`
 - **102** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses correctly_report with 0 argument(s) and the template has 0 %s (used by: rule_physical_world_2)
   - before: `  correctly_report: "Oflicial rulelebooks correctly report the rules in force."`
   - after: `  correctly_report/0: "Oflicial rulelebooks correctly report the rules in force."`
@@ -254,6 +270,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **110** [insert after] · template · abductive_backward uses data_set(D,A) with 2 arguments; only data_set/1 had a template (used by: abductive_backward, abductive_forward)
   - before: _(none)_
   - after: `  data_set/2: "%s is a set of data or supposed facts in case %s."`
+- **112** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: bridge_from_agent, bridge_from_continuing)
+  - before: _(none)_
+  - after: `  deliberating_agent/2: "It falls to %s to decide whether to go ahead with %s."`
 - **115** [insert after] · repair — owner decision · template for the analogy family's two-case form (D001, D028, D029), in our own words (used by: analogy, practical_analogy_positive)
   - before: _(none)_
   - after: `  difference_against/3: "%s and %s differ in a way that tells against %s."`
@@ -296,13 +315,13 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **144** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition)
   - before: _(none)_
   - after: `  goal_achievable_without_any/3: "%s could reach %s without using any of the means %s."`
-- **146** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+- **146** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, practical_goal, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
   - before: _(none)_
   - after: `  goal_of_agent/2: "One of the goals of %s is %s."`
 - **147** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses goal_prestige with 0 argument(s) and the template has 0 %s (used by: snob_appeal_ad_populum)
   - before: `  goal_prestige: "Prestige is an important goal for you."`
   - after: `  goal_prestige/0: "Prestige is an important goal for you."`
-- **150** [delete] · syntax · duplicate key good/1, identical to line 149 (used by: end_and_means_1, end_and_means_3, good_outweighs_bad, positive_consequences, positive_consequences_modal)
+- **150** [delete] · syntax · duplicate key good/1, identical to line 149 (used by: end_and_means_1, end_and_means_3, end_and_means_less_bad, good_outweighs_bad, positive_consequences, positive_consequences_modal)
   - before: `  good/1: "%s is good."`
   - after: _(none)_
 - **151** · typo · template word 'represen ts' (OCR) (used by: moral_justification_ad_populum)
@@ -320,7 +339,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **185** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_inference)
   - before: _(none)_
   - after: `  incompatible_consequences/3: "For %s, %s would have consequences that work against %s."`
-- **186** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+- **186** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_goal, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition, two_person_practical)
   - before: _(none)_
   - after: `  incompatible_goal/2: "Another goal of %s is incompatible with %s."`
 - **194** · typo · misspelled predicate (used by: verbal_slippery_slope)
@@ -350,6 +369,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **205** [insert after] · addition — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: harm_reduction)
   - before: _(none)_
   - after: `  less_harmful_per_occurrence/2: "Doing %s would make each occurrence of %s less harmful."`
+- **205** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: end_and_means_less_bad)
+  - before: _(none)_
+  - after: `  less_bad_as_means/2: "Being a means to the good end %[2]s would make %[1]s less bad."`
 - **206** [insert after] · addition — owner decision · template for the answer schemes (D064, D075, D089), in our own words (used by: bad_outweighs_good, good_outweighs_bad)
   - before: _(none)_
   - after: `  matters_more/2: "%s matters more than %s."`
@@ -368,9 +390,15 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **207** [insert after] · addition — owner decision · template for cause_to_effect_modal (audit N8), in our own words (used by: cause_to_effect_modal)
   - before: _(none)_
   - after: `  may_occur/1: "An event %s has happened, or could happen."`
+- **207** [insert after] · repair — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: end_and_means_1)
+  - before: _(none)_
+  - after: `  means_bad_outweighs/2: "As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end."`
 - **208** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses means_end with 1 argument(s) and the template has 1 %s (used by: end_and_means_2)
   - before: `  means_end: "Means %s should be regarded as an end."`
   - after: `  means_end/1: "Means %s should be regarded as an end."`
+- **208** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: end_and_means_bad)
+  - before: _(none)_
+  - after: `  means_good_outweighs/2: "As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end."`
 - **213** · typo · template word 'Appearence' (used by: no scheme)
   - before: `  misleading/1: "Appearence of the objects looking like it could be classified under %s is misleading for some reasons."`
   - after: `  misleading/1: "Appearance of the objects looking like it could be classified under %s is misleading for some reasons."`
@@ -422,12 +450,18 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **245** · template · malformed verb '%i' printed '%!i(string=...)s' (used by: alternative_normative)
   - before: `  not_required/1: "%is not required."`
   - after: `  not_required/1: "%s is not required."`
+- **250** · repair — owner decision · D062: danger concludes about the action, not the danger (37). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093) The template, in our own words. (used by: danger)
+  - before: `  occur/2: "If the respondent bring about %s then %s will occur."`
+  - after: `  occur/2: "If the respondent goes ahead with %s, then %s will occur."`
 - **251** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses oficcial_rulebook with 3 argument(s) and the template has 3 %s (used by: rule_physical_world_2)
   - before: `  oficcial_rulebook: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
   - after: `  oficcial_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
 - **251** · typo · misspelled predicate (used by: rule_physical_world_2)
   - before: `  oficcial_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
   - after: `  official_rulebook/3: "In the official rulebook for %s -a rule governed institution, such as a game- it is stated that %s counts as %s."`
+- **252** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: fear)
+  - before: `  only_way_prevent/2: "But the only way for you to prevent %s is bring about %s."`
+  - after: `  only_way_prevent/2: "The only way for you to prevent %s is %s."`
 - **255** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses other_consequences with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  other_consequences: "There are some good or bad consequences of doing %s should be taken into account."`
   - after: `  other_consequences/1: "There are some good or bad consequences of doing %s should be taken into account."`
@@ -440,9 +474,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **256** · typo · template word 'presum ption' (OCR) (used by: negative_practical)
   - before: `  other_consequences_presumption/2: "If I act on the presum ption that %s is not true, and it is true, consequences %s will follow."`
   - after: `  other_consequences_presumption/2: "If I act on the presumption that %s is not true, and it is true, consequences %s will follow."`
-- **260** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses ought_to_continue with 2 argument(s) and the template has 2 %s (used by: waste)
+- **260** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses ought_to_continue with 2 argument(s) and the template has 2 %s (used by: bridge_from_continuing, waste)
   - before: `  ought_to_continue: "Therefore, %s ought to continue trying to realize %s."`
   - after: `  ought_to_continue/2: "Therefore, %s ought to continue trying to realize %s."`
+- **260** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: bridge_from_continuing, waste)
+  - before: `  ought_to_continue/2: "Therefore, %s ought to continue trying to realize %s."`
+  - after: `  ought_to_continue/2: "%s ought to continue trying to realize %s."`
 - **261** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
   - before: _(none)_
   - after: `  part_is/2: "The part %s has %s."`
@@ -458,7 +495,10 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **277** · typo · misspelled predicate and scheme id ('practise' for the noun 'practice') (used by: popular_practice)
   - before: `  popular_practise/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."`
   - after: `  popular_practice/1: "%s is a popular practice among those who are familiar with what is acceptable or not in regard to it."`
-- **278** [delete] · typo · 'posible' is a misspelling of 'possible'; renamed in its only use (line 1105), which then uses the existing template possible/1 (line 284); a second possible/1 key would be a duplicate (used by: waste)
+- **277** [insert after] · repair — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: threat)
+  - before: _(none)_
+  - after: `  position_to_bring_about/1: "I am in a position to bring about %s."`
+- **278** [delete] · typo · 'posible' is a misspelling of 'possible'; renamed in its only use (line 1105), which then uses the existing template possible/1 (line 284); a second possible/1 key would be a duplicate (used by: no scheme)
   - before: `  posible/1: "%s is possible."`
   - after: _(none)_
 - **281** · template · the template has 2 %s and the scheme uses position_to_know_group(G,A) (used by: position_to_know_ad_populum)
@@ -470,9 +510,17 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **290** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_necessary_condition, practical_sufficient_condition)
   - before: _(none)_
   - after: `  practicality_action/2: "As far as %s can tell, nothing that cannot be changed stands in the way of bringing about %s."`
+- **290** [insert after] · addition — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: sunk_costs_precommitment)
+  - before: _(none)_
+  - after: `  precommitted/4: "What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s."`
 - **295** [insert after] · addition — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: harm_reduction)
   - before: _(none)_
   - after: `  preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."`
+- **295** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: fear)
+  - before: `  prevent/1: "Therefore, you ought to prevent %s if possible."
+  preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."`
+  - after: `  prevent/1: "You ought to prevent %s if you can."
+  preventable_otherwise/2: "A course open to whoever would do %s could prevent %s."`
 - **296** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: practical_reasoning1)
   - before: _(none)_
   - after: `  promote_more_effectively/3: "There is a way for %s to promote the value %s more effectively than %s."`
@@ -485,7 +533,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **302** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses prudential with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  prudential: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
   - after: `  prudential/1: "Therefore, you ought to reconsider other things being equal and you ought prudentially to do %s."`
-- **304** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition)
+- **304** [insert after] · repair — owner decision · template for practical reasoning's agent-scoped formulas and the answer schemes (D004, D005, D030, D064, D075, D088-D091), in our own words (used by: better_means, bridge_from_continuing, practical_goal, practical_inference, practical_necessary_condition, practical_reasoning1, practical_reasoning2, practical_sufficient_condition, two_person_practical)
   - before: _(none)_
   - after: `  realize_more_effectively/3: "There is a way for %s to realize the goal %s more effectively than %s."`
 - **306** · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed pp. 340-341, entry 51: template for the property-scoped reapplication_sequence(A2,A,P) (line 1557) (used by: sorites_slippery_slope)
@@ -500,6 +548,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **309** · typo · misspelled predicate (used by: memory)
   - before: `  reasonable_belive/1: "It is reasonable to believe %s."`
   - after: `  reasonable_believe/1: "It is reasonable to believe %s."`
+- **310** [insert after] · repair — owner decision · template for the formulas of proposal D022-D093, in our own words (used by: waste)
+  - before: _(none)_
+  - after: `  reassessment_against_continuing/2: "Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s."`
 - **312** · typo · template word 'recieves' (used by: opposition-normative)
   - before: `  recieves_evaluation/2: "%s recieves the evaluation %s." `
   - after: `  recieves_evaluation/2: "%s receives the evaluation %s." `
@@ -527,7 +578,7 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **332** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  sets_precedent/3: "Making an exception of %s would commit us to making one of %s as well, since like cases must be treated alike under the rule %s."`
-- **337** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses should_not with 1 argument(s) and the template has 1 %s (used by: danger)
+- **337** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses should_not with 1 argument(s) and the template has 1 %s (used by: no scheme)
   - before: `  should_not: "Therefore you should not bring about %s."`
   - after: `  should_not/1: "Therefore you should not bring about %s."`
 - **344** · typo · template word 'caryying' (used by: two_person_practical)
@@ -536,12 +587,18 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **344** · typo · misspelled predicate (used by: two_person_practical)
   - before: `  situation_necessiy/4: "As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this."`
   - after: `  situation_necessity/4: "As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this."`
+- **344** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: two_person_practical)
+  - before: `  situation_necessity/4: "As %s sets the situation, %s is a necessary or sufficient condition for carrying out %s, and tells %s this."`
+  - after: `  situation_necessity/4: "In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s."`
 - **346** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses speakers_correct with 0 argument(s) and the template has 0 %s (used by: rule_mental_world)
   - before: `  speakers_correct: "Speakers of a language are generally correct about word definitions in that language."`
   - after: `  speakers_correct/0: "Speakers of a language are generally correct about word definitions in that language."`
 - **350** · template · special_proposition is used with 2 arguments (A,K); the first was written as the letter A (used by: epistemic_ignorance)
   - before: `  special_proposition/2: "A is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."`
   - after: `  special_proposition/2: "%s is a special type of proposition such that if it were true, it would normally or usually be expected to be in %s."`
+- **353** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: waste)
+  - before: `  stop_realize_wasted/2: "If %s stops trying to realize %s now, all previous efforts will be wasted."`
+  - after: `  stop_realize_wasted/2: "If %s stopped trying to realize %s now, all the previous efforts would be wasted."`
 - **354** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses strong_advocate with 3 argument(s) and the template has 3 %s (used by: pragmatic_inconsistency)
   - before: `  strong_advocate: "%s advocate %s in a stron way indicating her personal commitment to %s."`
   - after: `  strong_advocate/3: "%s advocate %s in a stron way indicating her personal commitment to %s."`
@@ -575,6 +632,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **366** · template · language key without /arity is never used by Carneades (it looks up name/arity); every scheme uses synonymous with 0 argument(s) and the template has 0 %s (used by: rule_physical_world_1)
   - before: `  synonymous: "Whenever expressions are referentially coextensive, they are synonymous."`
   - after: `  synonymous/0: "Whenever expressions are referentially coextensive, they are synonymous."`
+- **367** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: two_person_practical)
+  - before: `  tells_intend/3: "%s intends to realize %s, and tells %s this."`
+  - after: `  tells_intend/3: "%s, intending to realize %s, told %s so."`
 - **370** [insert after] · repair — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: negative_consequences, negative_consequences_modal, positive_consequences, positive_consequences_modal)
   - before: _(none)_
   - after: `  too_slight/2: "In deciding on action %s, %s is too slight a consequence to count."`
@@ -596,6 +656,13 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **390** [insert after] · addition — owner decision · template for whole_into_parts (10.2), in our own words (the category file's repeats the book) (used by: whole_into_parts)
   - before: _(none)_
   - after: `  whole_of/4: "%s is made up of the parts %s, %s and %s."`
+- **390** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093) The template, in our own words. (used by: waste)
+  - before: `  waste_bad_thing/2: "If all %s 's previous attempts to realize %s are wasted, that would be a bad thing."
+  whole_is/2: "The whole %s has %s."
+  whole_of/4: "%s is made up of the parts %s, %s and %s."`
+  - after: `  waste_bad_thing/2: "If all the previous efforts of %s to realize %s were wasted, that would be a bad thing."
+  whole_is/2: "The whole %s has %s."
+  whole_of/4: "%s is made up of the parts %s, %s and %s."`
 - **392** [insert after] · addition — owner decision · template for the consequences' new formulas (D008, D065, D069, D072), in our own words (used by: bridge_from_possible_good, bridge_from_possible_harm)
   - before: _(none)_
   - after: `  worth_finding_out_first/2: "It is worth finding out first whether action %s would bring about %s, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing."`
@@ -626,6 +693,12 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **497** [delete] · repair — owner decision · D081, decided under the owner's standing rule of 2026-11-22 on ChatGPT's stage review, with the book's page images checked independently (proposal D081-D084): Walton, Reed and Macagno (2008), printed p. 312, entry 4.6: moved to conclusions (line 495); it was the scheme's conclusion listed as a premise
   - before: `      -  morally_acceptable_action(X,A)`
   - after: _(none)_
+
+### appeal_to_vanity_ad_populum
+
+- **525** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - carry_out_action(X)`
+  - after: `      - should_be_performed(X)`
 
 ### popular_practise → popular_practice
 
@@ -1055,12 +1128,141 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1024** · typo · source: 'lntelligence' (OCR l for I)
   - before: `              Artificial lntelligence and Law 11 (2003), p. 169.`
   - after: `              Artificial Intelligence and Law 11 (2003), p. 169.`
+- **1031** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `      - person_goal(P,G)`
+  - after: `      - goal_of_agent(P,G)`
+- **1031** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1031** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - realize_more_effectively(P,G,X)`
+- **1031** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - incompatible_goal(P,G)`
+- **1031** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - bad_outweighs(X,G)`
 
 ### end_and_means_1
 
 - **1037** · typo · source: 'Trtatise' (OCR)
   - before: `              Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Trtatise on Argumentation `
   - after: `              Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation `
+- **1044** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1044** [insert after] · repair — owner decision · D023: a question borrowed from a related scheme, its source recorded in the proposal. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - means_bad_outweighs(X,Y)`
+
+### end_and_means_bad
+
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `  - id: end_and_means_bad`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    meta:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      title: Ends and Means - a Bad End Condemns Its Means`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      source: >`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022), with the`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        question of the opposite value that end and means 1 borrows (D093).`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    variables: [X,Y]`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - bad(X)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    premises:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - means_to_end(X,Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - bad(Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - means_good_outweighs(X,Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, the negative reading of 22.6.1; its exception borrows the question of the opposite value, as end and means 1 does (D093(g)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: _(none)_
+
+### end_and_means_less_bad
+
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `  - id: end_and_means_less_bad`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    meta:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      title: Ends and Means - a Good End Makes a Bad Means Less Bad`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      source: >`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        University Press, ch. 9, entry 22.6.1 (its graded reading), p. 325. Chaim Perelman and Lucie`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022).`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    variables: [X,Y]`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - less_bad_as_means(X,Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    premises:`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - means_to_end(X,Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - good(Y)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - bad(X)`
+- **1045** [insert after] · addition — owner decision · D022: a variant of end and means 1, one reading of 22.6.1. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: _(none)_
 
 ### end_and_means_2
 
@@ -1079,15 +1281,156 @@ Format: **line** · category · reason, then the line before and after. An inser
 
 ### two_person_practical
 
+- **1080** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - should_carry_out(A,Y)`
+  - after: `      - should_do(A,Y)`
 - **1083** · typo · misspelled predicate
   - before: `      - situation_necessiy(B,Y,X,A)`
   - after: `      - situation_necessity(B,Y,X,A)`
+- **1085** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `      - alternative_means(A,X)`
+  - after: `      - realize_more_effectively(A,X,Y)`
+- **1086** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `      - goals_higher_priority(A,X)`
+  - after: `      - incompatible_goal(A,X)`
+- **1087** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `      - side_effect_other_act(B,A)`
+  - after: `      - bad_outweighs(Y,X)`
+- **1089** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `     - possible_action(Y)`
+  - after: `     - possible_bring_about(A,Y)`
 
 ### waste
 
 - **1105** · typo · misspelled predicate 'posible'
   - before: `     - posible(X)`
   - after: `     - possible(X)`
+- **1105** · repair — owner decision · D093: found in drafting step C4 and in the review of its first version: practical reasoning's formulas for the goal and the questions, the goal's possibility, and the templates of the changed schemes. Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: `     - possible(X)`
+  - after: `     - possible_goal(X)`
+- **1105** [insert after] · repair — owner decision · D033: the reassessment from now on (24, CQ2), an exception, the critic's. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1105** [insert after] · repair — owner decision · D033: the reassessment from now on (24, CQ2), an exception, the critic's. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - reassessment_against_continuing(A,X)`
+
+### bridge_from_agent
+
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `  - id: bridge_from_agent`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    meta:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      title: From What an Agent Should Do to the Action (bridge)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      source: >`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        WAG's bridge (decision D063, refined 2026-11-22; D093): an explicit warrant, with a premise its`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        arguer supports, from a conclusion that names an agent, should_do(P,A), to the recommendation`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        should_be_performed(A), when it falls to P to decide whether to go ahead with A. Not in the`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        compendium.`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    variables: [P,A]`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - should_be_performed(A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    premises:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - should_do(P,A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - deliberating_agent(P,A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: _(none)_
+
+### bridge_from_continuing
+
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `  - id: bridge_from_continuing`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    meta:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      title: From Continuing to Try to the Action (bridge)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      source: >`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        WAG's bridge (decision D063, refined 2026-11-22: continuing an activity binds to the continuing`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        action, not only to its goal; D093): from waste's conclusion, that an agent ought to continue trying`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        to realize a goal, to the recommendation of an action that continues the effort, when the decision`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        is the agent's, with practical reasoning's questions for the means it chooses. Not in the`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `        compendium.`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    variables: [P,G,A]`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - should_be_performed(A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    premises:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - ought_to_continue(P,G)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - continues_trying(A,G)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - deliberating_agent(P,A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    assumptions:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - possible_bring_about(P,A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `    exceptions:`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - realize_more_effectively(P,G,A)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - bad_outweighs(A,G)`
+- **1106** [insert after] · addition — owner decision · D063: the bridge from a conclusion that names an agent to should_be_performed(A), with a premise its arguer supports, deliberating_agent(P,A), for the exception D063's text names (D093(e)); the continuing bridge asks practical reasoning's questions of the means it chooses (D093(f)). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093); D093: Decided under the owner's instruction of 2026-11-25 to go with the recommended choices (proposal D022-D093)
+  - before: _(none)_
+  - after: _(none)_
 
 ### negative_normal_expectations
 
@@ -1134,6 +1477,12 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `     -  strongly_occur(X)`
   - after: `     -  strongly_occur(X,C)`
 
+### pragmatic_alternative
+
+- **1305** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - do_other(A) `
+  - after: `      - should_be_performed(A) `
+
 ### treat → threat
 
 - **1310** · typo · scheme id 'treat' for 'threat' (title: Argument From Threat)
@@ -1143,11 +1492,38 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      title: Argument From Treat `
   - after: `      title: Argument From Threat `
 
+### threat
+
+- **1318** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - not_bring_about(X)`
+  - after: `      - ¬should_be_performed(X)`
+- **1320** · repair — owner decision · D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - cited_bad_consequences(X)`
+  - after: `      - cited_bad_consequences(X,C)`
+- **1321** · repair — owner decision · D060: the threat names the threatened consequence C where the book does (35). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - position_to_know(X)`
+  - after: `      - position_to_bring_about(C)`
+
 ### ad_baculum
 
 - **1326** · typo · title 'Treat' for 'Threat'
   - before: `      title: Argument From Disjunctive Ad Baculum Treat`
   - after: `      title: Argument From Disjunctive Ad Baculum Threat`
+- **1331** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - do_other(X)`
+  - after: `      - should_be_performed(X)`
+
+### fear
+
+- **1343** · repair — owner decision · D063: a recommendation to the one addressed concludes should_be_performed(A) or its negation, the claim the consequence and practical-reasoning schemes conclude, so that it meets them. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - ought_to_bring_about(X)`
+  - after: `      - should_be_performed(X)`
+
+### danger
+
+- **1357** · repair — owner decision · D062: danger concludes about the action, not the danger (37). Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: `      - should_not(Y)`
+  - after: `      - ¬should_be_performed(X)`
 
 ### distress
 
@@ -2053,6 +2429,54 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1999, pp. 93, 95.`
   - after: `        Douglas Walton, Slippery Slope Arguments, Vale Press, Newport News, 1992, pp. 93, 95.`
 
+### sunk_costs_precommitment
+
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `  - id: sunk_costs_precommitment`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    meta:`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      title: Argument from Sunk Costs (the commitment form)`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      source: >`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        University Press, pp. 135-136, and ch. 9, entry 25, pp. 326-327. Douglas Walton, 'The Sunk Costs`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        Fallacy or Argument from Waste', Argumentation 16 (2002), pp. 488-489. As the schemes library has it`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `        (decision D031).`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    variables: [P,A,T1,T2]`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    conclusions:`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - should_do(P,A)`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `    premises:`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - choice_at(T2,A)`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: `      - precommitted(P,A,T1,T2)`
+- **2033** [insert after] · addition — owner decision · D031: the commitment form of sunk costs (25), a scheme of its own. Decided under the owner's standing rule of 2026-11-22 (proposal D022-D093)
+  - before: _(none)_
+  - after: _(none)_
+
 ## Schemes that cannot pass without a change of meaning
 
 Both instantiate correctly (every premise, assumption and exception, a conclusion, all ground), and their templates pass. They fail only the validator rule that each variable must occur in a premise. The rule exists because Carneades applies schemes by matching premises. `InstantiateScheme` with explicit parameters, which WAG uses, does not need it.
@@ -2131,5 +2555,5 @@ These 19 atoms stay 0-ary; only their language keys got `/0`. A 0-ary atom is on
 - The stray " s" in the `data_account/2` template, and the soft hyphen in "pp.429­448".
 - `langugage:` occurs only in the category file `B_source-based-arguments/1_…yml`, not in `walton.yml`.
 - Negated formulas have no `¬p/n` WAG templates (WAG lint warning, see Gate).
-- Orphan templates (no scheme uses them; 41): `acceptable_action/1`, `action_fit_quality/0`, `alternative_action/2`, `another_category/2`, `bribed/1`, `bring_about_more_effectively/2`, `bringing_about_action/1`, `cannot_opposite_evaluation/3`, `carry_out_right/2`, `carry_out_wrong/2`, `classified_under/1`, `conflict_goals/3`, `defeasibly_implies/2`, `goal_is_action/1`, `have_goal/1`, `incompatible_consequences/2`, `incompatible_goal/1`, `misleading/1`, `more_acceptable_bringing/2`, `more_efficient_alternative_actions/2`, `more_on_point/2`, `necessary_action/2`, `negative_consequences/1`, `other_consequences/1`, `other_goals_conflict/1`, `positive_consequences/1`, `possible_agent/2`, `practicality_action/1`, `promote_more_effectively/2`, `prudential/1`, `realize_more_effectively/2`, `relevant_differences/1`, `side_effect_action/2`, `side_effects/2`, `strongly_occur/1`, `successful_account/2`, `sufficient_action/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
+- Orphan templates (no scheme uses them; 55): `acceptable_action/1`, `action_fit_quality/0`, `alternative_action/2`, `alternative_means/2`, `another_category/2`, `bribed/1`, `bring_about_more_effectively/2`, `bringing_about_action/1`, `cannot_opposite_evaluation/3`, `carry_out_action/1`, `carry_out_right/2`, `carry_out_wrong/2`, `cited_bad_consequences/1`, `classified_under/1`, `conflict_goals/3`, `defeasibly_implies/2`, `do_other/1`, `goal_is_action/1`, `goals_higher_priority/2`, `have_goal/1`, `incompatible_consequences/2`, `incompatible_goal/1`, `misleading/1`, `more_acceptable_bringing/2`, `more_efficient_alternative_actions/2`, `more_on_point/2`, `necessary_action/2`, `negative_consequences/1`, `not_bring_about/1`, `other_consequences/1`, `other_goals_conflict/1`, `ought_to_bring_about/1`, `person_goal/2`, `position_to_know/1`, `positive_consequences/1`, `possible/1`, `possible_action/1`, `possible_agent/2`, `practicality_action/1`, `promote_more_effectively/2`, `prudential/1`, `realize_more_effectively/2`, `relevant_differences/1`, `should_carry_out/2`, `should_not/1`, `side_effect_action/2`, `side_effect_other_act/2`, `side_effects/2`, `strongly_occur/1`, `successful_account/2`, `sufficient_action/2`, `true_false/2`, `trustworthy/1`, `would_achieve/2`, `would_demote_value/2`.
 
