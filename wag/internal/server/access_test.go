@@ -360,7 +360,7 @@ func TestThisComputerAtItsNetworkAddressIsTheOwner(t *testing.T) {
 	// A name for this computer is not the owner, even from this computer.
 	req, _ := http.NewRequest("GET", ts.URL+"/api/games/"+st.ID+"/keys", nil)
 	req.Host = "wag.example"
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := direct.Do(req)
 	if err != nil {
 		t.Fatal(err)
 	}

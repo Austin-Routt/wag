@@ -32,6 +32,12 @@ func newTestServerWith(t *testing.T) (*Server, *httptest.Server) {
 	return s, ts
 }
 
+// direct is the tests' HTTP client: it reaches the test server itself, never
+// through a proxy the environment names. Go does not proxy loopback addresses,
+// but it would carry a request to this computer's network address
+// (TestThisComputerAtItsNetworkAddressIsTheOwner) to an HTTP_PROXY.
+var direct = &http.Client{Transport: &http.Transport{Proxy: nil}}
+
 func call(t *testing.T, ts *httptest.Server, method, path string, body interface{}, out interface{}) int {
 	t.Helper()
 	var r io.Reader
@@ -47,7 +53,7 @@ func call(t *testing.T, ts *httptest.Server, method, path string, body interface
 	if method == http.MethodPost {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := direct.Do(req)
 	if err != nil {
 		t.Fatal(err)
 	}
