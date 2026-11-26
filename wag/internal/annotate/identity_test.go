@@ -532,7 +532,7 @@ func TestCanonicalReadsAliasesAsTheirActions(t *testing.T) {
 	// A predicate's name is not an atom: an alias that is also a predicate
 	// name leaves the predicate alone.
 	cs.canon["brings_about"] = "tax_meat"
-	if got := cs.canonFormula("brings_about(brings_about,G)"); got != "brings_about(tax_meat,G)" {
+	if got := cs.canonFormula("brings_about(brings_about,G)", nil); got != "brings_about(tax_meat,G)" {
 		t.Errorf("%q", got)
 	}
 }
@@ -564,8 +564,10 @@ func TestCanonicalReadsAliasesOnlyWhereAnActionStands(t *testing.T) {
 		"brings_about( meat_tax ,food_less_affordable_for_poor)":   "brings_about(tax_meat,food_less_affordable_for_poor)",
 		"meat_tax":                        "meat_tax",
 		"should_be_performed(meat_tax,x)": "should_be_performed(meat_tax,x)",
+		"¬should_be_performed (meat_tax)": "¬should_be_performed(tax_meat)",
+		"bad(brings_about(meat_tax,food_less_affordable_for_poor))": "bad(brings_about(tax_meat,food_less_affordable_for_poor))",
 	} {
-		if got := cs.canonFormula(f); got != want {
+		if got := cs.canonFormula(f, nil); got != want {
 			t.Errorf("%q: %q, want %q", f, got, want)
 		}
 	}
@@ -597,6 +599,132 @@ func TestCanonicalReadsAliasesOnlyWhereAnActionStands(t *testing.T) {
 	cx, cg := cs.CanonicalSet(x, col), cs.CanonicalSet(d.Gold, col)
 	if FieldIn(cx["13292.7"], "bindings", cx) == FieldIn(cg["13292.7"], "bindings", cg) {
 		t.Error("an action in a goal's place agrees with the goal")
+	}
+}
+
+// In an instance's formulas, an alias is read as its action wherever the
+// instance's scheme has an action variable, also in places positions.json
+// does not type (sunk_costs(A,C)'s A, distress's relieve(B,X)), so that the
+// binding and the formulas it fills are read alike; outside an instance, in
+// a target's formula, positions.json alone types the places (the independent
+// check of ID-k, 2026-11-26).
+func TestCanonicalReadsTheInstancesScheme(t *testing.T) {
+	d, col := builtin(t)
+	cs := *d.Case
+	cs.canon = map[string]string{}
+	for k, v := range d.Case.canon {
+		cs.canon[k] = v
+	}
+	cs.canon["meat_tax"] = "tax_meat"
+	f := func(s string) map[string]any { return map[string]any{"formula": s} }
+	a := Annotation{
+		"instances": []any{
+			map[string]any{
+				"scheme":     map[string]any{"walton_id": "sunk_costs"},
+				"bindings":   map[string]any{"A": "meat_tax", "C": "costs"},
+				"premises":   []any{f("sunk_costs(meat_tax,costs)"), f("too_high_to_waste(costs)"), f("feasible(meat_tax)"), f("future_losses_outweigh(meat_tax)")},
+				"conclusion": f("should_be_performed(meat_tax)"),
+			},
+			map[string]any{
+				"scheme":     map[string]any{"walton_id": "distress"},
+				"bindings":   map[string]any{"B": "governments", "X": "meat_tax", "A": "farmers"},
+				"premises":   []any{f("distress(farmers)"), f("relieve(governments,meat_tax)"), f("possible_bring_about(governments,meat_tax)")},
+				"conclusion": f("bring_relief(governments,meat_tax)"),
+			},
+		},
+		"target": map[string]any{"actual": map[string]any{"formula": "sunk_costs(meat_tax,costs)"}},
+	}
+	got := cs.Canonical(a, col)
+	b, _ := json.Marshal(got["instances"])
+	if s := string(b); strings.Contains(s, "meat_tax") {
+		t.Errorf("an alias is left where the instance's scheme has an action: %s", s)
+	}
+	if f := got["target"].(map[string]any)["actual"].(map[string]any)["formula"]; f != "sunk_costs(meat_tax,costs)" {
+		t.Errorf("a target's formula, outside an instance: %v", f)
+	}
+	// Without the collection, the scheme is not read: positions.json alone.
+	b, _ = json.Marshal(cs.Canonical(a, nil)["instances"])
+	if s := string(b); !strings.Contains(s, "sunk_costs(meat_tax,costs)") || strings.Contains(s, "should_be_performed(meat_tax)") {
+		t.Errorf("without the collection: %s", s)
+	}
+}
+
+// R7 in Go as validate.py has it (the independent check of ID-k,
+// 2026-11-26): each other parent with its relation, in any order, each as
+// often as items.json has it; other_kialo_parents recorded exactly when the
+// claim has more than one parent; a claim id and a relation are strings.
+func TestR7KialoParents(t *testing.T) {
+	r7 := func(c *Collection, d *Dataset, set map[string]Annotation, id string) string {
+		var out []string
+		for _, p := range c.CheckIn(set[id], d, set, 0) {
+			if strings.HasPrefix(p, "R7 ") {
+				out = append(out, p)
+			}
+		}
+		return strings.Join(out, "; ")
+	}
+	d, c := builtin(t)
+	if p := r7(c, d, d.Gold, "13292.180"); p != "" {
+		t.Fatalf("the gold: %s", p)
+	}
+	others := func(set map[string]Annotation, id string) []any {
+		return set[id]["target"].(map[string]any)["other_kialo_parents"].([]any)
+	}
+	target := func(set map[string]Annotation, id string) map[string]any {
+		return set[id]["target"].(map[string]any)
+	}
+	for name, tc := range map[string]struct {
+		claim, want string
+		plant       func(set map[string]Annotation)
+	}{
+		"a parent twice": {"13292.180", "R7 its other Kialo parents are [13292.121 pro, 13292.121 pro]; items.json has [13292.121 pro]", func(set map[string]Annotation) {
+			target(set, "13292.180")["other_kialo_parents"] = append(others(set, "13292.180"), others(set, "13292.180")[0])
+		}},
+		"a number for the parent": {"13292.180", "R7 its Kialo parent is 13292.7 (not a string) pro", func(set map[string]Annotation) {
+			target(set, "13292.180")["kialo_parent"] = 13292.7
+		}},
+		"a number for another parent": {"13292.180", "[13292.121 (not a string) pro]", func(set map[string]Annotation) {
+			others(set, "13292.180")[0].(map[string]any)["claim_id"] = 13292.121
+		}},
+		"no list for two parents": {"13292.180", "R7 it has 2 Kialo parents, and records no list of other_kialo_parents", func(set map[string]Annotation) {
+			delete(target(set, "13292.180"), "other_kialo_parents")
+		}},
+		"a list for one parent": {"13292.7", "R7 it records other_kialo_parents, but has 1 Kialo parent(s)", func(set map[string]Annotation) {
+			target(set, "13292.7")["other_kialo_parents"] = []any{}
+		}},
+		"a list for the thesis": {"13292.1", "R7 it records other_kialo_parents, but has 0 Kialo parent(s)", func(set map[string]Annotation) {
+			target(set, "13292.1")["other_kialo_parents"] = nil
+		}},
+	} {
+		t.Run(name, func(t *testing.T) {
+			set := clone(t, d.Gold)
+			tc.plant(set)
+			if p := r7(c, d, set, tc.claim); !strings.Contains(p, tc.want) {
+				t.Errorf("%q, want %q", p, tc.want)
+			}
+		})
+	}
+	// Any order: a third parent, as another batch's items.json could have.
+	d3, _ := builtin(t)
+	for i := range d3.Items {
+		if d3.Items[i].ID != "13292.180" {
+			continue
+		}
+		var raw map[string]any
+		if err := json.Unmarshal(d3.Items[i].Raw, &raw); err != nil {
+			t.Fatal(err)
+		}
+		raw["kialo_parents"] = append(raw["kialo_parents"].([]any), map[string]any{"claim_id": "13292.115", "relation": "con", "location_id": "13292.999"})
+		d3.Items[i].Raw, _ = json.Marshal(raw)
+	}
+	set := clone(t, d3.Gold)
+	target(set, "13292.180")["other_kialo_parents"] = append([]any{map[string]any{"claim_id": "13292.115", "relation": "con"}}, others(set, "13292.180")...)
+	if p := r7(c, d3, set, "13292.180"); p != "" {
+		t.Errorf("two other parents, listed in another order: %s", p)
+	}
+	others(set, "13292.180")[0].(map[string]any)["relation"] = "pro"
+	if p := r7(c, d3, set, "13292.180"); !strings.Contains(p, "[13292.115 pro, 13292.121 pro]; items.json has [13292.115 con, 13292.121 pro]") {
+		t.Errorf("a reversed relation among two other parents: %q", p)
 	}
 }
 
@@ -1065,6 +1193,7 @@ func TestCanonicalMatchesAgreementPy(t *testing.T) {
 						f("¬ ¬should_be_performed( meat_tax )"), f("brings_about( tax_meat , food_less_affordable_for_poor )"),
 						f("should_be_performed(meat_tax,x)"), f("meat_tax"), f("brings_about(meat_tax"),
 						f("brings_about( meat_tax ,food_less_affordable_for_poor)"),
+						f("should_be_performed(\x1cmeat_tax)"), f("brings_about(\x1cmeat_tax,x)"),
 					},
 					"conclusion": f("¬should_be_performed(meat_tax)"),
 					"notes":      "brings_about(meat_tax,x)",
@@ -1074,6 +1203,17 @@ func TestCanonicalMatchesAgreementPy(t *testing.T) {
 				map[string]any{
 					"scheme":   map[string]any{"walton_id": "practical_reasoning2"},
 					"bindings": map[string]any{"A": "meat_tax", "G": "meat_tax", "P": "meat_tax", "S1": map[string]any{"unstated": "not said"}},
+				},
+				map[string]any{
+					"scheme":     map[string]any{"walton_id": "sunk_costs"},
+					"bindings":   map[string]any{"A": "meat_tax", "C": "food_less_affordable_for_poor"},
+					"premises":   []any{f("sunk_costs(meat_tax,food_less_affordable_for_poor)"), f("feasible( meat_tax )"), f("¬should_be_performed (meat_tax)")},
+					"conclusion": f("should_be_performed(meat_tax)"),
+				},
+				map[string]any{
+					"scheme":   map[string]any{"walton_id": "distress"},
+					"bindings": map[string]any{"B": "governments", "X": "meat_tax", "A": "meat_tax"},
+					"premises": []any{f("relieve(governments,meat_tax)"), f("distress(meat_tax)"), f("bad(brings_about(meat_tax,food_less_affordable_for_poor))")},
 				},
 			},
 			"target": map[string]any{"actual": map[string]any{"claim": "meat_tax", "formula": "too_slight(meat_tax,food_less_affordable_for_poor)"}},
@@ -1116,6 +1256,54 @@ func TestCanonicalMatchesAgreementPy(t *testing.T) {
 	}
 	if c := inst(x, 0)["conclusion"].(map[string]any)["formula"]; c != "¬should_be_performed(tax_meat)" {
 		t.Errorf("the conclusion: %v", c)
+	}
+}
+
+// agreement.py refuses the case records Go's parseCase refuses for their
+// actions and aliases, so that the two measures never read one case two ways
+// (the independent check of ID-k, 2026-11-26: agreement.py took them).
+func TestAgreementPyRefusesTheCaseGoRefuses(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(dir, "case.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for name, plant := range map[string]func(actions []any){
+		"an actor as an alias": func(a []any) { a[0].(map[string]any)["aliases"] = []any{"governments"} },
+		"an alias of two actions": func(a []any) {
+			a[0].(map[string]any)["aliases"] = []any{"meat_tax"}
+			a[1].(map[string]any)["aliases"] = []any{"meat_tax"}
+		},
+		"an action as an alias": func(a []any) { a[0].(map[string]any)["aliases"] = []any{a[1].(map[string]any)["id"]} },
+		"an actor as an action": func(a []any) { a[1].(map[string]any)["id"] = "governments" },
+	} {
+		t.Run(name, func(t *testing.T) {
+			var cj map[string]any
+			if err := json.Unmarshal(raw, &cj); err != nil {
+				t.Fatal(err)
+			}
+			plant(cj["actions"].([]any))
+			if _, err := parseCase([]byte(mustJSON(t, cj))); err == nil {
+				t.Fatal("parseCase takes it")
+			}
+			pc := filepath.Join(t.TempDir(), "case.json")
+			if err := os.WriteFile(pc, []byte(mustJSON(t, cj)), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			cmd := exec.Command(py, "-I", "-B", "agreement.py", "gold.json", "gold.json", "--case", pc)
+			cmd.Dir = dir
+			out, err := cmd.CombinedOutput()
+			if err == nil || !strings.Contains(string(out), "case: ") {
+				t.Errorf("agreement.py takes it: %v %s", err, out)
+			}
+		})
 	}
 }
 

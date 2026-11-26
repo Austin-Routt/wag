@@ -133,16 +133,50 @@ func (c *Case) Canon(atom string) string {
 	return atom
 }
 
+// actionPlaces are the places, by predicate and arity, of the formulas of an
+// instance of a scheme that hold one of its action variables (typedVars), as
+// zero-based argument positions: they cover the places positions.json does
+// not type, such as sunk_costs(A,C)'s A, where the scheme says the variable is
+// an action elsewhere. Nil for no scheme of the collection.
+type actionPlaces map[string]map[int]bool
+
+func schemeActionPlaces(sc waltonScheme) actionPlaces {
+	acts := map[string]bool{}
+	for v, kind := range typedVars(sc) {
+		if kind == "action" {
+			acts[v] = true
+		}
+	}
+	out := actionPlaces{}
+	for _, fs := range [][]string{sc.Premises, sc.Assumptions, sc.Exceptions, sc.Conclusions} {
+		for _, f := range fs {
+			name, args := splitFormula(f)
+			key := fmt.Sprintf("%s/%d", name, len(args))
+			for i, a := range args {
+				if acts[a] {
+					if out[key] == nil {
+						out[key] = map[int]bool{}
+					}
+					out[key][i] = true
+				}
+			}
+		}
+	}
+	return out
+}
+
 // canonFormula puts each alias in an action's place of a formula back to its
-// action (positions.json gives the places, by predicate and arity, nested
-// terms included). An atom in any other place keeps its name, even when it is
-// spelled as an alias: a goal or a consequence is not an action. A formula
-// with nothing to put back is returned as it is.
-func (c *Case) canonFormula(f string) string {
+// action: the places positions.json types, by predicate and arity, nested
+// terms included, and in an instance of a scheme of the collection, the
+// places where the scheme has an action variable (extra). An atom in any other
+// place keeps its name, even when it is spelled as an alias: a goal or a
+// consequence is not an action. A formula with nothing to put back is
+// returned as it is.
+func (c *Case) canonFormula(f string, extra actionPlaces) string {
 	if c == nil || len(c.canon) == 0 {
 		return f
 	}
-	if out, changed := c.canonTerm(f); changed {
+	if out, changed := c.canonTerm(f, extra); changed {
 		return out
 	}
 	return f
@@ -150,10 +184,10 @@ func (c *Case) canonFormula(f string) string {
 
 // canonTerm is canonFormula for one term; changed says whether it put an
 // alias back.
-func (c *Case) canonTerm(f string) (string, bool) {
+func (c *Case) canonTerm(f string, extra actionPlaces) (string, bool) {
 	g := strings.TrimSpace(f)
 	if strings.HasPrefix(g, "¬") {
-		y, changed := c.canonTerm(strings.TrimPrefix(g, "¬"))
+		y, changed := c.canonTerm(strings.TrimPrefix(g, "¬"), extra)
 		if !changed {
 			return f, false
 		}
@@ -163,15 +197,19 @@ func (c *Case) canonTerm(f string) (string, bool) {
 	if len(args) == 0 {
 		return f, false
 	}
+	key := fmt.Sprintf("%s/%d", name, len(args))
 	places := map[int]bool{}
-	for _, i := range typedPlaces.Action[fmt.Sprintf("%s/%d", name, len(args))] {
+	for _, i := range typedPlaces.Action[key] {
 		places[i-1] = true
+	}
+	for i := range extra[key] {
+		places[i] = true
 	}
 	changed := false
 	for i, x := range args {
 		switch {
 		case strings.Contains(x, "("):
-			if y, ch := c.canonTerm(x); ch {
+			if y, ch := c.canonTerm(x, extra); ch {
 				args[i], changed = y, true
 			}
 		case places[i]:
@@ -186,16 +224,24 @@ func (c *Case) canonTerm(f string) (string, bool) {
 	return name + "(" + strings.Join(args, ",") + ")", true
 }
 
-// actionVars are the variables of an instance's scheme that stand in an
-// action's place; nil without the collection, or when the scheme is not
-// one of its schemes (other).
-func actionVars(inst map[string]any, col *Collection) map[string]bool {
+// instanceScheme is the scheme of the collection an instance names; false
+// without the collection, or when the scheme is not one of its schemes
+// (other).
+func instanceScheme(inst map[string]any, col *Collection) (waltonScheme, bool) {
 	if col == nil {
-		return nil
+		return waltonScheme{}, false
 	}
 	sc, _ := inst["scheme"].(map[string]any)
 	id, _ := sc["walton_id"].(string)
 	s, ok := col.schemes[id]
+	return s, ok
+}
+
+// actionVars are the variables of an instance's scheme that stand in an
+// action's place; nil without the collection, or when the scheme is not
+// one of its schemes (other).
+func actionVars(inst map[string]any, col *Collection) map[string]bool {
+	s, ok := instanceScheme(inst, col)
 	if !ok {
 		return nil
 	}
@@ -213,22 +259,29 @@ func actionVars(inst map[string]any, col *Collection) map[string]bool {
 // two names of one action as one (docs/annotation-records.md §11): in the
 // binding of a variable that stands in an action's place in the instance's
 // scheme (walton.yml, positions.json), and in an action's place of a
-// formula. An atom anywhere else keeps its name, even when it is spelled as
-// an alias: a goal or a consequence written with an action's alias is not
-// that action, and reading it as one would make two different annotations
-// agree. Without the collection, the bindings are left as they are.
+// formula: one positions.json types, or, in an instance's formulas, one where
+// the instance's scheme has an action variable, so that a binding and the
+// formulas it fills are read alike. An atom anywhere else keeps its name,
+// even when it is spelled as an alias: a goal or a consequence written with
+// an action's alias is not that action, and reading it as one would make two
+// different annotations agree. Without the collection, the bindings are left
+// as they are, and formulas are read by positions.json alone.
 func (c *Case) Canonical(a Annotation, col *Collection) Annotation {
 	if c == nil || len(c.canon) == 0 || a == nil {
 		return a
 	}
-	var walk func(v any, key string) any
-	walk = func(v any, key string) any {
+	var walk func(v any, key string, extra actionPlaces) any
+	walk = func(v any, key string, extra actionPlaces) any {
 		switch x := v.(type) {
 		case map[string]any:
 			out := make(map[string]any, len(x))
 			var acts map[string]bool
 			if _, ok := x["bindings"]; ok {
 				acts = actionVars(x, col)
+				extra = nil
+				if s, ok := instanceScheme(x, col); ok {
+					extra = schemeActionPlaces(s)
+				}
 			}
 			for k, y := range x {
 				if b, ok := y.(map[string]any); ok && k == "bindings" {
@@ -243,23 +296,23 @@ func (c *Case) Canonical(a Annotation, col *Collection) Annotation {
 					out[k] = nb
 					continue
 				}
-				out[k] = walk(y, k)
+				out[k] = walk(y, k, extra)
 			}
 			return out
 		case []any:
 			out := make([]any, len(x))
 			for i, y := range x {
-				out[i] = walk(y, key)
+				out[i] = walk(y, key, extra)
 			}
 			return out
 		case string:
 			if key == "formula" {
-				return c.canonFormula(x)
+				return c.canonFormula(x, extra)
 			}
 		}
 		return v
 	}
-	out, _ := walk(map[string]any(a), "").(map[string]any)
+	out, _ := walk(map[string]any(a), "", nil).(map[string]any)
 	return out
 }
 
@@ -319,7 +372,9 @@ func typedVars(sc waltonScheme) map[string]string {
 	return out
 }
 
-// splitFormula reads "¬p(a,q(b),c)" as p and its top-level arguments.
+// splitFormula reads "¬p(a,q(b),c)" as p and its top-level arguments, the
+// name and each argument trimmed ("p (a)" is p, as formulas are compared
+// without their spaces).
 func splitFormula(f string) (string, []string) {
 	f = strings.TrimPrefix(strings.TrimSpace(f), "¬")
 	i := strings.Index(f, "(")
@@ -344,5 +399,5 @@ func splitFormula(f string) (string, []string) {
 	if s := strings.TrimSpace(cur.String()); s != "" {
 		args = append(args, s)
 	}
-	return f[:i], args
+	return strings.TrimSpace(f[:i]), args
 }

@@ -95,12 +95,15 @@ The typing of predicate positions (which argument of a predicate is an agent and
   alias (since 2026-11-25: an actor's id names the actor). What others would do in response
   (people switching to other protein) is a consequence, a state, not a declared action.
 - **What an alias is for.** A file writes each action by one atom. Aliases let other vocabularies be
-  read as the same action: who performs it (R14) and whether a better means is another course (R9)
-  read an alias as its action, and so do agreement and the choice of claims to review (§11), where
-  an action stands: in the binding of a variable in an action's place of the instance's scheme, and
-  in an action's place of a formula (`positions.json`). A goal or a consequence spelled like an
-  alias keeps its name (since 2026-11-25): read as the action, it would make an annotation that puts
-  the action in a goal's place agree with one that names the goal. A reference is exact: a target's
+  read as the same action: who performs it (R14), whether a better means is another course (R9) and
+  whether a cause is an action the case deliberates (R4) read an alias as its action, and so do
+  agreement and the choice of claims to review (§11), where an action stands: in the binding of a
+  variable in an action's place of the instance's scheme, and in a formula's places that
+  `positions.json` types as an action's or, within an instance, that its scheme fills with an action
+  variable (`sunk_costs(A,C)`'s A, which `positions.json` leaves untyped), so that a binding and the
+  formulas it fills read alike. A goal or a consequence spelled like an alias keeps its name (since
+  2026-11-25): read as the action, it would make an annotation that puts the action in a goal's place
+  agree with one that names the goal. A reference is exact: a target's
   formula (R13), an answer's conclusion (R8) and a challenge's formula (R10) are written as the
   instance they refer to has them, so an alias there is refused.
 - The thesis's action is a declared action; its actor is the agent the case deliberates for. The
@@ -245,9 +248,11 @@ Rules that change in format 2:
   the case deliberates (which has not occurred), or the effect a modal step of the same claim says
   only may occur, is refused. Format 1 keeps the rule of the N8 note.
 - **R7**: `other_kialo_parents` is there exactly when the claim has more than one Kialo parent, and
-  the parents, each with its relation, are `items.json`'s, each as often as it has it: the source's
-  pro or con, not the interpreted polarity (`role.polarity`), which may differ (since 2026-11-25,
-  in `validate.py` and the Go check alike, after an external review).
+  the parents, each with its relation, are `items.json`'s, in any order, each as often as it has it:
+  the source's pro or con, not the interpreted polarity (`role.polarity`), which may differ (since
+  2026-11-25, after an external review). Each claim id and relation is a string (R16). The Go check
+  reads them as `validate.py` does since 2026-11-26 (an independent check found it took a number for
+  a claim id and did not check when the list is recorded).
 - **R9**: A2 is another action than A as the case maps them, so an alias of A is not another course;
   the goal premise compared is the targeted instance's.
 - **R10**: a challenge names an instance, its own or its target's, and a formula of that instance.
@@ -299,8 +304,10 @@ claim it did not review as unresolved too.
 - **Agreement on aliases** depends on the case record listing them; an atom used by one annotator for
   an action the case does not list is simply another atom. It also depends on walton.yml typing the
   variables (`positions.json`): an instance of a scheme walton.yml lacks (`other`) has no variable
-  known to stand for an action, so its bindings keep their spelling, though its formulas' action
-  places are still read.
+  known to stand for an action, so its bindings keep their spelling, though its formulas' places that
+  `positions.json` types are still read. A formula outside an instance, a target's, is read by
+  `positions.json` alone: an alias in a place only the target instance's scheme makes an action's
+  (`sunk_costs(A,C)`'s A) keeps its spelling there.
 - **The case record, like the lexicon, is drawn from the gold for batch 2**, so it shows annotators
   which atoms the gold treats as actions. That is fine for development material; the pilot's
   (stage 3) must not be drawn from its gold, as its lexicon must not.

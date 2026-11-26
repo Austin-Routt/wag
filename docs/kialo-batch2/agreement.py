@@ -1,7 +1,8 @@
 """Inter-annotator agreement for the Kialo batch 2 double annotation.
 
 Usage (the standard library; --case also reads walton.yml, with PyYAML, as
-validate.py does):
+validate.py does, its scheme ids as walton.yml has them, as the Go measure
+reads them):
 
     python3 -I agreement.py annotator-A.json annotator-B.json \
         [--pilot ../kialo-pilot/pilot.json] [--families ../../wag/data/schemes/families.json] \
@@ -159,10 +160,16 @@ def instances(item):
     return "|".join(sorted(signature(i) for i in item.get("instances") or [] if isinstance(i, dict)))
 
 
+# Go's strings.TrimSpace trims what unicode.IsSpace calls space; Python's
+# str.strip() also trims U+001C to U+001F, so the agreement's own reading of
+# formulas trims Go's set, and reads a formula as the Go measure does.
+GO_SPACE = "\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
+
+
 def split_formula(f):
-    """"¬p(a,q(b),c)" as p and its top-level arguments, each trimmed (Go's
-    splitFormula)."""
-    f = f.strip()
+    """"¬p(a,q(b),c)" as p and its top-level arguments, the name and each
+    argument trimmed (Go's splitFormula)."""
+    f = f.strip(GO_SPACE)
     if f.startswith("¬"):
         f = f[1:]
     i = f.find("(")
@@ -171,7 +178,7 @@ def split_formula(f):
     args, depth, cur = [], 0, ""
     for ch in f[i + 1:-1]:
         if ch == "," and depth == 0:
-            args.append(cur.strip())
+            args.append(cur.strip(GO_SPACE))
             cur = ""
             continue
         if ch == "(":
@@ -179,9 +186,9 @@ def split_formula(f):
         elif ch == ")":
             depth -= 1
         cur += ch
-    if cur.strip():
-        args.append(cur.strip())
-    return f[:i], args
+    if cur.strip(GO_SPACE):
+        args.append(cur.strip(GO_SPACE))
+    return f[:i].strip(GO_SPACE), args
 
 
 def typed_vars(scheme, places):
@@ -198,65 +205,102 @@ def typed_vars(scheme, places):
     return out
 
 
+def case_canon(case):
+    """Each action of the case record and each alias, to its action. An
+    action or an alias that is an actor's id, empty, or given twice is refused,
+    as Go's parseCase refuses it, so that the two measures never read one
+    case two ways (validate.py checks the rest of the record)."""
+    actors = {a.get("id") for a in case.get("actors") or [] if isinstance(a, dict)}
+    canon = {}
+    for a in case.get("actions") or []:
+        x = a.get("id")
+        if x in actors:
+            raise SystemExit(f"case: {x!r} is an actor, so it cannot be an action")
+        if not x or x in canon:
+            raise SystemExit(f"case: the action {x!r} is empty or given twice")
+        canon[x] = x
+    for a in case.get("actions") or []:
+        for al in a.get("aliases") or []:
+            if al in actors:
+                raise SystemExit(f"case: {al!r} is an actor, so it cannot be an alias of {a['id']}")
+            if not al or al in canon:
+                raise SystemExit(f"case: {al!r} is an action or an alias already, so it cannot be an alias of {a['id']}")
+            canon[al] = a["id"]
+    return canon
+
+
 def canonical(S, case, schemes, places):
     """The annotations with each alias of the case's actions put back to its
     action where an action stands (Go's Case.CanonicalSet): in the binding of
     a variable in an action's place of the instance's scheme, and in an
-    action's place of a formula, nested terms included. A goal or a
-    consequence spelled like an alias keeps its name: read as the action, it
-    would make two different annotations agree. A formula with nothing to
-    put back is left as it is."""
-    canon = {}
-    for a in case.get("actions") or []:
-        canon[a["id"]] = a["id"]
-        for al in a.get("aliases") or []:
-            canon[al] = a["id"]
+    action's place of a formula: one positions.json types, or, in an
+    instance's formulas, one where its scheme has an action variable, so that
+    a binding and the formulas it fills are read alike; nested terms
+    included. A goal or a consequence spelled like an alias keeps its name:
+    read as the action, it would make two different annotations agree. A
+    formula with nothing to put back is left as it is."""
+    canon = case_canon(case)
     if not canon:
         return S
 
-    def term(f):
-        g = f.strip()
+    def term(f, extra):
+        g = f.strip(GO_SPACE)
         if g.startswith("¬"):
-            y, changed = term(g[1:])
+            y, changed = term(g[1:], extra)
             return ("¬" + y, True) if changed else (f, False)
         name, args = split_formula(g)
         if not args:
             return f, False
-        at = {i - 1 for i in places["action"].get(f"{name}/{len(args)}", [])}
+        key = f"{name}/{len(args)}"
+        at = {i - 1 for i in places["action"].get(key, [])} | extra.get(key, set())
         changed = False
         for i, x in enumerate(args):
             if "(" in x:
-                y, ch = term(x)
+                y, ch = term(x, extra)
                 if ch:
                     args[i], changed = y, True
             elif i in at and canon.get(x, x) != x:
                 args[i], changed = canon[x], True
         return (name + "(" + ",".join(args) + ")", True) if changed else (f, False)
 
-    def action_vars(ins):
+    def scheme_of(ins):
         sc = ins.get("scheme")
         wid = sc.get("walton_id") if isinstance(sc, dict) else None
-        s = schemes.get(wid) if isinstance(wid, str) else None
-        if s is None:
-            return set()
-        return {v for v, kind in typed_vars(s, places).items() if kind == "action"}
+        return schemes.get(wid) if isinstance(wid, str) else None
 
-    def walk(v, key):
+    def action_places(s):
+        """Go's schemeActionPlaces: the places of the scheme's formulas that
+        hold one of its action variables, by predicate and arity."""
+        acts = {v for v, kind in typed_vars(s, places).items() if kind == "action"}
+        out = {}
+        for key in ("premises", "assumptions", "exceptions", "conclusions"):
+            for f in s.get(key) or []:
+                name, args = split_formula(f)
+                for i, a in enumerate(args):
+                    if a in acts:
+                        out.setdefault(f"{name}/{len(args)}", set()).add(i)
+        return out
+
+    def walk(v, key, extra):
         if isinstance(v, dict):
-            acts = action_vars(v) if "bindings" in v else set()
+            acts = set()
+            if "bindings" in v:
+                s = scheme_of(v)
+                acts = {x for x, kind in typed_vars(s, places).items() if kind == "action"} if s is not None else set()
+                extra = action_places(s) if s is not None else {}
             out = {}
             for k, y in v.items():
                 if k == "bindings" and isinstance(y, dict):
                     out[k] = {x: (canon.get(b, b) if isinstance(b, str) and x in acts else b) for x, b in y.items()}
                 else:
-                    out[k] = walk(y, k)
+                    out[k] = walk(y, k, extra)
             return out
         if isinstance(v, list):
-            return [walk(y, key) for y in v]
+            return [walk(y, key, extra) for y in v]
         if isinstance(v, str) and key == "formula":
-            return term(v)[0]
+            return term(v, extra)[0]
         return v
-    return {k: walk(v, "") for k, v in S.items()}
+    return {k: walk(v, "", {}) for k, v in S.items()}
 
 
 def kappa(pairs):

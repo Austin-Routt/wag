@@ -98,7 +98,7 @@ func TestParseRefusesAnUnknownRelation(t *testing.T) {
 	if bad == sample {
 		t.Fatal("the fixture's relation is not where the test expects it")
 	}
-	if _, err := Parse([]byte(bad)); err == nil || !strings.Contains(err.Error(), `the relation "rebut"`) {
+	if _, err := Parse([]byte(bad)); err == nil || !strings.Contains(err.Error(), `the edge from 1.1 to 1.3 (location 1.12) has the relation "rebut"`) {
 		t.Fatalf("an unknown relation: %v", err)
 	}
 	inactive := strings.Replace(bad, `"relation": "rebut", "vote_vector": [1,1,1,0,0], "active": true`,

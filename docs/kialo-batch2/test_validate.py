@@ -27,6 +27,8 @@ with open(os.path.join(DOC, 'gold-format1.json'), encoding='utf-8') as fh:
     GOLD1 = json.load(fh)
 with open(os.path.join(DOC, 'case.json'), encoding='utf-8') as fh:
     CASE = json.load(fh)
+with open(os.path.join(DOC, 'items.json'), encoding='utf-8') as fh:
+    ITEMS = json.load(fh)
 ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs): ')
 # The walton.yml the format-1 gold was made with (WAG 96c3c5a), and the copy
 # of it that validate.py reads for a format-1 file (format1/walton.yml; D092:
@@ -36,21 +38,23 @@ with open(os.path.join(DOC, 'format1', 'walton.yml'), 'rb') as fh:
     WALTON_FORMAT1_COPY = hashlib.sha256(fh.read()).hexdigest()
 
 
-def run(gold, case=None, pin=True):
+def run(gold, case=None, pin=True, items=None):
     """validate.py's exit status, its error lines and its whole output. With
     a case, it is written beside the gold and named with --case, and the
-    gold's pin follows it unless pin is false."""
+    gold's pin follows it unless pin is false; so with items (--items)."""
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, 'gold.json')
         cmd = [sys.executable, '-I', '-B', os.path.join(DOC, 'validate.py'), path]
-        if case is not None:
-            cpath = os.path.join(d, 'case.json')
-            text = json.dumps(case, ensure_ascii=False, indent=1)
+        for name, value, flag in (('case.json', case, '--case'), ('items.json', items, '--items')):
+            if value is None:
+                continue
+            cpath = os.path.join(d, name)
+            text = json.dumps(value, ensure_ascii=False, indent=1)
             with open(cpath, 'w', encoding='utf-8') as fh:
                 fh.write(text)
             if pin and 'inputs' in gold:
-                gold = dict(gold, inputs=dict(gold['inputs'], **{'case.json': hashlib.sha256(text.encode('utf-8')).hexdigest()}))
-            cmd += ['--case', cpath]
+                gold = dict(gold, inputs=dict(gold['inputs'], **{name: hashlib.sha256(text.encode('utf-8')).hexdigest()}))
+            cmd += [flag, cpath]
         with open(path, 'w', encoding='utf-8') as fh:
             json.dump(gold, fh, ensure_ascii=False)
         r = subprocess.run(cmd, capture_output=True, text=True)
@@ -135,17 +139,17 @@ def conclusion_target(g, claim, iid=None):
 
 
 class Rules(unittest.TestCase):
-    def fails(self, g, cid, rules, text, case=None, pin=True):
+    def fails(self, g, cid, rules, text, case=None, pin=True, items=None):
         """validate.py fails, on cid only, by the rules given, one error
         containing text."""
-        code, errors, out = run(g, case, pin)
+        code, errors, out = run(g, case, pin, items)
         self.assertEqual(code, 1, out)
         for e in errors:
             self.assertTrue(any(e.startswith(f'{cid}: {r} ') for r in rules), f'unexpected error: {e}\n{out}')
         self.assertTrue(any(text in e for e in errors), out)
 
-    def passes(self, g, case=None):
-        code, errors, out = run(g, case)
+    def passes(self, g, case=None, items=None):
+        code, errors, out = run(g, case, items=items)
         self.assertEqual((code, errors), (0, []), out)
         return out
 
@@ -578,6 +582,25 @@ class Rules(unittest.TestCase):
         g = copy.deepcopy(GOLD)
         item(g, '13292.180')['target']['other_kialo_parents'][0]['relation'] = 'con'
         self.fails(g, '13292.180', ['R7'], 'R7 other_kialo_parents record 13292.121 con; items.json has 13292.121 pro')
+
+    def test_r7_each_other_parent_in_any_order_as_often_as_items_has_it(self):
+        # The other parents with their relations, as items.json has them, in
+        # any order and each as often as it has it (the independent check of
+        # ID-k, 2026-11-26: compared as a set, or unsorted, every earlier test
+        # passed). Batch 2 has no claim with more than two parents, so the
+        # order is tried on an items.json with a third.
+        g = copy.deepcopy(GOLD)
+        others = item(g, '13292.180')['target']['other_kialo_parents']
+        others.append(copy.deepcopy(others[0]))
+        self.fails(g, '13292.180', ['R7'], 'R7 other_kialo_parents record 13292.121 pro, 13292.121 pro; items.json has 13292.121 pro')
+        items = copy.deepcopy(ITEMS)
+        next(i for i in items['items'] if i['kialo_claim_id'] == '13292.180')['kialo_parents'].append(
+            {'claim_id': '13292.115', 'relation': 'con', 'location_id': '13292.999'})
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.180')['target']['other_kialo_parents'].insert(0, {'claim_id': '13292.115', 'relation': 'con'})
+        self.passes(g, items=items)
+        item(g, '13292.180')['target']['other_kialo_parents'][0]['relation'] = 'pro'
+        self.fails(g, '13292.180', ['R7'], 'R7 other_kialo_parents record 13292.115 pro, 13292.121 pro; items.json has 13292.115 con, 13292.121 pro', items=items)
 
     def test_r14_an_actor_is_no_action_and_no_alias(self):
         # An actor's id names the actor: as an alias of an action, it would be

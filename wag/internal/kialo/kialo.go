@@ -59,7 +59,7 @@ func Parse(b []byte) (*Discussion, error) {
 	// support (Plan, build), so it is refused here.
 	for _, e := range d.Edges {
 		if e.Active && e.Relation != "support" && e.Relation != "attack" {
-			return nil, fmt.Errorf("the edge from %s to %s has the relation %q: support or attack", e.To, e.From, e.Relation)
+			return nil, fmt.Errorf("the edge from %s to %s (location %s) has the relation %q: support or attack", e.From, e.To, e.LocationID, e.Relation)
 		}
 	}
 	return &d, nil

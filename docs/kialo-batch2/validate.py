@@ -1,6 +1,6 @@
 """Validate gold.json and lexicon.json (or another annotation file).
 
-    python3 -I validate.py [ANNOTATIONS.json] [--case CASE.json]
+    python3 -I validate.py [ANNOTATIONS.json] [--case CASE.json] [--items ITEMS.json]
 
 Everything it reads is in the repository: walton.yml
 (docs/scheme-registry/walton-clean/), the compendium links
@@ -33,6 +33,13 @@ if '--case' in ARGS:
     i = ARGS.index('--case')
     CASE = ARGS[i + 1]
     del ARGS[i:i + 2]
+# Another items.json (its claims' Kialo parents) for the planted-defect tests,
+# which need a claim with more parents than batch 2 has; pinned like the rest.
+ITEMS = DOC + 'items.json'
+if '--items' in ARGS:
+    i = ARGS.index('--items')
+    ITEMS = ARGS[i + 1]
+    del ARGS[i:i + 2]
 ANN = ARGS[0] if ARGS else DOC + 'gold.json'
 gold = json.load(open(ANN, encoding='utf-8'))
 IS_GOLD = gold.get('annotator') == 'gold'
@@ -48,7 +55,7 @@ WALTON_PATH = REPO + 'docs/scheme-registry/walton-clean/walton.yml'
 if not F2 and os.path.exists(DOC + 'format1/walton.yml'):
     WALTON_PATH = DOC + 'format1/walton.yml'
 lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
-items = json.load(open(DOC + 'items.json', encoding='utf-8'))['items']
+items = json.load(open(ITEMS, encoding='utf-8'))['items']
 W = {s['id']: s for s in yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))['argument_schemes']}
 # Upstream IDs renamed in the cleaned file read as their new ones.
 for old, new in json.load(open(REPO + 'docs/scheme-registry/walton-clean/id-migrations.json'))['schemes'].items():
@@ -149,7 +156,7 @@ INST = {}  # instance id -> (claim, instance)
 MALFORMED = set()  # format 2: items that break the field contract (R16)
 ID_RE = re.compile(r'^(.+)#([1-9][0-9]*)$')
 # Every input this check reads, which a gold pins (R16; docs/annotation-records.md §2).
-PINNED = {'items.json': DOC + 'items.json', 'lexicon.json': DOC + 'lexicon.json', 'case.json': CASE,
+PINNED = {'items.json': ITEMS, 'lexicon.json': DOC + 'lexicon.json', 'case.json': CASE,
           'walton.yml': WALTON_PATH, 'id-migrations.json': REPO + 'docs/scheme-registry/walton-clean/id-migrations.json',
           'links.json': REPO + 'docs/scheme-registry/links.json', 'positions.json': REPO + 'wag/data/annotation/positions.json',
           'nascq/schemes.json': REPO + 'wag/data/nascq/schemes.json',

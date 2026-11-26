@@ -75,6 +75,20 @@ func (d *Dataset) kialoParents(claim string) ([]string, bool) {
 	return nil, false
 }
 
+// kialoPair is a Kialo parent and its relation as items.json writes them,
+// "claim relation". A value that is not a string is written as JSON and
+// marked, so that it never equals one: a claim id and a relation are strings
+// (R16), and 13292.7 the number is not "13292.7".
+func kialoPair(claim, relation any) string {
+	s := func(v any) string {
+		if x, ok := v.(string); ok {
+			return x
+		}
+		return jsonText(v) + " (not a string)"
+	}
+	return s(claim) + " " + s(relation)
+}
+
 // checkIdentity is CheckIn's format-2 part.
 func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Annotation) []string {
 	var out []string
@@ -188,25 +202,36 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 			}
 		}
 	}
-	// R7: the Kialo parents, each with its relation, as items.json has them:
-	// the source's pro or con, not the interpreted polarity (role.polarity),
-	// which may differ.
-	if d != nil && claim != "" && claim != d.thesisID() {
-		if want, ok := d.kialoParents(claim); ok && len(want) > 0 {
-			if first := fmt.Sprintf("%v %v", tg["kialo_parent"], tg["kialo_relation"]); first != want[0] {
-				add("R7 its Kialo parent is %s; items.json has %s", first, want[0])
+	// R7: the Kialo parents, each with its relation, as items.json has them,
+	// each as often as it has it: the source's pro or con, not the interpreted
+	// polarity (role.polarity), which may differ. other_kialo_parents is
+	// recorded exactly when the claim has more than one (the thesis has none),
+	// and every claim id and relation is a string (R16), as validate.py has it.
+	if d != nil && claim != "" {
+		if want, ok := d.kialoParents(claim); ok {
+			others, isList := tg["other_kialo_parents"].([]any)
+			_, recorded := tg["other_kialo_parents"]
+			switch {
+			case len(want) > 1 && !isList:
+				add("R7 it has %d Kialo parents, and records no list of other_kialo_parents", len(want))
+			case len(want) <= 1 && recorded:
+				add("R7 it records other_kialo_parents, but has %d Kialo parent(s)", len(want))
 			}
-			var got []string
-			others, _ := tg["other_kialo_parents"].([]any)
-			for _, x := range others {
-				o, _ := x.(map[string]any)
-				got = append(got, fmt.Sprintf("%v %v", o["claim_id"], o["relation"]))
-			}
-			rest := append([]string(nil), want[1:]...)
-			sort.Strings(got)
-			sort.Strings(rest)
-			if strings.Join(got, ", ") != strings.Join(rest, ", ") {
-				add("R7 its other Kialo parents are [%s]; items.json has [%s]", strings.Join(got, ", "), strings.Join(rest, ", "))
+			if claim != d.thesisID() && len(want) > 0 {
+				if first := kialoPair(tg["kialo_parent"], tg["kialo_relation"]); first != want[0] {
+					add("R7 its Kialo parent is %s; items.json has %s", first, want[0])
+				}
+				var got []string
+				for _, x := range others {
+					o, _ := x.(map[string]any)
+					got = append(got, kialoPair(o["claim_id"], o["relation"]))
+				}
+				rest := append([]string(nil), want[1:]...)
+				sort.Strings(got)
+				sort.Strings(rest)
+				if strings.Join(got, ", ") != strings.Join(rest, ", ") {
+					add("R7 its other Kialo parents are [%s]; items.json has [%s]", strings.Join(got, ", "), strings.Join(rest, ", "))
+				}
 			}
 		}
 	}
