@@ -13,6 +13,13 @@
 # templates without agreement; examples corrected. The sources, quoted with
 # their pages, are in the workspace (verify/p-C4/quotes.md); this file cites
 # author, year and page.
+#
+# Version 2a, 2026-11-26, from the independent check of version 2 (the check
+# and the exact edits, v2a.py, in the workspace, verify/p-C4): the templates
+# this proposal adds or changes, and those of the places it types as an
+# agent's, read right of a plural binding; R9 reads the continuing bridge's
+# goal too; why the bridges ask what they ask, or nothing; the time bindings;
+# examples and notes corrected.
 
 decisions: [D022, D023, D031, D033, D060, D062, D063, D093]
 title: "The rest of the first family: practical conclusions and their bridges, threat and danger, ends and means, waste and sunk costs"
@@ -60,7 +67,7 @@ summary: |-
     and waste's ought_to_continue(A,X). They reach the recommendation only
     through a bridge: bridge_from_agent, from should_do(P,A) to
     should_be_performed(A), and bridge_from_continuing, from
-    ought_to_continue(P,G) to should_be_performed(A) for the action A that
+    ought_to_continue(P,G) to should_be_performed(A) for an action A that
     continues the effort to realize G. D063's refinement asks for the agent
     and the deliberation to be positively the same, or explicitly mapped: an
     exception nobody raises is presumed not to hold, so an agent nobody
@@ -81,8 +88,17 @@ summary: |-
     to realize G, and recommends A. That chooses a means for a goal, as
     practical inference does, so the bridge takes practical reasoning's
     questions for it: realize_more_effectively(P,G,A) and bad_outweighs(A,G)
-    as exceptions, possible_bring_about(P,A) as an assumption (D004, D070,
-    D088, D089; D093(f)). Neither bridge has a negative form: no scheme of
+    as exceptions, possible_bring_about(P,A) as an assumption (D070, D088,
+    D089; D093(f)); R9 reads its goal from ought_to_continue(P,G), so that a
+    better means answers it with better_means. A goal of P's that conflicts
+    with G bears on the argument from waste, whose conclusion the bridge
+    takes, not on the means, so the bridge does not ask it.
+    bridge_from_agent asks no question of its own, D075's reasoned none: it
+    chooses no means, but carries another argument's conclusion, whose own
+    questions test the action, and adds only that the decision is P's, its
+    premise, which a critic challenges. sunk_costs_precommitment, whose entry
+    prints no questions, is then answered through its premises or by a
+    rebuttal. Neither bridge has a negative form: no scheme of
     the family concludes the negation of should_do or of ought_to_continue.
     Outside the family, from_model (F03) concludes should_do(B,X) too, and
     bridge_from_agent takes it; from_antimodel's ¬should_do(B,X) has no
@@ -96,7 +112,9 @@ summary: |-
     practical form of argument from commitment (2008, p. 135), a hybrid of
     commitment and practical reasoning (Walton 2002, p. 491). It prints no
     questions for it. sunk_costs, WAG's form with the costs already incurred,
-    linked partly to 25, stays as it is.
+    linked partly to 25, stays as it is. Its times are bound with their
+    preposition ("in March", "this spring"), as the examples do, so that its
+    templates read right ("In October, there is a choice ...").
   - **D033.** waste gets reassessment_against_continuing(A,X), the book's
     second question for 24 (2008, p. 326): leaving aside past losses that
     cannot be recovered, a reassessment of costs and benefits from now on
@@ -147,21 +165,30 @@ summary: |-
     question: its premise claims a necessary or a sufficient condition, and
     under the necessary reading another required step is no reason against
     the advised one (D090's reasoning), while an agent-free formula such as
-    intervening_actions would reach other agents' arguments (D089). Its
-    exceptions named the advisor where the action belongs
+    intervening_actions would reach other agents' arguments (D089). Under
+    that necessary reading an alternative no better than Y denies the
+    premise, that Y is necessary, and so is an attack on that premise, not
+    on the advice; the exception takes the best-choice reading only (D090,
+    D006). Its exceptions named the advisor where the action belongs
     (side_effect_other_act(B,A)) and left the means out (alternative_means(A,X)).
     It concludes should_do(A,Y), D063's agent conclusion, for
     should_carry_out(A,Y). R9, which holds a better means to the goal of the
     argument it answers, reads its first premise's goal, tells_intend(A,X,B),
     as goal_of_agent(A,X). (c) waste's assumption reads possible_goal(X):
     possible/1's template said of a goal that an action is possible. (d) The
-    templates of the changed schemes, in our own words and free of
-    agreement (a plural agent reads right): occur/2 (D062), only_way_prevent/2,
-    prevent/1, situation_necessity/4, waste_bad_thing/2 and
-    ought_to_continue/2; a premise's template does not begin "Therefore", nor
-    does a conclusion's, which the views put after "So". (e) The bridges'
+    templates this proposal adds or changes, in our own words and free of
+    agreement (a plural binding reads right): occur/2 (D062), assert_bad/2
+    (D060), only_way_prevent/2, prevent/1, situation_necessity/4,
+    waste_bad_thing/2, ought_to_continue/2, and tells_intend/3 and
+    stop_realize_wasted/2, whose agent places this proposal types
+    (positions.json), so that the case's actors fill them; a premise's
+    template does not begin "Therefore", nor does a conclusion's, which the
+    views put after "So". The older templates the changed schemes share with
+    other schemes (good/1, bad/1, means_to_end/2 and the like) stay as they
+    are. (e) The bridges'
     premise deliberating_agent(P,A), for the exception D063's text names
-    (above). (f) bridge_from_continuing's questions (above). (g)
+    (above). (f) bridge_from_continuing's questions, R9 reading its goal
+    from ought_to_continue(P,G) (above). (g)
     end_and_means_bad borrows the question of the opposite value as
     end_and_means_1 does, means_good_outweighs(X,Y): 22.6.1's negative reading
     answers to it as the positive one does, and without it a means condemned
@@ -209,9 +236,9 @@ summary: |-
   advice standing, and a better means than one continuing action leaves the
   bridge to its rival); the schemes' shapes are pinned.
 effects:
-  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, in a block of its own, PRACTICAL_C4, with CHANGELOG rows: sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing added (category addition, owner decision); fear, danger, threat, ad_baculum, pragmatic_alternative, appeal_to_vanity_ad_populum, practical_goal, two_person_practical, waste and end_and_means_1 changed as above (repairs). Their meta (title and source) is walton.yml's, unchanged. Templates added: cited_bad_consequences/2, position_to_bring_about/1, reassessment_against_continuing/2, choice_at/2, precommitted/4, less_bad_as_means/2, means_bad_outweighs/2, means_good_outweighs/2, deliberating_agent/2, continues_trying/2; changed: assert_bad/2, occur/2, only_way_prevent/2, prevent/1, situation_necessity/4, waste_bad_thing/2, ought_to_continue/2; each agreement-free (a plural agent reads right). Templates left unused are kept and listed as orphans: ought_to_bring_about/1, should_not/1, not_bring_about/1, do_other/1, carry_out_action/1, cited_bad_consequences/1, position_to_know/1, should_carry_out/2, person_goal/2, possible/1, possible_action/1, goals_higher_priority/2, alternative_means/2 and side_effect_other_act/2, where no other scheme uses them. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys (129 schemes), every related pair declared. The cleaning's gate reads indexed templates as WAG's renderer reads them (walton-clean/check: a template with %[n]s verbs covers each argument, each index in range), which D060 needs for assert_bad/2 and this proposal for precommitted/4 and less_bad_as_means/2 (each place once, as Carneades' validator counts the verbs); plain templates are checked as before. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions, in a block of its own, PRACTICAL_C4, with CHANGELOG rows: sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing added (category addition, owner decision); fear, danger, threat, ad_baculum, pragmatic_alternative, appeal_to_vanity_ad_populum, practical_goal, two_person_practical, waste and end_and_means_1 changed as above (repairs). Their meta (title and source) is walton.yml's, unchanged. Templates added: cited_bad_consequences/2, position_to_bring_about/1, reassessment_against_continuing/2, choice_at/2, precommitted/4, less_bad_as_means/2, means_bad_outweighs/2, means_good_outweighs/2, deliberating_agent/2, continues_trying/2; changed: assert_bad/2, occur/2, only_way_prevent/2, prevent/1, situation_necessity/4, waste_bad_thing/2, ought_to_continue/2, tells_intend/3 and stop_realize_wasted/2 (agent places typed here); each agreement-free (a plural binding reads right). Templates left unused are kept and listed as orphans: ought_to_bring_about/1, should_not/1, not_bring_about/1, do_other/1, carry_out_action/1, cited_bad_consequences/1, position_to_know/1, should_carry_out/2, person_goal/2, possible/1, possible_action/1, goals_higher_priority/2, alternative_means/2 and side_effect_other_act/2, where no other scheme uses them. check/run.sh regenerates the derived files; the gate and the registry differ only in these schemes and keys (129 schemes), every related pair declared. The cleaning's gate reads indexed templates as WAG's renderer reads them (walton-clean/check: a template with %[n]s verbs covers each argument, each index in range), which D060 needs for assert_bad/2 and this proposal for precommitted/4 and less_bad_as_means/2 (each place once, as Carneades' validator counts the verbs); plain templates are checked as before. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
   - "links.json: 4.8, 22.5, 23, 24, 34, 35, 35.1, 36 and 37 as proposed below, for the changed formulas; end_and_means_1's link to 22.6.1 becomes partial, the entry's positive reading beside its two others; 35's link keeps links.json's upstream id treat (id-migrations.json), which the proposed link of threat replaces; 25 links sunk_costs_precommitment partly (sunk_costs stays linked partly); 22.6.1 links end_and_means_bad and end_and_means_less_bad partly, each one reading of the entry. families.json: F10 (practical reasoning) gains sunk_costs_precommitment, end_and_means_bad, end_and_means_less_bad, bridge_from_agent and bridge_from_continuing; F11 (waste and sunk costs) gains sunk_costs_precommitment. positions.json, by place: should_do/2 agent 1, action 2; deliberating_agent/2 agent 1, action 2; precommitted/4 agent 1, action 2; situation_necessity/4 agent 4 (the advised), action 2 (the advisor, place 1, untyped); tells_intend/3 agent 1 (its goal and its advisor untyped); ought_to_continue/2, stop_realize_wasted/2, waste_bad_thing/2 and reassessment_against_continuing/2 agent 1; continues_trying/2 and contributing_action/2 action 1; choice_at/2 action 2. No variable becomes both an agent and an action in any scheme."
-  - "The catalogue regenerates the entries of the changed and added schemes (wag/data/catalogue), and its drafted texts follow: waste's 24/CQ1 and 24/CQ2 target possible_goal(X) and the exception, the critic's (D033); the discrepancies decided on 2026-11-22 are applied; the new entries' summaries and contrasts; the proposal's examples. The candidates registry records what these decisions closed (C014, C012); the register records the decisions as applied. validate.py's R9 reads two_person_practical's goal from tells_intend(A,X,B), with a planted test. The guidelines' table of outweighing exceptions (§3.1) gains the new ones. The batch-2 gold: 13292.3's instance lists means_bad_outweighs(X,Y) (recode_c4.py), validate.py and the Go check pass, and the replay accounts for every claim as before. The docs that count walton.yml's schemes say 129; links.json's counts and first-family.md follow; the views of the earlier proposals are regenerated, and D055-D059's note on the disjunctive threat, which the change makes stale, is dated."
+  - "The catalogue regenerates the entries of the changed and added schemes (wag/data/catalogue), and its drafted texts follow: waste's 24/CQ1 and 24/CQ2 target possible_goal(X) and the exception, the critic's (D033); the discrepancies decided on 2026-11-22 are applied; the new entries' summaries and contrasts; the proposal's examples. The candidates registry records what these decisions closed (C014, C012); the register records the decisions as applied. validate.py's R9 reads two_person_practical's goal from tells_intend(A,X,B), and bridge_from_continuing's from ought_to_continue(P,G), with planted tests. The guidelines' table of outweighing exceptions (§3.1) gains the new ones, and says how a claim at a borrowed exception is coded: an undercutter, with no cq. negative_consequences_reasoning's contrast with threat, which says threat concludes not_bring_about(A), is dated. The batch-2 gold: 13292.3's instance lists means_bad_outweighs(X,Y) (recode_c4.py), validate.py and the Go check pass, and the replay accounts for every claim as before. The docs that count walton.yml's schemes say 129, and 70 of them with questions as assumptions or exceptions; links.json's counts and first-family.md follow; the views of the earlier proposals are regenerated, and D055-D059's note on the disjunctive threat, which the change makes stale, is dated."
 schemes:
   - id: fear
     meta:
@@ -317,7 +344,7 @@ schemes:
     meta:
       title: "Ends and Means - a Bad End Condemns Its Means"
       source: |
-        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022).
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, ch. 9, entry 22.6.1 (its negative reading), p. 325. Chaim Perelman and Lucie Olbrechts-Tyteca, The New Rhetoric: A Treatise on Argumentation, Notre Dame, Ind.: University of Notre Dame Press, 1969, pp. 273-278. As the schemes library has it (decision D022), with the question of the opposite value that end and means 1 borrows (D093).
     variables: [X, Y]
     premises: ["means_to_end(X,Y)", "bad(Y)"]
     assumptions: []
@@ -354,21 +381,23 @@ schemes:
     exceptions: ["realize_more_effectively(P,G,A)", "bad_outweighs(A,G)"]
     conclusions: ["should_be_performed(A)"]
 language:
-  cited_bad_consequences/2: "If you go ahead with %s, the cited bad consequence %s will follow."
+  cited_bad_consequences/2: "If you go ahead with %s, the bad consequence cited, %s, will follow."
   position_to_bring_about/1: "I am in a position to bring about %s."
-  assert_bad/2: "I will see to it that %[2]s happens if you go ahead with %[1]s."
+  assert_bad/2: "I will bring about %[2]s if you go ahead with %[1]s."
   occur/2: "If the respondent goes ahead with %s, then %s will occur."
   only_way_prevent/2: "The only way for you to prevent %s is %s."
   prevent/1: "You ought to prevent %s if you can."
-  situation_necessity/4: "In the view of %s, %s is a necessary or sufficient condition for realizing %s, a view reported to %s."
+  situation_necessity/4: "In the view of %s, %s would be a necessary or sufficient condition for realizing %s, a view reported to %s."
+  tells_intend/3: "%s, intending to realize %s, told %s so."
+  stop_realize_wasted/2: "If %s stopped trying to realize %s now, all the previous efforts would be wasted."
   waste_bad_thing/2: "If all the previous efforts of %s to realize %s were wasted, that would be a bad thing."
   ought_to_continue/2: "%s ought to continue trying to realize %s."
   reassessment_against_continuing/2: "Leaving aside past losses that cannot be recovered, a reassessment of the costs and benefits from now on goes against %s continuing to try to realize %s."
   choice_at/2: "%s, there is a choice between %s and not doing so."
   precommitted/4: "What %[1]s did or undertook %[3]s is a commitment, binding %[4]s, to %[2]s."
   less_bad_as_means/2: "Being a means to the good end %[2]s would make %[1]s less bad."
-  means_bad_outweighs/2: "As a means, %s would have bad consequences that matter more than its end %s."
-  means_good_outweighs/2: "As a means, %s would have good consequences that matter more than its end %s."
+  means_bad_outweighs/2: "As a means to the good end %[2]s, %[1]s would have bad consequences that matter more than that end."
+  means_good_outweighs/2: "As a means to the bad end %[2]s, %[1]s would have good consequences that matter more than that end."
   deliberating_agent/2: "It falls to %s to decide whether to go ahead with %s."
   continues_trying/2: "%s would continue the effort to realize %s."
 links:
@@ -414,7 +443,7 @@ links:
         note: "a conflicting goal, practical reasoning's formula"
         walton: [{formula: "incompatible_goal(A,X)", locus: exception}]
       - cq: CQ2
-        note: "alternative means read as a better means, scoped to the agent (D089); under the premise's necessary reading an alternative no better would deny the necessity too (D090), which this formula leaves to a rebuttal"
+        note: "alternative means read as a better means, scoped to the agent (D089); under the premise's necessary reading an alternative no better denies the premise that Y is necessary, and is an attack on that premise, not on the advice (D090, D006)"
         walton: [{formula: "realize_more_effectively(A,X,Y)", locus: exception}]
       - cq: CQ3
         note: "the side effect that outweighs: WAG's reading (D070, D091)"
@@ -475,7 +504,7 @@ links:
   - entry: "22.6.1"
     id: end_and_means_bad
     match: partial
-    reason: "The entry's negative reading, y bad and x bad, as a scheme of its own (decision D022), as the schemes library has it."
+    reason: "The entry's negative reading, y bad and x bad, as a scheme of its own (decision D022), as the schemes library has it, with the question of the opposite value borrowed as end_and_means_1's (D093(g))."
     premise_map:
       - compendium_label: Premise 1
         walton: [{formula: "means_to_end(X,Y)", locus: premise}]
@@ -637,7 +666,7 @@ examples:
     attacks:
       - question: "CQ:premise_acceptable"
         target: "occur(X,Y)"
-        text: "The storm passes before noon, and the crossing is at three."
+        text: "It is a self-righting lifeboat; boats like it do not capsize in this sea."
   - scheme: danger
     title: "Do not swim in the flooded river"
     invented: true
@@ -692,7 +721,7 @@ examples:
     invented: true
     use: near-miss
     near_miss_of: threat
-    text: "If management cuts the night shift, no one will watch the boilers at night, and one could explode. An explosion is a danger to everyone in the plant, managers included. So management should not cut it."
+    text: "If management cuts the night shift, no one will watch the boilers at night, and sooner or later one will explode. An explosion is a danger to everyone in the plant, managers included. So management should not cut it."
     bindings:
       X: "management cutting the night shift"
       Y: "an unwatched boiler exploding at night"
@@ -816,7 +845,7 @@ examples:
       G: "getting more exercise"
     attacks:
       - question: "walton/realize_more_effectively"
-        text: "Joining the swimming club would give her three times the exercise."
+        text: "Joining the swimming club would give her the same exercise in half the time."
       - question: "walton/incompatible_goal"
         text: "She also wants to sleep longer, and walking means leaving forty minutes earlier."
       - question: "walton/bad_outweighs"

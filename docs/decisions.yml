@@ -2540,11 +2540,18 @@ decisions:
       required too, keeps no formula, as links.json has it: under the
       premise's necessary reading another required step is no reason against
       the advised one (D090's reasoning), and a formula without the agent
-      would reach other agents' arguments (D089). It concludes should_do(A,Y)
-      (D063), and the gold's R9 reads its goal, tells_intend(A,X,B), as
-      goal_of_agent(A,X). (c) waste's assumption becomes possible_goal(X).
-      (d) The templates of the changed schemes are rewritten in WAG's own
-      words, and read right of a plural agent. (e) The bridges take the
+      would reach other agents' arguments (D089). Under that necessary
+      reading an alternative no better than Y denies the premise that Y is
+      necessary, an attack on that premise, not on the advice; the better-means
+      exception takes the best-choice reading only (D090, D006). It concludes
+      should_do(A,Y) (D063), and the gold's R9 reads its goal,
+      tells_intend(A,X,B), as goal_of_agent(A,X). (c) waste's assumption
+      becomes possible_goal(X). (d) The templates this proposal adds or
+      changes are rewritten in WAG's own words and read right of a plural
+      binding, tells_intend/3's and stop_realize_wasted/2's among them, whose
+      agent places the proposal types (positions.json); the older templates
+      the changed schemes share with other schemes stay as they are. (e) The
+      bridges take the
       premise deliberating_agent(P,A), that it falls to P to decide whether
       to go ahead with A, which their arguer supports, in place of the
       exception D063's decided text names: the refinement asks for the
@@ -2553,8 +2560,13 @@ decisions:
       case record; that the decision is P's is the premise's claim. (f)
       bridge_from_continuing asks practical reasoning's questions of the
       means it chooses: realize_more_effectively(P,G,A) and bad_outweighs(A,G)
-      as exceptions, possible_bring_about(P,A) as an assumption (D004, D070,
-      D088, D089). (g) end_and_means_bad borrows means_good_outweighs(X,Y),
+      as exceptions, possible_bring_about(P,A) as an assumption (D070, D088,
+      D089), and R9 reads its goal from ought_to_continue(P,G). A goal that
+      conflicts with G bears on the argument from waste, whose conclusion the
+      bridge takes, not on the means. bridge_from_agent asks no question of
+      its own (D075's reasoned none): it chooses no means, but carries another
+      argument's conclusion, whose questions test the action, and adds only
+      that the decision is P's. (g) end_and_means_bad borrows means_good_outweighs(X,Y),
       the question of the opposite value, as end_and_means_1 borrows
       means_bad_outweighs(X,Y) (D023): beyond D022's "as the schemes library
       has them", since without it a means condemned by a bad end could be
