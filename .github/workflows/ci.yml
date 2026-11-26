@@ -42,11 +42,14 @@ jobs:
         run: bash tools/engine-tests.sh
       - name: Lint the game's data
         run: go run ./cmd/wag-cli --lint
-      - name: The catalogue and the generated views are what the generator makes
+      - name: The catalogue, the game's files and the generated views are what the generator makes
+        # Since step C5.1 --catalogue-gen writes the game's files (nascq/*.json,
+        # schemes/core.yml) from the catalogue first: they are diffed too, as
+        # the check after this step reads them as this step left them.
         run: |
           go run ./cmd/wag-cli --catalogue-gen
-          git diff --exit-code -- data/catalogue ../docs/decisions.md ../docs/candidates.md || {
-            echo "::error::wag/data/catalogue, docs/decisions.md or docs/candidates.md differs from what --catalogue-gen makes: run it and commit the result"
+          git diff --exit-code -- data/catalogue data/nascq data/schemes/core.yml ../docs/decisions.md ../docs/candidates.md || {
+            echo "::error::wag/data/catalogue, the game's files (wag/data/nascq, wag/data/schemes/core.yml), docs/decisions.md or docs/candidates.md differ from what --catalogue-gen makes: run it and commit the result"
             exit 1
           }
       - name: Catalogue check

@@ -233,7 +233,7 @@ A test keeps every committed proposal valid and its view current.
   - `check/run.sh` after a formula change.
 - **CI on every push and pull request** ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml), since 2026-10-22):
   - `go vet`, `go test` and the data lint;
-  - the catalogue, the register's view and the candidates' view equal what `--catalogue-gen` makes;
+  - the catalogue, the game's files (generated from it since step C5.1), the register's view and the candidates' view equal what `--catalogue-gen` makes;
   - `--catalogue-check`. Its copy check reads only `docs/book-catalogue`, since the compendium's transcription is private;
   - the registry check, which tolerates only the known duplicate (D042 in the register);
   - the gold's `validate.py`, and the guidelines' worked cases (`TestRuleCases`, in `go test`);
