@@ -1,6 +1,7 @@
 package catalogue
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -1158,6 +1159,44 @@ func TestCandidatesFindFaults(t *testing.T) {
 // variants carry the questions printed under 33): the check reads links.json
 // with the link in place, holds the proposal's questions to the maps it
 // proposes, and checks the link itself.
+// A proposed link of a renamed scheme replaces links.json's link of it, which
+// names it by its upstream id (treat for threat): the view shows the entry with
+// one link, not two, and an applied proposal finds its link there.
+func TestProposalLinksOfARenamedScheme(t *testing.T) {
+	s := sources(t)
+	e, ok := s.link("35")
+	if !ok || len(e.Links) != 1 || e.Links[0].ID != "treat" {
+		t.Fatalf("35's links are not the ones this test was written for: %+v", e.Links)
+	}
+	sch, ok := findWalton(s, "threat")
+	if !ok {
+		t.Fatal("no threat in walton.yml")
+	}
+	link := withID(e.Links[0], "threat")
+	p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{sch},
+		Links: []ProposedLink{{Entry: "35", WaltonLink: link}}}
+	var errs []string
+	got := proposedLinks(p, s, func(f string, a ...any) { errs = append(errs, fmt.Sprintf(f, a...)) })
+	g, _ := got.link("35")
+	if len(errs) > 0 || len(g.Links) != 1 || g.Links[0].ID != "threat" {
+		t.Errorf("before it is applied: %v, the entry's links %+v", errs, g.Links)
+	}
+	p.Applied = "today"
+	for _, f := range CheckProposal(p, s) {
+		if strings.Contains(f.Msg, "links.json does not have its link") {
+			t.Errorf("applied, links.json's link under the upstream id is not found: %s", f.Msg)
+		}
+	}
+	p.Links[0].Reason += " Changed."
+	found := false
+	for _, f := range CheckProposal(p, s) {
+		found = found || strings.Contains(f.Msg, "does not have its link of threat to 35 as proposed")
+	}
+	if !found {
+		t.Error("applied, a link that differs from links.json's is not reported")
+	}
+}
+
 func TestProposalLinks(t *testing.T) {
 	s := sources(t)
 	const sound = `decisions: [D999]

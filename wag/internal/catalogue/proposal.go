@@ -656,16 +656,18 @@ func proposedLinks(p *Proposal, src *Sources, bad func(string, ...any)) *Sources
 			maps(r.CQ, r.Walton)
 		}
 		e.Links = append([]WaltonLink(nil), e.Links...)
+		// links.json names a renamed scheme by its upstream id (treat for
+		// threat, id-migrations.json): the proposed link replaces that one.
 		had := -1
 		for i := range e.Links {
-			if e.Links[i].ID == l.ID {
+			if src.migrate(e.Links[i].ID) == l.ID {
 				had = i
 			}
 		}
 		switch {
 		case p.Applied != "" && had < 0:
 			bad("%s: the proposal is applied, but links.json does not have its link of %s to %s", where, l.ID, l.Entry)
-		case p.Applied != "" && linkKey(e.Links[had]) != linkKey(l.WaltonLink):
+		case p.Applied != "" && linkKey(withID(e.Links[had], l.ID)) != linkKey(l.WaltonLink):
 			bad("%s: the proposal is applied, but links.json does not have its link of %s to %s as proposed", where, l.ID, l.Entry)
 		}
 		if had < 0 {
@@ -694,6 +696,13 @@ func proposedLinkOf(p *Proposal, src *Sources, scheme, printedUnder string) (str
 		}
 	}
 	return "", false
+}
+
+// withID is a link under another id: links.json's link of a renamed scheme,
+// under its upstream id, compared with a proposal's under the cleaned one.
+func withID(l WaltonLink, id string) WaltonLink {
+	l.ID = id
+	return l
 }
 
 // linkKey writes what a link says, so that a proposed link can be compared
