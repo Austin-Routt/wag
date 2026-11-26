@@ -168,12 +168,16 @@ type Session struct {
 	inspectedWith string
 	playedHistory []game.Move
 	// legacyReplayedWith is set when a game was loaded from an export that
-	// records no scheme data (one made before 13 October 2026): its moves
-	// were replayed with this server's data, which this identifies. It stays
-	// a legacy record: its export and its traces record no fingerprint
-	// (dataHash is ""), so that nothing takes it for a game played with this
-	// data (the critical review's adverse case 11; docs/c5-game.md).
+	// names no scheme data (one made before 13 October 2026, or a legacy
+	// record's own): its moves were replayed with this server's data, which
+	// this identifies. It stays a legacy record: its export and its traces
+	// name no data for its first legacyMoves moves (dataHash is ""), so that
+	// nothing takes it for a game played with this data (the critical
+	// review's adverse case 11; docs/c5-game.md); the moves after them were
+	// played with continuedWith, which its export names.
 	legacyReplayedWith string
+	legacyMoves        int
+	continuedWith      string
 	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
@@ -1065,8 +1069,13 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 	}
 	if ss.legacyReplayedWith != "" {
 		// A legacy record: data_sha256 is empty, as in the export it was
-		// loaded from; the state was computed with this data.
+		// loaded from; the state was computed with this data. The moves
+		// played after its own name the data they were played with.
 		out["legacy_replayed_with_data_sha256"] = ss.legacyReplayedWith
+		if len(history) > ss.legacyMoves {
+			out["legacy_moves"] = ss.legacyMoves
+			out["continued_with_data_sha256"] = ss.continuedWith
+		}
 	}
 	return out
 }

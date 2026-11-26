@@ -89,7 +89,7 @@ func ReadGameDir(dir string) (*GameData, error) {
 	if b, err = read(GameCoreTemplate); err != nil {
 		return nil, err
 	}
-	d.CoreTemplate = string(b)
+	d.CoreTemplate = string(lfOf(b)) // as written in a checkout that turns LF into CRLF
 	return d, nil
 }
 
@@ -109,13 +109,26 @@ type GameGen struct {
 	Inputs string
 }
 
+// GameSources are what the generator reads besides the catalogue:
+// walton.yml's formulas by scheme id, which a game scheme plays when its
+// entry records none of its own (nil: each entry's own copy), and its id
+// migrations, which map an upstream Carneades id to walton.yml's.
+type GameSources struct {
+	Formulas   map[string]*Formulas
+	Migrations map[string]string
+}
+
+// GameSources are the generator's sources from these sources.
+func (s *Sources) GameSources() GameSources {
+	return GameSources{Formulas: FormulasOf(s.Walton), Migrations: s.Migrations}
+}
+
 // GenerateGame makes the game's files from the catalogue's entries (by file
-// name, as ReadDir returns them) and GameDir's data. A game scheme whose
-// entry records no formulas of its own plays walton.yml's: formulas, by
-// walton.yml's scheme id (nil: each entry's own copy). It refuses a
-// catalogue whose game parts disagree with one another or break the rules
-// of a game question (docs/c5-game.md, C5.1 step 3).
-func GenerateGame(entries map[string]*Entry, d *GameData, formulas map[string]*Formulas) (*GameGen, error) {
+// name, as ReadDir returns them) and GameDir's data, with walton.yml's
+// formulas and id migrations (src). It refuses a catalogue whose game parts
+// disagree with one another or with their entries, or break the rules of a
+// game question (docs/c5-game.md, C5.1 step 3).
+func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*GameGen, error) {
 	var errs []string
 	fail := func(format string, a ...interface{}) { errs = append(errs, fmt.Sprintf(format, a...)) }
 
@@ -151,10 +164,10 @@ func GenerateGame(entries map[string]*Entry, d *GameData, formulas map[string]*F
 			continue
 		}
 		f := e.Formulas
-		if formulas != nil {
-			f = formulas[e.ID]
+		if src.Formulas != nil {
+			f = src.Formulas[e.ID]
 		}
-		g, err := schemeIn(gid, e, f)
+		g, err := schemeIn(gid, e, f, src.Migrations)
 		if err != nil {
 			fail("%s: %v", e.ID, err)
 			continue
@@ -241,12 +254,18 @@ func GenerateGame(entries map[string]*Entry, d *GameData, formulas map[string]*F
 	// The backup edges, in order.yml's order.
 	var backup []interface{}
 	backed := map[GameEdge]bool{}
+	askedQ := map[string]bool{}
+	for a := range asked {
+		askedQ[a.CQ] = true
+	}
 	for _, b := range d.Order.Backup {
 		switch {
 		case byID[b.Scheme] == nil:
 			fail("%s/%s: the backup edge %s by %s: no such game scheme", GameDir, GameOrderFile, b.CQ, b.Scheme)
 		case !qids[b.CQ]:
 			fail("%s/%s: the backup edge %s by %s: no such question", GameDir, GameOrderFile, b.CQ, b.Scheme)
+		case !askedQ[b.CQ]:
+			fail("%s/%s: the backup edge %s by %s backs a question no scheme asks", GameDir, GameOrderFile, b.CQ, b.Scheme)
 		case backed[b]:
 			fail("%s/%s: the backup edge %s by %s twice", GameDir, GameOrderFile, b.CQ, b.Scheme)
 		default:
@@ -259,10 +278,11 @@ func GenerateGame(entries map[string]*Entry, d *GameData, formulas map[string]*F
 	core, used, err := fillCore(d.CoreTemplate, byCID)
 	if err != nil {
 		fail("%s/%s: %v", GameDir, GameCoreTemplate, err)
-	}
-	for _, g := range schemes {
-		if !used[g.cid] {
-			fail("%s/%s has no marker for %s (%s)", GameDir, GameCoreTemplate, g.cid, g.id)
+	} else {
+		for _, g := range schemes {
+			if !used[g.cid] {
+				fail("%s/%s has no marker for %s (%s)", GameDir, GameCoreTemplate, g.cid, g.id)
+			}
 		}
 	}
 	if len(errs) > 0 {
@@ -341,6 +361,12 @@ func WithGame(f Files, dir string) (Files, *GameGen, error) {
 	if err := yaml.Unmarshal(f.Walton, &w); err != nil {
 		return f, nil, fmt.Errorf("walton.yml: %v", err)
 	}
+	var mig struct {
+		Schemes map[string]string `json:"schemes"`
+	}
+	if err := json.Unmarshal(f.Migrations, &mig); err != nil {
+		return f, nil, fmt.Errorf("id-migrations.json: %v", err)
+	}
 	entries, bad, err := ReadDir(dir)
 	if err != nil {
 		return f, nil, err
@@ -357,7 +383,7 @@ func WithGame(f Files, dir string) (Files, *GameGen, error) {
 	if err != nil {
 		return f, nil, err
 	}
-	g, err := GenerateGame(entries, d, FormulasOf(w.Schemes))
+	g, err := GenerateGame(entries, d, GameSources{Formulas: FormulasOf(w.Schemes), Migrations: mig.Schemes})
 	if err != nil {
 		return f, nil, err
 	}
@@ -365,13 +391,17 @@ func WithGame(f Files, dir string) (Files, *GameGen, error) {
 	return f, g, nil
 }
 
+// lfOf reads CRLF line endings as LF, as the data's fingerprint does: a
+// checkout on Windows may write them.
+func lfOf(b []byte) []byte { return bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n")) }
+
 // WriteGameFiles writes the game's files under dir (laid out as wag/data),
 // those that change, and returns their paths.
 func WriteGameFiles(dir string, g *GameGen) ([]string, error) {
 	var written []string
 	for _, p := range GamePaths {
 		path := filepath.Join(dir, filepath.FromSlash(p))
-		if cur, err := os.ReadFile(path); err == nil && bytes.Equal(cur, g.Files[p]) {
+		if cur, err := os.ReadFile(path); err == nil && bytes.Equal(lfOf(cur), g.Files[p]) {
 			continue
 		}
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
@@ -418,8 +448,12 @@ func coreHeader(inputs string) string {
 
 // schemeIn reads a game scheme from its entry: its NASCQ record, and its
 // core.yml block, whose formulas are walton.yml's (f) unless the entry
-// records others.
-func schemeIn(gid string, e *Entry, f *Formulas) (*gameIn, error) {
+// records others. An entry that records formulas records them all (an
+// override is all or nothing: a role it leaves out is empty). The block is
+// written with its id, its other keys in the entry's order, then its
+// formulas in core.yml's order, whichever way the entry lists them, so that
+// one run of the generator is a fixpoint.
+func schemeIn(gid string, e *Entry, f *Formulas, migrations map[string]string) (*gameIn, error) {
 	if len(e.Game.NASCQ) == 0 {
 		return nil, fmt.Errorf("the game part %s has no NASCQ record", gid)
 	}
@@ -427,22 +461,33 @@ func schemeIn(gid string, e *Entry, f *Formulas) (*gameIn, error) {
 	if !ok || cid == "" {
 		return nil, fmt.Errorf("the NASCQ record of %s has no carneades_id", gid)
 	}
+	// The game's scheme is the entry's (after walton.yml's id migrations,
+	// as the entries are made from the files): another would move the game
+	// part to another entry, or to none.
+	to := cid
+	if m, ok := migrations[cid]; ok {
+		to = m
+	}
+	if to != e.ID {
+		return nil, fmt.Errorf("the game part %s names core.yml's %s, which is walton.yml's %s, not this entry's scheme %s", gid, cid, to, e.ID)
+	}
 	g := &gameIn{id: gid, cid: cid, entry: e, roles: map[string][]string{}, vars: map[string]bool{}}
 	g.block = yaml.MapSlice{{Key: "id", Value: cid}}
-	override := false
+	formulas := map[string]interface{}{}
 	for _, it := range e.Game.Core {
 		k, ok := it.Key.(string)
 		if !ok || k == "id" {
 			return nil, fmt.Errorf("the core block of %s has the key %v", gid, it.Key)
 		}
 		if in(coreFormulaKeys, k) {
-			override = true
+			formulas[k] = it.Value
+			continue
 		}
 		g.block = append(g.block, it)
 	}
-	if override {
+	if len(formulas) > 0 {
 		for _, k := range []string{"variables", "conclusions"} {
-			if value(e.Game.Core, k) == nil {
+			if formulas[k] == nil {
 				return nil, fmt.Errorf("the core block of %s gives formulas but no %s", gid, k)
 			}
 		}
@@ -460,15 +505,16 @@ func schemeIn(gid string, e *Entry, f *Formulas) (*gameIn, error) {
 				for i, x := range r.have {
 					l[i] = x
 				}
-				g.block = append(g.block, yaml.MapItem{Key: r.key, Value: l})
+				formulas[r.key] = l
 			}
 		}
 	}
 	for _, k := range coreFormulaKeys {
-		v := value(g.block, k)
-		if v == nil {
+		v, ok := formulas[k]
+		if !ok {
 			continue
 		}
+		g.block = append(g.block, yaml.MapItem{Key: k, Value: v})
 		l, ok := v.([]interface{})
 		if !ok {
 			return nil, fmt.Errorf("the core block of %s: %s is not a list", gid, k)
@@ -483,6 +529,17 @@ func schemeIn(gid string, e *Entry, f *Formulas) (*gameIn, error) {
 	}
 	for _, v := range g.roles["variables"] {
 		g.vars[v] = true
+	}
+	// A formula names only the scheme's variables (a capitalized name is a
+	// variable, as in Carneades).
+	for _, k := range coreFormulaKeys[1:] {
+		for _, x := range g.roles[k] {
+			for _, t := range identifier.FindAllString(x, -1) {
+				if t[0] >= 'A' && t[0] <= 'Z' && !g.vars[t] {
+					return nil, fmt.Errorf("the game's %s: %s names %s, which is not one of its variables %v", cid, x, t, g.roles["variables"])
+				}
+			}
+		}
 	}
 	return g, nil
 }
@@ -530,7 +587,8 @@ func (g *gameIn) rebrace(pattern string) string {
 func fillCore(tpl string, byCID map[string]*gameIn) (string, map[string]bool, error) {
 	used := map[string]bool{}
 	var b strings.Builder
-	for _, l := range strings.SplitAfter(tpl, "\n") {
+	lines := strings.SplitAfter(tpl, "\n")
+	for i, l := range lines {
 		id, ok := strings.CutPrefix(strings.TrimRight(l, "\r\n"), coreMarker)
 		if !ok {
 			b.WriteString(l)
@@ -542,6 +600,9 @@ func fillCore(tpl string, byCID map[string]*gameIn) (string, map[string]bool, er
 			return "", nil, fmt.Errorf("a marker for %s, which no game scheme is", id)
 		case used[id]:
 			return "", nil, fmt.Errorf("two markers for %s", id)
+		}
+		if i+1 < len(lines) && strings.HasPrefix(lines[i+1], "    ") && !comment(lines[i+1]) {
+			return "", nil, fmt.Errorf("the marker for %s is followed by lines of a block (%q): the block is the entry's", id, strings.TrimSpace(lines[i+1]))
 		}
 		used[id] = true
 		y, err := yaml.Marshal(g.block[1:])

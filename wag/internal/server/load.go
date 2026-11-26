@@ -26,8 +26,15 @@ type Export struct {
 	Import  *kialo.Report   `json:"import"`
 	Notes   []Note          `json:"notes,omitempty"`
 	// DataHash identifies the scheme data the game was played with (Data.Hash);
-	// "" in exports made before 2026-10-13.
+	// "" in exports made before 2026-10-13, and in a legacy record's own.
 	DataHash string `json:"data_sha256,omitempty"`
+	// A legacy record's export (one loaded from an export that named no
+	// data): the data it was replayed with, and, if it was continued, how
+	// many of its moves came before and the data the later ones were played
+	// with.
+	LegacyReplayedWith string `json:"legacy_replayed_with_data_sha256,omitempty"`
+	LegacyMoves        *int   `json:"legacy_moves,omitempty"`
+	ContinuedWith      string `json:"continued_with_data_sha256,omitempty"`
 }
 
 // requestOf is the request that starts the exported game: the one recorded
@@ -62,6 +69,30 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		return nil, fmt.Errorf("the export has no seats")
 	}
 	req := e.requestOf()
+	// An export that names no scheme data is a legacy record: its moves were
+	// played with data no one recorded. One continued after it was loaded
+	// names the data its later moves were played with, and where they begin.
+	legacy := e.DataHash == ""
+	legacyMoves, continued := len(e.History), false
+	switch {
+	case !legacy && (e.LegacyMoves != nil || e.ContinuedWith != ""):
+		return nil, fmt.Errorf("the export names its scheme data (%s) and also a legacy record's continuation", e.DataHash)
+	case legacy && e.LegacyMoves != nil:
+		if *e.LegacyMoves < 0 || *e.LegacyMoves > len(e.History) {
+			return nil, fmt.Errorf("the export's legacy_moves (%d) is not between 0 and its %d moves", *e.LegacyMoves, len(e.History))
+		}
+		legacyMoves = *e.LegacyMoves
+		continued = legacyMoves < len(e.History)
+		if continued && e.ContinuedWith == "" {
+			return nil, fmt.Errorf("the export continues a legacy record after its move %d but names no data for the moves after it", legacyMoves)
+		}
+	case legacy && e.ContinuedWith != "":
+		return nil, fmt.Errorf("the export names the data a legacy record was continued with, but not where (legacy_moves)")
+	}
+	playedWith := e.DataHash
+	if continued {
+		playedWith = e.ContinuedWith
+	}
 	var gs *game.GameState
 	var rep *kialo.Report
 	switch {
@@ -91,7 +122,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		// whatever the preset says now (contexts are not in the data's
 		// fingerprint). An older export has only the request's context.
 		r := *req
-		recorded := e.DataHash != ""
+		recorded := e.DataHash != "" || e.LegacyReplayedWith != ""
 		if recorded {
 			r.Context, r.Weights = "", nil
 		}
@@ -114,23 +145,24 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 			return nil, err
 		}
 	}
-	same := s.data.Matches(e.DataHash)
+	same := s.data.Matches(playedWith)
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
 			if !same && !errors.Is(err, errBridgeRetired) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
-					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(e.DataHash), s.data.Hash())
+					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
 			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
 		}
 	}
 	// Legal moves do not establish that the same data produced them: a game
 	// known to be played with other data is not registered as if it had
-	// been played with this, unless it is opened read-only. An export made
-	// before 13 October 2026 records no fingerprint.
-	other := e.DataHash != "" && !same
+	// been played with this, unless it is opened read-only. A legacy record
+	// names no data for its first moves; a continued one names the data of
+	// the others.
+	other := playedWith != "" && !same
 	if other && !inspect {
-		return nil, &OtherDataError{PlayedWith: e.DataHash, Here: s.data.Hash()}
+		return nil, &OtherDataError{PlayedWith: playedWith, Here: s.data.Hash()}
 	}
 	title := e.Title
 	if title == "" {
@@ -144,10 +176,14 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	}
 	ss := s.add(gs, e.Seats, title, source, req.Seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
-	if e.DataHash == "" {
-		// An export that names no scheme data stays a legacy record: it is
-		// replayed with this data, but not taken for a game played with it.
-		ss.dataHash, ss.legacyReplayedWith = "", s.data.Hash()
+	if legacy {
+		// It stays a legacy record: replayed with this data, but not taken
+		// for a game played with it. Moves played from now on are played
+		// with this data, which its export names for them.
+		ss.dataHash, ss.legacyReplayedWith, ss.legacyMoves, ss.continuedWith = "", s.data.Hash(), legacyMoves, s.data.Hash()
+		if continued && other {
+			ss.continuedWith = e.ContinuedWith
+		}
 	}
 	if other {
 		// Its export keeps the data it was played with, and the history as

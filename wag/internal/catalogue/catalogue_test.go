@@ -155,7 +155,7 @@ func TestCheckFindsFaults(t *testing.T) {
 		}},
 		{"game question dropped", "game question CQ:expertise is missing", func(e *Entry) { e.CQs[0].Game = nil }},
 		{"book question dropped", "question 2/CQ1 (compendium) is missing", func(e *Entry) { e.CQs = e.CQs[1:] }},
-		{"game text edited", "the game part is not the NASCQ's", func(e *Entry) { e.CQs[1].Game.Text = "Is it?" }},
+		{"game text edited", "the game text is", func(e *Entry) { e.CQs[1].Game.Text = "Is it?" }},
 		{"bad status", "status \"done\"", func(e *Entry) { e.Summary.Status = "done" }},
 		{"bad date", "bad date", func(e *Entry) { e.Summary = Text{Text: "x", Status: "verified by A. Person, 2026-13-40"} }},
 		{"verified without text", "summary: verified by A. Person, 2026-10-22, but no text", func(e *Entry) { e.Summary.Status = "verified by A. Person, 2026-10-22" }},

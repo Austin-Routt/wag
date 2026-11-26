@@ -47,6 +47,7 @@ go run ./cmd/wag-cli --game-gen [--game-out DIR]            # the game's files (
 - **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md`, the decision register's view, `docs/decisions.md`, and the game's files.
 - **`--catalogue-check`** reports errors, which fail it, and warnings. It ends with a progress line.
 - **A test keeps the committed catalogue current:** `internal/catalogue`, `TestCommittedCatalogueIsCurrent`. When a source changes, run `--catalogue-gen` and commit the result.
+- **The game part of an entry.** `game.id`, `game.nascq` (the scheme's record in `nascq/schemes.json`), `game.core` (its block in `core.yml` but its id) and each question's game `id`, `locus` and `pattern` are the game's data. `game.nascq`'s `carneades_id` is the entry's own scheme (after `walton.yml`'s id migrations). `game.core` gives formulas only where the game plays others than `walton.yml`'s, and then all of them: an override is all or nothing, a role it leaves out is empty. `game.backs` and each question's game `text` are copied from [`game/order.yml`](game/order.yml) and [`game/questions.yml`](game/questions.yml), where they are changed; comments in those two files are not kept. `game.status` is the entry's.
 - **The game's files come from the catalogue** (since step C5's switch, [`docs/c5-game.md`](../../../docs/c5-game.md)): `--catalogue-gen` first writes `wag/data/nascq/*.json` and `wag/data/schemes/core.yml` from the entries' game parts, [`game/`](game/) and `walton.yml`'s formulas, then makes the entries from them, so a game part says what the game plays. The check requires those files to be what the catalogue makes. `--game-gen` writes them alone, by default into `wag/data`, or into `--game-out DIR`.
 
 ## An entry
@@ -62,7 +63,7 @@ game:                                                        # the game's data: 
   id: AS:expert_opinion
   nascq: {carneades_id: expert_opinion, name: ..., base_weight: 0.7, ...}   # its record in nascq/schemes.json
   core: {meta: {title: ..., source: ...}}                    # its block in core.yml; formulas only where they are not walton.yml's
-  status: generated
+  status: generated                                          # the game part's status, set by people as the others
 formulas:                                                    # source: walton.yml
   variables: [W, D, S]
   premises: [expert(W,D), in_domain(S,D), asserts(W,S)]

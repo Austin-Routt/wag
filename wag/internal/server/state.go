@@ -68,14 +68,17 @@ type State struct {
 	// replayed (/api/load?inspect=1).
 	Inspect *InspectView `json:"inspect,omitempty"`
 	// Legacy is set when the game was loaded from an export that names no
-	// scheme data (made before 13 October 2026): its moves were replayed
-	// with this server's, and it stays a legacy record.
+	// scheme data (made before 13 October 2026, or a legacy record's own):
+	// its moves were replayed with this server's, and it stays a legacy
+	// record.
 	Legacy *LegacyView `json:"legacy,omitempty"`
 }
 
-// LegacyView names the data a legacy record was replayed with.
+// LegacyView names the data a legacy record was replayed with, and how many
+// of its moves name no data.
 type LegacyView struct {
 	ReplayedWith string `json:"replayed_with"` // this server's data
+	Moves        int    `json:"moves"`         // the moves that name no data
 }
 
 // InspectView names the scheme data of a game open read-only.
@@ -541,7 +544,7 @@ func (s *Session) buildState() *State {
 	}
 	st.CanMove = !gs.Terminated && gs.Pending == nil && st.ActiveAI == "" && !s.thinking && s.inspectedWith == ""
 	if s.legacyReplayedWith != "" {
-		st.Legacy = &LegacyView{ReplayedWith: s.legacyReplayedWith}
+		st.Legacy = &LegacyView{ReplayedWith: s.legacyReplayedWith, Moves: s.legacyMoves}
 	}
 	if s.inspectedWith != "" {
 		st.Inspect = &InspectView{PlayedWith: s.dataHash, ReplayedWith: s.inspectedWith}

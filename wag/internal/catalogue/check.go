@@ -149,9 +149,9 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 	gameDir, err := ReadGameDir(dir)
 	if err == nil {
 		var gen *GameGen
-		if gen, err = GenerateGame(entries, gameDir, FormulasOf(src.Walton)); err == nil {
+		if gen, err = GenerateGame(entries, gameDir, src.GameSources()); err == nil {
 			for _, p := range GamePaths {
-				if !bytes.Equal(gen.Files[p], src.files.game(p)) {
+				if !bytes.Equal(gen.Files[p], lfOf(src.files.game(p))) {
 					r.Findings = append(r.Findings, Finding{File: GameDataDir + "/" + p, Error: true,
 						Msg: "not what the catalogue makes of its game data; run wag-cli --catalogue-gen"})
 				}
@@ -167,9 +167,9 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 	} else {
 		for _, name := range sortedKeys(files) {
 			cur, err := os.ReadFile(filepath.Join(dir, GameDir, name))
-			if err != nil || string(cur) != files[name] {
+			if err != nil || string(lfOf(cur)) != files[name] {
 				r.Findings = append(r.Findings, Finding{File: GameDir + "/" + name, Error: true,
-					Msg: "not what wag-cli --catalogue-gen makes of the game's files; run it"})
+					Msg: "not what the game's files give back (comments here are not kept); run wag-cli --catalogue-gen"})
 			}
 		}
 	}
@@ -270,6 +270,32 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 	return r, nil
 }
 
+// gamePart checks an entry's game part against the one the game's files
+// give back (step C5.1's switch): its id, NASCQ record and core block are
+// the game's data, which the files are generated from; backs is made from
+// game/order.yml's backup edges; its status is the entry's (statuses).
+func (c *checker) gamePart(e, want *GameScheme) {
+	id := func(g *GameScheme) string {
+		if g == nil {
+			return "none"
+		}
+		return g.ID
+	}
+	switch {
+	case e == nil && want == nil:
+		return
+	case e == nil || want == nil || e.ID != want.ID:
+		c.err("game: the game's files give %s, the entry %s; run wag-cli --catalogue-gen", id(want), id(e))
+		return
+	}
+	if !same(e.Backs, want.Backs) {
+		c.err("game.backs: made from game/order.yml's backup edges (%v): change them there, then run wag-cli --catalogue-gen", want.Backs)
+	}
+	if !same(e.NASCQ, want.NASCQ) || !same(e.Core, want.Core) {
+		c.err("game.nascq or game.core: not what the game's files give back; run wag-cli --catalogue-gen, which writes the files from them first")
+	}
+}
+
 // entry checks an entry against the one the sources make.
 func (c *checker) entry(e, want *Entry) {
 	// Source fields.
@@ -279,9 +305,7 @@ func (c *checker) entry(e, want *Entry) {
 	if !same(e.Walton, want.Walton) {
 		c.err("walton: not walton.yml's; run wag-cli --catalogue-gen")
 	}
-	if !same(e.Game, want.Game) {
-		c.err("game: not the NASCQ's; run wag-cli --catalogue-gen")
-	}
+	c.gamePart(e.Game, want.Game)
 	if !same(e.Formulas, want.Formulas) {
 		c.err("formulas: not walton.yml's (formulas or their order); run wag-cli --catalogue-gen")
 	}
@@ -422,8 +446,10 @@ func (c *checker) entry(e, want *Entry) {
 			switch {
 			case exp == nil:
 				c.err("%s: the game does not ask %s of this scheme", where, q.Game.ID)
+			case q.Game.Text != exp.Text:
+				c.err("%s: the game text is %s's in game/questions.yml (question_template_en): change it there, then run wag-cli --catalogue-gen", where, exp.ID)
 			case !same(q.Game, exp):
-				c.err("%s: the game part is not the NASCQ's; run wag-cli --catalogue-gen", where)
+				c.err("%s: the game part's locus or pattern is not what the game's files give back; run wag-cli --catalogue-gen, which writes the files from it first", where)
 			case exp.Pattern != "" && len(q.Targets) > 0 && !hasTarget(q.Targets, exp.Pattern):
 				c.warn("%s: the game's question targets %s, the book's question %s", where, exp.Pattern, formulasOf(q.Targets))
 			}
@@ -546,6 +572,9 @@ func (c *checker) statuses(e *Entry) {
 		if _, err := ParseStatus(s); err != nil {
 			c.err("%s: %v", where, err)
 		}
+	}
+	if e.Game != nil {
+		check("game", e.Game.Status)
 	}
 	for _, x := range e.Book {
 		check("book entry "+x.Entry, x.Status)

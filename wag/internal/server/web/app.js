@@ -787,7 +787,8 @@ function inspectPanel() {
 }
 
 function legacyPanel() {
-  return `<div class="panel"><h2>A legacy record</h2><p class="small">The export this game was loaded from names no scheme data (it was made before 13 October 2026). Its moves were replayed with this server's, ${esc(G.legacy.replayed_with)}, so what the board shows may differ from what the players saw, and its export names no scheme data either.</p></div>`;
+  const l = G.legacy;
+  return `<div class="panel"><h2>A legacy record</h2><p class="small">The export this game was loaded from names no scheme data for its first ${l.moves} move(s) (exports made before 13 October 2026 named none). They were replayed with this server's data, ${esc(l.replayed_with)}, so what the board shows may differ from what the players saw, and its export names no data for them either. Moves played after them are recorded with the data they were played with.</p></div>`;
 }
 
 function outcomePanel() {

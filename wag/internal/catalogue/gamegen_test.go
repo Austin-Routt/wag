@@ -33,7 +33,7 @@ func committedGame(t *testing.T) (map[string]*Entry, *GameData, *GameGen) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	out, err := GenerateGame(entries, d, FormulasOf(sources(t).Walton))
+	out, err := GenerateGame(entries, d, sources(t).GameSources())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -246,13 +246,18 @@ func without(t *testing.T, m yaml.MapSlice, key string) yaml.MapSlice {
 // The generator refuses a catalogue whose game parts disagree with one
 // another or break a question's rule, naming the fault.
 func TestGameGenFindsFaults(t *testing.T) {
-	walton := sources(t).Walton
+	src := sources(t)
 	for _, c := range []struct {
 		name, want string
 		edit       func(t *testing.T, es map[string]*Entry, d *GameData)
 	}{
-		{"a scheme walton.yml lacks", "walton.yml has no scheme expert_gone, whose formulas the game's AS:expert_opinion plays", func(t *testing.T, es map[string]*Entry, d *GameData) {
-			es["expert_opinion.yml"].ID = "expert_gone"
+		{"a carneades_id that is not the entry's scheme", "the game part AS:sign names core.yml's sign_renamed, which is walton.yml's sign_renamed, not this entry's scheme sign", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			for i, it := range es["sign.yml"].Game.NASCQ {
+				if it.Key == "carneades_id" {
+					es["sign.yml"].Game.NASCQ[i].Value = "sign_renamed"
+				}
+			}
+			d.CoreTemplate = strings.Replace(d.CoreTemplate, coreMarker+"sign\n", coreMarker+"sign_renamed\n", 1)
 		}},
 		{"no NASCQ record", "has no NASCQ record", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			es["sign.yml"].Game.NASCQ = nil
@@ -278,7 +283,7 @@ func TestGameGenFindsFaults(t *testing.T) {
 		{"two entries, one game part", "is the game part of both", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			es["analogy.yml"].Game.ID = "AS:sign"
 		}},
-		{"two game schemes, one core.yml scheme", "are both core.yml's sign", func(t *testing.T, es map[string]*Entry, d *GameData) {
+		{"two game schemes, one core.yml scheme", "the game part AS:analogy names core.yml's sign, which is walton.yml's sign, not this entry's scheme analogy", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			for i, it := range es["analogy.yml"].Game.NASCQ {
 				if it.Key == "carneades_id" {
 					es["analogy.yml"].Game.NASCQ[i].Value = "sign"
@@ -368,31 +373,53 @@ func TestGameGenFindsFaults(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			es, d := freshGame(t)
 			c.edit(t, es, d)
-			_, err := GenerateGame(es, d, FormulasOf(walton))
+			_, err := GenerateGame(es, d, src.GameSources())
 			if err == nil || !strings.Contains(err.Error(), c.want) {
 				t.Errorf("got %v, want an error with %q", err, c.want)
 			}
 		})
 	}
+	// A game scheme whose entry records no formulas of its own, and
+	// walton.yml lacks: refused.
+	es, d := freshGame(t)
+	gs := src.GameSources()
+	delete(gs.Formulas, "expert_opinion")
+	if _, err := GenerateGame(es, d, gs); err == nil || !strings.Contains(err.Error(), "walton.yml has no scheme expert_opinion, whose formulas the game's AS:expert_opinion plays") {
+		t.Errorf("walton.yml without expert_opinion: got %v", err)
+	}
+	// An upstream id that walton.yml's migrations map to the entry's scheme
+	// is the entry's: core.yml's block takes it.
+	es, d = freshGame(t)
+	for i, it := range es["sign.yml"].Game.NASCQ {
+		if it.Key == "carneades_id" {
+			es["sign.yml"].Game.NASCQ[i].Value = "sign_upstream"
+		}
+	}
+	d.CoreTemplate = strings.Replace(d.CoreTemplate, coreMarker+"sign\n", coreMarker+"sign_upstream\n", 1)
+	gs = src.GameSources()
+	gs.Migrations = map[string]string{"sign_upstream": "sign"}
+	if g, err := GenerateGame(es, d, gs); err != nil || !strings.Contains(string(g.Files[GameCorePath]), "  - id: sign_upstream\n") {
+		t.Errorf("a migrated id: %v", err)
+	}
 	// Unedited, it generates, and a template read with CRLF line endings
 	// fills the same markers.
-	es, d := freshGame(t)
-	if _, err := GenerateGame(es, d, FormulasOf(walton)); err != nil {
+	es, d = freshGame(t)
+	if _, err := GenerateGame(es, d, src.GameSources()); err != nil {
 		t.Fatal(err)
 	}
 	d.CoreTemplate = strings.ReplaceAll(d.CoreTemplate, "\n", "\r\n")
-	if _, err := GenerateGame(es, d, FormulasOf(walton)); err != nil {
+	if _, err := GenerateGame(es, d, src.GameSources()); err != nil {
 		t.Errorf("a CRLF template: %v", err)
 	}
 }
 
 // The fingerprint in core.yml's header is that of the values the generator
-// reads: drafting an entry's other parts leaves it, as it leaves the files;
-// a value the game reads changes both.
+// reads (core.yml's template, its comments included): drafting an entry's
+// other parts leaves it, as it leaves the files; a value read changes both.
 func TestGameGenFingerprint(t *testing.T) {
-	walton := sources(t).Walton
+	src := sources(t)
 	es, d := freshGame(t)
-	base, err := GenerateGame(es, d, FormulasOf(walton))
+	base, err := GenerateGame(es, d, src.GameSources())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -458,9 +485,9 @@ func TestGameGenFingerprint(t *testing.T) {
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			es, d := freshGame(t)
-			f := FormulasOf(walton)
-			c.edit(es, d, f)
-			got, err := GenerateGame(es, d, f)
+			gs := src.GameSources()
+			c.edit(es, d, gs.Formulas)
+			got, err := GenerateGame(es, d, gs)
 			if err != nil {
 				t.Fatal(err)
 			}

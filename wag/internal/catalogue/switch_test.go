@@ -140,7 +140,7 @@ func TestCatalogueGenTakesWaltonsFormulas(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	stale, err := GenerateGame(entries, d, nil)
+	stale, err := GenerateGame(entries, d, GameSources{Migrations: s.Migrations})
 	if err != nil {
 		t.Fatal(err)
 	}

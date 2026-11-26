@@ -294,6 +294,10 @@ type GameStart struct {
 	// InspectedWith: a game open read-only was replayed with this other
 	// data (Session.inspectedWith).
 	InspectedWith string `json:"inspected_with_data_sha256,omitempty"`
+	// LegacyReplayedWith: a legacy record (loaded from an export that names
+	// no data, so DataSHA256 is empty) was replayed with this data
+	// (Session.legacyReplayedWith).
+	LegacyReplayedWith string `json:"legacy_replayed_with_data_sha256,omitempty"`
 }
 
 // GameEnd is the last event of the trace file of a game that is over.
@@ -347,7 +351,7 @@ func (s *Server) guestCopy(b []byte) []byte {
 // gameStart describes the game for its trace file. Caller holds s.mu.
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
-		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
+		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
 		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts}
 	seen := map[string]bool{}
 	for _, seat := range ss.Seats {

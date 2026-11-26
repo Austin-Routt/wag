@@ -53,9 +53,10 @@ D007 and D009 name.
   today's data except where the catalogue records a reason; the game's tests pass unchanged; the
   formulas come from the formula layer.
 
-## What the game's data does today
+## What the game's data did before C5.1
 
-From an inventory of the code (verify/c5/inventory.md), checked twice:
+From an inventory of the code (verify/c5/inventory.md), checked twice; since C5.1's switch the direction is the
+other way (step 6):
 
 - **Every field is read but `caes_mapping.target`.** `negative_answer_type` is shown to players
   (app.js) and is wrong where a question is asked at different loci. Other's questions are defined
@@ -97,7 +98,10 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    output; `--catalogue-gen` and the check turn round in the same commit. Written: it reads only the
    catalogue (each game scheme's entry, its formulas where it records none of its own, and `game/`),
    refuses a catalogue whose game parts disagree with one another, and writes the header's
-   fingerprint (`# catalogue: ...`). Since the switch `--catalogue-gen` runs it first, with
+   fingerprint (`# catalogue: ...`, of the values it reads, `core.yml`'s template and its comments
+   included). The header names `wag-cli --game-gen`, which `--catalogue-gen` runs; any change to its
+   wording changes the data's fingerprint, so it waits for C5.2's change of identity. Since the switch
+   `--catalogue-gen` runs it first, with
    `walton.yml`'s formulas (not the entries' copies, which a change to `walton.yml` would leave
    stale), then makes the entries from its output, so an edit to a game part is what the entries
    say; the check requires the game's files to be its output, and the entries and `game/` to be
@@ -119,7 +123,16 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    batch-2 replay is the same but for its fingerprint, build and times; a game loaded from an export
    that names no data shows that it is a legacy record, and its export names none either
    (`legacy_replayed_with_data_sha256` says what it was replayed with).
-7. **Review and gates** on C5.1 alone.
+7. **Review and gates** on C5.1 alone. Done: each commit passed the gates on both toolchains, and CI.
+   The independent review (2026-11-26; the workspace's verify/c5/c51) found 2 errors, 7 warnings
+   and 6 notes, each confirmed and fixed with a test that fails without the fix (C5.1-D; F5, the CI
+   step, in 9e43ab0): a `carneades_id` must be its entry's scheme; `game.backs` and each question's
+   game text are copied from `game/`, and the check says where to change them; `game.status` is the
+   entry's; a comment under a marker stays in the template; the formulas are written in `core.yml`'s
+   order of keys; another catalogue leaves the repository's game files alone; a continued legacy
+   record names the data its later moves were played with; the check reads CRLF as LF; the generator
+   refuses a formula with an undeclared variable and a backed question no scheme asks. None changes
+   the data's bytes.
 
 ## C5.2: the slice, through the catalogue
 

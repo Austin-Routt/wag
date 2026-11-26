@@ -69,20 +69,15 @@ type GameData struct {
 type gameRaw struct {
 	schemes   []GameQuestion // reused shape: an id and its record
 	questions []GameQuestion
-	ask       []askRaw
+	ask       []GameEdge
 	backup    []GameEdge
 	core      map[string]yaml.MapSlice // core.yml's schemes, by id
 	coreText  string
 }
 
-type askRaw struct {
-	GameEdge
-	Locus, Pattern string
-}
-
 // parseGameRaw reads the game's files keeping their order.
 func parseGameRaw(f Files) (*gameRaw, error) {
-	g := &gameRaw{coreText: string(f.Core)}
+	g := &gameRaw{coreText: string(lfOf(f.Core))} // a template is made of LF lines
 	recs := func(b []byte, what string) ([]GameQuestion, error) {
 		v, err := decodeOrderedJSON(b)
 		if err != nil {
@@ -117,7 +112,7 @@ func parseGameRaw(f Files) (*gameRaw, error) {
 		return nil, fmt.Errorf("nascq/edges.json: %v", err)
 	}
 	for _, e := range edges.Ask {
-		g.ask = append(g.ask, askRaw{GameEdge{CQ: e["cq"], Scheme: e["scheme"]}, e["locus"], e["pattern"]})
+		g.ask = append(g.ask, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
 	}
 	for _, e := range edges.Backup {
 		g.backup = append(g.backup, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
@@ -153,9 +148,7 @@ func (g *gameRaw) gameData(gameIDs map[string]bool) (*GameData, error) {
 	for _, s := range g.schemes {
 		d.Order.Schemes = append(d.Order.Schemes, s.ID)
 	}
-	for _, a := range g.ask {
-		d.Order.Ask = append(d.Order.Ask, a.GameEdge)
-	}
+	d.Order.Ask = g.ask
 	d.Order.Backup = g.backup
 	t, err := coreTemplate(stripCoreHeader(g.coreText), gameIDs)
 	if err != nil {
@@ -183,9 +176,17 @@ func coreTemplate(text string, ids map[string]bool) (string, error) {
 		id = strings.TrimSpace(id)
 		found[id] = true
 		b.WriteString(coreMarker + id + "\n")
-		for i+1 < len(lines) && strings.HasPrefix(lines[i+1], "    ") {
-			i++
+		// The block is the lines indented under it, but the comments that
+		// end it: the generator writes none in a block, so those are the
+		// template's own, written under the marker.
+		end := i
+		for end+1 < len(lines) && strings.HasPrefix(lines[end+1], "    ") {
+			end++
 		}
+		for end > i && comment(lines[end]) {
+			end--
+		}
+		i = end
 	}
 	for id := range ids {
 		if !found[id] {
@@ -194,6 +195,9 @@ func coreTemplate(text string, ids map[string]bool) (string, error) {
 	}
 	return b.String(), nil
 }
+
+// comment tells whether a line holds only a comment.
+func comment(l string) bool { return strings.HasPrefix(strings.TrimSpace(l), "#") }
 
 // gameCore is the part of core.yml's block of a scheme the entry records:
 // all but its id, and, where its formulas are walton.yml's (the same, in
@@ -212,15 +216,13 @@ func gameCore(block yaml.MapSlice, w Scheme) yaml.MapSlice {
 	var out yaml.MapSlice
 	for _, it := range block {
 		k := it.Key.(string)
-		if k == "id" || (same && in(formulaKeys, k)) {
+		if k == "id" || (same && in(coreFormulaKeys, k)) {
 			continue
 		}
 		out = append(out, it)
 	}
 	return out
 }
-
-var formulaKeys = []string{"variables", "premises", "assumptions", "exceptions", "conclusions"}
 
 // stringList reads a YAML list of strings.
 func stringList(v interface{}) []string {
@@ -302,7 +304,7 @@ func readJSONValue(dec *json.Decoder) (interface{}, error) {
 const gameHeader = `# The game's data in the catalogue (step C5.1, docs/c5-game.md), with the
 # entries' game parts: wag-cli --catalogue-gen generates the game's files
 # (wag/data/nascq/*.json, wag/data/schemes/core.yml) from them. Change it only
-# as a decision says.
+# as a decision says. Comments are not kept: --catalogue-gen rewrites this file.
 `
 
 // GameFiles is GameDir's content, by file name, as the game's files give it.

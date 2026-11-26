@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/yourorg/wag/internal/catalogue"
+	"github.com/yourorg/wag/internal/server"
 )
 
 // catalogueDirs resolves the repository's root and the catalogue's
@@ -44,21 +45,23 @@ func runCatalogueGen(repo, dir, by string) int {
 	}
 	own := filepath.Join(repo, filepath.FromSlash(catalogue.Dir))
 	if _, err := os.Stat(filepath.Join(dir, catalogue.GameDir)); err != nil {
-		fmt.Printf("note: %s has no %s/; the game's files are left as they are\n", dir, catalogue.GameDir)
-	} else if !sameDir(dir, own) {
-		fmt.Printf("note: %s is not the repository's catalogue; the game's files are left as they are\n", dir)
+		fmt.Printf("note: %s has no %s/; its entries' game parts are made from the repository's game files\n", dir, catalogue.GameDir)
 	} else {
 		var g *catalogue.GameGen
 		if f, g, err = catalogue.WithGame(f, dir); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			return 1
 		}
-		written, err := catalogue.WriteGameFiles(filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir)), g)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return 1
+		if sameDir(dir, own) {
+			written, err := catalogue.WriteGameFiles(filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir)), g)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				return 1
+			}
+			fmt.Printf("%s: the game's files from the catalogue, %d of %d written (%s)\n", catalogue.GameDataDir, len(written), len(catalogue.GamePaths), fingerprints(g))
+		} else {
+			fmt.Printf("note: %s is not the repository's catalogue: its entries are made from the game's files it makes (%s), which are not written\n", dir, fingerprints(g))
 		}
-		fmt.Printf("%s: the game's files from the catalogue (%s): %d of %d written\n", catalogue.GameDataDir, g.Inputs, len(written), len(catalogue.GamePaths))
 	}
 	src, err := catalogue.Parse(f)
 	if err != nil {
@@ -102,6 +105,15 @@ func runCatalogueGen(repo, dir, by string) int {
 	return 0
 }
 
+// fingerprints names the generated files' data fingerprint (the data_sha256
+// a game records) and the fingerprint of the catalogue's values they were
+// made from (core.yml's header).
+func fingerprints(g *catalogue.GameGen) string {
+	d := server.Data{YAML: g.Files[catalogue.GameCorePath], Schemes: g.Files[catalogue.GameSchemesPath],
+		CQs: g.Files[catalogue.GameCQsPath], Edges: g.Files[catalogue.GameEdgesPath]}
+	return "data " + d.Hash() + ", catalogue values " + g.Inputs
+}
+
 // sameDir tells whether two paths name the same directory.
 func sameDir(a, b string) bool {
 	x, err1 := os.Stat(a)
@@ -119,6 +131,10 @@ func runGameGen(repo, dir, out string) int {
 		return 1
 	}
 	if out == "" {
+		if !sameDir(dir, filepath.Join(repo, filepath.FromSlash(catalogue.Dir))) {
+			fmt.Fprintf(os.Stderr, "%s is not the repository's catalogue: give --game-out, so that the repository's game files are left as they are\n", dir)
+			return 1
+		}
 		out = filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir))
 	}
 	g, err := catalogue.GameFromCatalogue(repo, dir)
@@ -131,7 +147,7 @@ func runGameGen(repo, dir, out string) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	fmt.Printf("%s: the game's files from the catalogue (%s): %d of %d written\n", out, g.Inputs, len(written), len(catalogue.GamePaths))
+	fmt.Printf("%s: the game's files from the catalogue, %d of %d written (%s)\n", out, len(written), len(catalogue.GamePaths), fingerprints(g))
 	return 0
 }
 

@@ -1,7 +1,7 @@
 # The game's data in the catalogue (step C5.1, docs/c5-game.md), with the
 # entries' game parts: wag-cli --catalogue-gen generates the game's files
 # (wag/data/nascq/*.json, wag/data/schemes/core.yml) from them. Change it only
-# as a decision says.
+# as a decision says. Comments are not kept: --catalogue-gen rewrites this file.
 questions:
 - id: CQ:other_goals
   record:
