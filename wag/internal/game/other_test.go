@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -12,7 +11,7 @@ import (
 
 func otherGame(t *testing.T, cfg func(*GameConfig)) *GameState {
 	t.Helper()
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config = DefaultGameConfig()
 	gs.Config.AllowOther = true
 	if cfg != nil {
@@ -83,7 +82,7 @@ func TestOtherScheme(t *testing.T) {
 		t.Fatal(errs)
 	}
 	// Without AllowOther, there is no such scheme.
-	gs3 := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs3 := newShippedGame(t, prevEdges, "Alice", "Bob")
 	if r, _ := gs3.ExecuteTurn(free("x", "y")); r.Accepted || !strings.HasPrefix(r.Error, "S1") {
 		t.Fatalf("Other without AllowOther: %+v", r)
 	}
@@ -113,7 +112,7 @@ func TestOtherTemplatesAreLegal(t *testing.T) {
 }
 
 func TestRequireEvidence(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.RequireEvidence = true
 	act := nascq.ProposedAction{Type: "support", SchemeID: "AS:expert_opinion",
 		VariableBindings: map[string]string{"W": "ipcc", "D": "climate", "S": "warming is real"}}
@@ -137,7 +136,7 @@ func TestRequireEvidence(t *testing.T) {
 // A moderated game holds each move for the moderator, who approves it (with
 // a weight) or rejects it, and decides on statements.
 func TestModeration(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.Moderated = true
 	r, err := gs.ExecuteTurn(prSupportAction())
 	if err != nil || !r.Pending || gs.Pending == nil || len(gs.Adapter.Graph.Arguments) != 0 {
@@ -190,7 +189,7 @@ func TestModeration(t *testing.T) {
 }
 
 func TestSuggest(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	for text, want := range map[string]string{
 		"According to Dr. Lee, an expert in economics, the tax works.": "AS:expert_opinion",
 		"We should tax meat in order to reduce emissions.":             "AS:practical_reasoning",

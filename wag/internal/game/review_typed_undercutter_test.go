@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 	"gopkg.in/yaml.v2"
@@ -19,7 +18,7 @@ func TestReviewTypedExceptionUndercutterFitsExactTarget(t *testing.T) {
 	const schemeID = "AS:test_typed_alternative"
 	makeGame := func(t *testing.T, conclusion, bridge string) (*GameState, string) {
 		t.Helper()
-		core := addTemplate(t, data.CoreYAML, "test_comparison/3", "Synthetic comparison: %s against %s for %s.")
+		core := addTemplate(t, prevCore, "test_comparison/3", "Synthetic comparison: %s against %s for %s.")
 		core = withScheme(t, core, yaml.MapSlice{{Key: "id", Value: "test_typed_alternative"},
 			{Key: "variables", Value: []string{"B", "A", "G"}}, {Key: "premises", Value: []string{"test_comparison(B,A,G)"}},
 			{Key: "conclusions", Value: []string{conclusion}}})
@@ -28,7 +27,7 @@ func TestReviewTypedExceptionUndercutterFitsExactTarget(t *testing.T) {
 			t.Fatal(err)
 		}
 		var schemes map[string]json.RawMessage
-		if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil {
+		if err := json.Unmarshal(prevSchemes, &schemes); err != nil {
 			t.Fatal(err)
 		}
 		schemes[schemeID] = json.RawMessage(`{"carneades_id":"test_typed_alternative","name":"Synthetic typed comparison (test only)","semantic_type":"proposition","base_weight":0.9,"variables":{"B":{"type":"action"},"A":{"type":"action"},"G":{"type":"goal"}},"premise_templates_en":["Synthetic comparison of {B} against {A} for {G}"],"conclusion_template_en":"An alternative achieves {G} more effectively than {A}"}`)
@@ -37,7 +36,7 @@ func TestReviewTypedExceptionUndercutterFitsExactTarget(t *testing.T) {
 			t.Fatal(err)
 		}
 		var edges map[string][]map[string]string
-		if err := json.Unmarshal(data.EdgesJSON, &edges); err != nil {
+		if err := json.Unmarshal(prevEdges, &edges); err != nil {
 			t.Fatal(err)
 		}
 		edge := map[string]string{"scheme": schemeID, "cq": "CQ:other_means"}
@@ -49,7 +48,7 @@ func TestReviewTypedExceptionUndercutterFitsExactTarget(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		n, err := nascq.LoadFromBytes(schemeBytes, data.CQsJSON, edgeBytes)
+		n, err := nascq.LoadFromBytes(schemeBytes, prevCQs, edgeBytes)
 		if err != nil {
 			t.Fatal(err)
 		}

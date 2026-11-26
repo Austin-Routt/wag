@@ -8,7 +8,6 @@ import (
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 )
@@ -16,11 +15,11 @@ import (
 // newShippedGame starts a game on the shipped data with the given NASCQ edges.
 func newShippedGame(t *testing.T, edgesJSON []byte, players ...string) *GameState {
 	t.Helper()
-	ad, err := carneades.NewAdapterFromYAML(data.CoreYAML)
+	ad, err := carneades.NewAdapterFromYAML(prevCore)
 	if err != nil {
 		t.Fatal(err)
 	}
-	n, err := nascq.LoadFromBytes(data.SchemesJSON, data.CQsJSON, edgesJSON)
+	n, err := nascq.LoadFromBytes(prevSchemes, prevCQs, edgesJSON)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +44,7 @@ func everyCQAsksEverySchemeEdges(t *testing.T) []byte {
 	for _, x := range []struct {
 		b []byte
 		v interface{}
-	}{{data.SchemesJSON, &schemes}, {data.CQsJSON, &cqs}, {data.EdgesJSON, &edges}} {
+	}{{prevSchemes, &schemes}, {prevCQs, &cqs}, {prevEdges, &edges}} {
 		if err := json.Unmarshal(x.b, x.v); err != nil {
 			t.Fatal(err)
 		}
@@ -94,7 +93,7 @@ func TestInvariantsHoldInRandomPlay(t *testing.T) {
 		name  string
 		edges []byte
 	}{
-		{"shipped edges", data.EdgesJSON},
+		{"shipped edges", prevEdges},
 		{"every CQ asks every scheme", everyCQAsksEverySchemeEdges(t)},
 	}
 	games := 60
@@ -119,7 +118,7 @@ func TestInvariantsHoldInRandomPlay(t *testing.T) {
 // The batch statistics add up: wins by seat plus ties is the number of games,
 // the move kinds count every accepted move.
 func TestBatchStatisticsAddUp(t *testing.T) {
-	br := RunBatch(6, DefaultGameConfig(), DefaultRunnerConfig(), data.CoreYAML, data.SchemesJSON, data.CQsJSON, data.EdgesJSON,
+	br := RunBatch(6, DefaultGameConfig(), DefaultRunnerConfig(), prevCore, prevSchemes, prevCQs, prevEdges,
 		func(i int) []Agent {
 			return []Agent{NewRandomAgent("A", int64(i), 0.1, 0.5), NewRandomAgent("B", int64(i+99), 0.1, 0.5)}
 		})
@@ -157,7 +156,7 @@ func TestInvariantsReportWhatIsNotAdmitted(t *testing.T) {
 				t.Fatalf("argument %s with premise %s: %s", id, unrelated.Id, joined)
 			}
 			// Contradictory assumptions, on a fresh game.
-			gs = newShippedGame(t, data.EdgesJSON, "A", "B")
+			gs = newShippedGame(t, prevEdges, "A", "B")
 			gs.Adapter.Graph.Assumptions = append(gs.Adapter.Graph.Assumptions, "p", "¬p")
 			if joined := fmt.Sprint(gs.CheckInvariants()); !strings.Contains(joined, "the assumptions are not consistent") {
 				t.Fatalf("contradictory assumptions: %s", joined)

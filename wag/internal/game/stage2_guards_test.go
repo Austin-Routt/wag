@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 )
@@ -15,7 +14,7 @@ import (
 // realizes the attacked argument's goal more effectively. A prose bridge
 // cannot supply that missing comparative inference (D075).
 func TestStage2BridgeDoesNotWaiveAnswerFit(t *testing.T) {
-	edges := withBackupEdge(t, data.EdgesJSON, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"the alternate action has a good consequence"}`)
+	edges := withBackupEdge(t, prevEdges, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"the alternate action has a good consequence"}`)
 	gs := newShippedGame(t, edges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	arg := play(t, gs, prSupportAction())
@@ -34,7 +33,7 @@ func TestStage2BridgeDoesNotWaiveAnswerFit(t *testing.T) {
 
 func TestStage2LintRefusesBridgeAndSharedEngineIdentity(t *testing.T) {
 	var schemes map[string]map[string]interface{}
-	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil {
+	if err := json.Unmarshal(prevSchemes, &schemes); err != nil {
 		t.Fatal(err)
 	}
 	copyBytes, _ := json.Marshal(schemes["AS:sign"])
@@ -42,8 +41,8 @@ func TestStage2LintRefusesBridgeAndSharedEngineIdentity(t *testing.T) {
 	json.Unmarshal(copyBytes, &alias)
 	schemes["AS:sign_alias"] = alias
 	s, _ := json.Marshal(schemes)
-	edges := withBackupEdge(t, data.EdgesJSON, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"untyped explanation"}`)
-	issues, err := LintData(data.CoreYAML, s, data.CQsJSON, edges)
+	edges := withBackupEdge(t, prevEdges, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"untyped explanation"}`)
+	issues, err := LintData(prevCore, s, prevCQs, edges)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +57,7 @@ func TestStage2LintRefusesBridgeAndSharedEngineIdentity(t *testing.T) {
 	if !bridge || !identity {
 		t.Fatalf("missing errors bridge=%v identity=%v: %v", bridge, identity, issues)
 	}
-	n, err := nascq.LoadFromBytes(s, data.CQsJSON, edges)
+	n, err := nascq.LoadFromBytes(s, prevCQs, edges)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,7 +67,7 @@ func TestStage2LintRefusesBridgeAndSharedEngineIdentity(t *testing.T) {
 }
 
 func TestStage2RecordsExactGameSchemeOnMainArguments(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	act := prSupportAction()
 	id := play(t, gs, act)
 	arg := gs.Adapter.Graph.Arguments[id]
@@ -83,7 +82,7 @@ func TestStage2RecordsExactGameSchemeOnMainArguments(t *testing.T) {
 }
 
 func TestStage2ViewPreservesRecordedSchemeIdentity(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	id := play(t, gs, prSupportAction())
 	// An old profile identity must survive even if the currently loaded
 	// NASCQ no longer contains that identity. Do not silently relabel it.
@@ -103,7 +102,7 @@ func TestStage2ViewPreservesRecordedSchemeIdentity(t *testing.T) {
 // profile's questions. Also reject a recorded ID for a different engine
 // scheme; a matching string alone is not a compatible argument identity.
 func TestStage2HistoricalIdentityCannotAcquireCurrentCQs(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	id := play(t, gs, prSupportAction())
 	arg := gs.Adapter.Graph.Arguments[id]
 	for _, incompatible := range []string{"AS:prior_profile_practical", "AS:sign"} {
@@ -129,7 +128,7 @@ func TestStage2HistoricalIdentityCannotAcquireCurrentCQs(t *testing.T) {
 // not conclude that answer. Preserve the OwnConclusion protection when
 // reading those games, even though new prose-bridge moves are now refused.
 func TestStage2LegacyBridgedConclusionDoesNotAcquireSchemeCQ(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	id := play(t, gs, prSupportAction())
 	ans := play(t, gs, answer("attack", "CQ:other_means", "AS:position_to_know", id,

@@ -1,7 +1,6 @@
 package game
 
 import (
-	"github.com/yourorg/wag/data"
 	"strings"
 	"testing"
 )
@@ -24,8 +23,8 @@ func TestIndexedTemplateLint(t *testing.T) {
 		template string
 		invalid  bool
 	}{{"%[1]s is good.", false}, {"%[2]s is good.", true}, {"%v is good.", true}} {
-		input := withTemplate(t, data.CoreYAML, "good/1", tc.template)
-		issues, err := LintData(input, data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+		input := withTemplate(t, prevCore, "good/1", tc.template)
+		issues, err := LintData(input, prevSchemes, prevCQs, prevEdges)
 		if err != nil {
 			t.Fatal(err)
 		}

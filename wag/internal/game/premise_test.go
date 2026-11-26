@@ -15,7 +15,7 @@ import (
 // critical questions is about can be questioned and undermined through the
 // generic premise question; the one Possibility is about cannot.
 func TestAnyPremise(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config = DefaultGameConfig()
 	gs.Config.AnyPremise = true
 	gs.NASCQ.EnablePremiseQuestion()
@@ -53,7 +53,7 @@ func TestAnyPremise(t *testing.T) {
 // double quotes and, a level deeper, shortened in brackets; on a card the
 // argument's own conclusion reads C.
 func TestEnglish(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config = DefaultGameConfig()
 	a1 := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:expert_opinion",
 		VariableBindings: map[string]string{"W": "the IPCC", "D": "climate science", "S": "it rains more"}})
@@ -80,7 +80,7 @@ func TestEnglish(t *testing.T) {
 // A negated conclusion is C on its card even where a premise nests it as
 // not(...).
 func TestSayInNegatedConclusion(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config = DefaultGameConfig()
 	a1 := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:practical_reasoning",
 		VariableBindings: map[string]string{"A": "ask her out", "S1": "single", "S2": "dating", "G": "a relationship", "V": "happiness"}})
@@ -104,7 +104,7 @@ func TestContexts(t *testing.T) {
 		t.Fatalf("contexts: %v %v", cs, err)
 	}
 	var schemes map[string]json.RawMessage
-	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil || len(schemes) == 0 {
+	if err := json.Unmarshal(prevSchemes, &schemes); err != nil || len(schemes) == 0 {
 		t.Fatalf("schemes.json: %v", err)
 	}
 	for _, c := range cs {
@@ -123,7 +123,7 @@ func TestContexts(t *testing.T) {
 			}
 		}
 	}
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.NASCQ.EnableOther()
 	for _, c := range cs {
 		for id := range c.Weights {
@@ -142,7 +142,7 @@ func TestContexts(t *testing.T) {
 // The same dispute under other weights: ClaimUnder re-weighs the arguments
 // made with schemes, without changing the game.
 func TestClaimUnder(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	gs.Config.Objective = ObjectiveClaim
 	play(t, gs, prSupportAction()) // practical reasoning, 0.70

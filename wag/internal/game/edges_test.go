@@ -4,8 +4,6 @@ import (
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/yourorg/wag/data"
 )
 
 // Every answer the shipped NASCQ offers to every critical question
@@ -13,7 +11,7 @@ import (
 // (EdgeCases), and docs/scheme-registry/nascq-edges.md (wag-cli --edges) is
 // the table of the shipped data.
 func TestEveryEdgeCase(t *testing.T) {
-	cases, err := EdgeCases(func() (*GameState, error) { return newShippedGame(t, data.EdgesJSON, "Pro", "Con"), nil })
+	cases, err := EdgeCases(func() (*GameState, error) { return newShippedGame(t, prevEdges, "Pro", "Con"), nil })
 	if err != nil {
 		t.Fatal(err)
 	}

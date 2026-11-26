@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -30,7 +29,7 @@ func fromTemplate(tmpl nascq.ActionTemplate, bindings map[string]string) nascq.P
 // (as agents and the CLI wizard play it). It used to undermine the first
 // premise, current_circumstances(S1).
 func TestPossibilityQuestionUnderminesPossible(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ := gs.ExecuteTurn(prSupportAction())
 	main := r.ArgIDs[0]
 	var tmpl *nascq.ActionTemplate
@@ -62,7 +61,7 @@ func TestPossibilityQuestionUnderminesPossible(t *testing.T) {
 // Malformed moves fail validation (and so are penalized and recorded like any
 // invalid move) instead of reaching the adapter.
 func TestMalformedMovesFailValidation(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ := gs.ExecuteTurn(prSupportAction())
 	main := r.ArgIDs[0]
 	presumption := r.Presumptions[0]
@@ -99,7 +98,7 @@ func TestMalformedMovesFailValidation(t *testing.T) {
 }
 
 func TestEnumeratedUnderminingTemplatesAreValid(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.ExecuteTurn(prSupportAction())
 	for _, a := range gs.BuildObservation().AvailableActions {
 		if a.CaesAttackType != "undermining" {
@@ -119,7 +118,7 @@ func TestEnumeratedUnderminingTemplatesAreValid(t *testing.T) {
 // when a rejected move came before an abstention (the round check used to read
 // the last len(Players) history records, which include rejected moves).
 func TestAllAbstainRoundCountsDespiteRejectedMoves(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.AbstentionThreshold = 1
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})                             // Alice
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:nonexistent"}) // Bob, rejected
@@ -129,7 +128,7 @@ func TestAllAbstainRoundCountsDespiteRejectedMoves(t *testing.T) {
 	}
 
 	// A round with a move resets the count.
-	gs = newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs = newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.AbstentionThreshold = 2
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
@@ -144,7 +143,7 @@ func TestAllAbstainRoundCountsDespiteRejectedMoves(t *testing.T) {
 // order puts it: judged_positive_value(V,A), reason_retaining_goal(V,G) and
 // more_on_point(A,C) rendered their arguments the wrong way round.
 func TestLanguageTemplatesFollowArgumentOrder(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: "AS:values",
 		VariableBindings: map[string]string{"V": "liberty", "A": "citizens", "G": "free_speech"}})
 	arg := gs.Adapter.Graph.Arguments[r.ArgIDs[0]]
@@ -174,7 +173,7 @@ func TestSelfAttackScoresNothing(t *testing.T) {
 		return nascq.ProposedAction{Type: "attack", SchemeID: "AS:expert_opinion", AnswersCQID: "CQ:side_effect",
 			TargetArgID: target, VariableBindings: map[string]string{"W": "imf", "D": "economics", "S": "tax_hurts_poor"}}
 	}
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ := gs.ExecuteTurn(prSupportAction())
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
 	self, _ := gs.ExecuteTurn(expert(r.ArgIDs[0]))
@@ -182,7 +181,7 @@ func TestSelfAttackScoresNothing(t *testing.T) {
 		t.Fatalf("self-attack: accepted=%v delta=%v, want accepted and 0", self.Accepted, self.ScoreDelta)
 	}
 
-	gs = newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs = newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ = gs.ExecuteTurn(prSupportAction())
 	other, _ := gs.ExecuteTurn(expert(r.ArgIDs[0]))
 	if other.ScoreDelta != 22 {
@@ -194,7 +193,7 @@ func TestSelfAttackScoresNothing(t *testing.T) {
 // penalized, recorded, and the graph is unchanged. Repeating a support used
 // to score 7 every turn.
 func TestDuplicateArgumentIsRejected(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	r, _ := gs.ExecuteTurn(prSupportAction())
 	for _, mover := range []string{"Bob", "Alice"} {
 		if gs.ActivePlayer().ID != mover {

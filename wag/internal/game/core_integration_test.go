@@ -10,7 +10,6 @@ package game
 //   go test ./internal/game/ -v -run TestCore
 
 import (
-	"github.com/yourorg/wag/data"
 	"strings"
 	"testing"
 
@@ -25,10 +24,10 @@ import (
 // =========================================================================
 
 var (
-	coreYAML        = string(data.CoreYAML)
-	coreSchemesJSON = string(data.SchemesJSON)
-	coreCQsJSON     = string(data.CQsJSON)
-	coreEdgesJSON   = string(data.EdgesJSON)
+	coreYAML        = string(prevCore)
+	coreSchemesJSON = string(prevSchemes)
+	coreCQsJSON     = string(prevCQs)
+	coreEdgesJSON   = string(prevEdges)
 )
 
 // =========================================================================

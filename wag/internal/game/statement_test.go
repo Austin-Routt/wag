@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -13,7 +12,7 @@ import (
 // Any statement on the board can be argued for or against, as the claim can,
 // with a scheme that can conclude it (S9).
 func TestArgueAboutStatements(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	label := func(id string) caes.Label { return gs.Adapter.Graph.Statements[id].Label }
 	const shouldTax, possibleTax = "should_be_performed(carbon_tax)", "possible(carbon_tax)"
@@ -108,7 +107,7 @@ func TestArgueAboutStatements(t *testing.T) {
 // A challenge ("why should we accept that?") is answered by any argument
 // for the premise, not only by a defence through the question.
 func TestChallengeAnsweredByAnArgumentForThePremise(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns, gs.Config.AnyPremise = 0, true
 	gs.NASCQ.EnablePremiseQuestion()
 	a1 := play(t, gs, prSupportAction())
@@ -141,7 +140,7 @@ func TestChallengeAnsweredByAnArgumentForThePremise(t *testing.T) {
 // must then concern that answer.
 func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 	add := func(edge string) []byte {
-		return withBackupEdge(t, data.EdgesJSON, edge)
+		return withBackupEdge(t, prevEdges, edge)
 	}
 	gs := newShippedGame(t, add(`{ "scheme": "AS:consequences", "cq": "CQ:other_means" }`), "Alice", "Bob")
 	gs.Config.MaxTurns = 0
@@ -192,7 +191,7 @@ func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 // practical reasoning stands beside the value-based one, with its own
 // questions.
 func TestNegativeConsequencesAndGoalBasedReasoning(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	const shouldTax = "should_be_performed(carbon_tax)"
 	a1 := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:practical_reasoning_goal",
@@ -231,7 +230,7 @@ func TestNegativeConsequencesAndGoalBasedReasoning(t *testing.T) {
 // the same action: positive consequences rebutting a negative-consequences
 // argument against the carbon tax must be about the carbon tax.
 func TestAnswerFixesTheSchemesConclusion(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	a1 := play(t, gs, prSupportAction())
 	_ = a1
@@ -250,7 +249,7 @@ func TestAnswerFixesTheSchemesConclusion(t *testing.T) {
 // Q2 refuses a question raised again about the same argument, but two
 // premises of one argument can each be challenged.
 func TestChallengeEachPremise(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns, gs.Config.AnyPremise = 0, true
 	gs.NASCQ.EnablePremiseQuestion()
 	a1 := play(t, gs, prSupportAction())

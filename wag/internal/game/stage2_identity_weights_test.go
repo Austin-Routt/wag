@@ -2,14 +2,12 @@ package game
 
 import (
 	"testing"
-
-	"github.com/yourorg/wag/data"
 )
 
 // Supplied by the non-author reviewer: profile-specific audience weights
 // cannot silently be applied to an unknown recorded historical identity.
 func TestStage2HistoricalSchemeKeepsOriginalWeight(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	id := play(t, gs, prSupportAction())
 	arg := gs.Adapter.Graph.Arguments[id]
 	gs.Claim = arg.Conclusion.Id

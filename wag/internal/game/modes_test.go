@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -14,7 +13,7 @@ import (
 // modeGame is a shipped-data game in the given mode.
 func modeGame(t *testing.T, mode string, players ...string) *GameState {
 	t.Helper()
-	gs := newShippedGame(t, data.EdgesJSON, players...)
+	gs := newShippedGame(t, prevEdges, players...)
 	cfg, err := ModeConfig(mode)
 	if err != nil {
 		t.Fatal(err)

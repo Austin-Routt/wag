@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
-
-	"github.com/yourorg/wag/data"
 )
 
 // The shipped data has no lint errors. Its warnings are logged: they are the
 // known gaps of the 7-scheme NASCQ (schemes no critical question is asked of).
 func TestShippedDataLint(t *testing.T) {
-	issues, err := LintData(data.CoreYAML, data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+	issues, err := LintData(prevCore, prevSchemes, prevCQs, prevEdges)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,8 +25,8 @@ func TestShippedDataLint(t *testing.T) {
 // Each kind of lint error is found.
 func TestLintFindsDataErrors(t *testing.T) {
 	var schemes, cqs map[string]map[string]interface{}
-	json.Unmarshal(data.SchemesJSON, &schemes)
-	json.Unmarshal(data.CQsJSON, &cqs)
+	json.Unmarshal(prevSchemes, &schemes)
+	json.Unmarshal(prevCQs, &cqs)
 	schemes["AS:sign"]["carneades_id"] = "no_such_scheme"
 	schemes["AS:analogy"]["base_weight"] = 1.5
 	schemes["AS:analogy"]["premise_templates_en"] = []string{"{C} is similar", "{Z} holds"}
@@ -41,7 +39,7 @@ func TestLintFindsDataErrors(t *testing.T) {
 	schemes["AS:values"]["entry_premise"] = "no_such_premise({G},{A})"
 	cqs["CQ:likelihood"]["caes_mapping"] = map[string]interface{}{"positive_answer_type": "support", "negative_answer_type": "support"}
 	var edgeData map[string][]map[string]interface{}
-	json.Unmarshal(data.EdgesJSON, &edgeData)
+	json.Unmarshal(prevEdges, &edgeData)
 	for _, e := range edgeData["ask_edges"] {
 		switch {
 		case e["cq"] == "CQ:possibility" && e["scheme"] == "AS:practical_reasoning":
@@ -57,7 +55,7 @@ func TestLintFindsDataErrors(t *testing.T) {
 	s, _ := json.Marshal(schemes)
 	c, _ := json.Marshal(cqs)
 	edges, _ := json.Marshal(edgeData)
-	core := withTemplate(t, data.CoreYAML, "good/1", "%s is good for %s.")
+	core := withTemplate(t, prevCore, "good/1", "%s is good for %s.")
 	// An answer scheme that concludes the negation of its answer variable.
 	core = withSchemeField(t, core, "analogy", "conclusions", []string{"¬A"})
 

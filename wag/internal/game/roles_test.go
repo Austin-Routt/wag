@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 	"gopkg.in/yaml.v2"
@@ -18,7 +17,7 @@ import (
 // and turns Other on.
 func bridgeGame(t *testing.T, refuse bool) (*GameState, *carneades.Adapter, *nascq.NASCQ) {
 	t.Helper()
-	core := data.CoreYAML
+	core := prevCore
 	for k, tmpl := range map[string]string{
 		"may_bring_about/2":         "The action %s may bring about %s.",
 		"may_be_worth_performing/2": "Action %s may be worth performing for the sake of %s.",
@@ -40,7 +39,7 @@ func bridgeGame(t *testing.T, refuse bool) (*GameState, *carneades.Adapter, *nas
 		t.Fatal(err)
 	}
 	var schemes map[string]json.RawMessage
-	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil {
+	if err := json.Unmarshal(prevSchemes, &schemes); err != nil {
 		t.Fatal(err)
 	}
 	vars := `{"A":{"type":"action"},"G":{"type":"event"}}`
@@ -55,7 +54,7 @@ func bridgeGame(t *testing.T, refuse bool) (*GameState, *carneades.Adapter, *nas
 	if err != nil {
 		t.Fatal(err)
 	}
-	cqs, edges := data.CQsJSON, data.EdgesJSON
+	cqs, edges := prevCQs, prevEdges
 	if refuse {
 		var q map[string]json.RawMessage
 		if err := json.Unmarshal(cqs, &q); err != nil {

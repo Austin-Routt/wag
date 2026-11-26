@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -16,7 +15,7 @@ import (
 // with an argument from sign, whose answer variable B the game binds to the
 // answer (so he is asked for A only).
 func TestHumanWizardSupportThenUndermining(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	var out bytes.Buffer
 	alice := NewHumanAgent("Alice", strings.NewReader(strings.Join([]string{
 		"1",                                                                                       // support
@@ -71,7 +70,7 @@ func TestHumanWizardSupportThenUndermining(t *testing.T) {
 // from position to know (an undermining), as the browser client and the
 // models can (docs/game-rules.md).
 func TestHumanWizardArguesAboutAStatement(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	if r, _ := gs.ExecuteTurn(prSupportAction()); !r.Accepted {
 		t.Fatalf("opening move refused: %s", r.Error)
 	}

@@ -1,0 +1,395 @@
+{
+  "AS:practical_reasoning": {
+    "carneades_id": "practical_reasoning1",
+    "name": "Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.7,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
+      },
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after action",
+        "example_en": "lower emissions"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized",
+        "example_en": "a stable climate"
+      },
+      "V": {
+        "type": "value",
+        "description": "Value promoted by the goal",
+        "example_en": "public health"
+      }
+    },
+    "premise_templates_en": [
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}",
+      "Achieving {G} would promote the value {V}"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state that realizes a goal, which promotes a value.",
+    "cues_en": [
+      "should",
+      "ought to",
+      "we must",
+      "in order to",
+      "so that",
+      "goal",
+      "aim",
+      "achieve",
+      "promote",
+      "policy",
+      "plan to"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
+  },
+  "AS:consequences": {
+    "carneades_id": "positive_consequences",
+    "name": "Argument from Positive Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "G": {
+        "type": "event",
+        "description": "Good consequence",
+        "example_en": "cleaner air"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is good"],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An action should be performed because it brings about good consequences.",
+    "cues_en": [
+      "consequence",
+      "consequences",
+      "would lead to",
+      "will lead to",
+      "leads to",
+      "result in",
+      "results in",
+      "benefit",
+      "benefits",
+      "good outcome",
+      "because it would"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
+  },
+  "AS:values": {
+    "carneades_id": "positive_value",
+    "name": "Argument from Values",
+    "semantic_type": "value",
+    "thesis_independent": false,
+    "base_weight": 0.6,
+    "variables": {
+      "V": {
+        "type": "value",
+        "description": "Value being invoked",
+        "example_en": "fairness"
+      },
+      "A": {
+        "type": "entity",
+        "description": "Agent or judger",
+        "example_en": "most voters"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal affected",
+        "example_en": "equal pay"
+      }
+    },
+    "premise_templates_en": ["{V} is a positive value for {A}", "{V} supports the goal {G} for {A}"],
+    "conclusion_template_en": "{V} is a reason to keep the goal {G}",
+    "description_en": "A goal is worth keeping because it promotes a value the agent holds.",
+    "cues_en": [
+      "value",
+      "values",
+      "freedom",
+      "fairness",
+      "justice",
+      "equality",
+      "dignity",
+      "important to",
+      "matters",
+      "principle",
+      "right thing"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
+  },
+  "AS:sign": {
+    "carneades_id": "sign",
+    "name": "Argument from Sign",
+    "semantic_type": "causality",
+    "thesis_independent": false,
+    "base_weight": 0.6,
+    "variables": {
+      "A": {
+        "type": "event",
+        "description": "Observable sign or indicator",
+        "example_en": "wet streets"
+      },
+      "B": {
+        "type": "event",
+        "description": "Indicated condition",
+        "example_en": "it rained"
+      }
+    },
+    "premise_templates_en": ["{A} is observed", "{B} is indicated when {A} holds"],
+    "conclusion_template_en": "{B} holds in the current situation",
+    "answer_variable": "B",
+    "description_en": "Something is probably true because an observed sign usually indicates it.",
+    "cues_en": [
+      "sign",
+      "signs",
+      "indicates",
+      "indication",
+      "suggests",
+      "symptom",
+      "evidence of",
+      "shows that",
+      "points to",
+      "observed"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "where the sign was observed"
+  },
+  "AS:expert_opinion": {
+    "carneades_id": "expert_opinion",
+    "name": "Argument from Expert Opinion",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.7,
+    "variables": {
+      "W": {
+        "type": "entity",
+        "description": "Expert or credible source",
+        "example_en": "the IPCC"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Field of expertise",
+        "example_en": "climate science"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted",
+        "example_en": "human activity is warming the planet"
+      }
+    },
+    "premise_templates_en": ["{W} is an expert in {D}", "{S} is a matter of {D}", "{W} says that {S}"],
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because an expert in its field asserts it.",
+    "cues_en": [
+      "expert",
+      "experts",
+      "scientist",
+      "scientists",
+      "according to",
+      "study",
+      "studies",
+      "research",
+      "professor",
+      "doctor",
+      "dr",
+      "researchers",
+      "ipcc",
+      "peer reviewed"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where the expert asserts it (a citation or a link)"
+  },
+  "AS:position_to_know": {
+    "carneades_id": "position_to_know",
+    "name": "Argument from Position to Know",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.65,
+    "variables": {
+      "W": {
+        "type": "entity",
+        "description": "Knowledgeable source",
+        "example_en": "a local resident"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Domain of knowledge",
+        "example_en": "what happens in the village"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted",
+        "example_en": "the road floods every spring"
+      }
+    },
+    "premise_templates_en": [
+      "{W} is in a position to know about {D}",
+      "{W} says that {S}",
+      "{S} is a matter of {D}"
+    ],
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because someone in a position to know asserts it.",
+    "cues_en": [
+      "witness",
+      "saw",
+      "eyewitness",
+      "insider",
+      "told me",
+      "reported",
+      "was there",
+      "first hand",
+      "firsthand",
+      "knows",
+      "in a position to know",
+      "official"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where they assert it (a citation or a link)"
+  },
+  "AS:analogy": {
+    "carneades_id": "analogy",
+    "name": "Argument from Analogy",
+    "semantic_type": "truth",
+    "thesis_independent": false,
+    "base_weight": 0.55,
+    "variables": {
+      "A": {
+        "type": "proposition",
+        "description": "Proposition claimed to hold",
+        "example_en": "a carbon tax cuts emissions"
+      },
+      "C": {
+        "type": "case",
+        "description": "Similar case",
+        "example_en": "Sweden's carbon tax"
+      }
+    },
+    "premise_templates_en": ["{C} is a similar case", "{A} is true in the case of {C}"],
+    "conclusion_template_en": "{A}",
+    "answer_variable": "A",
+    "description_en": "A claim holds here because it holds in a similar case.",
+    "cues_en": [
+      "like",
+      "similar",
+      "similarly",
+      "just as",
+      "analogous",
+      "analogy",
+      "same as",
+      "compare",
+      "as in",
+      "in the case of",
+      "precedent"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "the similar case"
+  },
+  "AS:practical_reasoning_goal": {
+    "carneades_id": "practical_reasoning2",
+    "name": "Instrumental Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
+      },
+      "A": {
+        "type": "action",
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after the action",
+        "example_en": "lower emissions"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized",
+        "example_en": "meet the 2030 climate target"
+      }
+    },
+    "premise_templates_en": [
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state in which the agent's goal is realized (goal-based, without values: Walton 2015; the book's practical inference, 22.1). For an argument that also names the value the goal promotes, use Practical Reasoning.",
+    "cues_en": [
+      "in order to",
+      "so that",
+      "so as to",
+      "means to",
+      "the way to",
+      "to achieve",
+      "to reach",
+      "our goal",
+      "the aim"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action would bring about the state"
+  },
+  "AS:negative_consequences": {
+    "carneades_id": "negative_consequences",
+    "name": "Argument from Negative Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "G": {
+        "type": "event",
+        "description": "Bad consequence",
+        "example_en": "higher heating bills for poor households"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is bad"],
+    "conclusion_template_en": "{A} should not be done",
+    "description_en": "An action should not be performed because it brings about bad consequences (the counterpart of positive consequences).",
+    "cues_en": [
+      "bad consequence",
+      "bad consequences",
+      "would cause",
+      "would harm",
+      "harm",
+      "harmful",
+      "danger",
+      "dangerous",
+      "risk",
+      "backfire",
+      "should not",
+      "shouldn't",
+      "downside"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
+  }
+}

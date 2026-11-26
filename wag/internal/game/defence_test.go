@@ -8,7 +8,6 @@ package game
 import (
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -32,7 +31,7 @@ func answer(typ, cq, scheme, target string, bindings map[string]string) nascq.Pr
 }
 
 func TestDefenceInDepth(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	label := func(id string) caes.Label { return gs.Adapter.Graph.Statements[id].Label }
 	const shouldTax, possibleTax = "should_be_performed(carbon_tax)", "possible(carbon_tax)"
@@ -117,7 +116,7 @@ func TestExceptionDefence(t *testing.T) {
 		{"weaker denial", "AS:expert_opinion", 0.55, caes.In}, // 0.55 < 0.65
 	} {
 		t.Run(c.name, func(t *testing.T) {
-			gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+			gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 			b1 := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:expert_opinion",
 				VariableBindings: map[string]string{"W": "dr_x", "D": "economics", "S": "tax_works"}})
 			play(t, gs, answer("attack", "CQ:trustworthiness", "AS:position_to_know", b1,
@@ -148,7 +147,7 @@ func TestExceptionDefence(t *testing.T) {
 // Attacking an argument that is already defeated earns nothing, and neither
 // does attacking one's own.
 func TestAttacksOnDefeatedOrOwnArgumentsScoreNothing(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	a1 := play(t, gs, prSupportAction())
 	r, _ := gs.ExecuteTurn(answer("attack", "CQ:possibility", "AS:expert_opinion", a1, map[string]string{"W": "dr_no", "D": "politics"}))
 	if r.ScoreDelta <= 0 {
@@ -167,7 +166,7 @@ func TestAttacksOnDefeatedOrOwnArgumentsScoreNothing(t *testing.T) {
 // The proleptic bonus rewards answering a question about one's own argument
 // before anyone has raised it, and only then.
 func TestProlepticBonus(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.Scoring.ProlepticBonus = 5
 	a1 := play(t, gs, prSupportAction())
 	gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
@@ -187,7 +186,7 @@ func TestProlepticBonus(t *testing.T) {
 // Two players with the same name get distinct IDs, so neither's attacks on
 // the other count as self-attacks.
 func TestDuplicatePlayerNamesGetDistinctIDs(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "A", "A", "A")
+	gs := newShippedGame(t, prevEdges, "A", "A", "A")
 	ids := map[string]bool{}
 	for _, p := range gs.Players {
 		ids[p.ID] = true

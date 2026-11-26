@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 	"gopkg.in/yaml.v2"
@@ -44,7 +43,7 @@ func caseProfile(t *testing.T) *Profile {
 // pr_agent and better_means added.
 func profileGame(t *testing.T, p *Profile) *GameState {
 	t.Helper()
-	core := data.CoreYAML
+	core := prevCore
 	for k, tmpl := range map[string]string{
 		"goal_of_agent/2":            "%s has the goal %s.",
 		"realize_more_effectively/3": "%s could realize %s more effectively than by %s.",
@@ -67,10 +66,10 @@ func profileGame(t *testing.T, p *Profile) *GameState {
 		t.Fatal(err)
 	}
 	var schemes, cqs map[string]json.RawMessage
-	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil {
+	if err := json.Unmarshal(prevSchemes, &schemes); err != nil {
 		t.Fatal(err)
 	}
-	if err := json.Unmarshal(data.CQsJSON, &cqs); err != nil {
+	if err := json.Unmarshal(prevCQs, &cqs); err != nil {
 		t.Fatal(err)
 	}
 	schemes["AS:pr_agent"] = json.RawMessage(`{"carneades_id":"pr_agent","name":"Practical Reasoning of an Agent","semantic_type":"action",
@@ -85,7 +84,7 @@ func profileGame(t *testing.T, p *Profile) *GameState {
 		"question_template_en":"Could {P} realize {G} better by another action than {A}?",
 		"caes_mapping":{"positive_answer_type":"support","negative_answer_type":"undercutter","target":"argument"}}`)
 	var edges map[string][]json.RawMessage
-	if err := json.Unmarshal(data.EdgesJSON, &edges); err != nil {
+	if err := json.Unmarshal(prevEdges, &edges); err != nil {
 		t.Fatal(err)
 	}
 	edges["ask_edges"] = append(edges["ask_edges"], json.RawMessage(

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/yourorg/wag/data"
 )
 
 // A refused moderator decision leaves no trace, whatever the adapter did
@@ -12,7 +11,7 @@ import (
 // complement, and then refuses when the issue the two would form already
 // exists with other positions.
 func TestDecideRefusedLeavesNoTrace(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.Moderated = true
 	a := gs.Adapter
 	a.AddStatement("p", "P")

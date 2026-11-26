@@ -11,7 +11,6 @@ package game
 
 import (
 	"fmt"
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 	"testing"
@@ -24,10 +23,10 @@ import (
 // =========================================================================
 
 var (
-	stressYAML        = string(data.CoreYAML)
-	stressSchemesJSON = string(data.SchemesJSON)
-	stressCQsJSON     = string(data.CQsJSON)
-	stressEdgesJSON   = string(data.EdgesJSON)
+	stressYAML        = string(prevCore)
+	stressSchemesJSON = string(prevSchemes)
+	stressCQsJSON     = string(prevCQs)
+	stressEdgesJSON   = string(prevEdges)
 )
 
 // =========================================================================

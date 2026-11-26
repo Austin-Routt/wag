@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -49,7 +48,7 @@ func TestViewActionsAreLegalMoves(t *testing.T) {
 // line that is not an action and a rejected move are both explained in the
 // next View's last_rejection.
 func TestJSONAgent(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Bot", "Other")
+	gs := newShippedGame(t, prevEdges, "Bot", "Other")
 	in := strings.Join([]string{
 		`{"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"carbon tax","S1":"status quo","S2":"lower emissions","G":"reduce emissions","V":"health"}}`,
 		`not json`,

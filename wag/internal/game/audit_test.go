@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -20,7 +19,7 @@ import (
 // consequences supports, and the two join one issue, even when neither is a
 // reply to the other.
 func TestAuditNegativeConsequencesJoinOneIssue(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	pc := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:consequences", VariableBindings: map[string]string{"A": "tax meat", "G": "lower emissions"}})
 	nc := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:negative_consequences", VariableBindings: map[string]string{"A": "tax meat", "G": "dearer food for the poor"}})
@@ -49,7 +48,7 @@ func TestAuditNegativeConsequencesQuestions(t *testing.T) {
 		{"CQ:evidence", "AS:expert_opinion", map[string]string{"W": "a statistician", "D": "evidence"}, "undercut("},
 		{"CQ:opposite_consequences", "AS:consequences", map[string]string{"G": "lower emissions"}, "should_be_performed(tax_meat)"},
 	} {
-		gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+		gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 		gs.Config.MaxTurns = 0
 		nc := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:negative_consequences", VariableBindings: map[string]string{"A": "tax meat", "G": "dearer food for the poor"}})
 		a := play(t, gs, answer("attack", c.cq, c.scheme, nc, c.bind))
@@ -68,7 +67,7 @@ func TestAuditNegativeConsequencesQuestions(t *testing.T) {
 // argument in force.
 func TestAuditInterveningActions(t *testing.T) {
 	for _, typ := range []string{"attack", "support"} {
-		gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+		gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 		gs.Config.MaxTurns = 0
 		pr := play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:practical_reasoning_goal",
 			VariableBindings: map[string]string{"A": "tax meat", "S1": "meat is cheap", "S2": "less meat is eaten", "G": "lower emissions"}})
@@ -92,7 +91,7 @@ func TestAuditInterveningActions(t *testing.T) {
 // better means: positive consequences cannot back the Other Means or Best
 // Means questions (S5).
 func TestAuditBestMeansNeedsComparativeEvidence(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	pr := play(t, gs, prSupportAction())
 	for _, cq := range []string{"CQ:other_means", "CQ:best_means"} {
@@ -106,7 +105,7 @@ func TestAuditBestMeansNeedsComparativeEvidence(t *testing.T) {
 // §7.8.8: Other, and arguments for and against a premise, need no named
 // scheme: Bob argues against a premise with his own premises.
 func TestAuditOtherAndPremiseMovesNeedNoScheme(t *testing.T) {
-	gs := newShippedGame(t, data.EdgesJSON, "Alice", "Bob")
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	gs.NASCQ.EnableOther()
 	play(t, gs, prSupportAction())
