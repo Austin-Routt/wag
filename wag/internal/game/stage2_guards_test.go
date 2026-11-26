@@ -15,8 +15,7 @@ import (
 // realizes the attacked argument's goal more effectively. A prose bridge
 // cannot supply that missing comparative inference (D075).
 func TestStage2BridgeDoesNotWaiveAnswerFit(t *testing.T) {
-	edges := []byte(strings.Replace(string(data.EdgesJSON), `"backup_edges": [`,
-		`"backup_edges": [{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"the alternate action has a good consequence"},`, 1))
+	edges := withBackupEdge(t, data.EdgesJSON, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"the alternate action has a good consequence"}`)
 	gs := newShippedGame(t, edges, "Alice", "Bob")
 	gs.Config.MaxTurns = 0
 	arg := play(t, gs, prSupportAction())
@@ -43,8 +42,7 @@ func TestStage2LintRefusesBridgeAndSharedEngineIdentity(t *testing.T) {
 	json.Unmarshal(copyBytes, &alias)
 	schemes["AS:sign_alias"] = alias
 	s, _ := json.Marshal(schemes)
-	edges := []byte(strings.Replace(string(data.EdgesJSON), `"backup_edges": [`,
-		`"backup_edges": [{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"untyped explanation"},`, 1))
+	edges := withBackupEdge(t, data.EdgesJSON, `{"scheme":"AS:consequences","cq":"CQ:other_means","bridge":"untyped explanation"}`)
 	issues, err := LintData(data.CoreYAML, s, data.CQsJSON, edges)
 	if err != nil {
 		t.Fatal(err)

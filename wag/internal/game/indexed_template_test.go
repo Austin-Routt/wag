@@ -24,11 +24,8 @@ func TestIndexedTemplateLint(t *testing.T) {
 		template string
 		invalid  bool
 	}{{"%[1]s is good.", false}, {"%[2]s is good.", true}, {"%v is good.", true}} {
-		input := strings.Replace(string(data.CoreYAML), `good/1: "%s is good."`, `good/1: "`+tc.template+`"`, 1)
-		if input == string(data.CoreYAML) {
-			t.Fatal("test template anchor missing")
-		}
-		issues, err := LintData([]byte(input), data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+		input := withTemplate(t, data.CoreYAML, "good/1", tc.template)
+		issues, err := LintData(input, data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
 		if err != nil {
 			t.Fatal(err)
 		}

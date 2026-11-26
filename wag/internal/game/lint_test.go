@@ -53,11 +53,11 @@ func TestLintFindsDataErrors(t *testing.T) {
 	s, _ := json.Marshal(schemes)
 	c, _ := json.Marshal(cqs)
 	edges, _ := json.Marshal(edgeData)
-	yaml := strings.Replace(string(data.CoreYAML), `good/1: "%s is good."`, `good/1: "%s is good for %s."`, 1)
+	core := withTemplate(t, data.CoreYAML, "good/1", "%s is good for %s.")
 	// An answer scheme that concludes the negation of its answer variable.
-	yaml = strings.Replace(yaml, "    variables: [A,C]\n    conclusions: [A]\n", "    variables: [A,C]\n    conclusions: [\"¬A\"]\n", 1)
+	core = withSchemeField(t, core, "analogy", "conclusions", []string{"¬A"})
 
-	issues, err := LintData([]byte(yaml), s, c, edges)
+	issues, err := LintData(core, s, c, edges)
 	if err != nil {
 		t.Fatal(err)
 	}

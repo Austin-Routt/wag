@@ -9,6 +9,7 @@ import (
 	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
+	"gopkg.in/yaml.v2"
 )
 
 // This deliberately synthetic scheme tests the existing exception-locus
@@ -18,10 +19,11 @@ func TestReviewTypedExceptionUndercutterFitsExactTarget(t *testing.T) {
 	const schemeID = "AS:test_typed_alternative"
 	makeGame := func(t *testing.T, conclusion, bridge string) (*GameState, string) {
 		t.Helper()
-		core := strings.Replace(string(data.CoreYAML), "language:\n",
-			"language:\n  test_comparison/3: \"Synthetic comparison: %s against %s for %s.\"\n", 1)
-		core += "\n  - id: test_typed_alternative\n    variables: [B,A,G]\n    premises:\n      - test_comparison(B,A,G)\n    conclusions:\n      - " + conclusion + "\n"
-		ad, err := carneades.NewAdapterFromYAML([]byte(core))
+		core := addTemplate(t, data.CoreYAML, "test_comparison/3", "Synthetic comparison: %s against %s for %s.")
+		core = withScheme(t, core, yaml.MapSlice{{Key: "id", Value: "test_typed_alternative"},
+			{Key: "variables", Value: []string{"B", "A", "G"}}, {Key: "premises", Value: []string{"test_comparison(B,A,G)"}},
+			{Key: "conclusions", Value: []string{conclusion}}})
+		ad, err := carneades.NewAdapterFromYAML(core)
 		if err != nil {
 			t.Fatal(err)
 		}

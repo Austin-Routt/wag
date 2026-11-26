@@ -141,7 +141,7 @@ func TestChallengeAnsweredByAnArgumentForThePremise(t *testing.T) {
 // must then concern that answer.
 func TestConclusionQuestionsOfAnswerArguments(t *testing.T) {
 	add := func(edge string) []byte {
-		return []byte(strings.Replace(string(data.EdgesJSON), `"backup_edges": [`, `"backup_edges": [ `+edge+`,`, 1))
+		return withBackupEdge(t, data.EdgesJSON, edge)
 	}
 	gs := newShippedGame(t, add(`{ "scheme": "AS:consequences", "cq": "CQ:other_means" }`), "Alice", "Bob")
 	gs.Config.MaxTurns = 0
