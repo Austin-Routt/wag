@@ -2669,8 +2669,35 @@ decisions:
   blocks: [game]
   decider: owner
   priority: 1
-  status: open
+  status: decided
   docs: ["docs/c5-game.md", "docs/proposals/D004-D075.md", "docs/proposals/D008-D074.md", "docs/proposals/D022-D093.md"]
+  decided:
+    date: "2026-11-26"
+    by: owner ("Approved, record D095 as worded", 2026-11-26), on the developer's recommendation and the independent review of 26 November (wag-workspace verify/r-external-2026-11-26, REPORT.md §3)
+    decision: >-
+      (1) CQ:side_effect is the rebuttal route (a further bad consequence, at
+      the conclusion) for practical reasoning and positive consequences, as
+      CQ:opposite_consequences is for negative consequences. A new weighing
+      question asks bad_outweighs(A,G) of practical reasoning and positive
+      consequences (one id: one formula, locus and burden), and another asks
+      good_outweighs(A,G) of negative consequences, both backed by C003's
+      answer schemes. An id that answer schemes back is asked at the same
+      formula and kind of locus wherever it is asked; the generator refuses
+      anything else. This departs from C2's game paragraph. (2) D074's
+      objection is Other's relevance question, unchanged, with the direct
+      undercutter of the particular inference; the consequence schemes get no
+      question for it, and direct counterarguments stay available. (3) An
+      answer scheme concludes worth_finding_out_first(A,G) from the owner's
+      declared conditions (an investigation timely and reliable enough to
+      settle whether A brings about G; its costs and risks justify finding out
+      first), proposed for walton.yml through the proposal process and quoting
+      the declaration. At that question the game accepts it and the
+      source-based schemes that assert the exception, each with its own
+      questions, and refuses Other, well made or not: a rule of WAG's first
+      profile. (4) D093 (e), (f) and (g) are confirmed as applied, with tests
+      for a wrong actor, action, goal and context, unrelated consequences, and
+      surviving independent support.
+    recorded: "docs/c5-game.md (version 4); to apply: the answer scheme's proposal for worth_finding_out_first, then step C5.2"
 
 # --- Decided ------------------------------------------------------------------
 

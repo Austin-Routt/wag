@@ -1,11 +1,12 @@
 # Step C5: the game takes the first family
 
-**Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch); C5.2 waits for D095. The
+**Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
+owner, 2026-11-26), so C5.2 follows the answer scheme's proposal for `worth_finding_out_first`. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
-2026-11-26 (in the workspace, verify/c5); this is version 3. Its implementation choices, within the
-decisions it applies, are D094. Three choices depart from the wording of decided texts, so they are
-the owner's, put as D095 with a recommendation each; C5.2's parts that depend on them wait for the
-answer. Step C5 of [first-family.md](first-family.md): the game's own data takes what proposals
+2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; this is version 4, with
+D095 as decided and item F's cases from the independent review of 26 November. Its implementation
+choices, within the decisions it applies, are D094. Three choices departed from the wording of
+decided texts, so they were the owner's: D095. Step C5 of [first-family.md](first-family.md): the game's own data takes what proposals
 D004-D075 (C2), D008-D074 (C3) and D022-D093 (C4) gave `walton.yml`, through the generator that
 D007 and D009 name.
 
@@ -38,7 +39,8 @@ D007 and D009 name.
   `good_outweighs(A,G)`, gives the weighing route (D055), answered by C003's answer schemes. With
   C2's wording above, this asks CQ:side_effect to be the weighing question on practical reasoning and
   the rebuttal question on positive consequences; an edge backs a question whatever scheme asks it,
-  so one id cannot be both (S9 would refuse `bad_outweighs_good` at the conclusion): **D095 (1)**.
+  so one id cannot be both (S9 would refuse `bad_outweighs_good` at the conclusion). D095 (1)
+  decides it (below).
 - **D009:** the question texts come from the catalogue's paraphrases (all 35 game questions have
   one), with the changes the entries list, among them sign's own likelihood text and the evidence
   question at the premise `brings_about(A,G)`; CQ:field is kept; each generated question has a test
@@ -48,6 +50,21 @@ D007 and D009 name.
   catalogue, with chapter and page. **D006:** CQ:other_means asks for a better means.
 - **D008:** a bridge is an entry condition, not a weight. **D053:** a bare claim that a consequence
   could be investigated does not establish `worth_finding_out_first` (the owner's declaration).
+- **D095** (the owner, 2026-11-26), which departs from C2's and C3's game paragraphs where they
+  differ: (1) CQ:side_effect is the rebuttal route (a further bad consequence, at the conclusion) for
+  practical reasoning and positive consequences, as CQ:opposite_consequences is for negative
+  consequences; a new weighing question asks `bad_outweighs(A,G)` of practical reasoning and
+  positive consequences (one id: one formula, locus and burden), and another asks
+  `good_outweighs(A,G)` of negative consequences, both backed by C003's answer schemes; an id that
+  answer schemes back is asked at the same formula and kind of locus wherever it is asked, and the
+  generator refuses anything else. (2) D074's objection is Other's relevance question, unchanged,
+  with the direct undercutter of the particular inference; the consequence schemes get no question
+  for it, and direct counterarguments stay available. (3) An answer scheme concludes
+  `worth_finding_out_first(A,G)` from the owner's declared conditions, proposed for `walton.yml`
+  through the proposal process; at that question the game accepts it and the source-based schemes
+  that assert the exception, each with its own questions, and refuses Other, well made or not: a
+  rule of WAG's first profile. (4) D093 (e), (f) and (g) are confirmed, with tests for a wrong
+  actor, action, goal and context, unrelated consequences, and surviving independent support.
 - **Workstreams E and I** (catalogue-alignment.md): the game's fields go into the entries with the
   status `generated`; derived fields get rules the checker re-derives; the first output reproduces
   today's data except where the catalogue records a reason; the game's tests pass unchanged; the
@@ -150,14 +167,20 @@ One change of data identity for all of it (D094 a).
   refusals of C2's paragraph; a `better_means` answer records its comparison. GameConfig, export,
   load and the trace carry the profile; /api/games, app.js, the model players' prompt and
   `to_wag.py` follow.
-- **Questions:** C2's paragraph and the entries' two routes, with the weighing questions' ids as
-  D095 (1) settles; D006's text for CQ:other_means; questions for `too_slight` and each side's
+- **Questions:** C2's paragraph and the entries' two routes, as D095 (1) decides: CQ:side_effect at
+  the conclusion of practical reasoning and positive consequences (the rebuttal route),
+  CQ:bad_outweighs at `bad_outweighs(A,G)` of both and CQ:good_outweighs at `good_outweighs(A,G)` of
+  negative consequences, the weighing route, backed by C003's answer schemes; the generator refuses
+  an id that answer schemes back asked at another formula or kind of locus; D006's text for CQ:other_means; questions for `too_slight` and each side's
   bearer exception (D065); the modal variants' and the bridges' questions from their entries (new
   ids where their paraphrases differ, as the modal 33/CQ1's does from CQ:likelihood's), with the
   question for `worth_finding_out_first`; D007's derived questions in the catalogue;
   `caes_mapping`'s effect derived from each edge's locus and shown per edge. Sign's three backup
   edges keep their meaning or are decided with their must-pass answers.
-- **D074 and D053's refusal:** as D095 (2) and (3) settle. CQ:relevance's text in code does not
+- **D074 and D053's refusal:** as D095 (2) and (3) decide. D074 is Other's relevance question with
+  the direct undercutter of the particular inference; no consequence scheme asks it. At
+  `worth_finding_out_first` the game accepts the answer scheme and the source-based schemes that
+  assert the exception, and refuses Other, well made or not. CQ:relevance's text in code does not
   change.
 - **New kinds of scheme** (D094 g): the answer schemes, the modal variants and the bridges join with
   a role. An answer scheme is offered only as an answer, and weighs as the schemes whose exception it
@@ -201,12 +224,27 @@ relevance is challenged in play (CQ:field, CQ:relevance), not refused. **8**, un
 in. C3's two tests: a modal argument for `should_be_performed(A)` refused (S9); a bridge with its
 premise challenged.
 
+The independent review of 26 November (in the workspace, reviews/2026-11-26 and
+verify/r-external-2026-11-26) proposed 22 cases for D095. Ten are the cases above (its Q1-A, Q1-D,
+Q3-A, Q3-B, Q3-D, Q3-E, Q3-F, E-agent, Replay-1, Replay-2). Eleven are added here: **Q1-B** and
+**Q1-C**, each route of each consequence scheme and the shared weighing id, each tested; **Q1-E**, a
+slight harm supports a con argument at the conclusion but does not establish `bad_outweighs(A,G)`;
+**Q2-A**, D074's undercutter of an argument that infers a factual claim from desirable consequences;
+**Q2-B**, with a second, legitimate argument about the same action, which the undercutter leaves
+standing; **Q2-C**, independent support of the factual claim survives the undercutter; **Q3-C**, a
+source-based answer at `worth_finding_out_first` is challenged in play through its own questions
+(adverse case 7); **F-continuing**, the better-means exception of the continuing bridge;
+**F-context**, a bridge that carries `should_do(P,A)` where A is another actor's is refused;
+**G-endandmeans**, `end_and_means_bad`'s mirrored weighing in the right direction; **G-unbound**, a
+weighing exception with an unbound X or Y is refused, not read as a wildcard. The twenty-second,
+Recording-1 (a paid reply recovered after a crash, with no second call), belongs to G, the journal.
+
 ## Order of work
 
 1. This plan and D094, checked independently; D095 put to the owner.
 2. C5.1 (it depends on no part of D095); gates on both toolchains; independent review; push.
-3. When D095 is answered: the answer scheme for `worth_finding_out_first`, if (3) is taken, through
-   the proposal process; then C5.2, one data identity; gates; independent review; push.
+3. D095 decided (2026-11-26): the answer scheme for `worth_finding_out_first` through the proposal
+   process; then C5.2, one data identity; gates; independent review; push.
 
 ## Not in C5
 
