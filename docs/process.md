@@ -238,6 +238,8 @@ A test keeps every committed proposal valid and its view current.
   - the registry check, which tolerates only the known duplicate (D042 in the register);
   - the gold's `validate.py`, and the guidelines' worked cases (`TestRuleCases`, in `go test`);
   - the upstream `walton.yml` fetched and checked against its recorded SHA-256, and `check/run.sh` reproducing every committed file.
+- **Every check at once** ([`tools/check-all.sh`](../tools/check-all.sh), since 2026-11-26): CI's steps, in step with `ci.yml`, run on a working tree with the `go` and `python3` on the path, given the upstream `walton.yml`; each step's output in a log, the exit status 0 only if all pass.
+- **A review bundle for a reviewer with no network** ([`tools/review-bundle.sh`](../tools/review-bundle.sh), since 2026-11-26): one commit with one commit of history, the Go modules of all four modules as a file proxy, and the upstream `walton.yml`; its `run-offline.sh` runs every check with no network (Go 1.24 or newer, Python 3 with PyYAML). Made because no external reviewer could build WAG's Go packages without a module proxy (the review of 26 November).
 - **The status report (to build):** one command prints every figure the documents need:
   - entries and items by status;
   - open decisions;
