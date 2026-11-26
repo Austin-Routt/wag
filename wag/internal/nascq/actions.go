@@ -83,6 +83,9 @@ func (n *NASCQ) EnumerateActions(graph GraphQuerier, argIDs []string) []ActionTe
 	// iteration order is random; the enumeration order must be reproducible).
 	for _, schemeID := range sortedSchemeIDs(n.Schemes) {
 		scheme := n.Schemes[schemeID]
+		if scheme.Role == RoleAnswer { // offered only as an answer (D094 (g))
+			continue
+		}
 		actions = append(actions, ActionTemplate{
 			Type:                 "support",
 			SchemeID:             scheme.ID,
@@ -239,6 +242,9 @@ func (n *NASCQ) answerTemplates(argID string, cq *CQNode, locus Locus, stmtID st
 	}
 	attackType := locus.AttackType()
 	for _, bs := range n.GetBackupSchemes(cq.ID) {
+		if bs.Free && cq.RefuseOther { // D095 (3)
+			continue
+		}
 		for _, typ := range []string{"attack", "support"} {
 			tmpl := ActionTemplate{
 				Type:                 typ,
@@ -288,6 +294,9 @@ func (n *NASCQ) EnumerateStatementActions(graph GraphQuerier, stmtIDs []string) 
 			}
 			for _, id := range sortedSchemeIDs(n.Schemes) {
 				s := n.Schemes[id]
+				if s.Role == RoleAnswer { // offered only as an answer (D094 (g))
+					continue
+				}
 				var fixed map[string]string
 				if !s.Free && s.AnswerVariable == "" {
 					if concl == "" {

@@ -73,6 +73,27 @@ func LintData(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) ([]nascq.LintIs
 		}
 	}
 
+	// A bridge's entry premise is one of its Carneades scheme's premises (its
+	// {Var} placeholders the scheme's variables): the move does not presume
+	// it, so a name that matches no premise would presume them all (D094 (g)).
+	for _, id := range nascq.SortedStringKeys(n.Schemes) {
+		ns := n.Schemes[id]
+		prem, known := caesSchemes[ns.CarneadesID]
+		if ns.Role != nascq.RoleBridge || ns.EntryPremise == "" || !known {
+			continue
+		}
+		want := strings.NewReplacer("{", "", "}", "").Replace(ns.EntryPremise)
+		found := false
+		for _, p := range prem {
+			if strings.ReplaceAll(p, " ", "") == strings.ReplaceAll(want, " ", "") {
+				found = true
+			}
+		}
+		if !found {
+			add(true, id, "entry_premise %s is not a premise of Carneades scheme %s (%v)", ns.EntryPremise, ns.CarneadesID, prem)
+		}
+	}
+
 	// An answer variable is what the Carneades scheme concludes: the variable
 	// itself (S) or a one-place predicate of it (true_in_situation(B)), not its
 	// negation (¬S): the answer concludes the claim it answers, which a scheme

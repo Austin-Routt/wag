@@ -95,7 +95,33 @@ type ASNode struct {
 	// "". EvidenceNoteEN says what to cite.
 	Evidence       string `json:"evidence,omitempty"`
 	EvidenceNoteEN string `json:"evidence_note_en,omitempty"`
+
+	// Role is how the game offers the scheme (decision D094 (g)): "" for an
+	// argument, offered wherever its conclusion fits (S9); RoleAnswer for an
+	// answer scheme, offered only on its backup edges, as the answer to a
+	// question whose formula it concludes; RoleModal for a modal variant,
+	// whose conclusion a bridge takes to the recommendation; RoleBridge for a
+	// bridge, offered for or against the recommendation it concludes, whose
+	// EntryPremise the move does not presume: a modal argument supports it,
+	// in the same move or later (D008).
+	Role string `json:"role,omitempty"`
+	// WeighsAs is the game scheme whose weight a modal variant or a bridge
+	// takes (D094 (g): a modal variant weighs as its categorical counterpart,
+	// a bridge as its modal variant, with no multiplier). An answer scheme
+	// weighs as the scheme of the argument it answers.
+	WeighsAs string `json:"weighs_as,omitempty"`
+	// EntryPremise is a bridge's premise that the move does not presume, with
+	// {Var} placeholders: the modal conclusion it carries
+	// (may_be_worth_performing({A},{G})).
+	EntryPremise string `json:"entry_premise,omitempty"`
 }
+
+// The roles of a scheme in the game (ASNode.Role; decision D094 (g)).
+const (
+	RoleAnswer = "answer"
+	RoleModal  = "modal"
+	RoleBridge = "bridge"
+)
 
 // CaesMapping specifies how a CQ-directed attack translates into a CAES
 // graph operation. This is the critical bridge between NASCQ semantics
@@ -130,6 +156,11 @@ type CQNode struct {
 	// side effects?" is against it; "no" to "is it possible?"): what the
 	// answer's support or attack means in the question's words.
 	AnswerEN *AnswerWords `json:"answer_en,omitempty"`
+	// RefuseOther makes the question refuse Other as an answer (decision
+	// D095 (3)): an answer must make out what the question's formula needs,
+	// with a typed answer scheme or a scheme that asserts it (an answer
+	// variable), each with its own questions; a bare claim cannot.
+	RefuseOther bool `json:"refuse_other,omitempty"`
 }
 
 // AnswerWords are a critical question's literal answers.
@@ -288,6 +319,10 @@ type ValidatedAction struct {
 	// "". EvidenceNoteEN says what to cite.
 	Evidence       string `json:"evidence,omitempty"`
 	EvidenceNoteEN string `json:"evidence_note_en,omitempty"`
+
+	// targetScheme is the game scheme of the argument a move answers (S3),
+	// whose weight an answer scheme takes.
+	targetScheme string
 }
 
 // IsDefence reports whether the move answers in the target's favour.

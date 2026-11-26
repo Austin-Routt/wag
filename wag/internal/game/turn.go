@@ -436,8 +436,14 @@ func (gs *GameState) applyAction(
 			arg.Metadata = make(caes.Metadata)
 		}
 		arg.Metadata["nascq_scheme_id"] = va.SchemeID
+		// A bridge's entry premise is not presumed: a modal argument supports
+		// it, in the same move or later (D008, D094 (g)).
+		entry := ""
+		if s := gs.NASCQ.GetScheme(va.SchemeID); s != nil && s.Role == nascq.RoleBridge && s.EntryPremise != "" {
+			entry = gs.Adapter.PremiseMatching(argID, s.EntryPremise)
+		}
 		for _, p := range arg.Premises {
-			if p.Stmt == nil {
+			if p.Stmt == nil || p.Stmt.Id == entry {
 				continue
 			}
 			pid, err := gs.Adapter.AddPresumption(ownerID, p.Stmt.Id, gs.Config.presumptionWeight())

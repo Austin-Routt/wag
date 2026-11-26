@@ -309,7 +309,7 @@ func (s *Session) buildState() *State {
 	if p := gs.Pending; p != nil {
 		st.Pending = &PendingState{Player: p.PlayerID, Action: p.Action, Description: s.describeAction(p.Action)}
 		if sc := gs.NASCQ.GetScheme(p.Action.SchemeID); sc != nil {
-			st.Pending.Weight = sc.BaseWeight
+			st.Pending.Weight = gs.MoveWeight(p.Action)
 		}
 	}
 

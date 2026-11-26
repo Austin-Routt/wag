@@ -261,6 +261,13 @@ func (n *NASCQ) Validate(action ProposedAction, graph GraphQuerier) (*ValidatedA
 		return nil, fmt.Errorf("S1: unknown scheme %q; available: %v", action.SchemeID, sortedSchemeIDs(n.Schemes))
 	}
 
+	// S1: an answer scheme answers a critical question, on its backup edges
+	// (D094 (g)); it is not a move of its own.
+	if scheme.Role == RoleAnswer && action.AnswersCQID == "" {
+		return nil, fmt.Errorf("S1: %s is an answer scheme: it answers a critical question whose formula it concludes, not a move of its own (D094 (g))",
+			scheme.Name)
+	}
+
 	va := &ValidatedAction{ProposedAction: action}
 	var err error
 	switch {
@@ -483,7 +490,11 @@ func (n *NASCQ) validateScheme(va *ValidatedAction, scheme *ASNode) error {
 		va.InstPremises = FreePremises(action.VariableBindings)
 	}
 	va.CarneadesSchemeID = scheme.CarneadesID
-	va.Weight = scheme.BaseWeight
+	answered := ""
+	if action.AnswersCQID != "" {
+		answered = va.targetScheme
+	}
+	va.Weight = n.MoveWeight(action.SchemeID, answered)
 	va.AnswerVariable = answerVar
 	return nil
 }
@@ -512,6 +523,7 @@ func (n *NASCQ) validateTarget(action ProposedAction, va *ValidatedAction, graph
 		return nil, fmt.Errorf("S3: target %q was not made with a NASCQ scheme, so no critical question applies to it",
 			action.TargetArgID)
 	}
+	va.targetScheme = targetScheme
 	var locus Locus
 	switch {
 	case action.AnswersCQID != "":
@@ -560,8 +572,15 @@ func (n *NASCQ) validateTarget(action ProposedAction, va *ValidatedAction, graph
 	}
 
 	// S5: Backup edge validity: an explicit backup edge, or a
-	// thesis-independent scheme (which backs every CQ).
+	// thesis-independent scheme (which backs every CQ). A question that
+	// refuses Other (D095 (3)) takes no answer made with it, before S9.
 	if action.AnswersCQID != "" && action.Type != "question" {
+		if cq := n.Questions[action.AnswersCQID]; cq != nil && cq.RefuseOther {
+			if s := n.Schemes[action.SchemeID]; s != nil && s.Free {
+				return nil, fmt.Errorf("S5: CQ %q refuses Other as an answer (D095 (3)): make the answer out with a scheme that backs it (%s)",
+					action.AnswersCQID, strings.Join(n.typedBackups(action.AnswersCQID), ", "))
+			}
+		}
 		backed := false
 		for _, bs := range n.GetBackupSchemes(action.AnswersCQID) {
 			if bs.ID == action.SchemeID {
@@ -620,4 +639,50 @@ func containsStr(slice []string, target string) bool {
 		}
 	}
 	return false
+}
+
+// MoveWeight is the weight of an argument made with a scheme (D094 (g)):
+// for an answer scheme, the weight of the scheme of the argument it answers
+// (answered: that argument's game scheme, "" when it answers none); for any
+// other, WeightOf. A context that sets a scheme's weight sets the weight of
+// the modal variants, bridges and answers that weigh as it.
+func (n *NASCQ) MoveWeight(schemeID, answered string) float64 {
+	s := n.Schemes[schemeID]
+	if s == nil {
+		return 0
+	}
+	if s.Role == RoleAnswer {
+		if t := n.Schemes[answered]; t != nil {
+			return n.WeightOf(t)
+		}
+	}
+	return n.WeightOf(s)
+}
+
+// WeightOf is the weight of a scheme's arguments: its own base weight, or,
+// for a modal variant or a bridge, the weight of the scheme it weighs as
+// (WeighsAs, followed to its end; D094 (g)). Lint refuses a cycle and a
+// name that is no scheme; such a chain stops at the last scheme it reaches.
+func (n *NASCQ) WeightOf(s *ASNode) float64 {
+	w := s.BaseWeight
+	for seen := 0; s.WeighsAs != "" && seen < len(n.Schemes); seen++ {
+		next := n.Schemes[s.WeighsAs]
+		if next == nil {
+			break
+		}
+		s, w = next, next.BaseWeight
+	}
+	return w
+}
+
+// typedBackups names the schemes that back a question other than Other:
+// its backup edges' and the thesis-independent ones.
+func (n *NASCQ) typedBackups(cqID string) []string {
+	var out []string
+	for _, s := range n.GetBackupSchemes(cqID) {
+		if !s.Free {
+			out = append(out, s.Name)
+		}
+	}
+	return out
 }

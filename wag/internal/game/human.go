@@ -222,10 +222,7 @@ func (h *HumanAgent) chooseTargeted(obs *Observation, typ string) nascq.Proposed
 	}
 	h.printf("\n  Answer with which scheme? The answer: %s\n", gs.Effect(cq, nil))
 	for i, b := range backups {
-		weight := 0.0
-		if scheme := gs.NASCQ.GetScheme(b.SchemeID); scheme != nil {
-			weight = scheme.BaseWeight
-		}
+		weight := gs.MoveWeight(nascq.ProposedAction{SchemeID: b.SchemeID, AnswersCQID: b.AnswersCQID, TargetArgID: target})
 		h.printf("    [%d] %s  (weight %.2f)\n", i+1, b.SchemeName, weight)
 	}
 	selected := backups[h.readChoice(1, len(backups))-1]
@@ -312,10 +309,7 @@ func (h *HumanAgent) chooseStatementAction(obs *Observation) nascq.ProposedActio
 	}
 	h.printf("\n  Argue with which scheme? The argument: %s\n", gs.Effect(schemes[0], nil))
 	for i, b := range schemes {
-		weight := 0.0
-		if scheme := gs.NASCQ.GetScheme(b.SchemeID); scheme != nil {
-			weight = scheme.BaseWeight
-		}
+		weight := gs.MoveWeight(nascq.ProposedAction{SchemeID: b.SchemeID})
 		h.printf("    [%d] %s  (weight %.2f)\n", i+1, b.SchemeName, weight)
 	}
 	selected := schemes[h.readChoice(1, len(schemes))-1]

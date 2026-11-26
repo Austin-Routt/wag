@@ -35,6 +35,10 @@ func TestLintFindsDataErrors(t *testing.T) {
 	delete(schemes["AS:consequences"]["variables"].(map[string]interface{}), "G")
 	schemes["AS:position_to_know"]["answer_variable"] = "W"
 	schemes["AS:expert_opinion"]["answer_variable"] = "Q"
+	// A bridge whose entry premise is none of its scheme's premises.
+	schemes["AS:values"]["role"] = "bridge"
+	schemes["AS:values"]["weighs_as"] = "AS:consequences"
+	schemes["AS:values"]["entry_premise"] = "no_such_premise({G},{A})"
 	cqs["CQ:likelihood"]["caes_mapping"] = map[string]interface{}{"positive_answer_type": "support", "negative_answer_type": "support"}
 	var edgeData map[string][]map[string]interface{}
 	json.Unmarshal(data.EdgesJSON, &edgeData)
@@ -81,6 +85,7 @@ func TestLintFindsDataErrors(t *testing.T) {
 		`AS:position_to_know: answer_variable W is not what Carneades scheme position_to_know concludes ([S])`,
 		`AS:expert_opinion: answer_variable "Q" is not a declared variable`,
 		`AS:analogy: answer_variable A is not what Carneades scheme analogy concludes ([¬A])`,
+		`AS:values: entry_premise no_such_premise({G},{A}) is not a premise of Carneades scheme positive_value`,
 	} {
 		if !strings.Contains(joined, want) {
 			t.Errorf("missing lint error %q in:\n%s", want, joined)

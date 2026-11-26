@@ -347,6 +347,17 @@ func (gs *GameState) BoardStatements() []string {
 	return out
 }
 
+// MoveWeight is the weight of the argument a move would make (D094 (g)):
+// its scheme's, the weight a modal variant or a bridge weighs as, or, for an
+// answer scheme, the weight of the argument it answers.
+func (gs *GameState) MoveWeight(a nascq.ProposedAction) float64 {
+	answered := ""
+	if a.AnswersCQID != "" && a.TargetArgID != "" {
+		answered = gs.bridge.ArgumentSchemeID(a.TargetArgID)
+	}
+	return gs.NASCQ.MoveWeight(a.SchemeID, answered)
+}
+
 // Effect says in English what a move made from the template would establish
 // about its target (or, for a plain support, what it concludes).
 func (gs *GameState) Effect(tmpl nascq.ActionTemplate, bindings map[string]string) string {

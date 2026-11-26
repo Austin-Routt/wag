@@ -170,6 +170,40 @@ Walton 2007). A question about an exception or a conclusion is refused
 (Q1): whoever raises an exception or a counterclaim must prove it, so it is
 raised with an argument (an attack).
 
+**The question protocol** (D003, D075). Who must answer an asked question is
+a rule of the dialogue, not a change of who proves an exception:
+
+- **Who asks what.** Any player may ask, about any argument on the board, a
+  question its scheme asks at a premise or of the inference, and, where any
+  premise may be challenged, `CQ:premise_acceptable` of any premise. A
+  question about an exception or the conclusion is not asked alone (Q1): an
+  exception is the critic's to support (D003), and a counterclaim is argued.
+  The same question about the same argument and premise is asked once (Q2).
+- **While it is pending.** The question is an argument for the negative
+  answer, with no premise, owned by the asker, at the presumption's weight.
+  On a premise it ties that premise's presumption, so the premise is out; on
+  the inference it puts the argument out of force. Nothing else changes: the
+  argument's other premises, its exceptions and the other arguments stand.
+- **Who answers, and how.** The proponent of the argument asked about (its
+  owner) must answer, and any player's answer closes the question: a defence
+  that names the question, or any argument for the premise asked about. The
+  answer outweighs the question's presumption, so the premise or the
+  inference holds again until it is attacked; the answer can itself be
+  questioned and attacked.
+- **When it is closed.** A question is closed when it is answered. With
+  `AnswerWithin` set (the `cq` mode sets 1), an owner who lets that many of
+  their own turns pass without answering loses the game; otherwise open
+  questions are shown, not enforced.
+- **What may answer.** A scheme on the question's backup edges, a
+  thesis-independent scheme (they back every question), or Other, unless the
+  question refuses Other (D095 (3)): then only its typed answers may, and a
+  well-made Other is refused too (S5). An answer scheme (one that concludes
+  the formula of the question it answers, D094 (g)) is offered only as an
+  answer, on its backup edges, never as a move of its own (S1).
+
+This formalizes the game's behaviour since October 2026; step C5.2 changes
+none of it, so no golden game moves.
+
 ## 3. Scoring
 
 | Model | Points |

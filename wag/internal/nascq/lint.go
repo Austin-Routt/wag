@@ -120,9 +120,10 @@ func (n *NASCQ) Lint() []LintIssue {
 				add(true, id, "answer_variable %q is not a declared variable", v)
 			}
 		}
-		if len(n.askIndex[id]) == 0 {
+		if len(n.askIndex[id]) == 0 && s.Role != RoleAnswer {
 			add(false, id, "no critical question is asked of it: its arguments, attacks included, can never be challenged")
 		}
+		n.lintRole(id, s, add)
 	}
 	for _, cid := range SortedStringKeys(byCarneades) {
 		if ids := byCarneades[cid]; len(ids) > 1 {
@@ -191,4 +192,66 @@ func SortedStringKeys[V any](m map[string]V) []string {
 	}
 	sort.Strings(keys)
 	return keys
+}
+
+// lintRole checks a scheme's role (D094 (g)): an answer scheme concludes a
+// formula and is offered on its backup edges, so it has one at least, no
+// answer variable, and backs no question by being thesis-independent; a
+// modal variant and a bridge name the scheme they weigh as, a chain with no
+// cycle; only a bridge has an entry premise, and it has one.
+func (n *NASCQ) lintRole(id string, s *ASNode, add func(bool, string, string, ...interface{})) {
+	switch s.Role {
+	case "", RoleAnswer, RoleModal, RoleBridge:
+	default:
+		add(true, id, "role %q is not %q, %q, %q or empty", s.Role, RoleAnswer, RoleModal, RoleBridge)
+		return
+	}
+	if s.Role == RoleAnswer {
+		backed := false
+		for _, e := range n.BackupEdges {
+			if sid, _ := n.resolveBackupEdge(e); sid == id {
+				backed = true
+			}
+		}
+		if !backed {
+			add(true, id, "an answer scheme with no backup edge can never be played")
+		}
+		if s.ThesisIndependent || s.AnswerVariable != "" || s.Free {
+			add(true, id, "an answer scheme concludes the formula of the question it answers: it is not thesis-independent, free, or with an answer variable")
+		}
+	}
+	weighs := s.Role == RoleModal || s.Role == RoleBridge
+	switch {
+	case weighs && s.WeighsAs == "":
+		add(true, id, "a %s names the scheme it weighs as (weighs_as)", s.Role)
+	case !weighs && s.WeighsAs != "":
+		add(true, id, "weighs_as is for a modal variant or a bridge, not a scheme of role %q", s.Role)
+	case weighs:
+		seen := map[string]bool{id: true}
+		for cur := s; cur.WeighsAs != ""; {
+			next := n.Schemes[cur.WeighsAs]
+			if next == nil {
+				add(true, id, "weighs_as %q is not a scheme", cur.WeighsAs)
+				break
+			}
+			if seen[cur.WeighsAs] {
+				add(true, id, "weighs_as makes a cycle through %q", cur.WeighsAs)
+				break
+			}
+			seen[cur.WeighsAs] = true
+			cur = next
+		}
+	}
+	switch {
+	case s.Role == RoleBridge && s.EntryPremise == "":
+		add(true, id, "a bridge names its entry premise, which a modal argument supports (entry_premise)")
+	case s.Role != RoleBridge && s.EntryPremise != "":
+		add(true, id, "entry_premise is for a bridge, not a scheme of role %q", s.Role)
+	case s.Role == RoleBridge:
+		for _, v := range Placeholders(s.EntryPremise) {
+			if _, ok := s.Variables[v]; !ok {
+				add(true, id, "entry_premise %q names %q, not a variable of the scheme", s.EntryPremise, v)
+			}
+		}
+	}
 }

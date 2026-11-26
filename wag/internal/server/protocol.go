@@ -389,7 +389,14 @@ func (ss *Session) promptSchemes(w func(string, ...interface{})) {
 	w("## The schemes\n")
 	for _, id := range nascq.SortedStringKeys(gs.NASCQ.Schemes) {
 		sc := gs.NASCQ.Schemes[id]
-		w("\n%s — %s (%s, weight %.2f)", id, sc.Name, sc.SemanticType, sc.BaseWeight)
+		switch sc.Role {
+		case nascq.RoleAnswer:
+			w("\n%s — %s (%s; an answer: it weighs as the argument it answers)", id, sc.Name, sc.SemanticType)
+		case nascq.RoleModal, nascq.RoleBridge:
+			w("\n%s — %s (%s, weight %.2f, as %s)", id, sc.Name, sc.SemanticType, gs.NASCQ.WeightOf(sc), sc.WeighsAs)
+		default:
+			w("\n%s — %s (%s, weight %.2f)", id, sc.Name, sc.SemanticType, sc.BaseWeight)
+		}
 		if sc.ThesisIndependent {
 			w(", can back an answer to any question")
 		}
