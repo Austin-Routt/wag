@@ -74,10 +74,7 @@
         "example_en": "cleaner air"
       }
     },
-    "premise_templates_en": [
-      "Doing {A} brings about {G}",
-      "{G} is good"
-    ],
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is good"],
     "conclusion_template_en": "{A} should be done",
     "description_en": "An action should be performed because it brings about good consequences.",
     "cues_en": [
@@ -119,10 +116,7 @@
         "example_en": "equal pay"
       }
     },
-    "premise_templates_en": [
-      "{V} is a positive value for {A}",
-      "{V} supports the goal {G} for {A}"
-    ],
+    "premise_templates_en": ["{V} is a positive value for {A}", "{V} supports the goal {G} for {A}"],
     "conclusion_template_en": "{V} is a reason to keep the goal {G}",
     "description_en": "A goal is worth keeping because it promotes a value the agent holds.",
     "cues_en": [
@@ -159,10 +153,7 @@
         "example_en": "it rained"
       }
     },
-    "premise_templates_en": [
-      "{A} is observed",
-      "{B} is indicated when {A} holds"
-    ],
+    "premise_templates_en": ["{A} is observed", "{B} is indicated when {A} holds"],
     "conclusion_template_en": "{B} holds in the current situation",
     "answer_variable": "B",
     "description_en": "Something is probably true because an observed sign usually indicates it.",
@@ -204,11 +195,7 @@
         "example_en": "human activity is warming the planet"
       }
     },
-    "premise_templates_en": [
-      "{W} is an expert in {D}",
-      "{S} is a matter of {D}",
-      "{W} says that {S}"
-    ],
+    "premise_templates_en": ["{W} is an expert in {D}", "{S} is a matter of {D}", "{W} says that {S}"],
     "conclusion_template_en": "{S}",
     "answer_variable": "S",
     "description_en": "A claim is plausible because an expert in its field asserts it.",
@@ -297,10 +284,7 @@
         "example_en": "Sweden's carbon tax"
       }
     },
-    "premise_templates_en": [
-      "{C} is a similar case",
-      "{A} is true in the case of {C}"
-    ],
+    "premise_templates_en": ["{C} is a similar case", "{A} is true in the case of {C}"],
     "conclusion_template_en": "{A}",
     "answer_variable": "A",
     "description_en": "A claim holds here because it holds in a similar case.",
@@ -387,10 +371,7 @@
         "example_en": "higher heating bills for poor households"
       }
     },
-    "premise_templates_en": [
-      "Doing {A} brings about {G}",
-      "{G} is bad"
-    ],
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is bad"],
     "conclusion_template_en": "{A} should not be done",
     "description_en": "An action should not be performed because it brings about bad consequences (the counterpart of positive consequences).",
     "cues_en": [

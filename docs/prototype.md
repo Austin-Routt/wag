@@ -27,7 +27,7 @@ Windows SmartScreen may warn about an unsigned program. Choose *More info → Ru
 |---|---|---|
 | `--addr` | `127.0.0.1:8080` | Where to listen. For another port: `--addr 127.0.0.1:9090`. With `--addr 0.0.0.0:8080`, or one of this computer's network addresses, other computers can reach the server, and act in a game only with a key its owner shares (*Share*, §3); this computer stays the owner, at `localhost` or at its own address. Use it only on a network you trust: the keys travel unencrypted over plain HTTP. |
 | `--kialo-dir` | none | The visualizer's `data` folder, for example `--kialo-dir C:\kialo_visualizer_v10_release\data`. Its discussions are then listed for import. Without it, you can still upload a single `graph.json`. |
-| `--data` | built-in | A folder with `schemes\core.yml`, `nascq\*.json` and `contexts.json`. Use it to try edited scheme data without rebuilding. |
+| `--data` | built-in | A folder with `schemes\core.yml`, `nascq\*.json` and `contexts.json`. Use it to try edited scheme data without rebuilding, or to replay a game played with older data: `wag\data\frozen` keeps each earlier version under its fingerprint, for example `--data wag\data\frozen\e7141ec8dea379bc` for the games played before 26 November 2026. |
 | `--claude` | off | Offer **Claude (API)** seats. Needs `ANTHROPIC_API_KEY` set (or an `ant auth login` profile); every Claude move costs API credits. `--claude-model` (default `claude-opus-5-5`) and `--claude-effort` (default `medium`) tune it. |
 | `--contexts` | none | A JSON file of context presets to offer besides the built-in ones: one preset as the browser saves it, or `{"contexts": [...]}` as `data/contexts.json`. A preset with a built-in's id replaces it. |
 | `--open=false` | open | Do not open the browser. |
@@ -143,7 +143,8 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 - **Traces** downloads the game's trace file (`wag-trace/2`, `docs/protocol.md`): the game's setup, every call a model seat made (the whole conversation, the answer, usage, latency), and every decision. For a language model, a decision has the prompt and its reply, the reasons it gave, its predictions checked, and its alternatives tried.
 - **Load an exported game** (on *New game*) replays an export move by move, so a game can be looked at again, continued, or turned into a test.
   - The game keeps the scheme weights it recorded, even if its context preset has changed since (exports from 13 October 2026 on record them).
-  - A game played with other scheme data (its `data_sha256` is not this server's) is refused. Start the server with `--data` on that data to replay it exactly, or open it read-only when offered: its moves are replayed with this server's data, it takes notes but no move, and its export keeps the data it was played with (and adds `inspected_with_data_sha256`).
+  - A game played with other scheme data (its `data_sha256` is not this server's) is refused. Start the server with `--data` on that data to replay it exactly (`wag/data/frozen` keeps the earlier versions, [its README](../wag/data/frozen/README.md)), or open it read-only when offered: its moves are replayed with this server's data, it takes notes but no move, and its export keeps the data it was played with (and adds `inspected_with_data_sha256`).
+  - An export made before 13 October 2026 names no scheme data. It is replayed with this server's data and stays a legacy record: the board says so, and its export names no data either (it adds `legacy_replayed_with_data_sha256`), so that nothing takes it for a game played with this data.
   - The same data with Windows line endings (CRLF) is the same data: the fingerprint reads them as LF.
 
 ## 3. Known limits of the prototype

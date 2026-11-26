@@ -33,7 +33,7 @@ func committedGame(t *testing.T) (map[string]*Entry, *GameData, *GameGen) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	out, err := GenerateGame(entries, d)
+	out, err := GenerateGame(entries, d, FormulasOf(sources(t).Walton))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -246,10 +246,14 @@ func without(t *testing.T, m yaml.MapSlice, key string) yaml.MapSlice {
 // The generator refuses a catalogue whose game parts disagree with one
 // another or break a question's rule, naming the fault.
 func TestGameGenFindsFaults(t *testing.T) {
+	walton := sources(t).Walton
 	for _, c := range []struct {
 		name, want string
 		edit       func(t *testing.T, es map[string]*Entry, d *GameData)
 	}{
+		{"a scheme walton.yml lacks", "walton.yml has no scheme expert_gone, whose formulas the game's AS:expert_opinion plays", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			es["expert_opinion.yml"].ID = "expert_gone"
+		}},
 		{"no NASCQ record", "has no NASCQ record", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			es["sign.yml"].Game.NASCQ = nil
 		}},
@@ -364,7 +368,7 @@ func TestGameGenFindsFaults(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			es, d := freshGame(t)
 			c.edit(t, es, d)
-			_, err := GenerateGame(es, d)
+			_, err := GenerateGame(es, d, FormulasOf(walton))
 			if err == nil || !strings.Contains(err.Error(), c.want) {
 				t.Errorf("got %v, want an error with %q", err, c.want)
 			}
@@ -373,11 +377,11 @@ func TestGameGenFindsFaults(t *testing.T) {
 	// Unedited, it generates, and a template read with CRLF line endings
 	// fills the same markers.
 	es, d := freshGame(t)
-	if _, err := GenerateGame(es, d); err != nil {
+	if _, err := GenerateGame(es, d, FormulasOf(walton)); err != nil {
 		t.Fatal(err)
 	}
 	d.CoreTemplate = strings.ReplaceAll(d.CoreTemplate, "\n", "\r\n")
-	if _, err := GenerateGame(es, d); err != nil {
+	if _, err := GenerateGame(es, d, FormulasOf(walton)); err != nil {
 		t.Errorf("a CRLF template: %v", err)
 	}
 }
@@ -386,32 +390,33 @@ func TestGameGenFindsFaults(t *testing.T) {
 // reads: drafting an entry's other parts leaves it, as it leaves the files;
 // a value the game reads changes both.
 func TestGameGenFingerprint(t *testing.T) {
+	walton := sources(t).Walton
 	es, d := freshGame(t)
-	base, err := GenerateGame(es, d)
+	base, err := GenerateGame(es, d, FormulasOf(walton))
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, c := range []struct {
 		name string
 		same bool
-		edit func(es map[string]*Entry, d *GameData)
+		edit func(es map[string]*Entry, d *GameData, f map[string]*Formulas)
 	}{
-		{"an entry's summary", true, func(es map[string]*Entry, d *GameData) {
+		{"an entry's summary", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			es["sign.yml"].Summary.Text = "something else"
 		}},
-		{"a question's paraphrase", true, func(es map[string]*Entry, d *GameData) {
+		{"a question's paraphrase", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			for i := range es["sign.yml"].CQs {
 				es["sign.yml"].CQs[i].Paraphrase += " more"
 			}
 		}},
-		{"a question's text in its entry", true, func(es map[string]*Entry, d *GameData) {
+		{"a question's text in its entry", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			for i := range es["sign.yml"].CQs {
 				if q := es["sign.yml"].CQs[i].Game; q != nil {
 					q.Text += " more"
 				}
 			}
 		}},
-		{"an entry with no game part", true, func(es map[string]*Entry, d *GameData) {
+		{"an entry with no game part", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			for _, e := range es {
 				if e.Game == nil && e.Formulas != nil {
 					e.Formulas.Premises = append(e.Formulas.Premises, "x(Y)")
@@ -419,32 +424,43 @@ func TestGameGenFingerprint(t *testing.T) {
 				}
 			}
 		}},
-		{"a weight", false, func(es map[string]*Entry, d *GameData) {
+		{"a weight", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			for i, it := range es["sign.yml"].Game.NASCQ {
 				if it.Key == "base_weight" {
 					es["sign.yml"].Game.NASCQ[i].Value = 0.51
 				}
 			}
 		}},
-		{"a formula of walton.yml the game plays", false, func(es map[string]*Entry, d *GameData) {
-			f := es["expert_opinion.yml"].Formulas
-			f.Premises[0], f.Premises[1] = f.Premises[1], f.Premises[0]
+		{"an entry's copy of walton.yml's formulas", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+			p := es["expert_opinion.yml"].Formulas.Premises
+			p[0], p[1] = p[1], p[0]
 		}},
-		{"a question's record", false, func(es map[string]*Entry, d *GameData) {
+		{"a formula of walton.yml the game plays", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+			w := *f["expert_opinion"]
+			w.Premises = append([]string{w.Premises[1], w.Premises[0]}, w.Premises[2:]...)
+			f["expert_opinion"] = &w
+		}},
+		{"a formula of a scheme the game does not play", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+			w := *f["cause_to_effect"]
+			w.Premises = append([]string{"x(Y)"}, w.Premises...)
+			f["cause_to_effect"] = &w
+		}},
+		{"a question's record", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			d.Questions[0].Record = append(yaml.MapSlice{}, d.Questions[0].Record...)
 			d.Questions[0].Record[0].Value = "Another Name"
 		}},
-		{"the order of the edges", false, func(es map[string]*Entry, d *GameData) {
+		{"the order of the edges", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			d.Order.Ask[0], d.Order.Ask[1] = d.Order.Ask[1], d.Order.Ask[0]
 		}},
-		{"core.yml's template", false, func(es map[string]*Entry, d *GameData) {
+		{"core.yml's template", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			d.CoreTemplate += "# a comment\n"
 		}},
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			es, d := freshGame(t)
-			c.edit(es, d)
-			got, err := GenerateGame(es, d)
+			f := FormulasOf(walton)
+			c.edit(es, d, f)
+			got, err := GenerateGame(es, d, f)
 			if err != nil {
 				t.Fatal(err)
 			}

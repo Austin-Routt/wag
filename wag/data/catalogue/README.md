@@ -21,7 +21,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 |---|---|
 | `schemes/<id>.yml` | 129 entries, one per `walton.yml` scheme. Every compendium scheme has one (the generator also makes an entry for any compendium scheme that `walton.yml` lacks; since 2026-10-22 there is none) |
 | [`index.md`](index.md) | One line per entry, tier 1 first, with how many of its items are verified. Generated. |
-| [`game/`](game/) | The game's data that no single entry holds: the questions, which several schemes share (`questions.yml`); the order of the schemes and edges, which is behaviour, the order of the offered moves (`order.yml`); and `core.yml` but the game schemes' blocks (`core.yml.in`). Generated from the game's files until step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)); after it, the game's files are generated from them and the entries. |
+| [`game/`](game/) | The game's data that no single entry holds: the questions, which several schemes share (`questions.yml`); the order of the schemes and edges, which is behaviour, the order of the offered moves (`order.yml`); and `core.yml` but the game schemes' blocks (`core.yml.in`). Since step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)) the game's files are generated from them and the entries. |
 | This README | The format, the statuses, the commands, the checks |
 
 **Who decides what** (the owner's decision of 2026-10-15):
@@ -30,7 +30,7 @@ Every item that people or models write carries a status. This is phase 1 of [the
 |---|---|
 | What a scheme says, and its critical questions | The book |
 | The formulas | `walton.yml` |
-| The game's critical questions | The game's NASCQ, until it is generated from the catalogue (plan §6) |
+| The game's critical questions | The entries' game parts and [`game/`](game/), changed as decisions say; the game's NASCQ files and `core.yml` are generated from them (plan §6; since step C5's switch, 2026-11-26) |
 
 ## Commands
 
@@ -40,14 +40,14 @@ Run them from `wag/`:
 go run ./cmd/wag-cli --catalogue-gen [--by "WHO"]   # (re)generate the skeleton; keeps what people and models wrote
 go run ./cmd/wag-cli --catalogue-check [--book FILE,FILE]   # check everything; status 1 on an error
 go run ./cmd/wag-cli --catalogue-show ID                    # a walton.yml scheme's formulas with their English readings
-go run ./cmd/wag-cli --game-gen --game-out DIR              # the game's files (nascq/*.json, schemes/core.yml) from the catalogue
+go run ./cmd/wag-cli --game-gen [--game-out DIR]            # the game's files (nascq/*.json, schemes/core.yml) alone, from the catalogue
 ```
 
 - **Where things are.** Both commands find the repository's root from the working directory; `--repo` and `--catalogue` override that.
-- **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md` and the decision register's view, `docs/decisions.md`.
+- **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md`, the decision register's view, `docs/decisions.md`, and the game's files.
 - **`--catalogue-check`** reports errors, which fail it, and warnings. It ends with a progress line.
 - **A test keeps the committed catalogue current:** `internal/catalogue`, `TestCommittedCatalogueIsCurrent`. When a source changes, run `--catalogue-gen` and commit the result.
-- **`--game-gen`** makes the game's files from the entries' game parts and [`game/`](game/), into `--game-out` (by default `wag/data`, the game's own files). Until step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)) those files are still the source, so give `--game-out`; a test requires its output to reproduce them.
+- **The game's files come from the catalogue** (since step C5's switch, [`docs/c5-game.md`](../../../docs/c5-game.md)): `--catalogue-gen` first writes `wag/data/nascq/*.json` and `wag/data/schemes/core.yml` from the entries' game parts, [`game/`](game/) and `walton.yml`'s formulas, then makes the entries from them, so a game part says what the game plays. The check requires those files to be what the catalogue makes. `--game-gen` writes them alone, by default into `wag/data`, or into `--game-out DIR`.
 
 ## An entry
 
@@ -58,7 +58,7 @@ id: expert_opinion
 name: Argument from Expert Opinion
 tier: 1
 walton: {id: expert_opinion, title: ..., source: ...}       # source: walton.yml
-game:                                                        # source: the NASCQ and core.yml, until C5's switch
+game:                                                        # the game's data: the game's files are generated from it
   id: AS:expert_opinion
   nascq: {carneades_id: expert_opinion, name: ..., base_weight: 0.7, ...}   # its record in nascq/schemes.json
   core: {meta: {title: ..., source: ...}}                    # its block in core.yml; formulas only where they are not walton.yml's

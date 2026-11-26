@@ -167,6 +167,13 @@ type Session struct {
 	// keeps (the replay's moves carry this data's weights and labels).
 	inspectedWith string
 	playedHistory []game.Move
+	// legacyReplayedWith is set when a game was loaded from an export that
+	// records no scheme data (one made before 13 October 2026): its moves
+	// were replayed with this server's data, which this identifies. It stays
+	// a legacy record: its export and its traces record no fingerprint
+	// (dataHash is ""), so that nothing takes it for a game played with this
+	// data (the critical review's adverse case 11; docs/c5-game.md).
+	legacyReplayedWith string
 	// thinking: a model seat is waiting for its model; the game takes no
 	// other move meanwhile.
 	thinking bool
@@ -1056,6 +1063,11 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 		// verdicts and the other arguments were computed again with this data.
 		out["inspected_with_data_sha256"] = ss.inspectedWith
 	}
+	if ss.legacyReplayedWith != "" {
+		// A legacy record: data_sha256 is empty, as in the export it was
+		// loaded from; the state was computed with this data.
+		out["legacy_replayed_with_data_sha256"] = ss.legacyReplayedWith
+	}
 	return out
 }
 
@@ -1252,6 +1264,9 @@ func (s *Server) handleLoad(w http.ResponseWriter, r *http.Request) {
 	detail := fmt.Sprintf("%d moves", len(e.History))
 	if ss.inspectedWith != "" {
 		detail += fmt.Sprintf("; read-only: played with scheme data %s, replayed with %s", ss.dataHash, ss.inspectedWith)
+	}
+	if ss.legacyReplayedWith != "" {
+		detail += fmt.Sprintf("; a legacy record: the export names no scheme data; replayed with %s", ss.legacyReplayedWith)
 	}
 	ss.event("load", "", detail, nil, nil)
 	writeJSON(w, ss.buildState())

@@ -1,10 +1,10 @@
 package catalogue
 
 // The game's data in the catalogue (step C5.1, docs/c5-game.md): the fields
-// of the NASCQ that no text defines (plan §6), recorded in the catalogue so
-// that the game's files can be generated from it. Until the switch (C5.1's
-// third commit) they are generated from the game's files, as the rest of an
-// entry's game part is; after it, the catalogue is their source.
+// of the NASCQ that no text defines (plan §6), recorded in the catalogue,
+// which the game's files are generated from since C5.1's switch. They are
+// read back from the generated files, so that the check sees the round trip
+// keep them.
 
 import (
 	"bytes"
@@ -157,7 +157,7 @@ func (g *gameRaw) gameData(gameIDs map[string]bool) (*GameData, error) {
 		d.Order.Ask = append(d.Order.Ask, a.GameEdge)
 	}
 	d.Order.Backup = g.backup
-	t, err := coreTemplate(g.coreText, gameIDs)
+	t, err := coreTemplate(stripCoreHeader(g.coreText), gameIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -299,9 +299,10 @@ func readJSONValue(dec *json.Decoder) (interface{}, error) {
 }
 
 // gameHeader heads GameDir's YAML files.
-const gameHeader = `# The game's data in the catalogue (step C5.1, docs/c5-game.md). Made by
-# wag-cli --catalogue-gen from the game's files until the switch, when it
-# becomes the source the game's files are generated from.
+const gameHeader = `# The game's data in the catalogue (step C5.1, docs/c5-game.md), with the
+# entries' game parts: wag-cli --catalogue-gen generates the game's files
+# (wag/data/nascq/*.json, wag/data/schemes/core.yml) from them. Change it only
+# as a decision says.
 `
 
 // GameFiles is GameDir's content, by file name, as the game's files give it.

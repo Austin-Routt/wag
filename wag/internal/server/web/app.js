@@ -370,7 +370,7 @@ function renderSetup() {
     const text = await f.text();
     const open = async inspect => {
       const st = await api('/api/load' + (inspect ? '?inspect=1' : ''), text, true); G = null; setState(st);
-      toast(`Loaded “${st.title}”: ${st.log.length} moves replayed${inspect ? ', read-only' : ''}.`); render();
+      toast(`Loaded “${st.title}”: ${st.log.length} moves replayed${inspect ? ', read-only' : ''}${st.legacy ? ', a legacy record (its export names no scheme data)' : ''}.`); render();
     };
     try { await open(false); }
     catch (e) {
@@ -766,6 +766,7 @@ function renderSide() {
   const side = $('#side'); if (!side) return;
   const parts = [];
   if (G.inspect) parts.push(inspectPanel());
+  if (G.legacy) parts.push(legacyPanel());
   if (G.over) parts.push(outcomePanel());
   if (G.pending) parts.push(pendingPanel());
   if (!G.over && !G.inspect) parts.push('<div class="panel" id="composer"></div>');
@@ -783,6 +784,10 @@ function renderSide() {
 function inspectPanel() {
   const i = G.inspect;
   return `<div class="panel"><h2>Read-only</h2><p class="small">The game was played with scheme data ${esc(i.played_with)}; its moves were replayed with this server's, ${esc(i.replayed_with)}, so what the board shows may differ from what the players saw. It takes no move. To replay it exactly, start the server with <code>--data</code> on the data it was played with. Notes can still be added, and its export keeps the data it was played with.</p></div>`;
+}
+
+function legacyPanel() {
+  return `<div class="panel"><h2>A legacy record</h2><p class="small">The export this game was loaded from names no scheme data (it was made before 13 October 2026). Its moves were replayed with this server's, ${esc(G.legacy.replayed_with)}, so what the board shows may differ from what the players saw, and its export names no scheme data either.</p></div>`;
 }
 
 function outcomePanel() {

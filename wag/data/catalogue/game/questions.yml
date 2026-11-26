@@ -1,6 +1,7 @@
-# The game's data in the catalogue (step C5.1, docs/c5-game.md). Made by
-# wag-cli --catalogue-gen from the game's files until the switch, when it
-# becomes the source the game's files are generated from.
+# The game's data in the catalogue (step C5.1, docs/c5-game.md), with the
+# entries' game parts: wag-cli --catalogue-gen generates the game's files
+# (wag/data/nascq/*.json, wag/data/schemes/core.yml) from them. Change it only
+# as a decision says.
 questions:
 - id: CQ:other_goals
   record:

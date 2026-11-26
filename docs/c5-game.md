@@ -1,6 +1,7 @@
 # Step C5: the game takes the first family
 
-**Status:** a plan. Version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
+**Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch); C5.2 waits for D095. The
+plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); this is version 3. Its implementation choices, within the
 decisions it applies, are D094. Three choices depart from the wording of decided texts, so they are
 the owner's, put as D095 with a recommendation each; C5.2's parts that depend on them wait for the
@@ -96,7 +97,11 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    output; `--catalogue-gen` and the check turn round in the same commit. Written: it reads only the
    catalogue (each game scheme's entry, its formulas where it records none of its own, and `game/`),
    refuses a catalogue whose game parts disagree with one another, and writes the header's
-   fingerprint (`# catalogue: ...`); it is not yet run on the game's own files.
+   fingerprint (`# catalogue: ...`). Since the switch `--catalogue-gen` runs it first, with
+   `walton.yml`'s formulas (not the entries' copies, which a change to `walton.yml` would leave
+   stale), then makes the entries from its output, so an edit to a game part is what the entries
+   say; the check requires the game's files to be its output, and the entries and `game/` to be
+   what their round trip gives.
 5. **Reproduction.** The pre-C5 files are frozen in `wag/data/frozen/e7141ec8dea379bc`, a `--data`
    folder named by its fingerprint (done; a test requires the two to agree); a test requires the
    generator's output to equal them as JSON and YAML trees (every field, the order of the edges and
@@ -109,7 +114,11 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    copies are re-pinned with a history entry, the batch-2 report takes the new hash, and the docs
    say how to replay an old game or trace (`--data` with the frozen files). No annotation run is in
    progress at the switch. A hashless export replays and is flagged as legacy, not as current
-   (adverse case 11), and TestLoadReplaysAnExport keeps passing.
+   (adverse case 11), and TestLoadReplaysAnExport keeps passing. Done: the data's fingerprint went
+   from `e7141ec8dea379bc` to `afd3335a23f12f41`; the 33 reference games kept their digests; the
+   batch-2 replay is the same but for its fingerprint, build and times; a game loaded from an export
+   that names no data shows that it is a legacy record, and its export names none either
+   (`legacy_replayed_with_data_sha256` says what it was replayed with).
 7. **Review and gates** on C5.1 alone.
 
 ## C5.2: the slice, through the catalogue

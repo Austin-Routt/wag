@@ -55,7 +55,7 @@ python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-rep
 
 ## How the annotations went into the game
 
-`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-11-25, after the analogy family's two-case form (decisions D001, D028, D029), the consequence family's sided exceptions (D055, D059), practical reasoning's proposal D004-D075 and the consequences' proposal D008-D074, and before the game's data takes them (workstream E, step C5):
+`wag-report.json` keeps, for each claim, what the annotation intended (`intended`: scheme, role, target, question) apart from what was played (`executed`), and says how they relate (`integration`). On the data of 2026-11-26 (generated from the catalogue since step C5.1, with the same values as before, so the same moves), after the analogy family's two-case form (decisions D001, D028, D029), the consequence family's sided exceptions (D055, D059), practical reasoning's proposal D004-D075 and the consequences' proposal D008-D074, and before the game's data takes them (workstream E, step C5.2):
 
 Every claim but the thesis, 13292.1 (the game's root, which no move plays), has one row: 49 claims, 37 of them played.
 

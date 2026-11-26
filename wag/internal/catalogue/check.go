@@ -144,6 +144,23 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 		gen[e.ID] = e
 		order = append(order, e.ID)
 	}
+	// The game's files are what the catalogue makes (step C5.1's switch):
+	// its entries' game parts and GameDir, with walton.yml's formulas.
+	gameDir, err := ReadGameDir(dir)
+	if err == nil {
+		var gen *GameGen
+		if gen, err = GenerateGame(entries, gameDir, FormulasOf(src.Walton)); err == nil {
+			for _, p := range GamePaths {
+				if !bytes.Equal(gen.Files[p], src.files.game(p)) {
+					r.Findings = append(r.Findings, Finding{File: GameDataDir + "/" + p, Error: true,
+						Msg: "not what the catalogue makes of its game data; run wag-cli --catalogue-gen"})
+				}
+			}
+		}
+	}
+	if err != nil {
+		r.Findings = append(r.Findings, Finding{File: GameDir, Error: true, Msg: "the game's files cannot be made from it: " + err.Error()})
+	}
 	// The game's data in the catalogue (step C5.1): GameDir's files.
 	if files, err := g.GameFiles(); err != nil {
 		r.Findings = append(r.Findings, Finding{File: GameDir, Error: true, Msg: err.Error()})

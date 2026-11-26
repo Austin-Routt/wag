@@ -73,7 +73,7 @@ go run ./cmd/wag-cli --data ./data --lint              # check data files on dis
 go run ./cmd/wag-cli --registry data/schemes/core.yml --families data/schemes/families.json  # one pattern, one name
 go run ./cmd/wag-cli --games 50 --p1 greedy --p2 random  # tournament statistics
 go run ./cmd/wag-cli --kialo-check <visualizer>/data   # import every captured Kialo discussion; report claims that share a text
-go run ./cmd/wag-cli --catalogue-gen                   # (re)generate the scheme catalogue's skeleton, keeping what was written
+go run ./cmd/wag-cli --catalogue-gen                   # (re)generate the scheme catalogue's skeleton, keeping what was written, and the game's files from it
 go run ./cmd/wag-cli --catalogue-check [--book FILE]   # check the catalogue; exit 1 on an error
 go run ./cmd/wag-cli --catalogue-show ID               # a walton.yml scheme's formulas with their English readings
 go run ./cmd/wag-cli --modes                           # list the game modes

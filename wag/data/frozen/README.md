@@ -14,4 +14,4 @@ each folder's fingerprint to be its name.
 
 | Folder | The data | Kept for |
 | --- | --- | --- |
-| `e7141ec8dea379bc` | the game's data from 2026-10-15 to step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)) | the games, exports and traces made with it; the generator's reproduction test |
+| `e7141ec8dea379bc` | the game's data from 2026-10-15 to step C5.1's switch on 2026-11-26 ([`docs/c5-game.md`](../../../docs/c5-game.md)), when the files began to be generated from the catalogue with the same values | the games, exports and traces made with it; the generator's reproduction test |

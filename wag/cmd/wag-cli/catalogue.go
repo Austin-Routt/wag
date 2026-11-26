@@ -34,7 +34,33 @@ func runCatalogueGen(repo, dir, by string) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	src, err := catalogue.Load(repo)
+	// The game's files first (step C5.1's switch, docs/c5-game.md): the
+	// catalogue's game data is their source, so the entries are then made
+	// from what it says. Only the repository's own catalogue writes them.
+	f, err := catalogue.ReadFiles(repo)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	own := filepath.Join(repo, filepath.FromSlash(catalogue.Dir))
+	if _, err := os.Stat(filepath.Join(dir, catalogue.GameDir)); err != nil {
+		fmt.Printf("note: %s has no %s/; the game's files are left as they are\n", dir, catalogue.GameDir)
+	} else if !sameDir(dir, own) {
+		fmt.Printf("note: %s is not the repository's catalogue; the game's files are left as they are\n", dir)
+	} else {
+		var g *catalogue.GameGen
+		if f, g, err = catalogue.WithGame(f, dir); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		written, err := catalogue.WriteGameFiles(filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir)), g)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		fmt.Printf("%s: the game's files from the catalogue (%s): %d of %d written\n", catalogue.GameDataDir, g.Inputs, len(written), len(catalogue.GamePaths))
+	}
+	src, err := catalogue.Parse(f)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
@@ -76,6 +102,13 @@ func runCatalogueGen(repo, dir, by string) int {
 	return 0
 }
 
+// sameDir tells whether two paths name the same directory.
+func sameDir(a, b string) bool {
+	x, err1 := os.Stat(a)
+	y, err2 := os.Stat(b)
+	return err1 == nil && err2 == nil && os.SameFile(x, y)
+}
+
 // runGameGen generates the game's files from the catalogue (docs/c5-game.md,
 // C5.1): the NASCQ files and core.yml, into out (default: the repository's
 // wag/data).
@@ -88,39 +121,17 @@ func runGameGen(repo, dir, out string) int {
 	if out == "" {
 		out = filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir))
 	}
-	entries, bad, err := catalogue.ReadDir(dir)
+	g, err := catalogue.GameFromCatalogue(repo, dir)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	if len(bad) > 0 {
-		for name, e := range bad {
-			fmt.Fprintf(os.Stderr, "%s: does not read: %v\n", name, e)
-		}
-		return 1
-	}
-	d, err := catalogue.ReadGameDir(dir)
+	written, err := catalogue.WriteGameFiles(out, g)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	g, err := catalogue.GenerateGame(entries, d)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return 1
-	}
-	for _, p := range catalogue.GamePaths {
-		path := filepath.Join(out, filepath.FromSlash(p))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return 1
-		}
-		if err := os.WriteFile(path, g.Files[p], 0o644); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return 1
-		}
-	}
-	fmt.Printf("%s: %s written from the catalogue (%s)\n", out, strings.Join(catalogue.GamePaths, ", "), g.Inputs)
+	fmt.Printf("%s: the game's files from the catalogue (%s): %d of %d written\n", out, g.Inputs, len(written), len(catalogue.GamePaths))
 	return 0
 }
 

@@ -69,6 +69,9 @@ type Sources struct {
 	Core     map[string]Scheme // the game's core.yml, by id
 	// gameRaw is the game's files read in their order (step C5.1).
 	gameRaw *gameRaw
+	// files are the source files as read, which the check compares with
+	// what the catalogue makes of the game's (step C5.1's switch).
+	files Files
 	// Close pairs walton.yml's schemes whose patterns the registry finds
 	// related (internal/registry: the same form, one formula apart, one
 	// extending the other, close).
@@ -227,7 +230,7 @@ func ReadFiles(root string) (Files, error) {
 
 // Parse decodes the source files.
 func Parse(f Files) (*Sources, error) {
-	s := &Sources{}
+	s := &Sources{files: f}
 	var w struct {
 		Language map[string]string `yaml:"language"`
 		Schemes  []Scheme          `yaml:"argument_schemes"`

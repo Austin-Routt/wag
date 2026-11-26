@@ -10,7 +10,6 @@
       "target": "conclusion"
     }
   },
-
   "CQ:other_means": {
     "name": "Other Means Question",
     "semantic_type": "action",
@@ -22,7 +21,6 @@
       "target": "argument"
     }
   },
-
   "CQ:side_effect": {
     "name": "Side Effects Question",
     "semantic_type": "causality",
@@ -34,7 +32,6 @@
       "target": "argument"
     }
   },
-
   "CQ:possibility": {
     "name": "Possibility Question",
     "semantic_type": "causality",
@@ -47,7 +44,6 @@
       "target_premise_pattern": "possible({A})"
     }
   },
-
   "CQ:best_means": {
     "name": "Best Means Question",
     "semantic_type": "action",
@@ -59,7 +55,6 @@
       "target": "argument"
     }
   },
-
   "CQ:evidence": {
     "name": "Evidence Question",
     "semantic_type": "truth",
@@ -71,7 +66,6 @@
       "target": "argument"
     }
   },
-
   "CQ:likelihood": {
     "name": "Likelihood Question",
     "semantic_type": "truth",
@@ -83,7 +77,6 @@
       "target": "premise"
     }
   },
-
   "CQ:other_event": {
     "name": "Other Event Question",
     "semantic_type": "causality",
@@ -95,7 +88,6 @@
       "target": "argument"
     }
   },
-
   "CQ:expertise": {
     "name": "Expertise Question",
     "semantic_type": "source",
@@ -107,7 +99,6 @@
       "target": "premise"
     }
   },
-
   "CQ:field": {
     "name": "Field Question",
     "semantic_type": "property",
@@ -119,7 +110,6 @@
       "target": "premise"
     }
   },
-
   "CQ:opinion": {
     "name": "Opinion Question",
     "semantic_type": "truth",
@@ -131,7 +121,6 @@
       "target": "premise"
     }
   },
-
   "CQ:trustworthiness": {
     "name": "Trustworthiness Question",
     "semantic_type": "source",
@@ -143,7 +132,6 @@
       "target": "argument"
     }
   },
-
   "CQ:consistency": {
     "name": "Consistency Question",
     "semantic_type": "truth",
@@ -155,7 +143,6 @@
       "target": "argument"
     }
   },
-
   "CQ:backup_evidence": {
     "name": "Backup Evidence Question",
     "semantic_type": "truth",
@@ -168,7 +155,6 @@
       "target_premise_pattern": "based_on_evidence(asserts({W},{S}))"
     }
   },
-
   "CQ:position": {
     "name": "Position to Know Question",
     "semantic_type": "source",
@@ -180,7 +166,6 @@
       "target": "premise"
     }
   },
-
   "CQ:difference": {
     "name": "Difference Question",
     "semantic_type": "property",
@@ -192,7 +177,6 @@
       "target": "argument"
     }
   },
-
   "CQ:truth": {
     "name": "Truth Question",
     "semantic_type": "truth",
@@ -204,7 +188,6 @@
       "target": "premise"
     }
   },
-
   "CQ:other_case": {
     "name": "Other Case Question",
     "semantic_type": "property",
@@ -216,7 +199,6 @@
       "target": "argument"
     }
   },
-
   "CQ:legitimate_value": {
     "name": "Legitimate Value Question",
     "semantic_type": "value",
@@ -228,7 +210,6 @@
       "target": "premise"
     }
   },
-
   "CQ:value_effect": {
     "name": "Value Effect Question",
     "semantic_type": "value",
@@ -240,49 +221,49 @@
       "target": "premise"
     }
   },
-    "CQ:conflicting_goals": {
-      "name": "Conflicting Goals Question",
-      "semantic_type": "value",
-      "question_template_en": "Does the goal {G} conflict with other goals that should be considered?",
-      "answer_en": {"against": "yes", "for": "no"},
-      "caes_mapping": {
-        "positive_answer_type": "support",
-        "negative_answer_type": "undercutter",
-        "target": "argument"
-      }
-    },
-    "CQ:intervening_actions": {
-      "name": "Intervening Actions Question",
-      "semantic_type": "causality",
-      "question_template_en": "Would something else have to happen, or be done, before {A} could achieve {G}?",
-      "answer_en": {"against": "yes", "for": "no"},
-      "caes_mapping": {
-        "positive_answer_type": "support",
-        "negative_answer_type": "undercutter",
-        "target": "argument"
-      }
-    },
-    "CQ:goal_possible": {
-      "name": "Goal Possibility Question",
-      "semantic_type": "causality",
-      "question_template_en": "Can the goal {G} be achieved at all?",
-      "answer_en": {"against": "no", "for": "yes"},
-      "caes_mapping": {
-        "positive_answer_type": "support",
-        "negative_answer_type": "undermining",
-        "target": "premise",
-        "target_premise_pattern": "possible({G})"
-      }
-    },
-    "CQ:opposite_consequences": {
-      "name": "Opposite Consequences Question",
-      "semantic_type": "action",
-      "question_template_en": "Would doing {A} also have good consequences, to weigh against {G}?",
-      "answer_en": {"against": "yes", "for": "no"},
-      "caes_mapping": {
-        "positive_answer_type": "support",
-        "negative_answer_type": "rebuttal",
-        "target": "conclusion"
-      }
+  "CQ:conflicting_goals": {
+    "name": "Conflicting Goals Question",
+    "semantic_type": "value",
+    "question_template_en": "Does the goal {G} conflict with other goals that should be considered?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
     }
+  },
+  "CQ:intervening_actions": {
+    "name": "Intervening Actions Question",
+    "semantic_type": "causality",
+    "question_template_en": "Would something else have to happen, or be done, before {A} could achieve {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:goal_possible": {
+    "name": "Goal Possibility Question",
+    "semantic_type": "causality",
+    "question_template_en": "Can the goal {G} be achieved at all?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise",
+      "target_premise_pattern": "possible({G})"
+    }
+  },
+  "CQ:opposite_consequences": {
+    "name": "Opposite Consequences Question",
+    "semantic_type": "action",
+    "question_template_en": "Would doing {A} also have good consequences, to weigh against {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "rebuttal",
+      "target": "conclusion"
+    }
+  }
 }

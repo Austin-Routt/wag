@@ -10,9 +10,9 @@
   "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
   "links.json": "a2d3f08a789873229fd003fa1a0f4538c71d367b297dcf2c35fd15d9e3c02124",
   "positions.json": "a31e0139a85cee88aebcf41861c2527b50ad74293a9c8ac1f53cc1fd85773792",
-  "nascq/schemes.json": "8616f56cde01fbb4372adb745410f7766cfda756889a4ce422d5979a8cb398b5",
-  "nascq/critical_questions.json": "cbc86ff8be867a5ae21376da4403e566306e9c294e0fb1255ecb133720ab5227",
-  "nascq/edges.json": "6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8"
+  "nascq/schemes.json": "d7c921902fb9c2b61893c5556cfda7e4cc6c75e5dde47973333eba0a1955a5d4",
+  "nascq/critical_questions.json": "7dc1c7b154b2c1cf3d7dbf8ffcef8c92f52806479c96478dce8c41fecae8298b",
+  "nascq/edges.json": "edbc604bf977521043e6300299727d36a48dae3575b7ed4ea31ae8d3d81b844c"
  },
  "status": "Development material (D086): adjudicated by a language model, no item verified by a person. The first gold is drafted from it.",
  "history": [
@@ -20,6 +20,11 @@
    "date": "2026-11-24",
    "by": "decision D092 (migrate_format2.py)",
    "what": "Format 2 (docs/annotation-records.md): instance ids, exact targets (their instance, and a conclusion target's formula), the instance each challenge is about, re_parented dropped (derived), the inputs pinned. No coding changed. The format-1 gold is kept as gold-format1.json. Decision D039's recoding of the 11 hypothetical causal steps is recorded in their items."
+  },
+  {
+   "date": "2026-11-26",
+   "by": "step C5.1's switch (docs/c5-game.md)",
+   "what": "The game's NASCQ files are generated from the scheme catalogue since step C5.1: their bytes changed, their values did not (the generator reproduces the files frozen in wag/data/frozen/e7141ec8dea379bc as trees). The gold was checked again on them and their pins renewed. No coding changed."
   }
  ],
  "items": [

@@ -144,6 +144,11 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	}
 	ss := s.add(gs, e.Seats, title, source, req.Seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
+	if e.DataHash == "" {
+		// An export that names no scheme data stays a legacy record: it is
+		// replayed with this data, but not taken for a game played with it.
+		ss.dataHash, ss.legacyReplayedWith = "", s.data.Hash()
+	}
 	if other {
 		// Its export keeps the data it was played with, and the history as
 		// played.

@@ -5,8 +5,8 @@ How to write the work fields of an entry in `schemes/<id>.yml`, for a model or a
 ## Rules
 
 1. **Never copy the book.** Write every text in your own words. Short labels are fine ("Expertise Question", "Major Premise"), but not the book's sentences, and not lightly reworded ones either. Do not reuse the book's examples. The copy check is a floor, not the test.
-2. **Never edit a source field**: `walton`, `game`, `formulas`, or the `game` part of a question. `--catalogue-gen` rewrites them. If a source is wrong, record a discrepancy (below).
-3. **The book decides what a scheme says and asks; `walton.yml` decides the formulas; the NASCQ decides the game's questions** (the README's "who decides what"). When they disagree, record it and say what the catalogue does about it. Do not settle it by quietly writing the text to fit one source.
+2. **Never edit a source field**: `walton` and `formulas`, which `--catalogue-gen` rewrites from `walton.yml`, or the game part (`game`, and the `game` part of a question), which is the game's own data: the game's files are generated from it (since step C5's switch), and it changes only as a decision says. If a source is wrong, record a discrepancy (below).
+3. **The book decides what a scheme says and asks; `walton.yml` decides the formulas; the game parts decide the game's questions** (the README's "who decides what"). When they disagree, record it and say what the catalogue does about it. Do not settle it by quietly writing the text to fit one source.
 4. **Set the status of each item you write** to `drafted by WHO, YYYY-MM-DD`. A model writes its tool's name, for example `drafted by Claude Code, 2026-10-22`. Only a person who has checked an item against the book sets `verified by WHO, DATE`. A person who thinks an item is wrong sets `disputed by WHO, DATE: REASON`. Leave an item you have not touched as `generated` or `todo`.
 5. **Add one line to `history`** for each session of work on the entry: date, who, what.
 6. **Run the checker with the book's text** before you stop. Fix every error, and every copy warning:
@@ -21,7 +21,7 @@ How to write the work fields of an entry in `schemes/<id>.yml`, for a model or a
 
 - **The book:** the compendium entries in `book` (and the entry named in `cqs_printed_under`, if any), and the chapters that discuss the scheme. The book's variable letters often differ from `walton.yml`'s (the book's E, S, A are `walton.yml`'s W, D, S for expert opinion). The catalogue writes `walton.yml`'s letters.
 - **`walton.yml`:** the formulas in the entry, and their English readings (`wag-cli --catalogue-show ID` prints them; they often repeat the book, so do not copy them). The upstream collection (`walton-argumentation-schemes-for-carneades-4-master`) also has 13 category files, which hold older or different versions of some schemes. When one differs from `walton.yml`, record it as a discrepancy of kind `other`.
-- **The game:** `wag/data/nascq/` (schemes, critical questions, ask and backup edges) and `wag/data/schemes/core.yml`. The `game` part of each question is the NASCQ's.
+- **The game:** the entries' game parts and [`game/`](game/), from which `wag/data/nascq/` (schemes, critical questions, ask and backup edges) and `wag/data/schemes/core.yml` are generated.
 - **The Kialo gold:** `docs/kialo-batch2/gold.json` codes 59 claims of discussion 13292; the claims' texts are in `items.json`.
 
 ## The fields

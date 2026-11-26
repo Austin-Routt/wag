@@ -369,6 +369,43 @@ func TestLoadReplaysAnExport(t *testing.T) {
 	if again["request"] == nil || again["build"] == nil || again["format"] != "wag-export/2" {
 		t.Fatalf("export lacks request, build or format: %v %v %v", again["request"], again["build"], again["format"])
 	}
+	// The export names no scheme data (it predates 13 October 2026), so the
+	// game stays a legacy record: replayed with this data, not taken for a
+	// game played with it, in its state, its export and a load of that.
+	here := Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON}.Hash()
+	if st.Legacy == nil || st.Legacy.ReplayedWith != here {
+		t.Fatalf("legacy: %+v, want replayed with %s", st.Legacy, here)
+	}
+	if again["data_sha256"] != "" || again["legacy_replayed_with_data_sha256"] != here {
+		t.Fatalf("export: data_sha256 %v, legacy %v", again["data_sha256"], again["legacy_replayed_with_data_sha256"])
+	}
+	b, err = json.Marshal(again)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var st2 State
+	if code := call(t, ts, "POST", "/api/load", string(b), &st2); code != 200 || st2.Legacy == nil || st2.Legacy.ReplayedWith != here {
+		t.Fatalf("loaded again: %d, legacy %+v", code, st2.Legacy)
+	}
+}
+
+// A game played with this server's data, as its export names, is not a
+// legacy record.
+func TestLoadOfACurrentExportIsNotLegacy(t *testing.T) {
+	s, ts := newTestServerWith(t)
+	e := reviewExport(t, s, NewGameRequest{Mode: "classic", Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}})
+	if e.DataHash != s.data.Hash() {
+		t.Fatalf("the fixture names data %q, not this server's %q", e.DataHash, s.data.Hash())
+	}
+	code, st := loadHTTP(t, ts, e, "")
+	if code != 200 || st["legacy"] != nil {
+		t.Fatalf("load: %d, legacy %v", code, st["legacy"])
+	}
+	var ex map[string]any
+	if code := call(t, ts, "GET", "/api/games/"+st["id"].(string)+"/export", nil, &ex); code != 200 ||
+		ex["data_sha256"] != s.data.Hash() || ex["legacy_replayed_with_data_sha256"] != nil {
+		t.Fatalf("export: %d, data_sha256 %v, legacy %v", code, ex["data_sha256"], ex["legacy_replayed_with_data_sha256"])
+	}
 }
 
 // Notes attach to a game and come back in its export.
