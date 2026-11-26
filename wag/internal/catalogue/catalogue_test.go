@@ -1353,6 +1353,12 @@ examples: []
 	if v := string(ProposalView(up, s, "p.yml")); !strings.Contains(v, "  - CQ1: no formula; an undercutter\n") {
 		t.Errorf("the view does not say that CQ1 maps to no formula:\n%s", v)
 	}
+	// A note that says so itself is not doubled (the check of D022-D093 v2).
+	said := load(strings.Replace(undercut, "note: an undercutter", "note: no formula, an undercutter", 1))
+	if v := string(ProposalView(said, s, "p.yml")); !strings.Contains(v, "  - CQ1: no formula, an undercutter\n") ||
+		strings.Contains(v, "no formula; no formula") {
+		t.Errorf("the view doubles a note that says there is no formula:\n%s", v)
+	}
 	// A link that links.json already has, unchanged, is accepted once the
 	// proposal is applied; another scheme's link to the entry is kept.
 	if w, ok := findWalton(s, "positive_consequences"); ok {
@@ -1554,6 +1560,54 @@ func TestProposalLinksMapEveryPremise(t *testing.T) {
 		if !strings.Contains(got, want) {
 			t.Errorf("a link that maps Premise 1 twice and Premise 2 never: want %q, got:\n%s", want, got)
 		}
+	}
+}
+
+// The check of D022-D093 version 2: links.json names a renamed scheme by its
+// upstream id (exeptional for exceptional, at 56), and every lookup of a
+// scheme's link migrates it: the entry is the scheme's, its printed
+// questions are asked of a proposal, a question the link maps is held to
+// the formula it maps, and one it maps to no formula has nothing to target.
+func TestProposalRenamedSchemeLinks(t *testing.T) {
+	s := sources(t)
+	if s.migrate("exeptional") != "exceptional" {
+		t.Skip("id-migrations.json no longer renames exeptional")
+	}
+	w, ok := findWalton(s, "exceptional")
+	if !ok {
+		t.Fatal("walton.yml has no exceptional")
+	}
+	if es := linkedEntries(s, "exceptional"); !in(es, "56") {
+		t.Errorf("linkedEntries(exceptional) = %v, want 56 (links.json names it exeptional)", es)
+	}
+	found := func(p *Proposal, want string, isErr bool) bool {
+		for _, f := range CheckProposal(p, s) {
+			if strings.Contains(f.Msg, want) && f.Error == isErr {
+				return true
+			}
+		}
+		return false
+	}
+	p := &Proposal{Decisions: []string{"D999"}, Title: "t", Schemes: []Scheme{w}}
+	if !found(p, "56/CQ1 is printed for 56, and the catalogue will carry it for exceptional", false) {
+		t.Errorf("a renamed scheme's printed question is not asked of it: %v", CheckProposal(p, s))
+	}
+	// links.json maps 56/CQ1 to case_exception(A): another target is held to it.
+	p.Questions = map[string][]PQuery{"exceptional": {{ID: "56/CQ1", Asks: "q", Target: "rule_can_waived(X)"}}}
+	if !found(p, "links.json maps 56/CQ1 of exceptional to case_exception(A)", false) {
+		t.Errorf("a renamed scheme's question is not held to its link's formula: %v", CheckProposal(p, s))
+	}
+	p.Questions = map[string][]PQuery{"exceptional": {{ID: "56/CQ1", Asks: "q", Target: "case_exception(A)"}}}
+	if found(p, "56/CQ1", true) || found(p, "links.json maps 56/CQ1", false) {
+		t.Errorf("a renamed scheme's question at its link's formula is refused: %v", CheckProposal(p, s))
+	}
+	// 56/CQ2 maps to no formula: not borrowed, and nothing to target.
+	p.Questions = map[string][]PQuery{"exceptional": {{ID: "56/CQ2", Asks: "q", Target: "rule_can_waived(X)"}}}
+	if found(p, "borrowed", true) {
+		t.Errorf("a renamed scheme's printed question is called borrowed: %v", CheckProposal(p, s))
+	}
+	if !found(p, "links.json maps CQ2 of exceptional to no formula, so the question has nothing to target", false) {
+		t.Errorf("a renamed scheme's question without a formula passes silently: %v", CheckProposal(p, s))
 	}
 }
 

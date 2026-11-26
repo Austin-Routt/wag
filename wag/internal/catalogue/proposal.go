@@ -383,7 +383,10 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		}
 		for _, e := range src.Links {
 			for _, l := range e.Links {
-				if l.ID != s.ID {
+				// links.json names a renamed scheme by its upstream id
+				// (id-migrations.json), here as in every lookup of a
+				// scheme's link (the check of D022-D093 v2).
+				if src.migrate(l.ID) != s.ID {
 					continue
 				}
 				under, labels := src.printedCQs(e)
@@ -728,7 +731,7 @@ func mapsNoFormula(src *Sources, scheme, printedUnder, label string) bool {
 		}
 		for _, l := range e.Links {
 			for _, r := range l.CQMap {
-				if l.ID == scheme && r.CQ == label && len(r.Walton) == 0 {
+				if src.migrate(l.ID) == scheme && r.CQ == label && len(r.Walton) == 0 {
 					return true
 				}
 			}
@@ -943,7 +946,7 @@ func questionTargets(p *Proposal, src *Sources, s Scheme, q, named string) ([]Fo
 				}
 				for _, l := range e.Links {
 					for _, r := range l.CQMap {
-						if l.ID == s.ID && r.CQ == label {
+						if src.migrate(l.ID) == s.ID && r.CQ == label {
 							out = append(out, r.Walton...)
 						}
 					}
@@ -1003,7 +1006,7 @@ func linkedEntries(src *Sources, id string) []string {
 	var out []string
 	for _, e := range src.Links {
 		for _, l := range e.Links {
-			if l.ID == id {
+			if src.migrate(l.ID) == id {
 				out = append(out, e.Number)
 				if e.SharesCQs != nil {
 					out = append(out, *e.SharesCQs)
@@ -1195,12 +1198,20 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 				for _, fl := range fls {
 					fs = append(fs, fmt.Sprintf("`%s` (%s)", fl.Formula, fl.Locus))
 				}
-				if len(fs) == 0 {
-					fs = []string{"no formula"}
-				}
-				fmt.Fprintf(&b, "  - %s: %s", label, strings.Join(fs, ", "))
-				if note = strings.Join(strings.Fields(note), " "); note != "" {
-					fmt.Fprintf(&b, "; %s", note)
+				note = strings.Join(strings.Fields(note), " ")
+				switch {
+				case len(fs) > 0:
+					fmt.Fprintf(&b, "  - %s: %s", label, strings.Join(fs, ", "))
+					if note != "" {
+						fmt.Fprintf(&b, "; %s", note)
+					}
+				case strings.Contains(note, "no formula"):
+					// The note says so itself (the check of D022-D093 v2).
+					fmt.Fprintf(&b, "  - %s: %s", label, note)
+				case note != "":
+					fmt.Fprintf(&b, "  - %s: no formula; %s", label, note)
+				default:
+					fmt.Fprintf(&b, "  - %s: no formula", label)
 				}
 				b.WriteString("\n")
 			}
