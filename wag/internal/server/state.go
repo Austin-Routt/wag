@@ -36,6 +36,9 @@ type State struct {
 	Verdicts  []Verdict     `json:"verdicts,omitempty"`
 	Pending   *PendingState `json:"pending,omitempty"`
 	Rejection string        `json:"last_rejection,omitempty"`
+	// Profile is the game's profile (D094 (b)) as play has left it; absent
+	// in a game made before step C5.2.
+	Profile *game.Profile `json:"profile,omitempty"`
 
 	Statements map[string]*StmtState `json:"statements"`
 	Arguments  map[string]*ArgState  `json:"arguments"`
@@ -274,7 +277,7 @@ func (s *Session) buildState() *State {
 	st := &State{
 		ID: s.ID, Version: s.Version, Title: s.Title, Source: s.Source,
 		Round: gs.CurrentTurn, Active: gs.ActivePlayer().ID, ActiveAI: s.Seats[gs.ActivePlayerIdx].aiKind(),
-		Claim: gs.Claim, Over: gs.Terminated, Rejection: gs.LastRejection,
+		Claim: gs.Claim, Over: gs.Terminated, Rejection: gs.LastRejection, Profile: gs.Profile,
 		Statements: map[string]*StmtState{}, Arguments: map[string]*ArgState{},
 		Roots: []string{}, Questions: []QuestionState{}, Log: []LogEntry{},
 	}

@@ -74,6 +74,8 @@ func main() {
 	answerWithin := flag.Int("answer-within", 0, "a question about your argument left unanswered for this many of your turns loses")
 	objective := flag.String("objective", "", "points or claim (default: the mode's)")
 	claim := flag.String("claim", "", "the central claim of a debate, as a statement such as should_be_performed(carbon_tax)")
+	caseFile := flag.String("case", "", "a case record (format wag-case/1): the game's profile, its agent and the actions argued about (D094 (b))")
+	agent := flag.String("agent", "", "the game's agent, who decides (without --case; default "+game.DefaultAgent+")")
 	standard := flag.String("standard", "", "proof standard of the claim: PE, CCE or BRD")
 	concede := flag.Bool("concede", false, "a debater who passes while the verdict is against them concedes")
 	undercutBonus := flag.Float64("undercut-bonus", 15, "flat points for an undercut that defeats its target")
@@ -194,6 +196,34 @@ func main() {
 			os.Exit(1)
 		}
 		cfg.ClaimStandard = std
+	}
+	// Every game has a profile (D094 (b)): the case record's, or the default
+	// with the agent given.
+	switch {
+	case *caseFile != "" && *agent != "":
+		fmt.Fprintln(os.Stderr, "Error: give --case or --agent, not both")
+		os.Exit(1)
+	case *caseFile != "":
+		b, err := os.ReadFile(*caseFile)
+		if err == nil {
+			cfg.Profile, err = game.ProfileFromCase(b)
+		}
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	default:
+		cfg.Profile = game.DefaultProfile()
+		if a := strings.TrimSpace(*agent); a != "" {
+			cfg.Profile.Agent = a
+			cfg.Profile.Actors = []game.ProfileActor{{ID: a}}
+		}
+	}
+	if cfg.Claim != "" {
+		if err := cfg.Profile.CheckClaim(cfg.Claim); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 	}
 	if msg := checkConfig(cfg); msg != "" {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", msg)

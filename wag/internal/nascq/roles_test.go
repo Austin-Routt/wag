@@ -1,6 +1,7 @@
 package nascq
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 )
@@ -36,6 +37,9 @@ const rolesQuestionsJSON = `{
   "CQ:wf": {"name": "Finding Out First Question", "semantic_type": "causality", "refuse_other": true,
     "question_template_en": "Should finding out whether {A} brings about {G} come first?",
     "caes_mapping": {"positive_answer_type": "support", "negative_answer_type": "undercutter", "target": "argument"}},
+  "CQ:slight": {"name": "Too Slight Question", "semantic_type": "value",
+    "question_template_en": "Is {G} too slight to count?",
+    "caes_mapping": {"positive_answer_type": "support", "negative_answer_type": "undercutter", "target": "argument"}},
   "CQ:likelihood": {"name": "Likelihood Question", "semantic_type": "causality",
     "question_template_en": "Is it likely?",
     "caes_mapping": {"positive_answer_type": "support", "negative_answer_type": "undermining", "target": "premise"}}
@@ -45,6 +49,7 @@ const rolesEdgesJSON = `{
   "ask_edges": [
     {"cq": "CQ:wf", "scheme": "AS:bridge_good", "locus": "exception", "pattern": "worth_finding_out_first({A},{G})"},
     {"cq": "CQ:likelihood", "scheme": "AS:cons", "locus": "premise", "pattern": "brings_about({A},{G})"},
+    {"cq": "CQ:slight", "scheme": "AS:cons", "locus": "exception", "pattern": "too_slight({A},{G})"},
     {"cq": "CQ:likelihood", "scheme": "AS:cons_modal", "locus": "premise", "pattern": "may_bring_about({A},{G})"}
   ],
   "backup_edges": [
@@ -66,14 +71,24 @@ func (rolesGraph) PremiseMatching(argID, pattern string) string {
 }
 func (rolesGraph) PremiseIDs(argID string) []string { return nil }
 func (rolesGraph) ExceptionMatching(argID, pattern string) string {
-	if argID != "b1" {
+	if argID != "b1" && argID != "c1" {
 		return ""
 	}
 	return strings.NewReplacer("{A}", "tax", "{G}", "g").Replace(pattern)
 }
 func (rolesGraph) ArgumentConclusion(argID string) string { return "should_be_performed(tax)" }
 func (rolesGraph) Statement(stmtID string) StatementInfo {
-	return StatementInfo{Exists: true, Premise: true, Opposite: "¬" + stmtID}
+	info := StatementInfo{Exists: true, Premise: true, Opposite: "¬" + stmtID}
+	if rest, ok := strings.CutPrefix(stmtID, "¬"); ok {
+		info.Opposite = rest
+	}
+	switch stmtID {
+	case "worth_finding_out_first(tax,g)":
+		info.ExceptionOf = []string{"b1"}
+	case "too_slight(tax,g)":
+		info.ExceptionOf = []string{"c1"}
+	}
+	return info
 }
 func (rolesGraph) Fits(schemeID, stmtID string, given map[string]string) (map[string]string, error) {
 	return map[string]string{}, nil
@@ -163,6 +178,29 @@ func TestQuestionRefusesOther(t *testing.T) {
 		VariableBindings: map[string]string{"P1": "rarely"}}, g); err != nil {
 		t.Errorf("Other at a question that does not refuse it: %v", err)
 	}
+	// The exception argued by a move about it, or against its negation, is
+	// refused with Other too; arguing against the exception is not.
+	for _, a := range []ProposedAction{
+		{Type: "support", SchemeID: OtherSchemeID, TargetStmtID: "worth_finding_out_first(tax,g)", VariableBindings: map[string]string{"P1": "it could be found out"}},
+		{Type: "attack", SchemeID: OtherSchemeID, TargetStmtID: "¬worth_finding_out_first(tax,g)", VariableBindings: map[string]string{"P1": "it could be found out"}},
+	} {
+		if _, err := n.Validate(a, g); err == nil || !strings.Contains(err.Error(), `S5: worth_finding_out_first(tax,g) is the exception CQ "CQ:wf" asks about`) {
+			t.Errorf("%s with Other: %v", a.Type, err)
+		}
+	}
+	if _, err := n.Validate(ProposedAction{Type: "attack", SchemeID: OtherSchemeID, TargetStmtID: "worth_finding_out_first(tax,g)",
+		VariableBindings: map[string]string{"P1": "there is no time to find out"}}, g); err != nil {
+		t.Errorf("Other against the exception: %v", err)
+	}
+	if _, err := n.Validate(ProposedAction{Type: "support", SchemeID: "AS:expert", TargetStmtID: "worth_finding_out_first(tax,g)",
+		VariableBindings: map[string]string{"W": "dr_smith"}}, g); err != nil {
+		t.Errorf("a source for the exception, about the statement: %v", err)
+	}
+	// An exception whose question does not refuse Other is argued with it.
+	if _, err := n.Validate(ProposedAction{Type: "support", SchemeID: OtherSchemeID, TargetStmtID: "too_slight(tax,g)",
+		VariableBindings: map[string]string{"P1": "few would notice"}}, g); err != nil {
+		t.Errorf("Other at an exception whose question takes it: %v", err)
+	}
 }
 
 // A modal variant weighs as its categorical counterpart, a bridge as its
@@ -228,6 +266,8 @@ func TestLintRoles(t *testing.T) {
 		{"bridge without entry premise", func(n *NASCQ) { n.Schemes["AS:bridge_good"].EntryPremise = "" }, "a bridge names its entry premise"},
 		{"entry premise on a modal", func(n *NASCQ) { n.Schemes["AS:cons_modal"].EntryPremise = "x({A})" }, "entry_premise is for a bridge"},
 		{"entry premise names a stranger", func(n *NASCQ) { n.Schemes["AS:bridge_good"].EntryPremise = "may_be_worth_performing({A},{H})" }, `names "H"`},
+		{"distinct names one variable twice", func(n *NASCQ) { n.Schemes["AS:cons"].Distinct = [][]string{{"A", "A"}} }, "is not two different variables"},
+		{"distinct names no action", func(n *NASCQ) { n.Schemes["AS:cons"].Distinct = [][]string{{"A", "G"}} }, "distinct names G, which is not an action variable"},
 	} {
 		issues := errorsOf(loadRoles(t, c.m).Lint())
 		if !strings.Contains(strings.Join(issues, "\n"), c.want) {
@@ -244,4 +284,18 @@ func errorsOf(issues []LintIssue) []string {
 		}
 	}
 	return out
+}
+
+// A declaration is an object with its id, actor and aliases (D094 (b)).
+func TestActionDeclJSON(t *testing.T) {
+	var a ProposedAction
+	if err := json.Unmarshal([]byte(`{"type":"support","declare":[{"id":"ban_meat","actor":"farmers","aliases":["meat ban"]}],"comparison":"cheaper"}`), &a); err != nil {
+		t.Fatal(err)
+	}
+	if len(a.Declare) != 1 || a.Declare[0].ID != "ban_meat" || a.Declare[0].Actor != "farmers" || a.Declare[0].Aliases[0] != "meat ban" || a.Comparison != "cheaper" {
+		t.Fatalf("%+v", a)
+	}
+	if err := json.Unmarshal([]byte(`{"declare":["ban_meat"]}`), &a); err == nil {
+		t.Error("a bare id was taken as a declaration")
+	}
 }

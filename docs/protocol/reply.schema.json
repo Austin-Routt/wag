@@ -72,7 +72,14 @@
           "type": "object", "additionalProperties": {"type": "string"}
         },
         "text": {"description": "The argument in the player's own words.", "type": "string"},
-        "evidence": {"description": "Sources, one per item.", "type": "array", "items": {"type": "string"}}
+        "evidence": {"description": "Sources, one per item.", "type": "array", "items": {"type": "string"}},
+        "declare": {
+          "description": "In a game with a profile (D094 (b)): the actions the move is the first to argue about, each with its actor.",
+          "type": "array",
+          "items": {"type": "object", "required": ["id", "actor"], "additionalProperties": false,
+                    "properties": {"id": {"type": "string"}, "actor": {"type": "string"}, "aliases": {"type": "array", "items": {"type": "string"}}}}
+        },
+        "comparison": {"description": "How a better_means alternative is better (D089).", "enum": ["surely", "sooner", "cheaper"]}
       },
       "allOf": [
         {"if": {"properties": {"type": {"const": "question"}}}, "then": {"required": ["target_arg_id", "answers_cq_id"]}},

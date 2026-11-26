@@ -319,6 +319,28 @@ func hasPremise(arg *caes.Argument, s *caes.Statement) bool {
 // exception arguments has the pattern's predicate and arity. Returns "" if
 // neither works. The exception statement need not exist yet; an attack on
 // it creates it (AnswerQuestion).
+// ExceptionOf returns the arguments, in order of their ids, whose exception
+// the statement is: those with an exception argument from it to their
+// undercutter.
+func (a *Adapter) ExceptionOf(stmtID string) []string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	var out []string
+	for _, id := range SortedKeys(a.Graph.Arguments) {
+		arg := a.Graph.Arguments[id]
+		if arg.Undercutter == nil {
+			continue
+		}
+		for _, x := range arg.Undercutter.Args {
+			if ArgumentRole(x) == RoleException && len(x.Premises) == 1 && x.Premises[0].Stmt.Id == stmtID {
+				out = append(out, id)
+				break
+			}
+		}
+	}
+	return out
+}
+
 func (a *Adapter) ExceptionMatching(argID, pattern string) string {
 	a.mu.Lock()
 	defer a.mu.Unlock()

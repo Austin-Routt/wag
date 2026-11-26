@@ -247,7 +247,7 @@ function renderSetup() {
   const s = ui.setup || (ui.setup = {
     mode: 'debate', seats: [{ name: 'Alice', kind: 'human' }, { name: 'Bob', kind: 'greedy' }],
     allow_other: true, any_premise: true, moderated: false, require_evidence: false, title: '', claim: '', standard: 'PE', context: 'everyday',
-    scoring: '', max_rounds: '', answer_within: '', target: '',
+    scoring: '', max_rounds: '', answer_within: '', target: '', agent: '', situation: '', caseText: '', caseName: '',
   });
   const modes = META.modes.map(m => `<div class="mode ${m.Name === s.mode ? 'on' : ''}" data-mode="${m.Name}"><b>${esc(m.Name)}</b><span class="small muted">${esc(m.Description)}</span></div>`).join('');
   const seats = s.seats.map((x, i) => `<div class="seat">
@@ -281,6 +281,14 @@ function renderSetup() {
             <div><label>Scoring</label><select id="o_scoring"><option value="">mode's</option><option value="move" ${s.scoring === 'move' ? 'selected' : ''}>once per move</option><option value="live" ${s.scoring === 'live' ? 'selected' : ''}>live</option></select></div>
           </div>
           <label>Title</label><input type="text" id="o_title" value="${esc(s.title)}" placeholder="WAG — ${esc(s.mode)}">
+          <h3>Who decides</h3>
+          <div class="grid2">
+            <div><label>The agent who decides</label><input type="text" id="o_agent" value="${esc(s.agent)}" placeholder="decider" ${s.caseText ? 'disabled' : ''}></div>
+            <div><label>The situation compared</label><input type="text" id="o_situation" value="${esc(s.situation)}" placeholder="the present one" ${s.caseText ? 'disabled' : ''}></div>
+          </div>
+          <label>Or a case record (wag-case/1): its agent, actions and situation</label><input type="file" id="o_case" accept=".json,application/json">
+          ${s.caseName ? `<p class="small">Case record: <b>${esc(s.caseName)}</b> <button class="small" id="o_nocase">Remove</button></p>` : ''}
+          <p class="small muted">A recommendation (“A should be done”) is addressed to the agent: the actions argued about are the agent's, and a move that first names an action declares it.</p>
         </div>
       </div>
       <p><button class="primary" id="start">Start the game</button></p>
@@ -350,11 +358,17 @@ function renderSetup() {
     } catch (err) { toast(err.message, 7000); }
   };
   $('#addseat').onclick = () => { s.seats.push({ name: `Player${s.seats.length + 1}`, kind: 'human' }); renderSetup(); };
+  $('#o_case').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    s.caseText = await f.text(); s.caseName = f.name; keepForm(); renderSetup();
+  };
+  const nocase = $('#o_nocase'); if (nocase) nocase.onclick = () => { s.caseText = ''; s.caseName = ''; keepForm(); renderSetup(); };
   $('#start').onclick = async () => {
     const num = id => { const v = $(id).value.trim(); return v === '' ? undefined : +v; };
     s.allow_other = $('#o_other').checked; s.any_premise = $('#o_anyp').checked; s.moderated = $('#o_mod').checked; s.require_evidence = $('#o_ev').checked;
     s.claim = $('#o_claim').value; s.standard = $('#o_std').value; s.title = $('#o_title').value;
     s.max_rounds = $('#o_rounds').value; s.answer_within = $('#o_within').value; s.scoring = $('#o_scoring').value;
+    s.agent = $('#o_agent').value; s.situation = $('#o_situation').value;
     const known = (META.contexts || []).find(c => c.id === s.context && !c.local);
     const req = {
       title: s.title, mode: s.mode, seats: s.seats, allow_other: s.allow_other, any_premise: s.any_premise, moderated: s.moderated,
@@ -362,6 +376,15 @@ function renderSetup() {
       require_evidence: s.require_evidence, claim: s.claim, standard: s.standard, scoring: s.scoring || undefined,
       max_rounds: num('#o_rounds'), answer_within: num('#o_within'),
     };
+    // The game's profile (D094 (b)): the case record's, or the agent and
+    // situation typed here; neither, the server's default.
+    try {
+      if (s.caseText) req.case = JSON.parse(s.caseText);
+      else if (s.agent.trim() || s.situation.trim()) {
+        const agent = s.agent.trim() || 'decider';
+        req.profile = { agent, actors: [{ id: agent }], situation: s.situation.trim() || 'the present one' };
+      }
+    } catch (e) { return toast('The case record is not JSON: ' + e.message); }
     try { const st = await api('/api/games', req); ui.gameId = st.id; G = null; setState(st); ui.moderator = s.moderated; render(); }
     catch (e) { toast(e.message); }
   };
@@ -770,6 +793,7 @@ function renderSide() {
   if (G.over) parts.push(outcomePanel());
   if (G.pending) parts.push(pendingPanel());
   if (!G.over && !G.inspect) parts.push('<div class="panel" id="composer"></div>');
+  if (G.profile) parts.push(profilePanel());
   if (G.questions && G.questions.length) parts.push(`<div class="panel"><h2>Open questions</h2><ul class="small">${G.questions.map(q => `<li><b>${esc(q.asker)}</b> asks <b>${esc(q.owner)}</b> about <button class="link" data-goarg="${esc(q.target)}">${esc(q.target)}</button>: ${esc(q.question)}${q.turns_left ? ` <span class="req">(${q.turns_left} turn(s) left)</span>` : ''}</li>`).join('')}</ul></div>`);
   if (ui.view === 'board') parts.push(`<div class="panel"><h2>History</h2><div class="log"><ol>${G.log.map(l => `<li class="${l.accepted ? '' : 'rej'}"><span class="r">${l.round}.</span> ${esc(l.text)}${l.deltas && Object.keys(l.deltas).length ? ' <span class="muted">(' + Object.entries(l.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ') + ')</span>' : ''}${l.nl ? `<div class="muted small">“${esc(short(l.nl, 160))}”</div>` : ''}</li>`).join('') || '<li class="muted">No moves yet.</li>'}</ol></div></div>`);
   side.innerHTML = parts.join('');
@@ -779,6 +803,37 @@ function renderSide() {
   if (G.pending) wirePending();
   if (!G.over && !G.inspect) renderComposer();
   const log = $('.log', side); if (log) log.scrollTop = log.scrollHeight;
+}
+
+// profilePanel shows who decides and the actions argued about (D094 (b)).
+function profilePanel() {
+  const p = G.profile;
+  const actor = id => ((p.actors || []).find(a => a.id === id) || {});
+  const acts = (p.actions || []).map(a => `<li><span class="mono">${esc(a.id)}</span>${(a.aliases || []).length ? ' <span class="muted">(also ' + a.aliases.map(esc).join(', ') + ')</span>' : ''}${a.actor !== p.agent ? ' <span class="muted">— ' + esc(a.actor) + '\'s</span>' : ''}</li>`).join('');
+  return `<div class="panel"><h2>Who decides</h2><p class="small"><b>${esc(p.agent)}</b>${actor(p.agent).text ? ' — ' + esc(actor(p.agent).text) : ''}. The situation: ${esc(p.situation)}.</p>
+    <p class="small muted">A recommendation is the agent's: argue about the agent's actions. A move that first names an action declares it.</p>
+    ${acts ? `<ul class="small">${acts}</ul>` : '<p class="small muted">No action declared yet.</p>'}</div>`;
+}
+
+// profileNames are the names the profile knows an action by: ids and aliases.
+function profileNames() {
+  const out = new Set();
+  for (const a of ((G.profile || {}).actions || [])) { out.add(a.id); for (const x of (a.aliases || [])) out.add(x); }
+  return out;
+}
+
+// withProfile completes a move for the profile: the agent's place is the
+// game's to fill, and an action not yet declared is declared, as the agent's.
+function withProfile(move, sc) {
+  if (!move || !sc || !G.profile || sc.free) return move;
+  const known = profileNames(), declare = [];
+  for (const v of sc.variable_order || []) {
+    const t = (sc.variables[v] || {}).type, x = (move.variable_bindings || {})[v];
+    if (t === 'agent') delete move.variable_bindings[v];
+    else if (t === 'action' && x && !known.has(x) && !declare.some(d => d.id === x)) declare.push({ id: x, actor: G.profile.agent });
+  }
+  if (declare.length) move.declare = declare;
+  return move;
 }
 
 function inspectPanel() {
@@ -959,11 +1014,18 @@ function varInputs(sc, c, answerVar, fixedText) {
     if (!answerVar) h += `<label>Conclusion</label><input type="text" data-var="C" value="${esc(c.vars.C || '')}" placeholder="What follows" list="stmtlist">`;
     return h + stmtDatalist();
   }
-  return sc.variable_order.filter(v => v !== answerVar).map(v => {
+  const known = profileNames();
+  const inputs = sc.variable_order.filter(v => v !== answerVar).map(v => {
     const spec = sc.variables[v];
     if (fixedText[v]) return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" disabled value="${esc(fixedText[v])}" title="The statement fixes it">`;
-    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}">`;
+    if (G.profile && spec.type === 'agent') return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" disabled value="${esc(G.profile.agent)}" title="The game's agent (who decides)">`;
+    const list = G.profile && spec.type === 'action' ? ' list="actionlist"' : '';
+    const fresh = list && c.vars[v] && !known.has(c.vars[v]) ? `<span class="small muted">A new action of ${esc(G.profile.agent)}: the move declares it.</span>` : '';
+    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}"${list}>${fresh}`;
   }).join('');
+  const actions = G.profile ? `<datalist id="actionlist">${(G.profile.actions || []).filter(a => a.actor === G.profile.agent).map(a => `<option value="${esc(a.id)}">`).join('')}</datalist>` : '';
+  const cmp = sc.comparison ? `<label>How is the alternative better?</label><select data-cmp="1">${['', 'surely', 'sooner', 'cheaper'].map(x => `<option value="${x}" ${c.comparison === x ? 'selected' : ''}>${x ? { surely: 'more surely', sooner: 'sooner', cheaper: 'at lower cost' }[x] : 'choose'}</option>`).join('')}</select>` : '';
+  return inputs + actions + cmp;
 }
 function stmtDatalist() {
   return `<datalist id="stmtlist">${Object.values(G.statements).filter(s => !s.id.startsWith('undercut(')).slice(0, 300).map(s => `<option value="${esc(s.id.startsWith('text_') ? s.text : s.id)}">${esc(short(s.text, 80))}</option>`).join('')}</datalist>`;
@@ -1008,7 +1070,7 @@ function evidenceInput(sc, c) {
 
 function buildArgue(c) {
   if (!c.scheme) return null;
-  return { type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
+  return withProfile({ type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme]);
 }
 
 // stmtOptions fetches (once per game version) the moves about a statement.
@@ -1064,7 +1126,7 @@ function buildStmt(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys((o && o.fixed) || {})) delete vars[v];
-  return { type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
+  return withProfile({ type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme]);
 }
 
 // moveOptions fetches (once per game version) the critical questions the
@@ -1144,7 +1206,7 @@ function buildTargeted(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys(fixedOf(o, c.kind, c.scheme) || {})) delete vars[v];
-  return { type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) };
+  return withProfile({ type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), comparison: c.comparison || undefined }, SCHEME[c.scheme]);
 }
 
 function wireComposer(body, c, build) {
@@ -1154,6 +1216,7 @@ function wireComposer(body, c, build) {
   const why = $('#why', body); if (why) why.oninput = () => { c.why = why.value; };
   const ev = $('#ev', body); if (ev) ev.oninput = () => { c.evidence = ev.value; schedulePreview(c, build); };
   body.querySelectorAll('[data-var]').forEach(inp => inp.oninput = () => { c.vars[inp.dataset.var] = inp.value; schedulePreview(c, build); });
+  const cmp = body.querySelector('[data-cmp]'); if (cmp) cmp.onchange = () => { c.comparison = cmp.value; schedulePreview(c, build); };
   const addp = $('#addp', body); if (addp) addp.onclick = () => { c.nP++; renderComposer(); };
   $('#play1', body).onclick = () => { const a = build(); if (a) submit(a); };
   schedulePreview(c, build, 0);

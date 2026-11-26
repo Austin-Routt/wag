@@ -50,6 +50,14 @@ type VariableSpec struct {
 	Example     string `json:"example_en,omitempty"` // what a player might type
 }
 
+// Variable types the game's profile reads (decision D094 (b)): an agent
+// place, which the game binds to the profile's agent, and an action, bound
+// to an action the profile declares.
+const (
+	VarAgent  = "agent"
+	VarAction = "action"
+)
+
 // ASNode represents an Argumentation Scheme node in the NASCQ graph.
 //
 // It carries two kinds of information:
@@ -102,8 +110,8 @@ type ASNode struct {
 	// question whose formula it concludes; RoleModal for a modal variant,
 	// whose conclusion a bridge takes to the recommendation; RoleBridge for a
 	// bridge, offered for or against the recommendation it concludes, whose
-	// EntryPremise the move does not presume: a modal argument supports it,
-	// in the same move or later (D008).
+	// EntryPremise the move does not presume: a modal argument, a move of its
+	// own made before or after, supports it (D008).
 	Role string `json:"role,omitempty"`
 	// WeighsAs is the game scheme whose weight a modal variant or a bridge
 	// takes (D094 (g): a modal variant weighs as its categorical counterpart,
@@ -114,6 +122,14 @@ type ASNode struct {
 	// {Var} placeholders: the modal conclusion it carries
 	// (may_be_worth_performing({A},{G})).
 	EntryPremise string `json:"entry_premise,omitempty"`
+
+	// Distinct names pairs of the scheme's action variables that must be
+	// different actions, aliases included (better_means: A2 is not A; D089).
+	Distinct [][]string `json:"distinct,omitempty"`
+	// Comparison says that a move made with the scheme records how its
+	// alternative is better (better_means: more surely, sooner or at lower
+	// cost; D089).
+	Comparison bool `json:"comparison,omitempty"`
 }
 
 // The roles of a scheme in the game (ASNode.Role; decision D094 (g)).
@@ -270,6 +286,23 @@ type ProposedAction struct {
 	// Evidence lists the sources the player cites for the argument
 	// (citations or URLs).
 	Evidence []string `json:"evidence,omitempty"`
+
+	// Declare declares the actions the move is the first to argue about, each
+	// with its actor (the game's agent when none is named) and aliases
+	// (decision D094 (b)). The declarations are recorded with the move and
+	// join the game's profile when the move is accepted.
+	Declare []ActionDecl `json:"declare,omitempty"`
+	// Comparison is how the alternative of a scheme that records one is
+	// better: "surely", "sooner" or "cheaper" (D089).
+	Comparison string `json:"comparison,omitempty"`
+}
+
+// ActionDecl declares an action: its id, its actor (required: D094 (b))
+// and its aliases.
+type ActionDecl struct {
+	ID      string   `json:"id"`
+	Actor   string   `json:"actor"`
+	Aliases []string `json:"aliases,omitempty"`
 }
 
 // ValidatedAction is the output of NASCQ validation. It contains

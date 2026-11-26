@@ -272,6 +272,7 @@ type snapshot struct {
 	questions                     []OpenQuestion
 	pending                       *PendingMove
 	turnStartedAt                 time.Time
+	profile                       *Profile
 }
 
 func (gs *GameState) takeSnapshot() *snapshot {
@@ -280,7 +281,7 @@ func (gs *GameState) takeSnapshot() *snapshot {
 		roundHadMove: gs.roundHadMove, consecAllAbstain: gs.ConsecAllAbstain,
 		terminated: gs.Terminated, truncated: gs.Truncated, reason: gs.TerminationReason, rejection: gs.LastRejection,
 		claim: gs.Claim, lsr: gs.Loser, questions: append([]OpenQuestion{}, gs.Questions...), pending: gs.Pending,
-		turnStartedAt: gs.TurnStartedAt,
+		turnStartedAt: gs.TurnStartedAt, profile: gs.Profile,
 	}
 	for _, p := range gs.Players {
 		c := *p
@@ -302,4 +303,5 @@ func (gs *GameState) restoreSnapshot(s *snapshot) {
 	gs.Terminated, gs.Truncated, gs.TerminationReason, gs.LastRejection = s.terminated, s.truncated, s.reason, s.rejection
 	gs.Claim, gs.Loser, gs.Questions, gs.Pending = s.claim, s.lsr, s.questions, s.pending
 	gs.TurnStartedAt = s.turnStartedAt
+	gs.Profile = s.profile // a move replaces the profile, never changes it in place
 }

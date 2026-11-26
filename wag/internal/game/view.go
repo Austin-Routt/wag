@@ -38,6 +38,10 @@ type View struct {
 	LastRejection     string          `json:"last_rejection,omitempty"` // why the active player's last move was rejected
 	Terminated        bool            `json:"terminated"`
 	TerminationReason string          `json:"termination_reason,omitempty"`
+	// Profile is the game's profile (D094 (b)): the agent, the actions
+	// argued about with their actors and aliases, and the situation; nil in
+	// a game without one.
+	Profile *Profile `json:"profile,omitempty"`
 }
 
 // PlayerView is a player and their score.
@@ -128,6 +132,7 @@ func (gs *GameState) BuildView() *View {
 		LastRejection:     gs.LastRejection,
 		Terminated:        gs.Terminated,
 		TerminationReason: gs.TerminationReason,
+		Profile:           gs.Profile,
 	}
 	if gs.Config.Objective == ObjectiveClaim {
 		v.Objective, v.Claim = ObjectiveClaim, gs.Claim
@@ -203,6 +208,7 @@ func (gs *GameState) BuildView() *View {
 	}
 
 	for _, a := range gs.BuildObservation().AvailableActions {
+		a.Fixed = gs.agentFixed(a)
 		vars := map[string]nascq.VariableSpec{}
 		for k, spec := range a.Variables {
 			if !a.Bound(k) {

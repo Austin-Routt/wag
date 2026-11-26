@@ -271,6 +271,7 @@ func play(ctx context.Context, args []string) error {
 	swap := fs.Bool("swap", false, "swap the sides every other game (the seat names stay Pro and Con)")
 	mode := fs.String("mode", "debate", "the game mode")
 	claim := fs.String("claim", "", "the claim, as a statement (e.g. should_be_performed(tax_meat)); without it, Pro's first argument states it")
+	caseFile := fs.String("case", "", "a case record (format wag-case/1, e.g. docs/kialo-batch2/case.json): the games' profile, their agent and actions (D094 (b)); without it, the default profile")
 	title := fs.String("title", "", "the game's title (the topic, for the players)")
 	context_ := fs.String("context", "", "a context preset (its scheme weights)")
 	standard := fs.String("standard", "", "the claim's proof standard: PE, CCE or BRD")
@@ -283,6 +284,14 @@ func play(ctx context.Context, args []string) error {
 	_ = fs.Parse(args)
 	if *pro == "" || *con == "" || *out == "" {
 		return fmt.Errorf("play needs --pro, --con and --out")
+	}
+	var caseRecord json.RawMessage
+	if *caseFile != "" {
+		b, err := os.ReadFile(*caseFile)
+		if err != nil {
+			return err
+		}
+		caseRecord = b
 	}
 	ps, err := llm.ProfilesFrom(*file, *specs)
 	if err != nil {
@@ -349,7 +358,7 @@ func play(ctx context.Context, args []string) error {
 		}
 		r := *rounds
 		req := server.NewGameRequest{Title: *title, Mode: *mode, Seats: []server.Seat{sp, sc}, Claim: *claim, Standard: *standard,
-			Context: *context_, MaxRounds: &r, AllowOther: true, Seed: *seed + int64(n)}
+			Context: *context_, MaxRounds: &r, AllowOther: true, Seed: *seed + int64(n), Case: caseRecord}
 		var st stateView
 		if err := call(ts.URL, "POST", "/api/games", req, &st); err != nil {
 			return err

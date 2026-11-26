@@ -110,10 +110,21 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	}
 
 	// ---------------------------------------------------------------
-	// Phase 2: NASCQ structural validation
+	// Phase 2: the profile's rules (D094 (b)), then NASCQ structural
+	// validation: the move's declarations (P1), the agent bound to an
+	// agent place (P2) and an alias read as its action before NASCQ's
+	// rules; every action the move binds, its own or fixed by its target
+	// (P1, P3, P4), after them.
 	// ---------------------------------------------------------------
+	action, prof, err := gs.beforeValidation(action)
+	if err != nil {
+		return gs.rejectInvalid(player, action, err.Error()), nil
+	}
 	validated, err := gs.NASCQ.Validate(action, gs.bridge)
 	if err != nil {
+		return gs.rejectInvalid(player, action, err.Error()), nil
+	}
+	if err := gs.afterValidation(validated, prof); err != nil {
 		return gs.rejectInvalid(player, action, err.Error()), nil
 	}
 	if validated.Type == "question" && gs.raised(validated.TargetArgID, validated.AnswersCQID, validated.LocusStmtID) {
@@ -217,6 +228,11 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 			return &TurnResult{Accepted: false, Error: fmt.Sprintf("adapter error: %v", err)}, nil
 		}
 		gs.Claim = claim
+	}
+
+	// The move is accepted: the actions it declared join the profile.
+	if prof != nil {
+		gs.Profile = prof
 	}
 
 	// ---------------------------------------------------------------
@@ -436,8 +452,8 @@ func (gs *GameState) applyAction(
 			arg.Metadata = make(caes.Metadata)
 		}
 		arg.Metadata["nascq_scheme_id"] = va.SchemeID
-		// A bridge's entry premise is not presumed: a modal argument supports
-		// it, in the same move or later (D008, D094 (g)).
+		// A bridge's entry premise is not presumed: a modal argument, a move
+		// of its own made before or after, supports it (D008, D094 (g)).
 		entry := ""
 		if s := gs.NASCQ.GetScheme(va.SchemeID); s != nil && s.Role == nascq.RoleBridge && s.EntryPremise != "" {
 			entry = gs.Adapter.PremiseMatching(argID, s.EntryPremise)

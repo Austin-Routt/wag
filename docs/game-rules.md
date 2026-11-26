@@ -197,12 +197,52 @@ a rule of the dialogue, not a change of who proves an exception:
 - **What may answer.** A scheme on the question's backup edges, a
   thesis-independent scheme (they back every question), or Other, unless the
   question refuses Other (D095 (3)): then only its typed answers may, and a
-  well-made Other is refused too (S5). An answer scheme (one that concludes
-  the formula of the question it answers, D094 (g)) is offered only as an
-  answer, on its backup edges, never as a move of its own (S1).
+  well-made Other is refused too (S5), whether it answers the question or
+  argues the exception as a move about the statement (or against its
+  negation). An answer scheme (one that concludes the formula of the
+  question it answers, D094 (g)) is offered only as an answer, on its backup
+  edges, never as a move of its own (S1).
 
 This formalizes the game's behaviour since October 2026; step C5.2 changes
 none of it, so no golden game moves.
+
+**The profile** (D094 (b); D089, D091, D092, D063). A game made since
+step C5.2 has a profile: the agent who decides, the actors, the actions
+argued about (each with its one actor and its aliases), and the situation
+the alternatives are compared in. It comes from a case record (`--case`,
+the new-game form, `"case"` in `POST /api/games`), or the agent and the
+situation are given when the game is created; otherwise it is the default,
+an agent called `decider`. The board shows it under *Who decides*. Its
+rules come before and after NASCQ's (S0 to S9):
+
+- **P1.** A variable of type action is bound to a declared action, by its
+  id or an alias, compared as the board writes names (`tax meat`, `Tax-Meat`
+  and `tax_meat` are one action); an alias is read as its action. A move
+  that first argues about an action declares it, with its actor:
+  `"declare": [{"id": "ban_meat", "actor": "governments", "aliases": []}]`.
+  The declaration is recorded with the move and joins the profile only if
+  the move is accepted. A declaration without an actor, of a name already
+  declared, or with an actor the profile does not know is refused. The
+  values a move's target fixes are checked too.
+- **P2.** A variable of type agent (practical reasoning's P, `better_means`'
+  P) is the agent: the game binds it, the board shows it as fixed, and a
+  move that binds it to anyone else is refused.
+- **P3.** The actions argued are the agent's (their actor, aliases
+  included): a recommendation names no agent but the one addressed (D063),
+  so a P that does not perform A is refused, and so is any other scheme's
+  move about another actor's action.
+- **P4.** A `better_means` answer's alternative A2 is another of the agent's
+  actions, not A and not one of A's aliases; the move records how it is
+  better (`"comparison": "surely"`, `"sooner"` or `"cheaper"`; D089) and is
+  refused without it. Its P, G and A are the answered exception's (S9), so
+  its goal premise is the answered argument's.
+
+P1 (the declarations) and P2 are checked before NASCQ's rules, P1 (the
+values) and P3 and P4 after them. The situation is shown and recorded, not
+checked move by move (D089). A game made before step C5.2 has no profile
+and plays without these rules, so its record replays as it was played; so
+do the reference games. Computer players argue about the agent's actions,
+and declare the new ones they name.
 
 ## 3. Scoring
 

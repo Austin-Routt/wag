@@ -2,6 +2,7 @@ package game
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
@@ -11,12 +12,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// A bridge's entry premise is not presumed: a modal argument supports it, in
-// the same move or later (D008, D094 (g)). Its other premise is presumed as
-// any move's is; the bridge and its modal variant weigh as the categorical
-// counterpart, with no multiplier. The two schemes are walton.yml's, added to
-// the shipped data with roles of their own for the test.
-func TestBridgeEntryPremiseIsNotPresumed(t *testing.T) {
+// bridgeGame is a game on the shipped data with walton.yml's modal variant of
+// positive consequences and its bridge added, with their roles; refuse adds
+// the bridge's question at its exception, which refuses Other (D095 (3)),
+// and turns Other on.
+func bridgeGame(t *testing.T, refuse bool) (*GameState, *carneades.Adapter, *nascq.NASCQ) {
+	t.Helper()
 	core := data.CoreYAML
 	for k, tmpl := range map[string]string{
 		"may_bring_about/2":         "The action %s may bring about %s.",
@@ -54,13 +55,46 @@ func TestBridgeEntryPremiseIsNotPresumed(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	n, err := nascq.LoadFromBytes(schemeBytes, data.CQsJSON, data.EdgesJSON)
+	cqs, edges := data.CQsJSON, data.EdgesJSON
+	if refuse {
+		var q map[string]json.RawMessage
+		if err := json.Unmarshal(cqs, &q); err != nil {
+			t.Fatal(err)
+		}
+		q["CQ:worth_finding_out_first"] = json.RawMessage(`{"name":"Finding Out First Question","semantic_type":"causality","refuse_other":true,
+			"question_template_en":"Should finding out whether {A} brings about {G} come first?",
+			"caes_mapping":{"positive_answer_type":"support","negative_answer_type":"undercutter","target":"argument"}}`)
+		var e map[string][]json.RawMessage
+		if err := json.Unmarshal(edges, &e); err != nil {
+			t.Fatal(err)
+		}
+		e["ask_edges"] = append(e["ask_edges"], json.RawMessage(
+			`{"cq":"CQ:worth_finding_out_first","scheme":"AS:bridge_possible_good","locus":"exception","pattern":"worth_finding_out_first({A},{G})"}`))
+		if cqs, err = json.Marshal(q); err != nil {
+			t.Fatal(err)
+		}
+		if edges, err = json.Marshal(e); err != nil {
+			t.Fatal(err)
+		}
+	}
+	n, err := nascq.LoadFromBytes(schemeBytes, cqs, edges)
 	if err != nil {
 		t.Fatal(err)
 	}
 	cfg := DefaultGameConfig()
 	cfg.MaxTurns = 0
-	gs := NewGame(cfg, ad, n, []string{"Alice", "Bob"})
+	cfg.AllowOther = refuse
+	return NewGame(cfg, ad, n, []string{"Alice", "Bob"}), ad, n
+}
+
+// A bridge's entry premise is not presumed: a modal argument supports it,
+// before or after (D008, D094 (g)). Its other premise is presumed as any
+// move's is; the bridge and its modal variant weigh as the categorical
+// counterpart, with no multiplier. The two schemes are walton.yml's, added to
+// the shipped data with roles of their own for the test.
+func TestBridgeEntryPremiseIsNotPresumed(t *testing.T) {
+	gs, ad, n := bridgeGame(t, false)
+	cfg := gs.Config
 	label := func(id string) caes.Label {
 		if s := gs.Adapter.Graph.Statements[id]; s != nil {
 			return s.Label
@@ -120,4 +154,24 @@ func TestBridgeEntryPremiseIsNotPresumed(t *testing.T) {
 			t.Errorf("the consequence argument's premise %s is not presumed", id)
 		}
 	}
+}
+
+// Other cannot establish the bridges' exception by a move about it either
+// (D095 (3)): the refusal is the question's, however the exception is
+// argued. Arguing against the exception with Other stays open.
+func TestOtherRefusedAtTheBridgesException(t *testing.T) {
+	gs, _, _ := bridgeGame(t, true)
+	play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:bridge_possible_good",
+		VariableBindings: map[string]string{"A": "carbon_tax", "G": "cleaner_air"}})
+	const exc = "worth_finding_out_first(carbon_tax,cleaner_air)"
+	if gs.Adapter.Graph.Statements[exc] == nil {
+		t.Fatalf("the bridge's exception is not on the board")
+	}
+	r, err := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: nascq.OtherSchemeID, TargetStmtID: exc,
+		VariableBindings: map[string]string{"P1": "it could be found out"}})
+	if err != nil || r.Accepted || !strings.Contains(gs.LastRejection, `S5: `+exc+` is the exception CQ "CQ:worth_finding_out_first" asks about`) {
+		t.Fatalf("Other for the exception: %v %+v %q", err, r, gs.LastRejection)
+	}
+	play(t, gs, nascq.ProposedAction{Type: "attack", SchemeID: nascq.OtherSchemeID, TargetStmtID: exc,
+		VariableBindings: map[string]string{"P1": "the decision cannot wait"}})
 }

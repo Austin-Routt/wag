@@ -101,6 +101,8 @@ The move:
 | `target_stmt_id` | The statement argued for or against. It names nothing else. |
 | `variable_bindings` | The scheme's parts as short phrases. Leave out the answer part and the parts the statement fixes. |
 | `text`, `evidence` | The argument in the player's words, and its sources. Both are shown to the other player. |
+| `declare` | In a game with a profile (D094 (b)): the actions the move is the first to argue about, each an object with its `id`, its `actor` (required) and its `aliases`. The prompt's *Who decides* names the agent and the actions declared so far. |
+| `comparison` | For a scheme that records one (`better_means`, D089): how the alternative is better, `surely`, `sooner` or `cheaper`. |
 
 **What the parser accepts.**
 - **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error. A bracket in prose, such as a citation `[s3]`, a footnote `[1]` or a link, is not JSON: an array counts only when it is empty or starts with an object, an array or a string.

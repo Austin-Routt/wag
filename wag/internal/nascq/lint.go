@@ -124,6 +124,17 @@ func (n *NASCQ) Lint() []LintIssue {
 			add(false, id, "no critical question is asked of it: its arguments, attacks included, can never be challenged")
 		}
 		n.lintRole(id, s, add)
+		for _, pair := range s.Distinct {
+			if len(pair) != 2 || pair[0] == pair[1] {
+				add(true, id, "distinct %v is not two different variables", pair)
+				continue
+			}
+			for _, v := range pair {
+				if spec, ok := s.Variables[v]; !ok || spec.Type != VarAction {
+					add(true, id, "distinct names %s, which is not an action variable of the scheme", v)
+				}
+			}
+		}
 	}
 	for _, cid := range SortedStringKeys(byCarneades) {
 		if ids := byCarneades[cid]; len(ids) > 1 {

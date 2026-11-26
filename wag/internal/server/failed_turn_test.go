@@ -219,7 +219,8 @@ func TestAReplyThatCannotBePlayedIsSaved(t *testing.T) {
 		t.Fatalf("new game: %d", code)
 	}
 	pr := map[string]any{"type": "support", "scheme_id": "AS:practical_reasoning", "text": "Tax carbon to cut emissions.",
-		"variable_bindings": map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"}}
+		"variable_bindings": map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"},
+		"declare":           []map[string]string{{"id": "carbon tax", "actor": "decider"}}}
 	if mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]any{"action": pr}); mr.Result["pending"] != true || mr.State.SavedTo == "" {
 		t.Fatalf("the move is not held, or not saved: %v %q", mr.Result, mr.State.SavedTo)
 	}

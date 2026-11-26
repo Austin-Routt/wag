@@ -105,6 +105,9 @@ func (ss *Session) Prompt() string {
 		w("- Scores are live: they count what stands now, so points for an argument go when it falls.\n")
 	}
 	w("\n")
+	if p := gs.Profile; p != nil {
+		ss.promptProfile(w, p)
+	}
 	if gs.Claim != "" {
 		c := st.Statements[gs.Claim]
 		w("## The claim\n%s %s It is now %s. %s\n\n", ref(gs.Claim), gs.Say(gs.Claim), strings.ToUpper(c.Label), c.Explain)
@@ -382,6 +385,34 @@ func (ss *Session) promptStatements(w func(string, ...interface{}), st *State, s
 	}
 }
 
+// promptProfile says who deliberates and about which actions (D094 (b)).
+func (ss *Session) promptProfile(w func(string, ...interface{}), p *game.Profile) {
+	w("## Who decides\nThe agent who decides is %s", p.Agent)
+	for _, a := range p.Actors {
+		if a.ID == p.Agent && a.Text != "" {
+			w(" (%s)", a.Text)
+		}
+	}
+	w(". A recommendation (\"A should be done\") is addressed to the agent, so the actions you argue about are the agent's; the game fills in the agent's place (P) itself. The alternatives are compared in this situation: %s.\n", p.Situation)
+	var mine []string
+	for _, a := range p.Actions {
+		if a.Actor != p.Agent {
+			continue
+		}
+		d := a.ID
+		if len(a.Aliases) > 0 {
+			d += " (also called " + strings.Join(a.Aliases, ", ") + ")"
+		}
+		mine = append(mine, d)
+	}
+	if len(mine) > 0 {
+		w("The agent's actions so far: %s.", strings.Join(mine, "; "))
+	} else {
+		w("No action has been argued about yet.")
+	}
+	w(` To argue about another action of the agent, declare it in the move that first names it, with its actor: "declare": [{"id": "the_action", "actor": %q, "aliases": []}].`+"\n\n", p.Agent)
+}
+
 // promptSchemes lists the schemes: parts, sentences, assumptions,
 // exceptions, sources, semantic type and the cue words that signal them.
 func (ss *Session) promptSchemes(w func(string, ...interface{})) {
@@ -399,6 +430,9 @@ func (ss *Session) promptSchemes(w func(string, ...interface{})) {
 		}
 		if sc.ThesisIndependent {
 			w(", can back an answer to any question")
+		}
+		if sc.Comparison {
+			w(`; the move says how its alternative is better: "comparison": "surely", "sooner" or "cheaper"`)
 		}
 		w("\n  %s\n  parts:", sc.DescriptionEN)
 		vars := game.VariableOrder(nascq.ActionTemplate{Variables: sc.Variables, PremiseTemplatesEN: sc.PremiseTemplatesEN,
@@ -873,6 +907,60 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 		default:
 			return a, true, fmt.Errorf("%q must be text or a list of texts (citations or URLs), not %s", k, jsonKind(ev))
 		}
+	}
+	// The actions the move declares (D094 (b)): a list of objects, each
+	// with its id, its actor and its aliases if any.
+	switch d := m["declare"].(type) {
+	case nil:
+	case []interface{}:
+		for _, x := range d {
+			switch v := x.(type) {
+			case map[string]interface{}:
+				decl := nascq.ActionDecl{}
+				for k, f := range v {
+					switch k {
+					case "id", "actor":
+						t, ok := f.(string)
+						if !ok {
+							return a, true, fmt.Errorf(`"declare": an action's %q must be text, not %s`, k, jsonKind(f))
+						}
+						if k == "id" {
+							decl.ID = strings.TrimSpace(t)
+						} else {
+							decl.Actor = strings.TrimSpace(t)
+						}
+					case "aliases":
+						list, ok := f.([]interface{})
+						if f != nil && !ok {
+							return a, true, fmt.Errorf(`"declare": an action's aliases must be a list of texts, not %s`, jsonKind(f))
+						}
+						for _, y := range list {
+							t, ok := y.(string)
+							if !ok {
+								return a, true, fmt.Errorf(`"declare": each alias must be text, not %s`, jsonKind(y))
+							}
+							if t = strings.TrimSpace(t); t != "" {
+								decl.Aliases = append(decl.Aliases, t)
+							}
+						}
+					default:
+						return a, true, fmt.Errorf(`"declare": an action has an id, an actor and aliases, not %q`, k)
+					}
+				}
+				a.Declare = append(a.Declare, decl)
+			default:
+				return a, true, fmt.Errorf(`"declare": each action must be an object with its id and actor, not %s`, jsonKind(x))
+			}
+		}
+	default:
+		return a, true, fmt.Errorf(`"declare" must be a list of actions, not %s`, jsonKind(d))
+	}
+	switch c := m["comparison"].(type) {
+	case nil:
+	case string:
+		a.Comparison = strings.ToLower(strings.TrimSpace(c))
+	default:
+		return a, true, fmt.Errorf(`"comparison" must be text ("surely", "sooner" or "cheaper"), not %s`, jsonKind(c))
 	}
 	if a.SchemeID != "" && !strings.HasPrefix(a.SchemeID, "AS:") {
 		a.SchemeID = "AS:" + a.SchemeID

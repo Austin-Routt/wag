@@ -100,7 +100,8 @@ func TestGameFlow(t *testing.T) {
 		t.Fatalf("new game: %+v", st)
 	}
 	pr := nascq.ProposedAction{Type: "support", SchemeID: "AS:practical_reasoning", Text: "Tax carbon to cut emissions.",
-		VariableBindings: map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"}}
+		VariableBindings: map[string]string{"A": "carbon tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"},
+		Declare:          []nascq.ActionDecl{{ID: "carbon tax", Actor: "decider"}}}
 	var p Preview
 	call(t, ts, "POST", "/api/games/"+st.ID+"/preview", map[string]interface{}{"action": pr}, &p)
 	if !p.OK || len(p.Premises) != 7 || len(p.Changes) == 0 {
@@ -477,7 +478,7 @@ func TestCustomWeights(t *testing.T) {
 		}
 	}
 	mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": map[string]interface{}{"type": "support", "scheme_id": "AS:consequences",
-		"variable_bindings": map[string]string{"A": "tax meat", "G": "cleaner rivers"}}})
+		"variable_bindings": map[string]string{"A": "tax meat", "G": "cleaner rivers"}, "declare": []map[string]string{{"id": "tax meat", "actor": "decider"}}}})
 	if mr.Result["accepted"] != true {
 		t.Fatalf("opening: %+v", mr.Result)
 	}

@@ -123,6 +123,14 @@ type vocabulary map[string][]string
 func (gs *GameState) vocabulary() vocabulary {
 	v := vocabulary{}
 	seen := map[string]bool{}
+	if gs.Profile != nil { // the agent's declared actions first (D094 (b))
+		for _, a := range gs.Profile.Actions {
+			if a.Actor == gs.Profile.Agent && !seen[nascq.VarAction+"|"+a.ID] {
+				seen[nascq.VarAction+"|"+a.ID] = true
+				v[nascq.VarAction] = append(v[nascq.VarAction], a.ID)
+			}
+		}
+	}
 	for _, m := range gs.MoveHistory {
 		sc := gs.NASCQ.GetScheme(m.Action.SchemeID)
 		if len(m.ArgIDs) == 0 || sc == nil {
@@ -208,7 +216,7 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	// In critical-question play, a question left unanswered loses: answer
 	// one.
 	if answers := dueAnswers(obs); len(answers) > 0 && obs.GameState.Config.AnswerWithin > 0 {
-		return fill(a.rng, answers[a.rng.Intn(len(answers))], obs.GameState.vocabulary())
+		return obs.GameState.forProfile(fill(a.rng, answers[a.rng.Intn(len(answers))], obs.GameState.vocabulary()))
 	}
 
 	// Randomly abstain.
@@ -236,7 +244,7 @@ func (a *RandomAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 	}
 
 	// Pick a random action template.
-	return fill(a.rng, candidates[a.rng.Intn(len(candidates))], obs.GameState.vocabulary())
+	return obs.GameState.forProfile(fill(a.rng, candidates[a.rng.Intn(len(candidates))], obs.GameState.vocabulary()))
 }
 
 // fill makes an action of the template with random variable bindings, drawn
@@ -374,7 +382,7 @@ func (a *GreedyAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
 			trials = 1 // a question: nothing to vary
 		}
 		for trial := 0; trial < trials; trial++ {
-			try(fill(a.rng, tmpl, words))
+			try(gs.forProfile(fill(a.rng, tmpl, words)))
 		}
 	}
 	try(nascq.ProposedAction{Type: "abstain"})

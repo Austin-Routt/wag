@@ -66,7 +66,7 @@ func TestPromptAndReply(t *testing.T) {
 			t.Errorf("the prompt lacks %q", want)
 		}
 	}
-	reply := `My opening. {"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"tax meat","S1":"meat is cheap","S2":"less meat is eaten","G":"lower emissions","V":"a stable climate"},"text":"Tax meat to cut emissions."}`
+	reply := `My opening. {"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"tax meat","S1":"meat is cheap","S2":"less meat is eaten","G":"lower emissions","V":"a stable climate"},"declare":[{"id":"tax meat","actor":"decider"}],"text":"Tax meat to cut emissions."}`
 	var mr struct {
 		Result map[string]interface{} `json:"result"`
 		State  State                  `json:"state"`
@@ -103,7 +103,7 @@ func TestModelSeat(t *testing.T) {
 			t.Errorf("the retry does not carry the conversation: %+v", req.Messages)
 		}
 		in := 900
-		return &llm.Response{Text: `Fine. {"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"cleaner rivers"}}`,
+		return &llm.Response{Text: `Fine. {"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"cleaner rivers"},"declare":[{"id":"tax meat","actor":"decider"}]}`,
 			Model: "mock-1", FinishReason: "stop", Usage: llm.Usage{InputTokens: &in}}, nil
 	}
 	srv.AddModel(llm.WithProvider(llm.Profile{Name: "test-model", Provider: "mock", Params: llm.Params{Model: "mock-1"}}, mock))
@@ -208,7 +208,7 @@ func TestReplyEnvelopeAndTraces(t *testing.T) {
 		call(t, ts, "POST", "/api/games/"+st.ID+"/reply", map[string]string{"reply": reply}, &mr)
 		return mr.Result
 	}
-	r := play(`{"action":{"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"tax meat","S1":"meat is cheap","S2":"less meat is eaten","G":"lower emissions","V":"a stable climate"}},"summary":"Opening."}`)
+	r := play(`{"action":{"type":"support","scheme_id":"AS:practical_reasoning","variable_bindings":{"A":"tax meat","S1":"meat is cheap","S2":"less meat is eaten","G":"lower emissions","V":"a stable climate"},"declare":[{"id":"tax meat","actor":"decider"}]},"summary":"Opening."}`)
 	if r["accepted"] != true {
 		t.Fatalf("opening: %+v", r)
 	}

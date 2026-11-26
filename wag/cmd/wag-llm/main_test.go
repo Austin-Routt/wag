@@ -16,7 +16,7 @@ func TestPlayAndReplay(t *testing.T) {
 	dir := t.TempDir()
 	prof := filepath.Join(dir, "profiles.json")
 	os.WriteFile(prof, []byte(`{"profiles":[{"name":"scripted","provider":"mock","model":"mock-1","replies":[
-		"Here is my case. {\"summary\":\"State the claim.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:consequences\",\"variable_bindings\":{\"A\":\"tax meat\",\"G\":\"lower emissions\"}}}",
+		"Here is my case. {\"summary\":\"State the claim.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:consequences\",\"variable_bindings\":{\"A\":\"tax meat\",\"G\":\"lower emissions\"},\"declare\":[{\"id\":\"tax meat\",\"actor\":\"decider\"}]}}",
 		"{\"type\":\"support\",\"scheme_id\":\"AS:nonexistent\"}",
 		"{\"summary\":\"Nothing more.\",\"action\":{\"type\":\"abstain\"}}"]}]}`), 0o644)
 	out := filepath.Join(dir, "out")

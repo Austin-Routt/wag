@@ -46,6 +46,7 @@ Each claim's entry in the report keeps what the annotation intended
 
 import argparse
 import json
+import os
 import re
 import sys
 import urllib.error
@@ -136,6 +137,8 @@ def main():
     ap.add_argument("base")
     ap.add_argument("--report")
     ap.add_argument("--export")
+    ap.add_argument("--case", help="the case record (wag-case/1) whose profile the game has: its agent, actors and "
+                    "actions (D094 (b)); default: case.json beside the items file")
     args = ap.parse_args()
     ann = {i["kialo_claim_id"]: i for i in json.load(open(args.annotations))["items"]}
     items = json.load(open(args.items))
@@ -144,9 +147,13 @@ def main():
     th = ann.get(thesis_id, {})
     claim = (primary(th).get("conclusion") or {}).get("formula") or "should_be_performed(tax_meat)"
     claim = claim.replace(" ", "")
+    # The game's profile is the case's (D094 (b)): its agent, and the actions
+    # the discussion deliberates, each with its actor and aliases.
+    case_path = args.case or os.path.join(os.path.dirname(os.path.abspath(args.items)), "case.json")
+    case = json.load(open(case_path, encoding="utf-8"))
     st = call(base, "/api/games", {"title": "Kialo 13292, annotated (batch 2)", "mode": "debate", "allow_other": True,
                                    "seats": [{"name": "Pro", "kind": "human"}, {"name": "Con", "kind": "human"}],
-                                   "claim": claim, "concede_on_pass": False, "max_rounds": 0})
+                                   "claim": claim, "concede_on_pass": False, "max_rounds": 0, "case": case})
     gid = st["id"]
     played = {}  # claim id -> {"arg": aN, "conclusion": stmt id}
     report = []

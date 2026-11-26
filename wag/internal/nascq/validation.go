@@ -66,6 +66,8 @@ type StatementInfo struct {
 	// statement is one of more than two positions of an issue (argue for
 	// one of the others instead).
 	Opposite string
+	// ExceptionOf names the arguments the statement is an exception of.
+	ExceptionOf []string
 }
 
 // attackTypes are the CAES operations an attack can perform.
@@ -334,8 +336,42 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 		}
 		va.CaesAttackType = action.AttackType
 	}
+	// A question that refuses Other (D095 (3)) refuses it however its
+	// exception is argued: an argument made with Other that concludes the
+	// exception, as a move about it (or against its negation), is refused as
+	// an answer made with Other at the question would be (S5).
+	if s := n.Schemes[action.SchemeID]; s != nil && s.Free {
+		concl := action.TargetStmtID
+		if action.Type == "attack" {
+			concl = info.Opposite
+		}
+		if concl != "" {
+			if cq := n.refusingQuestion(concl, graph); cq != "" {
+				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)",
+					concl, cq, strings.Join(n.typedBackups(cq), ", "))
+			}
+		}
+	}
 	va.ProposedAction = action
 	return va, nil
+}
+
+// refusingQuestion returns the question that refuses Other (D095 (3)) and
+// is asked at the exception stmt of an argument on the board, or "".
+func (n *NASCQ) refusingQuestion(stmt string, graph GraphQuerier) string {
+	for _, argID := range graph.Statement(stmt).ExceptionOf {
+		sid := graph.ArgumentSchemeID(argID)
+		for _, cqID := range n.askIndex[sid] {
+			cq := n.Questions[cqID]
+			if cq == nil || !cq.RefuseOther {
+				continue
+			}
+			if l := n.LocusOf(cqID, sid); l.Kind == LocusException && graph.ExceptionMatching(argID, l.Pattern) == stmt {
+				return cqID
+			}
+		}
+	}
+	return ""
 }
 
 // fit performs S9: a direct move, or a move about a statement, concludes the

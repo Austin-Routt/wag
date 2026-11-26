@@ -22,7 +22,7 @@ import (
 // whose path it left untested.
 
 var scripts = map[string][]string{
-	"scripted-a": {`{"summary":"State the claim.","action":{"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"lower emissions"}}}`,
+	"scripted-a": {`{"summary":"State the claim.","action":{"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"lower emissions"},"declare":[{"id":"tax meat","actor":"decider"}]}}`,
 		`{"summary":"Nothing more.","action":{"type":"abstain"}}`},
 	"scripted-b": {`{"summary":"Nothing to add.","action":{"type":"abstain"}}`},
 }

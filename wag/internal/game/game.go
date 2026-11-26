@@ -157,6 +157,12 @@ type GameConfig struct {
 	// the moderator: the runner and the CLI do not support it.
 	Moderated bool
 
+	// Profile is the game's profile (decision D094 (b)): its agent, the
+	// actions argued about with their actors and aliases, and the situation
+	// compared. A game made since step C5.2 has one; nil (a game made before
+	// it, or a test's) plays without the profile's rules.
+	Profile *Profile
+
 	// PresumptionWeight is the weight of the presumption that makes a move's
 	// premises hold until attacked (see carneades.AddPresumption). Any argued
 	// undermining (scheme weights are 0.55-0.70) outweighs it, and the mover
@@ -327,6 +333,11 @@ type GameState struct {
 	// can read it (it is part of the JSON View) and try again.
 	LastRejection string
 
+	// Profile is the game's profile as play has left it: the configured one
+	// with the actions the accepted moves declared (and the claim's action).
+	// nil when the game has none.
+	Profile *Profile
+
 	// Claim is the central claim of ObjectiveClaim, once set.
 	Claim string
 	// Questions are the critical questions asked without an argument
@@ -396,6 +407,9 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 		CurrentTurn: 1,
 	}
 	gs.bridge = &graphBridge{gs: gs}
+	if config.Profile != nil {
+		gs.Profile = config.Profile.withClaim(config.Claim)
+	}
 	gs.SetClock(nil)
 	if config.AllowOther {
 		n.EnableOther()
@@ -554,7 +568,8 @@ func (b *graphBridge) ArgumentConclusion(argID string) string {
 // carneades.Adapter.StatementUse).
 func (b *graphBridge) Statement(stmtID string) nascq.StatementInfo {
 	exists, premise, concluded, opposite := b.gs.Adapter.StatementUse(stmtID)
-	return nascq.StatementInfo{Exists: exists, Premise: premise, Concluded: concluded, Opposite: opposite}
+	return nascq.StatementInfo{Exists: exists, Premise: premise, Concluded: concluded, Opposite: opposite,
+		ExceptionOf: b.gs.Adapter.ExceptionOf(stmtID)}
 }
 
 // Fits returns the values a scheme's conclusion variables take to conclude

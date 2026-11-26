@@ -427,12 +427,48 @@ type NewGameRequest struct {
 	Moderated       bool               `json:"moderated"`
 	RequireEvidence bool               `json:"require_evidence"`
 	Seed            int64              `json:"seed,omitempty"`
+	// Profile is the game's profile (D094 (b)): its agent, the actions
+	// argued about with their actors and aliases, and the situation
+	// compared. Case is a case record (format wag-case/1) to make it from.
+	// A new game with neither has the default profile; the request recorded
+	// with the game holds the profile itself. A request recorded before step
+	// C5.2 has none, and its game replays without the profile's rules.
+	Profile *game.Profile   `json:"profile,omitempty"`
+	Case    json.RawMessage `json:"case,omitempty"`
+}
+
+// withProfile is the request of a new game with its profile: the case
+// record's, the one given, or the default.
+func (req NewGameRequest) withProfile() (NewGameRequest, error) {
+	if len(req.Case) > 0 {
+		if req.Profile != nil {
+			return req, fmt.Errorf("give a profile or a case record, not both")
+		}
+		p, err := game.ProfileFromCase(req.Case)
+		if err != nil {
+			return req, err
+		}
+		req.Profile, req.Case = p, nil
+	}
+	if req.Profile == nil {
+		req.Profile = game.DefaultProfile()
+	}
+	return req, nil
 }
 
 func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, error) {
 	cfg, err := game.ModeConfig(req.Mode)
 	if err != nil {
 		return cfg, err
+	}
+	if len(req.Case) > 0 {
+		return cfg, fmt.Errorf("the request's case record was not read into its profile")
+	}
+	if req.Profile != nil {
+		if err := req.Profile.Check(); err != nil {
+			return cfg, err
+		}
+		cfg.Profile = req.Profile
 	}
 	if req.Scoring != "" {
 		if req.Scoring != game.ScoringMove && req.Scoring != game.ScoringLive {
@@ -460,6 +496,11 @@ func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, err
 	}
 	if strings.TrimSpace(req.Claim) != "" {
 		cfg.Objective, cfg.Claim = game.ObjectiveClaim, strings.TrimSpace(req.Claim)
+		if cfg.Profile != nil {
+			if err := cfg.Profile.CheckClaim(cfg.Claim); err != nil {
+				return cfg, err
+			}
+		}
 	}
 	switch strings.ToUpper(req.Standard) {
 	case "", "PE":
@@ -529,6 +570,11 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 		}
 		var req NewGameRequest
 		if !readJSON(w, r, &req) {
+			return
+		}
+		req, err := req.withProfile()
+		if err != nil {
+			httpError(w, err, http.StatusBadRequest)
 			return
 		}
 		cfg, err := req.config(s.contexts)
