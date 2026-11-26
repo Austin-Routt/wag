@@ -180,6 +180,24 @@ func TestCheckFindsFaults(t *testing.T) {
 			e.CQs = append(e.CQs, CQ{ID: "walton/expert", Paraphrase: "Is W an expert?", Status: "drafted by a model, 2026-10-22",
 				Targets: []Target{{Formula: "expert(W,D)", Locus: "premise"}}})
 		}},
+		{"derived question with a bad id", "needs the id derived/<name>", func(e *Entry) {
+			e.CQs = append(e.CQs, derivedCQ("own/1"))
+		}},
+		{"derived question without its page", "names its source, chapter, page and name there", func(e *Entry) {
+			d := derivedCQ("derived/ch3-honesty")
+			d.Derived.Page = ""
+			e.CQs = append(e.CQs, d)
+		}},
+		{"derived question the game asks", "a derived question is neither the compendium's nor the game's", func(e *Entry) {
+			d := derivedCQ("derived/ch3-honesty")
+			d.Game = e.CQs[0].Game
+			e.CQs = append(e.CQs, d)
+		}},
+		{"derived/ question without its source", "says where it comes from", func(e *Entry) {
+			d := derivedCQ("derived/ch3-honesty")
+			d.Derived = nil
+			e.CQs = append(e.CQs, d)
+		}},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -213,6 +231,38 @@ func TestCheckFindsFaults(t *testing.T) {
 	errs := strings.Join(errorsOf(r), "\n")
 	if !strings.Contains(errs, "no entry for threat") || !strings.Contains(errs, "index.md: out of date") {
 		t.Errorf("a missing entry or a stale index is not reported:\n%s", errs)
+	}
+}
+
+// derivedCQ is a derived question (D007, D023) of expert opinion, well
+// made but for what a test changes.
+func derivedCQ(id string) CQ {
+	return CQ{ID: id, Paraphrase: "Is W honest?", Status: "drafted by a model, 2026-10-22",
+		Derived: &DerivedCQ{Source: "Walton, Reed and Macagno 2008", Chapter: "3", Page: "92", Name: "Honesty Question"},
+		Targets: []Target{{Formula: "untrustworthy(W)", Locus: "exception"}}}
+}
+
+// A well-made derived question passes the check and survives regeneration.
+func TestDerivedQuestion(t *testing.T) {
+	s := sources(t)
+	dir := generate(t, s)
+	e := readEntry(t, dir, "expert_opinion")
+	e.CQs = append(e.CQs, derivedCQ("derived/ch3-honesty"))
+	writeEntry(t, dir, e)
+	r, err := Check(dir, s, DefaultOptions())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, msg := range errorsOf(r) {
+		if strings.Contains(msg, "derived") {
+			t.Errorf("a well-made derived question: %s", msg)
+		}
+	}
+	if _, err := (&Generator{Src: s, Today: "2026-10-22", By: "test"}).Write(dir); err != nil {
+		t.Fatal(err)
+	}
+	if c := findCQ(readEntry(t, dir, "expert_opinion").CQs, "derived/ch3-honesty"); c == nil || c.Derived == nil || c.Derived.Page != "92" {
+		t.Errorf("regeneration lost the derived question: %+v", c)
 	}
 }
 

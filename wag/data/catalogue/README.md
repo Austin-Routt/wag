@@ -103,7 +103,7 @@ history: [{date: "2026-10-22", by: wag-cli --catalogue-gen, what: skeleton gener
 | `book` | Each compendium entry the scheme formalizes: entry number, title, pages, the heading it sits under, how closely (`exact`, `partial`; `none` for a scheme `walton.yml` lacks), and the entry its questions are printed under, if it shares a list | Work: from `links.json` |
 | `families` | Each family of `families.json` it belongs to, and the relation | Work: from `families.json` |
 | `premise_map` | Each printed premise and conclusion, by its label, and the formulas that express it | Work: from `links.json` |
-| `critical_questions` | Every question of the book's entries (id `<entry>/<label>`, from the entry the list is printed under), and every game question asked of the scheme. A game question sits on the book question that targets the same formula, or on its own (`game/<id>`). **`targets`:** the formulas the question puts in doubt, with their role. **`undercuts`:** the question attacks the inference itself. **`paraphrase`:** the question in our own words, with the scheme's variables. **`answer`:** what counts as an answer, and what each answer does. | Work, except `game`, which is source |
+| `critical_questions` | Every question of the book's entries (id `<entry>/<label>`, from the entry the list is printed under), and every game question asked of the scheme. A game question sits on the book question that targets the same formula, or on its own (`game/<id>`). A question that only `walton.yml` implies (an assumption or exception nobody asks about) is `walton/<predicate>`. A **derived question** (D007, D023) is one the book asks of the scheme elsewhere than in its compendium entry, or of a related scheme: its id is `derived/<name>`, and `derived` gives its source, chapter, page and name there; the game does not ask it. **`targets`:** the formulas the question puts in doubt, with their role. **`undercuts`:** the question attacks the inference itself. **`paraphrase`:** the question in our own words, with the scheme's variables. **`answer`:** what counts as an answer, and what each answer does. | Work, except `game`, which is source |
 | `summary` | When the scheme applies, in two sentences of our own | Work |
 | `contrasts` | "This, not X, when …" for each close relative. Generated as targets to write: the family's generic scheme (or, for the generic, every member), and the schemes the registry finds close in pattern. People add others. | Work |
 | `examples` | Two or three short claims coded in full, Kialo claims with their ids where possible, and one near miss (`near_miss: true`) | Work |
@@ -162,7 +162,8 @@ So set the status before or with any edit. An edit to a `generated` item is over
   - a contrast or `specialises` names an unknown entry;
   - a classification, dialogue type or discrepancy kind is outside the vocabulary;
   - a classification's group is not one of Walton and Macagno's groups under its heading, a source-dependent scheme is given a kind of reasoning, or a drafted classification stops short of a group;
-  - a question that neither the book nor the game asks is not named `walton/<predicate>`, or does not target that one assumption or exception.
+  - a question that neither the book nor the game asks is not named `walton/<predicate>`, or does not target that one assumption or exception, unless it is a derived question;
+  - a derived question is not named `derived/<name>`, lacks its source, chapter, page or name, or carries a book or game part.
 - **Copying:** a text of ours reproduces the book (below).
 - **The index:** `index.md` is out of date.
 - **The decision register** ([`docs/decisions.yml`](../../../docs/decisions.yml), [`docs/process.md`](../../../docs/process.md) §5):

@@ -417,7 +417,18 @@ func (c *checker) entry(e, want *Entry) {
 				c.err("%s: the id should be %s/%s", where, q.Book.Entry, q.Book.Label)
 			}
 		}
-		if q.Book == nil && q.Game == nil {
+		switch d := q.Derived; {
+		case d != nil && (q.Book != nil || q.Game != nil):
+			c.err("%s: a derived question is neither the compendium's nor the game's (the game does not ask it, D007)", where)
+		case d != nil && !strings.HasPrefix(q.ID, "derived/"):
+			c.err("%s: a derived question needs the id derived/<name>", where)
+		case d != nil && (strings.TrimSpace(d.Source) == "" || strings.TrimSpace(d.Chapter) == "" ||
+			strings.TrimSpace(d.Page) == "" || strings.TrimSpace(d.Name) == ""):
+			c.err("%s: a derived question names its source, chapter, page and name there (D007)", where)
+		case d == nil && strings.HasPrefix(q.ID, "derived/"):
+			c.err("%s: a derived/ question says where it comes from (derived: source, chapter, page, name)", where)
+		}
+		if q.Book == nil && q.Game == nil && q.Derived == nil {
 			switch {
 			case owned(q.Status):
 				c.err("%s: neither a book nor a game question", where)

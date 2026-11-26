@@ -137,12 +137,19 @@ type Target struct {
 type CQ struct {
 	// ID is "<entry>/<label>" for a book question (the entry under which it
 	// is printed), "game/<NASCQ id>" for a game question that matches no
-	// book question, or "walton/<predicate>" for a question that only
+	// book question, "walton/<predicate>" for a question that only
 	// walton.yml implies: an assumption or exception that neither the book
-	// nor the game asks about, added by whoever drafts the entry.
+	// nor the game asks about, added by whoever drafts the entry, or
+	// "derived/<name>" for a derived question (Derived).
 	ID   string  `yaml:"id"`
 	Book *BookCQ `yaml:"book,omitempty"`
 	Game *GameCQ `yaml:"game,omitempty"`
+	// Derived is the source of a derived question (decisions D007, D023): a
+	// question the book asks of this scheme elsewhere than in the
+	// compendium's entry, or of a related scheme, kept with its chapter and
+	// page so that derived is not read as invented. The game does not ask
+	// it.
+	Derived *DerivedCQ `yaml:"derived,omitempty"`
 	// Targets are the formulas the question puts in doubt. None: the
 	// question attacks the inference as a whole (Undercuts), or no formula
 	// encodes it yet.
@@ -155,6 +162,16 @@ type CQ struct {
 	// Answer says what counts as an answer, and what each answer does.
 	Answer string `yaml:"answer"`
 	Status string `yaml:"status"`
+}
+
+// DerivedCQ is where a derived question comes from: the work, its chapter
+// and page, and the question's name there. The book's wording is not
+// reproduced.
+type DerivedCQ struct {
+	Source  string `yaml:"source"`
+	Chapter string `yaml:"chapter"`
+	Page    string `yaml:"page"`
+	Name    string `yaml:"name"`
 }
 
 // BookCQ is a critical question as the compendium prints it: its entry and
