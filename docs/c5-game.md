@@ -223,7 +223,9 @@ G (D053). **7**, a negative-consequences answer at `bad_outweighs` is refused (S
 relevance is challenged in play (CQ:field, CQ:relevance), not refused. **8**, undermining
 `matters_more(H,G)` restores the target with its other questions open, and independent support stays
 in. C3's two tests: a modal argument for `should_be_performed(A)` refused (S9); a bridge with its
-premise challenged.
+premise challenged. For `finding_out_first` (proposal D095's check): an answer whose I is unbound is
+refused (S2); a condition challenged and not made out (each of its three is a premise of its own)
+restores both bridges.
 
 The independent review of 26 November (in the workspace, reviews/2026-11-26 and
 verify/r-external-2026-11-26) proposed 22 cases for D095. Ten are the cases above (its Q1-A, Q1-D,

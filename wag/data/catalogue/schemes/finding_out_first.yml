@@ -53,8 +53,8 @@ summary:
     critic bears the burden, and a tie goes against the critic. Its premises are its
     arguer''s, each challenged as any premise is; it has no question of its own (D075''s
     reasoned none). A reply that only says G could be found out is not this scheme:
-    it is coded with Other, and the game refuses it at the question (D095 (3)). Not
-    in the compendium; after Walton 1998, p. 203, and 2006, p. 85.'
+    it is coded with Other, and the game refuses it at the question from step C5.2
+    (D095 (3)). Not in the compendium; after Walton 1998, p. 203, and 2006, p. 85.'
   status: drafted by Claude Code, 2026-11-26
 contrasts:
 - scheme: positive_consequences
@@ -117,6 +117,16 @@ contrasts:
 - scheme: harm_reduction
   text: ""
   status: todo
+- scheme: ignorance
+  text: 'The argument from ignorance concludes that a claim is false because it would
+    be known if it were true and is not; in Walton''s account it is the argument of
+    the side that says further investigation is not needed (Walton 1996, p. 122).
+    This scheme argues the opposite for one possibility: that a particular investigation
+    is worth making before the possibility counts in the decision. A reply that a
+    study would settle the question answers the argument from ignorance at its exception
+    uninvestigated(S); such a reply is an argument of this scheme only when it answers
+    a bridge''s exception and makes out its three conditions.'
+  status: drafted by Claude Code, 2026-11-26
 examples:
 - text: A three-month trial in one team would show cheaply, and in time, whether productivity
     rises before the whole firm commits.
@@ -144,10 +154,9 @@ examples:
     licensing the pesticide; G = harm to bee colonies; I = a one-season field study.
     Established, the exception leaves the possible harm to bees out of the decision
     on the licence until it is found out; the licence is still decided by the other
-    arguments (the declaration). A bridge from a possible good of the same link, had
-    one been argued, would fall with it. Pressed: a challenge of worth_its_costs(I,A,G)
-    (The study would spray the pesticide near a whole region''s hives for a season:
-    it risks the very harm it is meant to measure). (proposal D095)'
+    arguments (the declaration). Pressed: a challenge of worth_its_costs(I,A,G) (The
+    study would spray the pesticide near a whole region''s hives for a season: it
+    risks the very harm it is meant to measure). (proposal D095)'
   status: drafted by Claude Code, 2026-11-26
 - text: 'Whether the new anticoagulant would interact with her heart medication can
     be checked with a blood test this afternoon, before tomorrow''s operation, at
@@ -166,10 +175,11 @@ examples:
     tax could reduce revenue (a modal argument and its bridge, D008); this answer
     would be a reply to its bridge. No claim of the batch makes it: the replies to
     13292.9 support the link (13292.12) or weigh it (13292.43). Pressed: a challenge
-    of settles_whether(I,A,G) (Denmark''s tax lasted fifteen months and taxed saturated
-    fat in every food; its records would not show what a tax on meat alone would do
-    to revenue); a challenge of done_in_time(I,A) (The budget must pass this month,
-    and the estimate would take three). (proposal D095)'
+    of settles_whether(I,A,G) (Denmark''s tax lasted fifteen months and taxed the
+    saturated fat of foods above a threshold, meat among them; its records would not
+    show what a tax on meat alone would do to revenue); a challenge of done_in_time(I,A)
+    (The budget must pass this month, and the estimate would take three). (proposal
+    D095)'
   status: drafted by Claude Code, 2026-11-26
 - text: No study has found that the pesticide harms bees, and if it did we would know
     by now, so it does not.
@@ -233,3 +243,7 @@ history:
   by: Claude Code
   what: 'after proposal D095: its summary, contrasts, answers and examples, as the
     proposal gives them'
+- date: "2026-11-26"
+  by: Claude Code
+  what: 'after the check of proposal D095 version 2: the contrast with the argument
+    from ignorance; the summary says from step C5.2; two examples corrected'

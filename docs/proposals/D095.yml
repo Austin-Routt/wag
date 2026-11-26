@@ -17,6 +17,13 @@
 # sources, quoted with their pages, are in the workspace
 # (verify/r-external-2026-11-26/QUOTES.md); this file cites author, year and
 # page.
+#
+# Version 2a, 2026-11-26, from the independent check of version 2 and its
+# application (in the workspace, verify/p-D095): the summary names the last two
+# premises, not the first two; the R11 test is said to be what it is, a test
+# that the list holds every scheme concluding an exception; two examples
+# corrected. The catalogue entry gains its contrast with the argument from
+# ignorance, which the effects named.
 
 decisions: [D095]
 title: "An answer scheme for the bridges' exception: finding out first"
@@ -38,7 +45,7 @@ summary: |-
     first").
   The investigation I is a variable of its own, so that an answer names the
   inquiry it relies on (a trial, a study, a check of the record), and each
-  condition can be challenged on its own. The first two premises keep apart
+  condition can be challenged on its own. The last two premises keep apart
   what the declaration keeps apart: done_in_time is the deadline, whether I
   ends before the decision on A must be taken; worth_its_costs is what I
   costs and risks (money, effort, a harm the investigation itself may do), so
@@ -119,7 +126,7 @@ effects:
   - "Engine tests (wag/internal/carneades), on walton.yml as changed, every argument at the same weight: the scheme's premises and conclusion pinned as this proposal gives them, with no assumption or exception; an argument of finding_out_first with its three premises proves worth_finding_out_first(A,G) and so defeats both bridges about the same A and G, offered by either side (one example per side, as D053's declaration is tested), and leaves standing a bridge about another consequence, the modal consequence arguments, and a categorical argument about the same A and G; with any one premise supported and denied at the same weight (a tie, which goes against the critic), the exception is not proved and both bridges stand."
   - "Catalogue (--catalogue-gen, then the drafted entry): one new entry, with no question of its own (each premise is challenged, as for the other answer schemes; D075's reasoned none), its summary, the contrasts with the argument from ignorance and with the harm bridge, and the examples below; the generator adds a discrepancy that the book prints no such scheme, and F15's other entries a contrast row to write. The two bridges' entries name finding_out_first as the answer to walton/worth_finding_out_first, where they now say it is coded with Other (OC15), and keep Other for a bare claim of knowability."
   - "The register: D095 (3)'s scheme applied (the date and where); D053's note on how WAG applies the declaration names the answer scheme. The candidates registry does not change: C008's open questions stand; near miss 6 codes a precautionary claim as today's rules do, with the harm bridge, and names C008's third question."
-  - "The batch-2 gold: no claim targets or concludes the exception (the only bridges are 13292.9's, .121's and .174's harm bridges, and no reply argues their exception), so no item changes; the gold pins its inputs (R16), and walton.yml and positions.json change, so it is re-pinned (validate.py --repin) once its checks pass, both copies. validate.py's ANSWER_SCHEMES gains finding_out_first, so that R11 (an answer scheme's own argument is at an exception, unless it is a fragment backing a premise) holds it too, with a planted-defect test. The batch-2 README gains its dated paragraph on this change, and its figure for the annotator's prompt is measured again."
+  - "The batch-2 gold: no claim targets or concludes the exception (the only bridges are 13292.9's, .121's and .174's harm bridges, and no reply argues their exception), so no item changes; the gold pins its inputs (R16), and walton.yml and positions.json change, so it is re-pinned (validate.py --repin) once its checks pass, both copies. validate.py's ANSWER_SCHEMES gains finding_out_first, so that R11 (an answer scheme's own argument is at an exception, unless it is a fragment backing a premise) holds it too, with a test that every scheme of walton.yml concluding an exception is in the list (no claim of the gold argues the exception, so no instance can be planted from it). The batch-2 README gains its dated paragraph on this change, and its figure for the annotator's prompt is measured again."
   - "Guidelines (§3.1 and OC15; both copies) and rule cases. §3.1: worth_finding_out_first is no longer an exception no scheme concludes: finding_out_first concludes it. OC15: a reply that makes out the conditions, an investigation it names or plainly implies that would settle the link in time and at a cost and risk worth bearing, is coded with finding_out_first, unless a source-based scheme fits (expert opinion, position to know), as an undercutter of the bridge it answers, at the bridge's exception; each premise explicit, inferred or supplied as usual, supplied only where the reply implies it, so that a bare claim of knowability is not made into one. A reply that only says G could be found out stays coded with Other, concluding the exception: the game refuses it at that question from step C5.2 (D095 (3)), and until then it stands in play until the bridge's defender answers it. The defender's answer: to a reply coded with finding_out_first, a premise attack on the premise it denies (too late: done_in_time; would not settle it: settles_whether; costs or risks too great: worth_its_costs); to a bare reply coded with Other, a rebuttal of its conclusion, as now. Rule cases: OC15-c, which makes out all three conditions, is recoded with finding_out_first; OC15-f, the defender's reply that the trial would end after the budget vote, becomes a premise attack on done_in_time; OC15-g, a pilot whose cost the decision cannot bear, stays coded with Other. §3.1's old wording that no scheme concludes any of the new exceptions, and the bridges' catalogue answers that code the exception with Other, join the retired wording (rule-cases.yml), so that a test catches them if they survive."
   - "Docs: the counts and lists of walton.yml's schemes say 130, with the scheme named where the lists name the schemes added (README.md's scheme sources and catalogue rows, whose discrepancies become 217; docs/plan.md's walton.yml row; docs/dialogue-types.md; wag/data/catalogue/README.md; docs/scheme-registry/README.md, whose rows name nineteen added schemes and the edit counts, and first-family.md, whose 38 schemes become 39, with a row for the scheme among the slice's answer schemes); docs/c5-game.md's status and order of work."
   - "The game, at step C5.2: finding_out_first joins as an answer scheme, offered only as an answer (D094 (g)), with a backup edge to the question at worth_finding_out_first(A,G) of both bridges, and admitted with no question of its own (TestCoreDataLoading allows D075's reasoned none); the game refuses Other at that question, well made or not (D095 (3)); item F's cases: the answer accepted with its burden; refused at another target or for another G; a premise challenged and the bridges restored; Other refused; a source-based answer challenged in play through its own questions (Q3-C); an answer whose I is unbound refused (S2); the decision not suspended (Q3-E); the question asked alone defeating nothing (Q3-F)."
@@ -186,7 +193,7 @@ examples:
       - question: CQ:premise_acceptable
         target: "worth_its_costs(I,A,G)"
         text: "The study would spray the pesticide near a whole region's hives for a season: it risks the very harm it is meant to measure."
-    note: "Established, the exception leaves the possible harm to bees out of the decision on the licence until it is found out; the licence is still decided by the other arguments (the declaration). A bridge from a possible good of the same link, had one been argued, would fall with it."
+    note: "Established, the exception leaves the possible harm to bees out of the decision on the licence until it is found out; the licence is still decided by the other arguments (the declaration)."
   # --- arguments: the scheme as a reason of its own ----------------------------
   - scheme: finding_out_first
     title: A blood test before the operation
@@ -213,7 +220,7 @@ examples:
     attacks:
       - question: CQ:premise_acceptable
         target: "settles_whether(I,A,G)"
-        text: "Denmark's tax lasted fifteen months and taxed saturated fat in every food; its records would not show what a tax on meat alone would do to revenue."
+        text: "Denmark's tax lasted fifteen months and taxed the saturated fat of foods above a threshold, meat among them; its records would not show what a tax on meat alone would do to revenue."
       - question: CQ:premise_acceptable
         target: "done_in_time(I,A)"
         text: "The budget must pass this month, and the estimate would take three."

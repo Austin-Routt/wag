@@ -91,7 +91,10 @@ func TestFindingOutFirstDefeatsBothBridgesPerSide(t *testing.T) {
 // that comes too late, one that would not settle the question, one not worth
 // its cost). Here the condition is denied by the bridges' side, at the same
 // weight as the answer's reason for it: under the preponderance of evidence a
-// tie leaves the condition out, and with it the exception.
+// tie leaves the condition out, and with it the exception. MakeIssue puts the
+// condition and its denial in one issue, as a premise attack in the game does
+// (opposingPosition, answers.go); without the issue the two would be unrelated
+// statements and the condition In on its own argument.
 func TestFindingOutFirstNeedsEachCondition(t *testing.T) {
 	for i, cond := range fofPremises {
 		a := c3(t)

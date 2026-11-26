@@ -1238,7 +1238,7 @@ decisions:
       a categorical argument about the same link challenges its
       brings_about(A,G) (33/CQ1 or CQ2; guidelines OC15). A bare claim of
       knowability is coded as arguing the exception without making it out
-      (OC15), and the game's CQ answer contract (item F, with step C5) is to
+      (OC15), and the game's CQ answer contract (item F, step C5.2) is to
       refuse it as an answer, the burden of production not met (Walton and
       Gordon 2015, p. 525; "Types of Dialogue and Burdens of Proof", p. 5);
       until then the engine lets it stand, as any argument, until it is
@@ -2702,7 +2702,7 @@ decisions:
       profile. (4) D093 (e), (f) and (g) are confirmed as applied, with tests
       for a wrong actor, action, goal and context, unrelated consequences, and
       surviving independent support.
-    recorded: "docs/c5-game.md (version 4); (3)'s answer scheme applied 2026-11-26: docs/proposals/D095.yml (version 2, after an independent review), walton.yml through edits.py (FINDING_OUT_D095), families.json, positions.json, the catalogue entries, docs/kialo-batch2 (guidelines OC15, rule cases OC15-c and OC15-f, validate.py's R11); the rest at step C5.2"
+    recorded: "docs/c5-game.md (version 4); (3)'s answer scheme applied 2026-11-26: docs/proposals/D095.yml (version 2, after an independent review; 2a after the check of its application), walton.yml through edits.py (FINDING_OUT_D095), families.json, positions.json, the catalogue entries, docs/kialo-batch2 (guidelines §3.1 and OC15, rule cases OC15-c, OC15-f and OC15-g, two retired wordings, validate.py's R11); the rest at step C5.2"
 
 # --- Decided ------------------------------------------------------------------
 
