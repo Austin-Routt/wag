@@ -4,8 +4,10 @@
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
 (proposal D095, applied 2026-11-26): C5.2 is next. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
-2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; this is version 4, with
-D095 as decided and item F's cases from the independent review of 26 November. Its implementation
+2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
+decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
+of work, its data and the choices the decisions leave to it; this is version 5a, after version 5's
+independent check, with steps 1 to 3 done. Its implementation
 choices, within the decisions it applies, are D094. Three choices departed from the wording of
 decided texts, so they were the owner's: D095. Step C5 of [first-family.md](first-family.md): the game's own data takes what proposals
 D004-D075 (C2), D008-D074 (C3) and D022-D093 (C4) gave `walton.yml`, through the generator that
@@ -154,49 +156,198 @@ other way (step 6):
 
 ## C5.2: the slice, through the catalogue
 
-One change of data identity for all of it (D094 a).
+One change of data identity for all of it (D094 a). Version 5 of this plan gave C5.2's order of
+work, the data at the switch, and the choices the decisions leave to the implementation; version
+5a corrects it after its independent check (in the workspace, verify/c5/c52: 5 errors, 15 warnings
+and 13 notes, each verified). The choices no decision makes are recorded as a refinement of D094,
+the developer's under the owner's mandate as D094 is; three questions go to the owner, and the plan
+keeps the decided text until they are answered.
 
-- **Formulas.** The four game schemes come from `walton.yml`, their overrides removed. The new
-  predicates take `walton.yml`'s templates, with negations written; the game's other templates
-  stay, each difference recorded (D094 f).
-- **The profile** (D089; D094 b): every game has one: the agent, the actions it deliberates with
-  their actors and aliases (D091, D092), and the situation compared. It comes from a case record
-  when one is supplied (`to_wag.py` supplies the batch's case.json), and is otherwise asked when the
-  game is created, with a default the board shows. A journaled move declares an action with its
-  actor and aliases; a move about an undeclared action is refused, so no agent passes unchecked
-  (D063). The game binds P; it refuses a P that does not perform A, aliases included, and the
-  refusals of C2's paragraph; a `better_means` answer records its comparison. GameConfig, export,
-  load and the trace carry the profile; /api/games, app.js, the model players' prompt and
-  `to_wag.py` follow.
-- **Questions:** C2's paragraph and the entries' two routes, as D095 (1) decides: CQ:side_effect at
-  the conclusion of practical reasoning and positive consequences (the rebuttal route),
-  CQ:bad_outweighs at `bad_outweighs(A,G)` of both and CQ:good_outweighs at `good_outweighs(A,G)` of
-  negative consequences, the weighing route, backed by C003's answer schemes; the generator refuses
-  an id that answer schemes back asked at another formula or kind of locus; D006's text for CQ:other_means; questions for `too_slight` and each side's
-  bearer exception (D065); the modal variants' and the bridges' questions from their entries (new
-  ids where their paraphrases differ, as the modal 33/CQ1's does from CQ:likelihood's), with the
-  question for `worth_finding_out_first`; D007's derived questions in the catalogue;
-  `caes_mapping`'s effect derived from each edge's locus and shown per edge. Sign's three backup
-  edges keep their meaning or are decided with their must-pass answers.
-- **D074 and D053's refusal:** as D095 (2) and (3) decide. D074 is Other's relevance question with
-  the direct undercutter of the particular inference; no consequence scheme asks it. At
-  `worth_finding_out_first` the game accepts the answer scheme and the source-based schemes that
-  assert the exception, and refuses Other, well made or not. CQ:relevance's text in code does not
-  change.
-- **New kinds of scheme** (D094 g): the answer schemes, the modal variants and the bridges join with
-  a role. An answer scheme is offered only as an answer, and weighs as the schemes whose exception it
-  concludes; a modal variant weighs as its categorical counterpart; a bridge is offered as a move for
-  or against a claim `should_be_performed(A)`, its first premise supported by a modal argument then
-  or later, at its modal variant's weight, with no multiplier (D008). TestCoreDataLoading allows a
-  scheme with no question where D075's reasoned none applies.
-- **D003's question protocol** written as the game's rule, formalizing today's behaviour where it
-  exists; any change of behaviour is listed with the golden games it moves.
-- **The gold:** validate.py's question table follows the new edges; the labels it then refuses are
-  recoded by a script, and the gold re-pinned.
-- **The replays:** the 33 golden games stay on the frozen pre-C5 data and keep their digests; a new
-  set is made on the new data (D094 h). The batch-2 replay plays by instance and reports the claims
-  C2 to C4 left unplayed that now play. Old traces with model players replay with the pre-C5.2
-  build and `--data` with the frozen files.
+### Order of work
+
+As C5.1: the code first, with the data's bytes unchanged and each commit gated on both toolchains;
+then the switch, one commit that changes the data's identity once; then the review.
+
+1. **Roles** (D094 (g); done: 5e6ca71). A game scheme's NASCQ record names its role: an argument
+   (no role, as today), an answer, a modal variant or a bridge. An answer scheme is offered only on
+   its backup edges (S1 refuses it as a move of its own or about a statement) and weighs as the
+   scheme of the argument it answers. A modal variant names the scheme it weighs as (`weighs_as`, its
+   categorical counterpart) and a bridge names its modal variant, so both weigh as the counterpart,
+   with no multiplier (D008); a context that sets the counterpart's weight sets theirs, in play and
+   under another audience's weights (ClaimUnder). A bridge names its entry premise (`entry_premise`,
+   the modal conclusion it carries), which the move does not presume: a modal argument, a move of
+   its own made before or after, supports it. A question record can refuse Other (`refuse_other`,
+   D095 (3)): S5 refuses an answer made with it, well made or not, before S9, and the question does
+   not offer it; Other's move about the exception, or against its negation, is refused too
+   (920adca). Lint refuses a role the game cannot play. Tests build their own small data in memory.
+2. **The game's profile** (D094 (b); done: 920adca; below).
+3. **D003's question protocol** written in game-rules.md as the game's rule (done: 5e6ca71): who may
+   ask what, what a question does while it is pending, who answers it and how, when it is closed,
+   and what may answer. It formalizes today's behaviour; no golden game moves.
+4. **The generator's rules** (`wag-cli --game-gen`), each refusing a catalogue that breaks it, with
+   a test that plants the fault (written and tested: 3373558; applied with the switch, since today's
+   data breaks them): (a) one id is one question: every scheme that asks it asks it at the same
+   formula and kind of locus (D095 (1) for a backed id; for every id by the refinement of D094); (b)
+   its record's `caes_mapping` is derived from that locus (premise: undermining; exception or
+   argument: undercutter; conclusion: rebuttal), so the effect shown is the edge's, and
+   `target_premise_pattern` goes (the edges carry the pattern); (c) a game question's text is its
+   entry's paraphrase with the scheme's variables braced, generated, not written: a paraphrase of a
+   game question uses a variable's letter only for the variable (so "A grave consequence" becomes
+   "One grave consequence"); (d) a role scheme's record agrees with its entry: an answer scheme
+   concludes the formula of each question it backs, a modal variant's and a bridge's `weighs_as` is a
+   game scheme, a bridge's `entry_premise` is one of its premises; (e) the templates of the predicates
+   the game plays are walton.yml's (D094 (f)), which becomes an input of the generator, or a
+   difference is recorded once, with its reason, in `game/`; new predicates get their negation
+   templates written, as core.yml has one for every predicate.
+5. **The switch** (the data below): the catalogue's game parts, `game/questions.yml`,
+   `game/order.yml` and `core.yml.in` changed, and the generated files with them, in one commit: the
+   data's fingerprint changes once. In the same commit: the gold recoded where validate.py then
+   refuses it, validate.py checking each challenge's `wag_cq` against the edges as it checks a role's
+   `cq` (four records carry CQ:side_effect at `bad_outweighs(...)` and become CQ:bad_outweighs), and
+   re-pinned, both copies; the frozen copy of the pre-C5.2 files (`wag/data/frozen/<fingerprint>`),
+   as C5.1 did; the docs say how an old game or trace replays.
+6. **The replays.** The 33 golden games stay on the frozen pre-C5 data and keep their digests (D094
+   (h)): they are computer games without a profile, so the profile's rules do not apply to them, as
+   to any record made before step 2. A new golden set is made on the new data, with a profile,
+   covering each new route. `to_wag.py` plays the batch-2 gold by instance (a claim's secondary
+   instances, a bridge with its modal argument), with the case's profile (done for the profile:
+   the replay is unchanged, claim for claim); the batch-2 report is made again and names the claims
+   C2 to C4 left unplayed that now play. Old traces with model players replay with the pre-C5.2 build
+   and `--data` with the frozen files; their prompts carry no profile section.
+7. **Item F** (below), with the review's eleven new cases and the check's two, each outcome written
+   first and paired with a planted defect.
+8. **Gates on both toolchains, an independent review, CI, and the docs** (README, prototype,
+   game-rules, protocol.md, llm.md, the catalogue README).
+
+### The game's profile
+
+D094 (b), applying D089, D091 and D092; D063 says why no agent may pass unchecked. "The game's
+profile" is this record; "WAG's first profile" in D095 (3) is the rule set it belongs to.
+
+- **What it holds:** the agent (an actor), the actors (id and text), the actions the game
+  deliberates (id, actor and aliases), and the situation the alternatives are compared in (a text,
+  D089: the current one, fixed for the game). `GameConfig` carries it; the request recorded with the
+  game holds it, so an export, a trace, a loaded game and a replay carry it with the moves.
+- **Where it comes from:** a case record (`--case case.json` for wag-cli and wag-llm, the board's
+  new-game form, `"case"` in `POST /api/games`; `to_wag.py` sends the batch's): its actors and
+  actions, its agent the thesis action's actor, its situation the default context's text. Otherwise
+  the agent and situation given when the game is created, or else the default the board shows: the
+  agent `decider` ("the one who decides whether to take the actions argued about"), no action yet,
+  the situation "the present one". A game's claim that recommends an action declares it as the
+  agent's when the game is made; one that recommends another actor's declared action is refused.
+- **Declaring an action:** a move that first argues about an action declares it (`declare`: its id,
+  its actor, which every declaration names, D094 (b), and its aliases), recorded with the move and
+  joining the profile only if the move is accepted. The board declares a new action as the agent's,
+  saying so; computer players declare the agent's actions they name; a model player's prompt lists
+  the declared actions and the field.
+- **The rules** (game-rules.md), P1 (the declarations) and P2 before NASCQ's S0 to S9, the rest after
+  them, each refusal saying which: **P1** an action variable is bound to a declared action, by id or
+  alias, names compared as the board writes them (an alias reads as its action), the values a target
+  fixes included; **P2** an agent variable is the agent, bound by the game; **P3** the actions argued
+  are the agent's (D063: a recommendation names no agent but the one addressed; the refinement of
+  D094 records this reading, which goes beyond D094 (b)'s "a P that does not perform A", and the
+  owner may narrow it: question 2); **P4** a `better_means` answer's A2 is another of the agent's
+  actions, not A or its alias, and the move records its comparison (surely, sooner or at lower cost;
+  D089). Its P, G and A are the answered exception's (S9 unifies them).
+- A game made before step 2 has no profile and plays without these rules. The situation is shown and
+  recorded, not checked move by move (D089).
+
+### The data at the switch
+
+Formulas: walton.yml's, the four game schemes' overrides removed (an entry keeps only its meta in
+`game.core`). New predicates take walton.yml's templates, with negation templates written; the
+game's other templates stay, each difference recorded once (rule (e)); a template no scheme uses,
+the schemes core.yml keeps for old games included, leaves core.yml (old games replay with the
+frozen files).
+
+| Game scheme | walton.yml | Role, weighs as | Notes |
+|---|---|---|---|
+| AS:practical_reasoning | practical_reasoning1 | argument | gains P (type agent) and `goal_of_agent(P,G)`; `possible_bring_about(P,A)` replaces `possible(A)` (D088); the scoped exceptions (D004, D089), `bad_outweighs(A,G)` replacing the side effect (D070, D091) |
+| AS:practical_reasoning_goal | practical_reasoning2 | argument | the same, with `possible_goal(G)` |
+| AS:consequences | positive_consequences | argument | gains `bad_outweighs`, `too_slight`, `gain_discounted_by_bearer` |
+| AS:negative_consequences | negative_consequences | argument | gains `good_outweighs`, `too_slight`, `harm_discounted_by_bearer` |
+| AS:consequences_modal (new) | positive_consequences_modal | modal, AS:consequences | concludes `may_be_worth_performing(A,G)` |
+| AS:negative_consequences_modal (new) | negative_consequences_modal | modal, AS:negative_consequences | concludes `may_be_unwise_to_perform(A,G)` |
+| AS:bridge_possible_good (new) | bridge_from_possible_good | bridge, AS:consequences_modal | entry premise `may_be_worth_performing({A},{G})` |
+| AS:bridge_possible_harm (new) | bridge_from_possible_harm | bridge, AS:negative_consequences_modal | entry premise `may_be_unwise_to_perform({A},{G})` |
+| AS:bad_outweighs_good (new) | bad_outweighs_good | answer | C003, D064 |
+| AS:good_outweighs_bad (new) | good_outweighs_bad | answer | C003, D064 |
+| AS:better_means (new) | better_means | answer | D089; P4 (`distinct` A2 and A; `comparison`) |
+| AS:finding_out_first (new) | finding_out_first | answer | D095 (3) |
+
+A modal variant's or bridge's record carries the base weight of the scheme it weighs as (what is
+shown before a move is the weight that applies); an answer scheme's carries 0.5, never used, since
+it weighs as the argument it answers. Types: P `agent`; A and A2 `action`; better_means' G `goal`
+(the practical reasoning's); H and the consequence schemes' G `event`; I `entity`. The three
+answer schemes without a question of their own record D075's reasoned none in their entries, as
+finding_out_first's does, and TestCoreDataLoading allows it.
+
+The other five game schemes (values, sign, expert opinion, position to know, analogy) keep their
+formulas; D009's listed changes reach them: their question texts (below), the values scheme
+described in the book's direction (a value favours a goal), and sign's premise keeping "generally".
+
+| Question | Asked of | Locus and formula | Backed by |
+|---|---|---|---|
+| CQ:other_goals | practical reasoning | exception `incompatible_goal({P},{G})` (D004) | — |
+| CQ:conflicting_goals | practical_reasoning_goal | exception `incompatible_goal({P},{G})` | — |
+| CQ:other_means | both practical reasonings | exception `realize_more_effectively({P},{G},{A})`, D006's text | AS:better_means |
+| CQ:best_means | both | exception `bring_about_more_effectively({P},{S2},{A})` | — |
+| CQ:possibility | both | premise `possible_bring_about({P},{A})` (D088) | AS:sign |
+| CQ:goal_possible | practical_reasoning_goal | premise `possible_goal({G})` | AS:sign |
+| CQ:intervening_actions | practical_reasoning_goal | exception `intervening_actions({A},{G})` | — |
+| CQ:side_effect | both practical reasonings (game-only questions), AS:consequences | conclusion (the rebuttal route, D095 (1)) | AS:sign |
+| CQ:bad_outweighs (new) | both practical reasonings (22.4/CQ7, 22.1/CQ5), AS:consequences, AS:consequences_modal | exception `bad_outweighs({A},{G})` | AS:bad_outweighs_good |
+| CQ:opposite_consequences | AS:negative_consequences | conclusion | AS:consequences |
+| CQ:good_outweighs (new) | AS:negative_consequences, AS:negative_consequences_modal | exception `good_outweighs({A},{G})` | AS:good_outweighs_bad |
+| CQ:too_slight (new) | both consequence schemes and both modal variants | exception `too_slight({A},{G})` (D065, D053) | — |
+| CQ:gain_discounted (new) | AS:consequences, AS:consequences_modal | exception `gain_discounted_by_bearer({A},{G})` | — |
+| CQ:harm_discounted (new) | AS:negative_consequences, AS:negative_consequences_modal | exception `harm_discounted_by_bearer({A},{G})` | — |
+| CQ:likelihood | both consequence schemes | premise `brings_about({A},{G})` (33/CQ1) | — |
+| CQ:evidence | both consequence schemes | premise `brings_about({A},{G})` (33/CQ2; D009) | — |
+| CQ:modal_likelihood (new) | both modal variants | premise `may_bring_about({A},{G})` (33/CQ1's modal paraphrase) | — |
+| CQ:modal_evidence (new) | both modal variants | premise `may_bring_about({A},{G})` (33/CQ2's modal paraphrase) | — |
+| CQ:worth_finding_out_first (new) | both bridges | exception `worth_finding_out_first({A},{G})`; refuses Other | AS:finding_out_first |
+| CQ:correlation (new) | AS:sign | premise `strong_correlation({A},{B})` (sign's own likelihood text, D009) | — |
+| CQ:honesty (new) | AS:position_to_know | exception `dishonest({W})` (split from CQ:trustworthiness, which expert opinion keeps at `untrustworthy({W})`) | — |
+
+The other questions keep their ids and edges, with their entries' paraphrases as texts. CQ:field
+and CQ:opinion stay shared by expert opinion and position to know, each with one paraphrase
+written for both. `matters_to_decision(A,G)`, the bridges' other premise, is challenged as any
+premise is (CQ:premise_acceptable). D074 is Other's relevance question with the direct undercutter:
+no data. D007's derived questions go into the practical reasoning entries as derived questions
+(ch. 3's Other-Goals question, which asks which goal comes first, not which conflicts), each with
+its chapter and page; the game does not ask them. The entries' game/CQ:evidence items go, 33/CQ2
+taking the game part. Every question whose text changes has its answer words written again (some
+new texts ask "what" or "who", not yes or no), with a test that each question has them.
+
+### Choices within the decisions
+
+- **One id is one question** (the refinement of D094): every scheme that asks an id asks it at one
+  formula and one kind of locus, with one text. Where entries' paraphrases of one id ask of one
+  formula at one locus in different words, they are given one paraphrase (drafted text, with a
+  history line): CQ:bad_outweighs (which D095 (1) makes one id), CQ:side_effect, CQ:field (which
+  D009 keeps), CQ:opinion, CQ:too_slight (one formula, declared neutral in polarity, D053). An id
+  over two formulas is split, the scheme whose book question named it keeping it: CQ:likelihood
+  (sign's becomes CQ:correlation, as D009 asks) and CQ:trustworthiness (position to know's becomes
+  CQ:honesty).
+- **No backup edge from negative consequences (or the harm bridge) to CQ:side_effect**, as D009
+  says. D009's reason, D070's weighing reading of the side-effect question, has lapsed with D095 (1),
+  whose rebuttal route is "as CQ:opposite_consequences is", which positive consequences backs: the
+  owner decides (question 1). Meanwhile a further bad consequence argued by negative consequences
+  is played as a direct rebuttal of the conclusion.
+- **Sign's three backup edges stay**; on practical reasoning the side-effect route moves to the
+  conclusion, so sign's answer there becomes a rebuttal, as it is on positive consequences already.
+  Whether a sign fits a practical conclusion is for sign's family (question 3).
+- **CQ:evidence moves to the premise** `brings_about(A,G)`, as D009 adopted: a premise question,
+  the proponent's to answer, beside CQ:likelihood; one argument for the premise answers both.
+
+### Questions for the owner
+
+1. A backup edge from negative consequences to CQ:side_effect, the mirror of positive consequences
+   at CQ:opposite_consequences (D009 excluded it for a reason D095 (1) has removed)?
+2. P3: the actions argued in the game are the agent's (from D063), or only those of a scheme with an
+   agent place (D094 (b)'s words)?
+3. Sign's answer at practical reasoning's rebuttal route: kept, or left to sign's family?
 
 ## Item F: the answer contract, per route
 
@@ -225,7 +376,11 @@ relevance is challenged in play (CQ:field, CQ:relevance), not refused. **8**, un
 in. C3's two tests: a modal argument for `should_be_performed(A)` refused (S9); a bridge with its
 premise challenged. For `finding_out_first` (proposal D095's check): an answer whose I is unbound is
 refused (S2); a condition challenged and not made out (each of its three is a premise of its own)
-restores both bridges.
+restores both bridges. From the check of version 5: Other's move about the exception, or against
+its negation, is refused as its answer at the question is (done, 920adca); one argument for
+`brings_about(A,G)` answers both CQ:likelihood and CQ:evidence; F-continuing, F-context and
+G-endandmeans below concern schemes the game does not play in C5.2 (`bridge_from_continuing`,
+`bridge_from_agent`, `end_and_means_bad`), so they are engine and validate.py tests.
 
 The independent review of 26 November (in the workspace, reviews/2026-11-26 and
 verify/r-external-2026-11-26) proposed 22 cases for D095. Ten are the cases above (its Q1-A, Q1-D,
@@ -247,11 +402,13 @@ Recording-1 (a paid reply recovered after a crash, with no second call), belongs
 1. This plan and D094, checked independently; D095 put to the owner.
 2. C5.1 (it depends on no part of D095); gates on both toolchains; independent review; push.
 3. D095 decided (2026-11-26); the answer scheme for `worth_finding_out_first` applied the same day through
-   the proposal process (proposal D095, version 2); then C5.2, one data identity; gates; independent review;
+   the proposal process (proposal D095, version 2a); then C5.2 in the order above (version 5 of this plan,
+   checked independently; version 5a after the check), one data identity; gates; independent review;
    push.
 
 ## Not in C5
 
 The other five game schemes' changes wait for their families; their fields move to the catalogue in
-C5.1. 33.4's `fails_to_avert` and `harm_reduction` wait for a profile that includes them. The
+C5.1, and in C5.2 only D009's listed changes reach them (their question texts, the split of shared
+questions over two formulas, the values scheme's description and sign's "generally"). 33.4's `fails_to_avert` and `harm_reduction` wait for a profile that includes them. The
 contexts' weights for today's schemes stay as they are (calibrated, plan §6).

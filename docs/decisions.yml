@@ -2628,8 +2628,26 @@ decisions:
       the generator reads. (k) A hashless export replays and is flagged as
       legacy, not as current. D009 applies to every generated question: each
       game question has a paraphrase, and a shared question is split where its
-      schemes' paraphrases differ, as the entries list.
-    recorded: "docs/c5-game.md (version 3); to apply: step C5 (C5.1 now; C5.2 after D095)"
+      schemes' paraphrases differ, as the entries list. Refined 2026-11-26 by
+      the developer, under the same mandate, on the independent check of
+      docs/c5-game.md version 5 (wag-workspace verify/c5/c52), with the choices
+      no decision makes: (1) one id is one question, asked at one formula and
+      one kind of locus by every scheme that asks it, with one text: entries'
+      paraphrases of one id that ask of one formula at one locus are given one
+      paraphrase, and an id over two formulas is split, the scheme whose book
+      question named it keeping it; its caes_mapping is derived from its
+      locus, and a game question's text is generated from its paraphrase with
+      the scheme's variables braced. (2) The game's profile: the default agent
+      is "decider"; a move that first argues about an action declares it in
+      that move, naming its actor; P3 reads D063 as making every action argued
+      the agent's, beyond (b)'s "a P that does not perform A", and is put to
+      the owner; a game made before step C5.2 has no profile and plays without
+      its rules. (3) Types: P agent; A and A2 action; better_means' G goal; H
+      and the consequence schemes' G event; I entity. (4) The weight shown
+      before a move is the weight it takes; a modal variant's or bridge's
+      record carries the base weight it weighs as, an answer scheme's 0.5,
+      unused.
+    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26); to apply: step C5 (C5.1 now; C5.2 after D095)"
 
 - id: D095
   title: Step C5's departures from decided wording

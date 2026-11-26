@@ -299,6 +299,11 @@ func TestProfileBetterMeans(t *testing.T) {
 	if c := gs.MoveHistory[len(gs.MoveHistory)-1].Action.Comparison; c != "cheaper" {
 		t.Errorf("the comparison is not recorded: %q", c)
 	}
+	// Under another audience's weights the answer weighs as the argument it
+	// answers (D094 (g)).
+	if got := gs.weighedAs(id, "AS:better_means"); got != "AS:pr_agent" {
+		t.Errorf("the answer is weighed as %s", got)
+	}
 }
 
 // A game without a profile (made before step C5.2) plays without its rules;

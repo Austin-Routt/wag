@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 )
@@ -123,6 +124,7 @@ func (gs *GameState) ClaimUnder(w map[string]float64) string {
 		if id == "" {
 			return 0, false
 		}
+		id = gs.weighedAs(arg.Id, id)
 		if v, ok := w[id]; ok {
 			return v, true
 		}
@@ -139,6 +141,32 @@ func (gs *GameState) ClaimUnder(w map[string]float64) string {
 		return "out"
 	}
 	return "undecided"
+}
+
+// weighedAs is the scheme whose weight an argument made with the scheme id
+// takes (D094 (g)): for an answer scheme, the scheme of the argument it
+// answers; for a modal variant or a bridge, the scheme it weighs as,
+// followed to the end of the chain (nascq.NASCQ.MoveWeight does the same
+// for the weights in effect).
+func (gs *GameState) weighedAs(argID, id string) string {
+	s := gs.NASCQ.GetScheme(id)
+	if s != nil && s.Role == nascq.RoleAnswer {
+		for _, m := range gs.MoveHistory {
+			if len(m.ArgIDs) > 0 && m.ArgIDs[0] == argID && m.Action.AnswersCQID != "" && m.Action.TargetArgID != "" {
+				if t := gs.Adapter.Graph.Arguments[m.Action.TargetArgID]; t != nil {
+					if tid := gs.CurrentSchemeID(t); tid != "" {
+						return gs.weighedAs(m.Action.TargetArgID, tid)
+					}
+				}
+			}
+		}
+		return id
+	}
+	for seen := 0; s != nil && s.WeighsAs != "" && seen < len(gs.NASCQ.Schemes); seen++ {
+		id = s.WeighsAs
+		s = gs.NASCQ.GetScheme(id)
+	}
+	return id
 }
 
 // applyWeights sets the schemes' base weights from a context's weights.

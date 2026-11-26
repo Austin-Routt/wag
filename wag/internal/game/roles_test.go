@@ -175,3 +175,27 @@ func TestOtherRefusedAtTheBridgesException(t *testing.T) {
 	play(t, gs, nascq.ProposedAction{Type: "attack", SchemeID: nascq.OtherSchemeID, TargetStmtID: exc,
 		VariableBindings: map[string]string{"P1": "the decision cannot wait"}})
 }
+
+// Under another audience's weights (ClaimUnder), a bridge and its modal
+// variant weigh as their categorical counterpart, as they do in play.
+func TestClaimUnderWeighsRolesAsTheirChain(t *testing.T) {
+	gs, _, _ := bridgeGame(t, false)
+	gs.Config.Objective = ObjectiveClaim
+	const claim, entry = "should_be_performed(carbon_tax)", "may_be_worth_performing(carbon_tax,cleaner_air)"
+	ac := map[string]string{"A": "carbon_tax", "G": "cleaner_air"}
+	play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:bridge_possible_good", VariableBindings: ac})
+	if gs.Claim != claim {
+		t.Fatalf("the claim is %q", gs.Claim)
+	}
+	if r, err := gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"}); err != nil || !r.Accepted {
+		t.Fatal(err)
+	}
+	play(t, gs, nascq.ProposedAction{Type: "support", SchemeID: "AS:consequences_modal", TargetStmtID: entry, VariableBindings: ac})
+	play(t, gs, nascq.ProposedAction{Type: "attack", SchemeID: "AS:negative_consequences", TargetStmtID: claim,
+		VariableBindings: map[string]string{"G": "higher_prices"}})
+	for w, want := range map[float64]string{0.9: "in", 0.3: "out"} {
+		if got := gs.ClaimUnder(map[string]float64{"AS:consequences": w}); got != want {
+			t.Errorf("with positive consequences at %v the claim is %s, want %s", w, got, want)
+		}
+	}
+}
