@@ -56,10 +56,10 @@
    "all_assigned_agreement": 0.9
   },
   "target_instance": {
-   "agreement": 1.0,
-   "kappa": 1.0,
+   "agreement": 0.978,
+   "kappa": 0.974,
    "unresolved": 5,
-   "all_assigned_agreement": 0.9
+   "all_assigned_agreement": 0.88
   },
   "target_formula": {
    "agreement": 0.72,
@@ -283,6 +283,13 @@
     "claim": "13292.233",
     "A": "",
     "B": "CQ:likelihood"
+   }
+  ],
+  "target_instance": [
+   {
+    "claim": "13292.29",
+    "A": "13292.1 primary",
+    "B": "13292.115 primary"
    }
   ],
   "target_formula": [

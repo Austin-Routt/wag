@@ -14,8 +14,9 @@ primary scheme, its fit, the role, the polarity, the actual target (claim and
 part), whether the claim was re-parented (derived from the target, as the
 guidelines say the tooling computes it), and the evidence status; and, since
 the identity contract (docs/annotation-records.md §11, D092), the question
-answered, the exact target (the instance it names, read in the annotator's
-own file and compared by its scheme and conclusion, and the formula), the
+answered, the exact target (its claim with the instance it names, read in
+the annotator's own file and compared by its scheme and conclusion, and the
+formula), the
 primary instance's bindings, and every instance. A value that is unresolved,
 or a target the annotator's own file does not hold, is left out of its
 field and counted ("unresolved"). With --case, an alias of an action is read
@@ -101,9 +102,10 @@ def target_instance(S, claim, ref):
 
 def exact(item, which, S):
     """target_instance or target_formula, read in S (Go's FieldIn). The
-    instance is compared as the targeting decision: the target claim's
-    primary instance, or which secondary one; only what a field itself leaves
-    open makes it unresolved."""
+    instance is compared as the targeting decision: the target claim with its
+    primary instance, or with which secondary one, so that two targets of
+    different claims disagree; only what a field itself leaves open makes it
+    unresolved."""
     a = (item.get("target") or {}).get("actual") if isinstance(item.get("target"), dict) else None
     if not isinstance(a, dict) or not a:
         return ""
@@ -128,10 +130,10 @@ def exact(item, which, S):
     if ins is None:
         return UNRESOLVED
     if ref is None or isinstance(ref, str) and (ref == "" or ref.startswith("primary")):
-        return "primary"
+        return claim + " primary"
     if ins.get("primary") is True:
-        return "primary"
-    return "secondary:" + signature(ins)
+        return claim + " primary"
+    return claim + " secondary:" + signature(ins)
 
 
 def question(item):

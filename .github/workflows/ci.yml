@@ -87,6 +87,8 @@ jobs:
         run: python3 -I docs/kialo-batch2/validate.py
       - name: The gold checks catch what they are for (planted defects)
         run: python3 -I docs/kialo-batch2/test_validate.py
+      - name: The agreement's exact target
+        run: python3 -I docs/kialo-batch2/test_agreement.py
       - name: Fetch the upstream walton.yml the cleaning was written for
         run: |
           curl -fsSL -o "$RUNNER_TEMP/walton.yml" \

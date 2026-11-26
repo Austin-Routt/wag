@@ -142,9 +142,11 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 			}
 			return Unresolved
 		}
-		// Which inference of the target claim: its primary one, or which
-		// secondary one. The targeting decision, not the target's own coding:
-		// how the target claim is coded is its own fields' business.
+		// Which inference of which claim: the target claim with its primary
+		// inference, or with which secondary one, so that two targets of
+		// different claims disagree. The targeting decision, not the target's
+		// own coding: how the target claim is coded is its own fields'
+		// business.
 		if isMarker(ref, "unresolved") {
 			return Unresolved
 		}
@@ -155,12 +157,12 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 		// A format-1 target names no instance (or names it in words that
 		// begin "primary"): it is its claim's primary instance.
 		if id, ok := ref.(string); ref == nil || ok && (id == "" || strings.HasPrefix(id, "primary")) {
-			return "primary"
+			return claim + " primary"
 		}
 		if p, _ := in["primary"].(bool); p {
-			return "primary"
+			return claim + " primary"
 		}
-		return "secondary:" + signature(in)
+		return claim + " secondary:" + signature(in)
 	}
 	return ""
 }

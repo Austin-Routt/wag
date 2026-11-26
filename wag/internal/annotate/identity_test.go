@@ -393,8 +393,8 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 		t.Fatal(err)
 	}
 	p := Agree("format 1", "format 2", old, d.Gold)
-	// target_instance is the targeting decision (the primary instance, or
-	// which secondary one): D039 changed the coding of 13292.12's primary,
+	// target_instance is the targeting decision (the target claim with its
+	// primary instance, or with which secondary one): D039 changed the coding of 13292.12's primary,
 	// not which of its instances 13292.194 and .45 target. D008-D074 made
 	// 13292.174, .121 and .9 a modal argument carried by a bridge (scheme,
 	// instances), so the claims at their causal premise or exception
@@ -414,14 +414,14 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 			t.Errorf("%s: %+v, want agreement %v over 50", f, fa, w)
 		}
 	}
-	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "secondary:negative_consequences_modal:may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)" {
+	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "13292.9 secondary:negative_consequences_modal:may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)" {
 		t.Errorf("13292.12's target instance: %q", v)
 	}
 	// A target at a secondary instance says which.
 	a := clone(t, d.Gold)
 	act := actualOf(a["13292.12"])
 	act["instance"], act["formula"] = "13292.9#3", "causes(meat_industry_harmed,tax_revenue_reduced)"
-	if v := FieldIn(a["13292.12"], "target_instance", a); v != "secondary:cause_to_effect_modal:may_occur(tax_revenue_reduced)" {
+	if v := FieldIn(a["13292.12"], "target_instance", a); v != "13292.9 secondary:cause_to_effect_modal:may_occur(tax_revenue_reduced)" {
 		t.Errorf("a secondary target: %q", v)
 	}
 	if v := FieldIn(d.Gold["13292.45"], "target_formula", d.Gold); v != "may_occur(domestic_meat_industry_pushed_out)" {
@@ -486,7 +486,7 @@ func TestFormat1TargetOfAnUnflaggedLoneInstance(t *testing.T) {
 	if act := actualOf(old["13292.104"]); act["claim"] != "13292.108" || act["instance"] != nil && !strings.HasPrefix(jsonText(act["instance"]), `"primary`) {
 		t.Fatalf("13292.104's format-1 target: %v", act)
 	}
-	if v := FieldIn(old["13292.104"], "target_instance", old); v != "primary" {
+	if v := FieldIn(old["13292.104"], "target_instance", old); v != "13292.108 primary" {
 		t.Errorf("%q", v)
 	}
 	// Format 1's check admits it too (format 2 needs the flag).
@@ -1368,6 +1368,35 @@ func TestTargetInstanceDoesNotSpread(t *testing.T) {
 		if x, y := FieldIn(a[id], "target_instance", a), FieldIn(d.Gold[id], "target_instance", d.Gold); x != y {
 			t.Errorf("%s: %q, %q", id, x, y)
 		}
+	}
+}
+
+// target_instance names the target claim with its inference, so two targets
+// of different claims, each the primary inference of its claim, disagree.
+// The batch's two annotators read 13292.29 so: A at the thesis, B at
+// 13292.115's positive consequences (the independent review of 26 November);
+// target_claim counted it, target_instance did not.
+func TestTargetInstanceComparesTheClaim(t *testing.T) {
+	d, c := builtin(t)
+	a, b := clone(t, d.Gold), clone(t, d.Gold)
+	act := actualOf(b["13292.29"])
+	if act["claim"] != "13292.115" || act["instance"] != "13292.115#1" {
+		t.Fatalf("13292.29's gold target: %v", act)
+	}
+	act["claim"], act["instance"], act["part"], act["formula"] = "13292.1", "13292.1#1", "conclusion", "should_be_performed(tax_meat)"
+	if probs := c.CheckIn(b["13292.29"], d, b, 2); len(probs) > 0 {
+		t.Fatalf("the other reading is not a valid record: %v", probs)
+	}
+	x, y := FieldIn(a["13292.29"], "target_instance", a), FieldIn(b["13292.29"], "target_instance", b)
+	if x != "13292.115 primary" || y != "13292.1 primary" {
+		t.Errorf("the two readings: %q, %q", x, y)
+	}
+	p := Agree("a", "b", a, b)
+	if fa := p.Fields["target_instance"]; fa.N != 50 || fa.Agreement != 0.98 {
+		t.Errorf("target_instance %+v, want 49 of 50", fa)
+	}
+	if dis := Disagrees([]Annotation{a["13292.29"], b["13292.29"]}, a, b); strings.Join(dis, ",") != "target_claim,target_instance" {
+		t.Errorf("the disagreements: %v", dis)
 	}
 }
 
