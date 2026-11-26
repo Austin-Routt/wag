@@ -86,15 +86,25 @@ From an inventory of the code (verify/c5/inventory.md), checked twice:
    override where there is one; an assumption is asked at the premise), its pattern that formula;
    where a question has several targets, its game part names the one asked; a question asked of the
    argument or of the conclusion records that. The checker re-derives them. How the book question's
-   target in `walton.yml` maps to the game's formula is the game-differs record, as today.
+   target in `walton.yml` maps to the game's formula is the game-differs record, as today. The
+   generator applies the rule (asked at a premise, the pattern is a premise or an assumption of the
+   formulas the game plays; at an exception, an exception; of the conclusion or the argument, none)
+   and refuses a catalogue that breaks it; today's 35 questions keep it.
 4. **The generator.** `wag-cli --game-gen` writes the NASCQ files and core.yml. core.yml's header
    carries the hash of a canonical form of the values the generator reads, so that drafting the
    entries' other parts changes nothing. The check requires the committed files to equal its
-   output; `--catalogue-gen` and the check turn round in the same commit.
+   output; `--catalogue-gen` and the check turn round in the same commit. Written: it reads only the
+   catalogue (each game scheme's entry, its formulas where it records none of its own, and `game/`),
+   refuses a catalogue whose game parts disagree with one another, and writes the header's
+   fingerprint (`# catalogue: ...`); it is not yet run on the game's own files.
 5. **Reproduction.** The pre-C5 files are frozen in `wag/data/frozen/e7141ec8dea379bc`, a `--data`
    folder named by its fingerprint (done; a test requires the two to agree); a test requires the
    generator's output to equal them as JSON and YAML trees (every field, the order of the edges and
-   of the premises), not through the loader.
+   of the premises), not through the loader. It passes: the JSON files' trees are equal with their
+   keys in order, core.yml's with its mappings in any order (one block, expert opinion's, writes its
+   formulas in another order of keys) and its lists in theirs. A second test plays both: every
+   answer to every question (`wag-cli --edges`) and the 33 reference games end the same, move for
+   move.
 6. **The switch:** the bytes change once, the meaning not (D094 a). In the same commit both gold
    copies are re-pinned with a history entry, the batch-2 report takes the new hash, and the docs
    say how to replay an old game or trace (`--data` with the frozen files). No annotation run is in

@@ -76,6 +76,54 @@ func runCatalogueGen(repo, dir, by string) int {
 	return 0
 }
 
+// runGameGen generates the game's files from the catalogue (docs/c5-game.md,
+// C5.1): the NASCQ files and core.yml, into out (default: the repository's
+// wag/data).
+func runGameGen(repo, dir, out string) int {
+	repo, dir, err := catalogueDirs(repo, dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if out == "" {
+		out = filepath.Join(repo, filepath.FromSlash(catalogue.GameDataDir))
+	}
+	entries, bad, err := catalogue.ReadDir(dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	if len(bad) > 0 {
+		for name, e := range bad {
+			fmt.Fprintf(os.Stderr, "%s: does not read: %v\n", name, e)
+		}
+		return 1
+	}
+	d, err := catalogue.ReadGameDir(dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	g, err := catalogue.GenerateGame(entries, d)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	for _, p := range catalogue.GamePaths {
+		path := filepath.Join(out, filepath.FromSlash(p))
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		if err := os.WriteFile(path, g.Files[p], 0o644); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+	}
+	fmt.Printf("%s: %s written from the catalogue (%s)\n", out, strings.Join(catalogue.GamePaths, ", "), g.Inputs)
+	return 0
+}
+
 // runCatalogueCheck checks the catalogue against the sources and, given
 // the book's text, checks that no text of ours reproduces it. Status 1 on
 // an error.

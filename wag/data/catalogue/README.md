@@ -40,12 +40,14 @@ Run them from `wag/`:
 go run ./cmd/wag-cli --catalogue-gen [--by "WHO"]   # (re)generate the skeleton; keeps what people and models wrote
 go run ./cmd/wag-cli --catalogue-check [--book FILE,FILE]   # check everything; status 1 on an error
 go run ./cmd/wag-cli --catalogue-show ID                    # a walton.yml scheme's formulas with their English readings
+go run ./cmd/wag-cli --game-gen --game-out DIR              # the game's files (nascq/*.json, schemes/core.yml) from the catalogue
 ```
 
 - **Where things are.** Both commands find the repository's root from the working directory; `--repo` and `--catalogue` override that.
 - **`--catalogue-gen` is safe to rerun.** It rewrites only what the sources own (below), and writes `index.md` and the decision register's view, `docs/decisions.md`.
 - **`--catalogue-check`** reports errors, which fail it, and warnings. It ends with a progress line.
 - **A test keeps the committed catalogue current:** `internal/catalogue`, `TestCommittedCatalogueIsCurrent`. When a source changes, run `--catalogue-gen` and commit the result.
+- **`--game-gen`** makes the game's files from the entries' game parts and [`game/`](game/), into `--game-out` (by default `wag/data`, the game's own files). Until step C5's switch ([`docs/c5-game.md`](../../../docs/c5-game.md)) those files are still the source, so give `--game-out`; a test requires its output to reproduce them.
 
 ## An entry
 
