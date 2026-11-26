@@ -2574,6 +2574,57 @@ decisions:
       orphans.
     recorded: "docs/proposals/D022-D093.yml (version 2); walton.yml through edits.py (PRACTICAL_C4), applied 2026-11-26; links.json, families.json, positions.json, the catalogue entries; docs/kialo-batch2 (validate.py's R9 reads two_person_practical's goal from tells_intend(A,X,B) and bridge_from_continuing's from ought_to_continue(P,G), with planted tests; guidelines §3.1 and OC6)"
 
+- id: D094
+  title: Step C5's choices, the game's data from the catalogue
+  question: >-
+    Step C5 (docs/c5-game.md) generates the game's data from the catalogue and
+    brings the game to the first family's formulas. The decisions it applies
+    (C2's and C3's game paragraphs, D003, D006, D007, D008, D009, D053, D055,
+    D065, D074, D075, D089, workstreams E and I) leave open: whether the data's
+    bytes may change when the generator takes over; who the game's agent is
+    where no claim sets one; how the game refuses a bare claim of
+    knowability; where D074's question sits in the game; how far D009 reaches
+    for questions shared with schemes outside the slice; the English of new
+    predicates; how the new kinds of scheme are offered and weighed; and what
+    the golden games are replayed on. The independent review of the plan's
+    first version (wag-workspace verify/c5/review-v1) found each of these.
+  category: game
+  blocks: [verification]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["docs/c5-game.md", "the independent review of the plan's version 1 (wag-workspace verify/c5/review-v1)"]
+  decided:
+    date: "2026-11-26"
+    by: owner (instruction of 2026-11-25 to go with the recommended choices)
+    decision: >-
+      As docs/c5-game.md version 2 recommends; each part reversible before the
+      work it governs. (a) The bytes change once when the generator takes
+      over, with the meaning unchanged (a test against the frozen pre-C5
+      files); C5.2 makes one more change of data identity, not one per step.
+      (b) Every game records a profile at its start (the agent, the actions it
+      deliberates with their actors and aliases, the situation compared;
+      D089, D091, D092): from the claim's case where the mode sets a claim,
+      otherwise asked when the game is created, with a default the board
+      shows; the game binds P and refuses a P that does not perform A. (c)
+      An answer scheme concludes worth_finding_out_first(A,G) from D053's
+      conditions, proposed for walton.yml through the proposal process; at
+      that question the game accepts it and the source-based schemes that
+      assert the exception, not Other. (d) In the game a consequence scheme
+      cannot conclude a factual claim (S9), so D074's question about the
+      argument itself is Other's relevance question, with the direct
+      undercutter; the consequence schemes get none (a reasoned departure
+      from the wording of C3's game paragraph). (e) D009 applies to the
+      slice's questions; a question shared with a scheme outside the slice is
+      split where their paraphrases differ. (f) New predicates take
+      walton.yml's templates in the game; the game's other templates stay,
+      each difference recorded. (g) The answer schemes, modal variants and
+      bridges join with a role (an answer scheme only as an answer); the
+      presets weigh them as their categorical counterparts, the bridges with
+      no multiplier (D008). (h) The 33 golden games stay on the frozen pre-C5
+      data; a new golden set is made on the new data.
+    recorded: "docs/c5-game.md (version 2); to apply: step C5 (C5.1, the answer scheme's proposal, C5.2)"
+
 # --- Decided ------------------------------------------------------------------
 
 - id: D052
