@@ -538,8 +538,8 @@ func (r *Run) disagrees(names []string, anns []Annotation) []string {
 	sets := make([]map[string]Annotation, len(names))
 	canon := make([]Annotation, len(anns))
 	for i, n := range names {
-		sets[i] = cs.CanonicalSet(r.anns[n])
-		canon[i] = cs.Canonical(anns[i])
+		sets[i] = cs.CanonicalSet(r.anns[n], r.coll)
+		canon[i] = cs.Canonical(anns[i], r.coll)
 	}
 	return Disagrees(canon, sets...)
 }

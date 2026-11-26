@@ -45,7 +45,7 @@ python3 -I test_validate.py                 # each rule from R8 on catches the d
 python3 -I validate.py gold-format1.json    # the format-1 gold, by the rules it was made under (R1–R11), against format1/walton.yml
 python3 -I validate.py annotator-A.json     # any annotation file (an annotator's, or a model's)
 python3 -I agreement.py annotator-A.json annotator-B.json --pilot ../kialo-pilot/pilot.json --families ../../wag/data/schemes/families.json --json agreement.json
-# add --case case.json to read the aliases the case record lists as their actions (none in batch 2)
+# add --case case.json to read the aliases the case record lists as their actions where an action stands (none in batch 2; it reads walton.yml, with PyYAML)
 # the game: start wag-server, then
 python3 -I to_wag.py gold.json items.json http://127.0.0.1:8080 --report wag-report.json --export wag-game.json
 ```

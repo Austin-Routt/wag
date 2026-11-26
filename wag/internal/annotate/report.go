@@ -111,14 +111,14 @@ func (r *Run) Report() (*Report, error) {
 			// The whole sets, in which targets are read; AgreeAssigned
 			// compares the claims assigned. Aliases read as their actions
 			// (docs/annotation-records.md §11).
-			pr := AgreeAssigned(p.Name, "gold", cs.CanonicalSet(r.anns[p.Name]), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
+			pr := AgreeAssigned(p.Name, "gold", cs.CanonicalSet(r.anns[p.Name], r.coll), cs.CanonicalSet(r.Dataset.Gold, r.coll), r.Settings.Items)
 			ar.VsGold = &pr
 		}
 		rep.Annotators = append(rep.Annotators, ar)
 	}
 	for i, a := range r.Settings.Annotators {
 		for _, b := range r.Settings.Annotators[i+1:] {
-			rep.Pairs = append(rep.Pairs, AgreeAssigned(a.Name, b.Name, cs.CanonicalSet(r.anns[a.Name]), cs.CanonicalSet(r.anns[b.Name]), r.Settings.Items))
+			rep.Pairs = append(rep.Pairs, AgreeAssigned(a.Name, b.Name, cs.CanonicalSet(r.anns[a.Name], r.coll), cs.CanonicalSet(r.anns[b.Name], r.coll), r.Settings.Items))
 		}
 	}
 	for _, id := range r.Settings.Items {
@@ -158,7 +158,7 @@ func (r *Run) Report() (*Report, error) {
 			}
 		}
 		if len(gold) > 0 && len(adj) > 0 {
-			pr := AgreeAssigned("reviewer", "gold", cs.CanonicalSet(reviewerTargets(adj)), cs.CanonicalSet(r.Dataset.Gold), r.Settings.Items)
+			pr := AgreeAssigned("reviewer", "gold", cs.CanonicalSet(reviewerTargets(adj), r.coll), cs.CanonicalSet(r.Dataset.Gold, r.coll), r.Settings.Items)
 			rr.VsGold = &pr
 		}
 		rep.Reviewer = rr

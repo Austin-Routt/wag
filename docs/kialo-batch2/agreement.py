@@ -1,6 +1,7 @@
 """Inter-annotator agreement for the Kialo batch 2 double annotation.
 
-Usage (standard library only):
+Usage (the standard library; --case also reads walton.yml, with PyYAML, as
+validate.py does):
 
     python3 -I agreement.py annotator-A.json annotator-B.json \
         [--pilot ../kialo-pilot/pilot.json] [--families ../../wag/data/schemes/families.json] \
@@ -16,11 +17,15 @@ answered, the exact target (the instance it names, read in the annotator's
 own file and compared by its scheme and conclusion, and the formula), the
 primary instance's bindings, and every instance. A value that is unresolved,
 or a target the annotator's own file does not hold, is left out of its
-field and counted ("unresolved"). With --case, aliases are read as their
-actions first. Both formats are read; WAG's Go measure (annotate.Agree)
-computes the same figures. Where both chose the same scheme it also compares
-the premises (by predicate and role) and the bindings (by the words of each
-value). The scheme is also compared at the level of families
+field and counted ("unresolved"). With --case, an alias of an action is read
+as the action first, where an action stands: in the binding of a variable in
+an action's place of the instance's scheme (walton.yml,
+wag/data/annotation/positions.json) and in an action's place of a formula. A
+goal or a consequence spelled like an alias keeps its name. Both formats are
+read; WAG's Go measure (annotate.Agree) computes the same figures. Where
+both chose the same scheme it also compares the premises (by predicate and
+role) and the bindings (by the words of each value). The scheme is also
+compared at the level of families
 (families.json): two schemes of one family agree there. With --pilot, the
 first pilot's 20 items are compared with each annotator on the scheme
 (mapped to walton.yml IDs) and the role.
@@ -29,8 +34,13 @@ first pilot's 20 items are compared with each annotator on the scheme
 import argparse
 import collections
 import json
+import os
 import re
 import sys
+
+REPO = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + "/../..") + "/"
+WALTON = REPO + "docs/scheme-registry/walton-clean/walton.yml"
+POSITIONS = REPO + "wag/data/annotation/positions.json"
 
 WAG_TO_WALTON = {
     "AS:practical_reasoning": "practical_reasoning1",
@@ -149,9 +159,53 @@ def instances(item):
     return "|".join(sorted(signature(i) for i in item.get("instances") or [] if isinstance(i, dict)))
 
 
-def canonical(S, case):
+def split_formula(f):
+    """"¬p(a,q(b),c)" as p and its top-level arguments, each trimmed (Go's
+    splitFormula)."""
+    f = f.strip()
+    if f.startswith("¬"):
+        f = f[1:]
+    i = f.find("(")
+    if i < 0 or not f.endswith(")"):
+        return f, []
+    args, depth, cur = [], 0, ""
+    for ch in f[i + 1:-1]:
+        if ch == "," and depth == 0:
+            args.append(cur.strip())
+            cur = ""
+            continue
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        cur += ch
+    if cur.strip():
+        args.append(cur.strip())
+    return f[:i], args
+
+
+def typed_vars(scheme, places):
+    """A scheme's variables in an agent's or an action's place (Go's typedVars;
+    validate.py's typed)."""
+    out = {}
+    for key in ("premises", "assumptions", "exceptions", "conclusions"):
+        for f in scheme.get(key) or []:
+            name, args = split_formula(f)
+            for kind in ("agent", "action"):
+                for i in places[kind].get(f"{name}/{len(args)}", []):
+                    if i - 1 < len(args):
+                        out.setdefault(args[i - 1], kind)
+    return out
+
+
+def canonical(S, case, schemes, places):
     """The annotations with each alias of the case's actions put back to its
-    action, in bindings and formulas (Go's Case.CanonicalSet)."""
+    action where an action stands (Go's Case.CanonicalSet): in the binding of
+    a variable in an action's place of the instance's scheme, and in an
+    action's place of a formula, nested terms included. A goal or a
+    consequence spelled like an alias keeps its name: read as the action, it
+    would make two different annotations agree. A formula with nothing to
+    put back is left as it is."""
     canon = {}
     for a in case.get("actions") or []:
         canon[a["id"]] = a["id"]
@@ -159,14 +213,48 @@ def canonical(S, case):
             canon[al] = a["id"]
     if not canon:
         return S
-    atom = re.compile(r"(?<![A-Za-z0-9_])[a-z_][A-Za-z0-9_]*(?![A-Za-z0-9_])(?!\s*\()")
+
+    def term(f):
+        g = f.strip()
+        if g.startswith("¬"):
+            y, changed = term(g[1:])
+            return ("¬" + y, True) if changed else (f, False)
+        name, args = split_formula(g)
+        if not args:
+            return f, False
+        at = {i - 1 for i in places["action"].get(f"{name}/{len(args)}", [])}
+        changed = False
+        for i, x in enumerate(args):
+            if "(" in x:
+                y, ch = term(x)
+                if ch:
+                    args[i], changed = y, True
+            elif i in at and canon.get(x, x) != x:
+                args[i], changed = canon[x], True
+        return (name + "(" + ",".join(args) + ")", True) if changed else (f, False)
+
+    def action_vars(ins):
+        sc = ins.get("scheme")
+        wid = sc.get("walton_id") if isinstance(sc, dict) else None
+        s = schemes.get(wid) if isinstance(wid, str) else None
+        if s is None:
+            return set()
+        return {v for v, kind in typed_vars(s, places).items() if kind == "action"}
+
     def walk(v, key):
         if isinstance(v, dict):
-            return {k: (canon.get(y, y) if key == "bindings" and isinstance(y, str) else walk(y, k)) for k, y in v.items()}
+            acts = action_vars(v) if "bindings" in v else set()
+            out = {}
+            for k, y in v.items():
+                if k == "bindings" and isinstance(y, dict):
+                    out[k] = {x: (canon.get(b, b) if isinstance(b, str) and x in acts else b) for x, b in y.items()}
+                else:
+                    out[k] = walk(y, k)
+            return out
         if isinstance(v, list):
             return [walk(y, key) for y in v]
         if isinstance(v, str) and key == "formula":
-            return atom.sub(lambda m: canon.get(m.group(0), m.group(0)), v)
+            return term(v)[0]
         return v
     return {k: walk(v, "") for k, v in S.items()}
 
@@ -298,13 +386,16 @@ def main():
     ap.add_argument("--families")
     ap.add_argument("--json")
     ap.add_argument("--assigned", help="items.json: all assigned claims, including missing replies")
-    ap.add_argument("--case", help="case.json: read the aliases of its actions as the actions")
+    ap.add_argument("--case", help="case.json: read the aliases of its actions as the actions, where an action stands")
     args = ap.parse_args()
     A = {i["kialo_claim_id"]: i for i in json.load(open(args.a))["items"]}
     B = {i["kialo_claim_id"]: i for i in json.load(open(args.b))["items"]}
     if args.case:
+        import yaml
         case = json.load(open(args.case))
-        A, B = canonical(A, case), canonical(B, case)
+        schemes = {s["id"]: s for s in yaml.safe_load(open(WALTON, encoding="utf-8"))["argument_schemes"]}
+        places = json.load(open(POSITIONS, encoding="utf-8"))
+        A, B = canonical(A, case, schemes, places), canonical(B, case, schemes, places)
     assigned = [i["kialo_claim_id"] for i in json.load(open(args.assigned))["items"]] if args.assigned else list(dict.fromkeys([*A,*B]))
     if len(set(assigned)) != len(assigned):
         ap.error("assignment list contains duplicate claim IDs")

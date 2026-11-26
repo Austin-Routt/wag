@@ -96,9 +96,13 @@ The typing of predicate positions (which argument of a predicate is an agent and
   (people switching to other protein) is a consequence, a state, not a declared action.
 - **What an alias is for.** A file writes each action by one atom. Aliases let other vocabularies be
   read as the same action: who performs it (R14) and whether a better means is another course (R9)
-  read an alias as its action, and so do agreement and the choice of claims to review (§11). A
-  reference is exact: a target's formula (R13), an answer's conclusion (R8) and a challenge's
-  formula (R10) are written as the instance they refer to has them, so an alias there is refused.
+  read an alias as its action, and so do agreement and the choice of claims to review (§11), where
+  an action stands: in the binding of a variable in an action's place of the instance's scheme, and
+  in an action's place of a formula (`positions.json`). A goal or a consequence spelled like an
+  alias keeps its name (since 2026-11-25): read as the action, it would make an annotation that puts
+  the action in a goal's place agree with one that names the goal. A reference is exact: a target's
+  formula (R13), an answer's conclusion (R8) and a challenge's formula (R10) are written as the
+  instance they refer to has them, so an alias there is refused.
 - The thesis's action is a declared action; its actor is the agent the case deliberates for. The
   thesis is a claim of the dataset, and every actor, action and alias an atom of its lexicon
   (checked when the dataset is read, and by `validate.py`).
@@ -266,8 +270,8 @@ annotate), is left out of that field's agreement and counted apart (`unresolved`
 neither agreement nor disagreement. Only what a field itself leaves open makes it unresolved: an
 unresolved instance leaves `target_instance` out, an unresolved formula `target_formula`, an
 unresolved part `target_part`. With a
-case record, aliases are read as their actions first, in agreement and in the choice of claims to
-review alike.
+case record, an alias is read as its action first where an action stands (§3), in agreement and in
+the choice of claims to review alike.
 
 These fields are also the ones a run compares to decide which claims the reviewer reviews (*Review
 the disagreements*): a claim whose annotations differ in their exact target or bindings is reviewed,
@@ -293,7 +297,10 @@ claim it did not review as unresolved too.
   C5.
 - **Evidence revisions** belong to the evidence records (D076, item E1), not to this format.
 - **Agreement on aliases** depends on the case record listing them; an atom used by one annotator for
-  an action the case does not list is simply another atom.
+  an action the case does not list is simply another atom. It also depends on walton.yml typing the
+  variables (`positions.json`): an instance of a scheme walton.yml lacks (`other`) has no variable
+  known to stand for an action, so its bindings keep their spelling, though its formulas' action
+  places are still read.
 - **The case record, like the lexicon, is drawn from the gold for batch 2**, so it shows annotators
   which atoms the gold treats as actions. That is fine for development material; the pilot's
   (stage 3) must not be drawn from its gold, as its lexicon must not.

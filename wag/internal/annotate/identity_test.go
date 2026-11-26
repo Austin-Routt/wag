@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -112,6 +114,9 @@ func inst(a Annotation, i int) map[string]any { return a["instances"].([]any)[i]
 func actualOf(a Annotation) map[string]any {
 	return a["target"].(map[string]any)["actual"].(map[string]any)
 }
+
+// atomArg is an atom: a lower-case word, as the lexicon writes one.
+var atomArg = regexp.MustCompile(`[a-z_][A-Za-z0-9_]*`)
 
 // renameIn replaces an atom in an instance's bindings and formulas.
 func renameIn(in map[string]any, old, new string) {
@@ -506,7 +511,7 @@ func TestDisagreesOnTheExactTarget(t *testing.T) {
 
 // Aliases read as their actions in agreement.
 func TestCanonicalReadsAliasesAsTheirActions(t *testing.T) {
-	d, _ := builtin(t)
+	d, col := builtin(t)
 	cs := *d.Case
 	cs.canon = map[string]string{}
 	for k, v := range d.Case.canon {
@@ -518,7 +523,7 @@ func TestCanonicalReadsAliasesAsTheirActions(t *testing.T) {
 	if FieldIn(a["13292.7"], "bindings", a) == FieldIn(d.Gold["13292.7"], "bindings", d.Gold) {
 		t.Fatal("the plant did not change the bindings")
 	}
-	ca := cs.CanonicalSet(a)
+	ca := cs.CanonicalSet(a, col)
 	for _, f := range Fields {
 		if x, y := FieldIn(ca["13292.7"], f, ca), FieldIn(d.Gold["13292.7"], f, d.Gold); x != y {
 			t.Errorf("%s: %q, %q", f, x, y)
@@ -529,6 +534,69 @@ func TestCanonicalReadsAliasesAsTheirActions(t *testing.T) {
 	cs.canon["brings_about"] = "tax_meat"
 	if got := cs.canonFormula("brings_about(brings_about,G)"); got != "brings_about(tax_meat,G)" {
 		t.Errorf("%q", got)
+	}
+}
+
+// An alias is read as its action only where an action stands: in the binding
+// of a variable in an action's place of the instance's scheme, and in an
+// action's place of a formula (positions.json), nested terms included. A goal
+// spelled like an alias keeps its name, so an annotation that puts the action
+// in the goal's place does not agree with one that names the goal (the
+// external audit of 2026-11-25).
+func TestCanonicalReadsAliasesOnlyWhereAnActionStands(t *testing.T) {
+	d, col := builtin(t)
+	cs := *d.Case
+	cs.canon = map[string]string{}
+	for k, v := range d.Case.canon {
+		cs.canon[k] = v
+	}
+	cs.canon["meat_tax"] = "tax_meat"
+	cs.canon["food_less_affordable_for_poor"] = "tax_meat" // 13292.7's consequence
+	for f, want := range map[string]string{
+		"brings_about(meat_tax,food_less_affordable_for_poor)":     "brings_about(tax_meat,food_less_affordable_for_poor)",
+		"bad(food_less_affordable_for_poor)":                       "bad(food_less_affordable_for_poor)",
+		"brings_about(meat_tax,meat_tax)":                          "brings_about(tax_meat,meat_tax)",
+		"possible_bring_about(meat_tax,meat_tax)":                  "possible_bring_about(meat_tax,tax_meat)",
+		"¬should_be_performed(meat_tax)":                           "¬should_be_performed(tax_meat)",
+		"¬ ¬should_be_performed( meat_tax )":                       "¬¬should_be_performed(tax_meat)",
+		"bad(brings_about(meat_tax,x))":                            "bad(brings_about(tax_meat,x))",
+		"brings_about( tax_meat , food_less_affordable_for_poor )": "brings_about( tax_meat , food_less_affordable_for_poor )",
+		"brings_about( meat_tax ,food_less_affordable_for_poor)":   "brings_about(tax_meat,food_less_affordable_for_poor)",
+		"meat_tax":                        "meat_tax",
+		"should_be_performed(meat_tax,x)": "should_be_performed(meat_tax,x)",
+	} {
+		if got := cs.canonFormula(f); got != want {
+			t.Errorf("%q: %q, want %q", f, got, want)
+		}
+	}
+	a := clone(t, d.Gold)
+	b := inst(a["13292.7"], 0)["bindings"].(map[string]any)
+	b["A"] = "meat_tax"
+	binding := func(x Annotation, v string) any {
+		return inst(x, 0)["bindings"].(map[string]any)[v]
+	}
+	got := cs.Canonical(a["13292.7"], col)
+	if binding(got, "A") != "tax_meat" || binding(got, "G") != "food_less_affordable_for_poor" {
+		t.Errorf("bindings: %v", inst(got, 0)["bindings"])
+	}
+	if b["A"] != "meat_tax" {
+		t.Errorf("Canonical changed its argument: %v", b)
+	}
+	// Without the collection, or for a scheme it lacks, no variable is known
+	// to stand for an action, so the bindings stay as they are.
+	if got := cs.Canonical(a["13292.7"], nil); binding(got, "A") != "meat_tax" {
+		t.Errorf("no collection: %v", inst(got, 0)["bindings"])
+	}
+	inst(a["13292.7"], 0)["scheme"].(map[string]any)["walton_id"] = "other"
+	if got := cs.Canonical(a["13292.7"], col); binding(got, "A") != "meat_tax" {
+		t.Errorf("other: %v", inst(got, 0)["bindings"])
+	}
+	// The action in the goal's place is not the goal.
+	x := clone(t, d.Gold)
+	inst(x["13292.7"], 0)["bindings"].(map[string]any)["G"] = "tax_meat"
+	cx, cg := cs.CanonicalSet(x, col), cs.CanonicalSet(d.Gold, col)
+	if FieldIn(cx["13292.7"], "bindings", cx) == FieldIn(cg["13292.7"], "bindings", cg) {
+		t.Error("an action in a goal's place agrees with the goal")
 	}
 }
 
@@ -867,7 +935,7 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	d, _ := builtin(t)
+	d, col := builtin(t)
 	a := clone(t, d.Gold)
 	renameIn(inst(a["13292.7"], 0), "tax_meat", "meat_tax")
 	inst(a["13292.6"], 0)["bindings"].(map[string]any)["S1"] = map[string]any{"unstated": "the claim states the goal's link only"}
@@ -883,11 +951,6 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 		}
 		return p
 	}
-	var items []Annotation
-	for _, id := range d.IDs() {
-		items = append(items, a[id])
-	}
-	pa := write("a.json", map[string]any{"format": Format2, "annotator": "a", "items": items})
 	raw, err := os.ReadFile(filepath.Join(dir, "case.json"))
 	if err != nil {
 		t.Fatal(err)
@@ -896,18 +959,41 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 	if err := json.Unmarshal(raw, &cj); err != nil {
 		t.Fatal(err)
 	}
-	cj["actions"].([]any)[0].(map[string]any)["aliases"] = []any{"meat_tax"}
-	pc := write("case.json", cj)
-	cs, err := parseCase([]byte(mustJSON(t, cj)))
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, withCase := range []bool{false, true} {
+	for _, tc := range []struct {
+		name    string
+		aliases []any // tax_meat's aliases in the case record; nil: no case
+		goal    bool  // 13292.7 puts the action in its consequence's place
+		want    float64
+	}{
+		// The alias changes 13292.7's bindings unless the case reads it as
+		// its action.
+		{"no case", nil, false, 0.96},
+		{"an alias", []any{"meat_tax"}, false, 0.98},
+		// An alias spelled like 13292.7's consequence is read as the action
+		// only in an action's place: an annotation that puts the action in
+		// the consequence's place still differs from the gold.
+		{"an alias spelled like a consequence", []any{"meat_tax", "food_less_affordable_for_poor"}, true, 0.96},
+	} {
+		x := clone(t, a)
+		if tc.goal {
+			inst(x["13292.7"], 0)["bindings"].(map[string]any)["G"] = "tax_meat"
+		}
+		var items []Annotation
+		for _, id := range d.IDs() {
+			items = append(items, x[id])
+		}
+		pa := write("a.json", map[string]any{"format": Format2, "annotator": "a", "items": items})
 		args := []string{"-I", "-B", "agreement.py", pa, "gold.json", "--json", filepath.Join(tmp, "out.json")}
-		ga, gb := a, d.Gold
-		if withCase {
+		ga, gb := x, d.Gold
+		if tc.aliases != nil {
+			cj["actions"].([]any)[0].(map[string]any)["aliases"] = tc.aliases
+			pc := write("case.json", cj)
+			cs, err := parseCase([]byte(mustJSON(t, cj)))
+			if err != nil {
+				t.Fatal(err)
+			}
 			args = append(args, "--case", pc)
-			ga, gb = cs.CanonicalSet(a), cs.CanonicalSet(d.Gold)
+			ga, gb = cs.CanonicalSet(x, col), cs.CanonicalSet(d.Gold, col)
 		}
 		cmd := exec.Command(py, args...)
 		cmd.Dir = dir
@@ -929,13 +1015,107 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 		for _, f := range Fields {
 			g, w := p.Fields[f], out.Fields[f]
 			if g.Agreement != w.Agreement || g.Unresolved != w.Unresolved || (g.Kappa == nil) != (w.Kappa == nil) || g.Kappa != nil && *g.Kappa != *w.Kappa {
-				t.Errorf("case %v, %s: go %+v, agreement.py %+v", withCase, f, g, w)
+				t.Errorf("%s, %s: go %+v, agreement.py %+v", tc.name, f, g, w)
 			}
 		}
-		// The alias changes 13292.7's bindings unless the case reads it as its action.
-		if want := map[bool]float64{false: 0.96, true: 0.98}[withCase]; p.Fields["bindings"].Agreement != want {
-			t.Errorf("case %v: bindings agreement %v, want %v", withCase, p.Fields["bindings"].Agreement, want)
+		if p.Fields["bindings"].Agreement != tc.want {
+			t.Errorf("%s: bindings agreement %v, want %v", tc.name, p.Fields["bindings"].Agreement, tc.want)
 		}
+	}
+}
+
+// agreement.py reads aliases where Go does, on the same annotations: actions'
+// and goals' places in formulas (negations, nested terms and spacing
+// included), the bindings of action variables by the instance's scheme, a
+// scheme that walton.yml lacks or that is not named, a marker, and strings
+// that are not formulas.
+func TestCanonicalMatchesAgreementPy(t *testing.T) {
+	py, err := exec.LookPath("python3")
+	if err != nil {
+		t.Skip("no python3")
+	}
+	dir, err := filepath.Abs("../../../docs/kialo-batch2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, col := builtin(t)
+	raw, err := os.ReadFile(filepath.Join(dir, "case.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cj map[string]any
+	if err := json.Unmarshal(raw, &cj); err != nil {
+		t.Fatal(err)
+	}
+	cj["actions"].([]any)[0].(map[string]any)["aliases"] = []any{"meat_tax", "food_less_affordable_for_poor"}
+	cs, err := parseCase([]byte(mustJSON(t, cj)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	f := func(s string) map[string]any { return map[string]any{"formula": s} }
+	set := map[string]Annotation{
+		"x": {
+			"instances": []any{
+				map[string]any{
+					"scheme":   map[string]any{"walton_id": "negative_consequences"},
+					"bindings": map[string]any{"A": "meat_tax", "G": "food_less_affordable_for_poor"},
+					"premises": []any{
+						f("brings_about(meat_tax,food_less_affordable_for_poor)"), f("bad(food_less_affordable_for_poor)"),
+						f("possible_bring_about(meat_tax, meat_tax)"), f("bad(brings_about(meat_tax,x))"),
+						f("¬ ¬should_be_performed( meat_tax )"), f("brings_about( tax_meat , food_less_affordable_for_poor )"),
+						f("should_be_performed(meat_tax,x)"), f("meat_tax"), f("brings_about(meat_tax"),
+						f("brings_about( meat_tax ,food_less_affordable_for_poor)"),
+					},
+					"conclusion": f("¬should_be_performed(meat_tax)"),
+					"notes":      "brings_about(meat_tax,x)",
+				},
+				map[string]any{"scheme": map[string]any{"walton_id": "other"}, "bindings": map[string]any{"A": "meat_tax"}},
+				map[string]any{"bindings": map[string]any{"A": "meat_tax"}},
+				map[string]any{
+					"scheme":   map[string]any{"walton_id": "practical_reasoning2"},
+					"bindings": map[string]any{"A": "meat_tax", "G": "meat_tax", "P": "meat_tax", "S1": map[string]any{"unstated": "not said"}},
+				},
+			},
+			"target": map[string]any{"actual": map[string]any{"claim": "meat_tax", "formula": "too_slight(meat_tax,food_less_affordable_for_poor)"}},
+		},
+	}
+	tmp := t.TempDir()
+	in, pc := filepath.Join(tmp, "set.json"), filepath.Join(tmp, "case.json")
+	for p, v := range map[string]any{in: set, pc: cj} {
+		if err := os.WriteFile(p, []byte(mustJSON(t, v)), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	code := "import importlib.util, json, sys, yaml\n" +
+		"spec = importlib.util.spec_from_file_location('agreement', 'agreement.py')\n" +
+		"m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)\n" +
+		"schemes = {s['id']: s for s in yaml.safe_load(open(m.WALTON, encoding='utf-8'))['argument_schemes']}\n" +
+		"places = json.load(open(m.POSITIONS, encoding='utf-8'))\n" +
+		"S, case = json.load(open(sys.argv[1], encoding='utf-8')), json.load(open(sys.argv[2], encoding='utf-8'))\n" +
+		"print(json.dumps(m.canonical(S, case, schemes, places)))\n"
+	cmd := exec.Command(py, "-I", "-B", "-c", code, in, pc)
+	cmd.Dir = dir
+	out, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
+	var got, want any
+	if err := json.Unmarshal(out, &got); err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
+	if err := json.Unmarshal([]byte(mustJSON(t, cs.CanonicalSet(set, col))), &want); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("agreement.py:\n%s\nGo:\n%s", mustJSON(t, got), mustJSON(t, want))
+	}
+	// What Go gives, so that the comparison is not of two copies of the input.
+	x := cs.CanonicalSet(set, col)["x"]
+	if b := inst(x, 3)["bindings"].(map[string]any); b["A"] != "tax_meat" || b["G"] != "meat_tax" || b["P"] != "meat_tax" {
+		t.Errorf("practical_reasoning2's bindings: %v", b)
+	}
+	if c := inst(x, 0)["conclusion"].(map[string]any)["formula"]; c != "¬should_be_performed(tax_meat)" {
+		t.Errorf("the conclusion: %v", c)
 	}
 }
 

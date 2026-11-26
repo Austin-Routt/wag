@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
-	"regexp"
 	"strings"
 
 	"github.com/yourorg/wag/data"
@@ -134,42 +133,91 @@ func (c *Case) Canon(atom string) string {
 	return atom
 }
 
-// atomArg is an atom in an argument's place: a lower-case word not followed
-// by "(" (a predicate's name is followed by one).
-var atomArg = regexp.MustCompile(`[a-z_][A-Za-z0-9_]*`)
-
-// canonFormula puts each alias of a formula's atoms back to its action.
+// canonFormula puts each alias in an action's place of a formula back to its
+// action (positions.json gives the places, by predicate and arity, nested
+// terms included). An atom in any other place keeps its name, even when it is
+// spelled as an alias: a goal or a consequence is not an action. A formula
+// with nothing to put back is returned as it is.
 func (c *Case) canonFormula(f string) string {
 	if c == nil || len(c.canon) == 0 {
 		return f
 	}
-	idx := atomArg.FindAllStringIndex(f, -1)
-	var b strings.Builder
-	last := 0
-	for _, m := range idx {
-		if m[0] > 0 && isWordByte(f[m[0]-1]) {
-			continue
-		}
-		rest := strings.TrimLeft(f[m[1]:], " ")
-		if strings.HasPrefix(rest, "(") {
-			continue
-		}
-		b.WriteString(f[last:m[0]])
-		b.WriteString(c.Canon(f[m[0]:m[1]]))
-		last = m[1]
+	if out, changed := c.canonTerm(f); changed {
+		return out
 	}
-	b.WriteString(f[last:])
-	return b.String()
+	return f
 }
 
-func isWordByte(x byte) bool {
-	return x == '_' || x >= '0' && x <= '9' || x >= 'a' && x <= 'z' || x >= 'A' && x <= 'Z'
+// canonTerm is canonFormula for one term; changed says whether it put an
+// alias back.
+func (c *Case) canonTerm(f string) (string, bool) {
+	g := strings.TrimSpace(f)
+	if strings.HasPrefix(g, "¬") {
+		y, changed := c.canonTerm(strings.TrimPrefix(g, "¬"))
+		if !changed {
+			return f, false
+		}
+		return "¬" + y, true
+	}
+	name, args := splitFormula(g)
+	if len(args) == 0 {
+		return f, false
+	}
+	places := map[int]bool{}
+	for _, i := range typedPlaces.Action[fmt.Sprintf("%s/%d", name, len(args))] {
+		places[i-1] = true
+	}
+	changed := false
+	for i, x := range args {
+		switch {
+		case strings.Contains(x, "("):
+			if y, ch := c.canonTerm(x); ch {
+				args[i], changed = y, true
+			}
+		case places[i]:
+			if y := c.Canon(x); y != x {
+				args[i], changed = y, true
+			}
+		}
+	}
+	if !changed {
+		return f, false
+	}
+	return name + "(" + strings.Join(args, ",") + ")", true
 }
 
-// Canonical returns a copy of an annotation in which each alias, in its
-// bindings and formulas, is put back to its action, so that agreement reads
-// two names of one action as one (docs/annotation-records.md §11).
-func (c *Case) Canonical(a Annotation) Annotation {
+// actionVars are the variables of an instance's scheme that stand in an
+// action's place; nil without the collection, or when the scheme is not
+// one of its schemes (other).
+func actionVars(inst map[string]any, col *Collection) map[string]bool {
+	if col == nil {
+		return nil
+	}
+	sc, _ := inst["scheme"].(map[string]any)
+	id, _ := sc["walton_id"].(string)
+	s, ok := col.schemes[id]
+	if !ok {
+		return nil
+	}
+	out := map[string]bool{}
+	for v, kind := range typedVars(s) {
+		if kind == "action" {
+			out[v] = true
+		}
+	}
+	return out
+}
+
+// Canonical returns a copy of an annotation in which each alias of an action
+// is put back to its action where an action stands, so that agreement reads
+// two names of one action as one (docs/annotation-records.md §11): in the
+// binding of a variable that stands in an action's place in the instance's
+// scheme (walton.yml, positions.json), and in an action's place of a
+// formula. An atom anywhere else keeps its name, even when it is spelled as
+// an alias: a goal or a consequence written with an action's alias is not
+// that action, and reading it as one would make two different annotations
+// agree. Without the collection, the bindings are left as they are.
+func (c *Case) Canonical(a Annotation, col *Collection) Annotation {
 	if c == nil || len(c.canon) == 0 || a == nil {
 		return a
 	}
@@ -178,12 +226,22 @@ func (c *Case) Canonical(a Annotation) Annotation {
 		switch x := v.(type) {
 		case map[string]any:
 			out := make(map[string]any, len(x))
+			var acts map[string]bool
+			if _, ok := x["bindings"]; ok {
+				acts = actionVars(x, col)
+			}
 			for k, y := range x {
-				if key == "bindings" {
-					if s, ok := y.(string); ok {
-						out[k] = c.Canon(s)
-						continue
+				if b, ok := y.(map[string]any); ok && k == "bindings" {
+					nb := make(map[string]any, len(b))
+					for v, val := range b {
+						if s, ok := val.(string); ok && acts[v] {
+							nb[v] = c.Canon(s)
+						} else {
+							nb[v] = val
+						}
 					}
+					out[k] = nb
+					continue
 				}
 				out[k] = walk(y, k)
 			}
@@ -206,13 +264,13 @@ func (c *Case) Canonical(a Annotation) Annotation {
 }
 
 // CanonicalSet is Canonical for each annotation of a set.
-func (c *Case) CanonicalSet(set map[string]Annotation) map[string]Annotation {
+func (c *Case) CanonicalSet(set map[string]Annotation, col *Collection) map[string]Annotation {
 	if c == nil || len(c.canon) == 0 {
 		return set
 	}
 	out := make(map[string]Annotation, len(set))
 	for id, a := range set {
-		out[id] = c.Canonical(a)
+		out[id] = c.Canonical(a, col)
 	}
 	return out
 }
