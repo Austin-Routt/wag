@@ -1308,6 +1308,12 @@ examples: []
 			`the link maps 33.1's premise "Premise" 2 times, and the entry's links map it 1`, true},
 		{"a question mapped twice", "      - cq: CQ3\n", "      - cq: CQ1\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n      - cq: CQ3\n",
 			"the link maps CQ1 twice", true},
+		// The review of D022-D093 v1: a question the link maps to no formula,
+		// as links.json maps some (an undercutting question), says why, and
+		// the proposal gives no question for it, which would have no target.
+		{"a question mapped to no formula, and asked", "      - cq: CQ1\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n",
+			"      - cq: CQ1\n        note: an undercutter\n        walton: []\n",
+			"the proposal's link of x_mod to 33.1 maps CQ1 to no formula, so the question has nothing to target", true},
 	}
 	for _, c := range cases {
 		text := sound
@@ -1328,6 +1334,24 @@ examples: []
 		if !found {
 			t.Errorf("%s: want a finding with %q (error %v), got %v", c.name, c.want, c.error, got)
 		}
+	}
+	// Mapped to no formula with a note, and not asked: sound, and the view
+	// says so.
+	undercut := strings.Replace(strings.Replace(sound,
+		"      - cq: CQ1\n        walton: [{formula: \"brings_about(A,G)\", locus: premise}]\n",
+		"      - cq: CQ1\n        note: an undercutter\n        walton: []\n", 1),
+		"    - {id: 33/CQ1, asks: q, target: \"brings_about(A,G)\"}\n", "", 1)
+	if undercut == sound || strings.Contains(undercut, "33/CQ1") {
+		t.Fatal("the variant with an undercutting CQ1 did not apply")
+	}
+	up := load(undercut)
+	for _, f := range CheckProposal(up, s) {
+		if f.Error || strings.Contains(f.Msg, "CQ1") {
+			t.Errorf("a question mapped to no formula, with a note, and not asked: %s", f)
+		}
+	}
+	if v := string(ProposalView(up, s, "p.yml")); !strings.Contains(v, "  - CQ1: no formula; an undercutter\n") {
+		t.Errorf("the view does not say that CQ1 maps to no formula:\n%s", v)
 	}
 	// A link that links.json already has, unchanged, is accepted once the
 	// proposal is applied; another scheme's link to the entry is kept.
@@ -1407,6 +1431,43 @@ examples: []
 		}
 		if !warned {
 			t.Errorf("a question links.json does not map passes silently: %v", CheckProposal(q, &gap))
+		}
+		// A question links.json maps to no formula has nothing to target:
+		// a warning that says so (the review of D022-D093 v1).
+		none := *s
+		none.Links = append([]LinkEntry(nil), s.Links...)
+		emptied := false
+		for i, en := range none.Links {
+			if en.Number != "33.1" {
+				continue
+			}
+			en.Links = append([]WaltonLink(nil), en.Links...)
+			for j, l := range en.Links {
+				if l.ID == w.ID {
+					l.CQMap = append([]CQMapRow(nil), l.CQMap...)
+					for k, r := range l.CQMap {
+						if r.CQ == "CQ2" {
+							l.CQMap[k] = CQMapRow{CQ: "CQ2", Note: "no formula"}
+							emptied = true
+						}
+					}
+					en.Links[j] = l
+				}
+			}
+			none.Links[i] = en
+		}
+		if !emptied {
+			t.Fatal("links.json maps no CQ2 of positive_consequences to empty")
+		}
+		warned = false
+		for _, f := range CheckProposal(q, &none) {
+			if f.Error && strings.Contains(f.Msg, "CQ2") {
+				t.Errorf("links.json's question without a formula is an error: %s", f)
+			}
+			warned = warned || !f.Error && strings.Contains(f.Msg, "links.json maps CQ2 of positive_consequences to no formula, so the question has nothing to target")
+		}
+		if !warned {
+			t.Errorf("a question links.json maps to no formula passes silently: %v", CheckProposal(q, &none))
 		}
 		// A relinked scheme keeps the book's premise labels, which its own
 		// link to the entry gives when no other link does.

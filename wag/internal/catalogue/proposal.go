@@ -352,10 +352,19 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 						// No link maps the label (the review of D008-D074
 						// v2, CW1): the proposal's own link must; links.json's
 						// must follow when the proposal is applied.
+						// A label mapped to no formula is an undercutting
+						// question, which has nothing to target (the review of
+						// D022-D093 v1).
 						entry, label, _ := strings.Cut(q.ID, "/")
-						if l, ok := proposedLinkOf(p, src, s.ID, entry); ok {
+						l, ok := proposedLinkOf(p, src, s.ID, entry)
+						switch none := mapsNoFormula(src, s.ID, entry, label); {
+						case ok && none:
+							bad("%s: question %s: the proposal's link of %s to %s maps %s to no formula, so the question has nothing to target: drop it, or map %s there", s.ID, q.ID, s.ID, l, label, label)
+						case ok:
 							bad("%s: question %s: the proposal's link of %s to %s maps no %s: map it there, or drop the question", s.ID, q.ID, s.ID, l, label)
-						} else {
+						case none:
+							warn("%s: question %s: links.json maps %s of %s to no formula, so the question has nothing to target: drop it, or map %s in links.json when the proposal is applied", s.ID, q.ID, label, s.ID, label)
+						default:
 							warn("%s: question %s: links.json maps no %s of %s: add it to links.json when the proposal is applied, or drop the question", s.ID, q.ID, label, s.ID)
 						}
 					}
@@ -653,6 +662,16 @@ func proposedLinks(p *Proposal, src *Sources, bad func(string, ...any)) *Sources
 				bad("%s: the link maps %s twice", where, r.CQ)
 			}
 			rows[r.CQ] = true
+			if len(r.Walton) == 0 {
+				// A printed question mapped to no formula is the catalogue's
+				// undercutting question, as links.json has them (the check
+				// of D008-D074 v3, W3): a proposed link may map one so, and
+				// its note says why (the review of D022-D093 v1).
+				if strings.TrimSpace(r.Note) == "" {
+					bad("%s: %s maps to no formula, and its note does not say why", where, r.CQ)
+				}
+				continue
+			}
 			maps(r.CQ, r.Walton)
 		}
 		e.Links = append([]WaltonLink(nil), e.Links...)
@@ -696,6 +715,26 @@ func proposedLinkOf(p *Proposal, src *Sources, scheme, printedUnder string) (str
 		}
 	}
 	return "", false
+}
+
+// mapsNoFormula reports whether a link of the scheme to the entry its
+// questions are printed under (or to one that shares them) maps the label to
+// no formula: the catalogue's undercutting question (the check of D008-D074
+// v3, W3).
+func mapsNoFormula(src *Sources, scheme, printedUnder, label string) bool {
+	for _, e := range src.Links {
+		if e.Number != printedUnder && (e.SharesCQs == nil || *e.SharesCQs != printedUnder) {
+			continue
+		}
+		for _, l := range e.Links {
+			for _, r := range l.CQMap {
+				if l.ID == scheme && r.CQ == label && len(r.Walton) == 0 {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 // withID is a link under another id: links.json's link of a renamed scheme,
@@ -1155,6 +1194,9 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 				var fs []string
 				for _, fl := range fls {
 					fs = append(fs, fmt.Sprintf("`%s` (%s)", fl.Formula, fl.Locus))
+				}
+				if len(fs) == 0 {
+					fs = []string{"no formula"}
 				}
 				fmt.Fprintf(&b, "  - %s: %s", label, strings.Join(fs, ", "))
 				if note = strings.Join(strings.Fields(note), " "); note != "" {
