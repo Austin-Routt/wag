@@ -535,3 +535,44 @@ recorded here.
   defects gave no verdict (they left a variable unused) and were rewritten to keep it used.
 - **Not yet:** `wag-llm play --mode inquiry` names its seats Pro and Con, and `wag-llm report`
   counts sides; E1.6, which gives `wag-llm` its `--evidence`, names them otherwise.
+
+### E1.2 to E1.4, with the load of E1.6 (Y1 to Y3, and Y9 for a load)
+
+- **R1 to R16, O1 to O19, M1 to M14 pass** (`internal/server/recordset_test.go`,
+  `acts_test.go`, `cmd/wag-evidence/recordset_test.go`); R13 in a headless browser (the
+  workspace's `verify/e1/browser/evidence.js`): the record set's claims, a script and a link
+  written in Markdown among them, and its references are shown as text; no script runs, no link
+  is made, no move is made, no dialog opens.
+- **Y1 to Y3, and Y9 for a load, pass** (`evidence_load_test.go`), with the code of choice 13 for a
+  load and a resume: the record set is read again (its SHA-256 the game's, its payloads checked),
+  the server's pins must be the game's, each act is replayed with its mark's time and must give its
+  recorded revisions, and a game with a record set is not opened read-only. Done now because,
+  without it, loading such a game replayed its acts as refused without saying so: the replay read
+  a move's acceptance from its arguments, which an act does not make. Y4 to Y8 and Y10 (model
+  seats, `wag-llm replay`, old games) come with E1.5 and E1.6.
+- **M11's direct undercutter.** The shipped data gives `a1`'s scheme no question whose locus is
+  its inference, so its direct undercutter is an undercutter that answers no question (`attack`,
+  `undercutter`, expert opinion). The test as first written used an answer at the exception
+  `gain_discounted_by_bearer`, which concludes the exception, and was corrected; O10 uses the same
+  undercutter. The test now checks that the undercutter concludes `undercut(a1)`.
+- **Beyond the cases:** M11's test also checks the table's fourth row (a defence of `a1`'s
+  inference, an attack on `undercut(a1)`, grounded by a support binding at the inference, not by
+  an oppose one); O8 also refuses an exception argument and a premise given as the conclusion.
+- **Ids from the history.** A refused move takes a place in the history too, so an act after one
+  makes `game:b<i>` with that place counted; the tests read a new binding's id from the act's mark.
+- **R6** gained a case after a planted defect survived: `records.json` itself a link (a link below
+  `NAME/`).
+- **The board.** A person offers with the composer's *Offer evidence*, consents and withdraws with
+  the evidence panel's buttons, and cites admitted bindings with the argument forms' check boxes;
+  an argument's card shows its cited bindings, admitted or withdrawn, and the mark of an argument
+  no longer grounded. Checked in the browser with the record set `r13`.
+- **The move digest** renders an act's parts and its mark (without its time) and a move's cited
+  bindings only when present: other games keep their digests.
+- **Planted defects:** 75 in the code (the workspace's `verify/e1/mutants-e124.py`, two runs) and
+  3 in the board's markup (`verify/e1/browser/r13_defects.py`), all caught. In the first run 70 of
+  75 were caught: one survived for want of a case (`records.json` a link, added to R6), two were
+  equivalent as written (kinds `source` and `annotation` were still refused by the statement's
+  check; a refused act's record was left after a check that returns first) and two gave no
+  verdict (an unused import, a repeated case); all five were rewritten and caught in the second
+  run. One was caught only by a test's panic (O15 read an event it did not count); O15 now counts
+  the events first, and the defect is caught without one.

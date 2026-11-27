@@ -31,6 +31,7 @@ import (
 // Returns a TurnResult indicating whether the move was accepted, the score
 // delta, any arguments created, and whether the game has terminated.
 func (gs *GameState) ExecuteTurn(action nascq.ProposedAction) (*TurnResult, error) {
+	defer func() { gs.actTime = "" }() // a replayed act's time is for that act alone
 	r, err := gs.executeTurn(action)
 	if err == nil {
 		gs.LastRejection = ""
@@ -69,7 +70,12 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		action, timedOut = nascq.ProposedAction{Type: "abstain"}, true
 	}
 
+	if len(action.EvidenceRefs) > 0 && (action.Type == "resign" || action.Type == "abstain") {
+		return gs.rejectInvalid(player, action, "EV: a pass or a resignation cites no binding: it argues nothing"), nil
+	}
 	switch action.Type {
+	case ActOffer, ActConsent, ActWithdraw:
+		return gs.evidenceAct(player, action), nil
 	case "resign":
 		player.Resigned = true
 		gs.MoveHistory = append(gs.MoveHistory, Move{TurnNumber: gs.CurrentTurn, PlayerID: player.ID, Action: action, Resigned: true})
@@ -136,7 +142,7 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 			validated.AnswersCQID, validated.TargetArgID)), nil
 	}
 	if s := gs.NASCQ.GetScheme(validated.SchemeID); gs.Config.RequireEvidence && s != nil && s.Evidence == "required" &&
-		len(nonEmpty(action.Evidence)) == 0 {
+		len(nonEmpty(action.Evidence)) == 0 && len(action.EvidenceRefs) == 0 {
 		return gs.rejectInvalid(player, action, fmt.Sprintf("E1: an argument from %s must cite a source: %s",
 			s.Name, s.EvidenceNoteEN)), nil
 	}
@@ -222,6 +228,13 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		return gs.rejectInvalid(player, action, fmt.Sprintf("G1: this argument is already in the graph as %s", dup)), nil
 	}
 
+	// The bindings the move cites must be admitted, and agree with it
+	// (docs/e1-evidence.md, choice 7).
+	if msg := gs.evidenceRefsRefusal(action, validated, argIDs); msg != "" {
+		gs.Adapter.Restore(checkpoint)
+		return gs.rejectInvalid(player, action, msg), nil
+	}
+
 	// The player's own wording of the argument, and the sources they cite.
 	if len(argIDs) > 0 && validated.Type != "question" {
 		if t := strings.TrimSpace(action.Text); t != "" {
@@ -229,6 +242,9 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		}
 		if ev := nonEmpty(action.Evidence); len(ev) > 0 {
 			gs.Adapter.SetArgumentMeta(argIDs[0], "evidence", ev)
+		}
+		if len(action.EvidenceRefs) > 0 {
+			gs.Adapter.SetArgumentMeta(argIDs[0], "evidence_refs", append([]string{}, action.EvidenceRefs...))
 		}
 	}
 

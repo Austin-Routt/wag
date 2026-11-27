@@ -11,6 +11,7 @@ import (
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/kialo"
 	"github.com/yourorg/wag/internal/language"
+	"github.com/yourorg/wag/internal/manifest"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -36,6 +37,12 @@ type Export struct {
 	LegacyReplayedWith string `json:"legacy_replayed_with_data_sha256,omitempty"`
 	LegacyMoves        *int   `json:"legacy_moves,omitempty"`
 	ContinuedWith      string `json:"continued_with_data_sha256,omitempty"`
+	// Pins are the inputs the game was played with, by content (E1.1);
+	// RecordSet names its record set (docs/e1-evidence.md). A game with a
+	// record set is replayed only with this server's pins equal to its own
+	// and its record set read again (loadEvidence).
+	Pins      *manifest.Pins `json:"pins,omitempty"`
+	RecordSet *RecordSet     `json:"record_set,omitempty"`
 }
 
 // requestOf is the request that starts the exported game: the one recorded
@@ -153,6 +160,11 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 		}
 		if gs, err = s.newState(cfg, names); err != nil {
 			return nil, err
+		}
+		if req.Evidence != "" || e.RecordSet != nil {
+			if gs.Evidence, err = s.loadEvidence(e, req, gs, inspect); err != nil {
+				return nil, err
+			}
 		}
 	}
 	same := s.data.Matches(playedWith)
@@ -334,6 +346,9 @@ func replay(gs *game.GameState, m game.Move) error {
 	if m.TimedOut {
 		action = nascq.ProposedAction{Type: "abstain"}
 	}
+	if m.Evidence != nil {
+		gs.ReplayActAt(m.Evidence.Time) // its records are dated as the act was made
+	}
 	res, err := gs.ExecuteTurn(action)
 	if err != nil {
 		return err
@@ -352,14 +367,22 @@ func replay(gs *game.GameState, m game.Move) error {
 			return err
 		}
 	}
-	if played := res.Accepted || res.Abstained; played != (len(m.ArgIDs) > 0 || m.Abstained || m.Resigned) && !m.TimedOut {
+	recorded := len(m.ArgIDs) > 0 || m.Abstained || m.Resigned || m.Evidence != nil
+	if played := res.Accepted || res.Abstained; played != recorded && !m.TimedOut {
 		if m.Bridge != "" && !played {
 			return fmt.Errorf("%w: %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record", errBridgeRetired, m.Bridge)
 		}
 		if what, ok := namelessRefusal(m.Action, res.Error); ok && !played {
 			return namelessRemedy(what)
 		}
-		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(len(m.ArgIDs) > 0 || m.Abstained), outcome(played), res.Error)
+		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(recorded), outcome(played), res.Error)
+	}
+	if m.Evidence != nil {
+		// A replayed act makes or names the revisions recorded
+		// (docs/e1-evidence.md, choice 6).
+		if got := gs.MoveHistory[len(gs.MoveHistory)-1].Evidence; got == nil || *got != *m.Evidence {
+			return fmt.Errorf("the evidence act was recorded as %+v, but replayed as %+v", *m.Evidence, got)
+		}
 	}
 	return nil
 }

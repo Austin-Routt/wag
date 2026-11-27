@@ -309,6 +309,9 @@ type GameStart struct {
 	// Pins are the server's inputs by content: its engine, scheme file and
 	// NASCQ data, each a full SHA-256 (E1, docs/e1-evidence.md).
 	Pins *manifest.Pins `json:"pins,omitempty"`
+	// RecordSet names the game's record set and the SHA-256 of its
+	// records.json (docs/e1-evidence.md); absent for a game without one.
+	RecordSet *RecordSet `json:"record_set,omitempty"`
 }
 
 // Resumption is a resume of a game from its folder (docs/g-journal.md):
@@ -388,7 +391,8 @@ func (s *Server) guestCopy(b []byte) []byte {
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
 		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
-		Seats: ss.Seats, System: ss.system(), Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil()}
+		Seats: ss.Seats, System: ss.system(), Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil(),
+		RecordSet: ss.recordSet()}
 	if g.Build == nil {
 		g.Build = buildInfo()
 	}

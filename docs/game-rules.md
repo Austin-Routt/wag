@@ -408,3 +408,58 @@ types are planned: [`dialogue-types.md`](dialogue-types.md) §9,
   - the open questions;
   - every legal action, with its locus and answer variable;
   - the outcome, once the game is over.
+
+## 8. Evidence in an inquiry (E1)
+
+An inquiry may be played with a **record set** ([`e1-evidence.md`](e1-evidence.md)): sources,
+artifacts, representations, claims and dependencies captured before play, a `wag-evidence/0.2`
+bundle without the records the game writes ([`evidence-contract.md`](evidence-contract.md)).
+`wag-server` reads the record set `NAME` from its data folder's `evidence/NAME/records.json`, with
+its payloads under `evidence/NAME/`; a request names it (`"evidence": "NAME"`). Only an inquiry of
+two seats, each a person or a model (a person relaying a chatbot counts as a model), not
+moderated, takes one: a rule bot cannot consent (D076). The game checks the record set in full when
+it is created or loaded, writes the context and its actors (`game:context`, profile
+`wag-inquiry/1`, policy `two-party-consideration/1`, the players `game:player:<id>`, the game
+`game:wag`), and records the record set's name and SHA-256 in the trace's start and the export.
+The board shows the sources, claims, dependencies and bindings as text.
+
+**Acts.** Three moves act on evidence. Each takes the turn and is a move, not a pass; one that
+breaks a rule is refused with the usual penalty and leaves no record.
+
+- An **offer** (`evidence_offer`) binds a claim of the record set to a statement of an argument
+  that a support or attack move made: a premise, an assumption, an exception, its conclusion, or
+  its inference (whose statement is `undercut(A)`), with a role (`support`, `oppose`, `context` or
+  `definition`), an interpretation and a warrant. The game writes the target (`game:t<i>`, by
+  `game:wag`, with the argument's revision, `wag-argument-revision/1`) and the binding (`game:b<i>`,
+  by the player), `<i>` being the act's place in the history. The offer is its player's consent.
+  An offer identical to one made is refused; any other change makes another binding, with its own
+  revision.
+- A **consent** (`evidence_consent`) names a binding and its exact revision, in full or by its
+  first 12 digits; a consent for another revision is stale.
+- A **withdrawal** (`evidence_withdraw`) takes back one's own standing consent.
+
+A binding is **admitted for consideration** while both players' consents to its revision stand.
+Admission sets no label, weight or assumption: it is not a finding of fact (D076).
+
+**Citing a binding.** A support or attack move may cite admitted bindings (`evidence_refs`),
+besides its citation strings, which keep their meaning. Each must agree with what the move's
+argument concludes:
+
+| The move's argument concludes | A cited binding must be |
+|---|---|
+| S (an argument for S; an answer at an exception S) | `support`, its target's proposition S |
+| the opposite of S (a rebuttal, an undermining of premise S, a defence at exception S, an attack on S) | `oppose`, its target's proposition S |
+| `undercut(A)` (a direct undercutter of A) | `oppose`, at A's inference |
+| the opposite of `undercut(A)` (a defence of A's inference) | `support`, at A's inference |
+
+Context and definition bindings ground no move; a question, a pass, a resignation or an act cites
+none. *Require sources* is met by a citation string or by a cited binding that agrees.
+
+**Withdrawal** ends the admission. A move that cited the binding stays, in force as before; the
+board shows its reference withdrawn, and an argument each of whose cited bindings was withdrawn,
+citing no string, as no longer grounded by admitted evidence. The mark changes no label.
+
+**Load and resume.** The record set is read again from the evidence folder: its SHA-256 must be
+the game's, its payloads must check, and the server's pins must be the game's; each act is replayed
+with the time it was made and must make or name the revisions recorded. A game with a record set
+is not opened read-only.

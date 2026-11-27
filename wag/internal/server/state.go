@@ -39,6 +39,9 @@ type State struct {
 	// Profile is the game's profile (D094 (b)) as play has left it; absent
 	// in a game made before step C5.2.
 	Profile *game.Profile `json:"profile,omitempty"`
+	// Evidence is the game's record set and the bindings made in play
+	// (docs/e1-evidence.md); absent in a game without a record set.
+	Evidence *EvidenceView `json:"evidence,omitempty"`
 
 	Statements map[string]*StmtState `json:"statements"`
 	Arguments  map[string]*ArgState  `json:"arguments"`
@@ -166,17 +169,23 @@ type ArgState struct {
 	Exceptions []string `json:"exceptions,omitempty"`
 	// PremiseTexts and ExceptionTexts read the premises and exceptions as
 	// the card shows them, with the conclusion as "C" (GameState.SayIn).
-	PremiseTexts   []string     `json:"premise_texts,omitempty"`
-	ExceptionTexts []string     `json:"exception_texts,omitempty"`
-	Undercutter    string       `json:"undercutter,omitempty"`
-	UndercutBy     []string     `json:"undercut_by,omitempty"` // arguments for its undercutter
-	Text           string       `json:"text,omitempty"`
-	Evidence       []string     `json:"evidence,omitempty"`
-	Answers        *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
-	CQs            []CQOnArg    `json:"cqs"`
-	Move           int          `json:"move"` // index of the move that made it in the log, -1 if imported
-	Moderation     string       `json:"moderation,omitempty"`
-	Kialo          *KialoOrigin `json:"kialo,omitempty"`
+	PremiseTexts   []string `json:"premise_texts,omitempty"`
+	ExceptionTexts []string `json:"exception_texts,omitempty"`
+	Undercutter    string   `json:"undercutter,omitempty"`
+	UndercutBy     []string `json:"undercut_by,omitempty"` // arguments for its undercutter
+	Text           string   `json:"text,omitempty"`
+	Evidence       []string `json:"evidence,omitempty"`
+	// EvidenceRefs are the bindings the argument cites, each with whether
+	// it is admitted now; Ungrounded: each was withdrawn since it was cited,
+	// and the argument cites no string: it is no longer grounded by admitted
+	// evidence (docs/e1-evidence.md, choice 8). The mark changes no label.
+	EvidenceRefs []RefState   `json:"evidence_refs,omitempty"`
+	Ungrounded   bool         `json:"ungrounded,omitempty"`
+	Answers      *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
+	CQs          []CQOnArg    `json:"cqs"`
+	Move         int          `json:"move"` // index of the move that made it in the log, -1 if imported
+	Moderation   string       `json:"moderation,omitempty"`
+	Kialo        *KialoOrigin `json:"kialo,omitempty"`
 }
 
 // AnswerOf says which question an answer argument answers.
@@ -231,7 +240,7 @@ type LogEntry struct {
 	NL       string             `json:"nl,omitempty"` // the player's own words
 
 	// The move in parts, for the dialogue view.
-	Kind     string   `json:"kind"`             // argue, attack, defend, for, against, question, pass, resign, decide, rejected, timeout
+	Kind     string   `json:"kind"`             // argue, attack, defend, for, against, question, pass, resign, decide, evidence, rejected, timeout
 	Target   string   `json:"target,omitempty"` // the argument the move answers or questions
 	Stmt     string   `json:"stmt,omitempty"`   // the statement a move for or against a statement is about
 	StmtText string   `json:"stmt_text,omitempty"`
@@ -277,7 +286,7 @@ func (s *Session) buildState() *State {
 	st := &State{
 		ID: s.ID, Version: s.Version, Title: s.Title, Source: s.Source,
 		Round: gs.CurrentTurn, Active: gs.ActivePlayer().ID, ActiveAI: s.Seats[gs.ActivePlayerIdx].aiKind(),
-		Claim: gs.Claim, Over: gs.Terminated, Rejection: gs.LastRejection, Profile: gs.Profile,
+		Claim: gs.Claim, Over: gs.Terminated, Rejection: gs.LastRejection, Profile: gs.Profile, Evidence: evidenceView(gs),
 		Statements: map[string]*StmtState{}, Arguments: map[string]*ArgState{},
 		Roots: []string{}, Questions: []QuestionState{}, Log: []LogEntry{},
 	}
@@ -384,6 +393,17 @@ func (s *Session) buildState() *State {
 		}
 		as.Text, _ = arg.Metadata["text"].(string)
 		as.Evidence, _ = arg.Metadata["evidence"].([]string)
+		if refs, _ := arg.Metadata["evidence_refs"].([]string); len(refs) > 0 && gs.Evidence != nil {
+			withdrawn := 0
+			for _, r := range refs {
+				ok := gs.Evidence.Admitted(r)
+				as.EvidenceRefs = append(as.EvidenceRefs, RefState{Binding: r, Admitted: ok})
+				if !ok {
+					withdrawn++
+				}
+			}
+			as.Ungrounded = withdrawn == len(refs) && len(as.Evidence) == 0
+		}
 		if loc, ok := arg.Metadata["kialo_location"].(string); ok {
 			cl, _ := arg.Metadata["kialo_claim"].(string)
 			as.Kialo = &KialoOrigin{Location: loc, Claim: cl}
@@ -836,7 +856,7 @@ func sortedStrings(xs []string) []string {
 func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) LogEntry {
 	a := m.Action
 	e := LogEntry{Index: i, Round: m.TurnNumber, Player: m.PlayerID, Text: gs.DescribeMove(m),
-		Accepted: len(m.ArgIDs) > 0 || m.Abstained || m.Resigned || a.Type == "decide",
+		Accepted: len(m.ArgIDs) > 0 || m.Abstained || m.Resigned || a.Type == "decide" || m.Evidence != nil,
 		Deltas:   m.ScoreDeltas, Args: m.ArgIDs, NL: a.Text, Target: a.TargetArgID, CQ: a.AnswersCQID}
 	if q := gs.NASCQ.GetCQ(a.AnswersCQID); q != nil {
 		e.CQName = q.Name
@@ -847,6 +867,8 @@ func logEntry(gs *game.GameState, i int, m game.Move, madeBy map[string]int) Log
 	switch {
 	case a.Type == "decide":
 		e.Kind = "decide"
+	case m.Evidence != nil:
+		e.Kind = "evidence"
 	case m.Resigned:
 		e.Kind = "resign"
 	case m.TimedOut:

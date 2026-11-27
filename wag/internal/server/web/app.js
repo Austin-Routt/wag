@@ -503,6 +503,7 @@ const KIND = {
   argue: ['argues', 'pro'], attack: ['attacks', 'con'], defend: ['defends', 'pro'], question: ['asks', 'q'],
   for: ['argues for a statement', 'pro'], against: ['argues against a statement', 'con'],
   pass: ['passes', ''], resign: ['resigns', ''], decide: ['rules', 'mod'], rejected: ['tried a move that was rejected', 'rej'], timeout: ['ran out of time', ''],
+  evidence: ['acts on evidence', 'ev'],
 };
 function deltasText(d) {
   if (!d || !Object.keys(d).length) return '';
@@ -543,8 +544,8 @@ function entryCard(l, i, depth, parent) {
   let body = '';
   if (l.kind === 'rejected') {
     body = `<div class="small">${esc(l.reason || 'The move was not legal.')}</div><div class="small muted">A rejected move costs points; the same player moves again.</div>`;
-  } else if (l.kind === 'pass' || l.kind === 'resign' || l.kind === 'timeout' || l.kind === 'decide') {
-    body = l.kind === 'decide' ? `<div>${esc(l.text)}</div>` : '';
+  } else if (l.kind === 'pass' || l.kind === 'resign' || l.kind === 'timeout' || l.kind === 'decide' || l.kind === 'evidence') {
+    body = l.kind === 'decide' || l.kind === 'evidence' ? `<div>${esc(l.text)}</div>` : '';
   } else {
     if (t) body += `<div class="replyto">↳ ${l.cq_name ? `the <b>${esc(l.cq_name.replace(/ Question$/, ''))}</b> question` : 'a direct reply'} about <button class="link" data-entry="${parent}">${esc(t.owner)}'s ${esc(t.id)}</button>${l.about ? ` (${esc(l.about)})` : ''}</div>`;
     if (l.stmt) body += `<div class="replyto">↳ ${l.kind === 'for' ? 'for' : 'against'} “${rich(l.stmt_text.replace(/\.$/, ''))}”${pa ? `, part of <button class="link" data-entry="${parent}">${esc(pa.owner)}'s ${esc(pa.id)}</button>` : ''}</div>`;
@@ -575,7 +576,7 @@ function argParts(a) {
   const prem = a.premises.map((p, k) => { const ps = G.statements[p]; return `<li><span class="dot ${ps ? ps.label : ''}"></span>${rich((a.premise_texts || [])[k] || (ps ? ps.text : p))}${stmtActs(p, a.id)}</li>`; }).join('');
   const exIn = (a.exceptions || []).map((e, k) => [e, (a.exception_texts || [])[k]]).filter(([e]) => G.statements[e] && G.statements[e].label === 'in');
   const ev = (a.evidence || []).map(x => /^https?:\/\//.test(x) ? `<a href="${esc(x)}" target="_blank" rel="noopener">${esc(x)}</a>` : esc(x)).join('; ');
-  return `<div class="parts"><div class="small"><b>C</b> = ${rich(stmtText(a.conclusion))}${stmtActs(a.conclusion)}</div><ol>${prem}</ol>
+  return `<div class="parts">${refsHTML(a)}<div class="small"><b>C</b> = ${rich(stmtText(a.conclusion))}${stmtActs(a.conclusion)}</div><ol>${prem}</ol>
     ${exIn.map(([e, tx]) => `<div class="warn small">⚡ exception that holds: ${rich(tx || stmtText(e))}</div>`).join('')}
     ${ev ? `<div class="ev">Sources: ${ev}</div>` : ''}
     <div class="small muted">${esc(a.scheme_name)} · weight ${a.base_weight.toFixed(2)} · by ${esc(a.owner)}</div></div>`;
@@ -748,6 +749,7 @@ function argCard(id, side) {
     <div class="therefore">∴ <b>C</b>: ${esc(short(stmtText(a.conclusion), 140))}</div>
     ${warn}${exc}
     ${ev ? `<div class="ev">Sources: ${ev}</div>` : ''}
+    ${refsHTML(a)}
     ${chips ? `<div class="cqs">${chips}</div>` : ''}${panel}
   </div>`;
 }
@@ -809,11 +811,13 @@ function renderSide() {
   if (G.pending) parts.push(pendingPanel());
   if (!G.over && !G.inspect) parts.push('<div class="panel" id="composer"></div>');
   if (G.profile) parts.push(profilePanel());
+  if (G.evidence) parts.push(evidencePanel());
   if (G.questions && G.questions.length) parts.push(`<div class="panel"><h2>Open questions</h2><ul class="small">${G.questions.map(q => `<li><b>${esc(q.asker)}</b> asks <b>${esc(q.owner)}</b> about <button class="link" data-goarg="${esc(q.target)}">${esc(q.target)}</button>: ${esc(q.question)}${q.turns_left ? ` <span class="req">(${q.turns_left} turn(s) left)</span>` : ''}</li>`).join('')}</ul></div>`);
   if (ui.view === 'board') parts.push(`<div class="panel"><h2>History</h2><div class="log"><ol>${G.log.map(l => `<li class="${l.accepted ? '' : 'rej'}"><span class="r">${l.round}.</span> ${esc(l.text)}${l.deltas && Object.keys(l.deltas).length ? ' <span class="muted">(' + Object.entries(l.deltas).map(([k, v]) => `${esc(k)} ${v > 0 ? '+' : ''}${v.toFixed(1)}`).join(', ') + ')</span>' : ''}${l.nl ? `<div class="muted small">“${esc(short(l.nl, 160))}”</div>` : ''}</li>`).join('') || '<li class="muted">No moves yet.</li>'}</ol></div></div>`);
   side.innerHTML = parts.join('');
   side.onclick = e => {
     const ga = e.target.closest('[data-goarg]'); if (ga) { const a = G.arguments[ga.dataset.goarg]; if (a) focusOn(a.conclusion); }
+    const ea = e.target.closest('[data-evact]'); if (ea) submit({ type: ea.dataset.evact, binding_id: ea.dataset.binding, revision: ea.dataset.rev });
   };
   if (G.pending) wirePending();
   if (!G.over && !G.inspect) renderComposer();
@@ -943,7 +947,7 @@ function renderComposer() {
   }
   if (G.seat_kind === 'llm' && !ui.manual) return composeLLM(box);
   const c = ui.c || (ui.c = newComposer('argue'));
-  const kinds = [['argue', 'New argument'], ['stmt', 'For / against'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Ask'], ['pass', 'Pass'], ['resign', 'Resign']];
+  const kinds = [['argue', 'New argument'], ['stmt', 'For / against'], ['attack', 'Attack'], ['defend', 'Defend'], ['question', 'Ask'], ...(G.evidence ? [['evidence', 'Offer evidence']] : []), ['pass', 'Pass'], ['resign', 'Resign']];
   const owes = (G.questions || []).filter(q => q.owner === G.active);
   box.innerHTML = `<div class="who">${esc(G.active)} to move${me && me.side ? ` <span class="pill ${me.side}">${me.side}</span>` : ''}</div>
     ${G.last_rejection ? `<div class="warn">Last move rejected: ${esc(G.last_rejection)}</div>` : ''}
@@ -957,6 +961,7 @@ function renderComposer() {
   const body = $('#cbody');
   if (c.kind === 'argue') return composeArgue(body, c);
   if (c.kind === 'stmt') return composeStmt(body, c);
+  if (c.kind === 'evidence') return composeOffer(body, c);
   if (c.kind === 'pass') return composeSimple(body, 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
   if (c.kind === 'resign') return composeSimple(body, G.config.mode === 'inquiry' ? 'Resign: the inquiry ends, with the claim\'s label as its result.' : 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
   return composeTargeted(body, c);
@@ -969,6 +974,7 @@ const KIND_HELP = {
   defend: 'Answer one of an argument’s critical questions in its favour, backed by an argument of your own.',
   question: 'Ask a critical question, or challenge a premise, without arguing: the argument stops counting until its author answers.',
   pass: 'Pass the turn.', resign: 'Give up the game.',
+  evidence: 'Offer a claim of the record set for a statement of an argument on the board: your offer is your consent; the other player\'s consent admits it for consideration. To consent or withdraw, use the buttons of the evidence panel.',
 };
 
 // composeLLM is the composer of a language-model seat: the prompt to copy
@@ -1111,12 +1117,12 @@ function whyInput(c) {
 
 function evidenceInput(sc, c) {
   const req = sc.evidence === 'required' && G.config.require_evidence;
-  return `<label>Sources ${req ? '<span class="req">(required)</span>' : '(optional)'}: one per line</label><textarea id="ev" placeholder="${esc(sc.evidence_note_en || 'A citation or a link')}">${esc(c.evidence)}</textarea>`;
+  return `<label>Sources ${req ? '<span class="req">(required)</span>' : '(optional)'}: one per line</label><textarea id="ev" placeholder="${esc(sc.evidence_note_en || 'A citation or a link')}">${esc(c.evidence)}</textarea>${citeInput(c)}`;
 }
 
 function buildArgue(c) {
   if (!c.scheme) return null;
-  return withProfile({ type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme], c.actors);
+  return withProfile({ type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), evidence_refs: (c.refs || []).length ? c.refs : undefined }, SCHEME[c.scheme], c.actors);
 }
 
 // stmtOptions fetches (once per game version) the moves about a statement.
@@ -1172,7 +1178,7 @@ function buildStmt(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys((o && o.fixed) || {})) delete vars[v];
-  return withProfile({ type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme], c.actors);
+  return withProfile({ type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), evidence_refs: (c.refs || []).length ? c.refs : undefined }, SCHEME[c.scheme], c.actors);
 }
 
 // moveOptions fetches (once per game version) the critical questions the
@@ -1252,7 +1258,7 @@ function buildTargeted(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys(fixedOf(o, c.kind, c.scheme) || {})) delete vars[v];
-  return withProfile({ type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), comparison: c.comparison || undefined }, SCHEME[c.scheme], c.actors);
+  return withProfile({ type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), evidence_refs: (c.refs || []).length ? c.refs : undefined, comparison: c.comparison || undefined }, SCHEME[c.scheme], c.actors);
 }
 
 function wireComposer(body, c, build) {
@@ -1261,6 +1267,7 @@ function wireComposer(body, c, build) {
   const nl = $('#nl', body); if (nl) nl.oninput = () => { c.text = nl.value; };
   const why = $('#why', body); if (why) why.oninput = () => { c.why = why.value; };
   const ev = $('#ev', body); if (ev) ev.oninput = () => { c.evidence = ev.value; schedulePreview(c, build); };
+  body.querySelectorAll('[data-cite]').forEach(x => x.onchange = () => { c.refs = [...body.querySelectorAll('[data-cite]:checked')].map(y => y.dataset.cite); schedulePreview(c, build); });
   body.querySelectorAll('[data-var]').forEach(inp => inp.oninput = () => { c.vars[inp.dataset.var] = inp.value; schedulePreview(c, build); });
   const cmp = body.querySelector('[data-cmp]'); if (cmp) cmp.onchange = () => { c.comparison = cmp.value; schedulePreview(c, build); };
   body.querySelectorAll('[data-actor]').forEach(sel => sel.onchange = () => { (c.actors = c.actors || {})[sel.dataset.actor] = sel.value; schedulePreview(c, build); });
@@ -1405,3 +1412,86 @@ function renderRules() {
 }
 
 init().catch(e => { document.body.innerHTML = '<p style="padding:20px">Cannot reach the WAG server: ' + esc(e.message) + '</p>'; });
+
+// ---------------------------------------------------------------------------
+// Evidence (docs/e1-evidence.md): the record set, the bindings, the acts
+// ---------------------------------------------------------------------------
+
+// evidencePanel shows a game's record set and the bindings its players made
+// (choice 12): every part a binding's revision covers, its full revision
+// and who has consented. Excerpts, claims, labels and references are data:
+// shown as text (esc), never through rich, never as a link.
+function evidencePanel() {
+  const e = G.evidence;
+  const byId = (list, id) => (list || []).find(x => x.id === id) || {};
+  const src = id => byId(e.sources, id);
+  const rep = id => byId(e.representations, id);
+  const art = id => byId(e.artifacts, id);
+  const claim = id => byId(e.claims, id);
+  const mover = !G.over && !G.inspect && G.can_move ? G.active : '';
+  const sources = (e.sources || []).map(s => `<li><b>${esc(s.label)}</b> <span class="muted">(${esc(s.kind)}, ${esc(s.id)})</span><div class="mono small">${esc(s.reference)}</div></li>`).join('');
+  const claims = (e.claims || []).map(c => {
+    const r = rep(c.representation_id), a = art(r.artifact_id);
+    return `<li><span class="mono">${esc(c.id)}</span>: ${esc(c.mode)}, from ${esc(src(c.attributed_to).label || c.attributed_to)} <span class="muted">(${esc(r.kind)} ${esc(c.representation_id)} of ${esc(a.revision)}, ${esc(a.capture_status)})</span><blockquote class="small">${esc(c.text)}</blockquote><div class="small muted">Scope: ${esc(c.scope)}</div></li>`;
+  }).join('');
+  const deps = (e.dependencies || []).map(d => `<li><span class="mono">${esc(d.id)}</span>: ${esc(d.relation)}, ${(d.artifact_ids || []).map(esc).join(' and ')}${d.rationale ? ' — ' + esc(d.rationale) : ''}</li>`).join('');
+  const bindings = (e.bindings || []).map(b => {
+    const t = b.target || {}, c = claim(b.claim_id), mine = (b.consents || []).includes(mover);
+    const state = b.admitted ? '<b>admitted for consideration</b>' : b.withdrawn ? 'not admitted: a consent was withdrawn' : 'offered, not admitted';
+    const act = !mover ? '' : mine ? `<button class="small" data-evact="evidence_withdraw" data-binding="${esc(b.id)}" data-rev="${esc(b.revision)}">Withdraw ${esc(mover)}'s consent</button>`
+      : `<button class="small primary" data-evact="evidence_consent" data-binding="${esc(b.id)}" data-rev="${esc(b.revision)}">Consent as ${esc(mover)}</button>`;
+    return `<li><span class="mono">${esc(b.id)}</span> (${state}): ${esc(b.role)} at <span class="mono">${esc(t.argument_id)}</span>'s ${esc(t.kind)} <span class="mono">${esc(t.proposition)}</span>
+      <div class="small">Claim <span class="mono">${esc(b.claim_id)}</span>: “${esc(c.text || '')}”</div>
+      <div class="small">Interpretation: ${esc(b.interpretation)}</div>
+      <div class="small">Warrant: ${esc(b.warrant)}</div>
+      <div class="small muted">Offered by ${esc(b.offered_by)}; consents: ${(b.consents || []).map(esc).join(', ') || 'none'}; the argument's revision <span class="mono">${esc(t.argument_revision)}</span></div>
+      <div class="small muted">Revision <span class="mono">${esc(b.revision)}</span></div>${act}</li>`;
+  }).join('');
+  return `<div class="panel evidence"><h2>Evidence: ${esc(e.name)}</h2>
+    <p class="small muted">Material for consideration only (D076): a binding is admitted when both players consent to its exact revision; admission sets no label, weight or assumption. Context ${esc(e.context)}, policy ${esc(e.policy)}; the record set's SHA-256 <span class="mono">${esc(e.sha256)}</span>.</p>
+    <h3>Sources</h3><ul class="small">${sources || '<li class="muted">None.</li>'}</ul>
+    <h3>Claims</h3><ul class="small">${claims || '<li class="muted">None.</li>'}</ul>
+    ${deps ? `<h3>Dependencies</h3><ul class="small">${deps}</ul>` : ''}
+    <h3>Bindings</h3><ul class="small">${bindings || '<li class="muted">None offered yet.</li>'}</ul></div>`;
+}
+
+// refsHTML shows the bindings an argument cites, each admitted or
+// withdrawn, and the mark of an argument no longer grounded by admitted
+// evidence (choice 8), which changes no label.
+function refsHTML(a) {
+  if (!(a.evidence_refs || []).length) return '';
+  const refs = a.evidence_refs.map(r => `<span class="mono">${esc(r.binding)}</span> ${r.admitted ? '(admitted)' : '<span class="muted">(withdrawn)</span>'}`).join('; ');
+  return `<div class="ev">Bindings cited: ${refs}</div>${a.ungrounded ? '<div class="warn small">No longer grounded by admitted evidence: each binding it cites was withdrawn. It stands on its scheme and questions as before.</div>' : ''}`;
+}
+
+// citeInput offers the admitted bindings for a move to cite.
+function citeInput(c) {
+  const admitted = ((G.evidence || {}).bindings || []).filter(b => b.admitted);
+  if (!admitted.length) return '';
+  return `<label>Cite admitted bindings (support or oppose, agreeing with what the move concludes)</label>${admitted.map(b => `<label class="inline small"><input type="checkbox" data-cite="${esc(b.id)}" ${(c.refs || []).includes(b.id) ? 'checked' : ''}> <span class="mono">${esc(b.id)}</span>: ${esc(b.role)} at ${esc((b.target || {}).argument_id)}'s ${esc((b.target || {}).kind)} ${esc((b.target || {}).proposition)}</label>`).join('')}`;
+}
+
+// composeOffer is the form of an offer: a claim of the record set for a
+// statement of an argument on the board, with a role, an interpretation
+// and a warrant.
+function composeOffer(body, c) {
+  const e = G.evidence;
+  const args = Object.values(G.arguments).filter(a => a.role === 'main' && a.move >= 0).map(a => a.id);
+  c.offer = c.offer || { claim_id: ((e.claims || [])[0] || {}).id || '', argument_id: args[0] || '', kind: 'premise', statement: '', role: 'support', interpretation: '', warrant: '' };
+  const o = c.offer, a = G.arguments[o.argument_id] || {};
+  const stmts = { premise: a.premises || [], exception: a.exceptions || [], conclusion: a.conclusion ? [a.conclusion] : [], inference: a.undercutter ? [a.undercutter] : [] }[o.kind] || [];
+  if (!stmts.includes(o.statement)) o.statement = stmts[0] || '';
+  const opt = (v, cur, label) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(label || v)}</option>`;
+  body.innerHTML = `<label>Claim of the record set</label><select id="oclaim">${(e.claims || []).map(x => opt(x.id, o.claim_id, x.id + ': ' + short(x.text, 60))).join('')}</select>
+    <label>Argument</label><select id="oarg">${args.map(x => opt(x, o.argument_id)).join('')}</select>
+    <label>Its part</label><select id="okind">${['premise', 'exception', 'conclusion', 'inference'].map(x => opt(x, o.kind)).join('')}</select>
+    <label>Statement</label><select id="ostmt">${stmts.map(x => opt(x, o.statement, x)).join('')}</select>
+    <label>Role</label><select id="orole">${['support', 'oppose', 'context', 'definition'].map(x => opt(x, o.role)).join('')}</select>
+    <label>Interpretation: what the claim is offered as showing</label><textarea id="ointerp">${esc(o.interpretation)}</textarea>
+    <label>Warrant: why it would bear on the statement</label><textarea id="owarrant">${esc(o.warrant)}</textarea>
+    <p><button class="primary" id="ooffer">Offer</button></p>`;
+  const on = (id, k, again) => { const el = $(id, body); el.onchange = el.oninput = () => { o[k] = el.value; if (again) composeOffer(body, c); }; };
+  on('#oclaim', 'claim_id'); on('#oarg', 'argument_id', true); on('#okind', 'kind', true); on('#ostmt', 'statement'); on('#orole', 'role');
+  on('#ointerp', 'interpretation'); on('#owarrant', 'warrant');
+  $('#ooffer', body).onclick = () => submit({ type: 'evidence_offer', offer: { ...o } });
+}

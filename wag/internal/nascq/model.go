@@ -296,6 +296,32 @@ type ProposedAction struct {
 	// Comparison is how the alternative of a scheme that records one is
 	// better: "surely", "sooner" or "cheaper" (D089).
 	Comparison string `json:"comparison,omitempty"`
+
+	// An evidence act (docs/e1-evidence.md), of type "evidence_offer",
+	// "evidence_consent" or "evidence_withdraw": an offer of a claim of the
+	// game's record set for a statement of an argument on the board, or a
+	// consent to a binding's exact revision, or the withdrawal of one's
+	// consent. The game writes the records; an offer is its player's consent.
+	Offer     *EvidenceOffer `json:"offer,omitempty"`
+	BindingID string         `json:"binding_id,omitempty"`
+	Revision  string         `json:"revision,omitempty"`
+	// EvidenceRefs cites bindings admitted for consideration, besides the
+	// citation strings of Evidence (docs/e1-evidence.md, choice 7).
+	EvidenceRefs []string `json:"evidence_refs,omitempty"`
+}
+
+// EvidenceOffer is what an offer proposes: a claim of the record set, bound
+// to a statement of an argument on the board (its premise, assumption,
+// exception or conclusion, or its inference) with a role, an interpretation
+// and a warrant.
+type EvidenceOffer struct {
+	ClaimID        string `json:"claim_id"`
+	ArgumentID     string `json:"argument_id"`
+	Kind           string `json:"kind"`                // premise, assumption, exception, conclusion, inference
+	Statement      string `json:"statement,omitempty"` // the statement's id (implied for a conclusion and an inference)
+	Role           string `json:"role"`                // support, oppose, context, definition
+	Interpretation string `json:"interpretation"`
+	Warrant        string `json:"warrant"`
 }
 
 // ActionDecl declares an action: its id, its actor (required: D094 (b))

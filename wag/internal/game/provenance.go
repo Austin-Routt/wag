@@ -32,7 +32,8 @@ func InputHashes(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) (yamlSHA, na
 
 // MoveDigest is a SHA-256 over a canonical rendering of the move history:
 // every move's player, action (with bindings in sorted order, and its
-// declarations and comparison when it has them), created argument IDs,
+// declarations, comparison, evidence act and cited bindings when it has
+// them), an evidence act's mark (without its time), created argument IDs,
 // weight, score delta and the statement labels after it.
 // Equal digests mean equality only for this deliberately partial rendering. Wall-clock
 // metadata (created_at) is deliberately not part of it.
@@ -54,6 +55,21 @@ func (gs *GameState) MoveDigest() string {
 		}
 		if a.Comparison != "" {
 			fmt.Fprintf(&b, "|comparison=%s", a.Comparison)
+		}
+		// An evidence act's parts and its mark, and the bindings a move
+		// cites (docs/e1-evidence.md), written only when present, as the
+		// declarations are; the mark's time is wall-clock metadata.
+		if o := a.Offer; o != nil {
+			fmt.Fprintf(&b, "|offer=%q:%q:%q:%q:%q:%q:%q", o.ClaimID, o.ArgumentID, o.Kind, o.Statement, o.Role, o.Interpretation, o.Warrant)
+		}
+		if a.BindingID != "" || a.Revision != "" {
+			fmt.Fprintf(&b, "|binding=%q:%q", a.BindingID, a.Revision)
+		}
+		if len(a.EvidenceRefs) > 0 {
+			fmt.Fprintf(&b, "|refs=%q", a.EvidenceRefs)
+		}
+		if k := m.Evidence; k != nil {
+			fmt.Fprintf(&b, "|act=%s:%s:%s:%s", k.Act, k.BindingID, k.BindingRevision, k.ArgumentRevision)
 		}
 		fmt.Fprintf(&b, "|%.6f|%.6f|", m.Weight, m.ScoreDelta)
 		keys := make([]string, 0, len(m.LabelsAfter))

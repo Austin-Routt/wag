@@ -99,6 +99,10 @@ type Server struct {
 	// pins are the inputs by content (manifest): the engine, the scheme
 	// file and the NASCQ data.
 	pins manifest.Pins
+	// evidenceDir is the evidence folder SetEvidence gave (evidenceSet);
+	// without one, the data folder's evidence/ (evidenceFolder).
+	evidenceDir string
+	evidenceSet bool
 	// stopAfterReply, set by a test, stops a model seat's turn after the
 	// provider's answer is recorded and saved, before it is used, as a crash
 	// would (docs/g-journal.md).
@@ -459,6 +463,9 @@ type NewGameRequest struct {
 	// replays with the build it was recorded with (docs/llm.md).
 	Profile *game.Profile   `json:"profile,omitempty"`
 	Case    json.RawMessage `json:"case,omitempty"`
+	// Evidence names the game's record set in the server's evidence folder
+	// (docs/e1-evidence.md): an inquiry of two people or models only.
+	Evidence string `json:"evidence,omitempty"`
 }
 
 // withProfile is the request of a new game with its profile: the case
@@ -636,6 +643,12 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			httpError(w, err, http.StatusBadRequest)
 			return
 		}
+		if req.Evidence != "" {
+			if err := checkEvidenceGame(cfg, req.Seats); err != nil {
+				httpError(w, err, http.StatusBadRequest)
+				return
+			}
+		}
 		var names []string
 		for i := range req.Seats {
 			req.Seats[i].Name = strings.TrimSpace(req.Seats[i].Name)
@@ -658,6 +671,15 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			title = "WAG — " + cfg.Mode
 		}
 		s.mu.Lock()
+		if req.Evidence != "" {
+			ev, err := s.gameEvidence(req.Evidence, gs, req.Seats)
+			if err != nil {
+				s.mu.Unlock()
+				httpError(w, err, http.StatusBadRequest)
+				return
+			}
+			gs.Evidence = ev
+		}
 		ss := s.add(gs, req.Seats, title, "new", req.Seed)
 		ss.Request = &req
 		st := ss.buildState()
@@ -1156,6 +1178,13 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 		// The time played so far, which the game clock counts: a resume
 		// counts this, not the time since the game was created.
 		"played_ns": now.Sub(ss.GS.StartedAt).Nanoseconds(),
+	}
+	if ev := ss.GS.Evidence; ev != nil {
+		// The record set by name and hash, and the game's bundle: the record
+		// set's records with the context, actors, targets, bindings and
+		// events the game wrote (docs/e1-evidence.md).
+		out["record_set"] = ss.recordSet()
+		out["evidence"] = ev.Bundle
 	}
 	if ss.inspectedWith != "" {
 		// The history is as it was played, with data_sha256; the state, the

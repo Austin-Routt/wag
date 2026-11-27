@@ -8,9 +8,14 @@ not adopt ([review-2026-11-22-stages.md](review-2026-11-22-stages.md)).
 
 The [evidence-theory review](evidence-theory-review.md) grounds the refinements
 below in seven supplied works. The provisional [evidence contract](evidence-contract.md)
-now has a native Go offline checker and a consent-log reducer. These do not yet
-connect to game execution, source capture, the dashboard or model prompts.
-The existing game's E1 rule still checks citation presence. Stage 2 remains open.
+has a native Go checker and a consent-log reducer. Since step E1 of the evidence plan
+([e1-evidence.md](e1-evidence.md)) the first slice is played: an inquiry of two
+players, people or models, with a record set captured before play, offers, consents
+and withdrawals as moves, and moves that cite admitted bindings
+([game-rules.md](game-rules.md) §8). Capture by WAG and model prompts with evidence
+are not built yet (e1-evidence.md, "Out of this step" and E1.5). The game's citation
+rule still checks citation presence, now met by an agreeing admitted binding too.
+Stage 2 remains open.
 
 ## The owner's rules this follows
 

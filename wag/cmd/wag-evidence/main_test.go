@@ -18,7 +18,7 @@ func TestHelperProcess(t *testing.T) {
 	}
 	args := []string{}
 	if a := os.Getenv("WAG_EVIDENCE_ARGS"); a != "" {
-		args = strings.Split(a, "\x00")
+		args = strings.Split(a, "\x1f") // the unit separator: an environment variable holds no NUL
 	}
 	os.Args = append([]string{"wag-evidence"}, args...)
 	flag.CommandLine = flag.NewFlagSet("wag-evidence", flag.ExitOnError)
@@ -29,7 +29,7 @@ func TestHelperProcess(t *testing.T) {
 func run(t *testing.T, args ...string) (int, string) {
 	t.Helper()
 	cmd := exec.Command(os.Args[0], "-test.run=^TestHelperProcess$")
-	cmd.Env = append(os.Environ(), "WAG_EVIDENCE_HELPER=1", "WAG_EVIDENCE_ARGS="+strings.Join(args, "\x00"))
+	cmd.Env = append(os.Environ(), "WAG_EVIDENCE_HELPER=1", "WAG_EVIDENCE_ARGS="+strings.Join(args, "\x1f"))
 	var out bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &out
 	err := cmd.Run()

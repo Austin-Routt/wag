@@ -461,6 +461,8 @@ func (gs *GameState) DescribeMove(m Move) string {
 		return who + " ran out of time"
 	case m.Abstained:
 		return who + " passes"
+	case m.Evidence != nil:
+		return gs.describeAct(m)
 	case len(m.ArgIDs) == 0:
 		return fmt.Sprintf("%s's move was rejected", who)
 	}
@@ -524,4 +526,36 @@ func StandardName(s caes.Standard) string { return standardName(s) }
 // in English (see Effect).
 func (gs *GameState) AnswerText(tmpl nascq.ActionTemplate) string {
 	return gs.answerText(tmpl, gs.Adapter.Graph.Arguments[tmpl.TargetArgID])
+}
+
+// describeAct says what an accepted evidence act did (docs/e1-evidence.md):
+// an offer, a consent or a withdrawal, and the binding by id and the first
+// 12 digits of its revision.
+func (gs *GameState) describeAct(m Move) string {
+	k := m.Evidence
+	rev := k.BindingRevision
+	if len(rev) > 12 {
+		rev = rev[:12]
+	}
+	switch k.Act {
+	case ActOffer:
+		o := m.Action.Offer
+		if o == nil {
+			break
+		}
+		at := o.Statement
+		if at == "" && gs.Evidence != nil {
+			if b, ok := gs.Evidence.Binding(k.BindingID); ok {
+				t, _ := gs.Evidence.Target(b.TargetID)
+				at = t.Proposition
+			}
+		}
+		return fmt.Sprintf("%s offers %s for %s's %s “%s”, as %s: binding %s (revision %s), which %s consents to",
+			m.PlayerID, o.ClaimID, o.ArgumentID, o.Kind, strings.TrimSuffix(gs.Say(at), "."), o.Role, k.BindingID, rev, m.PlayerID)
+	case ActConsent:
+		return fmt.Sprintf("%s consents to binding %s (revision %s)", m.PlayerID, k.BindingID, rev)
+	case ActWithdraw:
+		return fmt.Sprintf("%s withdraws their consent to binding %s (revision %s)", m.PlayerID, k.BindingID, rev)
+	}
+	return fmt.Sprintf("%s: %s %s", m.PlayerID, k.Act, k.BindingID)
 }

@@ -267,6 +267,9 @@ type Move struct {
 	// (Action.Type "decide", PlayerID ModeratorID).
 	Decision     string
 	DecisionStmt string
+	// Evidence marks an accepted evidence act (docs/e1-evidence.md): it
+	// makes no argument, and is a move all the same.
+	Evidence *EvidenceMark `json:",omitempty"`
 }
 
 // ModeratorID is the PlayerID of the moderator's records in the history.
@@ -321,11 +324,18 @@ type GameState struct {
 	// before a context or the game's own weights changed them (ClaimUnder).
 	dataWeights map[string]float64
 
-	CurrentTurn       int // 1-indexed turn number
-	ActivePlayerIdx   int // index into Players slice
-	MoveHistory       []Move
-	ConsecAllAbstain  int  // consecutive ROUNDS where all players abstained
-	roundHadMove      bool // a move was accepted in the current round
+	CurrentTurn      int // 1-indexed turn number
+	ActivePlayerIdx  int // index into Players slice
+	MoveHistory      []Move
+	ConsecAllAbstain int  // consecutive ROUNDS where all players abstained
+	roundHadMove     bool // a move was accepted in the current round
+
+	// Evidence is the game's record set and the records its players' acts
+	// made (docs/e1-evidence.md); nil in a game without a record set.
+	Evidence *Evidence
+	// actTime is the time of the evidence act being replayed (ReplayActAt).
+	actTime string
+
 	Terminated        bool
 	TerminationReason string
 	// Truncated: the game was cut off by a limit (rounds or time) rather
