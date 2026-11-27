@@ -199,7 +199,7 @@ cases:
     rules: [OC1, OC15]
     kialo: "13292.174"
     claim: Taxing meat might push producers to cheaper and more dangerous ways of producing it.
-    target: 13292.108, goal-based practical reasoning for the tax
+    target: 13292.1#2, the discussion's goal-based practical reasoning for the tax (D096)
     coding:
       instances:
       - primary: false
@@ -221,7 +221,7 @@ cases:
         - {role: exception, formula: 'worth_finding_out_first(tax_meat,more_dangerous_meat_production)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: rebuttal, cq: null, polarity: against}
-      target: {actual: {claim: '13292.108', part: conclusion}}
+      target: {actual: {claim: '13292.1', part: conclusion}}
     why: >-
       A further bad consequence offered against practical reasoning ranks
       nothing against its goal, so it is a rebuttal at the conclusion (OC2), as
@@ -358,7 +358,7 @@ cases:
     rules: [OC4, OC7, OC8]
     kialo: "13292.127"
     claim: Starvation from less access to meat is a worse threat than any harm of eating much meat.
-    target: 13292.108, goal-based practical reasoning for the tax; its Kialo parent is 13292.7
+    target: 13292.1#2, the discussion's goal-based practical reasoning for the tax (D096); its Kialo parent is 13292.7
     coding:
       instances:
       - primary: true
@@ -380,13 +380,14 @@ cases:
         - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,starvation_from_reduced_meat_access)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
       role: {kind: cq_answer, cq: 'CQ:bad_outweighs', polarity: against}
-      target: {actual: {claim: '13292.108', part: exception, formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}}
+      target: {actual: {claim: '13292.1', part: exception, formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}}
     why: >-
       A ranking against a class (any harm of eating much meat), with C003's
       bad_outweighs_good (OC4). Its Kialo parent, 13292.7, is not in the
       class, so it weighs against the earliest argument of the class on the
       board, re-parented (OC7): since practical reasoning has the
-      outweighing exception (D070, D091), that is 13292.108, not 13292.115.
+      outweighing exception (D070, D091), that is the environmental argument,
+      the discussion's at the thesis (13292.1#2; D096), not 13292.115.
       The words state the comparison, so the weighing is primary and the
       starvation consequence secondary (OC8). The game asks the exception as
       CQ:bad_outweighs (step C5.2), the question the role names (R2).
@@ -663,7 +664,8 @@ cases:
       A reply to a weighing claim attacks the consequence the weighing relies
       on, a premise of its bad_outweighs_good instance, which no question
       covers (an answer scheme's premises are challenged): a premise
-      attack, not an argument that nothing outweighs 13292.108's goal.
+      attack, not an argument that nothing outweighs the environmental
+      argument's goal (13292.1#2).
 
   - id: OC11-a
     rules: [OC11]

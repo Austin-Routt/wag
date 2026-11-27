@@ -186,6 +186,7 @@ def main():
     played = {}  # claim id -> {"arg": aN, "conclusion": stmt id}
     played_inst = {}  # instance id -> the same: each claim's primary instance, and a secondary one that carries it
     report = []
+    discussion = []  # D096: the instances by the discussion, played apart from the claims' moves
 
     def state():
         return call(base, f"/api/games/{gid}")
@@ -205,7 +206,7 @@ def main():
         out = []
         prem = {norm(p.get("formula")) for p in inst.get("premises") or [] if p.get("role") in ("premise", "assumption")}
         for sec in a.get("instances") or []:
-            if sec is inst or sec.get("primary"):
+            if sec is inst or sec.get("primary") or sec.get("by") == "the discussion":
                 continue
             sw = (sec.get("scheme") or {}).get("walton_id")
             sconc = norm((sec.get("conclusion") or {}).get("formula"))
@@ -234,6 +235,50 @@ def main():
             out.append(rec)
         return out
 
+    def play_discussion(owner, a, side):
+        """D096 (annotation-records.md §13): an instance by the discussion is the argument the
+        discussion needs for the claim it is recorded at. It is played as an argument for its
+        conclusion, that claim's statement (its primary instance's conclusion) or its negation, with
+        its scheme, by the claim's side, or the other side when it argues against the statement. The
+        game must have its scheme: it is not played with Other, which would leave its premises off the
+        board. It is recorded as a played instance, so that claims at it are played there."""
+        stmt = norm((primary(a).get("conclusion") or {}).get("formula"))
+        for ins in a.get("instances") or []:
+            if ins.get("by") != "the discussion":
+                continue
+            sw = (ins.get("scheme") or {}).get("walton_id")
+            wag2 = WALTON_TO_WAG.get(sw)
+            conc = norm((ins.get("conclusion") or {}).get("formula"))
+            rec = {"claim": owner, "instance": ins.get("id"), "scheme": sw, "wag_id": wag2, "conclusion": conc}
+            against = bool(stmt) and (conc == "¬" + stmt or stmt == "¬" + conc)
+            target = stmt[1:] if stmt.startswith("¬") and against else stmt
+            if not wag2:
+                rec.update(played=False, error=f"the game has no scheme for {sw}")
+            elif not stmt:
+                rec.update(played=False, error=f"{owner} has no statement for it to argue")
+            else:
+                who = side if not against else ("con" if side == "pro" else "pro")
+                act = {"type": "attack" if against else "support", "target_stmt_id": target, "scheme_id": wag2,
+                       "variable_bindings": {k: words(v) for k, v in (ins.get("bindings") or {}).items()},
+                       "text": (ins.get("conclusion") or {}).get("en") or conc}
+                why = f"Kialo {owner}: the discussion's instance {ins.get('id')}, {sw} (D096)"
+                r = move(who, act, why)
+                res = r.get("result") or {}
+                fixed = re.findall(r"leave (\w+) out", res.get("error") or "")
+                if not res.get("accepted") and fixed:
+                    act = dict(act, variable_bindings={k: v for k, v in act["variable_bindings"].items() if k not in fixed})
+                    r = move(who, act, why)
+                    res = r.get("result") or {}
+                if res.get("accepted"):
+                    arg = (res.get("arg_ids") or [None])[0]
+                    st = state()
+                    played_inst[ins.get("id")] = {"arg": arg,
+                                                  "conclusion": st["arguments"][arg]["conclusion"] if arg in st["arguments"] else None}
+                    rec.update(played=True, arg=arg, side=who, target_stmt=target)
+                else:
+                    rec.update(played=False, error=res.get("error"))
+            discussion.append(rec)
+
     def played_with_other(claim_id):
         """Whether the claim was played with Other where its annotation
         meant a scheme: its premises are not on the board."""
@@ -242,6 +287,8 @@ def main():
                 return e.get("played") in ("other", "other-new", "inference-other") and e.get("integration") != "fragment"
         return False
 
+    # The thesis's instances by the discussion go first: claims answer them (D096).
+    play_discussion(thesis_id, th, "pro")
     # A claim that answers a sibling played later waits for it (one more pass).
     order = [it for it in items["items"] if it["kialo_claim_id"] != thesis_id and it["kialo_claim_id"] in ann]
     later = {}
@@ -483,6 +530,8 @@ def main():
             carried = play_carried(cid, a, inst, side)
             if carried:
                 entry["secondary"] = carried
+        if cid in played:
+            play_discussion(cid, a, side)
         if fragment and how == "other":
             entry["integration"] = "fragment"
         elif how in ("cq", "statement", "new", "inference"):
@@ -518,6 +567,14 @@ def main():
             entry["integration"] = "cascade"
         report.append(entry)
 
+    # An instance by the discussion at a claim that was not played is not on the board either.
+    done = {d["instance"] for d in discussion}
+    for cid, a in ann.items():
+        for ins in a.get("instances") or []:
+            if ins.get("by") == "the discussion" and ins.get("id") not in done:
+                discussion.append({"claim": cid, "instance": ins.get("id"),
+                                   "scheme": (ins.get("scheme") or {}).get("walton_id"), "played": False,
+                                   "error": f"its claim {cid} is not on the board"})
     s = state()
     summary = {"game": gid, "claim": claim, "claim_label": s["statements"].get(claim, {}).get("label"),
                "played": sum(1 for e in report if not str(e.get("played", "")).startswith("no")),
@@ -529,6 +586,7 @@ def main():
                "integration": {k: sum(1 for e in report if e.get("integration") == k)
                                for k in ("as_intended", "fragment", "coverage_gap", "failed", "duplicate", "cascade", "not_played")},
                "data_sha256": call(base, f"/api/games/{gid}/export").get("data_sha256"),
+               "discussion": discussion,
                "moves": report}
     if args.report:
         json.dump(summary, open(args.report, "w"), indent=1, ensure_ascii=False)

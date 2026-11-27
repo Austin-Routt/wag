@@ -140,6 +140,41 @@ def next_id(it):
     return f"{it['kialo_claim_id']}#{max(used) + 1}"
 
 
+def environmental(g):
+    """The environmental argument for the tax, whole: the discussion's instance at the thesis since D096
+    (13292.1#2), 13292.108's primary instance before."""
+    for x in item(g, '13292.1')['instances']:
+        if x.get('by') == 'the discussion':
+            return x
+    return primary(item(g, '13292.108'))
+
+
+def plant_discussion(g, at='13292.1', retarget='13292.13'):
+    """The environmental argument as the discussion's (D096; annotation-records.md §13): an instance of
+    the claim `at`, marked by the discussion, its circumstances cited to 13292.108, the rest supplied,
+    and 13292.13's attack on its efficacy premise retargeted at it (unless retarget is None). The gold
+    recoded for D096 has it at the thesis already (13292.1#2): then it is that one, and only the
+    retarget is done. Returns the instance."""
+    it = item(g, at)
+    have = [x for x in it['instances'] if x.get('by') == 'the discussion']
+    if have:
+        ins = have[0]
+    else:
+        ins = copy.deepcopy(environmental(g))
+        ins.pop('label', None)
+        ins['id'], ins['primary'], ins['by'] = next_id(it), False, 'the discussion'
+        ins['scheme']['fit'] = 'reconstructed'
+        for pm in ins['premises']:
+            if pm['status'] == 'explicit':
+                pm['status'], pm['cite'] = 'inferred', '13292.108'
+        it['instances'].append(ins)
+    if retarget:
+        t = item(g, retarget)['target']['actual']
+        f = next(pm['formula'] for pm in ins['premises'] if pm['formula'].startswith('would_bring_about('))
+        t.update(claim=at, instance=ins['id'], part='premise', formula=f)
+    return ins
+
+
 def plant_two_person(g, goal):
     """Plant in 13292.108 a secondary instance of two-person practical
     reasoning (governments, who intend to realize the goal, told by
@@ -266,9 +301,9 @@ class Rules(unittest.TestCase):
     # scheme, or none when the game plays no scheme for it.
     def test_r2_challenge_another_question_than_the_game_asks_there(self):
         g = copy.deepcopy(GOLD)
-        c = next(c for c in item(g, '13292.108')['challenges'] if c['wag_cq'] == 'CQ:bad_outweighs')
+        c = next(c for c in item(g, '13292.1')['challenges'] if c['wag_cq'] == 'CQ:bad_outweighs')
         c['wag_cq'] = 'CQ:side_effect'
-        self.fails(g, '13292.108', ['R2'], "names the game's CQ:side_effect, but the game asks ['CQ:bad_outweighs'] there")
+        self.fails(g, '13292.1', ['R2'], "names the game's CQ:side_effect, but the game asks ['CQ:bad_outweighs'] there")
 
     def test_r2_challenge_no_question_where_the_game_asks_one(self):
         g = copy.deepcopy(GOLD)
@@ -305,7 +340,7 @@ class Rules(unittest.TestCase):
                  'at worth_finding_out_first(...)'),
                 ('13292.9', '13292.9#4', '¬should_be_performed(tax_meat)', 'CQ:worth_finding_out_first',
                  'at worth_finding_out_first(...)'),
-                ('13292.108', '13292.108#1', 'goal_of_agent(governments,environmental_harm_from_meat_reduced)', 'CQ:other_means',
+                ('13292.1', '13292.1#2', 'goal_of_agent(governments,environmental_harm_from_meat_reduced)', 'CQ:other_means',
                  'at realize_more_effectively(...)'),
                 ('13292.115', '13292.115#1', 'good(reduced_unhealthy_meat_consumption)', 'CQ:side_effect', 'at its conclusion')):
             g = copy.deepcopy(GOLD)
@@ -530,7 +565,7 @@ class Rules(unittest.TestCase):
         for x in it['instances']:
             x['primary'] = x['scheme']['walton_id'] == 'negative_consequences'
         it['role'].update(kind='rebuttal', cq=None)
-        it['target']['actual'] = conclusion_target(g, '13292.108')
+        it['target']['actual'] = conclusion_target(g, '13292.1', '13292.1#2')
         code, errors, out = run(g)
         self.assertFalse([e for e in errors if e.startswith('13292.127: R11')], out)
 
@@ -538,9 +573,9 @@ class Rules(unittest.TestCase):
     # formula of that instance.
     def test_r10_a_formula_renamed_in_walton_yml(self):
         g = copy.deepcopy(GOLD)
-        rec = next(c for c in item(g, '13292.108')['challenges'] if c.get('cq') == '22.1 CQ5')
+        rec = next(c for c in item(g, '13292.1')['challenges'] if c.get('cq') == '22.1 CQ5')
         rec['formula'] = 'side_effects(tax_meat,meat_production_and_consumption_harm_environment)'
-        self.fails(g, '13292.108', ['R10'], 'names side_effects(tax_meat,')
+        self.fails(g, '13292.1', ['R10'], 'names side_effects(tax_meat,')
 
     def test_r10_the_targets_other_instance(self):
         g = copy.deepcopy(GOLD)
@@ -991,10 +1026,10 @@ class Rules(unittest.TestCase):
         # 13292.208, which replies to 13292.104's answer, is now in another
         # context than its target too.
         self.assertEqual(sorted(errors), [
-            "13292.104: R15 its primary instance is in the context 'denmark_2005', its target 13292.108#1 in 'present'",
+            "13292.104: R15 its primary instance is in the context 'denmark_2005', its target 13292.1#2 in 'present'",
             "13292.208: R15 its primary instance is in the context 'present', its target 13292.104#1 in 'denmark_2005'"], out)
         # Both in the other context: no complaint.
-        primary(item(g, '13292.108'))['context'] = 'denmark_2005'
+        inst(g, '13292.1#2')['context'] = 'denmark_2005'
         code, errors, out = run(g, case)
         self.assertFalse([e for e in errors if e.startswith('13292.104: R15')], out)
 
@@ -1161,7 +1196,9 @@ class Rules(unittest.TestCase):
         # variables; the others are unstated, not null.
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.137')
-        frag = copy.deepcopy(primary(item(g, '13292.108')))
+        frag = copy.deepcopy(environmental(g))
+        frag.pop('by', None)
+        frag.pop('label', None)
         frag.update(id=next_id(it), primary=False)
         frag['scheme'] = {'walton_id': 'practical_reasoning2', 'compendium': '22.1', 'wag_id': 'AS:practical_reasoning_goal',
                           'fit': 'fragment', 'confidence': 0.5, 'alternatives': []}
@@ -1181,7 +1218,9 @@ class Rules(unittest.TestCase):
         # is not its scheme's is refused all the same.
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.137')
-        frag = copy.deepcopy(primary(item(g, '13292.108')))
+        frag = copy.deepcopy(environmental(g))
+        frag.pop('by', None)
+        frag.pop('label', None)
         frag.update(id=next_id(it), primary=False)
         frag['scheme'] = {'walton_id': 'practical_reasoning2', 'compendium': '22.1', 'wag_id': 'AS:practical_reasoning_goal',
                           'fit': 'fragment', 'confidence': 0.5, 'alternatives': []}
@@ -1233,7 +1272,9 @@ class Rules(unittest.TestCase):
     def test_a_fragment_conclusion_that_names_an_unstated_variable(self):
         g = copy.deepcopy(GOLD)
         it = item(g, '13292.137')
-        frag = copy.deepcopy(primary(item(g, '13292.108')))
+        frag = copy.deepcopy(environmental(g))
+        frag.pop('by', None)
+        frag.pop('label', None)
         frag.update(id=next_id(it), primary=False)
         frag['scheme'] = {'walton_id': 'practical_reasoning2', 'compendium': '22.1', 'wag_id': 'AS:practical_reasoning_goal',
                           'fit': 'fragment', 'confidence': 0.5, 'alternatives': []}
@@ -1291,6 +1332,86 @@ class Rules(unittest.TestCase):
             self.assertTrue(any(e.startswith('13292.108: ') for e in errors), out)
             if set(b) != {'X', 'Y'}:
                 self.assertTrue(any(f"binds {sorted(b)} not ['X', 'Y']" in e for e in errors), out)
+
+
+class Discussion(unittest.TestCase):
+    """Cases RC1-RC9 (d086-first-gold.md §6; D096, annotation-records.md §13, R20)."""
+
+    fails = Rules.fails
+    passes = Rules.passes
+
+    def test_rc1_the_discussions_instance_passes(self):
+        g = copy.deepcopy(GOLD)
+        plant_discussion(g)
+        self.passes(g)
+
+    def test_rc2_by_has_one_value(self):
+        for value in ('the claim', True):
+            with self.subTest(value=value):
+                g = copy.deepcopy(GOLD)
+                plant_discussion(g)['by'] = value
+                self.fails(g, '13292.1', ['R16'], '.by is')
+
+    def test_rc3_not_primary(self):
+        g = copy.deepcopy(GOLD)
+        ins = plant_discussion(g)
+        own = primary(item(g, '13292.1'))
+        own['primary'], ins['primary'] = False, True
+        self.fails(g, '13292.1', ['R20'], 'is primary')
+
+    def test_rc4_fit_reconstructed(self):
+        for fit, rules in (('fragment', ['R20']), ('explicit', ['R20', 'R18'])):
+            with self.subTest(fit=fit):
+                g = copy.deepcopy(GOLD)
+                plant_discussion(g)['scheme']['fit'] = fit
+                self.fails(g, '13292.1', rules, 'R20 13292.1#')
+
+    def test_rc5_no_explicit_premise(self):
+        g = copy.deepcopy(GOLD)
+        ins = plant_discussion(g)
+        goal = next(pm for pm in ins['premises'] if pm['formula'].startswith('goal_of_agent('))
+        goal['status'] = 'explicit'
+        self.fails(g, '13292.1', ['R20'], 'explicit')
+
+    def test_rc6_some_premise_cited(self):
+        g = copy.deepcopy(GOLD)
+        ins = plant_discussion(g)
+        for pm in ins['premises']:
+            if pm['status'] == 'inferred':
+                pm['status'] = 'supplied'
+                pm.pop('cite', None)
+        self.fails(g, '13292.1', ['R20'], 'cites no claim')
+
+    def test_rc7_concludes_its_claims_statement(self):
+        g = copy.deepcopy(GOLD)
+        plant_discussion(g, at='13292.2')
+        self.fails(g, '13292.2', ['R20'], 'neither')
+
+    def test_rc8_targeted(self):
+        # A second instance by the discussion at the thesis that no item targets.
+        g = copy.deepcopy(GOLD)
+        thesis = item(g, '13292.1')
+        extra = copy.deepcopy(plant_discussion(g, retarget=None))
+        extra['id'] = next_id(thesis)
+        thesis['instances'].append(extra)
+        self.fails(g, '13292.1', ['R20'], f'{extra["id"]} is by the discussion, but no item targets it')
+
+    def test_rc8_targeted_planted_on_another_claim(self):
+        g = copy.deepcopy(GOLD)
+        plant_discussion(g, at='13292.7', retarget=None)
+        self.fails(g, '13292.7', ['R20'], 'no item')
+
+    def test_rc9_not_citable_through_its_claim(self):
+        g = copy.deepcopy(GOLD)
+        ins = plant_discussion(g)
+        goal = next(pm['formula'] for pm in ins['premises'] if pm['formula'].startswith('goal_of_agent('))
+        citer = next(pm for x in item(g, '13292.104')['instances'] for pm in x['premises'] if pm['formula'] == goal)
+        citer['status'], citer['cite'] = 'inferred', '13292.1'
+        self.fails(g, '13292.104', ['R20'], 'only the discussion')
+        # Citing another claim of the discussion for it stays R19's: no R20 error.
+        citer['cite'] = '13292.108'
+        code, errors, out = run(g)
+        self.assertFalse([e for e in errors if ' R20 ' in e], out)
 
 
 class Repin(unittest.TestCase):

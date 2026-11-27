@@ -10,8 +10,9 @@ import (
 
 // The identity contract's checks (docs/annotation-records.md, D092) on a
 // format-2 annotation, the part the Go check shares with validate.py: R12
-// (ids), R13 (exact targets), R14 (actors and actions), R15 (contexts) and
-// R16's nulls and markers. R4, R9, R10, R11 and R17 are validate.py's.
+// (ids), R13 (exact targets), R14 (actors and actions), R15 (contexts),
+// R16's nulls and markers, and R20's part a record shows (checkDiscussion).
+// R4, R9, R10, R11, R17 and R20's batch-wide part are validate.py's.
 
 // instanceID is an instance's id, <claim>#<n>: a positive number, no
 // leading zero.
@@ -162,6 +163,7 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 	if own == nil && len(insts) == 1 {
 		own, _ = insts[0].(map[string]any)
 	}
+	out = append(out, checkDiscussion(insts, own)...)
 	// R16: the target and the polarity, null only for the thesis; no stored
 	// re-parenting.
 	tg, _ := a["target"].(map[string]any)
@@ -392,5 +394,56 @@ func sortedSet(m map[string]bool) []string {
 		out = append(out, k)
 	}
 	sort.Strings(out)
+	return out
+}
+
+// checkDiscussion is R16's by and R20's part the record shows (D096,
+// docs/annotation-records.md §13): an instance by the discussion is the
+// argument the discussion needs for the claim, which no claim states as a
+// whole, so it is not primary, its fit is reconstructed, none of its premises
+// is explicit, and it concludes the claim's statement (its primary
+// instance's conclusion) or its negation. That some premise is cited and an
+// item targets it are validate.py's (they need the batch).
+func checkDiscussion(insts []any, own map[string]any) []string {
+	var out []string
+	add := func(f string, x ...any) { out = append(out, fmt.Sprintf(f, x...)) }
+	conclusion := func(in map[string]any) string {
+		c, _ := in["conclusion"].(map[string]any)
+		f, _ := c["formula"].(string)
+		return compact(f)
+	}
+	for _, x := range insts {
+		in, _ := x.(map[string]any)
+		by, has := in["by"]
+		if in == nil || !has {
+			continue
+		}
+		id, _ := in["id"].(string)
+		if by != "the discussion" {
+			add("R16 the instance %s has by %s: only \"the discussion\" (an instance that is not the claim's own; D096), or no by at all", id, jsonText(by))
+			continue
+		}
+		if p, _ := in["primary"].(bool); p {
+			add("R20 %s is by the discussion and is primary: the claim's primary instance is what it states", id)
+		}
+		sc, _ := in["scheme"].(map[string]any)
+		if fit, _ := sc["fit"].(string); fit != "reconstructed" {
+			add("R20 %s is by the discussion, with fit %s: fit reconstructed (no claim states it as a whole)", id, jsonText(sc["fit"]))
+		}
+		pms, _ := in["premises"].([]any)
+		for _, y := range pms {
+			if pm, _ := y.(map[string]any); pm["status"] == "explicit" {
+				add("R20 %s is by the discussion, but its premise %v is explicit: a premise a claim states is inferred, citing that claim", id, pm["formula"])
+				break
+			}
+		}
+		stmt, concl := "", conclusion(in)
+		if own != nil {
+			stmt = conclusion(own)
+		}
+		if stmt == "" || concl != stmt && concl != "¬"+stmt && stmt != "¬"+concl {
+			add("R20 %s is by the discussion and concludes %s, neither the claim's statement (%s) nor its negation: record it at the claim whose statement it argues", id, concl, stmt)
+		}
+	}
 	return out
 }

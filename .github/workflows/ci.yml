@@ -97,6 +97,8 @@ jobs:
         run: python3 -I docs/kialo-batch2/test_to_wag_other_reporting.py
       - name: The replay skips unresolved targets
         run: python3 -I docs/kialo-batch2/test_to_wag_unresolved.py
+      - name: The replay's instances by the discussion (D096)
+        run: python3 -I docs/kialo-batch2/test_to_wag_discussion.py
       - name: Fetch the upstream walton.yml the cleaning was written for
         run: |
           curl -fsSL -o "$RUNNER_TEMP/walton.yml" \

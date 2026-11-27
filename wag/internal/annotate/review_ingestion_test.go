@@ -88,7 +88,19 @@ func TestReviewFragmentCannotHideUnrelatedFormula(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	b, _ := json.Marshal(d.Gold["13292.108"])
+	// A fully bound fragment: 13292.108 as draft 2 coded it (fullyBound; the
+	// gold has none since D096).
+	set := map[string]Annotation{}
+	for _, id := range []string{"13292.1", "13292.108"} {
+		var a Annotation
+		raw, _ := json.Marshal(d.Gold[id])
+		if err := json.Unmarshal(raw, &a); err != nil {
+			t.Fatal(err)
+		}
+		set[id] = a
+	}
+	fullyBound(t, set)
+	b, _ := json.Marshal(set["13292.108"])
 	clone := func() Annotation {
 		var a Annotation
 		if err := json.Unmarshal(b, &a); err != nil {

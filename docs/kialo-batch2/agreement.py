@@ -163,7 +163,10 @@ def bindings(item):
 
 
 def instances(item):
-    return "|".join(sorted(signature(i) for i in item.get("instances") or [] if isinstance(i, dict)))
+    """How the claim was divided into inferences: every instance's scheme and conclusion, but an instance by
+    the discussion (D096), which is not the claim's own (annotation-records.md §13)."""
+    return "|".join(sorted(signature(i) for i in item.get("instances") or []
+                           if isinstance(i, dict) and i.get("by") != "the discussion"))
 
 
 # Go's strings.TrimSpace trims what unicode.IsSpace calls space; Python's

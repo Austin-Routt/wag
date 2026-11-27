@@ -176,5 +176,21 @@ class AfterTheReview(unittest.TestCase):
         self.assertEqual(report["pilot"]["B"]["role_unresolved"], 0)
 
 
+class DiscussionInstances(unittest.TestCase):
+    """Case RC10 (d086-first-gold.md §6; D096, annotation-records.md §11 and §13)."""
+
+    def test_rc10_instances_leave_the_discussions_out(self):
+        disc = {"id": "c.0#2", "primary": False, "by": "the discussion",
+                "scheme": {"walton_id": "practical_reasoning2", "fit": "reconstructed"},
+                "conclusion": {"formula": "should_be_performed(a)"}}
+        with_it = {**PARENT, "instances": PARENT["instances"] + [disc]}
+        self.assertEqual(ag.instances(with_it), ag.instances(PARENT))
+        # A target at it is compared by its scheme and conclusion, as at a secondary instance.
+        S = {"c.0": with_it}
+        it = {"target": {"actual": {"claim": "c.0", "instance": "c.0#2", "part": "conclusion",
+                                    "formula": "should_be_performed(a)"}}}
+        self.assertEqual(ag.exact(it, "target_instance", S), "c.0 secondary:practical_reasoning2:should_be_performed(a)")
+
+
 if __name__ == "__main__":
     unittest.main()

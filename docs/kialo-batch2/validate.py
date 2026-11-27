@@ -444,6 +444,9 @@ def shape_errors(it):
             bad(f'{where}.conclusion.formula', 'is null, which only other, none and a fragment whose conclusion is unstated may be')
         for k in ('label', 'note', 'comparison'):
             if k in ins and not isinstance(ins[k], str): bad(f'{where}.{k}', 'is not text')
+        if 'by' in ins and ins['by'] != 'the discussion':
+            bad(f'{where}.by', f'is {ins["by"]!r}: only "the discussion" (an instance that is not the claim\'s own; '
+                               'D096), or no by at all')
     r_ = it.get('role')
     if not isinstance(r_, dict):
         bad('role', 'is not an object')
@@ -861,6 +864,72 @@ for it in gold['items']:
             if x not in lex: err(f'{cid}: atom {x} not in lexicon')
     for c in it['challenges']:
         if c.get('wag_cq') and c['wag_cq'] not in cqs: err(f'{cid}: unknown game CQ {c["wag_cq"]}')
+# R20 (format 2; D096, docs/annotation-records.md §13): an instance by the discussion is the argument the
+# discussion needs for the claim it is recorded at, which no claim states as a whole: not primary, fit
+# reconstructed, no premise explicit and some premise cited, concluding that claim's statement or its
+# negation, and targeted by an item of the batch. It is not a claim: no premise elsewhere cites the claim
+# it is recorded at for a formula that only the discussion's instance has.
+if F2:
+    DISCUSSION_INSTANCES = {}  # instance id -> (claim, instance)
+    for it in gold['items']:
+        cid = it.get('kialo_claim_id')
+        if cid in MALFORMED:
+            continue
+        for ins in it['instances']:
+            if ins.get('by') == 'the discussion':
+                DISCUSSION_INSTANCES[ins.get('id')] = (cid, ins)
+    targeted = set()
+    for it in gold['items']:
+        if it.get('kialo_claim_id') in MALFORMED:
+            continue
+        t = it.get('target') or {}
+        for o in [t.get('actual') or {}] + list(t.get('other_kialo_parents') or []):
+            if isinstance(o, dict) and isinstance(o.get('instance'), str):
+                targeted.add(o['instance'])
+    for iid, (cid, ins) in DISCUSSION_INSTANCES.items():
+        if ins.get('primary') is True:
+            err(f'{cid}: R20 {iid} is by the discussion and is primary: the claim\'s primary instance is what it states')
+        if ins['scheme'].get('fit') != 'reconstructed':
+            err(f'{cid}: R20 {iid} is by the discussion, with fit {ins["scheme"].get("fit")!r}: fit reconstructed '
+                '(no claim states it as a whole)')
+        explicit = [pm['formula'] for pm in ins['premises'] if pm.get('status') == 'explicit']
+        if explicit:
+            err(f'{cid}: R20 {iid} is by the discussion, but its premise {explicit[0]} is explicit: a premise a claim '
+                'states is inferred, citing that claim')
+        if not any(pm.get('status') == 'inferred' for pm in ins['premises']):
+            err(f'{cid}: R20 {iid} is by the discussion, but it cites no claim (no premise inferred): it rests on what '
+                'claims of the discussion state')
+        own = (primary(G[cid]) or {}).get('conclusion') or {}
+        stmt, concl = nows(own.get('formula') or ''), nows((ins.get('conclusion') or {}).get('formula') or '')
+        if not stmt or concl not in (stmt, '¬' + stmt) and stmt != '¬' + concl:
+            err(f'{cid}: R20 {iid} is by the discussion and concludes {concl or "nothing"}, neither {cid}\'s statement '
+                f'({stmt or "none"}) nor its negation: record it at the claim whose statement it argues')
+        if iid not in targeted:
+            err(f'{cid}: R20 {iid} is by the discussion, but no item targets it: a reconstruction is recorded for the '
+                'claims that answer it')
+    ANCHORS = {}
+    for iid, (cid, ins) in DISCUSSION_INSTANCES.items():
+        ANCHORS.setdefault(cid, set()).update(all_formulas(ins))
+    for it in gold['items']:
+        cid = it.get('kialo_claim_id')
+        if cid in MALFORMED:
+            continue
+        for ins in it['instances']:
+            if ins.get('by') == 'the discussion':
+                continue
+            for pm in ins['premises']:
+                x = pm.get('cite')
+                if pm.get('status') != 'inferred' or x not in ANCHORS:
+                    continue
+                mine = set()
+                for other in G[x]['instances']:
+                    if other.get('by') != 'the discussion':
+                        mine |= set(all_formulas(other))
+                f = nows(pm['formula'])
+                if f in ANCHORS[x] and f not in mine:
+                    err(f'{cid}: R20 {ins.get("id")}\'s premise {f} cites {x}, but only the discussion\'s instance '
+                        f'of {x} has it: a reconstruction is not a claim; cite the claim that states it, or mark it supplied')
+
 # R14 (format 2): the thesis concludes that the case's thesis action be done.
 if F2 and THESIS.get('claim') in G and THESIS.get('claim') not in MALFORMED and THESIS.get('action') in ACTOR:
     tconc = nows(((primary(G[THESIS['claim']]) or {}).get('conclusion') or {}).get('formula'))
@@ -885,6 +954,6 @@ if errors:
 if F2:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R2, R4, R7, R8, R9, R10, R11, '
           'R12 ids, R13 exact targets, R14 actors and actions, R15 contexts, R16 the field contract and the pinned inputs, '
-          'R17 verifications, R18 explicit fit, R19 cited inferences, atoms in lexicon')
+          'R17 verifications, R18 explicit fit, R19 cited inferences, R20 the discussion\'s instances, atoms in lexicon')
 else:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R1, R2, R4, R7, R8, R9, R10, R11, target formulas in primary instances, atoms in lexicon')

@@ -294,7 +294,7 @@ func TestFormat2Refusals(t *testing.T) {
 		{"an answer in another context", "13292.104", func(s map[string]Annotation) *Dataset {
 			inst(s["13292.104"], 0)["context"] = "denmark_2005"
 			return withCase(func(cs *Case) { cs.contexts["denmark_2005"] = true })
-		}, `R15 its primary instance is in the context "denmark_2005", its target 13292.108#1 in "present"`},
+		}, `R15 its primary instance is in the context "denmark_2005", its target 13292.1#2 in "present"`},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -423,9 +423,15 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// 13292.194, an amended action, is at the conclusion of the argument that
 	// cites the harm, 13292.12#3 (target_instance; its formula differed
 	// already, will_occur in format 1); 13292.192's primary is its second
-	// causal step, whose conclusion reaches the target (bindings).
-	want := map[string]float64{"scheme": 0.88, "instances": 0.72, "target_formula": 0.82, "role": 0.98,
-		"target_part": 0.92, "cq": 0.84, "target_instance": 0.84, "bindings": 0.92}
+	// causal step, whose conclusion reaches the target (bindings). Draft 3
+	// (D096): the environmental argument is the discussion's, at the thesis
+	// (13292.1#2), so the seven claims that answer it target the thesis
+	// (target_claim, target_instance; 13292.13 is no longer re-parented and
+	// 13292.6 is, re_parented), and 13292.108 is a fragment backing its
+	// circumstances (role, target_part, target_instance, target_formula,
+	// bindings, instances).
+	want := map[string]float64{"scheme": 0.88, "instances": 0.7, "target_formula": 0.8, "role": 0.96,
+		"target_part": 0.9, "cq": 0.84, "target_instance": 0.68, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -1075,8 +1081,11 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// carries (13292.12, .233, .43), and where D086's round-1 draft named the
 	// causal step a claim answers (13292.12, .141, .182, .198) or the argument
 	// whose conclusion a mitigation amends (13292.202, at 13292.127#2; in
-	// draft 2, 13292.194, at 13292.12#3).
-	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true, "13292.194": true}
+	// draft 2, 13292.194, at 13292.12#3), and where draft 3 moved the claims
+	// that answer the environmental argument to the discussion's instance at
+	// the thesis, with 13292.108 at its circumstances (D096).
+	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true, "13292.194": true,
+		"13292.108": true, "13292.5": true, "13292.147": true, "13292.174": true, "13292.13": true, "13292.6": true, "13292.104": true, "13292.127": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {
@@ -1101,9 +1110,8 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 	a := clone(t, d.Gold)
 	renameIn(inst(a["13292.7"], 0), "tax_meat", "meat_tax")
 	// An annotator who leaves unstated a fragment's variable the gold binds
-	// (13292.108 carries the environmental argument, every variable bound;
-	// D086 round 1).
-	inst(a["13292.108"], 0)["bindings"].(map[string]any)["S2"] = map[string]any{"unstated": "the claim states the circumstances only"}
+	// (13292.108 binds S1, the circumstances it states; D096).
+	inst(a["13292.108"], 0)["bindings"].(map[string]any)["S1"] = map[string]any{"unstated": "the claim states the circumstances only"}
 	tmp := t.TempDir()
 	write := func(name string, v any) string {
 		b, err := json.Marshal(v)
@@ -1390,9 +1398,9 @@ func TestARunsFilePassesValidatePy(t *testing.T) {
 }
 
 // target_instance compares the targeting decision, not the target's own
-// coding: a coding difference in 13292.108 does not spread to the eleven
-// claims that target its primary instance (the review of the identity
-// contract, W3).
+// coding: a coding difference in 13292.108 does not spread to the claims
+// that target its primary instance (the review of the identity contract,
+// W3; four since D096, at the circumstances it states).
 func TestTargetInstanceDoesNotSpread(t *testing.T) {
 	d, _ := builtin(t)
 	a := clone(t, d.Gold)
@@ -1712,13 +1720,13 @@ func TestCheckInMatchesValidatePy(t *testing.T) {
 	}{
 		{"a retired id of another claim", "13292.7", func(s map[string]Annotation) { s["13292.7"]["retired"] = []any{"13292.9#7"} },
 			"R12 its retired ids are not a list of instance ids of its own"},
-		// 13292.108 is the gold's fully bound fragment (13292.6 leaves its
-		// unstated variables unstated since D086 round 1).
+		// A fully bound fragment: 13292.108 as draft 2 coded it (fullyBound;
+		// since D096 the gold has none).
 		{"a fully bound fragment without its conclusion", "13292.108", func(s map[string]Annotation) {
-			inst(s["13292.108"], 0)["conclusion"].(map[string]any)["formula"] = nil
+			fullyBound(t, s)["conclusion"].(map[string]any)["formula"] = nil
 		}, "practical_reasoning2 concludes <nil>, not "},
 		{"a fully bound fragment that omits a premise", "13292.108", func(s map[string]Annotation) {
-			in := inst(s["13292.108"], 0)
+			in := fullyBound(t, s)
 			in["premises"] = in["premises"].([]any)[1:]
 		}, "practical_reasoning2: missing "},
 		{"a fragment that leaves a variable out of its bindings", "13292.108", func(s map[string]Annotation) {
@@ -1880,4 +1888,44 @@ func TestR18ExplicitFit(t *testing.T) {
 			}
 		})
 	}
+}
+
+// fullyBound gives 13292.108 the coding it had until D096 (round 1, draft
+// 3): the environmental argument, every variable bound, as a fragment, its
+// circumstances explicit and the rest supplied. It is the discussion's
+// instance at the thesis (13292.1#2) since, and the gold has no fully bound
+// fragment left; tests of one build it so. It returns the instance.
+func fullyBound(t *testing.T, s map[string]Annotation) map[string]any {
+	t.Helper()
+	var env map[string]any
+	for _, x := range s["13292.1"]["instances"].([]any) {
+		if in, _ := x.(map[string]any); in["by"] == "the discussion" {
+			env = in
+		}
+	}
+	if env == nil {
+		t.Fatal("the thesis has no instance by the discussion")
+	}
+	var in map[string]any
+	b, _ := json.Marshal(env)
+	if err := json.Unmarshal(b, &in); err != nil {
+		t.Fatal(err)
+	}
+	delete(in, "by")
+	delete(in, "label")
+	in["id"], in["primary"] = "13292.108#1", true
+	in["scheme"].(map[string]any)["fit"] = "fragment"
+	for _, y := range in["premises"].([]any) {
+		pm := y.(map[string]any)
+		if pm["status"] == "inferred" {
+			if pm["cite"] == "13292.108" {
+				pm["status"] = "explicit"
+			} else {
+				pm["status"] = "supplied"
+			}
+			delete(pm, "cite")
+		}
+	}
+	s["13292.108"]["instances"].([]any)[0] = in
+	return in
 }

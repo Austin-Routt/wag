@@ -118,10 +118,15 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 		}
 		return strings.Join(parts, ";")
 	case "instances":
+		// How the claim was divided into inferences: an instance by the
+		// discussion (D096), not the claim's own, is left out.
 		insts, _ := a["instances"].([]any)
 		sigs := make([]string, 0, len(insts))
 		for _, x := range insts {
 			in, _ := x.(map[string]any)
+			if in["by"] == "the discussion" {
+				continue
+			}
 			sigs = append(sigs, signature(in))
 		}
 		sort.Strings(sigs)

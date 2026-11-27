@@ -164,7 +164,7 @@ Fields this contract does not name are allowed and not read.
 next number after every number the item has used, its retired ones included. An edit of the
 instance (its scheme, bindings, formulas, English, fit or confidence) keeps its id; an instance that
 is removed goes to the item's `retired`, and its number is not given again. Ids are the annotator's
-own: annotator A's `13292.108#1` and the gold's need not be the same instance. A target refers to an
+own: annotator A's `13292.104#1` and the gold's need not be the same instance. A target refers to an
 instance of the same file. A target in a claim whose annotation the annotator cannot see (one not
 annotated yet, or any earlier one in an independent first pass) names its primary instance
 `<claim>#1`, by the rule that an annotator's record numbers its primary instance `#1`; another
@@ -173,8 +173,8 @@ instance of it is `{"unresolved": why}`.
 ## 6. Targets
 
 ```json
-"target": {"kialo_parent": "13292.108", "kialo_relation": "con",
-           "actual": {"claim": "13292.108", "instance": "13292.108#1", "part": "exception",
+"target": {"kialo_parent": "13292.13", "kialo_relation": "pro",
+           "actual": {"claim": "13292.1", "instance": "13292.1#2", "part": "exception",
                       "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)"}}
 ```
 
@@ -345,7 +345,8 @@ claim it did not review as unresolved too.
   Round 1 of the first gold's draft (2026-11-27, `d086-first-gold.md` §10) names the causal step for
   all four targets, and applies §5 item 6 to 13292.6, .11 and .218; 13292.108 keeps every variable
   bound, since the thesis has no argument and the fragment carries the environmental argument that
-  eleven targets point into: a question for the other reviewer and the owner. Two more targets that
+  eleven targets point into: a question for the other reviewer and the owner (decided by D096, §13:
+  the argument is the discussion's, at the thesis). Two more targets that
   format 1 moved for the same reason came to light: 13292.202, a mitigation, which the draft puts at
   the conclusion of the argument that cites the harm (13292.127#2), where both annotators put it; and
   13292.208, at 13292.104#1's better-means premise, which both annotators put at 13292.104#2's
