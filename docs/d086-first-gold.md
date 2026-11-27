@@ -332,6 +332,7 @@ and 04):
 | T5 | A claim coded Other that plays a free new argument (`other-new`) | `coverage_gap`, as before |
 | T6 | A claim coded Other whose executed conclusion is not its own annotated one | `failed` |
 | T7 | A claim coded Other with no conclusion formula | `failed` |
+| T8 | T7, the executed argument showing no conclusion either (T8 written after step 1's planted defects, which one rule survived, before its test) | `failed`: two missing conclusions are not the same conclusion |
 | U1 | A target whose formula, or part, or instance is `{"unresolved": why}` (each alone) | Not played: no move, `not_played`, the markers listed in the report |
 | U2 | All three unresolved | As U1; the report keeps the annotation's scheme, conclusion and question |
 | U3 | A bare denial (scheme `none`) whose target formula is unresolved | Not played: no challenge |
@@ -756,7 +757,7 @@ reviewers." In the register:
   item newly wrong in each field on the agreed gold).
 
 **Step 1 (code, before draft 3).** The verification import's strict input (ChatGPT's patch 01, cases
-V47-V49); the replay's label for a claim coded Other (patch 03, T1-T7); the replay's guard on an
+V47-V49); the replay's label for a claim coded Other (patch 03, T1-T8); the replay's guard on an
 unresolved target (patch 04, U1-U6): today a formula marker stops the replay with a traceback, an
 instance marker plays the claim at its target claim's primary argument, and a part marker plays it as
 a free argument; agreement's rule for an unsettled relation (D102, A1-A4).
