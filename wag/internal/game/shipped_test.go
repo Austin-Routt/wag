@@ -10,6 +10,22 @@ import (
 	"github.com/yourorg/wag/internal/nascq"
 )
 
+// newDataGame starts a game on the data the game ships (package data).
+func newDataGame(t *testing.T, players ...string) *GameState {
+	t.Helper()
+	ad, err := carneades.NewAdapterFromYAML(data.CoreYAML)
+	if err != nil {
+		t.Fatal(err)
+	}
+	n, err := nascq.LoadFromBytes(data.SchemesJSON, data.CQsJSON, data.EdgesJSON)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cfg := DefaultGameConfig()
+	cfg.MaxTurns = 12
+	return NewGame(cfg, ad, n, players)
+}
+
 // The data the game ships since step C5.2 (docs/c5-game.md): seventeen
 // schemes and thirty-four questions, generated from the catalogue. The
 // mechanics tests play the frozen pre-C5.2 data (prevdata_test.go); this

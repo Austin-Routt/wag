@@ -9,9 +9,10 @@ import (
 // Every answer the shipped NASCQ offers to every critical question
 // concludes what the question's locus and the answer's polarity call for
 // (EdgeCases), and docs/scheme-registry/nascq-edges.md (wag-cli --edges) is
-// the table of the shipped data.
+// the table of the shipped data: the data the game ships now (package data),
+// not the frozen data the mechanics tests play.
 func TestEveryEdgeCase(t *testing.T) {
-	cases, err := EdgeCases(func() (*GameState, error) { return newShippedGame(t, prevEdges, "Pro", "Con"), nil })
+	cases, err := EdgeCases(func() (*GameState, error) { return newDataGame(t, "Pro", "Con"), nil })
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -75,6 +75,16 @@ argument_schemes:
 	if back := languageTemplate(got); back != langCore {
 		t.Errorf("the template read back:\n%s", back)
 	}
+	// walton.yml's indexed templates (%[n]s) are taken as the game renders
+	// them (the independent check of the switch, W-2).
+	w3 := map[string]string{}
+	for k, v := range walton {
+		w3[k] = v
+	}
+	w3["brings_about/2"] = "%[2]s follows from doing %[1]s."
+	if got, err := fillLanguage(langCore, w3, l); err != nil || !strings.Contains(got, `brings_about/2: "%[2]s follows from doing %[1]s."`) {
+		t.Errorf("an indexed template: %v\n%s", err, got)
+	}
 
 	for _, c := range []struct {
 		name string
@@ -104,9 +114,11 @@ argument_schemes:
 		{"a negation the game does not play", langCore, func(l *GameLanguage, w map[string]string) { l.Negations["bad/1"] = "%s is not bad." },
 			"the negation of bad/1, a predicate the game does not play"},
 		{"a sentence's places", langCore, func(l *GameLanguage, w map[string]string) { w["brings_about/2"] = "The action %s brings about good." },
-			`brings_about/2's sentence "The action %s brings about good." has 1 places, not 2`},
+			`brings_about/2's sentence "The action %s brings about good." does not fill its 2 places`},
 		{"a negation's places", langCore, func(l *GameLanguage, w map[string]string) { l.Negations["good/1"] = "Nothing is good." },
-			"good/1's negation's sentence \"Nothing is good.\" has 0 places, not 1"},
+			"good/1's negation's sentence \"Nothing is good.\" does not fill its 1 places"},
+		{"an index beyond the places", langCore, func(l *GameLanguage, w map[string]string) { w["brings_about/2"] = "%[3]s follows %[1]s." },
+			`brings_about/2's sentence "%[3]s follows %[1]s." does not fill its 2 places`},
 	} {
 		l2 := GameLanguage{Negations: map[string]string{}}
 		for k, v := range l.Negations {

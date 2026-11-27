@@ -205,7 +205,7 @@ critical_questions:
     claim that argues it is coded with Other (docs/kialo-batch2/guidelines.md §3.1,
     OC9). For: showing that G is large enough to count: its size, how long it lasts,
     or how much it matters to those it reaches.'
-  status: drafted by Claude Code, 2026-11-25
+  status: drafted by Claude Code, 2026-11-27
 - id: walton/harm_discounted_by_bearer
   game:
     id: CQ:harm_discounted

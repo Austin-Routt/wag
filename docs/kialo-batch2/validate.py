@@ -56,14 +56,19 @@ if not F2 and os.path.exists(DOC + 'format1/walton.yml'):
     WALTON_PATH = DOC + 'format1/walton.yml'
 lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
 items = json.load(open(ITEMS, encoding='utf-8'))['items']
-W = {s['id']: s for s in yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))['argument_schemes']}
+WALTON = yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))
+W = {s['id']: s for s in WALTON['argument_schemes']}
+# walton.yml's predicates of no argument (sign's more_reliable/0): a formula,
+# not an atom of the lexicon.
+NULLARY = {k[:-2] for k in WALTON.get('language') or {} if k.endswith('/0')}
 # Upstream IDs renamed in the cleaned file read as their new ones.
 MIGRATED = json.load(open(REPO + 'docs/scheme-registry/walton-clean/id-migrations.json'))['schemes']
 for old, new in MIGRATED.items():
     W[old] = W[new]
 comp = json.load(open(REPO + 'docs/scheme-registry/links.json'))['entries']
 NASCQ = REPO + 'wag/data/nascq/'
-# A format-1 file is checked against the game's questions it was made with too:
+# A format-1 file is checked against the game's questions the format-1 gold was
+# made with (the annotators' files of 2026-10-13 were made with earlier ones):
 # since step C5.2 (docs/c5-game.md) the game asks questions at formulas where it
 # asked none (the weighing exceptions, too_slight, the modal premises), which R2
 # would ask a kept version to name. They are the files frozen in
@@ -97,7 +102,7 @@ def parse(f):
 
 def atoms(f):
     neg, p, args = parse(f)
-    if p is None: return [args[0]]
+    if p is None: return [] if args[0] in NULLARY else [args[0]]
     out = []
     for a in args:
         out += atoms(a) if ('(' in a or a.startswith('¬')) else [a]
@@ -291,16 +296,23 @@ for e in comp:
                 pred = parse(w['formula'])[1] or w['formula']
                 cq_pred.setdefault(l['id'], {}).setdefault(pred, set()).add(('comp', f"{m.get('printed_under') or e['number']} {m['cq']}", w['locus']))
 # The questions the game asks of the scheme that plays each walton.yml scheme,
-# and those it asks at its conclusion (R2 for a challenge's wag_cq).
-game_cqs, concl_cqs = {}, {}
+# those it asks at its conclusion, and where it asks each (R2 for a
+# challenge's wag_cq): its locus, and its pattern's predicate.
+game_cqs, concl_cqs, place_of = {}, {}, {}
 for e in edges:
     wid = WAG2W[e['scheme']]
     game_cqs.setdefault(wid, set()).add(e['cq'])
     if e.get('locus') == 'conclusion':
         concl_cqs.setdefault(wid, set()).add(e['cq'])
+    place_of[(wid, e['cq'])] = (e.get('locus'), parse(e['pattern'])[1] if 'pattern' in e else None)
     if 'pattern' in e:
         pred = parse(e['pattern'])[1]
         cq_pred.setdefault(wid, {}).setdefault(pred, set()).add(('game', e['cq'], e['locus']))
+
+def walton_predicates(wid):
+    """The predicates of a walton.yml scheme's formulas."""
+    sch = W.get(wid) or {}
+    return {parse(f)[1] for k in ('premises', 'assumptions', 'exceptions', 'conclusions') for f in sch.get(k) or []}
 
 def check_target_entry(cid, where, claim, ref, part, formula):
     """R13 (and R16's shape) for a format-2 target: its instance, part and
@@ -749,9 +761,12 @@ for it in gold['items']:
             # the game asks questions at the challenge's formula, the challenge
             # names one of them (wag_cq): at a premise or an exception those
             # whose pattern has its predicate, at the conclusion those asked
-            # there. Elsewhere the question it names is one the game asks of
-            # the scheme it plays the instance's scheme with, and it names
-            # none (null) when the game plays none.
+            # there. Where the game asks none there, the question it names is
+            # one the game asks of the scheme, at a formula of the game's own
+            # form that walton.yml's scheme lacks (analogy's
+            # relevant_differences): one the game asks at another formula of
+            # the scheme, at its conclusion or of the whole argument is not
+            # there. It names none (null) when the game asks the scheme none.
             cw = ci['scheme']['walton_id']
             cw = MIGRATED.get(cw, cw)
             label = c.get('cq') or c.get('type')
@@ -764,13 +779,22 @@ for it in gold['items']:
                     asked = sorted(x[1] for x in cq_pred.get(cw, {}).get(parse(f)[1], set()) if x[0] == 'game')
             if c.get('wag_cq'):
                 if cw not in game_cqs:
-                    err(f'{cid}: R2 the challenge {label} names the game\'s {c["wag_cq"]}, but the game plays {cw} with no scheme, '
-                        f'so it asks none of {ref} (wag_cq null)')
+                    why = (f'the game asks no question of {GAME_OF[cw]}' if cw in GAME_OF else
+                           f'the game plays {cw} with no scheme, so it asks none of {ref}')
+                    err(f'{cid}: R2 the challenge {label} names the game\'s {c["wag_cq"]}, but {why} (wag_cq null)')
                 elif c['wag_cq'] not in game_cqs[cw]:
                     err(f'{cid}: R2 the challenge {label} names the game\'s {c["wag_cq"]}, which the game does not ask of {GAME_OF[cw]}')
                 elif asked and c['wag_cq'] not in asked:
                     err(f'{cid}: R2 the challenge {label} at {c["formula"]} of {ref} names the game\'s {c["wag_cq"]}, '
                         f'but the game asks {asked} there')
+                elif not asked and c['formula'] is not None:
+                    locus, pred = place_of[(cw, c['wag_cq'])]
+                    where = ('of the whole argument (a challenge about the instance, formula null)' if locus == 'argument' else
+                             'at its conclusion' if locus == 'conclusion' else
+                             f'at {pred}(...)' if pred in walton_predicates(cw) else None)
+                    if where:
+                        err(f'{cid}: R2 the challenge {label} at {c["formula"]} of {ref} names the game\'s {c["wag_cq"]}, '
+                            f'which the game asks {where} of {GAME_OF[cw]}, not there')
             elif asked:
                 err(f'{cid}: R2 the challenge {label} at {c["formula"]} of {ref} names no question of the game, but the game '
                     f'asks {asked} there: name the one it is (wag_cq)')

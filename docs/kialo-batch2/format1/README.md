@@ -23,6 +23,8 @@ changed in ways that touch it: `links.json` gained two links on 2026-11-25, and 
 passes with them. When one does change in a way that fails it, its copy is kept here too.
 
 What the copy covers: `validate.py` reads it for every format-1 file, the format-1 gold (made with
-it) and the annotators' files of 2026-10-13 (made with an earlier `walton.yml`, as before). The Go
+it) and the annotators' files of 2026-10-13 (made with an earlier `walton.yml`, as before). The same
+holds of the frozen NASCQ: the annotators' files were made with the game's NASCQ before 2026-10-15,
+so they too are checked against a later one than they were made with. The Go
 side re-checks annotation runs recorded in format 1 with the dataset's `walton.yml` when it shows
 them, since such runs pin no inputs: a limit of D092's "checked as they were made".

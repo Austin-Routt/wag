@@ -180,7 +180,7 @@ critical_questions:
     something other than or less than S (a misquotation, a distorted second-hand report),
     which undermines asserts(W,S). For: a quotation, recording or citation of W stating
     S.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-27
 - id: game/CQ:field
   game:
     id: CQ:field
@@ -196,7 +196,7 @@ critical_questions:
     D (a resident of the street reporting on the city''s budget), which undermines
     in_domain(S,D). For: showing that S is the kind of fact that W''s access to D
     would reveal.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-27
 summary:
   text: 'Use it when a claim S is offered on the word of a source W who has first-hand
     access to the matters of D that S belongs to: someone who was there, lives or

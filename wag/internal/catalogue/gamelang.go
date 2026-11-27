@@ -10,9 +10,12 @@ package catalogue
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v2"
+
+	"github.com/yourorg/wag/internal/language"
 )
 
 // GameLanguageFile is GameDir's file of the game's sentences.
@@ -146,10 +149,15 @@ func fillLanguage(core string, walton map[string]string, l GameLanguage) (string
 		case n == "":
 			fail("%s has no negation's sentence in %s/%s: core.yml has one for every predicate", p, GameDir, GameLanguageFile)
 		}
-		arity := p[strings.LastIndex(p, "/")+1:]
+		// A sentence fills its predicate's places as the game renders it:
+		// %s in order, or %[n]s by index, each place at least once.
+		arity, _ := strconv.Atoi(p[strings.LastIndex(p, "/")+1:])
 		for _, s := range []struct{ what, text string }{{"sentence", t}, {"negation's sentence", n}} {
-			if s.text != "" && fmt.Sprint(strings.Count(s.text, "%s")) != arity {
-				fail("%s's %s %q has %d places, not %s", p, s.what, s.text, strings.Count(s.text, "%s"), arity)
+			if s.text == "" {
+				continue
+			}
+			if err := language.Validate(s.text, arity); err != nil {
+				fail("%s's %s %q does not fill its %d places: %v", p, s.what, s.text, arity, err)
 			}
 		}
 		fmt.Fprintf(&b, "  %s: %s\n  ¬%s: %s\n", p, yamlQuoted(t), p, yamlQuoted(n))

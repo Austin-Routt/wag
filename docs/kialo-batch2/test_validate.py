@@ -292,6 +292,55 @@ class Rules(unittest.TestCase):
         c['wag_cq'] = 'CQ:likelihood'
         self.fails(g, '13292.61', ['R2'], "names the game's CQ:likelihood, which the game does not ask of AS:analogy")
 
+    def test_r2_challenge_a_question_the_game_asks_at_another_formula(self):
+        # Where the game asks nothing at a challenge's formula, the question
+        # it names may not be one the game asks at another formula of the
+        # scheme, at its conclusion, or of the whole argument (the
+        # independent check of the switch, W-1).
+        for cid, iid, formula, cq, where in (
+                ('13292.7', '13292.7#1', 'bad(food_less_affordable_for_poor)', 'CQ:likelihood', 'at brings_about(...)'),
+                ('13292.9', '13292.9#4', 'matters_to_decision(tax_meat,tax_revenue_reduced)', 'CQ:worth_finding_out_first',
+                 'at worth_finding_out_first(...)'),
+                ('13292.9', '13292.9#4', '¬should_be_performed(tax_meat)', 'CQ:worth_finding_out_first',
+                 'at worth_finding_out_first(...)'),
+                ('13292.108', '13292.108#1', 'goal_of_agent(governments,environmental_harm_from_meat_reduced)', 'CQ:other_means',
+                 'at realize_more_effectively(...)'),
+                ('13292.115', '13292.115#1', 'good(reduced_unhealthy_meat_consumption)', 'CQ:side_effect', 'at its conclusion')):
+            g = copy.deepcopy(GOLD)
+            item(g, cid)['challenges'].append({'cq': None, 'wag_cq': cq, 'type': 'planted', 'instance': iid, 'formula': formula})
+            self.fails(g, cid, ['R2'], f"names the game's {cq}, which the game asks {where}")
+
+    def test_r2_challenge_a_question_of_the_whole_argument(self):
+        # Sign's CQ:other_event is asked of the argument: a challenge about
+        # the whole instance (formula null) names it, one at a formula does
+        # not. The sign instance is planted (the gold has none); its
+        # exception more_reliable takes no argument, a formula, not an atom.
+        def plant(formula):
+            g = copy.deepcopy(GOLD)
+            it = item(g, '13292.9')
+            iid = next_id(it)
+            b = {'A': 'meat_industry_harmed', 'B': 'tax_revenue_reduced'}
+            prem = [('premise', 'finding_true(meat_industry_harmed)'), ('premise', 'indicated_true(tax_revenue_reduced,meat_industry_harmed)'),
+                    ('assumption', 'strong_correlation(meat_industry_harmed,tax_revenue_reduced)'), ('exception', 'more_reliable')]
+            it['instances'].append({'id': iid, 'primary': False, 'bindings': b,
+                                    'scheme': {'walton_id': 'sign', 'compendium': None, 'wag_id': 'AS:sign', 'fit': 'reconstructed',
+                                               'confidence': 0.4, 'alternatives': []},
+                                    'premises': [{'role': r, 'formula': f, 'en': f, 'status': 'supplied'} for r, f in prem],
+                                    'conclusion': {'formula': 'true_in_situation(tax_revenue_reduced)', 'en': 'planted'}})
+            it['challenges'].append({'cq': None, 'wag_cq': 'CQ:other_event', 'type': 'other cause', 'instance': iid, 'formula': formula})
+            return g
+        self.passes(plant(None))
+        self.fails(plant('finding_true(meat_industry_harmed)'), '13292.9', ['R2'],
+                   "names the game's CQ:other_event, which the game asks of the whole argument")
+
+    def test_r2_challenge_of_an_answer_scheme(self):
+        # The game plays the answer schemes but asks them nothing.
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.127')['challenges'].append({'cq': None, 'wag_cq': 'CQ:bad_outweighs', 'type': 'planted',
+                                                   'instance': '13292.127#1',
+                                                   'formula': 'bad(starvation_from_reduced_meat_access)'})
+        self.fails(g, '13292.127', ['R2'], 'the game asks no question of AS:bad_outweighs_good (wag_cq null)')
+
     def test_r2_challenge_of_a_scheme_the_game_does_not_play(self):
         g = copy.deepcopy(GOLD)
         f = inst(g, '13292.9#3')['premises'][2]['formula']

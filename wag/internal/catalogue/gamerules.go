@@ -51,8 +51,24 @@ func questionFaults(asked map[string][]askedAt) []string {
 				id, describe(loci)))
 		}
 		if len(formulas) > 1 {
-			faults = append(faults, fmt.Sprintf("%s is asked at %s: one id is one question, asked at one formula wherever it is asked (the refinement of D094; D095 (1)): split it, the scheme whose book question named it keeping the id",
-				id, describe(formulas)))
+			fs := make([]string, 0, len(formulas))
+			for f := range formulas {
+				fs = append(fs, f)
+			}
+			sort.Strings(fs)
+			renamed := true
+			for _, f := range fs[1:] {
+				renamed = renamed && sameFormula(fs[0], f)
+			}
+			if renamed {
+				// One formula with other letters: one text names one set
+				// of variables (D009), so it is still two questions.
+				faults = append(faults, fmt.Sprintf("%s is asked at %s: the same formula with other variables, but one id's text names one set of variables (D009): split it, one id for each set",
+					id, describe(formulas)))
+			} else {
+				faults = append(faults, fmt.Sprintf("%s is asked at %s: one id is one question, asked at one formula wherever it is asked (the refinement of D094; D095 (1)): split it, the scheme whose book question named it keeping the id",
+					id, describe(formulas)))
+			}
 		}
 		if len(texts) > 1 {
 			faults = append(faults, fmt.Sprintf("%s reads %s: one id is one question, with one text: give its entries one paraphrase",
@@ -245,6 +261,8 @@ func roleFaults(schemes []*gameIn, byID map[string]*gameIn, asked map[string][]a
 					switch {
 					case a.Locus != "exception" && a.Locus != "premise":
 						faults = append(faults, fmt.Sprintf("%s backs %s, which %s asks at its %s: an answer scheme answers an exception or an assumption (D075)", g.id, cq, a.Scheme, a.Locus))
+					case a.Locus == "premise" && !isAssumption(byID[a.Scheme], a.Formula):
+						faults = append(faults, fmt.Sprintf("%s backs %s, which %s asks at its premise %s, not an assumption: an answer scheme answers an exception or an assumption (D075)", g.id, cq, a.Scheme, a.Formula))
 					case !sameFormula(concl, a.Formula):
 						faults = append(faults, fmt.Sprintf("%s concludes %s, not %s, which %s asks %s at: an answer scheme concludes what it answers (D075, D095 (1))", g.id, orNone(concl), a.Formula, a.Scheme, cq))
 					}
@@ -268,6 +286,20 @@ func roleFaults(schemes []*gameIn, byID map[string]*gameIn, asked map[string][]a
 		}
 	}
 	return faults
+}
+
+// isAssumption tells whether a braced formula is one of a game scheme's
+// assumptions (a premise locus covers premises and assumptions alike).
+func isAssumption(g *gameIn, f string) bool {
+	if g == nil {
+		return false
+	}
+	for _, x := range g.roles["assumptions"] {
+		if g.rebrace(x) == f {
+			return true
+		}
+	}
+	return false
 }
 
 func orNone(s string) string {

@@ -13,7 +13,7 @@ top-down, is played as the move its annotation describes, by Pro or Con:
     premise backing or attack, side effect): a move about that statement, with
     the annotated scheme if the game has it, else with Other;
   - an answer to one of the game's critical questions about an argument that
-    was played: that answer;
+    was played: that answer, with Other when the annotation codes it so;
   - a claim whose primary instance is carried by a secondary one (a bridge,
     whose entry premise its modal argument concludes): the primary, then the
     secondary for that premise, with its scheme; claims at the secondary
@@ -333,6 +333,16 @@ def main():
                 if f:
                     act["target_premise_id"] = f.strip().replace(" ", "")
             actions.append(("cq", act))
+        elif (a.get("role") or {}).get("kind") == "cq_answer" and wid == "other" and cq and str(cq).startswith("CQ:") and trec:
+            # An answer coded with Other is played through its question too,
+            # with Other: the game refuses it where the question refuses Other.
+            act = {"type": "attack" if pol == "against" else "support", "target_arg_id": trec["arg"],
+                   "answers_cq_id": cq, "scheme_id": "AS:other", "variable_bindings": {"P1": literal}, "text": literal}
+            if tpart.startswith("premise"):
+                f = tgt.get("formula") or (tpart.split(":", 1)[1] if ":" in tpart else "")
+                if f:
+                    act["target_premise_id"] = f.strip().replace(" ", "")
+            actions.append(("cq-other", act))
         if stmt and wag:
             actions.append(("statement", {"type": kind, "target_stmt_id": stmt, "scheme_id": wag,
                                           "variable_bindings": bindings, "text": literal}))
@@ -373,7 +383,7 @@ def main():
         else:
             entry["played"] = "no: " + ("; ".join(errors) if errors else f"its target ({tclaim}, {tpart}) is not on the board")
             entry["executed"] = None
-        if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new"):
+        if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new", "cq-other"):
             entry["fallback_after"] = errors
         how = entry.get("played")
         if how in ("cq", "statement", "new"):
@@ -388,6 +398,9 @@ def main():
             # statement or a new argument.
             intended_cq = entry["intended"]["role"] == "cq_answer" and str(cq or "").startswith("CQ:")
             entry["integration"] = "as_intended" if intended_cq == (how == "cq") else "failed"
+        elif how == "cq-other":
+            # Coded with Other, answering its question: its scheme and role.
+            entry["integration"] = "as_intended"
         elif how in ("other", "other-new"):
             entry["integration"] = "coverage_gap" if not wag else "failed"
         else:
@@ -402,7 +415,7 @@ def main():
                "played": sum(1 for e in report if not str(e.get("played", "")).startswith("no")),
                "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new")),
                "as_challenges": sum(1 for e in report if e.get("played") == "challenge"),
-               "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new")),
+               "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new", "cq-other")),
                "secondary_played": sum(1 for e in report for x in e.get("secondary") or [] if x.get("played")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "integration": {k: sum(1 for e in report if e.get("integration") == k)

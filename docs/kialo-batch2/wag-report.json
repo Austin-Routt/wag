@@ -1,5 +1,5 @@
 {
- "game": "2",
+ "game": "1",
  "claim": "should_be_performed(tax_meat)",
  "claim_label": "out",
  "played": 46,
@@ -9,9 +9,9 @@
  "secondary_played": 3,
  "not_played": 3,
  "integration": {
-  "as_intended": 27,
+  "as_intended": 31,
   "fragment": 3,
-  "coverage_gap": 15,
+  "coverage_gap": 11,
   "failed": 1,
   "duplicate": 1,
   "cascade": 1,
@@ -201,19 +201,19 @@
     "target_formula": "too_slight(tax_meat,food_less_affordable_for_poor)",
     "conclusion": "too_slight(tax_meat,food_less_affordable_for_poor)"
    },
-   "played": "other",
+   "played": "cq-other",
    "arg": "a45",
    "executed": {
-    "how": "other",
+    "how": "cq-other",
     "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": "too_slight(tax_meat,food_less_affordable_for_poor)",
-    "type": "support",
+    "cq": "CQ:too_slight",
+    "target_arg": "a1",
+    "target_stmt": null,
+    "type": "attack",
     "arg": "a45",
     "conclusion": "too_slight(tax_meat,food_less_affordable_for_poor)"
    },
-   "integration": "coverage_gap"
+   "integration": "as_intended"
   },
   {
    "claim": "13292.33",
@@ -232,19 +232,19 @@
     "target_formula": "brings_about(tax_meat,food_less_affordable_for_poor)",
     "conclusion": "¬brings_about(tax_meat,food_less_affordable_for_poor)"
    },
-   "played": "other",
+   "played": "cq-other",
    "arg": "a47",
    "executed": {
-    "how": "other",
+    "how": "cq-other",
     "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": "brings_about(tax_meat,food_less_affordable_for_poor)",
+    "cq": "CQ:likelihood",
+    "target_arg": "a1",
+    "target_stmt": null,
     "type": "attack",
     "arg": "a47",
     "conclusion": "¬brings_about(tax_meat,food_less_affordable_for_poor)"
    },
-   "integration": "coverage_gap"
+   "integration": "as_intended"
   },
   {
    "claim": "13292.180",
@@ -1063,19 +1063,19 @@
     "target_formula": "brings_about(tax_meat,more_anemia_cases)",
     "conclusion": "¬brings_about(tax_meat,more_anemia_cases)"
    },
-   "played": "other",
+   "played": "cq-other",
    "arg": "a130",
    "executed": {
-    "how": "other",
+    "how": "cq-other",
     "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": "brings_about(tax_meat,more_anemia_cases)",
+    "cq": "CQ:likelihood",
+    "target_arg": "a49",
+    "target_stmt": null,
     "type": "attack",
     "arg": "a130",
     "conclusion": "¬brings_about(tax_meat,more_anemia_cases)"
    },
-   "integration": "coverage_gap"
+   "integration": "as_intended"
   },
   {
    "claim": "13292.190",
@@ -1156,19 +1156,19 @@
     "target_formula": "brings_about(tax_meat,more_anemia_cases)",
     "conclusion": "¬brings_about(tax_meat,more_anemia_cases)"
    },
-   "played": "other",
+   "played": "cq-other",
    "arg": "a150",
    "executed": {
-    "how": "other",
+    "how": "cq-other",
     "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": "brings_about(tax_meat,more_anemia_cases)",
+    "cq": "CQ:likelihood",
+    "target_arg": "a49",
+    "target_stmt": null,
     "type": "attack",
     "arg": "a150",
     "conclusion": "¬brings_about(tax_meat,more_anemia_cases)"
    },
-   "integration": "coverage_gap"
+   "integration": "as_intended"
   },
   {
    "claim": "13292.202",

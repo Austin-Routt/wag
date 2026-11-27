@@ -25,6 +25,17 @@ func TestQuestionFaults(t *testing.T) {
 		t.Fatalf("sound questions: %v", f)
 	}
 
+	// One formula with other letters is still two questions: one text names
+	// one set of variables (the independent check of the switch, N-2).
+	renamed := []askedAt{
+		{Scheme: "AS:practical_reasoning", Locus: "exception", Formula: "bad_outweighs({A},{G})", Text: "Would {A} cost more than {G}?"},
+		{Scheme: "AS:necessary_condition", Locus: "exception", Formula: "bad_outweighs({X},{G})", Text: "Would {A} cost more than {G}?"},
+	}
+	if f := strings.Join(questionFaults(map[string][]askedAt{"CQ:bad_outweighs": renamed}), "\n"); !strings.Contains(f,
+		"the same formula with other variables, but one id's text names one set of variables (D009): split it, one id for each set") {
+		t.Errorf("renamed variables: %s", f)
+	}
+
 	// Before C5.2, CQ:side_effect was an exception of practical reasoning
 	// and the conclusion of positive consequences.
 	mixed := []askedAt{
@@ -153,7 +164,8 @@ func TestRoleFaults(t *testing.T) {
 		}
 		return g
 	}
-	cons := scheme("AS:consequences", "carneades_id: c\n", map[string][]string{"variables": {"A", "G"}})
+	cons := scheme("AS:consequences", "carneades_id: c\n", map[string][]string{"variables": {"A", "G"},
+		"premises": {"brings_about(A,G)", "good(G)"}, "assumptions": {"possible(A)"}, "exceptions": {"bad_outweighs(A,G)", "too_slight(A,G)"}})
 	modal := scheme("AS:modal", "role: modal\nweighs_as: AS:consequences\n", map[string][]string{"variables": {"A", "G"}})
 	bridge := scheme("AS:bridge", "role: bridge\nweighs_as: AS:modal\nentry_premise: may_be_worth_performing({A},{G})\n",
 		map[string][]string{"variables": {"A", "G"}, "premises": {"may_be_worth_performing(A,G)", "matters_to_decision(A,G)"}})
@@ -168,6 +180,8 @@ func TestRoleFaults(t *testing.T) {
 		"CQ:bad_outweighs": {{Scheme: "AS:consequences", Locus: "exception", Formula: "bad_outweighs({A},{G})"}},
 		"CQ:side_effect":   {{Scheme: "AS:consequences", Locus: "conclusion", Formula: "should_be_performed({A})"}},
 		"CQ:likelihood":    {{Scheme: "AS:consequences", Locus: "premise", Formula: "brings_about({A},{G})"}},
+		"CQ:too_slight":    {{Scheme: "AS:consequences", Locus: "exception", Formula: "too_slight({A},{G})"}},
+		"CQ:possibility":   {{Scheme: "AS:consequences", Locus: "premise", Formula: "possible({A})"}},
 	}
 	if f := roleFaults(schemes, byID, asked, map[string][]string{"AS:bad_outweighs_good": {"CQ:bad_outweighs"}}); len(f) > 0 {
 		t.Fatalf("sound roles: %v", f)
@@ -180,8 +194,12 @@ func TestRoleFaults(t *testing.T) {
 	}{
 		{"an answer backing a question about the conclusion", map[string][]string{"AS:bad_outweighs_good": {"CQ:side_effect"}}, nil,
 			"AS:bad_outweighs_good backs CQ:side_effect, which AS:consequences asks at its conclusion: an answer scheme answers an exception or an assumption"},
-		{"an answer concluding another formula", map[string][]string{"AS:bad_outweighs_good": {"CQ:likelihood"}}, nil,
-			"AS:bad_outweighs_good concludes bad_outweighs({A},{G}), not brings_about({A},{G}), which AS:consequences asks CQ:likelihood at"},
+		{"an answer concluding another formula", map[string][]string{"AS:bad_outweighs_good": {"CQ:too_slight"}}, nil,
+			"AS:bad_outweighs_good concludes bad_outweighs({A},{G}), not too_slight({A},{G}), which AS:consequences asks CQ:too_slight at"},
+		{"an answer at a premise that is not an assumption", map[string][]string{"AS:bad_outweighs_good": {"CQ:likelihood"}}, nil,
+			"AS:bad_outweighs_good backs CQ:likelihood, which AS:consequences asks at its premise brings_about({A},{G}), not an assumption"},
+		{"an answer at an assumption concludes it", map[string][]string{"AS:bad_outweighs_good": {"CQ:possibility"}}, nil,
+			"AS:bad_outweighs_good concludes bad_outweighs({A},{G}), not possible({A}), which AS:consequences asks CQ:possibility at"},
 		{"a modal weighing as no game scheme", nil, func() { modal.entry.Game.NASCQ[1].Value = "AS:none" },
 			`AS:modal weighs as "AS:none", which is no game scheme`},
 		{"a bridge's entry premise that is not its premise", nil, func() { bridge.entry.Game.NASCQ[2].Value = "may_be_worth_performing({G},{A})" },

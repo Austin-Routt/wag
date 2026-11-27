@@ -2,7 +2,7 @@
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
-(proposal D095, applied 2026-11-26). C5.2's steps 1 to 5 are done, the switch on 2026-11-27; steps 6 to 8 are next. The
+(proposal D095, applied 2026-11-26). C5.2's steps 1 to 6 are done, the switch and the replay by instance on 2026-11-27; steps 7 (item F and the new golden set) and 8 are next. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
 decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
@@ -229,8 +229,11 @@ then the switch, one commit that changes the data's identity once; then the revi
    the replay is unchanged, claim for claim); the batch-2 report is made again and names the claims
    C2 to C4 left unplayed that now play. The replay by instance done (2026-11-27): it reads the
    game's schemes from the server's data and sends a better means' comparison; on the new data 46 of
-   49 claims are played (37 before) and 27 as intended (17), the three bridges with their modal
-   arguments; on the frozen data it gives the committed report again, claim for claim. The new
+   49 claims are played (37 before) and 31 as intended (17), the three bridges with their modal
+   arguments. An answer coded with Other is played through its question, with Other (the check of
+   the switch, N-15). On the frozen data the script plays as the committed report of that data did,
+   but for three such answers (13292.33, .182 and .198, now played through their question, as
+   intended) and the `intended` fields of the five claims the recode changed (the recoded gold's). The new
    golden set is written with item F (step 7), whose cases are its routes. Old traces with model players replay with the pre-C5.2 build
    and `--data` with the frozen files; their prompts carry no profile section.
 7. **Item F** (below), with the review's eleven new cases and the check's two, each outcome written
@@ -372,7 +375,13 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
 4. Other's direct undercutter of a bridge whose premise is only that the consequence could be found
    out: D095 (2) keeps direct counterarguments available, while D095 (3) and D053 refuse a bare
    claim of knowability at the question. The game accepts it meanwhile (Other cannot conclude the
-   exception, nor presume it, VERIFY-5a E-b); should the refusal reach it?
+   exception, nor presume it, VERIFY-5a E-b); should the refusal reach it? Likewise sign and analogy,
+   which no backup edge offers at that question but which can argue the exception by a move about
+   it, as any statement can be argued (the check of the switch, N-12): should D095 (3)'s list (the
+   answer scheme and the source-based schemes) bound every route to the exception?
+5. A wording: CQ:worth_finding_out_first's text, from proposal D008-D074 (a decided text), ends
+   "Which way?", the investigation its answer names (D095 (3)), while the board offers "yes" and "no"
+   (the check of the switch, N-4). Keep it, or end it "If so, how?"
 
 ## Item F: the answer contract, per route
 

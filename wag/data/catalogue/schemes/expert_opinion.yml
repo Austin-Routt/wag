@@ -143,7 +143,7 @@ critical_questions:
   answer: 'The proponent, once asked. Against: showing that S belongs to some other
     field, or needs knowledge beyond D, which undermines in_domain(S,D). For: showing
     that settling S calls on the knowledge of D.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-27
 - id: 2/CQ3
   book:
     entry: "2"
@@ -165,7 +165,7 @@ critical_questions:
     say or imply S (a misquotation, a remark out of context, a conclusion W did not
     draw), which undermines asserts(W,S). For: a quotation or citation of W saying
     S, or saying something from which S plainly follows.'
-  status: drafted by Claude Code, 2026-10-22
+  status: drafted by Claude Code, 2026-11-27
 - id: 2/CQ4
   book:
     entry: "2"

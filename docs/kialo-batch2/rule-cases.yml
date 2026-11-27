@@ -25,6 +25,12 @@
 retired:
   # Wording that stated an earlier version of a rule. When a rule changes,
   # its old wording goes here, so that no copy of it survives.
+  - phrase: There are nine NASCQ schemes
+    now: seventeen since step C5.2, listed in the guidelines' first table
+    why: the independent check of step C5.2's switch (E-1)
+  - phrase: is a `cq_answer` too
+    now: a claim at the conclusion is a rebuttal (OC2); the game's questions there are that route
+    why: the independent check of step C5.2's switch (N-13); OC2 and the gold code it so
   - phrase: no question of the book or the game targets too_slight
     now: the game's CQ:too_slight (OC9; step C5.2)
     why: step C5.2's switch (2026-11-27), the game asks too_slight

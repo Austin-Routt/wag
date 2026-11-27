@@ -285,7 +285,7 @@ critical_questions:
     is argued as negative_consequences, a rebuttal at the conclusion, weighed by the
     scheme weights. For: a reply that attacks the weighing''s comparison or the consequence
     it relies on (docs/kialo-batch2/guidelines.md §3.1, OC10).'
-  status: drafted by Claude Code, 2026-11-24
+  status: drafted by Claude Code, 2026-11-27
 - id: walton/worthy_goal
   targets: [{formula: worthy_goal(G), locus: assumption}]
   note: Neither the book nor the game asks it. The premise map linked the book's first

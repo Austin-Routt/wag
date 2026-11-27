@@ -12,7 +12,10 @@ import (
 	"github.com/yourorg/wag/internal/nascq"
 )
 
-// newShippedGame starts a game on the shipped data with the given NASCQ edges.
+// newShippedGame starts a game on the data the game shipped until step
+// C5.2, frozen (prevdata_test.go), with the given NASCQ edges: the mechanics
+// tests were written with its schemes and questions. A game on the data the
+// game ships now is newDataGame's.
 func newShippedGame(t *testing.T, edgesJSON []byte, players ...string) *GameState {
 	t.Helper()
 	ad, err := carneades.NewAdapterFromYAML(prevCore)
