@@ -215,11 +215,12 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 		turnRec := Turn{Reply: resp.Text}
 		s.mu.Lock()
 		t := ss.newTrace(seat.Kind).withPrompt(prompt)
+		withEvidence := ss.GS.Evidence != nil
 		s.mu.Unlock()
 		t.Model, t.Profile, t.Provider, t.ServedModel = c.Profile.Model, c.Profile.Name, c.Provider.Name(), resp.Model
 		t.Attempt, t.Reply, t.Feedback, t.Parent, t.Turn = attempt, resp.Text, feedback, callID, turn
 		t.Recovered = recorded != nil
-		rep, perr := ParseReplyFull(resp.Text)
+		rep, perr := parseReply(resp.Text, withEvidence)
 		if perr != nil {
 			turnRec.Rejected = perr.Error()
 			t.Result.Error = perr.Error()

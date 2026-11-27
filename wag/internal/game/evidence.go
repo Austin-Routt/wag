@@ -31,6 +31,15 @@ const (
 // IsEvidenceAct: a move of this type is an evidence act.
 func IsEvidenceAct(t string) bool { return t == ActOffer || t == ActConsent || t == ActWithdraw }
 
+// WithoutEvidence is the action without the fields of an evidence act and
+// of a move's citations (offer, binding, revision, evidence_refs): what a
+// game without a record set reads of it, as before E1 (docs/e1-evidence.md,
+// E1.7, B3).
+func WithoutEvidence(a nascq.ProposedAction) nascq.ProposedAction {
+	a.Offer, a.BindingID, a.Revision, a.EvidenceRefs = nil, "", "", nil
+	return a
+}
+
 // ArgumentRevisionAlgorithm names how ArgumentRevision is computed.
 const ArgumentRevisionAlgorithm = "wag-argument-revision/1"
 
@@ -214,8 +223,10 @@ func (gs *GameState) exceptionsOf(arg *caes.Argument) []string {
 // exceptions, its conclusion, or its inference: the argument's undercutter
 // statement, undercut(A), which an undercutter of it concludes.
 func (gs *GameState) statementsOf(arg *caes.Argument, kind string) []string {
+	// An Other argument's scheme lists no premises: all its premises are
+	// premises, and it has no assumptions (docs/e1-evidence.md, E1.7, A1).
 	n := len(arg.Premises)
-	if arg.Scheme != nil && len(arg.Scheme.Premises) <= n {
+	if arg.Scheme != nil && arg.Scheme.Id != carneades.FreeSchemeID && len(arg.Scheme.Premises) <= n {
 		n = len(arg.Scheme.Premises)
 	}
 	var out []string
@@ -237,6 +248,10 @@ func (gs *GameState) statementsOf(arg *caes.Argument, kind string) []string {
 			out = []string{arg.Conclusion.Id}
 		}
 	case "inference":
+		// An argument whose scheme has no exceptions, or an Other argument,
+		// has no undercutter statement until it is undercut or asked about:
+		// its inference is undercut(A) all the same (E1.7, A2).
+		out = []string{carneades.UndercutterID(arg.Id)}
 		if arg.Undercutter != nil {
 			out = []string{arg.Undercutter.Id}
 		}
@@ -244,18 +259,47 @@ func (gs *GameState) statementsOf(arg *caes.Argument, kind string) []string {
 	return out
 }
 
+// OfferStatements are the statements of a kind (premise, assumption,
+// exception, conclusion, inference) of an argument an offer may target, as
+// an offer names them; nil for an argument no offer may target.
+func (gs *GameState) OfferStatements(argID, kind string) []string {
+	if _, arg, ok := gs.offerable(argID); ok {
+		return gs.statementsOf(arg, kind)
+	}
+	return nil
+}
+
 // ReplayActAt gives the next evidence act the time it was made at (its
 // mark's), which its records take instead of the clock's: a replay makes
 // the same records, dated as when the act was played.
 func (gs *GameState) ReplayActAt(t string) { gs.actTime = t }
 
-// actAt is the time of the evidence act being played.
+// actAt is the time of the evidence act being played: the clock's, or the
+// latest time of the game's bindings and events if that is later. The
+// contract refuses an event dated before the one before it, or before its
+// binding, and a clock behind the last act (a resume on another computer, a
+// clock set back) must not refuse a valid act (E1.7, A3).
 func (gs *GameState) actAt() string {
 	if t := gs.actTime; t != "" {
 		gs.actTime = ""
 		return t
 	}
-	return gs.now().UTC().Format(time.RFC3339Nano)
+	at := gs.now().UTC()
+	if ev := gs.Evidence; ev != nil {
+		var times []string
+		for _, b := range ev.Bundle.Bindings {
+			times = append(times, b.CreatedAt)
+		}
+		for _, e := range ev.Bundle.Events {
+			times = append(times, e.CreatedAt)
+		}
+		for _, s := range times {
+			if t, err := time.Parse(time.RFC3339Nano, s); err == nil && t.After(at) {
+				at = t.UTC()
+			}
+		}
+	}
+	return at.Format(time.RFC3339Nano)
 }
 
 // evidenceAct plays an evidence act: it checks the act against the record

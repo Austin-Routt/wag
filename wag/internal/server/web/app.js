@@ -529,7 +529,7 @@ function renderDialogue() {
   }).join('');
   const gameNotes = (G.notes || []).filter(n => !n.target).map(noteHTML).join('');
   box.innerHTML = claimHead()
-    + (G.log.length ? `<ol class="dialogue">${items}</ol>` : `<div class="panel"><h2>No moves yet</h2><p>Put forward the first argument with the panel on the right: say it in your own words, choose the scheme it fits, and fill in the scheme's parts. ${G.config.objective === 'claim' ? 'In a debate, pro’s first argument states the claim.' : ''}</p></div>`)
+    + (G.log.length ? `<ol class="dialogue">${items}</ol>` : `<div class="panel"><h2>No moves yet</h2><p>Put forward the first argument with the panel on the right: say it in your own words, choose the scheme it fits, and fill in the scheme's parts. ${G.config.mode === 'inquiry' ? 'In an inquiry, the first argument states the claim.' : G.config.objective === 'claim' ? 'In a debate, pro’s first argument states the claim.' : ''}</p></div>`)
     + (gameNotes || ui.flag === 'game' ? `<div class="panel"><h2>Notes on the game</h2>${gameNotes}${ui.flag === 'game' ? noteForm('') : ''}</div>` : '');
   box.onclick = dialogueClick;
   if (G.log.length !== ui.lastLog) { ui.lastLog = G.log.length; const last = box.querySelector('.entry:last-child'); if (last) last.scrollIntoView({ block: 'nearest' }); }
@@ -686,7 +686,7 @@ function renderMap() {
 function renderBoard() {
   const b = $('#board'); if (!b) return;
   if (!ui.focus || !G.statements[ui.focus]) {
-    b.innerHTML = `<div class="panel"><h2>The board is empty</h2><p>Put forward the first argument with the composer on the right: write it in your own words, choose the scheme it fits, and fill in the scheme's parts.</p>${G.config.objective === 'claim' ? '<p class="muted">In a debate, pro\'s first argument states the claim.</p>' : ''}</div>`;
+    b.innerHTML = `<div class="panel"><h2>The board is empty</h2><p>Put forward the first argument with the composer on the right: write it in your own words, choose the scheme it fits, and fill in the scheme's parts.</p>${G.config.mode === 'inquiry' ? '<p class="muted">In an inquiry, the first argument states the claim.</p>' : G.config.objective === 'claim' ? '<p class="muted">In a debate, pro\'s first argument states the claim.</p>' : ''}</div>`;
     return;
   }
   const s = G.statements[ui.focus];
@@ -962,7 +962,7 @@ function renderComposer() {
   if (c.kind === 'argue') return composeArgue(body, c);
   if (c.kind === 'stmt') return composeStmt(body, c);
   if (c.kind === 'evidence') return composeOffer(body, c);
-  if (c.kind === 'pass') return composeSimple(body, 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
+  if (c.kind === 'pass') return composeSimple(body, G.config.mode === 'inquiry' ? 'Pass this turn. The inquiry ends when both players pass in the same round.' : 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
   if (c.kind === 'resign') return composeSimple(body, G.config.mode === 'inquiry' ? 'Resign: the inquiry ends, with the claim\'s label as its result.' : 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
   return composeTargeted(body, c);
 }
@@ -1479,12 +1479,15 @@ function composeOffer(body, c) {
   const args = Object.values(G.arguments).filter(a => a.role === 'main' && a.move >= 0).map(a => a.id);
   c.offer = c.offer || { claim_id: ((e.claims || [])[0] || {}).id || '', argument_id: args[0] || '', kind: 'premise', statement: '', role: 'support', interpretation: '', warrant: '' };
   const o = c.offer, a = G.arguments[o.argument_id] || {};
-  const stmts = { premise: a.premises || [], exception: a.exceptions || [], conclusion: a.conclusion ? [a.conclusion] : [], inference: a.undercutter ? [a.undercutter] : [] }[o.kind] || [];
+  // An argument's assumptions are offered as kind assumption, its other
+  // premises as kind premise; its inference is undercut(A), made or not.
+  const assumed = a.assumptions || [];
+  const stmts = { premise: (a.premises || []).filter(p => !assumed.includes(p)), assumption: assumed, exception: a.exceptions || [], conclusion: a.conclusion ? [a.conclusion] : [], inference: a.id ? [a.undercutter || `undercut(${a.id})`] : [] }[o.kind] || [];
   if (!stmts.includes(o.statement)) o.statement = stmts[0] || '';
   const opt = (v, cur, label) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(label || v)}</option>`;
   body.innerHTML = `<label>Claim of the record set</label><select id="oclaim">${(e.claims || []).map(x => opt(x.id, o.claim_id, x.id + ': ' + short(x.text, 60))).join('')}</select>
     <label>Argument</label><select id="oarg">${args.map(x => opt(x, o.argument_id)).join('')}</select>
-    <label>Its part</label><select id="okind">${['premise', 'exception', 'conclusion', 'inference'].map(x => opt(x, o.kind)).join('')}</select>
+    <label>Its part</label><select id="okind">${['premise', 'assumption', 'exception', 'conclusion', 'inference'].map(x => opt(x, o.kind)).join('')}</select>
     <label>Statement</label><select id="ostmt">${stmts.map(x => opt(x, o.statement, x)).join('')}</select>
     <label>Role</label><select id="orole">${['support', 'oppose', 'context', 'definition'].map(x => opt(x, o.role)).join('')}</select>
     <label>Interpretation: what the claim is offered as showing</label><textarea id="ointerp">${esc(o.interpretation)}</textarea>

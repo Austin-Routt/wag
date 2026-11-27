@@ -701,3 +701,28 @@ against the code before it was accepted; all were. A3 and B1 are one finding, as
 | X12 | 31 bindings in an inquiry, offered in turn by A (16) and B (15); the prompt B is given | It lists A's 16 and B's newest 14, in the order made, and "(1 more binding, not listed)" |
 | X13 | The prompt's entry of a binding; the claim `claim-observation` | Its claim's scope, quoted; "an observation attributed to" |
 | X14 | An inquiry's board, in a headless browser: the empty board and the pass help | No "In a debate"; "In an inquiry, the first argument states the claim."; the composer's kinds include assumption, and its inference names `undercut(<id>)` |
+
+Their results (2026-11-27):
+
+- **X1 to X14 pass** (`internal/server/review_e17_test.go`, `internal/game/inquiry_value_test.go`,
+  `internal/evidence/records_selector_test.go`, `cmd/wag-llm/evidence_test.go`; X14 in a headless
+  browser, the workspace's `verify/e1/browser/x14.js`); the full suite passes.
+- **X7** replays a debate of model seats recorded by the build of 4ebff26, whose replies carry the
+  fields (`internal/server/testdata/e1-before/stray.trace.jsonl`, its profiles beside it): on 86a2f87
+  its replay differed in 7 ways, the stray `"revision": 2` refusing the first reply; it now replays as
+  recorded. X7 also checks a person's move through the server (its traces and export included, and the
+  fields in other JSON types, which a person's move was refused for by the request's decoding: before E1
+  they were unknown fields, and they are ignored again), and the game alone.
+- **Beyond the cases**, each written before it ran: X9 with an inquiry without a record set, its export
+  edited to three seats or to concede on a pass (refused, naming "two players" or "concedes"), since a
+  record set refuses three players itself and X9's case did not reach the load's own check (run 1 of the
+  planted defects found it); and an export naming a Kialo discussion as its source and a record set,
+  refused (a guard added with B4: a game imported from Kialo takes no record set).
+- **Planted defects** (the workspace's `verify/e1/mutants-e17.py`, each run on a fresh copy): run 1, 25,
+  one for each correction's rule: 24 caught; "a load without the inquiry's check" survived, as above.
+  Run 2, with X9's addition: caught. Run 3, one for the person's move decoding: caught. On the board
+  (`browser/x14_defects.py`): 4, of which 3 caught and one gave no verdict, the check stopping at the
+  missing option; with the check recording a missing kind instead, caught. In all 30 of 30, none by a
+  panic.
+- **By reading, not by a case:** `records.json` read from the file checked (a link swapped in between is
+  a race no test makes) and a new game's record set read without the lock; R6 and R1 still pass on them.

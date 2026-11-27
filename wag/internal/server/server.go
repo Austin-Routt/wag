@@ -670,16 +670,21 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 		if title == "" {
 			title = "WAG — " + cfg.Mode
 		}
-		s.mu.Lock()
 		if req.Evidence != "" {
-			ev, err := s.gameEvidence(req.Evidence, gs, req.Seats)
+			// Read and checked without the server's lock: hashing a record
+			// set's payloads would stall every game (docs/e1-evidence.md,
+			// E1.7). The new game is no one else's yet.
+			s.mu.Lock()
+			dir, pins := s.evidenceFolder(), s.pins
+			s.mu.Unlock()
+			ev, err := gameEvidence(dir, pins, req.Evidence, gs, req.Seats)
 			if err != nil {
-				s.mu.Unlock()
 				httpError(w, err, http.StatusBadRequest)
 				return
 			}
 			gs.Evidence = ev
 		}
+		s.mu.Lock()
 		ss := s.add(gs, req.Seats, title, "new", req.Seed)
 		ss.Request = &req
 		st := ss.buildState()
@@ -760,10 +765,15 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, ss.stateFor(who))
 	case "move":
 		var req struct {
-			Action nascq.ProposedAction `json:"action"`
-			Why    string               `json:"why"` // the player's note on the move, for the trace
+			Action json.RawMessage `json:"action"`
+			Why    string          `json:"why"` // the player's note on the move, for the trace
 		}
 		if !readJSON(w, r, &req) {
+			return
+		}
+		action, err := ss.decodeAction(req.Action)
+		if err != nil {
+			httpError(w, fmt.Errorf("bad request: %v", err), http.StatusBadRequest)
 			return
 		}
 		if ss.Seats[ss.GS.ActivePlayerIdx].aiKind() != "" {
@@ -773,8 +783,8 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		player := ss.GS.ActivePlayer().ID
 		t := ss.newTrace(ss.Seats[ss.GS.ActivePlayerIdx].Kind)
 		t.Why = strings.TrimSpace(req.Why)
-		res, err := ss.play(req.Action, t, nil)
-		ss.event("move", player, short(req.Action), res, err)
+		res, err := ss.play(action, t, nil)
+		ss.event("move", player, short(action), res, err)
 		s.reply(w, ss, who, res, err)
 	case "note":
 		var req struct {
@@ -816,7 +826,7 @@ func (s *Server) handleGame(w http.ResponseWriter, r *http.Request) {
 		player := ss.GS.ActivePlayer().ID
 		t := ss.newTrace(ss.Seats[ss.GS.ActivePlayerIdx].Kind).withPrompt(ss.Prompt())
 		t.Reply = req.Reply
-		rep, err := ParseReplyFull(req.Reply)
+		rep, err := parseReply(req.Reply, ss.GS.Evidence != nil)
 		if err != nil {
 			t.Result.Error = err.Error()
 			ss.addTrace(t)

@@ -39,11 +39,45 @@ type Participant struct{ ID, Kind, Label string }
 // them, even empty.
 var gameKeys = []string{"context", "targets", "bindings", "assessments", "events"}
 
+// IDLimit is the longest id a record set's record or actor may have.
+const IDLimit = 128
+
+// PlainID reports whether id is an identifier a record set may give a record
+// or an actor: letters, digits, '.', '_', ':' and '-', beginning with a
+// letter or a digit, at most IDLimit characters. A game's prompt writes ids
+// as they are, so an id carries no line, space or quotation mark
+// (docs/e1-evidence.md, E1.7, B2).
+func PlainID(id string) bool {
+	return plain(id, IDLimit, ".-_:")
+}
+
+// PlainName reports whether name may name a record set in an evidence
+// folder: letters, digits, '.', '_' and '-', beginning with a letter or a
+// digit, at most 64 characters.
+func PlainName(name string) bool {
+	return plain(name, 64, ".-_")
+}
+
+// plain reports whether s is 1 to limit ASCII letters, digits and the
+// punctuation punct, beginning with a letter or a digit.
+func plain(s string, limit int, punct string) bool {
+	if s == "" || len(s) > limit {
+		return false
+	}
+	for i, r := range s {
+		alnum := r < 128 && ('a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9')
+		if !alnum && (i == 0 || !strings.ContainsRune(punct, r)) {
+			return false
+		}
+	}
+	return true
+}
+
 // DecodeRecordSet decodes a record set's JSON strictly (Decode: no unknown
 // field, duplicate key or null) and refuses what a record set may not hold:
 // a key the game writes, even empty; another version than FormatGame; an id,
-// its actors' included, that begins with GamePrefix; and a record whose
-// author is not one of its actors.
+// its actors' included, that begins with GamePrefix or is not a plain id
+// (PlainID); and a record whose author is not one of its actors.
 func DecodeRecordSet(raw []byte) (*Bundle, error) {
 	b, err := Decode(raw)
 	if err != nil {
@@ -66,11 +100,17 @@ func DecodeRecordSet(raw []byte) (*Bundle, error) {
 		if strings.HasPrefix(a.ID, GamePrefix) {
 			return nil, fmt.Errorf("the actor %q begins with %q, which the game's actors use", a.ID, GamePrefix)
 		}
+		if !PlainID(a.ID) {
+			return nil, fmt.Errorf("the actor id %q is not a plain id: letters, digits, '.', '_', ':' and '-', beginning with a letter or a digit, at most %d characters", a.ID, IDLimit)
+		}
 		actors[a.ID] = true
 	}
 	for _, r := range b.records() {
 		if strings.HasPrefix(r.ID, GamePrefix) {
 			return nil, fmt.Errorf("the record %q begins with %q, which the game's records use", r.ID, GamePrefix)
+		}
+		if !PlainID(r.ID) {
+			return nil, fmt.Errorf("the record id %q is not a plain id: letters, digits, '.', '_', ':' and '-', beginning with a letter or a digit, at most %d characters", r.ID, IDLimit)
 		}
 		if !actors[r.CreatedBy] {
 			return nil, fmt.Errorf("the record %s is by %q, who is not one of the record set's actors", r.ID, r.CreatedBy)

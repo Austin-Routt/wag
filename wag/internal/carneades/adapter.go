@@ -999,7 +999,7 @@ func (a *Adapter) AddUndercutter(
 		ucStmt = targetArg.Undercutter
 	} else {
 		// No existing undercutter — create one.
-		ucID := fmt.Sprintf("undercut(%s)", targetArgID)
+		ucID := UndercutterID(targetArgID)
 		ucStmt = a.findOrCreateStatement(ucID)
 		ucStmt.Text = fmt.Sprintf("Argument %s is not applicable", targetArgID)
 		ucStmt.IsUndercutter = true

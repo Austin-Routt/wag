@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -53,9 +54,12 @@ func readRecordSet(dir, name string) (*evidence.Bundle, string, string, error) {
 	if dir == "" {
 		return nil, "", "", fmt.Errorf("this server has no evidence folder: wag-server's is its data folder's evidence/, and wag-llm takes one with --evidence DIR")
 	}
-	if name == "" || name == "." || strings.Contains(name, "..") || strings.ContainsAny(name, `/\`) || filepath.Base(name) != name {
-		return nil, "", "", fmt.Errorf("the record set's name %q is not a plain name: no separator, no ..", name)
+	if !evidence.PlainName(name) || strings.Contains(name, "..") {
+		return nil, "", "", fmt.Errorf("the record set's name %q is not a plain name: letters, digits, '.', '_' and '-', beginning with a letter or a digit, at most 64 characters, no separator, no ..", name)
 	}
+	// Cleaned, so that a trailing separator does not make Lstat follow a
+	// link (docs/e1-evidence.md, E1.7, B5).
+	dir = filepath.Clean(dir)
 	root := filepath.Join(dir, name)
 	for _, p := range []string{dir, root} {
 		fi, err := os.Lstat(p)
@@ -76,7 +80,17 @@ func readRecordSet(dir, name string) (*evidence.Bundle, string, string, error) {
 	if !fi.Mode().IsRegular() {
 		return nil, "", "", fmt.Errorf("the record set %s: its records.json is not a file (a link is not followed)", name)
 	}
-	raw, err := os.ReadFile(file)
+	// The file read is the file checked: a link swapped in between is
+	// refused (docs/e1-evidence.md, E1.7).
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, "", "", fmt.Errorf("the record set %s: %v", name, err)
+	}
+	defer f.Close()
+	if got, err := f.Stat(); err != nil || !os.SameFile(fi, got) {
+		return nil, "", "", fmt.Errorf("the record set %s: its records.json changed while it was read (a link is not followed)", name)
+	}
+	raw, err := io.ReadAll(f)
 	if err != nil {
 		return nil, "", "", fmt.Errorf("the record set %s: %v", name, err)
 	}
@@ -119,12 +133,14 @@ func checkEvidenceGame(cfg game.GameConfig, seats []Seat) error {
 	return nil
 }
 
-// gameEvidence reads the record set name for the game gs, whose seats are
-// seats, and checks it in full: its records, with the game's context and
-// actors, and its payloads and selectors (evidence.Validate), naming the
-// first error. Caller holds s.mu.
-func (s *Server) gameEvidence(name string, gs *game.GameState, seats []Seat) (*game.Evidence, error) {
-	set, sha, root, err := readRecordSet(s.evidenceFolder(), name)
+// gameEvidence reads the record set name from the evidence folder dir for
+// the game gs, whose seats are seats, and checks it in full: its records,
+// with the game's context and actors and the server's pins, and its
+// payloads and selectors (evidence.Validate), naming the first error. It
+// needs no lock: a new game reads its record set without the server's lock
+// (docs/e1-evidence.md, E1.7), hashing its payloads.
+func gameEvidence(dir string, pins manifest.Pins, name string, gs *game.GameState, seats []Seat) (*game.Evidence, error) {
+	set, sha, root, err := readRecordSet(dir, name)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +152,7 @@ func (s *Server) gameEvidence(name string, gs *game.GameState, seats []Seat) (*g
 		}
 		players = append(players, p)
 	}
-	ev, err := game.NewEvidence(name, sha, set, players, s.pins.Engine, s.pins.Catalogue, s.pins.NASCQ)
+	ev, err := game.NewEvidence(name, sha, set, players, pins.Engine, pins.Catalogue, pins.NASCQ)
 	if err != nil {
 		return nil, fmt.Errorf("the record set %s: %v", name, err)
 	}
@@ -169,7 +185,7 @@ func (s *Server) loadEvidence(e *Export, req *NewGameRequest, gs *game.GameState
 	case e.Pins == nil || *e.Pins != s.pins:
 		return nil, fmt.Errorf("the game was played with other pins than this server's (the game's %s; this server's %s): a game with a record set is replayed with the engine, the scheme file and the NASCQ data it was played with", pinsText(e.Pins), pinsText(&s.pins))
 	}
-	ev, err := s.gameEvidence(req.Evidence, gs, e.Seats)
+	ev, err := gameEvidence(s.evidenceFolder(), s.pins, req.Evidence, gs, e.Seats)
 	if err != nil {
 		return nil, err
 	}

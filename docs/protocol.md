@@ -70,10 +70,16 @@ protocol, and an *Evidence* section comes before the legal moves:
 - the claims of the record set the seat may offer (at most 30, the rest counted), each with its mode, its
   source (label, kind and reference), its representation, artifact, revision and capture status, the passage
   it selects, its text and its scope;
-- every binding made (at most 30), with every part its revision covers: its role and target (the argument,
-  the kind of statement, the statement), the claim and its passage, the interpretation and the warrant, the
-  argument's revision, who offered it and whose consent stands, whether it is admitted, and its full
-  revision.
+- every binding made, with every part its revision covers: its role and target (the argument, the kind of
+  statement, the statement), the claim with its passage, text and scope, the interpretation and the
+  warrant, the argument's revision, who offered it and whose consent stands, whether it is admitted, and
+  its full revision. Past 30, the prompt lists those the seat must weigh: the bindings awaiting its
+  consent, then the admitted ones, then the rest, newest first, in the order they were made, and counts
+  the others.
+
+The record set's ids and name are plain identifiers ([`evidence-contract.md`](evidence-contract.md)),
+written as they are. In such a game an argument's card names its scheme's assumptions `assumption`, the
+kind an offer gives them; other games' cards are unchanged.
 
 Every text of the record set and of the bindings is quoted between `<<<` and `>>>`, with `&`, `<` and `>`
 written `&amp;`, `&lt;` and `&gt;`, so that no quoted text can end its quotation; a text longer than 2,000
@@ -127,7 +133,10 @@ The move:
 | `evidence_refs` | In a game with a record set: the admitted bindings a support or attack cites, besides its `evidence` strings. Each must agree with what the move concludes ([`game-rules.md`](game-rules.md) §8). |
 
 The evidence acts, in a game with a record set (types `evidence_offer`, `evidence_consent`, `evidence_withdraw`;
-also `offer`, `consent`, `withdraw` and `withdrawal`):
+also `offer`, `consent`, `withdraw` and `withdrawal`). A move that is not an act and carries an act's parts
+(`offer`, `binding_id`, `revision`) is refused, naming `evidence_refs`, how a move cites a binding. A game
+without a record set reads none of these fields or short names, as before E1: a move is played without
+them, and an act's type is an unknown move type (S0).
 
 | Field | Meaning |
 |---|---|

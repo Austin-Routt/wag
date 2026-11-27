@@ -183,12 +183,18 @@ resumed must find the revisions it recorded. A 0.1 bundle keeps `/2` and its
 meaning; the checker takes both. In Go, `evidence.ValidateRecords` applies
 the same record and consent rules as `evidence.Validate` without reading a
 payload or checking a selector against its bytes, for records whose payloads
-were checked when they were taken.
+were checked when they were taken; it checks each selector's structure (its
+kind, offsets, declared pages, duration and region, and stray coordinates) as
+`Validate` does.
 
 **A game's record set** ([`e1-evidence.md`](e1-evidence.md), choice 2) is a 0.2
 bundle without the records a game writes: no `context`, `targets`, `bindings`,
 `assessments` or `events` key, even empty; no id, its actors' included, beginning
-with `game:`; every record by one of its own actors (`evidence.DecodeRecordSet`).
+with `game:`; every id a plain identifier (letters, digits, `.`, `_`, `:` and
+`-`, beginning with a letter or a digit, at most 128 characters: a game's prompt
+writes ids as they are); every record by one of its own actors
+(`evidence.DecodeRecordSet`). Its name in an evidence folder is letters, digits,
+`.`, `_` and `-`, beginning with a letter or a digit, at most 64 characters.
 The game adds its context and actors (`evidence.GameBundle`). `wag-evidence
 --record-set NAME/records.json` checks a record set alone, with the game's actors
 and a placeholder context of two players whose pins are zeros; its payloads are

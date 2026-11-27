@@ -154,6 +154,11 @@ func (t *Trace) withPrompt(prompt string) *Trace {
 // the reply the move came from. Caller holds s.mu.
 func (ss *Session) play(action nascq.ProposedAction, t *Trace, rep *Reply) (*game.TurnResult, error) {
 	gs := ss.GS
+	if gs.Evidence == nil {
+		// A game without a record set reads no evidence field, as before E1
+		// (docs/e1-evidence.md, E1.7, B3), in its trace too.
+		action = game.WithoutEvidence(action)
+	}
 	r := newRefs(gs)
 	action = r.resolveAction(action)
 	if rep != nil {

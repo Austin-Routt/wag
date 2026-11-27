@@ -52,6 +52,13 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 
 	player := gs.ActivePlayer()
 
+	// A game without a record set reads no evidence field, as before E1
+	// (docs/e1-evidence.md, E1.7, B3): its moves are played and recorded
+	// without them, and an act's type is an unknown type (S0).
+	if gs.Evidence == nil {
+		action = WithoutEvidence(action)
+	}
+
 	// ---------------------------------------------------------------
 	// Clocks: the game clock ends the game before the move; a late move is
 	// void (the turn passes, or the player loses).
@@ -73,9 +80,15 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	if len(action.EvidenceRefs) > 0 && (action.Type == "resign" || action.Type == "abstain") {
 		return gs.rejectInvalid(player, action, "EV: a pass or a resignation cites no binding: it argues nothing"), nil
 	}
-	switch action.Type {
-	case ActOffer, ActConsent, ActWithdraw:
+	if gs.Evidence != nil && IsEvidenceAct(action.Type) {
 		return gs.evidenceAct(player, action), nil
+	}
+	// An act's parts on another move (E1.7, A5, B8): a move cites admitted
+	// bindings with evidence_refs.
+	if action.Offer != nil || action.BindingID != "" || action.Revision != "" {
+		return gs.rejectInvalid(player, action, "EV: offer, binding_id and revision are the parts of an evidence act, not of this move: a move cites admitted bindings with evidence_refs"), nil
+	}
+	switch action.Type {
 	case "resign":
 		player.Resigned = true
 		gs.MoveHistory = append(gs.MoveHistory, Move{TurnNumber: gs.CurrentTurn, PlayerID: player.ID, Action: action, Resigned: true})

@@ -1,0 +1,10 @@
+{"profiles":[
+ {"name":"stray-pro","provider":"mock","model":"mock-1","replies":[
+  "{\"summary\":\"The claim, with a stray revision.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:consequences\",\"variable_bindings\":{\"A\":\"tax meat\",\"G\":\"lower emissions\"},\"declare\":[{\"id\":\"tax meat\",\"actor\":\"decider\"}],\"revision\":2}}",
+  "{\"summary\":\"Back the premise, with a stray binding.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:expert_opinion\",\"target_stmt_id\":\"brings_about(tax_meat,lower_emissions)\",\"variable_bindings\":{\"W\":\"an agency economist\",\"D\":\"emissions\"},\"binding_id\":\"game:b1\"}}",
+  "{\"summary\":\"Nothing more.\",\"action\":{\"type\":\"abstain\"}}"]},
+ {"name":"stray-con","provider":"mock","model":"mock-1","replies":[
+  "{\"summary\":\"Withdraw.\",\"action\":{\"type\":\"withdraw\"}}",
+  "{\"summary\":\"Doubt the premise, offering.\",\"action\":{\"type\":\"attack\",\"scheme_id\":\"AS:expert_opinion\",\"target_stmt_id\":\"brings_about(tax_meat,lower_emissions)\",\"variable_bindings\":{\"W\":\"a farm economist\",\"D\":\"emissions\"},\"offer\":\"I offer the farm report\",\"evidence_refs\":[\"game:b2\"]}}",
+  "{\"summary\":\"Nothing more.\",\"action\":{\"type\":\"abstain\"}}"]}
+]}

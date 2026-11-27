@@ -113,6 +113,9 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 	var rep *kialo.Report
 	switch {
 	case strings.HasPrefix(e.Source, "kialo:"):
+		if req.Evidence != "" || e.RecordSet != nil {
+			return nil, fmt.Errorf("a game imported from Kialo takes no record set")
+		}
 		id := strings.TrimPrefix(e.Source, "kialo:")
 		if s.kialoDir == "" || strings.ContainsAny(id, `/\.`) {
 			return nil, fmt.Errorf("the game was imported from Kialo discussion %s: start the server with --kialo-dir to load it", id)
@@ -152,6 +155,20 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 				return nil, fmt.Errorf("the export's weights: %v", err)
 			}
 			cfg.Context, cfg.Weights = e.Config.Context, maps.Clone(e.Config.Weights)
+		}
+		// The checks of a new game (docs/e1-evidence.md, E1.7, B4): an
+		// inquiry of two, without the settings that make a winner or a
+		// loser; a record set only in an inquiry of people and models that
+		// is not moderated.
+		if cfg.Cooperative {
+			if err := game.CheckInquiry(cfg, len(e.Seats)); err != nil {
+				return nil, err
+			}
+		}
+		if req.Evidence != "" || e.RecordSet != nil {
+			if err := checkEvidenceGame(cfg, e.Seats); err != nil {
+				return nil, err
+			}
 		}
 		cfg.TimeLimit, cfg.MoveTimeLimit = 0, 0
 		var names []string

@@ -258,6 +258,10 @@ func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]
 	return created, nil
 }
 
+// UndercutterID is the id of the undercutter statement of the argument
+// argID, undercut(<id>): what an undercutter of it concludes.
+func UndercutterID(argID string) string { return fmt.Sprintf("undercut(%s)", argID) }
+
 // ensureUndercutter returns the argument's undercutter statement, creating
 // undercut(<id>) if it has none.
 //
@@ -266,7 +270,7 @@ func (a *Adapter) ensureUndercutter(arg *caes.Argument) *caes.Statement {
 	if arg.Undercutter != nil {
 		return arg.Undercutter
 	}
-	u := a.findOrCreateStatement(fmt.Sprintf("undercut(%s)", arg.Id))
+	u := a.findOrCreateStatement(UndercutterID(arg.Id))
 	u.IsUndercutter = true
 	arg.Undercutter = u
 	return u

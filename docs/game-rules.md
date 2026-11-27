@@ -427,9 +427,10 @@ The board shows the sources, claims, dependencies and bindings as text.
 breaks a rule is refused with the usual penalty and leaves no record.
 
 - An **offer** (`evidence_offer`) binds a claim of the record set to a statement of an argument
-  that a support or attack move made: a premise, an assumption, an exception, its conclusion, or
-  its inference (whose statement is `undercut(A)`), with a role (`support`, `oppose`, `context` or
-  `definition`), an interpretation and a warrant. The game writes the target (`game:t<i>`, by
+  that a support or attack move made: a premise, an assumption (one of its scheme's assumptions;
+  an Other argument has none), an exception, its conclusion, or its inference (whose statement is
+  `undercut(A)`, whether or not the argument has been undercut yet), with a role (`support`,
+  `oppose`, `context` or `definition`), an interpretation and a warrant. The game writes the target (`game:t<i>`, by
   `game:wag`, with the argument's revision, `wag-argument-revision/1`) and the binding (`game:b<i>`,
   by the player), `<i>` being the act's place in the history. The offer is its player's consent.
   An offer identical to one made is refused; any other change makes another binding, with its own
@@ -439,7 +440,11 @@ breaks a rule is refused with the usual penalty and leaves no record.
 - A **withdrawal** (`evidence_withdraw`) takes back one's own standing consent.
 
 A binding is **admitted for consideration** while both players' consents to its revision stand.
-Admission sets no label, weight or assumption: it is not a finding of fact (D076).
+Admission sets no label, weight or assumption: it is not a finding of fact (D076). An act's records
+are dated at the act, and never before the records already made (a clock set back, or a game
+resumed on another computer, refuses no act). In a game with a record set, a move other than an
+act that carries an act's parts (`offer`, `binding_id`, `revision`) is refused; a game without a
+record set ignores those fields, and an act's type there is an unknown move, as before E1.
 
 **Citing a binding.** A support or attack move may cite admitted bindings (`evidence_refs`),
 besides its citation strings, which keep their meaning. Each must agree with what the move's

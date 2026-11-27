@@ -148,3 +148,25 @@ func TestY7ATraceMadeBeforeE1Replays(t *testing.T) {
 		t.Fatalf("Y7: %v", err)
 	}
 }
+
+// X7 (docs/e1-evidence.md, E1.7, B3; the outcome written before the test
+// ran): a debate of model seats whose replies carry the evidence fields
+// (`{"type":"withdraw"}`, a stray "revision": 2, a "binding_id", an "offer"
+// and "evidence_refs"), recorded by the build of 4ebff26, before E1: it
+// replays on this build, `withdraw` refused with S0's unknown action type
+// and the others played without those fields, as that build did.
+func TestX7ADebateWithStrayEvidenceFieldsReplays(t *testing.T) {
+	trace := filepath.Join("..", "..", "internal", "server", "testdata", "e1-before", "stray.trace.jsonl")
+	b, err := os.ReadFile(trace)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`\"revision\":2`, `\"binding_id\":\"game:b1\"`, `\"evidence_refs\":[\"game:b2\"]`, `S0: unknown action type \"withdraw\"`} {
+		if !strings.Contains(string(b), want) {
+			t.Fatalf("the trace has no %s", want)
+		}
+	}
+	if err := replay(context.Background(), []string{trace}); err != nil {
+		t.Fatalf("X7: %v", err)
+	}
+}

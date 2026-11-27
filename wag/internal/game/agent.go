@@ -414,7 +414,8 @@ func Value(gs *GameState, playerID string) float64 {
 		}
 	}
 	v := mine - others
-	if gs.Config.Objective == ObjectiveClaim && len(gs.Players) > 1 && gs.verdictFavours(playerID) {
+	// An inquiry has no sides: its verdict favours neither player (E1.7, A4).
+	if gs.Config.Objective == ObjectiveClaim && len(gs.Players) > 1 && !gs.Config.Cooperative && gs.verdictFavours(playerID) {
 		v += 100
 	}
 	return v

@@ -19,7 +19,7 @@ func TestAFaultyReplyIsRefusedForTheSamePartEachTime(t *testing.T) {
 	}{
 		{"two bindings that are not phrases", func() error {
 			_, _, err := moveOf(map[string]interface{}{"type": "support", "scheme_id": "AS:consequences",
-				"variable_bindings": map[string]interface{}{"G": map[string]interface{}{}, "A": []interface{}{}}})
+				"variable_bindings": map[string]interface{}{"G": map[string]interface{}{}, "A": []interface{}{}}}, false)
 			return err
 		}, "the binding of A must be a phrase"},
 		{"an action's id and actor not text", func() error {

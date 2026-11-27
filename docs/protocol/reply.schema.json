@@ -81,7 +81,7 @@
         },
         "comparison": {"description": "How a better_means alternative is better (D089).", "enum": ["surely", "sooner", "cheaper"]},
         "offer": {
-          "description": "An evidence offer (docs/e1-evidence.md): a claim of the record set for a statement of an argument a support or attack move made, with its role, interpretation and warrant. The offer is its player's consent.",
+          "description": "An evidence offer (docs/e1-evidence.md): a claim of the record set for a statement of an argument a support or attack move made, with its role, interpretation and warrant. The offer is its player's consent. Read only in a game with a record set; on a move that is not an act, refused.",
           "type": "object", "required": ["claim_id", "argument_id", "kind", "role", "interpretation", "warrant"], "additionalProperties": false,
           "properties": {"claim_id": {"type": "string"}, "argument_id": {"type": "string"},
                          "kind": {"enum": ["premise", "assumption", "exception", "conclusion", "inference"]},
@@ -89,9 +89,9 @@
                          "role": {"enum": ["support", "oppose", "context", "definition"]},
                          "interpretation": {"type": "string"}, "warrant": {"type": "string"}}
         },
-        "binding_id": {"description": "The binding a consent or a withdrawal names, e.g. game:b2.", "type": "string"},
+        "binding_id": {"description": "The binding a consent or a withdrawal names, e.g. game:b2. Read only in a game with a record set; on a move that is not an act, refused.", "type": "string"},
         "revision": {"description": "The binding's exact revision, in full or by its first 12 hexadecimal digits.", "type": "string", "pattern": "^[0-9a-f]{12}([0-9a-f]{52})?$"},
-        "evidence_refs": {"description": "Bindings admitted for consideration that a support or attack cites, besides its sources: each must agree with what the move concludes (docs/game-rules.md §8).", "type": "array", "items": {"type": "string"}}
+        "evidence_refs": {"description": "Bindings admitted for consideration that a support or attack cites, besides its sources: each must agree with what the move concludes (docs/game-rules.md §8). Read only in a game with a record set.", "type": "array", "items": {"type": "string"}}
       },
       "allOf": [
         {"if": {"properties": {"type": {"const": "question"}}}, "then": {"required": ["target_arg_id", "answers_cq_id"]}},

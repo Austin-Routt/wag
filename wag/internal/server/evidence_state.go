@@ -1,8 +1,11 @@
 package server
 
 import (
+	"encoding/json"
+
 	"github.com/yourorg/wag/internal/evidence"
 	"github.com/yourorg/wag/internal/game"
+	"github.com/yourorg/wag/internal/nascq"
 )
 
 // The board's view of a game's evidence (docs/e1-evidence.md, choice 12).
@@ -43,6 +46,28 @@ type BindingView struct {
 	Consents  []string        `json:"consents"`
 	Admitted  bool            `json:"admitted"`
 	Withdrawn bool            `json:"withdrawn,omitempty"`
+}
+
+// decodeAction reads a person's move. A game without a record set ignores
+// the fields of an evidence act and of a move's citations, whatever their
+// JSON types, as before E1, when they were unknown fields
+// (docs/e1-evidence.md, E1.7, B3). Caller holds s.mu.
+func (ss *Session) decodeAction(raw json.RawMessage) (nascq.ProposedAction, error) {
+	var a nascq.ProposedAction
+	if len(raw) == 0 || string(raw) == "null" {
+		return a, nil
+	}
+	if ss.GS.Evidence == nil {
+		var m map[string]json.RawMessage
+		if json.Unmarshal(raw, &m) == nil {
+			for _, k := range []string{"offer", "binding_id", "revision", "evidence_refs"} {
+				delete(m, k)
+			}
+			raw, _ = json.Marshal(m)
+		}
+	}
+	err := json.Unmarshal(raw, &a)
+	return a, err
 }
 
 // evidenceView is the board's view of the game's evidence, nil without a

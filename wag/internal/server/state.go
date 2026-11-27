@@ -179,13 +179,17 @@ type ArgState struct {
 	// it is admitted now; Ungrounded: each was withdrawn since it was cited,
 	// and the argument cites no string: it is no longer grounded by admitted
 	// evidence (docs/e1-evidence.md, choice 8). The mark changes no label.
-	EvidenceRefs []RefState   `json:"evidence_refs,omitempty"`
-	Ungrounded   bool         `json:"ungrounded,omitempty"`
-	Answers      *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
-	CQs          []CQOnArg    `json:"cqs"`
-	Move         int          `json:"move"` // index of the move that made it in the log, -1 if imported
-	Moderation   string       `json:"moderation,omitempty"`
-	Kialo        *KialoOrigin `json:"kialo,omitempty"`
+	EvidenceRefs []RefState `json:"evidence_refs,omitempty"`
+	Ungrounded   bool       `json:"ungrounded,omitempty"`
+	// Assumptions are, in a game with a record set, the premises that are
+	// its scheme's assumptions, which an offer names as kind assumption
+	// (docs/e1-evidence.md, E1.7, B6); listed in no other game.
+	Assumptions []string     `json:"assumptions,omitempty"`
+	Answers     *AnswerOf    `json:"answers,omitempty"` // the critical question this argument answers
+	CQs         []CQOnArg    `json:"cqs"`
+	Move        int          `json:"move"` // index of the move that made it in the log, -1 if imported
+	Moderation  string       `json:"moderation,omitempty"`
+	Kialo       *KialoOrigin `json:"kialo,omitempty"`
 }
 
 // AnswerOf says which question an answer argument answers.
@@ -403,6 +407,9 @@ func (s *Session) buildState() *State {
 				}
 			}
 			as.Ungrounded = withdrawn == len(refs) && len(as.Evidence) == 0
+		}
+		if gs.Evidence != nil {
+			as.Assumptions = gs.OfferStatements(id, "assumption")
 		}
 		if loc, ok := arg.Metadata["kialo_location"].(string); ok {
 			cl, _ := arg.Metadata["kialo_claim"].(string)

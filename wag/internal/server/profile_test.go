@@ -161,7 +161,7 @@ func TestPromptOtherActorsAndAlternatives(t *testing.T) {
 	}
 	alts := alternatives([]interface{}{map[string]interface{}{"why_not": "w", "action": map[string]interface{}{
 		"type": "support", "scheme_id": "better_means", "comparison": "Cheaper", "sources": []interface{}{"a study"},
-		"declare": "not a list"}}})
+		"declare": "not a list"}}}, false)
 	if len(alts) != 1 || alts[0].Action.SchemeID != "AS:better_means" || alts[0].Action.Comparison != "cheaper" ||
 		len(alts[0].Action.Evidence) != 1 {
 		t.Errorf("a considered move with a declaration that does not read: %+v", alts)

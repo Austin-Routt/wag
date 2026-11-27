@@ -271,8 +271,10 @@ func validate(b *Bundle, root string, checkBytes bool) Report {
 		if !oneOf(v.Mode, "quotation", "paraphrase", "observation", "reconstruction") || !nonempty(v.Text) || !nonempty(v.Scope) {
 			add("claim", v.ID, "claim needs a mode, text and scope")
 		}
-		if ok && checkBytes && !badPayload[v.RepresentationID] {
-			if err := checkSelector(v.Selector, rep, root, texts); err != nil {
+		// The records-only check (checkBytes false) checks the selector's
+		// structure, not the bytes it selects (docs/e1-evidence.md, E1.7, A6).
+		if ok && (!checkBytes || !badPayload[v.RepresentationID]) {
+			if err := checkSelector(v.Selector, rep, root, texts, checkBytes); err != nil {
 				add("selector", v.ID, err.Error())
 			}
 		}
@@ -692,7 +694,7 @@ func isLFSPointer(raw []byte) bool {
 	return oid && size
 }
 
-func checkSelector(s Selector, r Representation, root string, texts map[string][]byte) error {
+func checkSelector(s Selector, r Representation, root string, texts map[string][]byte, readBytes bool) error {
 	if !oneOf(s.Kind, "whole", "text", "page", "time", "region") {
 		return fmt.Errorf("unknown selector kind")
 	}
@@ -704,6 +706,8 @@ func checkSelector(s Selector, r Representation, root string, texts map[string][
 		if !strings.HasPrefix(media, "text/") {
 			return fmt.Errorf("text selector requires a retained text representation")
 		}
+	}
+	if s.Kind == "text" && readBytes {
 		raw, ok := texts[r.ID]
 		if !ok {
 			f, err := openPayload(root, r.Payload.Path)

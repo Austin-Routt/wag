@@ -151,7 +151,13 @@ func (ss *Session) Prompt() string {
 			}
 			w("  C: %s%s [%s]\n", spaced(ref(a.Conclusion)), gs.Say(a.Conclusion), strings.ToUpper(st.Statements[a.Conclusion].Label))
 			for i, p := range a.Premises {
-				w("  premise %s%s [%s]\n", spaced(ref(p)), textAt(a.PremiseTexts, i, p), strings.ToUpper(st.Statements[p].Label))
+				kind := "premise" // in a game with a record set, an assumption is named so (E1.7, B6)
+				for _, x := range a.Assumptions {
+					if x == p {
+						kind = "assumption"
+					}
+				}
+				w("  %s %s%s [%s]\n", kind, spaced(ref(p)), textAt(a.PremiseTexts, i, p), strings.ToUpper(st.Statements[p].Label))
 			}
 			for i, e := range a.Exceptions {
 				if st.Statements[e].Label == "in" {
@@ -733,7 +739,14 @@ func ParseReply(reply string) (nascq.ProposedAction, error) {
 // "statement" or "stmt" for "target_stmt_id", "slots" or "bindings" for
 // "variable_bindings", "sources" for "evidence"; "pass" for "abstain",
 // "argue" and "defend" for "support").
-func ParseReplyFull(reply string) (*Reply, error) {
+func ParseReplyFull(reply string) (*Reply, error) { return parseReply(reply, false) }
+
+// parseReply reads a reply as ParseReplyFull does; with evidence (a game
+// with a record set, wag-protocol/2+evidence) it also reads the evidence
+// acts' short names and the fields of an act and of a move's citations
+// (offer, binding_id, binding, revision, evidence_refs). A game without a
+// record set reads neither, as before E1 (docs/e1-evidence.md, E1.7, B3).
+func parseReply(reply string, evidence bool) (*Reply, error) {
 	objs := jsonCandidates(reply)
 	if len(objs) == 0 {
 		return nil, fmt.Errorf(`no move found: end the reply with one JSON object such as {"action": {"type": "abstain"}}`)
@@ -767,7 +780,7 @@ func ParseReplyFull(reply string) (*Reply, error) {
 			continue
 		}
 		if am, ok := v.(map[string]interface{}); ok {
-			a, ok, err := moveOf(am)
+			a, ok, err := moveOf(am, evidence)
 			if err != nil {
 				return nil, err
 			}
@@ -776,7 +789,7 @@ func ParseReplyFull(reply string) (*Reply, error) {
 			}
 			r := &Reply{Action: a, Context: strs(m["context"]), Thoughts: strs(m["thoughts"]), Summary: str1(m["summary"])}
 			r.Expect = expectations(m["expect"])
-			r.Alternatives = alternatives(m["alternatives"])
+			r.Alternatives = alternatives(m["alternatives"], evidence)
 			if c, ok := number(m["confidence"]); ok {
 				r.Confidence = &c
 			}
@@ -786,7 +799,7 @@ func ParseReplyFull(reply string) (*Reply, error) {
 			return nil, fmt.Errorf("%q: the final move must be an object or a move-type string, not %s", k, jsonKind(v))
 		}
 	}
-	a, ok, err := moveOf(m)
+	a, ok, err := moveOf(m, evidence)
 	if err != nil {
 		return nil, err
 	}
@@ -855,8 +868,9 @@ func rejectDuplicateReplyKeys(raw string) error {
 }
 
 // moveOf reads a move object; ok is false if it has no type. err is set for
-// a move whose fields cannot be read (a source that is not text).
-func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
+// a move whose fields cannot be read (a source that is not text). evidence
+// says whether the game has a record set (parseReply).
+func moveOf(m map[string]interface{}, evidence bool) (nascq.ProposedAction, bool, error) {
 	str := func(keys ...string) string {
 		for _, k := range keys {
 			if v, ok := m[k].(string); ok && strings.TrimSpace(v) != "" {
@@ -879,10 +893,13 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	// A target, scheme or question given as anything but text is refused by
 	// name: dropping it would change the move (a defence without its target
 	// is a new argument). null counts as absent.
-	for _, k := range []string{"scheme_id", "scheme", "target_arg_id", "target", "argument",
+	textKeys := []string{"scheme_id", "scheme", "target_arg_id", "target", "argument",
 		"answers_cq_id", "cq", "question", "critical_question", "target_premise_id", "premise",
-		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words",
-		"binding_id", "binding", "revision"} {
+		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words"}
+	if evidence {
+		textKeys = append(textKeys, "binding_id", "binding", "revision")
+	}
+	for _, k := range textKeys {
 		if v, exists := m[k]; exists && v != nil {
 			if _, ok := v.(string); !ok {
 				return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q must be text, not %s", k, jsonKind(v))
@@ -918,12 +935,16 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 		t = "attack"
 	case "ask", "challenge":
 		t = "question"
-	case "offer":
-		t = game.ActOffer
-	case "consent":
-		t = game.ActConsent
-	case "withdraw", "withdrawal":
-		t = game.ActWithdraw
+	}
+	if evidence {
+		switch t {
+		case "offer":
+			t = game.ActOffer
+		case "consent":
+			t = game.ActConsent
+		case "withdraw", "withdrawal":
+			t = game.ActWithdraw
+		}
 	}
 	a := nascq.ProposedAction{Type: t,
 		SchemeID:        str("scheme_id", "scheme"),
@@ -973,8 +994,12 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	} else {
 		a.Comparison = c
 	}
+	if !evidence {
+		return a, true, first
+	}
 	// An evidence act's parts, and the bindings a move cites
-	// (docs/e1-evidence.md): read only when given.
+	// (docs/e1-evidence.md), in a game with a record set: read only when
+	// given.
 	a.BindingID, a.Revision = str("binding_id", "binding"), str("revision")
 	if o, err := offerOf(m); err != nil {
 		if first == nil {
@@ -1217,7 +1242,7 @@ func expectations(v interface{}) []Expectation {
 	return out
 }
 
-func alternatives(v interface{}) []Alternative {
+func alternatives(v interface{}, evidence bool) []Alternative {
 	list, _ := v.([]interface{})
 	var out []Alternative
 	for _, x := range list {
@@ -1232,7 +1257,7 @@ func alternatives(v interface{}) []Alternative {
 		}
 		// A considered move with a part that does not read is still recorded,
 		// without that part (moveOf keeps the others).
-		if a, ok, _ := moveOf(am); ok && a.Type != "" {
+		if a, ok, _ := moveOf(am, evidence); ok && a.Type != "" {
 			alt.Action = a
 			out = append(out, alt)
 		}
