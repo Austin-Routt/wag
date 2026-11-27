@@ -847,3 +847,27 @@ round-1 claims that waited on G2, the seven agreed (13292.2, .9, .36, .141, .180
 review at draft 3, with 13292.11, .12 and .192 (draft 2, not reviewed); 13292.4 and .14 are round 2's,
 not yet drafted.
 
+**Part 2: the argument the discussion needs (D096; `recode_d096.py`).** The format first
+(`annotation-records.md` §13, rule R20, cases RC1-RC15 above, each written before its test and code):
+an argument that no claim states as a whole, which claims answer, is an instance of the claim whose
+statement it concludes, marked `"by": "the discussion"`, not primary, fit `reconstructed`, its premises
+cited to the claims that state them or supplied. `validate.py` and the Go check hold it to that; the
+`instances` field of agreement leaves it out; the replay plays it before the claims that answer it.
+In the gold the environmental argument for the tax is the thesis's instance 13292.1#2: goal-based
+practical reasoning, its circumstances cited to 13292.108 and its efficacy premise to 13292.14, the
+rest supplied, with the four challenge records of the whole argument. 13292.108 is what it states, a
+fragment backing those circumstances (`premise_backing`), as 13292.11 backs 13292.118's; the seven
+claims that answer the argument's other parts (13292.5, .147 and .174 at its conclusion, 13292.13 at
+its efficacy premise, 13292.6 at its goal link, 13292.104 and .127 at its exceptions) target
+13292.1#2; the claims at the circumstances (13292.2, .4, .135, .137) keep their targets. 13292.104's
+goal premise, cited to 13292.108, which does not state the goal, is supplied (R20). Thirteen items
+change; the seven claims that waited on Q1 are released, and 13292.1, .5, .147 and .174, agreed at
+draft 1, go back to review at draft 3, with .6, .104, .108, .123 and .127. The replay from a clean
+build (6b44138) plays 13292.1#2 first, by Pro, with goal-based practical reasoning; it is out, for
+13292.13's unanswered question about its efficacy premise, as 13292.108's argument was. 13292.108 is
+played as a fragment (27 claims as intended, 4 fragments). The first replay of the recoded gold
+showed 13292.135 and .137, which deny what 13292.108 states, challenged in the fragment's own Other
+argument, where the formula is a conclusion: cases RC14-RC15 were written, and a move at the premise a
+fragment backs is now made in the argument it backs, so the two are played as before (a challenge
+and its duplicate).
+
