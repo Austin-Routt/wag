@@ -2,16 +2,12 @@ package catalogue
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/internal/carneades"
-	"github.com/yourorg/wag/internal/game"
-	"github.com/yourorg/wag/internal/nascq"
 	"gopkg.in/yaml.v2"
 )
 
@@ -40,52 +36,18 @@ func committedGame(t *testing.T) (map[string]*Entry, *GameData, *GameGen) {
 	return entries, d, out
 }
 
-// sameGameFiles compares generated files with files on disk as trees: the
-// JSON files' objects in their order; core.yml's mappings in any order (its
-// readers read them into structures, and an entry keeps a scheme's formulas
-// in core.yml's usual order); lists, among them the schemes and the
-// formulas, in theirs.
-func sameGameFiles(t *testing.T, files map[string][]byte, dir string) []string {
-	t.Helper()
-	var diffs []string
-	for _, p := range GamePaths {
-		want, err := os.ReadFile(filepath.Join(dir, filepath.FromSlash(p)))
-		if err != nil {
-			t.Fatal(err)
-		}
-		var a, b interface{}
-		if strings.HasSuffix(p, ".json") {
-			if a, err = decodeOrderedJSON(files[p]); err != nil {
-				t.Fatalf("generated %s: %v", p, err)
-			}
-			if b, err = decodeOrderedJSON(want); err != nil {
-				t.Fatal(err)
-			}
-		} else {
-			var x, y yaml.MapSlice
-			if err := yaml.Unmarshal(files[p], &x); err != nil {
-				t.Fatalf("generated %s: %v", p, err)
-			}
-			if err := yaml.Unmarshal(want, &y); err != nil {
-				t.Fatal(err)
-			}
-			a, b = plain(t, x), plain(t, y)
-		}
-		if !reflect.DeepEqual(a, b) {
-			diffs = append(diffs, p)
-		}
-	}
-	return diffs
-}
-
-// The generator reproduces the game's files frozen before the switch, as
-// trees: every field, and the order of the schemes, the questions, the
-// edges and the formulas (docs/c5-game.md, C5.1 step 5).
-func TestGameGenReproducesTheFrozenData(t *testing.T) {
+// The generator makes the committed game files, byte for byte, with the
+// fingerprint of the values it read in core.yml's header. (Until step C5.2's
+// switch it reproduced the files frozen before C5.1's, as trees, and the game
+// played both alike, the reference games move for move: C5.1's guarantee,
+// kept in the history at 1273555. The 33 reference games play the frozen
+// files since, TestReferenceDigests.)
+func TestGameGenMakesTheCommittedData(t *testing.T) {
 	_, _, out := committedGame(t)
-	if diffs := sameGameFiles(t, out.Files, filepath.Join(root, frozenPreC5)); len(diffs) > 0 {
-		for _, p := range diffs {
-			t.Errorf("%s is not the frozen file's tree", p)
+	committed := readGameFiles(t, filepath.Join(root, GameDataDir))
+	for _, p := range GamePaths {
+		if !bytes.Equal(out.Files[p], bytes.ReplaceAll(committed[p], []byte("\r\n"), []byte("\n"))) {
+			t.Errorf("%s is not the committed file", p)
 		}
 	}
 	if len(out.Files) != len(GamePaths) {
@@ -109,96 +71,6 @@ func readGameFiles(t *testing.T, dir string) map[string][]byte {
 		files[p] = b
 	}
 	return files
-}
-
-// playAll plays, on the game's files, every answer the NASCQ allows to every
-// question (wag-cli --edges), and the 33 seeded games of the reference
-// digests (internal/game, TestReferenceDigests), and reports how each ended.
-func playAll(t *testing.T, files map[string][]byte) ([]game.EdgeCase, []string) {
-	t.Helper()
-	cases, err := game.EdgeCases(func() (*game.GameState, error) {
-		ad, err := carneades.NewAdapterFromYAML(files[GameCorePath])
-		if err != nil {
-			return nil, err
-		}
-		n, err := nascq.LoadFromBytes(files[GameSchemesPath], files[GameCQsPath], files[GameEdgesPath])
-		if err != nil {
-			return nil, err
-		}
-		return game.NewGame(game.DefaultGameConfig(), ad, n, []string{"Pro", "Con"}), nil
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	type ref struct {
-		mode, claim string
-		turns       int
-		p1, p2      string
-		s1, s2      int64
-	}
-	var refs []ref
-	for seed := int64(1); seed <= 8; seed++ {
-		refs = append(refs, ref{"classic", "", 12, "random", "random", seed, seed + 100})
-	}
-	for seed := int64(1); seed <= 4; seed++ {
-		refs = append(refs,
-			ref{"classic", "", 6, "greedy", "random", seed, seed + 100},
-			ref{"infinite", "", 10, "random", "random", seed, seed + 100},
-			ref{"target", "", 12, "random", "random", seed, seed + 100},
-			ref{"cq", "", 12, "random", "random", seed, seed + 100},
-			ref{"debate", "should_be_performed(carbon_tax)", 10, "random", "random", seed, seed + 100})
-	}
-	refs = append(refs,
-		ref{"classic", "", 5, "greedy", "greedy", 1, 2},
-		ref{"infinite", "", 5, "greedy", "random", 3, 4},
-		ref{"target", "", 5, "random", "greedy", 5, 6},
-		ref{"cq", "", 5, "greedy", "random", 7, 8},
-		ref{"debate", "should_be_performed(carbon_tax)", 5, "greedy", "greedy", 9, 10})
-	agent := func(name, kind string, seed int64) game.Agent {
-		if kind == "greedy" {
-			return game.NewGreedyAgent(name, seed, 2)
-		}
-		return game.NewRandomAgent(name, seed, 0.15, 0.55)
-	}
-	var games []string
-	for _, g := range refs {
-		cfg, err := game.ModeConfig(g.mode)
-		if err != nil {
-			t.Fatal(err)
-		}
-		cfg.MaxTurns = g.turns
-		if g.claim != "" {
-			cfg.Objective, cfg.Claim = game.ObjectiveClaim, g.claim
-		}
-		r := game.RunGame(cfg, game.DefaultRunnerConfig(), files[GameCorePath], files[GameSchemesPath], files[GameCQsPath],
-			files[GameEdgesPath], []game.Agent{agent("Alice", g.p1, g.s1), agent("Bob", g.p2, g.s2)})
-		if r.Panicked {
-			t.Fatalf("%+v panicked: %s", g, r.PanicMessage)
-		}
-		games = append(games, fmt.Sprintf("%+v moves=%d rejected=%d abstained=%d alice=%.6f bob=%.6f winner=%s verdict=%q reason=%q kinds=%v digest=%s",
-			g, r.MoveCount, r.InvalidCount, r.AbstainCount, r.Scores["Alice"], r.Scores["Bob"], r.Winner, r.Verdict, r.Reason, r.MoveKinds, r.MoveDigest))
-	}
-	return cases, games
-}
-
-// The game plays the generated files as it plays the frozen ones: every
-// answer to every question does the same, and the reference games end the
-// same, move for move.
-func TestGameGenPlaysTheSame(t *testing.T) {
-	_, _, out := committedGame(t)
-	c1, g1 := playAll(t, readGameFiles(t, filepath.Join(root, frozenPreC5)))
-	c2, g2 := playAll(t, out.Files)
-	if len(c1) == 0 || len(g1) != 33 {
-		t.Fatalf("%d answers, %d games", len(c1), len(g1))
-	}
-	if !reflect.DeepEqual(c1, c2) {
-		t.Errorf("the answers play otherwise on the generated files (%d and %d)", len(c1), len(c2))
-	}
-	for i := range g1 {
-		if g1[i] != g2[i] {
-			t.Errorf("game %d differs:\n frozen    %s\n generated %s", i+1, g1[i], g2[i])
-		}
-	}
 }
 
 // freshGame reads the committed catalogue's game data, to edit.
@@ -299,9 +171,9 @@ func TestGameGenFindsFaults(t *testing.T) {
 		{"an ask edge of an unknown scheme", "no such game scheme", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			d.Order.Ask[0].Scheme = "AS:nothing"
 		}},
-		{"an ask edge no entry asks", "0 questions with the game part CQ:likelihood", func(t *testing.T, es map[string]*Entry, d *GameData) {
+		{"an ask edge no entry asks", "0 questions with the game part CQ:correlation", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			for i := range es["sign.yml"].CQs {
-				if q := es["sign.yml"].CQs[i].Game; q != nil && q.ID == "CQ:likelihood" {
+				if q := es["sign.yml"].CQs[i].Game; q != nil && q.ID == "CQ:correlation" {
 					es["sign.yml"].CQs[i].Game = nil
 				}
 			}
@@ -321,7 +193,7 @@ func TestGameGenFindsFaults(t *testing.T) {
 			d.Order.Ask = keep
 		}},
 		{"a premise's pattern at an exception", "asked at an exception, its pattern \"strong_correlation(A,B)\"", func(t *testing.T, es map[string]*Entry, d *GameData) {
-			gameCQ(t, es["sign.yml"], "CQ:likelihood").Locus = "exception"
+			gameCQ(t, es["sign.yml"], "CQ:correlation").Locus = "exception"
 		}},
 		{"an exception's pattern at a premise", "asked at a premise, its pattern \"untrustworthy(W)\"", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			gameCQ(t, es["expert_opinion.yml"], "CQ:trustworthiness").Locus = "premise"
@@ -333,13 +205,13 @@ func TestGameGenFindsFaults(t *testing.T) {
 			gameCQ(t, es["expert_opinion.yml"], "CQ:expertise").Pattern = ""
 		}},
 		{"a conclusion question with a pattern", "asked of the conclusion, it has a pattern", func(t *testing.T, es map[string]*Entry, d *GameData) {
-			gameCQ(t, es["practical_reasoning1.yml"], "CQ:other_goals").Pattern = "possible(A)"
+			gameCQ(t, es["practical_reasoning1.yml"], "CQ:side_effect").Pattern = "possible_bring_about(P,A)"
 		}},
 		{"an unknown locus", "the locus \"premises\" is not one of", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			gameCQ(t, es["expert_opinion.yml"], "CQ:expertise").Locus = "premises"
 		}},
 		{"formulas without variables", "gives formulas but no variables", func(t *testing.T, es map[string]*Entry, d *GameData) {
-			es["practical_reasoning1.yml"].Game.Core = without(t, es["practical_reasoning1.yml"].Game.Core, "variables")
+			es["sign.yml"].Game.Core = without(t, es["sign.yml"].Game.Core, "variables")
 		}},
 		{"a formula that is not a string", "not a formula", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			for i, it := range es["sign.yml"].Game.Core {
@@ -368,6 +240,65 @@ func TestGameGenFindsFaults(t *testing.T) {
 		}},
 		{"two markers", "two markers for sign", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			d.CoreTemplate += coreMarker + "sign\n"
+		}},
+		// C5.2's rules (docs/c5-game.md, step 4), each wired into the generator.
+		{"one id at two formulas", "CQ:trustworthiness is asked at dishonest({W}) (AS:position_to_know) and untrustworthy({W}) (AS:expert_opinion): one id is one question, asked at one formula", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			gameCQ(t, es["position_to_know.yml"], "CQ:honesty").ID = "CQ:trustworthiness"
+			for i, a := range d.Order.Ask {
+				if a == (GameEdge{CQ: "CQ:honesty", Scheme: "AS:position_to_know"}) {
+					d.Order.Ask[i].CQ = "CQ:trustworthiness"
+				}
+			}
+			var keep []GameQuestion
+			for _, q := range d.Questions {
+				if q.ID != "CQ:honesty" {
+					keep = append(keep, q)
+				}
+			}
+			d.Questions = keep
+		}},
+		{"one id with two texts", "CQ:too_slight reads", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			for i := range es["negative_consequences.yml"].CQs {
+				if q := es["negative_consequences.yml"].CQs[i].Game; q != nil && q.ID == "CQ:too_slight" {
+					es["negative_consequences.yml"].CQs[i].Paraphrase = "Is G too slight a harm to count in deciding on A?"
+				}
+			}
+		}},
+		{"a question no scheme asks", "CQ:orphan is asked by no game scheme", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			d.Questions = append(d.Questions, GameQuestion{ID: "CQ:orphan", Record: d.Questions[0].Record})
+		}},
+		{"a record that writes its text", "gives question_template_en, which the generator makes", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			d.Questions[0].Record = append(append(yaml.MapSlice{}, d.Questions[0].Record...), yaml.MapItem{Key: "question_template_en", Value: "Why?"})
+		}},
+		{"a record without answer words", "CQ:other_goals: its record has no answer_en", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			d.Questions[0].Record = without(t, d.Questions[0].Record, "answer_en")
+		}},
+		{"a paraphrase with braces", "its paraphrase has braces", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			for i := range es["sign.yml"].CQs {
+				if q := es["sign.yml"].CQs[i].Game; q != nil && q.ID == "CQ:correlation" {
+					es["sign.yml"].CQs[i].Paraphrase = "How closely does {A} go with {B}?"
+				}
+			}
+		}},
+		{"an answer scheme concluding another formula", "AS:better_means concludes realize_more_effectively({P},{G},{A}), not bad_outweighs({A},{G})", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			for i, b := range d.Order.Backup {
+				if b.Scheme == "AS:better_means" {
+					d.Order.Backup[i].CQ = "CQ:bad_outweighs"
+				}
+			}
+		}},
+		{"a bridge's entry premise that is not its premise", "AS:bridge_possible_good's entry premise \"may_be_worth_performing({G},{A})\" is none of its premises", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			for i, it := range es["bridge_from_possible_good.yml"].Game.NASCQ {
+				if it.Key == "entry_premise" {
+					es["bridge_from_possible_good.yml"].Game.NASCQ[i].Value = "may_be_worth_performing({G},{A})"
+				}
+			}
+		}},
+		{"a sentence written in the template", "the language's block writes", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			d.CoreTemplate = strings.Replace(d.CoreTemplate, languageMarker+"\n", languageMarker+"\n  good/1: \"%s is fine.\"\n", 1)
+		}},
+		{"a predicate without its negation", "good/1 has no negation's sentence", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			delete(d.Language.Negations, "good/1")
 		}},
 	} {
 		t.Run(c.name, func(t *testing.T) {
@@ -431,9 +362,18 @@ func TestGameGenFingerprint(t *testing.T) {
 		{"an entry's summary", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			es["sign.yml"].Summary.Text = "something else"
 		}},
-		{"a question's paraphrase", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+		{"the paraphrase of a question the game does not ask", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			for i := range es["sign.yml"].CQs {
-				es["sign.yml"].CQs[i].Paraphrase += " more"
+				if es["sign.yml"].CQs[i].Game == nil {
+					es["sign.yml"].CQs[i].Paraphrase += " more"
+				}
+			}
+		}},
+		{"a game question's paraphrase, its text (D009)", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+			for i := range es["sign.yml"].CQs {
+				if es["sign.yml"].CQs[i].Game != nil {
+					es["sign.yml"].CQs[i].Paraphrase += " more"
+				}
 			}
 		}},
 		{"a question's text in its entry", true, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
@@ -482,6 +422,9 @@ func TestGameGenFingerprint(t *testing.T) {
 		{"core.yml's template", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
 			d.CoreTemplate += "# a comment\n"
 		}},
+		{"a negation's sentence in game/language.yml", false, func(es map[string]*Entry, d *GameData, f map[string]*Formulas) {
+			d.Language.Negations["good/1"] = "%s is not good at all."
+		}},
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			es, d := freshGame(t)
@@ -501,6 +444,28 @@ func TestGameGenFingerprint(t *testing.T) {
 				t.Errorf("fingerprint %s (was %s), files the same: %t; want the same: %t", got.Inputs, base.Inputs, sameFiles, c.same)
 			}
 		})
+	}
+	// walton.yml's templates are read for the predicates the game plays, and
+	// for those only.
+	for name, c := range map[string]struct {
+		key  string
+		same bool
+	}{"a template the game plays": {"goal_of_agent/2", false}, "a template the game does not play": {"causes/2", true}} {
+		es, d := freshGame(t)
+		gs := src.GameSources()
+		lang := map[string]string{}
+		for k, v := range gs.Language {
+			lang[k] = v
+		}
+		lang[c.key] = "%s and %s, reworded."
+		gs.Language = lang
+		got, err := GenerateGame(es, d, gs)
+		if err != nil {
+			t.Fatalf("%s: %v", name, err)
+		}
+		if (got.Inputs == base.Inputs) != c.same {
+			t.Errorf("%s: fingerprint %s (was %s), want the same: %t", name, got.Inputs, base.Inputs, c.same)
+		}
 	}
 }
 

@@ -7,8 +7,6 @@ import (
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/yourorg/wag/data"
 )
 
 // The critical review's adverse case 11 (docs/c5-game.md): a legacy record
@@ -47,7 +45,7 @@ func loadJSON(t *testing.T, ts *httptest.Server, e map[string]any, query string)
 }
 
 func TestLegacyRecordContinued(t *testing.T) {
-	s, ts := newTestServerWith(t)
+	s, ts := newPrevServer(t) // the record was played on data the switch of step C5.2 changed
 	here := s.data.Hash()
 	e := legacyExport(t)
 	n := len(e["history"].([]any))
@@ -135,8 +133,8 @@ func TestLegacyRecordContinued(t *testing.T) {
 // too (it was not played with other data, so it is not read-only); a legacy
 // record's trace says what it was replayed with.
 func TestLegacyOnTheReadOnlyPathAndInTraces(t *testing.T) {
-	s, ts := newTestServerWith(t)
-	here := Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON}.Hash()
+	s, ts := newPrevServer(t) // the record was played on data the switch of step C5.2 changed
+	here := s.data.Hash()
 	code, st := loadJSON(t, ts, legacyExport(t), "?inspect=1")
 	if l, _ := st["legacy"].(map[string]any); code != http.StatusOK || l == nil || l["replayed_with"] != here || st["inspect"] != nil {
 		t.Fatalf("?inspect=1: %d legacy %v inspect %v", code, st["legacy"], st["inspect"])

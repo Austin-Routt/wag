@@ -246,8 +246,15 @@ func TestGameFiles(t *testing.T) {
 		got[x.ID] = plain(t, x.Record)
 		ids = append(ids, x.ID)
 	}
-	if want := jsonTree(t, f.CQs); !reflect.DeepEqual(got, want) {
-		t.Errorf("questions.yml is not critical_questions.json")
+	// questions.yml is critical_questions.json but for what the generator
+	// makes: each question's text and caes_mapping (rules (b) and (c)).
+	want := jsonTree(t, f.CQs)
+	for _, rec := range want.(map[string]interface{}) {
+		delete(rec.(map[string]interface{}), "question_template_en")
+		delete(rec.(map[string]interface{}), "caes_mapping")
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("questions.yml is not critical_questions.json without the made text and caes_mapping")
 	}
 	if want := orderOfKeys(t, f.CQs); !reflect.DeepEqual(ids, want) {
 		t.Errorf("questions.yml's order %v, want critical_questions.json's %v", ids, want)
@@ -302,8 +309,11 @@ func TestGameFiles(t *testing.T) {
 	if err := yaml.Unmarshal(f.Core, &whole); err != nil {
 		t.Fatal(err)
 	}
-	if !reflect.DeepEqual(rest.Language, whole.Language) {
-		t.Error("core.yml.in's language is not core.yml's")
+	// The template's language writes no sentence: its marker stands where
+	// core.yml's sentences are made (rule (e)).
+	if len(rest.Language) != 0 || strings.Count(tpl, languageMarker+"\n") != 1 || len(whole.Language) == 0 {
+		t.Errorf("core.yml.in's language: %d sentences, %d markers; core.yml's: %d sentences",
+			len(rest.Language), strings.Count(tpl, languageMarker+"\n"), len(whole.Language))
 	}
 	if len(rest.Schemes)+len(s.Game) != len(whole.Schemes) {
 		t.Errorf("core.yml.in keeps %d schemes; core.yml has %d, the game plays %d", len(rest.Schemes), len(whole.Schemes), len(s.Game))

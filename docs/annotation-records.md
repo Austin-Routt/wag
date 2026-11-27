@@ -256,6 +256,12 @@ Rules that change in format 2:
 - **R9**: A2 is another action than A as the case maps them, so an alias of A is not another course;
   the goal premise compared is the targeted instance's.
 - **R10**: a challenge names an instance, its own or its target's, and a formula of that instance.
+- **R2** (since step C5.2, 2026-11-27): a challenge's `wag_cq` is checked as a role's `cq` is. Where the game asks
+  questions at its formula (at a premise or an exception, those whose pattern has its predicate; at the
+  conclusion, those asked there), it names one of them, and a null is refused; elsewhere it names a question
+  the game asks of the scheme it plays the instance's scheme with, or none when the game plays none.
+- **R16** (since step C5.2): an instance's `wag_id` is the game's scheme for its `walton.yml` scheme, as the
+  pinned `schemes.json` maps them, or null when the game plays none.
 
 ## 11. Agreement
 

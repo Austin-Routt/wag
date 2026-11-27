@@ -2,6 +2,7 @@ package carneades
 
 import (
 	"errors"
+	"os"
 	"strings"
 	"testing"
 
@@ -408,7 +409,14 @@ func TestAnswerFormNeedsAParameterPerVariable(t *testing.T) {
 // bare action rather than its scheme's should_be_performed of it, is not
 // folded: only answers are (the review of 2026-11-24, R4).
 func TestANonAnswerSchemeIsNotFolded(t *testing.T) {
-	yml := string(data.CoreYAML) + `
+	// The frozen pre-C5.2 data, whose positive_consequences has no
+	// exceptions: an authored argument of a scheme with exceptions must carry
+	// their links (TestAuthoredArgumentsCarryTheirSchemesExceptions' concern, not this one's).
+	core, err := os.ReadFile("../../data/frozen/afd3335a23f12f41/schemes/core.yml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	yml := string(core) + `
 statements:
   "brings_about(tax_meat,less_emissions)": Taxing meat brings about fewer emissions.
   good(less_emissions): Fewer emissions are good.

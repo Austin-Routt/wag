@@ -106,7 +106,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 			return nil, err
 		}
 		depth, keys := 0, kialo.KeysByText // an export without keys was imported with claims merged by text
-		var profile *game.Profile // none: imported before step C5.2
+		var profile *game.Profile          // none: imported before step C5.2
 		if e.Import != nil {
 			depth, profile = e.Import.Depth, e.Import.Profile
 			if e.Import.Keys != "" {

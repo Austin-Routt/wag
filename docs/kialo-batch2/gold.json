@@ -10,9 +10,9 @@
   "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
   "links.json": "a2d3f08a789873229fd003fa1a0f4538c71d367b297dcf2c35fd15d9e3c02124",
   "positions.json": "d631e3b9633787b26dbd874caa0c4c8c84886f02ac74a6b9e6b4e3474b6858ee",
-  "nascq/schemes.json": "d7c921902fb9c2b61893c5556cfda7e4cc6c75e5dde47973333eba0a1955a5d4",
-  "nascq/critical_questions.json": "7dc1c7b154b2c1cf3d7dbf8ffcef8c92f52806479c96478dce8c41fecae8298b",
-  "nascq/edges.json": "edbc604bf977521043e6300299727d36a48dae3575b7ed4ea31ae8d3d81b844c"
+  "nascq/schemes.json": "7e4dd0b560fbbf8cc416dbe0644e64cee8d48fd271577a3fb14405bc6979c4f8",
+  "nascq/critical_questions.json": "d2300b06194a61c850aa8198340b5b35903f5858316c69f12607a7d7b2f71435",
+  "nascq/edges.json": "724e46b0c83214cf2e4843701aadcb0f4a7d0ec91ef5cfa55979cffd4eacd63c"
  },
  "status": "Development material (D086): adjudicated by a language model, no item verified by a person. The first gold is drafted from it.",
  "history": [
@@ -25,6 +25,11 @@
    "date": "2026-11-26",
    "by": "step C5.1's switch (docs/c5-game.md)",
    "what": "The game's NASCQ files are generated from the scheme catalogue since step C5.1: their bytes changed, their values did not (the generator reproduces the files frozen in wag/data/frozen/e7141ec8dea379bc as trees). The gold was checked again on them and their pins renewed. No coding changed."
+  },
+  {
+   "date": "2026-11-27",
+   "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+   "what": "The game's data is generated from the catalogue with the entries' game parts since step C5.2: it plays the modal variants, the bridges of possible consequences and the answer schemes, and asks questions at formulas where it asked none. The gold names the game's question where it now asks one (R2): 13292.25 answers CQ:too_slight (an undercutter before); 13292.12, 13292.233 and 13292.180's function toward 13292.121 name CQ:modal_likelihood, 13292.127 CQ:bad_outweighs and 13292.43 CQ:good_outweighs, for the book's questions; four challenges at practical reasoning's outweighing exception name CQ:bad_outweighs for CQ:side_effect, and seventeen that named no game question name the one the game asks at their formula now (the outweighing exceptions, the modal premises, too_slight and the bearer exception). The ten instances of the schemes the game now plays name its scheme (wag_id, R16). The pins of the game's NASCQ files renewed. No claim's reading changed."
   }
  ],
  "items": [
@@ -263,11 +268,11 @@
     },
     {
      "cq": "33.2 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:good_outweighs",
      "type": "opposite consequences",
      "instance": "13292.7#1",
      "formula": "good_outweighs(tax_meat,food_less_affordable_for_poor)",
-     "note": "the thesis's pros may outweigh it"
+     "note": "the thesis's pros may outweigh it. Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
     },
     {
      "cq": null,
@@ -279,11 +284,11 @@
     },
     {
      "cq": null,
-     "wag_cq": null,
+     "wag_cq": "CQ:too_slight",
      "type": "severity",
      "instance": "13292.7#1",
      "formula": "too_slight(tax_meat,food_less_affordable_for_poor)",
-     "note": "no printed CQ; 13292.25: the burden is small. Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065)"
+     "note": "no printed CQ; 13292.25: the burden is small. Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065). Since 2026-11-27 (step C5.2): the game asks it as CQ:too_slight"
     }
    ],
    "notes": {
@@ -310,6 +315,14 @@
        "challenges"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge 33.2 CQ3 at the good_outweighs of 13292.7#1 names CQ:good_outweighs, the game's question there (R2); the challenge severity at the too_slight of 13292.7#1 names CQ:too_slight, the game's question there (R2)"
      }
     ]
    }
@@ -328,7 +341,7 @@
      "scheme": {
       "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": null,
+      "wag_id": "AS:negative_consequences_modal",
       "fit": "reconstructed",
       "confidence": 0.8,
       "alternatives": [
@@ -479,7 +492,7 @@
      "scheme": {
       "walton_id": "bridge_from_possible_harm",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:bridge_possible_harm",
       "fit": "reconstructed",
       "confidence": 0.8,
       "alternatives": []
@@ -541,27 +554,27 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_likelihood",
      "type": "likelihood",
      "instance": "13292.9#1",
      "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
-     "note": "\"could\"; 13292.12 backs it with a mechanism. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "\"could\"; 13292.12 backs it with a mechanism. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_likelihood"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_evidence",
      "type": "evidence",
      "instance": "13292.9#1",
      "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
-     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_evidence"
     },
     {
      "cq": "33.2 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:good_outweighs",
      "type": "opposite consequences",
      "instance": "13292.9#1",
      "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
-     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare)"
+     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare). Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
     },
     {
      "cq": null,
@@ -630,6 +643,15 @@
        "notes"
       ],
       "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "instances"
+      ],
+      "what": "the challenge 33.2 CQ1 at the may_bring_about of 13292.9#1 names CQ:modal_likelihood, the game's question there (R2); the challenge 33.2 CQ2 at the may_bring_about of 13292.9#1 names CQ:modal_evidence, the game's question there (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.9#1 names CQ:good_outweighs, the game's question there (R2); the game plays negative_consequences_modal as AS:negative_consequences_modal: 13292.9#1 names it (R16); the game plays bridge_from_possible_harm as AS:bridge_possible_harm: 13292.9#4 names it (R16)"
      }
     ]
    }
@@ -806,11 +828,11 @@
     },
     {
      "cq": "22.1 CQ5",
-     "wag_cq": "CQ:side_effect",
+     "wag_cq": "CQ:bad_outweighs",
      "type": "side effects that outweigh",
      "instance": "13292.108#1",
      "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
-     "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred). Since 2026-11-24: no claim weighs a side effect against this goal but 13292.127 (starvation, bad_outweighs_good); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070)"
+     "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred). Since 2026-11-24: no claim weighs a side effect against this goal but 13292.127 (starvation, bad_outweighs_good); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070). Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
     }
    ],
    "notes": {
@@ -831,6 +853,14 @@
        "notes"
       ],
       "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge at the bad_outweighs of 13292.108#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -941,10 +971,11 @@
     },
     {
      "cq": "33.1 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:bad_outweighs",
      "type": "opposite consequences",
      "instance": "13292.115#1",
-     "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)"
+     "formula": "bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:bad_outweighs"
     },
     {
      "cq": null,
@@ -986,6 +1017,14 @@
        "instances"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge 33.1 CQ3 at the bad_outweighs of 13292.115#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -1164,11 +1203,11 @@
     },
     {
      "cq": "22.1 CQ5",
-     "wag_cq": "CQ:side_effect",
+     "wag_cq": "CQ:bad_outweighs",
      "type": "side effects that outweigh",
      "instance": "13292.118#1",
      "formula": "bad_outweighs(tax_meat,meat_price_reflects_real_costs)",
-     "note": "affordability (13292.7). Since 2026-11-24: 13292.7's affordability is a plain side effect, a rebuttal at the conclusion; it would answer here only if claimed to outweigh the price goal (D070)"
+     "note": "affordability (13292.7). Since 2026-11-24: 13292.7's affordability is a plain side effect, a rebuttal at the conclusion; it would answer here only if claimed to outweigh the price goal (D070). Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
     }
    ],
    "notes": {
@@ -1188,6 +1227,14 @@
        "challenges"
       ],
       "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge at the bad_outweighs of 13292.118#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -1250,9 +1297,9 @@
     }
    ],
    "role": {
-    "kind": "undercutter",
+    "kind": "cq_answer",
     "confidence": 0.6,
-    "cq": null,
+    "cq": "CQ:too_slight",
     "polarity": "against"
    },
    "target": {
@@ -1288,7 +1335,7 @@
     }
    ],
    "notes": {
-    "text": "Concedes the burden ('the additional burden') and attacks its severity, the supplied premise bad(G) of 13292.7's negative-consequences argument. premise_attack, not cq_answer: no critical question of 33.2 or of the game targets bad(G) (R2). Unlike its sibling 13292.33 it does not say the consequence is avoided by a substitute; it says the cost is small. Since 2026-11-25: it says the burden is small, not that it is not bad: an undercutter at 13292.7#1's exception too_slight (OC9, D065). Its own words hedge (\"could be as small as\"); fit and confidence say so.",
+    "text": "Concedes the burden ('the additional burden') and attacks its severity, the supplied premise bad(G) of 13292.7's negative-consequences argument. premise_attack, not cq_answer: no critical question of 33.2 or of the game targets bad(G) (R2). Unlike its sibling 13292.33 it does not say the consequence is avoided by a substitute; it says the cost is small. Since 2026-11-25: it says the burden is small, not that it is not bad: an undercutter at 13292.7#1's exception too_slight (OC9, D065). Its own words hedge (\"could be as small as\"); fit and confidence say so. Since 2026-11-27 (step C5.2): the game asks CQ:too_slight at the exception, so the claim answers that question: cq_answer, CQ:too_slight (R2).",
     "candidate_pattern": "mitigation by substitution or adaptation (also 13292.33, 13292.182, 13292.198)"
    },
    "adjudication": {
@@ -1307,6 +1354,15 @@
        "notes"
       ],
       "what": "too slight, not denied: an undercutter at too_slight (D065)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "notes",
+       "role"
+      ],
+      "what": "the game asks CQ:too_slight at too_slight: the undercutter is its answer (R2)"
      }
     ]
    }
@@ -1554,7 +1610,7 @@
       "claim_id": "13292.121",
       "relation": "pro",
       "role": "cq_answer",
-      "cq": "33.2 CQ1",
+      "cq": "CQ:modal_likelihood",
       "polarity": "for",
       "part": "premise",
       "instance": "13292.121#1",
@@ -1588,10 +1644,11 @@
     },
     {
      "cq": "33.2 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:good_outweighs",
      "type": "opposite consequences",
      "instance": "13292.180#1",
-     "formula": "good_outweighs(tax_meat,more_anemia_cases)"
+     "formula": "good_outweighs(tax_meat,more_anemia_cases)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
     },
     {
      "cq": null,
@@ -1611,7 +1668,7 @@
     }
    ],
    "notes": {
-    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer, hence an independent argument for 13292.7's conclusion. Toward 13292.121 it backs that the tax brings about an unhealthy underconsumption; that function is recorded in other_kialo_parents as a cq_answer to CQ:likelihood (R2). 'Organic iron' presumably means heme iron; 13292.184 raises bioavailability against the substitutes. Since 2026-11-25: toward 13292.121 it backs the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, the modal argument (D008), with the book's question 33.2 CQ1.",
+    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer, hence an independent argument for 13292.7's conclusion. Toward 13292.121 it backs that the tax brings about an unhealthy underconsumption; that function is recorded in other_kialo_parents as a cq_answer to CQ:likelihood (R2). 'Organic iron' presumably means heme iron; 13292.184 raises bioavailability against the substitutes. Since 2026-11-25: toward 13292.121 it backs the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, the modal argument (D008), with the book's question 33.2 CQ1. Since 2026-11-27 (step C5.2): the game asks 33.2 CQ1 as CQ:modal_likelihood, the question its function toward 13292.121 names now (R2).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -1652,6 +1709,16 @@
        "notes"
       ],
       "what": "its second parent's target is the modal premise of 13292.121#1, with the book's question (D008)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "notes",
+       "target"
+      ],
+      "what": "the game asks 33.2 CQ1 as CQ:modal_likelihood: its function toward 13292.121 names it (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.180#1 names CQ:good_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -1909,7 +1976,7 @@
      "scheme": {
       "walton_id": "bad_outweighs_good",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:bad_outweighs_good",
       "fit": "reconstructed",
       "confidence": 0.45,
       "alternatives": [
@@ -2014,7 +2081,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.5,
-    "cq": "22.1 CQ5",
+    "cq": "CQ:bad_outweighs",
     "polarity": "against"
    },
    "target": {
@@ -2049,10 +2116,11 @@
     },
     {
      "cq": "33.2 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:good_outweighs",
      "type": "opposite consequences",
      "instance": "13292.127#2",
-     "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)"
+     "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
     },
     {
      "cq": null,
@@ -2072,7 +2140,7 @@
     }
    ],
    "notes": {
-    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link. Since 2026-11-24 (D064, D075) the weighing is an instance of bad_outweighs_good, C003's answer scheme, in place of Other. Since 2026-11-24 practical reasoning is in the class (D070, D091), so the earliest argument of the class on the board is 13292.108, not 13292.115 (OC7): the answer is at its exception, 22.1 CQ5. Since 2026-11-25: the mood rule (D008) leaves its link categorical: 'a more severe threat than' ranks how bad starvation is, and its link from the tax to starvation is its own, inferred from 13292.7's firm 'would make food more expensive' (cited).",
+    "text": "The claim ranks two consequences: starvation from reduced access to meat is worse than any harm of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (guidelines §3.1, OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, is not in it, so the earliest on the board, 13292.115's positive consequences argument; 13292.108, practical reasoning, has no outweighing exception and is left out (D070). The weighing is primary because the words state the comparison (OC8): Other concluding bad_outweighs(tax_meat,reduced_unhealthy_meat_consumption), a cq_answer to 33.1 CQ3 at 13292.115's exception, re-parented from 13292.7. The starvation consequence, which the text presupposes, is a secondary negative consequences instance. Its children engage the starvation link, a premise of the primary instance: 13292.202 amends the action, 13292.204 denies the link. Since 2026-11-24 (D064, D075) the weighing is an instance of bad_outweighs_good, C003's answer scheme, in place of Other. Since 2026-11-24 practical reasoning is in the class (D070, D091), so the earliest argument of the class on the board is 13292.108, not 13292.115 (OC7): the answer is at its exception, 22.1 CQ5. Since 2026-11-25: the mood rule (D008) leaves its link categorical: 'a more severe threat than' ranks how bad starvation is, and its link from the tax to starvation is its own, inferred from 13292.7's firm 'would make food more expensive' (cited). Since 2026-11-27 (step C5.2): the game asks 22.1 CQ5 as CQ:bad_outweighs, the question the answer names now (R2).",
     "candidate_pattern": "weighing of consequences (C003); a comparison with a class (OC7)"
    },
    "adjudication": {
@@ -2114,6 +2182,17 @@
        "notes"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied; its note says why its link stays categorical (D008)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "instances",
+       "notes",
+       "role"
+      ],
+      "what": "the game asks 22.1 CQ5 as CQ:bad_outweighs: the answer names it (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.127#2 names CQ:good_outweighs, the game's question there (R2); the game plays bad_outweighs_good as AS:bad_outweighs_good: 13292.127#1 names it (R16)"
      }
     ]
    }
@@ -2570,7 +2649,7 @@
      "scheme": {
       "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": null,
+      "wag_id": "AS:negative_consequences_modal",
       "fit": "reconstructed",
       "confidence": 0.75,
       "alternatives": [
@@ -2633,7 +2712,7 @@
      "scheme": {
       "walton_id": "bridge_from_possible_harm",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:bridge_possible_harm",
       "fit": "reconstructed",
       "confidence": 0.75,
       "alternatives": []
@@ -2696,27 +2775,27 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_likelihood",
      "type": "likelihood",
      "instance": "13292.174#1",
      "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
-     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices? Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices? Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_likelihood"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_evidence",
      "type": "evidence",
      "instance": "13292.174#1",
      "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
-     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_evidence"
     },
     {
      "cq": null,
-     "wag_cq": null,
+     "wag_cq": "CQ:harm_discounted",
      "type": "bearer",
      "instance": "13292.174#1",
      "formula": "harm_discounted_by_bearer(tax_meat,more_dangerous_meat_production)",
-     "note": "no printed CQ; dangerous to whom is unstated. Since 2026-11-25: on whom the harm falls has its own exception, harm_discounted_by_bearer (D065)"
+     "note": "no printed CQ; dangerous to whom is unstated. Since 2026-11-25: on whom the harm falls has its own exception, harm_discounted_by_bearer (D065). Since 2026-11-27 (step C5.2): the game asks it as CQ:harm_discounted"
     }
    ],
    "notes": {
@@ -2756,6 +2835,15 @@
        "notes"
       ],
       "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "instances"
+      ],
+      "what": "the challenge 33.2 CQ1 at the may_bring_about of 13292.174#1 names CQ:modal_likelihood, the game's question there (R2); the challenge 33.2 CQ2 at the may_bring_about of 13292.174#1 names CQ:modal_evidence, the game's question there (R2); the challenge bearer at the harm_discounted_by_bearer of 13292.174#1 names CQ:harm_discounted, the game's question there (R2); the game plays negative_consequences_modal as AS:negative_consequences_modal: 13292.174#1 names it (R16); the game plays bridge_from_possible_harm as AS:bridge_possible_harm: 13292.174#2 names it (R16)"
      }
     ]
    }
@@ -2774,7 +2862,7 @@
      "scheme": {
       "walton_id": "better_means",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:better_means",
       "fit": "reconstructed",
       "confidence": 0.65,
       "alternatives": [
@@ -3041,11 +3129,11 @@
     },
     {
      "cq": "22.1 CQ5",
-     "wag_cq": "CQ:side_effect",
+     "wag_cq": "CQ:bad_outweighs",
      "type": "side effects that outweigh",
      "instance": "13292.104#2",
      "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
-     "note": "Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
+     "note": "Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion. Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
     }
    ],
    "notes": {
@@ -3080,6 +3168,15 @@
        "notes"
       ],
       "what": "a primary better_means instance at the exception it answers, realize_more_effectively(P,G,tax_meat), with its comparison (D075, D089); the argument for the other course is secondary"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "instances"
+      ],
+      "what": "the challenge at the bad_outweighs of 13292.104#2 names CQ:bad_outweighs, the game's question there (R2); the game plays better_means as AS:better_means: 13292.104#1 names it (R16)"
      }
     ]
    }
@@ -3591,7 +3688,7 @@
      "scheme": {
       "walton_id": "good_outweighs_bad",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:good_outweighs_bad",
       "fit": "reconstructed",
       "confidence": 0.5,
       "alternatives": [
@@ -3638,7 +3735,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.5,
-    "cq": "33.2 CQ3",
+    "cq": "CQ:good_outweighs",
     "polarity": "against"
    },
    "target": {
@@ -3674,7 +3771,7 @@
     }
    ],
    "notes": {
-    "text": "Answers 33.2 CQ3 of 13292.9 against it: the tax serves sustainability and animal welfare, which press harder than the lost revenue. It ranks two consequences, so it argues the exception of 13292.9's argument, good_outweighs(tax_meat,tax_revenue_reduced), with Other (guidelines §3.1, OC3, OC4). The values it names are things the tax would promote, so they count as consequences (OC5). Its Kialo parent cites the outweighed consequence, so it is not re-parented. Since 2026-11-24 (D064, D075) the weighing is an instance of good_outweighs_bad, C003's answer scheme, in place of Other.",
+    "text": "Answers 33.2 CQ3 of 13292.9 against it: the tax serves sustainability and animal welfare, which press harder than the lost revenue. It ranks two consequences, so it argues the exception of 13292.9's argument, good_outweighs(tax_meat,tax_revenue_reduced), with Other (guidelines §3.1, OC3, OC4). The values it names are things the tax would promote, so they count as consequences (OC5). Its Kialo parent cites the outweighed consequence, so it is not re-parented. Since 2026-11-24 (D064, D075) the weighing is an instance of good_outweighs_bad, C003's answer scheme, in place of Other. Since 2026-11-27 (step C5.2): the game asks 33.2 CQ3 as CQ:good_outweighs, the question the answer names now (R2).",
     "candidate_pattern": "weighing of consequences (C003)"
    },
    "adjudication": {
@@ -3702,6 +3799,16 @@
        "notes"
       ],
       "what": "the weighing is an instance of good_outweighs_bad (D064, D075)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "instances",
+       "notes",
+       "role"
+      ],
+      "what": "the game asks 33.2 CQ3 as CQ:good_outweighs: the answer names it (R2); the game plays good_outweighs_bad as AS:good_outweighs_bad: 13292.43#1 names it (R16)"
      }
     ]
    }
@@ -3718,7 +3825,7 @@
      "scheme": {
       "walton_id": "negative_consequences_modal",
       "compendium": "33.2",
-      "wag_id": null,
+      "wag_id": "AS:negative_consequences_modal",
       "fit": "reconstructed",
       "confidence": 0.8,
       "alternatives": [
@@ -3781,7 +3888,7 @@
      "scheme": {
       "walton_id": "bridge_from_possible_harm",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:bridge_possible_harm",
       "fit": "reconstructed",
       "confidence": 0.8,
       "alternatives": []
@@ -3843,26 +3950,27 @@
    "challenges": [
     {
      "cq": "33.2 CQ1",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_likelihood",
      "type": "likelihood",
      "instance": "13292.121#1",
      "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)",
-     "note": "answered against by 13292.233; backed by 13292.139 and 13292.180. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "answered against by 13292.233; backed by 13292.139 and 13292.180. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_likelihood"
     },
     {
      "cq": "33.2 CQ2",
-     "wag_cq": null,
+     "wag_cq": "CQ:modal_evidence",
      "type": "evidence",
      "instance": "13292.121#1",
      "formula": "may_bring_about(tax_meat,unhealthy_meat_underconsumption)",
-     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5"
+     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_evidence"
     },
     {
      "cq": "33.2 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:good_outweighs",
      "type": "opposite consequences",
      "instance": "13292.121#1",
-     "formula": "good_outweighs(tax_meat,unhealthy_meat_underconsumption)"
+     "formula": "good_outweighs(tax_meat,unhealthy_meat_underconsumption)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
     },
     {
      "cq": null,
@@ -3914,6 +4022,15 @@
        "notes"
       ],
       "what": "the modal variant and its bridge (D008): the consequence is claimed only possible"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges",
+       "instances"
+      ],
+      "what": "the challenge 33.2 CQ1 at the may_bring_about of 13292.121#1 names CQ:modal_likelihood, the game's question there (R2); the challenge 33.2 CQ2 at the may_bring_about of 13292.121#1 names CQ:modal_evidence, the game's question there (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.121#1 names CQ:good_outweighs, the game's question there (R2); the game plays negative_consequences_modal as AS:negative_consequences_modal: 13292.121#1 names it (R16); the game plays bridge_from_possible_harm as AS:bridge_possible_harm: 13292.121#2 names it (R16)"
      }
     ]
    }
@@ -4648,7 +4765,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.55,
-    "cq": "33.2 CQ1",
+    "cq": "CQ:modal_likelihood",
     "polarity": "for"
    },
    "target": {
@@ -4702,7 +4819,7 @@
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json). Since 2026-11-25: 13292.9 is now coded as claiming its consequence only possible (D008): the target is 13292.9#1, its modal argument, now secondary (the bridge 13292.9#4 is primary), and its premise may_bring_about(A,G), which the game does not ask until step C5: the question is the book's, 33.2 CQ1.",
+    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': cheaper dumped imports push out domestic producers. So it backs 9's premise that the tax brings about lower tax revenue; that premise has CQ:likelihood (33.2 CQ1), so the role is cq_answer with polarity for (R2), and the target is 9's primary instance, not its secondary causal step (R5). Both causal steps have a hypothetical cause (needs a modal causal scheme, audit N8; R4). Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json). Since 2026-11-25: 13292.9 is now coded as claiming its consequence only possible (D008): the target is 13292.9#1, its modal argument, now secondary (the bridge 13292.9#4 is primary), and its premise may_bring_about(A,G), which the game does not ask until step C5: the question is the book's, 33.2 CQ1. Since 2026-11-27 (step C5.2): the game asks 33.2 CQ1 as CQ:modal_likelihood, the question the answer names now (R2).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4740,6 +4857,15 @@
        "notes"
       ],
       "what": "its target is the modal premise of 13292.9#1, with the book's question (D008)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "notes",
+       "role"
+      ],
+      "what": "the game asks 33.2 CQ1 as CQ:modal_likelihood: the answer names it (R2)"
      }
     ]
    }
@@ -5899,10 +6025,11 @@
     },
     {
      "cq": "33.1 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:bad_outweighs",
      "type": "opposite consequences",
      "instance": "13292.147#1",
-     "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)"
+     "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:bad_outweighs"
     },
     {
      "cq": null,
@@ -5949,6 +6076,14 @@
        "instances"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge 33.1 CQ3 at the bad_outweighs of 13292.147#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -6216,11 +6351,11 @@
     },
     {
      "cq": "22.1 CQ5",
-     "wag_cq": "CQ:side_effect",
+     "wag_cq": "CQ:bad_outweighs",
      "type": "side effects that outweigh",
      "instance": "13292.190#1",
      "formula": "bad_outweighs(tax_only_highest_emitting_meats,meat_ghg_emissions_reduced)",
-     "note": "substitution towards untaxed meats. Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion"
+     "note": "substitution towards untaxed meats. Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion. Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
     }
    ],
    "notes": {
@@ -6242,6 +6377,14 @@
        "challenges"
       ],
       "what": "practical_reasoning2 binds P to governments, with goal_of_agent(P,G), possible_bring_about(P,A), possible_goal(G), the exceptions scoped to the agent and bad_outweighs(A,G) (D004, D005, D070, D088, D089, D091)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge at the bad_outweighs of 13292.190#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -6361,10 +6504,11 @@
     },
     {
      "cq": "33.1 CQ3",
-     "wag_cq": null,
+     "wag_cq": "CQ:bad_outweighs",
      "type": "opposite consequences",
      "instance": "13292.194#1",
-     "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)"
+     "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
+     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:bad_outweighs"
     },
     {
      "cq": null,
@@ -6409,6 +6553,14 @@
        "instances"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge 33.1 CQ3 at the bad_outweighs of 13292.194#1 names CQ:bad_outweighs, the game's question there (R2)"
      }
     ]
    }
@@ -7123,7 +7275,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.6,
-    "cq": "33.2 CQ1",
+    "cq": "CQ:modal_likelihood",
     "polarity": "against"
    },
    "target": {
@@ -7170,7 +7322,7 @@
     }
    ],
    "notes": {
-    "text": "Denies that the reduction a tax would cause is unhealthy, i.e. the premise brings_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121, which 33.2 CQ1 targets, so cq_answer CQ:likelihood against (R2); it even suggests the opposite consequence (better health). Its own qualifier ('especially when high intakes ... are reduced') leaves open people who already eat little meat, which is 121's worry. Since 2026-11-25: 13292.121 is now coded as claiming its consequence only possible (D008): the target is the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, its modal argument, and the question is the book's, 33.2 CQ1 (the game asks nothing of the modal variant until step C5).",
+    "text": "Denies that the reduction a tax would cause is unhealthy, i.e. the premise brings_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121, which 33.2 CQ1 targets, so cq_answer CQ:likelihood against (R2); it even suggests the opposite consequence (better health). Its own qualifier ('especially when high intakes ... are reduced') leaves open people who already eat little meat, which is 121's worry. Since 2026-11-25: 13292.121 is now coded as claiming its consequence only possible (D008): the target is the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, its modal argument, and the question is the book's, 33.2 CQ1 (the game asks nothing of the modal variant until step C5). Since 2026-11-27 (step C5.2): the game asks 33.2 CQ1 as CQ:modal_likelihood, the question the answer names now (R2).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -7190,6 +7342,15 @@
        "notes"
       ],
       "what": "its target is the modal premise of 13292.121#1, with the book's question (D008)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "notes",
+       "role"
+      ],
+      "what": "the game asks 33.2 CQ1 as CQ:modal_likelihood: the answer names it (R2)"
      }
     ]
    }
@@ -7784,11 +7945,11 @@
     },
     {
      "cq": null,
-     "wag_cq": null,
+     "wag_cq": "CQ:too_slight",
      "type": "severity",
      "instance": "13292.5#1",
      "formula": "too_slight(tax_meat,regenerative_agriculture_deterred)",
-     "note": "no printed CQ; how much meat comes from regenerative farms? Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065); the amount asked about bears on the decision as the share of the tax's environmental aim that deterring regenerative farms would cost, not as how few farms it reaches (the owner's scope, D053)"
+     "note": "no printed CQ; how much meat comes from regenerative farms? Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065); the amount asked about bears on the decision as the share of the tax's environmental aim that deterring regenerative farms would cost, not as how few farms it reaches (the owner's scope, D053). Since 2026-11-27 (step C5.2): the game asks it as CQ:too_slight"
     }
    ],
    "notes": {
@@ -7819,6 +7980,14 @@
        "challenges"
       ],
       "what": "the new exceptions of its consequence scheme (D065), supplied"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "the challenge severity at the too_slight of 13292.5#1 names CQ:too_slight, the game's question there (R2)"
      }
     ]
    }
@@ -8030,7 +8199,7 @@
      "scheme": {
       "walton_id": "better_means",
       "compendium": null,
-      "wag_id": null,
+      "wag_id": "AS:better_means",
       "fit": "reconstructed",
       "confidence": 0.65,
       "alternatives": [
@@ -8327,6 +8496,14 @@
        "notes"
       ],
       "what": "a primary better_means instance at the exception it answers, realize_more_effectively(P,G,tax_meat), with its comparison (D075, D089); the argument for the other course is secondary"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "step C5.2's switch (docs/c5-game.md; recode_c52.py)",
+      "fields": [
+       "instances"
+      ],
+      "what": "the game plays better_means as AS:better_means: 13292.123#1 names it (R16)"
      }
     ]
    }

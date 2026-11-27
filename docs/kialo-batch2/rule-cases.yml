@@ -25,6 +25,21 @@
 retired:
   # Wording that stated an earlier version of a rule. When a rule changes,
   # its old wording goes here, so that no copy of it survives.
+  - phrase: no question of the book or the game targets too_slight
+    now: the game's CQ:too_slight (OC9; step C5.2)
+    why: step C5.2's switch (2026-11-27), the game asks too_slight
+  - phrase: the game does not ask the modal variants yet
+    now: CQ:modal_likelihood and CQ:modal_evidence (OC9, OC15)
+    why: step C5.2's switch (2026-11-27), the game plays the modal variants
+  - phrase: since no question of the book or the game targets them
+    now: a cq_answer that names the game's question (guidelines §3.1)
+    why: step C5.2's switch (2026-11-27), the game asks D065's exceptions and the bridges'
+  - phrase: until then it stands in play
+    now: the game refuses Other at the question (D095 (3), since step C5.2)
+    why: step C5.2's switch (2026-11-27)
+  - phrase: concluding the exception, as an undercutter
+    now: concluding the exception, a cq_answer to the game's question (OC9, OC16)
+    why: step C5.2's switch (2026-11-27), the game asks too_slight and the bearer exceptions
   - phrase: the action it allows
     now: the action that grants or secures the right (OC13)
     why: final check of D055-D059 v5, warning 3 (example 6's note)
@@ -270,7 +285,7 @@ cases:
         - {role: premise, formula: 'good(women_spared_harms_of_forced_pregnancy)'}
         - {role: premise, formula: 'matters_more(women_spared_harms_of_forced_pregnancy,men_emotional_harm_from_abortion)'}
         conclusion: {formula: 'good_outweighs(access_to_abortion,men_emotional_harm_from_abortion)'}
-      role: {kind: cq_answer, cq: '33.2 CQ3', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:good_outweighs', polarity: against}
       target: {actual: {claim: '5637.104', part: exception, formula: 'good_outweighs(access_to_abortion,men_emotional_harm_from_abortion)'}}
     why: >-
       It ranks without any cue word: both kinds of harm against one kind. The
@@ -352,7 +367,7 @@ cases:
         - {role: exception, formula: 'too_slight(tax_meat,starvation_from_reduced_meat_access)'}
         - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,starvation_from_reduced_meat_access)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
-      role: {kind: cq_answer, cq: '22.1 CQ5', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:bad_outweighs', polarity: against}
       target: {actual: {claim: '13292.108', part: exception, formula: 'bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)'}}
     why: >-
       A ranking against a class (any harm of eating much meat), with C003's
@@ -361,7 +376,8 @@ cases:
       board, re-parented (OC7): since practical reasoning has the
       outweighing exception (D070, D091), that is 13292.108, not 13292.115.
       The words state the comparison, so the weighing is primary and the
-      starvation consequence secondary (OC8).
+      starvation consequence secondary (OC8). The game asks the exception as
+      CQ:bad_outweighs (step C5.2), the question the role names (R2).
 
   - id: OC4-b
     rules: [OC4, OC5]
@@ -378,7 +394,7 @@ cases:
         - {role: premise, formula: 'good(sustainability_and_animal_welfare)'}
         - {role: premise, formula: 'matters_more(sustainability_and_animal_welfare,tax_revenue_reduced)'}
         conclusion: {formula: 'good_outweighs(tax_meat,tax_revenue_reduced)'}
-      role: {kind: cq_answer, cq: '33.2 CQ3', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:good_outweighs', polarity: against}
       target: {actual: {claim: '13292.9', part: exception, formula: 'good_outweighs(tax_meat,tax_revenue_reduced)'}}
     why: >-
       It ranks ("more pressing"), and the values it names are things the tax
@@ -551,7 +567,7 @@ cases:
         - {role: exception, formula: 'too_slight(tax_meat,jobs_lost)'}
         - {role: exception, formula: 'harm_discounted_by_bearer(tax_meat,jobs_lost)'}
         conclusion: {formula: '¬should_be_performed(tax_meat)'}
-      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:bad_outweighs', polarity: against}
     why: >-
       A concession and a ranking: two instances, the weighing and the
       rebuttal. The words state the comparison ("matter more"), so the
@@ -572,15 +588,15 @@ cases:
         - {role: premise, formula: 'means_to_end(change_food_consumption_pattern,avoid_meat_tax_burden)'}
         - {role: premise, formula: 'easy_to_achieve(change_food_consumption_pattern)'}
         conclusion: {formula: 'too_slight(tax_meat,food_less_affordable_for_poor)'}
-      role: {kind: undercutter, cq: null, polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:too_slight', polarity: against}
       target: {actual: {claim: '13292.7', part: exception, formula: 'too_slight(tax_meat,food_less_affordable_for_poor)'}}
     why: >-
       It grants the burden, says that it is small, and names no rival
       consequence: not a denial that the burden is bad, and not the outweighing
       exception, but too_slight(A,G), the exception of 13292.7's argument
-      (D065). No scheme concludes it, so it is other, concluding the exception,
-      an undercutter: no question of the book or the game targets too_slight
-      (R2). Its own hedge ("could be") is in its note and confidence. Until
+      (D065). No scheme concludes it, so it is other, concluding the exception:
+      the answer to the game's CQ:too_slight, which asks it since step C5.2
+      (R2; an undercutter before). Its own hedge ("could be") is in its note and confidence. Until
       2026-11-25 it was coded as an attack on bad(G), as OC9 then said.
 
   - id: OC10-a
@@ -743,7 +759,7 @@ cases:
         premises:
         - {role: premise, formula: 'four_day_week_costs_exceed_benefits'}
         conclusion: {formula: 'bad_outweighs(try_four_day_week,staff_more_rested)'}
-      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:bad_outweighs', polarity: against}
     why: >-
       A balance claim names no single consequence, so it weighs against every
       positive argument about the four-day week on the board, one instance
@@ -768,7 +784,7 @@ cases:
         - {role: exception, formula: 'untrustworthy(meat_reduction_studies)'}
         - {role: exception, formula: 'inconsistent_with_other_experts(meat_reduction_improves_health)'}
         conclusion: {formula: 'meat_reduction_improves_health'}
-      role: {kind: cq_answer, cq: '33.2 CQ1', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:modal_likelihood', polarity: against}
       target: {actual: {claim: '13292.121', part: premise, formula: 'may_bring_about(tax_meat,unhealthy_meat_underconsumption)'}}
     why: >-
       It denies that the possibility is real (less meat brings better health,
@@ -813,13 +829,14 @@ cases:
         - {role: premise, formula: 'done_in_time(regional_trial,tax_meat)'}
         - {role: premise, formula: 'worth_its_costs(regional_trial,tax_meat,meat_bought_across_border)'}
         conclusion: {formula: 'worth_finding_out_first(tax_meat,meat_bought_across_border)'}
-      role: {kind: undercutter, cq: null, polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:worth_finding_out_first', polarity: against}
     why: >-
       It names the investigation, a year's trial in two regions, and makes out
       the three conditions: the trial would show whether the tax sends shoppers
       across the border, in time, before the tax must be decided, and at little
       cost. So it is an argument of finding_out_first (D095), concluding the
-      bridge's exception worth_finding_out_first(A,G), an undercutter. It grants
+      bridge's exception worth_finding_out_first(A,G): the answer to the game's
+      CQ:worth_finding_out_first (R2). It grants
       the possibility and what it would weigh: the bridge falls, the modal
       argument stands. A reply that showed only that a study could be done, at
       a cost or a delay the decision cannot bear, would argue the exception
@@ -870,7 +887,7 @@ cases:
         - {role: premise, formula: 'may_bring_about(tax_meat,production_moved_abroad)'}
         - {role: premise, formula: 'matters_more(production_moved_abroad,emissions_cut)'}
         conclusion: {formula: 'bad_outweighs(tax_meat,emissions_cut)'}
-      role: {kind: cq_answer, cq: '33.1 CQ3', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:bad_outweighs', polarity: against}
     why: >-
       A weighing, but its rival consequence is only possible ("might only
       move"), and C003's answer schemes take a categorical brings_about(A,H):
@@ -911,19 +928,20 @@ cases:
         premises:
         - {role: premise, formula: 'night_bus_year_pilot_possible'}
         conclusion: {formula: 'worth_finding_out_first(run_night_bus,people_home_safely)'}
-      role: {kind: undercutter, cq: null, polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:worth_finding_out_first', polarity: against}
     why: >-
       It names a way to find out, but not one worth taking: a year's pilot costs
       what a year of the service would, so finding out first costs what the
       decision does. It still argues the bridge's exception, without making it
-      out: code it as the exception, an undercutter, and say in notes what it
-      leaves unshown. That G could be found out is not enough (D008): it does
-      not meet the critic's burden of production (the owner's declaration under
-      D053), and the game refuses it at the question from step C5.2 (D095
-      (3)); until then it stands in play until the bridge's defender answers
-      that finding out first is not worth it, a rebuttal of its conclusion (a
-      reply coded with finding_out_first is answered at the premise it
-      denies, OC15-f), and a tie goes against the critic (D003).
+      out: code it as the exception, the answer to CQ:worth_finding_out_first,
+      and say in notes what it leaves unshown. That G could be found out is not
+      enough (D008): it does not meet the critic's burden of production (the
+      owner's declaration under D053), and the game refuses Other at the
+      question (D095 (3), since step C5.2). In a game on the data before, it
+      stood until the bridge's defender answered that finding out first is not
+      worth it, a rebuttal of its conclusion (a reply coded with
+      finding_out_first is answered at the premise it denies, OC15-f), and a
+      tie went against the critic (D003).
 
   - id: OC15-h
     rules: [OC15]
@@ -969,12 +987,13 @@ cases:
         premises:
         - {role: premise, formula: 'regional_trial_would_settle_cross_border_buying'}
         conclusion: {formula: null}
-      role: {kind: cq_answer, cq: '33.2 CQ2', polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:evidence', polarity: against}
     why: >-
       The argument it answers asserts the link ("would"), so it is categorical,
       and the bridges' exception does not reach it. The reply doubts that the
       link is shown and names how to settle it: a challenge of
-      brings_about(A,G), the book's 33.2 CQ2 (what evidence shows it?), which
+      brings_about(A,G), the book's 33.2 CQ2 (what evidence shows it?), the
+      game's CQ:evidence, which
       the argument's proponent must answer. Against a modal argument the same
       words argue the bridges' exception (OC15-c); coded that way here, they
       would leave the categorical argument standing and favour the side that
@@ -992,13 +1011,13 @@ cases:
         premises:
         - {role: premise, formula: 'costs_fall_on_polluting_producers'}
         conclusion: {formula: 'harm_discounted_by_bearer(tax_meat,costs_raised_for_large_producers)'}
-      role: {kind: undercutter, cq: null, polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:harm_discounted', polarity: against}
     why: >-
       It grants the cost and discounts it because of whom it falls on: the
       bearer exception of the argument's side, harm_discounted_by_bearer(A,G)
       (D065, C021). The same fact is a reason for the tax, which is why the
       exception is sided: an argument for the tax has no harm to discount
-      (D053).
+      (D053). The game asks it as CQ:harm_discounted (step C5.2; R2).
 
   - id: OC16-b
     rules: [OC16]
@@ -1012,12 +1031,13 @@ cases:
         premises:
         - {role: premise, formula: 'savings_go_to_well_off_homeowners'}
         conclusion: {formula: 'gain_discounted_by_bearer(heat_pump_grant,energy_bills_cut)'}
-      role: {kind: undercutter, cq: null, polarity: against}
+      role: {kind: cq_answer, cq: 'CQ:gain_discounted', polarity: against}
     why: >-
       It grants the gain and discounts it because of whom it goes to: the
-      exception of an argument for A, gain_discounted_by_bearer(A,G). A claim
-      that the poor have a right to such help whatever its effects would be
-      OC5's, naming C007.
+      exception of an argument for A, gain_discounted_by_bearer(A,G), which the
+      game asks as CQ:gain_discounted (step C5.2; R2). A claim that the poor
+      have a right to such help whatever its effects would be OC5's, naming
+      C007.
 
   - id: OC17-a
     rules: [OC17]

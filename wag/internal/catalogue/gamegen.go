@@ -90,6 +90,12 @@ func ReadGameDir(dir string) (*GameData, error) {
 		return nil, err
 	}
 	d.CoreTemplate = string(lfOf(b)) // as written in a checkout that turns LF into CRLF
+	if b, err = read(GameLanguageFile); err != nil {
+		return nil, err
+	}
+	if err := yaml.UnmarshalStrict(b, &d.Language); err != nil {
+		return nil, fmt.Errorf("%s/%s: %v", GameDir, GameLanguageFile, err)
+	}
 	return d, nil
 }
 
@@ -111,16 +117,19 @@ type GameGen struct {
 
 // GameSources are what the generator reads besides the catalogue:
 // walton.yml's formulas by scheme id, which a game scheme plays when its
-// entry records none of its own (nil: each entry's own copy), and its id
-// migrations, which map an upstream Carneades id to walton.yml's.
+// entry records none of its own (nil: each entry's own copy), its id
+// migrations, which map an upstream Carneades id to walton.yml's, and its
+// language's templates, which the game's sentences are unless game/
+// records a difference (D094 (f)).
 type GameSources struct {
 	Formulas   map[string]*Formulas
 	Migrations map[string]string
+	Language   map[string]string
 }
 
 // GameSources are the generator's sources from these sources.
 func (s *Sources) GameSources() GameSources {
-	return GameSources{Formulas: FormulasOf(s.Walton), Migrations: s.Migrations}
+	return GameSources{Formulas: FormulasOf(s.Walton), Migrations: s.Migrations, Language: s.Language}
 }
 
 // GenerateGame makes the game's files from the catalogue's entries (by file
@@ -187,8 +196,9 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 		}
 	}
 
-	// The questions, in their order.
-	questions := yaml.MapSlice{}
+	// The questions, in their order; their records are made once their ask
+	// edges are read.
+	var qorder []GameQuestion
 	qids := map[string]bool{}
 	for _, q := range d.Questions {
 		switch {
@@ -200,14 +210,16 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 			fail("%s/%s: %s has no record", GameDir, GameQuestionsFile, q.ID)
 		default:
 			qids[q.ID] = true
-			questions = append(questions, yaml.MapItem{Key: q.ID, Value: q.Record})
+			qorder = append(qorder, q)
 		}
 	}
 
 	// The ask edges: order.yml's order, each with its entry's locus and
-	// pattern, which must be the scheme's.
+	// pattern, which must be the scheme's, and its question's text there,
+	// the entry's paraphrase with the scheme's variables braced (rule (c)).
 	var ask []interface{}
 	asked := map[GameEdge]bool{}
+	asks := map[string][]askedAt{}
 	for _, a := range d.Order.Ask {
 		g := byID[a.Scheme]
 		switch {
@@ -222,21 +234,38 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 			continue
 		}
 		asked[a] = true
-		var found []*GameCQ
+		var found []*CQ
 		for i := range g.entry.CQs {
 			if q := g.entry.CQs[i].Game; q != nil && q.ID == a.CQ {
-				found = append(found, q)
+				found = append(found, &g.entry.CQs[i])
 			}
 		}
 		if len(found) != 1 {
 			fail("%s: %d questions with the game part %s, not one", g.entry.ID, len(found), a.CQ)
 			continue
 		}
-		q := found[0]
+		c := found[0]
+		q := c.Game
 		if err := g.askRule(q.Locus, q.Pattern); err != nil {
 			fail("%s: %s: %v", g.entry.ID, a.CQ, err)
 			continue
 		}
+		if f := paraphraseFault(c.Paraphrase); f != "" {
+			fail("%s: %s, the game's %s: %s", g.entry.ID, c.ID, a.CQ, f)
+			continue
+		}
+		formula := ""
+		switch q.Locus {
+		case "premise", "exception":
+			formula = g.rebrace(q.Pattern)
+		case "conclusion":
+			var cs []string
+			for _, x := range g.roles["conclusions"] {
+				cs = append(cs, g.rebrace(x))
+			}
+			formula = strings.Join(cs, "; ")
+		}
+		asks[a.CQ] = append(asks[a.CQ], askedAt{Scheme: a.Scheme, Locus: q.Locus, Formula: formula, Text: g.rebrace(c.Paraphrase)})
 		edge := yaml.MapSlice{{Key: "cq", Value: a.CQ}, {Key: "scheme", Value: a.Scheme}, {Key: "locus", Value: q.Locus}}
 		if q.Pattern != "" {
 			edge = append(edge, yaml.MapItem{Key: "pattern", Value: g.rebrace(q.Pattern)})
@@ -274,7 +303,33 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 		}
 	}
 
-	// core.yml: the template with each marker replaced by its scheme's block.
+	// The questions' records: GameDir's, with the text and the effect the
+	// ask edges give (rules (a) to (c)); then the role schemes (rule (d)).
+	questions := yaml.MapSlice{}
+	for _, q := range qorder {
+		at := asks[q.ID]
+		if len(at) == 0 {
+			fail("%s/%s: %s is asked by no game scheme, so it has no text: its entries' paraphrase", GameDir, GameQuestionsFile, q.ID)
+			continue
+		}
+		rec, err := questionRecord(q.ID, q.Record, at[0].Text, at[0].Locus)
+		if err != nil {
+			fail("%s/%s: %v", GameDir, GameQuestionsFile, err)
+			continue
+		}
+		questions = append(questions, yaml.MapItem{Key: q.ID, Value: rec})
+	}
+	errs = append(errs, questionFaults(asks)...)
+	backs := map[string][]string{}
+	for _, b := range d.Order.Backup {
+		if backed[b] && !in(backs[b.Scheme], b.CQ) {
+			backs[b.Scheme] = append(backs[b.Scheme], b.CQ)
+		}
+	}
+	errs = append(errs, roleFaults(schemes, byID, asks, backs)...)
+
+	// core.yml: the template with each marker replaced by its scheme's
+	// block, and the language's marker by its sentences (rule (e)).
 	core, used, err := fillCore(d.CoreTemplate, byCID)
 	if err != nil {
 		fail("%s/%s: %v", GameDir, GameCoreTemplate, err)
@@ -283,6 +338,9 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 			if !used[g.cid] {
 				fail("%s/%s has no marker for %s (%s)", GameDir, GameCoreTemplate, g.cid, g.id)
 			}
+		}
+		if core, err = fillLanguage(core, src.Language, d.Language); err != nil {
+			fail("the game's sentences (%s/%s, %s/%s): %v", GameDir, GameCoreTemplate, GameDir, GameLanguageFile, err)
 		}
 	}
 	if len(errs) > 0 {
@@ -356,10 +414,15 @@ func GameFromCatalogue(root, dir string) (*GameGen, error) {
 // entries are made from what the catalogue says (step C5.1's switch).
 func WithGame(f Files, dir string) (Files, *GameGen, error) {
 	var w struct {
-		Schemes []Scheme `yaml:"argument_schemes"`
+		Schemes  []Scheme          `yaml:"argument_schemes"`
+		Language map[string]string `yaml:"language"`
 	}
 	if err := yaml.Unmarshal(f.Walton, &w); err != nil {
 		return f, nil, fmt.Errorf("walton.yml: %v", err)
+	}
+	language := map[string]string{}
+	for k, v := range w.Language {
+		language[k] = strings.TrimSpace(v) // as Sources reads it
 	}
 	var mig struct {
 		Schemes map[string]string `json:"schemes"`
@@ -383,7 +446,7 @@ func WithGame(f Files, dir string) (Files, *GameGen, error) {
 	if err != nil {
 		return f, nil, err
 	}
-	g, err := GenerateGame(entries, d, GameSources{Formulas: FormulasOf(w.Schemes), Migrations: mig.Schemes})
+	g, err := GenerateGame(entries, d, GameSources{Formulas: FormulasOf(w.Schemes), Migrations: mig.Schemes, Language: language})
 	if err != nil {
 		return f, nil, err
 	}

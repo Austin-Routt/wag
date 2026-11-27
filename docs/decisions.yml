@@ -2656,7 +2656,7 @@ decisions:
       and the agent are compared as atoms; the board and the terminal ask
       whose a new action is; a claim is written with its action's id; a
       discussion imported from Kialo has a profile.
-    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26, completed 2026-11-27); to apply: step C5 (C5.1 now; C5.2 after D095)"
+    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26, completed 2026-11-27); applied: C5.1 (2026-11-26); C5.2 steps 1 to 5 (roles, the profile, the question protocol, the generator's rules, the switch: 2026-11-27); to apply: C5.2 steps 6 to 8 (the replays, item F, the review)"
 
 - id: D095
   title: Step C5's departures from decided wording
@@ -2729,7 +2729,7 @@ decisions:
       profile. (4) D093 (e), (f) and (g) are confirmed as applied, with tests
       for a wrong actor, action, goal and context, unrelated consequences, and
       surviving independent support.
-    recorded: "docs/c5-game.md (version 4); (3)'s answer scheme applied 2026-11-26: docs/proposals/D095.yml (version 2, after an independent review; 2a after the check of its application), walton.yml through edits.py (FINDING_OUT_D095), families.json, positions.json, the catalogue entries, docs/kialo-batch2 (guidelines §3.1 and OC15, rule cases OC15-c, OC15-f and OC15-g, two retired wordings, validate.py's R11); the rest at step C5.2"
+    recorded: "docs/c5-game.md (version 4); (3)'s answer scheme applied 2026-11-26: docs/proposals/D095.yml (version 2, after an independent review; 2a after the check of its application), walton.yml through edits.py (FINDING_OUT_D095), families.json, positions.json, the catalogue entries, docs/kialo-batch2 (guidelines §3.1 and OC15, rule cases OC15-c, OC15-f and OC15-g, two retired wordings, validate.py's R11); (1) and (3) in the game at step C5.2's switch, 2026-11-27 (one question at one formula, CQ:bad_outweighs at the outweighing exception; CQ:worth_finding_out_first at both bridges' exception, refusing Other; finding_out_first plays as AS:finding_out_first); item F's tests of the rest at step C5.2's step 7"
 
 # --- Decided ------------------------------------------------------------------
 

@@ -1,17 +1,13 @@
 # WAG Core Argumentation Schemes for Carneades-4
 #
-# This file combines 7 schemes from the Kurtuldu YAML collection into a
-# single loadable file. These are the Minimum Viable NASCQ subset centered
-# on practical reasoning.
+# The game's schemes (docs/c5-game.md): each game scheme's block is made
+# from its catalogue entry, with walton.yml's formulas unless the entry
+# records its own (analogy and sign, until their families' steps), and the
+# language's sentences are walton.yml's templates or the ones game/language.yml
+# records, with the reason each differs. Wyner's credible-source scheme is kept
+# for games recorded before 2026-10-13.
 #
-# Source YAML files and their contributions:
-#   3_practical-reasoning.yml    → practical_reasoning1, positive_consequences
-#   2_argumen-from-commitment.yml → positive_value
-#   4_abductive-reasoning.yml    → sign
-#   1_arguments-from-position-to-know.yml → credible_source, position_to_know
-#   1_arguments-based-on-cases.yml → analogy
-#
-# Variable names are preserved exactly from the originals so that
+# Variable names are preserved exactly from the formulas so that
 # InstantiateScheme substitution works correctly.
 
 language:
@@ -20,93 +16,7 @@ language:
   # double quotes, so these templates need not fit every phrase a player
   # types. A key "¬p/n" is the sentence for the negation of p/n; without one
   # a negation reads "it is not the case that …".
-  # --- practical_reasoning1 ---
-  current_circumstances/1: "The current situation is %s."
-  ¬current_circumstances/1: "The current situation is not %s."
-  would_bring_about/3: "Doing %s in the situation %s would lead to %s."
-  ¬would_bring_about/3: "Doing %s in the situation %s would not lead to %s."
-  would_be_realized/2: "The goal %s would be achieved in %s."
-  ¬would_be_realized/2: "The goal %s would not be achieved in %s."
-  would_promote_value/2: "Achieving %s would promote the value %s."
-  ¬would_promote_value/2: "Achieving %s would not promote the value %s."
-  should_be_performed/1: "%s should be done."
-  ¬should_be_performed/1: "%s should not be done."
-  legitimate_value/1: "%s is a legitimate value."
-  ¬legitimate_value/1: "%s is not a legitimate value."
-  worthy_goal/1: "%s is a worthy goal."
-  ¬worthy_goal/1: "%s is not a worthy goal."
-  possible/1: "%s is possible."
-  ¬possible/1: "%s is not possible."
-  bring_about_more_effectively/2: "Another action would lead to %s more effectively than %s."
-  ¬bring_about_more_effectively/2: "No other action would lead to %s more effectively than %s."
-  realize_more_effectively/2: "Another action would achieve %s more effectively than %s."
-  ¬realize_more_effectively/2: "No other action would achieve %s more effectively than %s."
-  promote_more_effectively/2: "Another action would promote %s more effectively than %s."
-  ¬promote_more_effectively/2: "No other action would promote %s more effectively than %s."
-  side_effects/2: "Doing %s in the situation %s would have bad side effects."
-  ¬side_effects/2: "Doing %s in the situation %s would have no bad side effects."
-  # --- practical_reasoning2 (also uses the predicates above) ---
-  intervening_actions/2: "Something else would have to happen, or be done, before %s could achieve %s."
-  ¬intervening_actions/2: "Nothing else would have to happen, or be done, before %s could achieve %s."
-  incompatible_goal/1: "The goal %s conflicts with other goals that matter more."
-  ¬incompatible_goal/1: "The goal %s conflicts with no goal that matters more."
-  # --- positive_consequences, negative_consequences ---
-  brings_about/2: "Doing %s brings about %s."
-  ¬brings_about/2: "Doing %s does not bring about %s."
-  good/1: "%s is good."
-  ¬good/1: "%s is not good."
-  bad/1: "%s is bad."
-  ¬bad/1: "%s is not bad."
-  # --- positive_value ---
-  judged_positive_value/2: "%s is a positive value for %s."
-  ¬judged_positive_value/2: "%s is not a positive value for %s."
-  positive_affects/3: "%s supports the goal %s for %s."
-  ¬positive_affects/3: "%s does not support the goal %s for %s."
-  reason_retaining_goal/2: "%s is a reason to keep the goal %s."
-  ¬reason_retaining_goal/2: "%s is no reason to keep the goal %s."
-  # --- sign ---
-  finding_true/1: "%s is observed."
-  ¬finding_true/1: "%s is not observed."
-  indicated_true/2: "%s is indicated when %s holds."
-  ¬indicated_true/2: "%s is not indicated when %s holds."
-  true_in_situation/1: "%s holds in the current situation."
-  ¬true_in_situation/1: "%s does not hold in the current situation."
-  strong_correlation/2: "%s and %s are strongly correlated."
-  ¬strong_correlation/2: "%s and %s are not strongly correlated."
-  # --- credible_source ---
-  credible_source/2: "%s is a credible expert on %s."
-  ¬credible_source/2: "%s is not a credible expert on %s."
-  asserts/2: "%s says that %s."
-  ¬asserts/2: "%s does not say that %s."
-  in_domain/2: "%s is a matter of %s."
-  ¬in_domain/2: "%s is not a matter of %s."
-  biased/1: "%s is biased."
-  ¬biased/1: "%s is not biased."
-  dishonest/1: "%s is dishonest."
-  ¬dishonest/1: "%s is honest."
-  other_credible_sources_disagree/1: "Other credible sources dispute %s."
-  ¬other_credible_sources_disagree/1: "No other credible source disputes %s."
-  # --- expert_opinion (also asserts/2, in_domain/2) ---
-  expert/2: "%s is an expert in %s."
-  ¬expert/2: "%s is not an expert in %s."
-  untrustworthy/1: "%s is not a trustworthy source."
-  ¬untrustworthy/1: "%s is a trustworthy source."
-  inconsistent_with_other_experts/1: "Other experts disagree that %s."
-  ¬inconsistent_with_other_experts/1: "Other experts agree that %s."
-  based_on_evidence/1: "%s, and this is based on evidence."
-  ¬based_on_evidence/1: "%s, but this is not based on evidence."
-  # --- position_to_know ---
-  position_to_know/2: "%s is in a position to know about %s."
-  ¬position_to_know/2: "%s is not in a position to know about %s."
-  # --- analogy ---
-  similar_case/1: "%s is a similar case."
-  ¬similar_case/1: "%s is not a similar case."
-  in_case/2: "%s is true in the case of %s."
-  ¬in_case/2: "%s is not true in the case of %s."
-  relevant_differences/1: "The case of %s differs in relevant ways."
-  ¬relevant_differences/1: "The case of %s does not differ in relevant ways."
-  more_on_point/2: "%s is false in a case more on point than %s."
-  ¬more_on_point/2: "%s is not false in any case more on point than %s."
+  # @language
 
 argument_schemes:
   # @scheme practical_reasoning1
@@ -150,3 +60,26 @@ argument_schemes:
   # @scheme position_to_know
 
   # @scheme analogy
+
+  # The modal variants (D008): an action that may bring about a consequence.
+  # Their conclusions bear on the decision only through a bridge.
+  # @scheme positive_consequences_modal
+
+  # @scheme negative_consequences_modal
+
+  # The bridges (D008, refined 2026-11-25): from a possible consequence to the
+  # action, when its chance matters enough to the decision; a modal argument
+  # supports their first premise, and their exception is shared (D053).
+  # @scheme bridge_from_possible_good
+
+  # @scheme bridge_from_possible_harm
+
+  # The answer schemes (D075): each concludes the exception it answers and is
+  # offered only as that answer (D094 (g)).
+  # @scheme bad_outweighs_good
+
+  # @scheme good_outweighs_bad
+
+  # @scheme better_means
+
+  # @scheme finding_out_first

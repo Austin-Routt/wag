@@ -3,14 +3,11 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
 
-	"github.com/yourorg/wag/data"
 	"github.com/yourorg/wag/internal/game"
-	"gopkg.in/yaml.v2"
 )
 
 // A model player's move declares actions and records a comparison
@@ -125,57 +122,18 @@ func TestNewGameNullCaseAndSituation(t *testing.T) {
 // The preview validates a move as a turn does (W-d): an agent place left to
 // the game, as the board leaves it, previews as the move plays.
 func TestPreviewAppliesTheProfile(t *testing.T) {
-	var schemes map[string]json.RawMessage
-	if err := json.Unmarshal(data.SchemesJSON, &schemes); err != nil {
-		t.Fatal(err)
-	}
-	schemes["AS:pr_agent"] = json.RawMessage(`{"carneades_id":"pr_agent","name":"Practical Reasoning of an Agent","semantic_type":"action",
-		"base_weight":0.7,"variables":{"A":{"type":"action"},"G":{"type":"goal"},"P":{"type":"agent"}},
-		"premise_templates_en":["{P} has the goal {G}","Doing {A} brings about {G}"],"conclusion_template_en":"{A} should be done"}`)
-	var edges map[string][]json.RawMessage
-	if err := json.Unmarshal(data.EdgesJSON, &edges); err != nil {
-		t.Fatal(err)
-	}
-	edges["ask_edges"] = append(edges["ask_edges"], json.RawMessage(
-		`{"cq":"CQ:likelihood","scheme":"AS:pr_agent","locus":"premise","pattern":"brings_about({A},{G})"}`))
-	sb, _ := json.Marshal(schemes)
-	eb, _ := json.Marshal(edges)
-	var core yaml.MapSlice
-	if err := yaml.Unmarshal(data.CoreYAML, &core); err != nil {
-		t.Fatal(err)
-	}
-	for i, kv := range core {
-		switch kv.Key {
-		case "argument_schemes":
-			core[i].Value = append(kv.Value.([]interface{}), yaml.MapSlice{{Key: "id", Value: "pr_agent"},
-				{Key: "variables", Value: []string{"A", "G", "P"}},
-				{Key: "premises", Value: []string{"goal_of_agent(P,G)", "brings_about(A,G)"}},
-				{Key: "conclusions", Value: []string{"should_be_performed(A)"}}})
-		case "language":
-			core[i].Value = append(kv.Value.(yaml.MapSlice), yaml.MapItem{Key: "goal_of_agent/2", Value: "%s has the goal %s."})
-		}
-	}
-	yb, err := yaml.Marshal(core)
-	if err != nil {
-		t.Fatal(err)
-	}
-	s, err := New(Data{YAML: yb, Schemes: sb, CQs: data.CQsJSON, Edges: eb, Contexts: data.ContextsJSON}, "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	ts := httptest.NewServer(s.Handler())
-	defer ts.Close()
+	ts := newTestServer(t)
 	var st State
-	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Claim: "should_be_performed(tax_meat)",
+	if code := call(t, ts, "POST", "/api/games", NewGameRequest{Mode: "debate", Claim: "should_be_performed(carbon_tax)",
 		Seats: []Seat{{Name: "Ann", Kind: "human"}, {Name: "Bob", Kind: "human"}}}, &st); code != 200 {
 		t.Fatalf("new game: %d", code)
 	}
-	move := map[string]interface{}{"type": "support", "scheme_id": "AS:pr_agent",
-		"variable_bindings": map[string]string{"A": "tax_meat", "G": "lower_emissions"}}
+	move := map[string]interface{}{"type": "support", "scheme_id": "AS:practical_reasoning", // P left to the game, as the board sends it
+		"variable_bindings": map[string]string{"A": "carbon_tax", "S1": "status quo", "S2": "lower emissions", "G": "clean air", "V": "health"}}
 	var pv Preview
 	call(t, ts, "POST", "/api/games/"+st.ID+"/preview", map[string]interface{}{"action": move}, &pv)
-	if pv.Error != "" {
-		t.Fatalf("the preview refuses a move the game accepts: %q", pv.Error)
+	if pv.Error != "" || !strings.Contains(strings.Join(pv.Premises, " "), "One of the goals of ‘decider’ is ‘clean air’.") {
+		t.Fatalf("the preview: %q %v", pv.Error, pv.Premises)
 	}
 	if mr := post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": move}); mr.Result["accepted"] != true {
 		t.Fatalf("the move: %v", mr.Result["error"])

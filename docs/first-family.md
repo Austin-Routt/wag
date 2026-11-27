@@ -4,7 +4,7 @@
 
 ## The slice
 
-The first family is two of the scheme families (`wag/data/schemes/families.json`): **F10, practical reasoning**, and **F15, consequences, alternatives, threat and fear**. Together they have 39 schemes in `walton.yml`, three of them the answer schemes C2 added, five the schemes C3 added (the modal variants of 33.1 and 33.2, their two bridges, and the argument from what happens anyway) and five the schemes C4 added (the negative and graded readings of ends and means, the commitment form of sunk costs, and two bridges from conclusions that name an agent), and one the answer scheme for the bridges' exception that D095 added (`finding_out_first`). The game plays four of them.
+The first family is two of the scheme families (`wag/data/schemes/families.json`): **F10, practical reasoning**, and **F15, consequences, alternatives, threat and fear**. Together they have 39 schemes in `walton.yml`, three of them the answer schemes C2 added, five the schemes C3 added (the modal variants of 33.1 and 33.2, their two bridges, and the argument from what happens anyway) and five the schemes C4 added (the negative and graded readings of ends and means, the commitment form of sunk costs, and two bridges from conclusions that name an agent), and one the answer scheme for the bridges' exception that D095 added (`finding_out_first`). The game plays twelve of them since step C5.2 (2026-11-27, [c5-game.md](c5-game.md)): practical reasoning's two forms, the consequences and their modal variants, the two bridges, and the four answer schemes.
 
 | Family | Scheme | Compendium | In the game | Native diagnostics | Decisions still to apply |
 |---|---|---|---|---|---|

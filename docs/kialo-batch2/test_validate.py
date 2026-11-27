@@ -36,6 +36,13 @@ ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs): ')
 WALTON_OF_FORMAT1 = 'bb1edbcc69536bad04dc33ce8e8c3578d3a610e9abb6fadf1ea42d67d1badf42'
 with open(os.path.join(DOC, 'format1', 'walton.yml'), 'rb') as fh:
     WALTON_FORMAT1_COPY = hashlib.sha256(fh.read()).hexdigest()
+# The game's NASCQ files the format-1 gold was made with (WAG 96c3c5a), which
+# validate.py reads for a format-1 file from the frozen data of 2026-10-15 to
+# step C5.1's switch (step C5.2 asks questions where they asked none).
+REPO = os.path.normpath(os.path.join(DOC, '..', '..'))
+NASCQ_OF_FORMAT1 = {'schemes.json': '8616f56cde01fbb4372adb745410f7766cfda756889a4ce422d5979a8cb398b5',
+                    'critical_questions.json': 'cbc86ff8be867a5ae21376da4403e566306e9c294e0fb1255ecb133720ab5227',
+                    'edges.json': '6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8'}
 
 
 def run(gold, case=None, pin=True, items=None):
@@ -229,6 +236,69 @@ class Rules(unittest.TestCase):
         self.assertIn('format 1', out)
         self.assertEqual((code, errors), (0, []), out)
 
+    def test_the_format1_nascq_is_the_one_it_was_made_with(self):
+        # A kept version is checked against the game's questions it was made
+        # with: the current ones ask CQ:bad_outweighs and CQ:good_outweighs
+        # where the format-1 gold names the book's questions (13292.127,
+        # 13292.43), so the format-1 gold passing shows which are read.
+        for name, want in NASCQ_OF_FORMAT1.items():
+            with open(os.path.join(REPO, 'wag', 'data', 'frozen', 'e7141ec8dea379bc', 'nascq', name), 'rb') as fh:
+                self.assertEqual(hashlib.sha256(fh.read()).hexdigest(), want, name)
+
+    # R16 (since step C5.2): an instance names the game's scheme for its
+    # walton.yml scheme (wag_id), or null when the game plays none.
+    def test_r16_wag_id_of_a_scheme_the_game_plays(self):
+        for wag in (None, 'AS:bridge_possible_good'):
+            g = copy.deepcopy(GOLD)
+            inst(g, '13292.9#4')['scheme']['wag_id'] = wag
+            self.fails(g, '13292.9', ['R16'], f"13292.9#4 names the game's scheme {wag!r}, but the game plays "
+                       'bridge_from_possible_harm as AS:bridge_possible_harm')
+
+    def test_r16_wag_id_of_a_scheme_the_game_does_not_play(self):
+        g = copy.deepcopy(GOLD)
+        inst(g, '13292.9#2')['scheme']['wag_id'] = 'AS:consequences'
+        self.fails(g, '13292.9', ['R16'], 'but the game plays cause_to_effect_modal with none (null)')
+
+    # R2 for a challenge (since step C5.2): where the game asks questions at
+    # its formula, it names one of them; elsewhere, one the game asks of the
+    # scheme, or none when the game plays no scheme for it.
+    def test_r2_challenge_another_question_than_the_game_asks_there(self):
+        g = copy.deepcopy(GOLD)
+        c = next(c for c in item(g, '13292.108')['challenges'] if c['wag_cq'] == 'CQ:bad_outweighs')
+        c['wag_cq'] = 'CQ:side_effect'
+        self.fails(g, '13292.108', ['R2'], "names the game's CQ:side_effect, but the game asks ['CQ:bad_outweighs'] there")
+
+    def test_r2_challenge_no_question_where_the_game_asks_one(self):
+        g = copy.deepcopy(GOLD)
+        c = next(c for c in item(g, '13292.9')['challenges'] if c['wag_cq'] == 'CQ:modal_evidence')
+        c['wag_cq'] = None
+        self.fails(g, '13292.9', ['R2'], "names no question of the game, but the game asks ['CQ:modal_evidence', "
+                   "'CQ:modal_likelihood'] there")
+
+    def test_r2_challenge_at_a_conclusion(self):
+        g = copy.deepcopy(GOLD)
+        c = next(c for c in item(g, '13292.7')['challenges'] if c['wag_cq'] == 'CQ:opposite_consequences')
+        c['wag_cq'] = 'CQ:likelihood'
+        self.fails(g, '13292.7', ['R2'], "names the game's CQ:likelihood, but the game asks ['CQ:opposite_consequences'] there")
+        c['wag_cq'] = None
+        self.fails(g, '13292.7', ['R2'], "names no question of the game, but the game asks ['CQ:opposite_consequences'] there")
+
+    def test_r2_challenge_a_question_the_game_does_not_ask_of_the_scheme(self):
+        # The game's analogy asks at formulas of its own (relevant_differences,
+        # more_on_point), so at walton.yml's it cannot place the question, but
+        # it is one the game asks of the analogy, as the gold's are.
+        g = copy.deepcopy(GOLD)
+        c = next(c for c in item(g, '13292.61')['challenges'] if c['wag_cq'] == 'CQ:difference')
+        c['wag_cq'] = 'CQ:likelihood'
+        self.fails(g, '13292.61', ['R2'], "names the game's CQ:likelihood, which the game does not ask of AS:analogy")
+
+    def test_r2_challenge_of_a_scheme_the_game_does_not_play(self):
+        g = copy.deepcopy(GOLD)
+        f = inst(g, '13292.9#3')['premises'][2]['formula']
+        item(g, '13292.9')['challenges'].append({'cq': '28 CQ3', 'wag_cq': 'CQ:likelihood', 'type': 'causal interference',
+                                                 'instance': '13292.9#3', 'formula': f})
+        self.fails(g, '13292.9', ['R2'], 'but the game plays cause_to_effect_modal with no scheme')
+
     # R8: a claim at an exception concludes it.
     def test_r8_an_argument_for_another_course(self):
         g = copy.deepcopy(GOLD)
@@ -389,7 +459,7 @@ class Rules(unittest.TestCase):
             it = item(g, '13292.208')
             frag = copy.deepcopy(parent)
             frag['id'] = next_id(it)
-            frag['scheme'] = {'walton_id': 'better_means', 'compendium': None, 'wag_id': None, 'fit': fit,
+            frag['scheme'] = {'walton_id': 'better_means', 'compendium': None, 'wag_id': 'AS:better_means', 'fit': fit,
                               'confidence': 0.5, 'alternatives': []}
             frag.pop('comparison', None)
             it['instances'] = [frag] + [dict(x, primary=False) for x in it['instances']]
@@ -574,8 +644,10 @@ class Rules(unittest.TestCase):
         # Nor can a possible consequence fill the categorical premise.
         g = copy.deepcopy(GOLD)
         ins = next(x for x in item(g, '13292.174')['instances'] if x['scheme']['walton_id'] == 'negative_consequences_modal')
-        ins['scheme']['walton_id'] = 'negative_consequences'
-        self.fails(g, '13292.174', ['negative_consequences'], 'negative_consequences premises differ from walton.yml')
+        ins['scheme'].update(walton_id='negative_consequences', wag_id='AS:negative_consequences')
+        # (Its challenges name the modal questions, which the categorical
+        # scheme is not asked: R2 says so too.)
+        self.fails(g, '13292.174', ['negative_consequences', 'R2'], 'negative_consequences premises differ from walton.yml')
 
     def test_r13_the_wrong_conclusion(self):
         g = copy.deepcopy(GOLD)

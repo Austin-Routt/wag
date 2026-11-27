@@ -21,7 +21,7 @@ import (
 // (the order of the offered moves), and core.yml's template.
 const GameDir = "game"
 
-// The files of GameDir.
+// The files of GameDir (and GameLanguageFile).
 const (
 	GameQuestionsFile = "questions.yml"
 	GameOrderFile     = "order.yml"
@@ -60,9 +60,15 @@ type GameData struct {
 	Questions []GameQuestion
 	Order     GameOrder
 	// CoreTemplate is core.yml with each game scheme's block replaced by
-	// coreMarker and its id: its comments, its language and the schemes
-	// it keeps for old games stay as written.
+	// coreMarker and its id, and its language's sentences by
+	// languageMarker: its comments and the schemes it keeps for old games
+	// stay as written.
 	CoreTemplate string
+	// Language is game/language.yml: the game's sentences that differ from
+	// walton.yml's, with their reasons, and the negations' sentences. The
+	// game's files do not give it back, so --catalogue-gen keeps it as
+	// written.
+	Language GameLanguage
 }
 
 // gameRaw is the game's files read in order (Parse).
@@ -144,13 +150,22 @@ func value(m yaml.MapSlice, key string) interface{} {
 
 // gameData is GameDir's content as the game's files give it.
 func (g *gameRaw) gameData(gameIDs map[string]bool) (*GameData, error) {
-	d := &GameData{Questions: g.questions}
+	d := &GameData{}
+	for _, q := range g.questions {
+		var rec yaml.MapSlice
+		for _, it := range q.Record {
+			if k, _ := it.Key.(string); k != "question_template_en" && k != "caes_mapping" {
+				rec = append(rec, it) // the text and the effect are made (rules (b), (c))
+			}
+		}
+		d.Questions = append(d.Questions, GameQuestion{ID: q.ID, Record: rec})
+	}
 	for _, s := range g.schemes {
 		d.Order.Schemes = append(d.Order.Schemes, s.ID)
 	}
 	d.Order.Ask = g.ask
 	d.Order.Backup = g.backup
-	t, err := coreTemplate(stripCoreHeader(g.coreText), gameIDs)
+	t, err := coreTemplate(languageTemplate(stripCoreHeader(g.coreText)), gameIDs)
 	if err != nil {
 		return nil, err
 	}

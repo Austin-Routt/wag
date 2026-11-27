@@ -1,6 +1,7 @@
 package catalogue
 
 import (
+	"bytes"
 	"encoding/json"
 	"path/filepath"
 	"reflect"
@@ -140,7 +141,7 @@ func TestCatalogueGenTakesWaltonsFormulas(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	stale, err := GenerateGame(entries, d, GameSources{Migrations: s.Migrations})
+	stale, err := GenerateGame(entries, d, GameSources{Migrations: s.Migrations, Language: s.Language})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -159,15 +160,25 @@ func TestCatalogueGenTakesWaltonsFormulas(t *testing.T) {
 }
 
 // The check requires the game's files to be what the catalogue makes, byte
-// for byte: the files frozen before the switch, with the same values, are
-// four errors, and nothing else is.
+// for byte: the committed files laid out otherwise, with the same values,
+// are four errors, and nothing else is.
 func TestCheckRequiresTheGeneratedBytes(t *testing.T) {
 	f, err := ReadFiles(root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	frozen := readGameFiles(t, filepath.Join(root, frozenPreC5))
-	f.Core, f.Schemes, f.CQs, f.Edges = frozen[GameCorePath], frozen[GameSchemesPath], frozen[GameCQsPath], frozen[GameEdgesPath]
+	relaid := map[string][]byte{}
+	for p, b := range readGameFiles(t, filepath.Join(root, GameDataDir)) {
+		if strings.HasSuffix(p, ".json") {
+			relaid[p] = bytes.ReplaceAll(b, []byte("\n  "), []byte("\n    ")) // deeper indentation
+		} else {
+			relaid[p] = bytes.ReplaceAll(b, []byte("\n    - "), []byte("\n      - ")) // deeper lists
+		}
+		if bytes.Equal(relaid[p], b) {
+			t.Fatalf("%s is not laid out otherwise", p)
+		}
+	}
+	f.Core, f.Schemes, f.CQs, f.Edges = relaid[GameCorePath], relaid[GameSchemesPath], relaid[GameCQsPath], relaid[GameEdgesPath]
 	src, err := Parse(f)
 	if err != nil {
 		t.Fatal(err)

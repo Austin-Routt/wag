@@ -10,10 +10,17 @@ they are since, so that a later decision does not fail it:
   on it. `test_validate.py` checks that it is that walton.yml (its hash), and runs its format-1
   tests on it.
 
-The other inputs a format-1 check reads (`items.json`, `lexicon.json`, `links.json`, the game's
-NASCQ) have not changed in ways that touch it: `links.json` gained two links on 2026-11-25, and the
-format-1 gold passes with them. When one does change in a way that fails it, its copy is kept here
-too.
+- The game's NASCQ (`schemes.json`, `critical_questions.json`, `edges.json`): since step C5.2's switch
+  (2026-11-27) the game asks questions at formulas where it asked none, which R2 would ask a kept
+  version to name (13292.127 and 13292.43 name the book's questions). For a format-1 file
+  `validate.py` reads the files frozen in `wag/data/frozen/e7141ec8dea379bc`, the game's data of
+  2026-10-15 to step C5.1's switch: the NASCQ files of WAG 96c3c5a, where the format-1 gold was
+  made, byte for byte. That folder is never edited, so no copy is kept here; `test_validate.py`
+  checks the three files' hashes.
+
+The other inputs a format-1 check reads (`items.json`, `lexicon.json`, `links.json`) have not
+changed in ways that touch it: `links.json` gained two links on 2026-11-25, and the format-1 gold
+passes with them. When one does change in a way that fails it, its copy is kept here too.
 
 What the copy covers: `validate.py` reads it for every format-1 file, the format-1 gold (made with
 it) and the annotators' files of 2026-10-13 (made with an earlier `walton.yml`, as before). The Go

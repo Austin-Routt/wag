@@ -80,7 +80,7 @@ func TestStaticAndMeta(t *testing.T) {
 		CQs     []CQMeta `json:"cqs"`
 	}
 	call(t, ts, "GET", "/api/meta", nil, &meta)
-	if len(meta.Schemes) != 10 || len(meta.CQs) != 27 { // 9 Walton schemes and Other; 24 questions, the challenge and Other's two
+	if len(meta.Schemes) != 18 || len(meta.CQs) != 37 { // 17 game schemes and Other; 34 questions, the challenge and Other's two
 		t.Fatalf("%d schemes, %d questions", len(meta.Schemes), len(meta.CQs))
 	}
 	for _, s := range meta.Schemes {
@@ -104,7 +104,7 @@ func TestGameFlow(t *testing.T) {
 		Declare:          []nascq.ActionDecl{{ID: "carbon tax", Actor: "decider"}}}
 	var p Preview
 	call(t, ts, "POST", "/api/games/"+st.ID+"/preview", map[string]interface{}{"action": pr}, &p)
-	if !p.OK || len(p.Premises) != 7 || len(p.Changes) == 0 {
+	if !p.OK || len(p.Premises) != 8 || len(p.Changes) == 0 { // the agent's goal premise since step C5.2
 		t.Fatalf("preview: %+v", p)
 	}
 	for _, x := range append(append([]string{p.Conclusion}, p.Premises...), p.Changes[0].Text) {
@@ -119,21 +119,21 @@ func TestGameFlow(t *testing.T) {
 	}
 	var opts []MoveOption
 	call(t, ts, "GET", "/api/games/"+st.ID+"/moves?target=a1", nil, &opts)
-	// Its five critical questions, and the generic premise question about
-	// each of the six premises none of them is about (not possible(A),
-	// which the Possibility Question is about).
+	// Its six critical questions, and the generic premise question about
+	// each of the seven premises none of them is about (not
+	// possible_bring_about(P,A), which the Possibility Question is about).
 	generic := map[string]bool{}
 	for _, o := range opts {
 		if o.CQ == nascq.CQPremiseAcceptable {
 			generic[o.Stmt] = true
 		}
 	}
-	if len(opts) != 11 || len(generic) != 6 || generic["possible(carbon_tax)"] || !generic["would_bring_about(carbon_tax,status_quo,lower_emissions)"] {
+	if len(opts) != 13 || len(generic) != 7 || generic["possible_bring_about(decider,carbon_tax)"] || !generic["would_bring_about(carbon_tax,status_quo,lower_emissions)"] {
 		t.Fatalf("%d move options on a1, the generic question about %v", len(opts), generic)
 	}
 	q := nascq.ProposedAction{Type: "question", AnswersCQID: "CQ:possibility", TargetArgID: "a1"}
 	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": q})
-	if len(mr.State.Questions) != 1 || mr.State.Statements["possible(carbon_tax)"].Label != "out" {
+	if len(mr.State.Questions) != 1 || mr.State.Statements["possible_bring_about(decider,carbon_tax)"].Label != "out" {
 		t.Fatalf("question: %+v", mr.State.Questions)
 	}
 	cq := mr.State.Arguments["a1"].CQs
@@ -147,7 +147,7 @@ func TestGameFlow(t *testing.T) {
 	d := nascq.ProposedAction{Type: "support", AnswersCQID: "CQ:possibility", TargetArgID: "a1", SchemeID: nascq.OtherSchemeID,
 		VariableBindings: map[string]string{"P1": "Parliament has a majority for it."}}
 	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": d})
-	if mr.Result["accepted"] != true || mr.State.Statements["possible(carbon_tax)"].Label != "in" || len(mr.State.Questions) != 0 {
+	if mr.Result["accepted"] != true || mr.State.Statements["possible_bring_about(decider,carbon_tax)"].Label != "in" || len(mr.State.Questions) != 0 {
 		t.Fatalf("defence: %+v", mr.Result)
 	}
 	if code := call(t, ts, "POST", "/api/games/"+st.ID+"/ai", map[string]interface{}{}, nil); code != http.StatusConflict {
@@ -332,7 +332,7 @@ func TestCrossSiteRequestsRefused(t *testing.T) {
 // A game exported by a tester loads, replays move by move, and ends with the
 // labels it had when it was exported.
 func TestLoadReplaysAnExport(t *testing.T) {
-	ts := newTestServer(t)
+	_, ts := newPrevServer(t) // recorded before the switch of step C5.2
 	b, err := os.ReadFile("testdata/user-game-4.json")
 	if err != nil {
 		t.Fatal(err)
@@ -379,7 +379,7 @@ func TestLoadReplaysAnExport(t *testing.T) {
 	// The export names no scheme data (it predates 13 October 2026), so the
 	// game stays a legacy record: replayed with this data, not taken for a
 	// game played with it, in its state, its export and a load of that.
-	here := Data{YAML: data.CoreYAML, Schemes: data.SchemesJSON, CQs: data.CQsJSON, Edges: data.EdgesJSON}.Hash()
+	here := prevData(t).Hash()
 	if st.Legacy == nil || st.Legacy.ReplayedWith != here {
 		t.Fatalf("legacy: %+v, want replayed with %s", st.Legacy, here)
 	}
@@ -492,7 +492,7 @@ func TestCustomWeights(t *testing.T) {
 // data before 2026-11-22) stops at that move with a reason that names the
 // bridge, and does not send the user to --data, which cannot help (D075).
 func TestLoadBridgedGameSaysWhy(t *testing.T) {
-	ts := newTestServer(t)
+	_, ts := newPrevServer(t) // recorded before the switch of step C5.2
 	b, err := os.ReadFile(filepath.Join("testdata", "bridged-game.json"))
 	if err != nil {
 		t.Fatal(err)

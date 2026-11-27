@@ -223,8 +223,9 @@ func TestReplyEnvelopeAndTraces(t *testing.T) {
 			t.Errorf("the prompt lacks %q", want)
 		}
 	}
-	// s1 is the claim; s2 is the first premise of a1. Bob argues against
-	// it, predicts the claim goes out, and names an alternative.
+	// s1 is the claim; s2 is the first premise of a1 (the agent's goal since
+	// step C5.2). Bob argues against it, predicts the claim goes out, and
+	// names an alternative.
 	r = play("Thinking...\n```json\n" + `{"context":["a1 rests on the circumstances"],"thoughts":["if the circumstances fall, a1 falls"],
 		"summary":"Undermine the circumstances.","expect":[{"stmt":"claim","label":"out"},{"stmt":"s2","label":"in"}],
 		"alternatives":[{"action":{"type":"question","target_arg_id":"a1","answers_cq_id":"CQ:premise_acceptable","target_premise_id":"s2"},"why_not":"a question is weaker"}],
@@ -255,7 +256,7 @@ func TestReplyEnvelopeAndTraces(t *testing.T) {
 		tr.Reasoning.Summary != "Undermine the circumstances." || *tr.Reasoning.Confidence != 0.7 {
 		t.Fatalf("trace: %+v", tr)
 	}
-	if !strings.HasPrefix(tr.Action.TargetStmtID, "current_circumstances(") || tr.Action.Type != "attack" {
+	if !strings.HasPrefix(tr.Action.TargetStmtID, "goal_of_agent(") || tr.Action.Type != "attack" {
 		t.Fatalf("the reference was not resolved: %+v", tr.Action)
 	}
 	if len(tr.ExpectCheck) != 2 || !tr.ExpectCheck[0].OK || tr.ExpectCheck[1].OK || tr.ExpectCheck[1].Actual != "out" {

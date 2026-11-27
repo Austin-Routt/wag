@@ -273,7 +273,7 @@ func TestMergeKeepsWork(t *testing.T) {
 	dir := generate(t, s)
 	e := readEntry(t, dir, "expert_opinion")
 	e.Summary = Text{Text: "Our summary.", Status: "drafted by a model, 2026-10-22"}
-	e.CQs[0].Paraphrase = "How good an expert in D is W?"
+	para := e.CQs[0].Paraphrase // the game's text read back: the game's files stay as they are
 	e.CQs[0].Status = "verified by A. Person, 2026-10-23"
 	e.CQs[0].Game.Text = "stale text"                          // source: refreshed
 	e.CQs[1].Note = "a generated item edited without a status" // still generated: overwritten
@@ -294,7 +294,7 @@ func TestMergeKeepsWork(t *testing.T) {
 	switch {
 	case m.Summary.Text != "Our summary.":
 		t.Error("the drafted summary was lost")
-	case m.CQs[0].Paraphrase != "How good an expert in D is W?" || m.CQs[0].Status != "verified by A. Person, 2026-10-23":
+	case m.CQs[0].Paraphrase != para || m.CQs[0].Status != "verified by A. Person, 2026-10-23":
 		t.Error("the verified question was lost")
 	case m.CQs[0].Game == nil || m.CQs[0].Game.Text == "stale text":
 		t.Error("the game part of a kept question was not refreshed")
@@ -321,6 +321,18 @@ func TestMergeKeepsWork(t *testing.T) {
 	if res.Created+res.Updated != 0 {
 		t.Errorf("a second run changed files: %+v", res)
 	}
+	// A game question's text is its paraphrase (D009): a person who rewords
+	// it changes the game's files, which the check asks to make again.
+	m = readEntry(t, dir, "expert_opinion")
+	m.CQs[0].Paraphrase = "How good an expert in D is W?"
+	writeEntry(t, dir, m)
+	r, _ = Check(dir, s, DefaultOptions())
+	stale := strings.Join(errorsOf(r), "\n")
+	for _, f := range []string{GameCorePath, GameCQsPath} {
+		if !strings.Contains(stale, GameDataDir+"/"+f+": not what the catalogue makes of its game data") {
+			t.Errorf("a reworded game question leaves %s as it was:\n%s", f, stale)
+		}
+	}
 }
 
 // A kept question that took a game question from another keeps it, and the
@@ -332,8 +344,8 @@ func TestMergeMovesGameQuestion(t *testing.T) {
 	g := e.CQs[0].Game // CQ:expertise, matched to 2/CQ1
 	e.CQs[0].Game = nil
 	e.CQs[1].Game = nil
-	e.CQs[1].Game = g // a person moves it to 2/CQ2 ...
-	e.CQs[1].Paraphrase = "Is S in D?"
+	e.CQs[1].Game = g                                                           // a person moves it to 2/CQ2 ...
+	e.CQs[1].Paraphrase = strings.NewReplacer("{", "", "}", "").Replace(g.Text) // with the question's text (D009)
 	e.CQs[1].Status = "verified by A. Person, 2026-10-23"
 	writeEntry(t, dir, e)
 	gen := &Generator{Src: s, Today: "2026-10-22", By: "test"}
@@ -857,11 +869,12 @@ func TestProposalAnswerReferences(t *testing.T) {
 	// A game question of a walton.yml scheme resolves through its ask edge:
 	// CQ:other_means targets practical_reasoning1's realize_more_effectively.
 	p = base()
-	p.Schemes = append(p.Schemes, Scheme{ID: "xg_better", Variables: []string{"A", "G"}, Premises: []string{"xg_means(A,G)"},
-		Conclusions: []string{"realize_more_effectively(G,A)"}})
+	p.Schemes = append(p.Schemes, Scheme{ID: "xg_better", Variables: []string{"A", "G", "P"}, Premises: []string{"xg_means(A,G)", "goal_of_agent(P,G)"},
+		Conclusions: []string{"realize_more_effectively(P,G,A)"}})
 	p.Examples = append(p.Examples, ProposalExample{Scheme: "xg_better", Title: "g1", Text: "t", Use: "answer", Answers: "CQ:other_means",
-		Bindings: map[string]string{"A": "the plan", "G": "the aim"},
-		AnswerTo: &AnswerTo{Scheme: "practical_reasoning1", Question: "CQ:other_means", Polarity: "attack", Bindings: map[string]string{"G": "the aim", "A": "the plan"}}})
+		Bindings: map[string]string{"A": "the plan", "G": "the aim", "P": "the council"},
+		AnswerTo: &AnswerTo{Scheme: "practical_reasoning1", Question: "CQ:other_means", Polarity: "attack",
+			Bindings: map[string]string{"G": "the aim", "A": "the plan", "P": "the council"}}})
 	if e := errs(p); len(e) != 0 {
 		t.Errorf("an answer to a game question: %v", e)
 	}
@@ -877,11 +890,11 @@ func TestProposalAnswerReferences(t *testing.T) {
 	if e := errs(p); !strings.Contains(strings.Join(e, "\n"), `must conclude bad_outweighs("the plan","the aim")`) {
 		t.Errorf("a walton/ question of a walton.yml scheme: %v", e)
 	}
-	// A question about the argument itself (evidence) has no formula to
-	// compare.
+	// A question about the argument itself (sign's CQ:other_event) has no
+	// formula to compare.
 	p = base()
 	x = last(p)
-	x.AnswerTo = &AnswerTo{Scheme: "positive_consequences", Question: "CQ:evidence", Polarity: "attack"}
+	x.AnswerTo = &AnswerTo{Scheme: "sign", Question: "CQ:other_event", Polarity: "attack"}
 	if e := errs(p); len(e) != 0 {
 		t.Errorf("an answer to a question about the argument: %v", e)
 	}

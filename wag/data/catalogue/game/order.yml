@@ -12,10 +12,20 @@ schemes:
 - AS:analogy
 - AS:practical_reasoning_goal
 - AS:negative_consequences
+- AS:consequences_modal
+- AS:negative_consequences_modal
+- AS:bridge_possible_good
+- AS:bridge_possible_harm
+- AS:bad_outweighs_good
+- AS:good_outweighs_bad
+- AS:better_means
+- AS:finding_out_first
 ask_edges:
 - cq: CQ:other_goals
   scheme: AS:practical_reasoning
 - cq: CQ:other_means
+  scheme: AS:practical_reasoning
+- cq: CQ:bad_outweighs
   scheme: AS:practical_reasoning
 - cq: CQ:side_effect
   scheme: AS:practical_reasoning
@@ -23,11 +33,17 @@ ask_edges:
   scheme: AS:practical_reasoning
 - cq: CQ:best_means
   scheme: AS:practical_reasoning
+- cq: CQ:likelihood
+  scheme: AS:consequences
 - cq: CQ:evidence
   scheme: AS:consequences
-- cq: CQ:side_effect
+- cq: CQ:bad_outweighs
   scheme: AS:consequences
-- cq: CQ:likelihood
+- cq: CQ:too_slight
+  scheme: AS:consequences
+- cq: CQ:gain_discounted
+  scheme: AS:consequences
+- cq: CQ:side_effect
   scheme: AS:consequences
 - cq: CQ:conflicting_goals
   scheme: AS:practical_reasoning_goal
@@ -41,15 +57,23 @@ ask_edges:
   scheme: AS:practical_reasoning_goal
 - cq: CQ:intervening_actions
   scheme: AS:practical_reasoning_goal
+- cq: CQ:bad_outweighs
+  scheme: AS:practical_reasoning_goal
 - cq: CQ:side_effect
   scheme: AS:practical_reasoning_goal
 - cq: CQ:likelihood
   scheme: AS:negative_consequences
 - cq: CQ:evidence
   scheme: AS:negative_consequences
+- cq: CQ:good_outweighs
+  scheme: AS:negative_consequences
+- cq: CQ:too_slight
+  scheme: AS:negative_consequences
+- cq: CQ:harm_discounted
+  scheme: AS:negative_consequences
 - cq: CQ:opposite_consequences
   scheme: AS:negative_consequences
-- cq: CQ:likelihood
+- cq: CQ:correlation
   scheme: AS:sign
 - cq: CQ:other_event
   scheme: AS:sign
@@ -71,7 +95,7 @@ ask_edges:
   scheme: AS:position_to_know
 - cq: CQ:field
   scheme: AS:position_to_know
-- cq: CQ:trustworthiness
+- cq: CQ:honesty
   scheme: AS:position_to_know
 - cq: CQ:difference
   scheme: AS:analogy
@@ -83,6 +107,30 @@ ask_edges:
   scheme: AS:values
 - cq: CQ:value_effect
   scheme: AS:values
+- cq: CQ:modal_likelihood
+  scheme: AS:consequences_modal
+- cq: CQ:modal_evidence
+  scheme: AS:consequences_modal
+- cq: CQ:bad_outweighs
+  scheme: AS:consequences_modal
+- cq: CQ:too_slight
+  scheme: AS:consequences_modal
+- cq: CQ:gain_discounted
+  scheme: AS:consequences_modal
+- cq: CQ:modal_likelihood
+  scheme: AS:negative_consequences_modal
+- cq: CQ:modal_evidence
+  scheme: AS:negative_consequences_modal
+- cq: CQ:good_outweighs
+  scheme: AS:negative_consequences_modal
+- cq: CQ:too_slight
+  scheme: AS:negative_consequences_modal
+- cq: CQ:harm_discounted
+  scheme: AS:negative_consequences_modal
+- cq: CQ:worth_finding_out_first
+  scheme: AS:bridge_possible_good
+- cq: CQ:worth_finding_out_first
+  scheme: AS:bridge_possible_harm
 backup_edges:
 - cq: CQ:side_effect
   scheme: AS:sign
@@ -92,3 +140,11 @@ backup_edges:
   scheme: AS:sign
 - cq: CQ:opposite_consequences
   scheme: AS:consequences
+- cq: CQ:bad_outweighs
+  scheme: AS:bad_outweighs_good
+- cq: CQ:good_outweighs
+  scheme: AS:good_outweighs_bad
+- cq: CQ:other_means
+  scheme: AS:better_means
+- cq: CQ:worth_finding_out_first
+  scheme: AS:finding_out_first

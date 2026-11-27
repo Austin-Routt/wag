@@ -2,12 +2,12 @@
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
-(proposal D095, applied 2026-11-26): C5.2 is next. The
+(proposal D095, applied 2026-11-26). C5.2's steps 1 to 5 are done, the switch on 2026-11-27; steps 6 to 8 are next. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
 decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
 of work, its data and the choices the decisions leave to it; this is version 5a, after version 5's
-independent check, with steps 1 to 3 done. Its implementation
+independent check. Its implementation
 choices, within the decisions it applies, are D094. Three choices departed from the wording of
 decided texts, so they were the owner's: D095. Step C5 of [first-family.md](first-family.md): the game's own data takes what proposals
 D004-D075 (C2), D008-D074 (C3) and D022-D093 (C4) gave `walton.yml`, through the generator that
@@ -201,14 +201,26 @@ then the switch, one commit that changes the data's identity once; then the revi
    game scheme, a bridge's `entry_premise` is one of its premises; (e) the templates of the predicates
    the game plays are walton.yml's (D094 (f)), which becomes an input of the generator, or a
    difference is recorded once, with its reason, in `game/`; new predicates get their negation
-   templates written, as core.yml has one for every predicate.
+   templates written, as core.yml has one for every predicate. Done with the switch: the rules
+   hold on its data, and each refuses its planted fault.
 5. **The switch** (the data below): the catalogue's game parts, `game/questions.yml`,
    `game/order.yml` and `core.yml.in` changed, and the generated files with them, in one commit: the
    data's fingerprint changes once. In the same commit: the gold recoded where validate.py then
    refuses it, validate.py checking each challenge's `wag_cq` against the edges as it checks a role's
    `cq` (four records carry CQ:side_effect at `bad_outweighs(...)` and become CQ:bad_outweighs), and
    re-pinned, both copies; the frozen copy of the pre-C5.2 files (`wag/data/frozen/<fingerprint>`),
-   as C5.1 did; the docs say how an old game or trace replays.
+   as C5.1 did; the docs say how an old game or trace replays. Done (2026-11-27): the fingerprint
+   went from `afd3335a23f12f41` (frozen, 1273555) to `092b6a6f48a672d2`. The gold's recode
+   (`recode_c52.py`) found more than the four records: six roles named the book's question, or
+   none, where the game now asks one (13292.25 now answers CQ:too_slight; 13292.12, .233 and
+   13292.180's second function name CQ:modal_likelihood, 13292.127 CQ:bad_outweighs, 13292.43
+   CQ:good_outweighs), and seventeen challenges named no game question where the game asks one; the
+   ten instances of the schemes the game now plays name its scheme. `validate.py` checks a
+   challenge's `wag_cq` both ways (a null where the game asks one is refused) and an instance's
+   `wag_id`, and checks a format-1 file against the NASCQ it was made with
+   (`wag/data/frozen/e7141ec8dea379bc`). The guidelines and the rule cases name the game's
+   questions where it asks them. The batch-2 replay outputs stay those of the data before until
+   step 6.
 6. **The replays.** The 33 golden games stay on the frozen pre-C5 data and keep their digests (D094
    (h)): they are computer games without a profile, so the profile's rules do not apply to them, as
    to any record made before step 2. A new golden set is made on the new data, with a profile,

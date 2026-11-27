@@ -24,8 +24,9 @@ func findings(r *Report, file, text string) []string {
 	return out
 }
 
-// F2: the game part's status is the entry's once someone sets it; backs and
-// a question's game text are copied from game/, and the check says so.
+// F2: the game part's status is the entry's once someone sets it; backs are
+// copied from game/, and a question's game text is made from its paraphrase
+// (step C5.2), and the check says so.
 func TestGamePartStatusAndCopiedFields(t *testing.T) {
 	s := sources(t)
 	f, err := ReadFiles(root)
@@ -70,7 +71,7 @@ func TestGamePartStatusAndCopiedFields(t *testing.T) {
 	if r, err = Check(dir, s, DefaultOptions()); err != nil {
 		t.Fatal(err)
 	}
-	if len(findings(r, "sign.yml", "game/order.yml")) == 0 || len(findings(r, "sign.yml", "game/questions.yml")) == 0 {
+	if len(findings(r, "sign.yml", "game/order.yml")) == 0 || len(findings(r, "sign.yml", "made from the question's paraphrase")) == 0 {
 		t.Errorf("edited backs and game text: the check does not say where they are changed: %v", errorsOf(r))
 	}
 }

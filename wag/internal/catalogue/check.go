@@ -458,7 +458,7 @@ func (c *checker) entry(e, want *Entry) {
 			case exp == nil:
 				c.err("%s: the game does not ask %s of this scheme", where, q.Game.ID)
 			case q.Game.Text != exp.Text:
-				c.err("%s: the game text is %s's in game/questions.yml (question_template_en): change it there, then run wag-cli --catalogue-gen", where, exp.ID)
+				c.err("%s: the game text is made from the question's paraphrase, the scheme's variables braced (D009): run wag-cli --catalogue-gen", where)
 			case !same(q.Game, exp):
 				c.err("%s: the game part's locus or pattern is not what the game's files give back; run wag-cli --catalogue-gen, which writes the files from it first", where)
 			case exp.Pattern != "" && len(q.Targets) > 0 && !hasTarget(q.Targets, exp.Pattern):
@@ -621,6 +621,9 @@ func (c *checker) copies(e *Entry, opt Options) {
 		{"dialogue types note", e.DialogueTypes.Note}, {"classification note", e.Class.Note},
 	}
 	for _, q := range e.CQs {
+		if owned(q.Status) {
+			continue // a generated item's paraphrase is the game's text read back, checked where it was written
+		}
 		texts = append(texts, struct{ where, text string }{"question " + q.ID + " paraphrase", q.Paraphrase},
 			struct{ where, text string }{"question " + q.ID + " answer", q.Answer})
 	}

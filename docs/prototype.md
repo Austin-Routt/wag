@@ -95,7 +95,7 @@ The second tab shows the NASCQ itself:
   - Coloured lines are ask edges (scheme → question), coloured by locus.
   - Dashed lines are backup edges (question → scheme).
 
-Click a scheme or question to see its links. The data is what `wag/data/nascq/*.json` and `wag/data/schemes/core.yml` contain today: 9 Walton schemes and 24 questions, plus the challenge, and "Other" with its generic questions when enabled. Goal-based practical reasoning and negative consequences were added on 2026-10-13 (`docs/scheme-registry/README.md`).
+Click a scheme or question to see its links. The data is what `wag/data/nascq/*.json` and `wag/data/schemes/core.yml` contain today: 17 Walton schemes and 34 questions since step C5.2 (2026-11-27; 9 and 24 before), plus the challenge, and "Other" with its generic questions when enabled. Goal-based practical reasoning and negative consequences were added on 2026-10-13 (`docs/scheme-registry/README.md`).
 
 ### 2.4 Options
 

@@ -58,13 +58,24 @@ lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
 items = json.load(open(ITEMS, encoding='utf-8'))['items']
 W = {s['id']: s for s in yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))['argument_schemes']}
 # Upstream IDs renamed in the cleaned file read as their new ones.
-for old, new in json.load(open(REPO + 'docs/scheme-registry/walton-clean/id-migrations.json'))['schemes'].items():
+MIGRATED = json.load(open(REPO + 'docs/scheme-registry/walton-clean/id-migrations.json'))['schemes']
+for old, new in MIGRATED.items():
     W[old] = W[new]
 comp = json.load(open(REPO + 'docs/scheme-registry/links.json'))['entries']
 NASCQ = REPO + 'wag/data/nascq/'
+# A format-1 file is checked against the game's questions it was made with too:
+# since step C5.2 (docs/c5-game.md) the game asks questions at formulas where it
+# asked none (the weighing exceptions, too_slight, the modal premises), which R2
+# would ask a kept version to name. They are the files frozen in
+# wag/data/frozen/e7141ec8dea379bc, the game's data from 2026-10-15 to step
+# C5.1's switch: the NASCQ files of WAG 96c3c5a, where the format-1 gold was made.
+if not F2:
+    NASCQ = REPO + 'wag/data/frozen/e7141ec8dea379bc/nascq/'
 edges = json.load(open(NASCQ + 'edges.json'))['ask_edges']
 cqs = json.load(open(NASCQ + 'critical_questions.json'))
 WAG2W = {k: v['carneades_id'] for k, v in json.load(open(NASCQ + 'schemes.json')).items()}
+# The game's scheme that plays each walton.yml scheme (R16: an instance's wag_id).
+GAME_OF = {w: k for k, w in WAG2W.items()}
 # The answer schemes (D075): each concludes an exception of another scheme.
 ANSWER_SCHEMES = ('bad_outweighs_good', 'good_outweighs_bad', 'better_means', 'finding_out_first')
 errors, unresolved_values = [], []
@@ -177,9 +188,9 @@ ID_RE = re.compile(r'^(.+)#([1-9][0-9]*)$')
 PINNED = {'items.json': ITEMS, 'lexicon.json': DOC + 'lexicon.json', 'case.json': CASE,
           'walton.yml': WALTON_PATH, 'id-migrations.json': REPO + 'docs/scheme-registry/walton-clean/id-migrations.json',
           'links.json': REPO + 'docs/scheme-registry/links.json', 'positions.json': REPO + 'wag/data/annotation/positions.json',
-          'nascq/schemes.json': REPO + 'wag/data/nascq/schemes.json',
-          'nascq/critical_questions.json': REPO + 'wag/data/nascq/critical_questions.json',
-          'nascq/edges.json': REPO + 'wag/data/nascq/edges.json'}
+          'nascq/schemes.json': NASCQ + 'schemes.json',
+          'nascq/critical_questions.json': NASCQ + 'critical_questions.json',
+          'nascq/edges.json': NASCQ + 'edges.json'}
 if F2:
     POS = json.load(open(REPO + 'wag/data/annotation/positions.json', encoding='utf-8'))
     case = None
@@ -279,9 +290,15 @@ for e in comp:
             for w in m['walton']:
                 pred = parse(w['formula'])[1] or w['formula']
                 cq_pred.setdefault(l['id'], {}).setdefault(pred, set()).add(('comp', f"{m.get('printed_under') or e['number']} {m['cq']}", w['locus']))
+# The questions the game asks of the scheme that plays each walton.yml scheme,
+# and those it asks at its conclusion (R2 for a challenge's wag_cq).
+game_cqs, concl_cqs = {}, {}
 for e in edges:
+    wid = WAG2W[e['scheme']]
+    game_cqs.setdefault(wid, set()).add(e['cq'])
+    if e.get('locus') == 'conclusion':
+        concl_cqs.setdefault(wid, set()).add(e['cq'])
     if 'pattern' in e:
-        wid = WAG2W[e['scheme']]
         pred = parse(e['pattern'])[1]
         cq_pred.setdefault(wid, {}).setdefault(pred, set()).add(('game', e['cq'], e['locus']))
 
@@ -530,6 +547,13 @@ for it in gold['items']:
         if F2:
             for k in ('compendium', 'wag_id', 'confidence', 'alternatives'):
                 if k not in s: err(f'{cid}: R16 the scheme of {iid} says nothing of {k} (null when there is none)')
+            # wag_id is the game's scheme that plays walton_id, as the pinned
+            # schemes.json maps them, or null when the game plays none: a
+            # scheme the game comes to play is named (since step C5.2).
+            want_wag = GAME_OF.get(MIGRATED.get(wid, wid))
+            if 'wag_id' in s and s['wag_id'] != want_wag:
+                err(f'{cid}: R16 the scheme of {iid} names the game\'s scheme {s["wag_id"]!r}, but the game plays {wid} ' +
+                    (f'as {want_wag}' if want_wag else 'with none (null)'))
             for v, b in ins['bindings'].items():
                 if isinstance(b, str) and b: continue
                 if marker(b, 'unstated') and s['fit'] == 'fragment': continue
@@ -720,6 +744,36 @@ for it in gold['items']:
                 err(f'{cid}: R10 the challenge {c.get("cq") or c.get("type")} names the instance {ref!r}, neither one of its own nor its target\'s'); continue
             if c['formula'] is not None and nows(c['formula']) not in all_formulas(ci):
                 err(f'{cid}: R10 the challenge {c.get("cq") or c.get("type")} names {c["formula"]}, which is not a formula of {ref}')
+                continue
+            # R2 for a challenge, as for a role's cq (since step C5.2): where
+            # the game asks questions at the challenge's formula, the challenge
+            # names one of them (wag_cq): at a premise or an exception those
+            # whose pattern has its predicate, at the conclusion those asked
+            # there. Elsewhere the question it names is one the game asks of
+            # the scheme it plays the instance's scheme with, and it names
+            # none (null) when the game plays none.
+            cw = ci['scheme']['walton_id']
+            cw = MIGRATED.get(cw, cw)
+            label = c.get('cq') or c.get('type')
+            asked = []
+            if c['formula'] is not None and cw in game_cqs:
+                f = nows(c['formula'])
+                if f in formulas(ci, 'conclusion'):
+                    asked = sorted(concl_cqs.get(cw, ()))
+                else:
+                    asked = sorted(x[1] for x in cq_pred.get(cw, {}).get(parse(f)[1], set()) if x[0] == 'game')
+            if c.get('wag_cq'):
+                if cw not in game_cqs:
+                    err(f'{cid}: R2 the challenge {label} names the game\'s {c["wag_cq"]}, but the game plays {cw} with no scheme, '
+                        f'so it asks none of {ref} (wag_cq null)')
+                elif c['wag_cq'] not in game_cqs[cw]:
+                    err(f'{cid}: R2 the challenge {label} names the game\'s {c["wag_cq"]}, which the game does not ask of {GAME_OF[cw]}')
+                elif asked and c['wag_cq'] not in asked:
+                    err(f'{cid}: R2 the challenge {label} at {c["formula"]} of {ref} names the game\'s {c["wag_cq"]}, '
+                        f'but the game asks {asked} there')
+            elif asked:
+                err(f'{cid}: R2 the challenge {label} at {c["formula"]} of {ref} names no question of the game, but the game '
+                    f'asks {asked} there: name the one it is (wag_cq)')
     else:
         names = set()
         for ins in it['instances']:

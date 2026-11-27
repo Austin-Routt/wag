@@ -381,7 +381,8 @@ func TestFormat1IsCheckedAsMade(t *testing.T) {
 // The agreement fields read each annotator's targets in its own set: the
 // format-1 gold and the format-2 gold, the same codings but for D039's
 // eleven causal steps and proposal D008-D074's recode (2026-11-25), agree on
-// every field but where those changed them.
+// every field but where those changed them, and where step C5.2's switch
+// (2026-11-27) named the game's questions.
 func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	d, _ := builtin(t)
 	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
@@ -399,11 +400,13 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// 13292.174, .121 and .9 a modal argument carried by a bridge (scheme,
 	// instances), so the claims at their causal premise or exception
 	// (13292.12, .233, .43) target that secondary argument (target_instance),
-	// at may_bring_about with the book's question (target_formula, cq: .12,
-	// .233); 13292.25 is an undercutter at 13292.7's too_slight (role,
-	// target_part, target_formula).
+	// at may_bring_about (target_formula, cq: .12, .233); 13292.25 is at
+	// 13292.7's too_slight (role, target_part, target_formula). Since step
+	// C5.2 the game asks the questions there, so their cq is the game's: .12
+	// and .233 CQ:modal_likelihood, .25 CQ:too_slight, and .127 and .43, at
+	// the outweighing exceptions, CQ:bad_outweighs and CQ:good_outweighs (cq).
 	want := map[string]float64{"scheme": 0.88, "instances": 0.82, "target_formula": 0.9, "role": 0.98,
-		"target_part": 0.98, "cq": 0.96, "target_instance": 0.94}
+		"target_part": 0.98, "cq": 0.9, "target_instance": 0.94}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
