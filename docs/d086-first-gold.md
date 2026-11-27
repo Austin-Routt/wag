@@ -166,19 +166,33 @@ in the file has changed since (other items' drafts, other verifications).
   unresolved value (R17).
 - It removes `verified` for a verdict of another choice that holds of a verified item now: the owner's
   later verdict takes the verification back.
-- It lists every verdict it does not write, and why: the item changed since the verdict, or the gold it
-  was given on is not in the repository; a claim not agreed in a round, or not in the gold; another
-  choice on an item not verified; a verdict that recorded no gold.
-- It writes nothing at all when any other input the verdicts recorded differs from the repository's
-  now (the claims' texts, the guidelines, `walton.yml`, …: the round's clarifications of the guidelines
-  are made before the owner's build, not between it and the script's run), or is one the built-in
-  dataset does not have (a folder dataset's "guidelines.md (built in)", say); when the two copies of the
-  gold differ; or when the file is not a list of verdicts, a verdict lacks its claim, choice, time or
-  inputs, or two verdicts name one claim.
+- It records a verdict of another choice on an item not verified in the history entry only, as a
+  receipt (the command says "receipt recorded"). The item does not change, but the verdict's time is
+  kept, so that an older verdict *gold* imported later cannot verify the item.
+- It lists every verdict it does not write, and why:
+  - the item changed since the verdict, or the gold it was given on is not in the repository or is
+    not valid JSON;
+  - a claim not agreed in a round, or not in the gold;
+  - a verdict that recorded no gold;
+  - a verdict older than one already recorded for its item, or not ordered with it (below);
+  - a verdict the gold already records.
+- It writes nothing at all when:
+  - any other input the verdicts recorded differs from the repository's now (the claims' texts, the
+    guidelines, `walton.yml`, …: the round's clarifications of the guidelines are made before the
+    owner's build, not between it and the script's run);
+  - an input is one the built-in dataset does not have (a folder dataset's "guidelines.md (built
+    in)", say), or a verdict lacks one of the inputs' hashes;
+  - the two copies of the gold differ, or the gold is not valid JSON;
+  - the file is not a list of verdicts, or a JSON object in it repeats a member;
+  - a verdict lacks its claim, choice, time or inputs, or its time is not an RFC 3339 time with a
+    time zone;
+  - two verdicts name one claim.
 
 It writes `gold.json` and the built-in copy as the recoding scripts and `validate.py --repin` do
 (`json.dumps(…, indent=1, ensure_ascii=False)`), changing only the `verified` fields, the file's
-`status` (how many items are verified) and one `history` entry naming what was verified or taken back.
+`status` (how many items are verified) and one `history` entry. The entry names what was verified,
+taken back or recorded, and holds the verdicts' times (`verification_verdicts`,
+[annotation-records.md](annotation-records.md) §2).
 Its `item_rev` is a copy of `validate.py`'s (which runs its whole check when imported); the tests run
 `validate.py` on the gold the script wrote, and R17 compares the two. Its test, `test_verify_gold.py`,
 runs in CI beside `test_validate.py`.
@@ -190,6 +204,30 @@ again. R13 refuses a verified item whose target lost its formula, and R2 one who
 applies there; a target recoded with both kept leaves the verification standing, since what was
 verified still holds of it.
 
+### Order: the verdicts' times
+
+The dashboard stamps each verdict with its time (RFC 3339, to the nanosecond, with a time zone). A
+verification's `date` is the UTC date of that time.
+
+The script records each verdict it applies or records in the history entry's
+`verification_verdicts`: the claim, the choice, the time in UTC and the item's revision. It compares
+each new verdict with the latest so recorded for its item:
+
+- **An older verdict is not written.** An old file imported again cannot undo a newer verdict.
+- **Verdicts of different choices at the same time are not ordered.** The item is left unverified,
+  whichever comes first: a verdict *gold* at that time is not written, and a verdict of another
+  choice at that time takes a verification back. This lasts until a newer verdict. Of two recorded
+  verdicts at one time, the one other than *gold* counts as the latest.
+- **A confirmation records its time.** A verdict *gold* on a verified item, later the same day,
+  records its time, so that a verdict between the two cannot take the verification back.
+- **A verification with only a date cannot be ordered.** A verification whose time is not recorded
+  (made before the times were kept, or by hand) has only its date. A verdict of another choice on
+  that date, or any verdict before it, is not written, whatever else the history records for the
+  item.
+
+These receipts keep the order of the imports; they do not authenticate the owner. The run's
+`human.json`, committed in `verdicts/`, stays the record of the verdicts themselves.
+
 ## 6. Cases (outcomes written before the tests)
 
 The script:
@@ -200,7 +238,7 @@ The script:
 | V2 | A verdict given on an earlier gold, in which the item differs | Not written; listed: the item changed since |
 | V3 | A verdict given on an earlier gold, in which the item is the same (another item differs) | Written, as V1 |
 | V4 | A verdict given on a gold the repository does not hold | Not written; listed |
-| V5 | Verdicts *none*, *unsure*, an annotator's name, *reviewer*, and an empty choice with a note, on an item not verified | Nothing written; each listed |
+| V5 | Verdicts *none*, *unsure*, an annotator's name, *reviewer*, and an empty choice with a note, on items not verified | The items unchanged. One history entry names the five and records their times; each listed as "receipt recorded" |
 | V6 | V1, then a verdict *none* on one of the two, given on the gold V1 wrote | Its `verified` removed, listed; the other kept |
 | V7 | A verdict on a claim not in the gold (the dashboard cannot make one; the script still checks) | Not written; listed |
 | V8 | The verdicts' recorded hash of `items.json` differs from the repository's now | Nothing written at all; the command names the input |
@@ -212,6 +250,22 @@ The script:
 | V14 | A verdict *gold* on an item with an unresolved value | Not written; listed |
 | V15 | A verdict *gold* on a claim not agreed in a round, and on one agreed at another revision than it has | Not written; listed |
 | V16 | A verdict whose inputs lack the gold; one that records an input the built-in dataset does not have | The first listed and not written; the second: nothing written at all, the input named |
+| V17 | A verdict without one input's hash (`items.json`); one that records only the gold's | Refused; nothing written |
+| V18 | A verdict time with an impossible date (`2026-99-99garbage`); a date without a time (`2026-11-28`) | Refused; nothing written |
+| V19 | A verdict *gold* at 23:30 on 28 November at UTC−6 | Verified, its date 2026-11-29 |
+| V20 | A file in which a verdict repeats a member (`"choice"` twice) | Refused; nothing written |
+| V21 | A verification of the 30th, then a verdict *none* of the 28th | Not written; the gold unchanged |
+| V22 | A verdict *gold* of the 28th, a *none* of the 30th, then the *gold* of the 28th again | The third not written; the item unverified |
+| V23 | A verdict *none* of the 30th on an item not verified, then a verdict *gold* of the 28th from another run | The first recorded, the item unchanged; the second not written |
+| V24 | *gold* of the 27th, *none* of the 28th, *none* of the 30th, then *gold* of the 29th | The last not written; the item unverified |
+| V25 | A verification at 10:00, its confirmation at 15:00 the same day, then a *none* at 14:00 | The *none* not written; the item verified |
+| V26 | A *gold* and a *none* at the same nanosecond, imported in either order; then each imported again | The item unverified after both, in either order; the repeats change no byte |
+| V27 | A *gold*, then a *none* one nanosecond later | The verification taken back |
+| V28 | A *none* of the 28th, then a *gold* of the 30th | Verified |
+| V29 | The same *none* imported twice | The second changes no byte |
+| V30 | A verification that records only its date: a *none* earlier the same day; separately, a *none* of the 28th recorded, a verification of the 30th made by hand, then a *none* of the 29th | Neither written; the verification stands |
+| V31 | One run: a *gold* on one claim, a *none* and an *unsure* on two claims not verified | One history entry naming the verification and the two recorded verdicts, with three times |
+| V32 | A gold that repeats a member; separately, a verdict given on an earlier gold (given with `--also`) that is not valid JSON | The first refused, nothing written; the second not written, listed |
 
 The dashboard:
 

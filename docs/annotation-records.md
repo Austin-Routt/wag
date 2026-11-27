@@ -69,7 +69,12 @@ The typing of predicate positions (which argument of a predicate is an agent and
   checked again and its pins updated in the same commit: `validate.py --repin` writes them when
   nothing but the pins is wrong.
 - `history`, optional: the file's migrations, each with its date, by whom and what changed. A
-  change to an item's coding is recorded in the item (`adjudication.recoded`).
+  change to an item's coding is recorded in the item (`adjudication.recoded`). An entry written by
+  the owner's verification (`verify_gold.py`, D086) also holds `verification_verdicts`: each verdict
+  it applied or recorded, `{"item": "<claim>", "choice": "gold" | "none" | …, "at": "<the verdict's
+  time, RFC 3339, UTC>", "item_rev": "<sha256>"}`. A later import compares a verdict's time with these,
+  so that an older verdict cannot undo a newer one
+  ([d086-first-gold.md](d086-first-gold.md) §5).
 - `items`: one per claim; a gold has every claim of `items.json`, in its order.
 
 ## 3. The case record (`case.json`)
