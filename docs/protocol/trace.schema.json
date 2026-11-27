@@ -112,6 +112,31 @@
         },
         "players": {
           "type": "array"
+        },
+        "resumed": {
+          "type": "array",
+          "description": "The game's resumes from its folder of the data folder, in order (docs/g-journal.md).",
+          "items": {
+            "type": "object",
+            "required": [
+              "time",
+              "after_order"
+            ],
+            "properties": {
+              "time": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "after_order": {
+                "type": "integer",
+                "description": "The order of the last event kept; the events after it follow the resume."
+              },
+              "dropped_decisions": {
+                "type": "integer",
+                "description": "Decisions recorded after the export's last save (a save that stopped between the trace and the export), dropped at the resume."
+              }
+            }
+          }
         }
       }
     },
@@ -617,6 +642,10 @@
         "feedback": {
           "description": "On a retry, what the seat was told: why its previous move was rejected. The call event (parent) has the whole conversation.",
           "type": "string"
+        },
+        "recovered": {
+          "type": "boolean",
+          "description": "The reply was recorded (its call, parent) before the game stopped or could not be saved, and was played afterwards without asking the model again (docs/g-journal.md)."
         }
       }
     },

@@ -177,6 +177,7 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 | `GET /api/games/{id}/prompt`, `POST /api/games/{id}/reply` | The text protocol: the seat's prompt, and a reply to play (`docs/protocol.md`) |
 | `POST /api/games/{id}/note` | A tester's note, `{"target": "move:3", "kind": "confusing", "text": "…", "by": "…"}` |
 | `POST /api/load` | Start a game from an export and replay it; `?inspect=1` opens a game played with other scheme data read-only |
+| `GET /api/store`, `POST /api/store/resume` | The data folder; resume a game saved in it, `{"path": "games/…"}`, with its trace (this computer only) |
 | `POST /api/games/{id}/moderate`, `/decide` | Moderator actions |
 | `GET /api/games/{id}/role` | Who the request is in the game: `owner` (this computer), `moderator`, or `seat` with its name |
 | `GET /api/games/{id}/keys` | The game's keys, for the owner to share (this computer only) |
@@ -184,4 +185,4 @@ Click a scheme or question to see its links. The data is what `wag/data/nascq/*.
 | `GET /api/games/{id}/export` | The game: settings, moves, attempts, notes, LLM replies, Other arguments, build |
 | `GET /api/kialo`, `POST /api/kialo/import` | Kialo discussions |
 
-Requests that change a game must be `POST`s with `Content-Type: application/json`. That way other web pages cannot play in a local game. A request from another computer carries its key in the header `X-WAG-Key` (the page takes it from the link it was opened with); starting, loading and importing games, the keys and *Save now* are for this computer only. A page of another site whose name points to this computer is treated as another computer. A language-model player uses the text protocol; a program can also use the JSON API like the page, or the CLI's `--p1 json` pipe.
+Requests that change a game must be `POST`s with `Content-Type: application/json`. That way other web pages cannot play in a local game. A request from another computer carries its key in the header `X-WAG-Key` (the page takes it from the link it was opened with); starting, loading, resuming and importing games, the keys and *Save now* are for this computer only. A page of another site whose name points to this computer is treated as another computer. A language-model player uses the text protocol; a program can also use the JSON API like the page, or the CLI's `--p1 json` pipe.

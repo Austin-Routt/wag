@@ -66,6 +66,14 @@ func (e *Export) requestOf() *NewGameRequest {
 // read-only: its moves are then replayed with this server's data and it
 // takes no new move. Caller holds s.mu.
 func (s *Server) load(e *Export, inspect bool) (*Session, error) {
+	return s.loadAs(e, inspect, nil, 0)
+}
+
+// loadAs loads a game as load does, for a resume (resume.go): decisions are
+// the game's recorded decisions, for which its computer players draw again
+// what they drew (redraw), and seed, if not 0, is the game's seed as its
+// trace records it.
+func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) (*Session, error) {
 	if len(e.Seats) == 0 {
 		return nil, fmt.Errorf("the export has no seats")
 	}
@@ -148,7 +156,15 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		}
 	}
 	same := s.data.Matches(playedWith)
+	if seed == 0 {
+		seed = req.Seed
+	}
+	var rd *redraw
+	if decisions != nil {
+		rd = newRedraw(gs, e.Seats, seed, decisions)
+	}
 	for i, m := range e.History {
+		rd.draw(gs, i)
 		if err := replay(gs, m); err != nil {
 			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNameless) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
@@ -157,6 +173,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
 		}
 	}
+	rd.draw(gs, len(e.History))
 	// Legal moves do not establish that the same data produced them: a game
 	// known to be played with other data is not registered as if it had
 	// been played with this, unless it is opened read-only. A legacy record
@@ -176,8 +193,11 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		// before replaying its moves. "loaded" alone loses that distinction.
 		source = e.Source
 	}
-	ss := s.add(gs, e.Seats, title, source, req.Seed)
+	ss := s.add(gs, e.Seats, title, source, seed)
 	ss.Request, ss.Import, ss.Notes = req, rep, append([]Note(nil), e.Notes...)
+	if rd != nil {
+		ss.agents = rd.agents
+	}
 	if legacy {
 		// It stays a legacy record: replayed with this data, but not taken
 		// for a game played with it. Moves played from now on are played
@@ -194,6 +214,41 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		ss.playedHistory = append([]game.Move(nil), e.History...)
 	}
 	return ss, nil
+}
+
+// redraw makes a resumed game's computer players draw again what they drew
+// before it stopped (docs/g-journal.md): each computer player, seeded as the
+// game's, chooses again for each recorded decision of its seat that chose a
+// move (aiMove's tries, not its pass), on the board it chose on, so that it
+// goes on as in a game that did not stop.
+type redraw struct {
+	agents []game.Agent
+	at     map[int][]int // by the number of moves made: the seats that chose then, in order
+}
+
+func newRedraw(gs *game.GameState, seats []Seat, seed int64, decisions []Trace) *redraw {
+	rd := &redraw{at: map[int][]int{}}
+	seat := map[string]int{}
+	for i, st := range seats {
+		rd.agents = append(rd.agents, newAgent(st.Kind, gs.Players[i].ID, seed+int64(i)))
+		seat[gs.Players[i].ID] = i
+	}
+	for _, d := range decisions {
+		if i, ok := seat[d.Player]; ok && rd.agents[i] != nil && d.Attempt <= maxAgentTries {
+			rd.at[d.Turn] = append(rd.at[d.Turn], i)
+		}
+	}
+	return rd
+}
+
+// draw has the seats that chose when n moves were made choose again.
+func (rd *redraw) draw(gs *game.GameState, n int) {
+	if rd == nil {
+		return
+	}
+	for _, i := range rd.at[n] {
+		rd.agents[i].ChooseAction(gs.BuildObservation())
+	}
 }
 
 // OtherDataError refuses to load a game played with other scheme data than

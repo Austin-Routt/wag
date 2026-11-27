@@ -302,6 +302,9 @@ function renderSetup() {
         <p><button id="kimport">Import the file</button></p>
       </div>
       <div class="panel"><h2>Games on this server</h2><ul class="games" id="gamelist"><li class="muted">Loading…</li></ul>
+        <div id="savedgames" hidden><h3>Saved in your data folder</h3>
+          <p class="small muted">A game with a model seat is saved here after every change. <b>Resume</b> goes on with it, its record included: a reply the model gave that the game had not played yet is played, not asked for again.</p>
+          <ul class="games" id="savedlist"></ul></div>
         <h3>Load an exported game</h3>
         <p class="small muted">A file saved with <b>Export</b>: the game is replayed move by move, so you can look at it again or play on.</p>
         <input type="file" id="lfile" accept=".json,application/json"> <button id="lload">Load</button></div>
@@ -413,6 +416,18 @@ function renderSetup() {
     $('#gamelist').innerHTML = (list || []).map(g => `<li><a href="#game=${g.ID}" data-load="${g.ID}">${esc(g.Title)}</a> <span class="muted small">${esc(g.Mode)} · round ${g.Round}${g.Over ? ' · over' : ''}</span></li>`).join('') || '<li class="muted">None yet.</li>';
     $('#gamelist').onclick = async e => { const a = e.target.closest('[data-load]'); if (!a) return; e.preventDefault(); await loadGame(a.dataset.load); render(); };
   }).catch(() => { /* the server may be restarting */ });
+  // The data folder's games, on this computer only (another gets no list).
+  api('/api/store').then(st => {
+    const games = ((st && st.games) || []).filter(g => (g.files || []).includes('trace.jsonl') && (g.files || []).includes('export.json'));
+    if (!games.length || !$('#savedlist')) return;
+    $('#savedgames').hidden = false;
+    $('#savedlist').innerHTML = games.map(g => `<li><button class="small" data-resume="${esc(g.path)}">Resume</button> <span class="mono small">${esc(g.title)}</span> <span class="muted small">saved ${esc(new Date(g.modified).toLocaleString())}</span></li>`).join('');
+    $('#savedlist').onclick = async e => {
+      const b = e.target.closest('[data-resume]'); if (!b) return;
+      try { const r = await api('/api/store/resume', { path: b.dataset.resume }); await loadGame(r.id); render(); }
+      catch (err) { toast(err.message, 10000); }
+    };
+  }).catch(() => { /* not this computer, or no data folder */ });
   // Another computer gets no list: discussions are imported where the server runs.
   if (META.kialo) api('/api/kialo').catch(e => { const k = $('#kialolist'); if (k) k.textContent = e.message; return null; }).then(list => {
     if (!list) return;

@@ -169,3 +169,30 @@ Written while the planted defects were being prepared, before these checks ran:
 | A resumed game saves into a folder named anew | G2b |
 | The export's events are not carried over | G2 |
 | The order of events starts again | G2 |
+
+## Results (recorded after the tests ran, 2026-11-27)
+
+- **Every case passed as written**, with the checks added before they ran: G1, G2, G2b, G3, G3b, G4,
+  G4b, G5 (another game, other data, another move, another reply), G5b, G5c, G5d, G5e, G6, G7, G8,
+  G9 and G10 (`server/journal_test.go`; G6 in `wag-llm/resume_replay_test.go`).
+- **The existing test changed as amendment 8 said**: `TestAFailedModelTurnThatCannotBeSavedHoldsTheModel`
+  asks the model once while the reply cannot be saved, and now also checks that once it is saved the
+  kept reply is played (`recovered`) before the model is asked again.
+- **Also tested:** the resume takes only a game's folder of the data folder, from this computer
+  only, and not a game open in the server (`TestResumeTakesOnlyAGameFolderFromThisComputer`). The
+  browser was checked by hand: a server restarted on the data folder lists the game under *Saved in
+  your data folder*, and *Resume* opens it with its move and record.
+- **Corrected after the planted defects ran** (each correction made to a test, then all the
+  defects run again):
+  - "The call is saved after the move" was not caught by G1 at first (G7 and the failed-turn test
+    caught it): the test's stop ended the turn, but the server then saved its record of the stopped
+    turn, which a stopped process would not. The stop now copies the data folder at that moment,
+    and the tests resume from the copy, the folder a process stopped then leaves. G1 then catches
+    the defect, with G2, G2b, G5b to G5d, G8 and G10.
+  - "The trace is not read on load" was caught partly by a crash (G4b took a call the defect had
+    removed); the tests now fail on their checks there.
+  - "The export's events are not carried over" then survived: the copy is taken before any event is
+    recorded, so there was nothing to carry. G2 now has a note posted before the stop.
+- The trace reader takes only a trace the server writes: its format, a game's start first and once,
+  the four kinds of event (`TestReadTraceTakesOnlyATrace`).
+- The planted defects and their runs are in the workspace (`verify/g`).

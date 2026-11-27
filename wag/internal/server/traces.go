@@ -72,6 +72,10 @@ type Trace struct {
 	Prompt       string `json:"prompt,omitempty"`
 	Feedback     string `json:"feedback,omitempty"`
 	Reply        string `json:"reply,omitempty"` // the raw reply of a language-model seat
+	// Recovered: the reply was recorded (its call, Parent, saved) before the
+	// game stopped or could not be saved, and was played afterwards without
+	// asking the model again (docs/g-journal.md).
+	Recovered bool `json:"recovered,omitempty"`
 	// Reasoning is what the reply says of its reasoning (context, thoughts,
 	// summary, expect, alternatives, confidence), without the action: the
 	// model's own account, which need not be how it chose (docs/protocol.md).
@@ -298,6 +302,19 @@ type GameStart struct {
 	// no data, so DataSHA256 is empty) was replayed with this data
 	// (Session.legacyReplayedWith).
 	LegacyReplayedWith string `json:"legacy_replayed_with_data_sha256,omitempty"`
+	// Resumed are the game's resumes from its folder of the data folder
+	// (/api/store/resume), in order.
+	Resumed []Resumption `json:"resumed,omitempty"`
+}
+
+// Resumption is a resume of a game from its folder (docs/g-journal.md):
+// when, the order of the last event kept, which the events after it follow,
+// and how many decisions were dropped: those recorded after the export's
+// last save, when a save stopped between the trace and the export.
+type Resumption struct {
+	Time    time.Time `json:"time"`
+	After   int       `json:"after_order"`
+	Dropped int       `json:"dropped_decisions,omitempty"`
 }
 
 // GameEnd is the last event of the trace file of a game that is over.
@@ -352,7 +369,7 @@ func (s *Server) guestCopy(b []byte) []byte {
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
 		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
-		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts}
+		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts, Resumed: ss.resumed}
 	seen := map[string]bool{}
 	for _, seat := range ss.Seats {
 		if c, _ := s.model(seat); c != nil && !seen[c.Profile.Name] {

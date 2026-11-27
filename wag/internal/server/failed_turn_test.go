@@ -69,7 +69,10 @@ func TestAFailedModelTurnIsSaved(t *testing.T) {
 }
 
 // When that save fails, the game says so, and the model is asked nothing
-// until the reply is on the disk.
+// until the reply is on the disk. Since G (docs/g-journal.md, amendment 8)
+// the turn stops at the first reply, which cannot be saved, rather than
+// asking again: once the reply is saved, it is played, and only then is
+// the model asked again.
 func TestAFailedModelTurnThatCannotBeSavedHoldsTheModel(t *testing.T) {
 	f, calls := failingModelGame(t)
 	var st State
@@ -80,11 +83,11 @@ func TestAFailedModelTurnThatCannotBeSavedHoldsTheModel(t *testing.T) {
 	}
 	call(t, f.ts, "POST", "/api/games/"+f.id+"/ai", map[string]any{}, nil)
 	call(t, f.ts, "GET", "/api/games/"+f.id, nil, &st)
-	if !st.Unsaved || st.SaveError == "" || calls.Load() != 2 {
+	if !st.Unsaved || st.SaveError == "" || calls.Load() != 1 {
 		t.Fatalf("after the failed turn: unsaved %v %q, %d calls", st.Unsaved, st.SaveError, calls.Load())
 	}
 	var e map[string]string
-	if code := call(t, f.ts, "POST", "/api/games/"+f.id+"/ai", map[string]any{}, &e); code != http.StatusConflict || !strings.Contains(e["error"], "model seats wait") || calls.Load() != 2 {
+	if code := call(t, f.ts, "POST", "/api/games/"+f.id+"/ai", map[string]any{}, &e); code != http.StatusConflict || !strings.Contains(e["error"], "model seats wait") || calls.Load() != 1 {
 		t.Fatalf("the model was asked again while its reply is not on the disk: %d %v, %d calls", code, e, calls.Load())
 	}
 	if err := os.Remove(blocked); err != nil {
@@ -95,6 +98,13 @@ func TestAFailedModelTurnThatCannotBeSavedHoldsTheModel(t *testing.T) {
 	}
 	if b, _ := os.ReadFile(filepath.Join(st.SavedTo, "trace.jsonl")); !strings.Contains(string(b), "PAID-REPLY-ONE") {
 		t.Fatal("the paid reply is not on the disk after Save now")
+	}
+	// The kept reply is played (it has no move: refused), then the model is
+	// asked for the second attempt, whose call fails.
+	call(t, f.ts, "POST", "/api/games/"+f.id+"/ai", map[string]any{}, nil)
+	b, _ := os.ReadFile(filepath.Join(st.SavedTo, "trace.jsonl"))
+	if calls.Load() != 2 || !strings.Contains(string(b), `"recovered":true`) {
+		t.Fatalf("after the save: %d calls, the kept reply played: %v", calls.Load(), strings.Contains(string(b), `"recovered":true`))
 	}
 }
 

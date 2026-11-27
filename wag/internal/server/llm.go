@@ -1,6 +1,9 @@
 package server
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 
@@ -121,6 +124,12 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 	prompt := ss.Prompt()
 	turn := len(gs.MoveHistory)
 	ctx := s.ctx
+	// The turn may be in progress: replies recorded for it that no decision
+	// used (the game stopped, or could not be saved, after the provider
+	// answered), or refused replies whose next attempt was not made. It goes
+	// on from its record, and the model is asked only what it was not
+	// (docs/g-journal.md).
+	tr := ss.turnInProgress(gs.ActivePlayer().ID)
 	s.mu.Unlock()
 	keep := func(err error) {
 		if err != nil {
@@ -132,16 +141,48 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 	}
 	msgs := []llm.Message{{Role: "user", Content: prompt}}
 	feedback := ""
-	for attempt := 1; attempt <= maxModelAttempts; attempt++ {
+	start := 1
+	if tr != nil {
+		// The turn's start, the board it began on, and the conversation so
+		// far: the earlier replies and why they were refused.
+		turn, msgs, start = tr.turn, tr.msgs, tr.attempt
+		prompt = msgs[0].Content
+		if start > 1 {
+			feedback = msgs[len(msgs)-1].Content
+		}
+	}
+	for attempt := start; attempt <= maxModelAttempts; attempt++ {
 		var callID string
-		resp, err := c.Complete(ctx, c.Request(modelSystem, msgs), func(a llm.Attempt) {
+		var resp *llm.Response
+		req := c.Request(modelSystem, msgs)
+		recorded := tr.reply(attempt, req)
+		if recorded != nil {
+			callID, resp = recorded.ID, recorded.Response
+		} else {
+			var err error
+			resp, err = c.Complete(ctx, req, func(a llm.Attempt) {
+				s.mu.Lock()
+				callID = ss.addCall(a, turn, attempt)
+				// Kept before used: the call's record, with the reply or the
+				// error, is saved before the reply is read or played.
+				s.autosave(ss)
+				s.mu.Unlock()
+			})
+			if err != nil {
+				keep(err)
+				return nil, err
+			}
 			s.mu.Lock()
-			callID = ss.addCall(a, turn, attempt)
+			unsaved := ss.saveErr != ""
 			s.mu.Unlock()
-		})
-		if err != nil {
-			keep(err)
-			return nil, err
+			if unsaved {
+				err := errors.New("the model's reply is kept, but the game could not be saved: the reply is played once the game is saved, and the model is not asked again")
+				keep(err)
+				return nil, err
+			}
+			if s.stopAfterReply != nil && s.stopAfterReply() {
+				return nil, errStoppedAfterReply
+			}
 		}
 		turnRec := Turn{Reply: resp.Text}
 		s.mu.Lock()
@@ -149,6 +190,7 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 		s.mu.Unlock()
 		t.Model, t.Profile, t.Provider, t.ServedModel = c.Profile.Model, c.Profile.Name, c.Provider.Name(), resp.Model
 		t.Attempt, t.Reply, t.Feedback, t.Parent, t.Turn = attempt, resp.Text, feedback, callID, turn
+		t.Recovered = recorded != nil
 		rep, perr := ParseReplyFull(resp.Text)
 		if perr != nil {
 			turnRec.Rejected = perr.Error()
@@ -174,7 +216,7 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 			turnRec.Rejected = res.Error
 		}
 		rec.Turns = append(rec.Turns, turnRec)
-		feedback = "That move was rejected: " + turnRec.Rejected + "\n\nThe game is as before. Reply with a legal move: one JSON object at the end."
+		feedback = rejectedFeedback(turnRec.Rejected)
 		msgs = append(msgs, llm.Message{Role: "assistant", Content: resp.Text}, llm.Message{Role: "user", Content: feedback})
 	}
 	s.mu.Lock()
@@ -185,6 +227,134 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 	s.mu.Unlock()
 	keep(err)
 	return res, err
+}
+
+// errStoppedAfterReply is the stop a test makes between a provider's
+// answer and its use (Server.stopAfterReply), as a crash would.
+var errStoppedAfterReply = errors.New("the turn stopped after the model's reply was recorded")
+
+// rejectedFeedback is what a model seat is told when its move is refused,
+// before its next attempt.
+func rejectedFeedback(reason string) string {
+	return "That move was rejected: " + reason + "\n\nThe game is as before. Reply with a legal move: one JSON object at the end."
+}
+
+// turnRecord is where a model seat's turn in progress stands, read from the
+// game's record (docs/g-journal.md): the turn's start, the attempt to make
+// next and the conversation for it, and, by attempt, the replies recorded
+// for the turn that no decision used.
+type turnRecord struct {
+	turn, attempt int
+	msgs          []llm.Message
+	replies       map[int]*Call
+}
+
+// reply is the reply recorded for the attempt, if one is and it answered
+// the request the turn sends now: the same conversation, system prompt and
+// parameters. Otherwise the provider is asked.
+func (tr *turnRecord) reply(attempt int, req llm.Request) *Call {
+	if tr == nil || tr.replies[attempt] == nil {
+		return nil
+	}
+	c := tr.replies[attempt]
+	a, err1 := json.Marshal(c.Request)
+	b, err2 := json.Marshal(req)
+	if err1 != nil || err2 != nil || !bytes.Equal(a, b) {
+		return nil
+	}
+	return c
+}
+
+// replied: the call has a reply that came without an error. A reply that
+// came with one (a partial or blocked answer, or one the budget refused) is
+// not played, live or recovered.
+func replied(c *Call) bool { return c.Response != nil && c.Error == nil }
+
+// turnInProgress reads the record of the model seat p's turn in progress:
+// its last call, and the calls before it in the same turn, attempt by
+// attempt, with the decisions that used them. The conversation goes on from
+// the turn's prompt through the replies decisions used, and refused, each
+// with the reason, as the live turn has it; the replies no decision used
+// are played again in their attempts (turnRecord.reply). Nil when the turn
+// starts afresh: no call is recorded; the moves made since the seat's last
+// call are not only its own refused moves (the board moved on: another
+// player's move, the moderator's, a move of its own); that call failed (a
+// failed call ends a turn, live too); or the record is not one a turn
+// leaves. Caller holds s.mu.
+func (ss *Session) turnInProgress(p string) *turnRecord {
+	h := ss.GS.MoveHistory
+	last := -1
+	for i := len(ss.Calls) - 1; i >= 0 && last < 0; i-- {
+		if ss.Calls[i].Player == p {
+			last = i
+		}
+	}
+	if last < 0 || !replied(&ss.Calls[last]) {
+		return nil
+	}
+	turn := ss.Calls[last].Turn
+	if turn > len(h) {
+		return nil
+	}
+	for _, m := range h[turn:] {
+		if m.PlayerID != p || m.Rejection == "" {
+			return nil
+		}
+	}
+	// The turn's calls, back to its first: its first attempt's first try.
+	first := last
+	for first >= 0 && (ss.Calls[first].ForAttempt != 1 || ss.Calls[first].N != 1) {
+		first--
+	}
+	if first < 0 {
+		return nil
+	}
+	final := map[int]*Call{} // each attempt's last try: the one that answered
+	for i := first; i <= last; i++ {
+		c := &ss.Calls[i]
+		if c.Player != p || c.Turn != turn {
+			return nil
+		}
+		final[c.ForAttempt] = c
+	}
+	n := ss.Calls[last].ForAttempt
+	if len(final) != n || final[1] == nil || len(final[1].Request.Messages) == 0 {
+		return nil
+	}
+	used := map[string]*Trace{}
+	for i := range ss.Traces {
+		if d := &ss.Traces[i]; d.Parent != "" {
+			used[d.Parent] = d
+		}
+	}
+	tr := &turnRecord{turn: turn, replies: map[int]*Call{}}
+	msgs := []llm.Message{final[1].Request.Messages[0]} // the board the turn began on
+	for a := 1; a <= n; a++ {
+		c := final[a]
+		if c == nil || !replied(c) {
+			return nil
+		}
+		switch d := used[c.ID]; {
+		case d == nil:
+			if tr.attempt == 0 {
+				tr.attempt = a
+			}
+			cc := *c // a copy: the turn reads it without the lock
+			tr.replies[a] = &cc
+		case tr.attempt != 0:
+			return nil // a decision after a reply none used: not a turn's record
+		default:
+			// Used, and refused (a move played would have moved the board
+			// on): the conversation goes on with it and the reason.
+			msgs = append(msgs, llm.Message{Role: "assistant", Content: c.Response.Text},
+				llm.Message{Role: "user", Content: rejectedFeedback(d.Result.Error)})
+		}
+	}
+	if tr.attempt == 0 {
+		tr.attempt = n + 1 // every reply used and refused: the next attempt
+	}
+	tr.msgs = msgs
+	return tr
 }
 
 // modelMeta describes the model profiles a server offers, for the browser.

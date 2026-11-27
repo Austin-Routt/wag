@@ -46,7 +46,10 @@ The **Models** tab connects a model service with a key typed in the browser,
 finds a model and adds it as a player (a seat in any game); the **Annotate**
 tab has players annotate Kialo claims, a reviewer compare them, and you give
 your verdicts. Everything is saved in your data folder (`~/WAG`, or
-`--store DIR`): `../docs/llm.md`, "The dashboard".
+`--store DIR`): `../docs/llm.md`, "The dashboard". A game with a model seat
+is saved there after every change, each reply of the model before it is
+played; after the server stops, **Play** lists it, and *Resume* goes on with
+it without asking the model again for a reply it already gave.
 
 Building from source needs Go 1.24 or later (the Anthropic and Google SDKs require it).
 A seat can be a person, a language model through the text protocol

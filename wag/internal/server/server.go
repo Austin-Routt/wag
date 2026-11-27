@@ -95,6 +95,10 @@ type Server struct {
 	sessions  map[string]*Session
 	next      int
 	meta      []byte
+	// stopAfterReply, set by a test, stops a model seat's turn after the
+	// provider's answer is recorded and saved, before it is used, as a crash
+	// would (docs/g-journal.md).
+	stopAfterReply func() bool
 }
 
 // Seat is a player and who plays it.
@@ -155,6 +159,11 @@ type Session struct {
 	// save has succeeded; saveErr is why the last save failed (autosave).
 	SavedTo string
 	saveErr string
+	// folder is the data folder's game folder a resumed game goes on saving
+	// into (/api/store/resume); "" for a game saved under its own name.
+	// resumed are the game's resumes, which its trace's start records.
+	folder  string
+	resumed []Resumption
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
 	contexts []game.Context
@@ -653,17 +662,22 @@ func (s *Server) add(gs *game.GameState, seats []Seat, title, source string, see
 	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed, contexts: s.contexts, dataHash: s.data.Hash(),
 		keys: newKeys(seats)}
 	for i, seat := range seats {
-		var a game.Agent
-		switch seat.Kind {
-		case "random":
-			a = game.NewRandomAgent(gs.Players[i].ID, seed+int64(i), 0.1, 0.5)
-		case "greedy":
-			a = game.NewGreedyAgent(gs.Players[i].ID, seed+int64(i), 2)
-		}
-		ss.agents = append(ss.agents, a)
+		ss.agents = append(ss.agents, newAgent(seat.Kind, gs.Players[i].ID, seed+int64(i)))
 	}
 	s.sessions[id] = ss
 	return ss
+}
+
+// newAgent is the computer player of a seat of that kind, nil for a seat
+// the server does not choose for (a person, a model).
+func newAgent(kind, id string, seed int64) game.Agent {
+	switch kind {
+	case "random":
+		return game.NewRandomAgent(id, seed, 0.1, 0.5)
+	case "greedy":
+		return game.NewGreedyAgent(id, seed, 2)
+	}
+	return nil
 }
 
 // handleGame serves /api/games/{id}[/{action}].
@@ -938,6 +952,10 @@ func (s *Server) saveRecord(ss *Session) {
 	}
 }
 
+// maxAgentTries is how many moves a computer player tries for one move
+// before it passes.
+const maxAgentTries = 5
+
 // aiMove lets the AI seat to move play once (retrying a rejected move up to
 // five times, then passing, as the batch runner does).
 func (ss *Session) aiMove() (*game.TurnResult, error) {
@@ -953,7 +971,7 @@ func (ss *Session) aiMove() (*game.TurnResult, error) {
 		return nil, fmt.Errorf("it is %s's turn, a human", gs.ActivePlayer().ID)
 	}
 	seat := ss.Seats[gs.ActivePlayerIdx].Kind
-	for try := 0; try < 5; try++ {
+	for try := 0; try < maxAgentTries; try++ {
 		t := ss.newTrace(seat)
 		t.Attempt = try + 1
 		r, err := ss.play(a.ChooseAction(gs.BuildObservation()), t, nil)
@@ -965,7 +983,7 @@ func (ss *Session) aiMove() (*game.TurnResult, error) {
 		}
 	}
 	t := ss.newTrace(seat)
-	t.Attempt = 6
+	t.Attempt = maxAgentTries + 1
 	return ss.play(nascq.ProposedAction{Type: "abstain"}, t, nil)
 }
 

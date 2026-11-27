@@ -540,7 +540,8 @@ func listDir(store, sub string) []StoreEntry {
 }
 
 // handleStore serves /api/store: the data folder and what is in it;
-// /api/store/open shows a folder of it; /api/store/file?path= sends a file.
+// /api/store/open shows a folder of it; /api/store/file?path= sends a file;
+// /api/store/resume resumes a game saved in it (resume.go).
 func (s *Server) handleStore(w http.ResponseWriter, r *http.Request) {
 	if !local(w, r) {
 		return
@@ -569,6 +570,33 @@ func (s *Server) handleStore(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		writeJSON(w, map[string]any{"opened": p})
+	case "/resume":
+		// A game of the data folder, resumed from its folder with its trace
+		// (resume.go; docs/g-journal.md).
+		if !jsonPost(w, r) {
+			return
+		}
+		var req struct {
+			Path string `json:"path"`
+		}
+		if !readJSON(w, r, &req) {
+			return
+		}
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		p, err := s.inStore(req.Path)
+		if err == nil && filepath.Dir(p) != filepath.Join(s.store, "games") {
+			err = fmt.Errorf("%q is not a game's folder of the data folder (games/...)", req.Path)
+		}
+		var ss *Session
+		if err == nil {
+			ss, err = s.resume(p)
+		}
+		if err != nil {
+			httpError(w, err, http.StatusBadRequest)
+			return
+		}
+		writeJSON(w, ss.buildState())
 	case "/file":
 		p, err := s.inStore(r.URL.Query().Get("path"))
 		if err != nil {
@@ -598,6 +626,9 @@ func (s *Server) autosave(ss *Session) error {
 		return nil
 	}
 	dir := filepath.Join(s.store, "games", ss.Created.Format("2006-01-02_150405")+"_game"+ss.ID)
+	if ss.folder != "" {
+		dir = ss.folder // a resumed game goes on in the folder it was saved in
+	}
 	if err := s.saveGame(ss, dir); err != nil {
 		ss.saveErr = err.Error()
 		fmt.Fprintln(os.Stderr, "saving the game:", err)
