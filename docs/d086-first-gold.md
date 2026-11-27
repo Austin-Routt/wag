@@ -308,6 +308,8 @@ The script:
 | V47 | A verdict time whose offset is outside RFC 3339's ranges (`+00:60`, `-00:60`, `+01:99`; V47-V49 written after ChatGPT's review of exchange 2, its patch 01, before the tests are added) | Refused, naming the offset; nothing written; no trace of the program |
 | V48 | A *none* of the year 0001 recorded; then a *gold* of 2026 | The receipt written with a four-digit year (`0001-01-01T00:00:00Z`) and read back by the next import; the item verified |
 | V49 | A gold holding a number outside the finite range (`1e999`) | Refused, naming the number; the gold and its built-in copy unchanged; no trace of the program |
+| V50 | A gold holding an integer too large for a float (`1` and 400 zeros), which Go's reader refuses (V50-V51 written after the independent review of step 1, before their tests) | Refused, naming the number; the gold and its built-in copy unchanged; no trace of the program |
+| V51 | A number outside the finite range (`1e999`) in the verdicts file, or in the rounds file | Refused, naming the file; nothing written; no trace of the program |
 
 The dashboard:
 
@@ -333,12 +335,15 @@ and 04):
 | T6 | A claim coded Other whose executed conclusion is not its own annotated one | `failed` |
 | T7 | A claim coded Other with no conclusion formula | `failed` |
 | T8 | T7, the executed argument showing no conclusion either (T8 written after step 1's planted defects, which one rule survived, before its test) | `failed`: two missing conclusions are not the same conclusion |
+| T9 | A claim coded Other whose annotated conclusion is spelled with spaces, or with `not(...)` for `¬`, played with Other to the same formula (T9 written after the independent review of step 1, before its test) | `as_intended`: the formulas are compared, not their spelling |
 | U1 | A target whose formula, or part, or instance is `{"unresolved": why}` (each alone) | Not played: no move, `not_played`, the markers listed in the report |
 | U2 | All three unresolved | As U1; the report keeps the annotation's scheme, conclusion and question |
 | U3 | A bare denial (scheme `none`) whose target formula is unresolved | Not played: no challenge |
 | U4 | A named question's answer whose target instance is unresolved | Not played: not answered at the target claim's primary argument |
 | U5 | The same claim with its target resolved | Played as before |
 | U6 | An inference target, its formula null (not unresolved) | Played as before, as an undercutter |
+| U7 | A target whose instance, part or formula is neither text, null nor `{"unresolved": why}`: a blank reason, `{"unstated": why}`, a list, a marker with a second key (U7-U8 written after the independent review of step 1, before their tests) | Not played: no move, `not_played`, the fields listed in the report; the replay goes on. `validate.py` refuses each (R16) |
+| U8 | U4's claim with its target resolved | Answered through its question at the target's argument: played `cq`, `as_intended` |
 
 Agreement (D102: an unsettled relation is not scored):
 
@@ -348,6 +353,9 @@ Agreement (D102: an unsettled relation is not scored):
 | A2 | The same with the target part unresolved | As A1 |
 | A3 | Only the target instance unresolved (a model's "not yet annotated") | Only the target instance left out, as before; role and question compared |
 | A4 | The Go agreement (`FieldIn`) on A1-A3 | The same as `agreement.py` |
+| A5 | A marker whose reason is only characters that Go does not trim (U+001C to U+001F) (A5-A7 written after the independent review of step 1, before their tests) | A marker, as in Go (`strings.TrimSpace`): in `agreement.py`, in `validate.py` and in the replay |
+| A6 | An item whose target is not an object (text, a list) | D102's check finds no unsettled relation, as Go's does; no trace of the program |
+| A7 | The role counts, and the pilot's role comparison, of an item whose relation is unsettled | Its role counted as unresolved (`?`) and left out of the pilot's role agreement |
 
 ## 7. Out of this plan
 
