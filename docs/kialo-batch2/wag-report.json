@@ -1050,8 +1050,8 @@
     "target_claim": "13292.180",
     "target_instance": "13292.180#2",
     "target_part": "exception",
-    "target_formula": "interference(reduced_meat_consumption)",
-    "conclusion": "interference(reduced_meat_consumption)"
+    "target_formula": "interference(reduced_meat_consumption,more_anemia_cases)",
+    "conclusion": "interference(reduced_meat_consumption,more_anemia_cases)"
    },
    "played": "no: its target, the instance 13292.180#2, is a secondary instance of 13292.180, which is not played",
    "executed": null,
@@ -1123,8 +1123,8 @@
     "target_claim": "13292.180",
     "target_instance": "13292.180#2",
     "target_part": "exception",
-    "target_formula": "interference(reduced_meat_consumption)",
-    "conclusion": "interference(reduced_meat_consumption)"
+    "target_formula": "interference(reduced_meat_consumption,more_anemia_cases)",
+    "conclusion": "interference(reduced_meat_consumption,more_anemia_cases)"
    },
    "played": "no: its target, the instance 13292.180#2, is a secondary instance of 13292.180, which is not played",
    "executed": null,
