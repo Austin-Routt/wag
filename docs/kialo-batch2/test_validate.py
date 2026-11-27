@@ -1150,6 +1150,48 @@ class Rules(unittest.TestCase):
         self.assertEqual(code, 1, out)
         self.assertIn("the file is in format 'wag-annotation/3'", out)
 
+    # Item F (docs/c5-item-f.md, F): schemes the game does not play in C5.2.
+    @staticmethod
+    def plant_instance(it, scheme, bindings, premises, conclusion):
+        iid = next_id(it)
+        it['instances'].append({
+            'id': iid, 'primary': False, 'bindings': bindings,
+            'scheme': {'walton_id': scheme, 'compendium': None, 'wag_id': None, 'fit': 'reconstructed',
+                       'confidence': 0.4, 'alternatives': []},
+            'premises': [{'role': r, 'formula': f, 'en': f, 'status': 'supplied'} for r, f in premises],
+            'conclusion': {'formula': conclusion, 'en': conclusion}})
+        return iid
+
+    def test_itemf_f_context_another_actors_action_in_a_bridge_from_agent(self):
+        # F-context: a bridge carrying should_do(P,A) where the case record
+        # gives A to another actor is refused (R14), whatever supports
+        # should_do elsewhere.
+        case = copy.deepcopy(CASE)
+        case['actors'].append({'id': 'meat_tax_proponents', 'text': 'the proponents'})
+        case['actions'].append({'id': 'switch_to_other_protein', 'actor': 'meat_tax_proponents', 'aliases': []})
+        g = copy.deepcopy(GOLD)
+        P_, A = 'governments', 'switch_to_other_protein'
+        self.plant_instance(item(g, '13292.108'), 'bridge_from_agent', {'P': P_, 'A': A},
+                            [('premise', f'should_do({P_},{A})'), ('premise', f'deliberating_agent({P_},{A})')],
+                            f'should_be_performed({A})')
+        self.fails(g, '13292.108', ['R14'], "which is meat_tax_proponents's action, not governments's", case=case)
+
+    def test_itemf_g_unbound_end_and_means(self):
+        # G-unbound: an instance of end_and_means_bad with X or Y unbound (or
+        # blank) is refused, not read as a wildcard.
+        for b in ({'Y': 'tax_revenue_reduced'}, {'X': '', 'Y': 'tax_revenue_reduced'},
+                  {'X': 'meat_industry_harmed'}):
+            g = copy.deepcopy(GOLD)
+            X, Y = b.get('X', 'X'), b.get('Y', 'Y')
+            self.plant_instance(item(g, '13292.108'), 'end_and_means_bad', b,
+                                [('premise', f'means_to_end({X},{Y})'), ('premise', f'bad({Y})'),
+                                 ('exception', f'means_good_outweighs({X},{Y})')], f'bad({X})')
+            code, errors, out = run(g)
+            self.assertEqual(code, 1, out)
+            self.assertTrue(any(e.startswith('13292.108: ') for e in errors), out)
+            if set(b) != {'X', 'Y'}:
+                self.assertTrue(any(f"binds {sorted(b)} not ['X', 'Y']" in e for e in errors), out)
+
 
 class Repin(unittest.TestCase):
     """--repin pins the inputs only when nothing else is wrong."""

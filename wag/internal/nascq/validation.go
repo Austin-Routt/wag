@@ -486,7 +486,9 @@ func (n *NASCQ) validateScheme(va *ValidatedAction, scheme *ASNode) error {
 	action := va.ProposedAction
 	// S2: Variable completeness. On a move with a target, the scheme's answer
 	// variable is bound to the answer, not by the mover, and so are the
-	// variables S9 fixed.
+	// variables S9 fixed. A blank value binds nothing: an answer whose H, A2
+	// or I names nothing would make its exception out without saying what
+	// outweighs, what does better, or what would settle it (item F, G-unbound).
 	answerVar := ""
 	if action.TargetArgID != "" || action.TargetStmtID != "" {
 		answerVar = scheme.AnswerVariable
@@ -501,7 +503,7 @@ func (n *NASCQ) validateScheme(va *ValidatedAction, scheme *ASNode) error {
 		}
 	}
 	for varName := range scheme.Variables {
-		if _, ok := action.VariableBindings[varName]; !ok && varName != answerVar && va.Fixed[varName] == "" && !scheme.Free {
+		if strings.TrimSpace(action.VariableBindings[varName]) == "" && varName != answerVar && va.Fixed[varName] == "" && !scheme.Free {
 			missing = append(missing, varName)
 		}
 	}

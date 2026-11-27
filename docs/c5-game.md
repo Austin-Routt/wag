@@ -2,7 +2,7 @@
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
-(proposal D095, applied 2026-11-26). C5.2's steps 1 to 6 are done, the switch and the replay by instance on 2026-11-27; steps 7 (item F and the new golden set) and 8 are next. The
+(proposal D095, applied 2026-11-26). C5.2's steps 1 to 7 are done, the switch, the replay by instance and item F on 2026-11-27; step 8 (gates, an independent review, CI, the docs) is next. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
 decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
@@ -237,7 +237,14 @@ then the switch, one commit that changes the data's identity once; then the revi
    golden set is written with item F (step 7), whose cases are its routes. Old traces with model players replay with the pre-C5.2 build
    and `--data` with the frozen files; their prompts carry no profile section.
 7. **Item F** (below), with the review's eleven new cases and the check's two, each outcome written
-   first and paired with a planted defect.
+   first and paired with a planted defect. Done (2026-11-27): the cases and their outcomes in
+   [`c5-item-f.md`](c5-item-f.md), committed before any test of them ran (5b84dc2); the tests
+   (`itemf_test.go` on the shipped data, the engine's and `validate.py`'s for the schemes the game
+   does not play yet) and 25 planted defects, each caught. The first runs found two outcomes the page
+   had wrong (A4.10's board, B4's check) and one the game had wrong: a blank binding (an answer's H,
+   A2 or I, a consequence's G) was accepted as the atom `x_empty`; S2 and the adapter now refuse it.
+   The new golden set: the reference games' table on the shipped data with the default profile
+   (TestReferenceDigestsShipped), its file's first line pinning the data and the profile.
 8. **Gates on both toolchains, an independent review, CI, and the docs** (README, prototype,
    game-rules, protocol.md, llm.md, the catalogue README).
 

@@ -62,6 +62,13 @@ func (g referenceGame) agent(name, kind string, seed int64) Agent {
 
 func (g referenceGame) play(t *testing.T) string {
 	t.Helper()
+	return g.playOn(t, []byte(coreYAML), []byte(coreSchemesJSON), []byte(coreCQsJSON), []byte(coreEdgesJSON), nil)
+}
+
+// playOn plays the game on the data given, with the profile given (nil: none,
+// as games made before step C5.2).
+func (g referenceGame) playOn(t *testing.T, core, schemes, cqs, edges []byte, profile *Profile) string {
+	t.Helper()
 	cfg, err := ModeConfig(g.mode)
 	if err != nil {
 		t.Fatal(err)
@@ -70,8 +77,9 @@ func (g referenceGame) play(t *testing.T) string {
 	if g.claim != "" {
 		cfg.Objective, cfg.Claim = ObjectiveClaim, g.claim
 	}
-	r := RunGame(cfg, DefaultRunnerConfig(), []byte(coreYAML), []byte(coreSchemesJSON), []byte(coreCQsJSON),
-		[]byte(coreEdgesJSON), []Agent{g.agent("Alice", g.p1, g.s1), g.agent("Bob", g.p2, g.s2)})
+	cfg.Profile = profile
+	r := RunGame(cfg, DefaultRunnerConfig(), core, schemes, cqs, edges,
+		[]Agent{g.agent("Alice", g.p1, g.s1), g.agent("Bob", g.p2, g.s2)})
 	if r.Panicked {
 		t.Fatalf("%+v panicked: %s", g, r.PanicMessage)
 	}

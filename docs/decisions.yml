@@ -2656,7 +2656,7 @@ decisions:
       and the agent are compared as atoms; the board and the terminal ask
       whose a new action is; a claim is written with its action's id; a
       discussion imported from Kialo has a profile.
-    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26, completed 2026-11-27); applied: C5.1 (2026-11-26); C5.2 steps 1 to 6 (roles, the profile, the question protocol, the generator's rules, the switch, the replay by instance: 2026-11-27); to apply: C5.2 steps 7 and 8 (item F and the new golden set, the review)"
+    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26, completed 2026-11-27); applied: C5.1 (2026-11-26); C5.2 steps 1 to 7 (roles, the profile, the question protocol, the generator's rules, the switch, the replay by instance, item F and the new golden set: 2026-11-27); to apply: C5.2 step 8 (the gates, the independent review, CI, the docs)"
 
 - id: D095
   title: Step C5's departures from decided wording

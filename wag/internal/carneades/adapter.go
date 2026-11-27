@@ -728,7 +728,7 @@ func (a *Adapter) AddSupport(
 	params := make([]string, len(scheme.Variables))
 	for i, v := range scheme.Variables {
 		val, ok := variableBindings[v]
-		if !ok {
+		if !ok || strings.TrimSpace(val) == "" { // a blank value binds nothing
 			missing = append(missing, v)
 		} else {
 			params[i] = SanitizeBinding(val)

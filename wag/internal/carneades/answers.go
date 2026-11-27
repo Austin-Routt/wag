@@ -190,7 +190,7 @@ func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]
 	var env terms.Bindings
 	for i, v := range scheme.Variables {
 		val, ok := bindings[v]
-		if !ok {
+		if !ok || strings.TrimSpace(val) == "" { // a blank value binds nothing
 			return nil, fmt.Errorf("missing binding for variable %s of scheme %s", v, schemeID)
 		}
 		params[i] = val

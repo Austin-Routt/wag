@@ -1,0 +1,34 @@
+data 092b6a6f48a672d2 profile {"agent":"decider","actors":[{"id":"decider","text":"the one who decides whether to take the actions argued about"}],"situation":"the present one"}
+classic turns=12 random/1-random/101 moves=20 rejected=0 alice=49.5000 bob=80.5000 winner=Bob verdict="" reason="max rounds" digest=3fb7644886fb82062523170a15eff890948f5b4b390e0a0b62fe777300bc344a
+classic turns=12 random/2-random/102 moves=22 rejected=0 alice=58.0000 bob=89.5000 winner=Bob verdict="" reason="max rounds" digest=adec16d514b99114d6028fa2883836deda0772673edcf84c8a72c9ea2e6246f8
+classic turns=12 random/3-random/103 moves=23 rejected=0 alice=58.0000 bob=38.5000 winner=Alice verdict="" reason="max rounds" digest=a8047d122e48c120c805c2030b43ca002ea9dd02ce962840dd321a948d1f0ebc
+classic turns=12 random/4-random/104 moves=21 rejected=4 alice=57.0000 bob=65.0000 winner=Bob verdict="" reason="max rounds" digest=923cc44c7fff64fe57c0ca2e9819ee06a61f9fdaf8d18dc78ec8aa8502afd62d
+classic turns=12 random/5-random/105 moves=21 rejected=1 alice=49.5000 bob=62.5000 winner=Bob verdict="" reason="max rounds" digest=7485d62ef783cd0255b78fdf972136ff5c2ad61c30241725c5502a8138a9902a
+classic turns=12 random/6-random/106 moves=20 rejected=0 alice=44.0000 bob=54.0000 winner=Bob verdict="" reason="max rounds" digest=fde987e8d9b0a81cabe688fd1c1893c134163510ca4554907471bd3582c83b18
+classic turns=12 random/7-random/107 moves=18 rejected=0 alice=68.5000 bob=65.0000 winner=Alice verdict="" reason="max rounds" digest=7c0b83563d2a5d4f8129804b24570a0bf116a8a17f79774acc4290d532a769c3
+classic turns=12 random/8-random/108 moves=18 rejected=0 alice=32.5000 bob=44.5000 winner=Bob verdict="" reason="max rounds" digest=2921a1a7cb2c904ee3ec212f3e2eb5fac318613f3127b812527840ae9abdec2b
+classic turns=6 greedy/1-random/101 moves=10 rejected=0 alice=56.5000 bob=24.5000 winner=Alice verdict="" reason="max rounds" digest=4f54e545106d69957aff93ef9408dac815366fdc2a769301bfeaa4bb2f790521
+infinite turns=10 random/1-random/101 moves=17 rejected=0 alice=18.0000 bob=39.0000 winner=Bob verdict="" reason="max rounds" digest=87b8d2acc1f4ae9b206783889034dbcf96ebfb3d367dcb67de5e5a236153224e
+target turns=12 random/1-random/101 moves=20 rejected=0 alice=36.5000 bob=45.0000 winner=Bob verdict="" reason="max rounds" digest=285892be9c42c115ee3fab50966e6a0d3bd5b26ef544aeb19faf6c08293abeb8
+cq turns=12 random/1-random/101 moves=20 rejected=0 alice=36.5000 bob=45.0000 winner=Bob verdict="" reason="max rounds" digest=285892be9c42c115ee3fab50966e6a0d3bd5b26ef544aeb19faf6c08293abeb8
+debate turns=10 random/1-random/101 moves=4 rejected=1 alice=7.0000 bob=7.0000 winner=Bob verdict="Out" reason="burden of proof" digest=d205e5cbb05ad1c889bed2c924896b66f29000de4cd0b7e9657fcb633ee8f614
+classic turns=6 greedy/2-random/102 moves=12 rejected=1 alice=57.0000 bob=39.0000 winner=Alice verdict="" reason="max rounds" digest=d2b80c47058a8bb304eee0ac1d6820b8614315d0b305f7d2916506178cf4f68a
+infinite turns=10 random/2-random/102 moves=19 rejected=0 alice=39.0000 bob=40.5000 winner=Bob verdict="" reason="max rounds" digest=0303f598199be82beea9b3cbcced38fe1db36c3734759652ab59b1d08976a949
+target turns=12 random/2-random/102 moves=22 rejected=0 alice=39.0000 bob=47.5000 winner=Bob verdict="" reason="max rounds" digest=67e43a13aa470fae7d484eb29e0816aa6ffc708e5b952bacd63f80fb5a11969a
+cq turns=12 random/2-random/102 moves=22 rejected=0 alice=39.0000 bob=47.5000 winner=Bob verdict="" reason="max rounds" digest=67e43a13aa470fae7d484eb29e0816aa6ffc708e5b952bacd63f80fb5a11969a
+debate turns=10 random/2-random/102 moves=6 rejected=0 alice=13.5000 bob=0.0000 winner=Bob verdict="Out" reason="burden of proof" digest=2559049b12c7fe3081b3f1b885f96bb826db7afb3a9f51a094d79b46f10a9928
+classic turns=6 greedy/3-random/103 moves=11 rejected=1 alice=42.0000 bob=26.0000 winner=Alice verdict="" reason="max rounds" digest=faec84f97b6eedb9c149f1e6e284be464acffe3415c9d83d36119979ba504326
+infinite turns=10 random/3-random/103 moves=19 rejected=0 alice=32.0000 bob=17.5000 winner=Alice verdict="" reason="max rounds" digest=6f2731a008c8e603e708a74de48381d973af2eefddeed65fd84d9be1f4b29cbf
+target turns=12 random/3-random/103 moves=23 rejected=0 alice=38.0000 bob=24.5000 winner=Alice verdict="" reason="max rounds" digest=116a9de229910d21e5307f1dec84ad098b4a5573516071c0157196eed88932dd
+cq turns=12 random/3-random/103 moves=21 rejected=0 alice=19.0000 bob=51.0000 winner=Bob verdict="" reason="max rounds" digest=17cb5745dd958507ce2551bc20f7cb9e7f1521486ec0a20b4170b3fae741af9d
+debate turns=10 random/3-random/103 moves=10 rejected=1 alice=8.0000 bob=20.0000 winner=Bob verdict="Out" reason="burden of proof" digest=03e4455cc9d367b603827000526a7127cc371ce547305b28fdec8a102c03d1c5
+classic turns=6 greedy/4-random/104 moves=9 rejected=0 alice=42.0000 bob=13.0000 winner=Alice verdict="" reason="max rounds" digest=bf83f751328bb30d2c8d6431bb38c04eb9a7f91f801ec05e332f518bfb2c4d58
+infinite turns=10 random/4-random/104 moves=17 rejected=2 alice=24.5000 bob=39.5000 winner=Bob verdict="" reason="max rounds" digest=eb3268f3c497833dbddd0331d13197e54d001eacf84e137ff416acdafff4a4df
+target turns=12 random/4-random/104 moves=21 rejected=4 alice=37.0000 bob=52.0000 winner=Bob verdict="" reason="target score" digest=b5817e0f5f92dc21d1ea0bd07015a9495ea3e26c9065cfbbe08b75746464f10a
+cq turns=12 random/4-random/104 moves=21 rejected=3 alice=27.5000 bob=36.0000 winner=Bob verdict="" reason="max rounds" digest=1be0ea115b1b56b3837b029b82cebd51ed90ec42541ba3b3b7351127c2f5b2dd
+debate turns=10 random/4-random/104 moves=1 rejected=0 alice=7.0000 bob=0.0000 winner=Alice verdict="In" reason="conceded" digest=ad91cab935911c683bbb0f7bd0308106b81a39591aba2740b749053f65f8a74a
+classic turns=5 greedy/1-greedy/2 moves=10 rejected=0 alice=65.0000 bob=87.5000 winner=Bob verdict="" reason="max rounds" digest=6c75e09565891d44a2226905ecec3ebd8e3690384a130219ca42dbb3b18a10ef
+infinite turns=5 greedy/3-random/4 moves=10 rejected=0 alice=35.0000 bob=5.5000 winner=Alice verdict="" reason="max rounds" digest=c711059f7726a317c89453107d8028921f58cea58aee89a9cb1056a2ffe76ed4
+target turns=5 random/5-greedy/6 moves=10 rejected=1 alice=6.0000 bob=19.5000 winner=Bob verdict="" reason="max rounds" digest=3b9e8ea4dc53fdfabc91ba1898e18db377fc2c8f493ec3ef38b18ed783ff4558
+cq turns=5 greedy/7-random/8 moves=9 rejected=0 alice=33.0000 bob=7.0000 winner=Alice verdict="" reason="max rounds" digest=e99acc35c4252f11c70f53c8b13eb1c38c8453f3e3966615ae8483511a6f132c
+debate turns=5 greedy/9-greedy/10 moves=10 rejected=0 alice=0.0000 bob=27.0000 winner=Bob verdict="Out" reason="max rounds" digest=9b8c516c3c78b77957e6369ecb980804a7cfc5cd44e3ed345a9bff7ae4a32792
