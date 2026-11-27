@@ -42,13 +42,16 @@ func (gs *GameState) Moderate(approve bool, weight float64, note string) (*TurnR
 	}
 	gs.moderating, gs.weightOverride = true, weight
 	gs.TurnStartedAt = gs.now() // the moderator's time is not the player's
+	before := len(gs.MoveHistory)
 	r, err := gs.ExecuteTurn(p.Action)
 	gs.moderating, gs.weightOverride = false, 0
 	if err != nil {
 		return nil, err
 	}
 	gs.Pending = nil
-	if n := len(gs.MoveHistory); n > 0 {
+	// The verdict is the move's, if the approval made one: a game whose
+	// time is up ends without it, and the move before keeps its own.
+	if n := len(gs.MoveHistory); n > before {
 		gs.MoveHistory[n-1].Moderation = verdict
 	}
 	return r, nil

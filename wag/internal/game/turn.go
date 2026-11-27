@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
@@ -55,10 +56,8 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	// void (the turn passes, or the player loses).
 	// ---------------------------------------------------------------
 	now := gs.now()
-	if gs.Config.TimeLimit > 0 && now.Sub(gs.StartedAt) >= gs.Config.TimeLimit {
-		gs.terminate(fmt.Sprintf("time limit reached (%v)", gs.Config.TimeLimit))
-		gs.Truncated = true
-		return gs.ended(&TurnResult{Error: "time limit reached: the move was not played"}), nil
+	if gs.timeUp(now) {
+		return gs.endByClock("time limit reached: the move was not played"), nil
 	}
 	timedOut := false
 	if gs.Config.MoveTimeLimit > 0 && now.Sub(gs.TurnStartedAt) > gs.Config.MoveTimeLimit && action.Type != "resign" {
@@ -357,6 +356,34 @@ func (gs *GameState) terminate(reason string) {
 	gs.Terminated = true
 	gs.TerminationReason = reason
 }
+
+// timeUp: the game clock (GameConfig.TimeLimit) has run out at now.
+func (gs *GameState) timeUp(now time.Time) bool {
+	return gs.Config.TimeLimit > 0 && now.Sub(gs.StartedAt) >= gs.Config.TimeLimit
+}
+
+// endByClock ends the game on its game clock, the result saying why.
+func (gs *GameState) endByClock(why string) *TurnResult {
+	gs.terminate(fmt.Sprintf("time limit reached (%v)", gs.Config.TimeLimit))
+	gs.Truncated = true
+	return gs.ended(&TurnResult{Error: why})
+}
+
+// CheckClock ends the game if its game clock has run out, as the next move
+// would find it, and says so; nil if the game goes on or is already over.
+// It is how a game that waits (a resumed game, a model seat about to be
+// asked) learns that its time is up before anyone is asked to move.
+func (gs *GameState) CheckClock() *TurnResult {
+	if gs.Terminated || !gs.timeUp(gs.now()) {
+		return nil
+	}
+	gs.Pending = nil // a move held for the moderator is not played: its time is up too
+	return gs.endByClock("time limit reached")
+}
+
+// RestartMoveClock starts the move clock of the player to move again: the
+// time they could not move (their seat waited) is not theirs.
+func (gs *GameState) RestartMoveClock() { gs.TurnStartedAt = gs.now() }
 
 // ended completes a TurnResult with the termination state and, if the game
 // is over, its outcome.

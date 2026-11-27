@@ -340,7 +340,15 @@ func replay(gs *game.GameState, m game.Move) error {
 	}
 	if res.Pending {
 		verdict, note, _ := strings.Cut(m.Moderation, ": ")
-		if res, err = gs.Moderate(verdict == "approved", m.Weight, note); err != nil {
+		approve := verdict == "approved"
+		// A move the moderator rejected says so. Until 2026-11-27 WAG gave
+		// it, as its verdict, the approval of the next held move if that
+		// approval came after the game's time was up (the game ended
+		// without the move).
+		if why, ok := strings.CutPrefix(m.Rejection, "rejected by the moderator"); ok {
+			approve, note = false, strings.TrimPrefix(why, ": ")
+		}
+		if res, err = gs.Moderate(approve, m.Weight, note); err != nil {
 			return err
 		}
 	}

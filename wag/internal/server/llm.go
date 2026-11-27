@@ -121,9 +121,24 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 	gs := ss.GS
 	seat := ss.Seats[gs.ActivePlayerIdx]
 	rec := LLMRecord{Player: gs.ActivePlayer().ID, Profile: c.Profile.Name, Provider: c.Provider.Name(), Model: c.Profile.Model, Round: gs.CurrentTurn}
+	// The game clock first: a seat is not asked to move in a game whose time
+	// is up.
+	if r := gs.CheckClock(); r != nil {
+		s.mu.Unlock()
+		return r, nil
+	}
 	prompt := ss.Prompt()
 	turn := len(gs.MoveHistory)
-	ctx := s.ctx
+	// No try is sent while the game cannot be saved: a try whose record
+	// could not be saved stops the call's retries (llm.WithGate).
+	ctx := llm.WithGate(s.ctx, func() error {
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		if ss.saveErr != "" {
+			return errUnsaved
+		}
+		return nil
+	})
 	// The turn may be in progress: replies recorded for it that no decision
 	// used (the game stopped, or could not be saved, after the provider
 	// answered), or refused replies whose next attempt was not made. It goes
@@ -208,7 +223,7 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 				keep(err)
 				return nil, err
 			}
-			if res.Accepted || res.Abstained || res.Pending {
+			if res.Accepted || res.Abstained || res.Pending || res.Terminated {
 				rec.Turns = append(rec.Turns, turnRec)
 				keep(nil)
 				return res, nil
@@ -232,6 +247,10 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 // errStoppedAfterReply is the stop a test makes between a provider's
 // answer and its use (Server.stopAfterReply), as a crash would.
 var errStoppedAfterReply = errors.New("the turn stopped after the model's reply was recorded")
+
+// errUnsaved stops a model seat's call before a try is sent while the game
+// cannot be saved.
+var errUnsaved = errors.New("the game could not be saved: its model seats wait until it is, and are asked nothing meanwhile")
 
 // rejectedFeedback is what a model seat is told when its move is refused,
 // before its next attempt.
@@ -321,6 +340,11 @@ func (ss *Session) turnInProgress(p string) *turnRecord {
 	if len(final) != n || final[1] == nil || len(final[1].Request.Messages) == 0 {
 		return nil
 	}
+	if turn == len(h) && final[1].Request.Messages[0].Content != ss.Prompt() {
+		// No move since the turn began: its first request was this board,
+		// or the record is not this turn's.
+		return nil
+	}
 	used := map[string]*Trace{}
 	for i := range ss.Traces {
 		if d := &ss.Traces[i]; d.Parent != "" {
@@ -341,6 +365,11 @@ func (ss *Session) turnInProgress(p string) *turnRecord {
 			}
 			cc := *c // a copy: the turn reads it without the lock
 			tr.replies[a] = &cc
+		case d.Result.Pending:
+			// Held for the moderator: the turn ended with it. Rejected, the
+			// seat's next turn starts afresh, on the board with the
+			// moderator's note, as a refused move does not.
+			return nil
 		case tr.attempt != 0:
 			return nil // a decision after a reply none used: not a turn's record
 		default:

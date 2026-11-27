@@ -41,6 +41,6 @@ The profile has explicit limits and adaptations:
 
 **Checks.** `tools/engine-tests.sh` runs GoCHR's and Carneades' own tests (with the five fork regressions) against the local GoCHR; CI runs it. WAG's own suite passes even without the engine patches, so this is the check that catches a lost one.
 
-**Updating.** Run `tools/sync_carneades_fork.sh <library checkout> <commit>`, then `tools/engine-tests.sh` and `go test ./...` in `wag/`, and record the commit above. The old fork (branch `kialo-research`, commit `995768e`) stays in use by the Kialo argumentation project until it reruns its grid of 342 labellings on this engine.
+**Updating.** Run `tools/sync_carneades_fork.sh <library checkout> <commit>`, then `tools/engine-tests.sh`, regenerate the engine's fingerprint, which a game records as its `engine_sha256` pin (`WAG_UPDATE_ENGINE=1 go test -run TestEngineFingerprint ./internal/manifest/` in `wag/`), then `go test ./...` in `wag/`, and record the commit above. The old fork (branch `kialo-research`, commit `995768e`) stays in use by the Kialo argumentation project until it reruns its grid of 342 labellings on this engine.
 
 **Licence:** Carneades-4 and GoCHR keep their own licences (`carneades-4/LICENSE`, `GoCHR/LICENSE`); Carneades is MPL-2.0, and the patched files are published under it.

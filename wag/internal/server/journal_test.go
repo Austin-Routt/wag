@@ -448,6 +448,13 @@ func TestG5dAReplyAfterARefusalByARule(t *testing.T) {
 			(last["parent"] == calls[1]["id"]) == edit {
 			t.Fatalf("edited %v: the second attempt's decision: %v", edit, last)
 		}
+		// The recovered decision's prompt is the board as the turn began, and
+		// its feedback why the first reply was refused, as a live turn's.
+		board := calls[0]["request"].(map[string]any)["messages"].([]any)[0].(map[string]any)["content"]
+		why, _ := decisions[0]["result"].(map[string]any)["error"].(string)
+		if !edit && (last["prompt"] != board || why == "" || last["feedback"] != rejectedFeedback(why)) {
+			t.Fatalf("the recovered decision's prompt %.60q (want %.60q), feedback %q (want %q)", last["prompt"], board, last["feedback"], rejectedFeedback(why))
+		}
 	}
 }
 
@@ -614,7 +621,9 @@ func TestG10AResumedGameKeepsItsClocks(t *testing.T) {
 	gs := srv2.sessions[id2].GS
 	cfg, started, turn := gs.Config, gs.StartedAt, gs.TurnStartedAt
 	srv2.mu.Unlock()
+	srv.mu.Lock()
 	played := g.ExportedAt.Sub(srv.sessions[id].Created)
+	srv.mu.Unlock()
 	if cfg.TimeLimit != 10*time.Minute || cfg.MoveTimeLimit != time.Minute || turn.Before(at) ||
 		started.After(at.Add(-played).Add(time.Second)) || started.Before(at.Add(-played).Add(-time.Second)) {
 		t.Fatalf("clocks %v %v; started %v (want about %v), the turn %v", cfg.TimeLimit, cfg.MoveTimeLimit, started, at.Add(-played), turn)

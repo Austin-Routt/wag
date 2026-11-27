@@ -134,9 +134,42 @@
               "dropped_decisions": {
                 "type": "integer",
                 "description": "Decisions recorded after the export's last save (a save that stopped between the trace and the export), dropped at the resume."
+              },
+              "build": {
+                "type": "object",
+                "description": "The resuming server's build (the start keeps the build that began the game)."
+              },
+              "pins": {
+                "$ref": "#/$defs/pins"
               }
             }
           }
+        },
+        "pins": {
+          "$ref": "#/$defs/pins"
+        }
+      }
+    },
+    "pins": {
+      "type": "object",
+      "description": "The game's inputs by content, each a full SHA-256 (docs/e1-evidence.md): the engine's sources, the scheme file the game reads, and the NASCQ data. A game begun before they were recorded has none.",
+      "required": [
+        "engine_sha256",
+        "catalogue_sha256",
+        "nascq_sha256"
+      ],
+      "properties": {
+        "engine_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "nascq_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
         }
       }
     },

@@ -323,6 +323,12 @@ The game ends at the first of these conditions that is met.
 | The round limit is reached | `MaxTurns` | by the objective (truncated) |
 | Every player passes N rounds running | `AbstentionThreshold` | by the objective |
 
+The game clock is read when a move is made, and before a model seat is asked
+for one: once the time is up the game ends, and the move is not played (nor a
+move held for the moderator, whose approval then ends the game without it).
+A game resumed from the data folder counts the time played before it stopped,
+not the time it was stopped (`docs/g-journal.md`).
+
 SRD §17.3's "proof standard satisfied" condition is deliberately left out. It
 ends the game as soon as the claim meets its standard, which is usually right
 after the opening argument. In this implementation the verdict decides the

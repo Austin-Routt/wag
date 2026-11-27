@@ -19,6 +19,7 @@ type Replay struct {
 
 	mu         sync.Mutex
 	next       int
+	lastFailed bool // the last call it gave back was a recorded failure
 	Mismatches []string
 }
 
@@ -32,6 +33,7 @@ func (r *Replay) Complete(ctx context.Context, req Request) (*Response, error) {
 	}
 	a := r.Recorded[r.next]
 	r.next++
+	r.lastFailed = a.Error != nil
 	if d := RequestDiff(a.Request, req); d != "" {
 		r.Mismatches = append(r.Mismatches, fmt.Sprintf("call %d: %s", r.next, d))
 	}
@@ -44,6 +46,15 @@ func (r *Replay) Complete(ctx context.Context, req Request) (*Response, error) {
 	}
 	resp := *a.Response
 	return &resp, nil
+}
+
+// Given is how many recorded calls it gave back, and whether the last was a
+// recorded failure: a replay goes on past a call that failed as recorded,
+// as the game went on past it.
+func (r *Replay) Given() (n int, lastFailed bool) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return r.next, r.lastFailed
 }
 
 // Left is how many recorded calls were not asked for.

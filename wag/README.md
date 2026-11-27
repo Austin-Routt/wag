@@ -49,7 +49,9 @@ your verdicts. Everything is saved in your data folder (`~/WAG`, or
 `--store DIR`): `../docs/llm.md`, "The dashboard". A game with a model seat
 is saved there after every change, each reply of the model before it is
 played; after the server stops, **Play** lists it, and *Resume* goes on with
-it without asking the model again for a reply it already gave.
+it on a server set up as it was (the same model profiles and context
+presets), playing a reply the model gave that the game had not played yet
+rather than asking for it again.
 
 Building from source needs Go 1.24 or later (the Anthropic and Google SDKs require it).
 A seat can be a person, a language model through the text protocol

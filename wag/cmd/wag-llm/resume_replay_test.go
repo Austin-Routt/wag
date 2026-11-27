@@ -107,3 +107,59 @@ func TestG6AResumedGameReplays(t *testing.T) {
 		t.Fatalf("replay: %v", err)
 	}
 }
+
+// G6b (docs/g-journal.md): G3's game, whose model call failed and was asked
+// again, replays: the replay goes on past the failed call, as the game did.
+func TestG6bAGameWithAFailedCallReplays(t *testing.T) {
+	const (
+		claim = `{"summary":"State the claim.","action":{"type":"support","scheme_id":"AS:consequences","variable_bindings":{"A":"tax meat","G":"lower emissions"},"declare":[{"id":"tax meat","actor":"decider"}]}}`
+		pass  = `{"summary":"Nothing more.","action":{"type":"abstain"}}`
+	)
+	d, err := server.ReadData("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	store := t.TempDir()
+	srv, err := server.New(d, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := srv.SetStore(store); err != nil {
+		t.Fatal(err)
+	}
+	var n atomic.Int32
+	c := llm.WithProvider(llm.Profile{Name: "m", Provider: "mock", Retries: -1, Params: llm.Params{Model: "m-1"}}, &llm.Mock{Fn: func(llm.Request) (*llm.Response, error) {
+		switch n.Add(1) {
+		case 1:
+			return nil, &llm.Error{Provider: "mock", Kind: llm.KindAuth, Message: "the provider refused the key"}
+		case 2:
+			return &llm.Response{Text: claim, FinishReason: "stop", Model: "m-1"}, nil
+		}
+		return &llm.Response{Text: pass, FinishReason: "stop", Model: "m-1"}, nil
+	}})
+	c.Sleep = llm.NoWait
+	srv.AddModel(c)
+	ts := httptest.NewServer(srv.Handler())
+	t.Cleanup(ts.Close)
+	rounds, concede := 4, false
+	req := server.NewGameRequest{Mode: "debate", Seats: []server.Seat{{Name: "M", Kind: "model", Model: "m"}, {Name: "R", Kind: "random"}},
+		MaxRounds: &rounds, ConcedeOnPass: &concede, AllowOther: true, Seed: 7, Profile: wgame.DefaultProfile()}
+	var st stateView
+	if err := call(ts.URL, "POST", "/api/games", req, &st); err != nil {
+		t.Fatal(err)
+	}
+	if err := call(ts.URL, "POST", "/api/games/"+st.ID+"/ai", map[string]any{}, nil); err == nil {
+		t.Fatal("the first call did not fail")
+	}
+	g := &game{base: ts.URL, id: st.ID}
+	if err := g.run(200); err != nil {
+		t.Fatal(err)
+	}
+	dirs, _ := fs.Glob(os.DirFS(store), "games/*")
+	if len(dirs) != 1 {
+		t.Fatalf("the data folder holds %v", dirs)
+	}
+	if err := replay(context.Background(), []string{filepath.Join(store, filepath.FromSlash(dirs[0]), "trace.jsonl")}); err != nil {
+		t.Fatalf("replay: %v", err)
+	}
+}

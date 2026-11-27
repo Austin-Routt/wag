@@ -634,6 +634,12 @@ func (s *Server) autosave(ss *Session) error {
 		fmt.Fprintln(os.Stderr, "saving the game:", err)
 		return err
 	}
+	if gs := ss.GS; ss.saveErr != "" && !gs.Terminated && gs.Pending == nil && ss.Seats[gs.ActivePlayerIdx].aiKind() == "model" {
+		// Saved again: the model seat to move waited while the game could
+		// not be saved (it is asked nothing meanwhile), and that time is
+		// not its own: its move clock starts again.
+		gs.RestartMoveClock()
+	}
 	ss.saveErr = ""
 	ss.SavedTo = dir
 	return nil

@@ -12,6 +12,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/yourorg/wag/internal/game"
+	"github.com/yourorg/wag/internal/manifest"
 )
 
 // Resuming a game of the data folder (docs/g-journal.md). A game with a model
@@ -27,8 +30,12 @@ import (
 type savedGame struct {
 	Export
 	ExportedAt time.Time `json:"exported_at"`
-	State      struct {
-		ID string `json:"id"`
+	// PlayedNs is the time played when it was saved, which the game clock
+	// counts; an export saved before it was recorded (2026-11-27) has none.
+	PlayedNs *int64 `json:"played_ns"`
+	State    struct {
+		ID      string        `json:"id"`
+		Pending *PendingState `json:"pending"` // the move held for the moderator, if one was
 	} `json:"state"`
 	Traces []Trace     `json:"traces"`
 	Events []Event     `json:"events"`
@@ -164,6 +171,44 @@ func (tf *traceFile) check(g *savedGame) (kept []Trace, dropped int, why string)
 	return kept, len(tf.decisions) - len(kept), ""
 }
 
+// ownFile reads the game folder's file name, which must be a file of the
+// folder, not a link.
+func ownFile(dir, name string) ([]byte, error) {
+	p := filepath.Join(dir, name)
+	fi, err := os.Lstat(p)
+	if err != nil {
+		return nil, err
+	}
+	if !fi.Mode().IsRegular() {
+		return nil, fmt.Errorf("%s is a link, or not a file", name)
+	}
+	return os.ReadFile(p)
+}
+
+// heldAgain tells why the move the export holds for the moderator cannot be
+// held again, or "" if it can: the game is not over, it is its player's
+// turn, and the trace's last decision of that player was held. (The held
+// move is the export's: the game holds a move as it reads it, an alias as
+// its action and an agent place bound, which the decision records as it was
+// made. The moderator's approval plays it through every rule.)
+func heldAgain(gs *game.GameState, kept []Trace, p *PendingState) string {
+	if gs.Terminated {
+		return "the game is over"
+	}
+	if a := gs.ActivePlayer(); a == nil || a.ID != p.Player {
+		return fmt.Sprintf("the move is %s's, and it is not their turn", p.Player)
+	}
+	for i := len(kept) - 1; i >= 0; i-- {
+		if d := kept[i]; d.Player == p.Player {
+			if !d.Result.Pending {
+				return fmt.Sprintf("the trace's last decision of %s (%s) was not held", p.Player, d.ID)
+			}
+			return ""
+		}
+	}
+	return fmt.Sprintf("the trace has no decision of %s", p.Player)
+}
+
 // sameJSON: a and b are written alike.
 func sameJSON(a, b any) bool {
 	x, err1 := json.Marshal(a)
@@ -173,12 +218,23 @@ func sameJSON(a, b any) bool {
 
 // startDiffers names what of the game's start, as this server would write
 // it for the session, is not as the trace's start has it: "" if nothing.
+// The build is not compared: a build records what built it (a commit, its
+// time, files changed), not what it plays, and a game is resumed by
+// another (each resume records its own). What a build changes in play is
+// compared: the protocol, the system prompt, the model profiles, the
+// context presets, and the engine's and data's pins, where the start
+// recorded them (a game begun before they were recorded has none).
 func (s *Server) startDiffers(ss *Session, recorded *GameStart) string {
 	var got, want map[string]json.RawMessage
 	a, err1 := json.Marshal(s.gameStart(ss))
 	b, err2 := json.Marshal(recorded)
 	if err1 != nil || err2 != nil || json.Unmarshal(a, &got) != nil || json.Unmarshal(b, &want) != nil {
 		return "the start (it cannot be compared)"
+	}
+	delete(got, "build")
+	delete(want, "build")
+	if _, ok := want["pins"]; !ok {
+		delete(got, "pins")
 	}
 	var diff []string
 	for k, v := range got {
@@ -201,7 +257,13 @@ func (s *Server) startDiffers(ss *Session, recorded *GameStart) string {
 // its id, its start and its clocks, and goes on saving into dir. Caller
 // holds s.mu.
 func (s *Server) resume(dir string) (*Session, error) {
-	eb, err := os.ReadFile(filepath.Join(dir, "export.json"))
+	if fi, err := os.Lstat(dir); err != nil || !fi.IsDir() {
+		if err == nil {
+			err = fmt.Errorf("a link, or not a folder")
+		}
+		return nil, fmt.Errorf("%s is not a game's folder: %v", filepath.Base(dir), err)
+	}
+	eb, err := ownFile(dir, "export.json")
 	if err != nil {
 		return nil, fmt.Errorf("the game's folder has no export: %v", err)
 	}
@@ -209,7 +271,7 @@ func (s *Server) resume(dir string) (*Session, error) {
 	if err := json.Unmarshal(eb, &g); err != nil {
 		return nil, fmt.Errorf("the game's export does not read: %v", err)
 	}
-	tb, err := os.ReadFile(filepath.Join(dir, "trace.jsonl"))
+	tb, err := ownFile(dir, "trace.jsonl")
 	if err != nil {
 		return nil, fmt.Errorf("the game's folder has no trace: %v", err)
 	}
@@ -222,6 +284,9 @@ func (s *Server) resume(dir string) (*Session, error) {
 		return nil, fmt.Errorf("the trace is not the export's: %s", why)
 	}
 	id := tf.start.Game
+	if n, err := strconv.Atoi(id); err != nil || n <= 0 || strconv.Itoa(n) != id {
+		return nil, fmt.Errorf("the game's id %q is not one this server gives (a number)", id)
+	}
 	if s.sessions[id] != nil {
 		return nil, fmt.Errorf("the game %s is open in this server: go on playing it here", id)
 	}
@@ -234,19 +299,44 @@ func (s *Server) resume(dir string) (*Session, error) {
 	ss.resumed = tf.start.Resumed
 	// Its clocks, which a load drops: the move clock starts again for the
 	// turn in progress; the game clock counts the time played before the
-	// stop, from the start to the export's last save.
+	// stop, as its last save recorded it. (An export saved before that was
+	// recorded counts from the start to its last save: the time played,
+	// unless the game was resumed before, by the build of that day.)
 	gs := ss.GS
 	gs.Config.TimeLimit, gs.Config.MoveTimeLimit = tf.start.Config.TimeLimit, tf.start.Config.MoveTimeLimit
 	played := g.ExportedAt.Sub(tf.start.Time)
-	if played < 0 || g.ExportedAt.IsZero() {
+	if g.PlayedNs != nil {
+		played = time.Duration(*g.PlayedNs)
+	} else if g.ExportedAt.IsZero() {
 		played = 0
 	}
+	played = max(played, 0)
 	now := time.Now()
 	gs.StartedAt, gs.TurnStartedAt = now.Add(-played), now
+	// A move held for the moderator when the game was saved is held again:
+	// the moderator judges it, and no one is asked for another.
+	if p := g.State.Pending; p != nil {
+		if why := heldAgain(gs, kept, p); why != "" {
+			return nil, fmt.Errorf("the export holds a move for the moderator that the game does not: %s", why)
+		}
+		gs.Pending = &game.PendingMove{PlayerID: p.Player, Action: p.Action, SubmittedAt: now}
+		gs.LastRejection = "" // as holding it left it
+	}
 	if diff := s.startDiffers(ss, &tf.start); diff != "" {
 		return nil, fmt.Errorf("this server would not go on with the game as its trace began it: its %s differ. Resume it on a server set up as "+
-			"the game was (the same WAG build, model profiles and context presets), or load its export to go on with it as a new record", diff)
+			"the game was (the same protocol, model profiles, context presets, engine and scheme data), or load its export to go on with it "+
+			"as a new record (a model seat is then asked again for a turn in progress)", diff)
 	}
+	// The start keeps the build that began the game, and its pins as it
+	// recorded them; this resume records its own.
+	ss.build = tf.start.Build
+	if tf.start.Pins == nil {
+		ss.pins = manifest.Pins{}
+	}
+	// The game clock: a game whose time was up is over (and a move held for
+	// the moderator is not played: its time is up too).
+	held := gs.Pending != nil
+	clock := gs.CheckClock()
 	s.sessions[id] = ss
 	if n, err := strconv.Atoi(id); err == nil && n > s.next {
 		s.next = n
@@ -260,10 +350,19 @@ func (s *Server) resume(dir string) (*Session, error) {
 		ss.order = max(ss.order, d.Order)
 	}
 	ss.Events, ss.LLM = g.Events, g.LLM
-	ss.resumed = append(ss.resumed, Resumption{Time: now.UTC(), After: ss.order, Dropped: dropped})
+	pins := s.pins
+	ss.resumed = append(ss.resumed, Resumption{Time: now.UTC(), After: ss.order, Dropped: dropped, Build: buildInfo(), Pins: &pins})
 	detail := fmt.Sprintf("%d moves; %d calls and %d decisions carried over", len(g.History), len(ss.Calls), len(kept))
 	if dropped > 0 {
 		detail += fmt.Sprintf("; %d decisions dropped, recorded after the export's last save", dropped)
+	}
+	switch {
+	case clock != nil && held:
+		detail += "; the game's time was up: it is over, and the move held for the moderator was not played"
+	case clock != nil:
+		detail += "; the game's time was up: it is over"
+	case held:
+		detail += "; " + gs.Pending.PlayerID + "'s move awaits the moderator"
 	}
 	ss.event("resume", "", detail, nil, nil)
 	s.autosave(ss) // a failure is shown in the state, and the model seats wait

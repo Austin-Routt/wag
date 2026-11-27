@@ -253,3 +253,50 @@ corrections, each with its case, written before the case ran:
 
 G5d also checks the recovered decision's prompt (the board as the turn began) and feedback; the
 redraw has a unit test (a pass is not drawn again; the last board is).
+
+### Results of the corrections (recorded after the tests ran, 2026-11-27)
+
+- **Every case passed as written:** G11, G12, G12b, G13, G10b, G14, G15, G16, G17, G5f, G5g, G5h,
+  G4c, G3c, G5i, G6b, Gn, G5d's added checks and the redraw's unit test
+  (`server/journal_fixes_test.go`, `server/journal_test.go`; G6b in `wag-llm/resume_replay_test.go`).
+- **On the code before the corrections**, with these tests: G11, G12, G12b, G13, G10b, G14, G15, G16,
+  G17, G5f, G4c and G6b fail, each on the error the check found. G5g, G5h, G3c, G5i, Gn, G5d's
+  added checks and the redraw's test pass: they test what was right and untested (W1, W2).
+- **Also checked**, beyond the tables: the ids `""` and `007` besides `../x`, and an export that is a
+  link besides a folder (G5f); an export holding a move the trace's decision did not hold, or for a
+  player whose turn it is not (G12); the time running out while the model answers (its move not
+  played, the model not asked again), and a move held when the time was up (not played, no longer
+  held, at the resume) (G16); a start that recorded no pins (resumed, keeping none) and one with
+  another engine's pins (refused) (G17); a call, or a decision, of another game (G5g); game 2
+  resumed in a new server, whose load of it took the id 1 for a moment (a new game gets 3) (Gn);
+  the events' order after a resume that followed a decision (G13); a recorded request with another
+  parameter (`TestG5eAReplyToOtherParametersIsNotPlayed`); and records no turn leaves, crafted: a
+  call of another seat or turn among the turn's, a decision after a reply none used, an attempt
+  after the last call's (`TestTurnInProgressTakesOnlyATurnsRecord`). These were added after the
+  planted defects ran (below).
+- **Found while correcting W5, and corrected:** the moderator's approval of a held move after the
+  game's time was up ended the game without the move, and wrote the approval as the verdict of the
+  move before (`Moderate`); a record so written replayed that move as played if it had been
+  rejected. The verdict is now the move's the approval made, and a move the moderator rejected
+  replays as rejected whatever its verdict says (`TestTheVerdictIsTheMovesItMade`, which fails on the
+  code before).
+- **Corrections to the Results above:** G5's "another move" edited the reply's text, which the
+  decision comparison caught; no case gave the export another move list before G5g. "The resume
+  takes only a game's folder" was tested only with paths that had no export; G5h tests a whole
+  game's folder elsewhere. The trace reader takes only the trace's format, a start first and once,
+  and the kinds of event; it does not check event ids, orders or duplicates (a turn's calls are
+  checked as a turn's record, and a reply for the current board against the board: correction 8).
+- **Not corrected, and said where it applies:** two servers on one data folder (N4: llm.md says to
+  run one); the resume and every call's save hold the server's lock (N5); a profile edited mid-game
+  rewrites the start's profiles (N6; the build is now kept); a resumed game's seats get new keys
+  (N11: protocol.md says so); the browser lists every saved game, and a resume it refuses says why
+  (N9).
+- **Planted defects:** 62, each caught (in the workspace, `verify/g/mutants-g2.py` and its runs): the
+  first run's 16, the check's 22 (its R5 is left out: the start's comparison refuses other seats
+  too, so it changes nothing; its T11 was the correction of E1, whose reverse is F1), and 24 for
+  the corrections. The first run caught 35; 8 survived
+  (the check's R7, R9, R11, T1, T2, T3 and T9, and F2c, whose case was refused for another reason
+  first), one was caught by a crash (G4c read a call without checking there was one), and 19 had
+  no verdict: the disk allowance ran out (the Go build cache had grown to 42 GB over the day's
+  runs). The "also checked" cases above were added for the survivors and G4c guarded; the cache
+  cleared; the 28 run again, each caught on its checks.

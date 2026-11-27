@@ -168,8 +168,12 @@ type Session struct {
 	// resumed are the game's resumes, which its trace's start records.
 	folder  string
 	resumed []Resumption
+	// build is the build that began a resumed game, which its trace's start
+	// keeps (nil: this server's, buildInfo); each resume records its own.
+	build map[string]string
 	// pins are the server's inputs by content (manifest), which its trace's
-	// start and its export record.
+	// start and its export record; none for a resumed game whose start
+	// recorded none (begun before the pins were recorded).
 	pins manifest.Pins
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
@@ -1139,11 +1143,15 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 	if ss.inspectedWith != "" {
 		history = ss.playedHistory
 	}
+	now := time.Now()
 	out := map[string]interface{}{
-		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
+		"format": "wag-export/2", "exported_at": now.UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
 		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
-		"history": history, "state": st, "other_arguments": mined, "import": ss.Import, "pins": ss.pins,
+		"history": history, "state": st, "other_arguments": mined, "import": ss.Import, "pins": ss.pinsOrNil(),
 		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM, "traces": ss.tracesWithoutPrompts(), "verdicts": ss.verdicts(contexts),
+		// The time played so far, which the game clock counts: a resume
+		// counts this, not the time since the game was created.
+		"played_ns": now.Sub(ss.GS.StartedAt).Nanoseconds(),
 	}
 	if ss.inspectedWith != "" {
 		// The history is as it was played, with data_sha256; the state, the

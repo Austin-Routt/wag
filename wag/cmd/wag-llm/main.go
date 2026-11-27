@@ -170,6 +170,9 @@ func ping(ctx context.Context, args []string) error {
 type game struct {
 	base string
 	id   string
+	// replays are a replay's model seats, by player: a turn whose call
+	// failed as recorded is asked for again, as the game asked again.
+	replays map[string]*llm.Replay
 }
 
 func call(base, method, path string, body, out any) error {
@@ -228,7 +231,17 @@ func (g *game) run(maxMoves int) error {
 		if st.ActiveAI == "" {
 			return fmt.Errorf("%s is a human seat", st.Active)
 		}
+		rp := g.replays[st.Active]
+		var given int
+		if rp != nil {
+			given, _ = rp.Given()
+		}
 		if err := call(g.base, "POST", "/api/games/"+g.id+"/ai", map[string]any{}, nil); err != nil {
+			if rp != nil {
+				if n, failed := rp.Given(); n > given && failed {
+					continue // the call failed as recorded: the game asked again
+				}
+			}
 			return err
 		}
 	}
@@ -640,7 +653,7 @@ func replay(ctx context.Context, args []string) error {
 		return fmt.Errorf("the game was played with the scheme weights %v; its request now gives %v: %s (use --data for that version before replaying)",
 			start.Config.Weights, st.Config.Weights, why)
 	}
-	g := &game{base: ts.URL, id: st.ID}
+	g := &game{base: ts.URL, id: st.ID, replays: replays}
 	runErr := g.run(10 * (len(decisions) + 1))
 	again, err := replayedDecisions(ts.URL, st.ID)
 	if err != nil {

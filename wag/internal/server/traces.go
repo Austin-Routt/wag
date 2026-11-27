@@ -319,6 +319,21 @@ type Resumption struct {
 	Time    time.Time `json:"time"`
 	After   int       `json:"after_order"`
 	Dropped int       `json:"dropped_decisions,omitempty"`
+	// Build and Pins are the resuming server's: the start keeps the build
+	// that began the game, and its pins, if it recorded them, are this
+	// server's too.
+	Build map[string]string `json:"build,omitempty"`
+	Pins  *manifest.Pins    `json:"pins,omitempty"`
+}
+
+// pinsOrNil is the game's pins, or nil if it has none (a resumed game begun
+// before pins were recorded).
+func (ss *Session) pinsOrNil() *manifest.Pins {
+	if ss.pins == (manifest.Pins{}) {
+		return nil
+	}
+	p := ss.pins
+	return &p
 }
 
 // GameEnd is the last event of the trace file of a game that is over.
@@ -373,7 +388,10 @@ func (s *Server) guestCopy(b []byte) []byte {
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
 		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
-		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts, Resumed: ss.resumed, Pins: &ss.pins}
+		Seats: ss.Seats, System: modelSystem, Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil()}
+	if g.Build == nil {
+		g.Build = buildInfo()
+	}
 	seen := map[string]bool{}
 	for _, seat := range ss.Seats {
 		if c, _ := s.model(seat); c != nil && !seen[c.Profile.Name] {
