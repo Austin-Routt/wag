@@ -1,7 +1,7 @@
 # The first gold (D086): plan, version 2
 
 Status: plan, 2026-11-27, written before any drafting; the developer's under the owner's instruction to
-go with the recommended choices. Round 1's first draft followed the same day (§10). Phase 3's first item ([plan.md](plan.md) §4, item 1; D086, D045, D092).
+go with the recommended choices. Round 1's first draft followed the same day (§10), and its second, from the first exchange of the review (§11). Phase 3's first item ([plan.md](plan.md) §4, item 1; D086, D045, D092).
 Version 1 (8fcd001) was checked independently the same day; the check found four errors, seven
 warnings and ten notes, each verified against the repository and taken up here (§8).
 
@@ -90,7 +90,7 @@ gone, R13; a challenge record that names a formula no longer there, R10), change
 same draft, and the item joins the round: it is reviewed and verified with it. Where it can, a draft
 keeps the formulas that other items target.
 
-The round is checked as the gold always is: `validate.py` (R2-R17) and `test_validate.py`; the Go
+The round is checked as the gold always is: `validate.py` (R2-R19) and `test_validate.py`; the Go
 tests of the annotation package (`go test ./internal/annotate/`), two of which pin the gold
 (`TestRuleCases` compares the rule cases' codings with it, `TestAgreementFieldsAcrossFormats` pins the
 agreement of the format-1 and format-2 golds and two targets), updated with each change and its reason;
@@ -266,6 +266,8 @@ The script:
 | V30 | A verification that records only its date: a *none* earlier the same day; separately, a *none* of the 28th recorded, a verification of the 30th made by hand, then a *none* of the 29th | Neither written; the verification stands |
 | V31 | One run: a *gold* on one claim, a *none* and an *unsure* on two claims not verified | One history entry naming the verification and the two recorded verdicts, with three times |
 | V32 | A gold that repeats a member; separately, a verdict given on an earlier gold (given with `--also`) that is not valid JSON | The first refused, nothing written; the second not written, listed |
+| V33 | A verification at a time, then removed by hand; a *none* at the same time; then the *gold* imported again (added with the code: V26 does not reach a verdict that ties with a *gold* on an item no longer verified) | The *none* recorded; the *gold* not written; the item unverified |
+| V34 | A verdict *gold* on a claim agreed in its round whose coding waits for an owner's decision (`d086-rounds.json`, `pending`); a *none* on such a claim; a `pending` that is not a list of names (added with draft 2, §11) | The *gold* not written, listed with the decisions it waits for; the *none* recorded as for any item; the malformed rounds file refused, nothing written |
 
 The dashboard:
 
@@ -457,7 +459,8 @@ Open for the review and the owner, each said in the items' notes:
    not on the board, so they become playable when the game takes the causal schemes. 13292.202's
    target, the starvation argument 13292.127#2, is a consequence argument the game has: playing it is
    a change to `to_wag.py`, outside this plan (§7). Is there a reason the gold should not target
-   secondary instances?
+   secondary instances? (Corrected in §11: 13292.202 has scheme `none`, so the replay plays it
+   in no case, whatever its target.)
 
 Taken up in round 2, not in this draft: 13292.208's target, which format 1 also moved (to 13292.104#1's
 better-means premise; both annotators put it at 13292.104#2's circumstances
@@ -465,3 +468,102 @@ better-means premise; both annotators put it at 13292.104#2's circumstances
 though the note's last sentence reads it at the moved target); 13292.121's role
 kind `side_effect`, format 1's label (§5 item 3 makes it a value of `role.move`); 13292.14's capped
 causal steps; and the notes of 13292.7, .115 and .121 that still say "until workstream E".
+
+## 11. Round 1, draft 2 (2026-11-27)
+
+**The review.** The other reviewer's item review of draft 1 (in the workspace, `reviews/2026-11-27/`;
+checked in `verify/chatgpt-d086-2026-11-27/REVIEW.md`) agreed with 21 of the 31 items and objected to
+10. The developer accepted seven objections, partly accepted two, and agreed with the direction of
+the tenth, which needs a rule of the owner's first. The reviewer's addendum of the same day
+reconciled the two partial answers on conditions, and listed which agreed items the owner's
+decisions affect (`verify/ethix-2026-11-27/REVIEW.md` §2, checked).
+
+**The draft.** `recode_d086_r1_d2.py` writes draft 2 from draft 1, each changed item with its
+`adjudication.recoded` entry:
+
+- **Accepted (7).**
+  - 13292.25: the ease premise is supplied, the claim's hedge ("could be as small as") in its note;
+    confidence no longer said to carry the hedge.
+  - 13292.104:
+    - #2's fit is reconstructed (its goal premise is supplied, §5 item 6);
+    - #1's comparison is supplied, its note saying how it is reconstructed from the claim's
+      diagnosis and that the fairness reason is not it;
+    - #1's inferred link cites 13292.13.
+  - 13292.43: the tax's effect on the goods it ranks is supplied (presupposed), their evaluation
+    explicit.
+  - 13292.127: the starvation link is supplied in both instances, since 13292.7 grounds only the
+    dearer food; #1's evaluation is explicit, as #2's.
+  - 13292.192: its second causal step is primary, since its conclusion reaches the target (§5
+    item 5). The note says the chain shows only that some deforestation may occur, not that it does
+    not slow.
+  - 13292.8: the note says the backing of 13292.115's premise is partial.
+  - 13292.194: at 13292.12#3's conclusion, the argument that cites the harm, as 13292.202 is (OC6).
+    Question 3 is answered so.
+- **Partly accepted, on the reconciliation's conditions (2).**
+  - 13292.123:
+    - `better_means` kept, for 13292.118's own goal (D075);
+    - its comparison and its link to the goal are supplied, and scoped: subsidy removal corrects the
+      distortion 13292.11 names, not the externalities 13292.218 names;
+    - the reviewer's reading, a proposal of another course not said to do better (C017; OC6), is
+      recorded as the primary's alternative.
+  - 13292.218:
+    - the action is named ("it") but not represented in the fragment;
+    - the circumstances it elaborates are inferred from 13292.11, which states them;
+    - its stated link stays explicit, its note giving the projection to 13292.118's
+      `higher_meat_price` and its scope: the price rise that internalizes the named externalities, not
+      any higher price.
+- **Refinements of agreed items (2).** 13292.11 says the claim presents the subsidies as existing.
+  13292.6 records `cause_to_effect_modal` as an alternative.
+- **To the owner (1).** 13292.108, unchanged: question 1.
+- **Agreed at their revision (19).** The other agreed items, unchanged.
+
+**The rounds file.** `d086-rounds.json` records:
+
+- each claim's first exchange (`exchanges`: the draft reviewed, the reviewer's and the developer's
+  dispositions, the record);
+- the 11 changed claims at draft 2, not reviewed;
+- the 19 agreed at their revision;
+- 13292.108 with the owner;
+- the owner's decisions 17 claims wait for (`pending`). `verify_gold.py` writes no verification while
+  a claim waits (V34). The decisions:
+  - **Q1** (13292.108, .5, .6, .104, .127, .147, .174): whether 13292.108 keeps its source fragment
+    beside a separately identified reconstruction of the environmental argument. If so, the targets
+    into its conclusion and its supplied premises move to the reconstruction, since a fragment
+    carries no conclusion (13292.6#1, .11#1, .218#1).
+  - **G2** (13292.2, .9, .11, .12, .36, .141, .180, .182, .192, .198): whether the causal exception
+    names its effect, `interference(E1,E2)`, through a proposal. If so, every causal instance's
+    exception changes, and so do the answers at 13292.180#2's.
+
+The review's other questions for the owner change no item of this draft: the convention of OC6 and
+OC10, C5's questions, E1's choices and the pilot's external benchmark.
+
+**Checks.**
+
+- `validate.py` gains two rules from the review's findings, with planted-defect tests:
+  - R18, explicit fit (guidelines §5 item 6), which 13292.104#2 broke; it is in the Go check too;
+  - R19, an inferred premise cites the claim that says it (§2 item 3), which 13292.104#1, .43#1,
+    .123#1 and .127#1 broke.
+  Both pass now.
+- Each changed item's record names exactly the fields its diff changed (in the workspace,
+  `verify/d086/records_check.py`: 11 items, no mismatch).
+- `TestAgreementFieldsAcrossFormats` pins target_instance 0.84 (13292.194) and bindings 0.92
+  (13292.192's primary).
+- In the replay 13292.194, a new argument before, is a cascade, since its target, 13292.12#3, is a
+  secondary instance the replay does not play: 41 claims played.
+
+**Questions for the next revision of the guidelines,** which the review raised and this draft does
+not settle:
+
+- an S2 close to the action restated (13292.104#2, §5 item 4);
+- a fragment that elaborates a formula its context states (13292.218, §5 item 6 with §2 item 3);
+- a background condition that backs a premise only in part, which no target can name (13292.8).
+
+**A correction of draft 1's question 6 (§10).** It said that playing 13292.202's target was a change
+to `to_wag.py`. But 13292.202 has scheme `none`, so the replay plays it in no case (the reviewer's
+finding).
+
+**Next.**
+
+- Exchange 2, with the reviewer, on the 11 changed items; 13292.123 and .218 are measured against the
+  conditions the reviewer set.
+- The owner's decisions: Q1 and G2 first, since 17 claims wait for them.

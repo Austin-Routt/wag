@@ -497,6 +497,20 @@ func (gs *GameState) QuestionText(cqID, targetArgID string) string {
 	}
 	words := gs.words()
 	b := gs.Adapter.ArgumentBindings(targetArgID)
+	// An Other move about an existing statement can omit C. Recover its
+	// actual conclusion for this question without changing recorded bindings.
+	if cqID == nascq.CQCounter {
+		if _, hasC := b["C"]; !hasC {
+			if arg := gs.Adapter.Graph.Arguments[targetArgID]; arg != nil &&
+				arg.Scheme != nil && arg.Scheme.Id == nascq.OtherCarneades &&
+				arg.Conclusion != nil {
+				if b == nil {
+					b = make(map[string]string)
+				}
+				b["C"] = arg.Conclusion.Id
+			}
+		}
+	}
 	for k, v := range b {
 		if t, ok := terms.ReadString(v); ok {
 			b[k] = gs.sayArg(t, words, 0)

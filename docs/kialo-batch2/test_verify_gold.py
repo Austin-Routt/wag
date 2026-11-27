@@ -1,5 +1,6 @@
-"""Tests of verify_gold.py: the cases V1 to V16 of docs/d086-first-gold.md §6, whose outcomes were
-written before the tests ran, and two more (the rounds file it reads, and the repository's own).
+"""Tests of verify_gold.py: the cases V1 to V34 of docs/d086-first-gold.md §6, whose outcomes were
+written before the tests ran (V17-V32 at 8c64ee9; V33 added with the code, V34 with draft 2), and three more (V3 through the history, the
+rounds file it reads, and the repository's own).
 Each case works on temporary copies of the gold and of the rounds file; the claims' texts and the
 other inputs are the repository's.
 
@@ -7,6 +8,7 @@ usage: python3 -I test_verify_gold.py
 """
 import hashlib
 import json
+from pathlib import Path
 import os
 import shutil
 import subprocess
@@ -94,12 +96,14 @@ class VerifyGold(unittest.TestCase):
         return {it['kialo_claim_id']: it for it in load_json(path or self.gold)['items']}
 
     def agree(self, *cids, rev=None):
-        """The claims agreed in their round at the revision they have in the temporary gold."""
+        """The claims agreed in their round at the revision they have in the temporary gold, waiting for
+        no decision of the owner (whatever the repository's rounds file says of them now)."""
         doc = load_json(self.rounds)
         now = self.items()
         for cid in cids:
             doc['claims'][cid].update(draft=1, review='agreed', agreed_rev=rev or item_rev(now[cid]),
                                       agreed_by='the reviewer and the developer', agreed_date='2026-11-28', objections=[])
+            doc['claims'][cid].pop('pending', None)
         with open(self.rounds, 'wb') as fh:
             fh.write(dump(doc))
 
@@ -188,8 +192,21 @@ class VerifyGold(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stderr)
         for cid, word in (('13292.6', 'None is right'), ('13292.33', 'Unsure'), ('13292.1', 'A is right'),
                           ('13292.30', 'The reviewer is right'), ('13292.36', 'no choice, a note only')):
-            self.assertIn(f'not written: {cid}: its verdict is "{word}", not "The gold is right"', r.stdout)
-        self.unchanged()
+            self.assertIn(f'receipt recorded: {cid}: its verdict is "{word}"; the item remains unverified', r.stdout)
+        self.assertIn('5 receipts recorded, 0 not written', r.stdout)
+        # Non-gold decisions do not verify or recode items, but their
+        # timestamps must survive so an older positive import cannot win.
+        after = load_json(self.gold)
+        before = json.loads(self.bytes)
+        self.assertEqual(after['items'], before['items'])
+        self.assertEqual(len(after['history']), len(before['history']) + 1)
+        self.assertEqual({r['item'] for r in after['history'][-1]['verification_verdicts']},
+                         {v['item'] for v in vs})
+        for cid, word in (('13292.6', 'None is right'), ('13292.33', 'Unsure'), ('13292.1', 'A is right'),
+                          ('13292.30', 'The reviewer is right'), ('13292.36', 'no choice, a note only')):
+            self.assertIn(f'{cid} ({word})', after['history'][-1]['what'])
+        self.assertTrue(all('verified' not in it for it in after['items']))
+        self.assertEqual(read(self.builtin), read(self.gold))
 
     def test_v6_a_later_verdict_takes_a_verification_back(self):
         self.agree('13292.6', '13292.33')
@@ -373,6 +390,270 @@ class VerifyGold(unittest.TestCase):
         r = self.run_script([])  # the temporary rounds file is the repository's, read by the script
         self.assertEqual(r.returncode, 0, r.stderr)
 
+
+    # V17-V32: the order of the verdicts (§5, "Order: the verdicts' times"), written before these tests ran.
+
+    def test_v17_a_missing_input_hash(self):
+        self.agree('13292.6')
+        v = verdict('13292.6', 'gold', self.bytes)
+        del v['inputs_sha256']['items.json']
+        r = self.run_script([v])
+        self.assertNotEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn('missing required input hashes', r.stderr)
+        self.unchanged()
+        v = verdict('13292.6', 'gold', self.bytes)
+        v['inputs_sha256'] = {'gold.json': v['inputs_sha256']['gold.json']}
+        r = self.run_script([v])
+        self.assertNotEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.unchanged()
+
+    def test_v18_a_time_that_is_not_rfc3339(self):
+        self.agree('13292.6')
+        for at in ('2026-99-99garbage', '2026-11-28', '2026-02-30T10:00:00Z', '2026-11-28T10:00:00'):
+            r = self.run_script([verdict('13292.6', 'gold', self.bytes, at=at)])
+            self.assertNotEqual(r.returncode, 0, at + ': ' + r.stdout + r.stderr)
+            self.unchanged()
+
+    def test_v19_the_utc_date(self):
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T23:30:00-06:00')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(self.items()['13292.6']['verified']['date'], '2026-11-29')
+        self.assertEqual(load_json(self.gold)['history'][-1]['verification_verdicts'][0]['at'], '2026-11-29T05:30:00Z')
+
+    def test_v20_a_repeated_member(self):
+        self.agree('13292.6')
+        v = verdict('13292.6', 'none', self.bytes)
+        body = json.dumps([v]).replace('"choice": "none"', '"choice": "none", "choice": "gold"')
+        path = Path(self.dir) / 'human.json'
+        path.write_text(body)
+        r = subprocess.run([sys.executable, '-I', SCRIPT, str(path), '--gold', self.gold, '--builtin', self.builtin,
+                            '--rounds', self.rounds], capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn('duplicate JSON member', r.stderr)
+        self.unchanged()
+
+    def test_v21_an_older_none_after_a_newer_verification(self):
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-30T10:00:00Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at='2026-11-28T10:00:00Z')], also=[self.original])
+        self.assertIn('older than the latest', r.stdout)
+        self.assertEqual(read(self.gold), now, r.stdout + r.stderr)
+
+    def test_v22_an_older_gold_after_a_newer_withdrawal(self):
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00Z')])
+        self.run_script([verdict('13292.6', 'none', read(self.gold), at='2026-11-30T10:00:00Z')])
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00Z')], also=[self.original])
+        self.assertEqual(read(self.gold), now, r.stdout + r.stderr)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v23_a_newer_none_on_an_item_never_verified(self):
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at='2026-11-30T10:00:00Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('receipt recorded: 13292.6', r.stdout)
+        self.assertEqual(self.items(), self.items(self.original))
+        current = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00Z')], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(read(self.gold), current, r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v24_a_gold_between_two_nones(self):
+        self.agree('13292.6')
+        for choice, at in [('gold', '2026-11-27T10:00:00Z'), ('none', '2026-11-28T10:00:00Z'),
+                           ('none', '2026-11-30T10:00:00Z')]:
+            r = self.run_script([verdict('13292.6', choice, self.bytes, at=at)], also=[self.original])
+            self.assertEqual(r.returncode, 0, r.stderr)
+        current = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-29T10:00:00Z')], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(read(self.gold), current, r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v25_a_same_day_confirmation_keeps_its_time(self):
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00Z')])
+        r = self.run_script([verdict('13292.6', 'gold', read(self.gold), at='2026-11-28T15:00:00Z')])
+        self.assertIn('receipt recorded: 13292.6: a later confirmation', r.stdout)
+        self.assertIn('A later confirmation recorded', load_json(self.gold)['history'][-1]['what'])
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', now, at='2026-11-28T14:00:00Z')])
+        self.assertEqual(read(self.gold), now, r.stdout + r.stderr)
+        self.assertIn('verified', self.items()['13292.6'])
+
+    def test_v26_verdicts_of_different_choices_at_one_time(self):
+        stamp = '2026-11-28T10:00:00.123456789Z'
+        # gold, then none: the verification taken back.
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at=stamp)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        r = self.run_script([verdict('13292.6', 'none', read(self.gold), at=stamp)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('taken back: 13292.6 (a verdict "None is right" at the same time', r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+        self.assertIn('not ordered', load_json(self.gold)['history'][-1]['what'])
+        settled = read(self.gold)
+        for choice in ('gold', 'none'):
+            r = self.run_script([verdict('13292.6', choice, self.bytes, at=stamp)], also=[self.original])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual(read(self.gold), settled, choice + ': ' + r.stdout)
+        # none, then gold: the gold not written.
+        self.write_gold(json.loads(self.bytes))
+        self.unchanged()
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at=stamp)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        settled = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at=stamp)], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('13292.6: a verdict of another choice has the same time', r.stdout)
+        self.assertEqual(read(self.gold), settled, r.stdout)
+        for choice in ('gold', 'none'):
+            r = self.run_script([verdict('13292.6', choice, self.bytes, at=stamp)], also=[self.original])
+            self.assertEqual(read(self.gold), settled, choice + ': ' + r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v27_one_nanosecond_later(self):
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00.123456788Z')])
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', now, at='2026-11-28T10:00:00.123456789Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("taken back: 13292.6 (the owner's later verdict: None is right)", r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v28_a_later_gold_after_a_none(self):
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at='2026-11-28T10:00:00Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-30T10:00:00Z')], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('verified', self.items()['13292.6'])
+        v = self.validate()
+        self.assertEqual(v.returncode, 0, v.stdout + v.stderr)
+
+    def test_v29_the_same_none_twice(self):
+        self.agree('13292.6')
+        stamp = '2026-11-30T10:00:00Z'
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at=stamp)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        current = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at=stamp)], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(read(self.gold), current, r.stdout)
+
+    def test_v30_a_verification_with_only_its_date(self):
+        # A verification whose receipt is gone (as before the times were kept): a none earlier that day.
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes, at='2026-11-28T10:00:00Z')])
+        g = load_json(self.gold)
+        for h in g['history']:
+            h.pop('verification_verdicts', None)
+        self.write_gold(g)
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', now, at='2026-11-28T09:00:00Z')])
+        self.assertIn('records only a date', r.stdout)
+        self.assertEqual(read(self.gold), now, r.stdout + r.stderr)
+        # A none of the 28th recorded, a verification of the 30th made by hand, then a none of the 29th:
+        # the receipt of the 28th does not order the 29th after a verification it does not record.
+        self.write_gold(json.loads(self.bytes))
+        self.unchanged()
+        r = self.run_script([verdict('13292.6', 'none', self.bytes, at='2026-11-28T10:00:00Z')])
+        self.assertIn('receipt recorded: 13292.6', r.stdout)
+        g = load_json(self.gold)
+        text = {i['kialo_claim_id']: i['text'] for i in load_json(INPUTS['items.json'])['items']}['13292.6']
+        for it in g['items']:
+            if it['kialo_claim_id'] == '13292.6':
+                it['verified'] = {'by': 'owner', 'date': '2026-11-30', 'item_rev': item_rev(it),
+                                  'text_sha256': sha(text.encode('utf-8'))}
+        self.write_gold(g)
+        now = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'none', now, at='2026-11-29T10:00:00Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('records only a date', r.stdout)
+        self.assertEqual(read(self.gold), now, r.stdout)
+        self.assertIn('verified', self.items()['13292.6'])
+
+    def test_v31_the_history_names_every_verdict(self):
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes), verdict('13292.33', 'none', self.bytes),
+                             verdict('13292.30', 'unsure', self.bytes)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        entry = load_json(self.gold)['history'][-1]
+        self.assertIn('Verified by the owner: 13292.6', entry['what'])
+        self.assertIn('13292.33 (None is right)', entry['what'])
+        self.assertIn('13292.30 (Unsure)', entry['what'])
+        self.assertEqual(sorted(x['item'] for x in entry['verification_verdicts']), ['13292.30', '13292.33', '13292.6'])
+        self.assertTrue(all(x['at'] == '2026-11-28T10:00:00Z' for x in entry['verification_verdicts']))
+
+    def test_v32_a_gold_that_is_not_valid_json(self):
+        bad = self.bytes.replace(b'"format": "wag-annotation/2"',
+                                 b'"format": "wag-annotation/2", "format": "wag-annotation/2"', 1)
+        self.assertNotEqual(bad, self.bytes)
+        # The gold itself: refused, nothing written, no traceback.
+        for p in (self.gold, self.builtin):
+            with open(p, 'wb') as fh:
+                fh.write(bad)
+        r = self.run_script([verdict('13292.6', 'gold', bad)])
+        self.assertNotEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn('is not valid JSON', r.stderr)
+        self.assertNotIn('Traceback', r.stderr)
+        self.assertEqual(read(self.gold), bad)
+        self.assertEqual(read(self.builtin), bad)
+        # An earlier gold given with --also: that verdict listed, not written.
+        self.write_gold(json.loads(self.bytes))
+        self.unchanged()
+        earlier = os.path.join(self.dir, 'earlier.json')
+        with open(earlier, 'wb') as fh:
+            fh.write(bad)
+        self.agree('13292.6')
+        r = self.run_script([verdict('13292.6', 'gold', bad)], also=[earlier])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('13292.6: the gold it was given on is not valid JSON', r.stdout)
+        self.assertEqual(read(self.gold), self.bytes)
+
+    def test_v33_a_tie_on_an_item_no_longer_verified(self):
+        stamp = '2026-11-28T10:00:00Z'
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes, at=stamp)])
+        g = load_json(self.gold)
+        for it in g['items']:
+            it.pop('verified', None)
+        self.write_gold(g)
+        r = self.run_script([verdict('13292.6', 'none', read(self.gold), at=stamp)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn('receipt recorded: 13292.6', r.stdout)
+        settled = read(self.gold)
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes, at=stamp)], also=[self.original])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(read(self.gold), settled, r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+
+    def test_v34_a_claim_that_waits_for_a_decision(self):
+        self.agree('13292.6', '13292.33')
+        doc = load_json(self.rounds)
+        doc['claims']['13292.6']['pending'] = ['Q1']
+        doc['claims']['13292.33']['pending'] = ['G2']
+        with open(self.rounds, 'wb') as fh:
+            fh.write(dump(doc))
+        r = self.run_script([verdict('13292.6', 'gold', self.bytes), verdict('13292.33', 'none', self.bytes)])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("not written: 13292.6: its coding waits for the owner's decisions Q1", r.stdout)
+        self.assertIn('receipt recorded: 13292.33', r.stdout)
+        self.assertNotIn('verified', self.items()['13292.6'])
+        for bad in ([], [''], 'Q1', [1]):
+            doc['claims']['13292.6']['pending'] = bad
+            with open(self.rounds, 'wb') as fh:
+                fh.write(dump(doc))
+            before = read(self.gold)
+            r = self.run_script([verdict('13292.6', 'gold', self.bytes)])
+            self.assertNotEqual(r.returncode, 0, repr(bad) + ': ' + r.stdout)
+            self.assertIn('13292.6: not a claim', r.stderr)
+            self.assertEqual(read(self.gold), before)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

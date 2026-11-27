@@ -1,6 +1,6 @@
 {
  "format": "wag-d086-rounds/1",
- "note": "The rounds of the first gold (D086; docs/d086-first-gold.md): which claims each round takes and why (d086_rounds.py, from the reference named by its hash), and where each claim stands: its latest draft, the review's state (not drafted, not reviewed, objections, agreed, to the owner) and the revision of the item agreed on (verify_gold.py writes a verification only at that revision).",
+ "note": "The rounds of the first gold (D086; docs/d086-first-gold.md): which claims each round takes and why (d086_rounds.py, from the reference named by its hash), and where each claim stands: its latest draft, the review's state (not drafted, not reviewed, objections, agreed, to the owner), the revision of the item agreed on (verify_gold.py writes a verification only at that revision), its review exchanges (exchanges), and the owner's decisions its coding waits for (pending; verify_gold.py writes no verification while there are any).",
  "measure": {
   "fields": [
    "scheme",
@@ -126,11 +126,21 @@
    "why": "a control: the three codings agree on every core field",
    "fields": [],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "bf8885ada42ba3588f463e33cab78eb6e14ab6eb5011187b4d50182d7517679e",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.13": {
    "round": 2,
@@ -163,24 +173,50 @@
     "scheme"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
+   "review": "agreed",
+   "agreed_rev": "4f3e9966073dda6a1b869aa8495df73ddbfb96eebbe2c37946ec1c150be97e26",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
    "objections": [],
    "joined": 1,
-   "joined_why": "its challenge record at the modal premise named 13292.12, which backs its causal step 13292.9#2 now"
+   "joined_why": "its challenge record at the modal premise named 13292.12, which backs its causal step 13292.9#2 now",
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.108": {
    "round": 1,
    "why": "a fragment the identity contract left open for the draft",
    "fields": [],
    "draft": 1,
-   "review": "not reviewed",
+   "review": "to the owner",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "agreed in direction; a rule for the owner first (question 1)",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.115": {
    "round": 3,
@@ -213,12 +249,22 @@
     "target_formula",
     "target_part"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.33": {
    "round": 1,
@@ -229,35 +275,71 @@
     "target_formula"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "77bccc5db5a77993de313d1627a7a03429b07561462fd1f482ea9129f0b03f6a",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.180": {
    "round": 3,
    "why": "the three codings agree on every core field",
    "fields": [],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
+   "review": "agreed",
+   "agreed_rev": "27c071062887fcbf31ff545559550398de545c385093d074c0a2ec2418cc8271",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
    "objections": [],
    "joined": 1,
-   "joined_why": "its challenge record at the consequence premise named 13292.182 and .198, which answer its causal step 13292.180#2 now"
+   "joined_why": "its challenge record at the consequence premise named 13292.182 and .198, which answer its causal step 13292.180#2 now",
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.36": {
    "round": 1,
    "why": "a control: the three codings agree on every core field",
    "fields": [],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "d373c3691134722b3fe10cbffa0719a4ab39d97ee13fc89d00dc19780cd15575",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.127": {
    "round": 1,
@@ -272,12 +354,25 @@
     "target_instance",
     "target_part"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.14": {
    "round": 2,
@@ -330,11 +425,24 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "28b60ac150f3553bfa7d65e112421f06cb98179a61f2c959828b940b4b0c5d57",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.104": {
    "round": 1,
@@ -346,12 +454,25 @@
     "scheme",
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.169": {
    "round": 2,
@@ -372,12 +493,22 @@
    "fields": [
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "partly accepted, on the conditions of the reconciliation",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.11": {
    "round": 1,
@@ -385,12 +516,25 @@
    "fields": [
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed, with a refinement",
+     "developer": "refinement taken",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.43": {
    "round": 1,
@@ -402,12 +546,22 @@
     "target_instance",
     "target_part"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.121": {
    "round": 2,
@@ -455,13 +609,26 @@
     "scheme"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
+   "review": "agreed",
+   "agreed_rev": "d1ee72f94324287a834ab95e3ba957e8ec9bbf82f8520f4038e266999b02686c",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
    "objections": [],
    "joined": 1,
-   "joined_why": "its challenge record at the classification premise named 13292.141, which backs its causal step 13292.2#2 now"
+   "joined_why": "its challenge record at the classification premise named 13292.141, which backs its causal step 13292.2#2 now",
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.6": {
    "round": 1,
@@ -469,12 +636,25 @@
    "fields": [
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed, with a refinement",
+     "developer": "refinement taken",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.12": {
    "round": 1,
@@ -488,11 +668,24 @@
     "target_instance"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "f07c5620aa4076909f26268875cf5a31fdfa126cbf696d0653cee516b45fd59b",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.4": {
    "round": 2,
@@ -516,12 +709,22 @@
     "role",
     "scheme"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.46": {
    "round": 1,
@@ -532,11 +735,21 @@
     "scheme"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "7802bb64802a6377effae5c9fd64a85e9f2267f592ac47c5c176cbbec42eb448",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.192": {
    "round": 1,
@@ -547,12 +760,25 @@
     "target_formula",
     "target_part"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.3": {
    "round": 3,
@@ -570,11 +796,21 @@
    "why": "a control: the three codings agree on every core field",
    "fields": [],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "067d9ae1fe3a83f7f67d20fb7882ad0cc137bd2461ba7c77e8629156f959431a",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.141": {
    "round": 1,
@@ -585,11 +821,24 @@
     "target_formula"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "e945b5ce24d866c62afb58825f92de0c4fbc935a9da38a5a88b5bb9059ef4fad",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.147": {
    "round": 1,
@@ -601,11 +850,24 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "f133a4a3b6d22a71084e71859be05f90c69012b92b278452f6e10c499cdb02ac",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.182": {
    "round": 1,
@@ -617,11 +879,24 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "a2e534f6018bb038542d2f33904ad818cd51caad0bec0cbd270e327da862e9ea",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.190": {
    "round": 2,
@@ -644,12 +919,22 @@
     "scheme",
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "accepted",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.198": {
    "round": 1,
@@ -661,11 +946,24 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "29bb032d00606994f917cda0e29a22aad7a7d68cde3be14d8aa81bf6181de833",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "G2"
+   ]
   },
   "13292.202": {
    "round": 1,
@@ -677,11 +975,21 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "420c6a1885d0eb23e5ca1fe04a421511c9205415c0a8bf2700fb922429356a99",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.204": {
    "round": 1,
@@ -692,11 +1000,21 @@
     "target_formula"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "a41155c8a02d638d5983a80a69ffe04aa7fa03e43f9692004ad532e42b711614",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.208": {
    "round": 2,
@@ -736,11 +1054,21 @@
     "target_instance"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "ab902ea30a0ea1ce627643fbc0b86a5d21abb5f6bfdfa314019695e8c9d415dc",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.235": {
    "round": 2,
@@ -765,11 +1093,21 @@
     "target_instance"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "590cc968dfd8b899f85ea00d758b2f250ee41befe4e5b1a979af7966ec5d3daf",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   },
   "13292.45": {
    "round": 2,
@@ -793,11 +1131,24 @@
     "target_part"
    ],
    "draft": 1,
-   "review": "not reviewed",
-   "agreed_rev": null,
-   "agreed_by": null,
-   "agreed_date": null,
-   "objections": []
+   "review": "agreed",
+   "agreed_rev": "bfde4fba28eb6eabb22297560ad54e858ca8d0a8a818c90009184c8746d0252a",
+   "agreed_by": "the reviewer and the developer",
+   "agreed_date": "2026-11-27",
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "agreed",
+     "developer": "agreed",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ],
+   "pending": [
+    "Q1"
+   ]
   },
   "13292.56": {
    "round": 3,
@@ -819,12 +1170,22 @@
     "scheme",
     "target_formula"
    ],
-   "draft": 1,
+   "draft": 2,
    "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "exchanges": [
+    {
+     "exchange": 1,
+     "date": "2026-11-27",
+     "draft": 1,
+     "reviewer": "objection",
+     "developer": "partly accepted, on the conditions of the reconciliation",
+     "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
+    }
+   ]
   }
  }
 }

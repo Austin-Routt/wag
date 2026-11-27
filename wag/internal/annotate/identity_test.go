@@ -419,9 +419,13 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// argument that cites the harm it mitigates, 13292.127#2 (target_instance,
 	// target_part, target_formula); the fragments 13292.6, .11 and .218 leave
 	// unstated the variables of the formulas they do not state (bindings,
-	// instances); .182 and .198 conclude the exception (instances).
+	// instances); .182 and .198 conclude the exception (instances). Draft 2:
+	// 13292.194, an amended action, is at the conclusion of the argument that
+	// cites the harm, 13292.12#3 (target_instance; its formula differed
+	// already, will_occur in format 1); 13292.192's primary is its second
+	// causal step, whose conclusion reaches the target (bindings).
 	want := map[string]float64{"scheme": 0.88, "instances": 0.72, "target_formula": 0.82, "role": 0.98,
-		"target_part": 0.92, "cq": 0.84, "target_instance": 0.86, "bindings": 0.94}
+		"target_part": 0.92, "cq": 0.84, "target_instance": 0.84, "bindings": 0.92}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -1061,8 +1065,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// D008-D074's recode moved a target to the modal argument a bridge
 	// carries (13292.12, .233, .43), and where D086's round-1 draft named the
 	// causal step a claim answers (13292.12, .141, .182, .198) or the argument
-	// whose conclusion a mitigation amends (13292.202, at 13292.127#2).
-	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true}
+	// whose conclusion a mitigation amends (13292.202, at 13292.127#2; in
+	// draft 2, 13292.194, at 13292.12#3).
+	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true, "13292.194": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {
@@ -1823,5 +1828,47 @@ func TestReviewerSecondaryTargets(t *testing.T) {
 	// secondary target would be scored, against the gold's primary one.
 	if ti := rep.Reviewer.VsGold.Fields["target_instance"]; ti.Unresolved != 2 || ti.N != 0 {
 		t.Errorf("the reviewer's target_instance: %+v", ti)
+	}
+}
+
+// R18 (guidelines §5 item 6): fit explicit when every premise-role formula is
+// explicit; an assumption or exception may be supplied. From the reviewer's
+// patch of 2026-11-27 (D086 exchange 1), which found 13292.104#2 explicit with a
+// supplied goal premise.
+func TestR18ExplicitFit(t *testing.T) {
+	d, c := builtin(t)
+	for _, tc := range []struct {
+		name, fit, ordinary, other string
+		want                       bool
+	}{
+		{"a supplied premise", "explicit", "supplied", "supplied", true},
+		{"an inferred premise", "explicit", "inferred", "supplied", true},
+		{"a reconstruction may supply premises", "reconstructed", "supplied", "supplied", false},
+		{"assumptions and exceptions may be supplied", "explicit", "explicit", "supplied", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			set := clone(t, d.Gold)
+			a := set["13292.104"]
+			x := inst(a, 1)
+			x["scheme"].(map[string]any)["fit"] = tc.fit
+			for _, y := range x["premises"].([]any) {
+				pm := y.(map[string]any)
+				if pm["role"] == "premise" {
+					pm["status"] = tc.ordinary
+				} else {
+					pm["status"] = tc.other
+				}
+			}
+			out := c.CheckIn(a, d, set, 0)
+			got := false
+			for _, p := range out {
+				if strings.HasPrefix(p, "R18 ") {
+					got = true
+				}
+			}
+			if got != tc.want {
+				t.Fatalf("R18: got %v, want %v: %v", got, tc.want, out)
+			}
+		})
 	}
 }

@@ -91,6 +91,8 @@ jobs:
         run: python3 -I docs/kialo-batch2/test_agreement.py
       - name: The owner's verifications written from the dashboard's verdicts (D086)
         run: python3 -I docs/kialo-batch2/test_verify_gold.py
+      - name: The replay's moves at an argument's inference (OC18)
+        run: python3 -I docs/kialo-batch2/test_to_wag_inference.py
       - name: Fetch the upstream walton.yml the cleaning was written for
         run: |
           curl -fsSL -o "$RUNNER_TEMP/walton.yml" \

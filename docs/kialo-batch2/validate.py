@@ -555,6 +555,19 @@ for it in gold['items']:
         s = ins['scheme']; wid = s['walton_id']
         iid = ins.get('id', '?')
         if s['fit'] not in ('explicit', 'reconstructed', 'fragment', 'none'): err(f'{cid}: fit {s["fit"]}')
+        if F2:
+            for pm in ins['premises']:
+                # R18 (guidelines §5 item 6): fit explicit when every premise-role formula is explicit;
+                # assumptions and exceptions may be supplied. A format-1 file keeps the rules it was made with.
+                if s['fit'] == 'explicit' and pm['role'] == 'premise' and pm['status'] != 'explicit':
+                    err(f'{cid}: R18 {iid} has fit explicit, but its premise {pm["formula"]} is {pm["status"]}: '
+                        'fit reconstructed, or the premise stated (guidelines §5 item 6)')
+                # R19 (guidelines §2 item 3): an inferred premise cites the claim of the discussion that says it.
+                if pm['status'] == 'inferred' and not (isinstance(pm.get('cite'), str) and pm['cite'] in ids
+                                                       and pm['cite'] != cid):
+                    err(f'{cid}: R19 {iid}\'s premise {pm["formula"]} is inferred but cites no other claim of the '
+                        f'discussion (cite {pm.get("cite")!r}): cite the claim that says it, or mark it supplied '
+                        '(guidelines §2 item 3)')
         bad_binding = False
         if F2:
             for k in ('compendium', 'wag_id', 'confidence', 'alternatives'):
@@ -862,6 +875,6 @@ if errors:
 if F2:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R2, R4, R7, R8, R9, R10, R11, '
           'R12 ids, R13 exact targets, R14 actors and actions, R15 contexts, R16 the field contract and the pinned inputs, '
-          'R17 verifications, atoms in lexicon')
+          'R17 verifications, R18 explicit fit, R19 cited inferences, atoms in lexicon')
 else:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R1, R2, R4, R7, R8, R9, R10, R11, target formulas in primary instances, atoms in lexicon')

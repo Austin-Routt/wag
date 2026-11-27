@@ -579,7 +579,7 @@ class Rules(unittest.TestCase):
         step = next(x for x in it['instances'] if x['bindings'].get('E1') == 'tax_meat')
         step['scheme']['walton_id'] = 'cause_to_effect'
         p0 = next(p for p in step['premises'] if p['formula'].startswith('may_occur('))
-        p0['formula'], p0['status'] = 'has_occurred(tax_meat)', 'inferred'
+        p0['formula'], p0['status'], p0['cite'] = 'has_occurred(tax_meat)', 'inferred', '13292.1'
         step['conclusion']['formula'] = 'will_occur(' + step['bindings']['E2'] + ')'
         self.fails(g, '13292.9', ['R4'], 'an action the case deliberates, which has not occurred')
 
@@ -599,7 +599,51 @@ class Rules(unittest.TestCase):
         g = copy.deepcopy(GOLD)
         ins = next(x for x in item(g, '13292.11')['instances'] if x['scheme']['walton_id'] == 'cause_to_effect')
         next(p for p in ins['premises'] if p['formula'].startswith('has_occurred('))['status'] = 'supplied'
+        ins['scheme']['fit'] = 'reconstructed'  # a supplied premise makes it a reconstruction (R18)
         self.passes(g)
+
+    # R18 (guidelines §5 item 6): fit explicit when every premise-role formula
+    # is explicit. From the reviewer's patch (D086 exchange 1).
+    def test_r18_explicit_fit(self):
+        g = copy.deepcopy(GOLD)
+        x = inst(g, '13292.11#2')
+        self.assertEqual(x['scheme']['fit'], 'explicit')
+        pm = next(p for p in x['premises'] if p['role'] == 'premise')
+        pm['status'] = 'supplied'
+        self.fails(g, '13292.11', ['R18'], 'has fit explicit, but its premise')
+        pm['status'], pm['cite'] = 'inferred', '13292.118'
+        self.fails(g, '13292.11', ['R18'], 'has fit explicit, but its premise')
+        # A reconstruction may supply its premises; an explicit fit, its
+        # assumptions and exceptions (13292.11#2's interference is supplied).
+        x['scheme']['fit'] = 'reconstructed'
+        self.passes(g)
+        self.assertTrue(any(p['role'] == 'exception' and p['status'] == 'supplied'
+                            for p in inst(GOLD, '13292.11#2')['premises']))
+
+    def test_r18_not_in_format1(self):
+        # A format-1 file keeps the rules it was made with.
+        g = copy.deepcopy(GOLD1)
+        x = next(x for it in g['items'] for x in it['instances'] if x['scheme']['fit'] == 'explicit')
+        for p in x['premises']:
+            if p['role'] == 'premise':
+                p['status'] = 'supplied'
+        code, errors, out = run(g)
+        self.assertFalse(any(' R18 ' in e for e in errors), out)
+
+    # R19 (guidelines §2 item 3): an inferred premise cites the claim that says it.
+    def test_r19_an_inferred_premise_cites_its_claim(self):
+        g = copy.deepcopy(GOLD)
+        pm = next(p for p in inst(g, '13292.118#1')['premises'] if p.get('cite') == '13292.11')
+        self.assertEqual(pm['status'], 'inferred')
+        for bad in (None, '13292.99999', '13292.118', 7):
+            if bad is None:
+                pm.pop('cite', None)
+            else:
+                pm['cite'] = bad
+            self.fails(g, '13292.118', ['R19'], 'is inferred but cites no other claim')
+        pm['status'] = 'supplied'
+        pm.pop('cite')
+        self.passes(g)  # a supplied premise cites nothing
 
     def test_r4_in_format1_is_the_n8_rule(self):
         g = copy.deepcopy(GOLD1)

@@ -444,6 +444,18 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 		if !fits[fit] {
 			add("fit %q is not explicit, reconstructed, fragment or none", fit)
 		}
+		// R18 (guidelines §5 item 6): fit explicit when every premise-role
+		// formula is explicit; assumptions and exceptions may be supplied.
+		// A format-1 record keeps the rules it was made with.
+		if format == 2 && fit == "explicit" {
+			ps, _ := in["premises"].([]any)
+			for _, y := range ps {
+				pm, _ := y.(map[string]any)
+				if pm["role"] == "premise" && pm["status"] != "explicit" {
+					add("R18 %v has fit explicit, but its premise %v is %v: fit reconstructed, or the premise stated (guidelines §5 item 6)", in["id"], pm["formula"], pm["status"])
+				}
+			}
+		}
 		binds := map[string]string{}
 		badBinding := false
 		if bm, ok := in["bindings"].(map[string]any); ok {

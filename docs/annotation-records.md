@@ -246,6 +246,8 @@ annotator has not annotated cannot be looked up, and is not reported.
 | R15 | An instance's context is one of the case's, and a claim's primary instance is in its target instance's context | yes (with a case record) |
 | R16 | Every field of §4–§8, each of its type; nulls only where §8 allows them, markers only where it allows them; no `re_parented`; `kialo_parent` and `kialo_relation` as `items.json` has them; a gold names its case and pins every input it is checked against | in part: bindings (every variable, a fragment's unstated ones marked, and only formulas it binds), the target and polarity nulls, an empty target, `re_parented`, one primary instance, a fragment's conclusion |
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
+| R18 | An instance whose fit is `explicit` has every premise-role formula (`role: premise`) explicit; an assumption or exception may be supplied (guidelines §5 item 6; since D086 round 1's draft 2, 2026-11-27) | yes |
+| R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it (guidelines §2 item 3; since the same draft) | no: an annotator's record is not asked for `cite` |
 
 Rules that change in format 2:
 - **R4** (D039): a step whose cause is only proposed or possible is `cause_to_effect_modal`. Format 2

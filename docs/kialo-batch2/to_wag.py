@@ -14,6 +14,11 @@ top-down, is played as the move its annotation describes, by Pro or Con:
     the annotated scheme if the game has it, else with Other;
   - an answer to one of the game's critical questions about an argument that
     was played: that answer, with Other when the annotation codes it so;
+  - a claim whose target is the inference of an argument that was played
+    (OC18): an answer to that argument's question there, with Other when
+    the annotation codes it so or the game lacks its scheme; or, for an
+    undercutter, an undercut of that argument (with Other when the game
+    lacks its scheme). No other role is played there;
   - a claim whose primary instance is carried by a secondary one (a bridge,
     whose entry premise its modal argument concludes): the primary, then the
     secondary for that premise, with its scheme; claims at the secondary
@@ -46,7 +51,8 @@ Each claim's entry in the report keeps what the annotation intended
     only each claim's primary instance is played, and a secondary one that
     carries it;
   - not_played: a clarification, a claim with no scheme and no target, or
-    no side.
+    no side; or a claim whose scheme the game lacks, whose move with Other
+    the game refused.
 """
 
 import argparse
@@ -223,7 +229,7 @@ def main():
         meant a scheme: its premises are not on the board."""
         for e in report:
             if e["claim"] == claim_id:
-                return e.get("played") in ("other", "other-new") and e.get("integration") != "fragment"
+                return e.get("played") in ("other", "other-new", "inference-other") and e.get("integration") != "fragment"
         return False
 
     # A claim that answers a sibling played later waits for it (one more pass).
@@ -343,13 +349,60 @@ def main():
                 if f:
                     act["target_premise_id"] = f.strip().replace(" ", "")
             actions.append(("cq-other", act))
-        if stmt and wag:
+        if tpart == "inference":
+            # An inference is an argument, not an independent statement.
+            # Format 2 deliberately leaves its formula null (OC18): the
+            # engine constructs undercut(target_arg) for this exact instance.
+            if not trec or not trec.get("arg"):
+                entry["played"] = f"no: its inference target {tinst or tclaim} is not on the board"
+                entry["executed"], entry["integration"] = None, "cascade"
+                report.append(entry)
+                continue
+            role = (a.get("role") or {}).get("kind")
+            if role == "cq_answer":
+                # An argument-locus CQ is still an inference target. Keep the
+                # CQ route assembled above, including answers to sign's
+                # CQ:other_event; its backing/Other policy belongs to the game.
+                # If unavailable or refused, do not silently replace the CQ
+                # answer by an unrelated new statement or generic undercut.
+                game_cq = bool(cq) and str(cq).startswith("CQ:")
+                if not actions and not wag and game_cq:
+                    # The game lacks the claim's scheme: answer the same question
+                    # with Other, as a rejected move is retried with Other.
+                    actions.append(("cq-other", {"type": "attack" if pol == "against" else "support",
+                                                 "target_arg_id": trec["arg"], "answers_cq_id": cq,
+                                                 "scheme_id": "AS:other", "variable_bindings": {"P1": literal},
+                                                 "text": literal}))
+                if not actions:
+                    # No question of the game to answer: the game lacks it, so the
+                    # annotation is not at fault (a coverage gap); with the scheme
+                    # and the question there, a failed route.
+                    entry["played"] = "no: its inference CQ answer has no playable question route"
+                    entry["executed"] = None
+                    entry["integration"] = "coverage_gap" if not (wag and game_cq) else "failed"
+                    report.append(entry)
+                    continue
+            elif pol == "against" and role == "undercutter":
+                actions = []
+                if wag:
+                    actions.append(("inference", {"type": "attack", "attack_type": "undercutter",
+                        "target_arg_id": trec["arg"], "scheme_id": wag,
+                        "variable_bindings": bindings, "text": literal}))
+                actions.append(("inference-other", {"type": "attack", "attack_type": "undercutter",
+                    "target_arg_id": trec["arg"], "scheme_id": "AS:other",
+                    "variable_bindings": {"P1": literal}, "text": literal}))
+            else:
+                entry["played"] = "no: an inference target requires a CQ answer or an undercutter against that argument"
+                entry["executed"], entry["integration"] = None, "failed"
+                report.append(entry)
+                continue
+        if tpart != "inference" and stmt and wag:
             actions.append(("statement", {"type": kind, "target_stmt_id": stmt, "scheme_id": wag,
                                           "variable_bindings": bindings, "text": literal}))
-        if stmt:
+        if tpart != "inference" and stmt:
             actions.append(("other", {"type": kind, "target_stmt_id": stmt, "scheme_id": "AS:other",
                                       "variable_bindings": {"P1": literal}, "text": literal}))
-        if not stmt:
+        if tpart != "inference" and not stmt:
             if wag:
                 actions.append(("new", {"type": "support", "scheme_id": wag, "variable_bindings": bindings, "text": literal}))
             actions.append(("other-new", {"type": "support", "scheme_id": "AS:other", "text": literal,
@@ -378,29 +431,35 @@ def main():
                 entry["executed"] = {"how": how, "scheme_id": act.get("scheme_id"), "cq": act.get("answers_cq_id"),
                                      "target_arg": act.get("target_arg_id"), "target_stmt": act.get("target_stmt_id"),
                                      "type": act.get("type"), "arg": arg, "conclusion": concl}
+                if act.get("attack_type"):
+                    entry["executed"]["attack_type"] = act["attack_type"]
                 break
             errors.append(f"{how}: {res.get('error')}")
         else:
             entry["played"] = "no: " + ("; ".join(errors) if errors else f"its target ({tclaim}, {tpart}) is not on the board")
             entry["executed"] = None
-        if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new", "cq-other"):
+        if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new", "cq-other", "inference", "inference-other"):
             entry["fallback_after"] = errors
         how = entry.get("played")
-        if how in ("cq", "statement", "new"):
+        if how in ("cq", "statement", "new", "inference"):
             carried = play_carried(cid, a, inst, side)
             if carried:
                 entry["secondary"] = carried
         if fragment and how == "other":
             entry["integration"] = "fragment"
-        elif how in ("cq", "statement", "new"):
+        elif how in ("cq", "statement", "new", "inference"):
             # Played with its scheme; as intended if in the intended role:
             # a CQ answer as a CQ answer, anything else as a move about a
             # statement or a new argument.
             intended_cq = entry["intended"]["role"] == "cq_answer" and str(cq or "").startswith("CQ:")
             entry["integration"] = "as_intended" if intended_cq == (how == "cq") else "failed"
+        elif how == "inference-other":
+            entry["integration"] = "as_intended" if wid == "other" else "coverage_gap" if not wag else "failed"
         elif how == "cq-other":
-            # Coded with Other, answering its question: its scheme and role.
-            entry["integration"] = "as_intended"
+            # Coded with Other, answering its question: its scheme and role. An
+            # answer the game could not take with the claim's own scheme, played
+            # with Other through the same question, is a coverage gap.
+            entry["integration"] = "as_intended" if wid == "other" else "coverage_gap" if not wag else "failed"
         elif how in ("other", "other-new"):
             entry["integration"] = "coverage_gap" if not wag else "failed"
         else:
@@ -413,9 +472,9 @@ def main():
     s = state()
     summary = {"game": gid, "claim": claim, "claim_label": s["statements"].get(claim, {}).get("label"),
                "played": sum(1 for e in report if not str(e.get("played", "")).startswith("no")),
-               "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new")),
+               "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new", "inference")),
                "as_challenges": sum(1 for e in report if e.get("played") == "challenge"),
-               "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new", "cq-other")),
+               "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new", "cq-other", "inference-other")),
                "secondary_played": sum(1 for e in report for x in e.get("secondary") or [] if x.get("played")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "integration": {k: sum(1 for e in report if e.get("integration") == k)
