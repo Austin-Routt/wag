@@ -1053,12 +1053,21 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	}
 	// The plants are seen: the secondary instances differ, the unresolved
 	// values are counted, and the unflagged instance is its claim's primary.
+	// Since D102 (2026-11-27) an unresolved formula (13292.45) or part
+	// (13292.7) leaves the relation unsettled, so those two claims' role,
+	// question and target part, instance and formula are all left out;
+	// 13292.33's unresolved instance leaves out its instance only.
 	p := Agree("a", "b", a, b)
-	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 1 || tf.Unresolved != 1 || ti.Agreement != 0.98 { // 48 of 49, rounded
+	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 3 || tf.Unresolved != 2 || ti.Agreement != 0.979 { // 46 of 47, rounded
 		t.Errorf("target_instance %+v, target_formula %+v", ti, tf)
 	}
-	if tp := p.Fields["target_part"]; tp.Unresolved != 1 {
-		t.Errorf("target_part %+v: the unresolved part is not left out", tp)
+	if tp := p.Fields["target_part"]; tp.Unresolved != 2 {
+		t.Errorf("target_part %+v: the unsettled relations are not left out", tp)
+	}
+	for _, f := range []string{"role", "cq"} {
+		if fa := p.Fields[f]; fa.Unresolved != 2 {
+			t.Errorf("%s %+v: the unsettled relations' %s are not left out (D102)", f, fa, f)
+		}
 	}
 	// The unflagged instance reads as its claim's primary: format 1 and
 	// format 2 name the same target instance everywhere but where
