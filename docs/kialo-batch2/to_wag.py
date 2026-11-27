@@ -14,6 +14,10 @@ top-down, is played as the move its annotation describes, by Pro or Con:
     the annotated scheme if the game has it, else with Other;
   - an answer to one of the game's critical questions about an argument that
     was played: that answer;
+  - a claim whose primary instance is carried by a secondary one (a bridge,
+    whose entry premise its modal argument concludes): the primary, then the
+    secondary for that premise, with its scheme; claims at the secondary
+    instance then play against it;
   - a fragment, a clarification, or a claim with no scheme: not played.
 
 A move the game rejects is retried with Other (the claim's literal text as
@@ -38,8 +42,9 @@ Each claim's entry in the report keeps what the annotation intended
   - duplicate: a challenge of a premise another claim already challenged;
   - cascade: its target was itself not played as intended, so the premise
     or statement it is about is not on the board; or its target is a
-    secondary instance of its claim (format 2 names it: only each claim's
-    primary instance is played);
+    secondary instance of its claim (format 2 names it) that was not played:
+    only each claim's primary instance is played, and a secondary one that
+    carries it;
   - not_played: a clarification, a claim with no scheme and no target, or
     no side.
 """
@@ -52,18 +57,24 @@ import sys
 import urllib.error
 import urllib.request
 
-WALTON_TO_WAG = {
-    "practical_reasoning1": "AS:practical_reasoning",
-    "practical_reasoning2": "AS:practical_reasoning_goal",
-    "positive_consequences": "AS:consequences",
-    "negative_consequences": "AS:negative_consequences",
-    "positive_value": "AS:values",
-    "sign": "AS:sign",
-    "expert_opinion": "AS:expert_opinion",
-    "credible_source": "AS:expert_opinion",
-    "position_to_know": "AS:position_to_know",
-    "analogy": "AS:analogy",
-}
+# The game's scheme for each walton.yml scheme it plays (its Carneades id), read
+# from the server's data (/api/meta) when the game is made, so that a replay on
+# other data (wag-server --data on a frozen folder) plays that data's schemes.
+# credible_source, which the game does not play, is played as expert opinion.
+WALTON_TO_WAG = {}
+
+
+def game_schemes(meta):
+    out = {"credible_source": "AS:expert_opinion"}
+    for s in (meta or {}).get("schemes") or []:
+        if s.get("carneades_id") and not s.get("optional"):
+            out[s["carneades_id"]] = s["id"]
+    return out
+
+
+# How a better means does better, as the gold records it and as the game
+# takes it (D089).
+COMPARISON = {"more surely": "surely", "sooner": "sooner", "at lower cost": "cheaper"}
 FOR_ROLES = {"independent_pro", "premise_backing"}
 AGAINST_ROLES = {"independent_con", "rebuttal", "premise_attack", "side_effect", "undercutter", "alternative_means"}
 
@@ -155,7 +166,9 @@ def main():
                                    "seats": [{"name": "Pro", "kind": "human"}, {"name": "Con", "kind": "human"}],
                                    "claim": claim, "concede_on_pass": False, "max_rounds": 0, "case": case})
     gid = st["id"]
+    WALTON_TO_WAG.update(game_schemes(call(base, "/api/meta")))
     played = {}  # claim id -> {"arg": aN, "conclusion": stmt id}
+    played_inst = {}  # instance id -> the same: each claim's primary instance, and a secondary one that carries it
     report = []
 
     def state():
@@ -167,6 +180,43 @@ def main():
         if s["active"] != me:
             call(base, f"/api/games/{gid}/move", {"action": {"type": "abstain"}, "why": "keeps the Kialo order"})
         return call(base, f"/api/games/{gid}/move", {"action": action, "why": why})
+
+    def play_carried(cid, a, inst, side):
+        """A secondary instance whose conclusion is a premise of the claim's
+        primary instance carries it (a bridge's modal argument, whose
+        conclusion is the bridge's entry premise): it is played for that
+        premise, with its scheme, when the game has it. What each did."""
+        out = []
+        prem = {norm(p.get("formula")) for p in inst.get("premises") or [] if p.get("role") in ("premise", "assumption")}
+        for sec in a.get("instances") or []:
+            if sec is inst or sec.get("primary"):
+                continue
+            sw = (sec.get("scheme") or {}).get("walton_id")
+            sconc = norm((sec.get("conclusion") or {}).get("formula"))
+            wag2 = WALTON_TO_WAG.get(sw)
+            if not wag2 or not sconc or sconc not in prem:
+                continue
+            act = {"type": "support", "target_stmt_id": sconc, "scheme_id": wag2,
+                   "variable_bindings": {k: words(v) for k, v in (sec.get("bindings") or {}).items()},
+                   "text": (sec.get("conclusion") or {}).get("en") or sconc}
+            why = f"Kialo {cid}: its instance {sec.get('id')}, {sw}, for the premise it carries"
+            r = move(side, act, why)
+            res = r.get("result") or {}
+            fixed = re.findall(r"leave (\w+) out", res.get("error") or "")
+            if not res.get("accepted") and fixed:
+                act = dict(act, variable_bindings={k: v for k, v in act["variable_bindings"].items() if k not in fixed})
+                r = move(side, act, why)
+                res = r.get("result") or {}
+            rec = {"instance": sec.get("id"), "scheme": sw, "wag_id": wag2, "premise": sconc}
+            if res.get("accepted"):
+                arg = (res.get("arg_ids") or [None])[0]
+                s = state()
+                played_inst[sec.get("id")] = {"arg": arg, "conclusion": s["arguments"][arg]["conclusion"] if arg in s["arguments"] else None}
+                rec.update(played=True, arg=arg)
+            else:
+                rec.update(played=False, error=res.get("error"))
+            out.append(rec)
+        return out
 
     def played_with_other(claim_id):
         """Whether the claim was played with Other where its annotation
@@ -205,17 +255,21 @@ def main():
                              "target_part": tgt0.get("part"), "target_formula": tgt0.get("formula"),
                              "conclusion": (inst.get("conclusion") or {}).get("formula")}
         tprimary = primary(ann.get(str(tgt0.get("claim")), {})).get("id")
-        if isinstance(tinst, str) and tprimary and tinst != tprimary:
-            # Only each claim's primary instance is played: a secondary one's
-            # premises are not on the board.
+        secondary_target = isinstance(tinst, str) and tprimary and tinst != tprimary
+        if secondary_target and tinst not in played_inst:
+            # A secondary instance is played only when it carries its claim's
+            # primary one (play_carried): another one's premises are not on
+            # the board.
             entry["played"] = f"no: its target, the instance {tinst}, is a secondary instance of {tgt0.get('claim')}, which is not played"
             entry["executed"], entry["integration"] = None, "cascade"
             report.append(entry)
             continue
-        if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and str(tgt0.get("claim")) in played:
+        # The target instance on the board: its argument and its conclusion.
+        trec = played_inst.get(tinst) if secondary_target else played.get(str(tgt0.get("claim") or ""))
+        if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and trec:
             # A bare denial of a premise is a challenge (audit P5): the
             # premise's author must argue for it.
-            arg, f = played[str(tgt0["claim"])]["arg"], (tgt0.get("formula") or "").replace(" ", "")
+            arg, f = trec["arg"], (tgt0.get("formula") or "").replace(" ", "")
             cq = "CQ:premise_acceptable"
             for o in call(base, f"/api/games/{gid}/moves?target={arg}") or []:
                 if isinstance(o, dict) and o.get("locus") == "premise" and o.get("stmt") == f and o.get("question"):
@@ -243,9 +297,9 @@ def main():
         stmt = None
         if tclaim == thesis_id and tpart.startswith("conclusion"):
             stmt = claim
-        elif tclaim in played:
+        elif trec:
             if tpart.startswith("conclusion"):
-                stmt = played[tclaim]["conclusion"]
+                stmt = trec["conclusion"]
             elif tpart.startswith("premise") or tpart.startswith("exception"):
                 f = tgt.get("formula") or (tpart.split(":", 1)[1].strip() if ":" in tpart else "")
                 stmt = f.replace(" ", "") or None
@@ -271,8 +325,8 @@ def main():
         fragment = scheme.get("fit") == "fragment" and stmt and tpart.startswith("premise")
         if fragment:
             wag = None
-        if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and tclaim in played:
-            act = {"type": "attack" if pol == "against" else "support", "target_arg_id": played[tclaim]["arg"],
+        if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and trec:
+            act = {"type": "attack" if pol == "against" else "support", "target_arg_id": trec["arg"],
                    "answers_cq_id": cq, "scheme_id": wag, "variable_bindings": bindings, "text": literal}
             if tpart.startswith("premise"):
                 f = tgt.get("formula") or (tpart.split(":", 1)[1] if ":" in tpart else "")
@@ -290,6 +344,10 @@ def main():
                 actions.append(("new", {"type": "support", "scheme_id": wag, "variable_bindings": bindings, "text": literal}))
             actions.append(("other-new", {"type": "support", "scheme_id": "AS:other", "text": literal,
                                           "variable_bindings": {"P1": literal, "C": conc_en}}))
+        comparison = COMPARISON.get(inst.get("comparison"))
+        for how, act in actions:
+            if comparison and wag and act.get("scheme_id") == wag:
+                act["comparison"] = comparison
         errors = []
         for how, act in actions:
             r = move(side, act, f"Kialo {cid}: {entry['role']}, {wid}")
@@ -304,6 +362,7 @@ def main():
                 s = state()
                 concl = s["arguments"][arg]["conclusion"] if arg in s["arguments"] else None
                 played[cid] = {"arg": arg, "conclusion": concl}
+                played_inst[inst.get("id") or cid] = played[cid]
                 entry["played"] = how
                 entry["arg"] = arg
                 entry["executed"] = {"how": how, "scheme_id": act.get("scheme_id"), "cq": act.get("answers_cq_id"),
@@ -317,6 +376,10 @@ def main():
         if errors and entry.get("played") in ("statement", "other", "new", "cq", "other-new"):
             entry["fallback_after"] = errors
         how = entry.get("played")
+        if how in ("cq", "statement", "new"):
+            carried = play_carried(cid, a, inst, side)
+            if carried:
+                entry["secondary"] = carried
         if fragment and how == "other":
             entry["integration"] = "fragment"
         elif how in ("cq", "statement", "new"):
@@ -340,6 +403,7 @@ def main():
                "with_their_scheme": sum(1 for e in report if e.get("played") in ("cq", "statement", "new")),
                "as_challenges": sum(1 for e in report if e.get("played") == "challenge"),
                "with_other": sum(1 for e in report if e.get("played") in ("other", "other-new")),
+               "secondary_played": sum(1 for e in report for x in e.get("secondary") or [] if x.get("played")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "integration": {k: sum(1 for e in report if e.get("integration") == k)
                                for k in ("as_intended", "fragment", "coverage_gap", "failed", "duplicate", "cascade", "not_played")},

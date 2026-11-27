@@ -227,7 +227,11 @@ then the switch, one commit that changes the data's identity once; then the revi
    covering each new route. `to_wag.py` plays the batch-2 gold by instance (a claim's secondary
    instances, a bridge with its modal argument), with the case's profile (done for the profile:
    the replay is unchanged, claim for claim); the batch-2 report is made again and names the claims
-   C2 to C4 left unplayed that now play. Old traces with model players replay with the pre-C5.2 build
+   C2 to C4 left unplayed that now play. The replay by instance done (2026-11-27): it reads the
+   game's schemes from the server's data and sends a better means' comparison; on the new data 46 of
+   49 claims are played (37 before) and 27 as intended (17), the three bridges with their modal
+   arguments; on the frozen data it gives the committed report again, claim for claim. The new
+   golden set is written with item F (step 7), whose cases are its routes. Old traces with model players replay with the pre-C5.2 build
    and `--data` with the frozen files; their prompts carry no profile section.
 7. **Item F** (below), with the review's eleven new cases and the check's two, each outcome written
    first and paired with a planted defect.
