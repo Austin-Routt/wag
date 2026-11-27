@@ -19,7 +19,10 @@ the annotator's own file and compared by its scheme and conclusion, and the
 formula), the
 primary instance's bindings, and every instance. A value that is unresolved,
 or a target the annotator's own file does not hold, is left out of its
-field and counted ("unresolved"). With --case, an alias of an action is read
+field and counted ("unresolved"). An item whose target formula or part is
+unresolved has no settled relation to its target (D102): its role, its
+question and its target's part, instance and formula are unresolved, in the
+fields, the role counts and the pilot's role comparison. With --case, an alias of an action is read
 as the action first, where an action stands: in the binding of a variable in
 an action's place of the instance's scheme (walton.yml,
 wag/data/annotation/positions.json) and in an action's place of a formula. A
@@ -62,8 +65,9 @@ UNRESOLVED = "?"
 
 
 def is_marker(v, kind):
-    """{"unresolved": why} or {"unstated": why} (docs/annotation-records.md §8)."""
-    return isinstance(v, dict) and len(v) == 1 and isinstance(v.get(kind), str) and v[kind].strip() != ""
+    """{"unresolved": why} or {"unstated": why} (docs/annotation-records.md §8), its reason blank
+    exactly when Go's strings.TrimSpace finds it blank (GO_SPACE, below; case A5)."""
+    return isinstance(v, dict) and len(v) == 1 and isinstance(v.get(kind), str) and v[kind].strip(GO_SPACE) != ""
 
 
 def compact(f):
@@ -451,8 +455,9 @@ RELATION_FIELDS = ("role", "cq", "target_part", "target_instance", "target_formu
 
 def relation_unsettled(item):
     """Whether the item's target leaves its relation unresolved (D102): its formula or its part is a
-    marker {"unresolved": why}."""
-    actual = (item.get("target") or {}).get("actual") or {}
+    marker {"unresolved": why}. A target that is not an object settles nothing (case A6), as in Go."""
+    target = item.get("target")
+    actual = target.get("actual") if isinstance(target, dict) else None
     return isinstance(actual, dict) and (is_marker(actual.get("formula"), "unresolved")
                                          or is_marker(actual.get("part"), "unresolved"))
 
@@ -535,8 +540,9 @@ def main():
     }
     report["scheme_counts"] = {"A": collections.Counter(scheme_id(A[k]) for k in ids),
                                "B": collections.Counter(scheme_id(B[k]) for k in ids)}
-    report["role_counts"] = {"A": collections.Counter(fields["role"](A[k]) for k in ids),
-                             "B": collections.Counter(fields["role"](B[k]) for k in ids)}
+    # The role as the agreement reads it: an unsettled relation's role is unresolved (D102, case A7).
+    report["role_counts"] = {"A": collections.Counter(value("role", A[k], A) for k in ids),
+                             "B": collections.Counter(value("role", B[k], B) for k in ids)}
 
     if args.pilot:
         P = {i["kialo_claim_id"]: i for i in json.load(open(args.pilot))["items"]}
@@ -556,10 +562,13 @@ def main():
         out = {}
         for who, X in (("A", A), ("B", B)):
             sp = [(pilot_scheme(P[k]), scheme_id(X[k])) for k in pid]
-            rp = [(role_map.get(P[k]["role"]["kind"], P[k]["role"]["kind"]), fields["role"](X[k])) for k in pid]
+            every = [(role_map.get(P[k]["role"]["kind"], P[k]["role"]["kind"]), value("role", X[k], X)) for k in pid]
+            # An unsettled relation's role is left out and counted (D102, case A7).
+            rp = [(a, b) for a, b in every if b != UNRESOLVED]
             out[who] = {"scheme_agreement": round3(sum(a == b for a, b in sp) / len(sp)) if sp else None,
                         "scheme_kappa": None if kappa(sp) is None else round3(kappa(sp)),
-                        "role_agreement": round3(sum(a == b for a, b in rp) / len(rp)) if rp else None}
+                        "role_agreement": round3(sum(a == b for a, b in rp) / len(rp)) if rp else None,
+                        "role_unresolved": len(every) - len(rp)}
         out["items"] = len(pid)
         report["pilot"] = out
 

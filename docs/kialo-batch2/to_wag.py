@@ -44,15 +44,20 @@ Each claim's entry in the report keeps what the annotation intended
   - failed: the game has its scheme, but rejected the intended move, and the
     claim was played with Other or not at all: a failed test of the scheme,
     of its questions or of the annotation, even when the Other move is legal;
+    or a claim coded Other, played with Other, whose argument does not
+    conclude its own annotated conclusion (none, or another one: cases T6-T8)
+    or that lost its named question's route;
   - duplicate: a challenge of a premise another claim already challenged;
   - cascade: its target was itself not played as intended, so the premise
     or statement it is about is not on the board; or its target is a
     secondary instance of its claim (format 2 names it) that was not played:
     only each claim's primary instance is played, and a secondary one that
     carries it;
-  - not_played: an unresolved target, a clarification, a claim with no scheme and no target, or
-    no side; or a claim whose scheme the game lacks, whose move with Other
-    the game refused.
+  - not_played: an unresolved target, or a malformed one (a target instance,
+    part or formula that is neither text, null nor {"unresolved": why}, which
+    validate.py refuses); a clarification, a claim with no scheme and no
+    target, or no side; or a claim whose scheme the game lacks, whose move with
+    Other the game refused.
 """
 
 import argparse
@@ -138,6 +143,11 @@ def side_of(item, kialo_relation):
     if kialo_relation in ("pro", "con") and kind in ("action_amendment", "alternative_means", "none", "clarification"):
         side = kialo_relation  # a proposal of its own, by the side that filed it
     return side, pol
+
+
+# The characters Go's strings.TrimSpace removes (Python's str.strip also removes U+001C-U+001F):
+# a marker's reason is blank exactly when Go finds it blank (case A5), as in agreement.py.
+GO_SPACE = "\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
 
 
 def norm(formula):
@@ -264,12 +274,24 @@ def main():
         # authorize no executable target: do not normalize a marker as a
         # string, fall back to the parent's primary instance, or create a
         # different new argument. Preserve the annotation in the report.
-        unresolved = {}
+        unresolved, malformed = {}, []
         for field in ("instance", "part", "formula"):
             value = tgt0.get(field)
+            if value is None or isinstance(value, str):
+                continue
             if (isinstance(value, dict) and set(value) == {"unresolved"}
-                    and isinstance(value["unresolved"], str) and value["unresolved"].strip()):
+                    and isinstance(value["unresolved"], str) and value["unresolved"].strip(GO_SPACE)):
                 unresolved[field] = value["unresolved"]
+            else:
+                malformed.append(field)
+        if malformed:
+            # A value the format does not allow (validate.py refuses it, R16):
+            # no move is made from it, and the replay goes on (case U7).
+            entry["played"] = "no: malformed target: " + ", ".join(malformed)
+            entry["executed"], entry["integration"] = None, "not_played"
+            entry["malformed_target"] = malformed
+            report.append(entry)
+            continue
         if unresolved:
             entry["played"] = "no: unresolved target: " + ", ".join(unresolved)
             entry["executed"], entry["integration"] = None, "not_played"

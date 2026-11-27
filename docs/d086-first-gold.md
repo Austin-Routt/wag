@@ -783,6 +783,20 @@ a free argument; agreement's rule for an unsettled relation (D102, A1-A4).
 - D096: a reconstruction is not a claim an item can cite; its parts cite the claims that state them,
   or are supplied.
 
+**The independent check of step 1 (7c8679d).** It found the Go agreement test's figures stale (fixed in
+8431a50) and the replay's report not made again (made from a clean build, ebd2d72), and five defects or
+gaps, each fixed with cases written first (8e900ec) and tests that fail without the fix:
+- the import read an integer beyond a float's range, which Go's reader then refuses (V50); non-finite
+  numbers in the verdicts and the rounds files had no case (V51, already refused);
+- Python read a marker's reason with `str.strip`, which removes U+001C-U+001F where Go's
+  `strings.TrimSpace` keeps them; `validate.py`, `agreement.py` and the replay now strip Go's white space
+  (A5);
+- the replay's guard knew only well-formed markers: a blank reason, an `unstated` marker or a list
+  stopped the replay or was played (U7; U8 is U4's resolved control);
+- D102's check stopped on a target that is not an object (A6), and the role counts and the pilot's
+  role comparison read the role without D102 (A7);
+- the Other label had no case for two spellings of one conclusion (T9).
+
 **What the gold pins.** `validate.py` pins ten inputs, not the guidelines. A verdict still holds only
 of the guidelines and `walton.yml` it was given on, since `verify_gold.py` compares every input but
 the gold with the repository's (§5); a verification already written depends on the item's revision

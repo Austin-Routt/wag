@@ -808,6 +808,18 @@ class Rules(unittest.TestCase):
         out = self.passes(g)
         self.assertIn('13292.12: its target part (premise or exception)', out)
 
+    def test_a5_a_reason_go_does_not_trim_is_a_reason(self):
+        # Case A5 (d086-first-gold.md §6): U+001C to U+001F are not white space to Go's
+        # strings.TrimSpace, though Python's str.strip removes them: a reason made of them is a
+        # reason, as Go reads it; one made of Go's white space alone is blank.
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': '\x1c\x1d\x1e\x1f'}
+        out = self.passes(g)
+        self.assertIn('UNRESOLVED (1)', out)
+        g = copy.deepcopy(GOLD)
+        item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': '\u3000\t\x85'}
+        self.fails(g, '13292.12', ['R16'], 'target.actual.instance is not an instance id, or {"unresolved": why}')
+
     def test_r13_another_kialo_parents_inference(self):
         # An other parent's exact target is checked whatever its part, the
         # inference included.

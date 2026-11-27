@@ -21,7 +21,9 @@ var Fields = []string{"scheme", "fit", "role", "polarity", "target_claim", "targ
 // Unresolved is the value of a field that cannot be compared: an annotator's
 // {"unresolved": why}, or a target its own file does not hold. It is left
 // out of the field's agreement and counted apart, neither agreement nor
-// disagreement.
+// disagreement. An item whose target formula or part is unresolved has no
+// settled relation to its target (D102): its role, its question and its
+// target's part, instance and formula are Unresolved.
 const Unresolved = "?"
 
 // FieldOf returns an annotation's value for a field, as a string ("" if it

@@ -1,7 +1,8 @@
-"""Tests of verify_gold.py: the cases V1 to V46 of docs/d086-first-gold.md §6, whose outcomes were
+"""Tests of verify_gold.py: the cases V1 to V51 of docs/d086-first-gold.md §6, whose outcomes were
 written before the tests ran (V17-V32 at 8c64ee9; V33 added with the code, V34 with draft 2; V35-V42 at
-3cabca9, after the independent review of draft 2; V43-V46 at a3b9141, after the planted defects), and
-three more (V3 through the history, the rounds file it reads, and the repository's own).
+3cabca9, after the independent review of draft 2; V43-V46 at a3b9141, after the planted defects; V47-V49
+at cdfd2de, after ChatGPT's review of exchange 2; V50-V51 at 8e900ec, after the independent review of
+step 1), and three more (V3 through the history, the rounds file it reads, and the repository's own).
 Each case works on temporary copies of the gold and of the rounds file; the claims' texts and the
 other inputs are the repository's.
 
@@ -939,6 +940,55 @@ class VerifyGold(unittest.TestCase):
         self.assertNotIn('Traceback', result.stderr)
         self.assertEqual(read(c.gold), raw)
         self.assertEqual(read(c.builtin), raw)
+
+    def test_v50_integer_beyond_float_refused(self):
+        # Go reads every number of the gold as a float64, and refuses one beyond its range.
+        c = self
+        c.agree('13292.33')
+        gold = json.loads(c.bytes)
+        for item in gold['items']:
+            if item['kialo_claim_id'] == '13292.33':
+                item['instances'][0]['scheme']['confidence'] = 1.0
+        raw = dump(gold).replace(b'"confidence": 1.0', b'"confidence": 1' + b'0' * 400, 1)
+        for path in (c.gold, c.builtin):
+            Path(path).write_bytes(raw)
+        c.agree('13292.33')
+        result = c.run_script([verdict('13292.33', 'gold', raw)])
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn('finite', result.stderr)
+        self.assertIn('10000000000', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+        self.assertEqual(read(c.gold), raw)
+        self.assertEqual(read(c.builtin), raw)
+
+    def test_v51_non_finite_number_in_verdicts_or_rounds_refused(self):
+        c = self
+        c.agree('13292.33')
+        before = read(c.gold)
+        # The verdicts file: a number field of no meaning, read before anything is checked.
+        human = os.path.join(c.dir, 'human.json')
+        v = verdict('13292.33', 'gold', before)
+        v['note'] = 'PLACEHOLDER'
+        Path(human).write_bytes(json.dumps([v]).encode('utf-8').replace(b'"PLACEHOLDER"', b'1e999', 1))
+        cmd = [sys.executable, '-I', SCRIPT, human, '--gold', c.gold, '--builtin', c.builtin, '--rounds', c.rounds]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn(human, result.stderr)
+        self.assertIn('finite', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+        self.assertEqual(read(c.gold), before)
+        # The rounds file: a claim's draft number.
+        rounds = read(c.rounds)
+        bad = rounds.replace(b'"draft": 1', b'"draft": 1e999', 1)
+        self.assertNotEqual(bad, rounds)
+        Path(c.rounds).write_bytes(bad)
+        result = c.run_script([verdict('13292.33', 'gold', before)])
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn(c.rounds, result.stderr)
+        self.assertIn('finite', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+        self.assertEqual(read(c.gold), before)
+        self.assertEqual(read(c.builtin), before)
 
 
 if __name__ == '__main__':

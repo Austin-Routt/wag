@@ -63,3 +63,23 @@ func TestUnsettledRelationLeftOut(t *testing.T) {
 		}
 	}
 }
+
+// Cases A5 and A6 (docs/d086-first-gold.md §6): Go reads a marker's reason
+// with strings.TrimSpace, which keeps U+001C to U+001F (Python's str.strip
+// removes them, so the Python tools strip Go's white space instead); and a
+// target that is not an object settles nothing.
+func TestMarkerReasonAndTargetShape(t *testing.T) {
+	if !isMarker(map[string]any{"unresolved": "\x1c\x1d\x1e\x1f"}, "unresolved") {
+		t.Error("A5: a reason of U+001C to U+001F is not a reason")
+	}
+	if isMarker(map[string]any{"unresolved": "　\t\u0085"}, "unresolved") {
+		t.Error("A5: a reason of Go's white space alone is a reason")
+	}
+	for _, target := range []any{"c.0", []any{"c.0"}, map[string]any{"actual": "c.0"}} {
+		a := Annotation{"kialo_claim_id": "c.1", "target": target,
+			"role": map[string]any{"kind": "premise_backing", "polarity": "for", "cq": nil}}
+		if v := FieldIn(a, "role", nil); v != "premise_backing" {
+			t.Errorf("A6: target %v: role = %q, want premise_backing", target, v)
+		}
+	}
+}

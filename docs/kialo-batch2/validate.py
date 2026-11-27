@@ -133,9 +133,13 @@ def goals(ins):
 def subst(f, b):
     return re.sub(r'\b[A-Z][A-Za-z0-9_]*\b', lambda m: b[m.group(0)] if isinstance(b.get(m.group(0)), str) else m.group(0), f)
 
+# The characters Go's strings.TrimSpace removes (Python's str.strip also removes U+001C-U+001F).
+GO_SPACE = '\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000'
+
 def marker(v, kind):
-    """{"unresolved": why} or {"unstated": why} (docs/annotation-records.md §8)."""
-    return isinstance(v, dict) and set(v) == {kind} and isinstance(v[kind], str) and v[kind].strip() != ''
+    """{"unresolved": why} or {"unstated": why} (docs/annotation-records.md §8), its reason blank
+    exactly when Go finds it blank (strings.TrimSpace; case A5)."""
+    return isinstance(v, dict) and set(v) == {kind} and isinstance(v[kind], str) and v[kind].strip(GO_SPACE) != ''
 
 def item_rev(it):
     """An item's revision: the SHA-256 of the item without its adjudication and

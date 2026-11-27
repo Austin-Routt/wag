@@ -128,5 +128,53 @@ class UnsettledRelation(unittest.TestCase):
         self.assertEqual(fields["polarity"].get("unresolved"), 0)
         self.assertEqual(fields["scheme"].get("unresolved"), 0)
 
+class AfterTheReview(unittest.TestCase):
+    """Cases A5-A7 (d086-first-gold.md §6), after the independent review of step 1."""
+
+    def values(self, item):
+        S = {"c.0": PARENT, "c.1": item}
+        return {name: ag.field_value(name, item, S) for name in ag.FIELDS}
+
+    def test_a5_a_reason_go_does_not_trim_is_a_reason(self):
+        # U+001C to U+001F: Python's str.strip removes them, Go's strings.TrimSpace does not.
+        v = self.values(item_at(formula={"unresolved": "\x1c\x1d\x1e\x1f"}))
+        for name in RELATION:
+            self.assertEqual(v[name], ag.UNRESOLVED, name)
+        self.assertTrue(ag.is_marker({"unresolved": "\x1f"}, "unresolved"))
+        self.assertFalse(ag.is_marker({"unresolved": "\u3000\t\x85"}, "unresolved"))
+
+    def test_a6_a_target_that_is_not_an_object(self):
+        for target in ("c.0", ["c.0"], {"actual": "c.0"}, {"actual": ["c.0"]}):
+            with self.subTest(target=target):
+                it = dict(item_at(), target=target)
+                self.assertFalse(ag.relation_unsettled(it))
+                self.assertEqual(ag.field_value("role", it, {}), "premise_backing")
+
+    def test_a7_role_counts_and_the_pilot_follow_d102(self):
+        import json, subprocess, tempfile
+        pilot = {"items": [
+            {"kialo_claim_id": "c.0", "scheme": {"id": "walton.yml positive_consequences"}, "role": {"kind": "none"}},
+            {"kialo_claim_id": "c.1", "scheme": {"id": "walton.yml verbal_classification"}, "role": {"kind": "premise_attack"}}]}
+        with tempfile.TemporaryDirectory() as d:
+            files = []
+            for name, it in (("a.json", item_at(formula=MARK)), ("b.json", item_at()), ("pilot.json", None)):
+                path = os.path.join(d, name)
+                with open(path, "w", encoding="utf-8") as fh:
+                    json.dump(pilot if it is None else {"items": [PARENT, it]}, fh)
+                files.append(path)
+            out = os.path.join(d, "report.json")
+            r = subprocess.run([sys.executable, "-I", "-B", os.path.join(HERE, "agreement.py"), files[0], files[1],
+                                "--pilot", files[2], "--json", out], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            report = json.load(open(out, encoding="utf-8"))
+        self.assertEqual(report["role_counts"]["A"], {"none": 1, ag.UNRESOLVED: 1})
+        self.assertEqual(report["role_counts"]["B"], {"none": 1, "premise_backing": 1})
+        # A's c.1 is left out of the pilot's role comparison; B's disagrees with the pilot.
+        self.assertEqual(report["pilot"]["A"]["role_agreement"], 1.0)
+        self.assertEqual(report["pilot"]["A"]["role_unresolved"], 1)
+        self.assertEqual(report["pilot"]["B"]["role_agreement"], 0.5)
+        self.assertEqual(report["pilot"]["B"]["role_unresolved"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

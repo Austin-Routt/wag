@@ -108,9 +108,21 @@ def finite_float(value):
     return number
 
 
+def finite_int(value):
+    # Go reads every number of the gold as a float64 and refuses one beyond its range, so an integer
+    # is held to the same range (V50); one of more than 4,300 digits Python cannot read at all.
+    try:
+        number = int(value)
+        float(number)
+    except (OverflowError, ValueError):
+        shown = value if len(value) <= 24 else f'{value[:12]}… ({len(value)} characters)'
+        raise ValueError(f'JSON number {shown} is outside the finite numeric range') from None
+    return number
+
+
 def loads_json(raw):
     return json.loads(raw, object_pairs_hook=unique_members, parse_constant=reject_constant,
-                      parse_float=finite_float)
+                      parse_float=finite_float, parse_int=finite_int)
 
 
 def load_json(path):

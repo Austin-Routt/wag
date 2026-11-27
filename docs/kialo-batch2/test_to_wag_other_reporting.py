@@ -1,4 +1,5 @@
-"""The replay's label for a claim coded Other: cases T1-T7 (d086-first-gold.md §6; ChatGPT's patch 03).
+"""The replay's label for a claim coded Other: cases T1-T9 (d086-first-gold.md §6; ChatGPT's patch 03; T8
+after step 1's planted defects, T9 after its independent review).
 A capturing transport stands in for the server: the tests read labels only."""
 import contextlib, importlib.util, io, json, sys, tempfile, unittest
 from pathlib import Path
@@ -21,6 +22,10 @@ class OtherReporting(unittest.TestCase):
             ann["items"][-1]["instances"][0]["conclusion"]["formula"] = "background_fact"
         elif conclusion_kind == "null":
             ann["items"][-1]["instances"][0]["conclusion"]["formula"] = None
+        elif conclusion_kind == "spaced":
+            ann["items"][-1]["instances"][0]["conclusion"]["formula"] = "¬ brings_about( tax_meat , starvation_from_reduced_meat_access )"
+        elif conclusion_kind == "not":
+            ann["items"][-1]["instances"][0]["conclusion"]["formula"] = "not(brings_about(tax_meat,starvation_from_reduced_meat_access))"
         items = {'discussion': {'thesis_claim_id': 'thesis'}, 'items': [{'kialo_claim_id': x['kialo_claim_id'], 'text': 'Synthetic routing fixture', 'kialo_parents': []} for x in ann['items']]}
         state = {'id': 'test', 'active': 'Pro', 'arguments': {}, 'statements': {claim: {'label': 'out'}}}
         actions = []
@@ -103,6 +108,15 @@ class OtherReporting(unittest.TestCase):
         self.assertIsNone(result["intended"]["conclusion"])
         self.assertIsNone(result["executed"]["conclusion"])
         self.assertEqual(result["integration"], "failed")
+
+    def test_t9_spelling_of_the_same_conclusion_is_intended(self):
+        for kind in ("spaced", "not"):
+            with self.subTest(kind=kind):
+                result, _ = self.route(conclusion_kind=kind)
+                self.assertEqual(result["played"], "other")
+                self.assertNotEqual(result["intended"]["conclusion"], result["executed"]["conclusion"])
+                self.assertEqual(result["executed"]["conclusion"], "¬brings_about(tax_meat,starvation_from_reduced_meat_access)")
+                self.assertEqual(result["integration"], "as_intended")
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

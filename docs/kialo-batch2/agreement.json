@@ -807,12 +807,14 @@
   "A": {
    "scheme_agreement": 0.5,
    "scheme_kappa": 0.433,
-   "role_agreement": 0.45
+   "role_agreement": 0.45,
+   "role_unresolved": 0
   },
   "B": {
    "scheme_agreement": 0.5,
    "scheme_kappa": 0.437,
-   "role_agreement": 0.5
+   "role_agreement": 0.5,
+   "role_unresolved": 0
   },
   "items": 20
  }
