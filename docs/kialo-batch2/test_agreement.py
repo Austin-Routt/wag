@@ -57,5 +57,76 @@ class ExactTarget(unittest.TestCase):
         self.assertEqual(ag.exact({"target": {}}, "target_instance", self.S), "")
 
 
+
+def item_at(formula="brings_about(a,g)", part="premise", instance="c.0#1"):
+    """A claim backing a premise of c.0's primary instance; its target's fields as given."""
+    return {"kialo_claim_id": "c.1",
+            "instances": [{"id": "c.1#1", "primary": True,
+                           "scheme": {"walton_id": "verbal_classification", "fit": "reconstructed"},
+                           "conclusion": {"formula": "instance(o,g)"}}],
+            "role": {"kind": "premise_backing", "polarity": "for", "cq": None},
+            "target": {"kialo_parent": "c.0", "actual": {"claim": "c.0", "instance": instance,
+                                                         "part": part, "formula": formula}}}
+
+
+PARENT = {"kialo_claim_id": "c.0", "instances": [
+    {"id": "c.0#1", "primary": True, "scheme": {"walton_id": "positive_consequences", "fit": "reconstructed"},
+     "premises": [{"role": "premise", "formula": "brings_about(a,g)"}], "conclusion": {"formula": "should_be_performed(a)"}}]}
+MARK = {"unresolved": "a background condition of the premise"}
+RELATION = ("role", "cq", "target_part", "target_instance", "target_formula")
+
+
+class UnsettledRelation(unittest.TestCase):
+    """Cases A1-A3 (d086-first-gold.md §6; D102): an unsettled relation is not scored."""
+
+    def values(self, item):
+        S = {"c.0": PARENT, "c.1": item}
+        return {name: ag.field_value(name, item, S) for name in ag.FIELDS}
+
+    def test_a1_unresolved_formula_leaves_the_relation_out(self):
+        v = self.values(item_at(formula=MARK))
+        for name in RELATION:
+            self.assertEqual(v[name], ag.UNRESOLVED, name)
+        self.assertEqual((v["scheme"], v["fit"], v["polarity"], v["target_claim"]),
+                         ("verbal_classification", "reconstructed", "for", "c.0"))
+
+    def test_a2_unresolved_part_leaves_the_relation_out(self):
+        v = self.values(item_at(part=MARK))
+        for name in RELATION:
+            self.assertEqual(v[name], ag.UNRESOLVED, name)
+        self.assertEqual(v["target_claim"], "c.0")
+
+    def test_a3_unresolved_instance_alone_leaves_only_the_instance_out(self):
+        v = self.values(item_at(instance=MARK))
+        self.assertEqual(v["target_instance"], ag.UNRESOLVED)
+        self.assertEqual((v["role"], v["target_part"], v["target_formula"]),
+                         ("premise_backing", "premise", "brings_about(a,g)"))
+        self.assertNotEqual(v["cq"], ag.UNRESOLVED)
+
+    def test_a1_resolved_control_scores_the_relation(self):
+        v = self.values(item_at())
+        for name in RELATION:
+            self.assertNotEqual(v[name], ag.UNRESOLVED, name)
+
+    def test_a1_report_counts_the_unsettled_item(self):
+        """The report: the item left out of the relation's fields and counted as unresolved there."""
+        import json, subprocess, tempfile
+        with tempfile.TemporaryDirectory() as d:
+            files = []
+            for name, it in (("a.json", item_at(formula=MARK)), ("b.json", item_at())):
+                path = os.path.join(d, name)
+                with open(path, "w", encoding="utf-8") as fh:
+                    json.dump({"items": [PARENT, it]}, fh)
+                files.append(path)
+            out = os.path.join(d, "report.json")
+            r = subprocess.run([sys.executable, "-I", "-B", os.path.join(HERE, "agreement.py"), *files, "--json", out],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            fields = json.load(open(out, encoding="utf-8"))["fields"]
+        for name in RELATION:
+            self.assertEqual(fields[name]["unresolved"], 1, name)
+        self.assertEqual(fields["polarity"].get("unresolved"), 0)
+        self.assertEqual(fields["scheme"].get("unresolved"), 0)
+
 if __name__ == "__main__":
     unittest.main()

@@ -47,6 +47,16 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 		return nil
 	}
 	actual, _ := get(a["target"], "actual").(map[string]any)
+	// D102: a target whose formula or part is unresolved leaves the item's
+	// relation unsettled, so its role, question and target part, instance
+	// and formula are not compared (agreement.py's RELATION_FIELDS). An
+	// unresolved instance alone leaves only target_instance out, below.
+	if relationUnsettled(actual) {
+		switch field {
+		case "role", "cq", "target_part", "target_instance", "target_formula":
+			return Unresolved
+		}
+	}
 	switch field {
 	case "scheme":
 		return str(get(primary(a)["scheme"], "walton_id"))
@@ -203,6 +213,12 @@ func targetInstance(set map[string]Annotation, claim string, ref any) map[string
 		}
 	}
 	return nil
+}
+
+// relationUnsettled tells whether a target's formula or part is
+// {"unresolved": why} (D102).
+func relationUnsettled(actual map[string]any) bool {
+	return isMarker(actual["formula"], "unresolved") || isMarker(actual["part"], "unresolved")
 }
 
 // isMarker tells whether a value is {"unresolved": why} or {"unstated": why}

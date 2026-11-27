@@ -424,6 +424,47 @@ def family_of(families):
     return fam
 
 
+# The fields compared, each a function of an item (target_instance and target_formula also of the
+# annotator's own items, S, in which a target's instance is read).
+FIELDS = {
+    "scheme": scheme_id,
+    "fit": fit,
+    "role": lambda i: (i.get("role") or {}).get("kind") or "none",
+    "polarity": lambda i: (i.get("role") or {}).get("polarity") or "none",
+    "target_claim": lambda i: target(i)[0],
+    "target_part": lambda i: UNRESOLVED if is_marker(((i.get("target") or {}).get("actual") or {}).get("part"), "unresolved") else target(i)[1],
+    "re_parented": re_parented,
+    "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
+    "cq": lambda i: question(i),
+    "target_instance": lambda i, S: exact(i, "target_instance", S),
+    "target_formula": lambda i, S: exact(i, "target_formula", S),
+    "bindings": bindings,
+    "instances": instances,
+}
+
+# D102: an item whose target formula or part is unresolved has no settled relation to its target, so
+# its role, its question and its target's part, instance and formula are not compared: each is
+# unresolved, left out and counted. Its scheme, fit, polarity and target claim are compared as before.
+# An unresolved instance alone (a target claim not yet annotated) leaves only target_instance out.
+RELATION_FIELDS = ("role", "cq", "target_part", "target_instance", "target_formula")
+
+
+def relation_unsettled(item):
+    """Whether the item's target leaves its relation unresolved (D102): its formula or its part is a
+    marker {"unresolved": why}."""
+    actual = (item.get("target") or {}).get("actual") or {}
+    return isinstance(actual, dict) and (is_marker(actual.get("formula"), "unresolved")
+                                         or is_marker(actual.get("part"), "unresolved"))
+
+
+def field_value(name, item, S):
+    """The item's value for a field, UNRESOLVED where it is not compared."""
+    if name in RELATION_FIELDS and relation_unsettled(item):
+        return UNRESOLVED
+    fn = FIELDS[name]
+    return fn(item, S) if name in ("target_instance", "target_formula") else fn(item)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("a")
@@ -448,25 +489,8 @@ def main():
     ids = [k for k in assigned if k in A and k in B]
     fam = family_of(json.load(open(args.families))) if args.families else {}
 
-    fields = {
-        "scheme": scheme_id,
-        "fit": fit,
-        "role": lambda i: (i.get("role") or {}).get("kind") or "none",
-        "polarity": lambda i: (i.get("role") or {}).get("polarity") or "none",
-        "target_claim": lambda i: target(i)[0],
-        "target_part": lambda i: UNRESOLVED if is_marker(((i.get("target") or {}).get("actual") or {}).get("part"), "unresolved") else target(i)[1],
-        "re_parented": re_parented,
-        "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
-        "cq": lambda i: question(i),
-        "target_instance": lambda i, S: exact(i, "target_instance", S),
-        "target_formula": lambda i, S: exact(i, "target_formula", S),
-        "bindings": bindings,
-        "instances": instances,
-    }
-
-    def value(name, item, S):
-        fn = fields[name]
-        return fn(item, S) if name in ("target_instance", "target_formula") else fn(item)
+    fields = FIELDS
+    value = field_value
     report = {"items": len(ids), "fields": {}, "disagreements": collections.defaultdict(list)}
     report["coverage"] = {"assigned":len(assigned), "basis":"provided_assignment" if args.assigned else "observed_union", "annotated_A":sum(k in A for k in assigned), "annotated_B":sum(k in B for k in assigned), "both":len(ids), "neither":sum(k not in A and k not in B for k in assigned)}
     for name in fields:

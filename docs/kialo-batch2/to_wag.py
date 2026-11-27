@@ -50,7 +50,7 @@ Each claim's entry in the report keeps what the annotation intended
     secondary instance of its claim (format 2 names it) that was not played:
     only each claim's primary instance is played, and a secondary one that
     carries it;
-  - not_played: a clarification, a claim with no scheme and no target, or
+  - not_played: an unresolved target, a clarification, a claim with no scheme and no target, or
     no side; or a claim whose scheme the game lacks, whose move with Other
     the game refused.
 """
@@ -260,6 +260,22 @@ def main():
                              "target_instance": tinst if isinstance(tinst, str) else ("unresolved" if tinst else None),
                              "target_part": tgt0.get("part"), "target_formula": tgt0.get("formula"),
                              "conclusion": (inst.get("conclusion") or {}).get("formula")}
+        # Format 2 keeps unresolved targets as development material. They
+        # authorize no executable target: do not normalize a marker as a
+        # string, fall back to the parent's primary instance, or create a
+        # different new argument. Preserve the annotation in the report.
+        unresolved = {}
+        for field in ("instance", "part", "formula"):
+            value = tgt0.get(field)
+            if (isinstance(value, dict) and set(value) == {"unresolved"}
+                    and isinstance(value["unresolved"], str) and value["unresolved"].strip()):
+                unresolved[field] = value["unresolved"]
+        if unresolved:
+            entry["played"] = "no: unresolved target: " + ", ".join(unresolved)
+            entry["executed"], entry["integration"] = None, "not_played"
+            entry["unresolved_target"] = unresolved
+            report.append(entry)
+            continue
         tprimary = primary(ann.get(str(tgt0.get("claim")), {})).get("id")
         secondary_target = isinstance(tinst, str) and tprimary and tinst != tprimary
         if secondary_target and tinst not in played_inst:
@@ -460,6 +476,17 @@ def main():
             # answer the game could not take with the claim's own scheme, played
             # with Other through the same question, is a coverage gap.
             entry["integration"] = "as_intended" if wid == "other" else "coverage_gap" if not wag else "failed"
+        elif how == "other" and wid == "other":
+            # Other was the annotation's own scheme, not a substitute for a
+            # missing named scheme. A direct statement route still fails to
+            # preserve an explicitly named game-CQ answer if that route failed.
+            intended_cq = entry["intended"]["role"] == "cq_answer" and str(cq or "").startswith("CQ:")
+            expected = norm(entry["intended"].get("conclusion"))
+            actual = norm(entry["executed"].get("conclusion"))
+            # Other can support an existing target without preserving its own
+            # annotated conclusion. A missing conclusion proves no exact fit.
+            same_conclusion = bool(expected) and expected == actual
+            entry["integration"] = "as_intended" if same_conclusion and not intended_cq else "failed"
         elif how in ("other", "other-new"):
             entry["integration"] = "coverage_gap" if not wag else "failed"
         else:

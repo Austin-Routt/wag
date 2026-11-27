@@ -49,6 +49,7 @@ version of the gold to look for a verdict's gold in, besides the working tree an
 import datetime
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -100,8 +101,16 @@ def reject_constant(value):
     raise ValueError(f'non-JSON number {value}')
 
 
+def finite_float(value):
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError(f'JSON number {value} is outside the finite numeric range')
+    return number
+
+
 def loads_json(raw):
-    return json.loads(raw, object_pairs_hook=unique_members, parse_constant=reject_constant)
+    return json.loads(raw, object_pairs_hook=unique_members, parse_constant=reject_constant,
+                      parse_float=finite_float)
 
 
 def load_json(path):
@@ -122,6 +131,8 @@ def verdict_time(value):
     m = VERDICT_TIME.fullmatch(value) if isinstance(value, str) else None
     if m is None:
         raise ValueError('at is not an RFC3339 timestamp with a timezone')
+    if m[4] != 'Z' and (int(m[4][1:3]) > 23 or int(m[4][4:6]) > 59):
+        raise ValueError('at has a timezone offset outside RFC3339 hour/minute ranges')
     dt = datetime.datetime.fromisoformat(m[1] + 'T' + m[2] + m[4].replace('Z', '+00:00'))
     try:
         dt = dt.astimezone(datetime.timezone.utc)
@@ -130,7 +141,9 @@ def verdict_time(value):
     fraction = (m[3] or '')[1:]
     ns = int(fraction.ljust(9, '0') or '0')
     key = (dt, ns)
-    stamp = dt.strftime('%Y-%m-%dT%H:%M:%S') + ('.' + fraction.rstrip('0') if ns else '') + 'Z'
+    # strftime's %Y is not zero-padded for years below 1000 on some platforms.
+    # isoformat preserves the four-digit year required by our receipt reader.
+    stamp = dt.isoformat(timespec='seconds').removesuffix('+00:00') + ('.' + fraction.rstrip('0') if ns else '') + 'Z'
     return key, dt.date().isoformat(), stamp
 
 

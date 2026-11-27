@@ -898,5 +898,48 @@ class VerifyGold(unittest.TestCase):
             self.assertEqual(read(self.gold), before)
             self.assertEqual(read(self.builtin), before)
 
+    # V47-V49 (d086-first-gold.md §6): strict input and receipts (ChatGPT's review of exchange 2, patch 01).
+    def test_v47_offset_outside_rfc3339_refused(self):
+        c = self
+        c.agree('13292.33')
+        for offset in ('+00:60', '-00:60', '+01:99'):
+            with self.subTest(offset=offset):
+                result = c.run_script([verdict('13292.33', 'gold', c.bytes,
+                                                   at='2026-11-28T12:00:00' + offset)])
+                self.assertNotEqual(result.returncode, 0, result.stdout)
+                self.assertNotIn('Traceback', result.stderr)
+                self.assertIn('timezone offset', result.stderr)
+                c.unchanged()
+
+    def test_v48_early_year_receipt_read_back(self):
+        c = self
+        c.agree('13292.33')
+        result = c.run_script([verdict('13292.33', 'none', c.bytes, at='0001-01-01T00:00:00Z')])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(c.receipts('13292.33')[-1]['at'], '0001-01-01T00:00:00Z')
+        result = c.run_script([verdict('13292.33', 'gold', read(c.gold),
+                                           at='2026-11-28T10:00:00Z')])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('verified', c.items()['13292.33'])
+
+    def test_v49_non_finite_number_refused(self):
+        c = self
+        c.agree('13292.33')
+        gold = json.loads(c.bytes)
+        for item in gold['items']:
+            if item['kialo_claim_id'] == '13292.33':
+                item['instances'][0]['scheme']['confidence'] = 1.0
+        raw = dump(gold).replace(b'"confidence": 1.0', b'"confidence": 1e999', 1)
+        for path in (c.gold, c.builtin):
+            Path(path).write_bytes(raw)
+        c.agree('13292.33')
+        result = c.run_script([verdict('13292.33', 'gold', raw)])
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn('finite', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+        self.assertEqual(read(c.gold), raw)
+        self.assertEqual(read(c.builtin), raw)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

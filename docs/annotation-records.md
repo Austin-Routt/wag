@@ -289,8 +289,12 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 A value that is unresolved, or that cannot be read in the annotator's file (a target claim it did not
 annotate), is left out of that field's agreement and counted apart (`unresolved`): missing data is
 neither agreement nor disagreement. Only what a field itself leaves open makes it unresolved: an
-unresolved instance leaves `target_instance` out, an unresolved formula `target_formula`, an
-unresolved part `target_part`. With a
+unresolved instance leaves `target_instance` out. An unresolved formula or part leaves the relation
+unsettled (D102, since 2026-11-27): the claim's `role`, `cq`, `target_part`, `target_instance` and
+`target_formula` are all left out and counted, while its scheme, fit, polarity and target claim are
+compared as before (`agreement.py`'s `RELATION_FIELDS`, the Go `FieldIn`). In choosing the claims to
+review, an unresolved value differs from any other, so such a claim is reviewed against an annotator
+who settled the relation. With a
 case record, an alias is read as its action first where an action stands (§3), in agreement and in
 the choice of claims to review alike.
 
