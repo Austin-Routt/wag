@@ -305,6 +305,9 @@ The script:
 | V44 | A *gold* at 10:00 on the 28th (it verifies); the item recoded, agreed at its new revision and verified by hand that day; then a *none* at 12:00 that day, on the item as it is | The *none* not written, listed: the latest receipt is of another revision; the verification stands |
 | V45 | A *gold* and a *none* at one time on the 28th (the item left unverified); a verification of that day made by hand; then a *none* later that day | The last not written, listed: of the two receipts at one time the *none* counts as the latest, so the verification has only its date; the verification stands |
 | V46 | A gold whose history holds a receipt without its time, or one with a field more | Refused, naming the receipt; nothing written; no trace of the program |
+| V47 | A verdict time whose offset is outside RFC 3339's ranges (`+00:60`, `-00:60`, `+01:99`; V47-V49 written after ChatGPT's review of exchange 2, its patch 01, before the tests are added) | Refused, naming the offset; nothing written; no trace of the program |
+| V48 | A *none* of the year 0001 recorded; then a *gold* of 2026 | The receipt written with a four-digit year (`0001-01-01T00:00:00Z`) and read back by the next import; the item verified |
+| V49 | A gold holding a number outside the finite range (`1e999`) | Refused, naming the number; the gold and its built-in copy unchanged; no trace of the program |
 
 The dashboard:
 
@@ -316,6 +319,34 @@ The dashboard:
 
 Each rule of the script and each of the three changes to the dashboard gets a planted defect that one
 case must catch.
+
+The replay (`to_wag.py`; added after ChatGPT's reviews of exchange 2, before the tests: its patches 03
+and 04):
+
+| Case | Setup | Expected |
+|---|---|---|
+| T1 | A claim coded Other, attacking a premise, played with Other to its own annotated conclusion | `as_intended` |
+| T2 | The same, supporting the premise | `as_intended` |
+| T3 | A claim whose scheme the game lacks, played with Other | `coverage_gap`, as before |
+| T4 | A named question's answer that the game refuses, then played with Other at the statement | `failed`: the question's route was lost |
+| T5 | A claim coded Other that plays a free new argument (`other-new`) | `coverage_gap`, as before |
+| T6 | A claim coded Other whose executed conclusion is not its own annotated one | `failed` |
+| T7 | A claim coded Other with no conclusion formula | `failed` |
+| U1 | A target whose formula, or part, or instance is `{"unresolved": why}` (each alone) | Not played: no move, `not_played`, the markers listed in the report |
+| U2 | All three unresolved | As U1; the report keeps the annotation's scheme, conclusion and question |
+| U3 | A bare denial (scheme `none`) whose target formula is unresolved | Not played: no challenge |
+| U4 | A named question's answer whose target instance is unresolved | Not played: not answered at the target claim's primary argument |
+| U5 | The same claim with its target resolved | Played as before |
+| U6 | An inference target, its formula null (not unresolved) | Played as before, as an undercutter |
+
+Agreement (D102: an unsettled relation is not scored):
+
+| Case | Setup | Expected |
+|---|---|---|
+| A1 | One file's item has its target formula unresolved; the other's is resolved | That item's role, question and target part, instance and formula left out and counted as unresolved; its scheme, fit, polarity and target claim compared as before |
+| A2 | The same with the target part unresolved | As A1 |
+| A3 | Only the target instance unresolved (a model's "not yet annotated") | Only the target instance left out, as before; role and question compared |
+| A4 | The Go agreement (`FieldIn`) on A1-A3 | The same as `agreement.py` |
 
 ## 7. Out of this plan
 
@@ -708,3 +739,42 @@ the other reviewer. The owner's timed verification session follows draft 3: a ve
 guidelines and `walton.yml` it was given on (§5), and these decisions change both. Exchange 2 went to
 the reviewer in one package, as the owner asked (wag-workspace
 `verify/d086/package/WAG-review-2026-11-27.zip`).
+
+## 14. After exchange 2: ChatGPT's two reviews and the owner's answer (2026-11-27)
+
+ChatGPT answered exchange 2 (11 items agreed; objections to 13292.8 and .104), then reviewed the
+developer's check of that answer together with WAG's argument from rules. Both reviews are checked in
+the workspace (`verify/chatgpt-d086-x2-2026-11-27`, `verify/chatgpt-rule-2026-11-27`). The owner
+answered the developer's recommendations: "Based on your analysis, please proceed to close all
+remaining gaps. Ensure that everything is correct with appropriate validators and independent
+reviewers." In the register:
+
+- **D102: 13292.8's relation stays unresolved** until a connecting argument is justified and reviewed:
+  not played, not scored as a relation, not verified, kept in every count; the guidelines say the
+  same of any claim that states only a background condition of a premise.
+- **D101 amended: the EthiX protocol's rule is version 2's** (a paired debate bootstrap; at most one
+  item newly wrong in each field on the agreed gold).
+
+**Step 1 (code, before draft 3).** The verification import's strict input (ChatGPT's patch 01, cases
+V47-V49); the replay's label for a claim coded Other (patch 03, T1-T7); the replay's guard on an
+unresolved target (patch 04, U1-U6): today a formula marker stops the replay with a traceback, an
+instance marker plays the claim at its target claim's primary argument, and a part marker plays it as
+a free argument; agreement's rule for an unsettled relation (D102, A1-A4).
+
+**Draft 3** takes in, besides D096, D097 and D098:
+- 13292.8 (D102): its target's formula unresolved; its role `premise_backing`, with no question,
+  since without a formula R2 asks for none.
+- 13292.104#2: positive consequences. Guidelines §5 item 4 already decides it: practical reasoning
+  only with an S2 distinct from the action, and "a proposal with a purpose is
+  `positive_consequences`". Draft 2's note called it a question for the guidelines: wrong.
+- 13292.192#2's note: `causes(E1,E2)` is a tendency, strong or weak (D036); what the attack lacks is
+  the net-effect premise.
+- R19's citation in the output format (ChatGPT's patch 02, its Go check), in the same revision of the
+  guidelines as D098.
+- D096: a reconstruction is not a claim an item can cite; its parts cite the claims that state them,
+  or are supplied.
+
+**What the gold pins.** `validate.py` pins ten inputs, not the guidelines. A verdict still holds only
+of the guidelines and `walton.yml` it was given on, since `verify_gold.py` compares every input but
+the gold with the repository's (§5); a verification already written depends on the item's revision
+and its claim's text alone (R17).
