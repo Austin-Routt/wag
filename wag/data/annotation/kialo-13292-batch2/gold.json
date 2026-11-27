@@ -39,7 +39,7 @@
   {
    "date": "2026-11-27",
    "by": "developer (D086 draft 2)",
-   "what": "Round 1 of the first gold, draft 2 (D086; docs/d086-first-gold.md §11, d086-rounds.json): the first exchange of the review taken in. Accepted objections: 13292.25, .104, .43, .127, .192, .8 and .194; partly accepted, on the conditions of the reconciliation: 13292.123 and .218; refinements of agreed items: 13292.11 and .6. Premise provenance follows guidelines §2 item 3 and §5 item 6, now checked (R18, R19). 13292.108 goes to the owner (question 1); the 19 other agreed items are agreed at their revision. 17 of the round's claims wait for the owner's decisions (pending): 7 for Q1, the two layers of 13292.108, and 10 for G2, the causal exception's scope."
+   "what": "Round 1 of the first gold, draft 2 (D086; docs/d086-first-gold.md §11, d086-rounds.json): the first exchange of the review taken in. Accepted objections: 13292.25, .104, .43, .127, .192 and .194 (its optional second relation noted, not coded); partly accepted: 13292.8 (the note rewritten, the target kept), and, on the conditions of the reconciliation, 13292.123 and .218; refinements of agreed items: 13292.11 and .6. Corrected after the independent check of draft 2: 13292.204 and .12, agreed items whose records draft 2's changes made false. Premise provenance follows guidelines §2 item 3 and §5 item 6, now checked (R18, R19). 13292.108 goes to the owner (question 1); the 17 other agreed items are agreed at their revision. 17 of the round's claims wait for the owner's decisions (pending): 7 for Q1, the two layers of 13292.108, and 10 for G2, the causal exception's scope."
   }
  ],
  "items": [
@@ -3029,9 +3029,8 @@
        "role": "premise",
        "formula": "brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)",
        "en": "The action 'governments regulate the animal farming industry' brings about 'the environmental harm from meat production and consumption is reduced'.",
-       "status": "inferred",
-       "note": "the claim calls regulating the industry the solution to 'the problems associated with meat production and consumption' that its Kialo parent 13292.13 names, the environmental harm among them",
-       "cite": "13292.13"
+       "status": "explicit",
+       "note": "the claim calls regulating the industry 'the appropriate solution' to the problems its Kialo parent 13292.13 names ('the problems associated with its production and consumption', meat's), the environmental harm among them: the formula's S2 is that harm, 13292.108's goal, to which this claim's solution is projected (13292.104#2 states it of the problems in general)"
       },
       {
        "role": "premise",
@@ -3326,7 +3325,7 @@
        "instances.scheme.fit",
        "notes"
       ],
-      "what": "D086 exchange 1, the reviewer's objections accepted: 13292.104#2's fit is reconstructed, since its goal premise is supplied (guidelines §5 item 6; R18 checks it since this draft); #1's comparison more_effective_means(...) is supplied, not explicit, its note saying how it is reconstructed from the claim's diagnosis and that the fairness reason is not it; #1's inferred link brings_about(regulate_animal_farming_industry,...) cites 13292.13, the parent whose problems the claim's solution addresses (R19). #2's S2, close to the action restated (§5 item 4), is noted as a question for the guidelines. Better_means kept (the reviewer: a defensible choice, which the record now exposes). Notes rewritten."
+      "what": "D086 exchange 1, the reviewer's objections accepted: 13292.104#2's fit is reconstructed, since its goal premise is supplied (guidelines §5 item 6; R18 checks it since this draft); #1's comparison more_effective_means(...) is supplied, not explicit, its note saying how it is reconstructed from the claim's diagnosis and that the fairness reason is not it; #1's link brings_about(regulate_animal_farming_industry,...) is explicit, the claim's own 'the appropriate solution' projected to 13292.108's goal (13292.13, which it first cited, names the problems but does not say that regulating solves them: the independent check of draft 2, W7). #2's S2, close to the action restated (§5 item 4), is noted as a question for the guidelines. Better_means kept (the reviewer: a defensible choice, which the record now exposes). Notes rewritten."
      }
     ]
    }
@@ -3446,7 +3445,7 @@
        "formula": "current_circumstances(meat_price_below_real_costs)",
        "en": "'the consumer price of meat is below the real costs of meat consumption' is the case in the current circumstances.",
        "status": "inferred",
-       "note": "inferred from the sibling 13292.11, which states it: this claim elaborates the circumstances (it names the costs the price leaves out: externalities, from climate change, water pollution and disease risks) without stating them as a proposition of its own ('would factor externalities into the price' presupposes that the price leaves them out). 13292.224 backs them here, where their externalities are named",
+       "note": "inferred from the sibling 13292.11, which states it: this claim elaborates the circumstances (it names the costs the price leaves out: externalities, from climate change, water pollution and disease risks) without stating them as a proposition of its own ('it would factor in externalities', into the price 13292.118 speaks of, presupposes that the price leaves them out). 13292.224 backs them here, where their externalities are named",
        "cite": "13292.11"
       },
       {
@@ -3454,7 +3453,7 @@
        "formula": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)",
        "en": "'the consumer price of meat reflects the real costs of meat consumption' would be realized in 'the consumer price of meat is higher'.",
        "status": "explicit",
-       "note": "'It would factor externalities into the price': the price the tax raises includes the external costs. The formula's S2 is 13292.118's higher_meat_price, to which this claim's price with the externalities in it is projected, so that it backs that premise. Its scope: the price rise that internalizes the named externalities under this tax, not any higher price; the restriction is this claim's words, the projection 13292.118's reconstruction"
+       "note": "'It would factor in externalities': the price the tax raises includes the external costs. The formula's S2 is 13292.118's higher_meat_price, to which this claim's price with the externalities in it is projected, so that it backs that premise. Its scope: the price rise that internalizes the named externalities under this tax, not any higher price; the restriction is this claim's words, the projection 13292.118's reconstruction"
       }
      ],
      "conclusion": {
@@ -3617,7 +3616,7 @@
        "formula": "has_occurred(meat_subsidies)",
        "en": "An event 'meat production is subsidised' has occurred.",
        "status": "explicit",
-       "note": "presupposed: the claim presents the subsidies as existing ('because of subsidies'), so the cause has occurred as the claim has it (not a hypothetical cause)"
+       "note": "explicit: 'due to subsidies' presents the subsidies as existing, so the cause has occurred as the claim has it (not a hypothetical cause)"
       },
       {
        "role": "premise",
@@ -4839,7 +4838,7 @@
      "type": "causal interference",
      "instance": "13292.12#1",
      "formula": "interference(imported_meat_relatively_cheaper)",
-     "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions at 13292.12's predicted harm (OC6), not as answers here"
+     "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions (OC6), not as answers here: 13292.194 at 13292.12#3's conclusion, the argument that cites the harm against the tax, and 13292.45, until its round, at this argument's conclusion, the predicted harm"
     },
     {
      "cq": "33.2 CQ1",
@@ -4858,7 +4857,7 @@
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed (the tax) or possible (the cheaper imports it would bring), so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism offered for a link answers 28 CQ1; data offered for it would answer 28 CQ2 (a question for the review, D086 round 1). 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions at 13292.12's predicted harm).",
+    "text": "Gives the mechanism of 13292.9's 'by harming the trillion-dollar meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed (the tax) or possible (the cheaper imports it would bring), so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism offered for a link answers 28 CQ1; data offered for it would answer 28 CQ2 (a question for the review, D086 round 1). 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions: 13292.194 at 13292.12#3's conclusion, 13292.45, until its round, at 13292.12#1's, the predicted harm).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4918,6 +4917,15 @@
        "target"
       ],
       "what": "Retargeted from the modal premise of 13292.9#1 to the causal step it backs, 13292.9#2's causes(tax_meat,meat_industry_harmed), as both annotators aimed it: format 1 required a formula of the primary instance (adjudication.md R5), which put the target at 13292.9's consequence premise, and the recoding for D008 kept that choice, at the modal argument. A cq_answer to the book's 28 CQ1 there (a mechanism offered for the link; the game asks no question at the formula; guidelines §5 item 3), polarity for. The confidence of its causal steps set on their merits, 0.55: both annotators coded the same steps (with cause_to_effect), and §5 item 11 prescribes the modal form; this lifts the cap the N8 note put on them until this draft, and their notes now say why the scheme is modal. Its record at 13292.12#1's interference no longer says that 13292.45 and .194 answer there (they are amended actions at 13292.12's predicted harm). A cascade in the replay now. Notes rewritten as one current account."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "developer (D086 draft 2)",
+      "fields": [
+       "challenges",
+       "notes"
+      ],
+      "what": "D086 draft 2, after the independent check of draft 2 (W1): the challenge at 13292.12#1's interference and the notes say where 13292.194 now is, at 13292.12#3's conclusion, not at the predicted harm; the quotation of 13292.9 made exact ('the trillion-dollar meat industry'). Coding unchanged."
      }
     ]
    }
@@ -5300,7 +5308,7 @@
     }
    ],
    "notes": {
-    "text": "Backs a background condition of 13292.115's premise brings_about(tax_meat,reduced_unhealthy_meat_consumption): that there is unhealthy (excess) meat consumption for the tax to reduce. That condition is not the premise, which says that the tax would reduce such consumption: the claim backs it only in part, and the step from excess consumption to the tax's reducing it is not argued. The target is the nearest formula the format offers (a target names no component of a premise), and the relation is partial. positive_consequences has CQ:likelihood (33.1 CQ1) on that premise, so the role is cq_answer with polarity for (R2). The step from 'above the guidelines' to 'unhealthy' rests on the guidelines' authority, coded as a secondary expert-opinion instance. Its children treat it as stating the problem: 13292.3 (curbing it cuts health costs) and 13292.29 (it is a personal choice).",
+    "text": "Backs a background condition of 13292.115's premise brings_about(tax_meat,reduced_unhealthy_meat_consumption): that there is unhealthy (excess) meat consumption for the tax to reduce. That condition is not the premise, which says that the tax would reduce such consumption: the claim backs it only in part, and the step from excess consumption to the tax's reducing it is not argued. The target is the nearest formula the format offers (a target names no component of a premise), and the relation is partial. positive_consequences has CQ:likelihood (33.1 CQ1) on that premise, so the role is cq_answer with polarity for (R2). The step from 'more meat than dietary guidelines recommend' to unhealthy consumption rests on the guidelines' authority, coded as a secondary expert-opinion instance. Its children treat it as stating the problem: 13292.3 (curbing it cuts health costs) and 13292.29 (it is a personal choice).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5323,7 +5331,7 @@
       "fields": [
        "notes"
       ],
-      "what": "D086 exchange 1, the reviewer's objection accepted: the note no longer equates the background condition (there is excess consumption) with the premise it backs (the tax would reduce it), as its 'i.e.' did; it says the backing is partial and the target the nearest formula the format offers. Scheme, role and target unchanged."
+      "what": "D086 exchange 1, the reviewer's objection partly accepted: the note no longer equates the background condition (there is excess consumption) with the premise it backs (the tax would reduce it), as its 'i.e.' did; it says the backing is partial and the target the nearest formula the format offers. Not taken: the reviewer's unresolved or approximate target, since the format has no approximate target and an unresolved one could not be verified (R17); how to target a background condition that backs a premise in part is a question for the guidelines, to the owner. Scheme, role and target unchanged."
      }
     ]
    }
@@ -6716,7 +6724,7 @@
        "notes",
        "target"
       ],
-      "what": "D086 exchange 1, the reviewer's objection accepted (the developer's own first reading): retargeted from 13292.12#1's conclusion may_occur(domestic_meat_industry_pushed_out) to 13292.12#3's ¬should_be_performed(tax_meat), the conclusion of the argument that cites the harm against the tax, as 13292.202 is (OC6). The note gives the reason as an amended policy against a blocking circumstance that already holds, not as whose action the measures are. Scheme, role and polarity unchanged. Notes rewritten."
+      "what": "D086 exchange 1, the reviewer's objection accepted (the developer's own first reading): retargeted from 13292.12#1's conclusion may_occur(domestic_meat_industry_pushed_out) to 13292.12#3's ¬should_be_performed(tax_meat), the conclusion of the argument that cites the harm against the tax, as 13292.202 is (OC6). The note gives the reason as an amended policy against a blocking circumstance that already holds, not as whose action the measures are. The reviewer's optional second relation, the measures as interference with 13292.12#1's mechanism, is not coded (a claim has one target, and the claim proposes a changed policy, not a blocker under the tax): 13292.12's challenge at that interference names the measures. Scheme, role and polarity unchanged. Notes rewritten."
      }
     ]
    }
@@ -7048,7 +7056,7 @@
     }
    ],
    "notes": {
-    "text": "Denies the starvation link 13292.127 relies on: where people would starve from higher food costs, they eat little or no meat, so a meat tax cannot starve them by reducing their access to meat. A reply to a weighing claim attacks that claim's own instance (OC10): here the consequence it relies on, brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127#1 (bad_outweighs_good), about which no critical question is asked, so premise_attack (§5 item 3), against. The premise is 13292.127's own (inferred from 13292.7), so this is not re-parenting. Its argument is Other (absent exposure: the affected group is not exposed to the cause). Both annotators aimed it at the same link as a premise of the starvation argument, 13292.127's primary then and 13292.127#2 now, B as an answer to its likelihood question; D055's recoding moved it to the weighing's premise, which OC10 now supports: a question for the review (D086 round 1, with 13292.202's).",
+    "text": "Denies the starvation link 13292.127 relies on: where people would starve from higher food costs, they eat little or no meat, so a meat tax cannot starve them by reducing their access to meat. A reply to a weighing claim attacks that claim's own instance (OC10): here the consequence it relies on, brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127#1 (bad_outweighs_good), about which no critical question is asked, so premise_attack (§5 item 3), against. The premise is 13292.127's own (supplied: the claim presupposes the link, and 13292.7 grounds only its first step, the tax making food dearer), so this is not re-parenting. Its argument is Other (absent exposure: the affected group is not exposed to the cause). Both annotators aimed it at the same link as a premise of the starvation argument, 13292.127's primary then and 13292.127#2 now, B as an answer to its likelihood question; D055's recoding moved it to the weighing's premise, which OC10 now supports: a question for the review (D086 round 1, with 13292.202's).",
     "candidate_pattern": "absent exposure: the affected group is not exposed to the cause, so the cited consequence cannot reach it"
    },
    "adjudication": {
@@ -7074,6 +7082,14 @@
        "notes"
       ],
       "what": "Drafted: the reference's coding kept: a premise attack on the starvation link the weighing relies on (OC10); the annotators' reading (the same link as a premise of the starvation argument, now 13292.127#2, B's cq_answer to CQ:likelihood before D055's recoding) is put to the review with 13292.202's; notes rewritten (the earlier text called the weighing Other, as it was before D064 and D075)."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "developer (D086 draft 2)",
+      "fields": [
+       "notes"
+      ],
+      "what": "D086 draft 2, after the independent check of draft 2 (E2): the note's account of the premise it attacks corrected, which draft 2 made supplied in 13292.127 (the note said inferred from 13292.7). Coding unchanged."
      }
     ]
    }
@@ -8449,7 +8465,7 @@
        "formula": "brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs)",
        "en": "The action 'governments abolish meat subsidies (or at least exempt meat from them)' brings about 'the consumer price of meat reflects the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "supplied: 'the price distortions caused by subsidies should be removed by abolishing those subsidies' says that abolishing them removes the distortion; that the price then reflects the real costs, external costs included, is the reconstruction's, and holds of the subsidies' part only"
+       "note": "supplied: 'distortions caused by subsidies should be removed by abolishing those subsidies' says that abolishing them removes the distortion; that the price then reflects the real costs, external costs included, is the reconstruction's, and holds of the subsidies' part only"
       },
       {
        "role": "premise",
@@ -8513,9 +8529,8 @@
        "role": "premise",
        "formula": "would_be_realized(meat_price_reflects_real_costs,subsidy_distortions_removed)",
        "en": "'the consumer price of meat reflects the real costs of meat consumption' would be realized in 'the price distortions caused by subsidies are removed'.",
-       "status": "inferred",
-       "cite": "13292.118",
-       "note": "the goal of 13292.118 (a price reflecting the real costs)"
+       "status": "supplied",
+       "note": "supplied: that the price reflects the real costs once the subsidies' distortion is removed is the reconstruction's, as in 13292.123#1, and holds of the subsidies' part only; 13292.118 states the goal, not this link"
       },
       {
        "role": "assumption",
@@ -8677,7 +8692,7 @@
     }
    ],
    "notes": {
-    "text": "Accepts 13292.11's diagnosis (subsidies keep the price below the real costs) and proposes another means: abolish the subsidies (or exempt meat from them) instead of taxing. Read as a better means, it answers 13292.118's exception realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat) (OC6; D075, D089), as 13292.104 does 13292.108's: its primary instance is better_means, a cq_answer to the game's CQ:other_means (22.1 CQ2), with role.move alternative_means, against; re-parented from 13292.11 (13292.118 is an ancestor). The goal is 13292.118's, as D075 asks of a better means. The comparison and the link from abolishing the subsidies to that goal are supplied, not stated: 'instead' offers the other course and does not say that it reaches the goal more surely. Their scope is narrower than the goal: abolishing the subsidies removes the distortion 13292.11 names (a price held below cost by subsidies); it does not put into the price the external costs 13292.218 names, which the tax would. The other reading, a proposal of another course not said to do better (C017; OC6) at 13292.118's conclusion, is recorded as an alternative of the primary instance. The argument for the other course is a secondary instance; the incoherence sentence is a third, from opposition (11.2), coded as Other because walton.yml's 11.2 encoding is self-contradictory.",
+    "text": "Accepts 13292.11's diagnosis (subsidies keep the price below the real costs) and proposes another means: abolish the subsidies (or exempt meat from them) instead of taxing. Read as a better means, it answers 13292.118's exception realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat) (OC6; D075, D089), as 13292.104 does 13292.108's: its primary instance is better_means, a cq_answer to the game's CQ:other_means (22.1 CQ2), with role.move alternative_means, against; re-parented from 13292.11 (13292.118 is an ancestor). The goal is 13292.118's, as D075 asks of a better means. The comparison and the link from abolishing the subsidies to that goal (in both instances) are supplied, not stated: 'instead' offers the other course and does not say that it reaches the goal more surely. Their scope is narrower than the goal: abolishing the subsidies removes the distortion 13292.11 names (a price held below cost by subsidies); it does not put into the price the external costs 13292.218 names, which the tax would. The other reading, a proposal of another course not said to do better (C017; OC6) at 13292.118's conclusion, is recorded as an alternative of the primary instance. The argument for the other course is a secondary instance; the incoherence sentence is a third, from opposition (11.2), coded as Other because walton.yml's 11.2 encoding is self-contradictory.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -8734,7 +8749,7 @@
        "instances.scheme.alternatives",
        "notes"
       ],
-      "what": "D086 exchange 1, the reviewer's objection partly accepted, on the conditions of its reconciliation: better_means kept, with the same goal as 13292.118's argument (D075); its comparison more_effective_means(...) and its link brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs) supplied, not explicit or inferred, their notes and the item's scoping them (subsidy removal corrects the distortion 13292.11 names, not the externalities 13292.218 names); the reviewer's reading, a proposal of another course not said to do better (C017; OC6), recorded as the primary's alternative. Role and target unchanged. Notes rewritten."
+      "what": "D086 exchange 1, the reviewer's objection partly accepted, on the conditions of its reconciliation: better_means kept, with the same goal as 13292.118's argument (D075); its comparison more_effective_means(...) and its link brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs) supplied, not explicit or inferred, their notes and the item's scoping them (subsidy removal corrects the distortion 13292.11 names, not the externalities 13292.218 names), and the same link in 13292.123#2, would_be_realized(meat_price_reflects_real_costs,subsidy_distortions_removed), supplied too, not inferred from 13292.118, which states the goal, not the link (the independent check of draft 2, W7); the reviewer's reading, a proposal of another course not said to do better (C017; OC6), recorded as the primary's alternative. Role and target unchanged. Notes rewritten."
      }
     ]
    }

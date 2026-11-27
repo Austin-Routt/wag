@@ -161,6 +161,12 @@ gids = [i.get('kialo_claim_id') for i in gold['items']]
 if gids != ids: err('items not in items.json order or count differs: %d' % len(gids))
 G = {i.get('kialo_claim_id'): i for i in gold['items']}
 kp = {i['kialo_claim_id']: i['kialo_parents'] for i in items}
+# The claims of the discussion an inferred premise may cite (R19): those items.json lists, the batch's
+# and each claim's context, its parents, ancestors, siblings and children, with their texts.
+DISCUSSION = set(ids) | {c['claim_id'] for i in items
+                         for c in (i.get('kialo_parents') or []) + (i.get('ancestors') or [])
+                         + (i.get('siblings') or []) + (i.get('children') or [])
+                         if isinstance(c, dict) and isinstance(c.get('claim_id'), str)}
 # A claim's text revision (docs/annotation-records.md §9): the SHA-256 of its text in items.json.
 TEXT_REV = {i['kialo_claim_id']: hashlib.sha256(i['text'].encode('utf-8')).hexdigest() for i in items}
 
@@ -563,7 +569,7 @@ for it in gold['items']:
                     err(f'{cid}: R18 {iid} has fit explicit, but its premise {pm["formula"]} is {pm["status"]}: '
                         'fit reconstructed, or the premise stated (guidelines §5 item 6)')
                 # R19 (guidelines §2 item 3): an inferred premise cites the claim of the discussion that says it.
-                if pm['status'] == 'inferred' and not (isinstance(pm.get('cite'), str) and pm['cite'] in ids
+                if pm['status'] == 'inferred' and not (isinstance(pm.get('cite'), str) and pm['cite'] in DISCUSSION
                                                        and pm['cite'] != cid):
                     err(f'{cid}: R19 {iid}\'s premise {pm["formula"]} is inferred but cites no other claim of the '
                         f'discussion (cite {pm.get("cite")!r}): cite the claim that says it, or mark it supplied '

@@ -645,6 +645,25 @@ class Rules(unittest.TestCase):
         pm.pop('cite')
         self.passes(g)  # a supplied premise cites nothing
 
+    def test_r19_a_claim_of_the_context_outside_the_batch(self):
+        # items.json lists each claim's context with its text (parents, ancestors, siblings, children):
+        # 13292.167, a sibling of 13292.123 outside the batch, and 13292.149, a child, are claims of the
+        # discussion (guidelines §2 item 3); an id items.json does not list is not.
+        items_json = json.load(open(os.path.join(DOC, 'items.json'), encoding='utf-8'))['items']
+        context = {c['claim_id'] for i in items_json for k in ('ancestors', 'siblings', 'children')
+                   for c in i.get(k) or []}
+        self.assertIn('13292.167', context - {i['kialo_claim_id'] for i in items_json})
+        # 13292.149 is listed only as a child (of a claim of the batch), not as anyone's sibling.
+        siblings = {c['claim_id'] for i in items_json for c in i.get('siblings') or []}
+        self.assertIn('13292.149', context - siblings - {i['kialo_claim_id'] for i in items_json})
+        g = copy.deepcopy(GOLD)
+        pm = next(p for p in inst(g, '13292.118#1')['premises'] if p.get('cite') == '13292.11')
+        for listed in ('13292.167', '13292.149'):
+            pm['cite'] = listed
+            self.passes(g)
+        pm['cite'] = '13292.168'
+        self.fails(g, '13292.118', ['R19'], 'is inferred but cites no other claim')
+
     def test_r4_in_format1_is_the_n8_rule(self):
         g = copy.deepcopy(GOLD1)
         ins = item(g, '13292.36')['instances'][1]

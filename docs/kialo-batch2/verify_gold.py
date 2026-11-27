@@ -8,28 +8,36 @@ holds of the item as it is now when the two are equal (docs/annotation-records.m
 
 - A verdict "The gold is right" (choice "gold") that holds of its item now writes the item's
   `verified` (by "owner", the verdict's UTC date, the item's revision and its claim's text
-  revision), when the item is agreed in d086-rounds.json at the revision it has and has no
-  unresolved value (R17).
+  revision), when the item is agreed in d086-rounds.json at the revision it has, waits for no
+  decision of the owner (`pending`) and has no unresolved value (R17).
 - A verdict of another choice that holds of a verified item now takes the verification back.
 - A verdict of another choice on an item not verified is recorded in the history entry only (a
-  receipt), and so is a same-day confirmation of a verification: the item does not change, but the
-  verdict's time is kept.
+  receipt), and so is a same-day confirmation of a verification whose time is recorded: the item
+  does not change, but the verdict's time is kept.
+- A verdict of another choice whose gold cannot be placed (one the repository does not hold, one not
+  valid JSON, or none recorded) is treated as any verdict of its choice, the revision it was given on
+  unknown (its receipt's `item_rev` null): it can only leave the item unverified. A verdict "gold"
+  given so is neither written nor recorded.
 - Every remaining verdict is listed with the reason it is not written.
 
 Each verdict applied or recorded keeps its time in the history entry (`verification_verdicts`), and
 each new verdict is compared with the latest so recorded for its item (docs/d086-first-gold.md §5):
-an older one is not written; verdicts of different choices at one time are not ordered, so the item
-is left unverified, whichever comes first (and of two recorded at one time, the one other than
-"gold" counts as the latest); and a verification whose time is not recorded has only its date, so a
-conflicting verdict on that date, or any before it, is not written.
+an older one is not written, nor one recorded already; verdicts of different choices at one time are
+not ordered, so the item is left unverified, whichever comes first (and of two recorded at one time,
+the one other than "gold" counts as the latest). A verification's time is recorded only when its
+item's latest receipt is a "gold" of its date and revision; otherwise it has only its date, and a
+verdict of that day cannot be ordered with it: one of another choice is not written, and one "gold"
+that would leave it as it is is not recorded. A verdict of an earlier day is older.
 
 Nothing is written when a required input hash is missing, an input differs from the repository's
-now, or an input is not one of the built-in dataset's; when the two copies of the gold differ, or the
-gold or items.json is not valid JSON; when the file is not a list of verdicts, a JSON object repeats
-a member, a verdict lacks its claim, choice, RFC 3339 time or inputs, or two verdicts name one claim;
-or when d086-rounds.json cannot be read. The file is written as the recoding scripts write it,
-gold.json and the built-in copy (wag/data/annotation/kialo-13292-batch2/gold.json), changing only the
-`verified` fields, the file's `status` and one `history` entry.
+now, or an input is not one of the built-in dataset's; when the two copies of the gold differ, the
+gold or items.json is not valid JSON, two of the gold's items name one claim, a receipt in its
+history is not one or an item's `verified` lacks R17's fields; when the file is not a list of
+verdicts, a JSON object repeats a member, a verdict lacks its claim, choice, RFC 3339 time (one of
+the calendar's, in UTC too) or inputs, or two verdicts name one claim; or when d086-rounds.json
+cannot be read or a claim's state in it is not one. The file is written as the recoding scripts write
+it, gold.json and the built-in copy (wag/data/annotation/kialo-13292-batch2/gold.json), changing only
+the `verified` fields, the file's `status` and one `history` entry.
 
 usage: python3 -I verify_gold.py HUMAN.json [--gold GOLD.json] [--builtin GOLD.json]
                                  [--rounds ROUNDS.json] [--also GOLD.json ...]
@@ -115,7 +123,10 @@ def verdict_time(value):
     if m is None:
         raise ValueError('at is not an RFC3339 timestamp with a timezone')
     dt = datetime.datetime.fromisoformat(m[1] + 'T' + m[2] + m[4].replace('Z', '+00:00'))
-    dt = dt.astimezone(datetime.timezone.utc)
+    try:
+        dt = dt.astimezone(datetime.timezone.utc)
+    except OverflowError:
+        raise ValueError(f'{value} is outside the calendar in UTC (years 1 to 9999)') from None
     fraction = (m[3] or '')[1:]
     ns = int(fraction.ljust(9, '0') or '0')
     key = (dt, ns)
@@ -154,6 +165,30 @@ def unresolved(v):
     return False
 
 
+def verification_shaped(v):
+    """Whether an item's `verified` has R17's fields: by "owner", a date, the item_rev and the
+    text_sha256 verified (whether they are the item's now is R17's to say)."""
+    return (isinstance(v, dict) and v.get('by') == 'owner' and valid_date(v.get('date'))
+            and isinstance(v.get('item_rev'), str) and bool(SHA.fullmatch(v['item_rev']))
+            and isinstance(v.get('text_sha256'), str) and bool(SHA.fullmatch(v['text_sha256'])))
+
+
+def receipt_of(receipt):
+    """A receipt of the history's `verification_verdicts` (docs/annotation-records.md §2), checked:
+    its claim, choice, order key and UTC date. Its item_rev is a SHA-256, or null for a verdict other
+    than "gold" whose gold could not be placed. ValueError when it is not one."""
+    if not (isinstance(receipt, dict) and set(receipt) == {'item', 'choice', 'at', 'item_rev'}):
+        raise ValueError('a receipt has exactly its item, choice, at and item_rev')
+    cid, choice, rev = receipt['item'], receipt['choice'], receipt['item_rev']
+    if not (isinstance(cid, str) and cid and isinstance(choice, str)):
+        raise ValueError('the receipt names no claim or choice')
+    if not ((isinstance(rev, str) and SHA.fullmatch(rev)) or (rev is None and choice != 'gold')):
+        raise ValueError(f'{cid}: the receipt\'s item_rev is neither a SHA-256 nor, for a verdict other than '
+                         '"gold", null')
+    key, rdate, _ = verdict_time(receipt['at'])
+    return cid, choice, key, rdate
+
+
 def fail(msg):
     print('verify_gold: ' + msg, file=sys.stderr)
     sys.exit(1)
@@ -171,7 +206,7 @@ def read_rounds(path):
     exactly when it is agreed."""
     try:
         doc = load_json(path)
-    except (OSError, ValueError) as e:
+    except (OSError, ValueError, RecursionError) as e:
         fail(f'{path}: {e}')
     if not (isinstance(doc, dict) and doc.get('format') == ROUNDS_FORMAT and isinstance(doc.get('claims'), dict)):
         fail(f'{path} is not the rounds of the first gold ({ROUNDS_FORMAT})')
@@ -311,7 +346,14 @@ def main(argv):
             and all(isinstance(e, dict) for e in gold.get('history', []))):
         fail(f'{gold_path} is not an annotation file with its items and history: nothing written')
     gold.setdefault('history', [])
-    by_id = {it['kialo_claim_id']: it for it in gold['items']}
+    by_id = {}
+    for it in gold['items']:
+        if it['kialo_claim_id'] in by_id:
+            fail(f'{gold_path} has two items for {it["kialo_claim_id"]}: nothing written')
+        by_id[it['kialo_claim_id']] = it
+        if 'verified' in it and not verification_shaped(it['verified']):
+            fail(f'{it["kialo_claim_id"]}: its verification does not have R17\'s fields (by "owner", a date, the '
+                 'item_rev and the text_sha256 verified): nothing written')
     try:
         texts = {i['kialo_claim_id']: i['text'] for i in load_json(INPUTS['items.json'])['items']}
     except (OSError, ValueError, RecursionError, KeyError, TypeError) as e:
@@ -341,24 +383,32 @@ def main(argv):
         return invalid if parsed[h] is invalid else parsed[h].get(cid)
 
     # The verdicts already applied or recorded, from the history entries' receipts: for each claim,
-    # the latest (of two at one time, one other than "gold": verdicts at one time are not ordered, and
-    # the item is left unverified), and the date and revision of each applied verdict "gold", which
-    # tell a verification whose time is recorded from one that has only its date (§5).
-    latest, timed = {}, {}
-    for entry in gold['history']:
-        for receipt in entry.get('verification_verdicts', []):
+    # the latest with its UTC date (of two at one time, one other than "gold": verdicts at one time are
+    # not ordered, and the item is left unverified), and every receipt's claim, choice and time, so
+    # that a verdict recorded already is not written again (§5).
+    latest, recorded_already = {}, set()
+    for n, entry in enumerate(gold['history']):
+        receipts_then = entry.get('verification_verdicts', [])
+        if not isinstance(receipts_then, list):
+            fail(f'{gold_path}: history entry {n + 1}: verification_verdicts is not a list of receipts: nothing written')
+        for m, receipt in enumerate(receipts_then):
             try:
-                key, rdate, _ = verdict_time(receipt['at'])
-                cid = receipt['item']
-                if not isinstance(cid, str) or not isinstance(receipt['choice'], str):
-                    raise ValueError('receipt has no claim or choice')
-            except (KeyError, TypeError, ValueError) as e:
-                fail(f'the gold has an invalid verification receipt: {e}')
-            if receipt['choice'] == 'gold':
-                timed.setdefault(cid, set()).add((rdate, receipt.get('item_rev')))
-            if (cid not in latest or key > latest[cid][0]
-                    or (key == latest[cid][0] and receipt['choice'] != 'gold')):
-                latest[cid] = (key, receipt)
+                cid, choice, key, rdate = receipt_of(receipt)
+            except ValueError as e:
+                fail(f'{gold_path}: history entry {n + 1}, receipt {m + 1}, is not a verification receipt: {e}: '
+                     'nothing written')
+            recorded_already.add((cid, choice, key))
+            if cid not in latest or key > latest[cid][0] or (key == latest[cid][0] and choice != 'gold'):
+                latest[cid] = (key, receipt, rdate)
+
+    def time_recorded(cid, verification):
+        """Whether a verification's time is recorded: its item's latest receipt is a verdict "gold" of
+        its date at the revision verified (the one that wrote it, or a confirmation). Otherwise it has
+        only its date: an older receipt of that date and revision may record a verification taken back
+        since and made again by hand (§5)."""
+        lat = latest.get(cid)
+        return (lat is not None and lat[1]['choice'] == 'gold' and lat[2] == verification['date']
+                and lat[1]['item_rev'] == verification['item_rev'])
     verified, withdrawn, noted, confirmed, recorded, skipped, receipts = [], [], [], [], [], [], []
     for v in verdicts:
         cid, choice = v['item'], v['choice']
@@ -368,24 +418,29 @@ def main(argv):
         if it is None:
             skipped.append((cid, 'no such claim in the gold'))
             continue
+        # The gold the verdict was given on. When it cannot be placed, the item's revision then is
+        # unknown: a verdict "gold" is neither written nor recorded, but one of another choice can only
+        # leave the item unverified, so it counts in the order as any other (§5).
         if h is None:
-            skipped.append((cid, 'the verdict recorded no gold'))
-            continue
-        if h not in versions:
-            skipped.append((cid, 'given on a gold this repository does not hold (not in the working tree or its '
-                                 'history): verify it again'))
-            continue
-        then = item_then(h, cid)
-        if then is invalid:
-            skipped.append((cid, 'the gold it was given on is not valid JSON: verify it again'))
-            continue
-        if then is None or item_rev(then) != item_rev(it):
-            skipped.append((cid, 'the item has changed since the verdict: verify it again'))
+            unplaced = 'the verdict recorded no gold'
+        elif h not in versions:
+            unplaced = 'given on a gold this repository does not hold (not in the working tree or its history)'
+        else:
+            then = item_then(h, cid)
+            unplaced = 'the gold it was given on is not valid JSON' if then is invalid else None
+            if unplaced is None and (then is None or item_rev(then) != item_rev(it)):
+                skipped.append((cid, 'the item has changed since the verdict: verify it again'))
+                continue
+        if unplaced and choice == 'gold':
+            skipped.append((cid, unplaced + ': verify it again'))
             continue
         key, utc_date, utc_at = times[cid]
+        if (cid, choice, key) in recorded_already:
+            skipped.append((cid, 'the gold already records this verdict (its claim, choice and time)'))
+            continue
         prior = latest.get(cid)
         if prior and key < prior[0]:
-            skipped.append((cid, 'the verdict is older than the latest applied owner verdict'))
+            skipped.append((cid, 'the verdict is older than the latest verdict the gold records for its item'))
             continue
         # Verdicts of different choices at one time are not ordered: the item is left unverified.
         tie = prior is not None and key == prior[0] and choice != prior[1]['choice']
@@ -393,28 +448,32 @@ def main(argv):
             skipped.append((cid, 'a verdict of another choice has the same time: the two are not ordered, and the '
                                  'item stays unverified until a newer verdict'))
             continue
-        # A verification whose time no receipt records has only its date: a conflicting verdict on that
-        # date, or any verdict before it, cannot be ordered with it, whatever else the history records.
-        old_verification = it.get('verified')
-        if (isinstance(old_verification, dict) and valid_date(old_verification.get('date'))
-                and (old_verification['date'], old_verification.get('item_rev')) not in timed.get(cid, set())):
-            if utc_date < old_verification['date'] or (utc_date == old_verification['date'] and choice != 'gold'):
-                skipped.append((cid, 'the earlier verification records only a date; this conflicting verdict is not provably later'))
-                continue
-        receipt = {'item': cid, 'choice': choice, 'at': utc_at, 'item_rev': item_rev(it)}
+        # A verification whose time is not recorded has only its date: a verdict of an earlier day is
+        # older, and one of another choice that day cannot be ordered with it, whatever else the
+        # history records (a verdict "gold" that day is dealt with below).
+        old = it.get('verified')
+        date_only = old is not None and not time_recorded(cid, old)
+        if date_only and utc_date < old['date']:
+            skipped.append((cid, f'the verification records only a date ({old["date"]}), a later day than this '
+                                 'verdict\'s: the verdict is older'))
+            continue
+        if date_only and utc_date == old['date'] and choice != 'gold':
+            skipped.append((cid, f'the verification records only a date ({old["date"]}), and a verdict of another '
+                                 'choice that day cannot be ordered with it'))
+            continue
+        receipt = {'item': cid, 'choice': choice, 'at': utc_at, 'item_rev': None if unplaced else item_rev(it)}
         if choice != 'gold':
-            if 'verified' in it:
+            # A verified item: the newer verdict takes the verification back. Otherwise the item does not
+            # change, but the verdict's time is kept, so that an older verdict "gold" imported later
+            # cannot verify the item.
+            receipts.append(receipt)
+            if old is not None:
                 del it['verified']
-                withdrawn.append((cid, word, tie))
-                receipts.append(receipt)
-            elif not prior or key > prior[0] or tie:
-                # The item does not change, but the verdict's time is kept: otherwise an older verdict
-                # "gold" imported later could verify the item.
-                receipts.append(receipt)
-                noted.append((cid, word))
-                recorded.append((cid, f'its verdict is "{word}"; the item remains unverified'))
+                withdrawn.append((cid, word, tie, unplaced))
             else:
-                skipped.append((cid, f'its verdict is "{word}", not "The gold is right"'))
+                noted.append((cid, word, unplaced))
+                recorded.append((cid, f'its verdict is "{word}"; the item remains unverified'
+                                      + (f' ({unplaced}: verify it again)' if unplaced else '')))
             continue
         state = rounds.get(cid)
         if state is None:
@@ -435,15 +494,17 @@ def main(argv):
             continue
         rec = {'by': 'owner', 'date': utc_date, 'item_rev': item_rev(it),
                'text_sha256': sha(texts[cid].encode('utf-8'))}
-        if it.get('verified') == rec:
-            if not prior or key > prior[0]:
-                # A later confirmation the same day: its time is kept, so that a verdict between the two
-                # cannot take the verification back.
+        if old == rec:
+            if date_only:
+                # Its receipt would seem to record the verification's time, which is not known.
+                skipped.append((cid, f'already verified so; the verification records only a date ({old["date"]}), '
+                                     'and a verdict that day cannot be ordered with it, so its time is not recorded'))
+            else:
+                # A later confirmation the same day (an older or equal one was not written above): its time
+                # is kept, so that a verdict between the two cannot take the verification back.
                 receipts.append(receipt)
                 confirmed.append(cid)
                 recorded.append((cid, 'a later confirmation; the verification itself is unchanged'))
-            else:
-                skipped.append((cid, 'already verified so'))
             continue
         it['verified'] = rec
         verified.append((cid, rec))
@@ -455,17 +516,18 @@ def main(argv):
         what = []
         if verified:
             what.append('Verified by the owner: ' + ', '.join(f'{c} (the verdict of {r["date"]})' for c, r in verified) + '.')
-        later = [(c, w) for c, w, tie in withdrawn if not tie]
-        tied = [(c, w) for c, w, tie in withdrawn if tie]
+        def told(c, w, unplaced):
+            return f'{c} ({w}; given on a gold not found, the revision unknown)' if unplaced else f'{c} ({w})'
+        later = [told(c, w, u) for c, w, tie, u in withdrawn if not tie]
+        tied = [told(c, w, u) for c, w, tie, u in withdrawn if tie]
         if later:
-            what.append('Verification taken back by the owner\'s later verdict: ' +
-                        ', '.join(f'{c} ({w})' for c, w in later) + '.')
+            what.append('Verification taken back by the owner\'s later verdict: ' + ', '.join(later) + '.')
         if tied:
             what.append('Verification taken back by a verdict of another choice at the same time as the one that '
-                        'verified it (not ordered): ' + ', '.join(f'{c} ({w})' for c, w in tied) + '.')
+                        'verified it (not ordered): ' + ', '.join(tied) + '.')
         if noted:
             what.append('The owner\'s verdicts recorded, on items not verified: ' +
-                        ', '.join(f'{c} ({w})' for c, w in noted) + '.')
+                        ', '.join(told(c, w, u) for c, w, u in noted) + '.')
         if confirmed:
             what.append('A later confirmation recorded, the verification unchanged: ' + ', '.join(confirmed) + '.')
         gold['history'].append({'date': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d'),
@@ -477,12 +539,13 @@ def main(argv):
                 fh.write(out)
     for cid, rec in verified:
         print(f'verified: {cid} (revision {rec["item_rev"][:12]}, {rec["date"]})')
-    for cid, word, tie in withdrawn:
+    for cid, word, tie, unplaced in withdrawn:
+        again = f'; {unplaced}: verify it again' if unplaced else ''
         if tie:
             print(f'taken back: {cid} (a verdict "{word}" at the same time as the one that verified it: '
-                  'the two are not ordered, and the item is left unverified)')
+                  f'the two are not ordered, and the item is left unverified{again})')
         else:
-            print(f'taken back: {cid} (the owner\'s later verdict: {word})')
+            print(f'taken back: {cid} (the owner\'s later verdict: {word}{again})')
     for cid, why in recorded:
         print(f'receipt recorded: {cid}: {why}')
     for cid, why in skipped:

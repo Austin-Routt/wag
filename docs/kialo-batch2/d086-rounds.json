@@ -667,11 +667,11 @@
     "target_formula",
     "target_instance"
    ],
-   "draft": 1,
-   "review": "agreed",
-   "agreed_rev": "f07c5620aa4076909f26268875cf5a31fdfa126cbf696d0653cee516b45fd59b",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 2,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {
@@ -721,7 +721,7 @@
      "date": "2026-11-27",
      "draft": 1,
      "reviewer": "objection",
-     "developer": "accepted",
+     "developer": "partly accepted: the note rewritten; the unresolved or approximate target not taken, a question for the guidelines (to the owner)",
      "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
     }
    ]
@@ -931,7 +931,7 @@
      "date": "2026-11-27",
      "draft": 1,
      "reviewer": "objection",
-     "developer": "accepted",
+     "developer": "accepted; its optional second relation, the interference at 13292.12#1, noted, not coded",
      "record": "wag-workspace verify/chatgpt-d086-2026-11-27/REVIEW.md §3; verify/ethix-2026-11-27/REVIEW.md §2 (the reconciliation)"
     }
    ]
@@ -999,11 +999,11 @@
     "role",
     "target_formula"
    ],
-   "draft": 1,
-   "review": "agreed",
-   "agreed_rev": "a41155c8a02d638d5983a80a69ffe04aa7fa03e43f9692004ad532e42b711614",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 2,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {

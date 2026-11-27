@@ -10,22 +10,27 @@ adjudication.recoded entry (by "developer (D086 draft 2)") that names what chang
 
 - Accepted objections. 13292.25: its ease premise supplied, the claim's hedge in its note.
   13292.104: #2's fit reconstructed (its goal premise is supplied; guidelines §5 item 6, R18); #1's
-  comparison supplied, explained; #1's inferred link cites 13292.13 (R19). 13292.43: the tax's
-  effect supplied, its evaluation explicit. 13292.127: the starvation link supplied in both
-  instances (13292.7 grounds only the dearer food), #1's evaluation explicit as #2's. 13292.192:
-  #2 primary, its conclusion reaching the target (§5 item 5); the note says what the chain does not
-  show. 13292.8: the note says the backing is partial. 13292.194: at 13292.12#3's conclusion, as
-  13292.202 (OC6).
-- Partly accepted, with the reconciliation's conditions. 13292.123: better_means kept, its
-  comparison and its link to the goal supplied and scoped (subsidy removal corrects 13292.11's
-  distortion, not 13292.218's externalities), the goal 13292.118's (D075), the other reading (a
-  proposal of another course) recorded as an alternative. 13292.218: the action named but not
-  represented; the circumstances inferred from 13292.11 (R19); the stated link explicit, its
-  projection to 13292.118's higher_meat_price and its scope (the price rise that internalizes the
-  named externalities) explained.
+  comparison supplied, explained; #1's link explicit, the claim's 'the appropriate solution'
+  projected to 13292.108's goal. 13292.43: the tax's effect supplied, its evaluation explicit.
+  13292.127: the starvation link supplied in both instances (13292.7 grounds only the dearer food),
+  #1's evaluation explicit as #2's. 13292.192: #2 primary, its conclusion reaching the target (§5
+  item 5); the note says what the chain does not show. 13292.194: at 13292.12#3's conclusion, as
+  13292.202 (OC6); the reviewer's optional second relation noted, not coded.
+- Partly accepted. 13292.8: the note says the backing is partial; the target kept (the reviewer's
+  unresolved target, a question for the guidelines). With the reconciliation's conditions:
+  13292.123: better_means kept, its comparison and its link to the goal (in both instances) supplied
+  and scoped (subsidy removal corrects 13292.11's distortion, not 13292.218's externalities), the
+  goal 13292.118's (D075), the other reading (a proposal of another course) recorded as an
+  alternative. 13292.218: the action named but not represented; the circumstances inferred from
+  13292.11 (R19); the stated link explicit, its projection to 13292.118's higher_meat_price and its
+  scope (the price rise that internalizes the named externalities) explained.
 - Refinements of agreed items. 13292.11: the subsidies as the claim presents them. 13292.6: the
   modal causal reading recorded as an alternative.
-- Unchanged: 13292.108 (question 1 goes to the owner) and the 19 other agreed items.
+- Corrections of agreed items whose records draft 2's changes made false, from the independent
+  check of draft 2 (wag-workspace verify/d086/rv/): 13292.204's account of the premise it attacks;
+  13292.12's of where 13292.194 is, and a quotation made exact. Quotations in the notes are the
+  claims' words, checked against items.json.
+- Unchanged: 13292.108 (question 1 goes to the owner) and the 17 other agreed items.
 
 It refuses any gold but draft 1's, then writes gold.json; in d086-rounds.json it records each claim's
 first exchange (exchanges), sets the changed claims to draft 2, not reviewed, the unchanged agreed
@@ -154,9 +159,11 @@ restate(premise('13292.104', '13292.104#1',
         "reconstructed from that diagnosis, not stated. 'Rather than penalize those who wish to consume meat' adds a "
         "reason of fairness to consumers, which is not this comparison (D089)")
 restate(premise('13292.104', '13292.104#1', 'brings_about(regulate_animal_farming_industry,environmental_harm_from_meat_reduced)',
-                'inferred'), 'inferred',
-        "the claim calls regulating the industry the solution to 'the problems associated with meat production and "
-        "consumption' that its Kialo parent 13292.13 names, the environmental harm among them", cite='13292.13')
+                'inferred'), 'explicit',
+        "the claim calls regulating the industry 'the appropriate solution' to the problems its Kialo parent 13292.13 "
+        "names ('the problems associated with its production and consumption', meat's), the environmental harm among "
+        "them: the formula's S2 is that harm, 13292.108's goal, to which this claim's solution is projected (13292.104#2 "
+        "states it of the problems in general)")
 notes('13292.104',
       "Proposes another action, regulating the animal farming industry, for the goal the thesis's environmental "
       "argument pursues: the problem is the industry, not meat, so act on the industry 'rather than penalize those who "
@@ -177,10 +184,11 @@ record('13292.104', ['instances.premises', 'instances.scheme.fit', 'notes'],
        "D086 exchange 1, the reviewer's objections accepted: 13292.104#2's fit is reconstructed, since its goal premise "
        "is supplied (guidelines §5 item 6; R18 checks it since this draft); #1's comparison more_effective_means(...) "
        "is supplied, not explicit, its note saying how it is reconstructed from the claim's diagnosis and that the "
-       "fairness reason is not it; #1's inferred link brings_about(regulate_animal_farming_industry,...) cites "
-       "13292.13, the parent whose problems the claim's solution addresses (R19). #2's S2, close to the action "
-       "restated (§5 item 4), is noted as a question for the guidelines. Better_means kept (the reviewer: a defensible "
-       "choice, which the record now exposes). Notes rewritten.")
+       "fairness reason is not it; #1's link brings_about(regulate_animal_farming_industry,...) is explicit, the "
+       "claim's own 'the appropriate solution' projected to 13292.108's goal (13292.13, which it first cited, names "
+       "the problems but does not say that regulating solves them: the independent check of draft 2, W7). #2's S2, "
+       "close to the action restated (§5 item 4), is noted as a question for the guidelines. Better_means kept (the "
+       "reviewer: a defensible choice, which the record now exposes). Notes rewritten.")
 
 # 13292.43: the tax's effect presupposed; the evaluation the claim's own.
 restate(premise('13292.43', '13292.43#1', 'brings_about(tax_meat,sustainability_and_animal_welfare)', 'explicit'), 'supplied',
@@ -270,15 +278,19 @@ notes('13292.8',
       "which says that the tax would reduce such consumption: the claim backs it only in part, and the step from excess "
       "consumption to the tax's reducing it is not argued. The target is the nearest formula the format offers (a "
       "target names no component of a premise), and the relation is partial. positive_consequences has CQ:likelihood "
-      "(33.1 CQ1) on that premise, so the role is cq_answer with polarity for (R2). The step from 'above the "
-      "guidelines' to 'unhealthy' rests on the guidelines' authority, coded as a secondary expert-opinion instance. "
+      "(33.1 CQ1) on that premise, so the role is cq_answer with polarity for (R2). The step from 'more meat than "
+      "dietary guidelines recommend' to unhealthy consumption rests on the guidelines' authority, coded as a "
+      "secondary expert-opinion instance. "
       "Its children treat it as stating the problem: 13292.3 (curbing it cuts health costs) and 13292.29 (it is a "
       "personal choice).",
       'Backs the presupposition of 13292.115')
 record('13292.8', ['notes'],
-       "D086 exchange 1, the reviewer's objection accepted: the note no longer equates the background condition (there "
-       "is excess consumption) with the premise it backs (the tax would reduce it), as its 'i.e.' did; it says the "
-       "backing is partial and the target the nearest formula the format offers. Scheme, role and target unchanged.")
+       "D086 exchange 1, the reviewer's objection partly accepted: the note no longer equates the background condition "
+       "(there is excess consumption) with the premise it backs (the tax would reduce it), as its 'i.e.' did; it says "
+       "the backing is partial and the target the nearest formula the format offers. Not taken: the reviewer's "
+       "unresolved or approximate target, since the format has no approximate target and an unresolved one could not "
+       "be verified (R17); how to target a background condition that backs a premise in part is a question for the "
+       "guidelines, to the owner. Scheme, role and target unchanged.")
 
 # 13292.194: at the conclusion of the argument that cites the harm, as 13292.202.
 tgt = G['13292.194']['target']['actual']
@@ -305,7 +317,10 @@ record('13292.194', ['notes', 'target'],
        "13292.12#1's conclusion may_occur(domestic_meat_industry_pushed_out) to 13292.12#3's ¬should_be_performed("
        "tax_meat), the conclusion of the argument that cites the harm against the tax, as 13292.202 is (OC6). The note "
        "gives the reason as an amended policy against a blocking circumstance that already holds, not as whose action "
-       "the measures are. Scheme, role and polarity unchanged. Notes rewritten.")
+       "the measures are. The reviewer's optional second relation, the measures as interference with 13292.12#1's "
+       "mechanism, is not coded (a claim has one target, and the claim proposes a changed policy, not a blocker under "
+       "the tax): 13292.12's challenge at that interference names the measures. Scheme, role and polarity unchanged. "
+       "Notes rewritten.")
 
 
 # --- Partly accepted, with the reconciliation's conditions -----------------------------------------
@@ -321,9 +336,15 @@ restate(premise('13292.123', '13292.123#1',
         "13292.218 names, which the tax would")
 restate(premise('13292.123', '13292.123#1', 'brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs)', 'inferred'),
         'supplied',
-        "supplied: 'the price distortions caused by subsidies should be removed by abolishing those subsidies' says "
+        "supplied: 'distortions caused by subsidies should be removed by abolishing those subsidies' says "
         "that abolishing them removes the distortion; that the price then reflects the real costs, external costs "
         "included, is the reconstruction's, and holds of the subsidies' part only")
+restate(premise('13292.123', '13292.123#2',
+                'would_be_realized(meat_price_reflects_real_costs,subsidy_distortions_removed)', 'inferred'),
+        'supplied',
+        "supplied: that the price reflects the real costs once the subsidies' distortion is removed is the "
+        "reconstruction's, as in 13292.123#1, and holds of the subsidies' part only; 13292.118 states the goal, not "
+        "this link")
 alts = x1['scheme']['alternatives']
 if [x['walton_id'] for x in alts] != ['practical_reasoning2']:
     refuse('13292.123#1\'s alternatives are not draft 1\'s')
@@ -339,8 +360,8 @@ notes('13292.123',
       "13292.104 does 13292.108's: its primary instance is better_means, a cq_answer to the game's CQ:other_means "
       "(22.1 CQ2), with role.move alternative_means, against; re-parented from 13292.11 (13292.118 is an ancestor). The "
       "goal is 13292.118's, as D075 asks of a better means. The comparison and the link from abolishing the subsidies "
-      "to that goal are supplied, not stated: 'instead' offers the other course and does not say that it reaches the "
-      "goal more surely. Their scope is narrower than the goal: abolishing the subsidies removes the distortion "
+      "to that goal (in both instances) are supplied, not stated: 'instead' offers the other course and does not say "
+      "that it reaches the goal more surely. Their scope is narrower than the goal: abolishing the subsidies removes the distortion "
       "13292.11 names (a price held below cost by subsidies); it does not put into the price the external costs "
       "13292.218 names, which the tax would. The other reading, a proposal of another course not said to do better "
       "(C017; OC6) at 13292.118's conclusion, is recorded as an alternative of the primary instance. The argument for "
@@ -352,8 +373,11 @@ record('13292.123', ['instances.premises', 'instances.scheme.alternatives', 'not
        "kept, with the same goal as 13292.118's argument (D075); its comparison more_effective_means(...) and its link "
        "brings_about(abolish_meat_subsidies,meat_price_reflects_real_costs) supplied, not explicit or inferred, their "
        "notes and the item's scoping them (subsidy removal corrects the distortion 13292.11 names, not the "
-       "externalities 13292.218 names); the reviewer's reading, a proposal of another course not said to do better "
-       "(C017; OC6), recorded as the primary's alternative. Role and target unchanged. Notes rewritten.")
+       "externalities 13292.218 names), and the same link in 13292.123#2, would_be_realized(meat_price_reflects_"
+       "real_costs,subsidy_distortions_removed), supplied too, not inferred from 13292.118, which states the goal, not "
+       "the link (the independent check of draft 2, W7); the reviewer's reading, a proposal of another course not "
+       "said to do better (C017; OC6), recorded as the primary's alternative. Role and target unchanged. Notes "
+       "rewritten.")
 
 # 13292.218: the action named but not represented; the circumstances inferred; the link's scope.
 x = instance('13292.218', '13292.218#1')
@@ -366,10 +390,10 @@ x['bindings']['A'] = {'unstated': (
 restate(premise('13292.218', '13292.218#1', 'current_circumstances(meat_price_below_real_costs)', 'explicit'), 'inferred',
         "inferred from the sibling 13292.11, which states it: this claim elaborates the circumstances (it names the costs "
         "the price leaves out: externalities, from climate change, water pollution and disease risks) without stating "
-        "them as a proposition of its own ('would factor externalities into the price' presupposes that the price "
-        "leaves them out). 13292.224 backs them here, where their externalities are named", cite='13292.11')
+        "them as a proposition of its own ('it would factor in externalities', into the price 13292.118 speaks of, "
+        "presupposes that the price leaves them out). 13292.224 backs them here, where their externalities are named", cite='13292.11')
 p = premise('13292.218', '13292.218#1', 'would_be_realized(meat_price_reflects_real_costs,higher_meat_price)', 'explicit')
-p['note'] = ("'It would factor externalities into the price': the price the tax raises includes the external costs. The "
+p['note'] = ("'It would factor in externalities': the price the tax raises includes the external costs. The "
              "formula's S2 is 13292.118's higher_meat_price, to which this claim's price with the externalities in it is "
              "projected, so that it backs that premise. Its scope: the price rise that internalizes the named externalities "
              "under this tax, not any higher price; the restriction is this claim's words, the projection 13292.118's "
@@ -401,8 +425,8 @@ record('13292.218', ['instances.bindings', 'instances.premises', 'notes'],
 # --- Refinements of agreed items ------------------------------------------------------------------
 
 p = premise('13292.11', '13292.11#2', 'has_occurred(meat_subsidies)', 'explicit')
-p['note'] = ("presupposed: the claim presents the subsidies as existing ('because of subsidies'), so the cause has "
-             "occurred as the claim has it (not a hypothetical cause)")
+p['note'] = ("explicit: 'due to subsidies' presents the subsidies as existing, so the cause has occurred as the claim "
+             "has it (not a hypothetical cause)")
 OLD_11 = 'the subsidies exist, so the cause has occurred and cause_to_effect applies'
 if OLD_11 not in G['13292.11']['notes']['text']:
     refuse('13292.11\'s notes are not draft 1\'s')
@@ -426,6 +450,44 @@ record('13292.6', ['instances.scheme.alternatives'],
        "form. Coding unchanged.")
 
 
+# --- Corrections of agreed items that draft 2's changes made false (the independent check of draft 2) --
+
+# 13292.204: draft 2 made the premise it attacks supplied in 13292.127 (E2).
+OLD_204 = "The premise is 13292.127's own (inferred from 13292.7), so this is not re-parenting."
+if OLD_204 not in G['13292.204']['notes']['text']:
+    refuse('13292.204\'s notes are not draft 1\'s')
+G['13292.204']['notes']['text'] = G['13292.204']['notes']['text'].replace(
+    OLD_204, "The premise is 13292.127's own (supplied: the claim presupposes the link, and 13292.7 grounds only its "
+             "first step, the tax making food dearer), so this is not re-parenting.")
+record('13292.204', ['notes'],
+       "D086 draft 2, after the independent check of draft 2 (E2): the note's account of the premise it attacks "
+       "corrected, which draft 2 made supplied in 13292.127 (the note said inferred from 13292.7). Coding unchanged.")
+
+# 13292.12: draft 2 moved 13292.194 to 13292.12#3's conclusion (W1); a quotation of 13292.9 made exact.
+ch = [c for c in G['13292.12']['challenges'] if c.get('instance') == '13292.12#1' and c.get('cq') == '28 CQ3']
+OLD_12C = ("the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions at "
+           "13292.12's predicted harm (OC6), not as answers here")
+if len(ch) != 1 or ch[0].get('note') != OLD_12C:
+    refuse('13292.12\'s challenge at the interference is not draft 1\'s')
+ch[0]['note'] = ("the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions "
+                 "(OC6), not as answers here: 13292.194 at 13292.12#3's conclusion, the argument that cites the harm "
+                 "against the tax, and 13292.45, until its round, at this argument's conclusion, the predicted harm")
+t = G['13292.12']['notes']['text']
+OLD_12Q = "Gives the mechanism of 13292.9's 'by harming the meat industry':"
+OLD_12N = ("(13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions at 13292.12's "
+           "predicted harm)")
+if t.count(OLD_12Q) != 1 or t.count(OLD_12N) != 1:
+    refuse('13292.12\'s notes are not draft 1\'s')
+G['13292.12']['notes']['text'] = t.replace(
+    OLD_12Q, "Gives the mechanism of 13292.9's 'by harming the trillion-dollar meat industry':").replace(
+    OLD_12N, "(13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions: 13292.194 at "
+             "13292.12#3's conclusion, 13292.45, until its round, at 13292.12#1's, the predicted harm)")
+record('13292.12', ['challenges', 'notes'],
+       "D086 draft 2, after the independent check of draft 2 (W1): the challenge at 13292.12#1's interference and the "
+       "notes say where 13292.194 now is, at 13292.12#3's conclusion, not at the predicted harm; the quotation of "
+       "13292.9 made exact ('the trillion-dollar meat industry'). Coding unchanged.")
+
+
 # --- d086-rounds.json: the first exchange, the states of draft 2, the decisions pending ------------
 
 def rev(it):
@@ -433,9 +495,17 @@ def rev(it):
     return hashlib.sha256(json.dumps(x, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8')).hexdigest()
 
 
-ACCEPTED = ('13292.25', '13292.104', '13292.43', '13292.127', '13292.192', '13292.8', '13292.194')
+ACCEPTED = ('13292.25', '13292.104', '13292.43', '13292.127', '13292.192')
 PARTLY = ('13292.123', '13292.218')
 REFINED = ('13292.11', '13292.6')
+# The developer's answer where it is none of those (the independent check of draft 2, N3).
+OTHER = {'13292.8': ('objection', 'partly accepted: the note rewritten; the unresolved or approximate target not '
+                                  'taken, a question for the guidelines (to the owner)'),
+         '13292.194': ('objection', 'accepted; its optional second relation, the interference at 13292.12#1, noted, '
+                                    'not coded')}
+# Agreed in exchange 1, corrected in draft 2 where draft 2's changes made their records false (the
+# independent check of draft 2, E2 and W1): back to not reviewed, at draft 2.
+CORRECTED = ('13292.204', '13292.12')
 # Q1: the targets on 13292.108's conclusion and on its supplied premises, which move to a separate
 # reconstruction under the two-layer rule (fragments carry no conclusion), and 13292.108 itself;
 # G2: the items with a causal instance, whose exception changes with the scope, and the answers at
@@ -444,7 +514,7 @@ PENDING = {'13292.108': ['Q1'], '13292.5': ['Q1'], '13292.6': ['Q1'], '13292.147
            '13292.104': ['Q1'], '13292.127': ['Q1'],
            '13292.2': ['G2'], '13292.9': ['G2'], '13292.11': ['G2'], '13292.12': ['G2'], '13292.36': ['G2'],
            '13292.141': ['G2'], '13292.180': ['G2'], '13292.182': ['G2'], '13292.198': ['G2'], '13292.192': ['G2']}
-if set(done) != set(ACCEPTED) | set(PARTLY) | set(REFINED):
+if set(done) != set(ACCEPTED) | set(PARTLY) | set(REFINED) | set(OTHER) | set(CORRECTED):
     refuse('the items recorded are not the ones changed')
 for c in ROUND1:
     e = rounds['claims'][c]
@@ -454,6 +524,8 @@ for c in ROUND1:
         reviewer, developer = 'objection', 'partly accepted, on the conditions of the reconciliation'
     elif c in REFINED:
         reviewer, developer = 'agreed, with a refinement', 'refinement taken'
+    elif c in OTHER:
+        reviewer, developer = OTHER[c]
     elif c == '13292.108':
         reviewer, developer = 'objection', 'agreed in direction; a rule for the owner first (question 1)'
     else:
@@ -478,15 +550,18 @@ rounds['note'] = (
     'on (verify_gold.py writes a verification only at that revision), its review exchanges (exchanges), and the '
     "owner's decisions its coding waits for (pending; verify_gold.py writes no verification while there are any).")
 
+AGREED = sum(1 for c in ROUND1 if rounds['claims'][c]['review'] == 'agreed')
 gold['history'].append({
     'date': WHEN, 'by': BY,
     'what': ("Round 1 of the first gold, draft 2 (D086; docs/d086-first-gold.md §11, d086-rounds.json): the first "
-             "exchange of the review taken in. Accepted objections: 13292.25, .104, .43, .127, .192, .8 and .194; "
-             "partly accepted, on the conditions of the reconciliation: 13292.123 and .218; refinements of agreed "
-             "items: 13292.11 and .6. Premise provenance follows guidelines §2 item 3 and §5 item 6, now checked "
-             "(R18, R19). 13292.108 goes to the owner (question 1); the 19 other agreed items are agreed at their "
-             f"revision. {len(PENDING)} of the round's claims wait for the owner's decisions (pending): "
-             f"{sum(1 for v in PENDING.values() if 'Q1' in v)} for Q1, the two layers of 13292.108, and "
+             "exchange of the review taken in. Accepted objections: 13292.25, .104, .43, .127, .192 and .194 (its "
+             "optional second relation noted, not coded); partly accepted: 13292.8 (the note rewritten, the target "
+             "kept), and, on the conditions of the reconciliation, 13292.123 and .218; refinements of agreed items: "
+             "13292.11 and .6. Corrected after the independent check of draft 2: 13292.204 and .12, agreed items whose "
+             "records draft 2's changes made false. Premise provenance follows guidelines §2 item 3 and §5 item 6, "
+             f"now checked (R18, R19). 13292.108 goes to the owner (question 1); the {AGREED} other agreed items are "
+             f"agreed at their revision. {len(PENDING)} of the round's claims wait for the owner's decisions "
+             f"(pending): {sum(1 for v in PENDING.values() if 'Q1' in v)} for Q1, the two layers of 13292.108, and "
              f"{sum(1 for v in PENDING.values() if 'G2' in v)} for G2, the causal exception's scope.")})
 
 with open(GOLD, 'w', encoding='utf-8') as fh:
