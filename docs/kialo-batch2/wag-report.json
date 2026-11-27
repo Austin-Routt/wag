@@ -9,9 +9,9 @@
  "secondary_played": 3,
  "not_played": 8,
  "integration": {
-  "as_intended": 27,
+  "as_intended": 28,
   "fragment": 3,
-  "coverage_gap": 10,
+  "coverage_gap": 9,
   "failed": 1,
   "duplicate": 1,
   "cascade": 6,
@@ -1180,7 +1180,7 @@
     "arg": "a140",
     "conclusion": "¬brings_about(tax_meat,starvation_from_reduced_meat_access)"
    },
-   "integration": "coverage_gap"
+   "integration": "as_intended"
   },
   {
    "claim": "13292.208",
