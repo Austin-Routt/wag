@@ -674,8 +674,9 @@ found these, each verified against the code before it was fixed:
 - four were rules no case reached: the receipt's date and revision, the latest of two receipts at
   one time, and a receipt's fields. Cases V43-V46 were written for them (a3b9141), before their
   tests;
-- one was a defect R19's test could not tell from the correct code: siblings outside the batch are
-  all listed as children too. Its test now cites a claim listed only as a child.
+- one, R19 without siblings, does the same as the correct code on today's `items.json`, where every
+  sibling outside the batch is also listed as a child. It was replaced by R19 without children,
+  which the test now catches with a claim listed only as a child (13292.149).
 
 On the second run all 27 were caught.
 
