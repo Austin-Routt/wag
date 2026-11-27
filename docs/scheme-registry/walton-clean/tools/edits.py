@@ -1180,4 +1180,32 @@ FINDING_OUT_D095 += [insert(1926, text, ADD, _D095, scheme='finding_out_first') 
     '',
 ]]
 
-OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3 + PRACTICAL_C4 + FINDING_OUT_D095
+# ----------------------------------------------------------------------
+# 2026-11-27: the causal exception names its effect (D071, decided under the
+# owner's standing rule of 2026-11-22; D097, decided by the owner on 2026-11-27),
+# and cause to effect cites its source (D040, decided under the standing rule of
+# 2026-11-22): proposal D040-D071-D097, version 2, after an independent review.
+_D097 = ("D071, D097: the exception named only the cause, so an answer that something blocks one effect of a "
+         "cause undercut every causal step from that cause (the engine test of proposal D055-D059's second "
+         "review, 2026-11-22; the first gold's G2, 2026-11-27); now interference(E1,E2), as the book's 28/CQ3 "
+         "is about the effect in the case at hand. Decided under the owner's standing rule of 2026-11-22 and "
+         "by the owner on 2026-11-27 (proposal D040-D071-D097)")
+_D097T = "template for the two-place exception (D071, D097), in our own words"
+_D040 = ("D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as "
+         "cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 "
+         "(proposal D040-D071-D097)")
+CAUSAL_D097 = [
+    dict(op="set", line=197, before='  interference/1: "An event has occurred which interferes with event %s."',
+         after='  interference/2: "Another causal factor in this case keeps, or would keep, %s from bringing about %s."',
+         category=OWN, reason=_D097T),
+    sub(1748, "interference(E1)", "interference(E1,E2)", OWN, _D097, scheme="cause_to_effect"),
+    sub(1749, "interference(E1)", "interference(E1,E2)", OWN, _D097, scheme="cause_to_effect_modal"),
+]
+CAUSAL_D097 += [insert(1740, text, OWN, _D040, scheme="cause_to_effect") for text in [
+    '      source: >',
+    '              Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes.',
+    '              Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton, A Pragmatic Theory of',
+    '              Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, pp. 140-141.',
+]]
+
+OPS += OWNER_REPAIRS + ADDITIONS + ANALOGY + CONSEQUENCES + D084 + PRACTICAL + CONSEQUENCES_C3 + PRACTICAL_C4 + FINDING_OUT_D095 + CAUSAL_D097

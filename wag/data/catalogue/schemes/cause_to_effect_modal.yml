@@ -21,7 +21,7 @@ formulas:
   - may_occur(E1)
   - causes(E1,E2)
   exceptions:
-  - interference(E1)
+  - interference(E1,E2)
   conclusions:
   - may_occur(E2)
 book:
@@ -94,15 +94,17 @@ critical_questions:
   book:
     entry: "28"
     label: CQ3
-  targets: [{formula: interference(E1), locus: exception}]
+  targets: [{formula: 'interference(E1,E2)', locus: exception}]
   paraphrase: Could some other factor in this case, present now or arriving with E1,
-    keep E1 from bringing about E2 or blunt its effect?
+    keep E1 from bringing about E2?
   answer: 'The critic, who raises it with an argument. Against: a factor that is present,
-    or that E1 would bring with it, that blocks or offsets the effect, such as a countermeasure
-    or a stronger opposing cause, which undercuts the argument through interference(E1).
-    For: showing that no such factor is present or to be expected, or that it is too
-    weak to matter.'
-  status: drafted by Claude Code, 2026-10-22
+    or that E1 would bring with it, that would keep E1 from bringing about E2, such
+    as a countermeasure or a stronger opposing cause, which undercuts the argument
+    through interference(E1,E2). The exception names the effect (D071, D097), so another
+    argument from E1 to another effect is not touched. A factor that only weakens
+    the effect bears on the first question. For: showing that no such factor is present
+    or to be expected, or that it could not keep E2 from following.'
+  status: drafted by Claude Code, 2026-11-27
 summary:
   text: Use it when a cause E1 is only proposed, expected or possible in a case, typically
     a measure not yet adopted, or the text says only that an effect could follow,
@@ -194,6 +196,23 @@ examples:
     costs), as the gold codes it (a secondary instance beneath practical_reasoning2).'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
+- text: A tax on meat may come in, and a tax on a good raises what buyers pay for
+    it, so the price of meat may rise.
+  coding: 'E1 = a tax on meat coming in; E2 = the price of meat rising. Stated: may_occur(E1)
+    and causes(E1,E2). Conclusion: may_occur(E2). That processors would absorb the
+    tax to keep their market share answers 28/CQ3 at interference(tax on meat, price
+    rising): the factor has not happened, it would come with the cause. A first-question
+    attack must deny even a modest tendency, which is all this form needs.'
+  status: drafted by Claude Code, 2026-11-27
+- text: If the tax reduces meat consumption, cases of anemia may rise, since less
+    meat means less iron in many diets.
+  coding: Adapted from 13292.180 (meat as the easiest source of iron; any financial
+    restriction increasing anemia). E1 = reduced meat consumption; E2 = more anemia
+    cases. Iron-fortified foods or supplements (13292.182, .198) answer 28/CQ3 at
+    interference(reduced_meat_consumption,more_anemia_cases), and leave 13292.192's
+    step from the same cause to more crop production standing (D097, the first gold's
+    G2).
+  status: drafted by Claude Code, 2026-11-27
 discrepancies:
 - kind: partial-link
   about: "28"
@@ -287,9 +306,10 @@ discrepancies:
   detail: interference(E1)'s template says the interfering event has occurred; for
     a cause that may occur, the interference may be one still to come, such as producers
     absorbing a tax.
-  decision: 'No change: read it as a factor that is present or would come with E1,
-    as the paraphrase of 28/CQ3 does.'
-  status: drafted by Claude Code, 2026-10-22
+  decision: 'Done 2026-11-27 (D071, D097; proposal D040-D071-D097): the exception
+    is interference(E1,E2), whose template says that another causal factor keeps,
+    or would keep, E1 from bringing about E2, so a factor still to come is one.'
+  status: drafted by Claude Code, 2026-11-27
 classification:
   source: independent
   reasoning: epistemic
@@ -338,3 +358,10 @@ history:
 - date: "2026-11-25"
   by: Claude Code
   what: the 13292.9 example follows the recoded gold (proposal D008-D074, D008)
+- date: "2026-11-27"
+  by: Claude Code
+  what: 'D071 and D097 applied (proposal D040-D071-D097, version 2): 28/CQ3 targets
+    interference(E1,E2), its paraphrase no longer asks about a blunted effect (the
+    first question''s matter) and its answer names the effect; the template discrepancy
+    is done; two of the proposal''s examples added (a factor that would come with
+    the cause; anemia, adapted from 13292.180)'

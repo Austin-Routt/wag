@@ -1533,7 +1533,7 @@ decisions:
     by: owner (standing rule of 2026-11-22)
     decision: >-
       Yes: interference(E1,E2) in cause_to_effect and cause_to_effect_modal.
-    recorded: "docs/decisions.yml; to apply: stage 2: walton.yml through edits.py, after a proposal check and an independent review (plan §0)"
+    recorded: "docs/proposals/D040-D071-D097.yml (version 2, after an independent review of version 1, which found D071 left out), applied 2026-11-27: walton.yml through edits.py (CAUSAL_D097) and CHANGELOG.md; links.json (28 CQ3); the catalogue entries cause_to_effect and cause_to_effect_modal; engine tests (wag/internal/carneades/causal_d097_test.go); docs/kialo-batch2 (the gold by recode_d097.py, re-pinned; guidelines §5 item 11; rule case OC6-d); docs/proposals/D008-D074.md written again"
 
 - id: D076
   title: Evidence as records
@@ -1696,7 +1696,7 @@ decisions:
       Yes: cause_to_effect cites the book's entry 28 (p. 328), and the
       reference it prints (A Pragmatic Theory of Fallacy, 1995, pp. 140-141)
       as cited there.
-    recorded: "docs/decisions.yml; to apply: walton.yml's meta through edits.py (plan §0, stage 2)"
+    recorded: "docs/proposals/D040-D071-D097.yml (version 2), applied 2026-11-27: cause_to_effect's meta through edits.py (CAUSAL_D097); links.json's reason for 28; the catalogue entry's discrepancy on its major premise"
 
 - id: D041
   title: Witness testimony's year
@@ -2785,7 +2785,7 @@ decisions:
       edits.py, with links.json's 28 CQ3, the catalogue entries, the gold's
       causal instances and challenges recoded, the targets of 13292.182 and .198,
       and new pins. The format-1 walton.yml stays frozen.
-    recorded: "To be applied: a proposal (docs/proposals), walton.yml through edits.py, then round 1's draft 3"
+    recorded: "The same decision as D071 (2026-11-22). docs/proposals/D040-D071-D097.yml (version 2, after an independent review), applied 2026-11-27: walton.yml through edits.py (CAUSAL_D097); links.json (28 CQ3); the catalogue entries; engine tests; the gold by recode_d097.py (17 causal instances, 6 challenges, 13292.182 and .198; re-pinned), the start of round 1's draft 3: the 10 claims pending G2 released, the 7 agreed among them back to review (d086-rounds.json); guidelines §5 item 11 and rule case OC6-d"
 
 - id: D098
   title: Mitigations and replies to a weighing (OC6, OC10)

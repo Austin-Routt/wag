@@ -25,6 +25,12 @@
 retired:
   # Wording that stated an earlier version of a rule. When a rule changes,
   # its old wording goes here, so that no copy of it survives.
+  - phrase: which interferes with event
+    now: the two-place exception's template, another causal factor keeps, or would keep, E1 from bringing about E2
+    why: proposal D040-D071-D097 (D071, D097), 2026-11-27
+  - phrase: or blunt its effect
+    now: 28/CQ3 asks what keeps E1 from bringing about E2; a weaker effect is 28/CQ1's
+    why: proposal D040-D071-D097, version 2 (its independent review, W5)
   - phrase: There are nine NASCQ schemes
     now: seventeen since step C5.2, listed in the guidelines' first table
     why: the independent check of step C5.2's switch (E-1)
@@ -548,6 +554,37 @@ cases:
       CQ:likelihood), not an exception (C018, D066). A claim that the tax would
       be hard or costly to collect would be a further bad consequence (OC2), as
       in OC6-a.
+
+  - id: OC6-d
+    rules: [OC6]
+    kialo: "13292.24"
+    outside_batch: true
+    claim: Governments could give tax credits or food stamps to those who could no longer afford food because of the tax.
+    target: 13292.36, a negative consequence of the tax (less food security), whose causal step runs from higher food costs to less food security
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: positive_consequences, fit: reconstructed}
+        bindings: {A: tax_meat_with_food_support, G: food_security_kept}
+        premises:
+        - {role: premise, formula: 'brings_about(tax_meat_with_food_support,food_security_kept)'}
+        - {role: premise, formula: 'good(food_security_kept)'}
+        - {role: exception, formula: 'bad_outweighs(tax_meat_with_food_support,food_security_kept)'}
+        - {role: exception, formula: 'too_slight(tax_meat_with_food_support,food_security_kept)'}
+        - {role: exception, formula: 'gain_discounted_by_bearer(tax_meat_with_food_support,food_security_kept)'}
+        conclusion: {formula: 'should_be_performed(tax_meat_with_food_support)'}
+      role: {kind: action_amendment, cq: null, polarity: against}
+      target: {actual: {claim: '13292.36', part: conclusion}}
+    why: >-
+      A safeguard the agent would add to the policy argues for the amended
+      policy, at the conclusion of the argument that cites the harm (D066), as
+      in OC6-b. It does not say that anything in the case as proposed keeps the
+      higher food costs from lessening food security, so it is no answer at that
+      causal step's exception,
+      interference(food_production_costs_increased,food_security_decreased)
+      (guidelines §5 item 11; D071, D097). A factor that would come with the
+      cause itself, such as iron supplements against anemia from eating less
+      meat (13292.182 at 13292.180#2), is such an answer.
 
   - id: OC8-a
     rules: [OC8]

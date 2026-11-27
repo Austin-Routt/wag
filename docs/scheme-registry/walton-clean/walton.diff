@@ -227,7 +227,8 @@
 +  initial_commitment/2: "%s has claimed or indicated that he is committed to proposition %s. Generally, or by virtue of what he has said in the past."
 +  initial_presumption/1: "At the outset, %s is presumed acceptable."
    instance/2: "%s is an instance of class %s."
-   interference/1: "An event has occurred which interferes with event %s."
+-  interference/1: "An event has occurred which interferes with event %s."
++  interference/2: "Another causal factor in this case keeps, or would keep, %s from bringing about %s."
    internally_consistent/1: "%s is internally consistent."
    intervening_actions/2: "Intervening actions are needed after performing %s to achieve %s."
 -  is/2: "% is %s."
@@ -1484,10 +1485,24 @@
  
    - id: appearance
      meta:
-@@ -1747,6 +1943,21 @@
+@@ -1738,6 +1934,10 @@
+   - id: cause_to_effect
+     meta:
+       title: Argument from Cause to Effect
++      source: >
++              Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes.
++              Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton, A Pragmatic Theory of
++              Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, pp. 140-141.
+     variables: [E1,E2]
+     conclusions:
+       - will_occur(E2)
+@@ -1745,7 +1945,22 @@
+       - has_occurred(E1)
+       - causes(E1,E2)
      exceptions:
-       - interference(E1)
- 
+-      - interference(E1)
++      - interference(E1,E2)
++
 +  - id: cause_to_effect_modal
 +    meta:
 +      title: Argument from Cause to Effect - Modal Form
@@ -1501,12 +1516,11 @@
 +      - may_occur(E1)
 +      - causes(E1,E2)
 +    exceptions:
-+      - interference(E1)
-+
++      - interference(E1,E2)
+ 
    - id: correlation_to_cause
      meta:
-       title: Argument from Correlation to Cause
-@@ -1894,6 +2105,26 @@
+@@ -1894,6 +2109,26 @@
      premises:
        - brings_about(A,G)
        - bad(G)
@@ -1533,7 +1547,7 @@
        
    - id: position_to_know
      meta:
-@@ -1923,6 +2154,147 @@
+@@ -1923,6 +2158,147 @@
      premises:
        - brings_about(A,G)
        - good(G)
@@ -1681,7 +1695,7 @@
  
    - id: practical_reasoning1
      meta:
-@@ -1932,10 +2304,11 @@
+@@ -1932,10 +2308,11 @@
          Practical reasoning as presumptive argumentation using action
          based alternating transition systems. Artificial Intelligence 171,
          10-15 (2007), 855–874.
@@ -1694,7 +1708,7 @@
        - current_circumstances(S1)
        - would_bring_about(A,S1,S2)
        - would_be_realized(G,S2)
-@@ -1943,12 +2316,13 @@
+@@ -1943,12 +2320,13 @@
      assumptions:
        - legitimate_value(V)
        - worthy_goal(G)
@@ -1713,7 +1727,7 @@
  
    - id: practical_reasoning2
      meta:
-@@ -1956,24 +2330,42 @@
+@@ -1956,24 +2334,42 @@
        source: >
          Walton, Douglas (2015). Goal-Based Reasoning for Argumentation. 
          Cambridge University Press.
@@ -1764,7 +1778,7 @@
      meta:
        title: Argument From Exception to a Rule
        source: >
-@@ -1994,10 +2386,10 @@
+@@ -1994,10 +2390,10 @@
      meta:
        title: Slippery Slope Argument
        source: >
@@ -1777,7 +1791,7 @@
      premises:
        - would_realize(A,E)
        - horrible_costs(E)
-@@ -2006,7 +2398,7 @@
+@@ -2006,7 +2402,7 @@
      meta:
        title: Slippery Slope Argument
        source: >
@@ -1786,7 +1800,7 @@
      variables: [E1,E2]
      conclusions:
        - horrible_costs(E1)
-@@ -2031,6 +2423,21 @@
+@@ -2031,6 +2427,21 @@
      exceptions:
        - future_losses_outweigh(A)
          

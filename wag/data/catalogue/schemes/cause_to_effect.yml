@@ -13,13 +13,17 @@ tier: 1
 walton:
   id: cause_to_effect
   title: Argument from Cause to Effect
+  source: 'Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation
+    Schemes. Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton,
+    A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,
+    1995, pp. 140-141.'
 formulas:
   variables: [E1, E2]
   premises:
   - has_occurred(E1)
   - causes(E1,E2)
   exceptions:
-  - interference(E1)
+  - interference(E1,E2)
   conclusions:
   - will_occur(E2)
 book:
@@ -27,7 +31,8 @@ book:
   title: Argument From Cause To Effect
   pages: "328"
   match: exact
-  note: Same title (upstream Carneades, no source in walton.yml).
+  note: Same title; walton.yml cites the book's entry 28 and the reference it prints
+    since D040 (2026-11-27).
   status: generated
 families:
 - family: F13
@@ -78,14 +83,17 @@ critical_questions:
   book:
     entry: "28"
     label: CQ3
-  targets: [{formula: interference(E1), locus: exception}]
-  paraphrase: Is anything present in this case that could stop E1 from bringing about
-    E2?
-  answer: 'The critic, who raises it with an argument. Against: a factor in this case
-    that blocks or offsets the effect, such as a countermeasure or a stronger opposing
-    cause, which undercuts the argument through interference(E1). For: showing that
-    no such factor is present, or that it is too weak to matter.'
-  status: drafted by Claude Code, 2026-10-22
+  targets: [{formula: 'interference(E1,E2)', locus: exception}]
+  paraphrase: Is anything present in this case, or coming with E1, that could keep
+    E1 from bringing about E2?
+  answer: 'The critic, who raises it with an argument. Against: a factor in this case,
+    present now or coming with E1, that keeps E1 from bringing about E2, such as a
+    countermeasure or a stronger opposing cause, which undercuts the argument through
+    interference(E1,E2). The exception names the effect (D071, D097), so another argument
+    from E1 to another effect is not touched. A factor that only weakens the effect
+    bears on the first question. For: showing that no such factor is present, or that
+    it cannot keep E2 from following.'
+  status: drafted by Claude Code, 2026-11-27
 summary:
   text: Use it to predict, or to explain, that an event E2 happens or will happen
     in a case because an event E1 happens there, and events like E1 generally bring
@@ -185,6 +193,22 @@ examples:
     then.'
   near_miss: true
   status: drafted by Claude Code, 2026-11-24
+- text: The region has had no rain since spring, and a drought ruins the harvest,
+    so the harvest will fail.
+  coding: 'E1 = a drought in the region since spring; E2 = the region''s harvest failing.
+    Stated: has_occurred(E1) and causes(E1,E2). Conclusion: will_occur(E2). Its exception
+    is interference(drought, harvest failing): irrigation from an untouched aquifer
+    would answer it (28/CQ3) and leave standing a second argument from the same drought
+    to wildfires, whose exception names the fires (D071, D097; proposal D040-D071-D097).'
+  status: drafted by Claude Code, 2026-11-27
+- text: Last night's frost hit the orchard in full blossom, and frost at blossom time
+    kills the blossoms, so this year's apple crop will be small.
+  coding: 'E1 = last night''s frost on the orchard in full blossom; E2 = a small apple
+    crop this year. Stated: has_occurred(E1) and causes(E1,E2). Conclusion: will_occur(E2).
+    That frost kills open blossoms only below minus two degrees, and the orchard read
+    minus one, presses how reliably frost brings the effect about (28/CQ1), not whether
+    the frost happened.'
+  status: drafted by Claude Code, 2026-11-27
 discrepancies:
 - kind: book-walton
   about: conclusion
@@ -211,12 +235,12 @@ discrepancies:
     if A occurs, B will occur). causes(E1,E2) uses the same terms as the particular
     has_occurred(E1), so the kind and the instance are not told apart. walton.yml
     also cites no source, where the book cites Walton 1995, pp. 140–141.
-  decision: 'Decided 2026-11-22 (D040): Yes: cause_to_effect cites the book''s entry
-    28 (p. 328), and the reference it prints (A Pragmatic Theory of Fallacy, 1995,
-    pp. 140-141) as cited there. Not yet applied. Before: No change: read causes(E1,E2)
-    as "events of E1''s kind generally bring about events of E2''s kind", as the paraphrases
-    do. open: give walton.yml the book''s reference as its source.'
-  status: drafted by Claude Code, 2026-10-22
+  decision: 'The source: decided 2026-11-22 (D040) and applied 2026-11-27 (proposal
+    D040-D071-D097): cause_to_effect cites the book''s entry 28 (p. 328) and the reference
+    it prints (A Pragmatic Theory of Fallacy, 1995, pp. 140-141). The generalization:
+    no change: read causes(E1,E2) as "events of E1''s kind generally bring about events
+    of E2''s kind", as the paraphrases do.'
+  status: drafted by Claude Code, 2026-11-27
 - kind: other
   about: conclusion tense
   detail: will_occur(E2) reads as a future event, but causal explanations of a state
@@ -287,3 +311,9 @@ history:
   what: 'Revised for D039, applied with the batch-2 gold''s format 2 (docs/kialo-batch2/migrate_format2.py,
     decision D092): the gold codes its 11 hypothetical causal steps with cause_to_effect_modal
     now; the near miss 13292.14 says so, dated, and the version before is docs/kialo-batch2/gold-format1.json.'
+- date: "2026-11-27"
+  by: Claude Code
+  what: 'D071, D097 and D040 applied (proposal D040-D071-D097, version 2): 28/CQ3
+    targets interference(E1,E2), its paraphrase and answer name the effect; walton.yml
+    cites the source, and the major premise''s discrepancy says so; two of the proposal''s
+    examples added (one cause, two effects; the first question against a hard threshold)'

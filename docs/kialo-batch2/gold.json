@@ -6,9 +6,9 @@
   "items.json": "db9e8468bb41f4a0078e93f0252c615e05282ffe48fd9ab0dce5fcff8bc0771f",
   "lexicon.json": "e4e563a89277c02b1ba49169ccf829d73c94914e948d076e5931f50d382ff688",
   "case.json": "5857394dbd7d4f058dfa059567888fa950d51c4be9cdcd3294f8a08e8f35df80",
-  "walton.yml": "d42c90d5a16a6ddbf0ed4694eca79eec24271c5f1b0b4dec1407f8ad68e441e6",
+  "walton.yml": "6960f9b80957ccc38b04d3a392fd46b5afaa533af1f1d64abfd8b7d1fdbb9367",
   "id-migrations.json": "a0c5bb7afa7cace779ed58fdcccc5a3e416987627f73bc270d40aa0ce3314995",
-  "links.json": "a2d3f08a789873229fd003fa1a0f4538c71d367b297dcf2c35fd15d9e3c02124",
+  "links.json": "bd7476bc9347caacacb48368b328c04c04612bb44cc804825418ef40817c04f7",
   "positions.json": "d631e3b9633787b26dbd874caa0c4c8c84886f02ac74a6b9e6b4e3474b6858ee",
   "nascq/schemes.json": "7e4dd0b560fbbf8cc416dbe0644e64cee8d48fd271577a3fb14405bc6979c4f8",
   "nascq/critical_questions.json": "d2300b06194a61c850aa8198340b5b35903f5858316c69f12607a7d7b2f71435",
@@ -40,6 +40,11 @@
    "date": "2026-11-27",
    "by": "developer (D086 draft 2)",
    "what": "Round 1 of the first gold, draft 2 (D086; docs/d086-first-gold.md §11, d086-rounds.json): the first exchange of the review taken in. Accepted objections: 13292.25, .104, .43, .127, .192 and .194 (its optional second relation noted, not coded); partly accepted: 13292.8 (the note rewritten, the target kept), and, on the conditions of the reconciliation, 13292.123 and .218; refinements of agreed items: 13292.11 and .6. Corrected after the independent check of draft 2: 13292.204 and .12, agreed items whose records draft 2's changes made false. Premise provenance follows guidelines §2 item 3 and §5 item 6, now checked (R18, R19). 13292.108 goes to the owner (question 1); the 17 other agreed items are agreed at their revision. 17 of the round's claims wait for the owner's decisions (pending): 7 for Q1, the two layers of 13292.108, and 10 for G2, the causal exception's scope."
+  },
+  {
+   "date": "2026-11-27",
+   "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+   "what": "The causal exception names its effect (decisions D071 and D097; walton.yml through edits.py, CAUSAL_D097): the 17 causal instances have interference(E1,E2), their own cause and effect, in the new template's English; the 6 challenges at 28 CQ3 name it, and 13292.36's no longer cites 13292.24, a safeguard added to the policy (an action amendment, OC6), as interference; 13292.182 and .198 answer 13292.180#2 at interference(reduced_meat_consumption,more_anemia_cases), which their Other instances conclude (R8). An answer about anemia no longer undercuts 13292.192#1's step from the same cause to more crop production. The pins of walton.yml and links.json renewed."
   }
  ],
  "items": [
@@ -447,10 +452,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(tax_meat)",
-       "en": "An event has occurred which interferes with event 'governments put a tax on meat'.",
+       "formula": "interference(tax_meat,meat_industry_harmed)",
+       "en": "Another causal factor in this case keeps, or would keep, 'governments put a tax on meat' from bringing about 'the meat industry is harmed'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -492,10 +497,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(meat_industry_harmed)",
-       "en": "An event has occurred which interferes with event 'the meat industry is harmed'.",
+       "formula": "interference(meat_industry_harmed,tax_revenue_reduced)",
+       "en": "Another causal factor in this case keeps, or would keep, 'the meat industry is harmed' from bringing about 'tax revenues are reduced'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -615,7 +620,7 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.9#3",
-     "formula": "interference(meat_industry_harmed)",
+     "formula": "interference(meat_industry_harmed,tax_revenue_reduced)",
      "note": "the meat tax's own yield may offset the lost industry taxes"
     },
     {
@@ -690,6 +695,15 @@
        "notes"
       ],
       "what": "Joined round 1 (plan §3): its challenge record at the modal premise named 13292.12, which backs its causal step 13292.9#2 now; that record put right, and a 28 CQ1 record added at 13292.9#2 for 13292.12's mechanism. Otherwise the reference's coding kept, to be reviewed with round 1 (the developer's reading, round2-readings.md, matched; not blind, as that file says): the notes now name 33.3, as OC15 asks of a possible consequence to the agent's own goal, and tell one current account; the confidence of its causal steps set on their merits, 0.55: both annotators coded the same steps (with cause_to_effect), and §5 item 11 prescribes the modal form; this lifts the cap the N8 note put on them until this draft, and their notes now say why the scheme is modal; the notes of its modal premise and of its other challenge records rewritten without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.9#2's exception names its effect: interference(tax_meat,meat_industry_harmed) (D071, D097); 13292.9#3's exception names its effect: interference(meat_industry_harmed,tax_revenue_reduced) (D071, D097); the challenge at 28 CQ3 of 13292.9#3 names interference(meat_industry_harmed,tax_revenue_reduced)"
      }
     ]
    }
@@ -1650,10 +1664,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(reduced_meat_consumption)",
-       "en": "An event has occurred which interferes with event 'less meat is demanded and consumed (and so less is produced)'.",
+       "formula": "interference(reduced_meat_consumption,more_anemia_cases)",
+       "en": "Another causal factor in this case keeps, or would keep, 'less meat is demanded and consumed (and so less is produced)' from bringing about 'cases of anemia increase'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -1744,7 +1758,7 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.180#2",
-     "formula": "interference(reduced_meat_consumption)",
+     "formula": "interference(reduced_meat_consumption,more_anemia_cases)",
      "note": "answered against by 13292.182 (iron supplements) and 13292.198 (iron-rich plant foods)"
     }
    ],
@@ -1811,6 +1825,15 @@
        "notes"
       ],
       "what": "Joined round 1 (plan §3): its challenge record at the consequence premise named 13292.182 and .198, which answer its causal step 13292.180#2 now (28 CQ3, at its exception); that record put right and a 28 CQ3 record added at the exception. Otherwise the reference's coding kept, to be reviewed with round 1 (A, B and the reference agree on every core field; the developer read it with 13292.182 and .198, not blind): notes rewritten as one current account; the confidence of its causal step set on its merits, 0.55: both annotators coded the same step (with cause_to_effect), and §5 item 11 prescribes the modal form; this lifts the cap the N8 note put on it until this draft, and its note now says why the scheme is modal; the notes of its records at the outweighing exception and at the conclusion rewritten as current: without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.180#2's exception names its effect: interference(reduced_meat_consumption,more_anemia_cases) (D071, D097); the challenge at 28 CQ3 of 13292.180#2 names interference(reduced_meat_consumption,more_anemia_cases)"
      }
     ]
    }
@@ -1911,10 +1934,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(tax_meat)",
-       "en": "An event has occurred which interferes with event 'governments put a tax on meat'.",
+       "formula": "interference(tax_meat,food_production_costs_increased)",
+       "en": "Another causal factor in this case keeps, or would keep, 'governments put a tax on meat' from bringing about 'the costs of food production increase'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -1955,10 +1978,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(food_production_costs_increased)",
-       "en": "An event has occurred which interferes with event 'the costs of food production increase'.",
+       "formula": "interference(food_production_costs_increased,food_security_decreased)",
+       "en": "Another causal factor in this case keeps, or would keep, 'the costs of food production increase' from bringing about 'the country's food security decreases'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -2024,8 +2047,8 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.36#3",
-     "formula": "interference(food_production_costs_increased)",
-     "note": "13292.24: tax credits or food stamps for those who cannot afford food"
+     "formula": "interference(food_production_costs_increased,food_security_decreased)",
+     "note": "no reply in the batch argues such a factor: 13292.24 (tax credits or food stamps for those who cannot afford food) proposes a safeguard added to the policy, an action amendment (OC6), not a factor that keeps this step from its effect (since 2026-11-27, proposal D040-D071-D097)"
     }
    ],
    "notes": {
@@ -2062,6 +2085,15 @@
        "notes"
       ],
       "what": "Drafted: the reference's coding kept: a control (A, B and the reference agree on every core field). The developer's first reading differed (backing of 13292.7#1's consequence premise, the added production costs its mechanism), but the claim adds a consequence of its own (food security), so an independent argument for 13292.7's conclusion, as all three have it (its note names backing as the alternative). Notes rewritten as one current account (the history of the causal steps' coding is in this record and gold-format1.json); the confidence of its causal steps set on their merits, 0.55: both annotators coded the same steps (with cause_to_effect), and §5 item 11 prescribes the modal form; this lifts the cap the N8 note put on them until this draft, and their notes now say why the scheme is modal."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.36#2's exception names its effect: interference(tax_meat,food_production_costs_increased) (D071, D097); 13292.36#3's exception names its effect: interference(food_production_costs_increased,food_security_decreased) (D071, D097); its challenge at 28 CQ3 no longer cites 13292.24, a safeguard added to the policy (an action amendment, OC6), as interference; the challenge at 28 CQ3 of 13292.36#3 names interference(food_production_costs_increased,food_security_decreased)"
      }
     ]
    }
@@ -2366,10 +2398,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(higher_meat_price)",
-       "en": "An event has occurred which interferes with event 'the consumer price of meat is higher'.",
+       "formula": "interference(higher_meat_price,reduced_meat_consumption)",
+       "en": "Another causal factor in this case keeps, or would keep, 'the consumer price of meat is higher' from bringing about 'less meat is demanded and consumed (and so less is produced)'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -2411,10 +2443,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(tax_meat)",
-       "en": "An event has occurred which interferes with event 'governments put a tax on meat'.",
+       "formula": "interference(tax_meat,higher_meat_price)",
+       "en": "Another causal factor in this case keeps, or would keep, 'governments put a tax on meat' from bringing about 'the consumer price of meat is higher'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -2468,7 +2500,7 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.14#1",
-     "formula": "interference(higher_meat_price)",
+     "formula": "interference(higher_meat_price,reduced_meat_consumption)",
      "note": "substitution by cheaper imported or untaxed meat (13292.12)"
     }
    ],
@@ -2488,6 +2520,15 @@
        "notes"
       ],
       "what": "The hypothetical causal steps (instances 13292.14#1, 13292.14#2) recoded with cause_to_effect_modal: may_occur(E1) and causes(E1,E2), concluding may_occur(E2), for has_occurred(E1) and will_occur(E2) under the N8 note."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.14#1's exception names its effect: interference(higher_meat_price,reduced_meat_consumption) (D071, D097); 13292.14#2's exception names its effect: interference(tax_meat,higher_meat_price) (D071, D097); the challenge at 28 CQ3 of 13292.14#1 names interference(higher_meat_price,reduced_meat_consumption)"
      }
     ]
    }
@@ -3627,10 +3668,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(meat_subsidies)",
-       "en": "An event has occurred which interferes with event 'meat production is subsidised'.",
+       "formula": "interference(meat_subsidies,meat_price_below_real_costs)",
+       "en": "Another causal factor in this case keeps, or would keep, 'meat production is subsidised' from bringing about 'the consumer price of meat is below the real costs of meat consumption'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -3728,6 +3769,14 @@
        "notes"
       ],
       "what": "D086 exchange 1, the reviewer's refinement taken: the note and the occurrence premise's note say that the claim presents the subsidies as existing, rather than assert that they exist. Coding unchanged."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.premises"
+      ],
+      "what": "13292.11#2's exception names its effect: interference(meat_subsidies,meat_price_below_real_costs) (D071, D097)"
      }
     ]
    }
@@ -4373,10 +4422,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(meat_production)",
-       "en": "An event has occurred which interferes with event 'meat production'.",
+       "formula": "interference(meat_production,significant_ghg_emissions)",
+       "en": "Another causal factor in this case keeps, or would keep, 'meat production' from bringing about 'significant greenhouse gas emissions are released'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -4416,10 +4465,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(significant_ghg_emissions)",
-       "en": "An event has occurred which interferes with event 'significant greenhouse gas emissions are released'.",
+       "formula": "interference(significant_ghg_emissions,climate_change_driven)",
+       "en": "Another causal factor in this case keeps, or would keep, 'significant greenhouse gas emissions are released' from bringing about 'climate change is driven further'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -4503,6 +4552,14 @@
        "notes"
       ],
       "what": "Joined round 1 (plan §3): its challenge record at the classification premise named 13292.141, which backs its causal step 13292.2#2 now; that record put right, and the records at 13292.2#2 sort what bears on the link by the draft's reading of the book's questions (a mechanism, 13292.141, at 28 CQ1; data, 13292.46's beef figures, at 28 CQ2). Otherwise the reference's coding kept, to be reviewed with round 1: the developer's reading (round2-readings.md; written after round 1's draft had used its causal step, so not blind) matched. Notes rewritten as one current account, naming what bears on the emissions and their significance."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.premises"
+      ],
+      "what": "13292.2#2's exception names its effect: interference(meat_production,significant_ghg_emissions) (D071, D097); 13292.2#3's exception names its effect: interference(significant_ghg_emissions,climate_change_driven) (D071, D097)"
      }
     ]
    }
@@ -4685,10 +4742,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(imported_meat_relatively_cheaper)",
-       "en": "An event has occurred which interferes with event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing'.",
+       "formula": "interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out)",
+       "en": "Another causal factor in this case keeps, or would keep, 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' from bringing about 'domestic meat producers are pushed out of the market'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -4730,10 +4787,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(tax_meat)",
-       "en": "An event has occurred which interferes with event 'governments put a tax on meat'.",
+       "formula": "interference(tax_meat,imported_meat_relatively_cheaper)",
+       "en": "Another causal factor in this case keeps, or would keep, 'governments put a tax on meat' from bringing about 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -4837,7 +4894,7 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.12#1",
-     "formula": "interference(imported_meat_relatively_cheaper)",
+     "formula": "interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out)",
      "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions (OC6), not as answers here: 13292.194 at 13292.12#3's conclusion, the argument that cites the harm against the tax, and 13292.45, until its round, at this argument's conclusion, the predicted harm"
     },
     {
@@ -4926,6 +4983,15 @@
        "notes"
       ],
       "what": "D086 draft 2, after the independent check of draft 2 (W1): the challenge at 13292.12#1's interference and the notes say where 13292.194 now is, at 13292.12#3's conclusion, not at the predicted harm; the quotation of 13292.9 made exact ('the trillion-dollar meat industry'). Coding unchanged."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.12#1's exception names its effect: interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out) (D071, D097); 13292.12#2's exception names its effect: interference(tax_meat,imported_meat_relatively_cheaper) (D071, D097); the challenge at 28 CQ3 of 13292.12#1 names interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out)"
      }
     ]
    }
@@ -5013,10 +5079,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(meat_production)",
-       "en": "An event has occurred which interferes with event 'meat production'.",
+       "formula": "interference(meat_production,feed_monocultures)",
+       "en": "Another causal factor in this case keeps, or would keep, 'meat production' from bringing about 'grain and soy monocultures are grown to feed most animals raised for food'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -5055,10 +5121,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(feed_monocultures)",
-       "en": "An event has occurred which interferes with event 'grain and soy monocultures are grown to feed most animals raised for food'.",
+       "formula": "interference(feed_monocultures,global_soil_health_devastated)",
+       "en": "Another causal factor in this case keeps, or would keep, 'grain and soy monocultures are grown to feed most animals raised for food' from bringing about 'global soil health is devastated'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -5131,7 +5197,17 @@
      "instances.scheme.fit",
      "re_parented"
     ],
-    "reason": "scheme and fit: A (verbal_classification primary, reconstructed), as for 13292.2: only the classification step reaches the parent's evaluative S1. B's two causal steps are kept as secondary instances (A had only the second). re_parented: B (false), R1."
+    "reason": "scheme and fit: A (verbal_classification primary, reconstructed), as for 13292.2: only the classification step reaches the parent's evaluative S1. B's two causal steps are kept as secondary instances (A had only the second). re_parented: B (false), R1.",
+    "recoded": [
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.premises"
+      ],
+      "what": "13292.4#2's exception names its effect: interference(meat_production,feed_monocultures) (D071, D097); 13292.4#3's exception names its effect: interference(feed_monocultures,global_soil_health_devastated) (D071, D097)"
+     }
+    ]
    }
   },
   {
@@ -5506,10 +5582,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(reduced_meat_consumption)",
-       "en": "An event has occurred which interferes with event 'less meat is demanded and consumed (and so less is produced)'.",
+       "formula": "interference(reduced_meat_consumption,crop_production_increased)",
+       "en": "Another causal factor in this case keeps, or would keep, 'less meat is demanded and consumed (and so less is produced)' from bringing about 'crop production increases'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -5551,10 +5627,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(crop_production_increased)",
-       "en": "An event has occurred which interferes with event 'crop production increases'.",
+       "formula": "interference(crop_production_increased,deforestation_for_cropland)",
+       "en": "Another causal factor in this case keeps, or would keep, 'crop production increases' from bringing about 'forests are cleared for crop production'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -5640,6 +5716,14 @@
        "notes"
       ],
       "what": "D086 exchange 1, the reviewer's objection accepted: 13292.192#2, whose conclusion may_occur(deforestation_for_cropland) reaches the target, is primary (§5 item 5), keeping its id; #1 secondary. The note says that the chain shows only that some deforestation may occur, not that it does not slow, and names the net-effect premise the claim leaves unstated (13292.200's reply). Notes rewritten."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.premises"
+      ],
+      "what": "13292.192#1's exception names its effect: interference(reduced_meat_consumption,crop_production_increased) (D071, D097); 13292.192#2's exception names its effect: interference(crop_production_increased,deforestation_for_cropland) (D071, D097)"
      }
     ]
    }
@@ -5954,10 +6038,10 @@
       },
       {
        "role": "exception",
-       "formula": "interference(meat_production_energy_intensive)",
-       "en": "An event has occurred which interferes with event 'producing meat consumes far more energy than growing the same nutrients from plant sources'.",
+       "formula": "interference(meat_production_energy_intensive,significant_ghg_emissions)",
+       "en": "Another causal factor in this case keeps, or would keep, 'producing meat consumes far more energy than growing the same nutrients from plant sources' from bringing about 'significant greenhouse gas emissions are released'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-27 it names the effect as well as the cause (D071, D097; walton-clean/CHANGELOG.md), so it blocks this step only"
       }
      ],
      "conclusion": {
@@ -6008,7 +6092,7 @@
      "wag_cq": null,
      "type": "causal interference",
      "instance": "13292.141#1",
-     "formula": "interference(meat_production_energy_intensive)",
+     "formula": "interference(meat_production_energy_intensive,significant_ghg_emissions)",
      "note": "renewable energy"
     }
    ],
@@ -6033,6 +6117,15 @@
        "target"
       ],
       "what": "Retargeted from 13292.2#1's classification premise instance(meat_production,significant_ghg_source) (14 CQ1; format 1 required a formula of the primary instance) to the causal step it backs, 13292.2#2's causes(meat_production,significant_ghg_emissions), as both annotators aimed it; a cq_answer to the book's 28 CQ1 there (a mechanism, energy use, offered for the link; it cites no data), polarity for, as 13292.2's own record of the question has it. A cascade in the replay now. Notes rewritten."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "challenges",
+       "instances.premises"
+      ],
+      "what": "13292.141#1's exception names its effect: interference(meat_production_energy_intensive,significant_ghg_emissions) (D071, D097); the challenge at 28 CQ3 of 13292.141#1 names interference(meat_production_energy_intensive,significant_ghg_emissions)"
      }
     ]
    }
@@ -6264,8 +6357,8 @@
       }
      ],
      "conclusion": {
-      "formula": "interference(reduced_meat_consumption)",
-      "en": "An event has occurred which interferes with event 'less meat is demanded and consumed (and so less is produced)'."
+      "formula": "interference(reduced_meat_consumption,more_anemia_cases)",
+      "en": "Another causal factor in this case keeps, or would keep, 'less meat is demanded and consumed (and so less is produced)' from bringing about 'cases of anemia increase'."
      }
     }
    ],
@@ -6282,7 +6375,7 @@
      "claim": "13292.180",
      "instance": "13292.180#2",
      "part": "exception",
-     "formula": "interference(reduced_meat_consumption)"
+     "formula": "interference(reduced_meat_consumption,more_anemia_cases)"
     }
    },
    "evidence": {
@@ -6308,7 +6401,7 @@
     }
    ],
    "notes": {
-    "text": "A substitute (iron supplements) lets people get enough iron without meat, so eating less meat need not bring more anemia: it counteracts the causal step 13292.180#2, from reduced meat consumption to more anemia, which is what the book's 28 CQ3 asks (other factors that would interfere with or counteract the production of the effect; the game asks no question there). So it is a cq_answer at that step's exception interference(reduced_meat_consumption), against, and its own argument (Other: no walton.yml scheme concludes it from a substitute) concludes the exception (R8). It does not deny that the tax reduces meat eating; walton.yml's English for the exception ('an event has occurred which interferes with event ...') reads as if it did, but the exception is the book's CQ3. The substitute is what people would do, not an amended action of the agent's (OC6). Its sibling 13292.198 makes the same move with plant foods; 13292.184 replies that supplements are not always a good replacement.",
+    "text": "A substitute (iron supplements) lets people get enough iron without meat, so eating less meat need not bring more anemia: it counteracts the causal step 13292.180#2, from reduced meat consumption to more anemia, which is what the book's 28 CQ3 asks about: a factor in the case that keeps the cause from bringing about the effect (the game asks no question there). So it is a cq_answer at that step's exception interference(reduced_meat_consumption,more_anemia_cases), against, and its own argument (Other: no walton.yml scheme concludes it from a substitute) concludes the exception (R8). It does not deny that the tax reduces meat eating: since D071 and D097 the exception names the effect it blocks, so 13292.192#1's step from the same cause to more crop production is not touched. The substitute is what people would do, not an amended action of the agent's (OC6). Its sibling 13292.198 makes the same move with plant foods; 13292.184 replies that supplements are not always a good replacement.",
     "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.198; by adaptation 13292.25)"
    },
    "adjudication": {
@@ -6332,6 +6425,16 @@
        "target"
       ],
       "what": "Retargeted from 13292.180#1's premise brings_about(tax_meat,more_anemia_cases) (CQ:likelihood; format 1 required a formula of the primary instance) to the causal step it answers, the exception interference(reduced_meat_consumption) of 13292.180#2, the book's 28 CQ3 (other factors that counteract the production of the effect; the game asks no question there), as both annotators aimed it (A an undercutter, B a cq_answer to 28 CQ3); its Other instance concludes that exception now (R8), and its description says how a substitute counteracts the step. A cascade in the replay now. Notes rewritten."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.conclusion",
+       "notes",
+       "target"
+      ],
+      "what": "its target, 13292.180#2's exception, is interference(reduced_meat_consumption,more_anemia_cases); its Other instance concludes interference(reduced_meat_consumption,more_anemia_cases) (R8), in the new template's English; the note names the exception that names its effect"
      }
     ]
    }
@@ -6774,8 +6877,8 @@
       }
      ],
      "conclusion": {
-      "formula": "interference(reduced_meat_consumption)",
-      "en": "An event has occurred which interferes with event 'less meat is demanded and consumed (and so less is produced)'."
+      "formula": "interference(reduced_meat_consumption,more_anemia_cases)",
+      "en": "Another causal factor in this case keeps, or would keep, 'less meat is demanded and consumed (and so less is produced)' from bringing about 'cases of anemia increase'."
      }
     }
    ],
@@ -6792,7 +6895,7 @@
      "claim": "13292.180",
      "instance": "13292.180#2",
      "part": "exception",
-     "formula": "interference(reduced_meat_consumption)"
+     "formula": "interference(reduced_meat_consumption,more_anemia_cases)"
     }
    },
    "evidence": {
@@ -6820,7 +6923,7 @@
     }
    ],
    "notes": {
-    "text": "Plant foods rich in iron (beans, lentils) can replace meat as a source of iron, so eating less meat need not bring more anemia: like its sibling 13292.182, it counteracts the causal step 13292.180#2 (reduced meat consumption -> more anemia), the book's 28 CQ3 (the game asks no question there): a cq_answer at that step's exception interference(reduced_meat_consumption), against; its Other instance concludes the exception (R8), whose walton.yml English reads as if the reduction itself were interfered with. The substitute is what people would do, not an amended action of the agent's (OC6). It also implicitly contests 13292.180's premise that meat is the easiest source of iron. 13292.210 backs the substitution.",
+    "text": "Plant foods rich in iron (beans, lentils) can replace meat as a source of iron, so eating less meat need not bring more anemia: like its sibling 13292.182, it counteracts the causal step 13292.180#2 (reduced meat consumption -> more anemia), the book's 28 CQ3 (the game asks no question there): a cq_answer at that step's exception interference(reduced_meat_consumption,more_anemia_cases), against; its Other instance concludes the exception (R8), which names the effect it blocks since D071 and D097. The substitute is what people would do, not an amended action of the agent's (OC6). It also implicitly contests 13292.180's premise that meat is the easiest source of iron. 13292.210 backs the substitution.",
     "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.182; by adaptation 13292.25)"
    },
    "adjudication": {
@@ -6844,6 +6947,16 @@
        "target"
       ],
       "what": "Retargeted from 13292.180#1's premise brings_about(tax_meat,more_anemia_cases) (CQ:likelihood; format 1 required a formula of the primary instance) to the causal step it answers, the exception interference(reduced_meat_consumption) of 13292.180#2, the book's 28 CQ3 (other factors that counteract the production of the effect; the game asks no question there), as both annotators aimed it (A an undercutter, B a cq_answer to 28 CQ3); its Other instance concludes that exception now (R8), and its description says how a substitute counteracts the step. A cascade in the replay now. Notes rewritten."
+     },
+     {
+      "date": "2026-11-27",
+      "by": "proposal D040-D071-D097, version 2 (decisions D071 and D097; recode_d097.py)",
+      "fields": [
+       "instances.conclusion",
+       "notes",
+       "target"
+      ],
+      "what": "its target, 13292.180#2's exception, is interference(reduced_meat_consumption,more_anemia_cases); its Other instance concludes interference(reduced_meat_consumption,more_anemia_cases) (R8), in the new template's English; the note names the exception that names its effect"
      }
     ]
    }

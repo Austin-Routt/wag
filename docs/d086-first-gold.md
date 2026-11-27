@@ -801,3 +801,28 @@ gaps, each fixed with cases written first (8e900ec) and tests that fail without 
 of the guidelines and `walton.yml` it was given on, since `verify_gold.py` compares every input but
 the gold with the repository's (§5); a verification already written depends on the item's revision
 and its claim's text alone (R17).
+
+## 15. Round 1, draft 3 (2026-11-27)
+
+Draft 3 takes in exchange 2 and the owner's decisions, part by part, each checked by `validate.py`
+and recorded in the items it changes (`adjudication.recoded`) and in `d086-rounds.json`.
+
+**Part 1: the causal exception names its effect (D071, D097; `recode_d097.py`).** Proposal
+D040-D071-D097, version 2, written from the independent review of version 1 (which found D071, the same
+decision of 2026-11-22, left out, and book words in the summary), is applied: `walton.yml`'s
+`cause_to_effect` and `cause_to_effect_modal` have `interference(E1,E2)`, that another causal factor in
+the case keeps, or would keep, E1 from bringing about E2; `cause_to_effect` cites its source (D040). In
+the gold: the 17 causal instances' exceptions name their own cause and effect; the 6 challenges at
+28 CQ3 name the new formula, and 13292.36's no longer cites 13292.24, a safeguard added to the policy
+(an action amendment, OC6), as interference; 13292.182 and .198 answer 13292.180#2 at
+`interference(reduced_meat_consumption,more_anemia_cases)`, which their Other instances conclude, so
+an answer about anemia no longer undercuts 13292.192#1's step from the same cause to more crop
+production (G2). The engine shows it (`causal_d097_test.go`): an answer about one effect undercuts that
+step only, a second argument for the effect from another cause stands, and on the frozen format-1
+`walton.yml` the one-place exception undercuts both. Guidelines §5 item 11 states the line between a
+factor that keeps the cause from its effect (the exception), a safeguard added to the policy (OC6;
+rule case OC6-d) and a factor that only weakens the effect (28 CQ1). Twelve items change: of the ten
+round-1 claims that waited on G2, the seven agreed (13292.2, .9, .36, .141, .180, .182, .198) go back to
+review at draft 3, with 13292.11, .12 and .192 (draft 2, not reviewed); 13292.4 and .14 are round 2's,
+not yet drafted.
+

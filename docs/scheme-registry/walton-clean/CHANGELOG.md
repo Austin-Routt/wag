@@ -1,6 +1,6 @@
 # walton.yml cleanup: changelog
 
-Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2476 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 30 of them changed by the owner's decisions (`ad_baculum`, `analogy`, `appeal_to_vanity_ad_populum`, `danger`, `end_and_means_1`, `fear`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_goal`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `pragmatic_alternative`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`, `threat`, `two_person_practical`, `waste`), and 19 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_agent`, `bridge_from_continuing`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `end_and_means_bad`, `end_and_means_less_bad`, `finding_out_first`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `sunk_costs_precommitment`, `whole_into_parts`); 130 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
+Input: `walton.yml` from `walton-argumentation-schemes-for-carneades-4-master` (2068 lines, 111 schemes, SHA-256 `1976202ac6bd538526ea75488659ec9880641ec03534d6e098f6f6dd1bcc099c`). Output: `walton.yml` (2480 lines, after a 5-line notice of the modification that the licence asks for, `tools/header.txt`): the same 111 schemes in the same order, 31 of them changed by the owner's decisions (`ad_baculum`, `analogy`, `appeal_to_vanity_ad_populum`, `cause_to_effect`, `danger`, `end_and_means_1`, `fear`, `group_2`, `moral_justification_ad_populum_excuse`, `negative_consequences`, `negative_consequences_prudential`, `negative_value`, `positive_consequences`, `practical_analogy_negative`, `practical_analogy_positive`, `practical_goal`, `practical_inference`, `practical_necessary_condition`, `practical_reasoning1`, `practical_reasoning2`, `practical_sufficient_condition`, `pragmatic_alternative`, `rhetorical_oppositions_normative`, `rule_physical_world_1`, `sacrifice`, `slippery_slope_base_case`, `slippery_slope_inductive_step`, `sorites_slippery_slope`, `threat`, `two_person_practical`, `waste`), and 19 added by them (`bad_outweighs_good`, `better_means`, `bridge_from_agent`, `bridge_from_continuing`, `bridge_from_possible_good`, `bridge_from_possible_harm`, `cause_to_effect_modal`, `end_and_means_bad`, `end_and_means_less_bad`, `finding_out_first`, `full_slippery_slope`, `good_outweighs_bad`, `harm_reduction`, `negative_consequences_modal`, `negative_consequences_reasoning`, `positive_consequences_modal`, `precedent_slippery_slope`, `sunk_costs_precommitment`, `whole_into_parts`); 130 in all. See [Changes decided by the owner](#changes-decided-by-the-owner). Every edit below is also in `changes.json` and is produced by `tools/apply_edits.py` from the list in `tools/edits.py`; `check/run.sh` rebuilds everything. Line numbers are those of the original file.
 
 ## Gate
 
@@ -34,11 +34,11 @@ WAG's own lint (`wag-cli --lint --data DIR`, with the cleaned file as `schemes/c
 | variable | 24 | 22 |
 | template | 46 | 44 |
 | repair — needs approval | 0 | 0 |
-| repair — owner decision | 160 | 137 |
+| repair — owner decision | 167 | 141 |
 | addition — owner decision | 355 | 38 |
-| **total** | **704** | **315** distinct lines (a line can carry edits of several categories) |
+| **total** | **711** | **318** distinct lines (a line can carry edits of several categories) |
 
-Unified diff against the original (`walton.diff`): 261 lines removed, 668 added. That is 256 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 515 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
+Unified diff against the original (`walton.diff`): 263 lines removed, 674 added. That is 258 lines changed in place, 5 deleted (the duplicate keys `biased/1` and `good/1`, `posible/1`, and the conclusion that was listed as a premise), 2 inserted (the templates `cannot_present_sametime/3` and `data_set/2`); 522 of the recorded edits are authorized decisions (including the D081 conclusion move, below).
 
 Typo edits by kind: predicate names (incl. 1 key deleted) 48, template words 26, sources 22, titles 7, scheme ids 4. The `popular_practise` rename also renames the scheme id (counted under predicate names).
 
@@ -355,6 +355,9 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **195** [insert after] · addition — owner decision · template for full_slippery_slope (53), in our own words (the category file's repeats the book) (used by: full_slippery_slope)
   - before: _(none)_
   - after: `  initial_presumption/1: "At the outset, %s is presumed acceptable."`
+- **197** · repair — owner decision · template for the two-place exception (D071, D097), in our own words (used by: cause_to_effect, cause_to_effect_modal)
+  - before: `  interference/1: "An event has occurred which interferes with event %s."`
+  - after: `  interference/2: "Another causal factor in this case keeps, or would keep, %s from bringing about %s."`
 - **199** [insert after] · addition — owner decision · template for precedent_slippery_slope (50), in our own words (used by: precedent_slippery_slope)
   - before: _(none)_
   - after: `  intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."`
@@ -1757,6 +1760,24 @@ Format: **line** · category · reason, then the line before and after. An inser
   - before: `      - more_on_point(A,C)`
   - after: _(none)_
 
+### cause_to_effect
+
+- **1740** [insert after] · repair — owner decision · D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)
+  - before: _(none)_
+  - after: `      source: >`
+- **1740** [insert after] · repair — owner decision · D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)
+  - before: _(none)_
+  - after: `              Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes.`
+- **1740** [insert after] · repair — owner decision · D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)
+  - before: _(none)_
+  - after: `              Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton, A Pragmatic Theory of`
+- **1740** [insert after] · repair — owner decision · D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)
+  - before: _(none)_
+  - after: `              Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, pp. 140-141.`
+- **1748** · repair — owner decision · D071, D097: the exception named only the cause, so an answer that something blocks one effect of a cause undercut every causal step from that cause (the engine test of proposal D055-D059's second review, 2026-11-22; the first gold's G2, 2026-11-27); now interference(E1,E2), as the book's 28/CQ3 is about the effect in the case at hand. Decided under the owner's standing rule of 2026-11-22 and by the owner on 2026-11-27 (proposal D040-D071-D097)
+  - before: `      - interference(E1)`
+  - after: `      - interference(E1,E2)`
+
 ### cause_to_effect_modal
 
 - **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
@@ -1804,6 +1825,39 @@ Format: **line** · category · reason, then the line before and after. An inser
 - **1749** [insert after] · addition — owner decision · audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain
   - before: _(none)_
   - after: _(none)_
+- **1749** · repair — owner decision · D071, D097: the exception named only the cause, so an answer that something blocks one effect of a cause undercut every causal step from that cause (the engine test of proposal D055-D059's second review, 2026-11-22; the first gold's G2, 2026-11-27); now interference(E1,E2), as the book's 28/CQ3 is about the effect in the case at hand. Decided under the owner's standing rule of 2026-11-22 and by the owner on 2026-11-27 (proposal D040-D071-D097)
+  - before: `
+  - id: cause_to_effect_modal
+    meta:
+      title: Argument from Cause to Effect - Modal Form
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,
+             1995, pp. 140-141.
+    variables: [E1,E2]
+    conclusions:
+      - may_occur(E2)
+    premises:
+      - may_occur(E1)
+      - causes(E1,E2)
+    exceptions:
+      - interference(E1)
+`
+  - after: `
+  - id: cause_to_effect_modal
+    meta:
+      title: Argument from Cause to Effect - Modal Form
+      source: >
+             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,
+             1995, pp. 140-141.
+    variables: [E1,E2]
+    conclusions:
+      - may_occur(E2)
+    premises:
+      - may_occur(E1)
+      - causes(E1,E2)
+    exceptions:
+      - interference(E1,E2)
+`
 
 ### negative_consequences
 

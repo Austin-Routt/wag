@@ -24,6 +24,7 @@
 
 decisions: [D040, D071, D097]
 title: "The causal exception names its effect: interference(E1,E2); cause to effect cites its source"
+applied: "2026-11-27, through walton-clean/tools/edits.py (CAUSAL_D097; D071 under the owner's standing rule of 2026-11-22 and D097 decided by the owner on 2026-11-27; D040 under the standing rule; version 2 after an independent review)"
 summary: |-
   **What changes.** The exception of cause_to_effect and of its modal form,
   cause_to_effect_modal, names both the cause and the effect it blocks:
@@ -88,7 +89,7 @@ effects:
   - "The register: D040, D071 and D097 applied (the date and this proposal). The candidates registry does not change."
   - "The batch-2 gold (both copies), by a recode script (recode_d097.py, from the gold before it, pinned by its SHA-256): the exception of the 17 causal instances becomes interference(E1,E2) with their own E1 and E2, its English rendered by the new template; the 6 challenges at 28 CQ3 name the new formula; 13292.182 and .198, which answer 13292.180#2's step at its exception, name interference(reduced_meat_consumption,more_anemia_cases) in their targets and in their Other instances' conclusions (R8), with the English of the new template, and their notes no longer say the old English misread the step; 13292.36's challenge at 28 CQ3 no longer cites 13292.24 as interference, since tax credits or food stamps added to the policy are an amendment (OC6), and its note says so; each changed item gains an adjudication.recoded entry. walton.yml and links.json change, so the gold is re-pinned (validate.py --repin) once its checks pass."
   - "The first gold's rounds (d086-rounds.json): of the 12 items that change, 7 were agreed at round 1 (13292.2, .9, .36, .141, .180, .182 and .198) and go back to review at a revision they no longer have; 13292.11, .12 and .192 are at draft 2 and not yet reviewed; 13292.4 and .14 are round 2's, not yet drafted. The 10 claims that waited on this decision (pending G2) wait no more."
-  - "Guidelines (both copies) and rule cases: §5 item 11 names the exception, interference(E1,E2), and draws the line: a factor in the case, present or coming with the cause, that keeps the cause from bringing about the effect is an answer at that step's exception (a cq_answer, against; Other concluding the exception, R8); a safeguard the agent would add to the policy is an action amendment (OC6), not interference; a factor that only weakens the effect is the first question's. A rule case shows each. The batch README names the new formula where it names the old one."
+  - "Guidelines (both copies) and rule cases: §5 item 11 names the exception, interference(E1,E2), and draws the line: a factor in the case, present or coming with the cause, that keeps the cause from bringing about the effect is an answer at that step's exception (a cq_answer, against; Other concluding the exception, R8); a safeguard the agent would add to the policy is an action amendment (OC6), not interference; a factor that only weakens the effect is the first question's. Rule case OC6-d shows the safeguard (the rule cases are §3.1's rules), and the item gives an example of the answer; the old template's wording and the blunted effect are retired wordings. The batch README names the new formula where it names the old one."
   - "The replay (to_wag.py) does not play causal schemes (the game has none), so its moves do not change; it is made again with the gold."
   - "Docs: docs/d086-first-gold.md (round 1's draft 3), the batch README's dated paragraph, docs/scheme-registry/README.md's edit counts, the register's entries."
 schemes:
@@ -135,7 +136,7 @@ links:
     cq_map:
       - {cq: CQ1, walton: [{formula: "causes(E1,E2)", locus: premise}]}
       - {cq: CQ2, note: "no separate evidence formula", walton: [{formula: "causes(E1,E2)", locus: premise}]}
-      - {cq: CQ3, note: "the effect named since D097 (2026-11-27)", walton: [{formula: "interference(E1,E2)", locus: exception}]}
+      - {cq: CQ3, note: "the effect named since D071 and D097 (2026-11-27)", walton: [{formula: "interference(E1,E2)", locus: exception}]}
   - entry: "28"
     id: cause_to_effect_modal
     match: partial
@@ -147,7 +148,7 @@ links:
     cq_map:
       - {cq: CQ1, walton: [{formula: "causes(E1,E2)", locus: premise}]}
       - {cq: CQ2, note: "no separate evidence formula", walton: [{formula: "causes(E1,E2)", locus: premise}]}
-      - {cq: CQ3, note: "the effect named since D097 (2026-11-27)", walton: [{formula: "interference(E1,E2)", locus: exception}]}
+      - {cq: CQ3, note: "the effect named since D071 and D097 (2026-11-27)", walton: [{formula: "interference(E1,E2)", locus: exception}]}
 examples:
   # --- cause_to_effect: arguments --------------------------------------------
   - scheme: cause_to_effect

@@ -222,7 +222,7 @@ language:
   initial_commitment/2: "%s has claimed or indicated that he is committed to proposition %s. Generally, or by virtue of what he has said in the past."
   initial_presumption/1: "At the outset, %s is presumed acceptable."
   instance/2: "%s is an instance of class %s."
-  interference/1: "An event has occurred which interferes with event %s."
+  interference/2: "Another causal factor in this case keeps, or would keep, %s from bringing about %s."
   internally_consistent/1: "%s is internally consistent."
   intervening_actions/2: "Intervening actions are needed after performing %s to achieve %s."
   intolerable_exception/2: "Making an exception of %s to the rule %s would be intolerable."
@@ -1936,6 +1936,10 @@ argument_schemes:
   - id: cause_to_effect
     meta:
       title: Argument from Cause to Effect
+      source: >
+              Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes.
+              Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton, A Pragmatic Theory of
+              Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, pp. 140-141.
     variables: [E1,E2]
     conclusions:
       - will_occur(E2)
@@ -1943,7 +1947,7 @@ argument_schemes:
       - has_occurred(E1)
       - causes(E1,E2)
     exceptions:
-      - interference(E1)
+      - interference(E1,E2)
 
   - id: cause_to_effect_modal
     meta:
@@ -1958,7 +1962,7 @@ argument_schemes:
       - may_occur(E1)
       - causes(E1,E2)
     exceptions:
-      - interference(E1)
+      - interference(E1,E2)
 
   - id: correlation_to_cause
     meta:

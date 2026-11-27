@@ -803,6 +803,17 @@
   "reason": "template for full_slippery_slope (53), in our own words (the category file's repeats the book)"
  },
  {
+  "line": 197,
+  "change": "edit",
+  "scheme": "language",
+  "scheme_after": "language",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "  interference/1: \"An event has occurred which interferes with event %s.\"",
+  "after": "  interference/2: \"Another causal factor in this case keeps, or would keep, %s from bringing about %s.\"",
+  "reason": "template for the two-place exception (D071, D097), in our own words"
+ },
+ {
   "line": 199,
   "change": "insert after",
   "scheme": "language",
@@ -5203,6 +5214,61 @@
   "reason": "D001 (audit N12): the single proposition A made the premise assert the target's claim of the source case, false whenever the two claims differ; now a claim in each case (P1, P2) joined by corresponds(P1,P2), similarity between the two cases, and a difference exception that tells against the claim carried over and names it. The book's CQ3, a case like the source in which the claim failed, is a counter-analogy that rebuts, so more_on_point goes. Owner decision of 2026-10-22 (proposal D001-D028-D029, version 3)"
  },
  {
+  "line": 1740,
+  "change": "insert after",
+  "scheme": "cause_to_effect",
+  "scheme_after": "cause_to_effect",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "      source: >",
+  "reason": "D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)"
+ },
+ {
+  "line": 1740,
+  "change": "insert after",
+  "scheme": "cause_to_effect",
+  "scheme_after": "cause_to_effect",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "              Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes.",
+  "reason": "D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)"
+ },
+ {
+  "line": 1740,
+  "change": "insert after",
+  "scheme": "cause_to_effect",
+  "scheme_after": "cause_to_effect",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "              Cambridge University Press, p. 328 (scheme 28), citing Douglas Walton, A Pragmatic Theory of",
+  "reason": "D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)"
+ },
+ {
+  "line": 1740,
+  "change": "insert after",
+  "scheme": "cause_to_effect",
+  "scheme_after": "cause_to_effect",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "",
+  "after": "              Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, pp. 140-141.",
+  "reason": "D040: cause_to_effect cites the book's entry 28 (p. 328) and the reference it prints, as cause_to_effect_modal cites the reference. Decided under the owner's standing rule of 2026-11-22 (proposal D040-D071-D097)"
+ },
+ {
+  "line": 1748,
+  "change": "edit",
+  "scheme": "cause_to_effect",
+  "scheme_after": "cause_to_effect",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "      - interference(E1)",
+  "after": "      - interference(E1,E2)",
+  "reason": "D071, D097: the exception named only the cause, so an answer that something blocks one effect of a cause undercut every causal step from that cause (the engine test of proposal D055-D059's second review, 2026-11-22; the first gold's G2, 2026-11-27); now interference(E1,E2), as the book's 28/CQ3 is about the effect in the case at hand. Decided under the owner's standing rule of 2026-11-22 and by the owner on 2026-11-27 (proposal D040-D071-D097)"
+ },
+ {
   "line": 1749,
   "change": "insert after",
   "scheme": "cause_to_effect_modal",
@@ -5366,6 +5432,17 @@
   "before": "",
   "after": "",
   "reason": "audit N8: compendium 28's weak reading (the cause occurs or might occur; the effect might occur), which cause_to_effect does not formalize; written for WAG by the owner's decision of 2026-10-22, with cause_to_effect's causal premise and exception, and may_occur for the cause and the effect, so that hypothetical steps chain"
+ },
+ {
+  "line": 1749,
+  "change": "edit",
+  "scheme": "cause_to_effect_modal",
+  "scheme_after": "cause_to_effect_modal",
+  "category": "repair — owner decision",
+  "needs_owner_approval": false,
+  "before": "\n  - id: cause_to_effect_modal\n    meta:\n      title: Argument from Cause to Effect - Modal Form\n      source: >\n             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,\n             1995, pp. 140-141.\n    variables: [E1,E2]\n    conclusions:\n      - may_occur(E2)\n    premises:\n      - may_occur(E1)\n      - causes(E1,E2)\n    exceptions:\n      - interference(E1)\n",
+  "after": "\n  - id: cause_to_effect_modal\n    meta:\n      title: Argument from Cause to Effect - Modal Form\n      source: >\n             Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press,\n             1995, pp. 140-141.\n    variables: [E1,E2]\n    conclusions:\n      - may_occur(E2)\n    premises:\n      - may_occur(E1)\n      - causes(E1,E2)\n    exceptions:\n      - interference(E1,E2)\n",
+  "reason": "D071, D097: the exception named only the cause, so an answer that something blocks one effect of a cause undercut every causal step from that cause (the engine test of proposal D055-D059's second review, 2026-11-22; the first gold's G2, 2026-11-27); now interference(E1,E2), as the book's 28/CQ3 is about the effect in the case at hand. Decided under the owner's standing rule of 2026-11-22 and by the owner on 2026-11-27 (proposal D040-D071-D097)"
  },
  {
   "line": 1896,

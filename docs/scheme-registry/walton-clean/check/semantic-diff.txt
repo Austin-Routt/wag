@@ -54,6 +54,7 @@ analogy                                  variables    ['A', 'C'] -> ['P1', 'P2',
 analogy                                  premises     ['similar_case(C)', 'in_case(A,C)'] -> ['similar_to(C1,C2)', 'in_case(P1,C1)', 'corresponds(P1,P2)']
 analogy                                  exceptions   ['relevant_differences(C)', 'more_on_point(A,C)'] -> ['difference_against(C1,C2,P2)']
 analogy                                  conclusions  ['A'] -> ['P2']
+cause_to_effect                          exceptions   ['interference(E1)'] -> ['interference(E1,E2)']
 negative_consequences                    exceptions   [] -> ['good_outweighs(A,G)', 'too_slight(A,G)', 'harm_discounted_by_bearer(A,G)']
 positive_consequences                    exceptions   [] -> ['bad_outweighs(A,G)', 'too_slight(A,G)', 'gain_discounted_by_bearer(A,G)']
 practical_reasoning1                     variables    ['A', 'S1', 'S2', 'G', 'V'] -> ['A', 'S1', 'S2', 'G', 'V', 'P']
@@ -65,9 +66,9 @@ practical_reasoning2                     premises     ['current_circumstances(S1
 practical_reasoning2                     assumptions  ['possible(A)', 'possible(G)'] -> ['possible_bring_about(P,A)', 'possible_goal(G)']
 practical_reasoning2                     exceptions   ['bring_about_more_effectively(S2,A)', 'realize_more_effectively(G,A)', 'intervening_actions(A,G)', 'side_effects(A,S1)', 'incompatible_goal(G)'] -> ['bring_about_more_effectively(P,S2,A)', 'realize_more_effectively(P,G,A)', 'intervening_actions(A,G)', 'bad_outweighs(A,G)', 'incompatible_goal(P,G)']
 slippery_slope_base_case                 conclusions  ['negative_consequences(A)'] -> ['¬should_be_performed(A)']
-67 scheme-level difference(s) after renames
+68 scheme-level difference(s) after renames
 added by the owner's decision (not compared): whole_into_parts, end_and_means_bad, end_and_means_less_bad, bridge_from_agent, bridge_from_continuing, full_slippery_slope, precedent_slippery_slope, cause_to_effect_modal, negative_consequences_reasoning, bad_outweighs_good, good_outweighs_bad, positive_consequences_modal, negative_consequences_modal, bridge_from_possible_good, bridge_from_possible_harm, harm_reduction, finding_out_first, better_means, sunk_costs_precommitment
-language: 392 -> 458 keys; keys only in clean: 100, only in original: 33, same key with a changed template: 34
+language: 392 -> 458 keys; keys only in clean: 101, only in original: 34, same key with a changed template: 34
   +  accept_all_steps/2 'Opinion runs so that whoever comes to accept one case in the series from %s to %s will be carried on to accept the next.'
   +  accept_saying/0 'Therefore, you should accept what I say.'
   +  acceptable_action/2 'For %s, %s is an acceptable thing to do.'
@@ -108,6 +109,7 @@ language: 392 -> 458 keys; keys only in clean: 100, only in original: 33, same k
   +  incompatible_consequences/3 'For %s, %s would have consequences that work against %s.'
   +  incompatible_goal/2 'Another goal of %s is incompatible with %s.'
   +  initial_presumption/1 'At the outset, %s is presumed acceptable.'
+  +  interference/2 'Another causal factor in this case keeps, or would keep, %s from bringing about %s.'
   +  intolerable_exception/2 'Making an exception of %s to the rule %s would be intolerable.'
   +  leads_to_next/3 'In the chain of cases from %s through %s to %s, every case brings on the following one, through causal, precedent or analogical links.'
   +  led_to_step/2 'Accepting a case in the series from %s to %s will in fact carry people on to the next one.'
@@ -179,6 +181,7 @@ language: 392 -> 458 keys; keys only in clean: 100, only in original: 33, same k
   -  do_obligator 'One must not do what is prohibite -obligator-.'
   -  excuse '%s has an adequate excuse or an overriding duty.'
   -  goal_prestige 'Prestige is an important goal for you.'
+  -  interference/1 'An event has occurred which interferes with event %s.'
   -  means_end 'Means %s should be regarded as an end.'
   -  more_important_ends 'Ends are more important than the means used to achieve them.'
   -  more_reliable 'There are more reliable account for the sign.'
