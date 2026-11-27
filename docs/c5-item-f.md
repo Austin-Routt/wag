@@ -60,6 +60,7 @@ target (C2's game paragraph); what the answer leaves standing is tested with it.
 |---|---|---|
 | A1.1 | c1; Con answers CQ:bad_outweighs of c1 with AS:bad_outweighs_good, H `food_costlier` | accepted; the answer concludes `bad_outweighs(tax_meat,emissions_fall)`, In; c1 out of force; `should_be_performed(tax_meat)` Out |
 | A1.2 | c1, pr; the same answer to pr's CQ:bad_outweighs (Q1-C, adverse case 6) | accepted; c1 and pr both out of force (one statement, the exception of both); `should_be_performed(tax_meat)` Out |
+| A1.2b | (added after the check of step 8) c1, pr; A1.1's answer, at c1 | accepted; c1 and pr both out of force (one statement, the exception of both); `should_be_performed(tax_meat)` Out |
 | A1.3 | c1, c2; A1.1's answer (adverse case 6) | accepted; c2 stays in force, so `should_be_performed(tax_meat)` stays In |
 | A1.3b | c1, n1; A1.1's answer | accepted; n1 stays in force (its exception is `good_outweighs`) |
 | A1.4 | c1; the answer with G `diets_healthier` (a wrong target) | refused, S9 |
@@ -153,6 +154,16 @@ arguments for it; Pro's Other argument for c1's premise; Con's undercutter, answ
 with Other (Q2-A: the Other argument out of force and the premise Out, while c1's own undercutter is
 not In: Q2-B); Pro's AS:expert_opinion for the premise (Q2-C: the premise In and c1 in force, the
 Other argument still out of force).
+
+Recorded after the independent check of step 8 (2026-11-27), before the change ran: B6 as played
+after step 7 put the expert's argument after the undercut, so that nothing had to survive the
+undercut, and a defect that takes the support already there down with it passed every test (the
+check's W-1). B6 now plays the page's order after c1 and the question: Pro's Other argument for the
+premise; Pro's AS:expert_opinion for it; then Con's undercutter. Expected: the Other argument out of
+force (Q2-A); c1's own undercutter not In (Q2-B); the expert's argument in force, the premise In and
+c1 in force (Q2-C). The order played after step 7 is kept as B6b, with its outcomes: after the
+undercut, the Other argument out of force and the premise Out, c1's undercutter not In; after the
+expert's argument, the premise In and c1 in force.
 
 Recorded after the first run (2026-11-27): B4 was refused, but by the adapter, "the premise
 `bad_outweighs(tax_meat,emissions_fall)` is the conclusion itself", before the graph's cycle check,
@@ -283,3 +294,12 @@ Corrected after the independent check of step 7 (2026-11-27):
 | P1 resolves an action value that names nothing | A4.2b |
 | the adapter's AddSupport takes a value that names nothing | G-unbound (engine) |
 
+
+Added after the independent check of step 8 (2026-11-27), before they ran:
+
+| Defect | Caught by |
+|---|---|
+| an undercut also undercuts the arguments that have its target's conclusion as a premise (Q2-B) | B6, B6b |
+| an undercut also takes down the other arguments on the board for its target's conclusion (Q2-C) | B6 |
+| the shared exception is split in `practical_reasoning1`'s scheme of `core.yml`, not in `positive_consequences`' | A1.2b |
+| the profile's check takes an actor, an action or an alias that names nothing | TestProfileNamesThatNameNothing |
