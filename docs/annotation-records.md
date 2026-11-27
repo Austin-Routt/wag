@@ -157,6 +157,7 @@ Fields this contract does not name are allowed and not read.
 | `premises` | yes | As in format 1: `role`, `formula`, `en`, `status`; `note`, `cite` optional |
 | `conclusion` | yes | `formula` (null only for `other` and `none`, and for a fragment whose conclusion names a variable it leaves unstated: no formula can be written without it), `en` |
 | `comparison` | in `better_means` | `more surely`, `sooner` or `at lower cost` (R9) |
+| `by` | no | `"the discussion"` on an instance that is not the claim's own but the argument the discussion needs for the claim (§13, D096); absent, the instance is the claim's |
 | `label`, `note` | no | Free text |
 
 **An id is the instance's, whatever happens to its text.** It is given when the instance is made: the
@@ -249,6 +250,7 @@ annotator has not annotated cannot be looked up, and is not reported.
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
 | R18 | An instance whose fit is `explicit` has every premise-role formula (`role: premise`) explicit; an assumption or exception may be supplied (guidelines §5 item 6; since D086 round 1's draft 2, 2026-11-27) | yes |
 | R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it: a claim `items.json` lists, of the batch or of a claim's context (its parents, ancestors, siblings and children) (guidelines §2 item 3; since the same draft; the context's claims since the independent review of that draft) | no: the guidelines ask an annotator to cite the claim, but the output format (guidelines §4) has no `cite` field, so a model's record has none to check |
+| R20 | An instance by the discussion (§13, D096) is not primary; its fit is `reconstructed`; no premise of it is `explicit`, and at least one is `inferred` (cited, R19); it concludes the statement of the claim it is recorded at (that claim's primary conclusion) or its negation; an item of the batch targets it. A premise of another instance that cites the claim it is recorded at may not take a formula that only the discussion's instance has: the reconstruction is not a claim, and cannot be cited (since D086 round 1's draft 3, 2026-11-27) | in part: not primary, fit, no explicit premise, the conclusion |
 
 Rules that change in format 2:
 - **R4** (D039): a step whose cause is only proposed or possible is `cause_to_effect_modal`. Format 2
@@ -284,7 +286,7 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 | `target_instance` | Which inference of which claim the claim targets: the target claim with `primary`, or with `secondary:` and that instance's scheme and conclusion, read in the annotator's own file (ids are the annotator's own), so that two targets of different claims disagree even when each is its claim's primary inference (since 2026-11-26; before, the slot alone was compared, and 13292.29's two readings agreed). It measures the targeting decision, not how the target claim itself is coded, which its own fields measure: a different coding of a claim's primary instance does not spread to the claims that target it. A secondary target is named by that instance's scheme and conclusion, so a different coding of it does show in the claims that target it. A format-1 target is its claim's primary instance |
 | `target_formula` | The exact formula targeted; a format-1 conclusion target is its instance's conclusion. It does depend on how the target claim is coded: the formula attacked is that coding's |
 | `bindings` | The primary instance's bindings, every variable and its atom |
-| `instances` | Every instance's scheme and conclusion: how the claim was divided into inferences |
+| `instances` | Every instance's scheme and conclusion: how the claim was divided into inferences. An instance by the discussion (§13) is left out: it is not how the claim itself was divided (since 2026-11-27) |
 
 A value that is unresolved, or that cannot be read in the annotator's file (a target claim it did not
 annotate), is left out of that field's agreement and counted apart (`unresolved`): missing data is
@@ -348,3 +350,51 @@ claim it did not review as unresolved too.
   the conclusion of the argument that cites the harm (13292.127#2), where both annotators put it; and
   13292.208, at 13292.104#1's better-means premise, which both annotators put at 13292.104#2's
   circumstances, the premise its note says it contradicts (round 2 takes it up).
+
+## 13. The argument the discussion needs (D096)
+
+Some claims state only part of an argument that no claim states as a whole, and other claims answer
+its other parts. In the first gold, 13292.108 says only that meat production and consumption harm the
+environment; the thesis has no argument of its own; seven claims answer the environmental argument
+for the tax at its conclusion or at premises nobody states. D096 (the owner, 2026-11-27) keeps two
+layers apart: what a claim states, and the argument the discussion needs.
+
+**Where it is recorded.** The argument is an instance of the claim whose statement it concludes (here
+the thesis, `13292.1#2`), marked `"by": "the discussion"`: it is that claim's argument as the
+discussion gives it, not something the claim's text says (the claim may be a bare thesis), and not an
+argument of the claim that states one of its premises. Its id is an ordinary instance id of that
+claim (§5), so targets, agreement and the replay name it as any other instance. It is not primary;
+the claim's own primary instance stays what the claim states.
+
+**What it holds.** Its scheme and bindings as for any instance, fit `reconstructed`. A premise that a
+claim of the discussion states is `inferred`, citing that claim (R19); the rest are `supplied`, with a
+note of where the discussion presupposes them; none is `explicit`, since no claim states the argument.
+At least one premise is cited: a reconstruction rests on what the discussion says. Guidelines §5
+item 4's limit (one supplied link of three in a claim's own practical reasoning) is for what a claim
+states; the discussion's argument is recorded because no claim states it, and its parts are cited
+where claims state them.
+
+**The claims around it.** A claim that states one of its premises is a fragment of it (guidelines
+§5 item 6: a fragment of its parent's argument), backing that premise (`premise_backing`), as
+13292.11 backs 13292.118's circumstances. A claim that answers another part targets it as any
+instance (§6). The challenge records that list the questions it is open to are in the record of the
+claim it is recorded at (R10). A premise elsewhere may cite the claim that states a part, never the
+argument: a reconstruction is not a claim (R20).
+
+**Its checks (R20).** `validate.py`: not primary; fit `reconstructed`; no explicit premise; at
+least one inferred; it concludes the statement of the claim it is recorded at, or its negation; an
+item of the batch targets it; and no premise of another instance cites that claim for a formula only
+the reconstruction has. The Go check (§10): the field's value, not primary, the fit, no explicit
+premise and the conclusion.
+
+**Agreement and verification.** The `instances` field leaves it out (§11): it is not how the claim
+itself was divided. Targets at it are compared as targets at any secondary instance (by its scheme
+and conclusion). It is part of the item's revision (§9), so a verification of the claim it is
+recorded at covers it, and a change to it makes that verification stale.
+
+**The replay.** `to_wag.py` plays an instance by the discussion as an argument for its conclusion,
+with its scheme, by the side that conclusion takes (the thesis's statement: Pro; its negation: Con):
+the thesis's before any claim, another claim's right after that claim's own move. Claims that target
+it are played at it. The report lists it apart from the claims' moves; the claims' counts are
+unchanged by it.
+

@@ -357,6 +357,25 @@ Agreement (D102: an unsettled relation is not scored):
 | A6 | An item whose target is not an object (text, a list) | D102's check finds no unsettled relation, as Go's does; no trace of the program |
 | A7 | The role counts, and the pilot's role comparison, of an item whose relation is unsettled | Its role counted as unresolved (`?`) and left out of the pilot's role agreement |
 
+The argument the discussion needs (D096; `docs/annotation-records.md` §13; written before the tests
+and the code):
+
+| Case | Setup | Expected |
+|---|---|---|
+| RC1 | The gold with the thesis's instance by the discussion (13292.1#2) and its claims recoded | `validate.py` passes; the Go check reports nothing on it |
+| RC2 | `by` with another value (`"the claim"`, `true`) | Refused (R16), in `validate.py` and the Go check |
+| RC3 | `by` on the claim's primary instance | Refused (R20), in both |
+| RC4 | Its fit `explicit` or `fragment` | Refused (R20), in both |
+| RC5 | One of its premises `explicit` | Refused (R20), in both |
+| RC6 | None of its premises `inferred` (all supplied) | Refused (R20), in `validate.py` |
+| RC7 | It concludes neither the claim's statement nor its negation | Refused (R20), in both |
+| RC8 | No item of the batch targets it | Refused (R20), in `validate.py` |
+| RC9 | Another item's inferred premise cites the claim it is recorded at, for a formula only the reconstruction has | Refused (R20), in `validate.py`; citing that claim for a formula of its own instance is allowed |
+| RC10 | Agreement: two files whose items differ only in an instance by the discussion | The `instances` field agrees (it is left out), in `agreement.py` and the Go measure; a target at it is compared by its scheme and conclusion, as at a secondary instance |
+| RC11 | The replay: a thesis with an instance by the discussion, and a claim at one of its premises | The instance is played first, by Pro, with its scheme, for the main claim; the claim is played at it, not as a cascade; the report lists the instance apart, and the claims' counts are those of the claims |
+| RC12 | The replay: an instance by the discussion at a claim other than the thesis | Played right after that claim's own move, for that claim's statement |
+| RC13 | The replay: an instance by the discussion that the game refuses | Reported as not played, with the error; the claims at it are cascades, as at any instance not on the board |
+
 ## 7. Out of this plan
 
 Batch 2 recoded under the guidelines' version 4 (plan §4, item 2), other discussions and the probe set
