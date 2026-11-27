@@ -288,9 +288,10 @@ type ProposedAction struct {
 	Evidence []string `json:"evidence,omitempty"`
 
 	// Declare declares the actions the move is the first to argue about, each
-	// with its actor (the game's agent when none is named) and aliases
-	// (decision D094 (b)). The declarations are recorded with the move and
-	// join the game's profile when the move is accepted.
+	// with its actor, which every declaration names, and its aliases
+	// (decision D094 (b)); a move declares only actions it binds. The
+	// declarations are recorded with the move and join the game's profile
+	// when the move is accepted.
 	Declare []ActionDecl `json:"declare,omitempty"`
 	// Comparison is how the alternative of a scheme that records one is
 	// better: "surely", "sooner" or "cheaper" (D089).

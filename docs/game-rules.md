@@ -203,27 +203,36 @@ a rule of the dialogue, not a change of who proves an exception:
   question it answers, D094 (g)) is offered only as an answer, on its backup
   edges, never as a move of its own (S1).
 
-This formalizes the game's behaviour since October 2026; step C5.2 changes
-none of it, so no golden game moves.
+This formalizes the game's behaviour since October 2026, but for the two
+rules step C5.2 adds (an answer scheme only as an answer, a question that
+refuses Other), which no reference game reaches, so no golden game moves.
 
 **The profile** (D094 (b); D089, D091, D092, D063). A game made since
-step C5.2 has a profile: the agent who decides, the actors, the actions
-argued about (each with its one actor and its aliases), and the situation
-the alternatives are compared in. It comes from a case record (`--case`,
-the new-game form, `"case"` in `POST /api/games`), or the agent and the
-situation are given when the game is created; otherwise it is the default,
-an agent called `decider`. The board shows it under *Who decides*. Its
-rules come before and after NASCQ's (S0 to S9):
+step C5.2 has a profile, a discussion imported from Kialo included: the
+agent who decides, the actors, the actions argued about (each with its one
+actor and its aliases), and the situation the alternatives are compared in.
+It comes from a case record (`--case`, the new-game form, `"case"` in
+`POST /api/games`), or the agent and the situation are given when the game
+is created; otherwise it is the default, an agent called `decider`, in the
+present situation. The board shows it under *Who decides*. A claim that
+recommends an action is written with the action's id (an alias in it reads
+as the action). Its rules come before and after NASCQ's (S0 to S9):
 
 - **P1.** A variable of type action is bound to a declared action, by its
-  id or an alias, compared as the board writes names (`tax meat`, `Tax-Meat`
-  and `tax_meat` are one action); an alias is read as its action. A move
-  that first argues about an action declares it, with its actor:
+  id or an alias, names compared as atoms, as the board makes statements
+  of them (`tax meat`, `Tax-Meat` and `tax_meat` are one action; actors
+  too); an alias is read as its action. A move that first argues about an
+  action declares it, with its actor:
   `"declare": [{"id": "ban_meat", "actor": "governments", "aliases": []}]`.
-  The declaration is recorded with the move and joins the profile only if
-  the move is accepted. A declaration without an actor, of a name already
-  declared, or with an actor the profile does not know is refused. The
-  values a move's target fixes are checked too.
+  A move declares only actions it binds, so a question declares none. The
+  declaration is recorded with the move and joins the profile only if the
+  move is accepted. A declaration without an actor, with an actor the
+  profile does not know, or of a name already declared as another actor's
+  is refused; one of a name already declared as the same actor's declares
+  nothing new but the aliases it adds. The board and the terminal ask whose
+  a new action is, the agent's unless the player chooses another actor. The
+  values a move's target fixes are checked too; the scheme and values a
+  question carries are not its own (S0 sets them aside).
 - **P2.** A variable of type agent (practical reasoning's P, `better_means`'
   P) is the agent: the game binds it, the board shows it as fixed, and a
   move that binds it to anyone else is refused.
@@ -238,11 +247,17 @@ rules come before and after NASCQ's (S0 to S9):
   its goal premise is the answered argument's.
 
 P1 (the declarations) and P2 are checked before NASCQ's rules, P1 (the
-values) and P3 and P4 after them. The situation is shown and recorded, not
-checked move by move (D089). A game made before step C5.2 has no profile
-and plays without these rules, so its record replays as it was played; so
-do the reference games. Computer players argue about the agent's actions,
-and declare the new ones they name.
+values) and P3 and P4 after them; a preview checks a move as a turn does.
+The situation is shown and recorded, not checked move by move (D089).
+Computer players argue about the agent's actions, and declare the new ones
+they name.
+
+A game made before step C5.2 has no profile and plays without these rules.
+Its export, a reference game's and a Kialo import's included, loads and
+replays as it was played. A trace a model player recorded before then is
+replayed through a new game (`wag-llm --replay`), which has a profile, so it
+replays with the build it was recorded with, and with the data it was
+played with (`--data` and the frozen files, wag/data/frozen).
 
 ## 3. Scoring
 

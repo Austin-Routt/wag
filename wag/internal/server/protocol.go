@@ -408,7 +408,16 @@ func (ss *Session) promptProfile(w func(string, ...interface{}), p *game.Profile
 	if len(mine) > 0 {
 		w("The agent's actions so far: %s.", strings.Join(mine, "; "))
 	} else {
-		w("No action has been argued about yet.")
+		w("No action of the agent has been argued about yet.")
+	}
+	var others []string
+	for _, a := range p.Actions {
+		if a.Actor != p.Agent {
+			others = append(others, fmt.Sprintf("%s (%s's)", a.ID, a.Actor))
+		}
+	}
+	if len(others) > 0 {
+		w(" Other actors' actions, which a recommendation to the agent does not argue: %s.", strings.Join(others, "; "))
 	}
 	w(` To argue about another action of the agent, declare it in the move that first names it, with its actor: "declare": [{"id": "the_action", "actor": %q, "aliases": []}].`+"\n\n", p.Agent)
 }
@@ -881,10 +890,44 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 			break
 		}
 	}
-	// Sources are text: a citation or a URL. null, absent or an empty string
-	// is no source (the evidence rule then says whether one is needed); any
-	// other value is refused, since printing it ("<nil>", "false",
-	// "map[url:...]") would pass for a citation.
+	if a.SchemeID != "" && !strings.HasPrefix(a.SchemeID, "AS:") {
+		a.SchemeID = "AS:" + a.SchemeID
+	}
+	if a.AnswersCQID != "" && !strings.HasPrefix(a.AnswersCQID, "CQ:") {
+		a.AnswersCQID = "CQ:" + a.AnswersCQID
+	}
+	// The optional parts are read each on its own: a part that does not read
+	// is left out and its error returned, the others kept (a considered move
+	// keeps its sources when its declarations do not read).
+	var first error
+	if ev, err := sourcesOf(m); err != nil {
+		first = err
+	} else {
+		a.Evidence = ev
+	}
+	if d, err := declarationsOf(m); err != nil {
+		if first == nil {
+			first = err
+		}
+	} else {
+		a.Declare = d
+	}
+	if c, err := comparisonOf(m); err != nil {
+		if first == nil {
+			first = err
+		}
+	} else {
+		a.Comparison = c
+	}
+	return a, true, first
+}
+
+// sourcesOf reads a move's sources. Sources are text: a citation or a URL.
+// null, absent or an empty string is no source (the evidence rule then says
+// whether one is needed); any other value is refused, since printing it
+// ("<nil>", "false", "map[url:...]") would pass for a citation.
+func sourcesOf(m map[string]interface{}) ([]string, error) {
+	var out []string
 	for _, k := range []string{"evidence", "sources"} {
 		switch ev := m[k].(type) {
 		case nil:
@@ -894,22 +937,27 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 				case nil:
 				case string:
 					if s := strings.TrimSpace(c); s != "" {
-						a.Evidence = append(a.Evidence, s)
+						out = append(out, s)
 					}
 				default:
-					return a, true, fmt.Errorf("%q: each source must be text (a citation or a URL), not %s", k, jsonKind(x))
+					return nil, fmt.Errorf("%q: each source must be text (a citation or a URL), not %s", k, jsonKind(x))
 				}
 			}
 		case string:
 			if strings.TrimSpace(ev) != "" {
-				a.Evidence = append(a.Evidence, strings.TrimSpace(ev))
+				out = append(out, strings.TrimSpace(ev))
 			}
 		default:
-			return a, true, fmt.Errorf("%q must be text or a list of texts (citations or URLs), not %s", k, jsonKind(ev))
+			return nil, fmt.Errorf("%q must be text or a list of texts (citations or URLs), not %s", k, jsonKind(ev))
 		}
 	}
-	// The actions the move declares (D094 (b)): a list of objects, each
-	// with its id, its actor and its aliases if any.
+	return out, nil
+}
+
+// declarationsOf reads the actions a move declares (D094 (b)): a list of
+// objects, each with its id, its actor and its aliases if any.
+func declarationsOf(m map[string]interface{}) ([]nascq.ActionDecl, error) {
+	var out []nascq.ActionDecl
 	switch d := m["declare"].(type) {
 	case nil:
 	case []interface{}:
@@ -922,7 +970,7 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 					case "id", "actor":
 						t, ok := f.(string)
 						if !ok {
-							return a, true, fmt.Errorf(`"declare": an action's %q must be text, not %s`, k, jsonKind(f))
+							return nil, fmt.Errorf(`"declare": an action's %q must be text, not %s`, k, jsonKind(f))
 						}
 						if k == "id" {
 							decl.ID = strings.TrimSpace(t)
@@ -932,43 +980,42 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 					case "aliases":
 						list, ok := f.([]interface{})
 						if f != nil && !ok {
-							return a, true, fmt.Errorf(`"declare": an action's aliases must be a list of texts, not %s`, jsonKind(f))
+							return nil, fmt.Errorf(`"declare": an action's aliases must be a list of texts, not %s`, jsonKind(f))
 						}
 						for _, y := range list {
 							t, ok := y.(string)
 							if !ok {
-								return a, true, fmt.Errorf(`"declare": each alias must be text, not %s`, jsonKind(y))
+								return nil, fmt.Errorf(`"declare": each alias must be text, not %s`, jsonKind(y))
 							}
 							if t = strings.TrimSpace(t); t != "" {
 								decl.Aliases = append(decl.Aliases, t)
 							}
 						}
 					default:
-						return a, true, fmt.Errorf(`"declare": an action has an id, an actor and aliases, not %q`, k)
+						return nil, fmt.Errorf(`"declare": an action has an id, an actor and aliases, not %q`, k)
 					}
 				}
-				a.Declare = append(a.Declare, decl)
+				out = append(out, decl)
 			default:
-				return a, true, fmt.Errorf(`"declare": each action must be an object with its id and actor, not %s`, jsonKind(x))
+				return nil, fmt.Errorf(`"declare": each action must be an object with its id and actor, not %s`, jsonKind(x))
 			}
 		}
 	default:
-		return a, true, fmt.Errorf(`"declare" must be a list of actions, not %s`, jsonKind(d))
+		return nil, fmt.Errorf(`"declare" must be a list of actions, not %s`, jsonKind(d))
 	}
+	return out, nil
+}
+
+// comparisonOf reads how a move's alternative is better (D089).
+func comparisonOf(m map[string]interface{}) (string, error) {
 	switch c := m["comparison"].(type) {
 	case nil:
+		return "", nil
 	case string:
-		a.Comparison = strings.ToLower(strings.TrimSpace(c))
+		return strings.ToLower(strings.TrimSpace(c)), nil
 	default:
-		return a, true, fmt.Errorf(`"comparison" must be text ("surely", "sooner" or "cheaper"), not %s`, jsonKind(c))
+		return "", fmt.Errorf(`"comparison" must be text ("surely", "sooner" or "cheaper"), not %s`, jsonKind(c))
 	}
-	if a.SchemeID != "" && !strings.HasPrefix(a.SchemeID, "AS:") {
-		a.SchemeID = "AS:" + a.SchemeID
-	}
-	if a.AnswersCQID != "" && !strings.HasPrefix(a.AnswersCQID, "CQ:") {
-		a.AnswersCQID = "CQ:" + a.AnswersCQID
-	}
-	return a, true, nil
 }
 
 // strs reads a string or a list of strings.
@@ -1049,11 +1096,9 @@ func alternatives(v interface{}) []Alternative {
 		if !ok {
 			am = m
 		}
-		// A considered move with an unreadable source is still recorded, without sources.
-		if a, ok, err := moveOf(am); ok && a.Type != "" {
-			if err != nil {
-				a.Evidence = nil
-			}
+		// A considered move with a part that does not read is still recorded,
+		// without that part (moveOf keeps the others).
+		if a, ok, _ := moveOf(am); ok && a.Type != "" {
 			alt.Action = a
 			out = append(out, alt)
 		}

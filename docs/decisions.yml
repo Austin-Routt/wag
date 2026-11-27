@@ -2646,8 +2646,17 @@ decisions:
       and the consequence schemes' G event; I entity. (4) The weight shown
       before a move is the weight it takes; a modal variant's or bridge's
       record carries the base weight it weighs as, an answer scheme's 0.5,
-      unused.
-    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26); to apply: step C5 (C5.1 now; C5.2 after D095)"
+      unused. The refinement replaces two sentences above: (b)'s "Every game
+      has a profile" reads "every game made since step C5.2 has a profile",
+      and D009's "a shared question is split where its schemes' paraphrases
+      differ" gives way to (1). Completed 2026-11-27 on the check of version
+      5a and the profile's code (wag-workspace verify/c5/c52/VERIFY-5a): a
+      move declares only the actions it binds; a declaration of an action the
+      profile holds, by the same actor, adds only its aliases; names, actors
+      and the agent are compared as atoms; the board and the terminal ask
+      whose a new action is; a claim is written with its action's id; a
+      discussion imported from Kialo has a profile.
+    recorded: "docs/c5-game.md (version 3; version 5a for the refinement of 2026-11-26, completed 2026-11-27); to apply: step C5 (C5.1 now; C5.2 after D095)"
 
 - id: D095
   title: Step C5's departures from decided wording

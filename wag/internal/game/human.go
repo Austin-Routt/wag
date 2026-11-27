@@ -28,6 +28,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/yourorg/wag/internal/carneades"
 	"github.com/yourorg/wag/internal/nascq"
 
 	"github.com/carneades/carneades-4/src/engine/terms"
@@ -143,13 +144,14 @@ func (h *HumanAgent) chooseSupportAction(obs *Observation) nascq.ProposedAction 
 	selected := schemes[idx]
 
 	bindings := h.fillVariables(selected)
-	h.preview(obs.GameState, selected, bindings)
-
-	return nascq.ProposedAction{
+	a := nascq.ProposedAction{
 		Type:             "support",
 		SchemeID:         selected.SchemeID,
 		VariableBindings: bindings,
+		Declare:          h.declarations(obs.GameState, selected, bindings),
 	}
+	h.preview(obs.GameState, selected, a)
+	return a
 }
 
 // -------------------------------------------------------------------------
@@ -229,8 +231,7 @@ func (h *HumanAgent) chooseTargeted(obs *Observation, typ string) nascq.Proposed
 
 	// --- Step 4: the variables ---
 	bindings := h.fillVariables(selected)
-	h.preview(gs, selected, bindings)
-	return nascq.ProposedAction{
+	a := nascq.ProposedAction{
 		Type:             typ,
 		AttackType:       selected.AttackType,
 		SchemeID:         selected.SchemeID,
@@ -238,7 +239,10 @@ func (h *HumanAgent) chooseTargeted(obs *Observation, typ string) nascq.Proposed
 		TargetArgID:      selected.TargetArgID,
 		TargetPremiseID:  selected.TargetPremiseID,
 		VariableBindings: bindings,
+		Declare:          h.declarations(gs, selected, bindings),
 	}
+	h.preview(gs, selected, a)
+	return a
 }
 
 // -------------------------------------------------------------------------
@@ -316,8 +320,10 @@ func (h *HumanAgent) chooseStatementAction(obs *Observation) nascq.ProposedActio
 
 	// --- Step 4: the variables ---
 	bindings := h.fillVariables(selected)
-	h.preview(gs, selected, bindings)
-	return selected.Action(bindings)
+	a := selected.Action(bindings)
+	a.Declare = h.declarations(gs, selected, bindings)
+	h.preview(gs, selected, a)
+	return a
 }
 
 // -------------------------------------------------------------------------
@@ -350,10 +356,62 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 	return bindings
 }
 
+// declarations are the declarations of the new actions a move binds (D094
+// (b)): for each action place whose value the game's profile does not hold,
+// the person says whose action it is, the agent's unless they choose
+// another actor, and the move declares it.
+func (h *HumanAgent) declarations(gs *GameState, tmpl nascq.ActionTemplate, bindings map[string]string) []nascq.ActionDecl {
+	if gs.Profile == nil {
+		return nil
+	}
+	var out []nascq.ActionDecl
+	seen := map[string]bool{}
+	actors := gs.Profile.actorIDs()
+	for _, v := range variableOrder(tmpl) {
+		x := strings.TrimSpace(bindings[v])
+		if tmpl.Variables[v].Type != nascq.VarAction || x == "" || seen[carneades.TextToAtom(x)] {
+			continue
+		}
+		seen[carneades.TextToAtom(x)] = true
+		if _, ok := gs.Profile.Action(x); ok {
+			continue
+		}
+		actor := gs.Profile.Agent
+		if len(actors) > 1 {
+			h.printf("\n  %q is a new action: whose action is it?\n", x)
+			order := append([]string{actor}, without(actors, actor)...)
+			for i, a := range order {
+				note := ""
+				if a == actor {
+					note = " (the agent, who decides)"
+				}
+				h.printf("    [%d] %s%s\n", i+1, a, note)
+			}
+			actor = order[h.readChoice(1, len(order))-1]
+		} else {
+			h.printf("    (%q is a new action: the move declares it as %s's, the agent's)\n", x, actor)
+		}
+		out = append(out, nascq.ActionDecl{ID: x, Actor: actor})
+	}
+	return out
+}
+
+// without is a list without one of its strings.
+func without(list []string, x string) []string {
+	var out []string
+	for _, s := range list {
+		if s != x {
+			out = append(out, s)
+		}
+	}
+	return out
+}
+
 // preview shows the move before it is submitted: its argument as it would
 // read on the board, and what it establishes.
-func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, bindings map[string]string) {
-	rd, err := gs.Read(tmpl.Action(bindings))
+func (h *HumanAgent) preview(gs *GameState, tmpl nascq.ActionTemplate, a nascq.ProposedAction) {
+	bindings := a.VariableBindings
+	rd, err := gs.Read(a)
 	if err != nil {
 		h.printf("\n  This move would be rejected: %v\n", err)
 		return

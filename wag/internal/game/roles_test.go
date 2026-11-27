@@ -171,6 +171,21 @@ func TestOtherRefusedAtTheBridgesException(t *testing.T) {
 	if err != nil || r.Accepted || !strings.Contains(gs.LastRejection, `S5: `+exc+` is the exception CQ "CQ:worth_finding_out_first" asks about`) {
 		t.Fatalf("Other for the exception: %v %+v %q", err, r, gs.LastRejection)
 	}
+	// Nor by a move of its own that names the exception (Other's text reuses
+	// a statement of the board), nor by presuming it as a premise (the 5a
+	// check's E-b): each would make it out without the question's answer.
+	for _, b := range []map[string]string{
+		{"P1": "it could be investigated", "C": exc},
+		{"P1": exc, "C": "the tax can wait"},
+	} {
+		r, err := gs.ExecuteTurn(nascq.ProposedAction{Type: "support", SchemeID: nascq.OtherSchemeID, VariableBindings: b})
+		if err != nil || r.Accepted || !strings.Contains(gs.LastRejection, `the exception CQ "CQ:worth_finding_out_first" asks about`) {
+			t.Errorf("Other with %v: %v %+v %q", b, err, r, gs.LastRejection)
+		}
+	}
+	if s := gs.Adapter.Graph.Statements[exc]; s == nil || s.Label == caes.In {
+		t.Fatalf("the exception is %+v", s)
+	}
 	play(t, gs, nascq.ProposedAction{Type: "attack", SchemeID: nascq.OtherSchemeID, TargetStmtID: exc,
 		VariableBindings: map[string]string{"P1": "the decision cannot wait"}})
 }

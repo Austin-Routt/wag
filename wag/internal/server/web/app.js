@@ -815,22 +815,38 @@ function profilePanel() {
     ${acts ? `<ul class="small">${acts}</ul>` : '<p class="small muted">No action declared yet.</p>'}</div>`;
 }
 
-// profileNames are the names the profile knows an action by: ids and aliases.
+// atomOf is a name as the game compares names (carneades.TextToAtom): in
+// lower case, its words of letters and digits joined by "_", so that "tax
+// meat", "Tax-Meat" and tax_meat are one action. "" when it has no word.
+function atomOf(s) {
+  let out = String(s || '').toLowerCase().split(/[^\p{L}\p{Nd}]+/u).filter(Boolean).join('_');
+  if (!out) return '';
+  if (/^\p{Nd}/u.test(out)) out = 'x_' + out;
+  if (out === 'true' || out === 'false') out = 'val_' + out;
+  return out;
+}
+
+// profileNames are the names the profile knows an action by, ids and
+// aliases, as atoms.
 function profileNames() {
   const out = new Set();
-  for (const a of ((G.profile || {}).actions || [])) { out.add(a.id); for (const x of (a.aliases || [])) out.add(x); }
+  for (const a of ((G.profile || {}).actions || [])) { out.add(atomOf(a.id)); for (const x of (a.aliases || [])) out.add(atomOf(x)); }
   return out;
 }
 
 // withProfile completes a move for the profile: the agent's place is the
-// game's to fill, and an action not yet declared is declared, as the agent's.
-function withProfile(move, sc) {
+// game's to fill, and an action not yet declared is declared, with the
+// actor chosen for it (actors, by variable), the agent's by default.
+function withProfile(move, sc, actors) {
   if (!move || !sc || !G.profile || sc.free) return move;
-  const known = profileNames(), declare = [];
+  const known = profileNames(), declare = [], seen = new Set();
   for (const v of sc.variable_order || []) {
-    const t = (sc.variables[v] || {}).type, x = (move.variable_bindings || {})[v];
+    const t = (sc.variables[v] || {}).type, x = (move.variable_bindings || {})[v], at = atomOf(x);
     if (t === 'agent') delete move.variable_bindings[v];
-    else if (t === 'action' && x && !known.has(x) && !declare.some(d => d.id === x)) declare.push({ id: x, actor: G.profile.agent });
+    else if (t === 'action' && at && !known.has(at) && !seen.has(at)) {
+      seen.add(at);
+      declare.push({ id: x, actor: (actors || {})[v] || G.profile.agent });
+    }
   }
   if (declare.length) move.declare = declare;
   return move;
@@ -973,9 +989,21 @@ function composeSimple(body, text, action, label) {
   $('#play1').onclick = () => submit(action);
 }
 
+// moveWeight is the weight a move made with a scheme takes in this game
+// (refinement (4) of D094): an answer's is the argument's it answers; a
+// modal variant's or a bridge's is the weight of the scheme it weighs as,
+// as this game sets it; any other scheme's, its own.
+function moveWeight(id) {
+  let sc = SCHEME[id];
+  if (sc.role === 'answer') return 'as the argument it answers';
+  for (const seen = new Set([id]); sc.weighs_as && SCHEME[sc.weighs_as] && !seen.has(sc.weighs_as); sc = SCHEME[sc.weighs_as]) seen.add(sc.weighs_as);
+  const w = ((G && G.config && G.config.weights) || {});
+  return (w[sc.id] ?? w['*'] ?? sc.base_weight).toFixed(2);
+}
+
 function schemeOptions(ids, selected) {
   const official = ids.filter(i => !SCHEME[i].free), other = ids.filter(i => SCHEME[i].free);
-  const opt = i => `<option value="${esc(i)}" ${i === selected ? 'selected' : ''}>${esc(SCHEME[i].name)} (${SCHEME[i].base_weight.toFixed(2)})</option>`;
+  const opt = i => `<option value="${esc(i)}" ${i === selected ? 'selected' : ''}>${esc(SCHEME[i].name)} (${moveWeight(i)})</option>`;
   return `<option value="">— choose a scheme —</option><optgroup label="Walton schemes (NASCQ)">${official.map(opt).join('')}</optgroup>${other.length ? `<optgroup label="Other">${other.map(opt).join('')}</optgroup>` : ''}`;
 }
 
@@ -1020,8 +1048,11 @@ function varInputs(sc, c, answerVar, fixedText) {
     if (fixedText[v]) return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" disabled value="${esc(fixedText[v])}" title="The statement fixes it">`;
     if (G.profile && spec.type === 'agent') return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" disabled value="${esc(G.profile.agent)}" title="The game's agent (who decides)">`;
     const list = G.profile && spec.type === 'action' ? ' list="actionlist"' : '';
-    const fresh = list && c.vars[v] && !known.has(c.vars[v]) ? `<span class="small muted">A new action of ${esc(G.profile.agent)}: the move declares it.</span>` : '';
-    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}"${list}>${fresh}`;
+    const actor = (c.actors || {})[v] || (G.profile || {}).agent;
+    const fresh = list && atomOf(c.vars[v]) && !known.has(atomOf(c.vars[v])) ? `<span class="small muted">A new action: the move declares it as ${esc(actor)}'s.</span>` : '';
+    const actors = (G.profile || {}).actors || [];
+    const whose = list && actors.length > 1 ? `<label class="small muted">If it is a new action, whose is it?</label><select data-actor="${esc(v)}">${actors.map(a => `<option value="${esc(a.id)}" ${actor === a.id ? 'selected' : ''}>${esc(a.id)}${a.id === G.profile.agent ? ' (the agent)' : ''}</option>`).join('')}</select>` : '';
+    return `<label><span class="var">${esc(v)}</span> ${esc(spec.description)}</label><input type="text" data-var="${esc(v)}" value="${esc(c.vars[v] || '')}" placeholder="${spec.example_en ? 'e.g. ' + esc(spec.example_en) : esc(spec.type)}"${list}>${fresh}${whose}`;
   }).join('');
   const actions = G.profile ? `<datalist id="actionlist">${(G.profile.actions || []).filter(a => a.actor === G.profile.agent).map(a => `<option value="${esc(a.id)}">`).join('')}</datalist>` : '';
   const cmp = sc.comparison ? `<label>How is the alternative better?</label><select data-cmp="1">${['', 'surely', 'sooner', 'cheaper'].map(x => `<option value="${x}" ${c.comparison === x ? 'selected' : ''}>${x ? { surely: 'more surely', sooner: 'sooner', cheaper: 'at lower cost' }[x] : 'choose'}</option>`).join('')}</select>` : '';
@@ -1070,7 +1101,7 @@ function evidenceInput(sc, c) {
 
 function buildArgue(c) {
   if (!c.scheme) return null;
-  return withProfile({ type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme]);
+  return withProfile({ type: 'support', scheme_id: c.scheme, variable_bindings: { ...c.vars }, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme], c.actors);
 }
 
 // stmtOptions fetches (once per game version) the moves about a statement.
@@ -1126,7 +1157,7 @@ function buildStmt(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys((o && o.fixed) || {})) delete vars[v];
-  return withProfile({ type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme]);
+  return withProfile({ type: c.dir === 'for' ? 'support' : 'attack', target_stmt_id: c.stmt, scheme_id: c.scheme, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean) }, SCHEME[c.scheme], c.actors);
 }
 
 // moveOptions fetches (once per game version) the critical questions the
@@ -1206,7 +1237,7 @@ function buildTargeted(c, o) {
   if (!c.scheme) return null;
   const vars = { ...c.vars };
   for (const v of Object.keys(fixedOf(o, c.kind, c.scheme) || {})) delete vars[v];
-  return withProfile({ type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), comparison: c.comparison || undefined }, SCHEME[c.scheme]);
+  return withProfile({ type: c.kind === 'defend' ? 'support' : 'attack', scheme_id: c.scheme, ...base, variable_bindings: vars, text: c.text, evidence: c.evidence.split('\n').map(x => x.trim()).filter(Boolean), comparison: c.comparison || undefined }, SCHEME[c.scheme], c.actors);
 }
 
 function wireComposer(body, c, build) {
@@ -1217,6 +1248,7 @@ function wireComposer(body, c, build) {
   const ev = $('#ev', body); if (ev) ev.oninput = () => { c.evidence = ev.value; schedulePreview(c, build); };
   body.querySelectorAll('[data-var]').forEach(inp => inp.oninput = () => { c.vars[inp.dataset.var] = inp.value; schedulePreview(c, build); });
   const cmp = body.querySelector('[data-cmp]'); if (cmp) cmp.onchange = () => { c.comparison = cmp.value; schedulePreview(c, build); };
+  body.querySelectorAll('[data-actor]').forEach(sel => sel.onchange = () => { (c.actors = c.actors || {})[sel.dataset.actor] = sel.value; schedulePreview(c, build); });
   const addp = $('#addp', body); if (addp) addp.onclick = () => { c.nP++; renderComposer(); };
   $('#play1', body).onclick = () => { const a = build(); if (a) submit(a); };
   schedulePreview(c, build, 0);

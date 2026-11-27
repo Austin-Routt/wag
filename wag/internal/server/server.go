@@ -431,8 +431,11 @@ type NewGameRequest struct {
 	// argued about with their actors and aliases, and the situation
 	// compared. Case is a case record (format wag-case/1) to make it from.
 	// A new game with neither has the default profile; the request recorded
-	// with the game holds the profile itself. A request recorded before step
-	// C5.2 has none, and its game replays without the profile's rules.
+	// with the game holds the profile itself. An export whose request was
+	// recorded before step C5.2 has none: it loads (/api/games/load) and
+	// replays without the profile's rules. A trace a model player recorded
+	// before then is replayed through a new game, which has a profile, so it
+	// replays with the build it was recorded with (docs/llm.md).
 	Profile *game.Profile   `json:"profile,omitempty"`
 	Case    json.RawMessage `json:"case,omitempty"`
 }
@@ -440,6 +443,9 @@ type NewGameRequest struct {
 // withProfile is the request of a new game with its profile: the case
 // record's, the one given, or the default.
 func (req NewGameRequest) withProfile() (NewGameRequest, error) {
+	if strings.TrimSpace(string(req.Case)) == "null" {
+		req.Case = nil // as if absent
+	}
 	if len(req.Case) > 0 {
 		if req.Profile != nil {
 			return req, fmt.Errorf("give a profile or a case record, not both")
@@ -452,6 +458,10 @@ func (req NewGameRequest) withProfile() (NewGameRequest, error) {
 	}
 	if req.Profile == nil {
 		req.Profile = game.DefaultProfile()
+	} else if strings.TrimSpace(req.Profile.Situation) == "" {
+		p := *req.Profile
+		p.Situation = game.DefaultProfile().Situation // the present one (D089)
+		req.Profile = &p
 	}
 	return req, nil
 }
@@ -990,18 +1000,19 @@ func (ss *Session) preview(a nascq.ProposedAction) *Preview {
 		p.Error = "the game is over"
 		return p
 	}
-	if _, err := gs.NASCQ.Validate(a, gs.Bridge()); err != nil {
+	// The game's own validation: the profile's rules around NASCQ's, so that
+	// the preview accepts what a turn accepts (an agent place the game binds).
+	va, err := gs.Validate(a)
+	if err != nil {
 		p.Error = err.Error()
 		return p
 	}
-	tmpl := nascq.ActionTemplate{Type: a.Type, TargetArgID: a.TargetArgID, AnswersCQID: a.AnswersCQID, TargetStmtID: a.TargetStmtID}
-	if va, err := gs.NASCQ.Validate(a, gs.Bridge()); err == nil {
-		tmpl.Locus, tmpl.LocusStmtID, tmpl.CaesAttackType = va.Locus, va.LocusStmtID, va.CaesAttackType
-		if sc := gs.NASCQ.GetScheme(a.SchemeID); sc != nil {
-			tmpl.ConclusionTemplateEN = sc.ConclusionTemplateEN
-		}
+	tmpl := nascq.ActionTemplate{Type: a.Type, TargetArgID: a.TargetArgID, AnswersCQID: a.AnswersCQID, TargetStmtID: a.TargetStmtID,
+		Locus: va.Locus, LocusStmtID: va.LocusStmtID, CaesAttackType: va.CaesAttackType}
+	if sc := gs.NASCQ.GetScheme(a.SchemeID); sc != nil {
+		tmpl.ConclusionTemplateEN = sc.ConclusionTemplateEN
 	}
-	p.Effect = gs.Effect(tmpl, a.VariableBindings)
+	p.Effect = gs.Effect(tmpl, va.VariableBindings)
 	before := gs.Adapter.StatementLabels()
 	var after map[string]caes.Label
 	texts := map[string]string{} // the changed statements, as the move would leave them
@@ -1197,7 +1208,7 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
-	gs, rep, err := s.kialoGame(b, depth, kialo.KeysByClaim)
+	gs, rep, err := s.kialoGame(b, depth, kialo.KeysByClaim, game.DefaultProfile())
 	if err != nil {
 		httpError(w, err, http.StatusBadRequest)
 		return
@@ -1212,8 +1223,9 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 
 // kialoGame builds the game of a Kialo discussion (graph.json), down to depth
 // (0: all of it), with its claims keyed as keys says (kialo.KeysByClaim, or
-// KeysByText to replay a game imported that way).
-func (s *Server) kialoGame(b []byte, depth int, keys string) (*game.GameState, *kialo.Report, error) {
+// KeysByText to replay a game imported that way), and with a profile (D094
+// (b); nil for a game imported before step C5.2, replayed as it was played).
+func (s *Server) kialoGame(b []byte, depth int, keys string, profile *game.Profile) (*game.GameState, *kialo.Report, error) {
 	d, err := kialo.Parse(b)
 	if err != nil {
 		return nil, nil, err
@@ -1228,7 +1240,9 @@ func (s *Server) kialoGame(b []byte, depth int, keys string) (*game.GameState, *
 	if err != nil {
 		return nil, nil, err
 	}
-	gs, err := kialo.Build(d, rels, rep, kialo.Config(), ad, n)
+	cfg := kialo.Config()
+	cfg.Profile, rep.Profile = profile, profile
+	gs, err := kialo.Build(d, rels, rep, cfg, ad, n)
 	if err != nil {
 		return nil, nil, err
 	}

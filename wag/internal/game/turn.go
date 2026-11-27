@@ -200,6 +200,16 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		}, nil
 	}
 
+	// S5 (D095 (3)): a question that refuses Other refuses it however its
+	// exception is argued. No argument of Other may conclude the exception,
+	// as a move of its own or about a statement on the board, and no move may
+	// presume it as a premise: either would make it out without the answer
+	// the question asks for.
+	if msg := gs.refusedException(argIDs, validated); msg != "" {
+		gs.Adapter.Restore(checkpoint)
+		return gs.rejectInvalid(player, action, msg), nil
+	}
+
 	// G1: a move must not restate an argument already in the graph (same
 	// scheme, conclusion and premises, whoever made it). Repeating a support
 	// move used to score it again every turn.
@@ -470,6 +480,38 @@ func (gs *GameState) applyAction(
 		}
 	}
 	return argIDs, presumptions, nil
+}
+
+// refusedException returns why a move's arguments, once placed, make out
+// the exception of a question that refuses Other (D095 (3)) without its
+// answer: an argument of Other that concludes it, or an argument that
+// presumes it as a premise; "" if none does. A scheme that backs the
+// question concludes it as the answer, which S5 checks at the question.
+func (gs *GameState) refusedException(argIDs []string, va *nascq.ValidatedAction) string {
+	s := gs.NASCQ.GetScheme(va.SchemeID)
+	free := s != nil && s.Free
+	for _, id := range argIDs {
+		arg := gs.Adapter.Graph.Arguments[id]
+		if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
+			continue // an exception argument's premise is not presumed
+		}
+		if free && arg.Conclusion != nil {
+			if cq := gs.NASCQ.RefusingQuestion(arg.Conclusion.Id, gs.bridge); cq != "" {
+				return fmt.Sprintf("S5: an argument of Other cannot conclude %s, the exception CQ %q asks about: that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
+					arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+			}
+		}
+		for _, p := range arg.Premises {
+			if p.Stmt == nil {
+				continue
+			}
+			if cq := gs.NASCQ.RefusingQuestion(p.Stmt.Id, gs.bridge); cq != "" {
+				return fmt.Sprintf("S5: a move cannot presume %s as a premise: it is the exception CQ %q asks about, and that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
+					p.Stmt.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+			}
+		}
+	}
+	return ""
 }
 
 // rejectInvalid penalizes and records an invalid move. An invalid move does

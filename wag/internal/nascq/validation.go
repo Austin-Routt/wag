@@ -346,7 +346,7 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 			concl = info.Opposite
 		}
 		if concl != "" {
-			if cq := n.refusingQuestion(concl, graph); cq != "" {
+			if cq := n.RefusingQuestion(concl, graph); cq != "" {
 				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)",
 					concl, cq, strings.Join(n.typedBackups(cq), ", "))
 			}
@@ -356,9 +356,9 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 	return va, nil
 }
 
-// refusingQuestion returns the question that refuses Other (D095 (3)) and
+// RefusingQuestion returns the question that refuses Other (D095 (3)) and
 // is asked at the exception stmt of an argument on the board, or "".
-func (n *NASCQ) refusingQuestion(stmt string, graph GraphQuerier) string {
+func (n *NASCQ) RefusingQuestion(stmt string, graph GraphQuerier) string {
 	for _, argID := range graph.Statement(stmt).ExceptionOf {
 		sid := graph.ArgumentSchemeID(argID)
 		for _, cqID := range n.askIndex[sid] {
@@ -713,6 +713,11 @@ func (n *NASCQ) WeightOf(s *ASNode) float64 {
 
 // typedBackups names the schemes that back a question other than Other:
 // its backup edges' and the thesis-independent ones.
+// BackupNames are the names of the schemes that back a question's answer,
+// but the user-defined one: the schemes an answer to a question that
+// refuses Other is made with (D095 (3)).
+func (n *NASCQ) BackupNames(cqID string) []string { return n.typedBackups(cqID) }
+
 func (n *NASCQ) typedBackups(cqID string) []string {
 	var out []string
 	for _, s := range n.GetBackupSchemes(cqID) {

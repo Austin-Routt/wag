@@ -17,6 +17,7 @@ import (
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/game"
 )
 
 // Discussion is the part of a captured Kialo discussion the import needs.
@@ -226,6 +227,11 @@ type Report struct {
 	// for a game exported before 2026-10-15 (no keys recorded), which is
 	// rebuilt as it was played.
 	Keys string `json:"keys,omitempty"`
+	// Profile is the game's profile (D094 (b)): the default one for a
+	// discussion imported since step C5.2, recorded so that the export
+	// replays with it; none for a game imported before, which replays
+	// without the profile's rules, as it was played.
+	Profile *game.Profile `json:"profile,omitempty"`
 }
 
 // How claims become statements.

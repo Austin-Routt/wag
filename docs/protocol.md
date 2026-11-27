@@ -125,7 +125,10 @@ The move:
   reply keeps its old message.
   Exact historical replay needs the original WAG build and parser as well as
   the other pinned inputs; a changed reading must be recorded as a migration
-  or a new replay result.
+  or a new replay result. Since step C5.2 a new game has a profile (D094
+  (b)): its prompt has a *Who decides* section and a move about an action it
+  does not hold must declare it, so a trace recorded before then replays
+  with the build it was recorded with (docs/game-rules.md).
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

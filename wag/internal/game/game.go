@@ -399,6 +399,12 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 		players[i] = newPlayer(id, name)
 	}
 
+	// A recommendation is written with its action's id: an alias in the claim
+	// would leave the claim apart from the arguments for its action, whose
+	// alias P1 reads as the id.
+	if config.Profile != nil {
+		config.Claim = config.Profile.canonicalClaim(config.Claim)
+	}
 	gs := &GameState{
 		Config:      config,
 		Players:     players,

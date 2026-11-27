@@ -106,13 +106,14 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 			return nil, err
 		}
 		depth, keys := 0, kialo.KeysByText // an export without keys was imported with claims merged by text
+		var profile *game.Profile // none: imported before step C5.2
 		if e.Import != nil {
-			depth = e.Import.Depth
+			depth, profile = e.Import.Depth, e.Import.Profile
 			if e.Import.Keys != "" {
 				keys = e.Import.Keys
 			}
 		}
-		if gs, rep, err = s.kialoGame(b, depth, keys); err != nil {
+		if gs, rep, err = s.kialoGame(b, depth, keys, profile); err != nil {
 			return nil, err
 		}
 	default:

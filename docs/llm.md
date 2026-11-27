@@ -96,7 +96,7 @@ When a file of a run cannot be written (a full disk, a folder that cannot be wri
    ./wag-llm report runs/flash-vs-greedy             # wins and rejected moves by seat and side
    ./wag-llm replay runs/flash-self/<file>.trace.jsonl
    ```
-   `replay` uses the recorded answers, so it makes no calls. It checks that the game sent the same requests and made the same decisions. It refuses a trace played with other scheme data (give that data with `--data`) and uses the context presets the trace recorded.
+   `replay` uses the recorded answers, so it makes no calls. It checks that the game sent the same requests and made the same decisions. It refuses a trace played with other scheme data (give that data with `--data`) and uses the context presets the trace recorded. A trace recorded before step C5.2 replays with the build it was recorded with: since then a new game has a profile, which changes the prompt and refuses a move about an undeclared action (docs/game-rules.md).
 
 ### The free tier: privacy and limits
 

@@ -442,6 +442,11 @@ func (gs *GameState) BuildObservation() *Observation {
 	// board.
 	actions := gs.NASCQ.EnumerateActions(gs.bridge, argIDs)
 	actions = append(actions, gs.NASCQ.EnumerateStatementActions(gs.bridge, gs.BoardStatements())...)
+	// The game binds an agent place to the profile's agent (P2): no player
+	// fills it, a person at the terminal included.
+	for i := range actions {
+		actions[i].Fixed = gs.agentFixed(actions[i])
+	}
 
 	// Collect scores.
 	scores := make(map[string]float64, len(gs.Players))

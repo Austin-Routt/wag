@@ -159,9 +159,11 @@ other way (step 6):
 One change of data identity for all of it (D094 a). Version 5 of this plan gave C5.2's order of
 work, the data at the switch, and the choices the decisions leave to the implementation; version
 5a corrects it after its independent check (in the workspace, verify/c5/c52: 5 errors, 15 warnings
-and 13 notes, each verified). The choices no decision makes are recorded as a refinement of D094,
-the developer's under the owner's mandate as D094 is; three questions go to the owner, and the plan
-keeps the decided text until they are answered.
+and 13 notes, each verified), and after the check of version 5a and the profile's code (5 errors, 9
+warnings and 10 notes, each verified, VERIFY-5a). The choices no decision makes are recorded as a
+refinement of D094, the developer's under the owner's mandate as D094 is; four questions go to the
+owner, and the plan keeps the decided text until they are answered, but for question 2, where the
+game applies the refinement's reading of D063 meanwhile (reversible).
 
 ### Order of work
 
@@ -185,8 +187,9 @@ then the switch, one commit that changes the data's identity once; then the revi
    ask what, what a question does while it is pending, who answers it and how, when it is closed,
    and what may answer. It formalizes today's behaviour; no golden game moves.
 4. **The generator's rules** (`wag-cli --game-gen`), each refusing a catalogue that breaks it, with
-   a test that plants the fault (written and tested: 3373558; applied with the switch, since today's
-   data breaks them): (a) one id is one question: every scheme that asks it asks it at the same
+   a test that plants the fault (written for version 5 at 3373558, then for version 5a, which checks
+   one formula and one text for every id, generates the text and adds (d) and (e); applied with the
+   switch, since today's data breaks them): (a) one id is one question: every scheme that asks it asks it at the same
    formula and kind of locus (D095 (1) for a backed id; for every id by the refinement of D094); (b)
    its record's `caes_mapping` is derived from that locus (premise: undermining; exception or
    argument: undercutter; conclusion: rebuttal), so the effect shown is the edge's, and
@@ -237,9 +240,11 @@ profile" is this record; "WAG's first profile" in D095 (3) is the rule set it be
   agent's when the game is made; one that recommends another actor's declared action is refused.
 - **Declaring an action:** a move that first argues about an action declares it (`declare`: its id,
   its actor, which every declaration names, D094 (b), and its aliases), recorded with the move and
-  joining the profile only if the move is accepted. The board declares a new action as the agent's,
-  saying so; computer players declare the agent's actions they name; a model player's prompt lists
-  the declared actions and the field.
+  joining the profile only if the move is accepted; a move declares only actions it binds. The board
+  and the terminal ask whose a new action is, the agent's unless the player chooses another actor;
+  computer players declare the agent's actions they name; a model player's prompt lists the declared
+  actions, the other actors' too, and the field. A re-declaration with the same actor adds only its
+  aliases; with another actor it is refused. Names and actors are compared as atoms.
 - **The rules** (game-rules.md), P1 (the declarations) and P2 before NASCQ's S0 to S9, the rest after
   them, each refusal saying which: **P1** an action variable is bound to a declared action, by id or
   alias, names compared as the board writes them (an alias reads as its action), the values a target
@@ -330,8 +335,8 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
   over two formulas is split, the scheme whose book question named it keeping it: CQ:likelihood
   (sign's becomes CQ:correlation, as D009 asks) and CQ:trustworthiness (position to know's becomes
   CQ:honesty).
-- **No backup edge from negative consequences (or the harm bridge) to CQ:side_effect**, as D009
-  says. D009's reason, D070's weighing reading of the side-effect question, has lapsed with D095 (1),
+- **No backup edge from negative consequences to CQ:side_effect**, as D009 says (D009 predates the
+  bridges; the harm bridge has none either). D009's reason, D070's weighing reading of the side-effect question, has lapsed with D095 (1),
   whose rebuttal route is "as CQ:opposite_consequences is", which positive consequences backs: the
   owner decides (question 1). Meanwhile a further bad consequence argued by negative consequences
   is played as a direct rebuttal of the conclusion.
@@ -348,6 +353,10 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
 2. P3: the actions argued in the game are the agent's (from D063), or only those of a scheme with an
    agent place (D094 (b)'s words)?
 3. Sign's answer at practical reasoning's rebuttal route: kept, or left to sign's family?
+4. Other's direct undercutter of a bridge whose premise is only that the consequence could be found
+   out: D095 (2) keeps direct counterarguments available, while D095 (3) and D053 refuse a bare
+   claim of knowability at the question. The game accepts it meanwhile (Other cannot conclude the
+   exception, nor presume it, VERIFY-5a E-b); should the refusal reach it?
 
 ## Item F: the answer contract, per route
 
@@ -358,8 +367,9 @@ rebuttal where an answer route is removed. Each expected outcome is written befo
 with a planted defect the test must catch:
 
 - **Accepted:** the legitimate answer, at the right target and locus, with its burden.
-- **Refused, with the rule that refuses it first** (S5 before S9; Q1; the cycle check; the
-  profile's P; the A2 rule), leaving the graph, the open questions and the journal unchanged: an
+- **Refused, with the rule that refuses it first** (the profile's P1 declarations and P2 before
+  NASCQ's S0 to S9, S5 before S9, Q1; P1's values, P3 and P4, the A2 rule, after them; the cycle
+  check, S5 for Other at a refused exception and G1 once the move is placed), leaving the graph, the open questions and the journal unchanged: an
   irrelevant answer, a circular one, one bound to the wrong target; for `better_means` an A2 that is
   A or its alias, another P or another G; Other at `worth_finding_out_first` (D095 (3)).
 - **Surviving:** the target's other questions and exceptions, and independent support.
@@ -409,6 +419,7 @@ Recording-1 (a paid reply recovered after a crash, with no second call), belongs
 ## Not in C5
 
 The other five game schemes' changes wait for their families; their fields move to the catalogue in
-C5.1, and in C5.2 only D009's listed changes reach them (their question texts, the split of shared
-questions over two formulas, the values scheme's description and sign's "generally"). 33.4's `fails_to_avert` and `harm_reduction` wait for a profile that includes them. The
+C5.1, and in C5.2 only D009's listed changes reach them (their question texts, the values scheme's
+description and sign's "generally"), with the refinement of D094's split of the questions shared over
+two formulas. 33.4's `fails_to_avert` and `harm_reduction` wait for a profile that includes them. The
 contexts' weights for today's schemes stay as they are (calibrated, plan §6).

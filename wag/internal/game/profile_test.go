@@ -193,20 +193,24 @@ func TestProfileDeclaredActions(t *testing.T) {
 	if c := gs.Adapter.Graph.Arguments[id].Conclusion.Id; c != "should_be_performed(tax_meat)" {
 		t.Errorf("the alias's argument concludes %s", c)
 	}
-	// A name already declared, an unknown actor: refused, nothing declared.
-	again := cons("tax_meat")
-	again.Declare = []nascq.ActionDecl{{ID: "meat_ban", Actor: "governments"}}
-	refused(t, gs, again, "P1: meat_ban is already declared")
+	// A name already declared as another actor's, an unknown actor, an
+	// action the move does not argue about: refused, nothing declared.
+	again := cons("meat_ban")
+	again.Declare = []nascq.ActionDecl{{ID: "meat_ban", Actor: "farmers"}}
+	refused(t, gs, again, "P1: meat_ban is already declared, as governments's action (the action ban_meat), not farmers's")
 	stranger := cons("fish_tax")
 	stranger.Declare = []nascq.ActionDecl{{ID: "fish_tax", Actor: "fishers"}}
-	refused(t, gs, stranger, `its actor "fishers" is none of the actors`)
+	refused(t, gs, stranger, "P1: the declaration of fish_tax names the actor fishers, none of governments, farmers")
 	if _, ok := gs.Profile.Action("fish_tax"); ok {
 		t.Error("a refused move's declaration joined the profile")
 	}
+	unargued := cons("tax_meat")
+	unargued.Declare = []nascq.ActionDecl{{ID: "tax_fish", Actor: "governments"}}
+	refused(t, gs, unargued, "P1: the move declares tax_fish but argues about no such action")
 	// A sound declaration on a move refused later (P3) joins nothing either.
-	late := cons("switch_crops")
-	late.Declare = []nascq.ActionDecl{{ID: "tax_fish", Actor: "governments"}}
-	refused(t, gs, late, "P3: A = switch_crops is farmers's action")
+	late := cons("tax_fish")
+	late.Declare = []nascq.ActionDecl{{ID: "tax_fish", Actor: "farmers"}}
+	refused(t, gs, late, "P3: A = tax_fish is farmers's action")
 	if _, ok := gs.Profile.Action("tax_fish"); ok {
 		t.Error("the declaration of a move refused after it joined the profile")
 	}

@@ -181,8 +181,12 @@ var Comparisons = []string{"surely", "sooner", "cheaper"}
 // declared returns a copy of the profile with a move's declarations added,
 // or why they cannot be. A declaration names its actor (D094 (b): "a
 // journaled move declares an action with its actor"): an actor nobody named
-// would let any agent pass (D063).
-func (p *Profile) declared(decls []nascq.ActionDecl) (*Profile, error) {
+// would let any agent pass (D063). A move declares only the actions it
+// argues about (argued: the atoms of the values its action places take),
+// in the move that first argues about each. A declaration of an action the
+// profile already holds, with the same actor, declares nothing new but the
+// aliases it adds; with another actor it is refused.
+func (p *Profile) declared(decls []nascq.ActionDecl, argued map[string]bool) (*Profile, error) {
 	q := p.clone()
 	for _, d := range decls {
 		d.ID, d.Actor = strings.TrimSpace(d.ID), strings.TrimSpace(d.Actor)
@@ -192,17 +196,58 @@ func (p *Profile) declared(decls []nascq.ActionDecl) (*Profile, error) {
 		if d.Actor == "" {
 			return nil, fmt.Errorf("P1: the declaration of %s names its actor, one of %s (D094 (b))", d.ID, strings.Join(q.actorIDs(), ", "))
 		}
-		for _, n := range append([]string{d.ID}, d.Aliases...) {
-			if a, ok := q.Action(n); ok {
+		actor, ok := q.actorID(d.Actor)
+		if !ok {
+			return nil, fmt.Errorf("P1: the declaration of %s names the actor %s, none of %s", d.ID, d.Actor, strings.Join(q.actorIDs(), ", "))
+		}
+		names := append([]string{d.ID}, d.Aliases...)
+		bound := false
+		for _, n := range names {
+			bound = bound || argued[carneades.TextToAtom(n)]
+		}
+		if !bound {
+			return nil, fmt.Errorf("P1: the move declares %s but argues about no such action: a move declares the actions it argues about (D094 (b))", d.ID)
+		}
+		var known *ProfileAction
+		for _, n := range names {
+			a, ok := q.Action(n)
+			switch {
+			case !ok:
+			case known != nil && a.ID != known.ID:
 				return nil, fmt.Errorf("P1: %s is already declared (the action %s)", n, a.ID)
+			default:
+				known = a
 			}
 		}
-		q.Actions = append(q.Actions, ProfileAction{ID: d.ID, Actor: d.Actor, Aliases: d.Aliases})
+		if known == nil {
+			q.Actions = append(q.Actions, ProfileAction{ID: d.ID, Actor: actor, Aliases: d.Aliases})
+			continue
+		}
+		if known.Actor != actor {
+			return nil, fmt.Errorf("P1: %s is already declared, as %s's action (the action %s), not %s's", d.ID, known.Actor, known.ID, actor)
+		}
+		for _, n := range names {
+			if _, ok := q.Action(n); !ok {
+				known.Aliases = append(known.Aliases, n)
+			}
+		}
 	}
 	if err := q.Check(); err != nil {
 		return nil, fmt.Errorf("P1: %v", err)
 	}
 	return q, nil
+}
+
+// actorID returns the id of the actor a name names, compared as atoms, as
+// actions' names are.
+func (p *Profile) actorID(name string) (string, bool) {
+	atom := carneades.TextToAtom(name)
+	for _, a := range p.Actors {
+		if carneades.TextToAtom(a.ID) == atom {
+			return a.ID, true
+		}
+	}
+	return "", false
 }
 
 // actorIDs are the profile's actors' ids, in order.
@@ -236,13 +281,24 @@ func (gs *GameState) beforeValidation(a nascq.ProposedAction) (nascq.ProposedAct
 		}
 		return a, nil, nil
 	}
-	p, err := gs.Profile.declared(a.Declare)
+	// A question argues about nothing: it declares nothing, and the scheme
+	// and values it may carry are not its own (S0 sets them aside).
+	s := gs.NASCQ.GetScheme(a.SchemeID)
+	if a.Type == "question" || s == nil {
+		if len(a.Declare) > 0 {
+			return a, nil, fmt.Errorf("P1: the move declares %s but argues about no action: a move declares the actions it argues about (D094 (b))", a.Declare[0].ID)
+		}
+		return a, gs.Profile, nil
+	}
+	argued := map[string]bool{}
+	for _, v := range nascq.SortedStringKeys(s.Variables) {
+		if x, ok := a.VariableBindings[v]; ok && s.Variables[v].Type == nascq.VarAction {
+			argued[carneades.TextToAtom(x)] = true
+		}
+	}
+	p, err := gs.Profile.declared(a.Declare, argued)
 	if err != nil {
 		return a, nil, err
-	}
-	s := gs.NASCQ.GetScheme(a.SchemeID)
-	if s == nil {
-		return a, p, nil
 	}
 	b := make(map[string]string, len(a.VariableBindings)+1)
 	for k, v := range a.VariableBindings {
@@ -251,7 +307,7 @@ func (gs *GameState) beforeValidation(a nascq.ProposedAction) (nascq.ProposedAct
 	for _, v := range nascq.SortedStringKeys(s.Variables) {
 		switch s.Variables[v].Type {
 		case nascq.VarAgent:
-			if x, ok := b[v]; ok && x != p.Agent {
+			if x, ok := b[v]; ok && carneades.TextToAtom(x) != carneades.TextToAtom(p.Agent) {
 				return a, nil, fmt.Errorf("P2: %s is the game's agent, %s, not %s (the profile)", v, p.Agent, x)
 			}
 			b[v] = p.Agent
@@ -267,6 +323,24 @@ func (gs *GameState) beforeValidation(a nascq.ProposedAction) (nascq.ProposedAct
 	}
 	a.VariableBindings = b
 	return a, p, nil
+}
+
+// Validate validates a move as a turn would, without playing it: the
+// profile's rules (P1 to P4) around NASCQ's (S0 to S9). The preview uses
+// it, so that it accepts the moves the game accepts.
+func (gs *GameState) Validate(a nascq.ProposedAction) (*nascq.ValidatedAction, error) {
+	a, p, err := gs.beforeValidation(a)
+	if err != nil {
+		return nil, err
+	}
+	va, err := gs.NASCQ.Validate(a, gs.bridge)
+	if err != nil {
+		return nil, err
+	}
+	if err := gs.afterValidation(va, p); err != nil {
+		return nil, err
+	}
+	return va, nil
 }
 
 // afterValidation applies the profile to the values a validated move binds,
@@ -314,16 +388,32 @@ func (gs *GameState) afterValidation(va *nascq.ValidatedAction, p *Profile) erro
 }
 
 // practicalClaim matches a recommendation, should_be_performed(A) or its
-// negation, and gives its action.
-var practicalClaim = regexp.MustCompile(`^¬?should_be_performed\(([^(),]+)\)$`)
+// negation, and gives its negation sign and its action.
+var practicalClaim = regexp.MustCompile(`^(¬?)\s*should_be_performed\s*\(\s*([^(),]*[^(),\s])\s*\)$`)
 
-// claimAction returns the action a claim recommends or advises against, or
-// "" if it is not a recommendation.
+// claimAction returns the action a claim recommends or advises against, as
+// written, or "" if it is not a recommendation.
 func claimAction(claim string) string {
-	if m := practicalClaim.FindStringSubmatch(strings.ReplaceAll(claim, " ", "")); m != nil {
-		return m[1]
+	if m := practicalClaim.FindStringSubmatch(strings.TrimSpace(claim)); m != nil {
+		return m[2]
 	}
 	return ""
+}
+
+// canonicalClaim is a recommendation written with its action's id: the
+// claim names the action the moves about it bind (P1 reads an alias as its
+// action), so that an argument for the action concludes the claim. A name
+// the profile does not hold is written as the atom the board makes of it.
+func (p *Profile) canonicalClaim(claim string) string {
+	m := practicalClaim.FindStringSubmatch(strings.TrimSpace(claim))
+	if m == nil {
+		return claim
+	}
+	id := carneades.TextToAtom(m[2])
+	if act, ok := p.Action(m[2]); ok {
+		id = act.ID
+	}
+	return m[1] + "should_be_performed(" + id + ")"
 }
 
 // CheckClaim reports why a game's claim cannot be argued under the profile:
@@ -347,7 +437,7 @@ func (p *Profile) withClaim(claim string) *Profile {
 	q := p.clone()
 	if a := claimAction(claim); a != "" {
 		if _, ok := q.Action(a); !ok {
-			q.Actions = append(q.Actions, ProfileAction{ID: a, Actor: q.Agent})
+			q.Actions = append(q.Actions, ProfileAction{ID: carneades.TextToAtom(a), Actor: q.Agent})
 		}
 	}
 	return q

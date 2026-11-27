@@ -148,7 +148,7 @@ func TestReviewKialoSourceSurvivesRepeatedExportLoad(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(s.kialoDir, "9", "graph.json"), graph, 0600); err != nil {
 		t.Fatal(err)
 	}
-	gs, rep, err := s.kialoGame(graph, 0, kialo.KeysByClaim)
+	gs, rep, err := s.kialoGame(graph, 0, kialo.KeysByClaim, game.DefaultProfile())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -177,5 +177,27 @@ func TestReviewKialoSourceSurvivesRepeatedExportLoad(t *testing.T) {
 		if len(ss.GS.Adapter.Graph.Arguments) != wantArgs {
 			t.Errorf("generation %d changed imported argument count", generation)
 		}
+		// The import's profile (D094 (b)) is recorded and comes back.
+		if ss.GS.Profile == nil || ss.GS.Profile.Agent != game.DefaultAgent {
+			t.Errorf("generation %d: the profile %+v", generation, ss.GS.Profile)
+		}
+	}
+	// A game imported before step C5.2 (its report records no profile)
+	// replays without the profile's rules, as it was played.
+	b, err := json.Marshal(ss.export(s.contexts))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var old Export
+	if err := json.Unmarshal(b, &old); err != nil {
+		t.Fatal(err)
+	}
+	old.Import.Profile = nil
+	loaded, err := s.load(&old, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if loaded.GS.Profile != nil {
+		t.Errorf("an import recorded before step C5.2 has the profile %+v", loaded.GS.Profile)
 	}
 }
