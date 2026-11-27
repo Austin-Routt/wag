@@ -75,3 +75,80 @@ test seam that ends the turn after the reply is recorded and before its move is 
 | A used reply is used again | G4 |
 | A reply of another turn is used | G2 (a reply for turn n+1 is planted and must not be used at turn n) |
 | A trace of another game is accepted | G5 |
+
+## Amendments before the tests ran (2026-11-27)
+
+Writing the code showed points the plan above gets wrong or leaves open. They are settled here, before
+any test of G ran; the cases and planted defects below are added on the same terms (outcomes written
+first).
+
+1. **Which reply is for this move.** The plan takes a reply to be for this move when the number of
+   moves made is its call's turn. But a seat's move refused by a rule is recorded in the history
+   with its penalty (`rejectInvalid`), so the number grows during the seat's own turn, while the
+   turn's calls keep its start. A reply is for this move when the moves made since its call are only
+   that seat's refused moves.
+2. **A reply that came with an error is a failed call.** The client keeps a provider's answer that
+   came with an error (a partial or blocked answer, or one the budget refused: `Complete`). The live
+   turn does not play it, and neither does a resumed one.
+3. **The turn goes on as the live turn would.** The turn in progress is read from its record: its
+   calls, attempt by attempt, and the decisions that used them. The replies no decision used are
+   played in their order, each only if the conversation it answered is the one the turn has then
+   (the same request); otherwise the provider is asked. When every recorded reply was used and
+   refused, the next attempt asks the provider with the conversation so far (the refused reply and
+   the reason), or the seat passes after its fourth. A failed call ends the turn, as it does live:
+   the next turn starts afresh.
+4. **A save that stopped half way.** A save writes the trace, then the export. A process that stops
+   between the two leaves a trace with decisions the export does not have, and perhaps a move. The
+   export lists its decisions. The resume keeps those, drops the trace's later decisions, and keeps
+   all the calls: a dropped decision's reply is played again (3), and a dropped move of a person is
+   made again by its player. The trace's start records the resume: its time, the last event kept,
+   and how many decisions were dropped (`resumed`).
+5. **The same game, set up the same way.** The trace's start must be the one this server would write
+   for the game: the same build, protocol, system prompt, model profiles and context presets, the
+   same request, seats, seed and clocks. Otherwise the resume is refused, naming what differs: a
+   trace has one start, and all its decisions were made under it. So a resumed game keeps its
+   clocks, unlike a loaded one: the move clock starts again for the turn in progress, and the game
+   clock counts the time played before the stop (from the start to the export's last save).
+6. **Computer players choose as they would have.** A random or greedy player draws from its own
+   random numbers, seeded at the start. In a resumed game, each draws again, on the boards it drew
+   on, what it drew before the stop, so that it goes on as in a game that did not stop, and the
+   game replays (`wag-llm replay`).
+7. **G6's game.** `wag-llm replay` plays games whose seats are all models or computer players, so G6
+   plays a model seat against a random player, not G2's game (a person against a model). Its test
+   is in wag-llm, whose server has no test seam: the stop is a copy of the game's folder taken while
+   the provider answers the seat's second attempt (its first reply refused), which is the folder a
+   process stopped then leaves.
+8. **An existing test changes.** `TestAFailedModelTurnThatCannotBeSavedHoldsTheModel` expected the
+   model to be asked twice in a turn whose saves fail: a reply that cannot be played, then a call
+   that fails. Under "kept before used", the turn stops after the first reply, which cannot be
+   saved: the model is asked once, and again only once that reply is saved and played.
+9. **"A reply of another turn" is planted in the game's calls.** A trace with a call for a later
+   move than its export's is refused at the resume (G5), so that defect cannot reach the turn
+   through a resume. G4b plants the reply in the game's record instead.
+
+The browser lists the data folder's games, each with Resume (the endpoint of 2).
+
+### Cases added
+
+| Case | Setup | Expected |
+|---|---|---|
+| G3b | As G3, but the recorded call has a reply and an error | The reply is not played; the provider is called again, once |
+| G4b | As G4, with a reply recorded for the seat's previous move and used by no decision (planted in the game's calls) | The next model turn calls the provider |
+| G5c | G1's folder, resumed by a server whose profile for the seat names another model | The resume is refused, naming the profiles |
+| G5d | A game whose model seat's first reply is refused by a rule (recorded in the history with its penalty), and whose turn stops after its second reply | The resumed turn plays the second reply as the second attempt; the provider is not called |
+| G5e | As G5d, but the recorded second call answered another conversation (its request edited in the trace) | The recorded second reply is not played; the provider is called once, for the second attempt |
+| G8 | G1's game played on in the same server (the kept reply's move made, and saved), then its export put back as it was before that move: the save stopped between the trace and the export | The resume drops the decision the export does not have and says so in the trace's start; the seat plays the call's reply again without asking the provider; the moves are those of the game played on, and the trace has the call once |
+| G9 | A game of a model seat against a random player, stopped after a model's reply in a later turn, resumed in a new server and played to its end; and the same game played without a stop | The two games make the same moves |
+| G10 | A game with clocks (a move clock; a game clock), stopped and resumed | It keeps both clocks: the move clock starts again, and the game clock has the time played before the stop counted; its trace's start is unchanged |
+
+### Planted defects added
+
+| Defect | Caught by |
+|---|---|
+| The number of moves alone tells which reply is for this move | G5d |
+| A reply that came with an error is played | G3b |
+| A recorded reply is played whatever conversation it answered | G5e |
+| The trace's decisions the export does not have are kept | G8 |
+| The resume does not compare the trace's start with this server's | G5c |
+| Computer players start their random numbers again | G9 |
+| The clocks are dropped | G10 |
