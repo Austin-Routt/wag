@@ -375,6 +375,8 @@ and the code):
 | RC11 | The replay: a thesis with an instance by the discussion, and a claim at one of its premises | The instance is played first, by Pro, with its scheme, for the main claim; the claim is played at it, not as a cascade; the report lists the instance apart, and the claims' counts are those of the claims |
 | RC12 | The replay: an instance by the discussion at a claim other than the thesis | Played right after that claim's own move, for that claim's statement |
 | RC13 | The replay: an instance by the discussion that the game refuses | Reported as not played, with the error; the claims at it are cascades, as at any instance not on the board |
+| RC14 | The replay: a bare denial at the premise a fragment states, which is the premise it backs in another claim's instance (13292.135 and .137 at 13292.108's circumstances, which 13292.1#2 has) (RC14 and RC15 written after the replay from e1d6aa6 showed the two failing, before their tests and the code) | A challenge of that premise in the argument the fragment backs, where it is a premise on the board, not in the fragment's own Other argument, whose conclusion it is; a second denial of the same premise is a duplicate |
+| RC15 | The replay: a move at a premise of a fragment that is not the premise it backs (13292.192 at 13292.6's stated link, whose goal is narrower than that of the premise it backs) | Not moved to the argument the fragment backs: played as before (that statement is not on the board) |
 
 ## 7. Out of this plan
 
