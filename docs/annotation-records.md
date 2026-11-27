@@ -72,8 +72,9 @@ The typing of predicate positions (which argument of a predicate is an agent and
   change to an item's coding is recorded in the item (`adjudication.recoded`). An entry written by
   the owner's verification (`verify_gold.py`, D086) also holds `verification_verdicts`: each verdict
   it applied or recorded, `{"item": "<claim>", "choice": "gold" | "none" | …, "at": "<the verdict's
-  time, RFC 3339, UTC>", "item_rev": "<sha256>"}`. A later import compares a verdict's time with these,
-  so that an older verdict cannot undo a newer one
+  time, RFC 3339, UTC>", "item_rev": "<sha256>" | null}`, null only for a verdict other than *gold*
+  given on a gold the script could not place, whose revision is unknown. A later import compares a
+  verdict's time with these, so that an older verdict cannot undo a newer one
   ([d086-first-gold.md](d086-first-gold.md) §5).
 - `items`: one per claim; a gold has every claim of `items.json`, in its order.
 
@@ -247,7 +248,7 @@ annotator has not annotated cannot be looked up, and is not reported.
 | R16 | Every field of §4–§8, each of its type; nulls only where §8 allows them, markers only where it allows them; no `re_parented`; `kialo_parent` and `kialo_relation` as `items.json` has them; a gold names its case and pins every input it is checked against | in part: bindings (every variable, a fragment's unstated ones marked, and only formulas it binds), the target and polarity nulls, an empty target, `re_parented`, one primary instance, a fragment's conclusion |
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
 | R18 | An instance whose fit is `explicit` has every premise-role formula (`role: premise`) explicit; an assumption or exception may be supplied (guidelines §5 item 6; since D086 round 1's draft 2, 2026-11-27) | yes |
-| R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it (guidelines §2 item 3; since the same draft) | no: an annotator's record is not asked for `cite` |
+| R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it: a claim `items.json` lists, of the batch or of a claim's context (its parents, ancestors, siblings and children) (guidelines §2 item 3; since the same draft; the context's claims since the independent review of that draft) | no: the guidelines ask an annotator to cite the claim, but the output format (guidelines §4) has no `cite` field, so a model's record has none to check |
 
 Rules that change in format 2:
 - **R4** (D039): a step whose cause is only proposed or possible is `cause_to_effect_modal`. Format 2

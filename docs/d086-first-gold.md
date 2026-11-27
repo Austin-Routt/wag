@@ -162,31 +162,45 @@ in the file has changed since (other items' drafts, other verifications).
 
 - It writes the item's `verified` (`by` "owner", `date` the verdict's, a UTC date, `item_rev` and
   `text_sha256` computed now) for a verdict *The gold is right* (`choice` "gold") that holds of the
-  item now, when the item is agreed in `d086-rounds.json` at the revision it has, and has no
-  unresolved value (R17).
+  item now, when the item is agreed in `d086-rounds.json` at the revision it has, its coding waits for
+  no decision of the owner (`pending`, §11), and it has no unresolved value (R17).
 - It removes `verified` for a verdict of another choice that holds of a verified item now: the owner's
   later verdict takes the verification back.
 - It records a verdict of another choice on an item not verified in the history entry only, as a
   receipt (the command says "receipt recorded"). The item does not change, but the verdict's time is
   kept, so that an older verdict *gold* imported later cannot verify the item.
+- A verdict of another choice whose gold it cannot place (one the repository does not hold, one that
+  is not valid JSON, or none recorded) it treats as any verdict of that choice, since such a verdict
+  can only leave the item unverified: it records the verdict, or takes a verification back, by the
+  order below, with the item's revision unknown, and lists it, to verify the item again.
 - It lists every verdict it does not write, and why:
-  - the item changed since the verdict, or the gold it was given on is not in the repository or is
-    not valid JSON;
-  - a claim not agreed in a round, or not in the gold;
-  - a verdict that recorded no gold;
+  - the item changed since the verdict;
+  - a verdict *gold* given on a gold it cannot place (as above), which it neither writes nor records;
+  - a claim not agreed in a round, or not in the gold, or whose coding waits for a decision of the
+    owner;
   - a verdict older than one already recorded for its item, or not ordered with it (below);
-  - a verdict the gold already records.
+  - a verdict the gold already records (its claim, choice and time).
 - It writes nothing at all when:
   - any other input the verdicts recorded differs from the repository's now (the claims' texts, the
     guidelines, `walton.yml`, …: the round's clarifications of the guidelines are made before the
     owner's build, not between it and the script's run);
   - an input is one the built-in dataset does not have (a folder dataset's "guidelines.md (built
     in)", say), or a verdict lacks one of the inputs' hashes;
-  - the two copies of the gold differ, or the gold is not valid JSON;
+  - the two copies of the gold differ, or the gold is not valid JSON, or two of its items name one
+    claim;
+  - the gold's history holds a receipt that is not one (`verification_verdicts`, below), or an item's
+    `verified` does not have R17's fields;
+  - `d086-rounds.json` cannot be read, or a claim's state in it is not one (a review state, the
+    revision agreed on exactly when it is agreed, the decisions it waits for by name);
+  - `items.json` is not the claims of the dataset;
   - the file is not a list of verdicts, or a JSON object in it repeats a member;
   - a verdict lacks its claim, choice, time or inputs, or its time is not an RFC 3339 time with a
-    time zone;
+    time zone, or not one of the calendar's (years 1 to 9999, in UTC too);
   - two verdicts name one claim.
+
+It reads every file whole and checks it before it writes anything, so that a malformed input stops it
+with a message (a malformed gold a verdict was given on only lists that verdict, as above), never with
+half a file written or a trace of the program.
 
 It writes `gold.json` and the built-in copy as the recoding scripts and `validate.py --repin` do
 (`json.dumps(…, indent=1, ensure_ascii=False)`), changing only the `verified` fields, the file's
@@ -210,20 +224,31 @@ The dashboard stamps each verdict with its time (RFC 3339, to the nanosecond, wi
 verification's `date` is the UTC date of that time.
 
 The script records each verdict it applies or records in the history entry's
-`verification_verdicts`: the claim, the choice, the time in UTC and the item's revision. It compares
-each new verdict with the latest so recorded for its item:
+`verification_verdicts`: the claim, the choice, the time in UTC and the item's revision (null for a
+verdict whose gold it cannot place). It compares each new verdict with the latest so recorded for its
+item:
 
 - **An older verdict is not written.** An old file imported again cannot undo a newer verdict.
+- **A verdict already recorded is not written again.** One whose claim, choice and time a receipt
+  holds changes nothing, so that a file imported again changes no byte, whatever its order.
 - **Verdicts of different choices at the same time are not ordered.** The item is left unverified,
   whichever comes first: a verdict *gold* at that time is not written, and a verdict of another
   choice at that time takes a verification back. This lasts until a newer verdict. Of two recorded
   verdicts at one time, the one other than *gold* counts as the latest.
-- **A confirmation records its time.** A verdict *gold* on a verified item, later the same day,
-  records its time, so that a verdict between the two cannot take the verification back.
-- **A verification with only a date cannot be ordered.** A verification whose time is not recorded
-  (made before the times were kept, or by hand) has only its date. A verdict of another choice on
-  that date, or any verdict before it, is not written, whatever else the history records for the
-  item.
+- **A verification's time is recorded** when the latest verdict the history records for its item is
+  a *gold* of the verification's date, at the revision verified: the verdict that wrote it, or a
+  confirmation of it. Otherwise (made by hand, made before the times were kept, or made by hand
+  after a later verdict was recorded) it has only its date. An older receipt *gold* of the same date
+  and revision does not record its time: that verification may have been taken back and made again.
+- **A confirmation records its time.** A verdict *gold* on a verification whose time is recorded,
+  later the same day, records its time, so that a verdict between the two cannot take the
+  verification back.
+- **A verification with only a date cannot be ordered with a verdict of that day.** A verdict of an
+  earlier day is older, and is not written. A verdict of another choice on that day is not written.
+  Nor is a verdict *gold* on that day that would leave the verification as it is: it is not recorded,
+  since its receipt would seem to record the verification's time. A verdict of a later day is
+  ordered after it: a *gold* writes the verification anew, its time recorded; one of another choice
+  takes it back. All this whatever else the history records for the item.
 
 These receipts keep the order of the imports; they do not authenticate the owner. The run's
 `human.json`, committed in `verdicts/`, stays the record of the verdicts themselves.
@@ -268,6 +293,14 @@ The script:
 | V32 | A gold that repeats a member; separately, a verdict given on an earlier gold (given with `--also`) that is not valid JSON | The first refused, nothing written; the second not written, listed |
 | V33 | A verification at a time, then removed by hand; a *none* at the same time; then the *gold* imported again (added with the code: V26 does not reach a verdict that ties with a *gold* on an item no longer verified) | The *none* recorded; the *gold* not written; the item unverified |
 | V34 | A verdict *gold* on a claim agreed in its round whose coding waits for an owner's decision (`d086-rounds.json`, `pending`); a *none* on such a claim; a `pending` that is not a list of names (added with draft 2, §11) | The *gold* not written, listed with the decisions it waits for; the *none* recorded as for any item; the malformed rounds file refused, nothing written |
+| V35 | A verification of the 28th made by hand (no receipt); a *gold* at 08:00 that day; then a *none* at 12:00 that day (V35-V42 written after the independent review of draft 2, before their tests) | Neither written, each listed; the gold unchanged by both; the verification stands |
+| V36 | A *gold* at 08:00 on the 28th (it verifies), a *none* at 12:00 (it takes the verification back), a verification of the 28th made by hand, then a *none* at 13:00 | The last not written, listed; the verification stands |
+| V37 | A verification of the 28th made by hand; a *gold* of the 29th; then a *none* later on the 29th | The *gold* writes the verification anew, dated the 29th, its receipt recorded; the *none* takes it back |
+| V38 | A *none* of the 30th given on a gold the repository does not hold, on an item not verified; then a *gold* of the 28th from another run | The *none* recorded, its `item_rev` null, listed to verify again; the *gold* not written; the item unverified |
+| V39 | A verification at 10:00 on the 28th, then a *none* of the 30th given on a gold the repository does not hold; separately, on items not verified, a *gold* given on such a gold, a *none* given on a gold that is not valid JSON, and a *none* that recorded no gold | The *none* takes the verification back, listed to verify again; the *gold* neither written nor recorded; the other two recorded, each `item_rev` null, listed to verify again |
+| V40 | A *none* and an *unsure* at one time on an item not verified, imported in turn, then each again | Two receipts; the repeats change no byte, each listed as already recorded |
+| V41 | A gold whose history holds `verification_verdicts` null, or a number, or a receipt whose `item_rev` is a list, or a receipt *gold* whose `item_rev` is null, or a receipt whose time leaves the calendar in UTC; one in which an item's `verified` does not have R17's fields (its `item_rev` a list; a string); one with two items for one claim | Each refused, naming what is wrong; nothing written; no trace of the program |
+| V42 | A verdict time that leaves the calendar in UTC (`0001-01-01T00:00:00+23:59`, `9999-12-31T23:59:59-23:59`); a rounds file nested deeper than the parser reads | Refused; nothing written; no trace of the program |
 
 The dashboard:
 
