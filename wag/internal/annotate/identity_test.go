@@ -415,11 +415,13 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// D086's round-1 draft (2026-11-27): 13292.141, .182 and .198 name the
 	// causal step they answer (target_instance, target_formula, cq; .182 and
 	// .198 at its exception, target_part), as 13292.12 does, whose target
-	// differed already; the fragments 13292.6, .11 and .218 leave unstated
-	// the variables of the formulas they do not state (bindings, instances);
-	// .182 and .198 conclude the exception (instances).
-	want := map[string]float64{"scheme": 0.88, "instances": 0.72, "target_formula": 0.84, "role": 0.98,
-		"target_part": 0.94, "cq": 0.84, "target_instance": 0.88, "bindings": 0.94}
+	// differed already; 13292.202, a mitigation, is at the conclusion of the
+	// argument that cites the harm it mitigates, 13292.127#2 (target_instance,
+	// target_part, target_formula); the fragments 13292.6, .11 and .218 leave
+	// unstated the variables of the formulas they do not state (bindings,
+	// instances); .182 and .198 conclude the exception (instances).
+	want := map[string]float64{"scheme": 0.88, "instances": 0.72, "target_formula": 0.82, "role": 0.98,
+		"target_part": 0.92, "cq": 0.84, "target_instance": 0.86, "bindings": 0.94}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -1058,8 +1060,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// format 2 name the same target instance everywhere but where
 	// D008-D074's recode moved a target to the modal argument a bridge
 	// carries (13292.12, .233, .43), and where D086's round-1 draft named the
-	// causal step a claim answers (13292.12, .141, .182, .198).
-	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true}
+	// causal step a claim answers (13292.12, .141, .182, .198) or the argument
+	// whose conclusion a mitigation amends (13292.202, at 13292.127#2).
+	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {

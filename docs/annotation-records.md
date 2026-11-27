@@ -328,7 +328,11 @@ claim it did not review as unresolved too.
     guidelines §5 item 6 leaves those of formulas the fragment does not state unstated: annotators
     who follow the guidelines disagree with the gold on their bindings until one of the two changes.
 
-  Round 1 of the first gold's draft (2026-11-27, `d086-first-gold.md`) names the causal step for all
-  four targets, and applies §5 item 6 to 13292.6, .11 and .218; 13292.108 keeps every variable
+  Round 1 of the first gold's draft (2026-11-27, `d086-first-gold.md` §10) names the causal step for
+  all four targets, and applies §5 item 6 to 13292.6, .11 and .218; 13292.108 keeps every variable
   bound, since the thesis has no argument and the fragment carries the environmental argument that
-  eleven targets point into: a question for the other reviewer and the owner.
+  eleven targets point into: a question for the other reviewer and the owner. Two more targets that
+  format 1 moved for the same reason came to light: 13292.202, a mitigation, which the draft puts at
+  the conclusion of the argument that cites the harm (13292.127#2), where both annotators put it; and
+  13292.208, at 13292.104#1's better-means premise, which both annotators and its own note put at
+  13292.104#2's circumstances (round 2 takes it up).

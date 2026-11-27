@@ -278,45 +278,106 @@ The independent check of version 1 (in the workspace, `verify/d086/`):
 The developer's readings came first (in the workspace, `verify/d086/round1-readings.md`: the 16 claims
 of version 1's round, then the 12 new to version 2's), then the comparison with the reference, A and B.
 `recode_d086_r1.py` wrote the draft into the gold, each item with its `adjudication.recoded` entry;
-`d086-rounds.json` has every claim of round 1 at draft 1, not reviewed.
+`d086-rounds.json` has every claim of round 1 at draft 1, not reviewed. Its first version (6e9b28c) was
+checked independently before any review (the workspace's `verify/d086/DRAFT1-CHECK.md`: three errors,
+five warnings, eight notes, each confirmed against the files); the corrected script runs again from the
+reference, so draft 1 is one record. What the corrections changed is listed at the end.
 
-- **Changed (7).** 13292.12 at 13292.9#2's `causes(tax_meat,meat_industry_harmed)` (28 CQ1: a
-  mechanism for the link) and 13292.141 at 13292.2#2's `causes(meat_production,significant_ghg_emissions)`
-  (28 CQ2: data for the link), both for; 13292.182 and .198 at 13292.180#2's exception
-  `interference(reduced_meat_consumption)` (28 CQ3), against, their own arguments concluding it (R8):
-  each names the causal step it answers, as both annotators aimed it. 13292.6, .11 and .218 bind only
-  the variables of the formulas they state, list only those formulas, and leave their conclusions,
-  which name the action, null; their challenge records at formulas they no longer list are left to the
-  arguments they are fragments of (13292.108, .118), which record the same challenges.
-- **Kept (21),** each with its reason: the developer's reading matched the reference, or where it did not
+- **Changed (8).** 13292.12 at 13292.9#2's `causes(tax_meat,meat_industry_harmed)` and 13292.141 at
+  13292.2#2's `causes(meat_production,significant_ghg_emissions)`, both the book's 28 CQ1 (a mechanism
+  offered for the link), for; 13292.182 and .198 at 13292.180#2's exception
+  `interference(reduced_meat_consumption)` (28 CQ3), against, their own arguments concluding it (R8);
+  13292.202, a mitigation, at the conclusion of the argument that cites the harm it mitigates,
+  13292.127#2's `¬should_be_performed(tax_meat)` (OC6): each names what it answers, as both annotators
+  aimed it, where format 1's rule of a primary instance's formulas had kept it from that. 13292.6, .11
+  and .218 bind only the variables of the formulas they state, list only those formulas, and leave
+  their conclusions, which name the action, null; their challenge records at formulas they no longer
+  list are left to the arguments they are fragments of (13292.108, .118), which record the same
+  challenges.
+- **Joined (3).** 13292.9, .2 and .180 (rounds 2 and 3 by the measure) had challenge records that named
+  the retargeted claims at their old places. As §3 has it, an item a draft changes joins the round:
+  those records are put right, the missing ones at the causal steps added (13292.9#2's 28 CQ1,
+  13292.180#2's 28 CQ3), and the three are drafted and reviewed with round 1 (`d086-rounds.json` marks
+  them `joined`); otherwise their codings are kept.
+- **Kept (20),** each with its reason: the developer's reading matched the reference, or where it did not
   (13292.46: the argument from rules fits what the claim states; 13292.8: 13292.115 is a consequence
   argument, not practical reasoning, so 13292.8 is no fragment of it), the guidelines decide for the
-  reference. Notes that told a coding's history in dated additions are rewritten as one current
-  account (the history is in the recoded entries); 13292.147 names candidate C017.
-- **Checks.** `validate.py` (R2-R17) passes; the agreement of annotators A and B is unchanged. Two
-  planted-defect tests of `test_validate.py`, their Go counterparts and three more Go tests named the
-  items the draft changed (13292.12's old target, 13292.6 as a fully bound fragment or as binding the
-  agent); each now plants the same defect in another item (13292.108, the gold's fully bound fragment;
-  13292.45, which binds the agent and into which nothing points; 13292.12 at another instance of
-  13292.9), and the two rules they guard still catch their planted defects. `TestAgreementFieldsAcrossFormats`
-  pins the new figures of the format-1 gold against the format-2 one (each change above accounted for),
-  and the target-instance test lists the four new moves. `test_verify_gold.py`'s V15 sets the round state
-  it tests instead of reading the repository's. The replay: 13292.12, .182 and .198, played before, are
-  cascades now, with 13292.141 (the replay does not play the secondary causal steps they answer): 43
-  claims played instead of 46; the fragments play as before; the thesis stays out.
+  reference. 13292.108 keeps every variable bound (question 1).
+- **Confidence.** Nine causal steps whose confidence the N8 note capped "until the first gold's draft"
+  (13292.9#2 and #3, .12#1 and #2, .36#2 and #3, .180#2, .192#1 and #2) have it set on their merits,
+  0.55: the link stated, the cause's possibility supplied (fit stays `reconstructed`, §2 item 2).
+  13292.14's two steps keep the cap until round 2.
+- **Notes.** Notes and challenge notes that told a coding's history in dated additions, described a
+  coding the item no longer has, or said that the game asks a question at the conclusion only "until
+  workstream E" (it asks it there by design since step C5.2, the rebuttal route beside the exception's
+  question) are rewritten as one current account; the history is in the recoded entries and
+  `gold-format1.json`. 13292.147 names candidate C017. The gold's status says who made the material:
+  language models (the batch's adjudication, and the developer's drafts), no item verified by a person
+  yet; `verify_gold.py` writes the same words when no verification is left.
+- **Checks.** `validate.py` (R2-R17) passes. Each item's record names exactly the fields its diff against
+  the reference changed (`verify/d086/records_check.py`, which finds the one omission of the first
+  version). `d086_rounds.py` gives the same rounds from the reference; the agreement of annotators A and
+  B is unchanged. The tests that named items the draft changed now plant the same defects elsewhere:
+  `test_validate.py`'s R13 test plants its missing formula in another instance of 13292.9, and its R14
+  test picks an item that binds the agent and into which nothing points (it finds 13292.190); their Go
+  counterparts use 13292.108, the gold's fully bound fragment, 13292.45 for the agent, and 13292.9#1;
+  `TestFormat2OnePrimaryAndFragmentConclusions` still plants in 13292.6. The two rules still catch their
+  planted defects (`verify/d086/mutants-d086-r1-tests.py`). If question 1 goes against the draft,
+  the fully bound fragment cases need a constructed fragment. `rename()` leaves a fragment's null
+  conclusion alone, and no longer reads it as a formula of the instance. `TestAgreementFieldsAcrossFormats`
+  pins the new figures of the format-1 gold against the format-2 one (each change above accounted for)
+  and the target-instance test lists the five new moves. `test_verify_gold.py`'s V15 sets the round
+  state it tests instead of reading the repository's, and V6b checks the status written when every
+  verification is taken back. The replay: 13292.12, .182, .198 and .202, played before, are cascades
+  now, with 13292.141 (a cascade before too: the premise it targeted was not on the board): 42 claims
+  played instead of 46; the fragments play as before; the thesis stays out.
+- **The corrections of the first version (6e9b28c).** 13292.108's note and record counted eight targets
+  that §5 item 6 would leave without a formula: seven (the four at the stated circumstances keep
+  theirs). 13292.11's record omitted its instance note. The records of 13292.9, .2 and .180 still named
+  the retargeted claims (hence Joined). 13292.141 read as data (28 CQ2), though it offers a mechanism
+  and cites nothing (28 CQ1, as 13292.2's own record has it). 13292.202 now names the argument both
+  annotators aimed at (question 2 asks the other way). 13292.12's record at its interference no longer
+  says that 13292.45 and .194 answer there. 13292.25's note now says that the claim names a way to
+  avoid the cost (its premise), and argues the cost too slight, not avoided by a substitute. The caps,
+  the status, the challenge notes and the fragments' reasons for their unstated variables (13292.6's
+  S1, 13292.218's A) as above.
 
 Open for the review and the owner, each said in the items' notes:
 
 1. 13292.108: does a fragment whose parent has no argument carry that argument, every variable bound,
-   or does §5 item 6 apply to it too, leaving eight of the eleven targets into it without a formula?
+   or does §5 item 6 apply to it too, leaving seven of the eleven targets into it without a formula?
    Either way the guidelines should say.
-2. 13292.202: a mitigation that replies to a weighing claim, at the consequence the weighing relies on
-   (OC10; the reference's), or at the conclusion of the argument that cites the harm (OC6; 13292.127#2)?
+2. 13292.202: a mitigation that replies to a weighing claim. The draft puts it at the conclusion of the
+   argument that cites the harm (OC6; 13292.127#2), where both annotators put it (at 13292.127's
+   conclusion, when that argument was its primary). The reference had it at the consequence the
+   weighing relies on, a premise of 13292.127#1, since format 1 required a formula of the primary
+   instance once the weighing became 13292.127's primary (D055); OC10 has a reply to a weighing claim
+   attack the claim's own instance, as 13292.204 does. Which governs a mitigation?
 3. 13292.194 (and 13292.45, round 2): a mitigation at 13292.12's predicted harm (its primary step's
-   conclusion; the reference's), or at 13292.12#3, the argument that cites the harm against the tax?
-4. 28 CQ1 or CQ2: the draft reads a mechanism offered for a causal link as answering CQ1 (13292.12) and
-   data offered for it as answering CQ2 (13292.141). Should the guidelines say so?
-5. A fragment's premises: the draft lists only the formulas it states, not the others whose variables
-   it binds (13292.6 lists no `possible_goal(G)`). Should the guidelines say so?
-6. The replay's cascades: playing the secondary instances that claims target is a change to `to_wag.py`,
-   outside this plan (§7), proposed as the next step after round 1.
+   conclusion; the reference's and both annotators'), at 13292.12#3 (the argument that cites the harm
+   against the tax), or a 28 CQ3 answer at 13292.12#1's interference (the mechanism blocked)? The draft
+   keeps the first: the measures are the agent's own action (case.json), unlike the substitutes of
+   13292.182 and .198, which are what people would do.
+4. 28 CQ1 or CQ2: the draft reads a mechanism offered for a causal link as answering CQ1 (13292.12,
+   13292.141) and data offered for it as answering CQ2 (13292.46's beef figures bear on 13292.2#2's
+   CQ2). Nothing checks the choice: the book's two questions sit at the same formula. Should the
+   guidelines say so?
+5. A fragment's premises: the draft lists only the formulas a fragment states, not the parent's others
+   whose variables it binds (13292.6 lists no `possible_goal(G)`), nor a formula the claim leaves to
+   the parent (13292.218 names the tax only as "it": the transition is 13292.118's). §2 item 3 says no
+   premise may go unlisted because it is implicit; the draft reads §5 item 6 as the rule for a
+   fragment, whose implicit premises are its parent's to list. Should the guidelines say so?
+6. The replay's cascades: the replay plays each claim's primary instance and a secondary one that
+   carries it, so a claim at another secondary instance is not played. Four of the five target causal
+   steps, which the game does not play yet (`cause_to_effect` and its modal form are a coverage gap):
+   a replay that played those steps could play them only with Other, whose premises and exceptions are
+   not on the board, so they become playable when the game takes the causal schemes. 13292.202's
+   target, the starvation argument 13292.127#2, is a consequence argument the game has: playing it is
+   a change to `to_wag.py`, outside this plan (§7). Is there a reason the gold should not target
+   secondary instances?
+
+Taken up in round 2, not in this draft: 13292.208's target, which format 1 also moved (to 13292.104#1's
+better-means premise; both annotators and its own note put it at 13292.104#2's circumstances
+`current_circumstances(farming_industry_not_meat_is_problem)`, which it contradicts); 13292.121's role
+kind `side_effect`, format 1's label (§5 item 3 makes it a value of `role.move`); 13292.14's capped
+causal steps; and the notes of 13292.7, .115 and .121 that still say "until workstream E".

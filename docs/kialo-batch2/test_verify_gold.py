@@ -207,6 +207,19 @@ class VerifyGold(unittest.TestCase):
         v = self.validate()
         self.assertEqual(v.returncode, 0, v.stdout + v.stderr)
 
+    def test_v6b_every_verification_taken_back(self):
+        # With none left, the status is the drafts' own again, word for word (who made the material).
+        self.agree('13292.6')
+        self.run_script([verdict('13292.6', 'gold', self.bytes)])
+        g = load_json(self.gold)
+        self.assertIn('1 of its 50 items are verified', g['status'])
+        self.assertIn('made by language models', g['status'])
+        r = self.run_script([verdict('13292.6', 'unsure', read(self.gold), at='2026-11-30T08:00:00Z')])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        g = load_json(self.gold)
+        self.assertNotIn('verified', self.items()['13292.6'])
+        self.assertEqual(g['status'], json.loads(self.bytes)['status'])
+
     def test_v7_a_claim_not_in_the_gold(self):
         r = self.run_script([verdict('13292.99999', 'gold', self.bytes)])
         self.assertEqual(r.returncode, 0, r.stderr)

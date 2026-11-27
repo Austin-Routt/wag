@@ -162,12 +162,14 @@
    "fields": [
     "scheme"
    ],
-   "draft": 0,
-   "review": "not drafted",
+   "draft": 1,
+   "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "joined": 1,
+   "joined_why": "its challenge record at the modal premise named 13292.12, which backs its causal step 13292.9#2 now"
   },
   "13292.108": {
    "round": 1,
@@ -237,12 +239,14 @@
    "round": 3,
    "why": "the three codings agree on every core field",
    "fields": [],
-   "draft": 0,
-   "review": "not drafted",
+   "draft": 1,
+   "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "joined": 1,
+   "joined_why": "its challenge record at the consequence premise named 13292.182 and .198, which answer its causal step 13292.180#2 now"
   },
   "13292.36": {
    "round": 1,
@@ -450,12 +454,14 @@
     "fit",
     "scheme"
    ],
-   "draft": 0,
-   "review": "not drafted",
+   "draft": 1,
+   "review": "not reviewed",
    "agreed_rev": null,
    "agreed_by": null,
    "agreed_date": null,
-   "objections": []
+   "objections": [],
+   "joined": 1,
+   "joined_why": "its challenge record at the classification premise named 13292.141, which backs its causal step 13292.2#2 now"
   },
   "13292.6": {
    "round": 1,

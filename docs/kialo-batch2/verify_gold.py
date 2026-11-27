@@ -159,11 +159,12 @@ def history_versions(wanted):
 
 def status_text(n, total):
     if n == 0:
-        return ('Development material (D086): no item is verified by a person yet. The first gold is drafted '
-                'from it, round by round (docs/d086-first-gold.md).')
+        return ('Development material (D086): made by language models (the batch\'s adjudication, and the '
+                'developer\'s drafts of the first gold, round by round: docs/d086-first-gold.md); no item is '
+                'verified by a person yet.')
     return (f'The first gold, in part (D086): {n} of its {total} items are verified by the owner (each '
             'such item\'s `verified`), and each is gold while it is the revision verified (R17). The '
-            'others are development material.')
+            'others are development material, made by language models.')
 
 
 def main(argv):

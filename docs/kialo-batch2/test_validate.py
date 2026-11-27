@@ -87,7 +87,8 @@ def rename(it, ins, old, new, records=True):
     the instance walton.yml's."""
     def sub(f):
         return re.sub(r'(?<![A-Za-z0-9_])' + re.escape(old) + r'(?![A-Za-z0-9_])', new, f)
-    mine = {p['formula'] for p in ins['premises']} | {ins['conclusion']['formula']}
+    # A fragment's null conclusion is no formula: a record with no formula is not the instance's.
+    mine = ({p['formula'] for p in ins['premises']} | {ins['conclusion']['formula']}) - {None}
     ins['bindings'] = {k: (new if v == old else v) for k, v in ins['bindings'].items()}
     for p in ins['premises']:
         p['formula'] = sub(p['formula'])

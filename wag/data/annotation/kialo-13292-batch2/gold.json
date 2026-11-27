@@ -14,7 +14,7 @@
   "nascq/critical_questions.json": "d2300b06194a61c850aa8198340b5b35903f5858316c69f12607a7d7b2f71435",
   "nascq/edges.json": "724e46b0c83214cf2e4843701aadcb0f4a7d0ec91ef5cfa55979cffd4eacd63c"
  },
- "status": "Development material (D086): no item is verified by a person yet. The first gold is drafted from it, round by round (docs/d086-first-gold.md).",
+ "status": "Development material (D086): made by language models (the batch's adjudication, and the developer's drafts of the first gold, round by round: docs/d086-first-gold.md); no item is verified by a person yet.",
  "history": [
   {
    "date": "2026-11-24",
@@ -34,7 +34,7 @@
   {
    "date": "2026-11-27",
    "by": "developer (D086 draft 1)",
-   "what": "Round 1 of the first gold, draft 1 (D086; docs/d086-first-gold.md, d086-rounds.json): 28 claims drafted. Changed: 13292.12, .141, .182 and .198 name the causal step they answer (28 CQ1, 28 CQ2, 28 CQ3), which format 1 had kept them from; the fragments 13292.6, .11 and .218 bind only the variables of the formulas they state (guidelines §5 item 6). Kept, with the reason in each item's record: the other 21, among them 13292.108, which carries the environmental argument (a question for the review and the owner). Notes rewritten as one current account where they told a history; candidate C017 named for 13292.147."
+   "what": "Round 1 of the first gold, draft 1 (D086; docs/d086-first-gold.md, d086-rounds.json): 28 claims drafted, and three more that the draft changed and so joined the round (13292.9, .2, .180). Changed: 13292.12, .141, .182, .198 and .202 name what they answer, which format 1 had kept them from (13292.9#2 and 13292.2#2 at the book's 28 CQ1, 13292.180#2's exception at 28 CQ3, and 13292.127#2's conclusion for the mitigation 13292.202); the fragments 13292.6, .11 and .218 bind only the variables of the formulas they state (guidelines §5 item 6). Kept, with the reason in each item's record: the other 20 of the round and the three joined items, whose records of the retargeted claims are put right; among them 13292.108, which carries the environmental argument (a question for the review and the owner). Nine causal steps capped by the N8 note have their confidence set on their merits. Notes and challenge notes that told a coding's history, or that the game asks a question at the conclusion only until workstream E, are rewritten as one current account; candidate C017 named for 13292.147. Corrected before any review, after an independent check of its first version."
   }
  ],
  "items": [
@@ -374,7 +374,7 @@
        "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
        "en": "The action 'governments put a tax on meat' may bring about 'tax revenues are reduced'.",
        "status": "explicit",
-       "note": "\"could actually\" marks a possibility, not a firm prediction (33.2 CQ1). Since 2026-11-25: the modal premise of negative_consequences_modal (D008)"
+       "note": "\"could actually\" marks a possibility, not a firm prediction: the modal premise of negative_consequences_modal (D008)"
       },
       {
        "role": "premise",
@@ -418,7 +418,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 1: tax -> meat industry harmed",
@@ -452,7 +452,7 @@
       "formula": "may_occur(meat_industry_harmed)",
       "en": "An event 'the meat industry is harmed' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). First link of the chain tax -> harm to the meat industry -> lower tax revenue."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11). First link of the chain tax -> harm to the meat industry -> lower tax revenue."
     },
     {
      "id": "13292.9#3",
@@ -462,7 +462,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 2: meat industry harmed -> revenue reduced",
@@ -497,7 +497,7 @@
       "formula": "may_occur(tax_revenue_reduced)",
       "en": "An event 'tax revenues are reduced' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). Second link: harm to an industry that pays substantial taxes lowers tax revenue."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11). Second link: harm to an industry that pays substantial taxes lowers tax revenue."
     },
     {
      "id": "13292.9#4",
@@ -571,7 +571,7 @@
      "type": "likelihood",
      "instance": "13292.9#1",
      "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
-     "note": "\"could\"; 13292.12 backs it with a mechanism. Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_likelihood"
+     "note": "'could'; 13292.12 backs the link with a mechanism at its first causal step, 13292.9#2 (28 CQ1)"
     },
     {
      "cq": "33.2 CQ2",
@@ -579,7 +579,7 @@
      "type": "evidence",
      "instance": "13292.9#1",
      "formula": "may_bring_about(tax_meat,tax_revenue_reduced)",
-     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_evidence"
+     "note": "the claim cites nothing for the possibility"
     },
     {
      "cq": "33.2 CQ3",
@@ -587,7 +587,7 @@
      "type": "opposite consequences",
      "instance": "13292.9#1",
      "formula": "good_outweighs(tax_meat,tax_revenue_reduced)",
-     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare). Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
+     "note": "13292.43: the tax serves more pressing goods (sustainability, animal welfare)"
     },
     {
      "cq": null,
@@ -595,7 +595,7 @@
      "type": "opposite consequences",
      "instance": "13292.9#4",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E. Since 2026-11-25: at the bridge's conclusion, which meets the target (D008); the game asks nothing of the bridge until step C5, so the record has no game question"
+     "note": "at the bridge's conclusion, which meets the thesis (D008); a further consequence that ranks nothing would be a rebuttal here"
     },
     {
      "cq": null,
@@ -612,10 +612,18 @@
      "instance": "13292.9#3",
      "formula": "interference(meat_industry_harmed)",
      "note": "the meat tax's own yield may offset the lost industry taxes"
+    },
+    {
+     "cq": "28 CQ1",
+     "wag_cq": null,
+     "type": "likelihood",
+     "instance": "13292.9#2",
+     "formula": "causes(tax_meat,meat_industry_harmed)",
+     "note": "backed by 13292.12 (a mechanism: cheaper dumped imports would push domestic producers out)"
     }
    ],
    "notes": {
-    "text": "One negative-consequences argument, with its two causal links as secondary cause_to_effect steps (guidelines §3, chains). Both steps have a hypothetical cause (needs a modal causal scheme, audit N8): the tax has not been enacted, so fit reconstructed and confidence lowered (R4); they are kept because no other walton.yml scheme expresses a single causal step. The net claim presupposes that lost industry taxes exceed the meat tax's own yield. Note of 2026-11-24 (D039): the hypothetical causal steps are coded with cause_to_effect_modal now; what this note says of the N8 coding and of R4 is the earlier coding (gold-format1.json). Since 2026-11-25: 'could actually' claims the consequence only possible (the mood rule, D008): 13292.9#1 is the modal variant, secondary, and the bridge 13292.9#4, primary, carries its conclusion to the target, so the role and the target stand.",
+    "text": "A possible consequence of the tax: it could reduce tax revenue by harming the meat industry, which pays substantial taxes. 'Could actually' claims the consequence only possible (the mood rule, D008): 13292.9#1 is the modal variant of negative consequences, secondary, and the bridge 13292.9#4 (bridge_from_possible_harm), primary, carries its conclusion to the thesis, an independent con. The consequence falls on the agent's own goal, the government's revenue: 33.3, which has no modal variant, so the modal variant of 33.2 with its bridge (OC15). Its two causal links are secondary steps whose cause is only proposed (cause_to_effect_modal, §5 item 11): the tax -> harm to the meat industry (13292.9#2), and that harm -> lower revenue (13292.9#3). The net claim presupposes that lost industry taxes exceed the meat tax's own yield. 13292.12 backs the first link with a mechanism; 13292.43 weighs the tax's other goods against the lost revenue.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -665,6 +673,18 @@
        "instances"
       ],
       "what": "the challenge 33.2 CQ1 at the may_bring_about of 13292.9#1 names CQ:modal_likelihood, the game's question there (R2); the challenge 33.2 CQ2 at the may_bring_about of 13292.9#1 names CQ:modal_evidence, the game's question there (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.9#1 names CQ:good_outweighs, the game's question there (R2); the game plays negative_consequences_modal as AS:negative_consequences_modal: 13292.9#1 names it (R16); the game plays bridge_from_possible_harm as AS:bridge_possible_harm: 13292.9#4 names it (R16)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "developer (D086 draft 1)",
+      "fields": [
+       "challenges",
+       "instances.note",
+       "instances.premises",
+       "instances.scheme.confidence",
+       "notes"
+      ],
+      "what": "Joined round 1 (plan §3): its challenge record at the modal premise named 13292.12, which backs its causal step 13292.9#2 now; that record put right, and a 28 CQ1 record added at 13292.9#2 for 13292.12's mechanism. Otherwise the reference's coding kept, to be reviewed with round 1 (the developer's reading, round2-readings.md, matched; not blind, as that file says): the notes now name 33.3, as OC15 asks of a possible consequence to the agent's own goal, and tell one current account; the confidence of its causal steps set on their merits, 0.55 (the link stated, the cause's possibility supplied), lifting the cap the N8 note put on them until this draft; the notes of its modal premise and of its other challenge records rewritten without their history."
      }
     ]
    }
@@ -837,7 +857,7 @@
      "type": "other means",
      "instance": "13292.108#1",
      "formula": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)",
-     "note": "13292.104 (regulate the industry), 13292.147 (carbon rationing). Since 2026-11-24: 13292.147 claims no better means: a proposal of another course, not an answer here (D006)"
+     "note": "13292.104 (regulate the industry) answers it with a better means; 13292.147 (carbon rationing) claims no better means, so it is a proposal of another course at the conclusion, not an answer here (D006)"
     },
     {
      "cq": "22.1 CQ5",
@@ -845,11 +865,11 @@
      "type": "side effects that outweigh",
      "instance": "13292.108#1",
      "formula": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)",
-     "note": "13292.174 (more dangerous production), 13292.5 (regenerative farming deterred). Since 2026-11-24: no claim weighs a side effect against this goal but 13292.127 (starvation, bad_outweighs_good); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070). Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
+     "note": "13292.127 weighs a side effect, starvation, against the goal here (bad_outweighs_good); 13292.174 (more dangerous production) and 13292.5 (regenerative farming deterred) cite side effects that rank nothing, rebuttals at the conclusion (D070), where the game asks CQ:side_effect"
     }
    ],
    "notes": {
-    "text": "A pro of the thesis that states only the circumstances S1 (meat production and consumption harm the environment) of a goal-based practical reasoning for the tax: a fragment (guidelines §3). The thesis has no argument of its own (scheme none), so no other claim states the argument this fragment belongs to; 13292.108 carries it, binding every variable, with the goal (less environmental harm from meat), the resulting state (less meat consumed), the transition and the agent supplied, so that the replies to the environmental argument can name its parts: 13292.13 denies the efficacy premise; 13292.6 states a case of the link to the goal; 13292.104 answers the other-means question with a better means; 13292.147 proposes another course without saying it does better, at the conclusion (D006); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070); 13292.127 weighs a side effect against the goal at the exception bad_outweighs(A,G). Guidelines §5 item 6 would leave A, S2, G and P unstated and the conclusion null, and eight of the eleven targets into this argument would point at nothing: whether a fragment whose parent has no argument carries that argument is a question the guidelines leave open (D086 round 1, for the review and the owner). Goal-based because no value is stated.",
+    "text": "A pro of the thesis that states only the circumstances S1 (meat production and consumption harm the environment) of a goal-based practical reasoning for the tax: a fragment (guidelines §3). The thesis has no argument of its own (scheme none), so no other claim states the argument this fragment belongs to; 13292.108 carries it, binding every variable, with the goal (less environmental harm from meat), the resulting state (less meat consumed), the transition and the agent supplied, so that the replies to the environmental argument can name its parts: 13292.13 denies the efficacy premise; 13292.6 states a case of the link to the goal; 13292.104 answers the other-means question with a better means; 13292.147 proposes another course without saying it does better, at the conclusion (D006); 13292.174 and 13292.5 cite side effects that rank nothing, rebuttals at the conclusion (D070); 13292.127 weighs a side effect against the goal at the exception bad_outweighs(A,G); 13292.135, .137, .2 and .4 bear on the circumstances it states. Guidelines §5 item 6 would leave A, S2, G and P unstated and the conclusion null: the four targets at the stated circumstances would keep their formula, and the seven others would point at nothing. Whether a fragment whose parent has no argument carries that argument is a question the guidelines leave open (D086 round 1, for the review and the owner). Goal-based because no value is stated.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -879,9 +899,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: every variable bound (see the note): the thesis has no argument, so this fragment carries the environmental argument; §5 item 6 would leave eight of the eleven targets into it nothing to point at. Whether a fragment whose parent has no argument carries that argument is put to the review and the owner. Notes rewritten as one current account."
+      "what": "Drafted: the reference's coding kept: every variable bound (see the note): the thesis has no argument, so this fragment carries the environmental argument; §5 item 6 would leave seven of the eleven targets into it nothing to point at (the four at the stated circumstances keep theirs). Whether a fragment whose parent has no argument carries that argument is put to the review and the owner. Notes rewritten as one current account; challenge notes rewritten without their history."
      }
     ]
    }
@@ -1356,7 +1377,7 @@
     }
    ],
    "notes": {
-    "text": "Concedes the burden ('the additional burden') and says it is small: it argues that the consequence 13292.7 cites is too slight to count, the exception too_slight(tax_meat,food_less_affordable_for_poor) of 13292.7#1 (OC9). It grants that the burden is bad, and does not say it is avoided (its sibling 13292.33 does). No scheme concludes too_slight, so its own argument is Other, concluding the exception (R8); the game asks CQ:too_slight there, so the role is cq_answer (§5 item 3), against. Its own words hedge ('could be as small as'); the fit and the confidence say so.",
+    "text": "Concedes the burden ('the additional burden') and says it is small: at most a change in one's eating pattern, which is easy (its premises: changing one's eating pattern avoids the added cost, and is easy to do). It argues that the consequence 13292.7 cites is too slight to count, the exception too_slight(tax_meat,food_less_affordable_for_poor) of 13292.7#1 (OC9), not that the tax does not bring it about: its sibling 13292.33 says that, pointing to cheaper protein. No scheme concludes too_slight, so its own argument is Other, concluding the exception (R8); the game asks CQ:too_slight there, so the role is cq_answer (§5 item 3), against. Its own words hedge ('could be as small as'); the fit and the confidence say so.",
     "candidate_pattern": "mitigation by substitution or adaptation (also 13292.33, 13292.182, 13292.198)"
    },
    "adjudication": {
@@ -1589,7 +1610,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step: less meat eaten -> more anemia",
@@ -1624,7 +1645,7 @@
       "formula": "may_occur(more_anemia_cases)",
       "en": "An event 'cases of anemia increase' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11). The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit."
     }
    ],
    "role": {
@@ -1669,7 +1690,7 @@
      "type": "likelihood",
      "instance": "13292.180#1",
      "formula": "brings_about(tax_meat,more_anemia_cases)",
-     "note": "answered against by 13292.182 (supplements) and 13292.198 (iron-rich plant foods)"
+     "note": "the substitutes of 13292.182 and 13292.198 bear on it, but they answer at the causal step (13292.180#2's exception, 28 CQ3)"
     },
     {
      "cq": "33.2 CQ2",
@@ -1685,7 +1706,7 @@
      "type": "opposite consequences",
      "instance": "13292.180#1",
      "formula": "good_outweighs(tax_meat,more_anemia_cases)",
-     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
+     "note": "no claim of the batch argues it"
     },
     {
      "cq": null,
@@ -1693,7 +1714,7 @@
      "type": "opposite consequences",
      "instance": "13292.180#1",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "13292.233: meat reduction improves health; the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "13292.233's point (less meat, better health) would answer it; 13292.233 itself answers 13292.121, at its modal premise; the game asks it at the conclusion, the rebuttal route of 33.2 CQ3 (D055), beside the exception's question"
     },
     {
      "cq": "28 CQ1",
@@ -1702,10 +1723,18 @@
      "instance": "13292.180#2",
      "formula": "causes(reduced_meat_consumption,more_anemia_cases)",
      "note": "\"easiest\" source is not \"only\" source"
+    },
+    {
+     "cq": "28 CQ3",
+     "wag_cq": null,
+     "type": "causal interference",
+     "instance": "13292.180#2",
+     "formula": "interference(reduced_meat_consumption)",
+     "note": "answered against by 13292.182 (iron supplements) and 13292.198 (iron-rich plant foods)"
     }
    ],
    "notes": {
-    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer, hence an independent argument for 13292.7's conclusion. Toward 13292.121 it backs that the tax brings about an unhealthy underconsumption; that function is recorded in other_kialo_parents as a cq_answer to CQ:likelihood (R2). 'Organic iron' presumably means heme iron; 13292.184 raises bioavailability against the substitutes. Since 2026-11-25: toward 13292.121 it backs the premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1, the modal argument (D008), with the book's question 33.2 CQ1. Since 2026-11-27 (step C5.2): the game asks 33.2 CQ1 as CQ:modal_likelihood, the question its function toward 13292.121 names now (R2).",
+    "text": "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer (meat is the easiest source of iron, so financial restrictions will raise anemia), an independent argument for 13292.7's conclusion; its causal step, reduced meat consumption -> more anemia (13292.180#2, cause_to_effect_modal: the cause is only proposed), backs the primary's consequence premise, the step from the tax to less meat eaten left implicit. Toward 13292.121 it backs the modal premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of 13292.121#1 (D008), recorded in other_kialo_parents as a cq_answer to the game's CQ:modal_likelihood (33.2 CQ1). 'Organic iron' presumably means heme iron. 13292.182 and 13292.198 answer the causal step with substitutes (28 CQ3, at its exception); 13292.184 raises bioavailability against them.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -1756,6 +1785,17 @@
        "target"
       ],
       "what": "the game asks 33.2 CQ1 as CQ:modal_likelihood: its function toward 13292.121 names it (R2); the challenge 33.2 CQ3 at the good_outweighs of 13292.180#1 names CQ:good_outweighs, the game's question there (R2)"
+     },
+     {
+      "date": "2026-11-27",
+      "by": "developer (D086 draft 1)",
+      "fields": [
+       "challenges",
+       "instances.note",
+       "instances.scheme.confidence",
+       "notes"
+      ],
+      "what": "Joined round 1 (plan §3): its challenge record at the consequence premise named 13292.182 and .198, which answer its causal step 13292.180#2 now (28 CQ3, at its exception); that record put right and a 28 CQ3 record added at the exception. Otherwise the reference's coding kept, to be reviewed with round 1 (A, B and the reference agree on every core field; the developer read it with 13292.182 and .198, not blind): notes rewritten as one current account; the confidence of its causal step set on its merits, 0.55 (the link stated, the cause's possibility supplied), lifting the cap the N8 note put on it until this draft; the notes of its records at the outweighing exception and at the conclusion rewritten as current: without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
      }
     ]
    }
@@ -1832,7 +1872,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 1: tax -> higher food production costs",
@@ -1866,7 +1906,7 @@
       "formula": "may_occur(food_production_costs_increased)",
       "en": "An event 'the costs of food production increase' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11)."
     },
     {
      "id": "13292.36#3",
@@ -1876,7 +1916,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 2: higher costs -> lower food security",
@@ -1910,7 +1950,7 @@
       "formula": "may_occur(food_security_decreased)",
       "en": "An event 'the country's food security decreases' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11)."
     }
    ],
    "role": {
@@ -2002,9 +2042,11 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "instances.note",
+       "instances.scheme.confidence",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a control; notes rewritten without the history of the causal steps' coding (in this record and gold-format1.json)."
+      "what": "Drafted: the reference's coding kept: a control; notes rewritten as one current account (the history of the causal steps' coding is in this record and gold-format1.json); the confidence of its causal steps set on their merits, 0.55 (the link stated, the cause's possibility supplied), lifting the cap the N8 note put on them until this draft."
      }
     ]
    }
@@ -2165,7 +2207,7 @@
      "type": "opposite consequences",
      "instance": "13292.127#2",
      "formula": "good_outweighs(tax_meat,starvation_from_reduced_meat_access)",
-     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:good_outweighs"
+     "note": "no claim of the batch argues it"
     },
     {
      "cq": null,
@@ -2173,7 +2215,7 @@
      "type": "opposite consequences",
      "instance": "13292.127#2",
      "formula": "¬should_be_performed(tax_meat)",
-     "note": "the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "no claim of the batch argues a good consequence against this argument (13292.202, at the same conclusion, amends the action instead); the game asks it at the conclusion, the rebuttal route of 33.2 CQ3 (D055), beside the exception's question"
     },
     {
      "cq": null,
@@ -2185,7 +2227,7 @@
     }
    ],
    "notes": {
-    "text": "The claim ranks two consequences: starvation from reduced access to meat is a more severe threat than any consequence of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, argues against the tax and is not in it, so the earliest argument of the class on the board, 13292.108's practical reasoning, at its exception bad_outweighs(tax_meat,environmental_harm_from_meat_reduced) (D070, D091); re-parented from 13292.7. The weighing is primary because the words state the comparison (OC8): an instance of bad_outweighs_good, C003's answer scheme, a cq_answer to the game's CQ:bad_outweighs (22.1 CQ5), against. The starvation consequence, which the text presupposes, is a secondary negative-consequences instance (13292.127#2). Its link is categorical: 'a more severe threat than' ranks how bad starvation is, and the link from the tax to starvation is inferred from 13292.7's firm 'would make food more expensive' (the mood rule, D008). Its children engage the starvation link, a premise of the weighing (OC10): 13292.202 amends the action, 13292.204 denies the link.",
+    "text": "The claim ranks two consequences: starvation from reduced access to meat is a more severe threat than any consequence of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument it weighs against (OC3, OC4). It names a class, so it is coded against one argument of the class (OC7): its Kialo parent, 13292.7, argues against the tax and is not in it, so the earliest argument of the class on the board, 13292.108's practical reasoning, at its exception bad_outweighs(tax_meat,environmental_harm_from_meat_reduced) (D070, D091); re-parented from 13292.7. The weighing is primary because the words state the comparison (OC8): an instance of bad_outweighs_good, C003's answer scheme, a cq_answer to the game's CQ:bad_outweighs (22.1 CQ5), against. The starvation consequence, which the text presupposes, is a secondary negative-consequences instance (13292.127#2). Its link is categorical: 'a more severe threat than' ranks how bad starvation is, and the link from the tax to starvation is inferred from 13292.7's firm 'would make food more expensive' (the mood rule, D008). Its children engage the starvation consequence: 13292.202 amends the action, at the conclusion of the starvation argument 13292.127#2 (OC6), and 13292.204 denies the link the weighing relies on (OC10).",
     "candidate_pattern": "weighing of consequences (C003); a comparison with a class (OC7)"
    },
    "adjudication": {
@@ -2243,9 +2285,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: the weighing against the class at 13292.108's exception (OC3, OC4, OC7, OC8); notes rewritten as one current account (the earlier codings, against 13292.115 and with Other, are in this record's entries)."
+      "what": "Drafted: the reference's coding kept: the weighing against the class at 13292.108's exception (OC3, OC4, OC7, OC8); notes rewritten as one current account (the earlier codings, against 13292.115 and with Other, are in this record's entries); challenge notes rewritten without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
      }
     ]
    }
@@ -2832,7 +2875,7 @@
      "type": "likelihood",
      "instance": "13292.174#1",
      "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
-     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices? Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_likelihood"
+     "note": "'might'; why would a tax push producers to cheaper methods rather than raise prices?"
     },
     {
      "cq": "33.2 CQ2",
@@ -2840,7 +2883,7 @@
      "type": "evidence",
      "instance": "13292.174#1",
      "formula": "may_bring_about(tax_meat,more_dangerous_meat_production)",
-     "note": "Since 2026-11-25: the modal premise, with the book's question; the game asks nothing of the modal variant until step C5. Since 2026-11-27 (step C5.2): the game asks it as CQ:modal_evidence"
+     "note": "the claim cites nothing for the possibility"
     },
     {
      "cq": null,
@@ -2848,7 +2891,7 @@
      "type": "bearer",
      "instance": "13292.174#1",
      "formula": "harm_discounted_by_bearer(tax_meat,more_dangerous_meat_production)",
-     "note": "no printed CQ; dangerous to whom is unstated. Since 2026-11-25: on whom the harm falls has its own exception, harm_discounted_by_bearer (D065). Since 2026-11-27 (step C5.2): the game asks it as CQ:harm_discounted"
+     "note": "no printed question; dangerous to whom is unstated: on whom the harm falls is the exception harm_discounted_by_bearer (D065)"
     }
    ],
    "notes": {
@@ -2902,9 +2945,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a possible side effect that ranks nothing: the modal variant and its bridge, a rebuttal at 13292.108's conclusion (OC2, OC15; D070); notes rewritten."
+      "what": "Drafted: the reference's coding kept: a possible side effect that ranks nothing: the modal variant and its bridge, a rebuttal at 13292.108's conclusion (OC2, OC15; D070); notes rewritten; challenge notes rewritten without their history."
      }
     ]
    }
@@ -3170,7 +3214,7 @@
      "type": "circumstances",
      "instance": "13292.104#2",
      "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
-     "note": "no printed CQ; attacked by 13292.208 (non-cultured meat production is inherently problematic). Since 2026-11-24: 13292.208 attacks the better_means instance's premise brings_about(A2,G) now (D075)"
+     "note": "no printed question; 13292.208 (non-cultured meat production is inherently problematic) contradicts it; the gold has 13292.208 at the better means' premise brings_about(regulate_animal_farming_industry,G) of 13292.104#1, where format 1 moved it (round 2 of the first gold takes up its target)"
     },
     {
      "cq": null,
@@ -3186,7 +3230,7 @@
      "type": "efficacy",
      "instance": "13292.104#2",
      "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
-     "note": "feasibility of regulating the industry. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
+     "note": "feasibility of regulating the industry; also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
     {
      "cq": "22.1 CQ5",
@@ -3194,7 +3238,7 @@
      "type": "side effects that outweigh",
      "instance": "13292.104#2",
      "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
-     "note": "Since 2026-11-24: the exception is the claim that they outweigh the goal (D070); a plain side effect is a rebuttal at the conclusion. Since 2026-11-27 (step C5.2): the game asks the exception as CQ:bad_outweighs; CQ:side_effect is the plain side effect, at the conclusion"
+     "note": "no claim of the batch argues that the other course's bad consequences outweigh its goal (D070); a plain side effect would be a rebuttal at the conclusion"
     }
    ],
    "notes": {
@@ -3243,9 +3287,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a better means at 13292.108's exception (OC6; D075, D089): the developer's reading matched; notes rewritten."
+      "what": "Drafted: the reference's coding kept: a better means at 13292.108's exception (OC6; D075, D089): the developer's reading matched; notes rewritten; challenge notes rewritten without their history."
      }
     ]
    }
@@ -3350,7 +3395,7 @@
      },
      "bindings": {
       "A": {
-       "unstated": "the action: 13292.118's argument has it (tax_meat, the \"it\" of the claim); this claim does not name it"
+       "unstated": "the action: 13292.118's argument has it (tax_meat); the claim refers to it as 'it' but states no formula with it (the transition from the tax, would_bring_about, is inferred from 13292.118)"
       },
       "S1": "meat_price_below_real_costs",
       "S2": "higher_meat_price",
@@ -3423,7 +3468,7 @@
     }
    ],
    "notes": {
-    "text": "'It' is the meat tax of 13292.118. The claim restates 13292.118's link from the higher price to its goal with content (the price would then include the external costs: climate change, water pollution, disease risks) and names the circumstances (the price leaves those costs out). A fragment of 13292.118's goal-based argument (guidelines §3; §5 item 6): it binds the variables of the formulas it states, current_circumstances(meat_price_below_real_costs) and would_be_realized(meat_price_reflects_real_costs,higher_meat_price); the action and the agent are 13292.118's and are left unstated, and so is the conclusion. It backs 13292.118's premise would_be_realized(...), about which no critical question is asked, so premise_backing (§5 item 3); 'clarification' is a possible alternative role. 13292.224 backs the circumstances it states.",
+    "text": "'It' is the meat tax of 13292.118. The claim restates 13292.118's link from the higher price to its goal with content (the price would then include the external costs: climate change, water pollution, disease risks) and names the circumstances (the price leaves those costs out). A fragment of 13292.118's goal-based argument (guidelines §3; §5 item 6): it binds the variables of the formulas it states, current_circumstances(meat_price_below_real_costs) and would_be_realized(meat_price_reflects_real_costs,higher_meat_price); the action and the agent are 13292.118's and are left unstated (the claim names the tax as 'it', but the transition from the tax, would_bring_about, is inferred from 13292.118, not stated), and so is the conclusion. It backs 13292.118's premise would_be_realized(...), about which no critical question is asked, so premise_backing (§5 item 3); 'clarification' is a possible alternative role. 13292.224 backs the circumstances it states.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -3623,10 +3668,11 @@
        "challenges",
        "instances.bindings",
        "instances.conclusion",
+       "instances.note",
        "instances.premises",
        "notes"
       ],
-      "what": "Guidelines §5 item 6 applied: 13292.11#1 binds S1 alone, the variable of the formula it states (current_circumstances(meat_price_below_real_costs)); A, S2, G and P are unstated, its premises are that formula alone, its conclusion null. The challenge at realize_more_effectively(...) is left to 13292.118, whose own record has it. 13292.11#2, the causal explanation, unchanged. Notes rewritten."
+      "what": "Guidelines §5 item 6 applied: 13292.11#1 binds S1 alone, the variable of the formula it states (current_circumstances(meat_price_below_real_costs)); A, S2, G and P are unstated, its premises are that formula alone, its conclusion null, and its note says it states S1 and nothing else of the argument. The challenge at realize_more_effectively(...) is left to 13292.118, whose own record has it. 13292.11#2, the causal explanation, unchanged. Notes rewritten."
      }
     ]
    }
@@ -4347,7 +4393,7 @@
      "type": "evidence",
      "instance": "13292.2#1",
      "formula": "instance(meat_production,significant_ghg_source)",
-     "note": "how significant? 13292.135 (less than other sources), 13292.190 (mostly beef); backed by 13292.141"
+     "note": "how significant? 13292.135 (less than other sources), 13292.190 (mostly beef); 13292.141's energy comparison backs the causal step 13292.2#2 instead (28 CQ1)"
     },
     {
      "cq": "14 CQ2",
@@ -4362,18 +4408,19 @@
      "type": "likelihood",
      "instance": "13292.2#2",
      "formula": "causes(meat_production,significant_ghg_emissions)",
-     "note": "backed by 13292.141 (energy use) and 13292.46 (beef figures)"
+     "note": "backed by 13292.141 (a mechanism: the energy meat production takes)"
     },
     {
      "cq": "28 CQ2",
      "wag_cq": null,
      "type": "evidence",
      "instance": "13292.2#2",
-     "formula": "causes(meat_production,significant_ghg_emissions)"
+     "formula": "causes(meat_production,significant_ghg_emissions)",
+     "note": "the claim links a source for it (evidence); 13292.46's beef figures also bear on it, though 13292.46 itself targets the thesis (a tax graded by impact)"
     }
    ],
    "notes": {
-    "text": "Backs the circumstances of 13292.108 for production. The primary instance is the classification step that turns the causal facts into the parent's evaluative claim; the causal chain (production -> emissions -> climate change) is coded as two secondary steps whose causes have occurred, so without the hypothetical caveat. current_circumstances has no critical question, so premise_backing (R2).",
+    "text": "Backs the circumstances S1 of 13292.108's environmental argument, for production: meat production creates significant greenhouse gas emissions, which contribute to climate change. The primary instance is the classification step that turns the causal facts into the parent's evaluative claim (meat production is an activity that is bad for the environment); the causal chain (production -> emissions -> climate change) is two secondary steps whose causes have occurred, so cause_to_effect (§5 item 11). No critical question is about current_circumstances, so premise_backing (§5 item 3), for. 13292.141 backs the first causal step with a mechanism (28 CQ1); 13292.135 and 13292.190 bear on how significant the emissions are (14 CQ1).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4382,7 +4429,18 @@
      "instances.scheme.fit",
      "re_parented"
     ],
-    "reason": "scheme and fit: A (verbal_classification, reconstructed, with the causal steps as secondary instances). The claim's role is to back 13292.108's evaluative S1; the causal instance B made primary concludes only will_occur(emissions), and only the classification step, which B's note also names as left implicit, reaches the target. re_parented: B (false), R1."
+    "reason": "scheme and fit: A (verbal_classification, reconstructed, with the causal steps as secondary instances). The claim's role is to back 13292.108's evaluative S1; the causal instance B made primary concludes only will_occur(emissions), and only the classification step, which B's note also names as left implicit, reaches the target. re_parented: B (false), R1.",
+    "recoded": [
+     {
+      "date": "2026-11-27",
+      "by": "developer (D086 draft 1)",
+      "fields": [
+       "challenges",
+       "notes"
+      ],
+      "what": "Joined round 1 (plan §3): its challenge record at the classification premise named 13292.141, which backs its causal step 13292.2#2 now; that record put right, and the records at 13292.2#2 sort what bears on the link by the draft's reading of the book's questions (a mechanism, 13292.141, at 28 CQ1; data, 13292.46's beef figures, at 28 CQ2). Otherwise the reference's coding kept, to be reviewed with round 1: the developer's reading (round2-readings.md; written after round 1's draft had used its causal step, so not blind) matched. Notes rewritten as one current account, naming what bears on the emissions and their significance."
+     }
+    ]
    }
   },
   {
@@ -4416,7 +4474,7 @@
        "unstated": "the action: 13292.108's environmental argument has it (tax_meat); this claim does not state it"
       },
       "S1": {
-       "unstated": "the circumstances: 13292.108's environmental argument has it; this claim presupposes them, it does not state them"
+       "unstated": "the circumstances: 13292.108's environmental argument has them; this claim presupposes them, it does not state them"
       },
       "S2": "reduced_meat_consumption",
       "G": "deforestation_slowed",
@@ -4468,7 +4526,7 @@
      "type": "efficacy",
      "instance": "13292.6#1",
      "formula": "would_be_realized(deforestation_slowed,reduced_meat_consumption)",
-     "note": "no printed CQ; attacked by 13292.192 (crop expansion may still deforest), defended by its child 13292.200"
+     "note": "no printed question; attacked by 13292.192 (crop expansion may still deforest), defended by 13292.200, a reply to 13292.192"
     }
    ],
    "notes": {
@@ -4502,7 +4560,7 @@
        "instances.premises",
        "notes"
       ],
-      "what": "Guidelines §5 item 6 applied (the identity contract left it open for this draft): the fragment binds only the variables of the formula it states, G and S2 of would_be_realized(deforestation_slowed,reduced_meat_consumption); A, S1 and P are unstated, its premises are that formula alone, and its conclusion, which names A, is null. The challenge at would_bring_about(...) is left to 13292.108, whose own record has it. 13292.192's target, the stated link, is unchanged. Notes rewritten."
+      "what": "Guidelines §5 item 6 applied (the identity contract left it open for this draft): the fragment binds only the variables of the formula it states, G and S2 of would_be_realized(deforestation_slowed,reduced_meat_consumption); A, S1 and P are unstated, its premises are that formula alone, and its conclusion, which names A, is null. The challenge at would_bring_about(...) is left to 13292.108, whose own record has it; the remaining record's note says that 13292.200 replies to 13292.192. 13292.192's target, the stated link, is unchanged. Notes rewritten."
      }
     ]
    }
@@ -4522,7 +4580,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.45,
+      "confidence": 0.55,
       "alternatives": [
        {
         "walton_id": "negative_consequences",
@@ -4561,7 +4619,7 @@
       "formula": "may_occur(domestic_meat_industry_pushed_out)",
       "en": "An event 'domestic meat producers are pushed out of the market' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). A causal scheme because the claim's function is the causal mechanism, which no other walton.yml scheme expresses."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11). A causal scheme because the claim's function is the causal mechanism, which no other walton.yml scheme expresses."
     },
     {
      "id": "13292.12#2",
@@ -4571,7 +4629,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 1: tax -> cheaper imports",
@@ -4606,7 +4664,7 @@
       "formula": "may_occur(imported_meat_relatively_cheaper)",
       "en": "An event 'imported meat becomes cheaper relative to domestic meat through dumping and predatory pricing' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
+     "note": "A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11)."
     },
     {
      "id": "13292.12#3",
@@ -4704,7 +4762,7 @@
      "type": "causal interference",
      "instance": "13292.12#1",
      "formula": "interference(imported_meat_relatively_cheaper)",
-     "note": "answered by 13292.45 (import standards) and 13292.194 (eco-tariffs)"
+     "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions at 13292.12's predicted harm (OC6), not as answers here"
     },
     {
      "cq": "33.2 CQ1",
@@ -4723,7 +4781,7 @@
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed, so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism answers 28 CQ1; data offered for the link would answer 28 CQ2. 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies).",
+    "text": "Gives the mechanism of 13292.9's 'by harming the meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed, so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism offered for a link answers 28 CQ1; data offered for it would answer 28 CQ2 (a question for the review, D086 round 1). 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions at 13292.12's predicted harm).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -4775,11 +4833,14 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
+       "instances.note",
+       "instances.scheme.confidence",
        "notes",
        "role",
        "target"
       ],
-      "what": "Retargeted from the modal premise of 13292.9#1 (format 1 required a formula of the primary instance; adjudication.md R5) to the causal step it backs, 13292.9#2's causes(tax_meat,meat_industry_harmed), as both annotators aimed it; a cq_answer to the book's 28 CQ1 there (a mechanism offered for the link; the game asks no question at the formula; guidelines §5 item 3), polarity for. The replay plays each claim's primary instance and a secondary one that carries it, so this claim is a cascade there now. Notes rewritten as one current account."
+      "what": "Retargeted from the modal premise of 13292.9#1 to the causal step it backs, 13292.9#2's causes(tax_meat,meat_industry_harmed), as both annotators aimed it: format 1 required a formula of the primary instance (adjudication.md R5), which put the target at 13292.9's consequence premise, and the recoding for D008 kept that choice, at the modal argument. A cq_answer to the book's 28 CQ1 there (a mechanism offered for the link; the game asks no question at the formula; guidelines §5 item 3), polarity for. The confidence of its causal steps set on their merits, 0.55 (the link stated, the cause's possibility supplied), lifting the cap the N8 note put on them until this draft. Its record at 13292.12#1's interference no longer says that 13292.45 and .194 answer there (they are amended actions at 13292.12's predicted harm). A cascade in the replay now. Notes rewritten as one current account."
      }
     ]
    }
@@ -5322,7 +5383,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.45,
+      "confidence": 0.55,
       "alternatives": [
        {
         "walton_id": "none",
@@ -5362,7 +5423,7 @@
       "formula": "may_occur(crop_production_increased)",
       "en": "An event 'crop production increases' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086). A causal scheme because the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses."
+     "note": "A causal step whose cause is only possible (cause_to_effect_modal, §5 item 11). A causal scheme because the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses."
     },
     {
      "id": "13292.192#2",
@@ -5372,7 +5433,7 @@
       "compendium": "28",
       "wag_id": null,
       "fit": "reconstructed",
-      "confidence": 0.4,
+      "confidence": 0.55,
       "alternatives": []
      },
      "label": "chain step 2: more crops -> deforestation for cropland",
@@ -5407,7 +5468,7 @@
       "formula": "may_occur(deforestation_for_cropland)",
       "en": "An event 'forests are cleared for crop production' has happened, or could happen."
      },
-     "note": "Recoded with cause_to_effect_modal (D039, 2026-11-24): the cause is only proposed or possible. The confidence is the one the N8 note capped, until the first gold's draft (D086)."
+     "note": "A causal step whose cause is only possible (cause_to_effect_modal, §5 item 11)."
     }
    ],
    "role": {
@@ -5472,9 +5533,11 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "instances.note",
+       "instances.scheme.confidence",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: the attack on 13292.6's stated link with a modal causal chain; notes rewritten without the history of the causal steps' coding."
+      "what": "Drafted: the reference's coding kept: the attack on 13292.6's stated link with a modal causal chain; notes rewritten without the history of the causal steps' coding; the confidence of its causal steps set on their merits, 0.55 (the link stated, the cause's possibility supplied), lifting the cap the N8 note put on them until this draft."
      }
     ]
    }
@@ -5804,7 +5867,7 @@
    "role": {
     "kind": "cq_answer",
     "confidence": 0.55,
-    "cq": "28 CQ2",
+    "cq": "28 CQ1",
     "polarity": "for"
    },
    "target": {
@@ -5848,7 +5911,7 @@
     }
    ],
    "notes": {
-    "text": "Backs 13292.2's claim that meat production releases significant greenhouse gas emissions, with a comparison of energy use: producing meat takes far more energy than growing the same nutrients from plants. Its argument is a causal step whose cause is an actual state (cause_to_effect: the energy-intensive production causes significant emissions); the link from energy use to emissions is supplied. It backs the causal premise of 13292.2's own step, causes(meat_production,significant_ghg_emissions) (13292.2#2), with data offered for that link, which the book's 28 CQ2 asks about (whether the evidence warrants the generalization; the game asks no question there): cq_answer with polarity for (§5 item 3). It could also be read as evidence for 13292.2's classification premise instance(meat_production,significant_ghg_source) (14 CQ1). The comparison with plant sources also implies that they are more efficient (not coded).",
+    "text": "Backs 13292.2's claim that meat production releases significant greenhouse gas emissions, through its energy use: producing meat takes far more energy than growing the same nutrients from plants. Its argument is a causal step whose cause is an actual state (cause_to_effect: the energy-intensive production causes significant emissions); the link from energy use to emissions is supplied, and the comparison cites nothing. It offers a mechanism for the causal premise of 13292.2's own step, causes(meat_production,significant_ghg_emissions) (13292.2#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3), as 13292.2's own record of the question has it. It could also be read as evidence for 13292.2's classification premise instance(meat_production,significant_ghg_source) (14 CQ1). The comparison with plant sources also implies that they are more efficient (not coded).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5867,7 +5930,7 @@
        "role",
        "target"
       ],
-      "what": "Retargeted from 13292.2#1's classification premise instance(meat_production,significant_ghg_source) (14 CQ1; format 1 required a formula of the primary instance) to the causal step it backs, 13292.2#2's causes(meat_production,significant_ghg_emissions), as both annotators aimed it; a cq_answer to the book's 28 CQ2 there (data offered for the link; a mechanism would answer 28 CQ1), polarity for. A cascade in the replay now. Notes rewritten."
+      "what": "Retargeted from 13292.2#1's classification premise instance(meat_production,significant_ghg_source) (14 CQ1; format 1 required a formula of the primary instance) to the causal step it backs, 13292.2#2's causes(meat_production,significant_ghg_emissions), as both annotators aimed it; a cq_answer to the book's 28 CQ1 there (a mechanism, energy use, offered for the link; it cites no data), polarity for, as 13292.2's own record of the question has it. A cascade in the replay now. Notes rewritten."
      }
     ]
    }
@@ -5987,7 +6050,7 @@
      "type": "opposite consequences",
      "instance": "13292.147#1",
      "formula": "bad_outweighs(ration_meat_via_carbon_budgets,carbon_emissions_reduced)",
-     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:bad_outweighs"
+     "note": "no claim of the batch argues it"
     },
     {
      "cq": null,
@@ -5995,7 +6058,7 @@
      "type": "opposite consequences",
      "instance": "13292.147#1",
      "formula": "should_be_performed(ration_meat_via_carbon_budgets)",
-     "note": "13292.149: harder and costlier to implement than a plain meat tax; the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "13292.149 (a child outside the batch): harder and costlier to implement than a plain meat tax; the game asks it at the conclusion, the rebuttal route of 33.1 CQ3 (D055), beside the exception's question"
     }
    ],
    "notes": {
@@ -6047,9 +6110,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a proposal of another course at 13292.108's conclusion (OC6; D006, D066); notes rewritten (the earlier text described the answer at the exception it no longer is), and candidate C017 named, as OC6 asks."
+      "what": "Drafted: the reference's coding kept: a proposal of another course at 13292.108's conclusion (OC6; D006, D066); notes rewritten (the earlier text described the answer at the exception it no longer is), and candidate C017 named, as OC6 asks; challenge notes rewritten without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
      }
     ]
    }
@@ -6142,7 +6206,7 @@
     }
    ],
    "notes": {
-    "text": "A substitute (iron supplements) lets people get enough iron without meat, so eating less meat need not bring more anemia: it counteracts the causal step 13292.180#2, from reduced meat consumption to more anemia, which is what the book's 28 CQ3 asks (other factors that would interfere with or counteract the production of the effect; the game asks no question there). So it is a cq_answer at that step's exception interference(reduced_meat_consumption), against, and its own argument (Other: no walton.yml scheme concludes it from a substitute) concludes the exception (R8). It does not deny that the tax reduces meat eating. Its sibling 13292.198 makes the same move with plant foods; 13292.184 replies that supplements are not always a good replacement.",
+    "text": "A substitute (iron supplements) lets people get enough iron without meat, so eating less meat need not bring more anemia: it counteracts the causal step 13292.180#2, from reduced meat consumption to more anemia, which is what the book's 28 CQ3 asks (other factors that would interfere with or counteract the production of the effect; the game asks no question there). So it is a cq_answer at that step's exception interference(reduced_meat_consumption), against, and its own argument (Other: no walton.yml scheme concludes it from a substitute) concludes the exception (R8). It does not deny that the tax reduces meat eating; walton.yml's English for the exception ('an event has occurred which interferes with event ...') reads as if it did, but the exception is the book's CQ3. The substitute is what people would do, not an amended action of the agent's (OC6). Its sibling 13292.198 makes the same move with plant foods; 13292.184 replies that supplements are not always a good replacement.",
     "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.198; by adaptation 13292.25)"
    },
    "adjudication": {
@@ -6488,7 +6552,7 @@
      "type": "opposite consequences",
      "instance": "13292.194#1",
      "formula": "bad_outweighs(tax_meat_with_import_safeguards,domestic_producers_protected_from_imports)",
-     "note": "Since 2026-11-27 (step C5.2): the game asks it as CQ:bad_outweighs"
+     "note": "no claim of the batch argues it"
     },
     {
      "cq": null,
@@ -6496,11 +6560,11 @@
      "type": "opposite consequences",
      "instance": "13292.194#1",
      "formula": "should_be_performed(tax_meat_with_import_safeguards)",
-     "note": "trade disputes; verification costs; the game asks it at the conclusion, as a rebuttal, until workstream E"
+     "note": "possible side effects (trade disputes, verification costs); the claim has no replies; the game asks it at the conclusion, the rebuttal route of 33.1 CQ3 (D055), beside the exception's question"
     }
    ],
    "notes": {
-    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, polarity against 13292.12, at 13292.12's predicted harm, the conclusion may_occur(domestic_meat_industry_pushed_out) of its primary causal step 13292.12#1. In format 2 the target could name 13292.12#3 instead, 13292.12's negative-consequences argument that cites the harm against the tax (a question for the review, D086 round 1; its sibling 13292.45, in round 2, has the same target). Read as blocking 13292.12's mechanism, it would be a cq_answer to 28 CQ3 (interference).",
+    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, polarity against 13292.12, at 13292.12's predicted harm, the conclusion may_occur(domestic_meat_industry_pushed_out) of its primary causal step 13292.12#1, where both annotators put it. Two other readings are put to the review (D086 round 1): the target at 13292.12#3, the negative-consequences argument that cites the harm against the tax; or a cq_answer to 28 CQ3 at 13292.12#1's interference, the mechanism blocked, which the draft does not take, since the measures are the agent's own action (case.json), unlike the substitutes of 13292.182 and .198. Its sibling 13292.45 (round 2) has the same target.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -6546,9 +6610,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: positive consequences of the amended action, at 13292.12's predicted harm; the alternative target, 13292.12#3, is put to the review with its sibling 13292.45 (round 2); notes rewritten."
+      "what": "Drafted: the reference's coding kept: positive consequences of the amended action, at 13292.12's predicted harm, where both annotators put it; two other readings (13292.12#3, and 28 CQ3 at 13292.12#1's interference) are put to the review; notes rewritten; challenge notes rewritten without their history, and without the remark that the game asks its question at the conclusion only 'until workstream E': it asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))."
      }
     ]
    }
@@ -6644,7 +6709,7 @@
     }
    ],
    "notes": {
-    "text": "Plant foods rich in iron (beans, lentils) can replace meat as a source of iron, so eating less meat need not bring more anemia: like its sibling 13292.182, it counteracts the causal step 13292.180#2 (reduced meat consumption -> more anemia), the book's 28 CQ3 (the game asks no question there): a cq_answer at that step's exception interference(reduced_meat_consumption), against; its Other instance concludes the exception (R8). It also implicitly contests 13292.180's premise that meat is the easiest source of iron. 13292.210 backs the substitution.",
+    "text": "Plant foods rich in iron (beans, lentils) can replace meat as a source of iron, so eating less meat need not bring more anemia: like its sibling 13292.182, it counteracts the causal step 13292.180#2 (reduced meat consumption -> more anemia), the book's 28 CQ3 (the game asks no question there): a cq_answer at that step's exception interference(reduced_meat_consumption), against; its Other instance concludes the exception (R8), whose walton.yml English reads as if the reduction itself were interfered with. The substitute is what people would do, not an amended action of the agent's (OC6). It also implicitly contests 13292.180's premise that meat is the easiest source of iron. 13292.210 backs the substitution.",
     "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.182; by adaptation 13292.25)"
    },
    "adjudication": {
@@ -6723,9 +6788,9 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.127",
-     "instance": "13292.127#1",
-     "part": "premise",
-     "formula": "brings_about(tax_meat,starvation_from_reduced_meat_access)"
+     "instance": "13292.127#2",
+     "part": "conclusion",
+     "formula": "¬should_be_performed(tax_meat)"
     }
    },
    "evidence": {
@@ -6751,7 +6816,7 @@
     }
    ],
    "notes": {
-    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope (exceptions, or the tax only in non-third-world countries): a mitigation, an amended action (C006; OC6), tax_meat_outside_poor_countries, with no purpose stated beyond the context's, so scheme none (a bare proposal, §5 item 4), role action_amendment, polarity against 13292.127; it still supports a restricted meat tax. It is coded at the starvation link brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127's weighing, since a reply to a weighing claim addresses the consequence it relies on (OC10); OC6 would put a mitigation at the conclusion of the argument it answers, here 13292.127#2's ¬should_be_performed(tax_meat), the argument that cites the starvation (a question for the review, D086 round 1). Stated as a possibility ('there can be', 'could'). Its sibling 13292.204 instead denies the starvation link.",
+    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope (exceptions, or the tax only in non-third-world countries): a mitigation, an amended action (C006; OC6), tax_meat_outside_poor_countries, with no purpose stated beyond the context's, so scheme none (a bare proposal, §5 item 4), role action_amendment, polarity against; it still supports a restricted meat tax. OC6 puts a mitigation at the conclusion of the argument it answers: 13292.127#2's ¬should_be_performed(tax_meat), the argument that cites the starvation, where both annotators put it (at 13292.127's conclusion, when that argument was its primary). A reply to a weighing claim that attacks it addresses the link the weighing relies on (OC10), as its sibling 13292.204 does; this reply amends the action instead (the reference had it at that link, since format 1 required a formula of the primary instance once the weighing became primary, D055: a question for the review, D086 round 1). Stated as a possibility ('there can be', 'could').",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -6773,9 +6838,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
-       "notes"
+       "notes",
+       "target"
       ],
-      "what": "Drafted: the reference's coding kept: scheme none and role action_amendment for the restricted tax, at the starvation link of the weighing (OC10); the alternative, OC6's conclusion of the argument that cites the starvation (13292.127#2), is put to the review; notes rewritten."
+      "what": "Retargeted from the starvation link of 13292.127#1 (format 1 required a formula of the primary instance once the weighing became 13292.127's primary, D055) to the conclusion of the argument that cites the starvation, 13292.127#2's ¬should_be_performed(tax_meat), as OC6 puts a mitigation and as both annotators aimed it (at 13292.127's conclusion, when that argument was its primary); scheme, role and polarity unchanged. A cascade in the replay now. Notes rewritten."
      }
     ]
    }
@@ -7983,7 +8049,7 @@
      "type": "severity",
      "instance": "13292.5#1",
      "formula": "too_slight(tax_meat,regenerative_agriculture_deterred)",
-     "note": "no printed CQ; how much meat comes from regenerative farms? Since 2026-11-25: how serious the consequence is has its own exception, too_slight (D065); the amount asked about bears on the decision as the share of the tax's environmental aim that deterring regenerative farms would cost, not as how few farms it reaches (the owner's scope, D053). Since 2026-11-27 (step C5.2): the game asks it as CQ:too_slight"
+     "note": "no printed question; how much meat comes from regenerative farms? How serious the consequence is, is the exception too_slight (D065): the amount bears on the decision as the share of the tax's environmental aim that deterring regenerative farms would cost, not as how few farms it reaches (the owner's scope, D053)"
     }
    ],
    "notes": {
@@ -8027,9 +8093,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a side effect that ranks nothing, a rebuttal at 13292.108's conclusion (OC2; D070); notes rewritten."
+      "what": "Drafted: the reference's coding kept: a side effect that ranks nothing, a rebuttal at 13292.108's conclusion (OC2; D070); notes rewritten; challenge notes rewritten without their history."
      }
     ]
    }
@@ -8487,7 +8554,7 @@
      "type": "efficacy",
      "instance": "13292.123#2",
      "formula": "possible_bring_about(governments,abolish_meat_subsidies)",
-     "note": "13292.171: removing subsidies is politically easier than taxing. Since 2026-11-24: also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
+     "note": "13292.171: removing subsidies is politically easier than taxing; also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
     },
     {
      "cq": null,
@@ -8551,9 +8618,10 @@
       "date": "2026-11-27",
       "by": "developer (D086 draft 1)",
       "fields": [
+       "challenges",
        "notes"
       ],
-      "what": "Drafted: the reference's coding kept: a better means at 13292.118's exception (OC6; D075, D089); notes rewritten."
+      "what": "Drafted: the reference's coding kept: a better means at 13292.118's exception (OC6; D075, D089); notes rewritten; challenge notes rewritten without their history."
      }
     ]
    }
