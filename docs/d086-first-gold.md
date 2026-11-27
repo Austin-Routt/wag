@@ -378,6 +378,30 @@ and the code):
 | RC14 | The replay: a bare denial at the premise a fragment states, which is the premise it backs in another claim's instance (13292.135 and .137 at 13292.108's circumstances, which 13292.1#2 has) (RC14 and RC15 written after the replay from e1d6aa6 showed the two failing, before their tests and the code) | A challenge of that premise in the argument the fragment backs, where it is a premise on the board, not in the fragment's own Other argument, whose conclusion it is; a second denial of the same premise is a duplicate |
 | RC15 | The replay: a move at a premise of a fragment that is not the premise it backs (13292.192 at 13292.6's stated link, whose goal is narrower than that of the premise it backs) | Not moved to the argument the fragment backs: played as before (that statement is not on the board) |
 
+The English of a gold and the templates of an applied proposal (the independent review of D097's
+application, W6: a changed template passed every check once re-pinned; written before the tests and
+the code):
+
+| Case | Setup | Expected |
+|---|---|---|
+| EN1 | The gold, 13292.61#1's conclusion re-rendered (it had the game's phrasing) | `validate.py` passes R21: the English of every positive formula over lexicon atoms is `walton.yml`'s template for it, each atom in single quotes as the lexicon gives it |
+| EN2 | One word changed in a checked English (an exception's) | Refused (R21), naming the item, the instance, the formula and the English the template gives |
+| EN3 | `walton.yml`'s `interference/2` template changed in a copy, the gold not rendered again (the review's mutation) | Refused (R21) at each English that renders it; `--repin` renews no pin |
+| EN4 | A negated formula (`¬should_be_performed(tax_meat)`, "should not be done") | Not checked: `walton.yml` has no template for a negation |
+| EN5 | A nested formula (`based_on_evidence(asserts(W,S))`) or a bare proposition atom | Not checked |
+| EN6 | An Other instance's conclusion over lexicon atoms (13292.182's exception) | Checked as any instance's |
+| EN7 | A file that is not a gold (an annotator's) with English of its own | Not refused by R21: the rule is the gold's, whose English the tooling writes |
+| PC1 | An applied proposal whose template is not `walton.yml`'s (D040-D071-D097 with `interference/2` changed in a copy) | `wag-cli --proposal`: an error, the proposal is applied but `walton.yml`'s template is not as proposed |
+| PC2 | The same template in a proposal not applied | No such error: it proposes the template |
+| PC3 | Every committed applied proposal | No such error (`TestCommittedProposals`) |
+
+Decision D098 (OC6 and OC10; rule cases in `rule-cases.yml`, added with the recode that applies it):
+OC6-e, 13292.202, a mitigation at the conclusion of the argument that cites the harm, the starvation
+argument 13292.127#2; OC6-f, 13292.45, an amended action at the conclusion of the consequence
+argument 13292.12#3, not at the causal step 13292.12#1 that predicts the harm (as 13292.194);
+OC10-a, 13292.204, a denial of the link a weighing relies on, at the weighing's own premise
+(13292.127#1), not at the consequence argument that also has it.
+
 ## 7. Out of this plan
 
 Batch 2 recoded under the guidelines' version 4 (plan §4, item 2), other discussions and the probe set
