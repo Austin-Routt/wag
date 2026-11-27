@@ -1,7 +1,7 @@
 # The first gold (D086): plan, version 2
 
-Status: plan, 2026-11-27, before any drafting; the developer's under the owner's instruction to go with
-the recommended choices. Phase 3's first item ([plan.md](plan.md) §4, item 1; D086, D045, D092).
+Status: plan, 2026-11-27, written before any drafting; the developer's under the owner's instruction to
+go with the recommended choices. Round 1's first draft followed the same day (§10). Phase 3's first item ([plan.md](plan.md) §4, item 1; D086, D045, D092).
 Version 1 (8fcd001) was checked independently the same day; the check found four errors, seven
 warnings and ten notes, each verified against the repository and taken up here (§8).
 
@@ -280,8 +280,10 @@ of version 1's round, then the 12 new to version 2's), then the comparison with 
 `recode_d086_r1.py` wrote the draft into the gold, each item with its `adjudication.recoded` entry;
 `d086-rounds.json` has every claim of round 1 at draft 1, not reviewed. Its first version (6e9b28c) was
 checked independently before any review (the workspace's `verify/d086/DRAFT1-CHECK.md`: three errors,
-five warnings, eight notes, each confirmed against the files); the corrected script runs again from the
-reference, so draft 1 is one record. What the corrections changed is listed at the end.
+five warnings, eight notes, each confirmed against the files), and so were its corrections (b888983;
+`verify/d086/FIXCHECK-draft1.md`: three errors, two warnings, notes); the corrected script runs again
+from the reference each time, so draft 1 is one record. What the corrections changed is listed at the
+end.
 
 - **Changed (8).** 13292.12 at 13292.9#2's `causes(tax_meat,meat_industry_harmed)` and 13292.141 at
   13292.2#2's `causes(meat_production,significant_ghg_emissions)`, both the book's 28 CQ1 (a mechanism
@@ -298,20 +300,31 @@ reference, so draft 1 is one record. What the corrections changed is listed at t
   the retargeted claims at their old places. As §3 has it, an item a draft changes joins the round:
   those records are put right, the missing ones at the causal steps added (13292.9#2's 28 CQ1,
   13292.180#2's 28 CQ3), and the three are drafted and reviewed with round 1 (`d086-rounds.json` marks
-  them `joined`); otherwise their codings are kept.
-- **Kept (20),** each with its reason: the developer's reading matched the reference, or where it did not
-  (13292.46: the argument from rules fits what the claim states; 13292.8: 13292.115 is a consequence
-  argument, not practical reasoning, so 13292.8 is no fragment of it), the guidelines decide for the
-  reference. 13292.108 keeps every variable bound (question 1).
+  them `joined`); otherwise their codings are kept, but for the confidence of their capped causal steps
+  (below).
+- **Kept (20),** each with its reason. Where the developer's reading differed from the reference, the
+  guidelines decide for the reference (13292.46: the argument from rules fits what the claim states;
+  13292.8: 13292.115 is a consequence argument, not practical reasoning, so 13292.8 is no fragment of
+  it; 13292.36: the claim adds a consequence of its own, so an independent argument, as all three
+  codings have it, not backing of 13292.7's premise), or the question goes to the review (13292.194:
+  the developer read it at 13292.12#3; the reference and both annotators have 13292.12#1's conclusion;
+  question 3). 13292.108 keeps every variable bound (question 1).
 - **Confidence.** Nine causal steps whose confidence the N8 note capped "until the first gold's draft"
-  (13292.9#2 and #3, .12#1 and #2, .36#2 and #3, .180#2, .192#1 and #2) have it set on their merits,
-  0.55: the link stated, the cause's possibility supplied (fit stays `reconstructed`, §2 item 2).
-  13292.14's two steps keep the cap until round 2.
+  (13292.9#2 and #3, .12#1 and #2, .36#2 and #3, .180#2, .192#1 and #2) have it set on their merits
+  (confidence is the estimate that a careful annotator would choose the same, guidelines §3): both annotators coded
+  the same nine steps (with `cause_to_effect`, before D039), and §5 item 11 prescribes the modal form,
+  so 0.55; 13292.192#2, whose link the text states only as a possibility ("may still occur"), which the
+  scheme's firm link does not express, 0.5. Fit stays `reconstructed` (§2 item 2). Their notes say
+  whether the cause is the proposed tax or an effect predicted to follow from it. 13292.14's two steps
+  keep the cap until round 2.
 - **Notes.** Notes and challenge notes that told a coding's history in dated additions, described a
   coding the item no longer has, or said that the game asks a question at the conclusion only "until
   workstream E" (it asks it there by design since step C5.2, the rebuttal route beside the exception's
   question) are rewritten as one current account; the history is in the recoded entries and
-  `gold-format1.json`. 13292.147 names candidate C017. The gold's status says who made the material:
+  `gold-format1.json`. So are the premise notes that did so (13292.9#1's, 13292.174#1's), or that said
+  something no longer true or loose (13292.127#2's, 13292.108#1's); the boilerplate of exception and assumption notes, which
+  names the decision a premise comes from ("Since 2026-11-24: ..."), is kept, as everywhere in the
+  gold. 13292.147 names candidate C017. The gold's status says who made the material:
   language models (the batch's adjudication, and the developer's drafts), no item verified by a person
   yet; `verify_gold.py` writes the same words when no verification is left.
 - **Checks.** `validate.py` (R2-R17) passes. Each item's record names exactly the fields its diff against
@@ -341,23 +354,39 @@ reference, so draft 1 is one record. What the corrections changed is listed at t
   avoid the cost (its premise), and argues the cost too slight, not avoided by a substitute. The caps,
   the status, the challenge notes and the fragments' reasons for their unstated variables (13292.6's
   S1, 13292.218's A) as above.
+- **The corrections of the corrections (b888983).** 13292.127#2's starvation premise said that the
+  children engage it, which stopped being true when 13292.202 moved: it now says which reply engages
+  what. This section said the developer's reading matched where it did not (13292.36, .194): now
+  listed above. 13292.204's reference coding came the same way as 13292.202's (D055's recoding moved
+  B's answer to CQ:likelihood at the starvation argument's premise to the weighing's premise): its note
+  and record say so, and question 2 puts both to the review. The causal steps' notes said "only
+  proposed" where the cause is an effect predicted to follow from the tax. The nine confidences now
+  rest on what confidence means (guidelines §3): 0.55, and 0.5 for 13292.192#2. Smaller: two premise notes told a history
+  or said loosely what bears on them (13292.174#1, 13292.108#1), 13292.180's note named a reply to
+  13292.182 as one to both substitutes, and some records named their changes only by implication.
 
 Open for the review and the owner, each said in the items' notes:
 
 1. 13292.108: does a fragment whose parent has no argument carry that argument, every variable bound,
    or does §5 item 6 apply to it too, leaving seven of the eleven targets into it without a formula?
    Either way the guidelines should say.
-2. 13292.202: a mitigation that replies to a weighing claim. The draft puts it at the conclusion of the
-   argument that cites the harm (OC6; 13292.127#2), where both annotators put it (at 13292.127's
-   conclusion, when that argument was its primary). The reference had it at the consequence the
-   weighing relies on, a premise of 13292.127#1, since format 1 required a formula of the primary
-   instance once the weighing became 13292.127's primary (D055); OC10 has a reply to a weighing claim
-   attack the claim's own instance, as 13292.204 does. Which governs a mitigation?
+2. 13292.202 and 13292.204, the replies to the weighing claim 13292.127. When D055 made the weighing
+   13292.127's primary, format 1's rule of a primary instance's formulas moved both from the starvation
+   argument (now 13292.127#2), where both annotators had put them, to the weighing (13292.127#1):
+   13292.202, a mitigation, from the argument's conclusion to the starvation link, and 13292.204, which
+   denies that link, from the argument's premise (B's answer to CQ:likelihood there) to the same link
+   as the weighing's premise (a premise attack). The draft moves 13292.202 back, by OC6 (a mitigation
+   at the conclusion of the argument it answers), and keeps 13292.204 at the weighing, by OC10 (a reply
+   to a weighing claim attacks that claim's own instance: its comparison or the consequence it relies
+   on). Is that right for each, and which rule governs a reply that both mitigates or denies a harm and
+   answers a weighing claim?
 3. 13292.194 (and 13292.45, round 2): a mitigation at 13292.12's predicted harm (its primary step's
    conclusion; the reference's and both annotators'), at 13292.12#3 (the argument that cites the harm
    against the tax), or a 28 CQ3 answer at 13292.12#1's interference (the mechanism blocked)? The draft
-   keeps the first: the measures are the agent's own action (case.json), unlike the substitutes of
-   13292.182 and .198, which are what people would do.
+   keeps the first, where the reference and both annotators put it; the developer's own reading was the
+   second (13292.12#3 is the argument that cites the harm against the tax, as 13292.127#2 is for
+   13292.202). It does not take the third: the measures are the agent's own action (case.json), unlike
+   the substitutes of 13292.182 and .198, which are what people would do.
 4. 28 CQ1 or CQ2: the draft reads a mechanism offered for a causal link as answering CQ1 (13292.12,
    13292.141) and data offered for it as answering CQ2 (13292.46's beef figures bear on 13292.2#2's
    CQ2). Nothing checks the choice: the book's two questions sit at the same formula. Should the
@@ -377,7 +406,8 @@ Open for the review and the owner, each said in the items' notes:
    secondary instances?
 
 Taken up in round 2, not in this draft: 13292.208's target, which format 1 also moved (to 13292.104#1's
-better-means premise; both annotators and its own note put it at 13292.104#2's circumstances
-`current_circumstances(farming_industry_not_meat_is_problem)`, which it contradicts); 13292.121's role
+better-means premise; both annotators put it at 13292.104#2's circumstances
+`current_circumstances(farming_industry_not_meat_is_problem)`, which its note says it contradicts,
+though the note's last sentence reads it at the moved target); 13292.121's role
 kind `side_effect`, format 1's label (§5 item 3 makes it a value of `role.move`); 13292.14's capped
 causal steps; and the notes of 13292.7, .115 and .121 that still say "until workstream E".

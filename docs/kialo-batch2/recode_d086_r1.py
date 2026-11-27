@@ -6,7 +6,8 @@ A one-off, kept as the record. It writes the developer's draft of round 1 (d086-
 gold, each item with an adjudication.recoded entry (by "developer (D086 draft 1)") that names what
 changed and why, or says the reference's coding is kept and why. Corrected on 2026-11-27, before
 any review, after an independent check of its first version (6e9b28c; the workspace's
-verify/d086/DRAFT1-CHECK.md): it is run again from the reference, so that draft 1 is one record.
+verify/d086/DRAFT1-CHECK.md) and an independent check of those corrections (b888983;
+verify/d086/FIXCHECK-draft1.md): it is run again from the reference, so that draft 1 is one record.
 
 - Changed. The targets that format 1's rule of a primary instance's formulas (adjudication.md R5)
   had kept from what they answer name it: 13292.12 at 13292.9#2's causes(tax_meat,
@@ -26,14 +27,20 @@ verify/d086/DRAFT1-CHECK.md): it is run again from the reference, so that draft 
   the environmental argument, and §5 item 6 would leave seven of the eleven targets into it nothing
   to point at (a question for the review and the owner). The other items keep the reference's
   coding, which the developer's reading of each matched or, where it did not, the guidelines decide
-  for the reference (workspace verify/d086/round1-readings.md, round2-readings.md).
+  for the reference (13292.8, .36, .46) or the question goes to the review (13292.194's target)
+  (workspace verify/d086/round1-readings.md, round2-readings.md).
 - The nine causal steps of these items whose confidence the N8 note capped "until the first gold's
-  draft" have it set on their merits, 0.55: the link stated, the cause's possibility supplied.
+  draft" have it set on their merits: both annotators coded the same nine steps (with cause_to_effect),
+  and §5 item 11 prescribes the modal form, so 0.55, but 0.5 for 13292.192#2, whose link the text
+  states only as a possibility. Their notes say whether the cause is the proposed tax or an effect
+  predicted to follow from it.
 - Notes. Where a note, or a challenge record's note, told the coding's history in dated additions,
   described a coding the item no longer has, or said that the game asks a question at the conclusion
   only "until workstream E" (it asks it there by design since step C5.2, the rebuttal route), it is
   rewritten as one current account; the history is in the item's recoded entries and in
-  gold-format1.json. 13292.147 names candidate C017.
+  gold-format1.json. So are three premise notes (13292.127#2's, 13292.174#1's, 13292.108#1's); the
+  boilerplate of exception and assumption notes, which names the decision a premise comes from
+  ("Since 2026-11-24: ..."), is kept, as everywhere in the gold. 13292.147 names candidate C017.
 
 It refuses any gold but the one the rounds were measured on (d086-rounds.json's reference), then
 writes gold.json, sets each claim's draft to 1 and its review to "not reviewed" in d086-rounds.json
@@ -119,7 +126,7 @@ def add_challenge(cid, rec):
     G[cid]['challenges'].append(rec)
 
 
-def lift_cap(cid, iid, note):
+def lift_cap(cid, iid, note, conf=0.55):
     """The N8 note capped a hypothetical causal step's confidence "until the first gold's draft"."""
     ins = instance(cid, iid)
     if 'until the first gold' not in (ins.get('note') or '') or ins['scheme']['confidence'] > 0.5:
@@ -127,14 +134,31 @@ def lift_cap(cid, iid, note):
     stated = [p for p in ins['premises'] if p['formula'].startswith('causes(')]
     if not stated or stated[0]['status'] != 'explicit':
         refuse(f'{iid} does not state its causal link')
-    ins['scheme']['confidence'] = 0.55
+    ins['scheme']['confidence'] = conf
     ins['note'] = note
 
 
-MODAL_STEP = 'A causal step whose cause is only proposed (cause_to_effect_modal, §5 item 11).'
+def set_premise_note(cid, iid, formula, note):
+    hits = [p for p in instance(cid, iid)['premises'] if p['formula'] == formula]
+    if len(hits) != 1:
+        refuse(f'{iid} has {len(hits)} premises {formula}')
+    hits[0]['note'] = note
+
+
+MODAL_STEP = 'A causal step whose cause is only proposed, the un-enacted tax (cause_to_effect_modal, §5 item 11).'
+MODAL_EFFECT = ('A causal step whose cause is only possible, itself predicted to follow from the un-enacted tax '
+                '(cause_to_effect_modal, §5 item 11).')
 WORKSTREAM_E = ("without the remark that the game asks its question at the conclusion only 'until workstream E': it "
                 "asks it there by design, the rebuttal route beside the exception's question (D055; D095 (1))")
-LIFTED = 'the confidence of its causal steps set on their merits, 0.55 (the link stated, the cause\'s possibility supplied), lifting the cap the N8 note put on them until this draft'
+MERITS = 'both annotators coded the same steps (with cause_to_effect), and §5 item 11 prescribes the modal form'
+LIFTED = ('the confidence of its causal steps set on their merits, 0.55: ' + MERITS + '; this lifts the cap the N8 note '
+          'put on them until this draft, and their notes now say why the scheme is modal')
+LIFTED_ONE = ('the confidence of its causal step set on its merits, 0.55: ' + MERITS.replace('steps', 'step') + '; this '
+              'lifts the cap the N8 note put on it until this draft, and its note now says why the scheme is modal')
+LIFTED_192 = ("the confidence of its causal steps set on their merits: 0.55 for 13292.192#1, whose link the text states "
+              "firmly ('would require'), and 0.5 for 13292.192#2, whose link it states only as a possibility ('may still "
+              "occur'), which the scheme's firm link does not express; " + MERITS + "; this lifts the cap the N8 note put "
+              "on them until this draft, and their notes now say why the scheme is modal")
 NO_REPLY = 'no claim of the batch argues it'
 
 
@@ -143,7 +167,7 @@ NO_REPLY = 'no claim of the batch argues it'
 # 13292.12: the mechanism of 13292.9's first step.
 set_target('13292.12', '13292.9', '13292.9#2', 'premise', 'causes(tax_meat,meat_industry_harmed)')
 G['13292.12']['role'].update({'kind': 'cq_answer', 'cq': '28 CQ1', 'polarity': 'for'})
-lift_cap('13292.12', '13292.12#1', MODAL_STEP + ' A causal scheme because the claim\'s function is the causal mechanism, which no other walton.yml scheme expresses.')
+lift_cap('13292.12', '13292.12#1', MODAL_EFFECT + ' A causal scheme because the claim\'s function is the causal mechanism, which no other walton.yml scheme expresses.')
 lift_cap('13292.12', '13292.12#2', MODAL_STEP)
 set_note('13292.12', '13292.12#1', 'interference(imported_meat_relatively_cheaper)', '28 CQ3',
          'the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions at '
@@ -187,8 +211,8 @@ for cid in ('13292.182', '13292.198'):
            "required a formula of the primary instance) to the causal step it answers, the exception "
            "interference(reduced_meat_consumption) of 13292.180#2, the book's 28 CQ3 (other factors that counteract the "
            "production of the effect; the game asks no question there), as both annotators aimed it (A an undercutter, "
-           "B a cq_answer to 28 CQ3); its Other instance concludes that exception now (R8). A cascade in the replay now. "
-           "Notes rewritten.")
+           "B a cq_answer to 28 CQ3); its Other instance concludes that exception now (R8), and its description says how "
+           "a substitute counteracts the step. A cascade in the replay now. Notes rewritten.")
 
 # 13292.202: a mitigation, at the conclusion of the argument that cites the harm.
 set_target('13292.202', '13292.127', '13292.127#2', 'conclusion', '¬should_be_performed(tax_meat)')
@@ -275,7 +299,7 @@ record('13292.218', ['challenges', 'instances.bindings', 'instances.conclusion',
 # --- Joined: the items whose records named the retargeted claims (plan §3) ------------------------
 
 lift_cap('13292.9', '13292.9#2', MODAL_STEP + ' First link of the chain tax -> harm to the meat industry -> lower tax revenue.')
-lift_cap('13292.9', '13292.9#3', MODAL_STEP + ' Second link: harm to an industry that pays substantial taxes lowers tax revenue.')
+lift_cap('13292.9', '13292.9#3', MODAL_EFFECT + ' Second link: harm to an industry that pays substantial taxes lowers tax revenue.')
 modal = instance('13292.9', '13292.9#1')
 mp = next(p for p in modal['premises'] if p['formula'] == 'may_bring_about(tax_meat,tax_revenue_reduced)')
 mp['note'] = '"could actually" marks a possibility, not a firm prediction: the modal premise of negative_consequences_modal (D008)'
@@ -294,7 +318,7 @@ record('13292.9', ['challenges', 'instances.note', 'instances.premises', 'instan
        "13292.9#2 for 13292.12's mechanism. Otherwise the reference's coding kept, to be reviewed with round 1 (the "
        "developer's reading, round2-readings.md, matched; not blind, as that file says): the notes now name 33.3, as OC15 asks of a possible "
        "consequence to the agent's own goal, and tell one current account; " + LIFTED + "; the notes of its modal "
-       "premise and of its other challenge records rewritten without their history.")
+       "premise and of its other challenge records rewritten without their history, and " + WORKSTREAM_E + ".")
 
 set_note('13292.2', '13292.2#1', 'instance(meat_production,significant_ghg_source)', '14 CQ1',
          "how significant? 13292.135 (less than other sources), 13292.190 (mostly beef); 13292.141's energy comparison "
@@ -311,7 +335,7 @@ record('13292.2', ['challenges', 'notes'],
        "developer's reading (round2-readings.md; written after round 1's draft had used its causal step, so not blind) "
        "matched. Notes rewritten as one current account, naming what bears on the emissions and their significance.")
 
-lift_cap('13292.180', '13292.180#2', MODAL_STEP + ' The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit.')
+lift_cap('13292.180', '13292.180#2', MODAL_EFFECT + ' The step that backs the primary brings_about premise; the step tax -> less meat eaten is left implicit.')
 set_note('13292.180', '13292.180#1', 'brings_about(tax_meat,more_anemia_cases)', '33.2 CQ1',
          'the substitutes of 13292.182 and 13292.198 bear on it, but they answer at the causal step (13292.180#2\'s exception, 28 CQ3)')
 set_note('13292.180', '13292.180#1', 'good_outweighs(tax_meat,more_anemia_cases)', '33.2 CQ3', NO_REPLY)
@@ -323,7 +347,7 @@ record('13292.180', ['challenges', 'instances.note', 'instances.scheme.confidenc
        "28 CQ3 record added at the exception. Otherwise the reference's coding kept, to be reviewed with round 1 (A, B "
        "and the reference agree on every core field; the developer read it with 13292.182 and .198, not blind): notes "
        "rewritten as one current account; " +
-       LIFTED.replace('its causal steps', 'its causal step').replace('their merits', 'its merits').replace('on them', 'on it') +
+       LIFTED_ONE +
        "; the notes of its records at the outweighing exception and at the conclusion rewritten as current: without "
        "their history, and " + WORKSTREAM_E + ".")
 
@@ -376,10 +400,20 @@ set_note('13292.5', '13292.5#1', 'too_slight(tax_meat,regenerative_agriculture_d
 set_note('13292.123', '13292.123#2', 'possible_bring_about(governments,abolish_meat_subsidies)', '22.1 CQ4',
          '13292.171: removing subsidies is politically easier than taxing; also a premise of the primary better_means '
          'instance, possible_bring_about(P,A2) (D089)')
-lift_cap('13292.192', '13292.192#1', MODAL_STEP.replace('only proposed', 'only possible') + ' A causal scheme because the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses.')
-lift_cap('13292.192', '13292.192#2', MODAL_STEP.replace('only proposed', 'only possible'))
+# Premise notes of kept items that told a history or said something no longer true.
+set_premise_note('13292.127', '13292.127#2', 'brings_about(tax_meat,starvation_from_reduced_meat_access)',
+                 "presupposed: the tax decreases access to meat by making it dearer (13292.7); 13292.204 denies this link at "
+                 "the weighing's own premise (13292.127#1, OC10), and 13292.202 amends the action at this argument's conclusion")
+set_premise_note('13292.174', '13292.174#1', 'may_bring_about(tax_meat,more_dangerous_meat_production)',
+                 '"might force" marks a possibility, not a firm prediction: the modal premise of negative_consequences_modal (D008)')
+set_premise_note('13292.108', '13292.108#1',
+                 'would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)',
+                 'denied by 13292.13; 13292.14 and 13292.61 rebut that denial')
+lift_cap('13292.192', '13292.192#1', MODAL_EFFECT + ' A causal scheme because the attack consists of an offsetting causal chain, which no other walton.yml scheme expresses.')
+lift_cap('13292.192', '13292.192#2', MODAL_EFFECT + " The link itself is stated only as a possibility ('may still "
+         "occur'), which the scheme's firm link does not express.", conf=0.5)
 lift_cap('13292.36', '13292.36#2', MODAL_STEP)
-lift_cap('13292.36', '13292.36#3', MODAL_STEP)
+lift_cap('13292.36', '13292.36#3', MODAL_EFFECT)
 
 
 # --- Notes: one current account -------------------------------------------------------------------
@@ -434,7 +468,8 @@ NOTES = {
     '13292.12': (
         "Gives the mechanism of 13292.9's 'by harming the meat industry': the tax would make imported meat cheaper "
         "(dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal "
-        "steps whose cause is only proposed, so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper "
+        "steps whose cause is only proposed (the tax) or possible (the cheaper imports it would bring), so "
+        "cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper "
         "imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at "
         "the harm to the industry. Together they back the causal premise of 13292.9's first step, "
         "causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal "
@@ -492,8 +527,8 @@ NOTES = {
         "A further bad consequence for the same conclusion as 13292.7 (food security falls where the poor need easy "
         "access to all food), so an independent argument for it; backing of 13292.7's bad(G) is the alternative role, "
         "since the need sentence backs it. 'Taxes' generalizes from the meat tax; A is bound to the thesis's action. The "
-        "chain tax -> production costs -> food security is coded as two causal steps whose cause is only proposed "
-        "(cause_to_effect_modal, §5 item 11)."),
+        "chain tax -> production costs -> food security is coded as two causal steps, whose causes, the tax and the "
+        "higher costs it would bring, are only proposed or possible (cause_to_effect_modal, §5 item 11)."),
     '13292.127': (
         "The claim ranks two consequences: starvation from reduced access to meat is a more severe threat than any "
         "consequence of high meat consumption, the harms the pros cite. A ranking argues the exception of the argument "
@@ -559,7 +594,10 @@ NOTES = {
         "brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127#1 (bad_outweighs_good), "
         "about which no critical question is asked, so premise_attack (§5 item 3), against. The premise is 13292.127's "
         "own (inferred from 13292.7), so this is not re-parenting. Its argument is Other (absent exposure: the affected "
-        "group is not exposed to the cause)."),
+        "group is not exposed to the cause). Both annotators aimed it at the same link as a premise of the starvation "
+        "argument, 13292.127's primary then and 13292.127#2 now, B as an answer to its likelihood question; D055's "
+        "recoding moved it to the weighing's premise, which OC10 now supports: a question for the review (D086 round 1, "
+        "with 13292.202's)."),
     '13292.233': (
         "Denies that the reduction a tax would cause is unhealthy: meta-analyses and reviews find that less meat, and "
         "vegetarian diets, bring better health, lower mortality and longer lives, especially when high intakes of red "
@@ -620,8 +658,9 @@ NOTES = {
         "the modal variant of negative consequences, secondary, and the bridge 13292.9#4 (bridge_from_possible_harm), "
         "primary, carries its conclusion to the thesis, an independent con. The consequence falls on the agent's own "
         "goal, the government's revenue: 33.3, which has no modal variant, so the modal variant of 33.2 with its bridge "
-        "(OC15). Its two causal links are secondary steps whose cause is only proposed (cause_to_effect_modal, §5 item "
-        "11): the tax -> harm to the meat industry (13292.9#2), and that harm -> lower revenue (13292.9#3). The net claim "
+        "(OC15). Its two causal links are secondary steps whose cause is only proposed or possible (cause_to_effect_modal, "
+        "§5 item 11): the tax -> harm to the meat industry (13292.9#2), and that harm, itself predicted, -> lower "
+        "revenue (13292.9#3). The net claim "
         "presupposes that lost industry taxes exceed the meat tax's own yield. 13292.12 backs the first link with a "
         "mechanism; 13292.43 weighs the tax's other goods against the lost revenue."),
     '13292.2': (
@@ -635,12 +674,14 @@ NOTES = {
     '13292.180': (
         "Two Kialo parents (R7). Primary function: a further bad consequence of making meat dearer (meat is the easiest "
         "source of iron, so financial restrictions will raise anemia), an independent argument for 13292.7's conclusion; "
-        "its causal step, reduced meat consumption -> more anemia (13292.180#2, cause_to_effect_modal: the cause is only "
-        "proposed), backs the primary's consequence premise, the step from the tax to less meat eaten left implicit. "
+        "its causal step, reduced meat consumption -> more anemia (13292.180#2, cause_to_effect_modal: the cause, less "
+        "meat eaten, is only possible, a predicted effect of the tax), backs the primary's consequence premise, the step "
+        "from the tax to less meat eaten left implicit. "
         "Toward 13292.121 it backs the modal premise may_bring_about(tax_meat,unhealthy_meat_underconsumption) of "
         "13292.121#1 (D008), recorded in other_kialo_parents as a cq_answer to the game's CQ:modal_likelihood (33.2 "
         "CQ1). 'Organic iron' presumably means heme iron. 13292.182 and 13292.198 answer the causal step with "
-        "substitutes (28 CQ3, at its exception); 13292.184 raises bioavailability against them."),
+        "substitutes (28 CQ3, at its exception); 13292.184, a reply to 13292.182 outside the batch, says that supplements "
+        "are not always a good replacement (bioavailability)."),
 }
 for cid, text in NOTES.items():
     if cid not in ROUND1 and cid not in JOINED:
@@ -657,26 +698,32 @@ KEPT = {
     '13292.1': ([], 'a control (A, B and the reference agree on every core field): the thesis, scheme none.'),
     '13292.30': ([], 'a control: the practical analogy from taxes on ecologically damaging businesses elsewhere, at the thesis (guidelines §3 names it).'),
     '13292.36': (['instances.note', 'instances.scheme.confidence', 'notes'],
-                 f'a control; {NOTES_REWRITTEN} (the history of the causal steps\' coding is in this record and gold-format1.json); {LIFTED}.'),
-    '13292.108': (['challenges', 'notes'],
+                 'a control (A, B and the reference agree on every core field). The developer\'s first reading differed '
+                 '(backing of 13292.7#1\'s consequence premise, the added production costs its mechanism), but the claim '
+                 'adds a consequence of its own (food security), so an independent argument for 13292.7\'s conclusion, as '
+                 'all three have it (its note names backing as the alternative). '
+                 f'{NOTES_REWRITTEN[0].upper() + NOTES_REWRITTEN[1:]} (the history of the causal steps\' coding is in this '
+                 f'record and gold-format1.json); {LIFTED}.'),
+    '13292.108': (['challenges', 'instances.premises', 'notes'],
                   'every variable bound (see the note): the thesis has no argument, so this fragment carries the environmental argument; §5 item 6 would leave seven of the eleven targets into it nothing to point at (the four at the stated circumstances keep theirs). Whether a fragment whose parent has no argument carries that argument is put to the review and the owner. '
-                  f'{NOTES_REWRITTEN[0].upper() + NOTES_REWRITTEN[1:]}; {CHALLENGES_REWRITTEN}.'),
+                  f'{NOTES_REWRITTEN[0].upper() + NOTES_REWRITTEN[1:]}; {CHALLENGES_REWRITTEN}; the note of its efficacy '
+                  'premise says how 13292.14 and 13292.61 bear on it (they rebut 13292.13\'s denial).'),
     '13292.25': (['notes'], f'the exception too_slight (OC9), the game\'s CQ:too_slight; {NOTES_REWRITTEN}.'),
     '13292.33': (['notes'], 'the likelihood question at 13292.7#1\'s consequence premise (13292.7 has no causal step of its own); notes rewritten.'),
-    '13292.127': (['challenges', 'notes'],
-                  f'the weighing against the class at 13292.108\'s exception (OC3, OC4, OC7, OC8); {NOTES_REWRITTEN} (the earlier codings, against 13292.115 and with Other, are in this record\'s entries); {CHALLENGES_REWRITTEN}, and {WORKSTREAM_E}.'),
-    '13292.174': (['challenges', 'notes'], f'a possible side effect that ranks nothing: the modal variant and its bridge, a rebuttal at 13292.108\'s conclusion (OC2, OC15; D070); notes rewritten; {CHALLENGES_REWRITTEN}.'),
-    '13292.104': (['challenges', 'notes'], f'a better means at 13292.108\'s exception (OC6; D075, D089): the developer\'s reading matched; notes rewritten; {CHALLENGES_REWRITTEN}.'),
+    '13292.127': (['challenges', 'instances.premises', 'notes'],
+                  f'the weighing against the class at 13292.108\'s exception (OC3, OC4, OC7, OC8); {NOTES_REWRITTEN} (the earlier codings, against 13292.115 and with Other, are in this record\'s entries); {CHALLENGES_REWRITTEN}, and {WORKSTREAM_E}; the note of 13292.127#2\'s starvation premise says which reply engages what (13292.204 the weighing\'s premise, 13292.202 this argument\'s conclusion).'),
+    '13292.174': (['challenges', 'instances.premises', 'notes'], f'a possible side effect that ranks nothing: the modal variant and its bridge, a rebuttal at 13292.108\'s conclusion (OC2, OC15; D070); notes rewritten; {CHALLENGES_REWRITTEN}, and the note of its modal premise too.'),
+    '13292.104': (['challenges', 'notes'], 'a better means at 13292.108\'s exception (OC6; D075, D089): the developer\'s reading matched; notes rewritten; challenge notes rewritten as current (the one at 13292.104#2\'s circumstances says where format 1 moved 13292.208, which round 2 takes up).'),
     '13292.43': (['notes'], 'the weighing at 13292.9#1\'s exception (OC3, OC4, OC15): the developer\'s reading matched; notes rewritten.'),
     '13292.192': (['instances.note', 'instances.scheme.confidence', 'notes'],
-                  f'the attack on 13292.6\'s stated link with a modal causal chain; notes rewritten without the history of the causal steps\' coding; {LIFTED}.'),
+                  f'the attack on 13292.6\'s stated link with a modal causal chain; notes rewritten without the history of the causal steps\' coding; {LIFTED_192}.'),
     '13292.147': (['challenges', 'notes'], f'a proposal of another course at 13292.108\'s conclusion (OC6; D006, D066); notes rewritten (the earlier text described the answer at the exception it no longer is), and candidate C017 named, as OC6 asks; {CHALLENGES_REWRITTEN}, and {WORKSTREAM_E}.'),
-    '13292.204': (['notes'], 'a premise attack on the starvation link the weighing relies on (OC10); notes rewritten (the earlier text called the weighing Other, as it was before D064 and D075).'),
+    '13292.204': (['notes'], 'a premise attack on the starvation link the weighing relies on (OC10); the annotators\' reading (the same link as a premise of the starvation argument, now 13292.127#2, B\'s cq_answer to CQ:likelihood before D055\'s recoding) is put to the review with 13292.202\'s; notes rewritten (the earlier text called the weighing Other, as it was before D064 and D075).'),
     '13292.233': (['notes'], 'the modal premise of 13292.121#1, CQ:modal_likelihood (OC15); notes rewritten (the earlier text named CQ:likelihood, the question before the modal variant).'),
     '13292.29': (['notes'], 'the rule from personal liberty, a rebuttal at 13292.115\'s conclusion (OC5, C007); fit explicit, since both premise-role formulas are stated (§5 item 6); notes revised: the remark on a game question removed, since a right that rules the action out answers no question (OC5).'),
     '13292.5': (['challenges', 'notes'], f'a side effect that ranks nothing, a rebuttal at 13292.108\'s conclusion (OC2; D070); notes rewritten; {CHALLENGES_REWRITTEN}.'),
     '13292.123': (['challenges', 'notes'], f'a better means at 13292.118\'s exception (OC6; D075, D089); notes rewritten; {CHALLENGES_REWRITTEN}.'),
-    '13292.194': (['challenges', 'notes'], f'positive consequences of the amended action, at 13292.12\'s predicted harm, where both annotators put it; two other readings (13292.12#3, and 28 CQ3 at 13292.12#1\'s interference) are put to the review; notes rewritten; {CHALLENGES_REWRITTEN}, and {WORKSTREAM_E}.'),
+    '13292.194': (['challenges', 'notes'], f'positive consequences of the amended action, at 13292.12\'s predicted harm, where both annotators put it (the developer\'s own reading was 13292.12#3, the argument that cites the harm); two other readings (13292.12#3, and 28 CQ3 at 13292.12#1\'s interference) are put to the review; notes rewritten; {CHALLENGES_REWRITTEN}, and {WORKSTREAM_E}.'),
     '13292.8': ([], 'the classification of North American consumption as unhealthy, backing 13292.115\'s premise brings_about(...) (CQ:likelihood): the developer\'s first reading (a fragment) took 13292.115 for practical reasoning; it is positive consequences, which has no circumstances premise.'),
     '13292.46': ([], 'the argument from rules (the rule, tax by impact; the case, beef\'s impact; the conclusion, beef taxed higher) fits what the claim states; no consequence of the graded tax is stated.'),
 }
@@ -701,10 +748,10 @@ gold['history'].append({
              "6). Kept, with the reason in each item's record: the other 20 of the round and the three joined items, whose "
              "records of the retargeted claims are put right; among them 13292.108, which carries the environmental "
              "argument (a question for the review and the owner). Nine causal steps capped by the N8 note have their "
-             "confidence set on their merits. Notes and challenge notes that told a coding's history, or that the game asks a "
+             "confidence set on their merits (0.55; 0.5 for 13292.192#2). Notes and challenge notes that told a coding's history, or that the game asks a "
              "question at the conclusion only until workstream E, are rewritten as one current account; candidate C017 "
-             "named for 13292.147. Corrected before any review, after an independent "
-             "check of its first version.")})
+             "named for 13292.147. Corrected before any review, after an independent check of its first version and an "
+             "independent check of those corrections.")})
 
 with open(GOLD, 'w', encoding='utf-8') as fh:
     fh.write(json.dumps(gold, indent=1, ensure_ascii=False))

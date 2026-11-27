@@ -334,5 +334,5 @@ claim it did not review as unresolved too.
   eleven targets point into: a question for the other reviewer and the owner. Two more targets that
   format 1 moved for the same reason came to light: 13292.202, a mitigation, which the draft puts at
   the conclusion of the argument that cites the harm (13292.127#2), where both annotators put it; and
-  13292.208, at 13292.104#1's better-means premise, which both annotators and its own note put at
-  13292.104#2's circumstances (round 2 takes it up).
+  13292.208, at 13292.104#1's better-means premise, which both annotators put at 13292.104#2's
+  circumstances, the premise its note says it contradicts (round 2 takes it up).
