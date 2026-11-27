@@ -30,6 +30,7 @@ func Modes() []ModeInfo {
 		{"cq", "points, live scoring; a question about your argument left unanswered on your next turn loses"},
 		{"debate", "a central claim: pro (first seat) bears the burden of proof and wins if the claim is In; a losing side that passes concedes"},
 		{"solo", "one player argues both sides of a claim until they pass; the result is the verdict (belief revision)"},
+		{"inquiry", "two players examine a claim together until both pass: no sides and no winner; the result is the verdict"},
 	}
 }
 
@@ -73,6 +74,11 @@ func ModeConfig(name string) (GameConfig, error) {
 		live()
 		c.Objective = ObjectiveClaim
 		c.AbstentionThreshold = 1
+	case "inquiry":
+		live()
+		c.Objective = ObjectiveClaim
+		c.Cooperative = true
+		c.AbstentionThreshold = 1
 	default:
 		names := make([]string, 0, len(Modes()))
 		for _, m := range Modes() {
@@ -81,6 +87,30 @@ func ModeConfig(name string) (GameConfig, error) {
 		return c, fmt.Errorf("unknown mode %q (modes: %s)", name, strings.Join(names, ", "))
 	}
 	return c, nil
+}
+
+// CheckInquiry tells why a configuration of the inquiry mode, with n
+// players, is not one (docs/e1-evidence.md, E1.0): an inquiry is two players
+// with no winner and no loser, so it takes no setting that makes one.
+func CheckInquiry(c GameConfig, n int) error {
+	if !c.Cooperative {
+		return nil
+	}
+	switch {
+	case n != 2:
+		return fmt.Errorf("an inquiry is two players, not %d", n)
+	case c.Objective != ObjectiveClaim:
+		return fmt.Errorf("an inquiry examines a claim (objective claim)")
+	case c.TargetScore > 0:
+		return fmt.Errorf("an inquiry has no winner: it takes no target score")
+	case c.AnswerWithin > 0:
+		return fmt.Errorf("an inquiry has no loser: it takes no answer deadline")
+	case c.ConcedeOnPass:
+		return fmt.Errorf("an inquiry has no sides: no one concedes on a pass")
+	case c.MoveTimeoutLoses:
+		return fmt.Errorf("an inquiry has no loser: a late move passes the turn, it does not lose")
+	}
+	return nil
 }
 
 // -------------------------------------------------------------------------
@@ -118,8 +148,8 @@ func (gs *GameState) Outcome() *Outcome {
 		if s := gs.Adapter.Graph.Statements[gs.Claim]; s != nil {
 			o.Verdict = verdictString(s.Label)
 		}
-		if len(gs.Players) < 2 {
-			return o // solo: the verdict is the result
+		if len(gs.Players) < 2 || gs.Config.Cooperative {
+			return o // solo, or an inquiry: the verdict is the result
 		}
 		switch {
 		case gs.Loser != "" && gs.Side(gs.Loser) == "pro":

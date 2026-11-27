@@ -61,6 +61,8 @@ func (ss *Session) Prompt() string {
 		w("You argue FOR the claim: you win if the claim is IN when the game ends.")
 	case side == "con":
 		w("You argue AGAINST the claim: you win unless the claim is IN when the game ends.")
+	case gs.Config.Cooperative:
+		w("You and the other player examine the claim together: neither of you argues a side or wins; the result is the claim's label when the game ends (when both of you pass in one round, or at the round limit).")
 	default:
 		w("You play for points.")
 	}
@@ -86,7 +88,17 @@ func (ss *Session) Prompt() string {
 - After every move the Carneades engine labels each statement IN, OUT or UNDECIDED. An argument is in force when all its premises are IN and no exception or undercutter against it is IN. A statement that is at issue (argued for and against) is decided by the strongest argument in force on each side, not by their sum: under PE (preponderance) the stronger side wins and a tie leaves both OUT; under CCE it must also lead by more than 0.5; under BRD, also the other side must weigh under 0.3.
 - Make your parts true and relevant to the discussion, in plain words: the other player can challenge any of them. Cite sources when a scheme asks for them.
 `)
-	if gs.Config.Objective == game.ObjectiveClaim {
+	if gs.Config.Objective == game.ObjectiveClaim && gs.Config.Cooperative {
+		w("- The inquiry is about the claim: you examine it together, and its label when the game ends is the result; no one wins, and the scores decide nothing. ")
+		if gs.Claim == "" {
+			w("There is no claim yet: the conclusion of the first argument becomes the claim. ")
+		}
+		w("The game ends when both players pass in one round")
+		if gs.Config.MaxTurns > 0 {
+			w(", after round %d,", gs.Config.MaxTurns)
+		}
+		w(" or when a player resigns.\n")
+	} else if gs.Config.Objective == game.ObjectiveClaim {
 		w("- The debate is about the claim: pro wins if it is IN when the game ends, con otherwise; the scores do not decide it. ")
 		if gs.Claim == "" {
 			w("There is no claim yet: the conclusion of pro's first argument becomes the claim. ")

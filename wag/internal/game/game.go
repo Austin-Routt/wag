@@ -119,6 +119,10 @@ type GameConfig struct {
 	// is against it concedes, as in persuasion dialogues (pro retracts a
 	// claim it cannot carry; con concedes one it cannot shake).
 	ConcedeOnPass bool
+	// Cooperative (ObjectiveClaim, the inquiry mode): the players examine
+	// the claim together. No one has a side or wins; the result is the
+	// verdict, as in solo (docs/e1-evidence.md, E1.0).
+	Cooperative bool `json:",omitempty"`
 
 	// TargetScore > 0 ends the game when a player's score reaches it.
 	TargetScore float64
@@ -457,7 +461,7 @@ func (c GameConfig) live() bool { return c.Scoring.Model == ScoringLive }
 // Side returns "pro" or "con" for a player of an ObjectiveClaim game with two
 // or more players (even seats are pro), and "" otherwise.
 func (gs *GameState) Side(playerID string) string {
-	if gs.Config.Objective != ObjectiveClaim || len(gs.Players) < 2 {
+	if gs.Config.Objective != ObjectiveClaim || len(gs.Players) < 2 || gs.Config.Cooperative {
 		return ""
 	}
 	for i, p := range gs.Players {

@@ -493,3 +493,45 @@ and "Out of this step"; W-15 by choice 12; the notes as the check of version 2 f
 | N-11 payload bytes in play | Choice 2: none served |
 | N-12 the pins rule's scope | Choice 13: games with a record set; Y9 |
 | N-13 new fields omitted when empty | Choice 13; Y7 |
+
+## Results
+
+The tables above stay as they were written before the tests ran; corrections and findings are
+recorded here.
+
+### E1.0, with the contract's 0.2 (V1 to V4)
+
+- **C1 to C9 and V1 to V4 pass**: `internal/game/inquiry_test.go`, `internal/server/inquiry_test.go`,
+  `cmd/wag-cli/inquiry_test.go`, `internal/evidence/format02_test.go`. V1 to V4 are E1.2's row,
+  done with E1.0 because the contract's version comes first.
+- **C1, before the end.** The board's state carries an outcome only once a game is over, in every
+  mode (`state.go`), and the verdict throughout. The test as first written read the board's
+  outcome before the end, which no game shows, and failed; it now checks, before the end, that the
+  board shows the verdict and no outcome and that the game's provisional outcome (`Outcome()`)
+  names no winner, and after the end the board's outcome, as before.
+- **The terminal named a tie.** Played at the terminal, an inquiry ended with "Result: TIE!", and a
+  series (`--games`) counted wins and ties. Fixed: the terminal says "Result: the claim's verdict
+  (an inquiry: no one wins)", and a series gives the mean scores and the verdicts. The terminal's
+  test now also plays an inquiry to its end and a series, and refuses an inquiry that loses on a
+  late move (C6).
+- **C6 at the server.** The server takes no setting for losing on a late move (only the terminal's
+  `--timeout-loses` sets it); the game's check and the terminal refuse it.
+- **An older test.** `TestInvariantsHoldInEveryMode` plays every mode, and expected every game of
+  two players on a claim to have a winner or a draw, and tried three players in every mode but
+  solo. It now plays the inquiry with two players and expects no winner, loser or draw.
+- **The board**, checked in a headless browser (the workspace's `verify/e1/browser/inquiry.js`):
+  no player's side shown before or after the end; the end's panel reads "An inquiry: no one wins;
+  the result is the claim's label"; no page error. "Wins" before the end is the board's
+  explanation of a statement under its proof standard ("it wins"), not a player's.
+- **The name.** The mode is named `inquiry`, as choice 1 says. `game-rules.md` and
+  `dialogue-types.md` §9.1 say what it takes from Walton's inquiry (two fellow investigators with
+  no side; the claim proven, disproven or not settled) and what it does not (the inquiry's high
+  standard of proof and evidential priority), as the context presets' renaming did for the types
+  the game does not play. Put to the owner with choice 1.
+- **Planted defects:** 27, one or more for each of C1 to C9, V1 to V4 and the terminal's result
+  (the workspace's `verify/e1/mutants-e10.py` and its two runs' output), all caught. In the first
+  run one survived: an inquiry's prompt saying "You play for points" passed C7, whose "together"
+  the rules paragraph also has; C7 now checks the seat's role line, and the defect is caught. Two
+  defects gave no verdict (they left a variable unused) and were rewritten to keep it used.
+- **Not yet:** `wag-llm play --mode inquiry` names its seats Pro and Con, and `wag-llm report`
+  counts sides; E1.6, which gives `wag-llm` its `--evidence`, names them otherwise.

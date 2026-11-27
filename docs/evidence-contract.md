@@ -1,4 +1,4 @@
-# Provisional offline evidence contract: wag-evidence/0.1
+# Provisional offline evidence contract: wag-evidence/0.1 and 0.2
 
 This is the first executable record contract for D076, informed by the
 [literature review](evidence-theory-review.md). It is implemented by
@@ -171,6 +171,18 @@ change to it is a deliberate version change. This is not an assertion
 of RFC canonical-JSON compatibility. Cross-language writers should consume the
 checker-produced fingerprints or reproduce the named algorithm against pinned
 fixtures. A future canonicalization migration needs a new algorithm version.
+
+**Version 0.2** (`wag-evidence/0.2`, 2026-11-27) is the version a game writes
+([`e1-evidence.md`](e1-evidence.md), choice 6). It is 0.1 with one change: a
+binding's revision is `wag-binding-go-json/3`, the same serialization with
+every record's `created_at` left out (the binding's, and its claim's,
+target's, representations', artifacts' and sources'). A time says when a
+record was written, not what a consent is to, and a game replayed, loaded or
+resumed must find the revisions it recorded. A 0.1 bundle keeps `/2` and its
+meaning; the checker takes both. In Go, `evidence.ValidateRecords` applies
+the same record and consent rules as `evidence.Validate` without reading a
+payload or checking a selector against its bytes, for records whose payloads
+were checked when they were taken.
 
 First create a bundle with no events and inspect `binding_revisions`. Append
 the participants' actual consent events using those values, then recheck.

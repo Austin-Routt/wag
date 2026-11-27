@@ -347,6 +347,7 @@ losing side has nothing more to say.
 | cq | points | live | 30 rounds; a question left unanswered on your next turn loses |
 | debate | claim | live | 20 rounds, or a concession |
 | solo | claim, one player | live | the player passes |
+| inquiry | claim, two players together: no sides, no winner | live | 20 rounds, a round in which both pass, or a resignation |
 
 Every setting can also be changed on its own:
 
@@ -358,14 +359,22 @@ In tournaments (`--games`), `--alternate` swaps the seats every other game.
 
 **Self-play** is two seats played by the same kind of agent
 (`--p1 greedy --p2 greedy`). **Solo** is one seat arguing both sides.
+**Inquiry** is two players examining a claim together, as the first evidence
+slice's players do (D076; `docs/e1-evidence.md`): neither has a side or wins,
+and the result is the verdict.
 
-**Dialogue type.** In Walton's terms every mode is a persuasion dialogue, or
-none:
+**Dialogue type.** In Walton's terms every mode but `inquiry` is a persuasion
+dialogue, or none:
 - `debate` is the one-sided form: pro must prove the claim, and con need only
   doubt it.
 - `cq` adds a strict duty to answer.
 - `solo` is one person deliberating with a devil's advocate on a practical
   claim, or a one-person inquiry on a factual one.
+- `inquiry` takes the inquiry's relation and its result, not its rules: two
+  fellow investigators, with no side, find the claim proven, disproven or
+  not settled (In, Out or Undecided; `dialogue-types.md` §5.2), under the
+  game's standard of proof; the inquiry's high standard of proof and
+  evidential priority are not imposed.
 - The points modes match no type.
 
 The context presets are domains (weights and standards), not types. Other

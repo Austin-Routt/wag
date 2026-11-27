@@ -3,6 +3,13 @@
 package evidence
 
 const Format = "wag-evidence/0.1"
+
+// FormatGame is the version a game writes (docs/e1-evidence.md): as 0.1,
+// but a binding's revision (wag-binding-go-json/3) leaves out the records'
+// times, which say when a record was written, not what a consent is to, so
+// that a game replayed, loaded or resumed finds the revisions it recorded.
+const FormatGame = "wag-evidence/0.2"
+
 const Policy = "two-party-consideration/1"
 
 // Bundle is an offline snapshot. Native WAG moves still use citation strings;

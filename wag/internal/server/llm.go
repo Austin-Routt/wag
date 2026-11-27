@@ -22,6 +22,19 @@ import (
 // modelSystem is a model seat's system prompt (a profile can replace it).
 const modelSystem = `You play one seat of WAG, a two-player argumentation game built on Walton's argumentation schemes and the Carneades model of argument. Play well and honestly: make arguments that are true and relevant to the discussion, in plain words, and pick the moves that help your side. Every reply ends with exactly one JSON object: your move, in the format the prompt gives.`
 
+// modelSystemInquiry is a model seat's system prompt in an inquiry, where the
+// players examine the claim together (docs/e1-evidence.md, E1.0). Other
+// games keep modelSystem, which their starts record.
+const modelSystemInquiry = `You play one seat of WAG, a two-player argumentation game built on Walton's argumentation schemes and the Carneades model of argument. This game is an inquiry: you and the other player examine a claim together, with no side and no winner. Play well and honestly: make arguments that are true and relevant to the discussion, in plain words, and pick the moves that bring out what holds. Every reply ends with exactly one JSON object: your move, in the format the prompt gives.`
+
+// system is the session's system prompt for its model seats.
+func (ss *Session) system() string {
+	if ss.GS.Config.Cooperative {
+		return modelSystemInquiry
+	}
+	return modelSystem
+}
+
 // maxModelAttempts is how many replies a model seat may give for one move.
 const maxModelAttempts = 4
 
@@ -169,7 +182,7 @@ func (s *Server) modelTurn(ss *Session, c *llm.Client) (*game.TurnResult, error)
 	for attempt := start; attempt <= maxModelAttempts; attempt++ {
 		var callID string
 		var resp *llm.Response
-		req := c.Request(modelSystem, msgs)
+		req := c.Request(ss.system(), msgs)
 		recorded := tr.reply(attempt, req)
 		if recorded != nil {
 			callID, resp = recorded.ID, recorded.Response

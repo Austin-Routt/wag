@@ -7,7 +7,7 @@
 // Flags:
 //
 //	--mode    Game mode (default: "classic"); --modes lists them: classic, infinite,
-//	          target, timed, speed, cq, debate, solo (see game.ModeConfig)
+//	          target, timed, speed, cq, debate, solo, inquiry (see game.ModeConfig)
 //	--p1      Player 1 type: "human", "random", "greedy" or "json" (default: "human")
 //	--p2      Player 2 type: "human", "random", "greedy", "json" or "none" (default:
 //	          "random"; "none", and the solo mode, make a one-player game)
@@ -232,6 +232,14 @@ func main() {
 	if *mode == "solo" {
 		*p2Type = "none"
 	}
+	players := 2
+	if *p2Type == "none" {
+		players = 1
+	}
+	if err := game.CheckInquiry(cfg, players); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
 
 	if *games > 0 {
 		os.Exit(runGames(files, cfg, *games, *seed, *p1Type, *p2Type, *name1, *name2, *alternate))
@@ -384,6 +392,8 @@ gameOver:
 	switch {
 	case o.Winner != "":
 		fmt.Fprintf(say, "\n  Winner: %s!\n", gs.PlayerByID(o.Winner).Name)
+	case gs.Config.Cooperative:
+		fmt.Fprintln(say, "\n  Result: the claim's verdict (an inquiry: no one wins)")
 	case len(gs.Players) > 1:
 		fmt.Fprintln(say, "\n  Result: TIE!")
 	}
@@ -639,9 +649,15 @@ func runGames(f dataFiles, cfg game.GameConfig, n int, seed int64, p1, p2, name1
 	maxTurns := cfg.MaxTurns
 	fmt.Printf("%d games (%d panicked), mode %s: %s; %d rounds at most (0: no limit)\n",
 		br.GamesPlayed, br.Panics, cfg.Mode, describeConfig(cfg), maxTurns)
-	if p2 == "none" {
+	switch {
+	case p2 == "none":
 		fmt.Printf("  %-12s mean score %7.2f\n", name1, br.AvgScores[name1])
-	} else {
+	case cfg.Cooperative:
+		// An inquiry: no one wins; the verdicts below are its results.
+		for _, name := range []string{name1, name2} {
+			fmt.Printf("  %-12s mean score %7.2f\n", name, br.AvgScores[name])
+		}
+	default:
 		for _, name := range []string{name1, name2} {
 			fmt.Printf("  %-12s wins %4d   mean score %7.2f\n", name, br.Wins[name], br.AvgScores[name])
 		}

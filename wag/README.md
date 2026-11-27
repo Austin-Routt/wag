@@ -12,9 +12,10 @@ moves as the rules and the game's limits allow. The rules
 gives each scheme its questions and the schemes that can answer them, and an
 argument needs no question to be made. Carneades-4 (the fork in
 `../carneades-4`) labels every statement In, Out or Undecided after each
-move. Eight modes
+move. Nine modes
 (points races, timed and speed play, critical-question duels, debates on a
-central claim, solo belief revision) are combinations of a few settings.
+central claim, solo belief revision, an inquiry of two players into a claim)
+are combinations of a few settings.
 
 ## Layout
 
@@ -85,6 +86,7 @@ go run ./cmd/wag-cli --modes                           # list the game modes
 go run ./cmd/wag-cli --mode debate --p2 human          # debate a claim against a friend
 go run ./cmd/wag-cli --mode cq --p1 greedy --p2 random # critical-question duel
 go run ./cmd/wag-cli --mode solo                       # argue both sides yourself
+go run ./cmd/wag-cli --mode inquiry --p2 human         # examine a claim together with a friend: no sides, no winner
 go run ./cmd/wag-cli --mode classic --scoring live --answer-within 1  # mix the settings
 go run ./cmd/wag-cli --mode debate --games 40 --p1 greedy --p2 greedy --alternate  # self-play
 ```

@@ -378,9 +378,10 @@ func TestModeConfig(t *testing.T) {
 	}
 }
 
-// Random play keeps every invariant in every mode, with one player in solo
-// and two or three otherwise; the clocks of the timed modes run on a fake
-// clock that moves 10 to 69 seconds a move.
+// Random play keeps every invariant in every mode, with one player in solo,
+// two in an inquiry (CheckInquiry) and two or three otherwise; the clocks of
+// the timed modes run on a fake clock that moves 10 to 69 seconds a move. An
+// inquiry ends with no winner, no loser and no draw (docs/e1-evidence.md).
 func TestInvariantsHoldInEveryMode(t *testing.T) {
 	games := 6
 	if testing.Short() {
@@ -392,7 +393,7 @@ func TestInvariantsHoldInEveryMode(t *testing.T) {
 				names := []string{"A", "B"}
 				if m.Name == "solo" {
 					names = names[:1]
-				} else if i%2 == 1 {
+				} else if i%2 == 1 && m.Name != "inquiry" {
 					names = append(names, "C")
 				}
 				gs := modeGame(t, m.Name, names...)
@@ -427,7 +428,11 @@ func TestInvariantsHoldInEveryMode(t *testing.T) {
 					t.Fatalf("game %d did not end", i)
 				}
 				o := gs.Outcome()
-				if (o.Winner == "") != (o.Draw || len(names) == 1 || o.WinningSide != "" && o.Winner == "") {
+				if m.Name == "inquiry" {
+					if o.Winner != "" || o.Loser != "" || o.Draw || o.WinningSide != "" {
+						t.Fatalf("game %d: an inquiry's outcome %+v", i, o)
+					}
+				} else if (o.Winner == "") != (o.Draw || len(names) == 1 || o.WinningSide != "" && o.Winner == "") {
 					t.Fatalf("game %d: outcome %+v", i, o)
 				}
 				t.Logf("game %d: %s; winner %q, verdict %q, %d moves", i, o.Reason, o.Winner, o.Verdict, len(gs.MoveHistory))

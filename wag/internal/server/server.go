@@ -632,6 +632,10 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 		if req.Mode == "solo" {
 			req.Seats = req.Seats[:1]
 		}
+		if err := game.CheckInquiry(cfg, len(req.Seats)); err != nil {
+			httpError(w, err, http.StatusBadRequest)
+			return
+		}
 		var names []string
 		for i := range req.Seats {
 			req.Seats[i].Name = strings.TrimSpace(req.Seats[i].Name)

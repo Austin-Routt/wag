@@ -879,7 +879,7 @@ function legacyPanel() {
 
 function outcomePanel() {
   const o = G.outcome || {};
-  const win = o.winner ? `<b>${esc(o.winner)}</b> wins` : (o.draw ? 'A draw' : (G.players.length === 1 ? 'Solo game' : 'No winner'));
+  const win = G.config.mode === 'inquiry' ? 'An inquiry: no one wins; the result is the claim\'s label' : o.winner ? `<b>${esc(o.winner)}</b> wins` : (o.draw ? 'A draw' : (G.players.length === 1 ? 'Solo game' : 'No winner'));
   const vs = (G.verdicts || []).length > 1 ? `<p class="small">The same dispute under other weights: ${G.verdicts.map(v => `${esc(v.context === 'this game' ? 'this game' : v.name)} ${lbl(v.claim)}`).join(' · ')}</p>` : '';
   return `<div class="panel outcome"><h2>Game over</h2><p>${win}. ${esc(o.reason || '')}</p>${o.claim ? `<p>Claim: ${esc(stmtText(o.claim))} — ${lbl((o.verdict || 'out').toLowerCase())}</p>` : ''}${vs}</div>`;
 }
@@ -958,7 +958,7 @@ function renderComposer() {
   if (c.kind === 'argue') return composeArgue(body, c);
   if (c.kind === 'stmt') return composeStmt(body, c);
   if (c.kind === 'pass') return composeSimple(body, 'Pass this turn. In a debate, passing while the verdict is against your side concedes.', { type: 'abstain' }, 'Pass');
-  if (c.kind === 'resign') return composeSimple(body, 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
+  if (c.kind === 'resign') return composeSimple(body, G.config.mode === 'inquiry' ? 'Resign: the inquiry ends, with the claim\'s label as its result.' : 'Resign: you lose the game (with three or more players on points, the others play on).', { type: 'resign' }, 'Resign');
   return composeTargeted(body, c);
 }
 

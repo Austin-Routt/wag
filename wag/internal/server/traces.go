@@ -388,7 +388,7 @@ func (s *Server) guestCopy(b []byte) []byte {
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
 		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
-		Seats: ss.Seats, System: modelSystem, Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil()}
+		Seats: ss.Seats, System: ss.system(), Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil()}
 	if g.Build == nil {
 		g.Build = buildInfo()
 	}

@@ -70,8 +70,21 @@ func digestOK(s string) bool {
 // Validate checks record consistency, retained bytes and the finite consent
 // protocol. It does not fetch sources, execute evidence content, authenticate
 // identities, judge entailment, or alter a live argument graph.
-func Validate(b *Bundle, root string) Report {
-	r := Report{Format: "wag-evidence-check/0.1", Scope: "record integrity, retained payload identity, selectors and two-party admission for consideration only; no factual or inferential truth certification", Errors: []Issue{}, Warnings: []Issue{}, BindingRevisions: map[string]string{}, Consents: map[string][]string{}, AdmittedBindings: []string{}, DuplicatePayloads: [][]string{}}
+func Validate(b *Bundle, root string) Report { return validate(b, root, true) }
+
+// ValidateRecords checks the records and the consent protocol as Validate
+// does, but not the retained bytes or the selectors against them: for
+// records whose payloads were checked when they were taken (a game checks
+// its record set's when the game is created, loaded or resumed, and its own
+// acts against the records).
+func ValidateRecords(b *Bundle) Report { return validate(b, "", false) }
+
+func validate(b *Bundle, root string, checkBytes bool) Report {
+	scope := "record integrity, retained payload identity, selectors and two-party admission for consideration only; no factual or inferential truth certification"
+	if !checkBytes {
+		scope = "record integrity and two-party admission for consideration only, the retained payloads and selectors checked when the records were taken; no factual or inferential truth certification"
+	}
+	r := Report{Format: "wag-evidence-check/0.1", Scope: scope, Errors: []Issue{}, Warnings: []Issue{}, BindingRevisions: map[string]string{}, Consents: map[string][]string{}, AdmittedBindings: []string{}, DuplicatePayloads: [][]string{}}
 	add := func(code, loc, message string) { r.Errors = append(r.Errors, Issue{code, loc, message}) }
 	warn := func(code, loc, message string) { r.Warnings = append(r.Warnings, Issue{code, loc, message}) }
 	if b == nil {
@@ -103,7 +116,7 @@ func Validate(b *Bundle, root string) Report {
 			add("time", loc, "created_at must be an RFC3339 timestamp")
 		}
 	}
-	if b.Format != Format {
+	if b.Format != Format && b.Format != FormatGame {
 		add("format", "format", "unsupported evidence contract version")
 	}
 	c := b.Context
@@ -208,9 +221,11 @@ func Validate(b *Bundle, root string) Report {
 		if v.Pages < 0 || v.DurationMS < 0 {
 			add("bounds", v.ID, "declared page count/duration cannot be negative")
 		}
-		if err := checkPayload(root, v.Payload); err != nil {
-			add("payload", v.ID, err.Error())
-			badPayload[v.ID] = true
+		if checkBytes {
+			if err := checkPayload(root, v.Payload); err != nil {
+				add("payload", v.ID, err.Error())
+				badPayload[v.ID] = true
+			}
 		}
 		payloads[v.Payload.SHA256] = append(payloads[v.Payload.SHA256], v.ID)
 	}
@@ -256,7 +271,7 @@ func Validate(b *Bundle, root string) Report {
 		if !oneOf(v.Mode, "quotation", "paraphrase", "observation", "reconstruction") || !nonempty(v.Text) || !nonempty(v.Scope) {
 			add("claim", v.ID, "claim needs a mode, text and scope")
 		}
-		if ok && !badPayload[v.RepresentationID] {
+		if ok && checkBytes && !badPayload[v.RepresentationID] {
 			if err := checkSelector(v.Selector, rep, root, texts); err != nil {
 				add("selector", v.ID, err.Error())
 			}
@@ -369,7 +384,7 @@ func Validate(b *Bundle, root string) Report {
 		return r
 	}
 	for _, v := range b.Bindings {
-		digest, err := bindingDigest(b.Context, v, x)
+		digest, err := bindingDigest(b.Format, b.Context, v, x)
 		if err != nil {
 			add("fingerprint", v.ID, err.Error())
 			return r
@@ -443,7 +458,40 @@ func Validate(b *Bundle, root string) Report {
 	return r
 }
 
-func bindingDigest(context Context, b Binding, x index) (string, error) {
+// bindingDigest is a binding's revision: wag-binding-go-json/2 for a
+// wag-evidence/0.1 bundle, and /3 for a wag-evidence/0.2 one (FormatGame):
+// the same value with every record's created_at left empty.
+func bindingDigest(format string, context Context, b Binding, x index) (string, error) {
+	if format != FormatGame {
+		return digestOf("wag-binding-go-json/2", context, b, x)
+	}
+	y := index{actors: x.actors, sources: map[string]Source{}, artifacts: map[string]Artifact{}, reps: map[string]Representation{},
+		claims: map[string]Claim{}, targets: map[string]Target{}, bindings: x.bindings}
+	for k, v := range x.sources {
+		v.CreatedAt = ""
+		y.sources[k] = v
+	}
+	for k, v := range x.artifacts {
+		v.CreatedAt = ""
+		y.artifacts[k] = v
+	}
+	for k, v := range x.reps {
+		v.CreatedAt = ""
+		y.reps[k] = v
+	}
+	for k, v := range x.claims {
+		v.CreatedAt = ""
+		y.claims[k] = v
+	}
+	for k, v := range x.targets {
+		v.CreatedAt = ""
+		y.targets[k] = v
+	}
+	b.CreatedAt = ""
+	return digestOf("wag-binding-go-json/3", context, b, y)
+}
+
+func digestOf(algorithm string, context Context, b Binding, x index) (string, error) {
 	claim := x.claims[b.ClaimID]
 	reps := []Representation{}
 	artifacts := map[string]Artifact{}
@@ -482,7 +530,7 @@ func bindingDigest(context Context, b Binding, x index) (string, error) {
 		Representations []Representation
 		Artifacts       map[string]Artifact
 		Sources         map[string]Source
-	}{"wag-binding-go-json/2", context, players, b, claim, x.targets[b.TargetID], reps, artifacts, sources}
+	}{algorithm, context, players, b, claim, x.targets[b.TargetID], reps, artifacts, sources}
 	raw, err := json.Marshal(value)
 	if err != nil {
 		return "", err

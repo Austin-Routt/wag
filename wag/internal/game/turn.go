@@ -73,6 +73,11 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 	case "resign":
 		player.Resigned = true
 		gs.MoveHistory = append(gs.MoveHistory, Move{TurnNumber: gs.CurrentTurn, PlayerID: player.ID, Action: action, Resigned: true})
+		if gs.Config.Cooperative {
+			// An inquiry has no loser: a resignation ends it, with the verdict.
+			gs.terminate(player.ID + " resigned: the inquiry ends")
+			return gs.ended(&TurnResult{Accepted: true}), nil
+		}
 		active := 0
 		for _, p := range gs.Players {
 			if !p.Resigned {
