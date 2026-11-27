@@ -8,7 +8,7 @@
 const WB = {
   services: [], players: [], store: '', svc: 'gemini', models: {}, filter: '', chosen: '', test: null, busy: false,
   datasets: [], runs: [], run: null, status: null, report: null, item: null, view: null, reveal: false, timer: null,
-  form: { dataset: '', annotators: [], reviewer: '', count: 5 },
+  form: { dataset: '', annotators: [], reviewer: '', count: 5, items: '' },
 };
 
 // The game bar's "Saved" button opens the game's folder.
@@ -268,6 +268,7 @@ async function renderAnnotate(noLoad) {
           : '<p class="small warn">No player is ready: add one in the Models tab.</p>'}
         <label class="small">Reviewer (optional)<select id="freviewer"><option value="">— none —</option>${ready.map(p => `<option value="${esc(p.name)}" ${WB.form.reviewer === p.name ? 'selected' : ''}>${esc(p.name)} (${esc(runsOn(p))})</option>`).join('')}</select></label>
         <label class="small">Claims: the first<input type="number" id="fcount" min="1" max="${ds.items || 1}" value="${WB.form.count}"> of ${ds.items || 0}</label>
+        <label class="small">or these claims<input type="text" id="fitems" value="${esc(WB.form.items)}" placeholder="their ids, separated by commas or spaces"></label>
         <div id="selfreview">${selfReview()}</div>
         <p class="small muted">Each call sends the guidelines and the scheme collection: about 40,000 tokens. Each claim is one call per annotator, and one more if the reviewer reviews it. Free tiers have daily limits (Gemini 2.5 Flash: 20 requests a day): start with a few claims.</p>
         <button class="primary" id="newrun" ${ready.length ? '' : 'disabled'}>Create the run</button>
@@ -380,6 +381,16 @@ function annCard(name, a, problems, diff, cmp) {
   </div>`;
 }
 
+// The whole of a gold item, every field as recorded (docs/d086-first-gold.md
+// §5): the card above shows its primary instance; "The gold is right"
+// verifies all of this.
+function wholeItem(x) {
+  if (x === null || x === undefined) return '<span class="muted">null</span>';
+  if (Array.isArray(x)) return x.length ? `<ol>${x.map(e => `<li>${wholeItem(e)}</li>`).join('')}</ol>` : '<span class="muted">none</span>';
+  if (typeof x === 'object') return `<table class="wtable kv">${Object.keys(x).map(k => `<tr><td>${esc(k)}</td><td>${wholeItem(x[k])}</td></tr>`).join('')}</table>`;
+  return esc(String(x));
+}
+
 function itemPane() {
   const v = WB.view, it = v.item || {};
   const names = Object.keys(v.annotations);
@@ -400,7 +411,8 @@ function itemPane() {
     <div class="anncards">${cards || '<p class="small muted">Not annotated yet.</p>'}</div>${fails}
     <label class="inline small"><input type="checkbox" id="reveal" ${WB.reveal ? 'checked' : ''}> Show the reviewer${v.gold ? ' and the gold' : ''} (leave it off to judge first)</label>
     ${review}
-    ${v.gold && WB.reveal ? `<div class="anncards">${annCard('Gold (adjudicated)', v.gold, [], v.disagree || [], v.gold_compared)}</div>` : ''}
+    ${v.gold && WB.reveal ? `<div class="anncards">${annCard('Gold (adjudicated)', v.gold, [], v.disagree || [], v.gold_compared)}</div>
+    <details class="wholeitem small" open><summary>The whole item: what <i>The gold is right</i> verifies</summary>${wholeItem(v.gold)}</details>` : ''}
     <div class="verdict"><h4>Your verdict</h4>
       <div class="seg">${opts.map(([k, l]) => `<button data-choice="${esc(k)}" class="${choice === k ? 'on' : ''}">${esc(l)}</button>`).join('')}</div>
       <input type="text" id="vnote" placeholder="Why (optional)" value="${esc((v.verdict || {}).note || '')}">
@@ -429,7 +441,11 @@ function wireAnnotate() {
       if (b.id === 'newrun') {
         const f = WB.form;
         if (!f.annotators.length) return toast('Tick at least one annotator.');
-        const r = await api('/api/annotate/runs', { dataset: f.dataset, annotators: f.annotators, reviewer: f.reviewer, count: Number(f.count) || 0 });
+        // The claims listed, in their order; none listed, the first N (docs/d086-first-gold.md §5).
+        const ids = String(f.items || '').split(/[\s,]+/).filter(Boolean);
+        const body = { dataset: f.dataset, annotators: f.annotators, reviewer: f.reviewer };
+        if (ids.length) body.items = ids; else body.count = Number(f.count) || 0;
+        const r = await api('/api/annotate/runs', body);
         WB.run = r.status.id; WB.item = null; WB.view = null; toast('Run created: annotate the next claim, or all of them.'); return renderAnnotate();
       }
       const act = { next: 'next', startall: 'start', review: 'review', reviewall: 'review', stop: 'stop', flush: 'flush', syncverdicts: 'flush' }[b.id];
@@ -446,7 +462,9 @@ function wireAnnotate() {
       }
       if (b.dataset.choice !== undefined) {
         // A warning: the verdict is kept, but its folder could not be synced.
-        const r = await api(`/api/annotate/runs/${WB.run}/verdict`, { item: WB.item, choice: b.dataset.choice, note: $('#vnote').value });
+        // The page's input hashes go with the verdict: the server refuses one
+        // given on a page that shows other data than the run has now.
+        const r = await api(`/api/annotate/runs/${WB.run}/verdict`, { item: WB.item, choice: b.dataset.choice, note: $('#vnote').value, inputs_sha256: (WB.view || {}).inputs_sha256 });
         await runLoad(); toast(r.warning || 'Verdict saved.', r.warning ? 10000 : 3500); return renderAnnotate(true);
       }
     } catch (err) { toast(err.message, 8000); }
@@ -456,6 +474,7 @@ function wireAnnotate() {
     if (t.id === 'fdataset') { WB.form.dataset = t.value; renderAnnotate(true); }
     if (t.id === 'freviewer') WB.form.reviewer = t.value;
     if (t.id === 'fcount') WB.form.count = t.value;
+    if (t.id === 'fitems') WB.form.items = t.value;
     if (t.dataset.ann) { const n = t.dataset.ann; WB.form.annotators = t.checked ? [...WB.form.annotators, n] : WB.form.annotators.filter(x => x !== n); }
     if ((t.id === 'freviewer' || t.dataset.ann) && $('#selfreview')) $('#selfreview').innerHTML = selfReview();
     if (t.id === 'reveal') { WB.reveal = t.checked; renderAnnotate(true); }

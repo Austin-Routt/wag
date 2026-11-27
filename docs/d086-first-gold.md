@@ -250,3 +250,25 @@ The independent check of version 1 (in the workspace, `verify/d086/`):
 | W-7 Convergence undefined; the package lacked files R2 and R16 read | §4: per item, at most three exchanges, then the owner; the files added |
 | N-1 Phase 3, not stage 3; N-2 `.gitattributes`; N-3 the record public; N-4 `item_rev` a copy; N-5 UTC dates; N-6 the test service; N-7 `agreement.json`; N-8 the first pilot; N-9 `walton.yml` and D043 | The status line, §5, §3, §2 and §4 |
 | N-10 The script and its tests were written during the check | They are rewritten for this version and checked with it |
+
+## 9. Results (the cases above, run after this version was committed, 0a09e32)
+
+- **The rounds.** `d086_rounds.py gold.json --init` wrote `d086-rounds.json` from the gold before any
+  draft (SHA-256 `fc929c7e…`): the lists of §2, 28, 15 and 7 claims, the controls 13292.1, .30 and .36;
+  run again without `--init`, it finds the file the same.
+- **The script.** V1-V16 pass, and three more cases: V3 with the earlier gold found in the repository's
+  history rather than given; a rounds file it cannot read (refused, nothing written); and the
+  repository's rounds file (every claim of `items.json` in one round, readable by the script). 25
+  planted defects, one for each rule, are all caught. Corrected on the way: the first run's record
+  marked every kill as the script raising, since the runner took the test file's name for the
+  script's; read again, one defect is caught only by the script raising (a verdict without its inputs,
+  whose check removed leaves the script to fail on the missing field, which the case still catches).
+- **The dashboard.** D1 and D3 pass in the server's tests (`TestD1ARunOfTheClaimsListed`,
+  `TestD3AVerdictGivenOnAStalePage`, which also refuses a page with an input fewer), and D1-D3 in the
+  browser: the claims field makes the run listed and refuses an unknown claim, the whole item shows
+  every instance id, challenge, link, the notes and the adjudication's reason, and a verdict carries
+  the page's hashes and is refused on a stale page with nothing saved. Eight planted defects (four in
+  the page, four in the server) are all caught, none by a panic. Corrected on the way: in the first
+  run the browser check stopped when the run it made lacked the claim it opens (the defect "the claims
+  field not sent" had no verdict); it now records that and goes on with a run made through the API,
+  and catches it.

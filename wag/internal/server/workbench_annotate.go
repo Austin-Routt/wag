@@ -355,6 +355,10 @@ func (s *Server) runAction(w http.ResponseWriter, r *http.Request, run *annotate
 		// warning that the verdict may not survive a power loss yet.
 		err := run.SetVerdict(v)
 		var nd *annotate.NotDurableError
+		if errors.Is(err, annotate.ErrStalePage) {
+			httpError(w, err, http.StatusConflict)
+			return
+		}
 		if err != nil && !errors.As(err, &nd) {
 			httpError(w, err, http.StatusBadRequest)
 			return

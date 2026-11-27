@@ -280,6 +280,9 @@ li:hover > .sacts, div:hover > .sacts, .premise:hover .sacts, .claimhead .sacts,
 details.weights { margin: 6px 0 10px; }
 details.weights summary { cursor: pointer; font-size: 13px; }
 .wtable td { padding: 2px 8px 2px 0; font-size: 13px; }
+.wholeitem table.kv { border-left: 2px solid rgba(127,127,127,.25); margin: 2px 0 2px 4px; }
+.wholeitem table.kv td:first-child { color: var(--muted, #777); white-space: nowrap; vertical-align: top; }
+.wholeitem ol { margin: 2px 0; padding-left: 20px; }
 
 /* ---- The workbench: Models and Annotate ---- */
 .workbench .row, .annotate .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }

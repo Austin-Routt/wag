@@ -596,6 +596,20 @@ func (r *Run) Busy() string {
 
 // begin marks the run busy with what, and returns the context to do it in;
 // an error if it is busy already.
+// sameHashes reports whether two sets of input hashes name the same inputs
+// with the same hashes.
+func sameHashes(a, b map[string]string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for k, v := range a {
+		if w, ok := b[k]; !ok || w != v {
+			return false
+		}
+	}
+	return true
+}
+
 func copyHashes(in map[string]string) map[string]string {
 	out := map[string]string{}
 	for k, v := range in {
@@ -1239,7 +1253,15 @@ func (r *Run) saveReviews() error {
 	return writeFile(r.reviewPath(r.Settings.Reviewer.Name), b)
 }
 
-// SetVerdict records a person's verdict on a claim.
+// ErrStalePage refuses a verdict given on a page that shows other data than
+// the run has now (docs/d086-first-gold.md §5).
+var ErrStalePage = errors.New("the page shows other data than this run has now (the program was restarted on another build?): reload the claim and give the verdict again")
+
+// SetVerdict records a person's verdict on a claim. v.InputsSHA256, when the
+// client sends it, is the input hashes of the page the verdict was given on
+// (ItemView.InputsSHA256): a verdict whose page showed other data than the
+// run has now is refused (ErrStalePage), and nothing is saved. The verdict
+// then records the run's own hashes, as it always has.
 func (r *Run) SetVerdict(v Verdict) error {
 	if r.Dataset.Item(v.Item) == nil {
 		return fmt.Errorf("no claim %s", v.Item)
@@ -1258,6 +1280,9 @@ func (r *Run) SetVerdict(v Verdict) error {
 	defer r.mu.Unlock()
 	if len(r.loadErrors) > 0 {
 		return fmt.Errorf("saved run data is unreadable; recover it before writing verdicts")
+	}
+	if v.InputsSHA256 != nil && !sameHashes(v.InputsSHA256, r.Dataset.Hashes) {
+		return ErrStalePage
 	}
 	r.refreshDrift()
 	v.InputsSHA256, v.InputDrift, v.AssessmentBuild = copyHashes(r.Dataset.Hashes), r.drift, buildID()
@@ -1446,6 +1471,10 @@ type ItemView struct {
 	// re_parented is, rather than the annotation's own field.
 	Compared     map[string]map[string]string `json:"compared"`
 	GoldCompared map[string]string            `json:"gold_compared,omitempty"`
+	// InputsSHA256 is the hashes of the inputs this view shows: the client
+	// sends them back with a verdict, which SetVerdict refuses when the run
+	// has other data by then.
+	InputsSHA256 map[string]string `json:"inputs_sha256,omitempty"`
 }
 
 // compared returns an annotation's values of the fields compared, its
@@ -1467,7 +1496,7 @@ func (r *Run) Item(id string) (*ItemView, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	v := &ItemView{ID: id, Item: it.Raw, Annotations: map[string]Annotation{}, Problems: map[string][]string{}, Failures: map[string]string{},
-		Gold: r.Dataset.Gold[id], Review: r.reviews[id], Compared: map[string]map[string]string{}}
+		Gold: r.Dataset.Gold[id], Review: r.reviews[id], Compared: map[string]map[string]string{}, InputsSHA256: copyHashes(r.Dataset.Hashes)}
 	if v.Gold != nil {
 		v.GoldCompared = compared(v.Gold, r.Dataset.Gold)
 	}

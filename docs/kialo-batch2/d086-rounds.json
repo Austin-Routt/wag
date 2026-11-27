@@ -1,0 +1,824 @@
+{
+ "format": "wag-d086-rounds/1",
+ "note": "The rounds of the first gold (D086; docs/d086-first-gold.md): which claims each round takes and why (d086_rounds.py, from the reference named by its hash), and where each claim stands: its latest draft, the review's state (not drafted, not reviewed, objections, agreed, to the owner) and the revision of the item agreed on (verify_gold.py writes a verification only at that revision).",
+ "measure": {
+  "fields": [
+   "scheme",
+   "fit",
+   "role",
+   "polarity",
+   "target_claim",
+   "target_instance",
+   "target_part",
+   "target_formula",
+   "evidence",
+   "cq"
+  ],
+  "codings": [
+   "annotator-A.json",
+   "annotator-B.json",
+   "the reference, gold.json before the draft"
+  ],
+  "reference_sha256": "fc929c7e6efea157cc779b0146e71f39e2ebd9b7a4f89e660a40aa897a8e77ac",
+  "threshold": 3,
+  "open_items": [
+   "13292.6",
+   "13292.11",
+   "13292.108",
+   "13292.218",
+   "13292.12",
+   "13292.141",
+   "13292.182",
+   "13292.198"
+  ],
+  "controls": {
+   "seed": 86,
+   "k": 3,
+   "population": [
+    "13292.1",
+    "13292.7",
+    "13292.115",
+    "13292.118",
+    "13292.180",
+    "13292.36",
+    "13292.137",
+    "13292.3",
+    "13292.30",
+    "13292.56"
+   ],
+   "drawn": [
+    "13292.1",
+    "13292.30",
+    "13292.36"
+   ]
+  }
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "claims": [
+    "13292.1",
+    "13292.108",
+    "13292.25",
+    "13292.33",
+    "13292.36",
+    "13292.127",
+    "13292.174",
+    "13292.104",
+    "13292.218",
+    "13292.11",
+    "13292.43",
+    "13292.6",
+    "13292.12",
+    "13292.8",
+    "13292.46",
+    "13292.192",
+    "13292.30",
+    "13292.141",
+    "13292.147",
+    "13292.182",
+    "13292.194",
+    "13292.198",
+    "13292.202",
+    "13292.204",
+    "13292.233",
+    "13292.29",
+    "13292.5",
+    "13292.123"
+   ]
+  },
+  {
+   "round": 2,
+   "claims": [
+    "13292.13",
+    "13292.9",
+    "13292.14",
+    "13292.61",
+    "13292.145",
+    "13292.169",
+    "13292.121",
+    "13292.135",
+    "13292.2",
+    "13292.4",
+    "13292.190",
+    "13292.208",
+    "13292.224",
+    "13292.235",
+    "13292.45"
+   ]
+  },
+  {
+   "round": 3,
+   "claims": [
+    "13292.7",
+    "13292.115",
+    "13292.118",
+    "13292.180",
+    "13292.137",
+    "13292.3",
+    "13292.56"
+   ]
+  }
+ ],
+ "claims": {
+  "13292.1": {
+   "round": 1,
+   "why": "a control: the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.13": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.7": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.9": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.108": {
+   "round": 1,
+   "why": "a fragment the identity contract left open for the draft",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.115": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.118": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.25": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.33": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.180": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.36": {
+   "round": 1,
+   "why": "a control: the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.127": {
+   "round": 1,
+   "why": "the three codings differ on 8 of the ten core fields",
+   "fields": [
+    "cq",
+    "polarity",
+    "role",
+    "scheme",
+    "target_claim",
+    "target_formula",
+    "target_instance",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.14": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "scheme",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.61": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.145": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "scheme",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.174": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "role",
+    "scheme",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.104": {
+   "round": 1,
+   "why": "the three codings differ on 5 of the ten core fields",
+   "fields": [
+    "cq",
+    "fit",
+    "role",
+    "scheme",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.169": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.218": {
+   "round": 1,
+   "why": "a fragment the identity contract left open for the draft",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.11": {
+   "round": 1,
+   "why": "a fragment the identity contract left open for the draft",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.43": {
+   "round": 1,
+   "why": "the three codings differ on 5 of the ten core fields",
+   "fields": [
+    "cq",
+    "scheme",
+    "target_formula",
+    "target_instance",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.121": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.135": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "fit",
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.137": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.2": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "fit",
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.6": {
+   "round": 1,
+   "why": "a fragment the identity contract left open for the draft",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.12": {
+   "round": 1,
+   "why": "the three codings differ on 6 of the ten core fields",
+   "fields": [
+    "cq",
+    "evidence",
+    "role",
+    "scheme",
+    "target_formula",
+    "target_instance"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.4": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "fit",
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.8": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.46": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "fit",
+    "polarity",
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.192": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "role",
+    "scheme",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.3": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.30": {
+   "round": 1,
+   "why": "a control: the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.141": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.147": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "role",
+    "scheme",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.182": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.190": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "polarity"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.194": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "evidence",
+    "scheme",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.198": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.202": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "fit",
+    "scheme",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.204": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.208": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.224": {
+   "round": 2,
+   "why": "the three codings differ on 2 of the ten core fields",
+   "fields": [
+    "fit",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.233": {
+   "round": 1,
+   "why": "the three codings differ on 5 of the ten core fields",
+   "fields": [
+    "cq",
+    "fit",
+    "role",
+    "target_formula",
+    "target_instance"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.235": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "scheme"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.29": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "fit",
+    "role",
+    "target_claim",
+    "target_instance"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.45": {
+   "round": 2,
+   "why": "the three codings differ on 1 of the ten core fields",
+   "fields": [
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.5": {
+   "round": 1,
+   "why": "the three codings differ on 3 of the ten core fields",
+   "fields": [
+    "role",
+    "target_formula",
+    "target_part"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.56": {
+   "round": 3,
+   "why": "the three codings agree on every core field",
+   "fields": [],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  },
+  "13292.123": {
+   "round": 1,
+   "why": "the three codings differ on 4 of the ten core fields",
+   "fields": [
+    "cq",
+    "role",
+    "scheme",
+    "target_formula"
+   ],
+   "draft": 0,
+   "review": "not drafted",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
+   "objections": []
+  }
+ }
+}
