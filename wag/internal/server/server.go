@@ -36,6 +36,7 @@ import (
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/kialo"
 	"github.com/yourorg/wag/internal/llm"
+	"github.com/yourorg/wag/internal/manifest"
 	"github.com/yourorg/wag/internal/nascq"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
@@ -95,6 +96,9 @@ type Server struct {
 	sessions  map[string]*Session
 	next      int
 	meta      []byte
+	// pins are the inputs by content (manifest): the engine, the scheme
+	// file and the NASCQ data.
+	pins manifest.Pins
 	// stopAfterReply, set by a test, stops a model seat's turn after the
 	// provider's answer is recorded and saved, before it is used, as a crash
 	// would (docs/g-journal.md).
@@ -164,6 +168,9 @@ type Session struct {
 	// resumed are the game's resumes, which its trace's start records.
 	folder  string
 	resumed []Resumption
+	// pins are the server's inputs by content (manifest), which its trace's
+	// start and its export record.
+	pins manifest.Pins
 	// contexts are the server's context presets, for the verdicts under
 	// each (State.Verdicts).
 	contexts []game.Context
@@ -202,6 +209,7 @@ func New(d Data, kialoDir string) (*Server, error) {
 	if _, err := s.newState(game.DefaultGameConfig(), []string{"x"}); err != nil {
 		return nil, fmt.Errorf("the game data does not load: %v", err)
 	}
+	s.pins = manifest.Of(d.YAML, d.Schemes, d.CQs, d.Edges)
 	if len(d.Contexts) > 0 {
 		cs, err := game.LoadContexts(d.Contexts)
 		if err != nil {
@@ -660,7 +668,7 @@ func (s *Server) add(gs *game.GameState, seats []Seat, title, source string, see
 		seed = time.Now().UnixNano()
 	}
 	ss := &Session{ID: id, Title: title, Source: source, GS: gs, Seats: seats, Created: time.Now(), Version: 1, Seed: seed, contexts: s.contexts, dataHash: s.data.Hash(),
-		keys: newKeys(seats)}
+		keys: newKeys(seats), pins: s.pins}
 	for i, seat := range seats {
 		ss.agents = append(ss.agents, newAgent(seat.Kind, gs.Players[i].ID, seed+int64(i)))
 	}
@@ -1134,7 +1142,7 @@ func (ss *Session) export(contexts []game.Context) map[string]interface{} {
 	out := map[string]interface{}{
 		"format": "wag-export/2", "exported_at": time.Now().UTC(), "build": buildInfo(), "data_sha256": ss.dataHash,
 		"title": ss.Title, "source": ss.Source, "seats": ss.Seats, "config": st.Config, "request": req,
-		"history": history, "state": st, "other_arguments": mined, "import": ss.Import,
+		"history": history, "state": st, "other_arguments": mined, "import": ss.Import, "pins": ss.pins,
 		"notes": ss.Notes, "events": ss.Events, "llm": ss.LLM, "traces": ss.tracesWithoutPrompts(), "verdicts": ss.verdicts(contexts),
 	}
 	if ss.inspectedWith != "" {

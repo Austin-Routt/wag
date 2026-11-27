@@ -14,6 +14,7 @@ import (
 
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/llm"
+	"github.com/yourorg/wag/internal/manifest"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -305,6 +306,9 @@ type GameStart struct {
 	// Resumed are the game's resumes from its folder of the data folder
 	// (/api/store/resume), in order.
 	Resumed []Resumption `json:"resumed,omitempty"`
+	// Pins are the server's inputs by content: its engine, scheme file and
+	// NASCQ data, each a full SHA-256 (E1, docs/e1-evidence.md).
+	Pins *manifest.Pins `json:"pins,omitempty"`
 }
 
 // Resumption is a resume of a game from its folder (docs/g-journal.md):
@@ -369,7 +373,7 @@ func (s *Server) guestCopy(b []byte) []byte {
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
 		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
-		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts, Resumed: ss.resumed}
+		Seats: ss.Seats, System: modelSystem, Build: buildInfo(), Contexts: ss.contexts, Resumed: ss.resumed, Pins: &ss.pins}
 	seen := map[string]bool{}
 	for _, seat := range ss.Seats {
 		if c, _ := s.model(seat); c != nil && !seen[c.Profile.Name] {
