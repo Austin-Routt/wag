@@ -60,6 +60,7 @@
           "type": "string"
         },
         "protocol": {
+          "description": "The text protocol of the game's prompts: wag-protocol/2, or wag-protocol/2+evidence in a game with a record set (docs/e1-evidence.md).",
           "type": "string"
         },
         "data_sha256": {
@@ -147,6 +148,24 @@
         },
         "pins": {
           "$ref": "#/$defs/pins"
+        },
+        "record_set": {
+          "description": "The game's record set (docs/e1-evidence.md): its name in the evidence folder and the SHA-256 of its records.json as the game took it. Absent in a game without one.",
+          "type": "object",
+          "required": [
+            "name",
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
         }
       }
     },
@@ -495,7 +514,7 @@
           "format": "date-time"
         },
         "protocol": {
-          "description": "The text protocol of the prompt (language-model seats).",
+          "description": "The text protocol of the prompt (language-model seats): wag-protocol/2, or wag-protocol/2+evidence in a game with a record set.",
           "type": "string"
         },
         "prompt_sha256": {

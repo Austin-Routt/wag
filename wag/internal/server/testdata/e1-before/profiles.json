@@ -1,0 +1,9 @@
+{"profiles":[
+ {"name":"before-a","provider":"mock","model":"mock-1","replies":[
+  "{\"summary\":\"The claim.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:consequences\",\"variable_bindings\":{\"A\":\"tax meat\",\"G\":\"lower emissions\"},\"declare\":[{\"id\":\"tax meat\",\"actor\":\"decider\"}],\"evidence\":[\"https://example.org/agency-report\",\"game:b2\"]}}",
+  "{\"summary\":\"Back the premise.\",\"action\":{\"type\":\"support\",\"scheme_id\":\"AS:expert_opinion\",\"target_stmt_id\":\"brings_about(tax_meat,lower_emissions)\",\"variable_bindings\":{\"W\":\"an agency economist\",\"D\":\"emissions\"},\"evidence\":[\"game:b2\"]}}",
+  "{\"summary\":\"Nothing more.\",\"action\":{\"type\":\"abstain\"}}"]},
+ {"name":"before-b","provider":"mock","model":"mock-1","replies":[
+  "{\"summary\":\"Doubt the premise.\",\"action\":{\"type\":\"attack\",\"scheme_id\":\"AS:expert_opinion\",\"target_stmt_id\":\"brings_about(tax_meat,lower_emissions)\",\"variable_bindings\":{\"W\":\"a farm economist\",\"D\":\"emissions\"},\"evidence\":[\"https://example.org/news-article\",\"game:b4\"]}}",
+  "{\"summary\":\"Nothing more.\",\"action\":{\"type\":\"abstain\"}}"]}
+]}

@@ -576,3 +576,46 @@ recorded here.
   verdict (an unused import, a repeated case); all five were rewritten and caught in the second
   run. One was caught only by a test's panic (O15 read an event it did not count); O15 now counts
   the events first, and the defect is caught without one.
+
+### E1.5 and E1.6
+
+- **S1 to S6 pass** (`internal/server/evidence_model_test.go`); **Y4 to Y10 pass**
+  (`evidence_resume_test.go`, `evidence_before_test.go`, `cmd/wag-llm/evidence_test.go`), with Y1 to
+  Y3 and Y9 for a load from E1.4's commit. Y9 is checked for a load, a resume and a replay; beyond
+  the cases, a replay with a changed record set is refused, naming its SHA-256.
+- **S2's pairing.** A binding's revision covers the participants' declared kinds (D076), and B is
+  a model in one game and a person in the other, so the two games' revisions differ, each its own.
+  The test pairs every other part (the history's entries, the acts' marks, the records) and checks
+  that each mark's revision is its game's.
+- **Y7** uses an export and two traces recorded by the build of 4ebff26, the plan's commit, before
+  any of E1's code (`wag-llm play` with scripted profiles; `internal/server/testdata/e1-before/`):
+  the export loads and the game stopped early resumes on this build, the finished game's trace
+  replays, and their citations, a source's reference URL and binding ids among them, stay
+  citations. A trace of a game stopped early (`--max-moves`) asks a replay for a call it does not
+  have, under any build, so the replay takes the finished game.
+- **`wag-llm`** (E1.0's "not yet"): `play` takes `--evidence DIR` and `--record-set NAME`; in an
+  inquiry the seats are A and B, the summary records them as `first` and `second` with the verdict,
+  and `report` counts no wins; `replay` takes `--evidence DIR`.
+- **A correction to E1.0**, found while writing the prompt's evidence section: an inquiry's prompt
+  still said that the reply's confidence was how likely the move "helps your side", named "the
+  other side" as who argues a scheme's exceptions, and said that in a debate pro's first argument
+  states the claim. C7 looked only for the system prompt's "help your side". They now read "helps
+  the inquiry", "either player" and "In an inquiry, the first argument states the claim", and C7
+  checks for "your side", "other side may argue" and "In a debate". A debate's prompt is unchanged
+  byte for byte.
+- A decision of such a game records `wag-protocol/2+evidence`, as its trace's start does.
+- **Beyond the cases**, each outcome written before it ran. (a) `wag-llm play` and `report` of an
+  inquiry (`cmd/wag-llm/inquiry_play_test.go`): the summary's `first` and `second` and no sides, the
+  printed line naming the claim's label, the trace's record set and protocol, its replay, the report's
+  rows with no wins, and `--record-set` without `--evidence` refused before the run's folder is made.
+  (b) A reply with two faulty parts of one object was refused for whichever part Go's map order gave
+  first, and a replay compares the refusal's reason (the next prompt quotes it), so such a reply could
+  fail its own replay. Found in the offer's parts while writing them; the parser's older code read a
+  move's variable bindings and an action's declaration the same way. All three now read their parts in
+  the order of their names (`internal/server/parse_order_test.go`, each case read 64 times).
+- **Planted defects** (`verify/e1/mutants-e156.py` in the owner's workspace; each run on a fresh copy of
+  the tree). Run 1, 29 for S1 to S6, Y4 to Y10 and the corrected wording: 28 caught; one was not applied
+  (its second edit named the wrong file) and was rewritten. Run 2, that one and 8 for (a) and (b): 8
+  caught; "`--record-set` without `--evidence` taken" survived, since the server refuses such a game
+  too, with a message that also names `--evidence`, but only after the run's folder is made: (a) now
+  checks the folder. Run 3, that one: caught. In all, 37 of 37 caught, none by a panic.

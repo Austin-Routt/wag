@@ -7,7 +7,7 @@
 //	wag-llm models PROVIDER [--base-url URL] [--api-key-env VAR]
 //	wag-llm ping --model SPEC
 //	wag-llm play --model SPEC… --pro SEAT --con SEAT --out DIR [options]
-//	wag-llm replay TRACE.jsonl [--data DIR]
+//	wag-llm replay TRACE.jsonl [--data DIR] [--evidence DIR]
 //	wag-llm report DIR
 //	wag-llm annotate --model SPEC… [--reviewer NAME] --out DIR [--dataset ID|DIR] [--limit N]
 //
@@ -213,6 +213,11 @@ type stateView struct {
 	Config   struct {
 		Weights map[string]float64 `json:"weights"`
 	} `json:"config"`
+	// Evidence names the game's record set and its hash (docs/e1-evidence.md).
+	Evidence *struct {
+		Name   string `json:"name"`
+		SHA256 string `json:"sha256"`
+	} `json:"evidence"`
 }
 
 // run plays the game until it is over; the error is why it stopped early.
@@ -294,9 +299,20 @@ func play(ctx context.Context, args []string) error {
 	seed := fs.Int64("seed", 1, "the seed of the rule bots (game n uses seed+n)")
 	out := fs.String("out", "", "the directory for the trace files, exports and summary.jsonl")
 	dataDir := fs.String("data", "", "the game data directory (default: built in)")
+	evidenceDir := fs.String("evidence", "", "the evidence folder of the record sets (docs/e1-evidence.md)")
+	recordSet := fs.String("record-set", "", "the record set the games are played with, by its name in the evidence folder (an inquiry: --mode inquiry)")
 	_ = fs.Parse(args)
 	if *pro == "" || *con == "" || *out == "" {
 		return fmt.Errorf("play needs --pro, --con and --out")
+	}
+	if *recordSet != "" && *evidenceDir == "" {
+		return fmt.Errorf("--record-set %s needs its evidence folder: --evidence DIR", *recordSet)
+	}
+	// An inquiry has no sides (docs/e1-evidence.md): its seats are the
+	// first and the second, A and B.
+	first, second := "Pro", "Con"
+	if *mode == "inquiry" {
+		first, second = "A", "B"
 	}
 	var caseRecord json.RawMessage
 	if *caseFile != "" {
@@ -319,6 +335,9 @@ func play(ctx context.Context, args []string) error {
 		return err
 	}
 	srv.SetContext(ctx)
+	if *evidenceDir != "" {
+		srv.SetEvidence(*evidenceDir)
+	}
 	var used []llm.Profile
 	for _, p := range ps {
 		if p.Name == *pro || p.Name == *con {
@@ -361,17 +380,17 @@ func play(ctx context.Context, args []string) error {
 		if *swap && n%2 == 1 {
 			a, b = b, a
 		}
-		sp, err := seat("Pro", a, have)
+		sp, err := seat(first, a, have)
 		if err != nil {
 			return err
 		}
-		sc, err := seat("Con", b, have)
+		sc, err := seat(second, b, have)
 		if err != nil {
 			return err
 		}
 		r := *rounds
 		req := server.NewGameRequest{Title: *title, Mode: *mode, Seats: []server.Seat{sp, sc}, Claim: *claim, Standard: *standard,
-			Context: *context_, MaxRounds: &r, AllowOther: true, Seed: *seed + int64(n), Case: caseRecord}
+			Context: *context_, MaxRounds: &r, AllowOther: true, Seed: *seed + int64(n), Case: caseRecord, Evidence: *recordSet}
 		var st stateView
 		if err := call(ts.URL, "POST", "/api/games", req, &st); err != nil {
 			return err
@@ -388,7 +407,12 @@ func play(ctx context.Context, args []string) error {
 			return err
 		}
 		s := summarize(trace)
-		s["file"], s["pro"], s["con"], s["seconds"] = name+".trace.jsonl", a, b, time.Since(start).Seconds()
+		s["file"], s["seconds"] = name+".trace.jsonl", time.Since(start).Seconds()
+		if *mode == "inquiry" {
+			s["mode"], s["first"], s["second"] = "inquiry", a, b
+		} else {
+			s["pro"], s["con"] = a, b
+		}
 		if runErr != nil {
 			s["stopped"] = runErr.Error()
 		}
@@ -399,8 +423,13 @@ func play(ctx context.Context, args []string) error {
 		if err := sum.Sync(); err != nil {
 			return fmt.Errorf("summary.jsonl: %w", err)
 		}
-		fmt.Printf("game %d: %s (pro) vs %s (con): %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
-			s["winner_side"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
+		if *mode == "inquiry" {
+			fmt.Printf("game %d: %s and %s (an inquiry): the claim %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
+				s["verdict"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
+		} else {
+			fmt.Printf("game %d: %s (pro) vs %s (con): %v, %v moves, %v decisions (%v rejected), %v calls (%v failed)%s\n", n+1, a, b,
+				s["winner_side"], s["moves"], s["decisions"], s["rejected"], s["calls"], s["failed_calls"], stoppedNote(runErr))
+		}
 		if budget.Refused() {
 			if h := budget.Halted(); h != "" {
 				fmt.Fprintf(os.Stderr, "The run's accounting stopped it (%s): no further game is started.\n", h)
@@ -538,6 +567,7 @@ func mustJSON(e map[string]json.RawMessage) []byte { b, _ := json.Marshal(e); re
 func replay(ctx context.Context, args []string) error {
 	fs := flag.NewFlagSet("replay", flag.ExitOnError)
 	dataDir := fs.String("data", "", "the game data directory (default: built in)")
+	evidenceDir := fs.String("evidence", "", "the evidence folder of the game's record set (docs/e1-evidence.md)")
 	if len(args) == 0 {
 		return fmt.Errorf("replay TRACE.jsonl")
 	}
@@ -575,6 +605,18 @@ func replay(ctx context.Context, args []string) error {
 		return err
 	}
 	srv.SetContext(ctx)
+	// A game with a record set (docs/e1-evidence.md, choice 13) is replayed
+	// with it, read again from the evidence folder, and with the pins it was
+	// played with.
+	if rs := start.RecordSet; rs != nil {
+		switch pins := srv.Pins(); {
+		case *evidenceDir == "":
+			return fmt.Errorf("the game was played with the record set %s: give its evidence folder with --evidence DIR", rs.Name)
+		case start.Pins == nil || *start.Pins != pins:
+			return fmt.Errorf("the game was played with other pins than this build's (the game's %+v; this build's %+v): a game with a record set is replayed with the engine, the scheme file and the NASCQ data it was played with", start.Pins, pins)
+		}
+		srv.SetEvidence(*evidenceDir)
+	}
 	// The context presets as they were when the game was played: the game's
 	// request names one, and presets are not in the data's fingerprint.
 	for _, c := range start.Contexts {
@@ -644,6 +686,13 @@ func replay(ctx context.Context, args []string) error {
 	var st stateView
 	if err := call(ts.URL, "POST", "/api/games", req, &st); err != nil {
 		return err
+	}
+	if rs := start.RecordSet; rs != nil && (st.Evidence == nil || st.Evidence.SHA256 != rs.SHA256) {
+		got := "none"
+		if st.Evidence != nil {
+			got = st.Evidence.SHA256
+		}
+		return fmt.Errorf("the record set %s has changed since the game: its records.json's SHA-256 is %s, the game's %s", rs.Name, got, rs.SHA256)
 	}
 	if !maps.Equal(st.Config.Weights, start.Config.Weights) {
 		why := "the context presets have changed since, and the trace does not record them"
@@ -765,17 +814,36 @@ func report(args []string) error {
 	if err != nil {
 		return err
 	}
-	type agg struct{ games, wins, decisions, rejected int }
+	type agg struct {
+		games, wins, decisions, rejected int
+		inquiry                          bool // no one wins an inquiry
+	}
 	rows := map[string]*agg{}
 	sc := bufio.NewScanner(bytes.NewReader(b))
 	sc.Buffer(make([]byte, 1<<20), 64<<20)
 	for sc.Scan() {
 		var s struct {
-			Pro, Con   string
-			WinnerSide string                    `json:"winner_side"`
-			ByPlayer   map[string]map[string]int `json:"by_player"`
+			Pro, Con      string
+			First, Second string                    // an inquiry's seats (docs/e1-evidence.md): no sides, no winner
+			WinnerSide    string                    `json:"winner_side"`
+			ByPlayer      map[string]map[string]int `json:"by_player"`
 		}
 		if json.Unmarshal(sc.Bytes(), &s) != nil {
+			continue
+		}
+		if s.First != "" || s.Second != "" {
+			for seat, who := range map[string]string{"A": s.First, "B": s.Second} {
+				k := who + " in an inquiry, as " + seat
+				r := rows[k]
+				if r == nil {
+					r = &agg{inquiry: true}
+					rows[k] = r
+				}
+				r.games++
+				p := s.ByPlayer[seat]
+				r.decisions += p["decisions"]
+				r.rejected += p["rejected"]
+			}
 			continue
 		}
 		for side, who := range map[string]string{"pro": s.Pro, "con": s.Con} {
@@ -802,7 +870,11 @@ func report(args []string) error {
 	fmt.Printf("%-40s %6s %6s %10s %10s\n", "seat", "games", "wins", "decisions", "rejected")
 	for _, k := range keys {
 		r := rows[k]
-		fmt.Printf("%-40s %6d %6d %10d %9.0f%%\n", k, r.games, r.wins, r.decisions, 100*float64(r.rejected)/float64(max(r.decisions, 1)))
+		wins := fmt.Sprint(r.wins)
+		if r.inquiry {
+			wins = "-"
+		}
+		fmt.Printf("%-40s %6d %6s %10d %9.0f%%\n", k, r.games, wins, r.decisions, 100*float64(r.rejected)/float64(max(r.decisions, 1)))
 	}
 	return nil
 }

@@ -300,3 +300,13 @@ redraw has a unit test (a pass is not drawn again; the last board is).
   no verdict: the disk allowance ran out (the Go build cache had grown to 42 GB over the day's
   runs). The "also checked" cases above were added for the survivors and G4c guarded; the cache
   cleared; the 28 run again, each caught on its checks.
+
+## A game with a record set (E1, 2026-11-27)
+
+A game played with a record set ([`e1-evidence.md`](e1-evidence.md)) resumes as any other, and more: its
+record set is read again from the evidence folder, its `records.json` must have the SHA-256 the game
+recorded and its payloads must check, and the server's pins (its engine, scheme file and NASCQ data) must
+be the game's. Each evidence act is replayed with the time it was made, which its records take, and must
+make or name the revisions recorded. A model's consent recorded before a stop is played without asking the
+model, as any recorded reply (the plan's Y4); a payload changed since refuses the resume, naming the
+representation (Y10).

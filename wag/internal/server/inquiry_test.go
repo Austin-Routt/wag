@@ -164,7 +164,8 @@ func TestC7C8AModelSeatsPromptsInAnInquiryAndADebate(t *testing.T) {
 	prompt := r.Messages[0].Content
 	for _, s := range []string{r.System, prompt} {
 		if !strings.Contains(s, "together") || strings.Contains(s, "help your side") || strings.Contains(s, "You argue FOR") ||
-			strings.Contains(s, "You argue AGAINST") || strings.Contains(s, "pro wins") || strings.Contains(s, "for points") {
+			strings.Contains(s, "You argue AGAINST") || strings.Contains(s, "pro wins") || strings.Contains(s, "for points") ||
+			strings.Contains(s, "your side") || strings.Contains(s, "other side may argue") || strings.Contains(s, "In a debate") {
 			t.Fatalf("C7: an inquiry's prompt or system prompt names a side or a winner:\n%s", s)
 		}
 	}

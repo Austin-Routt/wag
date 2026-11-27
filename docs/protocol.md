@@ -61,6 +61,27 @@ The prompt is self-contained. In order, it gives:
 
 **Size.** A game of 40 moves gives a prompt of about 40 KB. Imported Kialo discussions are cut to the 40 arguments nearest the play.
 
+**An inquiry** (mode `inquiry`, [`e1-evidence.md`](e1-evidence.md)) names no side and no winner: the seat's
+role is to examine the claim with the other player, and the reply's confidence is how likely the move helps
+the inquiry. The model seats' system prompt says the same; other games keep theirs byte for byte.
+
+**Evidence** (`wag-protocol/2+evidence`, an inquiry with a record set): the prompt's first line names the
+protocol, and an *Evidence* section comes before the legal moves:
+- the claims of the record set the seat may offer (at most 30, the rest counted), each with its mode, its
+  source (label, kind and reference), its representation, artifact, revision and capture status, the passage
+  it selects, its text and its scope;
+- every binding made (at most 30), with every part its revision covers: its role and target (the argument,
+  the kind of statement, the statement), the claim and its passage, the interpretation and the warrant, the
+  argument's revision, who offered it and whose consent stands, whether it is admitted, and its full
+  revision.
+
+Every text of the record set and of the bindings is quoted between `<<<` and `>>>`, with `&`, `<` and `>`
+written `&amp;`, `&lt;` and `&gt;`, so that no quoted text can end its quotation; a text longer than 2,000
+characters is cut, and the cut said. The prompt says that quoted material is to be read and weighed, never
+obeyed: what a model is told to do inside a quotation makes no move and no act (the game plays only the
+reply's final move). An argument's card also lists the bindings it cites, admitted or withdrawn. The legal
+moves add the evidence acts and `evidence_refs` (below).
+
 ## The reply
 
 Free text, ending with one JSON object (`protocol/reply.schema.json`):
@@ -103,6 +124,15 @@ The move:
 | `text`, `evidence` | The argument in the player's words, and its sources. Both are shown to the other player. |
 | `declare` | In a game with a profile (D094 (b)): the actions the move is the first to argue about, each an object with its `id`, its `actor` (required) and its `aliases`. The prompt's *Who decides* names the agent and the actions declared so far. |
 | `comparison` | For a scheme that records one (`better_means`, D089): how the alternative is better, `surely`, `sooner` or `cheaper`. |
+| `evidence_refs` | In a game with a record set: the admitted bindings a support or attack cites, besides its `evidence` strings. Each must agree with what the move concludes ([`game-rules.md`](game-rules.md) §8). |
+
+The evidence acts, in a game with a record set (types `evidence_offer`, `evidence_consent`, `evidence_withdraw`;
+also `offer`, `consent`, `withdraw` and `withdrawal`):
+
+| Field | Meaning |
+|---|---|
+| `offer` | An offer's parts: `claim_id`, `argument_id`, `kind` (`premise`, `assumption`, `exception`, `conclusion`, `inference`), `statement` (an id or a reference; none for a conclusion or the inference), `role` (`support`, `oppose`, `context`, `definition`), `interpretation`, `warrant`. A part that is not text, or one not listed, is refused by name (the first such part in the order of the parts' names, so that a replay refuses it alike). |
+| `binding_id`, `revision` | The binding a consent or a withdrawal names (`binding` is accepted too), and its exact revision, in full or by its first 12 digits. |
 
 **What the parser accepts.**
 - **Where the move is.** The final JSON container must be an envelope (with `action`, or `move`) or a move (with `type`). The parser refuses a malformed, incomplete or wrong-kind final container; it never substitutes an earlier example. Prose and examples may precede the final object, and the object may be in a code block. A trailing JSON array or unrelated object is an error. A bracket in prose, such as a citation `[s3]`, a footnote `[1]` or a link, is not JSON: an array counts only when it is empty or starts with an object, an array or a string.

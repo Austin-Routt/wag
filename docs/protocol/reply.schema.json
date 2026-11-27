@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/austin-routt/wag/docs/protocol/reply.schema.json",
-  "title": "WAG reply (wag-protocol/2)",
+  "title": "WAG reply (wag-protocol/2; wag-protocol/2+evidence in a game with a record set)",
   "description": "The JSON object that ends a player's reply to a WAG prompt. Only `action` is required. A bare move object (protocol 1) is also accepted; see `#/$defs/action`. The server accepts some other spellings of the field names (docs/protocol.md); this schema gives the canonical ones.",
   "type": "object",
   "required": ["action"],
@@ -45,7 +45,7 @@
       }
     },
     "confidence": {
-      "description": "How likely, from 0 to 1, the player thinks the move helps its side.",
+      "description": "How likely, from 0 to 1, the player thinks the move helps its side (in an inquiry, the inquiry).",
       "type": "number", "minimum": 0, "maximum": 1
     },
     "action": {"$ref": "#/$defs/action"}
@@ -58,8 +58,8 @@
       "required": ["type"],
       "properties": {
         "type": {
-          "description": "support: a new argument (no target), a defence (target_arg_id and answers_cq_id), or an argument for a statement (target_stmt_id). attack: a negative answer to a critical question, or an argument against a statement. question: a critical question or a challenge, asked without an argument. abstain: pass. resign.",
-          "enum": ["support", "attack", "question", "abstain", "resign"]
+          "description": "support: a new argument (no target), a defence (target_arg_id and answers_cq_id), or an argument for a statement (target_stmt_id). attack: a negative answer to a critical question, or an argument against a statement. question: a critical question or a challenge, asked without an argument. abstain: pass. resign. In a game with a record set (wag-protocol/2+evidence): evidence_offer (with offer), evidence_consent and evidence_withdraw (with binding_id and revision).",
+          "enum": ["support", "attack", "question", "abstain", "resign", "evidence_offer", "evidence_consent", "evidence_withdraw"]
         },
         "scheme_id": {"description": "The scheme of the argument, e.g. AS:position_to_know (not for a question).", "type": "string", "pattern": "^AS:"},
         "target_arg_id": {"description": "The argument a critical question is about, e.g. a1.", "type": "string"},
@@ -79,12 +79,26 @@
           "items": {"type": "object", "required": ["id", "actor"], "additionalProperties": false,
                     "properties": {"id": {"type": "string"}, "actor": {"type": "string"}, "aliases": {"type": "array", "items": {"type": "string"}}}}
         },
-        "comparison": {"description": "How a better_means alternative is better (D089).", "enum": ["surely", "sooner", "cheaper"]}
+        "comparison": {"description": "How a better_means alternative is better (D089).", "enum": ["surely", "sooner", "cheaper"]},
+        "offer": {
+          "description": "An evidence offer (docs/e1-evidence.md): a claim of the record set for a statement of an argument a support or attack move made, with its role, interpretation and warrant. The offer is its player's consent.",
+          "type": "object", "required": ["claim_id", "argument_id", "kind", "role", "interpretation", "warrant"], "additionalProperties": false,
+          "properties": {"claim_id": {"type": "string"}, "argument_id": {"type": "string"},
+                         "kind": {"enum": ["premise", "assumption", "exception", "conclusion", "inference"]},
+                         "statement": {"description": "The statement's id or reference; none for a conclusion or the inference, whose statement is undercut(A).", "type": "string"},
+                         "role": {"enum": ["support", "oppose", "context", "definition"]},
+                         "interpretation": {"type": "string"}, "warrant": {"type": "string"}}
+        },
+        "binding_id": {"description": "The binding a consent or a withdrawal names, e.g. game:b2.", "type": "string"},
+        "revision": {"description": "The binding's exact revision, in full or by its first 12 hexadecimal digits.", "type": "string", "pattern": "^[0-9a-f]{12}([0-9a-f]{52})?$"},
+        "evidence_refs": {"description": "Bindings admitted for consideration that a support or attack cites, besides its sources: each must agree with what the move concludes (docs/game-rules.md §8).", "type": "array", "items": {"type": "string"}}
       },
       "allOf": [
         {"if": {"properties": {"type": {"const": "question"}}}, "then": {"required": ["target_arg_id", "answers_cq_id"]}},
         {"if": {"properties": {"type": {"enum": ["support", "attack"]}}}, "then": {"required": ["scheme_id"]}},
-        {"if": {"required": ["target_stmt_id"]}, "then": {"not": {"anyOf": [{"required": ["target_arg_id"]}, {"required": ["answers_cq_id"]}]}}}
+        {"if": {"required": ["target_stmt_id"]}, "then": {"not": {"anyOf": [{"required": ["target_arg_id"]}, {"required": ["answers_cq_id"]}]}}},
+        {"if": {"properties": {"type": {"const": "evidence_offer"}}}, "then": {"required": ["offer"]}},
+        {"if": {"properties": {"type": {"enum": ["evidence_consent", "evidence_withdraw"]}}}, "then": {"required": ["binding_id", "revision"]}}
       ]
     }
   }

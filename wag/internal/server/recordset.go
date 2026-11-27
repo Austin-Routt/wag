@@ -192,3 +192,11 @@ func pinsText(p *manifest.Pins) string {
 	}
 	return fmt.Sprintf("engine %s, scheme file %s, NASCQ %s", cut(p.Engine), cut(p.Catalogue), cut(p.NASCQ))
 }
+
+// Pins are the server's inputs by content (manifest): its engine, scheme
+// file and NASCQ data, which a game with a record set is replayed with.
+func (s *Server) Pins() manifest.Pins {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.pins
+}

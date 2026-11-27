@@ -97,6 +97,13 @@ When a file of a run cannot be written (a full disk, a folder that cannot be wri
    ./wag-llm replay runs/flash-self/<file>.trace.jsonl
    ```
    `replay` uses the recorded answers, so it makes no calls. It checks that the game sent the same requests and made the same decisions. It refuses a trace played with other scheme data (give that data with `--data`) and uses the context presets the trace recorded. A trace recorded before step C5.2 replays with the build it was recorded with: since then a new game has a profile, which changes the prompt and refuses a move about an undeclared action (docs/game-rules.md).
+7. **An inquiry with evidence** ([`e1-evidence.md`](e1-evidence.md); `docs/game-rules.md` §8). Two seats examine a claim together; with a record set, captured before play into an evidence folder (`DIR/NAME/records.json` and its payloads), they offer, consent to and withdraw evidence, and cite what both admitted.
+   ```sh
+   ./wag-llm play --model flash=gemini:gemini-2.5-flash,min_interval=13s,output=json \
+       --mode inquiry --pro flash --con flash --evidence DIR --record-set NAME --out runs/inquiry
+   ./wag-llm replay runs/inquiry/<file>.trace.jsonl --evidence DIR
+   ```
+   In an inquiry the seats are named A and B (`--pro` plays A, `--con` B), the summary records them as `first` and `second` with the verdict and no winner, and `report` counts no wins. A replay of a game with a record set needs `--evidence`: it reads the record set again, and refuses it if its SHA-256 has changed, or if this build's pins (its engine, scheme file and NASCQ data) are not the game's. The record set's excerpts go to the model's provider in its prompts (D079 leaves that open), and into the trace and the export: keep them in a private folder.
 
 ### The free tier: privacy and limits
 

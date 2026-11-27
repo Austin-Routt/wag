@@ -43,6 +43,10 @@ const TraceFormat = "wag-trace/2"
 // Traces are for debugging the game and the prompt, and for training and
 // evaluating players.
 type Trace struct {
+	// protocol is the protocol of the game's prompts (Session.protocol),
+	// which withPrompt records.
+	protocol string
+
 	Format string    `json:"format"`
 	Type   string    `json:"type"` // "decision"
 	ID     string    `json:"id"`   // dN, N its index among the game's decisions
@@ -130,13 +134,17 @@ func (ss *Session) newTrace(seat string) *Trace {
 	gs := ss.GS
 	p := gs.ActivePlayer()
 	return &Trace{Format: TraceFormat, Type: "decision", Game: ss.ID, Turn: len(gs.MoveHistory), Move: -1, Round: gs.CurrentTurn, Player: p.ID,
-		Side: gs.Side(p.ID), Seat: seat, Attempt: 1, Time: time.Now().UTC()}
+		Side: gs.Side(p.ID), Seat: seat, Attempt: 1, Time: time.Now().UTC(), protocol: ss.protocol()}
 }
 
-// withPrompt records the prompt a language-model seat was given.
+// withPrompt records the prompt a language-model seat was given, and the
+// protocol it follows.
 func (t *Trace) withPrompt(prompt string) *Trace {
 	h := sha256.Sum256([]byte(prompt))
-	t.Protocol, t.PromptSHA256, t.Prompt = ProtocolVersion, hex.EncodeToString(h[:]), prompt
+	t.Protocol, t.PromptSHA256, t.Prompt = t.protocol, hex.EncodeToString(h[:]), prompt
+	if t.Protocol == "" {
+		t.Protocol = ProtocolVersion
+	}
 	return t
 }
 
@@ -390,7 +398,7 @@ func (s *Server) guestCopy(b []byte) []byte {
 // gameStart describes the game for its trace file. Caller holds s.mu.
 func (s *Server) gameStart(ss *Session) GameStart {
 	g := GameStart{Format: TraceFormat, Type: "game_start", ID: "g", Game: ss.ID, Time: ss.Created.UTC(), Title: ss.Title, Source: ss.Source,
-		Protocol: ProtocolVersion, DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
+		Protocol: ss.protocol(), DataSHA256: ss.dataHash, InspectedWith: ss.inspectedWith, LegacyReplayedWith: ss.legacyReplayedWith, Seed: ss.Seed, Request: ss.Request, Config: ss.GS.Config,
 		Seats: ss.Seats, System: ss.system(), Build: ss.build, Contexts: ss.contexts, Resumed: ss.resumed, Pins: ss.pinsOrNil(),
 		RecordSet: ss.recordSet()}
 	if g.Build == nil {

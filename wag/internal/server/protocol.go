@@ -51,7 +51,7 @@ func (ss *Session) Prompt() string {
 	refs := newRefs(gs)
 	ref := func(id string) string { return refs.ref(id) }
 
-	w("# WAG: the Waltonian Argumentation Game. It is your move. (%s)\n\n", ProtocolVersion)
+	w("# WAG: the Waltonian Argumentation Game. It is your move. (%s)\n\n", ss.protocol())
 	if t := strings.TrimSpace(ss.Title); t != "" && !strings.HasPrefix(t, "WAG — ") {
 		w("Topic: %s\n\n", t)
 	}
@@ -164,6 +164,21 @@ func (ss *Session) Prompt() string {
 			if len(a.Evidence) > 0 {
 				w("  Sources: %s\n", strings.Join(a.Evidence, "; "))
 			}
+			if len(a.EvidenceRefs) > 0 {
+				var cited []string
+				for _, r := range a.EvidenceRefs {
+					state := "admitted"
+					if !r.Admitted {
+						state = "withdrawn"
+					}
+					cited = append(cited, r.Binding+" ("+state+")")
+				}
+				w("  Bindings cited: %s", strings.Join(cited, ", "))
+				if a.Ungrounded {
+					w("; no longer grounded by admitted evidence (its label is as before)")
+				}
+				w("\n")
+			}
 		}
 		w("\n")
 	}
@@ -196,10 +211,17 @@ func (ss *Session) Prompt() string {
 		w("Your last move was rejected: %s\n\n", gs.LastRejection)
 	}
 
+	ss.promptEvidence(w, st, refs)
 	w("## Your legal moves\n")
 	ss.promptQuestions(w, st, ids, me.ID, refs)
 	ss.promptStatements(w, st, ids, refs)
-	w("\n### New argument\nAny scheme, with no target: {\"type\":\"support\",\"scheme_id\":…,\"variable_bindings\":{…}}. In a debate, pro's first argument states the claim.\n")
+	w("\n### New argument\nAny scheme, with no target: {\"type\":\"support\",\"scheme_id\":…,\"variable_bindings\":{…}}.")
+	if gs.Config.Cooperative {
+		w(" In an inquiry, the first argument states the claim.\n")
+	} else {
+		w(" In a debate, pro's first argument states the claim.\n")
+	}
+	ss.promptEvidenceActs(w)
 	w("\n### Pass or resign\n{\"type\":\"abstain\"} passes")
 	if gs.Config.ConcedeOnPass {
 		w(" (in a debate, passing while the verdict is against your side concedes)")
@@ -207,7 +229,12 @@ func (ss *Session) Prompt() string {
 	w("; {\"type\":\"resign\"} gives up.\n\n")
 
 	ss.promptSchemes(w)
-	w("%s", replyFormat)
+	if gs.Config.Cooperative {
+		// An inquiry has no sides (docs/e1-evidence.md, E1.0).
+		w("%s", strings.Replace(replyFormat, "the move helps your side", "the move helps the inquiry", 1))
+	} else {
+		w("%s", replyFormat)
+	}
 	return b.String()
 }
 
@@ -438,6 +465,10 @@ func (ss *Session) promptProfile(w func(string, ...interface{}), p *game.Profile
 // exceptions, sources, semantic type and the cue words that signal them.
 func (ss *Session) promptSchemes(w func(string, ...interface{})) {
 	gs := ss.GS
+	other := "the other side" // who argues a scheme's exceptions: in an inquiry there are no sides
+	if gs.Config.Cooperative {
+		other = "either player"
+	}
 	w("## The schemes\n")
 	for _, id := range nascq.SortedStringKeys(gs.NASCQ.Schemes) {
 		sc := gs.NASCQ.Schemes[id]
@@ -482,7 +513,7 @@ func (ss *Session) promptSchemes(w func(string, ...interface{})) {
 				w("  also assumed: %s\n", strings.Join(r.Assumptions, "; "))
 			}
 			if len(r.Exceptions) > 0 {
-				w("  unless (exceptions the other side may argue): %s\n", strings.Join(r.Exceptions, "; "))
+				w("  unless (exceptions %s may argue): %s\n", other, strings.Join(r.Exceptions, "; "))
 			}
 		}
 		switch {
@@ -850,7 +881,8 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	// is a new argument). null counts as absent.
 	for _, k := range []string{"scheme_id", "scheme", "target_arg_id", "target", "argument",
 		"answers_cq_id", "cq", "question", "critical_question", "target_premise_id", "premise",
-		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words"} {
+		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words",
+		"binding_id", "binding", "revision"} {
 		if v, exists := m[k]; exists && v != nil {
 			if _, ok := v.(string); !ok {
 				return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q must be text, not %s", k, jsonKind(v))
@@ -866,7 +898,11 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 		if !ok {
 			return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q must be an object of variable bindings, not %s", k, jsonKind(v))
 		}
-		for name, x := range vb {
+		// In the order of their names, so that a reply with two faulty parts
+		// is refused for the same one each time: a replay compares the
+		// reasons, and the next prompt quotes them.
+		for _, name := range nascq.SortedStringKeys(vb) {
+			x := vb[name]
 			switch x.(type) {
 			case map[string]interface{}, []interface{}:
 				return nascq.ProposedAction{Type: t}, true, fmt.Errorf("%q: the binding of %s must be a phrase, not %s", k, name, jsonKind(x))
@@ -882,6 +918,12 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 		t = "attack"
 	case "ask", "challenge":
 		t = "question"
+	case "offer":
+		t = game.ActOffer
+	case "consent":
+		t = game.ActConsent
+	case "withdraw", "withdrawal":
+		t = game.ActWithdraw
 	}
 	a := nascq.ProposedAction{Type: t,
 		SchemeID:        str("scheme_id", "scheme"),
@@ -931,7 +973,86 @@ func moveOf(m map[string]interface{}) (nascq.ProposedAction, bool, error) {
 	} else {
 		a.Comparison = c
 	}
+	// An evidence act's parts, and the bindings a move cites
+	// (docs/e1-evidence.md): read only when given.
+	a.BindingID, a.Revision = str("binding_id", "binding"), str("revision")
+	if o, err := offerOf(m); err != nil {
+		if first == nil {
+			first = err
+		}
+	} else {
+		a.Offer = o
+	}
+	if refs, err := bindingRefsOf(m); err != nil {
+		if first == nil {
+			first = err
+		}
+	} else {
+		a.EvidenceRefs = refs
+	}
 	return a, true, first
+}
+
+// offerFields are the parts of an evidence offer.
+var offerFields = []string{"claim_id", "argument_id", "kind", "statement", "role", "interpretation", "warrant"}
+
+// offerOf reads an evidence offer: an object of text parts (offerFields).
+// Another value, an unknown part, or a part that is not text is refused by
+// name; absent or null is no offer.
+func offerOf(m map[string]interface{}) (*nascq.EvidenceOffer, error) {
+	v, exists := m["offer"]
+	if !exists || v == nil {
+		return nil, nil
+	}
+	o, ok := v.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("\"offer\" must be an object of %s, not %s", strings.Join(offerFields, ", "), jsonKind(v))
+	}
+	parts := map[string]string{}
+	for _, k := range nascq.SortedStringKeys(o) { // sorted: see moveOf
+		x := o[k]
+		known := false
+		for _, f := range offerFields {
+			known = known || f == k
+		}
+		if !known {
+			return nil, fmt.Errorf("\"offer\" has no part %q: its parts are %s", k, strings.Join(offerFields, ", "))
+		}
+		if x == nil {
+			continue
+		}
+		s, ok := x.(string)
+		if !ok {
+			return nil, fmt.Errorf("\"offer\": %q must be text, not %s", k, jsonKind(x))
+		}
+		parts[k] = strings.TrimSpace(s)
+	}
+	return &nascq.EvidenceOffer{ClaimID: parts["claim_id"], ArgumentID: parts["argument_id"], Kind: parts["kind"], Statement: parts["statement"],
+		Role: parts["role"], Interpretation: parts["interpretation"], Warrant: parts["warrant"]}, nil
+}
+
+// bindingRefsOf reads the bindings a move cites: a list of binding ids.
+// Another value, or an item that is not text, is refused by name.
+func bindingRefsOf(m map[string]interface{}) ([]string, error) {
+	v, exists := m["evidence_refs"]
+	if !exists || v == nil {
+		return nil, nil
+	}
+	list, ok := v.([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("\"evidence_refs\" must be a list of binding ids, not %s", jsonKind(v))
+	}
+	var out []string
+	for _, x := range list {
+		s, ok := x.(string)
+		if !ok {
+			return nil, fmt.Errorf("\"evidence_refs\": a binding id must be text, not %s", jsonKind(x))
+		}
+		if s = strings.TrimSpace(s); s != "" {
+			out = append(out, s)
+		}
+	}
+	return out, nil
 }
 
 // sourcesOf reads a move's sources. Sources are text: a citation or a URL.
@@ -977,7 +1098,8 @@ func declarationsOf(m map[string]interface{}) ([]nascq.ActionDecl, error) {
 			switch v := x.(type) {
 			case map[string]interface{}:
 				decl := nascq.ActionDecl{}
-				for k, f := range v {
+				for _, k := range nascq.SortedStringKeys(v) { // sorted: see moveOf
+					f := v[k]
 					switch k {
 					case "id", "actor":
 						t, ok := f.(string)
@@ -1214,6 +1336,11 @@ func (r *refs) resolve(id string) string {
 func (r *refs) resolveAction(a nascq.ProposedAction) nascq.ProposedAction {
 	a.TargetStmtID = r.resolve(a.TargetStmtID)
 	a.TargetPremiseID = r.resolve(a.TargetPremiseID)
+	if a.Offer != nil {
+		o := *a.Offer
+		o.Statement = r.resolve(o.Statement)
+		a.Offer = &o
+	}
 	return a
 }
 
