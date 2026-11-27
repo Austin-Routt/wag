@@ -272,3 +272,51 @@ The independent check of version 1 (in the workspace, `verify/d086/`):
   run the browser check stopped when the run it made lacked the claim it opens (the defect "the claims
   field not sent" had no verdict); it now records that and goes on with a run made through the API,
   and catches it.
+
+## 10. Round 1, draft 1 (2026-11-27)
+
+The developer's readings came first (in the workspace, `verify/d086/round1-readings.md`: the 16 claims
+of version 1's round, then the 12 new to version 2's), then the comparison with the reference, A and B.
+`recode_d086_r1.py` wrote the draft into the gold, each item with its `adjudication.recoded` entry;
+`d086-rounds.json` has every claim of round 1 at draft 1, not reviewed.
+
+- **Changed (7).** 13292.12 at 13292.9#2's `causes(tax_meat,meat_industry_harmed)` (28 CQ1: a
+  mechanism for the link) and 13292.141 at 13292.2#2's `causes(meat_production,significant_ghg_emissions)`
+  (28 CQ2: data for the link), both for; 13292.182 and .198 at 13292.180#2's exception
+  `interference(reduced_meat_consumption)` (28 CQ3), against, their own arguments concluding it (R8):
+  each names the causal step it answers, as both annotators aimed it. 13292.6, .11 and .218 bind only
+  the variables of the formulas they state, list only those formulas, and leave their conclusions,
+  which name the action, null; their challenge records at formulas they no longer list are left to the
+  arguments they are fragments of (13292.108, .118), which record the same challenges.
+- **Kept (21),** each with its reason: the developer's reading matched the reference, or where it did not
+  (13292.46: the argument from rules fits what the claim states; 13292.8: 13292.115 is a consequence
+  argument, not practical reasoning, so 13292.8 is no fragment of it), the guidelines decide for the
+  reference. Notes that told a coding's history in dated additions are rewritten as one current
+  account (the history is in the recoded entries); 13292.147 names candidate C017.
+- **Checks.** `validate.py` (R2-R17) passes; the agreement of annotators A and B is unchanged. Two
+  planted-defect tests of `test_validate.py`, their Go counterparts and three more Go tests named the
+  items the draft changed (13292.12's old target, 13292.6 as a fully bound fragment or as binding the
+  agent); each now plants the same defect in another item (13292.108, the gold's fully bound fragment;
+  13292.45, which binds the agent and into which nothing points; 13292.12 at another instance of
+  13292.9), and the two rules they guard still catch their planted defects. `TestAgreementFieldsAcrossFormats`
+  pins the new figures of the format-1 gold against the format-2 one (each change above accounted for),
+  and the target-instance test lists the four new moves. `test_verify_gold.py`'s V15 sets the round state
+  it tests instead of reading the repository's. The replay: 13292.12, .182 and .198, played before, are
+  cascades now, with 13292.141 (the replay does not play the secondary causal steps they answer): 43
+  claims played instead of 46; the fragments play as before; the thesis stays out.
+
+Open for the review and the owner, each said in the items' notes:
+
+1. 13292.108: does a fragment whose parent has no argument carry that argument, every variable bound,
+   or does §5 item 6 apply to it too, leaving eight of the eleven targets into it without a formula?
+   Either way the guidelines should say.
+2. 13292.202: a mitigation that replies to a weighing claim, at the consequence the weighing relies on
+   (OC10; the reference's), or at the conclusion of the argument that cites the harm (OC6; 13292.127#2)?
+3. 13292.194 (and 13292.45, round 2): a mitigation at 13292.12's predicted harm (its primary step's
+   conclusion; the reference's), or at 13292.12#3, the argument that cites the harm against the tax?
+4. 28 CQ1 or CQ2: the draft reads a mechanism offered for a causal link as answering CQ1 (13292.12) and
+   data offered for it as answering CQ2 (13292.141). Should the guidelines say so?
+5. A fragment's premises: the draft lists only the formulas it states, not the others whose variables
+   it binds (13292.6 lists no `possible_goal(G)`). Should the guidelines say so?
+6. The replay's cascades: playing the secondary instances that claims target is a change to `to_wag.py`,
+   outside this plan (§7), proposed as the next step after round 1.

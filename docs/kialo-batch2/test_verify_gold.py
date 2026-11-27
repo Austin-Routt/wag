@@ -292,12 +292,14 @@ class VerifyGold(unittest.TestCase):
     def test_v15_not_agreed(self):
         doc = load_json(self.rounds)
         del doc['claims']['13292.1']
+        doc['claims']['13292.6'].update(draft=1, review='objections', agreed_rev=None, agreed_by=None, agreed_date=None,
+                                        objections=['the reviewer reads the link otherwise'])
         with open(self.rounds, 'wb') as fh:
             fh.write(dump(doc))
         self.agree('13292.33', rev='0' * 64)
         r = self.run_script([verdict('13292.6', 'gold', self.bytes), verdict('13292.33', 'gold', self.bytes), verdict('13292.1', 'gold', self.bytes)])
         self.assertEqual(r.returncode, 0, r.stderr)
-        self.assertIn('13292.6: not agreed in its round (the review: not drafted)', r.stdout)
+        self.assertIn('13292.6: not agreed in its round (the review: objections)', r.stdout)
         self.assertIn('13292.33: agreed at another revision than it has now', r.stdout)
         self.assertIn('13292.1: not in a round of the first gold', r.stdout)
         self.unchanged()

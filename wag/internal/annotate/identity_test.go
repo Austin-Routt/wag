@@ -138,7 +138,9 @@ func renameIn(in map[string]any, old, new string) {
 		p["formula"] = sub(p["formula"].(string))
 	}
 	cm := in["conclusion"].(map[string]any)
-	cm["formula"] = sub(cm["formula"].(string))
+	if f, ok := cm["formula"].(string); ok { // a fragment's unstated conclusion stays null
+		cm["formula"] = sub(f)
+	}
 }
 
 func TestTheBuiltinDatasetIsFormat2WithACase(t *testing.T) {
@@ -198,8 +200,10 @@ func TestFormat2Refusals(t *testing.T) {
 			"R13 its target names the instance 13292.9#7, which is not an instance of 13292.9"},
 		{"an instance of another claim", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["instance"] = "13292.7#1"; return nil },
 			"R13 its target names the instance 13292.7#1, which is not an instance of 13292.9"},
-		{"a formula of another instance", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["instance"] = "13292.9#2"; return nil },
-			"R13 its target names may_bring_about(tax_meat,tax_revenue_reduced), which is not a premise of 13292.9#2"},
+		// 13292.12's target is 13292.9#2's causal premise since D086 round 1;
+		// 13292.9#1, the modal argument, does not have it.
+		{"a formula of another instance", "13292.12", func(s map[string]Annotation) *Dataset { actualOf(s["13292.12"])["instance"] = "13292.9#1"; return nil },
+			"R13 its target names causes(tax_meat,meat_industry_harmed), which is not a premise of 13292.9#1"},
 		{"the wrong conclusion", "13292.9", func(s map[string]Annotation) *Dataset {
 			actualOf(s["13292.9"])["formula"] = "¬should_be_performed(tax_meat)"
 			return nil
@@ -262,10 +266,12 @@ func TestFormat2Refusals(t *testing.T) {
 			inst(s["13292.7"], 0)["bindings"].(map[string]any)["G"] = map[string]any{"unstated": "not said"}
 			return nil
 		}, `R16 13292.7#1 binds G to {"unstated":"not said"}`},
-		{"an agent who is not an actor", "13292.6", func(s map[string]Annotation) *Dataset {
-			renameIn(inst(s["13292.6"], 0), "governments", "meat_tax_proponents")
+		// 13292.45 binds the agent and no other item points into it (13292.6,
+		// a fragment since D086 round 1, leaves the agent unstated).
+		{"an agent who is not an actor", "13292.45", func(s map[string]Annotation) *Dataset {
+			renameIn(inst(s["13292.45"], 0), "governments", "meat_tax_proponents")
 			return nil
-		}, "R14 13292.6#1 binds the agent P to meat_tax_proponents, which is not an actor of the case"},
+		}, "R14 13292.45#1 binds the agent P to meat_tax_proponents, which is not an actor of the case"},
 		{"an action the case lacks", "13292.123", func(s map[string]Annotation) *Dataset {
 			renameIn(inst(s["13292.123"], 0), "abolish_meat_subsidies", "switch_to_other_protein")
 			return nil
@@ -381,8 +387,9 @@ func TestFormat1IsCheckedAsMade(t *testing.T) {
 // The agreement fields read each annotator's targets in its own set: the
 // format-1 gold and the format-2 gold, the same codings but for D039's
 // eleven causal steps and proposal D008-D074's recode (2026-11-25), agree on
-// every field but where those changed them, and where step C5.2's switch
-// (2026-11-27) named the game's questions.
+// every field but where those changed them, where step C5.2's switch
+// (2026-11-27) named the game's questions, and where D086's round-1 draft
+// (2026-11-27) named causal steps and left fragments' variables unstated.
 func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	d, _ := builtin(t)
 	b, err := os.ReadFile("../../../docs/kialo-batch2/gold-format1.json")
@@ -405,8 +412,14 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// C5.2 the game asks the questions there, so their cq is the game's: .12
 	// and .233 CQ:modal_likelihood, .25 CQ:too_slight, and .127 and .43, at
 	// the outweighing exceptions, CQ:bad_outweighs and CQ:good_outweighs (cq).
-	want := map[string]float64{"scheme": 0.88, "instances": 0.82, "target_formula": 0.9, "role": 0.98,
-		"target_part": 0.98, "cq": 0.9, "target_instance": 0.94}
+	// D086's round-1 draft (2026-11-27): 13292.141, .182 and .198 name the
+	// causal step they answer (target_instance, target_formula, cq; .182 and
+	// .198 at its exception, target_part), as 13292.12 does, whose target
+	// differed already; the fragments 13292.6, .11 and .218 leave unstated
+	// the variables of the formulas they do not state (bindings, instances);
+	// .182 and .198 conclude the exception (instances).
+	want := map[string]float64{"scheme": 0.88, "instances": 0.72, "target_formula": 0.84, "role": 0.98,
+		"target_part": 0.94, "cq": 0.84, "target_instance": 0.88, "bindings": 0.94}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -417,7 +430,7 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 			t.Errorf("%s: %+v, want agreement %v over 50", f, fa, w)
 		}
 	}
-	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "13292.9 secondary:negative_consequences_modal:may_be_unwise_to_perform(tax_meat,tax_revenue_reduced)" {
+	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "13292.9 secondary:cause_to_effect_modal:may_occur(meat_industry_harmed)" {
 		t.Errorf("13292.12's target instance: %q", v)
 	}
 	// A target at a secondary instance says which.
@@ -1044,8 +1057,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// The unflagged instance reads as its claim's primary: format 1 and
 	// format 2 name the same target instance everywhere but where
 	// D008-D074's recode moved a target to the modal argument a bridge
-	// carries (13292.12, .233, .43).
-	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true}
+	// carries (13292.12, .233, .43), and where D086's round-1 draft named the
+	// causal step a claim answers (13292.12, .141, .182, .198).
+	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {
@@ -1069,7 +1083,10 @@ func TestAgreementPyMatchesGoWithAliases(t *testing.T) {
 	d, col := builtin(t)
 	a := clone(t, d.Gold)
 	renameIn(inst(a["13292.7"], 0), "tax_meat", "meat_tax")
-	inst(a["13292.6"], 0)["bindings"].(map[string]any)["S1"] = map[string]any{"unstated": "the claim states the goal's link only"}
+	// An annotator who leaves unstated a fragment's variable the gold binds
+	// (13292.108 carries the environmental argument, every variable bound;
+	// D086 round 1).
+	inst(a["13292.108"], 0)["bindings"].(map[string]any)["S2"] = map[string]any{"unstated": "the claim states the circumstances only"}
 	tmp := t.TempDir()
 	write := func(name string, v any) string {
 		b, err := json.Marshal(v)
@@ -1475,16 +1492,14 @@ func TestFormat2OnePrimaryAndFragmentConclusions(t *testing.T) {
 	if p := c.CheckIn(set["13292.7"], d, set, 0); strings.Join(p, "|") != "0 primary instances, not 1" {
 		t.Errorf("a lone instance that is not primary: %v", p)
 	}
+	// 13292.6 leaves the action unstated since D086 round 1 (guidelines §5
+	// item 6): a conclusion that names it is refused, a null one is taken.
 	set = clone(t, d.Gold)
 	frag := inst(set["13292.6"], 0)
-	frag["bindings"].(map[string]any)["A"] = map[string]any{"unstated": "the claim states the goal's link only"}
-	var keep []any
-	for _, x := range frag["premises"].([]any) {
-		if !strings.Contains(x.(map[string]any)["formula"].(string), "tax_meat") {
-			keep = append(keep, x)
-		}
+	if _, unstated := frag["bindings"].(map[string]any)["A"].(map[string]any); !unstated || frag["conclusion"].(map[string]any)["formula"] != nil {
+		t.Fatalf("13292.6#1 binds A or concludes: %v", frag)
 	}
-	frag["premises"] = keep
+	frag["conclusion"].(map[string]any)["formula"] = "should_be_performed(tax_meat)"
 	if p := c.CheckIn(set["13292.6"], d, set, 0); !strings.Contains(strings.Join(p, "|"), "is a fragment whose conclusion names a variable it leaves unstated") {
 		t.Errorf("%v", p)
 	}
@@ -1680,15 +1695,17 @@ func TestCheckInMatchesValidatePy(t *testing.T) {
 	}{
 		{"a retired id of another claim", "13292.7", func(s map[string]Annotation) { s["13292.7"]["retired"] = []any{"13292.9#7"} },
 			"R12 its retired ids are not a list of instance ids of its own"},
-		{"a fully bound fragment without its conclusion", "13292.6", func(s map[string]Annotation) {
-			inst(s["13292.6"], 0)["conclusion"].(map[string]any)["formula"] = nil
+		// 13292.108 is the gold's fully bound fragment (13292.6 leaves its
+		// unstated variables unstated since D086 round 1).
+		{"a fully bound fragment without its conclusion", "13292.108", func(s map[string]Annotation) {
+			inst(s["13292.108"], 0)["conclusion"].(map[string]any)["formula"] = nil
 		}, "practical_reasoning2 concludes <nil>, not "},
-		{"a fully bound fragment that omits a premise", "13292.6", func(s map[string]Annotation) {
-			in := inst(s["13292.6"], 0)
+		{"a fully bound fragment that omits a premise", "13292.108", func(s map[string]Annotation) {
+			in := inst(s["13292.108"], 0)
 			in["premises"] = in["premises"].([]any)[1:]
 		}, "practical_reasoning2: missing "},
-		{"a fragment that leaves a variable out of its bindings", "13292.6", func(s map[string]Annotation) {
-			in := inst(s["13292.6"], 0)
+		{"a fragment that leaves a variable out of its bindings", "13292.108", func(s map[string]Annotation) {
+			in := inst(s["13292.108"], 0)
 			bm := in["bindings"].(map[string]any)
 			s1 := bm["S1"].(string)
 			delete(bm, "S1")
@@ -1700,8 +1717,8 @@ func TestCheckInMatchesValidatePy(t *testing.T) {
 			}
 			in["premises"] = keep
 		}, "not the scheme's variables"},
-		{"a fragment premise that keeps its unstated variable", "13292.6", func(s map[string]Annotation) {
-			in := inst(s["13292.6"], 0)
+		{"a fragment premise that keeps its unstated variable", "13292.108", func(s map[string]Annotation) {
+			in := inst(s["13292.108"], 0)
 			bm := in["bindings"].(map[string]any)
 			s1 := bm["S1"].(string)
 			bm["S1"] = map[string]any{"unstated": "not said"}

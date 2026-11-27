@@ -327,3 +327,8 @@ claim it did not review as unresolved too.
   - the gold's four fragments (13292.6, .11, .108 and .218) bind every variable of the scheme, where
     guidelines §5 item 6 leaves those of formulas the fragment does not state unstated: annotators
     who follow the guidelines disagree with the gold on their bindings until one of the two changes.
+
+  Round 1 of the first gold's draft (2026-11-27, `d086-first-gold.md`) names the causal step for all
+  four targets, and applies §5 item 6 to 13292.6, .11 and .218; 13292.108 keeps every variable
+  bound, since the thesis has no argument and the fragment carries the environmental argument that
+  eleven targets point into: a question for the other reviewer and the owner.

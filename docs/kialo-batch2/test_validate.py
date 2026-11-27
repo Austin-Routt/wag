@@ -91,7 +91,8 @@ def rename(it, ins, old, new, records=True):
     ins['bindings'] = {k: (new if v == old else v) for k, v in ins['bindings'].items()}
     for p in ins['premises']:
         p['formula'] = sub(p['formula'])
-    ins['conclusion']['formula'] = sub(ins['conclusion']['formula'])
+    if ins['conclusion']['formula'] is not None:  # a fragment's unstated conclusion stays null
+        ins['conclusion']['formula'] = sub(ins['conclusion']['formula'])
     for c in it['challenges'] if records else []:
         # A format-2 record names its instance: only the renamed one's follow.
         if c.get('formula') in mine and c.get('instance', ins.get('id')) == ins.get('id'):
@@ -677,10 +678,14 @@ class Rules(unittest.TestCase):
         self.fails(g, '13292.12', ['R13'], 'not an instance of 13292.9')
 
     def test_r13_a_formula_of_another_instance_of_the_claim(self):
+        # Another instance of the target claim, one that does not have the
+        # target's formula (whichever instance the gold names now).
         g = copy.deepcopy(GOLD)
         a = item(g, '13292.12')['target']['actual']
-        a['instance'] = '13292.9#2'
-        self.fails(g, '13292.12', ['R13'], f"{a['formula']}, which is not a premise of 13292.9#2")
+        other = next(x['id'] for x in item(g, '13292.9')['instances']
+                     if x['id'] != a['instance'] and a['formula'] not in [p['formula'] for p in x['premises']])
+        a['instance'] = other
+        self.fails(g, '13292.12', ['R13'], f"{a['formula']}, which is not a premise of {other}")
 
     def test_d008_a_possible_consequence_concludes_no_more_than_it_may(self):
         # D008: a modal argument concludes that the action may be unwise
@@ -763,10 +768,29 @@ class Rules(unittest.TestCase):
 
     # R14: actors and actions.
     def test_r14_an_agent_who_is_not_an_actor(self):
+        # An item whose primary instance binds the agent and into whose
+        # formulas naming the agent no other item points (a target or a
+        # challenge record), so that the renamed agent is its error alone.
+        # (13292.6 served until D086 round 1 made it a fragment that leaves
+        # the agent unstated.)
         g = copy.deepcopy(GOLD)
-        it = item(g, '13292.6')
+        def pointed_into(cid):
+            ids = {x['id'] for x in item(g, cid)['instances']}
+            for o in g['items']:
+                if o['kialo_claim_id'] == cid:
+                    continue
+                t = (o.get('target') or {}).get('actual') or {}
+                if t.get('claim') == cid and 'governments' in str(t.get('formula')):
+                    return True
+                if any(c.get('instance') in ids and 'governments' in str(c.get('formula')) for c in o.get('challenges') or []):
+                    return True
+            return False
+        cid = next(i['kialo_claim_id'] for i in g['items']
+                   if primary(i)['bindings'].get('P') == 'governments' and primary(i)['scheme']['walton_id'] != 'better_means'
+                   and not pointed_into(i['kialo_claim_id']))
+        it = item(g, cid)
         rename(it, primary(it), 'governments', 'meat_tax_proponents')
-        self.fails(g, '13292.6', ['R14'], 'binds the agent P to meat_tax_proponents, which is not an actor of the case')
+        self.fails(g, cid, ['R14'], 'binds the agent P to meat_tax_proponents, which is not an actor of the case')
 
     def test_r14_an_action_the_case_does_not_have(self):
         g = copy.deepcopy(GOLD)
