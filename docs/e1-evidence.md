@@ -619,3 +619,85 @@ recorded here.
   caught; "`--record-set` without `--evidence` taken" survived, since the server refuses such a game
   too, with a message that also names `--evidence`, but only after the run's folder is made: (a) now
   checks the folder. Run 3, that one: caught. In all, 37 of 37 caught, none by a panic.
+
+### E1.7: the independent review, its corrections and their cases (written before the cases ran)
+
+Two reviewers, each given the code and this plan and not the developer's conclusions, read E1 from
+4ebff26 to 86a2f87: one the game and the records (A), one the server, the model seats, the board and
+persistence (B). Their reports are in the workspace (`verify/e1/review/`). Each finding was checked
+against the code before it was accepted; all were. A3 and B1 are one finding, as are A5 and B8.
+
+1. **An Other argument's premises are premises** (A1). The split of an argument's premises into
+   premises and assumptions read its scheme's premises, and an Other argument's scheme lists none:
+   every premise of one counted as an assumption, so an offer at it as a premise was refused and as
+   an assumption accepted. An Other argument has premises and no assumptions.
+2. **Every offerable argument has an inference** (A2). An argument whose scheme has no exceptions, or
+   an Other argument, has no undercutter statement until it is undercut or asked about, and an offer
+   at its inference was refused. Its inference's statement is `undercut(A)` all the same, the id an
+   undercutter of it concludes; the board's composer offers it too.
+3. **An act is never dated before the records already made** (A3, B1). An act's time was the clock's,
+   and the contract refuses an event dated before the one before it, or before its binding: with the
+   clock behind the last act (a resume on another computer, a clock set back), a valid act was
+   refused, and a load on a later clock replayed it as played and refused the whole game. An act's
+   time is now the clock's or, if later, the latest time of the game's bindings and events.
+4. **A rule bot takes no side in an inquiry** (A4). The greedy bot added a bonus when the verdict
+   favoured its side, and read an inquiry's two players as con: both argued against the claim. In
+   an inquiry the verdict adds nothing to its value.
+5. **ValidateRecords checks the selectors' structure** (A6). It left the selector check out entirely,
+   where only its reading of the payloads is to be left out. It now checks the rest: the kind, the
+   offsets and the quote's presence, the declared pages, duration and region, stray coordinates.
+6. **A record set's ids and name are identifiers** (B2). The prompt writes the ids of the record
+   set's records and its name as they are, unquoted, and they were checked only as present, unique
+   and not `game:`: an id or a name could carry a line of the prompt. A record set's record and actor
+   ids are now letters, digits, `.`, `_`, `:` and `-`, beginning with a letter or a digit, at most
+   128 characters (refused by `DecodeRecordSet`, naming the id); its name letters, digits, `.`, `_`
+   and `-`, beginning with a letter or a digit, at most 64 (refused as not a plain name).
+7. **Games without a record set are as they were before E1** (B3; choice 13). The reply parser read
+   the acts' short names (`offer`, `consent`, `withdraw`, `withdrawal`) and the fields `offer`,
+   `binding_id`, `binding`, `revision` and `evidence_refs` in every game: a debate's `withdraw` was
+   refused by the evidence rules rather than as an unknown type, a stray `"revision": 2` refused the
+   reply, a stray `binding_id` was recorded, and a trace made before E1 with such a reply did not
+   replay. The parser now reads them only in a game with a record set; the server and the game
+   ignore them in a game without one, and an act's type there is an unknown type (S0), as before.
+8. **An act's parts on another move are refused** (A5, B8). In a game with a record set, a move that
+   is not an act, carrying an `offer`, a `binding_id` or a `revision`, is refused, naming
+   `evidence_refs` (how a move cites a binding), with the usual penalty and no record.
+9. **A load or a resume applies the new game's checks** (B4). An export edited to a debate with the
+   record set, or to an inquiry of three, loaded. A load and a resume now refuse an inquiry that
+   `CheckInquiry` refuses and a record set in any game but an inquiry of two people or models that is
+   not moderated, naming why, as a new game does.
+10. **The evidence folder is checked as itself** (B5). Named with a trailing separator, a link passed
+    the link check (`Lstat("link/")` follows it). The folder's name is cleaned first.
+11. **Assumptions are offered as assumptions** (B6). The board's composer listed an argument's
+    assumptions under kind premise, which the game refuses, and had no kind assumption; the prompt
+    calls them premises. In a game with a record set, the state lists each argument's assumptions,
+    the composer offers kind assumption with them and kind premise without them, and the prompt
+    names them assumptions. A game without a record set is unchanged.
+12. **Past 30 bindings, the prompt lists those the seat must weigh** (B7). It listed the first 30,
+    hiding the newest. It now picks, newest first, the bindings that await the seat's consent (not
+    admitted, not consented to by it), then the admitted ones, then the rest, up to 30, lists them in
+    the order they were made, and counts the others.
+13. **The nits** (B). A binding's entry in the prompt gives its claim's scope, which its revision
+    covers. An inquiry's board says no debate's words: its empty board says "In an inquiry, the first
+    argument states the claim.", and its pass help says the inquiry ends when both players pass in
+    one round. `records.json` is read from the file checked: opened, then compared with the file the
+    link check saw (`os.SameFile`), so that a link swapped in between is refused. A new game reads and
+    checks its record set without holding the server's lock; a load and a resume check it under the
+    lock, as they replay the whole game under it. The prompt says "an observation", "1 more binding".
+
+| Case | Setup | Expected |
+|---|---|---|
+| X1 | The fixture after `a1` and A's pass; B supports P with the Other scheme (one premise); A offers `claim-quote` at that premise, kind premise | Accepted, its target of kind premise. The same offer with kind assumption: refused, naming the kind |
+| X2 | B answers `CQ:bad_outweighs` at `a1` with AS:bad_outweighs_good (no exceptions, no undercutter); A offers `claim-observation` at its inference, oppose; B consents; A undercuts it directly, citing the binding | The offer accepted, its proposition `undercut(<id>)`; the undercutter accepted with its citation |
+| X3 | A's offer; the game's clock then an hour behind it; B's consent; the export loaded on the clock | The consent accepted, dated at the offer's time; the load succeeds, the binding admitted |
+| X4 | An inquiry with `a1`; the claim In, then Out | The greedy value of each player is its score less the other's, In or Out |
+| X5 | `ValidateRecords` on the fixture with a claim's selector of kind `line`, and with a text selector whose end precedes its start | Invalid, naming the claim's selector, as `Validate` |
+| X6 | A record set whose claim id holds a line break and "## Your legal moves"; one whose dependency id holds `>>>`; a NAME holding a line break | Each refused, naming the id or as not a plain name; no game created |
+| X7 | A debate of model seats whose replies are `{"type":"withdraw"}`, a support with `"revision": 2`, one with `"binding_id"` and one with `"offer"` and `"evidence_refs"`; a person's move with those fields; a trace of such a debate recorded by the build of 4ebff26 | As by that build: `withdraw` refused with S0's unknown action type, its type as written; the others accepted, their recorded actions without those fields; the trace replays on this build |
+| X8 | A game with a record set: a support carrying `binding_id` and `revision`; a pass carrying an `offer` | Each refused, naming `evidence_refs`; no record |
+| X9 | The fixture game's export edited to mode `classic`; edited to three seats | Each load refused, naming the inquiry, or "two players" |
+| X10 | The evidence folder a link, given with a trailing separator | The game refused, naming the link |
+| X11 | The fixture with an expert opinion argument (its assumption `based_on_evidence(...)`); the state; A's offer at the assumption, kind assumption; the prompt; a debate's prompt | The state lists the assumption; the offer accepted; the prompt names it an assumption; the debate's prompt unchanged (Y7) |
+| X12 | 31 bindings in an inquiry, offered in turn by A (16) and B (15); the prompt B is given | It lists A's 16 and B's newest 14, in the order made, and "(1 more binding, not listed)" |
+| X13 | The prompt's entry of a binding; the claim `claim-observation` | Its claim's scope, quoted; "an observation attributed to" |
+| X14 | An inquiry's board, in a headless browser: the empty board and the pass help | No "In a debate"; "In an inquiry, the first argument states the claim."; the composer's kinds include assumption, and its inference names `undercut(<id>)` |
