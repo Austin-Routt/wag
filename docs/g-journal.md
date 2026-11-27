@@ -196,3 +196,60 @@ Written while the planted defects were being prepared, before these checks ran:
 - The trace reader takes only a trace the server writes: its format, a game's start first and once,
   the four kinds of event (`TestReadTraceTakesOnlyATrace`).
 - The planted defects and their runs are in the workspace (`verify/g`).
+
+## Corrections after the independent check of 90d2327 (2026-11-27), before their tests ran
+
+The check (in the workspace, `verify/g/CHECK-g.md`) found 3 errors, 7 warnings and 15 notes. The
+corrections, each with its case, written before the case ran:
+
+1. **A held move ends the turn in progress** (E1). A model seat's reply held for the moderator is not
+   a refused reply: when the moderator rejects it, the seat's next turn starts afresh, with the
+   board and the moderator's note, as before G, and the moderator's rejections are not the seat's
+   attempts.
+2. **A held move is held again after a resume** (E2). The trace's last decision, held for the
+   moderator when the export was saved, is held again: the model is not asked, and a computer player
+   does not choose again.
+3. **The game clock counts the time played, across resumes** (E3). Each save records the time played
+   so far (`played_ns` in the export); a resume counts that, not the time since the game was created.
+4. **A move clock does not run while the game cannot be saved** (W3). A model seat waits while the
+   game cannot be saved; when a save succeeds, its move clock starts again.
+5. **No retry is sent while the game cannot be saved** (W4). A call's tries stop as soon as one's
+   record cannot be saved.
+6. **A game over by its clock stays over** (W5). A resume applies the game clock: a game whose time
+   was up is over at once. A model seat is not asked once the game's time is up.
+7. **The build is recorded, not compared** (W6). A trace's start keeps the build that began the game,
+   and each resume records its own (`resumed[].build`); the start's other fields, its pins included,
+   must still be this server's. The protocol, the system prompt, the model profiles, the context
+   presets and the engine's and data's pins say what a build would change in play; `go run`
+   records no commit, and an untracked file changes a built binary's.
+8. **What a resume takes** (N1, N2, N3). A game's id must be one this server makes (digits); the
+   game's folder and its two files must be a folder and files, not links. A recorded reply for the
+   first attempt of a turn on the current board (no move since its call) must have answered this
+   board: its prompt must be the one the board gives now.
+9. **A recorded failed call replays** (N7): `wag-llm replay` goes on past a failed call it replays,
+   as the game did.
+
+### Cases added
+
+| Case | Setup | Expected |
+|---|---|---|
+| G11 | A moderated debate; the model's legal reply held; the moderator rejects it with a note | The model's next request is one message, the board, which names the note; after four rejections the model is still asked |
+| G12 | A moderated debate stopped while the model's reply is held, resumed | The move is held again; `/ai` asks nothing (a move awaits the moderator); the moderator's approval plays it |
+| G12b | The same with a random player's held move | The same move is held again; after the moderator's rejection, the random player chooses as in the game that did not stop |
+| G13 | A game with a game clock, resumed twice after stops of a few seconds | The time played counted is the time played (under a second), not the stops |
+| G10b | G10 with the export's time played set to five minutes | The resumed game clock counts five minutes |
+| G14 | A move clock of one second; the save fails after the provider's answer; it succeeds two seconds later | The kept reply is played as the move, not voided |
+| G15 | Retries allowed; the first try fails with a server error and its save fails | No second try is sent; the provider is called once |
+| G16 | A game over by its game clock, resumed | Over at once; `/ai` asks nothing. In a live game whose time is up, `/ai` asks nothing either |
+| G17 | G1's folder with its start's build edited (another commit), resumed | Resumed; the start keeps the edited build; the resume records this server's |
+| G5f | G1's folder with a game id `../x`, or as a link to a folder elsewhere | Refused, each |
+| G5g | G4's folder with: the export's move edited (another move list); a call's turn after the export's moves; the start's request edited; the export's seed edited | Refused, each, naming it |
+| G5h | A complete game folder copied under `annotation/` | Refused: not a game's folder |
+| G4c | A reply planted for the current turn whose prompt is another board's | Not played: the provider is asked |
+| G3c | The model's first reply refused, its second call failed | The next turn starts afresh: a one-message request, attempt 1 |
+| G5i | G5d's folder with the second call removed (every recorded reply used and refused) | The provider is asked once, for the second attempt, with the conversation so far |
+| G6b | G3's game (a failed call, then the model asked again), replayed | It replays |
+| Gn | After resuming game 1 in a new server, a new game | Gets id 2 |
+
+G5d also checks the recovered decision's prompt (the board as the turn began) and feedback; the
+redraw has a unit test (a pass is not drawn again; the last board is).
