@@ -683,3 +683,28 @@ On the second run all 27 were caught.
 **Results.** `test_verify_gold.py` 50 tests, `test_validate.py` 91, `test_agreement.py` 5 and
 `test_to_wag_inference.py` 10 pass. `validate.py` passes the gold. The draft-2 script reproduces the
 gold from draft 1, its records match the diff (13 items), and `d086_rounds.py` gives the same rounds.
+
+## 13. The owner's decisions (2026-11-27)
+
+Asked the decision batch's questions, each with a recommendation, the owner replied: "Yes. Based on
+your analysis and recommendations, please proceed to close all remaining gaps." They are in the
+register as D096-D101:
+
+- **D096 (question 1): two layers.** 13292.108 keeps what it states; a separately identified
+  reconstruction of the environmental argument, marked as the discussion's, takes the targets on the
+  parts it does not state (13292.5, .147 and .174 at its conclusion; 13292.6, .13, .104 and .127 at
+  its supplied premises). How a reconstruction is identified goes through a proposal.
+- **D097 (G2): the causal exception names its effect,** `interference(E1,E2)`, through a proposal
+  and `edits.py`; the gold's causal instances and challenges are recoded.
+- **D098: the OC6 and OC10 convention** goes into the guidelines (§3.1).
+- **D099: C5's questions,** answered as the other reviewer answered them (`c5-game.md`).
+- **D100: E1's choices,** as implemented.
+- **D101: EthiX first** as the pilot's external benchmark, a private track; no model is run on it
+  until the owner sets a budget.
+
+**Next.** Round 1's draft 3 takes in D096, D097 and D098: the proposals first, each checked
+independently, then the recode, the rounds file (the `pending` claims released) and exchange 3 with
+the other reviewer. The owner's timed verification session follows draft 3: a verdict is tied to the
+guidelines and `walton.yml` it was given on (§5), and these decisions change both. Exchange 2 went to
+the reviewer in one package, as the owner asked (wag-workspace
+`verify/d086/package/WAG-review-2026-11-27.zip`).

@@ -46,6 +46,8 @@ Each is the developer's, under the owner's instruction to go with the recommende
 marked **(owner)** set a game rule or read a decision, and are put to the owner with this plan, the
 work going on with the recommendation meanwhile, as before (D094, D095).
 
+The owner confirmed choices 1, 2, 4, 7, 8, 13 and 14 as implemented on 2026-11-27 (D100).
+
 1. **The slice is a cooperative game of two players (owner).** D076 puts the review's four profiles
    in Track D and fixes the first slice as two players under the two-party policy;
    evidence-records.md reads that slice as cooperative. *The automated profile* is the review's

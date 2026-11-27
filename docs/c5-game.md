@@ -386,6 +386,8 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
 
 ### Questions for the owner
 
+**Answered by the owner on 2026-11-27 (D099),** as the other reviewer answered them: (1) yes; (2) yes, P3 as implemented; (3) sign's answer at that route stays a reviewed candidate, outside the pilot's profile until its warrant is reviewed; (4) yes, D095 (3)'s list bounds every route to the exception, and undercutters that attack something other than knowability are kept; (5) "If so, how?". (2) is applied; (1), (3), (4) and (5) are to be applied in the game. The questions as they were put:
+
 1. A backup edge from negative consequences to CQ:side_effect, the mirror of positive consequences
    at CQ:opposite_consequences (D009 excluded it for a reason D095 (1) has removed)?
 2. P3: the actions argued in the game are the agent's (from D063), or only those of a scheme with an
