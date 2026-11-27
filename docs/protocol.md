@@ -129,9 +129,11 @@ The move:
   (b)): its prompt has a *Who decides* section and a move about an action it
   does not hold must declare it, so a trace recorded before then replays
   with the build it was recorded with (docs/game-rules.md). Likewise a game
-  recorded before 2026-11-27 with a value that names nothing (S2, P1). The
-  reply's reader drops blank values, so a model's trace can have one only if
-  the reply gave a value of punctuation alone.
+  recorded before 2026-11-27 with a value or a name that names nothing (S2,
+  P1, the profile's check). The reply's reader drops blank values and keeps
+  the others as written, so a model's trace can have one where the reply gave
+  a value with no letter or digit (punctuation, an invisible character, a
+  sign such as "€").
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

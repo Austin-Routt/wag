@@ -161,13 +161,68 @@ func TestHumanAsksAgainForANamelessValue(t *testing.T) {
 		}
 	}
 
+	// The input ends at A: the move is not made, the seat resigns (the check
+	// of step 8, W-2: a move left blank was refused, and asked for again,
+	// forever).
 	out.Reset()
-	bob := NewHumanAgent("Bob", strings.NewReader("1\n6\nstatus quo\n"), &out) // the input ends at A
-	act = bob.ChooseAction(gs.BuildObservation())
-	if act.VariableBindings["A"] != "" {
-		t.Fatalf("A = %q at the end of the input", act.VariableBindings["A"])
+	bob := NewHumanAgent("Bob", strings.NewReader("1\n6\nstatus quo\n"), &out)
+	if act = bob.ChooseAction(gs.BuildObservation()); act.Type != "resign" || !strings.Contains(out.String(), "The input has ended: Bob resigns") {
+		t.Fatalf("at the end of the input: %+v\n%s", act, out.String())
 	}
-	if r, _ := gs.ExecuteTurn(act); r.Accepted || !strings.HasPrefix(gs.LastRejection, "S2") {
-		t.Fatalf("the move with a blank A: accepted %v, %q", r.Accepted, gs.LastRejection)
+}
+
+// A seat whose input has ended resigns, from its first move or from a later
+// one, and the game is over: a terminal game whose input ends does not ask
+// again forever (the check of step 8, W-2).
+func TestHumanResignsAtTheEndOfItsInput(t *testing.T) {
+	for _, in := range []string{"", "1\n", "6\n"} {
+		gs := newShippedGame(t, prevEdges, "Alice", "Bob")
+		var out bytes.Buffer
+		alice := NewHumanAgent("Alice", strings.NewReader(in), &out)
+		if in == "6\n" { // Alice passes once, Bob passes, then her input has ended
+			gs.ExecuteTurn(alice.ChooseAction(gs.BuildObservation()))
+			gs.ExecuteTurn(nascq.ProposedAction{Type: "abstain"})
+		}
+		act := alice.ChooseAction(gs.BuildObservation())
+		if act.Type != "resign" {
+			t.Fatalf("input %q: %+v", in, act)
+		}
+		if r, err := gs.ExecuteTurn(act); err != nil || !r.Terminated {
+			t.Fatalf("input %q: the resignation: %+v %v", in, r, err)
+		}
+		if act := alice.ChooseAction(gs.BuildObservation()); act.Type != "resign" {
+			t.Fatalf("input %q: asked again after the end: %+v", in, act)
+		}
+	}
+}
+
+// Other's premises after the first may be left blank at the terminal; a
+// value that names nothing is asked for again (the check of step 8, N-4).
+func TestHumanLeavesOthersLaterPremisesBlank(t *testing.T) {
+	g := newFGame(t)
+	var tmpl *nascq.ActionTemplate
+	for _, a := range g.gs.BuildObservation().AvailableActions {
+		if a.Type == "support" && a.SchemeID == nascq.OtherSchemeID && a.TargetArgID == "" && a.TargetStmtID == "" {
+			a := a
+			tmpl = &a
+			break
+		}
+	}
+	if tmpl == nil {
+		t.Fatal("no Other support to make")
+	}
+	lines := []string{"lower emissions would be good", "", "?", "food prices rise"}
+	for i := 4; i <= nascq.OtherMaxPremises; i++ {
+		lines = append(lines, "")
+	}
+	lines = append(lines, "tax meat")
+	var out bytes.Buffer
+	h := NewHumanAgent("Pro", strings.NewReader(strings.Join(lines, "\n")+"\n"), &out)
+	b := h.fillVariables(*tmpl)
+	if b["P1"] != "lower emissions would be good" || b["P2"] != "" || b["P3"] != "food prices rise" || b["C"] != "tax meat" {
+		t.Fatalf("bindings %v\n%s", b, out.String())
+	}
+	if strings.Contains(out.String(), "P2 names nothing") || !strings.Contains(out.String(), "P3 names nothing") {
+		t.Fatalf("asked again for the wrong premise:\n%s", out.String())
 	}
 }

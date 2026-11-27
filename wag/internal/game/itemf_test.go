@@ -85,9 +85,10 @@ func (g *fgame) play(player string, a nascq.ProposedAction) string {
 }
 
 // refuse makes a move that must be refused by the rule named (the start of
-// the refusal), leaving the graph, the open questions (arguments of the
-// graph) and the profile as they were, and the turn where it was; the move
-// history gains the refusal only.
+// the refusal), leaving the game as state() renders it, and the turn, as
+// they were: a rule's refusal (S, P, Q, G) adds one record to the move
+// history, with its penalty, and the adapter's and the cycle check's add
+// none.
 func (g *fgame) refuse(player string, a nascq.ProposedAction, rule string) {
 	g.t.Helper()
 	g.turnOf(player)
@@ -120,8 +121,9 @@ func (g *fgame) refuse(player string, a nascq.ProposedAction, rule string) {
 }
 
 // state is the game as a refusal must leave it: every statement with its
-// label, every argument with its conclusion, premises, undercutter and
-// weight, the profile, and the number of accepted moves.
+// label and text, the issues, the assumptions, the questioned statements,
+// the open questions, every argument with its conclusion, premises,
+// undercutter and weight, the profile, and the number of accepted moves.
 func (g *fgame) state() string {
 	var b strings.Builder
 	gr := g.gs.Adapter.Graph
@@ -361,6 +363,16 @@ func TestItemFBackupEdges(t *testing.T) {
 		g := newFGame(t)
 		c1, pr := g.c1(), g.pr()
 		g.play("Con", answer("attack", "CQ:bad_outweighs", "AS:bad_outweighs_good", pr, vb("H", "food_costlier")))
+		g.mustIn(bad1)
+		g.outOfForce(c1, pr)
+		g.mustOut(shouldTax)
+	})
+	t.Run("A1.2b", func(t *testing.T) {
+		// A1.2 from the other side: the answer at c1 reaches pr through the
+		// exception the two share (the check of step 8, N-7).
+		g := newFGame(t)
+		c1, pr := g.c1(), g.pr()
+		g.play("Con", answer("attack", "CQ:bad_outweighs", "AS:bad_outweighs_good", c1, vb("H", "food_costlier")))
 		g.mustIn(bad1)
 		g.outOfForce(c1, pr)
 		g.mustOut(shouldTax)
@@ -730,10 +742,13 @@ func TestItemFOther(t *testing.T) {
 		g.outOfForce(exp)
 		g.inForce(c1)
 	})
+	// B6 and B6b are played as recorded after the checks of steps 7 (E-1)
+	// and 8 (W-1): c1 first, so that the Other argument concludes c1's
+	// premise, whose presumption a pending question ties, so that it holds
+	// only by the arguments for it.
 	t.Run("B6", func(t *testing.T) {
-		// Played as recorded after the check of step 7 (E-1): c1 first, so
-		// that the Other argument concludes c1's premise, whose presumption a
-		// pending question ties, so that it holds only by the arguments for it.
+		// The expert's argument is on the board when the undercut comes, so
+		// that the support already there must survive it (Q2-C).
 		g := newFGame(t)
 		c1 := g.c1()
 		g.play("Con", ask("CQ:likelihood", c1))
@@ -742,17 +757,40 @@ func TestItemFOther(t *testing.T) {
 		if got := g.conclusion(wish); got != brings1 {
 			t.Fatalf("the Other argument concludes %s, not c1's premise", got)
 		}
+		exp := g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
 		g.mustIn(brings1)
-		g.inForce(c1)
+		g.inForce(c1, exp)
 		g.play("Con", answer("attack", nascq.CQRelevance, nascq.OtherSchemeID, wish,
 			other("that an outcome is desirable is no evidence that it will happen")))
 		g.outOfForce(wish) // Q2-A
-		g.mustOut(brings1) // the premise stood only on the undercut inference
 		if u := g.gs.Adapter.Graph.Arguments[c1].Undercutter; u == nil || u.Label == caes.In {
 			t.Fatalf("c1's undercutter is %+v: the undercutter reached c1", u)
 		} // Q2-B: c1 itself is untouched
+		g.inForce(exp) // Q2-C: the support already there stands
+		g.mustIn(brings1)
+		g.inForce(c1)
+	})
+	t.Run("B6b", func(t *testing.T) {
+		// The undercut comes while the Other argument is the premise's only
+		// support: the premise goes Out with it, and comes In again with
+		// support added after.
+		g := newFGame(t)
+		c1 := g.c1()
+		g.play("Con", ask("CQ:likelihood", c1))
+		wish := g.play("Pro", support(nascq.OtherSchemeID, vb("P1", "lower emissions would be good", "C", brings1)))
+		if got := g.conclusion(wish); got != brings1 {
+			t.Fatalf("the Other argument concludes %s, not c1's premise", got)
+		}
+		g.mustIn(brings1)
+		g.play("Con", answer("attack", nascq.CQRelevance, nascq.OtherSchemeID, wish,
+			other("that an outcome is desirable is no evidence that it will happen")))
+		g.outOfForce(wish)
+		g.mustOut(brings1) // the premise stood only on the undercut inference
+		if u := g.gs.Adapter.Graph.Arguments[c1].Undercutter; u == nil || u.Label == caes.In {
+			t.Fatalf("c1's undercutter is %+v: the undercutter reached c1", u)
+		}
 		g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
-		g.mustIn(brings1) // Q2-C: the independent support stands
+		g.mustIn(brings1)
 		g.inForce(c1)
 		g.outOfForce(wish)
 	})

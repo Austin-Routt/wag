@@ -150,11 +150,15 @@ move again.
 
 **Validity checks.** NASCQ checks S0 to S9 and Q1 (`nascq.Validate`); S2 refuses a
 variable left out or bound to a value that names nothing, with no letter or digit (blank,
-punctuation alone, invisible characters), and in a game with a profile P1 refuses such an action
-first (since step C5.2's item F: an answer whose H or I names nothing would make its exception out
-without saying what outweighs or what would settle it). The terminal asks again for such a value.
-A game recorded before 2026-11-27 with one replays with a build from before that date, and the
-loader says so. The game then adds three rules:
+punctuation alone, invisible characters, a number not written in digits such as "½"), and in a game
+with a profile P1 refuses such an action first, as the profile's check refuses an actor, an action
+or an alias that names nothing (since step C5.2's item F: an answer whose H or I names nothing would
+make its exception out without saying what outweighs or what would settle it). Other's premises and
+conclusion are free text, and S2 refuses one that names nothing likewise; its premises after the
+first may be left blank. The terminal asks again for such a value, and a terminal seat whose input
+has ended resigns. A game recorded with one of these before 2026-11-27 replays with a build of
+2026-11-26 or earlier (with the scheme data it was played with), and the loader says so. The game
+then adds three rules:
 
 - G1: a move may not restate an argument already in the graph;
 - Q2: a question that has already been raised about an argument may not be

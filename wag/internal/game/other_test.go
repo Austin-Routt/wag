@@ -202,3 +202,31 @@ func TestSuggest(t *testing.T) {
 		}
 	}
 }
+
+// Other's premises and conclusion are free text, and S2 refuses one that
+// names nothing (no letter or digit), as it refuses such a value of a
+// scheme's variable: an answer "?" at CQ:too_slight would make c1's
+// exception In without saying anything (the check of step 8, W-4). Its
+// premises after the first may be left blank.
+func TestOtherFreeTextThatNamesNothing(t *testing.T) {
+	for _, c := range []struct {
+		name string
+		b    map[string]string
+	}{
+		{"a premise ?", map[string]string{"P1": "?", "C": "tax meat"}},
+		{"a later premise --", map[string]string{"P1": "lower emissions would be good", "P2": "--", "C": "tax meat"}},
+		{"a conclusion ?", map[string]string{"P1": "lower emissions would be good", "C": "?"}},
+		{"a zero-width premise", map[string]string{"P1": string(rune(0x200b)), "C": "tax meat"}},
+	} {
+		g := newFGame(t)
+		g.refuse("Pro", support(nascq.OtherSchemeID, c.b), "S2")
+		if !strings.Contains(g.gs.LastRejection, "name nothing") {
+			t.Errorf("%s: %q", c.name, g.gs.LastRejection)
+		}
+	}
+	g := newFGame(t)
+	c1 := g.c1()
+	g.refuse("Con", answer("attack", "CQ:too_slight", nascq.OtherSchemeID, c1, vb("P1", "?")), "S2")
+	g.inForce(c1)
+	g.play("Pro", support(nascq.OtherSchemeID, map[string]string{"P1": "lower emissions would be good", "P2": "", "C": "tax meat"}))
+}

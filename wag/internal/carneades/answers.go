@@ -126,6 +126,9 @@ func (a *Adapter) AnswerQuestion(ans Answer) ([]string, error) {
 		return nil, err
 	}
 	if ans.SchemeID == FreeSchemeID {
+		if err := namesSomething(ans.FreePremises, ""); err != nil {
+			return nil, err
+		}
 		return a.addFreeArgument(ans.Owner, ans.FreePremises, concl, ans.Weight)
 	}
 	bindings := make(map[string]string, len(ans.Bindings)+len(ans.Fixed)+1)

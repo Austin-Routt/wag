@@ -60,8 +60,27 @@ var _ Agent = (*HumanAgent)(nil)
 func (h *HumanAgent) Name() string { return h.name }
 
 // ChooseAction displays the game state and walks the player through
-// constructing a valid move via numbered menus.
+// constructing a valid move via numbered menus. Once its input has ended,
+// no one is left to play the seat, which resigns: asked again, it would
+// read nothing, and a move made of nothing is refused again and again.
 func (h *HumanAgent) ChooseAction(obs *Observation) nascq.ProposedAction {
+	if h.eof {
+		return h.resignAtEnd()
+	}
+	a := h.choose(obs)
+	if h.eof {
+		return h.resignAtEnd()
+	}
+	return a
+}
+
+func (h *HumanAgent) resignAtEnd() nascq.ProposedAction {
+	h.printf("\n  The input has ended: %s resigns.\n", h.name)
+	return nascq.ProposedAction{Type: "resign"}
+}
+
+// choose walks the player through a move.
+func (h *HumanAgent) choose(obs *Observation) nascq.ProposedAction {
 	gs := obs.GameState
 	h.print(RenderState(gs))
 
@@ -347,10 +366,12 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 		value := h.readLine()
 		// A value that names nothing (blank, punctuation alone) binds
 		// nothing (S2): ask again, rather than fill in the variable's letter,
-		// which the game would take as a name. At the end of the input the
-		// value stays blank and the game refuses the move.
-		for language.NamesNothing(value) && !h.eof {
-			h.printf("    %s names nothing: type a word or a number: ", name)
+		// which the game would take as a name. Other's premises after the
+		// first may be left blank. At the end of the input the move is not
+		// made: the seat resigns (ChooseAction).
+		optional := tmpl.SchemeID == nascq.OtherSchemeID && name != "P1" && strings.HasPrefix(name, "P")
+		for language.NamesNothing(value) && !(optional && value == "") && !h.eof {
+			h.printf("    %s names nothing: type a word, or a number in digits: ", name)
 			value = h.readLine()
 		}
 		// Not sanitized here: the adapter turns each value into an atom,

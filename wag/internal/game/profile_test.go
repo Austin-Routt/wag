@@ -2,6 +2,7 @@ package game
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -344,5 +345,43 @@ func TestForProfile(t *testing.T) {
 	play(t, gs, a)
 	if gs.vocabulary()[nascq.VarAction][0] != "tax_meat" {
 		t.Errorf("the vocabulary's actions: %v", gs.vocabulary()[nascq.VarAction])
+	}
+}
+
+// The profile's check refuses an actor, an action or an alias that names
+// nothing (no letter or digit), naming it, and marks the refusal so that a
+// server can name the build that replays a game recorded with one (the
+// check of step 8, W-3). Other refusals are not so marked.
+func TestProfileNamesThatNameNothing(t *testing.T) {
+	good := func() *Profile {
+		p := DefaultProfile()
+		p.Actors = append(p.Actors, ProfileActor{ID: "farmers"})
+		p.Actions = []ProfileAction{{ID: "tax_meat", Actor: DefaultAgent, Aliases: []string{"meat tax"}}, {ID: "strike", Actor: "farmers"}}
+		return p
+	}
+	if err := good().Check(); err != nil {
+		t.Fatalf("a good profile: %v", err)
+	}
+	for _, c := range []struct {
+		name string
+		edit func(*Profile)
+		says string
+	}{
+		{"an actor ?", func(p *Profile) { p.Actors[1].ID = "?"; p.Actions[1].Actor = "?" }, `an actor whose id, "?", names nothing`},
+		{"an action ①", func(p *Profile) { p.Actions[1].ID = "\u2460" }, "names nothing"},
+		{"an alias —", func(p *Profile) { p.Actions[0].Aliases = []string{"\u2014"} }, "the action \"tax_meat\" has a name, \"\u2014\", that names nothing"},
+		{"a zero-width alias", func(p *Profile) { p.Actions[0].Aliases = []string{string(rune(0x200b))} }, "names nothing"},
+	} {
+		p := good()
+		c.edit(p)
+		err := p.Check()
+		if err == nil || !strings.Contains(err.Error(), c.says) || !errors.Is(err, ErrNamesNothing) {
+			t.Errorf("%s: %v (marked: %v)", c.name, err, errors.Is(err, ErrNamesNothing))
+		}
+	}
+	p := good()
+	p.Actions[1].ID = "tax_meat"
+	if err := p.Check(); err == nil || errors.Is(err, ErrNamesNothing) {
+		t.Errorf("an action twice: %v, marked %v", err, errors.Is(err, ErrNamesNothing))
 	}
 }

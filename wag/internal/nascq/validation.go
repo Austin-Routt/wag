@@ -3,6 +3,7 @@ package nascq
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/yourorg/wag/internal/language"
@@ -489,31 +490,55 @@ func (n *NASCQ) validateScheme(va *ValidatedAction, scheme *ASNode) error {
 	// S2: Variable completeness. On a move with a target, the scheme's answer
 	// variable is bound to the answer, not by the mover, and so are the
 	// variables S9 fixed. A value that names nothing (no letter or digit:
-	// blank, punctuation, invisible characters) binds nothing: an answer whose
-	// H, A2 or I names nothing would make its exception out without saying
-	// what outweighs, what does better, or what would settle it (item F,
-	// G-unbound).
+	// punctuation, invisible characters) binds nothing, as a blank one: an
+	// answer whose H, A2 or I names nothing would make its exception out
+	// without saying what outweighs, what does better, or what would settle
+	// it (item F, G-unbound). Other's premises and conclusion are free text,
+	// and the same holds of them: a premise "?" says nothing (the check of
+	// step 8, W-4). Other's premises after the first may be left blank.
 	answerVar := ""
 	if action.TargetArgID != "" || action.TargetStmtID != "" {
 		answerVar = scheme.AnswerVariable
 	}
-	missing := []string{}
+	missing, nameless := []string{}, []string{}
+	check := func(v string) {
+		switch x := action.VariableBindings[v]; {
+		case strings.TrimSpace(x) == "":
+			missing = append(missing, v)
+		case language.NamesNothing(x):
+			nameless = append(nameless, v)
+		}
+	}
 	if scheme.Free { // the user-defined scheme: a conclusion and at least one premise
 		if len(FreePremises(action.VariableBindings)) == 0 {
 			missing = append(missing, "P1")
 		}
-		if strings.TrimSpace(action.VariableBindings["C"]) == "" && answerVar == "" {
-			missing = append(missing, "C")
+		for i := 1; i <= OtherMaxPremises; i++ {
+			if v := "P" + strconv.Itoa(i); strings.TrimSpace(action.VariableBindings[v]) != "" {
+				check(v)
+			}
+		}
+		if answerVar == "" {
+			check("C")
+		}
+	} else {
+		for varName := range scheme.Variables {
+			if varName != answerVar && va.Fixed[varName] == "" {
+				check(varName)
+			}
 		}
 	}
-	for varName := range scheme.Variables {
-		if language.NamesNothing(action.VariableBindings[varName]) && varName != answerVar && va.Fixed[varName] == "" && !scheme.Free {
-			missing = append(missing, varName)
+	if len(missing) > 0 || len(nameless) > 0 {
+		var why []string
+		if len(missing) > 0 {
+			sort.Strings(missing)
+			why = append(why, fmt.Sprintf("missing variable binding(s): %v", missing))
 		}
-	}
-	if len(missing) > 0 {
-		sort.Strings(missing)
-		return fmt.Errorf("S2: missing variable binding(s): %v", missing)
+		if len(nameless) > 0 {
+			sort.Strings(nameless)
+			why = append(why, fmt.Sprintf("binding(s) that name nothing (no letter or digit): %v", nameless))
+		}
+		return fmt.Errorf("S2: %s", strings.Join(why, "; "))
 	}
 
 	// S6: Template instantiation

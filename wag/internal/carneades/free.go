@@ -9,6 +9,8 @@ import (
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
+
+	"github.com/yourorg/wag/internal/language"
 )
 
 // FreeSchemeID is the scheme ID of arguments of the user-defined scheme
@@ -65,7 +67,23 @@ func (a *Adapter) AddFreeArgument(owner string, premises []string, conclusion st
 	if strings.TrimSpace(conclusion) == "" {
 		return nil, fmt.Errorf("empty conclusion")
 	}
+	if err := namesSomething(premises, conclusion); err != nil {
+		return nil, err
+	}
 	return a.addFreeArgument(owner, premises, a.freeStatement(conclusion), weight)
+}
+
+// namesSomething refuses a move's free text that names nothing (no letter
+// or digit): a statement "?" says nothing (S2 refuses it first). A blank
+// premise is left out, as addFreeArgument leaves it. A Kialo discussion's
+// claims are taken as they are (AddFreeArgumentOn).
+func namesSomething(premises []string, conclusion string) error {
+	for _, p := range append([]string{conclusion}, premises...) {
+		if strings.TrimSpace(p) != "" && language.NamesNothing(p) {
+			return fmt.Errorf("the statement %q names nothing (no letter or digit)", p)
+		}
+	}
+	return nil
 }
 
 // IMPORTANT: Caller must hold a.mu.

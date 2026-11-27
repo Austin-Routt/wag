@@ -115,7 +115,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 			}
 		}
 		if gs, rep, err = s.kialoGame(b, depth, keys, profile); err != nil {
-			return nil, err
+			return nil, namelessName(err)
 		}
 	default:
 		// An export that records the scheme data (since 13 October 2026)
@@ -130,7 +130,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 		}
 		cfg, err := r.config(s.contexts)
 		if err != nil {
-			return nil, err
+			return nil, namelessName(err)
 		}
 		if recorded {
 			if err := game.CheckWeights(e.Config.Weights); err != nil {
@@ -150,7 +150,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	same := s.data.Matches(playedWith)
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
-			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNamelessBinding) {
+			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNameless) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
@@ -210,17 +210,54 @@ func (e *OtherDataError) Error() string {
 // conclusion, with any data, so other data (--data) cannot replay it either.
 var errBridgeRetired = errors.New("it was played through a free-text bridge, which no longer stands in for an answer's conclusion (D075, since 2026-11-22)")
 
-// errNamelessBinding marks a recorded move with a value that names nothing
-// (no letter or digit: blank, punctuation, invisible characters), which the
-// game took as a name before step C5.2's item F (2026-11-27) and refuses
-// since (S2 for a variable, P1 for an action), with any data.
-var errNamelessBinding = errors.New("it binds a value that names nothing, which the game accepted before 2026-11-27 and refuses since (S2, P1: docs/game-rules.md)")
+// errNameless marks a game recorded with a value or a name that names
+// nothing (no letter or digit: blank, punctuation, invisible characters): a
+// move's value, an actor, an action or an alias of its profile or of a
+// declaration. WAG took such a value as a name until 2026-11-26, and
+// refuses it since step C5.2's item F, on 2026-11-27 (S2 for a variable, P1
+// for an action or a declaration, the profile's check), with any data.
+var errNameless = errors.New("the game records a value or a name that names nothing (no letter or digit), which WAG accepted until 2026-11-26 and refuses since 2026-11-27 (S2, P1, the profile's check: docs/game-rules.md)")
 
-// namelessBinding returns a variable of a move whose value names nothing.
-func namelessBinding(a nascq.ProposedAction) (string, bool) {
-	for _, k := range sortedKeys(a.VariableBindings) {
-		if language.NamesNothing(a.VariableBindings[k]) {
-			return k, true
+// namelessRemedy says what replays a game errNameless refuses.
+func namelessRemedy(what string) error {
+	return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of 2026-11-26 or earlier can, with the scheme data the game was played with "+
+		"(--data, if they are not that build's own), and the export stays readable as a record", errNameless, what)
+}
+
+// namelessName names the remedy for a profile whose names name nothing.
+func namelessName(err error) error {
+	if errors.Is(err, game.ErrNamesNothing) {
+		return namelessRemedy(err.Error())
+	}
+	return err
+}
+
+// namelessRefusal says what the refusal of a recorded move refuses, if it
+// refuses a value or a name of the move that names nothing: a variable S2
+// lists, or P1 names, whose value names nothing; or a declaration P1 refuses
+// for a name that names nothing.
+func namelessRefusal(a nascq.ProposedAction, refusal string) (string, bool) {
+	switch {
+	case strings.HasPrefix(refusal, "S2:"):
+		for _, f := range strings.FieldsFunc(refusal, func(r rune) bool { return r == '[' || r == ']' || r == ' ' || r == ';' || r == ':' }) {
+			if x, ok := a.VariableBindings[f]; ok && language.NamesNothing(x) {
+				return fmt.Sprintf("%s = %q", f, x), true
+			}
+		}
+	case strings.HasPrefix(refusal, "P1:"):
+		for _, k := range sortedKeys(a.VariableBindings) {
+			if x := a.VariableBindings[k]; language.NamesNothing(x) && strings.HasPrefix(refusal, fmt.Sprintf("P1: %s = ", k)) {
+				return fmt.Sprintf("%s = %q", k, x), true
+			}
+		}
+		if strings.Contains(refusal, "names nothing") {
+			for _, d := range a.Declare {
+				for _, n := range append([]string{d.ID, d.Actor}, d.Aliases...) {
+					if language.NamesNothing(n) {
+						return fmt.Sprintf("the declaration of %q names %q", d.ID, n), true
+					}
+				}
+			}
 		}
 	}
 	return "", false
@@ -256,9 +293,8 @@ func replay(gs *game.GameState, m game.Move) error {
 		if m.Bridge != "" && !played {
 			return fmt.Errorf("%w: %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record", errBridgeRetired, m.Bridge)
 		}
-		if v, ok := namelessBinding(m.Action); ok && !played && (strings.HasPrefix(res.Error, "S2:") || strings.HasPrefix(res.Error, "P1:")) {
-			return fmt.Errorf("%w: %s = %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record",
-				errNamelessBinding, v, m.Action.VariableBindings[v])
+		if what, ok := namelessRefusal(m.Action, res.Error); ok && !played {
+			return namelessRemedy(what)
 		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(len(m.ArgIDs) > 0 || m.Abstained), outcome(played), res.Error)
 	}

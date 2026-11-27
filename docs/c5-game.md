@@ -2,7 +2,7 @@
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
-(proposal D095, applied 2026-11-26). C5.2's steps 1 to 7 are done, the switch, the replay by instance and item F on 2026-11-27; step 8 (gates, an independent review, CI, the docs) is next. The
+(proposal D095, applied 2026-11-26). C5.2 is done (2026-11-27): steps 1 to 7, the switch, the replay by instance and item F; step 8, the gates, two independent checks (of steps 7 and 8, in the workspace, `verify/c5/c52`) and their fixes, CI and the docs. The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
 decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
@@ -224,7 +224,7 @@ then the switch, one commit that changes the data's identity once; then the revi
 6. **The replays.** The 33 golden games stay on the frozen pre-C5 data and keep their digests (D094
    (h)): they are computer games without a profile, so the profile's rules do not apply to them, as
    to any record made before step 2. A new golden set is made on the new data, with a profile,
-   covering each new route. `to_wag.py` plays the batch-2 gold by instance (a claim's secondary
+   reaching each new question. `to_wag.py` plays the batch-2 gold by instance (a claim's secondary
    instances, a bridge with its modal argument), with the case's profile (done for the profile:
    the replay is unchanged, claim for claim); the batch-2 report is made again and names the claims
    C2 to C4 left unplayed that now play. The replay by instance done (2026-11-27): it reads the
@@ -242,15 +242,21 @@ then the switch, one commit that changes the data's identity once; then the revi
    (`itemf_test.go` on the shipped data, the engine's and `validate.py`'s for the schemes the game
    does not play yet) and 25 planted defects, each caught. The first runs found two outcomes the page
    had wrong (A4.10's board, B4's check) and one the game had wrong: a value that names nothing was
-   accepted as a name (`x_empty`), for an answer's H or I, a consequence's G, and an action's A2 in a
-   game without a profile; S2, P1 and the adapter now refuse it, and the terminal asks again. The
+   accepted as a name (blank as `x_empty`, punctuation as `x_` and a hash), for an answer's H or I, a
+   consequence's G, and an action's A2, declared with the move or not; S2, P1 and the adapter now
+   refuse it, and the terminal asks again. The
    independent check of step 7 (in the workspace, `verify/c5/c52/CHECK-step7.md`) found B6 testing
    nothing (played in the wrong order), punctuation and invisible values still binding, old records
    with such a value failing to load without a reason, and the golden set covering few new routes;
    each is fixed in the commit after b3b10ef. The new golden set: the reference games' table on the
-   shipped data with the default profile, and a scripted game for each new route
-   (TestShippedReferenceDigests, TestShippedReferenceRoutes), each file's first line pinning the data
-   and the profile; the move digest now renders declarations and comparisons.
+   shipped data with the default profile, and scripted games that reach each new question
+   (TestShippedReferenceDigests, TestShippedReferenceRoutes; the edges, each new or moved
+   question-and-scheme pair, are TestEveryEdgeCase's), each file's first line pinning the data and
+   the profile; the move digest now renders declarations and comparisons. The independent check of
+   step 8 (`verify/c5/c52/CHECK-step8.md`) found B6 still not testing the support already there,
+   the terminal asking forever once its input ended, the profile's new refusals untested and
+   unexplained by the loader, and Other's free text still taking a value that names nothing; each is
+   fixed in the commit after fce7a9a.
 8. **Gates on both toolchains, an independent review, CI, and the docs** (README, prototype,
    game-rules, protocol.md, llm.md, the catalogue README).
 

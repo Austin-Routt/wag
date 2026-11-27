@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"maps"
 	"net/http"
@@ -255,7 +256,8 @@ func TestNamelessBindingOfAnOldRecord(t *testing.T) {
 		e.History[0].Action.VariableBindings["C"] = v
 		code, out := loadHTTP(t, ts, e, "")
 		msg, _ := out["error"].(string)
-		if code == http.StatusOK || !strings.Contains(msg, "names nothing") || !strings.Contains(msg, "a WAG build from before that date can") {
+		if code == http.StatusOK || !strings.Contains(msg, "names nothing") || !strings.Contains(msg, "a WAG build of 2026-11-26 or earlier can") ||
+			!strings.Contains(msg, fmt.Sprintf("C = %q", v)) {
 			t.Fatalf("C=%q: %d %q", v, code, msg)
 		}
 	}

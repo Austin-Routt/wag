@@ -8,6 +8,7 @@ package game
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"regexp"
 	"sort"
@@ -112,14 +113,33 @@ func ProfileFromCase(b []byte) (*Profile, error) {
 	return p, p.Check()
 }
 
+// ErrNamesNothing marks a name that names nothing (no letter or digit): an
+// actor's, an action's or an alias of a profile or of a declaration. The
+// game refuses such names since 2026-11-27, and a server that loads a game
+// recorded with one says what build replays it (docs/game-rules.md).
+var ErrNamesNothing = errors.New("names nothing (no letter or digit)")
+
+// checkError is what Check reports, ErrNamesNothing if a name it reports
+// names nothing.
+type checkError struct {
+	msg      string
+	nameless bool
+}
+
+func (e *checkError) Error() string        { return e.msg }
+func (e *checkError) Is(target error) bool { return e.nameless && target == ErrNamesNothing }
+
 // Check reports what makes a profile unusable: an agent that is no actor,
-// an action without a known actor, an id or alias given twice.
+// an action without a known actor, an id or alias given twice, a name that
+// names nothing.
 func (p *Profile) Check() error {
 	var errs []string
+	nameless := false
 	actors := map[string]bool{}
 	for _, a := range p.Actors {
 		if language.NamesNothing(a.ID) { // blank, punctuation or invisible: no name
-			errs = append(errs, "an actor without an id")
+			errs = append(errs, fmt.Sprintf("an actor whose id, %q, names nothing (no letter or digit)", a.ID))
+			nameless = true
 		} else if actors[a.ID] {
 			errs = append(errs, fmt.Sprintf("the actor %s twice", a.ID))
 		}
@@ -140,7 +160,8 @@ func (p *Profile) Check() error {
 		}
 		for _, n := range append([]string{a.ID}, a.Aliases...) {
 			if language.NamesNothing(n) {
-				errs = append(errs, fmt.Sprintf("the action %q has a name that names nothing (no letter or digit)", a.ID))
+				errs = append(errs, fmt.Sprintf("the action %q has a name, %q, that names nothing (no letter or digit)", a.ID, n))
+				nameless = true
 				continue
 			}
 			if o, ok := names[carneades.TextToAtom(n)]; ok && o != a.ID {
@@ -151,7 +172,7 @@ func (p *Profile) Check() error {
 	}
 	if len(errs) > 0 {
 		sort.Strings(errs)
-		return fmt.Errorf("the profile: %s", strings.Join(errs, "; "))
+		return &checkError{msg: "the profile: " + strings.Join(errs, "; "), nameless: nameless}
 	}
 	return nil
 }
@@ -192,7 +213,7 @@ func (p *Profile) declared(decls []nascq.ActionDecl, argued map[string]bool) (*P
 	for _, d := range decls {
 		d.ID, d.Actor = strings.TrimSpace(d.ID), strings.TrimSpace(d.Actor)
 		if language.NamesNothing(d.ID) {
-			return nil, fmt.Errorf("P1: a declared action has no id (its id names nothing)")
+			return nil, fmt.Errorf("P1: a declared action's id, %q, names nothing (no letter or digit)", d.ID)
 		}
 		if d.Actor == "" {
 			return nil, fmt.Errorf("P1: the declaration of %s names its actor, one of %s (D094 (b))", d.ID, strings.Join(q.actorIDs(), ", "))
