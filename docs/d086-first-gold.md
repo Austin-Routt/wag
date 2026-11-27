@@ -301,6 +301,10 @@ The script:
 | V40 | A *none* and an *unsure* at one time on an item not verified, imported in turn, then each again | Two receipts; the repeats change no byte, each listed as already recorded |
 | V41 | A gold whose history holds `verification_verdicts` null, or a number, or a receipt whose `item_rev` is a list, or a receipt *gold* whose `item_rev` is null, or a receipt whose time leaves the calendar in UTC; one in which an item's `verified` does not have R17's fields (its `item_rev` a list; a string); one with two items for one claim | Each refused, naming what is wrong; nothing written; no trace of the program |
 | V42 | A verdict time that leaves the calendar in UTC (`0001-01-01T00:00:00+23:59`, `9999-12-31T23:59:59-23:59`); a rounds file nested deeper than the parser reads | Refused; nothing written; no trace of the program |
+| V43 | A *gold* at 10:00 on the 28th (it verifies); the verification rewritten by hand with the date of the 30th; then a *none* at 10:00 on the 30th (V43-V46 written after the planted defects of the fixes, which four of the rules survived, before their tests) | The *none* not written, listed: the latest receipt is of another date, so the verification has only its date; the verification stands |
+| V44 | A *gold* at 10:00 on the 28th (it verifies); the item recoded, agreed at its new revision and verified by hand that day; then a *none* at 12:00 that day, on the item as it is | The *none* not written, listed: the latest receipt is of another revision; the verification stands |
+| V45 | A *gold* and a *none* at one time on the 28th (the item left unverified); a verification of that day made by hand; then a *none* later that day | The last not written, listed: of the two receipts at one time the *none* counts as the latest, so the verification has only its date; the verification stands |
+| V46 | A gold whose history holds a receipt without its time, or one with a field more | Refused, naming the receipt; nothing written; no trace of the program |
 
 The dashboard:
 
