@@ -8,10 +8,15 @@ planted defect it must catch (the last section). A case whose outcome turns out 
 here is not rewritten silently: the change, and whether the game or this page was wrong, is
 recorded below it.
 
-*Refused* means: the move is refused with the rule named (the profile's P1 declarations and P2,
-then NASCQ's S0 to S9 and Q1, then P1's values, P3 and P4, then the cycle check, S5 for a refused
-exception and G1 once the move is placed: game-rules.md), and the graph, the open questions and
-the profile are as before; the move history gains the refusal only. *Out of force* means the
+*Refused* means: the move is refused with the rule named, and the graph (its statements with their
+labels and texts, arguments, issues and assumptions), the open questions and the profile are as
+before. The rules come in this order (game-rules.md): the profile's P1 for the move's declarations
+and its own action values, and P2; NASCQ's S0 to S9 and Q1; P1 for the values a target fixes, P3
+and P4; Q2 for a question; then, once the move is placed, the adapter's refusal (a premise that is
+the argument's own conclusion), the cycle check, S5 for a refused exception and G1. A rule's refusal
+(S, P, Q, G) is recorded in the move history once, with its penalty; the adapter's refusal and the
+cycle check's leave no record and cost nothing. (Corrected after the independent check of step 7:
+the page first put P1's own values after NASCQ, and said every refusal is recorded.) *Out of force* means the
 argument does not count: an exception of it is In, a premise of it is Out, or a question about its
 inference is pending.
 
@@ -61,7 +66,7 @@ target (C2's game paragraph); what the answer leaves standing is tested with it.
 | A1.5 | c1; the answer at CQ:side_effect, the conclusion's rebuttal route (Q1-D); and at CQ:too_slight | refused, S5 (no backup edge), both |
 | A1.6 | c1; AS:bad_outweighs_good as a move of its own, and as a move about `bad_outweighs(tax_meat,emissions_fall)` | refused, S1, both (an answer scheme only answers) |
 | A1.7 | c1; the answer with H unbound (G-unbound, in the game) | refused, S2 |
-| A1.7b | (added after the first run) c1; the answer with H blank; Pro's AS:consequences with G blank | refused, S2, each |
+| A1.7b | (added after the first run) c1; the answer with H blank, and (after the check of step 7) H that names nothing: punctuation, a zero-width space, a byte order mark; Pro's AS:consequences with G blank | refused, S2, each |
 | A1.8 | n1; Pro answers CQ:bad_outweighs of n1 (not asked of negative consequences) | refused, S3 |
 | A1.9 | c1; Con answers CQ:bad_outweighs with AS:negative_consequences, G `food_costlier` (adverse case 7) | refused, S5 |
 | A1.10 | A1.1, then Pro argues against `matters_more(food_costlier,emissions_fall)` with Other (adverse case 8) | accepted; the answer out of force; the exception Out; c1 in force again; `should_be_performed(tax_meat)` In; c1's other questions still open (CQ:likelihood asked is accepted) |
@@ -96,7 +101,7 @@ target (C2's game paragraph); what the answer leaves standing is tested with it.
 |---|---|---|
 | A4.1 | m+, b+, m-, b-, c1; Con answers CQ:worth_finding_out_first of b+ with AS:finding_out_first, I `pilot_study` (Q3-A, Q3-E) | accepted; `worth_finding_out_first(tax_meat,demand_falls)` In; b+ and b- out of force; m+, m- and c1 in force, their conclusions In; `should_be_performed(tax_meat)` In (c1) |
 | A4.2 | m+, b+; I unbound | refused, S2 |
-| A4.2b | (added after the first run) m+, b+; I blank; and pr with a better means whose A2 is blank | refused: S2 for I; P1 for A2, a blank action being no declared action |
+| A4.2b | (added after the first run) m+, b+; I blank, and (after the check of step 7) I that names nothing; and pr with a better means whose A2 is blank or names nothing, and one that declares an action whose id names nothing | refused: S2 for I; P1 for A2 and for the declaration |
 | A4.3 | m+, b+; Other as the answer; Other for the exception as a move about it; Other concluding it as a new move; Other presuming it as a premise; and, once Pro has argued against the exception with Other (accepted), Other against that negation (Q3-B) | refused, S5, every form |
 | A4.4 | m+, b+; Con answers with AS:expert_opinion that the exception holds, then Pro asks CQ:expertise of that answer (Q3-C, adverse case 7) | both accepted; while the question is pending the expert's argument is out of force, the exception Out and b+ in force again |
 | A4.5 | m+, b+, and a bridge about G `prices_rise` with its modal argument; A4.1's answer (Q3-D) | accepted; the bridge about `prices_rise` stays in force |
@@ -140,6 +145,15 @@ needs the statement. The case is played on m+ and b+ (b+ concludes it), and is r
 | B5 | c1; Con answers CQ:likelihood of c1 with AS:expert_opinion, against; then Pro asks CQ:field of it (adverse case 7) | both accepted; after the answer `brings_about(tax_meat,emissions_fall)` Out and c1 out of force; while CQ:field is pending the expert's argument is out of force and c1 in force again |
 | B6 | (Q2-A to Q2-C) Pro: Other concluding `brings_about(tax_meat,emissions_fall)` from its being desirable; c1; Pro: AS:expert_opinion for `brings_about(tax_meat,emissions_fall)`; then Con undercuts the Other argument, answering CQ:relevance with Other | accepted; the Other argument out of force; c1 in force (Q2-B); `brings_about(tax_meat,emissions_fall)` In by the expert's argument (Q2-C) |
 
+Recorded after the independent check of step 7 (2026-11-27): B6 as written played the Other argument
+before c1, so its conclusion was a statement of its own words (the formula was not yet on the
+board), not c1's premise, and the test passed whatever the game did about Q2-B and Q2-C. The page
+was wrong. B6 is now played as: c1; Con asks CQ:likelihood, so that the premise holds only by the
+arguments for it; Pro's Other argument for c1's premise; Con's undercutter, answering CQ:relevance
+with Other (Q2-A: the Other argument out of force and the premise Out, while c1's own undercutter is
+not In: Q2-B); Pro's AS:expert_opinion for the premise (Q2-C: the premise In and c1 in force, the
+Other argument still out of force).
+
 Recorded after the first run (2026-11-27): B4 was refused, but by the adapter, "the premise
 `bad_outweighs(tax_meat,emissions_fall)` is the conclusion itself", before the graph's cycle check,
 which B4b's longer cycle (through c1's exception) reaches. The game is right: the circular answer is
@@ -173,6 +187,10 @@ refusal.
 | E1 | Pro: AS:consequences with A `farmers_strike` (E-agent: another actor's action) | refused, P3 |
 | E2 | Pro: AS:consequences with A `ban_meat`, declared by no one and by no move | refused, P1 |
 | E3 | Pro: AS:consequences with A `meat_tax` (the alias) | accepted; the argument is about `tax_meat` (the alias reads as its action) |
+
+E1's outcome follows P3's reading of D063 (the actions argued are the agent's), which is the
+owner's question 2 (c5-game.md): under D094 (b)'s narrower words a consequence argument has no agent
+place, and E1 would be accepted.
 
 D095 (4)'s wrong actor, action and goal are A3.4, A3.7, A3.2, A3.6, A1.4 and E1; its unrelated
 consequences A1.3 and A4.5; its surviving independent support A1.3, A3.9, A4.1 and B6. Its
@@ -237,10 +255,31 @@ Each defect is planted on a copy of the tree, and the tests named must fail:
 | S2 takes a blank binding | A1.7b, A4.2b |
 | the adapter takes a blank binding | G-unbound (engine) |
 
-Recorded after the run of the planted defects (2026-11-27): each row above was planted, the engine's
-two as an exception statement made per scheme and one that ignores its G; both fail nearly every
-case, since every answer reaches its target through that statement. One survived at first: with
-NASCQ's refusal of Other as an answer removed, the game's own check after the move is placed refused
-it, also by S5, so A4.3 now asks the answer form to be refused by the question's own check ("refuses
-Other as an answer"). Two did not build at first (a variable left unused) and were rewritten. All are
-caught; the record is in the workspace (verify/c5/c52/itemf).
+Recorded after the run of the planted defects (2026-11-27): each row above was planted. One survived
+at first: with NASCQ's refusal of Other as an answer removed, the game's own check after the move is
+placed refused it, also by S5, so A4.3 now asks the answer form to be refused by the question's own
+check ("refuses Other as an answer"). Two did not build at first (a variable left unused) and were
+rewritten. The record is in the workspace (verify/c5/c52/itemf).
+
+Corrected after the independent check of step 7 (2026-11-27):
+
+- The engine's two defects (an exception statement made per scheme, and one that ignores its G) are
+  caught by the engine's own admission check at each case's first move, not by the cases named. The
+  shared exception is planted in the data instead, as an exception written with its places swapped
+  in one scheme of `core.yml`: `bridge_from_possible_harm`'s, caught by A4.1;
+  `negative_consequences`' `too_slight`, caught by B2; `negative_consequences_modal`'s
+  `good_outweighs`, caught by A2.2.
+- No planted defect was found that makes an exception defeat an argument about another G and
+  nothing else: an exception is a statement keyed by its whole formula, and a defect in that key (the
+  engine's second defect) fails at the engine's admission check first. A1.3, A1.3b and A4.5 assert
+  it.
+- The planted rules are S1, S2, S3, S5 and S9 of NASCQ's, not "S1 to S9".
+- Rows added with the fixes of the check:
+
+| Defect | Caught by |
+|---|---|
+| an argument for a premise answers no pending question about it | C2, A4.9 |
+| S2 takes a value that names nothing (punctuation, invisible) as a name | A1.7b, A4.2b |
+| P1 resolves an action value that names nothing | A4.2b |
+| the adapter's AddSupport takes a value that names nothing | G-unbound (engine) |
+

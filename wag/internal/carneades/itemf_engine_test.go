@@ -76,18 +76,29 @@ func TestItemFEndAndMeansMirrored(t *testing.T) {
 	}
 }
 
-// G-unbound: an argument with X or Y unbound is refused; the engine does not
-// read the unbound variable as a wildcard.
+// G-unbound: an argument with X or Y unbound, or bound to a value that names
+// nothing, is refused, by both of the adapter's ways of building one; the
+// engine does not read the unbound variable as a wildcard, nor the nameless
+// value as a name.
 func TestItemFEndAndMeansUnbound(t *testing.T) {
-	for _, b := range []map[string]string{{"X": "tax_meat"}, {"Y": "meat_scarce"}, {"X": "tax_meat", "Y": ""}} {
-		a := c3(t)
-		before := len(a.Graph.Arguments)
-		ids, err := a.AddSchemeArgument("pro", "end_and_means_bad", b, "bad(tax_meat)", w)
-		if err == nil {
-			t.Errorf("%v: accepted as %v", b, ids)
-		}
-		if len(a.Graph.Arguments) != before {
-			t.Errorf("%v: the refusal left %d arguments", b, len(a.Graph.Arguments)-before)
+	for _, b := range []map[string]string{{"X": "tax_meat"}, {"Y": "meat_scarce"}, {"X": "tax_meat", "Y": ""},
+		{"X": "tax_meat", "Y": "  "}, {"X": "?", "Y": "meat_scarce"}, {"X": "tax_meat", "Y": string(rune(0x200b))}} {
+		for _, how := range []string{"AddSchemeArgument", "AddSupport"} {
+			a := c3(t)
+			before := len(a.Graph.Arguments)
+			var ids []string
+			var err error
+			if how == "AddSupport" {
+				ids, err = a.AddSupport("pro", "end_and_means_bad", b, w)
+			} else {
+				ids, err = a.AddSchemeArgument("pro", "end_and_means_bad", b, "bad(tax_meat)", w)
+			}
+			if err == nil {
+				t.Errorf("%s %q: accepted as %v", how, b, ids)
+			}
+			if len(a.Graph.Arguments) != before {
+				t.Errorf("%s %q: the refusal left %d arguments", how, b, len(a.Graph.Arguments)-before)
+			}
 		}
 	}
 }

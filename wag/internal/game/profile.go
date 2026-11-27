@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/language"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -117,7 +118,7 @@ func (p *Profile) Check() error {
 	var errs []string
 	actors := map[string]bool{}
 	for _, a := range p.Actors {
-		if strings.TrimSpace(a.ID) == "" {
+		if language.NamesNothing(a.ID) { // blank, punctuation or invisible: no name
 			errs = append(errs, "an actor without an id")
 		} else if actors[a.ID] {
 			errs = append(errs, fmt.Sprintf("the actor %s twice", a.ID))
@@ -138,8 +139,8 @@ func (p *Profile) Check() error {
 			errs = append(errs, fmt.Sprintf("the action %s: its actor %q is none of the actors", a.ID, a.Actor))
 		}
 		for _, n := range append([]string{a.ID}, a.Aliases...) {
-			if strings.TrimSpace(n) == "" {
-				errs = append(errs, fmt.Sprintf("the action %s has an empty name", a.ID))
+			if language.NamesNothing(n) {
+				errs = append(errs, fmt.Sprintf("the action %q has a name that names nothing (no letter or digit)", a.ID))
 				continue
 			}
 			if o, ok := names[carneades.TextToAtom(n)]; ok && o != a.ID {
@@ -190,8 +191,8 @@ func (p *Profile) declared(decls []nascq.ActionDecl, argued map[string]bool) (*P
 	q := p.clone()
 	for _, d := range decls {
 		d.ID, d.Actor = strings.TrimSpace(d.ID), strings.TrimSpace(d.Actor)
-		if d.ID == "" {
-			return nil, fmt.Errorf("P1: a declared action has no id")
+		if language.NamesNothing(d.ID) {
+			return nil, fmt.Errorf("P1: a declared action has no id (its id names nothing)")
 		}
 		if d.Actor == "" {
 			return nil, fmt.Errorf("P1: the declaration of %s names its actor, one of %s (D094 (b))", d.ID, strings.Join(q.actorIDs(), ", "))
@@ -313,6 +314,11 @@ func (gs *GameState) beforeValidation(a nascq.ProposedAction) (nascq.ProposedAct
 			b[v] = p.Agent
 		case nascq.VarAction:
 			if x, ok := b[v]; ok {
+				// A value that names nothing is no action, even where the
+				// board would write a declared action's name as the same atom.
+				if language.NamesNothing(x) {
+					return a, nil, fmt.Errorf("P1: %s = %q names no action (no letter or digit)", v, x)
+				}
 				act, found := p.Action(x)
 				if !found {
 					return a, nil, fmt.Errorf("P1: %s = %s is no declared action: declare it with the move (declare: its id, actor and aliases)", v, x)

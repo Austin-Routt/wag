@@ -7,6 +7,8 @@ import (
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
+
+	"github.com/yourorg/wag/internal/language"
 )
 
 // Locus kinds, as in package nascq: the part of an argument a critical
@@ -190,7 +192,7 @@ func (a *Adapter) addSchemeArgument(owner, schemeID string, bindings map[string]
 	var env terms.Bindings
 	for i, v := range scheme.Variables {
 		val, ok := bindings[v]
-		if !ok || strings.TrimSpace(val) == "" { // a blank value binds nothing
+		if !ok || language.NamesNothing(val) { // a value that names nothing binds nothing
 			return nil, fmt.Errorf("missing binding for variable %s of scheme %s", v, schemeID)
 		}
 		params[i] = val

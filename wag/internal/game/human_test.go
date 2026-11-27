@@ -139,3 +139,35 @@ func TestHumanWizardArguesAboutAStatement(t *testing.T) {
 		t.Errorf("recorded as %+v", m.Action)
 	}
 }
+
+// A value that names nothing is asked for again, not replaced by the
+// variable's letter, which the game would take as a name (the check of
+// step C5.2's step 7, W-1); at the end of the input it stays blank, and the
+// game refuses the move (S2).
+func TestHumanAsksAgainForANamelessValue(t *testing.T) {
+	gs := newShippedGame(t, prevEdges, "Alice", "Bob")
+	var out bytes.Buffer
+	alice := NewHumanAgent("Alice", strings.NewReader(strings.Join([]string{
+		"1", "6", // support, Practical Reasoning
+		"", "?", "status quo", "carbon tax", "lower emissions", "reduce emissions", "environmental health",
+	}, "\n")+"\n"), &out)
+	act := alice.ChooseAction(gs.BuildObservation())
+	if act.VariableBindings["S1"] != "status quo" || !strings.Contains(out.String(), "S1 names nothing") {
+		t.Fatalf("S1 = %q:\n%s", act.VariableBindings["S1"], out.String())
+	}
+	for v, x := range act.VariableBindings {
+		if x == strings.ToLower(v) {
+			t.Errorf("%s = %q, the variable's letter", v, x)
+		}
+	}
+
+	out.Reset()
+	bob := NewHumanAgent("Bob", strings.NewReader("1\n6\nstatus quo\n"), &out) // the input ends at A
+	act = bob.ChooseAction(gs.BuildObservation())
+	if act.VariableBindings["A"] != "" {
+		t.Fatalf("A = %q at the end of the input", act.VariableBindings["A"])
+	}
+	if r, _ := gs.ExecuteTurn(act); r.Accepted || !strings.HasPrefix(gs.LastRejection, "S2") {
+		t.Fatalf("the move with a blank A: accepted %v, %q", r.Accepted, gs.LastRejection)
+	}
+}

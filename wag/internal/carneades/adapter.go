@@ -41,6 +41,8 @@ import (
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
+
+	"github.com/yourorg/wag/internal/language"
 )
 
 // Adapter is a concurrency-safe wrapper around a Carneades ArgGraph.
@@ -728,7 +730,7 @@ func (a *Adapter) AddSupport(
 	params := make([]string, len(scheme.Variables))
 	for i, v := range scheme.Variables {
 		val, ok := variableBindings[v]
-		if !ok || strings.TrimSpace(val) == "" { // a blank value binds nothing
+		if !ok || language.NamesNothing(val) { // a value that names nothing binds nothing
 			missing = append(missing, v)
 		} else {
 			params[i] = SanitizeBinding(val)

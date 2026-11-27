@@ -56,7 +56,7 @@ The next step is therefore not more code. It is to align and verify that catalog
 
 | Part | State | What works | What is missing | Read |
 |---|---|---|---|---|
-| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | Only 9 of the 130 schemes are playable | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
+| Game engine | Working; tested | Moves validated by the NASCQ (rules S0–S9, Q1); Carneades labelling; eight modes; rule bots; batch runs | 17 of the 130 schemes are playable (since step C5.2, 2026-11-27; 9 before) | [`wag/README.md`](wag/README.md), [`docs/game-rules.md`](docs/game-rules.md) |
 | Browser dashboard (`wag-server`) | Prototype, used on Windows | **Play:** dialogue and board views. **Models:** type a key, find a model, add it as a player. **Annotate:** runs, model review, your verdicts. Everything is saved in a data folder (`~/WAG`). | A catalogue browser; causes for verdicts | [`docs/prototype.md`](docs/prototype.md), [`docs/llm.md`](docs/llm.md) |
 | Model players and traces | Working: tested with scripted models, and in one real Gemini run | **Providers:** Gemini, Claude, OpenAI-compatible (including local servers), an external command, a mock, a replay. **Traces:** every request, answer, token count and decision. | Measured play quality | [`docs/llm.md`](docs/llm.md), [`docs/protocol.md`](docs/protocol.md) |
 | Text protocol | Working | Any chatbot can play by copy and paste (protocol 2) | | [`docs/protocol.md`](docs/protocol.md) |

@@ -241,10 +241,16 @@ then the switch, one commit that changes the data's identity once; then the revi
    [`c5-item-f.md`](c5-item-f.md), committed before any test of them ran (5b84dc2); the tests
    (`itemf_test.go` on the shipped data, the engine's and `validate.py`'s for the schemes the game
    does not play yet) and 25 planted defects, each caught. The first runs found two outcomes the page
-   had wrong (A4.10's board, B4's check) and one the game had wrong: a blank binding (an answer's H,
-   A2 or I, a consequence's G) was accepted as the atom `x_empty`; S2 and the adapter now refuse it.
-   The new golden set: the reference games' table on the shipped data with the default profile
-   (TestReferenceDigestsShipped), its file's first line pinning the data and the profile.
+   had wrong (A4.10's board, B4's check) and one the game had wrong: a value that names nothing was
+   accepted as a name (`x_empty`), for an answer's H or I, a consequence's G, and an action's A2 in a
+   game without a profile; S2, P1 and the adapter now refuse it, and the terminal asks again. The
+   independent check of step 7 (in the workspace, `verify/c5/c52/CHECK-step7.md`) found B6 testing
+   nothing (played in the wrong order), punctuation and invisible values still binding, old records
+   with such a value failing to load without a reason, and the golden set covering few new routes;
+   each is fixed in the commit after b3b10ef. The new golden set: the reference games' table on the
+   shipped data with the default profile, and a scripted game for each new route
+   (TestShippedReferenceDigests, TestShippedReferenceRoutes), each file's first line pinning the data
+   and the profile; the move digest now renders declarations and comparisons.
 8. **Gates on both toolchains, an independent review, CI, and the docs** (README, prototype,
    game-rules, protocol.md, llm.md, the catalogue README).
 

@@ -10,6 +10,7 @@ import (
 
 	"github.com/yourorg/wag/internal/game"
 	"github.com/yourorg/wag/internal/kialo"
+	"github.com/yourorg/wag/internal/language"
 	"github.com/yourorg/wag/internal/nascq"
 )
 
@@ -149,7 +150,7 @@ func (s *Server) load(e *Export, inspect bool) (*Session, error) {
 	same := s.data.Matches(playedWith)
 	for i, m := range e.History {
 		if err := replay(gs, m); err != nil {
-			if !same && !errors.Is(err, errBridgeRetired) {
+			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNamelessBinding) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
@@ -209,6 +210,22 @@ func (e *OtherDataError) Error() string {
 // conclusion, with any data, so other data (--data) cannot replay it either.
 var errBridgeRetired = errors.New("it was played through a free-text bridge, which no longer stands in for an answer's conclusion (D075, since 2026-11-22)")
 
+// errNamelessBinding marks a recorded move with a value that names nothing
+// (no letter or digit: blank, punctuation, invisible characters), which the
+// game took as a name before step C5.2's item F (2026-11-27) and refuses
+// since (S2 for a variable, P1 for an action), with any data.
+var errNamelessBinding = errors.New("it binds a value that names nothing, which the game accepted before 2026-11-27 and refuses since (S2, P1: docs/game-rules.md)")
+
+// namelessBinding returns a variable of a move whose value names nothing.
+func namelessBinding(a nascq.ProposedAction) (string, bool) {
+	for _, k := range sortedKeys(a.VariableBindings) {
+		if language.NamesNothing(a.VariableBindings[k]) {
+			return k, true
+		}
+	}
+	return "", false
+}
+
 // replay plays one recorded move again and checks that it went as recorded.
 func replay(gs *game.GameState, m game.Move) error {
 	if m.PlayerID == game.ModeratorID {
@@ -238,6 +255,10 @@ func replay(gs *game.GameState, m game.Move) error {
 	if played := res.Accepted || res.Abstained; played != (len(m.ArgIDs) > 0 || m.Abstained || m.Resigned) && !m.TimedOut {
 		if m.Bridge != "" && !played {
 			return fmt.Errorf("%w: %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record", errBridgeRetired, m.Bridge)
+		}
+		if v, ok := namelessBinding(m.Action); ok && !played && (strings.HasPrefix(res.Error, "S2:") || strings.HasPrefix(res.Error, "P1:")) {
+			return fmt.Errorf("%w: %s = %q. This build cannot replay the game; a WAG build from before that date can, and the export stays readable as a record",
+				errNamelessBinding, v, m.Action.VariableBindings[v])
 		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(len(m.ArgIDs) > 0 || m.Abstained), outcome(played), res.Error)
 	}

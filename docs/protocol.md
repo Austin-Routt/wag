@@ -128,7 +128,10 @@ The move:
   or a new replay result. Since step C5.2 a new game has a profile (D094
   (b)): its prompt has a *Who decides* section and a move about an action it
   does not hold must declare it, so a trace recorded before then replays
-  with the build it was recorded with (docs/game-rules.md).
+  with the build it was recorded with (docs/game-rules.md). Likewise a game
+  recorded before 2026-11-27 with a value that names nothing (S2, P1). The
+  reply's reader drops blank values, so a model's trace can have one only if
+  the reply gave a value of punctuation alone.
 - **Protocol 1.** A bare move object is still accepted.
 - **Other spellings.**
 

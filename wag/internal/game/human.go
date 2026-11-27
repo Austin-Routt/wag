@@ -29,6 +29,7 @@ import (
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
+	"github.com/yourorg/wag/internal/language"
 	"github.com/yourorg/wag/internal/nascq"
 
 	"github.com/carneades/carneades-4/src/engine/terms"
@@ -39,6 +40,7 @@ type HumanAgent struct {
 	name    string
 	scanner *bufio.Scanner
 	out     io.Writer
+	eof     bool // the input has ended
 }
 
 // NewHumanAgent creates a human player with the given IO channels.
@@ -343,10 +345,13 @@ func (h *HumanAgent) fillVariables(tmpl nascq.ActionTemplate) map[string]string 
 		spec := vars[name]
 		h.printf("    %s (%s — %s): ", name, spec.Type, spec.Description)
 		value := h.readLine()
-		if strings.TrimSpace(value) == "" {
-			// Fallback: use lowercase variable name to avoid empty bindings.
-			value = strings.ToLower(name)
-			h.printf("    (using default: %q)\n", value)
+		// A value that names nothing (blank, punctuation alone) binds
+		// nothing (S2): ask again, rather than fill in the variable's letter,
+		// which the game would take as a name. At the end of the input the
+		// value stays blank and the game refuses the move.
+		for language.NamesNothing(value) && !h.eof {
+			h.printf("    %s names nothing: type a word or a number: ", name)
+			value = h.readLine()
 		}
 		// Not sanitized here: the adapter turns each value into an atom,
 		// and the board shows the words typed (GameState.Say).
@@ -497,6 +502,7 @@ func (h *HumanAgent) readLine() string {
 	if h.scanner.Scan() {
 		return strings.TrimSpace(h.scanner.Text())
 	}
+	h.eof = true
 	return ""
 }
 

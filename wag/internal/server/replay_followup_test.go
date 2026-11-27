@@ -240,3 +240,23 @@ func TestFollowupOtherDataOpensReadOnly(t *testing.T) {
 		t.Fatalf("same data: %d %v %v", code, st["inspect"], st["can_move"])
 	}
 }
+
+// A game recorded before 2026-11-27 with a value that names nothing (a field
+// typed into and cleared on the board was sent as "") no longer replays: S2
+// refuses it since step C5.2's item F. The refusal says so and names the
+// remedy, as a retired bridge's does (the independent check of step 7, W-2).
+func TestNamelessBindingOfAnOldRecord(t *testing.T) {
+	for _, v := range []string{"", "  ", "?"} {
+		s, ts := newTestServerWith(t)
+		e := reviewExport(t, s, NewGameRequest{Mode: "classic", Seats: twoHumans})
+		if len(e.History) == 0 || len(e.History[0].ArgIDs) == 0 {
+			t.Fatalf("the recorded game has no played move: %+v", e.History)
+		}
+		e.History[0].Action.VariableBindings["C"] = v
+		code, out := loadHTTP(t, ts, e, "")
+		msg, _ := out["error"].(string)
+		if code == http.StatusOK || !strings.Contains(msg, "names nothing") || !strings.Contains(msg, "a WAG build from before that date can") {
+			t.Fatalf("C=%q: %d %q", v, code, msg)
+		}
+	}
+}

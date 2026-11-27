@@ -149,9 +149,12 @@ move again.
 | Resign | `{"type":"resign"}` | Concedes the game. With three or more players on points, the others play on. |
 
 **Validity checks.** NASCQ checks S0 to S9 and Q1 (`nascq.Validate`); S2 refuses a
-variable left out or bound to a blank value, which names nothing (since step C5.2's item F: an
-answer whose H, A2 or I is blank would make its exception out without saying what outweighs, what
-does better, or what would settle it). The game then adds three rules:
+variable left out or bound to a value that names nothing, with no letter or digit (blank,
+punctuation alone, invisible characters), and in a game with a profile P1 refuses such an action
+first (since step C5.2's item F: an answer whose H or I names nothing would make its exception out
+without saying what outweighs or what would settle it). The terminal asks again for such a value.
+A game recorded before 2026-11-27 with one replays with a build from before that date, and the
+loader says so. The game then adds three rules:
 
 - G1: a move may not restate an argument already in the graph;
 - Q2: a question that has already been raised about an argument may not be

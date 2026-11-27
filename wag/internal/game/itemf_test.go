@@ -103,10 +103,16 @@ func (g *fgame) refuse(player string, a nascq.ProposedAction, rule string) {
 	if after := g.state(); after != before {
 		g.t.Fatalf("the refusal changed the game:\nbefore:\n%s\nafter:\n%s", before, after)
 	}
-	for _, m := range g.gs.MoveHistory[n:] {
-		if m.Rejection == "" {
-			g.t.Fatalf("the refusal recorded a move: %+v", m)
+	// A rule's refusal (S, P, Q, G) is recorded once, with its penalty; the
+	// adapter's refusal and the cycle check's leave no record and cost
+	// nothing (the independent check of step 7, W-3).
+	added := g.gs.MoveHistory[n:]
+	if ruleRefusal(rule) {
+		if len(added) != 1 || added[0].Rejection == "" || added[0].ScoreDelta != g.gs.Config.Scoring.InvalidActionPenalty {
+			g.t.Fatalf("a rule's refusal is recorded once, with its penalty: %+v", added)
 		}
+	} else if len(added) != 0 {
+		g.t.Fatalf("the refusal recorded %+v", added)
 	}
 	if g.gs.ActivePlayer().ID != player {
 		g.t.Fatalf("the refusal passed the turn")
@@ -125,7 +131,24 @@ func (g *fgame) state() string {
 	}
 	sort.Strings(ids)
 	for _, id := range ids {
-		fmt.Fprintf(&b, "s %s %v\n", id, gr.Statements[id].Label)
+		fmt.Fprintf(&b, "s %s %v %q\n", id, gr.Statements[id].Label, gr.Statements[id].Text)
+	}
+	var issues []string
+	for id, is := range gr.Issues {
+		var pos []string
+		for _, p := range is.Positions {
+			pos = append(pos, p.Id)
+		}
+		issues = append(issues, fmt.Sprintf("%s %v %v", id, pos, is.Standard))
+	}
+	sort.Strings(issues)
+	assumed := append([]string(nil), gr.Assumptions...)
+	sort.Strings(assumed)
+	questioned := append([]string(nil), gr.Questioned...)
+	sort.Strings(questioned)
+	fmt.Fprintf(&b, "issues %v\nassumptions %v\nquestioned %v\n", issues, assumed, questioned)
+	for _, q := range g.gs.Questions {
+		fmt.Fprintf(&b, "question %+v\n", q)
 	}
 	ids = ids[:0]
 	for id := range gr.Arguments {
@@ -179,6 +202,40 @@ func (g *fgame) mustNotIn(stmt string) {
 	g.t.Helper()
 	if g.in(stmt) {
 		g.t.Fatalf("%s is In", stmt)
+	}
+}
+
+// mustOut checks that a statement is on the board and Out (not Undecided).
+func (g *fgame) mustOut(stmt string) {
+	g.t.Helper()
+	if s := g.gs.Adapter.Graph.Statements[stmt]; s == nil || s.Label != caes.Out {
+		g.t.Fatalf("%s is %v, want Out", stmt, g.label(stmt))
+	}
+}
+
+// ruleRefusal tells whether a refusal is a rule's (S0 to S9, P1 to P4, Q1,
+// Q2, G1), which the history records with its penalty.
+func ruleRefusal(rule string) bool {
+	return len(rule) >= 2 && strings.ContainsRune("SPQG", rune(rule[0])) && rule[1] >= '0' && rule[1] <= '9'
+}
+
+// answeredBy checks that the questions named, asked of the argument, are
+// closed by the argument given.
+func (g *fgame) answeredBy(target, by string, cqs ...string) {
+	g.t.Helper()
+	found := 0
+	for _, q := range g.gs.Questions {
+		for _, cq := range cqs {
+			if q.TargetArgID == target && q.CQID == cq {
+				found++
+				if q.AnsweredBy != by {
+					g.t.Fatalf("%s of %s is answered by %q, not %s", cq, target, q.AnsweredBy, by)
+				}
+			}
+		}
+	}
+	if found != len(cqs) {
+		g.t.Fatalf("%d of the questions %v were asked of %s", found, cqs, target)
 	}
 }
 
@@ -298,7 +355,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		}
 		g.mustIn(bad1)
 		g.outOfForce(c1)
-		g.mustNotIn(shouldTax)
+		g.mustOut(shouldTax)
 	})
 	t.Run("A1.2", func(t *testing.T) {
 		g := newFGame(t)
@@ -306,7 +363,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		g.play("Con", answer("attack", "CQ:bad_outweighs", "AS:bad_outweighs_good", pr, vb("H", "food_costlier")))
 		g.mustIn(bad1)
 		g.outOfForce(c1, pr)
-		g.mustNotIn(shouldTax)
+		g.mustOut(shouldTax)
 	})
 	t.Run("A1.3", func(t *testing.T) {
 		g := newFGame(t)
@@ -349,7 +406,9 @@ func TestItemFBackupEdges(t *testing.T) {
 		// Added after the first run (G-unbound): a blank H names nothing.
 		g := newFGame(t)
 		c1 := g.c1()
-		for _, h := range []string{"", "  "} {
+		// A value with no letter or digit names nothing either (the check
+		// of step 7, W-1): punctuation, a zero-width space, a byte order mark.
+		for _, h := range []string{"", "  ", "?", "--", string(rune(0x200b)), string(rune(0xfeff))} {
 			g.refuse("Con", answer("attack", "CQ:bad_outweighs", "AS:bad_outweighs_good", c1, vb("H", h)), "S2")
 		}
 		g.refuse("Pro", support("AS:consequences", vb("A", "tax_meat", "G", " ")), "S2")
@@ -371,7 +430,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		g.play("Pro", about("attack", nascq.OtherSchemeID, "matters_more(food_costlier,emissions_fall)",
 			vb("P1", "lower emissions matter more than dearer food")))
 		g.outOfForce(ans)
-		g.mustNotIn(bad1)
+		g.mustOut(bad1)
 		g.inForce(c1)
 		g.mustIn(shouldTax)
 		g.play("Con", ask("CQ:likelihood", c1))
@@ -443,8 +502,8 @@ func TestItemFBackupEdges(t *testing.T) {
 	t.Run("A4.1", func(t *testing.T) {
 		g := newFGame(t)
 		mp := g.mPlus("demand_falls")
-		mm := g.mMinus()
 		bp := g.bPlus("demand_falls")
+		mm := g.mMinus()
 		bm := g.bMinus()
 		c1 := g.c1()
 		g.play("Con", answer("attack", "CQ:worth_finding_out_first", "AS:finding_out_first", bp, vb("I", "pilot_study")))
@@ -467,10 +526,26 @@ func TestItemFBackupEdges(t *testing.T) {
 		g := newFGame(t)
 		g.mPlus("demand_falls")
 		bp := g.bPlus("demand_falls")
-		g.refuse("Con", answer("attack", "CQ:worth_finding_out_first", "AS:finding_out_first", bp, vb("I", "")), "S2")
+		for _, i := range []string{"", "?", string(rune(0x200b))} {
+			g.refuse("Con", answer("attack", "CQ:worth_finding_out_first", "AS:finding_out_first", bp, vb("I", i)), "S2")
+		}
 		pr := g.pr()
 		// A blank action is no declared action: P1 refuses it first.
-		g.refuse("Con", betterMeans(pr, vb("A2", " "), "sooner"), "P1")
+		for _, a2 := range []string{" ", "?"} {
+			g.refuse("Con", betterMeans(pr, vb("A2", a2), "sooner"), "P1")
+		}
+		// A declaration whose id names nothing is refused (the check of step
+		// 7, N-6).
+		decl := betterMeans(pr, vb("A2", string(rune(0x200b))), "sooner")
+		decl.Declare = []nascq.ActionDecl{{ID: string(rune(0x200b)), Actor: DefaultAgent}}
+		g.refuse("Con", decl, "P1")
+		// Where an action's name is written as the atom a blank value makes
+		// (x_empty), the blank value still names no action (the check of
+		// step 7, N-6).
+		g2 := newFGame(t)
+		g2.gs.Profile.Actions = append(g2.gs.Profile.Actions, ProfileAction{ID: "x empty", Actor: DefaultAgent})
+		pr2 := g2.pr()
+		g2.refuse("Con", betterMeans(pr2, vb("A2", " "), "sooner"), "P1")
 	})
 	t.Run("A4.3", func(t *testing.T) {
 		g := newFGame(t)
@@ -495,7 +570,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		g.outOfForce(bp)
 		g.play("Pro", ask("CQ:expertise", exp))
 		g.outOfForce(exp)
-		g.mustNotIn(worthDF)
+		g.mustOut(worthDF)
 		g.inForce(bp)
 	})
 	t.Run("A4.5", func(t *testing.T) {
@@ -520,7 +595,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		q.TargetPremiseID = "settles_whether(pilot_study,tax_meat,demand_falls)"
 		g.play("Pro", q)
 		g.outOfForce(ans)
-		g.mustNotIn(worthDF)
+		g.mustOut(worthDF)
 		g.inForce(bp, bm)
 	})
 	t.Run("A4.7", func(t *testing.T) {
@@ -544,9 +619,10 @@ func TestItemFBackupEdges(t *testing.T) {
 		q.TargetPremiseID = "matters_to_decision(tax_meat,demand_falls)"
 		g.play("Con", q)
 		g.outOfForce(bp)
-		g.play("Pro", about("support", nascq.OtherSchemeID, "matters_to_decision(tax_meat,demand_falls)",
+		by := g.play("Pro", about("support", nascq.OtherSchemeID, "matters_to_decision(tax_meat,demand_falls)",
 			vb("P1", "whether demand falls decides whether the tax works")))
 		g.inForce(bp)
+		g.answeredBy(bp, by, nascq.CQPremiseAcceptable)
 	})
 	t.Run("A4.10", func(t *testing.T) {
 		// The board needs the statement (first run: S7 with m+ alone).
@@ -558,7 +634,7 @@ func TestItemFBackupEdges(t *testing.T) {
 	t.Run("A4.11", func(t *testing.T) {
 		g := newFGame(t)
 		g.bPlus("demand_falls")
-		g.mustNotIn("may_be_worth_performing(tax_meat,demand_falls)")
+		g.mustOut("may_be_worth_performing(tax_meat,demand_falls)")
 		g.mustNotIn(shouldTax)
 		g.mPlus("demand_falls")
 		g.mustIn(shouldTax)
@@ -576,14 +652,14 @@ func TestItemFBackupEdges(t *testing.T) {
 		g := newFGame(t)
 		pr := g.pr()
 		g.play("Con", answer("attack", "CQ:possibility", "AS:sign", pr, vb("A", "the_budget_is_frozen")))
-		g.mustNotIn("possible_bring_about(decider,tax_meat)")
+		g.mustOut("possible_bring_about(decider,tax_meat)")
 		g.outOfForce(pr)
 	})
 	t.Run("A5.3", func(t *testing.T) {
 		g := newFGame(t)
 		pg := g.pg()
 		g.play("Con", answer("attack", "CQ:goal_possible", "AS:sign", pg, vb("A", "emissions_rose_last_year")))
-		g.mustNotIn("possible_goal(emissions_fall)")
+		g.mustOut("possible_goal(emissions_fall)")
 		g.outOfForce(pg)
 	})
 	t.Run("A5.4", func(t *testing.T) {
@@ -630,7 +706,7 @@ func TestItemFOther(t *testing.T) {
 		o := g.play("Con", answer("attack", "CQ:too_slight", nascq.OtherSchemeID, c1, other("the fall is tiny")))
 		g.play("Pro", ask(nascq.CQRelevance, o))
 		g.outOfForce(o)
-		g.mustNotIn(slight1)
+		g.mustOut(slight1)
 		g.inForce(c1)
 	})
 	t.Run("B4", func(t *testing.T) {
@@ -648,22 +724,37 @@ func TestItemFOther(t *testing.T) {
 		g := newFGame(t)
 		c1 := g.c1()
 		exp := g.play("Con", answer("attack", "CQ:likelihood", "AS:expert_opinion", c1, vb("W", "dr_lee", "D", "climate_science")))
-		g.mustNotIn(brings1)
+		g.mustOut(brings1)
 		g.outOfForce(c1)
 		g.play("Pro", ask("CQ:field", exp))
 		g.outOfForce(exp)
 		g.inForce(c1)
 	})
 	t.Run("B6", func(t *testing.T) {
+		// Played as recorded after the check of step 7 (E-1): c1 first, so
+		// that the Other argument concludes c1's premise, whose presumption a
+		// pending question ties, so that it holds only by the arguments for it.
 		g := newFGame(t)
-		wish := g.play("Pro", support(nascq.OtherSchemeID, vb("P1", "lower emissions would be good", "C", brings1)))
 		c1 := g.c1()
-		g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
+		g.play("Con", ask("CQ:likelihood", c1))
+		g.mustOut(brings1)
+		wish := g.play("Pro", support(nascq.OtherSchemeID, vb("P1", "lower emissions would be good", "C", brings1)))
+		if got := g.conclusion(wish); got != brings1 {
+			t.Fatalf("the Other argument concludes %s, not c1's premise", got)
+		}
+		g.mustIn(brings1)
+		g.inForce(c1)
 		g.play("Con", answer("attack", nascq.CQRelevance, nascq.OtherSchemeID, wish,
 			other("that an outcome is desirable is no evidence that it will happen")))
-		g.outOfForce(wish)
+		g.outOfForce(wish) // Q2-A
+		g.mustOut(brings1) // the premise stood only on the undercut inference
+		if u := g.gs.Adapter.Graph.Arguments[c1].Undercutter; u == nil || u.Label == caes.In {
+			t.Fatalf("c1's undercutter is %+v: the undercutter reached c1", u)
+		} // Q2-B: c1 itself is untouched
+		g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
+		g.mustIn(brings1) // Q2-C: the independent support stands
 		g.inForce(c1)
-		g.mustIn(brings1)
+		g.outOfForce(wish)
 	})
 }
 
@@ -677,7 +768,7 @@ func TestItemFQuestionsAlone(t *testing.T) {
 			before[id] = s.Label
 		}
 		g.play("Con", ask("CQ:likelihood", c1))
-		g.mustNotIn(brings1)
+		g.mustOut(brings1)
 		g.outOfForce(c1)
 		for id, l := range before {
 			if id != brings1 && id != shouldTax && g.label(id) != l {
@@ -690,15 +781,16 @@ func TestItemFQuestionsAlone(t *testing.T) {
 		c1 := g.c1()
 		g.play("Con", ask("CQ:likelihood", c1))
 		g.play("Con", ask("CQ:evidence", c1))
-		g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
+		exp := g.play("Pro", about("support", "AS:expert_opinion", brings1, vb("W", "dr_lee", "D", "climate_science")))
 		g.mustIn(brings1)
 		g.inForce(c1)
+		g.answeredBy(c1, exp, "CQ:likelihood", "CQ:evidence")
 	})
 	t.Run("C3", func(t *testing.T) {
 		g := newFGame(t)
 		pr := g.pr()
 		g.play("Con", ask("CQ:possibility", pr))
-		g.mustNotIn("possible_bring_about(decider,tax_meat)")
+		g.mustOut("possible_bring_about(decider,tax_meat)")
 		g.outOfForce(pr)
 	})
 	t.Run("C4", func(t *testing.T) {

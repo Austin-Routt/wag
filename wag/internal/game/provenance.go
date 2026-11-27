@@ -31,8 +31,9 @@ func InputHashes(yamlBytes, schemesJSON, cqsJSON, edgesJSON []byte) (yamlSHA, na
 }
 
 // MoveDigest is a SHA-256 over a canonical rendering of the move history:
-// every move's player, action (with bindings in sorted order), created
-// argument IDs, weight, score delta and the statement labels after it.
+// every move's player, action (with bindings in sorted order, and its
+// declarations and comparison when it has them), created argument IDs,
+// weight, score delta and the statement labels after it.
 // Equal digests mean equality only for this deliberately partial rendering. Wall-clock
 // metadata (created_at) is deliberately not part of it.
 func (gs *GameState) MoveDigest() string {
@@ -43,6 +44,16 @@ func (gs *GameState) MoveDigest() string {
 			a.AnswersCQID, a.TargetArgID, a.TargetPremiseID, strings.Join(m.ArgIDs, ","), strings.Join(m.Presumptions, ","), m.Abstained)
 		for _, k := range carneades.SortedKeys(a.VariableBindings) {
 			fmt.Fprintf(&b, "%s=%s,", k, a.VariableBindings[k])
+		}
+		// A move's declarations and comparison (D094 (b), D089), written
+		// only when it has them, so that a game without them keeps the
+		// digest it had before they were rendered (step C5.2's check of
+		// step 7, W-6).
+		for _, d := range a.Declare {
+			fmt.Fprintf(&b, "|declare=%s:%s:%s", d.ID, d.Actor, strings.Join(d.Aliases, ";"))
+		}
+		if a.Comparison != "" {
+			fmt.Fprintf(&b, "|comparison=%s", a.Comparison)
 		}
 		fmt.Fprintf(&b, "|%.6f|%.6f|", m.Weight, m.ScoreDelta)
 		keys := make([]string, 0, len(m.LabelsAfter))

@@ -18,8 +18,9 @@ import (
 //
 // The file was written on WAG 7f784b0 with the fork (carneades-4 995768e) and
 // reproduced with the schemes library's engine 4.3.1+walton.8 (024b86b).
-// WAG_UPDATE_REFERENCE=1 go test ./internal/game -run TestReferenceDigests
-// rewrites it; read the diff before committing it.
+// WAG_UPDATE_REFERENCE=1 go test ./internal/game -run '^TestReferenceDigests$'
+// rewrites it (the anchors keep it from matching the golden set on the shipped
+// data, reference_shipped_test.go); read the diff before committing it.
 
 type referenceGame struct {
 	mode   string
