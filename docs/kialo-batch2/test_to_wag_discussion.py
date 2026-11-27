@@ -1,4 +1,4 @@
-"""The replay plays an instance by the discussion (D096): cases RC11-RC13 (d086-first-gold.md §6;
+"""The replay plays an instance by the discussion (D096): cases RC11-RC15 (d086-first-gold.md §6;
 annotation-records.md §13). A capturing transport stands in for the server."""
 import contextlib
 import copy
@@ -47,6 +47,9 @@ class DiscussionReplay(unittest.TestCase):
                 moves.append(copy.deepcopy(body))
                 act = body['action']
                 if act['type'] == 'abstain':
+                    state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
+                    return {'result': {'accepted': True}}
+                if act['type'] == 'question':
                     state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
                     return {'result': {'accepted': True}}
                 if refuse_scheme and act.get('scheme_id') == refuse_scheme:
@@ -122,6 +125,46 @@ class DiscussionReplay(unittest.TestCase):
                          ('support', 'AS:positive_consequences', parent_stmt))
         entry = next(x for x in report['moves'] if x['claim'] == 'reply')
         self.assertNotEqual(entry['integration'], 'cascade')
+
+    def with_fragment(self, stated):
+        """The thesis's discussion instance, a fragment that backs its premise PREMISE but states
+        `stated`, and a bare denial of what the fragment states."""
+        ann = self.thesis_with_discussion()
+        ann['items'] = ann['items'][:1]
+        frag_inst = instance('frag#1', 'positive_consequences', None, premises=[stated], bindings={'G': 'less_emissions'})
+        frag_inst['scheme']['fit'] = 'fragment'
+        frag_inst['premises'][0]['status'] = 'explicit'
+        frag = {'kialo_claim_id': 'frag', 'literal': ['The tax would cut emissions.'], 'instances': [frag_inst],
+                'role': {'kind': 'premise_backing', 'polarity': 'for', 'cq': None},
+                'target': {'actual': {'claim': 'thesis', 'instance': 'thesis#2', 'part': 'premise', 'formula': PREMISE}}}
+        deny = {'kialo_claim_id': 'deny', 'literal': ['It would not.'],
+                'instances': [instance('deny#1', 'none', 'no_cut')],
+                'role': {'kind': 'premise_attack', 'polarity': 'against', 'cq': None},
+                'target': {'actual': {'claim': 'frag', 'instance': 'frag#1', 'part': 'premise', 'formula': stated}}}
+        deny['instances'][0]['scheme']['fit'] = 'none'
+        ann['items'] += [frag, deny]
+        return ann
+
+    def test_rc14_a_denial_of_what_a_fragment_states_is_a_challenge_where_it_is_a_premise(self):
+        report, moves = self.run_replay(self.with_fragment(PREMISE))
+        disc_arg = report['discussion'][0]['arg']
+        frag = next(x for x in report['moves'] if x['claim'] == 'frag')
+        self.assertEqual(frag['integration'], 'fragment')
+        self.assertNotEqual(frag['arg'], disc_arg)
+        q = [m['action'] for m in moves if m['action']['type'] == 'question']
+        self.assertEqual(len(q), 1, moves)
+        self.assertEqual((q[0]['target_arg_id'], q[0]['target_premise_id']), (disc_arg, PREMISE))
+        deny = next(x for x in report['moves'] if x['claim'] == 'deny')
+        self.assertEqual((deny['played'], deny['integration'], deny['executed']['target_arg']),
+                         ('challenge', 'as_intended', disc_arg))
+
+    def test_rc15_another_premise_of_a_fragment_is_not_moved(self):
+        other = 'brings_about(tax_meat,less_methane)'
+        report, moves = self.run_replay(self.with_fragment(other))
+        frag = next(x for x in report['moves'] if x['claim'] == 'frag')
+        q = [m['action'] for m in moves if m['action']['type'] == 'question']
+        self.assertEqual(len(q), 1, moves)
+        self.assertEqual((q[0]['target_arg_id'], q[0]['target_premise_id']), (frag['arg'], other))
 
     def test_rc13_a_refused_discussion_instance(self):
         report, moves = self.run_replay(self.thesis_with_discussion(), refuse_scheme='AS:positive_consequences')

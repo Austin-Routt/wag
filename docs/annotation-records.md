@@ -396,6 +396,8 @@ recorded at covers it, and a change to it makes that verification stale.
 **The replay.** `to_wag.py` plays an instance by the discussion as an argument for its conclusion,
 with its scheme, by the side that conclusion takes (the thesis's statement: Pro; its negation: Con):
 the thesis's before any claim, another claim's right after that claim's own move. Claims that target
-it are played at it. The report lists it apart from the claims' moves; the claims' counts are
-unchanged by it.
+it are played at it. A fragment of it is played as before, supporting the premise it backs; since
+that premise is on the board only in the argument it backs, a move at that premise of the fragment
+(13292.135 and .137 deny what 13292.108 states) is made there. The report lists it apart from the
+claims' moves; the claims' counts are unchanged by it.
 

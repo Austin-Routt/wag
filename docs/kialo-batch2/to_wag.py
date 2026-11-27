@@ -187,6 +187,7 @@ def main():
     played_inst = {}  # instance id -> the same: each claim's primary instance, and a secondary one that carries it
     report = []
     discussion = []  # D096: the instances by the discussion, played apart from the claims' moves
+    backs = {}  # a claim played as a fragment -> {"formula": the premise it backs, "trec": the argument that has it}
 
     def state():
         return call(base, f"/api/games/{gid}")
@@ -357,6 +358,14 @@ def main():
             continue
         # The target instance on the board: its argument and its conclusion.
         trec = played_inst.get(tinst) if secondary_target else played.get(str(tgt0.get("claim") or ""))
+        # A claim played as a fragment supports the premise it backs: on the
+        # board that formula is a premise of the argument it backs, and the
+        # conclusion of the fragment's own Other argument. A move at that
+        # premise of the fragment is made at the argument it backs (RC14); the
+        # fragment's other premises are not on the board (RC15).
+        back = backs.get(str(tgt0.get("claim") or ""))
+        if back and str(tgt0.get("part", "")).startswith("premise") and norm(tgt0.get("formula")) == back["formula"]:
+            trec = back["trec"]
         if wid == "none" and side == "con" and str(tgt0.get("part", "")).startswith("premise") and trec:
             # A bare denial of a premise is a challenge (audit P5): the
             # premise's author must argue for it.
@@ -534,6 +543,7 @@ def main():
             play_discussion(cid, a, side)
         if fragment and how == "other":
             entry["integration"] = "fragment"
+            backs[cid] = {"formula": norm(stmt), "trec": trec}
         elif how in ("cq", "statement", "new", "inference"):
             # Played with its scheme; as intended if in the intended role:
             # a CQ answer as a CQ answer, anything else as a move about a
