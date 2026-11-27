@@ -152,3 +152,20 @@ The browser lists the data folder's games, each with Resume (the endpoint of 2).
 | The resume does not compare the trace's start with this server's | G5c |
 | Computer players start their random numbers again | G9 |
 | The clocks are dropped | G10 |
+
+### Checks added before they ran (2026-11-27)
+
+Written while the planted defects were being prepared, before these checks ran:
+
+- G2 also checks that the trace's events are in strictly increasing order, and that the export
+  keeps the events recorded before the stop and records the resume.
+- G2b: G1's folder renamed (`games/renamed`), then resumed and played on. Expected: the game goes on
+  saving into that folder, and makes no other.
+- G3 also checks that no decision uses the failed call, and that the new reply's decision is the
+  turn's first attempt; G4b, that no decision uses the planted reply.
+
+| Defect | Caught by |
+|---|---|
+| A resumed game saves into a folder named anew | G2b |
+| The export's events are not carried over | G2 |
+| The order of events starts again | G2 |
