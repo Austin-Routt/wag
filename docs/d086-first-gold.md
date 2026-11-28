@@ -895,3 +895,19 @@ argument, where the formula is a conclusion: cases RC14-RC15 were written, and a
 fragment backs is now made in the argument it backs, so the two are played as before (a challenge
 and its duplicate).
 
+**Part 3: mitigations and replies to a weighing (D098; `recode_d098.py`), and the review of part 1's
+application.** Guidelines §3.1 states the convention both reviewers applied: a measure the agent adds
+so that a cited harm does not follow is at the conclusion of the argument that cites the harm against
+A, by its instance id (OC6; rule cases OC6-e and OC6-f), and what those affected would do is coded by
+what it says of the harm; a denial of the link a weighing relies on is at the weighing's own premise
+(OC10). 13292.45 moves to 13292.12#3's conclusion, as 13292.194 (a cascade in the replay now: 40 claims
+played). The independent review of part 1's application (verdict: approve with changes) found the line
+"a factor that only weakens the effect is 28 CQ1's" wrong: CQ1 asks about the generalization, and a
+factor that only makes the effect smaller answers neither it nor the exception (at a cited
+consequence, `too_slight`, OC9); the guidelines, the catalogue entries and the proposal (version 2b)
+say so, and the old line is a retired wording. It also found that nothing tied the gold's English to
+`walton.yml`'s templates: `validate.py`'s R21 and the proposal check do now (cases EN1-EN7, PC1-PC3),
+and 13292.61#1's conclusion, in the game's phrasing, is re-rendered. The template's wording ("keeps, or
+would keep") narrows the decided "interferes with": put to the owner as a choice of its own. 13292.12
+and .194 (round 1) are at draft 3, not reviewed; 13292.9, .45 and .61 are round 2's.
+

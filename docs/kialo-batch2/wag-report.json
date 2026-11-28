@@ -2,19 +2,19 @@
  "game": "1",
  "claim": "should_be_performed(tax_meat)",
  "claim_label": "out",
- "played": 41,
+ "played": 40,
  "with_their_scheme": 20,
  "as_challenges": 4,
- "with_other": 17,
+ "with_other": 16,
  "secondary_played": 3,
- "not_played": 8,
+ "not_played": 9,
  "integration": {
   "as_intended": 27,
   "fragment": 4,
-  "coverage_gap": 9,
+  "coverage_gap": 8,
   "failed": 1,
   "duplicate": 1,
-  "cascade": 6,
+  "cascade": 7,
   "not_played": 1
  },
  "data_sha256": "092b6a6f48a672d2",
@@ -438,7 +438,7 @@
     "target_stmt": null,
     "type": "support",
     "arg": "a70",
-    "conclusion": "text_6e55cf47951747d6"
+    "conclusion": "text_c3464ef3d35371f7"
    },
    "fallback_after": [
     "new: S2: missing variable binding(s): [A C]"
@@ -1387,24 +1387,14 @@
     "cq": null,
     "polarity": "against",
     "target_claim": "13292.12",
-    "target_instance": "13292.12#1",
+    "target_instance": "13292.12#3",
     "target_part": "conclusion",
-    "target_formula": "may_occur(domestic_meat_industry_pushed_out)",
+    "target_formula": "¬should_be_performed(tax_meat)",
     "conclusion": "should_be_performed(raise_import_standards)"
    },
-   "played": "other-new",
-   "arg": "a168",
-   "executed": {
-    "how": "other-new",
-    "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": null,
-    "type": "support",
-    "arg": "a168",
-    "conclusion": "text_a0083b93e96bbac7"
-   },
-   "integration": "coverage_gap"
+   "played": "no: its target, the instance 13292.12#3, is a secondary instance of 13292.12, which is not played",
+   "executed": null,
+   "integration": "cascade"
   },
   {
    "claim": "13292.5",
@@ -1424,7 +1414,7 @@
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "played": "statement",
-   "arg": "a170",
+   "arg": "a168",
    "executed": {
     "how": "statement",
     "scheme_id": "AS:negative_consequences",
@@ -1432,7 +1422,7 @@
     "target_arg": null,
     "target_stmt": "should_be_performed(tax_meat)",
     "type": "attack",
-    "arg": "a170",
+    "arg": "a168",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "integration": "as_intended"
@@ -1455,7 +1445,7 @@
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "played": "statement",
-   "arg": "a176",
+   "arg": "a174",
    "executed": {
     "how": "statement",
     "scheme_id": "AS:negative_consequences",
@@ -1463,7 +1453,7 @@
     "target_arg": null,
     "target_stmt": "¬should_be_performed(tax_meat)",
     "type": "support",
-    "arg": "a176",
+    "arg": "a174",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "integration": "as_intended"
@@ -1486,7 +1476,7 @@
     "conclusion": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
    },
    "played": "cq",
-   "arg": "a182",
+   "arg": "a180",
    "executed": {
     "how": "cq",
     "scheme_id": "AS:better_means",
@@ -1494,7 +1484,7 @@
     "target_arg": "a37",
     "target_stmt": null,
     "type": "attack",
-    "arg": "a182",
+    "arg": "a180",
     "conclusion": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
    },
    "integration": "as_intended"
