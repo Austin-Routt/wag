@@ -512,3 +512,16 @@ Planted for the bound by the exception's form (A9.8 to A9.13; 2026-11-28, writte
 | the pattern's repeated placeholders bound independently, or a non-ground statement taken | the matcher's unit cases |
 | the loader names no change for a game the new rule refuses | A9.13 |
 
+Recorded with the code (2026-11-28): A9.8 to A9.13 ran as written. On the code before the change,
+A9.8, A9.8b, A9.8c, A9.9, A9.11 and A9.12 fail and A9.10, A9.10b and A9.10c pass, as controls should.
+S5's refusal now ends, when no bridge on the board has the statement as its exception, with "no
+bridge on the board has it as its exception yet: S5 bounds it by its form" (`nascq.FormOnly`), which
+the loader reads to name the change. Planted on a copy of the tree (the workspace's
+`verify/x3-fixes/f1-mutants.py`), each caught: the question found only at the bridges on the board
+fails A9.8, A9.8b, A9.8c, A9.9, A9.11 and A9.12; the pattern compared by its predicate's name only
+fails A9.10c; repeated placeholders bound independently, a non-ground statement taken, and the fast
+path taken for a statement with a space before "(" fail the matcher's unit cases
+(`TestStatementPatternMatchesTheForm`); S5's refusal without the form-only note, the loader without
+the named change, and the named change taken for other data's refusal fail A9.13; and the offers'
+check skipped before any bridge fails A9.11.
+

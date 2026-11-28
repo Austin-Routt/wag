@@ -572,11 +572,11 @@ func (gs *GameState) refusedException(argIDs []string, va *nascq.ValidatedAction
 		if arg.Conclusion != nil {
 			if cq := gs.NASCQ.RefusingQuestion(arg.Conclusion.Id, gs.bridge); cq != "" && !gs.NASCQ.Backs(cq, s) {
 				if s == nil || s.Free {
-					return fmt.Sprintf("S5: an argument of Other cannot conclude %s, the exception CQ %q asks about: that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
-						arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+					return fmt.Sprintf("S5: an argument of Other cannot conclude %s, the exception CQ %q asks about: that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)%s",
+						arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "), nascq.FormNote(arg.Conclusion.Id, gs.bridge))
 				}
-				return fmt.Sprintf("S5: an argument of %s cannot conclude %s, the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s",
-					s.Name, arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+				return fmt.Sprintf("S5: an argument of %s cannot conclude %s, the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s%s",
+					s.Name, arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "), nascq.FormNote(arg.Conclusion.Id, gs.bridge))
 			}
 		}
 		for _, p := range arg.Premises {
@@ -584,8 +584,8 @@ func (gs *GameState) refusedException(argIDs []string, va *nascq.ValidatedAction
 				continue
 			}
 			if cq := gs.NASCQ.RefusingQuestion(p.Stmt.Id, gs.bridge); cq != "" {
-				return fmt.Sprintf("S5: a move cannot presume %s as a premise: it is the exception CQ %q asks about, and that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
-					p.Stmt.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+				return fmt.Sprintf("S5: a move cannot presume %s as a premise: it is the exception CQ %q asks about, and that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)%s",
+					p.Stmt.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "), nascq.FormNote(p.Stmt.Id, gs.bridge))
 			}
 		}
 	}

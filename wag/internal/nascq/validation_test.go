@@ -61,6 +61,11 @@ func (m *mockGraph) ExceptionMatching(argID, pattern string) string {
 	return pattern
 }
 
+// This fixture has no placeholder bindings; exact matches suffice.
+func (m *mockGraph) MatchesStatementPattern(stmt, pattern string) bool {
+	return stmt == pattern
+}
+
 // ArgumentConclusion: the mock's practical reasoning arguments conclude
 // should_be_performed(<id>), the others c(<id>).
 func (m *mockGraph) ArgumentConclusion(argID string) string {

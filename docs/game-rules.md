@@ -214,7 +214,20 @@ a rule of the dialogue, not a change of who proves an exception:
   which conclude any statement, are refused there as Other is (S5), and the
   board does not offer them. Arguing against the exception is not bounded,
   and an undercutter of the question's argument is kept: it concludes neither
-  the exception nor anything it presumes. An answer scheme (one that concludes
+  the exception nor anything it presumes. The bound holds by the exception's
+  form, before and without a bridge (since 2026-11-28; F1 of the external
+  review of exchange 3): a statement that matches the exception pattern of a
+  question that refuses Other is bounded whether or not a bridge on the board
+  has it as its exception, in any game whose data has the question, with or
+  without a profile, and also where no bridge in the game could take it
+  (another actor's action). So in an inquiry whose claim is the exception,
+  only expert opinion and position to know argue for the claim before any
+  bridge. Until then the bound held only at a bridge on the board, so sign
+  could make the statement In first and the bridge, made later, stood
+  defeated. S5's refusal says when it bounds by the form alone ("no bridge on
+  the board has it as its exception yet"). A game that recorded such a move
+  replays with a build of commit 6916369 or earlier, and the loader says so.
+  An answer scheme (one that concludes
   the formula of the question it answers, D094 (g)) is offered only as an
   answer, on its backup edges, never as a move of its own (S1). Since step
   C5.3's switch, negative consequences backs CQ:side_effect (D099 (1)), as

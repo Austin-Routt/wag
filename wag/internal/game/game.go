@@ -576,6 +576,11 @@ func (b *graphBridge) ExceptionMatching(argID, pattern string) string {
 	return b.gs.Adapter.ExceptionMatching(argID, pattern)
 }
 
+// MatchesStatementPattern checks the pattern without requiring a board node.
+func (b *graphBridge) MatchesStatementPattern(stmtID, pattern string) bool {
+	return b.gs.Adapter.MatchesStatementPattern(stmtID, pattern)
+}
+
 // ArgumentConclusion returns the statement ID of the argument's conclusion.
 func (b *graphBridge) ArgumentConclusion(argID string) string {
 	if arg := b.gs.Adapter.Graph.Arguments[argID]; arg != nil && arg.Conclusion != nil {

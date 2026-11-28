@@ -466,6 +466,17 @@ step applies the other four, written before the code (2026-11-28); the cases are
   a scheme that does not back the question, before the move is placed; the game's check after
   placement refuses any argument a move places that concludes the exception with such a scheme, a
   second layer as at C5.2 (A4.3).
+- **The exception's form, not its bridge** (2026-11-28, F1 of the external review of exchange 3;
+  item F's A9.8 to A9.13). Both layers first found the refusing question only at the bridges on the
+  board, so a statement of the exception's form argued with sign before any bridge became, unchecked,
+  the exception that defeats the bridge made later: a route D099 (4) bounds. Both layers, and the
+  board's offers, now match the statement against the exception pattern of every question that
+  refuses Other, whether or not a bridge is on the board. Three consequences: the bound holds for a
+  statement no bridge in the game could take (another actor's action); in an inquiry whose claim is
+  the exception, only expert opinion and position to know argue for the claim before any bridge;
+  and the bound is the data's, not the profile's (a game with no profile has it too). S5's refusal
+  says when it bounds by the form alone, and the loader names the change for a game a build of
+  6916369 or earlier recorded.
 
 **The switch's further parts** (from the independent check of this plan, W1 and Q4):
 

@@ -195,11 +195,11 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 	for i, m := range e.History {
 		rd.draw(gs, i)
 		if err := replay(gs, m); err != nil {
-			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNameless) {
+			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNameless) && !errors.Is(err, errExceptionForm) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
-			return nil, fmt.Errorf("move %d (%s): %v", i+1, m.PlayerID, err)
+			return nil, fmt.Errorf("move %d (%s): %w", i+1, m.PlayerID, err)
 		}
 	}
 	rd.draw(gs, len(e.History))
@@ -302,6 +302,16 @@ var errBridgeRetired = errors.New("it was played through a free-text bridge, whi
 // for an action or a declaration, the profile's check), with any data.
 var errNameless = errors.New("the game records a value or a name that names nothing (no letter or digit), which WAG accepted until 2026-11-26 and refuses since 2026-11-27 (S2, P1, the profile's check: docs/game-rules.md)")
 
+// errExceptionForm marks a recorded move that argued or presumed a statement
+// of a protected exception's form with a scheme that does not back its
+// question, before any bridge on the board had the statement as its
+// exception. WAG accepted it until 2026-11-28 (commit 6916369 and before),
+// when S5 looked only at the bridges on the board, and refuses it since, by
+// the exception's form (D099 (4); F1 of the external review of exchange 3),
+// with any data. S5's refusal says so (nascq.FormOnly).
+var errExceptionForm = errors.New("it argued or presumed a statement of a protected exception's form before any bridge had it as its exception, " +
+	"which WAG accepted until 2026-11-28 and refuses since, by the exception's form (S5, D099 (4): docs/game-rules.md)")
+
 // namelessRemedy says what replays a game errNameless refuses.
 func namelessRemedy(what string) error {
 	return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of 2026-11-26 or earlier can, with the scheme data the game was played with "+
@@ -391,6 +401,10 @@ func replay(gs *game.GameState, m game.Move) error {
 		}
 		if what, ok := namelessRefusal(m.Action, res.Error); ok && !played {
 			return namelessRemedy(what)
+		}
+		if !played && strings.HasPrefix(res.Error, "S5:") && strings.Contains(res.Error, nascq.FormOnly) {
+			return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of commit 6916369 or earlier can, and the export stays readable as a record",
+				errExceptionForm, strings.TrimSuffix(res.Error, nascq.FormOnly))
 		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(recorded), outcome(played), res.Error)
 	}

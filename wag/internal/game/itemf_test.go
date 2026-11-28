@@ -1061,6 +1061,100 @@ func TestItemFStepC53(t *testing.T) {
 	})
 }
 
+// A9.8 to A9.12 (docs/c5-item-f.md, written before these tests): the bound
+// by the exception's form, before any bridge (F1 of the external review of
+// exchange 3). The statement is put on the board as an inquiry's claim puts
+// it there; the server's test of A9.13 loads a game a build before this
+// change recorded.
+func TestItemFExceptionForm(t *testing.T) {
+	worthRefused := "S5: " + worthDF + " is the exception"
+	signFor := about("support", "AS:sign", worthDF, vb("A", "a_pilot_is_planned"))
+	analogyFor := about("support", "AS:analogy", worthDF, vb("C", "the_sugar_tax"))
+	otherFor := about("support", nascq.OtherSchemeID, worthDF, vb("P1", "a pilot is planned"))
+	onBoard := func(g *fgame, stmts ...string) {
+		for _, s := range stmts {
+			g.gs.Adapter.AddStatement(s, s)
+		}
+	}
+	refuseAll := func(g *fgame) {
+		t.Helper()
+		for _, a := range []nascq.ProposedAction{signFor, analogyFor, otherFor} {
+			g.refuse("Con", a, worthRefused)
+		}
+	}
+	t.Run("A9.8", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		refuseAll(g)
+	})
+	t.Run("A9.8b", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		refuseAll(g)
+		g.mPlus("demand_falls")
+		g.inForce(g.bPlus("demand_falls"))
+		g.mustNotIn(worthDF)
+	})
+	t.Run("A9.8c", func(t *testing.T) {
+		g := newFGameNoProfile(t)
+		onBoard(g, worthDF)
+		refuseAll(g)
+	})
+	t.Run("A9.9", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		g.refuse("Con", support(nascq.OtherSchemeID, vb("P1", worthDF, "C", "the decision must wait")), "S5")
+	})
+	t.Run("A9.10", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		g.play("Con", about("support", "AS:expert_opinion", worthDF, vb("W", "dr_lee", "D", "food_economics")))
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		g.mustIn(worthDF)
+		g.outOfForce(bp)
+	})
+	t.Run("A9.10b", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		g.play("Con", about("attack", "AS:sign", worthDF, vb("A", "the_decision_cannot_wait")))
+		g.mPlus("demand_falls")
+		g.inForce(g.bPlus("demand_falls"))
+	})
+	t.Run("A9.10c", func(t *testing.T) {
+		for _, stmt := range []string{"worth_finding_out_first_extra(tax_meat,demand_falls)", "worth_finding_out_first(tax_meat)",
+			"true_in_situation(worth_finding_out_first_tax_meat_demand_falls)"} {
+			g := newFGame(t)
+			onBoard(g, stmt)
+			g.play("Con", about("support", "AS:sign", stmt, vb("A", "an_observation")))
+		}
+	})
+	t.Run("A9.11", func(t *testing.T) {
+		g := newFGame(t)
+		onBoard(g, worthDF)
+		offered := map[string][]string{}
+		for _, a := range g.gs.NASCQ.EnumerateStatementActions(g.gs.Bridge(), []string{worthDF}) {
+			if a.TargetStmtID == worthDF {
+				offered[a.Type] = append(offered[a.Type], a.SchemeID)
+			}
+		}
+		sort.Strings(offered["support"])
+		sort.Strings(offered["attack"])
+		if got, want := strings.Join(offered["support"], " "), "AS:expert_opinion AS:position_to_know"; got != want {
+			t.Errorf("for the exception: %q, want %q", got, want)
+		}
+		if got, want := strings.Join(offered["attack"], " "), "AS:analogy AS:expert_opinion AS:other AS:position_to_know AS:sign"; got != want {
+			t.Errorf("against the exception: %q, want %q", got, want)
+		}
+	})
+	t.Run("A9.12", func(t *testing.T) {
+		const other = "worth_finding_out_first(farmers_strike,demand_falls)"
+		g := newFGameNoProfile(t)
+		onBoard(g, other)
+		g.refuse("Con", about("support", "AS:sign", other, vb("A", "a_pilot_is_planned")), "S5: "+other+" is the exception")
+	})
+}
+
 // B. Other and the thesis-independent schemes.
 func TestItemFOther(t *testing.T) {
 	other := func(p string) map[string]string { return vb("P1", p) }

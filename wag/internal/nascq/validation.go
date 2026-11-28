@@ -39,6 +39,11 @@ type GraphQuerier interface {
 	// need not exist yet.
 	ExceptionMatching(argID, pattern string) string
 
+	// MatchesStatementPattern tests a ground formula against a NASCQ pattern,
+	// including all placeholders, constants, arity and repeated variables.
+	// It does not depend on whether a statement or argument exists yet.
+	MatchesStatementPattern(stmtID, pattern string) bool
+
 	// PremiseIDs returns the statement IDs of the argument's premises, in
 	// order (for questions about any premise, such as those asked of the
 	// user-defined scheme).
@@ -354,11 +359,11 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 		if concl != "" {
 			if cq := n.RefusingQuestion(concl, graph); cq != "" && !n.Backs(cq, s) {
 				if s.Free {
-					return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)",
-						concl, cq, strings.Join(n.typedBackups(cq), ", "))
+					return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)%s",
+						concl, cq, strings.Join(n.typedBackups(cq), ", "), FormNote(concl, graph))
 				}
-				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s",
-					concl, cq, strings.Join(n.typedBackups(cq), ", "))
+				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s%s",
+					concl, cq, strings.Join(n.typedBackups(cq), ", "), FormNote(concl, graph))
 			}
 		}
 	}
@@ -366,17 +371,34 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 	return va, nil
 }
 
+// FormOnly ends S5's refusal of a statement that no argument on the board has
+// as its exception yet: S5 bounds the exception by its form, before and
+// without a bridge (D099 (4); since 2026-11-28, F1 of the external review of
+// exchange 3). The loader names that change by it.
+const FormOnly = "; no bridge on the board has it as its exception yet: S5 bounds it by its form (D099 (4))"
+
+// FormNote returns FormOnly when no argument on the board has stmt as its
+// exception, and "" when one does.
+func FormNote(stmt string, graph GraphQuerier) string {
+	if len(graph.Statement(stmt).ExceptionOf) == 0 {
+		return FormOnly
+	}
+	return ""
+}
+
 // RefusingQuestion returns the question that refuses Other (D095 (3)) and
-// is asked at the exception stmt of an argument on the board, or "".
+// whose exception pattern matches stmt in the loaded profile, or "". This
+// depends on the profile, not on which arguments have been played: otherwise
+// a prohibited argument or presumption could be made before a bridge and
+// become its exception once the bridge was played (D099 (4)).
 func (n *NASCQ) RefusingQuestion(stmt string, graph GraphQuerier) string {
-	for _, argID := range graph.Statement(stmt).ExceptionOf {
-		sid := graph.ArgumentSchemeID(argID)
+	for _, sid := range sortedSchemeIDs(n.Schemes) {
 		for _, cqID := range n.askIndex[sid] {
 			cq := n.Questions[cqID]
 			if cq == nil || !cq.RefuseOther {
 				continue
 			}
-			if l := n.LocusOf(cqID, sid); l.Kind == LocusException && graph.ExceptionMatching(argID, l.Pattern) == stmt {
+			if l := n.LocusOf(cqID, sid); l.Kind == LocusException && graph.MatchesStatementPattern(stmt, l.Pattern) {
 				return cqID
 			}
 		}

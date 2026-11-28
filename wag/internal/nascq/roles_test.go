@@ -76,6 +76,9 @@ func (rolesGraph) ExceptionMatching(argID, pattern string) string {
 	}
 	return strings.NewReplacer("{A}", "tax", "{G}", "g").Replace(pattern)
 }
+func (rolesGraph) MatchesStatementPattern(stmt, pattern string) bool {
+	return stmt == strings.NewReplacer("{A}", "tax", "{G}", "g").Replace(pattern)
+}
 func (rolesGraph) ArgumentConclusion(argID string) string { return "should_be_performed(tax)" }
 func (rolesGraph) Statement(stmtID string) StatementInfo {
 	info := StatementInfo{Exists: true, Premise: true, Opposite: "¬" + stmtID}
