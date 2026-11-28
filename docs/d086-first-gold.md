@@ -395,6 +395,20 @@ the code):
 | PC2 | The same template in a proposal not applied | No such error: it proposes the template |
 | PC3 | Every committed applied proposal | No such error (`TestCommittedProposals`) |
 
+The independent review of D096's application (written before their tests and the code):
+
+| Case | Setup | Expected |
+|---|---|---|
+| RC16 | The replay: a claim whose statement is a negation (¬S), with an instance by the discussion concluding S | Played as an argument for S (support S), by the side opposite the claim's: the move follows the instance's own conclusion |
+| RC17 | The replay: an instance by the discussion concluding neither its claim's statement nor its negation | Not played; the report says why (R20 refuses it in a gold) |
+| RC18 | An instance by the discussion whose inferred premise cites another claim at which a reconstruction is recorded, for a formula only that reconstruction has | Refused (R20), as for any other instance |
+| RC19 | The only target at an instance by the discussion is its own claim's | Refused (R20): another item must target it |
+| RC20 | The replay: a fragment whose own Other move the game refuses, and a denial of the premise it backs | The denial is made in the argument the fragment backs, as when the fragment's move is accepted (RC14) |
+| RC21 | A formula with a character Go's `strings.Fields` does not take for space (U+001C) | Refused by `validate.py`, as by the Go check: both read the same characters as space |
+| CT1-CT5 | The Go check (format 2) on an inferred premise whose `cite` is missing, null, a number, the claim itself, or a claim the dataset does not list | Refused (R19), as `validate.py` refuses it |
+| CT6-CT8 | The same, citing a claim of the batch, a claim of a claim's context (a sibling the dataset lists), or a known claim that does not say the premise | Accepted: the check is of the cited identity, not of what the claim says |
+| CT9 | A format-1 file with the same premise | No R19: format 1 keeps the rules it was made with |
+
 Decision D098 (OC6 and OC10; rule cases in `rule-cases.yml`, added with the recode that applies it):
 OC6-e, 13292.202, a mitigation at the conclusion of the argument that cites the harm, the starvation
 argument 13292.127#2; OC6-f, 13292.45, an amended action at the conclusion of the consequence
