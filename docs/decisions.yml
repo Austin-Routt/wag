@@ -2934,6 +2934,125 @@ decisions:
   status: open
   docs: ["docs/c5-game.md, C5.3 (P5's scope)", "docs/c5-item-f.md, A8", "docs/candidates.yml C027"]
 
+- id: D104
+  title: The exceptional case names its rule and its case
+  question: >-
+    walton.yml's exceptional (the book's 56, p. 344) concludes rule_waived(A) from rule_can_waived(X) and case_exception(A): X and A are unrelated and the rule is unnamed, so an exceptional case waives no rule in particular. The book's 56 and its source (Walton 1995, p. 147) bind the case to the rule it is an exception to. Should the scheme bind them?
+  category: scheme
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: exceptional binds the rule R and the case X in every formula: the case is an exception to that rule, which can be waived in that case.
+    recorded: "to apply: proposal D019-D020-D024-D026, after an independent review and after the owner's verdicts of exchange 3 are imported (walton.yml is an input every verdict records)"
+
+- id: D105
+  title: The regulative rule's addressee and its excuse
+  question: >-
+    walton.yml's regulative_rule (55.3, pp. 343-344) concludes must_do(A,X), but A occurs only in the conclusion, and its exception, excuse, names neither the agent nor the act. Should the rule name its addressee and scope its excuse?
+  category: scheme
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: regulative_rule states that the agent is subject to the rule, addressee_of(A,X), and its exception names the agent and the act, excuse_or_overriding_duty(A,X), as the schemes library has them; the 0-ary excuse goes.
+    recorded: "to apply: proposal D019-D020-D024-D026, after an independent review and after the owner's verdicts of exchange 3 are imported (walton.yml is an input every verdict records)"
+
+- id: D106
+  title: One mapping for 55.1's first question
+  question: >-
+    55.1's first question (does the rule require acts of a type that includes this one) targets has_conclusion(R,C) and applicable(R) in established_rule's catalogue entry, and applicable(R) alone in links.json. Which mapping holds?
+  category: scheme
+  blocks: [annotation]
+  decider: owner
+  priority: 3
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Both formulas, as the catalogue entry has them: links.json's 55.1 maps CQ1 to has_conclusion(R,C) and applicable(R).
+    recorded: "to apply: proposal D019-D020-D024-D026, after an independent review and after the owner's verdicts of exchange 3 are imported (walton.yml is an input every verdict records)"
+
+- id: D107
+  title: The rule schemes' places typed
+  question: >-
+    The rule schemes' agent and action places are not recorded in positions.json, so the checks of actors and actions (R14) cannot read them. Should they be recorded?
+  category: scheme
+  blocks: [annotation]
+  decider: owner
+  priority: 3
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: established_rule_actor's P and A and regulative_rule's A and X are recorded (positions.json), so R14 reads them.
+    recorded: "to apply: proposal D019-D020-D024-D026, after an independent review and after the owner's verdicts of exchange 3 are imported (walton.yml is an input every verdict records)"
+
+- id: D108
+  title: From the exceptional case to the established rule's exception
+  question: >-
+    An argument that a case is exceptional (56) is the natural answer to 55.1's third question, whether the case is an exception to the rule, but nothing links its conclusion to the established rule's exception rule_exception_or_excuse(R,C) (D024). Should an answer route link them?
+  category: scheme
+  blocks: [annotation, game]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: an answer route links the exceptional case's conclusion to the established rule's exception, so that a claim of an exceptional case can answer 55.1's third question by the book's 56; its form (a bridge scheme or an answer form) is the proposal's.
+    recorded: "to apply: proposal D019-D020-D024-D026, after an independent review and after the owner's verdicts of exchange 3 are imported (walton.yml is an input every verdict records)"
+
+- id: D109
+  title: The replay keeps a rule instance's formulas
+  question: >-
+    A claim coded with a scheme the game lacks is played with Other, and the replay plays its text, not its formula, where the instance states one: 13292.46, coded with rule, becomes a new Other argument with a text conclusion and loses its formulas (wag-report.json). Should the replay keep them?
+  category: annotation
+  blocks: [annotation]
+  decider: owner
+  priority: 2
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: a claim coded with a scheme the game lacks is played with Other, its conclusion the instance's formula where the instance states one, not its text.
+    recorded: "to apply: to_wag.py, with its tests, beside proposal D019-D020-D024-D026's recode of 13292.46 and .29, after the owner's verdicts of exchange 3 are imported"
+
+- id: D110
+  title: Carneades' preference weighing
+  question: >-
+    The engine's preference weighing (carneades-4/src/engine/caes/weighing.go) sorts by the schemes' metadata but groups by the arguments', lets a decisive category comparison fall through to the next property, and prints debug output. The game does not use it (every game argument is weighed by a constant). Should it be fixed?
+  category: project
+  blocks: [play]
+  decider: owner
+  priority: 3
+  status: decided
+  docs: ["wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1, §4 item 6", "wag-workspace verify/rule-family/DESIGN.md"]
+  decided:
+    date: "2026-11-28"
+    by: "owner (standing rule of 2026-11-22), on ChatGPT's review of argument by rule (2026-11-27, wag-workspace reviews/2026-11-27), checked and agreed by the developer (wag-workspace verify/chatgpt-rule-2026-11-27/REVIEW.md §1 and §4 item 6)"
+    decision: >-
+      Yes: the weighing sorts and groups by the same metadata, a decisive comparison stops the comparison, the debug print goes, and missing or unknown metadata has a stated rule; a local patch with tests, meant for the schemes library too.
+    recorded: "to apply: a local patch to WAG's copy of the engine with its tests (CARNEADES_FORK.md, local patches), offered to the schemes library; the game does not use it"
+
 # --- Decided ------------------------------------------------------------------
 
 - id: D052
