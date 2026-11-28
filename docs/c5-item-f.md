@@ -532,6 +532,30 @@ unchanged) change nothing; NK5 (an operator's opposite written `¬p && q`) and N
 "none" in Python, "" in Go, which `validate.py` refuses) are from before; NK7: game-rules.md says what
 `wag-llm --replay` does with a recorded move the form bound now refuses.
 
+Added 2026-11-28, before their tests and the code, from the independent check of L and K2 (the
+workspace's verify/x3-fixes/review-l/REVIEW-l.md, W3 and N4, each checked against the code). K2 made the
+named error's remedies true for every data; the loader's other remedies still promised more than they
+hold. A game played on data with a question that refuses Other, whose moves this server's data (without
+one) replays, was refused as other data with "start the server with --data on the data of that version
+to replay it exactly", though this build on that data refuses the move (A9.13d); the remedy for a move
+that fails on other data for another reason promised the same; a record whose export names no data was
+said to be "played with other scheme data"; and the remedy for a reserved claim named f38d189, a build
+that bounds a protected exception by its form. A test that told the named error apart from S5's other
+refusals was missing (the check's planted defect RL-K2 survived).
+
+| Case | Setup | Expected |
+|---|---|---|
+| A9.13f | the game a build of 6916369 recorded on `092b6a6f48a672d2` (A9.13d's), loaded by this build on `afd3335a23f12f41`, where every move replays | refused as other data (`OtherDataError`), its remedy saying when `--data` replays it: this build on that data replays it unless a move argues a protected exception by its form where that data's question about it refuses Other, and a WAG build of commit 6916369 or earlier replays that; or open it read-only |
+| A9.13g | a move that this server's data refuses for another reason than the form, in a game played on other data | its `--data` remedy with the same condition |
+| A9.13h | A9.13d's game with its `data_sha256` taken out (a record whose export names no data), loaded on its own data; and the same with a move this data refuses for another reason | the message says that the export does not record the data it was played with, not that it was other data; its remedies are those of A9.13c and A9.13g, which hold whatever that data was |
+| A9.13i | a recorded game whose claim is in the engine's undercutter namespace (U1's), loaded | the reserved claim's remedy names commit f38d189 or earlier, and 6916369 or earlier for a game that also argues a protected exception by its form where its data's question refuses Other |
+| A9.13j | a recorded game on this server's data with a move S5 refuses when a bridge already has the statement as its exception (not by its form alone) | the move's own refusal, not A9.13's named error |
+| N6 | `docs/game-rules.md` | names the command `wag-llm replay TRACE.jsonl`, not `wag-llm --replay` |
+
+Planted for them: `OtherDataError`'s old remedy (A9.13f); the generic remedy without the condition
+(A9.13g); "played with other scheme data" for a record that names none (A9.13h); the reserved claim's
+remedy without 6916369 (A9.13i); the named error for any S5 refusal (A9.13j, the check's RL-K2).
+
 ## Not here
 
 - Replay-1, the 33 reference games on the frozen data (TestReferenceDigests), and Replay-2, the new

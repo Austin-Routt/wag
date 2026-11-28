@@ -590,6 +590,85 @@ fixture.
 choosing the claims a run reviews and in a run's count of disagreements, a run recorded before
 included when it is read again (annotation-records.md §11).
 
+Added 2026-11-28, before their tests and the code, from the independent check of L and K2 (the
+workspace's verify/x3-fixes/review-l/REVIEW-l.md: one error, six warnings, eight notes, each checked
+against the code before it was acted on), and from the parity gap the external review of exchange 3
+tracked under F4 (a target part's letter case), which is one of a kind. None is to change a figure of
+the batch: `agreement.json` and the replay's counts are to stay as they are.
+
+**The thesis (E1, N8).** Go read the discussion's `thesis_claim_id` through a struct, so in any case,
+the Kelvin sign and the long s folded, the last of two spellings read; it found the thesis by that
+name, and with none it made no check of R16's thesis rule. `validate.py` never read the name: it took
+any claim whose `kialo_parents` is `[]` for a thesis. Both now read the name as written, and keep the
+two readings one, so that each finds the same thesis:
+
+| Case | Setup | Expected |
+|---|---|---|
+| SC17 | Both tools on an `items.json` whose discussion gives `thesis_claim_id` and `Thesis_Claim_Id`, naming two claims | Refused by both, one line: another spelling of `thesis_claim_id` |
+| SC18 | Both tools on an `items.json` whose discussion gives only `THESIS_CLAIM_ID`, or only `theſis_claim_id`, naming 13292.1; one whose discussion is a text or a list; one whose `thesis_claim_id` is a number | Refused by both, one line each: the first two name no thesis as written (13292.1, whose `kialo_parents` is `[]`, is then refused by SC19); the discussion is not an object; its `thesis_claim_id` is not a text |
+| SC19 | Both tools on an `items.json` in which a claim other than the thesis the discussion names has `kialo_parents` `[]` (13292.115); and one whose discussion names as its thesis a claim with a Kialo parent | Refused by both, one line: a claim with no Kialo parent (`[]`) is the thesis the discussion names, and the thesis it names, where it gives its parents, has none. Before, `validate.py` took 13292.115 for a second thesis (R16), and Go took the named claim for the thesis and reported 13292.115 by R7 (SC14) |
+| SC20 | `validate.py` on an `items.json` whose discussion names no thesis (`thesis_claim_id` absent, null or blank, or no discussion); Go reading a dataset whose discussion names none and whose claims give no `kialo_parents` (a dataset not made from Kialo, as EthiX's) | `validate.py`: refused, one line, since it reads only batches made from Kialo, whose import names the thesis. Go: read, as before: no claim is known to be the thesis, so R16's thesis rule is not checked. Both tools find the thesis by the name the discussion gives it; SC19 makes that the claim `validate.py`'s R16 found by its `[]` |
+
+SC14 stays: Go's R7 still reports a claim that is not the thesis, whose `kialo_parents` is null or
+absent (which Go reads as none) and whose record names a Kialo parent; a `[]` there is now refused when
+the dataset is read (SC19), before R7.
+
+**JSON outside strings (W1, N1).** d5c613b's reader for nesting deeper than Python's C reader goes,
+Python's pure-Python reader, reads a number with `\d` in Python 3.11 and 3.12 (CI's), so `1٢` (U+0662)
+after such nesting was read as 12, where Go refuses the file; and `nesting()`'s regular expression
+took a time that grew with the square of an unterminated string full of `\"`.
+
+| Case | Setup | Expected |
+|---|---|---|
+| SC21 | `validate.py` under Python 3.11, 3.12 and 3.13 on an `items.json` with a character that is not ASCII outside its strings: `1٢` after nesting 1,000 and 9,999 deep, U+00A0 between two tokens, a byte-order mark at its start | Refused, one line, on every Python, as Go refuses each (JSON has no character outside its strings that is not ASCII) |
+| SC22 | `validate.py` on an `items.json` that is one unterminated string of 128 KB of `\"`; and on one whose text holds `\"` and then 10,001 `[` | The first refused within a second (one pass over the text; before, about a minute), one line; the second read: a bracket in a text is no nesting, after an escaped quote too |
+
+**Ids and digests read whole (W2).** `agreement.py`'s and `validate.py`'s instance id,
+`^(.+)#([1-9][0-9]*)$` read with `re.match`, matched `13292.1#2\n`, since Python's `$` also matches before
+a final newline; Go's `$` does not. `verify_gold.py` read a rounds entry's `agreed_rev` so too.
+
+| Case | Setup | Expected |
+|---|---|---|
+| SC23 | `validate.py` and Go on a gold whose instance id `13292.1#2` is written `13292.1#2\n` in all its places; `agreement.py` on items targeting it; `verify_gold.py` on a rounds entry whose `agreed_rev` ends in a newline | Refused by `validate.py` (R12, R13) as by Go; `agreement.py`'s target fields the same as Go's (TS11); `verify_gold.py` refuses the entry. Each pattern reads the whole text |
+
+**The replay's ids (W4, N5).** T21 compares formulas without Go's whitespace, but the replay still took
+only U+0020 out of the statement and premise ids it sends, which the game looks up as written.
+
+| Case | Setup | Expected |
+|---|---|---|
+| T25 | `to_wag.py` on a gold that `validate.py` accepts, whose target formula of 13292.204, a premise's formula targeted by a claim, and the thesis's conclusion each hold a tab, U+00A0 or U+3000 | Each id is sent without Go's whitespace, as `norm` compares it, and played as without it: 13292.204 `as_intended` (before, the game refused it, S7, and the row was `not_played`) |
+| T26 | The game schemes WAG's data gives the replay (`/api/meta`, read from `wag/data/nascq/schemes.json`) | None has `carneades_id` `other`: so the first route the replay tries for a claim coded `other` is Other, and a row labelled `conclusion_changed` is its first route's move (T24's correction rests on this) |
+
+**Every agreement field on every shape (F4's tracked gap; N2's RL-A1 and RL-A4).** F4's tracked gap, a
+target part's letter case, is one of a kind: on a value that is not a text, an empty text, the text
+`none` beside an absent value, or a field that is not an object where an object is read, the two tools
+read the plain fields differently (Go wrote any value with `fmt.Sprint` and an absent one as `""`;
+`agreement.py` wrote `none` for an absent value and for any value Python reads as false, kept a number
+as a number, lowercased a part and matched its prefix, read `argument` as `inference`, and raised on a
+role, target, evidence or scheme that is not an object); a binding that is a number, `true` or a list
+was written by each its own way.
+
+| Case | Setup | Expected |
+|---|---|---|
+| TS11 | The Go measure and `agreement.py`, every field, on items whose `scheme.walton_id`, `scheme.fit`, `role.kind`, `role.polarity`, `role.cq`, `target.actual.claim`, `target.actual.part`, `evidence.status` and a binding of the primary are each absent, null, true, 0, 3, 1.5, `""`, `"none"`, `"x"`, a list or an object; whose `role`, `target`, `target.actual`, `evidence`, primary `scheme` and primary `bindings` are each null, a text, a number or a list; whose part is `Premise`, ` premise`, `premise: f(x)`, `premise(x)`, `premises` or `argument`; with two instances marked primary; with a target formula written with spaces inside and at its ends; and on the gold and the batch's two annotators | The same value in every field, from both tools, and no exception. A plain field (scheme, fit, role, polarity, target claim, evidence) is its text as written; any other value, and `""`, is `none` in both. A part is cut at its first `:` or `(` and trimmed of Go's whitespace, its case kept; no file of the batch has another part than the four. A binding that is not a text, null or a marker leaves the bindings unresolved. The primary is the first instance marked primary. `agreement.json` regenerates byte for byte, and the Go figures equal it |
+
+**Annotation files (N3).** Go read an annotation file's `items` and `format` through a struct, in any
+case; `validate.py`, `agreement.py` and `to_wag.py` read the gold and the annotators' files with
+`json.load`, which reads a member given twice, `NaN` and `1e400`, which Go refuses, and `agreement.py`
+raised writing a lone surrogate and stopped with a traceback on a lone `Items`.
+
+| Case | Setup | Expected |
+|---|---|---|
+| AN1 | Go reading an annotation file whose `items` is spelt `Items`, alone; and one whose `format` is spelt `FORMAT`, alone | Read by their names as written, as `items.json` is (SC12): a lone `Items` is no items (refused); a lone `FORMAT` names no format (format 1) |
+| AN2 | `validate.py` on a gold, and `agreement.py` and `to_wag.py` on an annotator's file, each with a member given twice, `NaN`, nesting deeper than 10,000, a lone surrogate escape, a character not ASCII outside its strings, and a lone `Items` | Read as Go reads it, by one reader the three scripts share (SC15, SC21): refused, one line naming the file, no traceback; a lone surrogate read as U+FFFD |
+
+**The rest.** SC13's second setup is a Kialo parent entry, as the case says (it was tested with a
+sibling entry); the README's sentence on the rows not compared is corrected (W5: a challenge has no
+`conclusion_preserved`; null are the three new Other arguments, 13292.14, .46 and .61, and the four
+whose annotated conclusion is unstated, 13292.108, .6, .11 and .218; 13292.29 concludes the negation of
+its target, which it attacks); and two comments say what Python's C reader reads (N7: about 9,997 levels
+in 3.12, 9,998 in 3.13). W6 (the gate ran only the default Python) was done with d5c613b.
+
 ## 7. Out of this plan
 
 Batch 2 recoded under the guidelines' version 4 (plan §4, item 2), other discussions and the probe set
