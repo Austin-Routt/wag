@@ -56,10 +56,61 @@ if not F2 and os.path.exists(DOC + 'format1/walton.yml'):
     WALTON_PATH = DOC + 'format1/walton.yml'
 lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
 # items.json is checked whole before any rule reads it (source_errors, below).
+LONE_SURROGATE = re.compile('[\ud800-\udfff]')
+
+
+def go_json(raw):
+    """items.json read as Go reads it (checkedJSON, wag/internal/annotate/json_check.go; cases SC15 and
+    SC16, the independent check of F3, F5 and F6). Refused, with its reason: a file that is not UTF-8;
+    one that is not JSON (NaN and Infinity are not); a member given twice in one object; nesting deeper
+    than Python's reader goes, 9,998 (Go reads 10,000; an items.json is five deep). Read: a number of any
+    length, and a lone surrogate escape as U+FFFD, as Go reads it, so that two names, or two ids, that
+    differ only there are one name, or one id, given twice."""
+    def once(pairs):
+        obj = {}
+        for k, v in pairs:
+            k = LONE_SURROGATE.sub('\ufffd', k)
+            if k in obj:
+                raise ValueError(f'gives the member {k!r} twice in one object')
+            obj[k] = v
+        return obj
+
+    def no_constant(name):
+        raise ValueError(f'is not JSON ({name} is not a JSON value)')
+
+    def fffd(doc):
+        """The strings the object hook does not see, values and those in lists, walked without
+        recursion: a file nested 9,998 deep is read, not refused with a traceback."""
+        if isinstance(doc, str):
+            return LONE_SURROGATE.sub('\ufffd', doc)
+        stack = [doc] if isinstance(doc, (dict, list)) else []
+        while stack:
+            v = stack.pop()
+            for k, x in list(v.items() if isinstance(v, dict) else enumerate(v)):
+                if isinstance(x, str):
+                    v[k] = LONE_SURROGATE.sub('\ufffd', x)
+                elif isinstance(x, (dict, list)):
+                    stack.append(x)
+        return doc
+    try:
+        text = raw.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ValueError('is not UTF-8')
+    try:
+        doc = json.loads(text, object_pairs_hook=once, parse_constant=no_constant,
+                         parse_int=lambda t: int(t) if len(t) <= 4000 else float(t))
+    except json.JSONDecodeError as e:
+        raise ValueError(f'is not JSON ({e})')
+    except RecursionError:
+        raise ValueError('is nested deeper than it can be read')
+    return fffd(doc)
+
+
 try:
-    ITEMS_DOC = json.load(open(ITEMS, encoding='utf-8'))
+    with open(ITEMS, 'rb') as fh:
+        ITEMS_DOC = go_json(fh.read())
 except ValueError as e:
-    print(f'ERRORS (1):\nitems.json: is not JSON ({e})'); sys.exit(1)
+    print(f'ERRORS (1):\nitems.json: {e}'); sys.exit(1)
 WALTON = yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))
 W = {s['id']: s for s in WALTON['argument_schemes']}
 # walton.yml's predicates of no argument (sign's more_reliable/0): a formula,
@@ -170,6 +221,22 @@ def source_errors(doc):
     where given and not null; kialo_parents a list (the thesis has []) of objects with a text
     claim_id and relation, which R7 reads, and which finds the thesis by its empty list. An entry
     of ancestors, siblings or children that is not a claim is R19's to skip (CT16), not refused."""
+    def spellings(obj, names):
+        """Two spellings of one of these members in one object, as Go's canonicalNames refuses them
+        (case SC12): the one written as named would be read, the other not. A spelling is a name
+        strings.EqualFold matches: rune by rune, an ASCII letter in either case, and K (U+212A) and
+        ſ (U+017F), the only other runes Go folds to an ASCII letter (not ß to ss, as casefold does)."""
+        def go_fold(key, name):
+            return len(key) == len(name) and all(
+                {'\u212a': 'k', '\u017f': 's'}.get(c, c.lower() if 'A' <= c <= 'Z' else c) == n
+                for c, n in zip(key, name))
+        for name in names:
+            spelt = sorted(k for k in obj if go_fold(k, name))
+            if len(spelt) > 1:
+                return f'member {spelt[0] if spelt[0] != name else spelt[1]!r} is another spelling of {name!r}'
+        return None
+    if isinstance(doc, dict) and spellings(doc, ('discussion', 'items')):
+        return [f'items.json: {spellings(doc, ("discussion", "items"))}']
     its = doc.get('items') if isinstance(doc, dict) else None
     if not isinstance(its, list) or not all(isinstance(i, dict) for i in its):
         return ['items.json: its items are not a list of objects']
@@ -178,6 +245,9 @@ def source_errors(doc):
         cid = it.get('kialo_claim_id')
         if not isinstance(cid, str) or cid.strip(GO_SPACE) == '':
             out.append(f'items.json: item {n} has no kialo_claim_id'); continue
+        two = spellings(it, ('kialo_claim_id', 'text'))
+        if two:
+            out.append(f'items.json: item {n}: {two}'); continue
         if cid in seen:
             out.append(f'items.json: two items are {cid}'); continue
         seen.add(cid)

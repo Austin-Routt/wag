@@ -170,12 +170,13 @@ func TestReportSaysWhatIsUnsaved(t *testing.T) {
 	}
 }
 
-// One spelling of a field, however it is spelt, is not ambiguous: it loads.
+// One spelling of a field of dataset.json, however it is spelt, is not
+// ambiguous: it loads. items.json is read by its names as written, as
+// validate.py reads it (case SC12, the independent check of F3, F5 and F6),
+// so a lone Items or Text there is not read (TestSC12ItemsNamesAsWritten).
 func TestALoneSpellingLoads(t *testing.T) {
 	for name, files := range map[string]map[string]string{
-		"items.json {Items}":  {"items.json": `{"Items": [{"kialo_claim_id": "1.2", "text": "Meat is bad for the climate."}]}`},
 		"dataset.json {Name}": {"dataset.json": `{"Name": "My dataset"}`, "items.json": `{"items": [{"kialo_claim_id": "1.2", "text": "Meat is bad for the climate."}]}`},
-		"item {Text}":         {"items.json": `{"items": [{"kialo_claim_id": "1.2", "Text": "Meat is bad for the climate."}]}`},
 	} {
 		d, err := FromDir(dataset(t, files))
 		if err != nil {

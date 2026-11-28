@@ -134,9 +134,11 @@ func TestSC10AClaimHasAText(t *testing.T) {
 			t.Errorf("text = %#v: %v, want %q", v, err, want)
 		}
 	}
-	// The lone spelling Text is read as the text (TestALoneSpellingLoads).
-	d, err := contextDataset(t, map[string]any{"text": absentField, "Text": "B."})
-	if err != nil || d.Items[1].Text != "B." {
-		t.Errorf("Text: %v %+v", err, d)
+	// The lone spelling Text is not the text: items.json is read by its names
+	// as written, as validate.py reads it (case SC12, which corrects SC10's
+	// last case, the independent check of F3, F5 and F6).
+	if _, err := contextDataset(t, map[string]any{"text": absentField, "Text": "B."}); err == nil ||
+		err.Error() != "items.json: item 2 (1.2) has no text" {
+		t.Errorf("Text: %v", err)
 	}
 }

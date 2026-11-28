@@ -189,27 +189,30 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	}
 	d.setHash(m.Items, b)
 	d.annotationFiles[m.Items] = true
-	var in struct {
-		Discussion json.RawMessage   `json:"discussion"`
-		Items      []json.RawMessage `json:"items"`
-	}
-	if err := checkedJSON(b, &in); err != nil {
+	// items.json is read by its names as written, as validate.py reads it
+	// (cases SC11 and SC12, the independent check of F3, F5 and F6): Go's
+	// structs matched any case of a name, and read null and {} as no items.
+	var top map[string]json.RawMessage
+	if err := checkedJSON(b, &top); err != nil {
 		return nil, fmt.Errorf("%s: %v", m.Items, err)
 	}
+	// Two spellings of one member stay refused (the ingestion review): read
+	// by its name as written, the other spelling would be silently unread.
 	if err := canonicalNames(b, []string{"discussion", "items"}); err != nil {
 		return nil, fmt.Errorf("%s: %v", m.Items, err)
 	}
-	d.Discussion = in.Discussion
+	var items []json.RawMessage
+	if raw, ok := top["items"]; !ok || bytes.Equal(bytes.TrimSpace(raw), []byte("null")) || json.Unmarshal(raw, &items) != nil {
+		return nil, fmt.Errorf("%s: its items are not a list of objects", m.Items)
+	}
+	d.Discussion = top["discussion"]
 	seen := map[string]bool{}
-	for i, raw := range in.Items {
-		var it struct {
-			ID   json.RawMessage `json:"kialo_claim_id"`
-			Text json.RawMessage `json:"text"`
-		}
+	for i, raw := range items {
+		var it map[string]json.RawMessage
 		// The same rule as an annotation file's (parseAnnotations): an ID of
 		// spaces is no ID, so a run never refuses claims it was given.
 		var id, text string
-		if err := json.Unmarshal(raw, &it); err != nil || !isText(it.ID, &id) || strings.TrimSpace(id) == "" {
+		if err := json.Unmarshal(raw, &it); err != nil || !isText(it["kialo_claim_id"], &id) || strings.TrimSpace(id) == "" {
 			return nil, fmt.Errorf("%s: item %d has no kialo_claim_id", m.Items, i+1)
 		}
 		if err := canonicalNames(raw, []string{"kialo_claim_id", "text"}); err != nil {
@@ -223,7 +226,7 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 		// external review of exchange 3, cases SC7-SC10): before, an absent
 		// text was read as empty, a malformed context field was skipped, and
 		// R7 skipped a claim whose parents it could not read.
-		if !isText(it.Text, &text) {
+		if !isText(it["text"], &text) {
 			return nil, fmt.Errorf("%s: item %d (%s) has no text", m.Items, i+1, id)
 		}
 		if err := checkContext(raw); err != nil {

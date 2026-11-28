@@ -46,17 +46,28 @@ format it was made in (`run.json`, `settings.format`); a run made before this co
 format 1, so its annotations are checked as they were made.
 
 `items.json` is read whole before any rule reads it (since the external review of exchange 3, F5;
-cases SC1-SC10 in `docs/d086-first-gold.md` §6): its `items` are a list of objects, each with a
+cases SC1-SC16 in `docs/d086-first-gold.md` §6): its `items` are a list of objects, each with a
 `kialo_claim_id` (a text, not blank, used once) and a `text` (a text); a claim's context,
 `kialo_parents`, `ancestors`, `siblings` and `children`, is lists where given and not null; and each
 entry of `kialo_parents` is an object with a text `claim_id` and `relation`, which R7 reads. Any
 other shape is refused with its claim and field named, by `validate.py` and when Go reads the
-dataset, both reading the context's names as written (Go reads a lone `Text` as the text, as
-`TestALoneSpellingLoads` has it). An entry of `ancestors`, `siblings` or `children` that
-is not a claim (an object with a text `claim_id`) is skipped and the others kept (R19, case CT16).
-`validate.py` also refuses a claim whose `kialo_parents` is absent or null, since it finds the
-thesis by its empty list (`[]`); Go reads such a claim as having no Kialo parent, as a dataset not
-made from Kialo has none.
+dataset. Both read its names as written, the context's (R7 and R19 alike) and the items' (since
+2026-11-28, cases SC11-SC14: Go read `items`, `kialo_claim_id` and `text` in any case, and `null`
+and `{}` as no items, and its R19 read a context entry's `claim_id` in any case), and both refuse
+two spellings of `items`, `discussion`, `kialo_claim_id` or `text` in one object, the spellings Go's
+`strings.EqualFold` matches (any case, the Kelvin sign as k and ſ as s; ß is not ss). Both read its
+JSON as Go reads it (SC15, SC16): UTF-8, no member given twice in one object, no NaN or Infinity, a
+number of any length, a lone surrogate escape read as U+FFFD (so two ids that differ only there are
+one id given twice); an id is blank when Go's `strings.TrimSpace` leaves nothing of it (U+00A0 or
+U+3000 alone is blank, U+001C is not), and is otherwise used as written (`" 13292.1"` and
+`"13292.1"` are two ids). `validate.py` refuses nesting deeper than Python's reader goes, 9,998
+levels, where Go reads 10,000 (an `items.json` is five deep). An entry of `ancestors`, `siblings`
+or `children` that is not a claim (an object with a text `claim_id`) is skipped and the others kept
+(R19, case CT16). `validate.py` also refuses a claim whose `kialo_parents` is absent or null, since
+it finds the thesis by its empty list (`[]`); Go reads such a claim as having no Kialo parent, as a
+dataset not made from Kialo has none, and its R7 then reports a claim other than the thesis whose
+record names a Kialo parent that `items.json` does not give (SC14). `dataset.json`, which only Go
+reads, keeps its lone spellings (`TestALoneSpellingLoads`).
 
 The typing of predicate positions (which argument of a predicate is an agent and which an action,
 §3) is `wag/data/annotation/positions.json`, until the catalogue types each scheme's variables
@@ -322,7 +333,14 @@ in Go; validate.py refuses such an id, so no gold has one); and a formula's name
 of Go's whitespace only, U+001C to U+001F kept (`split_formula`, as Go's `splitFormula`; Python's own
 trim would take them off). Cases: AG1, one file's `walton_id` `" analogy"` (and `"analogy\u001c"`)
 and the other's `analogy` disagree in `scheme`, in agreement.py as in Go; AG2, `split_formula` on
-`p( a\u001c , b\u00a0)` gives `p` and `a\u001c`, `b`, as Go's `splitFormula` does.
+`p( a\u001c , b\u00a0)` gives `p` and `a\u001c`, `b`, as Go's `splitFormula` does. An instance's premises
+and a claim's instances are read as Go reads them too (cases TS8-TS10, from the independent check of
+F3, F5 and F6): premises or instances that are not a list are none (agreement.py read a text as its
+characters, and a number raised); an entry of the instances that is not an object is an instance of
+no scheme and no conclusion; and the primary instance is the first object whose `primary` is the
+boolean true, else the first object (agreement.py took a later one whose `primary` was `"true"` or
+1). `TestTS9ParityWithPythonOnEveryShape` compares the two on every such shape and on every item of
+the format-2 gold.
 
 These fields are also the ones a run compares to decide which claims the reviewer reviews (*Review
 the disagreements*): a claim whose annotations differ in their exact target or bindings is reviewed,
@@ -334,7 +352,11 @@ and the bindings. The reviewer adjudicates each claim in a call of its own, and 
 instance as the annotation it follows does, which its adjudication of the target claim may not
 follow. Its targets are read in its adjudications: a primary target (`<claim>#1` in every
 annotator's numbering) as such, a target at a secondary instance as unresolved, and a target in a
-claim it did not review as unresolved too.
+claim it did not review as unresolved too. Since 2026-11-28 `target_instance_v2` is one of these
+fields (F6), so a claim whose two annotations name one secondary target by its signature and
+differ in its structure, or one of which leaves a premise of it unresolved, is reviewed, and
+counted as a disagreement in a run's status, a run recorded before included when it is read again
+(N1 of the independent check of F3, F5 and F6).
 
 ## 12. Limits
 

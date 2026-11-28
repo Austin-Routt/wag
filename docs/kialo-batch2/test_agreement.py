@@ -280,6 +280,49 @@ class StructuralTarget(unittest.TestCase):
         self.assertIn("target_instance_v2", ag.RELATION_FIELDS)
 
 
+class MalformedShapes(unittest.TestCase):
+    """Cases TS8 and TS10 (d086-first-gold.md §6; the independent check of F3, F5 and F6), read as Go
+    reads them; TestTS9ParityWithPythonOnEveryShape compares every value with the Go measure."""
+
+    def test_ts8_premises_that_are_not_a_list_are_none(self):
+        for premises in ("ab", {"x": 1, "y": 2}, 5, True):
+            with self.subTest(premises=premises):
+                ins = goal_instance("t.1#2", "env")
+                ins["premises"] = premises
+                S = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), ins)}
+                item = target("t.1", "t.1#2", "conclusion", "should_be_performed(tax)")
+                self.assertEqual(ag.field_value("target_instance_v2", item, S),
+                                 "t.1 secondary:practical_reasoning2:should_be_performed(tax)[]by=")
+
+    def test_ts10_the_primary_as_go_reads_it(self):
+        first = {"id": "t.1#1", "primary": False, "conclusion": {"formula": "first(x)"}}
+        for value in ("true", 1):
+            with self.subTest(primary=value):
+                later = {"id": "t.1#2", "primary": value, "conclusion": {"formula": "second(x)"}}
+                claim = target_claim(first, later)
+                self.assertIs(ag.primary(claim), first)
+                item = target("t.1", None, "conclusion", None)
+                self.assertEqual(ag.field_value("target_formula", item, {"t.1": claim}), "first(x)")
+        # The boolean true marks the primary wherever it is; the first object stands in only when none is marked.
+        marked = dict(first, id="t.1#2", primary=True)
+        self.assertIs(ag.primary(target_claim(first, marked)), marked)
+        self.assertEqual(ag.primary(target_claim(7, first))["id"], "t.1#1")
+
+    def test_ts10_instances_that_are_not_a_list_or_not_objects(self):
+        item = target("t.1", None, "conclusion", "should_be_performed(tax)")
+        for insts in (5, "ab", None, []):
+            with self.subTest(instances=insts):
+                claim = {"kialo_claim_id": "t.1", "instances": insts}
+                self.assertEqual(ag.instances(claim), "")
+                self.assertEqual(ag.primary(claim), {})
+                self.assertEqual(ag.field_value("target_instance", item, {"t.1": claim}), ag.UNRESOLVED)
+        # An entry that is not an object is an instance of no scheme and no conclusion, as in Go.
+        claim = target_claim(7, goal_instance("t.1#1", "env", primary=True))
+        self.assertEqual(ag.instances(claim), ":|practical_reasoning2:should_be_performed(tax)")
+        # An empty instance is an instance: the claim's primary.
+        self.assertEqual(ag.field_value("target_instance", item, {"t.1": target_claim({})}), "t.1 primary")
+
+
 class CompactParity(unittest.TestCase):
     """compact() removes what Go's strings.Fields removes, and keeps U+001C-U+001F, as Go does."""
 

@@ -79,13 +79,15 @@ func checkCitations(a Annotation, d *Dataset) []string {
 					continue
 				}
 				for _, e := range entries {
-					var ref struct {
-						ClaimID any `json:"claim_id"`
-					}
+					// The name as written, as R7 (readParents) and
+					// validate.py read it (case SC13): a struct matched any
+					// case of claim_id, the last of two spellings winning.
+					var ref map[string]json.RawMessage
 					if json.Unmarshal(e, &ref) != nil {
 						continue
 					}
-					if id, ok := ref.ClaimID.(string); ok {
+					var id string
+					if isText(ref["claim_id"], &id) {
 						known[id] = true
 					}
 				}
@@ -268,6 +270,12 @@ func (c *Collection) checkIdentity(a Annotation, d *Dataset, set map[string]Anno
 				add("R7 it has %d Kialo parents, and records no list of other_kialo_parents", len(want))
 			case len(want) <= 1 && recorded:
 				add("R7 it records other_kialo_parents, but has %d Kialo parent(s)", len(want))
+			}
+			// A claim other than the thesis that items.json gives no Kialo
+			// parent (kialo_parents null, absent or []), whose record names
+			// one (case SC14): before, R7 compared nothing.
+			if claim != d.thesisID() && len(want) == 0 && tg["kialo_parent"] != nil {
+				add("R7 its Kialo parent is %s; items.json gives none", kialoPair(tg["kialo_parent"], tg["kialo_relation"]))
 			}
 			if claim != d.thesisID() && len(want) > 0 {
 				if first := kialoPair(tg["kialo_parent"], tg["kialo_relation"]); first != want[0] {

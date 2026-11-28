@@ -421,7 +421,7 @@
     "conclusion": "text_8571dd05e1a30e4d"
    },
    "integration": "coverage_gap",
-   "conclusion_preserved": false
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.61",
@@ -456,7 +456,7 @@
     "new: S2: missing variable binding(s): [A C]"
    ],
    "integration": "failed",
-   "conclusion_preserved": false
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.145",
@@ -959,7 +959,7 @@
     "conclusion": "text_83170f5d76133e77"
    },
    "integration": "coverage_gap",
-   "conclusion_preserved": false
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.192",

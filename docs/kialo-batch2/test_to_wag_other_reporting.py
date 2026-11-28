@@ -14,13 +14,19 @@ spec.loader.exec_module(replay)
 
 class OtherReporting(unittest.TestCase):
 
-    def route(self, wid='other', role='premise_attack', polarity='against', cq=None, refuse_cq=False, new_statement=False, conclusion_kind="matched", lose_reply=False, part='premise', new_conclusion='new_statement'):
+    def route(self, wid='other', role='premise_attack', polarity='against', cq=None, refuse_cq=False, new_statement=False, conclusion_kind="matched", lose_reply=False, part='premise', new_conclusion='new_statement',
+              conclusion=None, parent_wid='negative_consequences', parent_concludes=None, board=None, cq_error='S-test: scripted CQ refusal'):
+        # conclusion: the reply's annotated conclusion, given (T21, T22); parent_wid: the parent's scheme (one the
+        # game lacks plays it with Other, T24); parent_concludes: the formula the parent's argument concludes in
+        # place of its annotated one (T22); board: with it, a move about a statement that is neither the thesis,
+        # an argument's conclusion nor one of these is refused (S7), as the game refuses it (T22); cq_error: the
+        # refusal of a scripted CQ route (T24).
         claim = 'should_be_performed(tax_meat)'
         premise = 'brings_about(tax_meat,starvation_from_reduced_meat_access)'
 
         def inst(cid, wid, formula, bindings):
             return {'id': cid + '#1', 'primary': True, 'scheme': {'walton_id': wid, 'fit': 'reconstructed'}, 'bindings': bindings, 'premises': [], 'conclusion': {'formula': formula, 'en': formula or 'Reply'}}
-        ann = {'items': [{'kialo_claim_id': 'thesis', 'instances': [inst('thesis', 'none', claim, {})]}, {'kialo_claim_id': 'parent', 'literal': ['A reconstructed consequence argument.'], 'instances': [inst('parent', 'negative_consequences', '¬' + claim, {'A': 'tax_meat', 'G': 'starvation_from_reduced_meat_access'})], 'role': {'kind': 'independent_con', 'polarity': 'against'}, 'target': {'actual': {'claim': 'thesis', 'part': 'conclusion', 'formula': claim}}}, {'kialo_claim_id': 'reply', 'literal': ['The people said to be harmed do not consume the taxed good.'], 'instances': [inst('reply', wid, ('¬' if polarity == 'against' else '') + premise, {})], 'role': {'kind': role, 'polarity': polarity, 'cq': cq}, 'target': {'actual': None if new_statement else {'claim': 'parent', 'instance': 'parent#1', 'part': part, 'formula': None if part == 'inference' else premise}}}]}
+        ann = {'items': [{'kialo_claim_id': 'thesis', 'instances': [inst('thesis', 'none', claim, {})]}, {'kialo_claim_id': 'parent', 'literal': ['A reconstructed consequence argument.'], 'instances': [inst('parent', parent_wid, '¬' + claim, {'A': 'tax_meat', 'G': 'starvation_from_reduced_meat_access'})], 'role': {'kind': 'independent_con', 'polarity': 'against'}, 'target': {'actual': {'claim': 'thesis', 'part': 'conclusion', 'formula': claim}}}, {'kialo_claim_id': 'reply', 'literal': ['The people said to be harmed do not consume the taxed good.'], 'instances': [inst('reply', wid, ('¬' if polarity == 'against' else '') + premise, {})], 'role': {'kind': role, 'polarity': polarity, 'cq': cq}, 'target': {'actual': None if new_statement else {'claim': 'parent', 'instance': 'parent#1', 'part': part, 'formula': None if part == 'inference' else '¬' + claim if part == 'conclusion' else premise}}}]}
         if part == 'exception':
             # R8: a claim at an exception concludes it against the argument, its negation for it.
             ann["items"][-1]["instances"][0]["conclusion"]["formula"] = ('¬' if polarity == 'for' else '') + premise
@@ -32,6 +38,8 @@ class OtherReporting(unittest.TestCase):
             ann["items"][-1]["instances"][0]["conclusion"]["formula"] = "¬ brings_about( tax_meat , starvation_from_reduced_meat_access )"
         elif conclusion_kind == "not":
             ann["items"][-1]["instances"][0]["conclusion"]["formula"] = "not(brings_about(tax_meat,starvation_from_reduced_meat_access))"
+        if conclusion is not None:
+            ann["items"][-1]["instances"][0]["conclusion"]["formula"] = conclusion
         items = {'discussion': {'thesis_claim_id': 'thesis'}, 'items': [{'kialo_claim_id': x['kialo_claim_id'], 'text': 'Synthetic routing fixture', 'kialo_parents': []} for x in ann['items']]}
         state = {'id': 'test', 'active': 'Pro', 'arguments': {}, 'statements': {claim: {'label': 'out'}}}
         actions = []
@@ -47,8 +55,12 @@ class OtherReporting(unittest.TestCase):
                 if action.get('type') == 'abstain':
                     state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
                     return {'result': {'accepted': True}}
+                target = action.get('target_stmt_id')
+                if board is not None and target and target != claim and target not in board and \
+                        target not in (a['conclusion'] for a in state['arguments'].values()):
+                    return {'result': {'accepted': False, 'error': f'S7: statement "{target}" is not on the board'}}
                 if refuse_cq and action.get('answers_cq_id'):
-                    return {'result': {'accepted': False, 'error': 'S-test: scripted CQ refusal'}}
+                    return {'result': {'accepted': False, 'error': cq_error}}
                 aid = 'a' + str(len(state['arguments']) + 1)
                 if lose_reply and action.get('target_stmt_id') == premise:
                     # T8: the move is accepted, but its argument is not in the state, so no conclusion shows.
@@ -64,6 +76,8 @@ class OtherReporting(unittest.TestCase):
                     formula = new_conclusion
                 elif action.get('type') == 'attack':
                     formula = '¬' + formula if not formula.startswith('¬') else formula[1:]
+                if parent_concludes and action.get('text') == 'A reconstructed consequence argument.':
+                    formula = parent_concludes
                 state['arguments'][aid] = {'conclusion': formula}
                 state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
                 return {'result': {'accepted': True, 'arg_ids': [aid]}}
@@ -78,6 +92,7 @@ class OtherReporting(unittest.TestCase):
                 replay.main()
             report = json.loads((p / 'report.json').read_text())
             self.summary = report['integration']
+            self.rows = {x['claim']: x for x in report['moves']}
             result = next((x for x in report['moves'] if x['claim'] == 'reply'))
         return (result, actions)
 
@@ -217,6 +232,93 @@ class OtherReporting(unittest.TestCase):
         self.assertEqual(result['executed']['conclusion'], 'undercut(a1)')
         self.assertEqual(result['integration'], 'as_intended')
         self.assertNotIn('conclusion_preserved', result)
+
+
+    def test_t20_a_new_other_argument_is_not_compared(self):
+        # Cases T20-T24: the independent check of F3, F5 and F6 (d086-first-gold.md §6). A new Other
+        # argument concludes the statement the game makes from the claim's English (its C): null, not
+        # compared; its label as before (T5). In the batch, 13292.14, .46 and .61.
+        for wid in ('other', 'verbal_classification'):
+            with self.subTest(wid=wid):
+                result, actions = self.route(wid=wid, new_statement=True, role='independent_pro', polarity='for',
+                                             new_conclusion='A synthetic claim of its own.')
+                self.assertEqual(result['played'], 'other-new')
+                self.assertEqual(actions[-1]['variable_bindings']['C'], result['intended']['conclusion'])
+                self.assertEqual(result['integration'], 'coverage_gap')
+                self.assertIn('conclusion_preserved', result)
+                self.assertIsNone(result['conclusion_preserved'])
+                self.assertNotIn('conclusion_change', result)
+
+    def test_t21_go_whitespace_in_a_conclusion_is_no_change(self):
+        # As T9: the formulas are compared without Go's whitespace (a tab, U+00A0, U+3000), as
+        # validate.py and agreement.py compare them.
+        premise = 'brings_about(tax_meat,starvation_from_reduced_meat_access)'
+        for space in ('\t', '\u00a0', '\u3000', ' \t\u3000'):
+            for wid in ('other', 'negative_consequences'):
+                with self.subTest(space=repr(space), wid=wid):
+                    result, _ = self.route(wid=wid, conclusion='¬' + space + premise.replace(',', ',' + space))
+                    self.assertEqual(result['executed']['conclusion'], '¬' + premise)
+                    self.assertEqual(result['integration'], 'as_intended')
+                    self.assertIs(result['conclusion_preserved'], True)
+
+    def test_t22_a_claim_at_the_conclusion_of_a_changed_conclusion(self):
+        # Its target's argument concludes another formula (conclusion_changed): the move is about the
+        # target's annotated conclusion, which is not on the board: a cascade.
+        claim = 'should_be_performed(tax_meat)'
+        result, actions = self.route(wid='negative_consequences', role='independent_con', polarity='against',
+                                     part='conclusion', conclusion=claim, parent_concludes='other_formula(tax_meat)',
+                                     board=set())
+        self.assertEqual(self.rows['parent']['integration'], 'conclusion_changed')
+        self.assertTrue(result['played'].startswith('no: '), result['played'])
+        self.assertIn('S7', result['played'])
+        self.assertEqual({a.get('target_stmt_id') for a in actions[-2:]}, {'¬' + claim})
+        self.assertEqual(result['integration'], 'cascade')
+        # Where the annotated conclusion is on the board, the move is made about it, as intended.
+        result, actions = self.route(wid='negative_consequences', role='independent_con', polarity='against',
+                                     part='conclusion', conclusion=claim, parent_concludes='other_formula(tax_meat)',
+                                     board={'¬' + claim})
+        self.assertEqual(result['played'], 'statement')
+        self.assertEqual(actions[-1]['target_stmt_id'], '¬' + claim)
+        self.assertEqual(result['integration'], 'as_intended')
+        self.assertIs(result['conclusion_preserved'], True)
+        # A target whose conclusion is kept: the move is about its argument's conclusion, as before.
+        result, actions = self.route(wid='negative_consequences', role='independent_con', polarity='against',
+                                     part='conclusion', conclusion=claim, board=set())
+        self.assertEqual(self.rows['parent']['integration'], 'as_intended')
+        self.assertEqual(result['played'], 'statement')
+        self.assertEqual(result['integration'], 'as_intended')
+
+    def test_t23_an_annotated_conclusion_and_none_executed_is_failed(self):
+        # T8 with an annotated conclusion: the executed argument shows none, so nothing is compared.
+        for wid in ('other', 'negative_consequences'):
+            with self.subTest(wid=wid):
+                result, _ = self.route(wid=wid, lose_reply=True)
+                self.assertIsNotNone(result['intended']['conclusion'])
+                self.assertIsNone(result['executed']['conclusion'])
+                self.assertEqual(result['integration'], 'failed')
+                self.assertIsNone(result['conclusion_preserved'])
+                self.assertNotIn('conclusion_change', result)
+
+    def test_t24_a_later_route_after_a_refused_question(self):
+        # Corrected on the tests' first run (d086-first-gold.md §6): a row labelled conclusion_changed
+        # is always the first route's move, so no refusal precedes it and the cascade rule cannot reach
+        # it. What can occur: the question route refused (S8, the target played with Other), the
+        # statement route taken, concluding another formula: not as intended (T4), so a cascade.
+        result, actions = self.route(wid='negative_consequences', role='cq_answer', cq='CQ:likelihood',
+                                     refuse_cq=True, conclusion_kind='different', parent_wid='verbal_classification',
+                                     cq_error='S8: premise "brings_about(tax_meat,starvation_from_reduced_meat_access)" not found in argument "a1"')
+        self.assertEqual(self.rows['parent']['integration'], 'coverage_gap')
+        self.assertEqual(result['played'], 'statement')
+        self.assertTrue(any('S8' in e for e in result['fallback_after']))
+        self.assertIs(result['conclusion_preserved'], False)
+        self.assertEqual(result['integration'], 'cascade')
+        # The same without the refusal: the question route is the first, its move as intended in role,
+        # its argument concluding another formula: conclusion_changed, and never a cascade.
+        result, _ = self.route(wid='negative_consequences', role='cq_answer', cq='CQ:likelihood',
+                               conclusion_kind='different', parent_wid='verbal_classification')
+        self.assertEqual(result['played'], 'cq')
+        self.assertNotIn('fallback_after', result)
+        self.assertEqual(result['integration'], 'conclusion_changed')
 
 
 if __name__ == '__main__':

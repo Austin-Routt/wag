@@ -104,11 +104,12 @@ def run(gold, case=None, pin=True, items=None, english=True):
             if value is None:
                 continue
             cpath = os.path.join(d, name)
-            text = json.dumps(value, ensure_ascii=False, indent=1)
-            with open(cpath, 'w', encoding='utf-8') as fh:
-                fh.write(text)
+            # bytes are written as given (cases SC15 and SC16: JSON as Go reads it, and not UTF-8)
+            raw = value if isinstance(value, bytes) else json.dumps(value, ensure_ascii=False, indent=1).encode('utf-8')
+            with open(cpath, 'wb') as fh:
+                fh.write(raw)
             if pin and 'inputs' in gold:
-                gold = dict(gold, inputs=dict(gold['inputs'], **{name: hashlib.sha256(text.encode('utf-8')).hexdigest()}))
+                gold = dict(gold, inputs=dict(gold['inputs'], **{name: hashlib.sha256(raw).hexdigest()}))
             cmd += [flag, cpath]
         with open(path, 'w', encoding='utf-8') as fh:
             json.dump(gold, fh, ensure_ascii=False)
@@ -1894,6 +1895,102 @@ class SourceShape(unittest.TestCase):
         it = next(i for i in items['items'] if i['kialo_claim_id'] == '13292.115')
         it['siblings'] = ['junk', {'claim_id': '13292.888888'}] + it['siblings']
         self.accepted(items, gold=g)
+
+    def test_sc12_items_names_as_written(self):
+        # Both tools read items.json's names as written (Go read them through structs, in any case).
+        lone = copy.deepcopy(ITEMS)
+        lone['Items'] = lone.pop('items')
+        self.refused(lone, 'items.json: its items are not a list of objects')
+        for spelt in ('KIALO_CLAIM_ID', '\u212aialo_claim_id'):  # the second with a Kelvin sign
+            with self.subTest(id=spelt):
+                items = copy.deepcopy(ITEMS)
+                items['items'][5][spelt] = items['items'][5].pop('kialo_claim_id')
+                self.refused(items, 'items.json: item 6 has no kialo_claim_id')
+        items = copy.deepcopy(ITEMS)
+        items['items'][5]['Text'] = items['items'][5].pop('text')
+        self.refused(items, '13292.115: in items.json, its text is not a text')
+        # Two spellings of one member in one object: refused, as Go's canonicalNames refuses them.
+        for where, name, value, line in (
+                (None, 'item\u017f', [], "items.json: member 'item\u017f' is another spelling of 'items'"),
+                (None, 'DISCUSSION', {}, "items.json: member 'DISCUSSION' is another spelling of 'discussion'"),
+                (5, 'TEXT', 'b', "items.json: item 6: member 'TEXT' is another spelling of 'text'"),
+                (5, 'Kialo_Claim_Id', '13292.3',
+                 "items.json: item 6: member 'Kialo_Claim_Id' is another spelling of 'kialo_claim_id'"),
+                (5, '\u212aialo_claim_id', '13292.3',  # with a Kelvin sign, which Go folds to k
+                 "items.json: item 6: member '\u212aialo_claim_id' is another spelling of 'kialo_claim_id'")):
+            with self.subTest(member=name):
+                items = copy.deepcopy(ITEMS)
+                (items if where is None else items['items'][where])[name] = value
+                self.refused(items, line)
+        # Go folds no rune but K and \u017f to an ASCII letter: \u00df is not ss, so discu\u00dfion is a member of its own.
+        items = copy.deepcopy(ITEMS)
+        items['discu\u00dfion'] = {}
+        self.accepted(items)
+
+    def json_with(self, raw_member=None, **at):
+        """items.json as ASCII JSON text (a lone surrogate written as its escape), with a member no
+        rule reads first in its object (raw JSON text), and the sixth item's fields set (at)."""
+        items = copy.deepcopy(ITEMS)
+        items['items'][5].update(at)
+        text = json.dumps(items, ensure_ascii=True)
+        self.assertTrue(text.startswith('{"discussion"'))
+        return (('{' + raw_member + ', ' + text[1:]) if raw_member else text).encode('ascii')
+
+    def test_sc15_json_as_go_reads_it(self):
+        # A member given twice in one object: refused (Go's checkedJSON; Python kept the last).
+        items = copy.deepcopy(ITEMS)
+        items['items'][5]['text'] = '@@'
+        items['items'][5]['kialo_parents'][0]['relation'] = '@@'
+        text = json.dumps(items, ensure_ascii=True)
+        for twice, line in (('{"items": [], ' + text[1:], "items.json: gives the member 'items' twice in one object"),
+                            (text.replace('"text": "@@"', '"text": "a", "text": "b"'),
+                             "items.json: gives the member 'text' twice in one object"),
+                            (text.replace('"relation": "@@"', '"relation": "pro", "relation": "con"'),
+                             "items.json: gives the member 'relation' twice in one object"),
+                            (self.json_with('"x\\ud800": 1, "x\\udc00": 2').decode(),
+                             "items.json: gives the member 'x\ufffd' twice in one object"),
+                            (self.json_with('"x\\ufffd": 1, "x\\udbff": 2').decode(),
+                             "items.json: gives the member 'x\ufffd' twice in one object")):
+            with self.subTest(twice=line):
+                self.refused(twice.encode('ascii'), line)
+        # NaN and Infinity are not JSON: refused (Python read them).
+        for value in ('NaN', 'Infinity', '-Infinity'):
+            with self.subTest(value=value):
+                self.refused(self.json_with(f'"x": {value}'), f'items.json: is not JSON ({value} is not a JSON value)')
+        # An integer of 5,000 digits, and nesting 9,998 deep, in a member no rule reads: read
+        # (Python refused the first, beyond its 4,300 digits; Go reads both).
+        self.accepted(self.json_with('"x": ' + '7' * 5000))
+        self.accepted(self.json_with('"x": ' + '[' * 9997 + ']' * 9997))
+        # Nested 20,000 deep: refused, one line (it raised RecursionError).
+        self.refused(self.json_with('"x": ' + '[' * 20000 + ']' * 20000), 'items.json: is nested deeper than it can be read')
+        # A lone surrogate escape is read as U+FFFD, as Go reads it: in a text, read; in an id whose
+        # item is refused, the line says it (both raised UnicodeEncodeError); and two ids that differ
+        # only there are one id given twice.
+        self.accepted(self.json_with(text=ITEMS['items'][5]['text'] + '\udc80'))
+        code, _, out = run(copy.deepcopy(GOLD), items=self.json_with(kialo_claim_id='13292.115\ud800', text=7),
+                           english=False)
+        self.assertEqual((code, out), (1, 'ERRORS (1):\n13292.115\ufffd: in items.json, its text is not a text\n'))
+        items = copy.deepcopy(ITEMS)
+        items['items'][0]['kialo_claim_id'], items['items'][5]['kialo_claim_id'] = '13292.1\ud800', '13292.1\udbff'
+        self.refused(json.dumps(items, ensure_ascii=True).encode('ascii'), 'items.json: two items are 13292.1\ufffd')
+
+    def test_sc16_ids_as_both_tools_read_them(self):
+        # Blank as Go trims it (strings.TrimSpace): U+00A0 alone, U+3000 alone. Refused.
+        for blank in ('\u00a0', '\u3000', '\t\u3000 '):
+            with self.subTest(id=blank):
+                self.refused(self.source('13292.115', 'kialo_claim_id', blank), 'items.json: item 6 has no kialo_claim_id')
+        # U+001C, which Go keeps (Python's strip() takes it out), and " 13292.1" beside "13292.1"
+        # (an id is trimmed only to see that it is blank): read, each, so the gold's ids then differ.
+        for cid in ('\x1c', ' 13292.1'):
+            with self.subTest(id=cid):
+                code, errors, out = run(copy.deepcopy(GOLD), items=self.source('13292.115', 'kialo_claim_id', cid),
+                                        english=False)
+                self.assertEqual(code, 1, out)
+                self.assertNotIn('Traceback', out)
+                self.assertFalse([e for e in errors if e.startswith('items.json: ')], out)
+                self.assertIn('items not in items.json order or count differs: 50', out)
+        # A file that is not UTF-8: refused, one line (Go: "JSON is not valid UTF-8").
+        self.refused(self.json_with().replace(b'"13292.115"', b'"13292.115\xff"', 1), 'items.json: is not UTF-8')
 
 
 class Repin(unittest.TestCase):

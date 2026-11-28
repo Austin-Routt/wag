@@ -59,21 +59,30 @@ Each claim's entry in the report keeps what the annotation intended
     or a claim coded Other that lost its named question's route;
   - duplicate: a challenge of a premise another claim already challenged;
   - cascade: its target was itself not played as intended, so the premise
-    or statement it is about is not on the board; or its target is a
-    secondary instance of its claim (format 2 names it) that was not played:
-    only each claim's primary instance is played, and a secondary one that
-    carries it;
+    or statement it is about is not on the board: played with Other, or, for
+    a claim at its conclusion, labelled conclusion_changed, the move then
+    made about the target's annotated conclusion and refused (case T22); or
+    its target is a secondary instance of its claim (format 2 names it) that
+    was not played: only each claim's primary instance is played, and a
+    secondary one that carries it. A row labelled conclusion_changed is never
+    a cascade: its move is the first the replay tries, so nothing was
+    refused before it (case T24);
   - not_played: an unresolved target, or a malformed one (a target instance,
     part or formula that is neither text, null nor {"unresolved": why}, which
     validate.py refuses); a clarification, a claim with no scheme and no
     target, or no side; or a claim whose scheme the game lacks, whose move with
     Other the game refused.
 
-Each row whose move made an argument (not a challenge, nor an undercutter of
-an inference) also says whether that argument concludes the annotation's own
-conclusion (`conclusion_preserved`: true or false, null when either formula is
-missing), whatever its label: a coverage gap or a fragment played with Other
-at its target may conclude the target, not the claim (case T17).
+Each row whose move made an argument also says whether that argument
+concludes the annotation's own conclusion (`conclusion_preserved`: true or
+false, null when either formula is missing), whatever its label: a coverage
+gap or a fragment played with Other at its target may conclude the target, not
+the claim (case T17). The formulas are compared without Go's whitespace and
+with not(...) as ¬ (T9, T21). Not compared: a challenge, which makes no
+argument; a move at an inference, an undercutter or an answer through a
+question whose locus is the argument, which concludes undercut(<its target>)
+(T19); and a new Other argument, which concludes the statement the game makes
+from the claim's English (null, T20).
 """
 
 import argparse
@@ -167,7 +176,10 @@ GO_SPACE = "\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\
 
 
 def norm(formula):
-    f = (formula or "").replace(" ", "")
+    """A formula as the replay compares it: without the whitespace Go's strings.Fields removes
+    (GO_SPACE; case T21: a tab, U+00A0 or U+3000 is no difference, as validate.py and agreement.py
+    compare formulas), and not(...) written as ¬."""
+    f = re.sub("[" + re.escape(GO_SPACE) + "]+", "", formula or "")
     if f.startswith("not(") and f.endswith(")"):
         f = "¬" + f[4:-1]
     return f
@@ -316,6 +328,16 @@ def main():
                 return e.get("played") in ("other", "other-new", "inference-other") and e.get("integration") != "fragment"
         return False
 
+    def conclusion_changed(claim_id):
+        """The claim's row if its argument concludes another formula than its
+        annotated one (case T22): its annotated conclusion is not that
+        argument's, so a claim at its conclusion is about a statement the
+        argument does not put on the board."""
+        for e in report:
+            if e["claim"] == claim_id:
+                return e if e.get("integration") == "conclusion_changed" else None
+        return None
+
     # The thesis's instances by the discussion go first: claims answer them (D096).
     play_discussion(thesis_id, th, "pro")
     # A claim that answers a sibling played later waits for it (one more pass).
@@ -422,12 +444,17 @@ def main():
         tgt = ((a.get("target") or {}).get("actual") or {})
         tclaim, tpart = str(tgt.get("claim") or ""), str(tgt.get("part") or "conclusion")
         # The statement the move is about.
-        stmt = None
+        stmt, changed_target = None, False
         if tclaim == thesis_id and tpart.startswith("conclusion"):
             stmt = claim
         elif trec:
             if tpart.startswith("conclusion"):
                 stmt = trec["conclusion"]
+                changed = None if secondary_target else conclusion_changed(tclaim)
+                if changed:
+                    # T22: the move is about the target's annotated conclusion, not the formula its
+                    # argument concludes; where the game refuses it (S7), a cascade (below).
+                    stmt, changed_target = changed["conclusion_change"]["annotated"], True
             elif tpart.startswith("premise") or tpart.startswith("exception"):
                 f = tgt.get("formula") or (tpart.split(":", 1)[1].strip() if ":" in tpart else "")
                 stmt = f.replace(" ", "") or None
@@ -606,7 +633,11 @@ def main():
         # variable (the retry above leaves it out). An undercutter of an
         # inference (OC18) concludes undercut(its argument) by design, and a
         # challenge makes no argument: neither is compared.
-        if how in ("cq", "statement", "new", "other", "other-new", "cq-other") and tpart != "inference":
+        if how == "other-new":
+            # A new Other argument concludes the statement the game makes from
+            # the claim's English (its C), not a formula: not compared (T20).
+            entry["conclusion_preserved"] = None
+        elif how in ("cq", "statement", "new", "other", "cq-other") and tpart != "inference":
             expected = norm(entry["intended"].get("conclusion"))
             actual = norm((entry.get("executed") or {}).get("conclusion"))
             entry["conclusion_preserved"] = (expected == actual) if expected and actual else None
@@ -615,7 +646,8 @@ def main():
             elif entry["integration"] == "as_intended" and expected != actual:
                 entry["integration"] = "conclusion_changed"
                 entry["conclusion_change"] = {"annotated": expected, "executed": actual}
-        if entry["integration"] in ("failed", "not_played") and played_with_other(tclaim) and \
+        if entry["integration"] in ("failed", "not_played") and \
+                (played_with_other(tclaim) or changed_target) and \
                 any("S8" in x or "S7" in x for x in errors):
             entry["integration"] = "cascade"
         report.append(entry)

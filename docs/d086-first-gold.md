@@ -526,7 +526,10 @@ formula, sorted) and who made it (`by`). Written before their tests and the code
 
 Added 2026-11-28, before their tests and the code, from the independent check of F3, F5 and F6 (the
 workspace's verify/x3-fixes/review-x3-f356/REVIEW-x3-f356.md: three errors, nine warnings, four notes,
-each checked against the code before it was acted on). None changes a committed figure.
+each checked against the code before it was acted on). None changes a committed figure (corrected
+with the code: none changes a count of the replay's labels or an agreement figure, but T20 makes three
+rows' `conclusion_preserved` null, so the batch README's count of rows whose argument does not
+conclude the claim's own conclusion goes from nine to six).
 
 **F5.** Go read `items.json` through structs, whose names `encoding/json` matches in any case, and
 read `null` and `{}` as an empty list; its R19 read a context entry's `claim_id` so too, while R7 reads
@@ -562,6 +565,17 @@ An answer through a question whose locus is an argument, at an inference (`cq` o
 argument, `undercut(<its target>)`, and is not compared either, as an undercutter of an inference is
 not (T19): the docstring and the README say so.
 
+Corrected with the code (2026-11-28), on the tests' first run: T24 cannot occur as written. A row
+labelled `conclusion_changed` is always the move of the first route the replay tries (a CQ answer the
+game takes only by a later route is `failed`, T4), so no refusal precedes it and the cascade rule,
+which needs one, cannot reach it: the planted defect that lets the rule relabel `conclusion_changed`
+(F3-M8) changes nothing. The test pins what can occur: the question route refused (S8, the target
+played with Other) and the statement route taken, concluding another formula, is a cascade, as before;
+the same answer taken by its question route, with no refusal, is `conclusion_changed`. T22 is played so:
+the move is about the target's annotated conclusion, which the game refuses where it is not on the
+board (S7), and the row is then a cascade; where that statement is on the board, the move is made about
+it and labelled as any other.
+
 **F6.** A target instance whose `premises` is not a list was read as a list by `agreement.py` (a text
 as its characters) and as none by Go, and a number raised in Python; the parity test had one shape of
 fixture.
@@ -570,6 +584,7 @@ fixture.
 |---|---|---|
 | TS8 | A secondary target whose `premises` is a text, an object, a number or `true` | No premises, in `agreement.py` as in Go; no exception |
 | TS9 | The Go measure and `agreement.py` on secondary targets with one premise and with five, a premise with no role, a formula that is a number, a premise that is not an object; and on every item of the format-2 gold, each file read against itself | The same values in `target_instance`, `target_instance_v2`, `target_formula` and `instances` |
+| TS10 | (added with the code, from its first run) The same on a target claim whose instances are absent or not a list (a number, a text), hold an entry that is not an object, mark a later instance primary with `"true"` or 1, or are one empty object | The same values: instances that are not a list are none; an entry that is not an object is an instance of no scheme and no conclusion; the primary is the first object whose `primary` is the boolean true, else the first object, and a claim with none has no primary, so a target at it is unresolved. Before, `agreement.py` raised on instances that are a number, and on a text or an entry that is not an object where it looked for the primary; read a claim with no instances as having a primary; left an entry that is not an object out of `instances`; and took the later instance |
 
 `target_instance_v2` is one of the fields a run compares, so since 056c064 it also takes part in
 choosing the claims a run reviews and in a run's count of disagreements, a run recorded before

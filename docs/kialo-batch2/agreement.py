@@ -90,9 +90,12 @@ def structure(ins):
     """What an instance says, not its id (Go's structure): its scheme and conclusion, its premises,
     each role and formula, sorted, and who made it (by), so that two reconstructions of one claim with
     one scheme and conclusion and different premises differ (F6 of the external review of exchange 3,
-    target_instance_v2). A premise whose formula is unresolved leaves it UNRESOLVED."""
+    target_instance_v2). A premise whose formula is unresolved leaves it UNRESOLVED. Premises that are
+    not a list are none, as Go reads them (case TS8: a text was read as its characters, and a number
+    raised)."""
     ps = []
-    for p in ins.get("premises") or []:
+    pms = ins.get("premises")
+    for p in (pms if isinstance(pms, list) else []):
         p = p if isinstance(p, dict) else {}
         if is_marker(p.get("formula"), "unresolved"):
             return UNRESOLVED
@@ -115,10 +118,11 @@ def target_instance(S, claim, ref):
     if t is None:
         return None
     if ref is None or isinstance(ref, str) and (ref == "" or ref.startswith("primary")):
-        return primary(t)
+        return primary_instance(t)
     if not isinstance(ref, str) or not INSTANCE_ID.match(ref):
         return None
-    for ins in t.get("instances") or []:
+    insts = t.get("instances")
+    for ins in (insts if isinstance(insts, list) else []):
         if isinstance(ins, dict) and ins.get("id") == ref:
             return ins
     return None
@@ -188,9 +192,12 @@ def bindings(item):
 
 def instances(item):
     """How the claim was divided into inferences: every instance's scheme and conclusion, but an instance by
-    the discussion (D096), which is not the claim's own (annotation-records.md §13)."""
-    return "|".join(sorted(signature(i) for i in item.get("instances") or []
-                           if isinstance(i, dict) and i.get("by") != "the discussion"))
+    the discussion (D096), which is not the claim's own (annotation-records.md §13). As Go reads them (case
+    TS10): instances that are not a list are none, and an entry that is not an object is an instance of no
+    scheme and no conclusion."""
+    insts = item.get("instances")
+    return "|".join(sorted(signature(i if isinstance(i, dict) else {}) for i in (insts if isinstance(insts, list) else [])
+                           if not isinstance(i, dict) or i.get("by") != "the discussion"))
 
 
 # Go's strings.TrimSpace trims what unicode.IsSpace calls space; Python's
@@ -350,12 +357,26 @@ def kappa(pairs):
     return (po - pe) / (1 - pe)
 
 
-def primary(item):
-    inst = item.get("instances") or []
-    for i in inst:
-        if i.get("primary"):
+def primary_instance(item):
+    """The primary instance as Go's primary reads it (case TS10): the first instance that is an object
+    whose primary is true (the boolean, not "true" or 1), else the first that is an object; None if none
+    is (before, a later instance whose primary was "true" or 1 was taken, and an entry that is not an
+    object, or instances that are a number, raised)."""
+    insts = item.get("instances") if isinstance(item, dict) else None
+    first = None
+    for i in (insts if isinstance(insts, list) else []):
+        if not isinstance(i, dict):
+            continue
+        if first is None:
+            first = i
+        if i.get("primary") is True:
             return i
-    return inst[0] if inst else {}
+    return first
+
+
+def primary(item):
+    p = primary_instance(item)
+    return p if p is not None else {}
 
 
 def scheme_id(item):
