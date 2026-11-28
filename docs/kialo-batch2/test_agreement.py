@@ -192,5 +192,46 @@ class DiscussionInstances(unittest.TestCase):
         self.assertEqual(ag.exact(it, "target_instance", S), "c.0 secondary:practical_reasoning2:should_be_performed(a)")
 
 
+
+# Go's unicode.IsSpace, written out here so that the test does not read the constant it checks
+# (F4 of the external review of exchange 3; WAG's check of it, the planted defect 02-c).
+GO_SPACES = [0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x20, 0x85, 0xA0, 0x1680, 0x2000, 0x2001, 0x2002, 0x2003,
+             0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x2028, 0x2029, 0x202F, 0x205F, 0x3000]
+
+
+def _go_space(name):
+    """The GO_SPACE a script assigns, read from its source (the scripts run when imported)."""
+    import ast
+    with open(os.path.join(HERE, name + ".py"), encoding="utf-8") as fh:
+        tree = ast.parse(fh.read())
+    found = [ast.literal_eval(n.value) for n in tree.body if isinstance(n, ast.Assign)
+             and any(isinstance(t, ast.Name) and t.id == "GO_SPACE" for t in n.targets)]
+    if len(found) != 1:
+        raise AssertionError(f"{name}.py assigns GO_SPACE {len(found)} times")
+    return found[0]
+
+
+class CompactParity(unittest.TestCase):
+    """compact() removes what Go's strings.Fields removes, and keeps U+001C-U+001F, as Go does."""
+
+    def test_go_spaces_are_removed(self):
+        for cp in GO_SPACES:
+            with self.subTest(codepoint=hex(cp)):
+                self.assertEqual(ag.compact("p(a" + chr(cp) + "b)"), "p(ab)")
+
+    def test_what_go_keeps_is_kept(self):
+        for cp in (0x1C, 0x1D, 0x1E, 0x1F, 0x200B, 0xFEFF):
+            with self.subTest(codepoint=hex(cp)):
+                f = "p(a" + chr(cp) + "b)"
+                self.assertEqual(ag.compact(f), f)
+                self.assertNotEqual(ag.compact(f), ag.compact("p(ab)"))
+
+    def test_the_three_copies_are_gos_set(self):
+        want = "".join(chr(cp) for cp in GO_SPACES)
+        for name in ("agreement", "validate", "to_wag"):
+            with self.subTest(module=name):
+                self.assertEqual(sorted(_go_space(name)), sorted(want))
+
+
 if __name__ == "__main__":
     unittest.main()

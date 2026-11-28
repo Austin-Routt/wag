@@ -71,7 +71,10 @@ def is_marker(v, kind):
 
 
 def compact(f):
-    return re.sub(r"\s+", "", f)
+    """The formula without the whitespace Go's strings.Fields removes (GO_SPACE): Python's \\s also
+    holds U+001C-U+001F, which Go keeps, so the two measures read such a formula alike (F4 of the
+    external review of exchange 3)."""
+    return re.sub("[" + re.escape(GO_SPACE) + "]+", "", f)
 
 
 def signature(ins):
