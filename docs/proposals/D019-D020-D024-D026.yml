@@ -10,15 +10,19 @@
 # `wag-cli --proposal` checks it and writes its view, D019-D020-D024-D026.md.
 # How proposals work: process.md §5.
 #
-# Version 1 (draft), 2026-11-28, from the design and inventory in the
-# workspace (verify/rule-family: DESIGN.md, INVENTORY.md, REGISTER-DRAFT.md)
-# and ChatGPT's rule review with its check (verify/chatgpt-rule-2026-11-27/
-# REVIEW.md, §1 and §4 item 6). Not applied: an independent review comes
-# first (process.md §3), and the application waits until the owner's verdicts
-# of exchange 3 are imported, since walton.yml is an input every verdict
-# records. Where it goes beyond the decided text, the summary's "Beyond the
-# decided text" says so; its departures from the workspace design are listed,
-# with their reasons, in verify/rule-family/proposal/NOTES.md §2. The book is
+# Version 2, 2026-11-28, from the independent review of version 1 (the
+# workspace's verify/rule-family/proposal/REVIEW.md: the formulas right, nine
+# errors, four warnings, thirteen notes; each finding checked against the code
+# and the sources before it was acted on, NOTES.md §6). Version 1 was drafted
+# from the design and inventory in the workspace (verify/rule-family:
+# DESIGN.md, INVENTORY.md, REGISTER-DRAFT.md) and ChatGPT's rule review with
+# its check (verify/chatgpt-rule-2026-11-27/REVIEW.md, §1 and §4 item 6). Not
+# applied: a verification round of this version comes first (process.md §3),
+# then the owner's answers to the choices in "Beyond the decided text", and
+# the application waits until the owner's verdicts of exchange 3 are
+# imported, since walton.yml is an input every verdict records. Its
+# departures from the workspace design are listed, with their reasons, in
+# verify/rule-family/proposal/NOTES.md §2. The book is
 # cited by entry and page; quotations, where a reviewer needs them, are in the
 # workspace (the compendium transcription and the rule review's check), not
 # here. The schemes library is
@@ -60,10 +64,14 @@ summary: |-
     names the rule and the conclusion, so it defeats this application of this
     rule and no other. D024's "rule (55.2) keeps its form" is read as: the
     argument from rules takes none of 55.1's exceptions. 55.1's questions apply
-    to its two forms only as derived questions, which the catalogue cannot
-    carry yet (D023), so the forms have no questions here; a conflicting rule
-    or an exceptional case is raised against them by challenging the rule
-    premise, or as a rebuttal.
+    to its two forms only as derived questions, as D024 decides: the
+    catalogue carries them (a derived/ question, with its source, chapter,
+    page and name, D007 and D023), and each form's entry gets 55.1's three,
+    the first at its rule premise and the second and third with no target,
+    since neither form has a formula for a conflicting rule or an exceptional
+    case: those are raised against it by challenging the rule premise, or as
+    a rebuttal. The game does not ask a derived question. A proposal cannot
+    hold one, so they are in the catalogue's effect.
   - **D106: one mapping for 55.1's first question.** CQ1 asks whether the rule
     requires acts of a kind that takes in this one. links.json maps it to
     has_conclusion(R,C) (what R requires covers C) and applicable(R) (R governs
@@ -84,15 +92,22 @@ summary: |-
     instance had to bind both. It becomes two schemes, with templates of our
     own: rule_evaluative, rule_evaluation(A,E) and case(A), so
     evaluation_justified(E); and rule_prescriptive, rule_conduct(A,C) and
-    case(A), so conduct_required(C). rule is retired (the design's preferred
-    choice): an id whose formulas changed would pass silently wherever only
-    the id is read, while a retired id is refused by every check that reads
-    it (validate.py, the catalogue check's contrasts, the rule cases). The
-    other choice, rule kept as the evaluative form and rule_prescriptive new,
-    is for the review to weigh (the design: decide with the review).
+    case(A), so is_required(C), walton.yml's statement that something is
+    required, which the argument from alternatives also uses (its premise, and
+    its conclusion's negation once D016 is applied), so the two meet on one
+    formula (D004's one formula for one idea; choice (C3) below). rule is
+    retired (choice (C2) below): an id whose formulas changed would pass
+    silently wherever only the id is read, while a retired id is refused by
+    every check that reads it (validate.py, the catalogue check's contrasts,
+    the rule cases).
   - **D104: the exceptional case names its rule and its case.**
     waivable_for_exceptions(R) and case_exception(R,X), presumed
-    exception_backed(R,X), so rule_waived(R,X). It had rule_can_waived(X) and
+    exception_backed(R,X), so rule_waived(R,X). Every formula names the rule
+    R; all but the major premise name the case X. The major premise is
+    general, about R and any case that is an exception to it, as the book
+    binds its case there: a counter to it defeats the argument for every
+    case at once. D104's text says that every formula names both, so this is
+    put to the owner as choice (C1) below. It had rule_can_waived(X) and
     case_exception(A), the latter as both premise and assumption, concluding
     rule_waived(A): X and A unrelated, and no rule named. The book's 56 ties
     the case of its premises to its conclusion's (p. 344), and its source
@@ -102,16 +117,22 @@ summary: |-
     cases back a borderline one) target the premise case_exception(R,X); CQ2
     (whether, for a case of no recognized kind, evidence shows that the rule
     does not reach it) targets the assumption exception_backed(R,X), presumed
-    until it is asked. Templates ours.
+    until it is asked (the question's mapping is the design's, DESIGN.md §5),
+    worded as the question's conditional: unless the case is of a recognized
+    kind, there is evidence that the rule does not reach it. Templates ours.
+    Its source is Walton 1995, p. 147 (walton.yml prints p. 148, which holds
+    the argument from precedent): a correction below.
   - **D105: the regulative rule's addressee and excuse.** The agent A was only
     in the conclusion and the excuse was 0-ary, so one excuse undercut every
     regulative-rule argument, whoever's. As the schemes library has them:
     the premise addressee_of(A,X), that the rule on X addresses A, and the
     exception excuse_or_overriding_duty(A,X), scoped to the agent and the act
-    (55.3's rebuttal factor, pp. 343-344); the 0-ary excuse goes. With A in a
-    premise, regulative_rule passes the Carneades validator, which it fails
-    today. The templates are ours: the library's template for the excuse
-    repeats the book's rebuttal factor word for word.
+    (55.3's rebuttal factor, pp. 343-344); the 0-ary excuse goes, and with it
+    its template, which repeats eight words of that rebuttal factor. With A in
+    a premise, regulative_rule passes the Carneades validator, which it fails
+    today. addressee_of/2 takes the library's template. The excuse's template
+    is ours, since the library's repeats eight words of the rebuttal factor
+    (D043): a departure the decided text forces, listed below as choice (C4).
   - **D108: from the exceptional case to the established rule's exception.**
     bridge_from_exceptional_case: rule_waived(R,X) and case_of(C,X), so
     rule_exception_or_excuse(R,C). Rule R can be waived for the case X, and
@@ -123,61 +144,122 @@ summary: |-
     option (a); option (b), 56 used as an answer concluding the exception
     directly, is not taken.
 
-  **Beyond the decided text** (found in drafting; each is put to the owner as
-  a choice of its own, and is to be registered before the application):
+  **Beyond the decided text.** Two kinds of point, kept apart (process.md
+  §3, "Fixing a finding"; the review of version 1, §5).
+
+  *Consequences and corrections, to register before the application* (no
+  real alternative; each is the developer's, under the standing rule):
   - (a) **precedent_slippery_slope concludes ¬case_exception(R,C0).** It
     concluded ¬case_exception(C0), the negation of the exceptional case's
-    premise, which it was written to counter (50, p. 340; its link's note).
-    D104 binds that premise to its rule, so the slope's conclusion names the
-    rule it already has, R, and still meets the premise for the same rule and
-    case; unchanged, it would meet nothing.
-  - (b) **Templates of the proposed schemes corrected.** applicable/1 read
-    "Argument %s is applicable." of a rule; obligatory/1 and do_obligator/0
-    printed the book's slash as "prohibited -obligatory-" in the obligation
-    form, and the warrant now speaks of those the rule addresses. Each is used
-    by its scheme alone.
+    premise, which it was written to counter (the owner's decision of
+    2026-10-22; 50's claim premise, p. 340). D104 binds that premise to its
+    rule, so the slope's conclusion names the rule it already has, R, and
+    still meets the premise for the same rule and case; unchanged, it would
+    meet nothing.
+  - (b) **Three templates corrected.** applicable/1 read "Argument %s is
+    applicable." of a rule; obligatory/1 printed the book's slash as
+    "prohibited -obligatory-" in the obligation form, and takes the schemes
+    library's "%s is obligatory."; do_obligator/0, the warrant every
+    regulative-rule argument shares, printed the same slash. Its text keeps
+    the warrant's meaning, general as before, in words of our own: the
+    library's rewording is 73% like the book's sentence (the copy check's
+    warning), and version 1's spoke of "those a rule addresses", which
+    changed it (the review's W4). Each template is used by its scheme alone.
   - (c) **The established rule's link maps valid(R) under the Minor Premise,**
     as the catalogue entry corrected it on 2026-10-22: the minor premise says
     that the rule is established for the agent; links.json put it under the
     major premise. D106 aligns only CQ1.
-  - (d) **rule retired without an id-migrations entry.** id-migrations.json
-    renames an upstream id one to one, and validate.py reads every migration
-    into its scheme table (W[old] = W[new]); a split has no one new id, and the
-    format-1 checks, against the frozen format-1 walton.yml, which has neither
-    new id, would fail. So rule is removed, and a format-2 record that still
-    names it is refused as an unknown scheme. With it gone, F20's generic
-    scheme in families.json becomes rule_prescriptive, whose obligations the
-    family's specializations (established_rule, established_rule_actor,
-    regulative_rule) narrow; the design kept rule as the generic, which a
-    retired id cannot be.
+  - (d) **rule removed without an id-migrations entry**, if choice (C2)
+    retires it. id-migrations.json renames an upstream id one to one, and
+    validate.py reads every migration into its scheme table (W[old] = W[new]);
+    a split has no one new id, and the format-1 checks, against the frozen
+    format-1 walton.yml, which has neither new id, would fail. So a format-2
+    record that still names rule is refused as an unknown scheme. With rule
+    gone, F20's generic scheme in families.json is rule_prescriptive, whose
+    obligations the family's specializations (established_rule,
+    established_rule_actor, regulative_rule) narrow: the close contrasts the
+    generator draws from it are with the established and regulative rules,
+    the exceptional case, precedent and excuse.
+  - (e) **exceptional's source is Walton 1995, p. 147**, where the scheme and
+    55.1's are; walton.yml prints p. 148, which holds the argument from
+    precedent (a one-line correction, as D040 corrected cause to effect's).
+  - (f) **excuse/0's template goes with the 0-ary excuse** (D105): unused,
+    and it repeats eight words of 55.3's rebuttal factor.
+
+  *Choices for the owner, each with both texts* (the application waits for
+  the answers; the recommendation is the text this version proposes):
+  - (C1) **The exceptional case's major premise (D104).** D104's text binds
+    the rule R and the case X "in every formula".
+    - Proposed: waivable_for_exceptions(R), "R can be waived for a case that
+      is an exception to it": a general premise about R, as the book binds
+      its case there; a counter to it defeats the argument for every case at
+      once, as a counter to a general premise should.
+    - D104's text: waivable_for_exceptions(R,X), "R can be waived for X, as
+      an exception to it": a premise about this case, so a counter defeats
+      the argument for X only.
+    - Recommended: the proposed text, with D104's wording amended to "every
+      formula names R, and every one but the general major premise names X".
+  - (C2) **The ids of argument from rules (D026, which names no ids).**
+    - Proposed: rule retired; rule_evaluative and rule_prescriptive new.
+      Neither reading is the scheme's alone (the book prints both with a
+      slash), and a rule kept with one reading would mean something other
+      than the upstream collection's and the schemes library's rule, which
+      keep the slash form, wherever only the id is read.
+    - Other: rule kept as the evaluative form, its formulas changed, and
+      rule_prescriptive new.
+    - Recommended: the proposed text (the review recommends it too).
+  - (C3) **The prescriptive form's conclusion (D026 names no predicate).**
+    - Proposed: is_required(C), walton.yml's "%s is required.", which the
+      argument from alternatives uses: a rebuttal that C is not required
+      meets the rule's conclusion (D004: one formula for one idea; D016).
+    - Version 1's: conduct_required(C), "The conduct %s is required.", a
+      predicate of its own, which neither argument meets.
+    - Recommended: the proposed text. C stays untyped either way (positions.json
+      types neither).
+  - (C4) **The excuse's template (D105: "as the schemes library has them").**
+    A departure the decided text forces: the library's template (its C/2
+    file, excuse_or_overriding_duty/2) repeats eight words of 55.3's rebuttal
+    factor, so it cannot be quoted here or adopted (D043). Proposed: "%s has
+    a good excuse, or a weightier duty, that sets aside the rule on %s."
+    Listed so that both texts are before the owner (the library's in the
+    workspace's NOTES.md §6).
 
   **What stays.** exception_to_rule (57's upstream precedent form) and
   plea_for_excuse (58) do not change; the prohibition form of 55.3 (the
   schemes library's regulative_rule_prohibition) is not proposed, since no
-  item needs it. The constitutive rules (54.1-54.3) do not change. None of
-  these schemes is among the game's 17; the game's Other does not change
-  here, though plan §3 plays it as defeasible modus ponens later.
+  item needs it, and becomes a candidate. The bridge reaches the generic
+  form's exception only: neither established_rule_actor's third question nor
+  a plea for excuse (58), the excuse half of 55.1's third question, is
+  reached by it, which D108 does not ask; that gap becomes a candidate too.
+  The constitutive rules (54.1-54.3) do not change. None of these schemes is
+  among the game's 17; the game's Other does not change here, though plan §3
+  plays it as defeasible modus ponens later.
 
   **The gold.** Its two rule items, 13292.46 and 13292.29, conclude a required
   conduct (a higher tax on beef than on wild game; the state keeping out of
   meat eating), so both become rule_prescriptive instances when the proposal
   is applied: what each says is justified (a higher rate on beef, the
-  liberty to choose) is the rule's content, read as the conduct. No other
-  item uses a changed scheme by name. The application waits until the owner's
+  liberty to choose) is the rule's content, read as the conduct. 13292.190
+  names rule among its first instance's alternatives (a rule it rejects); the
+  recode renames it rule_prescriptive, since the alternative is a conduct
+  (tax design), and nothing checks an alternative's id. No other item uses a
+  changed scheme by name. The application waits until the owner's
   verdicts of exchange 3 are imported: walton.yml is an input every verdict
   records (verify_gold.py), and the recode sends both items back to review.
 effects:
-  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (D019, D020, D024, D025 and D026, decided 2026-11-22 under the owner's standing rule; D104-D108, registered under it on 2026-11-28), in a block of its own, RULES_F20, with CHANGELOG rows (tools/make_changelog.py): defeasible_modus_ponens, established_rule, regulative_rule, exceptional and precedent_slippery_slope changed as above (repairs, owner decision); established_rule_actor, rule_evaluative, rule_prescriptive and bridge_from_exceptional_case added (additions, owner decision); rule removed, its lines deleted. Their meta is walton.yml's, unchanged; the new schemes' meta as proposed. Templates added: the schemes library's six, as it words them (D024: conflicting_or_overriding_rule/2 and rule_exception_or_excuse/2; D025: established_action_rule/4, established_action_warrant/4, conflicting_action_rule/4 and action_rule_excuse/4); ours: rule_excepted/2, rule_evaluation/2, evaluation_justified/1, rule_conduct/2, conduct_required/1, addressee_of/2, excuse_or_overriding_duty/2, waivable_for_exceptions/1, case_exception/2, exception_backed/2, rule_waived/2 and case_of/2; changed, ours: applicable/1, obligatory/1 and do_obligator/0 (point (b)). Templates left unused are kept and listed as orphans: implies/2, evaluation/3, evaluation_justified/2, rule_can_waived/1, rule_waived/1, case_exception/1 and excuse/0; defeasibly_implies/2 leaves the orphans. check/run.sh regenerates the derived files. The gate: regulative_rule passes the validator, so ad_hominem is the cleaned file's one failure left, and CHANGELOG.md's paragraph on the two failing schemes is updated; the registry: 133 schemes, its differences these schemes and keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (D019, D020, D024, D025 and D026, decided 2026-11-22 under the owner's standing rule; D104-D108, registered under it on 2026-11-28), in a block of its own, RULES_F20, with CHANGELOG rows (tools/make_changelog.py): defeasible_modus_ponens, established_rule, regulative_rule, exceptional and precedent_slippery_slope changed as above (repairs, owner decision); established_rule_actor, rule_evaluative, rule_prescriptive and bridge_from_exceptional_case added (additions, owner decision); rule removed, its lines deleted (choice (C2); point (d)). Their meta is walton.yml's, unchanged, but exceptional's source, p. 147 (point (e)); the new schemes' meta as proposed. Templates added: the schemes library's seven, as it words them (D024: conflicting_or_overriding_rule/2 and rule_exception_or_excuse/2; D025: established_action_rule/4, established_action_warrant/4, conflicting_action_rule/4 and action_rule_excuse/4; D105: addressee_of/2); ours: rule_excepted/2, rule_evaluation/2, evaluation_justified/1, rule_conduct/2, excuse_or_overriding_duty/2 (choice (C4)), waivable_for_exceptions/1, case_exception/2, exception_backed/2, rule_waived/2 and case_of/2; changed: applicable/1 and do_obligator/0 (ours) and obligatory/1 (the library's) (point (b)); removed: excuse/0 (point (f)); is_required/1 is walton.yml's, unchanged (choice (C3)). Templates left unused are kept and listed as orphans: implies/2, evaluation/3, evaluation_justified/2, rule_can_waived/1, rule_waived/1 and case_exception/1; defeasibly_implies/2 leaves the orphans. check/run.sh regenerates the derived files, and three of the tools it runs change with the edits: proposals.py's own repair of regulative_rule (its do_obligator(A) and the template lines it rewrites) is withdrawn, since RULES_F20 now changes those lines and a repair that finds its text gone stops apply_edits.py, as D004-D075 withdrew the condition schemes' repairs (its docstring and the CHANGELOG's table of proposals follow); semantic_diff.py, which pairs the syntax-only file's schemes with the cleaned file's less the added ones, learns that a decision removes an upstream scheme (rule listed as removed, not paired); make_changelog.py's guard expects one failing scheme, ad_hominem, and its texts that name regulative_rule (the table of schemes that cannot pass, the line on variables used in no premise, the rows on do_obligator and excuse) say what changed. The gate: regulative_rule passes the validator, so ad_hominem is the cleaned file's one failure left, and CHANGELOG.md's paragraph on the two failing schemes says so; the registry: 133 schemes, its differences these schemes and keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
   - "links.json (D024, D106, D104, D105, D026; the proposed links below): 55.1's link of established_rule maps CQ1 to has_conclusion(R,C) and applicable(R), CQ2 and CQ3 to the two exceptions, and valid(R) under the Minor Premise; 55.1 links established_rule_actor exactly; 55.2's link of rule is removed, and 55.2 links rule_evaluative and rule_prescriptive partly, one reading each; 55.3's link maps addressee_of(A,X) with the Warrant and its rebuttal factor to excuse_or_overriding_duty(A,X); 56's link, which keeps links.json's upstream id exeptional (id-migrations.json), maps the bound formulas and CQ2 to exception_backed(R,X); 50's link maps the conclusion to ¬case_exception(R,C0). The file's _note logs the change."
   - "families.json: F20 loses rule; rule_prescriptive is its generic scheme (55.2's prescriptive reading) and rule_evaluative a variant (55.2's evaluative reading); established_rule_actor joins as a specialization (55.1) and bridge_from_exceptional_case as related (the answer from 56 to 55.1's third question). F17 does not change. positions.json (D107), by place: agent: must_do/2 [1], addressee_of/2 [1], excuse_or_overriding_duty/2 [1], established_action_rule/4, established_action_warrant/4, conflicting_action_rule/4 and action_rule_excuse/4 [3]; action: must_do/2 [2], obligatory/1 [1], addressee_of/2 [2], excuse_or_overriding_duty/2 [2], and the four /4 predicates [4]. No variable becomes both an agent and an action in any scheme (TestTypedPlacesAreConsistent). The case, the rule, the evaluation and the conduct stay untyped."
-  - "The engine's tests (wag/internal/carneades, a new rules_f20_test.go), on walton.yml as changed, every argument at the same weight: an exception of defeasible modus ponens for one rule from A undercuts that argument and not another from A; each of the established rule's exceptions undercuts the argument with its R and C and not another rule's argument for the same C; through the bridge, an exceptional case for R and X undercuts the established-rule argument for R and a conclusion about X, and not one for another rule; a precedent slope for R and C0 attacks the exceptional case's premise for R and C0 and not for another rule; an excuse of one agent undercuts the regulative-rule argument for that agent and not another's; established_rule_actor's conclusion meets the regulative rule's. On the frozen format-1 walton.yml, the planted control: the 0-ary excuse undercuts every agent's argument."
-  - "The catalogue (--catalogue-gen, then the drafted texts): rule.yml is retired, its drafted texts moved: the two gold examples to rule_prescriptive's new entry, the near miss and the contrasts to whichever form each concerns; new entries for rule_evaluative, rule_prescriptive, established_rule_actor and bridge_from_exceptional_case; the eleven entries whose contrasts name rule (defeasible_modus_ponens, established_rule, exception_to_rule, exceptional, plea_for_excuse, positive_value, regulative_rule, rule_mental_world, rule_physical_world_1, rule_physical_world_2, verbal_classification) choose the form each means, as the check requires (a contrast with a retired scheme has no entry). established_rule's 55.1/CQ1 keeps both targets, its CQ2 and CQ3 target the exceptions, its paraphrases and answers no longer say that walton.yml lacks them, and its two discrepancies are closed (D024, D025); defeasible_modus_ponens's discrepancies on implies (D020) and on its questions (D019) are closed, the not-in-book one stays open with D021, and its note says that the game's Other is to be played as it (plan §3); exceptional's, regulative_rule's and precedent_slippery_slope's questions get their targets and texts. The examples below move into the entries."
-  - "The register: D019, D020, D024, D025 and D026 applied (the date and this proposal); D104-D108 (registered 2026-11-28, under the standing rule) applied; D109 applied with the replay (below); D021 stays open; points (a)-(d) above are registered before the application, under D104, D024 and D026 or as an entry of their own. The candidates registry does not change."
-  - "The batch-2 gold (both copies), by a recode script (recode_rules_f20.py, from the gold before it, pinned by its SHA-256): 13292.46#1 and 13292.29#1 become rule_prescriptive instances, bound A and C (E dropped), with the premises rule_conduct(A,C) and case(A) and the conclusion conduct_required(C), their English rendered by the new templates; their challenges at evaluation(...) name rule_conduct(...); their notes say why (the evaluation part is the rule's content, read as the conduct); each gains an adjudication.recoded entry. The lexicon keeps the two evaluation atoms, which the format-1 files use. walton.yml, links.json and positions.json change, so the gold is re-pinned (validate.py --repin) once its checks pass. The format-1 gold and the two annotators' files, checked against the frozen format-1 walton.yml, do not change."
+  - "The engine's tests (wag/internal/carneades, a new rules_f20_test.go), on walton.yml as changed, every argument at the same weight: an exception of defeasible modus ponens for one rule from A undercuts that argument and not another from A; each of the established rule's exceptions undercuts the argument with its R and C and not another rule's argument for the same C; through the bridge, an exceptional case for R and X undercuts the established-rule argument for R and a conclusion about X, and not one for another rule; a precedent slope for R and C0 attacks the exceptional case's premise for R and C0 and not for another rule; an excuse of one agent undercuts the regulative-rule argument for that agent and not another's; established_rule_actor's conclusion meets the regulative rule's; a counter to the exceptional case's general major premise for R defeats its arguments for every case of R and none for another rule; rule_prescriptive's conclusion is rebutted by ¬is_required(C) (choice (C3)). On the frozen format-1 walton.yml, the planted control: the 0-ary excuse undercuts every agent's argument."
+  - "The catalogue (--catalogue-gen, then the drafted texts): rule.yml is retired, its drafted texts moved: the two gold examples to rule_prescriptive's new entry, the near miss and the contrasts to whichever form each concerns; new entries for rule_evaluative, rule_prescriptive, established_rule_actor and bridge_from_exceptional_case. rule_evaluative's and rule_prescriptive's entries get 55.1's three questions as derived questions (D024; derived/<name> with its source, Walton, Reed and Macagno 2008, chapter 9, page 343, and its name there, CQ1, CQ2 or CQ3, as D007 and D023 have them): CQ1 at the form's rule premise, rule_evaluation(A,E) or rule_conduct(A,C); CQ2 and CQ3 with no target, each saying how it is raised (a challenge of the rule premise, or a rebuttal). bridge_from_exceptional_case's entry gives its questions as a reasoned none (D075): both its premises are challenged as premises, and the exceptional case's questions are 56's. The entries whose contrasts name rule choose the form each means, as the check requires (a contrast with a retired scheme has no entry): the seven of F20 (exception_to_rule, exceptional, plea_for_excuse, regulative_rule, rule_mental_world, rule_physical_world_1, rule_physical_world_2), whose contrasts the generator writes from the family, take its new generic; the four drafted ones (defeasible_modus_ponens, established_rule, positive_value, verbal_classification) are rewritten by hand; and rule.yml's summary, classification, specialisations and dialogue types, and established_rule.yml's summary and note on what it specialises, which name rule (55.2), move to the new entries. exceptional's and plea_for_excuse's entries gain a contrast with each other (a rule waived for this case, or this act's sanction lifted). defeasible_modus_ponens's walton/rule_excepted note says that it is derived (D019), not the book's, while D021 is open. established_rule's 55.1/CQ1 keeps both targets, its CQ2 and CQ3 target the exceptions, its paraphrases and answers no longer say that walton.yml lacks them, and its two discrepancies are closed (D024, D025); defeasible_modus_ponens's discrepancies on implies (D020) and on its questions (D019) are closed, the not-in-book one stays open with D021, and its note says that the game's Other is to be played as it (plan §3); exceptional's, regulative_rule's and precedent_slippery_slope's questions get their targets and texts. The examples below move into the entries. wag/data/catalogue/README.md follows: its count of entries, its tier-1 table and its line on the questions (the established rule's CQ2 and CQ3 have targets now; the derived questions are counted)."
+  - "Code that names or pins what changes: wag/internal/catalogue/generate.go's Tier1 names rule_evaluative and rule_prescriptive in place of rule (the gold's two items are rule_prescriptive's; without it their entries are made at tier 2); catalogue_test.go's TestProposalRenamedSchemeLinks, which holds exceptional's link as it is today (56/CQ1 at case_exception(A), CQ2 at no formula), moves its fixture to exception_to_rule, which links.json still names by its upstream id exeption_to_rule (57: CQ1 at inapplicable_rule(R), CQ2 and CQ3 at no formula), since D104 changes exceptional's."
+  - "The register: D019, D020, D024, D025 and D026 applied (the date and this proposal); D104-D108 (registered 2026-11-28, under the standing rule) applied; D109 applied with the replay (below); D021 stays open; points (a)-(f) above are registered before the application (a) under D104, (b) under D105, (c) under D106, (d) under D026, (e) as an entry of its own and (f) under D105; the owner's answers to choices (C1)-(C4) are recorded where they belong (C1 amends D104's wording if the proposed text is taken). D024's and D026's items, which name the catalogue entry rule, name the new entries instead (D024: rule_evaluative and rule_prescriptive, about their derived questions; D026: the two, about their readings), or the catalogue check finds no entry rule. The candidates registry gains two entries: 55.3's prohibition form (the schemes library's regulative_rule_prohibition), and an answer route to established_rule_actor's third question and from a plea for excuse (58), which the bridge does not give."
+  - "The batch-2 gold (both copies), by a recode script (recode_rules_f20.py, from the gold before it, pinned by its SHA-256): 13292.46#1 and 13292.29#1 become rule_prescriptive instances, bound A and C (E dropped), with the premises rule_conduct(A,C) and case(A) and the conclusion is_required(C), their English rendered by the templates; their challenges at evaluation(...) name rule_conduct(...); their notes say why (the evaluation part is the rule's content, read as the conduct); each gains an adjudication.recoded entry. 13292.190#1's alternative rule is renamed rule_prescriptive, its reason unchanged (no rounds' state changes: 13292.190 is a round-2 claim not drafted yet). The lexicon keeps the two evaluation atoms, which the format-1 files use. walton.yml, links.json and positions.json change, so the gold is re-pinned (validate.py --repin) once its checks pass. The format-1 gold and the two annotators' files, checked against the frozen format-1 walton.yml, do not change."
   - "The first gold's rounds (d086-rounds.json): 13292.46 and 13292.29 were agreed at round 1, draft 1 (exchange 1), and go back to review at a revision they no longer have; 13292.29 is in the owner's session of exchange 3."
+  - "The guidelines (§3.1), with a rule case of their own: a claim that the case at hand is an exception to an established rule is coded with two instances, as OC15 codes D008's bridges: the exceptional case (exceptional, secondary), concluding rule_waived(R,X), and the bridge (bridge_from_exceptional_case, primary), at the established-rule argument's exception rule_exception_or_excuse(R,C), with case_of(C,X) supplied unless the claim states it. A claim coded with the exceptional case as its primary instance at the exception is what R8 refuses, since that instance does not conclude the exception. No gold item needs it yet."
   - "Rule cases (rule-cases.yml): OC5-c, 13292.29, is recoded as the gold is (TestRuleCases). validate.py: ANSWER_SCHEMES gains bridge_from_exceptional_case, which concludes an exception (its test requires every scheme that does), so R11 keeps it at an exception."
-  - "The replay (D109; to_wag.py): a claim coded with a scheme the game lacks is played with Other, its conclusion the instance's formula where the instance states one, not its text: 13292.46, an action amendment played as a new Other argument, concludes conduct_required(tax_beef_more_than_wild_game) where it concluded a text statement; 13292.29, a rebuttal, concludes ¬should_be_performed(tax_meat) as before. A test pins it; the replay is made again with the gold. The game's moves do not change otherwise: none of these schemes is in the game."
-  - "Proposal views: the committed views are written again and checked to change nowhere else. Docs: the README, plan.md, dialogue-types.md and scheme-registry/README.md count 133 schemes, and the schemes with questions as assumptions or exceptions (72, from 70); first-family.md's note that regulative_rule waits for its family is dated."
+  - "The replay (D109; to_wag.py): a claim coded with a scheme the game lacks is played with Other, its conclusion the instance's formula where the instance states one, not its text: 13292.46, an action amendment played as a new Other argument, concludes is_required(tax_beef_more_than_wild_game) where it concluded a text statement; 13292.29, a rebuttal, concludes ¬should_be_performed(tax_meat) as before. A test pins it; the replay is made again with the gold. The game's moves do not change otherwise: none of these schemes is in the game."
+  - "Proposal views: the committed views are written again and checked to change nowhere else. Docs: the README's scheme-sources line and scheme-registry/README.md's account of the cleaned file say that, for the first time, a decision removes an upstream scheme (rule), with the four added and the four more upstream schemes changed; they, plan.md and dialogue-types.md count 133 schemes, and the schemes with questions as assumptions or exceptions (72, from 70); plan.md §2's tier-1 list names the two new forms, and its row on links.json gives the links' counts recounted by script at the application; first-family.md's note that regulative_rule waits for its family is dated."
 schemes:
   - id: defeasible_modus_ponens
     meta:
@@ -226,7 +308,7 @@ schemes:
     premises: ["rule_conduct(A,C)", "case(A)"]
     assumptions: []
     exceptions: []
-    conclusions: ["conduct_required(C)"]
+    conclusions: ["is_required(C)"]
   - id: regulative_rule
     meta:
       title: Argumentation From Rules - Regulative Rule Premise Obligation Claim
@@ -241,7 +323,7 @@ schemes:
     meta:
       title: Argument For An Exceptional Case
       source: |
-        Douglas Walton, A Pragmatic Theory of Fallacy.  Tuscaloosa and London: University of Alabama Press, 1995, p. 148.
+        Douglas Walton, A Pragmatic Theory of Fallacy.  Tuscaloosa and London: University of Alabama Press, 1995, p. 147.
     variables: [R, X]
     premises: ["waivable_for_exceptions(R)", "case_exception(R,X)"]
     assumptions: ["exception_backed(R,X)"]
@@ -251,7 +333,7 @@ schemes:
     meta:
       title: "From an Exceptional Case to the Established Rule's Exception (bridge)"
       source: |
-        WAG's bridge (decisions D108 and D024): when an established rule R can be waived for a case X (the argument for an exceptional case, compendium entry 56, p. 344) and C is the conclusion about X, an exceptional case defeats R in its application to C, the exception rule_exception_or_excuse(R,C) that the argument from an established rule takes for its third question (55.1, p. 343). Walton (A Pragmatic Theory of Fallacy, 1995, p. 147) presents the exceptional case as the critic's reply to that question. Not in the compendium.
+        WAG's bridge (decisions D108 and D024): when an established rule R can be waived for a case X (the argument for an exceptional case, compendium entry 56, p. 344) and C is the conclusion about X, an exceptional case defeats R in its application to C, the exception rule_exception_or_excuse(R,C) that the argument from an established rule takes for its third question (55.1, p. 343). Walton (A Pragmatic Theory of Fallacy, 1995, p. 147) presents the exceptional case as the critic's reply to that question, and so does the book itself (pp. 71-72), where the scheme for it follows the established rule's third question. Not in the compendium.
     variables: [R, X, C]
     premises: ["rule_waived(R,X)", "case_of(C,X)"]
     assumptions: []
@@ -279,14 +361,13 @@ language:
   rule_evaluation/2: "When %s is the case, the evaluation %s is justified."
   evaluation_justified/1: "The evaluation %s is justified."
   rule_conduct/2: "When %s is the case, the conduct %s is required."
-  conduct_required/1: "The conduct %s is required."
   obligatory/1: "%s is obligatory."
-  do_obligator/0: "Those a rule addresses must do what it makes obligatory, and not do what it prohibits."
-  addressee_of/2: "The rule on %[2]s addresses %[1]s."
+  do_obligator/0: "What is obligatory must be done, and what is prohibited must not be done."
+  addressee_of/2: "%s is subject to the rule concerning %s."
   excuse_or_overriding_duty/2: "%s has a good excuse, or a weightier duty, that sets aside the rule on %s."
   waivable_for_exceptions/1: "%s can be waived for a case that is an exception to it."
   case_exception/2: "%[2]s is an exception to %[1]s."
-  exception_backed/2: "%[2]s is a recognized kind of exception to %[1]s, or there is evidence that the rule was not meant to govern it."
+  exception_backed/2: "Unless %[2]s is a recognized kind of exception to %[1]s, there is evidence that %[1]s does not reach it."
   rule_waived/2: "%s can be waived for %s."
   case_of/2: "%s is a conclusion about the case %s."
 questions:
@@ -305,7 +386,7 @@ questions:
     - {id: "55.3/Rebuttal Factor 1", asks: "Does A have a good excuse for not doing X, or a weightier duty that sets the rule aside?", target: "excuse_or_overriding_duty(A,X)"}
   exceptional:
     - {id: 56/CQ1, asks: "Is X an exception of a kind already recognized under R?", target: "case_exception(R,X)"}
-    - {id: 56/CQ2, asks: "If X is no recognized exception, what evidence shows that R was not meant to govern it?", target: "exception_backed(R,X)"}
+    - {id: 56/CQ2, asks: "If X is no recognized exception, what evidence shows that R does not reach it?", target: "exception_backed(R,X)"}
     - {id: 56/CQ3, asks: "If X is a borderline case, which comparable cases were treated as exceptions to R?", target: "case_exception(R,X)"}
   precedent_slippery_slope:
     - {id: 50/CQ1, asks: "Would treating C0 as an exception to R really commit us to treating C1 as one too?", target: "sets_precedent(C0,C1,R)"}
@@ -371,8 +452,8 @@ links:
       - compendium_label: Minor Premise
         walton: [{formula: "case(A)", locus: premise}]
     conclusion_map:
-      note: "the reading 'conduct C is required'"
-      walton: [{formula: "conduct_required(C)", locus: conclusion}]
+      note: "the reading 'conduct C is required', in walton.yml's statement that something is required (choice (C3))"
+      walton: [{formula: "is_required(C)", locus: conclusion}]
   - entry: "55.3"
     id: regulative_rule
     match: exact
@@ -390,7 +471,7 @@ links:
   - entry: "56"
     id: exceptional
     match: exact
-    reason: "Same title (\"Exceptional Case\"); source A Pragmatic Theory of Fallacy 1995 (walton.yml prints p. 148, the book p. 147 and also Erlbaum 1996, p. 93). Since D104 every formula names the rule R and the case X, as the entry ties the case of its premises to the case of its conclusion."
+    reason: "Same title (\"Exceptional Case\"); source A Pragmatic Theory of Fallacy 1995, p. 147 (walton.yml printed p. 148, point (e); the book also cites Erlbaum 1996, p. 93). Since D104 every formula names the rule R, and every one but the major premise, a general premise about R and any case (the book binds its case there), names the case X (choice (C1)): the entry ties the case of its minor premise to the case of its conclusion."
     premise_map:
       - compendium_label: Major Premise
         walton: [{formula: "waivable_for_exceptions(R)", locus: premise}]
@@ -400,7 +481,7 @@ links:
       walton: [{formula: "rule_waived(R,X)", locus: conclusion}]
     cq_map:
       - {cq: CQ1, note: "a recognized kind of exception: the premise itself", walton: [{formula: "case_exception(R,X)", locus: premise}]}
-      - {cq: CQ2, note: "for a case of no recognized kind, evidence that R does not reach it: presumed until asked (D104)", walton: [{formula: "exception_backed(R,X)", locus: assumption}]}
+      - {cq: CQ2, note: "for a case of no recognized kind, evidence that R does not reach it: presumed until asked (the design's mapping, DESIGN.md §5; D104 binds its formulas)", walton: [{formula: "exception_backed(R,X)", locus: assumption}]}
       - {cq: CQ3, note: "a borderline case: comparable cases support the premise", walton: [{formula: "case_exception(R,X)", locus: premise}]}
   - entry: "50"
     id: precedent_slippery_slope
@@ -416,7 +497,7 @@ links:
         note: "read at the end case Cn; the book prints C0"
         walton: [{formula: "intolerable_exception(Cn,R)", locus: premise}]
     conclusion_map:
-      note: "the negation of the premise of the argument for an exceptional case (exceptional), which the slope counters (book p. 117), for the same rule since D104"
+      note: "the negation of the premise of the argument for an exceptional case (exceptional), which the slope counters through its claim premise (p. 340), for the same rule since D104"
       walton: [{formula: "¬case_exception(R,C0)", locus: conclusion}]
     cq_map:
       - {cq: CQ1, walton: [{formula: "sets_precedent(C0,C1,R)", locus: premise}]}
@@ -472,7 +553,7 @@ examples:
     attacks:
       - question: walton/rule_excepted
         text: "The processors run on margins of a few cents a kilo: firms that thin cannot absorb a tax, whatever their fight for market share."
-    note: "Its rule is no named scheme's, so it is a defeasible modus ponens; the answer is an attack at the exception of the causal argument (D097's interference(E1,E2))."
+    note: "Its rule is no named scheme's, so it is a defeasible modus ponens; the answer is an attack at the exception of the causal argument (D097's interference(E1,E2)). It is not a cause to effect (as example 4 is): what it concludes is the causal argument's exception, which no named scheme concludes."
   - scheme: cause_to_effect
     title: Salt on the steps
     invented: true
@@ -576,7 +657,7 @@ examples:
       - question: CQ:premise_acceptable
         target: "established_action_warrant(C,R,P,A)"
         text: "The fire code is the insurer's recommendation, not a rule that obliges anyone in the building."
-    note: "It concludes must_do(P,A), the regulative rule's predicate: an argument that Femi must not test the alarms, of either scheme, meets it on the same formula."
+    note: "It concludes must_do(P,A), the regulative rule's predicate: an argument of either scheme that Femi must test the alarms concludes the same statement, and a rebuttal that he is not obliged to, ¬must_do(P,A), meets both. (That he must not test them is a prohibition, which neither scheme concludes.)"
   - scheme: regulative_rule
     title: The alarms are obligatory for whoever is on duty
     invented: true
@@ -612,7 +693,7 @@ examples:
       - question: CQ:premise_acceptable
         target: "rule_evaluation(A,E)"
         text: "Taking a bigger share from the poor makes a tax regressive, not unfair, when what it raises goes back to them as a food rebate."
-    note: "The rule's two forms take no questions (D024: 55.1's apply to them only as derived questions, which the catalogue cannot carry yet); the rule and the case are challenged as premises."
+    note: "The rule's two forms take none of 55.1's exceptions (D024): 55.1's questions are theirs as derived questions, which the catalogue carries and the game does not ask (a proposal cannot hold one); the rule and the case are challenged as premises."
   - scheme: verbal_classification
     title: A flat tax on meat is regressive
     invented: true
@@ -698,11 +779,11 @@ examples:
     invented: true
     use: near-miss
     near_miss_of: regulative_rule
-    text: "Going onto the site without a helmet could get the inspector hurt by a falling bolt, which is bad; so the inspector should not go on without one."
+    text: "Going onto the site without a helmet would leave the inspector's head unprotected from falling bolts, which is bad; so the inspector should not go on without one."
     bindings:
       A: the inspector going onto the site without a helmet
-      G: the inspector being hurt by a falling bolt
-    note: "A bad consequence of the act, with no rule that makes the opposite obligatory: negative consequences."
+      G: the inspector's head being unprotected from falling bolts
+    note: "A bad consequence of the act, with no rule that makes the opposite obligatory: negative consequences, categorical, since the consequence would follow (guidelines §3: a consequence that could follow is coded with the modal variant)."
   # --- exceptional --------------------------------------------------------------
   - scheme: exceptional
     title: Ana's operation and the zero rule
