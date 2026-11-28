@@ -621,6 +621,7 @@ func TestProposalFindsFaults(t *testing.T) {
 		{"a stray binding", func(p *Proposal) { p.Examples[0].Bindings["Q"] = "q" }, "Q is not a variable", true},
 		{"no template", func(p *Proposal) { p.Schemes[0].Premises = []string{"nowhere(P,C)"}; p.Questions = nil }, "no template for nowhere/2", true},
 		{"an undeclared variable", func(p *Proposal) { p.Schemes[0].Variables = []string{"P"} }, "variable C is used but not declared", true},
+		{"a variable declared twice", func(p *Proposal) { p.Schemes[0].Variables = append(p.Schemes[0].Variables, "P") }, "variable P is declared twice", true},
 		{"a variable in no premise", func(p *Proposal) {
 			p.Schemes[0].Variables = append(p.Schemes[0].Variables, "D")
 			p.Schemes[0].Conclusions = []string{"in_case(P,D)"}
@@ -658,7 +659,7 @@ func TestProposalFindsFaults(t *testing.T) {
 			p.Questions["x_new"][0].ID = "7/CQ2"
 			p.Examples[0].Attacks[0].Question = "7/CQ2"
 		}, "no compendium entry is linked to x_new", true},
-		{"an id the catalogue cannot carry", func(p *Proposal) {
+		{"an id the proposal cannot carry", func(p *Proposal) {
 			p.Questions["x_new"][0].ID = "C999/Q1"
 			p.Examples[0].Attacks[0].Question = "C999/Q1"
 		}, "neither a book question", true},

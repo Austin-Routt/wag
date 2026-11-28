@@ -318,6 +318,12 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		}
 		declared := map[string]bool{}
 		for _, v := range s.Variables {
+			if declared[v] {
+				// The engine would take the variable twice as a parameter of
+				// every argument the scheme makes.
+				bad("%s: variable %s is declared twice", s.ID, v)
+				continue
+			}
 			declared[v] = true
 			if !used[v] {
 				bad("%s: variable %s is declared but used in no formula", s.ID, v)
@@ -799,8 +805,10 @@ func linkKey(l WaltonLink) string {
 // entry links.json links to the scheme, or the one its questions are
 // printed under), one the game asks (game/...), or a walton/ question of an
 // assumption or exception (checked above). A question borrowed from another
-// entry is a derived question (D023), which the catalogue cannot hold yet;
-// candidates' sketches, which are never applied, may still borrow.
+// entry is a derived question (D023): a catalogue entry holds it as
+// derived/<name>, with its source, written when the proposal is applied, not
+// carried from the proposal's questions; candidates' sketches, which are never
+// applied, may still borrow.
 func carriedQuestion(src *Sources, scheme, id string) string {
 	if strings.HasPrefix(id, "walton/") || strings.HasPrefix(id, "game/") {
 		return ""
@@ -808,11 +816,11 @@ func carriedQuestion(src *Sources, scheme, id string) string {
 	entry, label, ok := strings.Cut(id, "/")
 	l, found := src.link(entry)
 	if !ok || !found || !in(l.CQLabels, label) {
-		return "neither a book question, a game question (game/…) nor a walton/ question; the catalogue could not carry it (a question derived from another, D023, is not supported yet)"
+		return "neither a book question, a game question (game/…) nor a walton/ question; a question derived from another (D023) goes into the catalogue entry as derived/<name> when the proposal is applied, not into the proposal's questions"
 	}
 	es := linkedEntries(src, scheme)
 	if len(es) == 0 {
-		return fmt.Sprintf("no compendium entry is linked to %s, so %s's question is borrowed: a derived question (D023), which the catalogue cannot carry yet", scheme, entry)
+		return fmt.Sprintf("no compendium entry is linked to %s, so %s's question is borrowed: a derived question (D023), which goes into the catalogue entry as derived/<name> when the proposal is applied, not into the proposal's questions", scheme, entry)
 	}
 	if !in(es, entry) {
 		return fmt.Sprintf("%s is not a compendium entry of %s (%s)", entry, scheme, strings.Join(es, ", "))
