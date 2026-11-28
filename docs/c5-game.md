@@ -404,6 +404,46 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
    "Which way?", the investigation its answer names (D095 (3)), while the board offers "yes" and "no"
    (the check of the switch, N-4). Keep it, or end it "If so, how?"
 
+## C5.3: the owner's answers to C5's questions (D099)
+
+The owner answered the five questions above on 2026-11-27 (D099). (2) is applied (P3, step C5.2). This
+step applies the other four, written before the code (2026-11-28); the cases are in
+[`c5-item-f.md`](c5-item-f.md), sections A7-A9 and A4's additions, written before their tests.
+
+- **(1) A backup edge from negative consequences to CQ:side_effect** (`game/order.yml`): a further bad
+  consequence argued with `negative_consequences` answers the side-effect question of practical
+  reasoning and positive consequences, a rebuttal at the conclusion (D095 (1)), as positive
+  consequences answers CQ:opposite_consequences of negative consequences. Before, such a move was a
+  direct rebuttal of the conclusion only; it still is one when no question is asked.
+- **(3) Sign's answer at practical reasoning's rebuttal route is outside the pilot's profile**: a
+  profile rule, **P5**, refuses an answer to CQ:side_effect of a practical-reasoning argument
+  (`AS:practical_reasoning`, `AS:practical_reasoning_goal`) made with `AS:sign`, until its warrant is
+  reviewed. Sign's edge stays in the data: it answers positive consequences' side-effect question as
+  before (A5.1), and a game without a profile plays it at practical reasoning too (as every rule of
+  the profile, P5 binds only a game that has one). P5 comes after NASCQ's rules, with P3 and P4.
+- **(4) D095 (3)'s list bounds every route to the bridges' exception**: S5 refuses an argument that
+  concludes the exception of a question that refuses Other unless its scheme backs the question:
+  the answer scheme on its backup edge, or a thesis-independent scheme (the game's source-based
+  schemes, `AS:expert_opinion` and `AS:position_to_know`, which back every question). Sign and
+  analogy, which bind their conclusion to any statement and so could argue
+  `worth_finding_out_first(A,G)` by a move about it (the check of the switch, N-12), are refused
+  there as Other is; a move that presumes the exception as a premise is refused as before.
+  Undercutters are kept: S5 reads what an argument concludes or presumes, and an undercutter of a
+  bridge concludes neither. The game reads formulas, not free text, so an Other undercutter whose
+  premise is only that the consequence could be found out cannot be told from one about something
+  else: it is kept, and what it says is for the players and the review (D053).
+- **(5) CQ:worth_finding_out_first's text ends "If so, how?"** (the two bridges' entries, from which
+  the text is generated).
+
+**The switch.** (1) and (5) change the game's data, so its fingerprint changes once, in one commit,
+as at C5.2: the generated files with the catalogue's; the frozen copy of today's files
+(`wag/data/frozen/092b6a6f48a672d2`) for the games and traces made on them; the gold re-pinned to the
+new NASCQ files (`validate.py --repin`, both copies); the reference games' pinned fingerprint and
+digests made again where a move's board changes. (3) and (4) are code, with in-memory tests first;
+they hold on today's data and change no byte of it. Then the batch-2 replay is made again (no claim
+uses these routes, so no move should change), the docs (game-rules.md for P5 and S5, the
+catalogue's entries, the README's counts), gates on both toolchains and an independent review.
+
 ## Item F: the answer contract, per route
 
 Per question and answer route (D075; the critical review's row F): each backup edge (the answer

@@ -134,6 +134,34 @@ needs the statement. The case is played on m+ and b+ (b+ concludes it), and is r
 | A6.1 | n1; Pro answers CQ:opposite_consequences of n1 with AS:consequences, G `emissions_fall` | accepted, a rebuttal: the answer concludes `should_be_performed(tax_meat)` |
 | A6.2 | n1; Pro answers it with AS:negative_consequences | refused, S5 |
 
+### A7. AS:negative_consequences at CQ:side_effect (D099 (1); step C5.3, written before the tests)
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A7.1 | c1; Con answers CQ:side_effect of c1 with AS:negative_consequences, G `food_costlier` | accepted, a rebuttal: the answer concludes `¬should_be_performed(tax_meat)` |
+| A7.2 | pr; the same answer to pr's CQ:side_effect | accepted, a rebuttal of pr's conclusion |
+| A7.3 | c1; the answer with A `subsidy_plants` (another action) | refused, S9 |
+| A7.4 | c1; Con answers CQ:side_effect of c1 with AS:consequences | refused, S5 (no backup edge) |
+| A7.5 | n1; Pro answers CQ:opposite_consequences of n1 with AS:negative_consequences | refused, S5 (the edge is CQ:side_effect's only) |
+
+### A8. Sign at practical reasoning's rebuttal route (D099 (3); step C5.3)
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A8.1 | pr; Con answers CQ:side_effect of pr with AS:sign | refused, P5 |
+| A8.2 | pg; the same answer to pg's CQ:side_effect | refused, P5 |
+| A8.3 | c1; A5.1's answer (sign at positive consequences' side-effect question) | accepted, as before |
+| A8.4 | pr, in a game with no profile; A8.1's answer | accepted: P5 is a rule of the profile |
+
+### A9. The bridges' exception bounded (D099 (4), (5); step C5.3)
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A9.1 | m+, b+; Con argues for `worth_finding_out_first(tax_meat,demand_falls)` with AS:sign as a move about the statement; and with AS:analogy | refused, S5, both (the check of the switch, N-12) |
+| A9.2 | m+, b+; Con argues for it with AS:position_to_know as a move about the statement | accepted: a source-based scheme (D095 (3)); while its own questions are not asked, the exception In and b+ out of force |
+| A9.3 | m+, b+; Con undercuts b+ with Other, its premise a free text | accepted: S5 reads what an argument concludes or presumes; b+ out of force |
+| A9.4 | CQ:worth_finding_out_first's text, as the board shows it for b+ | ends "If so, how?" |
+
 ## B. Other and the thesis-independent schemes
 
 | Case | Board, then the move | Expected |
@@ -303,3 +331,16 @@ Added after the independent check of step 8 (2026-11-27), before they ran:
 | an undercut also takes down the other arguments on the board for its target's conclusion (Q2-C) | B6 |
 | the shared exception is split in `practical_reasoning1`'s scheme of `core.yml`, not in `positive_consequences`' | A1.2b |
 | the profile's check takes an actor, an action or an alias that names nothing | TestProfileNamesThatNameNothing |
+
+Step C5.3's planted defects (2026-11-28, written before the tests):
+
+| Defect | Caught by |
+|---|---|
+| no backup edge from negative consequences to CQ:side_effect | A7.1, A7.2 |
+| the edge given to CQ:opposite_consequences as well | A7.5 |
+| P5 removed, or applied to positive consequences too | A8.1, A8.2; A8.3 |
+| P5 applied in a game with no profile | A8.4 |
+| S5 refusing only Other at the exception | A9.1 |
+| S5 refusing the source-based schemes too | A9.2 |
+| S5 refusing an undercutter of a bridge | A9.3 |
+
