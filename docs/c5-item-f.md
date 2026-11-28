@@ -373,6 +373,38 @@ have let `finding_out_first` stand without naming any investigation, the bare cl
 The game was wrong: S2 checked that a binding was there, not that it named something. S2 and the
 adapter now refuse a blank binding (A1.7b, A4.2b, and the engine's G-unbound).
 
+## U. A claim in the engine's undercutter namespace (F2 of the external review of exchange 3)
+
+Added 2026-11-28, before their tests. The engine names an argument's undercutter `undercut(<id>)`
+and writes that statement when it makes the argument, replacing one so named before; WAG's own
+answer paths take such a statement over instead. So a game whose claim is `undercut(a11)` (or whose
+claim's opposite is, `¬undercut(a11)`) had moves about a statement for an argument not yet made: the
+bridge later made as a11 stood with its conclusion's statement replaced (the board's links broken), or
+an answer made as a11 was born out of force, defeated by a sign argument made before it existed
+(reproduced in the workspace's verify/chatgpt-x3-2026-11-28/CHECK-runtime.md). A game no longer
+starts with such a claim: the claim is read as the engine reads it, its negations taken off, and one
+of the form `undercut/1` is refused. The engine's own choice of ids is unchanged (fixing it changes the
+engine's pin, so saved model-seat games would stop resuming; it is offered upstream instead).
+
+| Case | Setup | Expected |
+|---|---|---|
+| U1 | the server's new game with the claim `undercut(a11)`, `undercut( a11 )`, `¬undercut(a11)` or `¬¬undercut(a11)` | refused (the request's config; HTTP 400 at /api/games), naming the engine's undercutter |
+| U2 | the same claims given to NewGame directly | no claim is made: the game's claim is empty and `undercut(a11)` is not on the board, so a move about it is refused (S7) |
+| U3 | claims of another form: `undercut_cost(a11)`, `undercut(a11,b)`, `undercut`, `worth_finding_out_first(tax_meat,demand_falls)` | accepted by U1's check, and made by NewGame |
+| U4 | wag-cli's `--claim undercut(a11)` | refused before the game starts, with U1's message |
+| U5 | a recorded game whose claim is `undercut(a11)`, loaded | refused with a named error: WAG accepted such a claim until 2026-11-28, and a build of f38d189 or earlier loads the game |
+
+Planted for U1 to U5:
+
+| Defect | Caught by |
+|---|---|
+| the claim compared as text (`undercut( a11 )` taken) | U1 |
+| a negation not taken off (`¬undercut(a11)` taken, whose opposite is the reserved statement) | U1, U2 |
+| NewGame makes the claim the server refuses | U2 |
+| every functor that starts with `undercut`, or `undercut` of any arity, refused | U3 |
+| wag-cli not checking the claim | U4 |
+| the loader naming no change | U5 |
+
 ## Not here
 
 - Replay-1, the 33 reference games on the frozen data (TestReferenceDigests), and Replay-2, the new
