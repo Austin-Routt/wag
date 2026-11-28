@@ -64,29 +64,27 @@ func checkCitations(a Annotation, d *Dataset) []string {
 		known = map[string]bool{}
 		for _, it := range d.Items {
 			known[it.ID] = true
-			var ctx map[string][]struct {
-				ClaimID any `json:"claim_id"`
-			}
-			// A field that is not a list of objects is skipped, as validate.py
-			// skips an entry that is not an object or has no text id.
 			var raw map[string]json.RawMessage
 			if json.Unmarshal(it.Raw, &raw) != nil {
 				continue
 			}
-			ctx = map[string][]struct {
-				ClaimID any `json:"claim_id"`
-			}{}
+			// Each entry of a context list that is an object with a text
+			// claim_id names a known claim. An entry that is not is skipped
+			// and the rest of its list kept, as validate.py skips it (CT16);
+			// a field that is not a list is skipped whole.
 			for _, f := range []string{"kialo_parents", "ancestors", "siblings", "children"} {
-				var refs []struct {
-					ClaimID any `json:"claim_id"`
+				var entries []json.RawMessage
+				if json.Unmarshal(raw[f], &entries) != nil {
+					continue
 				}
-				if json.Unmarshal(raw[f], &refs) == nil {
-					ctx[f] = refs
-				}
-			}
-			for _, refs := range ctx {
-				for _, r := range refs {
-					if id, ok := r.ClaimID.(string); ok {
+				for _, e := range entries {
+					var ref struct {
+						ClaimID any `json:"claim_id"`
+					}
+					if json.Unmarshal(e, &ref) != nil {
+						continue
+					}
+					if id, ok := ref.ClaimID.(string); ok {
 						known[id] = true
 					}
 				}

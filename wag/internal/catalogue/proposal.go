@@ -240,7 +240,11 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 		sort.Strings(keys)
 		for _, k := range keys {
 			if cur, ok := src.Language[k]; !ok || strings.TrimSpace(cur) != strings.TrimSpace(p.Language[k]) {
-				bad("template %s: the proposal is applied, but walton.yml's template is %q, not %q as proposed", k, cur, strings.TrimSpace(p.Language[k]))
+				// A later applied proposal's template, which the view marks
+				// (PC4); any other is an error (PC1, PC5).
+				if src.laterTemplate(p, k) == nil {
+					bad("template %s: the proposal is applied, but walton.yml's template is %q, not %q as proposed", k, cur, strings.TrimSpace(p.Language[k]))
+				}
 			}
 		}
 	}
@@ -1204,6 +1208,18 @@ func ProposalView(p *Proposal, src *Sources, file string) []byte {
 		writeScheme(&b, src, s, p.Questions[s.ID], "A new scheme.", p.Applied != "")
 	}
 	writeTemplates(&b, "**Templates added or changed:**", p.Language)
+	if p.Applied != "" {
+		keys := make([]string, 0, len(p.Language))
+		for k := range p.Language {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			if at := src.laterTemplate(p, k); at != nil && strings.TrimSpace(src.Language[k]) != strings.TrimSpace(p.Language[k]) {
+				fmt.Fprintf(&b, "*Changed since this proposal was applied:* `walton.yml`'s template for `%s` is now “%s”, from the later proposal “%s” (applied %s).\n\n", k, at.Template, at.Title, at.Date)
+			}
+		}
+	}
 	if len(p.Links) > 0 {
 		b.WriteString("## Links to the compendium, as proposed\n\n")
 		b.WriteString("Written into `docs/scheme-registry/links.json` when the proposal is applied, in place of the scheme's own link to the entry if it has one. The labels refer to the book's printed text, which is not reproduced here.\n\n")

@@ -1661,6 +1661,111 @@ class English(unittest.TestCase):
         self.assertEqual((code, errors), (0, []), out)
 
 
+class EnglishCoverage(unittest.TestCase):
+    """R21's coverage and rendering (cases EN8-EN13, d086-first-gold.md §6; the independent review of
+    D098 and R21, W1 and N3): every arity, role and status it reads, atoms with digits, formulas written
+    with spaces, case and period, and templates filled as Go's language.Render fills them."""
+
+    def planted(self, iid, formula, change, g=None):
+        """The gold with the English of an instance's formula (a premise's or the conclusion) changed."""
+        g = copy.deepcopy(GOLD) if g is None else g
+        ins = inst(g, iid)
+        pm = next(p for p in list(ins['premises']) + [ins['conclusion']] if p.get('formula') == formula)
+        pm['en'] = change(pm['en'])
+        return g
+
+    def refused(self, g, iid, formula):
+        code, errors, out = run(g, english=False)
+        self.assertEqual(code, 1, out)
+        r21 = [e for e in errors if ': R21 ' in e]
+        self.assertTrue(any(f"R21 {iid}'s English for {formula} " in e for e in r21), errors)
+
+    def word(self, en):
+        return en.replace('is ', 'was ', 1) if 'is ' in en else en.replace(' ', '  ', 1)
+
+    def test_en8_arity_one_and_three(self):
+        for iid, f in (('13292.7#1', 'bad(food_less_affordable_for_poor)'),
+                       ('13292.115#1', 'good(reduced_unhealthy_meat_consumption)'),
+                       ('13292.61#1', 'would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)')):
+            with self.subTest(formula=f):
+                self.refused(self.planted(iid, f, lambda en: en.replace('would bring about', 'would cause').replace(' is ', ' was ')), iid, f)
+
+    def test_en9_an_explicit_premise_and_an_assumption(self):
+        for iid, f in (('13292.7#1', 'brings_about(tax_meat,food_less_affordable_for_poor)'),
+                       ('13292.1#2', 'possible_bring_about(governments,tax_meat)')):
+            with self.subTest(formula=f):
+                self.refused(self.planted(iid, f, lambda en: en.rstrip('.') + ' indeed.'), iid, f)
+
+    def test_en10_an_atom_with_digits(self):
+        f = 'expert(nature_2020_external_cost_study,external_costs_of_food)'
+        self.refused(self.planted('13292.224#1', f, lambda en: en.rstrip('.') + ' indeed.'), '13292.224#1', f)
+
+    def test_en11_a_formula_written_with_spaces(self):
+        g = copy.deepcopy(GOLD)
+        ins = inst(g, '13292.7#1')
+        pm = next(p for p in ins['premises'] if p['formula'] == 'brings_about(tax_meat,food_less_affordable_for_poor)')
+        pm['formula'] = 'brings_about(tax_meat, food_less_affordable_for_poor)'
+        pm['en'] = pm['en'].rstrip('.') + ' indeed.'
+        self.refused(g, '13292.7#1', 'brings_about(tax_meat,food_less_affordable_for_poor)')
+
+    def test_en12_case_and_period(self):
+        f = 'brings_about(tax_meat,food_less_affordable_for_poor)'
+        for name, change in (('case', lambda en: en[0].swapcase() + en[1:]), ('period', lambda en: en.rstrip('.'))):
+            with self.subTest(change=name):
+                self.refused(self.planted('13292.7#1', f, change), '13292.7#1', f)
+
+    def test_en13_templates_filled_as_go_fills_them(self):
+        with tempfile.TemporaryDirectory() as root:
+            for rel in ('docs/kialo-batch2/validate.py', 'docs/kialo-batch2/lexicon.json', 'docs/kialo-batch2/items.json',
+                        'docs/kialo-batch2/case.json', 'docs/scheme-registry/walton-clean/walton.yml',
+                        'docs/scheme-registry/walton-clean/id-migrations.json', 'docs/scheme-registry/links.json',
+                        'wag/data/annotation/positions.json', 'wag/data/nascq/schemes.json',
+                        'wag/data/nascq/critical_questions.json', 'wag/data/nascq/edges.json'):
+                os.makedirs(os.path.dirname(os.path.join(root, rel)), exist_ok=True)
+                with open(os.path.join(REPO, rel), 'rb') as src, open(os.path.join(root, rel), 'wb') as dst:
+                    dst.write(src.read())
+            w = os.path.join(root, 'docs/scheme-registry/walton-clean/walton.yml')
+            with open(w, encoding='utf-8') as fh:
+                text = fh.read()
+            for old, new in (('would_bring_about/3: "Performing %s in %s would bring about %s."',
+                              'would_bring_about/3: "%[3]s, from %[1]s then %s."'),
+                             ('bad/1: "%s is bad."', 'bad/1: "%s is bad, 100%%."'),
+                             ('good/1: "%s is good."', 'good/1: "%[0]s is good."')):
+                self.assertEqual(text.count(old), 1, old)
+                text = text.replace(old, new)
+            with open(w, 'w', encoding='utf-8') as fh:
+                fh.write(text)
+            gpath = os.path.join(root, 'gold.json')
+            with open(gpath, 'w', encoding='utf-8') as fh:
+                fh.write(json.dumps(GOLD, indent=1, ensure_ascii=False))
+            r = subprocess.run([sys.executable, '-I', '-B', os.path.join(root, 'docs/kialo-batch2/validate.py'), gpath],
+                               capture_output=True, text=True)
+            r21 = [line for line in r.stdout.splitlines() if ERROR.match(line) and ': R21 ' in line]
+            lexicon = json.load(open(os.path.join(DOC, 'lexicon.json'), encoding='utf-8'))
+            a, s_, b = (lexicon[x] for x in ('tax_meat', 'meat_production_and_consumption_harm_environment', 'reduced_meat_consumption'))
+            # %[3]s, %[1]s, then %s: the argument after the first, as Go's Render takes it.
+            self.assertTrue(any(f"'{b}', from '{a}' then '{s_}'." in e for e in r21), r21)
+            # %% is a literal %.
+            self.assertTrue(any('is bad, 100%."' in e and "100%%" not in e for e in r21), r21)
+            # Render refuses %[0]s: nothing is checked for good/1.
+            self.assertFalse(any('English for good(' in e for e in r21), r21)
+
+
+class CiteNotText(unittest.TestCase):
+    """RC23: a cite that is a list or an object is an R19 error, with no traceback."""
+
+    def test_rc23(self):
+        for bad in (['13292.7'], {'claim': '13292.7'}):
+            with self.subTest(cite=bad):
+                g = copy.deepcopy(GOLD)
+                pm = next(p for it in g['items'] for ins in it['instances'] for p in ins['premises']
+                          if p.get('status') == 'inferred' and isinstance(p.get('cite'), str))
+                pm['cite'] = bad
+                code, errors, out = run(g)
+                self.assertEqual(code, 1, out)
+                self.assertNotIn('Traceback', out)
+                self.assertTrue(any(': R19 ' in e for e in errors), errors)
+
 class Repin(unittest.TestCase):
     """--repin pins the inputs only when nothing else is wrong."""
     def repin(self, g):

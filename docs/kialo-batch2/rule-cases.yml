@@ -603,7 +603,7 @@ cases:
         premises: []
         conclusion: {formula: 'should_be_performed(tax_meat_outside_poor_countries)'}
       role: {kind: action_amendment, cq: null, polarity: against}
-      target: {actual: {claim: '13292.127', part: conclusion}}
+      target: {actual: {claim: '13292.127', instance: '13292.127#2', part: conclusion}}
     why: >-
       A bare proposal of an amended policy (none, action_amendment; §5 item 4)
       that would spare those the tax could starve. It answers the argument that
@@ -637,14 +637,18 @@ cases:
         - {role: exception, formula: 'incompatible_goal(governments,domestic_producers_protected_from_imports)'}
         conclusion: {formula: 'should_be_performed(raise_import_standards)'}
       role: {kind: action_amendment, cq: null, polarity: against}
-      target: {actual: {claim: '13292.12', part: conclusion}}
+      target: {actual: {claim: '13292.12', instance: '13292.12#3', part: conclusion}}
     why: >-
       A measure the agent would add to the tax so that the harm 13292.12
       predicts does not follow, argued with the necessary-condition scheme: an
       amended action. It answers the argument that cites the harm against the
       tax, 13292.12#3, at its conclusion (D098), as its sibling 13292.194 does,
       not the causal step 13292.12#1 that predicts the harm, whose conclusion
-      is a prediction, not a verdict on the tax.
+      is a prediction, not a verdict on the tax. The case is about that place
+      only. Its action is its round's to code (13292.45 is of round 2, not
+      drafted): OC6 codes the claim for the amended action, the tax with
+      higher import standards, where the coding above concludes the added
+      measure alone (the independent review of D098, W3).
 
   - id: OC8-a
     rules: [OC8]
@@ -718,7 +722,7 @@ cases:
         - {role: premise, formula: 'meat_tax_leaves_staple_prices'}
         conclusion: {formula: '¬brings_about(tax_meat,starvation_from_reduced_meat_access)'}
       role: {kind: premise_attack, cq: null, polarity: against}
-      target: {actual: {claim: '13292.127', part: premise, formula: 'brings_about(tax_meat,starvation_from_reduced_meat_access)'}}
+      target: {actual: {claim: '13292.127', instance: '13292.127#1', part: premise, formula: 'brings_about(tax_meat,starvation_from_reduced_meat_access)'}}
     why: >-
       A reply to a weighing claim attacks the consequence the weighing relies
       on, a premise of its bad_outweighs_good instance, which no question

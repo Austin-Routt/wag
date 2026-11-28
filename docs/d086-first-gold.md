@@ -905,7 +905,8 @@ production (G2). The engine shows it (`causal_d097_test.go`): an answer about on
 step only, a second argument for the effect from another cause stands, and on the frozen format-1
 `walton.yml` the one-place exception undercuts both. Guidelines §5 item 11 states the line between a
 factor that keeps the cause from its effect (the exception), a safeguard added to the policy (OC6;
-rule case OC6-d) and a factor that only weakens the effect (28 CQ1). Twelve items change: of the ten
+rule case OC6-d) and a factor that only weakens the effect (28 CQ1, as part 1 wrote it; corrected in part 3:
+such a factor answers neither CQ1 nor the exception). Twelve items change: of the ten
 round-1 claims that waited on G2, the seven agreed (13292.2, .9, .36, .141, .180, .182, .198) go back to
 review at draft 3, with 13292.11, .12 and .192 (draft 2, not reviewed); 13292.4 and .14 are round 2's,
 not yet drafted.
@@ -948,7 +949,8 @@ say so, and the old line is a retired wording. It also found that nothing tied t
 `walton.yml`'s templates: `validate.py`'s R21 and the proposal check do now (cases EN1-EN7, PC1-PC3),
 and 13292.61#1's conclusion, in the game's phrasing, is re-rendered. The template's wording ("keeps, or
 would keep") narrows the decided "interferes with": put to the owner as a choice of its own. 13292.12
-and .194 (round 1) are at draft 3, not reviewed; 13292.9, .45 and .61 are round 2's.
+and .194 (round 1) are at draft 3, not reviewed; 13292.45 and .61 are round 2's, and 13292.9, of round 2,
+joined round 1 and is at draft 3, not reviewed.
 
 **Part 4: exchange 2's objections and verdicts, and the review of D096's application
 (`recode_d086_r1_d3.py`, 2026-11-28).** Exchange 2 agreed with 11 of its 13 items and objected to two,
@@ -965,5 +967,8 @@ asks for `cite` on an inferred premise, and the Go check reads it (R19, cases CT
 written again). The independent review of D096's application (approve with changes) found two latent
 errors and gaps in R20's checks and tests: the replay plays a reconstruction for its own conclusion,
 R20's citation and target rules have no gap, formulas are compared with Go's space set, and 13292.1#2's
-alternatives are written for it (cases RC16-RC21).
+alternatives are written for it (cases RC16-RC21). With 13292.104#2's practical reasoning, the target
+both annotators gave 13292.208 is gone: 13292.104#2's circumstances,
+`current_circumstances(farming_industry_not_meat_is_problem)`, which §10 left to round 2; round 2 finds
+where 13292.208 answers (13292.104#1's better-means premise, where it is now, or another).
 

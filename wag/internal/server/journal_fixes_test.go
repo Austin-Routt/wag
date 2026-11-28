@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -468,17 +469,27 @@ func TestG16AGameOverByItsClockStaysOver(t *testing.T) {
 // keeps its own verdict (it was given the approval's).
 func TestTheVerdictIsTheMovesItMade(t *testing.T) {
 	store := t.TempDir()
-	_, ts, _ := journalServer(t, store, "m-1", script(replyClaim))
+	srv, ts, _ := journalServer(t, store, "m-1", script(replyClaim))
 	req := moderated(Seat{Name: "Ann", Kind: "human"})
 	limit := 1
 	req.TimeLimitSec = &limit
 	id := newGame(t, ts, req)
+	// The game's clock is the test's: it moves only when the test moves it,
+	// so the one-second limit is not reached while the requests run, however
+	// loaded the machine (a gate on two toolchains at once missed it).
+	var clockMu sync.Mutex
+	now := time.Now()
+	srv.mu.Lock()
+	srv.sessions[id].GS.SetClock(func() time.Time { clockMu.Lock(); defer clockMu.Unlock(); return now })
+	srv.mu.Unlock()
 	post(t, ts, "/api/games/"+id+"/ai", map[string]any{})
 	post(t, ts, "/api/games/"+id+"/moderate", map[string]any{"approve": false, "note": "no"})
 	if mr := post(t, ts, "/api/games/"+id+"/ai", map[string]any{}); mr.State.Pending == nil {
 		t.Fatal("the model's second move is not held")
 	}
-	time.Sleep(1100 * time.Millisecond)
+	clockMu.Lock()
+	now = now.Add(1100 * time.Millisecond)
+	clockMu.Unlock()
 	if mr := post(t, ts, "/api/games/"+id+"/moderate", map[string]any{"approve": true}); !mr.State.Over {
 		t.Fatal("the approval after the time is up does not end the game")
 	}

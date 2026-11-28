@@ -42,6 +42,7 @@ class DiscussionReplay(unittest.TestCase):
         def transport(base, path, body=None):
             if path == '/api/meta':
                 return {'schemes': [{'id': 'AS:positive_consequences', 'carneades_id': 'positive_consequences'},
+                                    {'id': 'AS:negative_consequences', 'carneades_id': 'negative_consequences'},
                                     {'id': 'AS:other', 'carneades_id': 'other', 'optional': True}]}
             if path.endswith('/export'):
                 return {'data_sha256': 'capturing-transport-only'}
@@ -213,6 +214,23 @@ class DiscussionReplay(unittest.TestCase):
         act = next(m['action'] for m in moves if 'con#2' in m.get('why', ''))
         self.assertEqual((act['type'], act['target_stmt_id'], act['scheme_id']),
                          ('support', CLAIM, 'AS:positive_consequences'))
+
+    def test_rc22_a_negated_statement_argued_as_stated(self):
+        # The fourth combination (the check of the D096 fixes, N2): the claim states ¬S and its
+        # reconstruction concludes ¬S, so the claim's own side argues for ¬S.
+        con = {'kialo_claim_id': 'con', 'literal': ['The tax should not be adopted.'],
+               'instances': [instance('con#1', 'other', '¬' + CLAIM),
+                             instance('con#2', 'negative_consequences', '¬' + CLAIM, primary=False, premises=[PREMISE],
+                                      by='the discussion', bindings={'A': 'tax_meat', 'G': 'jobs_lost'})],
+               'role': {'kind': 'independent_con', 'polarity': 'against', 'cq': None},
+               'target': {'actual': {'claim': 'thesis', 'instance': 'thesis#1', 'part': 'conclusion', 'formula': CLAIM}}}
+        thesis = {'kialo_claim_id': 'thesis', 'instances': [instance('thesis#1', 'none', CLAIM)]}
+        report, moves = self.run_replay({'items': [thesis, con]})
+        d = report['discussion'][0]
+        self.assertEqual((d['instance'], d['played'], d['side'], d['target_stmt']), ('con#2', True, 'con', '¬' + CLAIM))
+        act = next(m['action'] for m in moves if 'con#2' in m.get('why', ''))
+        self.assertEqual((act['type'], act['target_stmt_id'], act['scheme_id']),
+                         ('support', '¬' + CLAIM, 'AS:negative_consequences'))
 
     def test_rc17_neither_its_claims_statement_nor_its_negation(self):
         report, moves = self.run_replay(self.thesis_and(PREMISE))

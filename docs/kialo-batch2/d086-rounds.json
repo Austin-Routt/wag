@@ -243,11 +243,11 @@
     "target_formula",
     "target_part"
    ],
-   "draft": 2,
-   "review": "agreed",
-   "agreed_rev": "2e4fb2c5247824d5bfe838e9a45dd5b50c33ef78f0cc1c6aecf6b9ead13632f5",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 3,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {
@@ -276,11 +276,11 @@
     "role",
     "target_formula"
    ],
-   "draft": 1,
-   "review": "agreed",
-   "agreed_rev": "77bccc5db5a77993de313d1627a7a03429b07561462fd1f482ea9129f0b03f6a",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 3,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {
@@ -1014,11 +1014,11 @@
     "target_formula",
     "target_part"
    ],
-   "draft": 1,
-   "review": "agreed",
-   "agreed_rev": "420c6a1885d0eb23e5ca1fe04a421511c9205415c0a8bf2700fb922429356a99",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 3,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {
@@ -1039,11 +1039,11 @@
     "role",
     "target_formula"
    ],
-   "draft": 2,
-   "review": "agreed",
-   "agreed_rev": "a8de135aef9c58b836cf209099339b39b5fde19565c66ed6aac601735df63b45",
-   "agreed_by": "the reviewer and the developer",
-   "agreed_date": "2026-11-27",
+   "draft": 3,
+   "review": "not reviewed",
+   "agreed_rev": null,
+   "agreed_by": null,
+   "agreed_date": null,
    "objections": [],
    "exchanges": [
     {

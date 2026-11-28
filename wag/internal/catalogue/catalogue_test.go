@@ -1777,3 +1777,64 @@ func TestProposalPrintedQuestionsWithoutFormula(t *testing.T) {
 		}
 	}
 }
+
+// Cases PC4 and PC5 (docs/d086-first-gold.md §6; the independent review of
+// D098 and R21, W2): an applied proposal's template that walton.yml no
+// longer has is a later decision's when a later applied proposal set
+// walton.yml's (no error; the view marks it), and an error otherwise.
+func TestAppliedProposalTemplatesLater(t *testing.T) {
+	p, err := LoadProposal(filepath.Join(root, "docs", "proposals", "D040-D071-D097.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	const decided = "Something interferes with %s bringing about %s."
+	errs := func(s *Sources) []string {
+		var out []string
+		for _, f := range CheckProposal(p, s) {
+			if f.Error && strings.Contains(f.Msg, "the proposal is applied, but walton.yml's template") {
+				out = append(out, f.Msg)
+			}
+		}
+		return out
+	}
+	with := func(later ...AppliedTemplate) *Sources {
+		s := sources(t)
+		changed := *s
+		changed.Language = map[string]string{}
+		for k, v := range s.Language {
+			changed.Language[k] = v
+		}
+		changed.Language["interference/2"] = decided
+		changed.Applied = map[string][]AppliedTemplate{}
+		for k, v := range s.Applied {
+			changed.Applied[k] = append([]AppliedTemplate(nil), v...)
+		}
+		changed.Applied["interference/2"] = append(changed.Applied["interference/2"], later...)
+		return &changed
+	}
+	// PC4: a later applied proposal carries walton.yml's template.
+	s := with(AppliedTemplate{Title: "The decided wording of interference", Date: "2026-12-01", Template: decided})
+	if got := errs(s); len(got) != 0 {
+		t.Errorf("PC4: %v", got)
+	}
+	view := string(ProposalView(p, s, "D040-D071-D097.yml"))
+	if !strings.Contains(view, "*Changed since this proposal was applied:* `walton.yml`'s template for `interference/2` is now “"+decided+"”, from the later proposal “The decided wording of interference” (applied 2026-12-01).") {
+		t.Errorf("PC4: the view does not mark the template")
+	}
+	// PC5: none does; one applied before this proposal does not count, nor
+	// one whose template is another.
+	for name, later := range map[string][]AppliedTemplate{
+		"none":    nil,
+		"earlier": {{Title: "An earlier proposal", Date: "2026-11-01", Template: decided}},
+		"another": {{Title: "A later proposal", Date: "2026-12-01", Template: "Something else stops %s bringing about %s."}},
+	} {
+		if got := errs(with(later...)); len(got) != 1 {
+			t.Errorf("PC5 %s: %v", name, got)
+		}
+	}
+	// The committed proposals, read by Load: interference/2 is this
+	// proposal's own, which is no later decision.
+	if at := sources(t).Applied["interference/2"]; len(at) != 1 || at[0].Title != p.Title {
+		t.Errorf("the applied templates of interference/2: %+v", at)
+	}
+}

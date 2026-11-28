@@ -922,7 +922,8 @@ if F2:
         for ins in it['instances']:
             for pm in ins['premises']:
                 x = pm.get('cite')
-                if pm.get('status') != 'inferred' or x not in ANCHORS:
+                # A cite that is not text is R19's (RC23): it names no claim here.
+                if pm.get('status') != 'inferred' or not isinstance(x, str) or x not in ANCHORS:
                     continue
                 mine = set()
                 for other in G[x]['instances']:
@@ -936,10 +937,50 @@ if F2:
 # R21 (a gold; guidelines §4: the English in `en` uses walton.yml's language templates): the English of
 # each formula that is one positive predicate over atoms of the lexicon, with a template in walton.yml,
 # is that template filled with the atoms' lexicon texts, each in single quotes, as the recode scripts
-# write it. A negation (walton.yml has no template for one), a nested formula and a bare proposition are
-# not checked, nor a file that is not a gold, whose English is its annotator's. Since 2026-11-27 (the
+# write it, filled as Go's language.Render fills it (go_render; case EN13). A negation (walton.yml has no template for one), a nested formula and a bare proposition are
+# not checked, nor a file that is not a gold, whose English is its annotator's. Since 2026-11-28 (the
 # independent review of proposal D040-D071-D097's application, W6): a template changed with the gold's
 # English left as it was passed every check once the gold was re-pinned.
+def go_render(tmpl, args):
+    """A template filled with its arguments as Go's language.Render fills it (internal/language/template.go),
+    or None where Render refuses the template (EN13): %s takes the argument after the last one placed,
+    %[n]s the n-th (1 to the arity), %% is a literal %; a template that leaves an argument out, or has any
+    other escape, is refused."""
+    out, used, nxt, i, n = [], set(), 0, 0, len(args)
+    while i < len(tmpl):
+        if tmpl[i] != '%':
+            out.append(tmpl[i])
+            i += 1
+            continue
+        i += 1
+        if i >= len(tmpl):
+            return None
+        if tmpl[i] == '%':
+            out.append('%')
+            i += 1
+            continue
+        index = nxt
+        if tmpl[i] == '[':
+            i += 1
+            begin = i
+            while i < len(tmpl) and '0' <= tmpl[i] <= '9':
+                i += 1
+            if begin == i or i >= len(tmpl) or tmpl[i] != ']':
+                return None
+            k = int(tmpl[begin:i])
+            if k < 1 or k > n:
+                return None
+            index = k - 1
+            i += 1
+        if i >= len(tmpl) or tmpl[i] != 's' or not 0 <= index < n:
+            return None
+        used.add(index)
+        out.append(args[index])
+        nxt = index + 1
+        i += 1
+    return ''.join(out) if len(used) == n else None
+
+
 def template_english(f):
     """walton.yml's English for a formula that is one predicate over lexicon atoms, or None."""
     m = re.fullmatch(r'([a-z_][a-z0-9_]*)\(([^()]*)\)', f)
@@ -949,12 +990,7 @@ def template_english(f):
     tmpl = (WALTON.get('language') or {}).get(f'{m.group(1)}/{len(atoms)}')
     if not isinstance(tmpl, str) or any(a not in lex for a in atoms):
         return None
-    args = ["'" + lex[a] + "'" for a in atoms]
-    seq = iter(args)
-    try:
-        return re.sub(r'%(?:\[(\d+)\])?s', lambda x: args[int(x.group(1)) - 1] if x.group(1) else next(seq), tmpl)
-    except (IndexError, StopIteration):
-        return None
+    return go_render(tmpl, ["'" + lex[a] + "'" for a in atoms])
 
 if F2 and IS_GOLD:
     for it in gold['items']:

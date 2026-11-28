@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/yourorg/wag/internal/carneades"
@@ -76,6 +77,17 @@ type Sources struct {
 	// related (internal/registry: the same form, one formula apart, one
 	// extending the other, close).
 	Close []registry.Relation
+	// Applied are the templates of the applied proposals (docs/proposals),
+	// by "predicate/arity" (Load reads them): an applied proposal's template
+	// that walton.yml no longer has is a later decision's when a later
+	// applied proposal has walton.yml's (CheckProposal; cases PC4, PC5).
+	Applied map[string][]AppliedTemplate
+}
+
+// AppliedTemplate is a template an applied proposal set, with the proposal's
+// title and the date it was applied (the start of its "applied").
+type AppliedTemplate struct {
+	Title, Date, Template string
 }
 
 // Scheme is a Carneades scheme as walton.yml and core.yml write it.
@@ -327,13 +339,64 @@ func Parse(f Files) (*Sources, error) {
 	return s, nil
 }
 
-// Load reads and decodes the sources under the repository's root.
+// Load reads and decodes the sources under the repository's root, and the
+// templates of its applied proposals.
 func Load(root string) (*Sources, error) {
 	f, err := ReadFiles(root)
 	if err != nil {
 		return nil, err
 	}
-	return Parse(f)
+	s, err := Parse(f)
+	if err != nil {
+		return nil, err
+	}
+	s.Applied = appliedTemplates(filepath.Join(root, "docs", "proposals"))
+	return s, nil
+}
+
+// appliedTemplates reads the templates of the applied proposals in a folder.
+// A file that is not a proposal is left out: TestCommittedProposals and
+// wag-cli --proposal report it.
+func appliedTemplates(dir string) map[string][]AppliedTemplate {
+	files, _ := filepath.Glob(filepath.Join(dir, "*.yml"))
+	sort.Strings(files)
+	out := map[string][]AppliedTemplate{}
+	for _, f := range files {
+		p, err := LoadProposal(f)
+		if err != nil || p.Applied == "" {
+			continue
+		}
+		for k, v := range p.Language {
+			out[k] = append(out[k], AppliedTemplate{Title: p.Title, Date: appliedDate(p.Applied), Template: strings.TrimSpace(v)})
+		}
+	}
+	return out
+}
+
+// appliedDate is the date an "applied" record starts with (YYYY-MM-DD), or "".
+func appliedDate(applied string) string {
+	a := strings.TrimSpace(applied)
+	if len(a) >= 10 && a[4] == '-' && a[7] == '-' {
+		return a[:10]
+	}
+	return ""
+}
+
+// laterTemplate returns the applied proposal, other than p and applied on
+// p's date or later, that set walton.yml's template for key, or nil.
+func (s *Sources) laterTemplate(p *Proposal, key string) *AppliedTemplate {
+	cur, ok := s.Language[key]
+	since := appliedDate(p.Applied)
+	if !ok || since == "" {
+		return nil
+	}
+	for i := range s.Applied[key] {
+		at := &s.Applied[key][i]
+		if at.Title != p.Title && at.Date != "" && at.Date >= since && at.Template == strings.TrimSpace(cur) {
+			return at
+		}
+	}
+	return nil
 }
 
 // scheme returns the walton.yml scheme with an id (after migration).

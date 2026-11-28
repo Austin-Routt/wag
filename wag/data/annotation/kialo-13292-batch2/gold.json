@@ -60,6 +60,11 @@
    "date": "2026-11-28",
    "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
    "what": "Round 1, draft 3, part 4: exchange 2's two objections, accepted: 13292.8's relation to 13292.115's premise is unresolved (D102: premise_backing, its formula unresolved, no question); 13292.104#2 is positive consequences, since its S2 restated the action (§5 item 4), its challenge records following. 13292.192's notes say that the modal form carries the source's 'may' and that causes(E1,E2) is a tendency (D036); 13292.1#2's alternatives are written for the discussion's argument."
+  },
+  {
+   "date": "2026-11-28",
+   "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+   "what": "Text only, from the independent reviews of 28 November: 13292.104's likelihood note and its possible_bring_about record's type; 13292.45's note leaves its action's coding to its round (OC6-f) and 13292.194's says it is at the same place; 13292.61#1's two nested premises in walton.yml's English; 13292.204's and 13292.202's notes cite D098; the candidate pattern of 13292.25, .33, .182 and .198 is substitution by those affected."
   }
  ],
  "items": [
@@ -1516,7 +1521,7 @@
    ],
    "notes": {
     "text": "Concedes the burden ('the additional burden') and says it could be small: as small as a change in one's eating pattern. Its premises: changing one's eating pattern avoids the added cost (stated), and is easy to do (supplied: the claim says only that the burden could be that small, not that the change is easy for everyone the tax burdens). It argues that the consequence 13292.7 cites is too slight to count, the exception too_slight(tax_meat,food_less_affordable_for_poor) of 13292.7#1 (OC9), not that the tax does not bring it about: its sibling 13292.33 says that, pointing to cheaper protein. No scheme concludes too_slight, so its own argument is Other, concluding the exception (R8); the game asks CQ:too_slight there, so the role is cq_answer (§5 item 3), against. The hedge ('could be as small as') is the claim's, recorded in the ease premise's note; the confidence is the estimate that a careful annotator would choose the same (guidelines §3), not the strength of the claim.",
-    "candidate_pattern": "mitigation by substitution or adaptation (also 13292.33, 13292.182, 13292.198)"
+    "candidate_pattern": "substitution or adaptation by those affected (also 13292.33, 13292.182, 13292.198)"
    },
    "adjudication": {
     "changed_fields": [
@@ -1560,6 +1565,14 @@
        "notes"
       ],
       "what": "D086 exchange 1, the reviewer's objection accepted: the ease premise easy_to_achieve(change_food_consumption_pattern) is supplied, not explicit (the claim says the burden 'could be as small as' a change of diet, not that the change is easy for those it burdens), with the hedge in its note; the note no longer says that the confidence carries the hedge (confidence is the expected agreement, guidelines §3). Scheme, role, target unchanged."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its candidate pattern says substitution by those affected: since D098 a mitigation is the agent's measure (OC6, C006)"
      }
     ]
    }
@@ -1654,7 +1667,7 @@
    ],
    "notes": {
     "text": "With cheaper protein available, a meat tax need not make food unaffordable for those who cannot afford it: the claim offers a way to avoid the consequence 13292.7 cites, so it answers the likelihood question at 13292.7#1's premise brings_about(tax_meat,food_less_affordable_for_poor), the game's CQ:likelihood (33.2 CQ1), against. It does not say the burden is slight (its sibling 13292.25 does, at too_slight). 13292.7 has no causal step of its own in the gold, so the answer is at its consequence premise (compare 13292.182 and 13292.198, at the causal step of 13292.180).",
-    "candidate_pattern": "mitigation by substitution (also 13292.182, 13292.198; by adaptation 13292.25)"
+    "candidate_pattern": "substitution by those affected (also 13292.182, 13292.198; adaptation, 13292.25)"
    },
    "adjudication": {
     "changed_fields": [
@@ -1681,6 +1694,14 @@
        "notes"
       ],
       "what": "Drafted: the reference's coding kept: the likelihood question at 13292.7#1's consequence premise (13292.7 has no causal step of its own); notes rewritten."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its candidate pattern says substitution by those affected: since D098 a mitigation is the agent's measure (OC6, C006)"
      }
     ]
    }
@@ -2711,14 +2732,14 @@
       {
        "role": "premise",
        "formula": "corresponds(tobacco_tax_reduced_tobacco_consumption,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
-       "en": "In the other case, the counterpart of 'a tax on tobacco significantly reduced tobacco consumption' is 'doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)''.",
+       "en": "In the other case, the counterpart of 'a tax on tobacco significantly reduced tobacco consumption' is 'performing 'governments put a tax on meat' in 'meat production and consumption are bad for the environment' would bring about 'less meat is demanded and consumed (and so less is produced)''.",
        "status": "supplied",
        "note": "P2 is the very statement the claim backs, the efficacy premise of the environmental argument for the tax (13292.1#2) that 13292.13 denies; it says of a meat tax what the source claim says of the tobacco tax"
       },
       {
        "role": "exception",
        "formula": "difference_against(tobacco_tax_case,meat_tax_case,would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption))",
-       "en": "'the case of a tax on tobacco' and 'the case of a tax on meat' differ in a way that tells against 'doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)''.",
+       "en": "'the case of a tax on tobacco' and 'the case of a tax on meat' differ in a way that tells against 'performing 'governments put a tax on meat' in 'meat production and consumption are bad for the environment' would bring about 'less meat is demanded and consumed (and so less is produced)''.",
        "status": "supplied",
        "note": "exception: presumed not to hold unless shown"
       }
@@ -2801,6 +2822,14 @@
        "instances.conclusion"
       ],
       "what": "13292.61#1's conclusion reads as walton.yml's template gives it (R21); it had the game's phrasing"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "instances.premises"
+      ],
+      "what": "the two premises that embed 13292.61#1's conclusion render it as walton.yml's template does, as the conclusion itself"
      }
     ]
    }
@@ -3388,7 +3417,7 @@
      "type": "likelihood",
      "instance": "13292.104#2",
      "formula": "brings_about(regulate_animal_farming_industry,meat_problems_resolved)",
-     "note": "no printed CQ; can regulation remove harms that scale with consumption?"
+     "note": "can regulation remove harms that scale with consumption?"
     },
     {
      "cq": "33.1 CQ3",
@@ -3401,7 +3430,7 @@
     {
      "cq": null,
      "wag_cq": null,
-     "type": "feasibility",
+     "type": "efficacy",
      "instance": "13292.104#1",
      "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
      "note": "that governments can regulate the industry, a premise of the better means (D089); 22.1 CQ4 asked it of the practical reasoning this claim's second instance was until draft 3"
@@ -3487,6 +3516,14 @@
        "notes"
       ],
       "what": "13292.104#2 is positive_consequences (§5 item 4: its S2 restated the action), where it was practical reasoning; its challenge records follow (the feasibility record at the better means, the circumstances' dropped); exchange 2's objection, accepted"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "its likelihood record's note no longer says no CQ is printed (it names 33.1 CQ1); its record at possible_bring_about is typed efficacy, as the gold's others on that premise"
      }
     ]
    }
@@ -6580,7 +6617,7 @@
    ],
    "notes": {
     "text": "A substitute (iron supplements) lets people get enough iron without meat, so eating less meat need not bring more anemia: it counteracts the causal step 13292.180#2, from reduced meat consumption to more anemia, which is what the book's 28 CQ3 asks about: a factor in the case that keeps the cause from bringing about the effect (the game asks no question there). So it is a cq_answer at that step's exception interference(reduced_meat_consumption,more_anemia_cases), against, and its own argument (Other: no walton.yml scheme concludes it from a substitute) concludes the exception (R8). It does not deny that the tax reduces meat eating: since D071 and D097 the exception names the effect it blocks, so 13292.192#1's step from the same cause to more crop production is not touched. The substitute is what people would do, not an amended action of the agent's (OC6). Its sibling 13292.198 makes the same move with plant foods; 13292.184 replies that supplements are not always a good replacement.",
-    "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.198; by adaptation 13292.25)"
+    "candidate_pattern": "substitution by those affected (also 13292.33, 13292.198; adaptation, 13292.25)"
    },
    "adjudication": {
     "changed_fields": [
@@ -6613,6 +6650,14 @@
        "target"
       ],
       "what": "its target, 13292.180#2's exception, is interference(reduced_meat_consumption,more_anemia_cases); its Other instance concludes interference(reduced_meat_consumption,more_anemia_cases) (R8), in the new template's English; the note names the exception that names its effect"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its candidate pattern says substitution by those affected: since D098 a mitigation is the agent's measure (OC6, C006)"
      }
     ]
    }
@@ -6947,7 +6992,7 @@
     }
    ],
    "notes": {
-    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, against. As for 13292.202 (OC6, D098), the amendment is at the conclusion of the argument that cites the harm against the tax, 13292.12#3's ¬should_be_performed(tax_meat): an amended policy answers the argument against the tax, and its conclusion is not the negation of may_occur(domestic_meat_industry_pushed_out), the predicted harm, where the reference and both annotators put it. Nor is it a cq_answer to 28 CQ3 at 13292.12#1's interference: that would say that something under the unamended tax already blocks the mechanism, while the claim proposes a changed policy. Its sibling 13292.45 is coded the same way (D098).",
+    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, against. As for 13292.202 (OC6, D098), the amendment is at the conclusion of the argument that cites the harm against the tax, 13292.12#3's ¬should_be_performed(tax_meat): an amended policy answers the argument against the tax, and its conclusion is not the negation of may_occur(domestic_meat_industry_pushed_out), the predicted harm, where the reference and both annotators put it. Nor is it a cq_answer to 28 CQ3 at 13292.12#1's interference: that would say that something under the unamended tax already blocks the mechanism, while the claim proposes a changed policy. Its sibling 13292.45 is at the same place (D098); its action is coded in its round.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -7014,6 +7059,14 @@
        "notes"
       ],
       "what": "its note cites D098, and says that 13292.45 is coded the same way"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its note says that 13292.45 is at the same place, not coded the same way"
      }
     ]
    }
@@ -7110,7 +7163,7 @@
    ],
    "notes": {
     "text": "Plant foods rich in iron (beans, lentils) can replace meat as a source of iron, so eating less meat need not bring more anemia: like its sibling 13292.182, it counteracts the causal step 13292.180#2 (reduced meat consumption -> more anemia), the book's 28 CQ3 (the game asks no question there): a cq_answer at that step's exception interference(reduced_meat_consumption,more_anemia_cases), against; its Other instance concludes the exception (R8), which names the effect it blocks since D071 and D097. The substitute is what people would do, not an amended action of the agent's (OC6). It also implicitly contests 13292.180's premise that meat is the easiest source of iron. 13292.210 backs the substitution.",
-    "candidate_pattern": "mitigation by substitution (also 13292.33, 13292.182; by adaptation 13292.25)"
+    "candidate_pattern": "substitution by those affected (also 13292.33, 13292.182; adaptation, 13292.25)"
    },
    "adjudication": {
     "changed_fields": [
@@ -7143,6 +7196,14 @@
        "target"
       ],
       "what": "its target, 13292.180#2's exception, is interference(reduced_meat_consumption,more_anemia_cases); its Other instance concludes interference(reduced_meat_consumption,more_anemia_cases) (R8), in the new template's English; the note names the exception that names its effect"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its candidate pattern says substitution by those affected: since D098 a mitigation is the agent's measure (OC6, C006)"
      }
     ]
    }
@@ -7226,7 +7287,7 @@
     }
    ],
    "notes": {
-    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope (exceptions, or the tax only in non-third-world countries): a mitigation, an amended action (C006; OC6), tax_meat_outside_poor_countries, with no purpose stated beyond the context's, so scheme none (a bare proposal, §5 item 4), role action_amendment, polarity against; it still supports a restricted meat tax. OC6 puts a mitigation at the conclusion of the argument it answers: 13292.127#2's ¬should_be_performed(tax_meat), the argument that cites the starvation, where both annotators put it (at 13292.127's conclusion, when that argument was its primary). A reply to a weighing claim that attacks it addresses the link the weighing relies on (OC10), as its sibling 13292.204 does; this reply amends the action instead (the reference had it at that link, since format 1 required a formula of the primary instance once the weighing became primary, D055: a question for the review, D086 round 1). Stated as a possibility ('there can be', 'could').",
+    "text": "'A only for X': answers 13292.127's starvation objection by restricting the tax's scope (exceptions, or the tax only in non-third-world countries): a mitigation, an amended action (C006; OC6), tax_meat_outside_poor_countries, with no purpose stated beyond the context's, so scheme none (a bare proposal, §5 item 4), role action_amendment, polarity against; it still supports a restricted meat tax. OC6 puts a mitigation at the conclusion of the argument it answers: 13292.127#2's ¬should_be_performed(tax_meat), the argument that cites the starvation, where both annotators put it (at 13292.127's conclusion, when that argument was its primary). A reply to a weighing claim that attacks it addresses the link the weighing relies on (OC10), as its sibling 13292.204 does; this reply amends the action instead (the reference had it at that link, since format 1 required a formula of the primary instance once the weighing became primary, D055; D098 settled it, OC6). Stated as a possibility ('there can be', 'could').",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -7252,6 +7313,14 @@
        "target"
       ],
       "what": "Retargeted from the starvation link of 13292.127#1 (format 1 required a formula of the primary instance once the weighing became 13292.127's primary, D055) to the conclusion of the argument that cites the starvation, 13292.127#2's ¬should_be_performed(tax_meat), as OC6 puts a mitigation and as both annotators aimed it (at 13292.127's conclusion, when that argument was its primary); scheme, role and polarity unchanged. A cascade in the replay now. Notes rewritten."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its note says D098 settled where it is, no longer that it is a question for the review"
      }
     ]
    }
@@ -7355,7 +7424,7 @@
     }
    ],
    "notes": {
-    "text": "Denies the starvation link 13292.127 relies on: where people would starve from higher food costs, they eat little or no meat, so a meat tax cannot starve them by reducing their access to meat. A reply to a weighing claim attacks that claim's own instance (OC10): here the consequence it relies on, brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127#1 (bad_outweighs_good), about which no critical question is asked, so premise_attack (§5 item 3), against. The premise is 13292.127's own (supplied: the claim presupposes the link, and 13292.7 grounds only its first step, the tax making food dearer), so this is not re-parenting. Its argument is Other (absent exposure: the affected group is not exposed to the cause). Both annotators aimed it at the same link as a premise of the starvation argument, 13292.127's primary then and 13292.127#2 now, B as an answer to its likelihood question; D055's recoding moved it to the weighing's premise, which OC10 now supports: a question for the review (D086 round 1, with 13292.202's).",
+    "text": "Denies the starvation link 13292.127 relies on: where people would starve from higher food costs, they eat little or no meat, so a meat tax cannot starve them by reducing their access to meat. A reply to a weighing claim attacks that claim's own instance (OC10): here the consequence it relies on, brings_about(tax_meat,starvation_from_reduced_meat_access), a premise of 13292.127#1 (bad_outweighs_good), about which no critical question is asked, so premise_attack (§5 item 3), against. The premise is 13292.127's own (supplied: the claim presupposes the link, and 13292.7 grounds only its first step, the tax making food dearer), so this is not re-parenting. Its argument is Other (absent exposure: the affected group is not exposed to the cause). Both annotators aimed it at the same link as a premise of the starvation argument, 13292.127's primary then and 13292.127#2 now, B as an answer to its likelihood question; D055's recoding moved it to the weighing's premise, where OC10 puts it since D098.",
     "candidate_pattern": "absent exposure: the affected group is not exposed to the cause, so the cited consequence cannot reach it"
    },
    "adjudication": {
@@ -7389,6 +7458,14 @@
        "notes"
       ],
       "what": "D086 draft 2, after the independent check of draft 2 (E2): the note's account of the premise it attacks corrected, which draft 2 made supplied in 13292.127 (the note said inferred from 13292.7). Coding unchanged."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its note says D098 settled where it is, no longer that it is a question for the review"
      }
     ]
    }
@@ -8327,7 +8404,7 @@
     }
    ],
    "notes": {
-    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5). Since 2026-11-24 (D030, D090): the scheme states P in each premise and has no A2; G is the goal (the atom bound to A before) and S the barriers to cheaper meat imports, of which higher standards are one. Since 2026-11-28 (D098; OC6) it is at the conclusion of the argument that cites the harm against the tax, 13292.12#3, as its sibling 13292.194 is: an amended policy answers the argument against the tax, not the causal step 13292.12#1 that predicts the harm.",
+    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5). Since 2026-11-24 (D030, D090): the scheme states P in each premise and has no A2; G is the goal (the atom bound to A before) and S the barriers to cheaper meat imports, of which higher standards are one. Since 2026-11-28 (D098; OC6) it is at the conclusion of the argument that cites the harm against the tax, 13292.12#3, as its sibling 13292.194 is: an amended policy answers the argument against the tax, not the causal step 13292.12#1 that predicts the harm. How its action is coded is its round's: OC6 codes the claim for the amended action, the tax with higher import standards, where this coding concludes the added measure alone (the independent review of D098, W3; rule case OC6-f).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -8362,6 +8439,14 @@
        "target"
       ],
       "what": "at 13292.12#3's conclusion, the argument that cites the harm against the tax, as 13292.194 (OC6, D098); it was at 13292.12#1's, the causal step that predicts the harm"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "the independent reviews of 28 November (D098 and R21; the D096 fixes and draft 3, part 4) (recode_reviews_1128.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its note leaves the coding of its action, the added measure or the amended action (OC6), to its round"
      }
     ]
    }

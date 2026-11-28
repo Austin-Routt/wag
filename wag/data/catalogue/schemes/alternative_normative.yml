@@ -99,8 +99,10 @@ contrasts:
     because otherwise something bad will happen; choose alternative_normative when
     it concludes that another course is not required because a competing one is. A
     claim that one measure, rather than another, is the right one often carries an
-    alternative_normative step, a practical reasoning for the measure and, when it
-    says that the measure does better, a better_means answer (Kialo gold, 13292.104).
+    alternative_normative step, an argument for the measure (positive consequences
+    where practical reasoning's S2 would only restate the measure, batch-2 guidelines
+    §5 item 4) and, when it says that the measure does better, a better_means answer
+    (Kialo gold, 13292.104).
   status: drafted by Claude Code, 2026-11-24
 examples:
 - text: Meat is not inherently problematic. What is problematic is the animal farming
@@ -112,8 +114,8 @@ examples:
     industry"). Supplied: none. Conclusion: not_required(B). The gold codes it as
     a secondary instance; since 2026-11-24 the primary is better_means, that regulating
     the industry would reduce the harm more surely than the tax (D075, D089), and
-    practical_reasoning2 for regulating the industry is secondary too. See the discrepancy
-    on the conclusion.'
+    positive_consequences for regulating the industry is secondary too (practical_reasoning2
+    until round 1''s draft 3, 2026-11-28). See the discrepancy on the conclusion.'
   status: drafted by Claude Code, 2026-11-24
 - text: The grant can pay for the library repairs or the new playground, not both.
     The fire inspector has ordered the library repairs, so the playground is not what
@@ -211,3 +213,8 @@ history:
   what: The contrasts with opposition-normative and pragmatic_alternative, the codings
     of 13292.104 and 13292.123 and the D016 discrepancy follow the gold's recode for
     proposal D004-D075 (better_means, D075, D089).
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'The contrast and the 13292.104 coding follow round 1''s draft 3: its argument
+    for regulating the industry is positive_consequences, not practical_reasoning2
+    (the check of the D096 fixes and draft 3, W3)'

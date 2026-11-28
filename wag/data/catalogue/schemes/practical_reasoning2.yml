@@ -335,7 +335,7 @@ contrasts:
   text: Choose practical_reasoning1 when the text also names the value V that the
     goal serves (health, fairness, liberty); choose practical_reasoning2 when it argues
     from the goal alone. A value only hinted at does not make the argument value-based
-    (Kialo gold, 13292.104 and 13292.118).
+    (Kialo gold, 13292.118).
   status: drafted by Claude Code, 2026-10-22
 - scheme: positive_consequences
   text: Choose practical_reasoning2 when S2 is a state distinct from the action and,
@@ -563,3 +563,8 @@ history:
     asks the rebuttal route at the conclusion (D095 (1)); ch. 3''s Other-Goals question
     is the derived question derived/other_goals_priority (D007); the game-questions
     discrepancy and the notes say what changed.'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'The contrast with practical_reasoning1 cites 13292.118 only: since round
+    1''s draft 3, 13292.104 has no practical reasoning (the check of the D096 fixes
+    and draft 3, W3)'

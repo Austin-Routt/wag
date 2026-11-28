@@ -250,7 +250,7 @@ annotator has not annotated cannot be looked up, and is not reported.
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
 | R18 | An instance whose fit is `explicit` has every premise-role formula (`role: premise`) explicit; an assumption or exception may be supplied (guidelines §5 item 6; since D086 round 1's draft 2, 2026-11-27) | yes |
 | R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it: a claim `items.json` lists, of the batch or of a claim's context (its parents, ancestors, siblings and children) (guidelines §2 item 3; since the same draft; the context's claims since the independent review of that draft) | yes, since 2026-11-28 (the output format, guidelines §4, has `cite`; ChatGPT's patch 02 of exchange 2): the citation's type, that it names another claim, and that the dataset lists it; with no dataset, the first two |
-| R20 | An instance by the discussion (§13, D096) is not primary; its fit is `reconstructed`; no premise of it is `explicit`, and at least one is `inferred` (cited, R19); it concludes the statement of the claim it is recorded at (that claim's primary conclusion) or its negation; an item of the batch targets it. A premise of another instance that cites the claim it is recorded at may not take a formula that only the discussion's instance has: the reconstruction is not a claim, and cannot be cited (since D086 round 1's draft 3, 2026-11-27) | in part: not primary, fit, no explicit premise, the conclusion |
+| R20 | An instance by the discussion (§13, D096) is not primary; its fit is `reconstructed`; no premise of it is `explicit`, and at least one is `inferred` (cited, R19); it concludes the statement of the claim it is recorded at (that claim's primary conclusion) or its negation; another item of the batch targets it (its own claim's target does not count). A premise of another instance that cites the claim it is recorded at may not take a formula that only the discussion's instance has: the reconstruction is not a claim, and cannot be cited (since D086 round 1's draft 3, 2026-11-27) | in part: not primary, fit, no explicit premise, the conclusion |
 | R21 | In a gold, the English (`en`) of a formula that is one positive predicate over atoms of the lexicon, with a template in `walton.yml`, is that template filled with the atoms' lexicon texts, each in single quotes (guidelines §4: the English uses the `language` templates). A negation, a nested formula and a bare proposition are not checked, nor a file that is not a gold (since 2026-11-28: a template changed after a proposal's application, with the gold's English left as it was, passed every check once re-pinned) | no: the Go check reads no English |
 
 Rules that change in format 2:
@@ -351,7 +351,8 @@ claim it did not review as unresolved too.
   format 1 moved for the same reason came to light: 13292.202, a mitigation, which the draft puts at
   the conclusion of the argument that cites the harm (13292.127#2), where both annotators put it; and
   13292.208, at 13292.104#1's better-means premise, which both annotators put at 13292.104#2's
-  circumstances, the premise its note says it contradicts (round 2 takes it up).
+  circumstances, the premise its note says it contradicts (round 2 takes it up; since draft 3,
+  13292.104#2 is positive consequences and has no circumstances, so round 2 finds where it answers).
 
 ## 13. The argument the discussion needs (D096)
 
@@ -361,7 +362,8 @@ environment; the thesis has no argument of its own; seven claims answer the envi
 for the tax at its conclusion or at premises nobody states. D096 (the owner, 2026-11-27) keeps two
 layers apart: what a claim states, and the argument the discussion needs.
 
-**Where it is recorded.** The argument is an instance of the claim whose statement it concludes (here
+**Where it is recorded.** The argument is an instance of the claim whose statement it concludes, or
+negates (here
 the thesis, `13292.1#2`), marked `"by": "the discussion"`: it is that claim's argument as the
 discussion gives it, not something the claim's text says (the claim may be a bare thesis), and not an
 argument of the claim that states one of its premises. Its id is an ordinary instance id of that
@@ -386,8 +388,8 @@ claim it is recorded at (R10). A premise elsewhere may cite the claim that state
 argument: a reconstruction is not a claim (R20).
 
 **Its checks (R20).** `validate.py`: not primary; fit `reconstructed`; no explicit premise; at
-least one inferred; it concludes the statement of the claim it is recorded at, or its negation; an
-item of the batch targets it; and no premise of another instance cites that claim for a formula only
+least one inferred; it concludes the statement of the claim it is recorded at, or its negation; another
+item of the batch targets it (not its own claim's); and no premise of another instance cites that claim for a formula only
 the reconstruction has. The Go check (§10): the field's value, not primary, the fit, no explicit
 premise and the conclusion.
 

@@ -42,8 +42,9 @@ func plain(v any) any {
 }
 
 // shape is what a case and the gold must agree on: each instance's scheme,
-// primacy, bindings, formulas and conclusion; the role; the target.
-func shape(a Annotation) string {
+// primacy, bindings, formulas and conclusion; the role; the target, with its
+// instance where the case names one (RS1).
+func shape(a Annotation, instance bool) string {
 	get := func(m any, k string) any {
 		if mm, ok := m.(map[string]any); ok {
 			return mm[k]
@@ -72,13 +73,17 @@ func shape(a Annotation) string {
 	fmt.Fprintf(&b, "role kind=%v cq=%v polarity=%v\n", get(r, "kind"), get(r, "cq"), get(r, "polarity"))
 	// The formula of a premise or an exception target; a conclusion target's
 	// is its instance's conclusion, which format 2 names and a case's coding
-	// need not. Instance ids, which a case's coding has not, are not compared.
+	// need not. The target's instance is compared where the case names one,
+	// as the cases of D098 do, whose point is which instance (RS1).
 	t := get(a["target"], "actual")
 	f := ""
 	if p := get(t, "part"); p == "premise" || p == "exception" {
 		f = compact(fmt.Sprint(get(t, "formula")))
 	}
 	fmt.Fprintf(&b, "target claim=%v part=%v formula=%s\n", get(t, "claim"), get(t, "part"), f)
+	if instance {
+		fmt.Fprintf(&b, "target instance=%v\n", get(t, "instance"))
+	}
 	return b.String()
 }
 
@@ -187,7 +192,13 @@ func TestRuleCases(t *testing.T) {
 			t.Errorf("%s: %s is of the batch's discussion but not in the gold: mark it outside_batch, or fix the id", cs.ID, cs.Kialo)
 		}
 		if g, ok := gold[cs.Kialo]; ok {
-			if got, want := shape(a), shape(g); got != want {
+			named := false
+			if t, ok := a["target"].(map[string]any); ok {
+				if act, ok := t["actual"].(map[string]any); ok {
+					_, named = act["instance"]
+				}
+			}
+			if got, want := shape(a, named), shape(g, named); got != want {
 				t.Errorf("%s: the case is not coded as gold.json codes %s:\ncase:\n%sgold:\n%s", cs.ID, cs.Kialo, got, want)
 			}
 		}
