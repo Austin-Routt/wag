@@ -472,6 +472,12 @@ step applies the other four, written before the code (2026-11-28); the cases are
   `game/order.yml`; the lint takes a backup edge across types that names a decided decision, and
   the catalogue check that the decision is decided. The shipped data lints clean
   (TestShippedDataLoading), as before.
+- The `across` mark, code first with today's data (cases written before their tests, 2026-11-28):
+  XA1, a backup edge across semantic types with no mark: the lint warns, as before; XA2, the same
+  edge marked `across: D009`: no warning; XA3, a mark naming a decision the register does not have,
+  or one not decided: the catalogue check refuses it; XA4, the generator writes the mark into
+  `edges.json` and reads it back (the reproduction test), and an edge given twice with and without
+  the mark is still given twice.
 - `docs/scheme-registry/nascq-edges.md` made again (`wag-cli --edges`, TestEveryEdgeCase); the
   server's fixtures made on 092b6a6f48a672d2 (`internal/server/testdata/e1-before`) read the frozen
   copy; a scripted reference route for the new edge; the new edge placed after
