@@ -1,0 +1,848 @@
+# Proposal for decisions D019, D020, D024, D025 and D026 (docs/decisions.md),
+# with the rule review's points D104-D108, registered on 2026-11-28 under the
+# owner's standing rule of 2026-11-22: the rule family (F20). Defeasible modus ponens
+# gets its defeasible rule premise and an exception for the case at hand; the
+# established rule gets its two exceptions, one mapping for its first question
+# and an actor and action form; argument from rules splits into an evaluative
+# and a prescriptive form; the exceptional case names its rule and its case;
+# the regulative rule names its addressee and scopes its excuse; and a bridge
+# lets an exceptional case answer the established rule's third question.
+# `wag-cli --proposal` checks it and writes its view, D019-D020-D024-D026.md.
+# How proposals work: process.md §5.
+#
+# Version 1 (draft), 2026-11-28, from the design and inventory in the
+# workspace (verify/rule-family: DESIGN.md, INVENTORY.md, REGISTER-DRAFT.md)
+# and ChatGPT's rule review with its check (verify/chatgpt-rule-2026-11-27/
+# REVIEW.md, §1 and §4 item 6). Not applied: an independent review comes
+# first (process.md §3), and the application waits until the owner's verdicts
+# of exchange 3 are imported, since walton.yml is an input every verdict
+# records. Where it goes beyond the decided text, the summary's "Beyond the
+# decided text" says so; its departures from the workspace design are listed,
+# with their reasons, in verify/rule-family/proposal/NOTES.md §2. The book is
+# cited by entry and page; quotations, where a reviewer needs them, are in the
+# workspace (the compendium transcription and the rule review's check), not
+# here. The schemes library is
+# Austin-Routt/walton-argumentation-schemes-for-carneades-4 at 024b86b
+# (CARNEADES_FORK.md); D024 and D025 adopt its formulas and templates. D109,
+# the replay that keeps a rule instance's formulas, is an effect here; D110,
+# Carneades' preference weighing, is a local patch of its own, not part of this
+# proposal. The engine behaviours the effects claim were run once as a scratch
+# pre-check on walton.yml with this proposal applied and rule removed (in the
+# workspace, verify/rule-family/proposal/NOTES.md); the tests the effects name
+# are the application's.
+
+decisions: [D019, D020, D024, D025, D026, D104, D105, D106, D107, D108]
+title: "The rule family: exceptions that name what they block, the established rule's actor form, argument from rules in two forms, and the exceptional case as an answer"
+summary: |-
+  **What changes.**
+  - **D020, D019: defeasible modus ponens.** Its rule premise becomes
+    defeasibly_implies(A,B), which walton.yml has, unused, with a template that
+    already reads as a defeasible rule ("If A is true then presumably B is also
+    true"), in place of implies(A,B), which reads as a strict conditional
+    (D020). It gains an exception for the case at hand, rule_excepted(A,B):
+    the defeasible rule from A to B has an exception in this case (D019; the
+    template is ours). The exception names the rule's antecedent and its
+    consequent, so an exception to one rule from A does not undercut another
+    rule from A (the lesson of D071 and D097: an exception names what it
+    blocks).
+    Its questions are derived, not the book's (D019): whether this case is an
+    exception is walton/rule_excepted; what backs the rule is the game's
+    challenge of the premise defeasibly_implies(A,B), which every premise has,
+    so it needs no formula of its own (as D023 derived 33/CQ1-2 to a premise).
+    D021 stays open: two models read the book's treatment of the form
+    (pp. 364-367) and found an added premise that the rule has no exception
+    but no numbered questions; a person has not checked it yet.
+  - **D024: the established rule's exceptions.** As the schemes library has
+    them, with its templates: conflicting_or_overriding_rule(R,C), another
+    established rule conflicts with or overrides R in its application to C
+    (55.1 CQ2, p. 343); and rule_exception_or_excuse(R,C), an exceptional case
+    or an adequate excuse defeats R in its application to C (55.1 CQ3). Each
+    names the rule and the conclusion, so it defeats this application of this
+    rule and no other. D024's "rule (55.2) keeps its form" is read as: the
+    argument from rules takes none of 55.1's exceptions. 55.1's questions apply
+    to its two forms only as derived questions, which the catalogue cannot
+    carry yet (D023), so the forms have no questions here; a conflicting rule
+    or an exceptional case is raised against them by challenging the rule
+    premise, or as a rebuttal.
+  - **D106: one mapping for 55.1's first question.** CQ1 asks whether the rule
+    requires acts of a kind that takes in this one. links.json maps it to
+    has_conclusion(R,C) (what R requires covers C) and applicable(R) (R governs
+    this case), as the catalogue entry does; it mapped applicable(R) alone.
+    The proposal's question names has_conclusion(R,C), its first target; the
+    link carries both.
+  - **D025, D107: the actor and action form.** established_rule_actor, beside
+    the generic form, as the schemes library has it, with its templates: in
+    case C, rule R is established for the agent P and requires the action A as
+    an instance of its action types, and obliges P to do A unless an exception
+    applies; unless another rule conflicts or overrides, or the case gives P
+    an exception or excuse (55.1 CQ2, CQ3); so P must do A. It concludes
+    must_do(P,A), the regulative rule's predicate, so the two meet on one
+    formula. positions.json types its agent and action places, and the
+    regulative rule's (D107), so the actor and action checks (R14) read them.
+  - **D026: argument from rules in two forms.** rule bound an evaluation E and
+    a conduct C in every formula, the book's slash (55.2, p. 343), so each
+    instance had to bind both. It becomes two schemes, with templates of our
+    own: rule_evaluative, rule_evaluation(A,E) and case(A), so
+    evaluation_justified(E); and rule_prescriptive, rule_conduct(A,C) and
+    case(A), so conduct_required(C). rule is retired (the design's preferred
+    choice): an id whose formulas changed would pass silently wherever only
+    the id is read, while a retired id is refused by every check that reads
+    it (validate.py, the catalogue check's contrasts, the rule cases). The
+    other choice, rule kept as the evaluative form and rule_prescriptive new,
+    is for the review to weigh (the design: decide with the review).
+  - **D104: the exceptional case names its rule and its case.**
+    waivable_for_exceptions(R) and case_exception(R,X), presumed
+    exception_backed(R,X), so rule_waived(R,X). It had rule_can_waived(X) and
+    case_exception(A), the latter as both premise and assumption, concluding
+    rule_waived(A): X and A unrelated, and no rule named. The book's 56 ties
+    the case of its premises to its conclusion's (p. 344), and its source
+    presents it as a reply to the established rule's third question (Walton
+    1995, p. 147), which is about that rule and that case. 56/CQ1
+    (whether the case is of a recognized kind) and CQ3 (whether comparable
+    cases back a borderline one) target the premise case_exception(R,X); CQ2
+    (whether, for a case of no recognized kind, evidence shows that the rule
+    does not reach it) targets the assumption exception_backed(R,X), presumed
+    until it is asked. Templates ours.
+  - **D105: the regulative rule's addressee and excuse.** The agent A was only
+    in the conclusion and the excuse was 0-ary, so one excuse undercut every
+    regulative-rule argument, whoever's. As the schemes library has them:
+    the premise addressee_of(A,X), that the rule on X addresses A, and the
+    exception excuse_or_overriding_duty(A,X), scoped to the agent and the act
+    (55.3's rebuttal factor, pp. 343-344); the 0-ary excuse goes. With A in a
+    premise, regulative_rule passes the Carneades validator, which it fails
+    today. The templates are ours: the library's template for the excuse
+    repeats the book's rebuttal factor word for word.
+  - **D108: from the exceptional case to the established rule's exception.**
+    bridge_from_exceptional_case: rule_waived(R,X) and case_of(C,X), so
+    rule_exception_or_excuse(R,C). Rule R can be waived for the case X, and
+    C is the conclusion about X, so an exceptional case defeats R in its
+    application to C. It concludes the exception it answers, as D075's answer
+    schemes do, so a claim of an exceptional case answers 55.1 CQ3 by the
+    book's 56; 56 stays as the book prints it, and the step between them is
+    explicit and can be challenged at either premise. This is the design's
+    option (a); option (b), 56 used as an answer concluding the exception
+    directly, is not taken.
+
+  **Beyond the decided text** (found in drafting; each is put to the owner as
+  a choice of its own, and is to be registered before the application):
+  - (a) **precedent_slippery_slope concludes ¬case_exception(R,C0).** It
+    concluded ¬case_exception(C0), the negation of the exceptional case's
+    premise, which it was written to counter (50, p. 340; its link's note).
+    D104 binds that premise to its rule, so the slope's conclusion names the
+    rule it already has, R, and still meets the premise for the same rule and
+    case; unchanged, it would meet nothing.
+  - (b) **Templates of the proposed schemes corrected.** applicable/1 read
+    "Argument %s is applicable." of a rule; obligatory/1 and do_obligator/0
+    printed the book's slash as "prohibited -obligatory-" in the obligation
+    form, and the warrant now speaks of those the rule addresses. Each is used
+    by its scheme alone.
+  - (c) **The established rule's link maps valid(R) under the Minor Premise,**
+    as the catalogue entry corrected it on 2026-10-22: the minor premise says
+    that the rule is established for the agent; links.json put it under the
+    major premise. D106 aligns only CQ1.
+  - (d) **rule retired without an id-migrations entry.** id-migrations.json
+    renames an upstream id one to one, and validate.py reads every migration
+    into its scheme table (W[old] = W[new]); a split has no one new id, and the
+    format-1 checks, against the frozen format-1 walton.yml, which has neither
+    new id, would fail. So rule is removed, and a format-2 record that still
+    names it is refused as an unknown scheme. With it gone, F20's generic
+    scheme in families.json becomes rule_prescriptive, whose obligations the
+    family's specializations (established_rule, established_rule_actor,
+    regulative_rule) narrow; the design kept rule as the generic, which a
+    retired id cannot be.
+
+  **What stays.** exception_to_rule (57's upstream precedent form) and
+  plea_for_excuse (58) do not change; the prohibition form of 55.3 (the
+  schemes library's regulative_rule_prohibition) is not proposed, since no
+  item needs it. The constitutive rules (54.1-54.3) do not change. None of
+  these schemes is among the game's 17; the game's Other does not change
+  here, though plan §3 plays it as defeasible modus ponens later.
+
+  **The gold.** Its two rule items, 13292.46 and 13292.29, conclude a required
+  conduct (a higher tax on beef than on wild game; the state keeping out of
+  meat eating), so both become rule_prescriptive instances when the proposal
+  is applied: what each says is justified (a higher rate on beef, the
+  liberty to choose) is the rule's content, read as the conduct. No other
+  item uses a changed scheme by name. The application waits until the owner's
+  verdicts of exchange 3 are imported: walton.yml is an input every verdict
+  records (verify_gold.py), and the recode sends both items back to review.
+effects:
+  - "walton.yml, through walton-clean/tools/edits.py as owner decisions (D019, D020, D024, D025 and D026, decided 2026-11-22 under the owner's standing rule; D104-D108, registered under it on 2026-11-28), in a block of its own, RULES_F20, with CHANGELOG rows (tools/make_changelog.py): defeasible_modus_ponens, established_rule, regulative_rule, exceptional and precedent_slippery_slope changed as above (repairs, owner decision); established_rule_actor, rule_evaluative, rule_prescriptive and bridge_from_exceptional_case added (additions, owner decision); rule removed, its lines deleted. Their meta is walton.yml's, unchanged; the new schemes' meta as proposed. Templates added: the schemes library's six, as it words them (D024: conflicting_or_overriding_rule/2 and rule_exception_or_excuse/2; D025: established_action_rule/4, established_action_warrant/4, conflicting_action_rule/4 and action_rule_excuse/4); ours: rule_excepted/2, rule_evaluation/2, evaluation_justified/1, rule_conduct/2, conduct_required/1, addressee_of/2, excuse_or_overriding_duty/2, waivable_for_exceptions/1, case_exception/2, exception_backed/2, rule_waived/2 and case_of/2; changed, ours: applicable/1, obligatory/1 and do_obligator/0 (point (b)). Templates left unused are kept and listed as orphans: implies/2, evaluation/3, evaluation_justified/2, rule_can_waived/1, rule_waived/1, case_exception/1 and excuse/0; defeasibly_implies/2 leaves the orphans. check/run.sh regenerates the derived files. The gate: regulative_rule passes the validator, so ad_hominem is the cleaned file's one failure left, and CHANGELOG.md's paragraph on the two failing schemes is updated; the registry: 133 schemes, its differences these schemes and keys. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
+  - "links.json (D024, D106, D104, D105, D026; the proposed links below): 55.1's link of established_rule maps CQ1 to has_conclusion(R,C) and applicable(R), CQ2 and CQ3 to the two exceptions, and valid(R) under the Minor Premise; 55.1 links established_rule_actor exactly; 55.2's link of rule is removed, and 55.2 links rule_evaluative and rule_prescriptive partly, one reading each; 55.3's link maps addressee_of(A,X) with the Warrant and its rebuttal factor to excuse_or_overriding_duty(A,X); 56's link, which keeps links.json's upstream id exeptional (id-migrations.json), maps the bound formulas and CQ2 to exception_backed(R,X); 50's link maps the conclusion to ¬case_exception(R,C0). The file's _note logs the change."
+  - "families.json: F20 loses rule; rule_prescriptive is its generic scheme (55.2's prescriptive reading) and rule_evaluative a variant (55.2's evaluative reading); established_rule_actor joins as a specialization (55.1) and bridge_from_exceptional_case as related (the answer from 56 to 55.1's third question). F17 does not change. positions.json (D107), by place: agent: must_do/2 [1], addressee_of/2 [1], excuse_or_overriding_duty/2 [1], established_action_rule/4, established_action_warrant/4, conflicting_action_rule/4 and action_rule_excuse/4 [3]; action: must_do/2 [2], obligatory/1 [1], addressee_of/2 [2], excuse_or_overriding_duty/2 [2], and the four /4 predicates [4]. No variable becomes both an agent and an action in any scheme (TestTypedPlacesAreConsistent). The case, the rule, the evaluation and the conduct stay untyped."
+  - "The engine's tests (wag/internal/carneades, a new rules_f20_test.go), on walton.yml as changed, every argument at the same weight: an exception of defeasible modus ponens for one rule from A undercuts that argument and not another from A; each of the established rule's exceptions undercuts the argument with its R and C and not another rule's argument for the same C; through the bridge, an exceptional case for R and X undercuts the established-rule argument for R and a conclusion about X, and not one for another rule; a precedent slope for R and C0 attacks the exceptional case's premise for R and C0 and not for another rule; an excuse of one agent undercuts the regulative-rule argument for that agent and not another's; established_rule_actor's conclusion meets the regulative rule's. On the frozen format-1 walton.yml, the planted control: the 0-ary excuse undercuts every agent's argument."
+  - "The catalogue (--catalogue-gen, then the drafted texts): rule.yml is retired, its drafted texts moved: the two gold examples to rule_prescriptive's new entry, the near miss and the contrasts to whichever form each concerns; new entries for rule_evaluative, rule_prescriptive, established_rule_actor and bridge_from_exceptional_case; the eleven entries whose contrasts name rule (defeasible_modus_ponens, established_rule, exception_to_rule, exceptional, plea_for_excuse, positive_value, regulative_rule, rule_mental_world, rule_physical_world_1, rule_physical_world_2, verbal_classification) choose the form each means, as the check requires (a contrast with a retired scheme has no entry). established_rule's 55.1/CQ1 keeps both targets, its CQ2 and CQ3 target the exceptions, its paraphrases and answers no longer say that walton.yml lacks them, and its two discrepancies are closed (D024, D025); defeasible_modus_ponens's discrepancies on implies (D020) and on its questions (D019) are closed, the not-in-book one stays open with D021, and its note says that the game's Other is to be played as it (plan §3); exceptional's, regulative_rule's and precedent_slippery_slope's questions get their targets and texts. The examples below move into the entries."
+  - "The register: D019, D020, D024, D025 and D026 applied (the date and this proposal); D104-D108 (registered 2026-11-28, under the standing rule) applied; D109 applied with the replay (below); D021 stays open; points (a)-(d) above are registered before the application, under D104, D024 and D026 or as an entry of their own. The candidates registry does not change."
+  - "The batch-2 gold (both copies), by a recode script (recode_rules_f20.py, from the gold before it, pinned by its SHA-256): 13292.46#1 and 13292.29#1 become rule_prescriptive instances, bound A and C (E dropped), with the premises rule_conduct(A,C) and case(A) and the conclusion conduct_required(C), their English rendered by the new templates; their challenges at evaluation(...) name rule_conduct(...); their notes say why (the evaluation part is the rule's content, read as the conduct); each gains an adjudication.recoded entry. The lexicon keeps the two evaluation atoms, which the format-1 files use. walton.yml, links.json and positions.json change, so the gold is re-pinned (validate.py --repin) once its checks pass. The format-1 gold and the two annotators' files, checked against the frozen format-1 walton.yml, do not change."
+  - "The first gold's rounds (d086-rounds.json): 13292.46 and 13292.29 were agreed at round 1, draft 1 (exchange 1), and go back to review at a revision they no longer have; 13292.29 is in the owner's session of exchange 3."
+  - "Rule cases (rule-cases.yml): OC5-c, 13292.29, is recoded as the gold is (TestRuleCases). validate.py: ANSWER_SCHEMES gains bridge_from_exceptional_case, which concludes an exception (its test requires every scheme that does), so R11 keeps it at an exception."
+  - "The replay (D109; to_wag.py): a claim coded with a scheme the game lacks is played with Other, its conclusion the instance's formula where the instance states one, not its text: 13292.46, an action amendment played as a new Other argument, concludes conduct_required(tax_beef_more_than_wild_game) where it concluded a text statement; 13292.29, a rebuttal, concludes ¬should_be_performed(tax_meat) as before. A test pins it; the replay is made again with the gold. The game's moves do not change otherwise: none of these schemes is in the game."
+  - "Proposal views: the committed views are written again and checked to change nowhere else. Docs: the README, plan.md, dialogue-types.md and scheme-registry/README.md count 133 schemes, and the schemes with questions as assumptions or exceptions (72, from 70); first-family.md's note that regulative_rule waits for its family is dated."
+schemes:
+  - id: defeasible_modus_ponens
+    meta:
+      title: Defeasible Modus Ponens
+    variables: [A, B]
+    premises: ["defeasibly_implies(A,B)", "A"]
+    assumptions: []
+    exceptions: ["rule_excepted(A,B)"]
+    conclusions: ["B"]
+  - id: established_rule
+    meta:
+      title: Argument from an Established Rule
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy, The University of Alabama Press, Tuscaloosa and London, 1995, p. 147.
+    variables: [C, R]
+    premises: ["has_conclusion(R,C)", "applicable(R)"]
+    assumptions: ["valid(R)"]
+    exceptions: ["conflicting_or_overriding_rule(R,C)", "rule_exception_or_excuse(R,C)"]
+    conclusions: ["C"]
+  - id: established_rule_actor
+    meta:
+      title: "Argument from an Established Rule - Actor and Action Form"
+      source: |
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, ch. 9, entry 55.1, p. 343. As the schemes library has it (decision D025): the case, the rule, the agent and the action type the entry names.
+    variables: [C, R, P, A]
+    premises: ["established_action_rule(C,R,P,A)", "established_action_warrant(C,R,P,A)"]
+    assumptions: []
+    exceptions: ["conflicting_action_rule(C,R,P,A)", "action_rule_excuse(C,R,P,A)"]
+    conclusions: ["must_do(P,A)"]
+  - id: rule_evaluative
+    meta:
+      title: "Argument From Rules - Evaluative Form"
+      source: |
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, ch. 9, entry 55.2 (its evaluative reading), p. 343. Peter Jan Schellens and Menno De Jong, "Argumentation Schemes in Persuasive Brochures." Argumentation 18, 2004, p. 311. Decision D026.
+    variables: [A, E]
+    premises: ["rule_evaluation(A,E)", "case(A)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["evaluation_justified(E)"]
+  - id: rule_prescriptive
+    meta:
+      title: "Argument From Rules - Prescriptive Form"
+      source: |
+        Walton, Douglas and Reed, Chris and Macagno, Fabrizio (2008). Argumentation Schemes. Cambridge University Press, ch. 9, entry 55.2 (its prescriptive reading), p. 343. Peter Jan Schellens and Menno De Jong, "Argumentation Schemes in Persuasive Brochures." Argumentation 18, 2004, p. 311. Decision D026.
+    variables: [A, C]
+    premises: ["rule_conduct(A,C)", "case(A)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["conduct_required(C)"]
+  - id: regulative_rule
+    meta:
+      title: Argumentation From Rules - Regulative Rule Premise Obligation Claim
+      source: |
+        Wayne Grennan, Informal Logic. Montreal: McGill-Queen's University Press, 1997, p. 169.
+    variables: [A, X]
+    premises: ["obligatory(X)", "do_obligator", "addressee_of(A,X)"]
+    assumptions: []
+    exceptions: ["excuse_or_overriding_duty(A,X)"]
+    conclusions: ["must_do(A,X)"]
+  - id: exceptional
+    meta:
+      title: Argument For An Exceptional Case
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy.  Tuscaloosa and London: University of Alabama Press, 1995, p. 148.
+    variables: [R, X]
+    premises: ["waivable_for_exceptions(R)", "case_exception(R,X)"]
+    assumptions: ["exception_backed(R,X)"]
+    exceptions: []
+    conclusions: ["rule_waived(R,X)"]
+  - id: bridge_from_exceptional_case
+    meta:
+      title: "From an Exceptional Case to the Established Rule's Exception (bridge)"
+      source: |
+        WAG's bridge (decisions D108 and D024): when an established rule R can be waived for a case X (the argument for an exceptional case, compendium entry 56, p. 344) and C is the conclusion about X, an exceptional case defeats R in its application to C, the exception rule_exception_or_excuse(R,C) that the argument from an established rule takes for its third question (55.1, p. 343). Walton (A Pragmatic Theory of Fallacy, 1995, p. 147) presents the exceptional case as the critic's reply to that question. Not in the compendium.
+    variables: [R, X, C]
+    premises: ["rule_waived(R,X)", "case_of(C,X)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["rule_exception_or_excuse(R,C)"]
+  - id: precedent_slippery_slope
+    meta:
+      title: Precedent Slippery Slope Argument
+      source: |
+        Douglas Walton, A Pragmatic Theory of Fallacy. Tuscaloosa and London: University of Alabama Press, 1995, p. 159. Douglas Walton, Slippery Slope Arguments. Newport News, Va.: Vale Press, 1992, pp. 93, 95.
+    variables: [C0, C1, Cn, R]
+    premises: ["claimed_exception(C0,R)", "sets_precedent(C0,C1,R)", "precedent_chain(C1,Cn,R)", "intolerable_exception(Cn,R)"]
+    assumptions: []
+    exceptions: []
+    conclusions: ["¬case_exception(R,C0)"]
+language:
+  rule_excepted/2: "The defeasible rule from %s to %s has an exception in this case."
+  conflicting_or_overriding_rule/2: "Another established rule conflicts with or overrides rule %s in its application to conclusion %s."
+  rule_exception_or_excuse/2: "An exceptional case or an adequate excuse defeats rule %s in its application to conclusion %s."
+  applicable/1: "Rule %s applies to the case at hand."
+  established_action_rule/4: "In case %s, rule %s is established for actor %s and requires action %s as an instance of its action types."
+  established_action_warrant/4: "In case %s, established rule %s obliges actor %s to perform included action %s unless a relevant exception applies."
+  conflicting_action_rule/4: "In case %s, an established rule conflicts with or overrides rule %s for actor %s and action %s."
+  action_rule_excuse/4: "Case %s supplies an exception, extenuating circumstance or excuse under rule %s for actor %s's noncompliance with action %s."
+  rule_evaluation/2: "When %s is the case, the evaluation %s is justified."
+  evaluation_justified/1: "The evaluation %s is justified."
+  rule_conduct/2: "When %s is the case, the conduct %s is required."
+  conduct_required/1: "The conduct %s is required."
+  obligatory/1: "%s is obligatory."
+  do_obligator/0: "Those a rule addresses must do what it makes obligatory, and not do what it prohibits."
+  addressee_of/2: "The rule on %[2]s addresses %[1]s."
+  excuse_or_overriding_duty/2: "%s has a good excuse, or a weightier duty, that sets aside the rule on %s."
+  waivable_for_exceptions/1: "%s can be waived for a case that is an exception to it."
+  case_exception/2: "%[2]s is an exception to %[1]s."
+  exception_backed/2: "%[2]s is a recognized kind of exception to %[1]s, or there is evidence that the rule was not meant to govern it."
+  rule_waived/2: "%s can be waived for %s."
+  case_of/2: "%s is a conclusion about the case %s."
+questions:
+  defeasible_modus_ponens:
+    - {id: walton/rule_excepted, asks: "Does something about this case put it outside the defeasible rule from A to B?", target: "rule_excepted(A,B)"}
+  established_rule:
+    - {id: 55.1/CQ1, asks: "Does R require, of agents placed as this one is, acts of a kind that takes in the act C demands here?", target: "has_conclusion(R,C)"}
+    - {id: 55.1/CQ2, asks: "Does some other rule in force clash with R here, or take priority over it?", target: "conflicting_or_overriding_rule(R,C)"}
+    - {id: 55.1/CQ3, asks: "Does something about this agent's situation, such as illness, an emergency or an accepted excuse, take the case outside what R demands?", target: "rule_exception_or_excuse(R,C)"}
+    - {id: walton/valid, asks: "Is R a binding rule, properly made and still in force for those it governs?", target: "valid(R)"}
+  established_rule_actor:
+    - {id: 55.1/CQ1, asks: "Does R, as established for agents placed as P is, require acts of a kind that takes in A?", target: "established_action_rule(C,R,P,A)"}
+    - {id: 55.1/CQ2, asks: "In case C, does another rule in force clash with R for P and A, or take priority over it?", target: "conflicting_action_rule(C,R,P,A)"}
+    - {id: 55.1/CQ3, asks: "Does something in case C make it an exception to R, or excuse P from doing A?", target: "action_rule_excuse(C,R,P,A)"}
+  regulative_rule:
+    - {id: "55.3/Rebuttal Factor 1", asks: "Does A have a good excuse for not doing X, or a weightier duty that sets the rule aside?", target: "excuse_or_overriding_duty(A,X)"}
+  exceptional:
+    - {id: 56/CQ1, asks: "Is X an exception of a kind already recognized under R?", target: "case_exception(R,X)"}
+    - {id: 56/CQ2, asks: "If X is no recognized exception, what evidence shows that R was not meant to govern it?", target: "exception_backed(R,X)"}
+    - {id: 56/CQ3, asks: "If X is a borderline case, which comparable cases were treated as exceptions to R?", target: "case_exception(R,X)"}
+  precedent_slippery_slope:
+    - {id: 50/CQ1, asks: "Would treating C0 as an exception to R really commit us to treating C1 as one too?", target: "sets_precedent(C0,C1,R)"}
+    - {id: 50/CQ2, asks: "What shows that each case in the chain from C1 to Cn would follow from the one before it?", target: "precedent_chain(C1,Cn,R)"}
+    - {id: 50/CQ3, asks: "Would an exception to R for Cn really be intolerable, or only unwelcome?", target: "intolerable_exception(Cn,R)"}
+links:
+  - entry: "55.1"
+    id: established_rule
+    match: exact
+    reason: "Same title and source (A Pragmatic Theory of Fallacy 1995, p. 147); upstream Carneades encodes it as generic rule application (a rule R with conclusion C applies and is valid), so the obligation the entry concludes is the bound conclusion C. Since D024 its CQ2 and CQ3 map to the exceptions the schemes library has, and since D106 its CQ1 to has_conclusion(R,C) and applicable(R), as the catalogue entry has it. The form that names the agent and the action type is established_rule_actor (D025)."
+    premise_map:
+      - compendium_label: Major Premise
+        note: "the rule R with conclusion C; the premise's reservation of exceptions is the two exceptions (D024)"
+        walton: [{formula: "has_conclusion(R,C)", locus: premise}]
+      - compendium_label: Minor Premise
+        note: "that the rule is established (valid) and governs this case, as the catalogue entry maps it"
+        walton: [{formula: "applicable(R)", locus: premise}, {formula: "valid(R)", locus: assumption}]
+    conclusion_map:
+      note: "bare variable: the obligation the entry concludes"
+      walton: [{formula: "C", locus: conclusion}]
+    cq_map:
+      - {cq: CQ1, note: "one mapping, as the catalogue entry has it (D106)", walton: [{formula: "has_conclusion(R,C)", locus: premise}, {formula: "applicable(R)", locus: premise}]}
+      - {cq: CQ2, note: "the conflicting or overriding rule, scoped to R and C (D024)", walton: [{formula: "conflicting_or_overriding_rule(R,C)", locus: exception}]}
+      - {cq: CQ3, note: "the exceptional case or excuse, scoped to R and C (D024); 56's exceptional case reaches it through bridge_from_exceptional_case (D108)", walton: [{formula: "rule_exception_or_excuse(R,C)", locus: exception}]}
+  - entry: "55.1"
+    id: established_rule_actor
+    match: exact
+    reason: "The entry's actor and action form, as the schemes library has it (decision D025): the agent P and the action type A that the entry names, with the case C the argument is about. Beside the generic form, established_rule."
+    premise_map:
+      - compendium_label: Major Premise
+        note: "the entry's conditional for this case, agent and action, with its reservation of exceptions"
+        walton: [{formula: "established_action_warrant(C,R,P,A)", locus: premise}]
+      - compendium_label: Minor Premise
+        walton: [{formula: "established_action_rule(C,R,P,A)", locus: premise}]
+    conclusion_map:
+      note: "the regulative rule's predicate, so the two forms meet (D025)"
+      walton: [{formula: "must_do(P,A)", locus: conclusion}]
+    cq_map:
+      - {cq: CQ1, walton: [{formula: "established_action_rule(C,R,P,A)", locus: premise}]}
+      - {cq: CQ2, walton: [{formula: "conflicting_action_rule(C,R,P,A)", locus: exception}]}
+      - {cq: CQ3, walton: [{formula: "action_rule_excuse(C,R,P,A)", locus: exception}]}
+  - entry: "55.2"
+    id: rule_evaluative
+    match: partial
+    reason: "The entry's evaluative reading, an evaluation E justified in the situation A, as a scheme of its own (decision D026); rule_prescriptive is its conduct reading. Same references (Schellens and De Jong 2004, p. 311). rule, which bound both in every formula, is retired."
+    premise_map:
+      - compendium_label: Major Premise
+        note: "the reading 'an evaluation E is justified'"
+        walton: [{formula: "rule_evaluation(A,E)", locus: premise}]
+      - compendium_label: Minor Premise
+        walton: [{formula: "case(A)", locus: premise}]
+    conclusion_map:
+      note: "the reading 'evaluation E is justified'"
+      walton: [{formula: "evaluation_justified(E)", locus: conclusion}]
+  - entry: "55.2"
+    id: rule_prescriptive
+    match: partial
+    reason: "The entry's prescriptive reading, a conduct C required in the situation A, as a scheme of its own (decision D026); rule_evaluative is its evaluation reading. Same references (Schellens and De Jong 2004, p. 311). rule, which bound both in every formula, is retired."
+    premise_map:
+      - compendium_label: Major Premise
+        note: "the reading 'conduct C is required'"
+        walton: [{formula: "rule_conduct(A,C)", locus: premise}]
+      - compendium_label: Minor Premise
+        walton: [{formula: "case(A)", locus: premise}]
+    conclusion_map:
+      note: "the reading 'conduct C is required'"
+      walton: [{formula: "conduct_required(C)", locus: conclusion}]
+  - entry: "55.3"
+    id: regulative_rule
+    match: exact
+    reason: "Same title and source (Grennan 1997, p. 169). Since D105 the agent is in a premise, addressee_of(A,X), and the rebuttal factor names the agent and the act, as the schemes library has them. The entry prints the conclusion's polarity the other way round from its premise and warrant, a probable misprint the compendium transcription notes; this scheme takes the obligation reading, obligatory with must."
+    premise_map:
+      - compendium_label: Premise
+        walton: [{formula: "obligatory(X)", locus: premise}]
+      - compendium_label: Warrant
+        note: "the warrant, 0-ary, with the agent it binds: that the rule addresses A is not printed, and the conclusion needs it (D105)"
+        walton: [{formula: "do_obligator", locus: premise}, {formula: "addressee_of(A,X)", locus: premise}]
+    conclusion_map:
+      walton: [{formula: "must_do(A,X)", locus: conclusion}]
+    cq_map:
+      - {cq: Rebuttal Factor 1, note: "names the agent and the act (D105)", walton: [{formula: "excuse_or_overriding_duty(A,X)", locus: exception}]}
+  - entry: "56"
+    id: exceptional
+    match: exact
+    reason: "Same title (\"Exceptional Case\"); source A Pragmatic Theory of Fallacy 1995 (walton.yml prints p. 148, the book p. 147 and also Erlbaum 1996, p. 93). Since D104 every formula names the rule R and the case X, as the entry ties the case of its premises to the case of its conclusion."
+    premise_map:
+      - compendium_label: Major Premise
+        walton: [{formula: "waivable_for_exceptions(R)", locus: premise}]
+      - compendium_label: Minor Premise
+        walton: [{formula: "case_exception(R,X)", locus: premise}]
+    conclusion_map:
+      walton: [{formula: "rule_waived(R,X)", locus: conclusion}]
+    cq_map:
+      - {cq: CQ1, note: "a recognized kind of exception: the premise itself", walton: [{formula: "case_exception(R,X)", locus: premise}]}
+      - {cq: CQ2, note: "for a case of no recognized kind, evidence that R does not reach it: presumed until asked (D104)", walton: [{formula: "exception_backed(R,X)", locus: assumption}]}
+      - {cq: CQ3, note: "a borderline case: comparable cases support the premise", walton: [{formula: "case_exception(R,X)", locus: premise}]}
+  - entry: "50"
+    id: precedent_slippery_slope
+    match: partial
+    reason: "Written for WAG by the owner's decision of 2026-10-22, since no upstream file formalizes 50 (walton-clean/CHANGELOG.md, \"Changes decided by the owner\"). Partial: the Intolerable Outcome Premise is read at the end of the series, Cn, where the book prints C0; and the Related Cases Premise is split into the first pair and the chain. Since D104 its conclusion names the rule, so that it still meets the premise of the argument for an exceptional case about the same rule and case."
+    premise_map:
+      - compendium_label: Claim to Exceptional Status Premise
+        walton: [{formula: "claimed_exception(C0,R)", locus: premise}]
+      - compendium_label: Related Cases Premise
+        note: "split: the first pair, and the chain from C1 to the end case Cn"
+        walton: [{formula: "sets_precedent(C0,C1,R)", locus: premise}, {formula: "precedent_chain(C1,Cn,R)", locus: premise}]
+      - compendium_label: Intolerable Outcome Premise
+        note: "read at the end case Cn; the book prints C0"
+        walton: [{formula: "intolerable_exception(Cn,R)", locus: premise}]
+    conclusion_map:
+      note: "the negation of the premise of the argument for an exceptional case (exceptional), which the slope counters (book p. 117), for the same rule since D104"
+      walton: [{formula: "¬case_exception(R,C0)", locus: conclusion}]
+    cq_map:
+      - {cq: CQ1, walton: [{formula: "sets_precedent(C0,C1,R)", locus: premise}]}
+      - {cq: CQ2, walton: [{formula: "precedent_chain(C1,Cn,R)", locus: premise}]}
+      - {cq: CQ3, note: "the book asks it of C0; read at Cn, with the premise", walton: [{formula: "intolerable_exception(Cn,R)", locus: premise}]}
+examples:
+  # --- defeasible_modus_ponens -----------------------------------------------
+  - scheme: defeasible_modus_ponens
+    title: A card payment and the plumber's records
+    invented: true
+    use: argument
+    text: "Maria paid the plumber by card, and a card payment, as a rule, leaves a record with the one who is paid; so the plumber's records show her payment."
+    bindings:
+      A: Maria paid the plumber by card
+      B: the plumber's records show Maria's payment
+    attacks:
+      - question: walton/rule_excepted
+        text: "The plumber's card reader was offline that week and stored nothing: this payment falls outside the rule."
+      - question: CQ:premise_acceptable
+        target: "defeasibly_implies(A,B)"
+        text: "A card payment leaves a record with the bank, not with every trader: many plumbers keep no books of their own."
+    note: "The exception names the rule's two ends, so the offline reader blocks this step and not another rule from the same fact (that the payment shows on Maria's bank statement, say). The challenge asks what backs the rule, the first of the two derived questions."
+  - scheme: defeasible_modus_ponens
+    title: Three days of rain and the river path
+    invented: true
+    use: argument
+    text: "It has rained for three days, and after three days of rain the river path is, as a rule, under water; so it is under water now."
+    bindings:
+      A: it has rained for three days
+      B: the river path is under water
+    attacks:
+      - question: walton/rule_excepted
+        text: "The council raised the path last summer, so this time it stays dry."
+      - question: CQ:premise_acceptable
+        target: "A"
+        text: "It rained on Monday only; Tuesday and Wednesday were dry."
+  - scheme: defeasible_modus_ponens
+    title: The processors would absorb the tax (as an answer)
+    invented: true
+    use: answer
+    answers: "28/CQ3 of an argument from cause to effect in the modal form, that a tax on meat may raise the price of meat; the game binds the conclusion B to that argument's exception, interference(E1,E2), as it would for Other once Other is played as this scheme (plan §3)."
+    answer_to:
+      scheme: cause_to_effect_modal
+      question: 28/CQ3
+      polarity: attack
+      bindings:
+        E1: a tax on meat coming in
+        E2: the price of meat rising
+    text: "Firms fighting for market share, as a rule, absorb a new tax rather than pass it on, and the meat processors are fighting hard for theirs; so they would absorb a meat tax, and it would not raise what shoppers pay."
+    bindings:
+      A: the meat processors are fighting for market share
+      B: another causal factor, the processors absorbing the tax, would keep a tax on meat from raising the price of meat
+    attacks:
+      - question: walton/rule_excepted
+        text: "The processors run on margins of a few cents a kilo: firms that thin cannot absorb a tax, whatever their fight for market share."
+    note: "Its rule is no named scheme's, so it is a defeasible modus ponens; the answer is an attack at the exception of the causal argument (D097's interference(E1,E2))."
+  - scheme: cause_to_effect
+    title: Salt on the steps
+    invented: true
+    use: near-miss
+    near_miss_of: defeasible_modus_ponens
+    text: "The caretaker salted the steps at six this morning, and salt keeps ice from forming, so the steps will stay clear of ice today."
+    bindings:
+      E1: the caretaker salting the steps at six this morning
+      E2: the steps staying clear of ice today
+    note: "A causal generalization: cause to effect, whose third question asks what could keep the cause from its effect. Defeasible modus ponens is the general form for a rule that no named scheme captures."
+  # --- established_rule --------------------------------------------------------
+  - scheme: established_rule
+    title: Signing a guest in at the club
+    invented: true
+    use: argument
+    text: "The club's rules require members to sign their guests in at the front desk. Dana is a member, and her sister is her guest tonight, so Dana must sign her sister in at the front desk."
+    bindings:
+      R: the club's guest rule
+      C: Dana must sign her sister in at the front desk tonight
+    attacks:
+      - question: 55.1/CQ1
+        text: "The guest rule covers the gym and the pool; Dana is taking her sister only to the café, which the rule leaves out."
+      - question: 55.1/CQ3
+        text: "Dana's sister uses a wheelchair, the front desk is up a flight of stairs, and the club lets members sign such guests in at the side door."
+    note: "CQ1 puts in doubt what the rule requires and whether it governs this visit (has_conclusion(R,C) and applicable(R), D106); CQ3 is the exception, the critic's to make out (D024)."
+  - scheme: established_rule
+    title: A missed exam paper
+    invented: true
+    use: argument
+    text: "Under the exam board's rules, a candidate who misses a paper is given a zero for it. Ana missed Tuesday's statistics paper, so the board must record a zero for her paper."
+    bindings:
+      R: the exam board's zero rule for missed papers
+      C: the board must record a zero for Ana's missed paper
+    attacks:
+      - question: 55.1/CQ2
+        text: "The university's disability policy, which takes priority over the board's rules, requires a deferred paper for a student with a registered condition, and Ana has one."
+      - question: walton/valid
+        text: "The board dropped the zero rule in September; since then a missed paper is sat again later."
+    note: "The bridge's answer example below answers this argument's third question with Ana's operation, 56's exceptional case."
+  - scheme: established_rule
+    title: The dispensing code backs an obligation (as an answer)
+    invented: true
+    use: answer
+    answers: "the challenge of the premise obligatory(X) of the regulative-rule argument that the night pharmacist must check each controlled-drug prescription twice (below); the game binds the conclusion C to that premise's statement."
+    answer_to:
+      scheme: regulative_rule
+      question: CQ:premise_acceptable
+      target: "obligatory(X)"
+      polarity: defence
+      bindings:
+        X: checking each controlled-drug prescription twice
+    text: "The hospital's dispensing code requires a second check of every prescription for a controlled drug, and the code covers the night pharmacy as well as the day one; so checking each such prescription twice is obligatory at night too."
+    bindings:
+      R: the hospital's dispensing code
+      C: checking each controlled-drug prescription twice is obligatory
+    attacks:
+      - question: walton/valid
+        text: "The trust replaced the dispensing code in June with its new medicines policy, which leaves the second check to the ward."
+  - scheme: rule_prescriptive
+    title: A guest should be signed in
+    invented: true
+    use: near-miss
+    near_miss_of: established_rule
+    text: "When a guest comes into the clubhouse, signing them in at the front desk is required; Dana's sister is coming in tonight; so signing her in is required."
+    bindings:
+      A: Dana's sister is coming into the clubhouse tonight as a guest
+      C: signing Dana's sister in at the front desk
+    note: "A principle that attaches a conduct to a situation, with no rule in force for a class of agents and no agent it binds: the prescriptive form of argument from rules (55.2). The established rule cites a rule in force for agents like Dana and concludes what Dana must do."
+  # --- established_rule_actor ----------------------------------------------------
+  - scheme: established_rule_actor
+    title: Rotating the audit partner
+    invented: true
+    use: argument
+    text: "Under the firm's rotation rule, a partner who has led a client's audit for five years must hand it to another partner. Lee has led the Harlow audit for five years, so Lee must hand it on this year."
+    bindings:
+      C: the Harlow audit this year
+      R: the firm's five-year rotation rule
+      P: Lee
+      A: handing the Harlow audit to another partner
+    attacks:
+      - question: 55.1/CQ1
+        text: "The rule rotates the partner who signs the audit; for two of the five years Lee only reviewed it, so handing it on is not yet what the rule asks of Lee."
+      - question: 55.1/CQ2
+        text: "The regulator's rule for clients of Harlow's size, which overrides the firm's, allows seven years."
+      - question: 55.1/CQ3
+        text: "Lee's successor is on leave until spring, and the rule allows a year's grace when that happens."
+    note: "The agent and the action are typed places (D107): in a case record, Lee must be an actor of the case and the hand-over an action of Lee's."
+  - scheme: established_rule_actor
+    title: Testing the fire alarms
+    invented: true
+    use: argument
+    text: "The building's fire code requires the tenant on duty to test the alarms every Monday. Femi is the tenant on duty this week, so Femi must test the alarms on Monday."
+    bindings:
+      C: this week in the building
+      R: the building's fire code
+      P: Femi
+      A: testing the alarms on Monday
+    attacks:
+      - question: 55.1/CQ3
+        text: "Monday is a public holiday, and the code moves the test to Tuesday in a holiday week."
+      - question: CQ:premise_acceptable
+        target: "established_action_warrant(C,R,P,A)"
+        text: "The fire code is the insurer's recommendation, not a rule that obliges anyone in the building."
+    note: "It concludes must_do(P,A), the regulative rule's predicate: an argument that Femi must not test the alarms, of either scheme, meets it on the same formula."
+  - scheme: regulative_rule
+    title: The alarms are obligatory for whoever is on duty
+    invented: true
+    use: near-miss
+    near_miss_of: established_rule_actor
+    text: "Testing the fire alarms on Monday is obligatory, the rule on it addresses Femi as the tenant on duty, and those a rule addresses must do what it makes obligatory; so Femi must test them."
+    bindings:
+      A: Femi
+      X: testing the fire alarms on Monday
+    note: "It argues from the act's being obligatory and the rule's addressing Femi, not from a rule established for a class of agents whose action types take in the act: the regulative rule. The two conclude the same formula."
+  # --- rule_evaluative -----------------------------------------------------------
+  - scheme: rule_evaluative
+    title: Two failed hygiene inspections
+    invented: true
+    use: argument
+    text: "A restaurant that fails two hygiene inspections in one year is not one to recommend; the Bridge Café failed two this year; so it is not one to recommend."
+    bindings:
+      A: the Bridge Café failed two hygiene inspections this year
+      E: the Bridge Café is not a restaurant to recommend
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "case(A)"
+        text: "The first failed inspection was of the previous owner's kitchen, before the café changed hands."
+  - scheme: rule_evaluative
+    title: A flat tax on meat is unfair
+    invented: true
+    use: argument
+    text: "A tax that takes a bigger share of poor households' food budgets than of rich ones' is unfair, and a flat tax on meat would do that; so a flat tax on meat is unfair."
+    bindings:
+      A: a flat tax on meat takes a bigger share of poor households' food budgets than of rich ones'
+      E: a flat tax on meat is unfair
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "rule_evaluation(A,E)"
+        text: "Taking a bigger share from the poor makes a tax regressive, not unfair, when what it raises goes back to them as a food rebate."
+    note: "The rule's two forms take no questions (D024: 55.1's apply to them only as derived questions, which the catalogue cannot carry yet); the rule and the case are challenged as premises."
+  - scheme: verbal_classification
+    title: A flat tax on meat is regressive
+    invented: true
+    use: near-miss
+    near_miss_of: rule_evaluative
+    text: "A tax that takes a bigger share of poor households' budgets than of rich ones' is a regressive tax, and a flat tax on meat is such a tax; so it is a regressive tax."
+    bindings:
+      O: a flat tax on meat
+      F: taxes taking a bigger share of poor households' budgets than of rich ones'
+      G: regressive taxes
+    note: "What the tax is, by a defining property: verbal classification. The evaluative form concludes that an evaluation of it is justified."
+  # --- rule_prescriptive ---------------------------------------------------------
+  - scheme: rule_prescriptive
+    title: Taxing meat by its impact (adapted from Kialo 13292.46)
+    invented: true
+    use: argument
+    text: "Each kind of meat should be taxed by its environmental impact, and beef's impact is many times that of other meats; so beef should be taxed more heavily than wild game."
+    bindings:
+      A: beef's environmental impact is far greater than that of other meats
+      C: taxing beef more heavily than wild game such as venison
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "rule_conduct(A,C)"
+        text: "Grading the tax by impact means measuring impact farm by farm, which would cost more than the tax brings in."
+      - question: CQ:premise_acceptable
+        target: "case(A)"
+        text: "The figures compare beef with the average of farmed meats; nobody has measured the impact of wild game."
+    note: "Adapted from 13292.46, which links the tax to environmental impact and concludes that beef should be taxed above wild game. Its gold coding becomes this (D026): the conduct is what it concludes, and its evaluation part, that a higher rate on beef is justified, is the rule's content read as that conduct. 13292.29 is recoded the same way (the effects)."
+  - scheme: rule_prescriptive
+    title: Dismounting at a school entrance
+    invented: true
+    use: argument
+    text: "Where a footpath crosses a school entrance, cyclists are required to dismount, and the canal path crosses the entrance of Hill Street School; so cyclists must dismount there."
+    bindings:
+      A: the canal path crosses the entrance of Hill Street School
+      C: cyclists dismounting where the canal path crosses the school entrance
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "case(A)"
+        text: "The canal path passes the school's back fence; the entrance is on Hill Street."
+  - scheme: established_rule
+    title: The council's bylaw on dismounting
+    invented: true
+    use: near-miss
+    near_miss_of: rule_prescriptive
+    text: "The council's bylaw requires cyclists to dismount at school entrances, and it applies to the canal path; so Sam must dismount where the path meets the school."
+    bindings:
+      R: the council's dismount bylaw
+      C: Sam must dismount where the canal path meets the school entrance
+    note: "A rule in force, a bylaw, applied to an agent it governs: the established rule. The prescriptive form needs no rule in force, only a principle that attaches a conduct to a situation."
+  # --- regulative_rule ---------------------------------------------------------
+  - scheme: regulative_rule
+    title: The night pharmacist's second check
+    invented: true
+    use: argument
+    text: "Checking each prescription for a controlled drug twice is obligatory, the rule on it addresses the night pharmacist as much as anyone, and those a rule addresses must do what it makes obligatory; so the night pharmacist must check each such prescription twice."
+    bindings:
+      A: the night pharmacist
+      X: checking each controlled-drug prescription twice
+    attacks:
+      - question: 55.3/Rebuttal Factor 1
+        text: "Tonight a cardiac arrest on the ward needs every pharmacist there: a weightier duty, for as long as it lasts."
+      - question: CQ:premise_acceptable
+        target: "addressee_of(A,X)"
+        text: "The double-check rule is addressed to the dispensing technicians; the pharmacist signs once, after them."
+    note: "The excuse names the night pharmacist and the act (D105), so it leaves the day pharmacist's obligation standing; the 0-ary excuse undercut every regulative-rule argument at once. The established rule's answer example above backs the premise obligatory(X)."
+  - scheme: regulative_rule
+    title: A helmet for the site inspector
+    invented: true
+    use: argument
+    text: "Wearing a helmet on the building site is obligatory, the rule on it covers visitors, and those a rule addresses must do what it makes obligatory; so the visiting inspector must wear a helmet."
+    bindings:
+      A: the visiting inspector
+      X: wearing a helmet on the site
+    attacks:
+      - question: 55.3/Rebuttal Factor 1
+        text: "The inspector has a medical exemption after head surgery and wears a protective visor instead."
+      - question: CQ:premise_acceptable
+        target: "obligatory(X)"
+        text: "Helmets are required only in the lifting zones, and the inspector will stay in the site office."
+  - scheme: negative_consequences
+    title: Hurt by a falling bolt
+    invented: true
+    use: near-miss
+    near_miss_of: regulative_rule
+    text: "Going onto the site without a helmet could get the inspector hurt by a falling bolt, which is bad; so the inspector should not go on without one."
+    bindings:
+      A: the inspector going onto the site without a helmet
+      G: the inspector being hurt by a falling bolt
+    note: "A bad consequence of the act, with no rule that makes the opposite obligatory: negative consequences."
+  # --- exceptional --------------------------------------------------------------
+  - scheme: exceptional
+    title: Ana's operation and the zero rule
+    invented: true
+    use: argument
+    text: "Ana missed Tuesday's statistics paper because she was in hospital for an operation. The board's zero rule for missed papers can be waived for a case that is an exception to it, and hers is one; so the rule can be waived for her paper."
+    bindings:
+      R: the exam board's zero rule for missed papers
+      X: Ana's paper, missed for an operation
+    attacks:
+      - question: 56/CQ1
+        text: "The board's recognized exceptions are sudden illness and bereavement; an operation booked months ahead is neither."
+      - question: 56/CQ2
+        text: "As it is no recognized exception, something must show that the zero rule was not meant for an absence like hers, and nothing has been offered."
+    note: "The case of the premises is the case of the conclusion, and the rule is the one waived (D104). The precedent slope below argues the negation of the second premise, for the same rule and case."
+  - scheme: exceptional
+    title: A guide dog in the clubhouse
+    invented: true
+    use: argument
+    text: "The clubhouse's no-dogs rule can be waived for a case that is an exception to it, and Mr Price's guide dog is one; so the rule can be waived for his visit with it."
+    bindings:
+      R: the clubhouse's no-dogs rule
+      X: Mr Price's visit with his guide dog
+    attacks:
+      - question: 56/CQ3
+        text: "His dog is still in training, not yet a qualified guide dog: a borderline case, and the club has never let in a dog in training."
+      - question: CQ:premise_acceptable
+        target: "waivable_for_exceptions(R)"
+        text: "The no-dogs rule comes from the food-hygiene licence of the clubhouse kitchen, which admits no exceptions."
+  - scheme: established_rule
+    title: The board's own rule for candidates in hospital
+    invented: true
+    use: near-miss
+    near_miss_of: exceptional
+    text: "The board's rules say that a candidate in hospital on the day of a paper sits it later, and Ana was in hospital on Tuesday; so the board must let her sit the statistics paper later."
+    bindings:
+      R: the board's rule for candidates in hospital
+      C: the board must let Ana sit the statistics paper later
+    note: "The board's rules provide for her case themselves, so the argument applies a rule, the provision for candidates in hospital: an established rule, not a claim that the zero rule can be waived for an exception to it."
+  # --- bridge_from_exceptional_case -------------------------------------------
+  - scheme: bridge_from_exceptional_case
+    title: Ana's operation answers the zero rule (as an answer)
+    invented: true
+    use: answer
+    answers: "55.1/CQ3 of the established-rule argument above that the board must record a zero for Ana's missed paper; it concludes that argument's exception, rule_exception_or_excuse(R,C)."
+    answer_to:
+      scheme: established_rule
+      question: 55.1/CQ3
+      polarity: attack
+      bindings:
+        R: the exam board's zero rule for missed papers
+        C: the board must record a zero for Ana's missed paper
+    text: "The zero rule can be waived for Ana's paper, missed for an operation, and the zero the board must record is about that very paper; so her exceptional case defeats the zero rule's application there."
+    bindings:
+      R: the exam board's zero rule for missed papers
+      X: Ana's paper, missed for an operation
+      C: the board must record a zero for Ana's missed paper
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "rule_waived(R,X)"
+        text: "The board has refused to waive the zero rule for her: the argument for her exceptional case failed at its first question."
+    note: "The exceptional case argues rule_waived(R,X), as the book's 56 prints it; the bridge carries it to the established rule's exception for the same rule and the conclusion about the same case (D108). A waiver of another rule for the same paper answers nothing here."
+  - scheme: bridge_from_exceptional_case
+    title: The guide dog and the order to leave it outside
+    invented: true
+    use: argument
+    text: "The no-dogs rule can be waived for Mr Price's visit with his guide dog, and the order that he leave the dog outside is about that visit; so his exceptional case defeats the rule's application to that order."
+    bindings:
+      R: the clubhouse's no-dogs rule
+      X: Mr Price's visit with his guide dog
+      C: Mr Price must leave his dog outside the clubhouse
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "rule_waived(R,X)"
+        text: "The rule can be waived for guide dogs in the lounge only, and Mr Price is going to the kitchen."
+  - scheme: bridge_from_exceptional_case
+    title: Books kept while the library was flooded
+    invented: true
+    use: argument
+    text: "The late-fine rule can be waived for Omar's books, kept while the library was shut by the flood, and the fine he is asked to pay is for those books; so the flood defeats the rule's application to his fine."
+    bindings:
+      R: the library's late-fine rule
+      X: Omar's books, kept while the library was shut by the flood
+      C: Omar must pay the late fine on his books
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "case_of(C,X)"
+        text: "His fine is for a laptop he borrowed in March, not for the books kept during the closure."
+  - scheme: exceptional
+    title: The flood as an exception
+    invented: true
+    use: near-miss
+    near_miss_of: bridge_from_exceptional_case
+    text: "The late-fine rule can be waived for a case that is an exception to it, and Omar's books, kept while the library was shut by the flood, are one; so the rule can be waived for them."
+    bindings:
+      R: the library's late-fine rule
+      X: Omar's books, kept while the library was shut by the flood
+    note: "It concludes the waiver, rule_waived(R,X): 56's exceptional case. The bridge is the further step to the established rule's exception for a conclusion about the case."
+  # --- precedent_slippery_slope --------------------------------------------------
+  - scheme: precedent_slippery_slope
+    title: Ana, Ben and every booked appointment
+    invented: true
+    use: argument
+    text: "Ana says her operation makes her missed paper an exception to the zero rule. But if her booked operation counts, Ben's booked dental appointment must count too, and then any booked appointment at all, and a rule that bends for every appointment would be intolerable. So Ana's paper cannot be an exception to it."
+    bindings:
+      C0: Ana's paper, missed for an operation
+      C1: Ben's paper, missed for a dental appointment
+      Cn: any paper missed for a booked appointment
+      R: the exam board's zero rule for missed papers
+    attacks:
+      - question: 50/CQ1
+        text: "No one can sit a paper the day after an operation, while a dental check-up can be moved: waiving the rule for Ana commits the board to nothing for Ben."
+      - question: 50/CQ2
+        text: "From Ben's appointment to every booked appointment the chain is only asserted; nothing shows the board would have to go on."
+      - question: 50/CQ3
+        text: "Letting booked appointments be sat later would be a nuisance, not intolerable: every paper would still be sat."
+    note: "It concludes ¬case_exception(R,C0), the negation of the exceptional case's premise for the same rule and the same paper (above), so the two meet in the engine; with the one-place formula of today the slope named no rule (point (a))."
+  - scheme: precedent_slippery_slope
+    title: A garden room over the building line
+    invented: true
+    use: argument
+    text: "The Greens say their garden room is an exception to the building-line rule. If the council lets it stand, it must let their neighbours build out too, and soon every house on the street will reach the pavement, which would be intolerable. So their case cannot be an exception."
+    bindings:
+      C0: the Greens' garden room over the building line
+      C1: a neighbour's garden room over the building line
+      Cn: every house on the street built out to the pavement
+      R: the council's building-line rule
+    attacks:
+      - question: CQ:premise_acceptable
+        target: "claimed_exception(C0,R)"
+        text: "The Greens never asked for an exception: they say the room is behind the line, and they have the survey to show it."
+      - question: 50/CQ1
+        text: "Their room is on a corner plot, the only one on the street, so letting it stand binds the council to nothing for the others."
+  - scheme: negative_consequences
+    title: The cost of a second sitting
+    invented: true
+    use: near-miss
+    near_miss_of: precedent_slippery_slope
+    text: "Making an exception for Ana would mean booking the exam hall a second time, at a cost the board cannot spare; so the board should not make one."
+    bindings:
+      A: the board making an exception for Ana's missed paper
+      G: the board paying to book the exam hall a second time
+    note: "A cost of granting the exception, not a chain of cases that must be treated alike: negative consequences."
