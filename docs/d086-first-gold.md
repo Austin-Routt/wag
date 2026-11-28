@@ -409,6 +409,31 @@ The independent review of D096's application (written before their tests and the
 | CT6-CT8 | The same, citing a claim of the batch, a claim of a claim's context (a sibling the dataset lists), or a known claim that does not say the premise | Accepted: the check is of the cited identity, not of what the claim says |
 | CT9 | A format-1 file with the same premise | No R19: format 1 keeps the rules it was made with |
 
+The independent reviews of 28 November: of D098 and R21 (verify/d098/REVIEW-batch.md) and the
+check of the D096 fixes and draft 3, part 4 (verify/d096/FIXCHECK.md); written before their tests
+and the code:
+
+| Case | Setup | Expected |
+|---|---|---|
+| EN8 | One word changed in the English of a checked formula of arity 1 (`bad(G)` or `good(G)`), and of arity 3 (13292.61#1's conclusion) | Refused (R21), each |
+| EN9 | One word changed in an explicit premise's English, and in an assumption's | Refused (R21), each |
+| EN10 | One word changed in the English of a formula whose atom has digits (13292.224#1's `expert(...)`) | Refused (R21) |
+| EN11 | A checked formula written with a space after its comma, its English changed | Refused (R21): the formula is read without its spaces, as Go reads it |
+| EN12 | A checked English changed in its case only (its first letter), or in its final period only | Refused (R21), each |
+| EN13 | A copy of `walton.yml` whose templates use `%[n]s` followed by `%s`, and `%%`; and one whose template `Render` refuses (`%[0]s`) | R21 renders them as Go's `language.Render` does (`%[3]s, %[1]s then %s` gives the third, first and second arguments; `%%` a literal `%`), and checks nothing where `Render` refuses; Go's `Render` gives the same strings |
+| CT10 | The Go check on a dataset whose items' context lists do not name another item of the batch, a premise citing that item's claim | Accepted: a claim of the batch is known |
+| CT11 | The same, citing a claim listed only among an item's children | Accepted |
+| CT12 | The same, citing a claim listed only among an item's `kialo_parents`, and one listed only among its ancestors | Accepted, each |
+| CT13 | A premise of role exception, and one of role assumption, inferred, whose `cite` is the claim itself | Refused (R19), each: premises of any role |
+| CT14 | The same premise in an instance that is not the primary one | Refused (R19) |
+| CT15 | No dataset: an inferred premise with no `cite`, one citing the claim itself, and one citing an unknown claim | The first two refused (R19); the third accepted (without a dataset no claim is unknown) |
+| CT16 | A dataset whose item's siblings list is `["junk", {"claim_id": "13292.888888"}]`, a premise citing 13292.888888 | Accepted, as by `validate.py`: an entry that is not a claim is skipped, the others kept |
+| RC22 | The replay: a claim whose statement is a negation (¬S), with an instance by the discussion concluding ¬S | Played as an argument for ¬S (support ¬S), by the claim's own side |
+| RC23 | `validate.py` on an inferred premise whose `cite` is a list, and one whose `cite` is an object | An R19 error line each, no traceback |
+| RS1 | `TestRuleCases` on a case that names its target's instance (OC6-e, 13292.127#2; OC6-f, 13292.12#3; OC10-a, 13292.127#1), the gold's target moved to another instance of the same claim | Refused: the case's instance is compared |
+| PC4 | An applied proposal whose template is not `walton.yml`'s, where a later applied proposal carries `walton.yml`'s template | No error; the view marks the template changed since the proposal was applied, naming the later proposal |
+| PC5 | The same with no later applied proposal carrying it | An error, as PC1 |
+
 Decision D098 (OC6 and OC10; rule cases in `rule-cases.yml`, added with the recode that applies it):
 OC6-e, 13292.202, a mitigation at the conclusion of the argument that cites the harm, the starvation
 argument 13292.127#2; OC6-f, 13292.45, an amended action at the conclusion of the consequence
