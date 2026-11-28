@@ -450,6 +450,32 @@ argument 13292.12#3, not at the causal step 13292.12#1 that predicts the harm (a
 OC10-a, 13292.204, a denial of the link a weighing relies on, at the weighing's own premise
 (13292.127#1), not at the consequence argument that also has it.
 
+The external review of exchange 3, F5 (a malformed `items.json`: `validate.py` stopped with a
+traceback on a context field that is a text, and read `""`, `0` or `{}` as an empty list; Go skipped
+a field that is not a list, and R7 for a claim whose `kialo_parents` it could not read). ChatGPT's
+patch 03, with the changes of the workspace's check of it (`verify/chatgpt-x3-2026-11-28/
+CHECK-annotation.md` §3); written before their tests and the code. "A later claim" is 13292.115, the
+sixth:
+
+| Case | Setup | Expected |
+|---|---|---|
+| SC1 | `validate.py` with an `items.json` whose `ancestors`, `siblings` or `children` is a text, a number, `true`, an object, `""`, `0`, `false` or `{}`, at the thesis (13292.1) and at a later claim | Refused, each: one line naming the claim and the field, exit 1, no traceback |
+| SC2 | The same field null, or absent, at either claim | Accepted: no claim of its context |
+| SC3 | `validate.py` with `kialo_parents` absent, null, a text, a number, an object, `""`, `0`, `false` or `{}`, at the thesis and at a later claim | Refused, each, with one line: `validate.py` finds the thesis by its empty list (`[]`) and R7 reads every parent |
+| SC4 | `validate.py` with a `kialo_parents` entry that is a text, null, or an object whose `claim_id` or `relation` is absent, null or a number | Refused, each, with one line naming the entry |
+| SC5 | `validate.py` with `items.json`'s `items` not a list, or holding a text; an item with no `kialo_claim_id`, a number, or one of spaces (a tab and U+00A0, which Go trims); two items with one id; an item whose `text` is absent or a number | Refused, each, with one line, exit 1, no traceback |
+| SC6 | `validate.py` on CT16's dataset: a claim's siblings `["junk", {"claim_id": "13292.888888"}]`, and 13292.25#1's inferred premise citing 13292.888888 | Accepted, as by Go (CT16): an entry that is not a claim is skipped, the others kept; without that sibling, refused (R19) |
+| SC7 | Go reading a dataset (`FromDir`) whose claim's `ancestors`, `siblings`, `children` or `kialo_parents` is a text, a number, `true`, an object, `""` or `{}`, or whose Kialo parent is a text, null, or an object whose `claim_id` or `relation` is absent, null or a number | Refused when the dataset is read, naming the claim and the field: R7 no longer skips a claim whose parents it cannot read |
+| SC8 | Go reading a dataset whose claims have these four fields null or absent, and one whose claims have none of them (a dataset not made from Kialo) | Read: no Kialo parent, no claim of context |
+| SC9 | Go: R7 on a claim whose parents are written only under `Kialo_Parents` (another spelling) | Not its Kialo parents: Go reads the context by its names as written, as R19 and `validate.py` do (before, R7 read any spelling and R19 one) |
+| SC10 | Go reading a dataset whose claim's `text` is absent, null or a number; and one whose only text is spelt `Text` | The first three refused when the dataset is read, each saying the claim has no text (before, an absent text was read as empty, and a number was reported as a missing id); the last read, as `TestALoneSpellingLoads` has it |
+
+Go reads a claim with no `kialo_parents` as having no Kialo parent (SC8), where `validate.py`
+refuses it (SC3): Go reads any dataset, and finds the thesis by the discussion's
+`thesis_claim_id`; `validate.py` checks the Kialo batch, whose every claim has the list. A dataset
+that a build before this change read, skipping a malformed field, is refused by name; such a
+dataset is not WAG's (its Kialo import writes every list, and the built-in dataset passes).
+
 ## 7. Out of this plan
 
 Batch 2 recoded under the guidelines' version 4 (plan §4, item 2), other discussions and the probe set

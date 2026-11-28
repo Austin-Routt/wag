@@ -45,6 +45,19 @@ manifest names is refused when the dataset is read. A run records the
 format it was made in (`run.json`, `settings.format`); a run made before this contract has none and is
 format 1, so its annotations are checked as they were made.
 
+`items.json` is read whole before any rule reads it (since the external review of exchange 3, F5;
+cases SC1-SC10 in `docs/d086-first-gold.md` §6): its `items` are a list of objects, each with a
+`kialo_claim_id` (a text, not blank, used once) and a `text` (a text); a claim's context,
+`kialo_parents`, `ancestors`, `siblings` and `children`, is lists where given and not null; and each
+entry of `kialo_parents` is an object with a text `claim_id` and `relation`, which R7 reads. Any
+other shape is refused with its claim and field named, by `validate.py` and when Go reads the
+dataset, both reading the context's names as written (Go reads a lone `Text` as the text, as
+`TestALoneSpellingLoads` has it). An entry of `ancestors`, `siblings` or `children` that
+is not a claim (an object with a text `claim_id`) is skipped and the others kept (R19, case CT16).
+`validate.py` also refuses a claim whose `kialo_parents` is absent or null, since it finds the
+thesis by its empty list (`[]`); Go reads such a claim as having no Kialo parent, as a dataset not
+made from Kialo has none.
+
 The typing of predicate positions (which argument of a predicate is an agent and which an action,
 §3) is `wag/data/annotation/positions.json`, until the catalogue types each scheme's variables
 (plan §2).
