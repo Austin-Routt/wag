@@ -245,6 +245,32 @@ written, on the uncommitted code (accepted); its outcome as corrected below repl
 | A9.3f | c1; Con undercuts c1 directly with Other, with no ground | accepted: P6 binds only an argument whose question refuses Other |
 | A9.7 | the schemes that back CQ:worth_finding_out_first, Other aside (D095 (3)'s list) | AS:finding_out_first, AS:expert_opinion and AS:position_to_know |
 
+Added 2026-11-28, before their tests: the bound by the exception's form (F1 of the external review of
+exchange 3; WAG's check of it, wag-workspace verify/chatgpt-x3-2026-11-28/CHECK-runtime.md). S5 looked
+for the question that refuses Other only among the bridges on the board. So a statement of the
+exception's form argued with sign before any bridge (sign, then the modal argument, then the bridge)
+became, unchecked, the exception that defeats the bridge, against D099 (4), which bounds every route
+to the exception. S5 now reads the statement's form: a statement that matches the exception pattern
+of a question that refuses Other is bounded whether or not a bridge is on the board, in any game whose
+data has the question. Three consequences, written here so that they are tested: (1) the bound holds
+for every statement of the form, also one no bridge in the game could take (another actor's action);
+(2) in an inquiry whose claim is the exception, before any bridge, only expert opinion and position to
+know can argue for the claim (finding out first is an answer only, S1); (3) the bound is not the
+profile's: it holds in a game with no profile.
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A9.8 | `worth_finding_out_first(tax_meat,demand_falls)` on the board, no bridge (as an inquiry's claim puts it there); Con argues for it with AS:sign, with AS:analogy and with Other, each a move about the statement | refused, S5, each |
+| A9.8b | A9.8, then m+ and b+ | accepted; b+ in force (whatever the order, sign has not made the exception) |
+| A9.8c | A9.8 in a game with no profile | refused, S5, each (consequence 3) |
+| A9.9 | the statement on the board, no bridge; Con supports another statement with Other, its premise the exception's formula | refused, S5 (a presumed premise) |
+| A9.10 | the statement on the board, no bridge; Con argues for it with AS:expert_opinion; then m+ and b+ | accepted; the exception In; b+ out of force |
+| A9.10b | the statement on the board, no bridge; Con argues against it with AS:sign; then m+ and b+ | accepted; b+ in force |
+| A9.10c | statements of another form on the board: `worth_finding_out_first_extra(tax_meat,demand_falls)`, `worth_finding_out_first(tax_meat)`, `true_in_situation(worth_finding_out_first_tax_meat_demand_falls)`; Con argues for each with AS:sign | accepted, each |
+| A9.11 | the statement on the board, no bridge: the moves the game offers about it | for it, only AS:expert_opinion and AS:position_to_know (consequence 2); against it, as A9.5 |
+| A9.12 | in a game with no profile (with one, P3 would speak first for an action no player declared): `worth_finding_out_first(farmers_strike,demand_falls)` on the board, another actor's action; Con argues for it with AS:sign | refused, S5 (consequence 1) |
+| A9.13 | a recorded game that argued the exception with sign before any bridge, made by a build that accepted it, loaded (server) | refused with a named error: WAG accepted it until this change (2026-11-28), and a build of an earlier commit replays it |
+
 ## B. Other and the thesis-independent schemes
 
 | Case | Board, then the move | Expected |
@@ -476,4 +502,13 @@ A6.2 and A7.5, by the rule's name only); P5 refusing every answer there fails A7
 skipped for a defence fails A7.6; the edges to the harm bridge and the modal variant fail A7.7, whose
 answer they let through, and A7.7b, refused then by S9 instead of S5; the record without its
 question fails A7.1r, A5.1 and A6.1; the lint not checking a mark fails XA5.
+
+Planted for the bound by the exception's form (A9.8 to A9.13; 2026-11-28, written before the tests):
+
+| Defect | Caught by |
+|---|---|
+| S5 looks for the refusing question only at the bridges on the board (C5.3's reading) | A9.8, A9.9, A9.11, A9.12 |
+| the exception's pattern compared by its predicate's name only | A9.10c |
+| the pattern's repeated placeholders bound independently, or a non-ground statement taken | the matcher's unit cases |
+| the loader names no change for a game the new rule refuses | A9.13 |
 
