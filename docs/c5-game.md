@@ -434,6 +434,19 @@ step applies the other four, written before the code (2026-11-28); the cases are
   else: it is kept, and what it says is for the players and the review (D053).
 - **(5) CQ:worth_finding_out_first's text ends "If so, how?"** (the two bridges' entries, from which
   the text is generated).
+- **The offers** (added 2026-11-28, with the code's first run): the moves the board and the computer
+  players are offered are the moves the game accepts. In a game with a profile,
+  `GameState.EnumerateActions` leaves out the answers P5 refuses, of either polarity; NASCQ's
+  enumeration of the moves about a statement leaves out, for the exception of a question that
+  refuses Other, every scheme that does not back the question. On the shipped data, the first run
+  of the golden set changed 24 of its 33 games, each first where its menu lost two offers: sign's
+  attack and defence at a practical-reasoning argument's CQ:side_effect (19 games), or sign and
+  analogy for a `worth_finding_out_first` statement (6); nothing was added to a menu. The golden
+  set is made again with the code, before the switch.
+- **Two layers for (4).** NASCQ refuses a move about the exception, or against its negation, with
+  a scheme that does not back the question, before the move is placed; the game's check after
+  placement refuses any argument a move places that concludes the exception with such a scheme, a
+  second layer as at C5.2 (A4.3).
 
 **The switch.** (1) and (5) change the game's data, so its fingerprint changes once, in one commit,
 as at C5.2: the generated files with the catalogue's; the frozen copy of today's files

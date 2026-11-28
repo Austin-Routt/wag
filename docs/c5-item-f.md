@@ -153,6 +153,16 @@ needs the statement. The case is played on m+ and b+ (b+ concludes it), and is r
 | A8.3 | c1; A5.1's answer (sign at positive consequences' side-effect question) | accepted, as before |
 | A8.4 | pr, in a game with no profile; A8.1's answer | accepted: P5 is a rule of the profile |
 
+Added 2026-11-28, with the code's first run on today's data and before their tests: P5 leaves out
+sign's answers at that route of either polarity, and the board and the computer players are not
+offered a move the profile refuses (the first run refused a computer player's sign defence of a
+practical-reasoning argument in five of the golden games on the shipped data).
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A8.1b | pr; Pro defends pr at CQ:side_effect with AS:sign (the positive answer) | refused, P5 |
+| A8.5 | pr; the moves the game offers about pr (`GameState.EnumerateActions`, which the board and the computer players list) | no answer made with AS:sign to CQ:side_effect, of either polarity, and A5.1's two at c1 still offered; in a game with no profile, both offered at pr |
+
 ### A9. The bridges' exception bounded (D099 (4), (5); step C5.3)
 
 | Case | Board, then the move | Expected |
@@ -161,6 +171,19 @@ needs the statement. The case is played on m+ and b+ (b+ concludes it), and is r
 | A9.2 | m+, b+; Con argues for it with AS:position_to_know as a move about the statement | accepted: a source-based scheme (D095 (3)); while its own questions are not asked, the exception In and b+ out of force |
 | A9.3 | m+, b+; Con undercuts b+ with Other, its premise a free text | accepted: S5 reads what an argument concludes or presumes; b+ out of force |
 | A9.4 | CQ:worth_finding_out_first's text, as the board shows it for b+ | ends "If so, how?" |
+
+Added 2026-11-28, before their tests: the other route to the exception, the offers, and S5's second
+layer. A typed scheme's own move cannot conclude the exception (a value it binds is made an atom, so
+sign with B written as the exception's formula concludes another statement), so a move about the
+statement, or against its negation, is the route: NASCQ refuses it before the move is placed (its
+message names the statement); the game's check after placement (S5, "an argument of ... cannot
+conclude") is a second layer, tested on an argument placed directly.
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A9.1b | m+, b+; once Pro has argued against the exception with Other (accepted), Con argues against that negation with AS:sign | refused, S5, before the move is placed |
+| A9.5 | m+, b+; the moves the game offers about `worth_finding_out_first(tax_meat,demand_falls)` | for it, only AS:expert_opinion and AS:position_to_know (AS:finding_out_first is offered only as the answer); against it, as before, every scheme that can conclude its negation: Other, sign, analogy and the two source-based schemes |
+| A9.6 | m+, b+; an argument of sign, of Other and of position to know, each concluding the exception, placed on the board directly and checked as a move's arguments (the game's S5) | refused for sign and Other, with the scheme named; kept for position to know |
 
 ## B. Other and the thesis-independent schemes
 
@@ -218,6 +241,12 @@ refusal.
 | D1 | c1; Con answers CQ:side_effect of c1 with AS:negative_consequences, G `food_costlier` (owner's question 1) | refused, S5 |
 | D2 | c1; Con argues the same against `should_be_performed(tax_meat)`, a move about the statement | accepted, a rebuttal |
 | D3 | D2 (a slight harm; Q1-E) | `bad_outweighs(tax_meat,emissions_fall)` is not In, and c1 is not out of force: the con argument does not establish the weighing |
+
+Written 2026-11-28, before step C5.3's switch: D1's outcome changes at the switch, by the owner's
+answer D099 (1) (the backup edge), not by a defect: the answer is accepted, a rebuttal, which is A7.1.
+At the switch D1's test asserts A7.1's outcome, and the planted defect "S5 skips the backup-edge
+check" names A7.4 in D1's place. D2 and D3 hold as before: the move about the statement stays a
+direct rebuttal when no question is asked.
 
 ## E. The profile (D094 (b), D063, D095 (4))
 
@@ -343,4 +372,9 @@ Step C5.3's planted defects (2026-11-28, written before the tests):
 | S5 refusing only Other at the exception | A9.1 |
 | S5 refusing the source-based schemes too | A9.2 |
 | S5 refusing an undercutter of a bridge | A9.3 |
+| P5 refusing only the attack | A8.1b |
+| the offers keep the answers P5 refuses, or drop A5.1's | A8.5 |
+| NASCQ's route about the statement refusing only Other (the game's layer left to catch it) | A9.1, A9.1b (NASCQ's message) |
+| the offers keep the schemes that do not back the question, or drop the source-based ones | A9.5 |
+| the game's S5 refusing only Other, or refusing the source-based schemes | A9.6 |
 
