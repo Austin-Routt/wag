@@ -914,10 +914,26 @@ func TestProposalAnswerReferences(t *testing.T) {
 		t.Errorf("an attack on a premise that concludes the premise: %v", e)
 	}
 	// An applied proposal, written before answer_to, is warned, not refused.
+	// Applied, its templates are walton.yml's (TestAppliedProposalTemplates):
+	// the sources here have them.
 	p = base()
 	last(p).AnswerTo = nil
 	p.Applied = "2026-10-22"
-	if e := errs(p); len(e) != 0 {
+	applied := *s
+	applied.Language = map[string]string{}
+	for k, v := range s.Language {
+		applied.Language[k] = v
+	}
+	for k, v := range p.Language {
+		applied.Language[k] = v
+	}
+	var e []string
+	for _, f := range CheckProposal(p, &applied) {
+		if f.Error {
+			e = append(e, f.Msg)
+		}
+	}
+	if len(e) != 0 {
 		t.Errorf("an applied proposal's answer without answer_to: %v", e)
 	}
 }
@@ -1009,6 +1025,57 @@ func TestCommittedProposals(t *testing.T) {
 		if err != nil || strings.ReplaceAll(string(view), "\r\n", "\n") != string(ProposalView(p, s, filepath.Base(f))) {
 			t.Errorf("%s is not the proposal's current view: run wag-cli --proposal %s", ProposalViewPath(filepath.Base(f)), filepath.Base(f))
 		}
+	}
+}
+
+// An applied proposal's templates are walton.yml's (cases PC1-PC3,
+// docs/d086-first-gold.md §6; the independent review of D040-D071-D097's
+// application, W6): a template changed after the application is an error
+// of the applied proposal, not of one that proposes it.
+func TestAppliedProposalTemplates(t *testing.T) {
+	p, err := LoadProposal(filepath.Join(root, "docs", "proposals", "D040-D071-D097.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if p.Applied == "" || p.Language["interference/2"] == "" {
+		t.Fatal("D040-D071-D097 is not the applied proposal of interference/2 this test was written for")
+	}
+	const want = "template interference/2: the proposal is applied, but walton.yml's template is"
+	errs := func(p *Proposal, s *Sources) []string {
+		var out []string
+		for _, f := range CheckProposal(p, s) {
+			if f.Error && strings.Contains(f.Msg, "the proposal is applied, but walton.yml's template") {
+				out = append(out, f.Msg)
+			}
+		}
+		return out
+	}
+	// PC3: as committed, none.
+	if got := errs(p, sources(t)); len(got) != 0 {
+		t.Errorf("committed: %v", got)
+	}
+	// PC1: walton.yml's template changed after the application.
+	s := sources(t)
+	changed := *s
+	changed.Language = map[string]string{}
+	for k, v := range s.Language {
+		changed.Language[k] = v
+	}
+	changed.Language["interference/2"] = "Something keeps %s from being brought about by %s."
+	if got := errs(p, &changed); len(got) != 1 || !strings.HasPrefix(got[0], want) {
+		t.Errorf("a changed template: %v", got)
+	}
+	// The template gone from walton.yml is the same error.
+	delete(changed.Language, "interference/2")
+	if got := errs(p, &changed); len(got) != 1 || !strings.HasPrefix(got[0], want) {
+		t.Errorf("a template gone: %v", got)
+	}
+	// PC2: a proposal not applied proposes the template.
+	q := *p
+	q.Applied = ""
+	changed.Language["interference/2"] = "Something keeps %s from being brought about by %s."
+	if got := errs(&q, &changed); len(got) != 0 {
+		t.Errorf("not applied: %v", got)
 	}
 }
 

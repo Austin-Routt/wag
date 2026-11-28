@@ -29,8 +29,11 @@ retired:
     now: the two-place exception's template, another causal factor keeps, or would keep, E1 from bringing about E2
     why: proposal D040-D071-D097 (D071, D097), 2026-11-27
   - phrase: or blunt its effect
-    now: 28/CQ3 asks what keeps E1 from bringing about E2; a weaker effect is 28/CQ1's
-    why: proposal D040-D071-D097, version 2 (its independent review, W5)
+    now: 28/CQ3 asks what keeps E1 from bringing about E2; a factor that only makes E2 smaller answers neither it nor 28/CQ1
+    why: proposal D040-D071-D097, version 2 (its independent review, W5); corrected by the review of its application (W1)
+  - phrase: only weakens the effect bears on
+    now: 28/CQ1 asks how reliably events like E1 bring about events like E2; a factor that only makes E2 smaller, while E2 still follows, answers neither CQ1 nor the exception, and at a cited consequence bears on too_slight (OC9)
+    why: the independent review of proposal D040-D071-D097's application, W1 (2026-11-28)
   - phrase: There are nine NASCQ schemes
     now: seventeen since step C5.2, listed in the guidelines' first table
     why: the independent check of step C5.2's switch (E-1)
@@ -578,14 +581,70 @@ cases:
       target: {actual: {claim: '13292.36', part: conclusion}}
     why: >-
       A safeguard the agent would add to the policy argues for the amended
-      policy, at the conclusion of the argument that cites the harm (D066), as
-      in OC6-b. It does not say that anything in the case as proposed keeps the
+      policy, at the conclusion of the argument that cites the harm (D066,
+      D098), as in OC6-b. It does not say that anything in the case as proposed keeps the
       higher food costs from lessening food security, so it is no answer at that
       causal step's exception,
       interference(food_production_costs_increased,food_security_decreased)
       (guidelines §5 item 11; D071, D097). A factor that would come with the
       cause itself, such as iron supplements against anemia from eating less
       meat (13292.182 at 13292.180#2), is such an answer.
+
+  - id: OC6-e
+    rules: [OC6]
+    kialo: "13292.202"
+    claim: There can be exceptions and/or indiscriminate meat taxes could be implemented only in non-third-world countries.
+    target: 13292.127#2, the starvation argument inside the weighing claim 13292.127, which cites the harm
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: none, fit: none}
+        bindings: {}
+        premises: []
+        conclusion: {formula: 'should_be_performed(tax_meat_outside_poor_countries)'}
+      role: {kind: action_amendment, cq: null, polarity: against}
+      target: {actual: {claim: '13292.127', part: conclusion}}
+    why: >-
+      A bare proposal of an amended policy (none, action_amendment; §5 item 4)
+      that would spare those the tax could starve. It answers the argument that
+      cites the harm against the tax, at its conclusion (D066, D098): the
+      starvation argument, the claim's secondary instance 13292.127#2, by its
+      id, not the weighing 13292.127#1, whose conclusion is the outweighing
+      exception, not a verdict on the tax.
+
+  - id: OC6-f
+    rules: [OC6]
+    kialo: "13292.45"
+    claim: In which case, importation standards have to be maintained at a higher level; this is manageable.
+    target: 13292.12#3, the consequence argument that cites the harm (the domestic industry pushed out) against the tax
+    coding:
+      instances:
+      - primary: true
+        scheme: {walton_id: practical_necessary_condition, fit: reconstructed}
+        bindings: {X: raise_import_standards, G: domestic_producers_protected_from_imports, P: governments, S: barriers_to_cheaper_meat_imports}
+        premises:
+        - {role: premise, formula: 'goal_of_agent(governments,domestic_producers_protected_from_imports)'}
+        - {role: premise, formula: 'alternative_action(governments,barriers_to_cheaper_meat_imports,domestic_producers_protected_from_imports)'}
+        - {role: premise, formula: 'necessary_action(governments,raise_import_standards,barriers_to_cheaper_meat_imports,domestic_producers_protected_from_imports)'}
+        - {role: premise, formula: 'practicality_action(governments,raise_import_standards)'}
+        - {role: premise, formula: 'more_acceptable_bringing(governments,domestic_producers_protected_from_imports,raise_import_standards)'}
+        - {role: assumption, formula: 'possible_goal(domestic_producers_protected_from_imports)'}
+        - {role: assumption, formula: 'acceptable_action(governments,raise_import_standards)'}
+        - {role: assumption, formula: 'possible_bring_about(governments,raise_import_standards)'}
+        - {role: exception, formula: 'realize_more_effectively(governments,domestic_producers_protected_from_imports,raise_import_standards)'}
+        - {role: exception, formula: 'goal_achievable_without_any(governments,domestic_producers_protected_from_imports,barriers_to_cheaper_meat_imports)'}
+        - {role: exception, formula: 'bad_outweighs(raise_import_standards,domestic_producers_protected_from_imports)'}
+        - {role: exception, formula: 'incompatible_goal(governments,domestic_producers_protected_from_imports)'}
+        conclusion: {formula: 'should_be_performed(raise_import_standards)'}
+      role: {kind: action_amendment, cq: null, polarity: against}
+      target: {actual: {claim: '13292.12', part: conclusion}}
+    why: >-
+      A measure the agent would add to the tax so that the harm 13292.12
+      predicts does not follow, argued with the necessary-condition scheme: an
+      amended action. It answers the argument that cites the harm against the
+      tax, 13292.12#3, at its conclusion (D098), as its sibling 13292.194 does,
+      not the causal step 13292.12#1 that predicts the harm, whose conclusion
+      is a prediction, not a verdict on the tax.
 
   - id: OC8-a
     rules: [OC8]
@@ -665,7 +724,9 @@ cases:
       on, a premise of its bad_outweighs_good instance, which no question
       covers (an answer scheme's premises are challenged): a premise
       attack, not an argument that nothing outweighs the environmental
-      argument's goal (13292.1#2).
+      argument's goal (13292.1#2). It is at the weighing's own premise
+      (13292.127#1), though the claim's starvation argument (13292.127#2) has
+      the same premise: it is the weighing it answers (D098).
 
   - id: OC11-a
     rules: [OC11]

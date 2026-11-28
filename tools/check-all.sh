@@ -46,6 +46,11 @@ cd "$root" || exit 2
 step validate python3 -I docs/kialo-batch2/validate.py
 step test-validate python3 -I docs/kialo-batch2/test_validate.py
 step test-agreement python3 -I docs/kialo-batch2/test_agreement.py
+step test-verify-gold python3 -I docs/kialo-batch2/test_verify_gold.py
+step test-to-wag-inference python3 -I docs/kialo-batch2/test_to_wag_inference.py
+step test-to-wag-other python3 -I docs/kialo-batch2/test_to_wag_other_reporting.py
+step test-to-wag-unresolved python3 -I docs/kialo-batch2/test_to_wag_unresolved.py
+step test-to-wag-discussion python3 -I docs/kialo-batch2/test_to_wag_discussion.py
 step rebuild bash -c 'sh docs/scheme-registry/walton-clean/check/run.sh "$1" && python3 -B tools/check_d084_migration.py && python3 -B tools/check_d081_migration.py && { test -z "$(git status --porcelain)" || { echo "the tree changed:"; git status --porcelain; exit 1; }; }' rebuild "$upstream"
 
 echo "ALL $([ $fail = 0 ] && echo PASS || echo FAIL) (logs in $logs)"

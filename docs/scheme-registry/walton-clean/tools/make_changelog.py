@@ -263,7 +263,8 @@ def main(outdir):
       "keeps `cause_to_effect`'s causal premise and exception, so the book's three questions target the same formulas, and "
       "uses `may_occur` for both the cause and the effect, so that hypothetical steps chain. The causal premise is not "
       "weakened, though the book's weak reading has a weak generalization too; the catalogue records that as open. Its "
-      "template is our own. |")
+      "template is our own. Its exception, with `cause_to_effect`'s, was replaced on 2026-11-27 by "
+      "`interference(E1,E2)` (D040, D071, D097; below). |")
     w("| `positive_consequences`, `negative_consequences` | exception `other_consequences(A)` added; the template "
       "`other_consequences/1` rewritten | 2026-10-22 | The book's question about other, opposite consequences (33/CQ3) is "
       "printed for all of 33.1–33.4; `walton.yml` had its formula only in `negative_consequences_prudential` (33.4). An "
@@ -435,6 +436,14 @@ def main(outdir):
       "made-out answer from a bare claim of knowability. No premise makes the decision wait. After Walton, The "
       "New Dialectic (1998), p. 203, and Fundamentals of Critical Argumentation (2006), p. 85; not in the "
       "compendium. |")
+    w("| `cause_to_effect`, `cause_to_effect_modal` | exception `interference(E1)` → `interference(E1,E2)`; the "
+      "template `interference/1` replaced by `interference/2`; `cause_to_effect`'s source names the book's entry 28 "
+      "(p. 328) and the reference it prints | 2026-11-27 | Decisions D071 (2026-11-22) and D097 (2026-11-27), "
+      "and D040 (WAG's proposal D040-D071-D097, version 2, after an independent review). A formula with the cause "
+      "alone was shared by every causal step from that cause, and in Carneades an exception that holds undercuts "
+      "every argument that lists it: an answer that blocked one effect blocked the steps to all the others. The "
+      "exception names the effect it blocks; the template says that another causal factor in the case keeps, or "
+      "would keep, the cause from bringing about the effect. |")
     w("")
 
     # ---- repairs list -------------------------------------------------------

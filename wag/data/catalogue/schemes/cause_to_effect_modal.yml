@@ -99,12 +99,15 @@ critical_questions:
     keep E1 from bringing about E2?
   answer: 'The critic, who raises it with an argument. Against: a factor that is present,
     or that E1 would bring with it, that would keep E1 from bringing about E2, such
-    as a countermeasure or a stronger opposing cause, which undercuts the argument
-    through interference(E1,E2). The exception names the effect (D071, D097), so another
-    argument from E1 to another effect is not touched. A factor that only weakens
-    the effect bears on the first question. For: showing that no such factor is present
-    or to be expected, or that it could not keep E2 from following.'
-  status: drafted by Claude Code, 2026-11-27
+    as a stronger opposing cause or a countermeasure already in place, which undercuts
+    the argument through interference(E1,E2). The exception names the effect (D071,
+    D097), so another argument from E1 to another effect is not touched. A countermeasure
+    the agent would add to a policy argues for the amended policy, an action amendment
+    (OC6), not this exception; a factor that would only make E2 smaller, while E2
+    would still follow, answers neither this question nor the first. For: showing
+    that no such factor is present or to be expected, or that it could not keep E2
+    from following.'
+  status: drafted by Claude Code, 2026-11-28
 summary:
   text: Use it when a cause E1 is only proposed, expected or possible in a case, typically
     a measure not yet adopted, or the text says only that an effect could follow,
@@ -213,6 +216,15 @@ examples:
     step from the same cause to more crop production standing (D097, the first gold's
     G2).
   status: drafted by Claude Code, 2026-11-27
+- text: A tax on meat could make food dearer for poor families, so it should not be
+    adopted.
+  coding: 'Near miss: a possible consequence offered against an action. Its conclusion
+    is a verdict on the action, carried by its bridge (OC15): negative_consequences_modal
+    (A = the tax, G = food dearer for poor families) with bridge_from_possible_harm,
+    not a prediction that the effect may occur. A causal step behind it (the tax may
+    raise prices) is cause_to_effect_modal.'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-28
 discrepancies:
 - kind: partial-link
   about: "28"

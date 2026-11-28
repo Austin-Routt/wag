@@ -1,7 +1,7 @@
 """Planted-defect tests of validate.py's rules: R8 to R11 (decisions D075 and
-D089; proposal D004-D075), and the identity contract's R12 to R17 with the
+D089; proposal D004-D075), the identity contract's R12 to R17 with the
 format-2 forms of R4, R9 and R10 (decision D092, D039;
-docs/annotation-records.md).
+docs/annotation-records.md), R20 (D096) and R21 (a gold's English).
 
     python3 -I test_validate.py
 
@@ -45,10 +45,58 @@ NASCQ_OF_FORMAT1 = {'schemes.json': '8616f56cde01fbb4372adb745410f7766cfda756889
                     'edges.json': '6f367c9e1efbc3ed16da385f206e4867af5ae4b4e51d1cd5de5c2f23a1c416c8'}
 
 
-def run(gold, case=None, pin=True, items=None):
+with open(os.path.join(DOC, 'lexicon.json'), encoding='utf-8') as fh:
+    LEX = json.load(fh)
+with open(os.path.join(REPO, 'docs', 'scheme-registry', 'walton-clean', 'walton.yml'), encoding='utf-8') as fh:
+    import yaml
+    LANG = yaml.safe_load(fh)['language']
+
+
+def template_english(f):
+    """walton.yml's English for a formula that is one predicate over lexicon atoms, or None (validate.py's R21)."""
+    m = re.fullmatch(r'([a-z_][a-z0-9_]*)\(([^()]*)\)', f)
+    if not m:
+        return None
+    atoms = m.group(2).split(',')
+    tmpl = LANG.get(f'{m.group(1)}/{len(atoms)}')
+    if not isinstance(tmpl, str) or any(a not in LEX for a in atoms):
+        return None
+    args = ["'" + LEX[a] + "'" for a in atoms]
+    seq = iter(args)
+    try:
+        return re.sub(r'%(?:\[(\d+)\])?s', lambda x: args[int(x.group(1)) - 1] if x.group(1) else next(seq), tmpl)
+    except (IndexError, StopIteration):
+        return None
+
+
+def render_english(g):
+    """A copy of a format-2 gold whose every formula R21 reads has the English it asks for, so that a defect
+    planted in a formula is the only one validate.py reports (the English tests plant theirs and keep it)."""
+    if not isinstance(g, dict) or g.get('format') != 'wag-annotation/2' or not isinstance(g.get('items'), list):
+        return g
+    g = copy.deepcopy(g)
+    for it in g['items']:
+        for ins in (it.get('instances') if isinstance(it, dict) and isinstance(it.get('instances'), list) else []):
+            if not isinstance(ins, dict):
+                continue
+            slots = list(ins.get('premises') if isinstance(ins.get('premises'), list) else []) + [ins.get('conclusion')]
+            for pm in slots:
+                # English that is not text is left as planted (R16's tests).
+                if isinstance(pm, dict) and isinstance(pm.get('formula'), str) and isinstance(pm.get('en'), str):
+                    want = template_english(re.sub(r'\s+', '', pm['formula']))
+                    if want is not None:
+                        pm['en'] = want
+    return g
+
+
+def run(gold, case=None, pin=True, items=None, english=True):
     """validate.py's exit status, its error lines and its whole output. With
     a case, it is written beside the gold and named with --case, and the
-    gold's pin follows it unless pin is false; so with items (--items)."""
+    gold's pin follows it unless pin is false; so with items (--items). Its
+    formulas get walton.yml's English first (render_english) unless english
+    is false."""
+    if english:
+        gold = render_english(gold)
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, 'gold.json')
         cmd = [sys.executable, '-I', '-B', os.path.join(DOC, 'validate.py'), path]
@@ -1412,6 +1460,105 @@ class Discussion(unittest.TestCase):
         citer['cite'] = '13292.108'
         code, errors, out = run(g)
         self.assertFalse([e for e in errors if ' R20 ' in e], out)
+
+
+class English(unittest.TestCase):
+    """R21: a gold's English follows walton.yml's templates (cases EN1-EN7, d086-first-gold.md §6; the
+    independent review of D040-D071-D097's application, W6)."""
+    INTERFERENCE = 19  # 17 causal instances' exceptions and the conclusions of 13292.182's and .198's Other
+
+    def r21(self, errors):
+        return [e for e in errors if ': R21 ' in e]
+
+    def test_en1_the_gold_passes(self):
+        code, errors, out = run(GOLD, english=False)
+        self.assertEqual((code, errors), (0, []), out)
+        self.assertIn('R21 the gold\'s English', out)
+
+    def test_en2_a_word_changed(self):
+        g = copy.deepcopy(GOLD)
+        ex = next(p for p in primary(item(g, '13292.9'))['premises'] + item(g, '13292.9')['instances'][1]['premises']
+                  if p['formula'].startswith('interference('))
+        ex['en'] = ex['en'].replace('keeps, or would keep,', 'keeps')
+        code, errors, out = run(g, english=False)
+        self.assertEqual(code, 1, out)
+        self.assertEqual(len(errors), 1, errors)
+        self.assertRegex(errors[0], r"^13292\.9: R21 13292\.9#\d's English for interference\(")
+        self.assertIn("not walton.yml's template filled with the lexicon: \"Another causal factor", errors[0])
+
+    def test_en3_a_template_changed_and_the_gold_left_as_it_was(self):
+        # The review's mutation: walton.yml's interference/2 changed in a copy of the inputs validate.py reads.
+        with tempfile.TemporaryDirectory() as root:
+            for rel in ('docs/kialo-batch2/validate.py', 'docs/kialo-batch2/lexicon.json', 'docs/kialo-batch2/items.json',
+                        'docs/kialo-batch2/case.json', 'docs/scheme-registry/walton-clean/walton.yml',
+                        'docs/scheme-registry/walton-clean/id-migrations.json', 'docs/scheme-registry/links.json',
+                        'wag/data/annotation/positions.json', 'wag/data/nascq/schemes.json',
+                        'wag/data/nascq/critical_questions.json', 'wag/data/nascq/edges.json'):
+                os.makedirs(os.path.dirname(os.path.join(root, rel)), exist_ok=True)
+                with open(os.path.join(REPO, rel), 'rb') as src, open(os.path.join(root, rel), 'wb') as dst:
+                    dst.write(src.read())
+            w = os.path.join(root, 'docs/scheme-registry/walton-clean/walton.yml')
+            with open(w, encoding='utf-8') as fh:
+                text = fh.read()
+            old = 'interference/2: "Another causal factor in this case keeps, or would keep, %s from bringing about %s."'
+            self.assertEqual(text.count(old), 1)
+            with open(w, 'w', encoding='utf-8') as fh:
+                fh.write(text.replace(old, 'interference/2: "Something keeps %s from being brought about by %s."'))
+            gpath = os.path.join(root, 'gold.json')
+            with open(gpath, 'w', encoding='utf-8') as fh:
+                fh.write(json.dumps(GOLD, indent=1, ensure_ascii=False))
+            r = subprocess.run([sys.executable, '-I', '-B', os.path.join(root, 'docs/kialo-batch2/validate.py'), gpath],
+                               capture_output=True, text=True)
+            errors = [line for line in r.stdout.splitlines() if ERROR.match(line)]
+            self.assertEqual(r.returncode, 1, r.stdout)
+            r21 = self.r21(errors)
+            self.assertEqual(len(r21), self.INTERFERENCE, r21)
+            self.assertTrue(all('English for interference(' in e for e in r21), r21)
+            # --repin renews no pin while R21 fails.
+            r = subprocess.run([sys.executable, '-I', '-B', os.path.join(root, 'docs/kialo-batch2/validate.py'), gpath,
+                                '--repin'], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 1, r.stdout)
+            with open(gpath, encoding='utf-8') as fh:
+                self.assertEqual(json.load(fh)['inputs'], GOLD['inputs'])
+
+    def test_en4_a_negation_is_not_checked(self):
+        g = copy.deepcopy(GOLD)
+        c = primary(item(g, '13292.7'))['conclusion']
+        self.assertEqual(c['formula'], '¬should_be_performed(tax_meat)')
+        c['en'] = 'Governments should not tax meat.'
+        code, errors, out = run(g, english=False)
+        self.assertEqual((code, errors), (0, []), out)
+
+    def test_en5_a_nested_formula_or_a_proposition_is_not_checked(self):
+        g = copy.deepcopy(GOLD)
+        ins = inst(g, '13292.224#1')
+        nested = next(p for p in ins['premises'] if p['formula'].startswith('based_on_evidence('))
+        nested['en'] = 'The study rests on evidence.'
+        ins['conclusion']['en'] = 'Animal products cost the climate most.'
+        code, errors, out = run(g, english=False)
+        self.assertEqual((code, errors), (0, []), out)
+
+    def test_en6_an_other_instances_conclusion_is_checked(self):
+        g = copy.deepcopy(GOLD)
+        c = item(g, '13292.182')['instances'][0]['conclusion']
+        self.assertTrue(c['formula'].startswith('interference('))
+        c['en'] = 'Iron supplements would stop it.'
+        code, errors, out = run(g, english=False)
+        self.assertEqual(code, 1, out)
+        self.assertEqual(len(errors), 1, errors)
+        self.assertTrue(errors[0].startswith("13292.182: R21 13292.182#1's English for interference("), errors)
+
+    def test_en7_a_file_that_is_not_a_gold(self):
+        g = copy.deepcopy(GOLD)
+        g['annotator'] = 'A'
+        g.pop('inputs', None)
+        for it in g['items']:
+            it.pop('verification', None)
+        ex = next(p for p in primary(item(g, '13292.9'))['premises'] + item(g, '13292.9')['instances'][1]['premises']
+                  if p['formula'].startswith('interference('))
+        ex['en'] = 'Something else could stop it.'
+        code, errors, out = run(g, english=False)
+        self.assertEqual((code, errors), (0, []), out)
 
 
 class Repin(unittest.TestCase):

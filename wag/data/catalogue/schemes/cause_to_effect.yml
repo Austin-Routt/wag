@@ -88,12 +88,14 @@ critical_questions:
     E1 from bringing about E2?
   answer: 'The critic, who raises it with an argument. Against: a factor in this case,
     present now or coming with E1, that keeps E1 from bringing about E2, such as a
-    countermeasure or a stronger opposing cause, which undercuts the argument through
-    interference(E1,E2). The exception names the effect (D071, D097), so another argument
-    from E1 to another effect is not touched. A factor that only weakens the effect
-    bears on the first question. For: showing that no such factor is present, or that
-    it cannot keep E2 from following.'
-  status: drafted by Claude Code, 2026-11-27
+    stronger opposing cause or a countermeasure already in place, which undercuts
+    the argument through interference(E1,E2). The exception names the effect (D071,
+    D097), so another argument from E1 to another effect is not touched. A countermeasure
+    the agent would add to a policy argues for the amended policy, an action amendment
+    (OC6), not this exception; a factor that only makes E2 smaller, while E2 still
+    follows, answers neither this question nor the first. For: showing that no such
+    factor is present, or that it cannot keep E2 from following.'
+  status: drafted by Claude Code, 2026-11-28
 summary:
   text: Use it to predict, or to explain, that an event E2 happens or will happen
     in a case because an event E1 happens there, and events like E1 generally bring
@@ -209,6 +211,17 @@ examples:
     minus one, presses how reliably frost brings the effect about (28/CQ1), not whether
     the frost happened.'
   status: drafted by Claude Code, 2026-11-27
+- text: The plant has been releasing untreated sewage into the river all month, and
+    nutrient-rich sewage causes algal blooms, so the river will have an algal bloom.
+  coding: 'E1 = untreated sewage released into the river all month; E2 = an algal
+    bloom in the river. Stated: has_occurred(E1) and causes(E1,E2). Conclusion: will_occur(E2).
+    That the river is in spate, carrying the nutrients downstream before a bloom can
+    form, answers 28/CQ3 at interference(sewage, bloom): it blocks this effect only,
+    not the sewage''s other effects (the bacteria count at a bathing site downstream),
+    which other arguments from the same cause may claim. That the rule is cited from
+    studies of still lakes, with nothing for a flowing river, presses the grounds
+    of the causal claim (28/CQ2).'
+  status: drafted by Claude Code, 2026-11-28
 discrepancies:
 - kind: book-walton
   about: conclusion

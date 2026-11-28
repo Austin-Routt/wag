@@ -228,6 +228,22 @@ func CheckProposal(p *Proposal, src *Sources) []Finding {
 	warn := func(f string, a ...any) { out = append(out, Finding{Msg: fmt.Sprintf(f, a...)}) }
 	src = proposedLinks(p, src, bad)
 	schemes, lang := proposalSchemes(p, src)
+	// An applied proposal's templates are walton.yml's, as its links are
+	// links.json's: a template edited after the application, with the
+	// English written from it left as it was, passed every check (the
+	// independent review of D040-D071-D097's application, W6; cases PC1-PC3).
+	if p.Applied != "" {
+		keys := make([]string, 0, len(p.Language))
+		for k := range p.Language {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			if cur, ok := src.Language[k]; !ok || strings.TrimSpace(cur) != strings.TrimSpace(p.Language[k]) {
+				bad("template %s: the proposal is applied, but walton.yml's template is %q, not %q as proposed", k, cur, strings.TrimSpace(p.Language[k]))
+			}
+		}
+	}
 	if len(p.Decisions) == 0 || p.Title == "" {
 		bad("a proposal names its decisions and has a title")
 	}

@@ -429,9 +429,11 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// (target_claim, target_instance; 13292.13 is no longer re-parented and
 	// 13292.6 is, re_parented), and 13292.108 is a fragment backing its
 	// circumstances (role, target_part, target_instance, target_formula,
-	// bindings, instances).
+	// bindings, instances). D098 (2026-11-28): 13292.45, an amended action, is
+	// at 13292.12#3's conclusion, the argument that cites the harm, where it
+	// was at the causal step 13292.12#1 (target_instance).
 	want := map[string]float64{"scheme": 0.88, "instances": 0.7, "target_formula": 0.8, "role": 0.96,
-		"target_part": 0.9, "cq": 0.84, "target_instance": 0.68, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
+		"target_part": 0.9, "cq": 0.84, "target_instance": 0.66, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -452,7 +454,9 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	if v := FieldIn(a["13292.12"], "target_instance", a); v != "13292.9 secondary:cause_to_effect_modal:may_occur(tax_revenue_reduced)" {
 		t.Errorf("a secondary target: %q", v)
 	}
-	if v := FieldIn(d.Gold["13292.45"], "target_formula", d.Gold); v != "may_occur(domestic_meat_industry_pushed_out)" {
+	// D098: at 13292.12#3's conclusion; until 2026-11-28 at 13292.12#1's,
+	// may_occur(domestic_meat_industry_pushed_out).
+	if v := FieldIn(d.Gold["13292.45"], "target_formula", d.Gold); v != "¬should_be_performed(tax_meat)" {
 		t.Errorf("13292.45's target formula: %q", v)
 	}
 	if v := FieldIn(old["13292.45"], "target_formula", old); v != "will_occur(domestic_meat_industry_pushed_out)" {
@@ -1085,7 +1089,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// that answer the environmental argument to the discussion's instance at
 	// the thesis, with 13292.108 at its circumstances (D096).
 	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true, "13292.194": true,
-		"13292.108": true, "13292.5": true, "13292.147": true, "13292.174": true, "13292.13": true, "13292.6": true, "13292.104": true, "13292.127": true}
+		"13292.108": true, "13292.5": true, "13292.147": true, "13292.174": true, "13292.13": true, "13292.6": true, "13292.104": true, "13292.127": true,
+		// D098: an amended action at the argument that cites the harm.
+		"13292.45": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {

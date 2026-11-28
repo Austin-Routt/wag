@@ -21,6 +21,22 @@
 # proposal view, the two answers' conclusions and notes, 13292.36's challenge, the
 # guidelines' rule and the rounds. The book's page is quoted in the workspace's
 # compendium transcription; this file cites entry and page.
+#
+# Version 2a, at application (2026-11-27): two effects were reworded when the
+# application showed them false as written, with nothing else changed: the rule
+# cases are guidelines §3.1's rules, so one case (OC6-d) shows the safeguard and
+# §5 item 11 gives the example of the answer, where the effect said that a rule
+# case would show each; the links' CQ3 notes say "since D071 and D097".
+#
+# Version 2b (2026-11-28), from the independent review of the application (in the
+# workspace, verify/d097/REVIEW-application.md): the summary's paragraph on the
+# template no longer says that a factor that only weakens the effect is the first
+# question's (W1): the first question asks about the generalization, and a factor
+# that only makes E2 smaller, while E2 still follows, answers neither it nor the
+# exception; at a cited consequence it bears on too_slight (OC9). The examples
+# effect says which examples moved (N1). The template's wording, which narrows the
+# decided text ("that something interferes with E1 bringing about E2"), is put to
+# the owner as a choice of its own (process.md §5); it stays as applied meanwhile.
 
 decisions: [D040, D071, D097]
 title: "The causal exception names its effect: interference(E1,E2); cause to effect cites its source"
@@ -56,9 +72,12 @@ summary: |-
 
   **The template.** An exception that holds undercuts the step: the effect does
   not follow from that cause in this case. So the template says the factor keeps
-  the cause from bringing about the effect. A factor that only weakens the effect
-  bears on how reliably the cause brings it about, the first question's matter, not
-  on the exception. The template is in the present tense with "or would keep" for a
+  the cause from bringing about the effect. A factor that only makes the effect
+  smaller, while the effect still follows, does not make the exception hold, nor does
+  it answer the first question, which asks how reliably events like the cause bring
+  about events like the effect: where a consequence argument cites the effect, it
+  bears on how serious that consequence is (OC9; version 2b). The template is in the
+  present tense with "or would keep" for a
   factor that would come with a contemplated cause (producers absorbing a tax), so
   one template reads right for both forms.
 
@@ -84,12 +103,12 @@ effects:
   - "walton.yml, through walton-clean/tools/edits.py as owner decisions (D071, decided 2026-11-22, and D097, decided 2026-11-27; D040, decided 2026-11-22), in a block of its own, CAUSAL_D097, with its CHANGELOG rows (tools/make_changelog.py): line 197's template interference/1 becomes interference/2, with the template above; cause_to_effect's exception (line 1748) and cause_to_effect_modal's (inserted after line 1749 by the additions of 2026-10-22) become interference(E1,E2); cause_to_effect's meta gains its source after its title (line 1740). check/run.sh regenerates the derived files; the gate and the registry are made again and their differences are these two schemes, the key and the source. The annotation engine's copy, wag/data/annotation/walton.yml, is copied."
   - "links.json: entry 28's two links, cause_to_effect (exact) and cause_to_effect_modal (partial), map CQ3 to interference(E1,E2) at the exception; cause_to_effect's reason names its source (D040); their other maps are unchanged (below, links). The file's _note logs the change."
   - "Engine tests (wag/internal/carneades), on walton.yml as changed, every argument at the same weight: two causal arguments from one cause to two effects; an argument that interference holds for the first effect undercuts the first and leaves the second standing; a second argument for the first effect, from another cause, keeps it acceptable; the same for the modal form; and, on the walton.yml of before (the frozen format-1 copy), the planted control: the one-place exception undercuts both."
-  - "Catalogue (--catalogue-gen, then the drafted texts): cause_to_effect's and cause_to_effect_modal's 28/CQ3 target interference(E1,E2); their paraphrases and answers name the effect; the modal entry's discrepancy on the template (that it said the interfering event has occurred) is closed; cause_to_effect's discrepancy on its major premise records D040 applied (its reading of the generalization stays); the examples below move into the entries."
+  - "Catalogue (--catalogue-gen, then the drafted texts): cause_to_effect's and cause_to_effect_modal's 28/CQ3 target interference(E1,E2); their paraphrases and answers name the effect; the modal entry's discrepancy on the template (that it said the interfering event has occurred) is closed; cause_to_effect's discrepancy on its major premise records D040 applied (its reading of the generalization stays); the examples below move into the entries, but the ice-cream near miss, whose contrast cause_to_effect's fast-food near miss already shows, and the sewage example's second attack is worded in the entry to press the grounds of the causal generalization (version 2b)."
   - "Proposal views: D008-D074.md, whose near miss renders the causal exception, is written again (TestCommittedProposals); the other committed views are written again and checked to change nowhere else."
   - "The register: D040, D071 and D097 applied (the date and this proposal). The candidates registry does not change."
   - "The batch-2 gold (both copies), by a recode script (recode_d097.py, from the gold before it, pinned by its SHA-256): the exception of the 17 causal instances becomes interference(E1,E2) with their own E1 and E2, its English rendered by the new template; the 6 challenges at 28 CQ3 name the new formula; 13292.182 and .198, which answer 13292.180#2's step at its exception, name interference(reduced_meat_consumption,more_anemia_cases) in their targets and in their Other instances' conclusions (R8), with the English of the new template, and their notes no longer say the old English misread the step; 13292.36's challenge at 28 CQ3 no longer cites 13292.24 as interference, since tax credits or food stamps added to the policy are an amendment (OC6), and its note says so; each changed item gains an adjudication.recoded entry. walton.yml and links.json change, so the gold is re-pinned (validate.py --repin) once its checks pass."
   - "The first gold's rounds (d086-rounds.json): of the 12 items that change, 7 were agreed at round 1 (13292.2, .9, .36, .141, .180, .182 and .198) and go back to review at a revision they no longer have; 13292.11, .12 and .192 are at draft 2 and not yet reviewed; 13292.4 and .14 are round 2's, not yet drafted. The 10 claims that waited on this decision (pending G2) wait no more."
-  - "Guidelines (both copies) and rule cases: §5 item 11 names the exception, interference(E1,E2), and draws the line: a factor in the case, present or coming with the cause, that keeps the cause from bringing about the effect is an answer at that step's exception (a cq_answer, against; Other concluding the exception, R8); a safeguard the agent would add to the policy is an action amendment (OC6), not interference; a factor that only weakens the effect is the first question's. Rule case OC6-d shows the safeguard (the rule cases are §3.1's rules), and the item gives an example of the answer; the old template's wording and the blunted effect are retired wordings. The batch README names the new formula where it names the old one."
+  - "Guidelines (both copies) and rule cases: §5 item 11 names the exception, interference(E1,E2), and draws the line: a factor in the case, present or coming with the cause, that keeps the cause from bringing about the effect is an answer at that step's exception (a cq_answer, against; Other concluding the exception, R8); a safeguard the agent would add to the policy is an action amendment (OC6), not interference; a factor that only makes the effect smaller answers neither the exception nor the first question (version 2b). Rule case OC6-d shows the safeguard (the rule cases are §3.1's rules), and the item gives an example of the answer; the old template's wording and the blunted effect are retired wordings. The batch README names the new formula where it names the old one."
   - "The replay (to_wag.py) does not play causal schemes (the game has none), so its moves do not change; it is made again with the gold."
   - "Docs: docs/d086-first-gold.md (round 1's draft 3), the batch README's dated paragraph, docs/scheme-registry/README.md's edit counts, the register's entries."
 schemes:

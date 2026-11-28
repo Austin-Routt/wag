@@ -50,6 +50,11 @@
    "date": "2026-11-27",
    "by": "decision D096 (docs/annotation-records.md §13; recode_d096.py)",
    "what": "Round 1, draft 3, part 2: the argument the discussion needs (D096; docs/annotation-records.md §13, R20). The environmental argument for the tax, which no claim states as a whole, is the discussion's instance of the thesis, 13292.1#2: its circumstances cited to 13292.108, its efficacy to 13292.14, the rest supplied, its four challenge records moved with it. 13292.108 is a fragment of it backing its circumstances. 13292.5, .147, .174, .13, .6, .104 and .127 target 13292.1#2; 13292.104's goal premise is supplied (R20); 13292.137's other-means challenge is the thesis's record's (R10); notes that named 13292.108's argument name the discussion's."
+  },
+  {
+   "date": "2026-11-28",
+   "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+   "what": "Decision D098 (guidelines §3.1, OC6 and OC10): 13292.45, an amended action, is at 13292.12#3's conclusion, the argument that cites the harm against the tax, as 13292.194, where it was at the causal step 13292.12#1; 13292.12's and 13292.194's records say so. From the independent review of D040-D071-D097's application: 13292.61#1's conclusion reads as walton.yml's template gives it (R21), and 13292.9#3's challenge at 28 CQ3 names a factor that keeps the harm from reducing revenue."
   }
  ],
  "items": [
@@ -795,7 +800,7 @@
      "type": "causal interference",
      "instance": "13292.9#3",
      "formula": "interference(meat_industry_harmed,tax_revenue_reduced)",
-     "note": "the meat tax's own yield may offset the lost industry taxes"
+     "note": "the meat tax's own yield could make up for the lost industry taxes, so that revenue does not fall"
     },
     {
      "cq": "28 CQ1",
@@ -878,6 +883,14 @@
        "instances.premises"
       ],
       "what": "13292.9#2's exception names its effect: interference(tax_meat,meat_industry_harmed) (D071, D097); 13292.9#3's exception names its effect: interference(meat_industry_harmed,tax_revenue_reduced) (D071, D097); the challenge at 28 CQ3 of 13292.9#3 names interference(meat_industry_harmed,tax_revenue_reduced)"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+      "fields": [
+       "challenges"
+      ],
+      "what": "its challenge at 13292.9#3's 28 CQ3 names a factor that would keep the harm from reducing revenue, not one that only lessens the loss (§5 item 11)"
      }
     ]
    }
@@ -2699,7 +2712,7 @@
      ],
      "conclusion": {
       "formula": "would_bring_about(tax_meat,meat_production_and_consumption_harm_environment,reduced_meat_consumption)",
-      "en": "Doing 'governments put a tax on meat' in the situation 'meat production and consumption are bad for the environment' would lead to 'less meat is demanded and consumed (and so less is produced)'."
+      "en": "Performing 'governments put a tax on meat' in 'meat production and consumption are bad for the environment' would bring about 'less meat is demanded and consumed (and so less is produced)'."
      }
     }
    ],
@@ -2767,6 +2780,14 @@
        "notes"
       ],
       "what": "its notes name the discussion's argument (D096)"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+      "fields": [
+       "instances.conclusion"
+      ],
+      "what": "13292.61#1's conclusion reads as walton.yml's template gives it (R21); it had the game's phrasing"
      }
     ]
    }
@@ -5046,7 +5067,7 @@
      "type": "causal interference",
      "instance": "13292.12#1",
      "formula": "interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out)",
-     "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions (OC6), not as answers here: 13292.194 at 13292.12#3's conclusion, the argument that cites the harm against the tax, and 13292.45, until its round, at this argument's conclusion, the predicted harm"
+     "note": "the import measures 13292.45 and 13292.194 propose would block it; they are coded as amended actions (OC6), not as answers here: both at 13292.12#3's conclusion, the argument that cites the harm against the tax (D098)"
     },
     {
      "cq": "33.2 CQ1",
@@ -5065,7 +5086,7 @@
     }
    ],
    "notes": {
-    "text": "Gives the mechanism of 13292.9's 'by harming the trillion-dollar meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed (the tax) or possible (the cheaper imports it would bring), so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism offered for a link answers 28 CQ1; data offered for it would answer 28 CQ2 (a question for the review, D086 round 1). 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions: 13292.194 at 13292.12#3's conclusion, 13292.45, until its round, at 13292.12#1's, the predicted harm).",
+    "text": "Gives the mechanism of 13292.9's 'by harming the trillion-dollar meat industry': the tax would make imported meat cheaper (dumping, predatory pricing), and cheaper imports would push domestic producers out of the market. Two causal steps whose cause is only proposed (the tax) or possible (the cheaper imports it would bring), so cause_to_effect_modal (§5 item 11): 13292.12#2 (the tax -> cheaper imports) and 13292.12#1 (cheaper imports -> domestic producers pushed out), primary as the step that ends at the harm to the industry. Together they back the causal premise of 13292.9's first step, causes(tax_meat,meat_industry_harmed) (13292.9#2), which the book's 28 CQ1 asks about (how strong the causal generalization is; the game asks no question there): cq_answer with polarity for (§5 item 3). A mechanism offered for a link answers 28 CQ1; data offered for it would answer 28 CQ2 (a question for the review, D086 round 1). 13292.12#3 codes the same content as a con of the tax in its own right, as its children treat it (13292.131 backs the badness; 13292.45 and 13292.194 propose remedies, amended actions, both at 13292.12#3's conclusion, the argument that cites the harm (OC6, D098)).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5143,6 +5164,15 @@
        "instances.premises"
       ],
       "what": "13292.12#1's exception names its effect: interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out) (D071, D097); 13292.12#2's exception names its effect: interference(tax_meat,imported_meat_relatively_cheaper) (D071, D097); the challenge at 28 CQ3 of 13292.12#1 names interference(imported_meat_relatively_cheaper,domestic_meat_industry_pushed_out)"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+      "fields": [
+       "challenges",
+       "notes"
+      ],
+      "what": "its records say that 13292.45, like 13292.194, is at 13292.12#3's conclusion (D098)"
      }
     ]
    }
@@ -6929,7 +6959,7 @@
     }
    ],
    "notes": {
-    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, against. As for 13292.202 (OC6), the amendment is at the conclusion of the argument that cites the harm against the tax, 13292.12#3's ¬should_be_performed(tax_meat): an amended policy answers the argument against the tax, and its conclusion is not the negation of may_occur(domestic_meat_industry_pushed_out), the predicted harm, where the reference and both annotators put it. Nor is it a cq_answer to 28 CQ3 at 13292.12#1's interference: that would say that something under the unamended tax already blocks the mechanism, while the claim proposes a changed policy. Its sibling 13292.45 (round 2) is coded the same way when its round comes.",
+    "text": "An amended action that mitigates the harm 13292.12 predicts (C006; OC6): the meat tax plus import measures (eco-tariffs; imports that verifiably meet environmental and animal-welfare standards, or pass a high enough tax barrier), tax_meat_with_import_safeguards. 'Can solve this issue' is can of capability (the mood rule, D008): positive consequences of the amended action, role action_amendment, against. As for 13292.202 (OC6, D098), the amendment is at the conclusion of the argument that cites the harm against the tax, 13292.12#3's ¬should_be_performed(tax_meat): an amended policy answers the argument against the tax, and its conclusion is not the negation of may_occur(domestic_meat_industry_pushed_out), the predicted harm, where the reference and both annotators put it. Nor is it a cq_answer to 28 CQ3 at 13292.12#1's interference: that would say that something under the unamended tax already blocks the mechanism, while the claim proposes a changed policy. Its sibling 13292.45 is coded the same way (D098).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -6988,6 +7018,14 @@
        "target"
       ],
       "what": "D086 exchange 1, the reviewer's objection accepted (the developer's own first reading): retargeted from 13292.12#1's conclusion may_occur(domestic_meat_industry_pushed_out) to 13292.12#3's ¬should_be_performed(tax_meat), the conclusion of the argument that cites the harm against the tax, as 13292.202 is (OC6). The note gives the reason as an amended policy against a blocking circumstance that already holds, not as whose action the measures are. The reviewer's optional second relation, the measures as interference with 13292.12#1's mechanism, is not coded (a claim has one target, and the claim proposes a changed policy, not a blocker under the tax): 13292.12's challenge at that interference names the measures. Scheme, role and polarity unchanged. Notes rewritten."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+      "fields": [
+       "notes"
+      ],
+      "what": "its note cites D098, and says that 13292.45 is coded the same way"
      }
     ]
    }
@@ -8249,9 +8287,9 @@
     "kialo_relation": "con",
     "actual": {
      "claim": "13292.12",
-     "instance": "13292.12#1",
+     "instance": "13292.12#3",
      "part": "conclusion",
-     "formula": "may_occur(domestic_meat_industry_pushed_out)"
+     "formula": "¬should_be_performed(tax_meat)"
     }
    },
    "evidence": {
@@ -8301,7 +8339,7 @@
     }
    ],
    "notes": {
-    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5). Since 2026-11-24 (D030, D090): the scheme states P in each premise and has no A2; G is the goal (the atom bound to A before) and S the barriers to cheaper meat imports, of which higher standards are one.",
+    "text": "'In which case' grants 13292.12's prediction for the sake of argument and names a necessary accompanying measure plus its practicality, which is the necessary-condition schema (22.2); the amended action is the tax plus higher import standards ('A plus B'), polarity against 12. walton.yml requires binding P (the agent) and A2 (a conflicting goal), although A2 occurs only in an exception and P only in assumptions and exceptions; both are supplied. The goal A is the same atom as 13292.194's good outcome (R5). Since 2026-11-24 (D030, D090): the scheme states P in each premise and has no A2; G is the goal (the atom bound to A before) and S the barriers to cheaper meat imports, of which higher standards are one. Since 2026-11-28 (D098; OC6) it is at the conclusion of the argument that cites the harm against the tax, 13292.12#3, as its sibling 13292.194 is: an amended policy answers the argument against the tax, not the causal step 13292.12#1 that predicts the harm.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -8327,6 +8365,15 @@
        "target"
       ],
       "what": "Its target, the conclusion of 13292.12's causal step, is may_occur(domestic_meat_industry_pushed_out) since that step's recoding (was will_occur(domestic_meat_industry_pushed_out)); its own coding names neither formula."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
+      "fields": [
+       "notes",
+       "target"
+      ],
+      "what": "at 13292.12#3's conclusion, the argument that cites the harm against the tax, as 13292.194 (OC6, D098); it was at 13292.12#1's, the causal step that predicts the harm"
      }
     ]
    }

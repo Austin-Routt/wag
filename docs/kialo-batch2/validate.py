@@ -930,6 +930,42 @@ if F2:
                     err(f'{cid}: R20 {ins.get("id")}\'s premise {f} cites {x}, but only the discussion\'s instance '
                         f'of {x} has it: a reconstruction is not a claim; cite the claim that states it, or mark it supplied')
 
+# R21 (a gold; guidelines §4: the English in `en` uses walton.yml's language templates): the English of
+# each formula that is one positive predicate over atoms of the lexicon, with a template in walton.yml,
+# is that template filled with the atoms' lexicon texts, each in single quotes, as the recode scripts
+# write it. A negation (walton.yml has no template for one), a nested formula and a bare proposition are
+# not checked, nor a file that is not a gold, whose English is its annotator's. Since 2026-11-27 (the
+# independent review of proposal D040-D071-D097's application, W6): a template changed with the gold's
+# English left as it was passed every check once the gold was re-pinned.
+def template_english(f):
+    """walton.yml's English for a formula that is one predicate over lexicon atoms, or None."""
+    m = re.fullmatch(r'([a-z_][a-z0-9_]*)\(([^()]*)\)', f)
+    if not m:
+        return None
+    atoms = m.group(2).split(',')
+    tmpl = (WALTON.get('language') or {}).get(f'{m.group(1)}/{len(atoms)}')
+    if not isinstance(tmpl, str) or any(a not in lex for a in atoms):
+        return None
+    args = ["'" + lex[a] + "'" for a in atoms]
+    seq = iter(args)
+    try:
+        return re.sub(r'%(?:\[(\d+)\])?s', lambda x: args[int(x.group(1)) - 1] if x.group(1) else next(seq), tmpl)
+    except (IndexError, StopIteration):
+        return None
+
+if F2 and IS_GOLD:
+    for it in gold['items']:
+        cid = it.get('kialo_claim_id')
+        if cid in MALFORMED:
+            continue
+        for ins in it['instances']:
+            for pm in list(ins.get('premises') or []) + [ins.get('conclusion') or {}]:
+                f = nows(pm.get('formula') or '')
+                want = template_english(f) if f else None
+                if want is not None and pm.get('en') != want:
+                    err(f'{cid}: R21 {ins.get("id")}\'s English for {f} is {pm.get("en")!r}, not walton.yml\'s template '
+                        f'filled with the lexicon: {want!r}')
+
 # R14 (format 2): the thesis concludes that the case's thesis action be done.
 if F2 and THESIS.get('claim') in G and THESIS.get('claim') not in MALFORMED and THESIS.get('action') in ACTOR:
     tconc = nows(((primary(G[THESIS['claim']]) or {}).get('conclusion') or {}).get('formula'))
@@ -954,6 +990,7 @@ if errors:
 if F2:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R2, R4, R7, R8, R9, R10, R11, '
           'R12 ids, R13 exact targets, R14 actors and actions, R15 contexts, R16 the field contract and the pinned inputs, '
-          'R17 verifications, R18 explicit fit, R19 cited inferences, R20 the discussion\'s instances, atoms in lexicon')
+          'R17 verifications, R18 explicit fit, R19 cited inferences, R20 the discussion\'s instances, R21 the gold\'s English, '
+          'atoms in lexicon')
 else:
     print('OK: order, schemes and bindings, premises/conclusions = walton.yml instantiations, R1, R2, R4, R7, R8, R9, R10, R11, target formulas in primary instances, atoms in lexicon')
