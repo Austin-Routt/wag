@@ -33,10 +33,10 @@ Arguments are instances of the schemes in `data/schemes/core.yml`. The NASCQ
 
 | Locus | Example | Negative answer (an **attack**) | Positive answer (a **defence**) |
 |---|---|---|---|
-| premise P | possibility: `possible(A)` | argues ¬P: undermines | argues P: backs the premise |
-| exception E | side effects: `side_effects(A,S1)` | argues E: undercuts, through the scheme's exception argument | argues ¬E: E becomes an issue, decided by weight; a tie leaves E Out, so the argument stands |
-| conclusion C | other goals | argues ¬C: rebuts | argues C: supports |
-| argument | evidence | argues `undercut(a)`: undercuts | argues ¬`undercut(a)`: the undercutter becomes an issue |
+| premise P | possibility: `possible_bring_about(P,A)` | argues ¬P: undermines | argues P: backs the premise |
+| exception E | other means: `realize_more_effectively(P,G,A)` | argues E: undercuts, through the scheme's exception argument | argues ¬E: E becomes an issue, decided by weight; a tie leaves E Out, so the argument stands |
+| conclusion C | side effects (a further bad consequence, D095 (1)) | argues ¬C: rebuts | argues C: supports |
+| argument | another event (sign's: a better explanation of the sign) | argues `undercut(a)`: undercuts | argues ¬`undercut(a)`: the undercutter becomes an issue |
 
 **Any statement can be argued for or against.** A premise, a conclusion,
 an exception someone raised, and the claim are all statements. A move about

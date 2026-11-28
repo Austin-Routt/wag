@@ -355,3 +355,38 @@ func TestLintAcross(t *testing.T) {
 		t.Errorf("XA2: %d warnings, want 0", c)
 	}
 }
+
+// Case XA5 (docs/c5-game.md, C5.3's switch; added after its independent
+// review, N3, before this test): a mark on a backup edge that does not cross
+// semantic types (the same type, or either has none) suppresses no warning,
+// so it is stale, and the lint says so.
+func TestLintAcrossStale(t *testing.T) {
+	n := loadRoles(t)
+	stale := func() int {
+		c := 0
+		for _, i := range n.Lint() {
+			if strings.Contains(i.Msg, "does not cross semantic types") {
+				if i.Error {
+					t.Errorf("a stale mark is a warning, not an error: %+v", i)
+				}
+				c++
+			}
+		}
+		return c
+	}
+	if c := stale(); c != 0 {
+		t.Fatalf("the fixture: %d warnings", c)
+	}
+	n.BackupEdges[0].Across = "D009" // the edge is of one type
+	if c := stale(); c != 1 {
+		t.Errorf("XA5, the same type: %d warnings, want 1", c)
+	}
+	n.Questions["CQ:wf"].SemanticType = "" // a type missing
+	if c := stale(); c != 1 {
+		t.Errorf("XA5, a type missing: %d warnings, want 1", c)
+	}
+	n.Questions["CQ:wf"].SemanticType = "action" // now it crosses, as XA2
+	if c := stale(); c != 0 {
+		t.Errorf("XA5, an edge that crosses: %d warnings, want 0", c)
+	}
+}

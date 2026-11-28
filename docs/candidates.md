@@ -62,7 +62,7 @@ case: D058).
 | What happens anyway | [C022](#c022-argument-from-inevitability) | Argument from inevitability | scheme | variant of positive_consequences | 8 verified in 2; met | decided | D072 (decided) |
 | Threat or warning | [C012](#c012-is-the-warning-an-indirect-threat) | Is the warning an indirect threat? | question | addition to negative_consequences_prudential | – | collecting | – |
 | Where practical conclusions meet | [C014](#c014-the-familys-practical-conclusions-should-meet-should_be_performed) | The family's practical conclusions should meet should_be_performed | link | rule about fear, danger, threat, pragmatic_alternative, ad_baculum, waste, help, distress, two_person_practical | exempt | decided | D063 (decided) |
-| Where practical conclusions meet | [C027](#c027-signs-argument-for-or-against-a-practical-conclusion) | Sign's argument for or against a practical conclusion | link | rule about sign, practical_reasoning1, practical_reasoning2, positive_consequences | exempt | ready | D099 (decided) |
+| Where practical conclusions meet | [C027](#c027-signs-argument-for-or-against-a-practical-conclusion) | Sign's argument for or against a practical conclusion | link | rule about sign, practical_reasoning1, practical_reasoning2, positive_consequences | exempt | ready | D103 (open) |
 | Predicting what agents will do | [C009](#c009-prediction-from-an-agents-incentives) | Prediction from an agent's incentives | scheme | new | 8 verified in 3; met | decided | D068 (decided) |
 
 ## By relation
@@ -2376,7 +2376,7 @@ D059's reasoning reaches beyond the prudential form: fear (ought_to_bring_about)
 
 ### C027. Sign's argument for or against a practical conclusion
 
-**Kind:** link. **Decision:** D099 (decided). **Stage:** ready. **Found:** the other reviewer's answer to C5's question 3, 2026-11-27, which the owner adopted (D099 (3)); the independent check of step C5.3's plan, 2026-11-28 (W2). **Finder's confidence:** medium.
+**Kind:** link. **Decision:** D103 (open). **Stage:** ready. **Found:** the other reviewer's answer to C5's question 3, 2026-11-27, which the owner adopted (D099 (3)); the independent check of step C5.3's plan, 2026-11-28 (W2). **Finder's confidence:** medium.
 
 Sign answers CQ:side_effect by its backup edge (D009): a further bad consequence, argued from a sign, rebuts the practical conclusion. D099 (3) leaves that answer out of WAG's first profile at practical reasoning until its warrant is reviewed (the profile's P5), while D009 keeps it at positive consequences. The same inference stays open by three other routes: a direct rebuttal of practical reasoning made with sign, sign for or against should_be_performed(A) as a move about the statement, and the answer at positive consequences, which concludes the same statement.
 

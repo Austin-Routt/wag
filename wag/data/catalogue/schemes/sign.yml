@@ -268,16 +268,22 @@ discrepancies:
     lets sign back answers to CQ:side_effect, CQ:possibility and CQ:goal_possible,
     practical-reasoning questions the book does not connect with sign; on practical
     reasoning CQ:side_effect is the rebuttal route since step C5.2 (D095 (1)), so
-    sign's answer there is a rebuttal (the owner's question 3 in docs/c5-game.md).
+    sign's answer there is a rebuttal. WAG's first profile leaves that answer out
+    until its warrant is reviewed (D099 (3), the profile's P5, since step C5.3's code);
+    how far P5 reaches is D103's question. At positive consequences the answer is
+    played as before (D009). Since step C5.3's switch CQ:side_effect is of semantic
+    type action, so sign's edge to it crosses types (causality to action) and carries
+    the across mark D009 in game/order.yml.
   decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
     texts from the catalogue''s paraphrases, with the changes the entries list, except
     the backup edge that lets negative consequences answer the side-effect question,
     which D070 and D075 replace. CQ:field is kept. Every generated question gets a
     test that its formula target is one of its scheme''s. Applied at step C5.2 (2026-11-27).
-    Before: open: when the NASCQ is generated from the catalogue (plan §6), give sign
-    its own likelihood text, from 30/CQ1''s paraphrase, and keep "generally" in the
-    premise. The backup edges can stay: sign concludes that a state of affairs holds,
-    which can serve as factual evidence in an answer to those questions.'
+    D099 (1) added that backup edge at step C5.3''s switch (2026-11-28). Before: open:
+    when the NASCQ is generated from the catalogue (plan §6), give sign its own likelihood
+    text, from 30/CQ1''s paraphrase, and keep "generally" in the premise. The backup
+    edges can stay: sign concludes that a state of affairs holds, which can serve
+    as factual evidence in an answer to those questions.'
   status: drafted by Claude Code, 2026-10-22
 classification:
   source: independent
@@ -328,3 +334,10 @@ history:
   what: 'Step C5.2''s switch (docs/c5-game.md): 30/CQ1 is the game''s CQ:correlation,
     sign''s own likelihood question (D009), and the game''s premise keeps "generally";
     the game-questions discrepancy and the note say what changed.'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'Step C5.3 (docs/c5-game.md): the game-questions detail says that WAG''s first
+    profile leaves sign''s answer at practical reasoning''s CQ:side_effect out (D099
+    (3), P5; its reach is D103''s question), and that its edge to that question, across
+    semantic types since the switch, is marked across: D009 (the independent review
+    of the switch, N4).'

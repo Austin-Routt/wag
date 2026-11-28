@@ -88,11 +88,12 @@ critical_questions:
   targets: [{formula: 'worth_finding_out_first(A,G)', locus: exception}]
   note: 'The book does not ask it: the bridge is WAG''s (D008, refined 2026-11-25).
     The game asks it since step C5.2 (CQ:worth_finding_out_first), and refuses Other''s
-    answer there (D095 (3)). The exception is the critic''s (D003): that it is worth
-    finding out first, not merely that it could be found out, since a test too costly,
-    too slow, too risky or too unreliable to settle the question is no reason to set
-    the possibility aside (the owner, 2026-11-25: bare knowability does not justify
-    deferring a decision). The bridge''s other premise, matters_to_decision(A,G),
+    answer there (D095 (3)); since step C5.3''s switch its text ends "If so, how?"
+    (D099 (5)), where it ended "Which way?". The exception is the critic''s (D003):
+    that it is worth finding out first, not merely that it could be found out, since
+    a test too costly, too slow, too risky or too unreliable to settle the question
+    is no reason to set the possibility aside (the owner, 2026-11-25: bare knowability
+    does not justify deferring a decision). The bridge''s other premise, matters_to_decision(A,G),
     is its arguer''s, challenged as any premise is (CQ:premise_acceptable). The exception
     is shared with the other bridge, neutral as to polarity (D053, declared by the
     owner, with its scope): if it is worth finding out first whether A brings G about,
@@ -271,3 +272,8 @@ history:
     a bridge that weighs as AS:consequences_modal (D094 (g)), whose entry premise
     may_be_worth_performing({A},{G}) a modal argument supports; walton/worth_finding_out_first
     is the game''s CQ:worth_finding_out_first, which refuses Other (D095 (3)).'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'Step C5.3''s switch (docs/c5-game.md): CQ:worth_finding_out_first''s text
+    and the paraphrase end "If so, how?" (D099 (5)); before, "Which way?". The note
+    says so.'

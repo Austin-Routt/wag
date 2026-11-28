@@ -595,9 +595,9 @@ recorded here.
   replays, and their citations, a source's reference URL and binding ids among them, stay
   citations. A trace of a game stopped early (`--max-moves`) asks a replay for a call it does not
   have, under any build, so the replay takes the finished game. The fixtures were made on the game's
-  data `092b6a6f48a672d2`, which step C5.3's switch changed (2026-11-28): since then Y7 and X7 load,
-  replay and resume them on its frozen copy (`wag/data/frozen/092b6a6f48a672d2`, `--data`), as a
-  record of other data is replayed.
+  data `092b6a6f48a672d2`, which step C5.3's switch changed (2026-11-28): since then Y7 loads,
+  replays and resumes them, and X7 replays its trace, on its frozen copy
+  (`wag/data/frozen/092b6a6f48a672d2`, `--data`), as a record of other data is replayed.
 - **`wag-llm`** (E1.0's "not yet"): `play` takes `--evidence DIR` and `--record-set NAME`; in an
   inquiry the seats are A and B, the summary records them as `first` and `second` with the verdict,
   and `report` counts no wins; `replay` takes `--evidence DIR`.

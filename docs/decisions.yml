@@ -293,7 +293,7 @@ decisions:
       of each generated question also covers the catalogue version, the
       target's role and type, the variable substitution, the argument
       instance, the polarity, the response's effect and its replay.
-    recorded: "docs/decisions.yml; to apply: the NASCQ generator and the game's data (plan §0, stage 2)"
+    recorded: "docs/decisions.yml; applied at step C5.2 (2026-11-27): the game's question texts are generated from the catalogue (wag-cli --game-gen). Its exception, no backup edge from negative consequences to the side-effect question, was reversed by D099 (1) at step C5.3's switch (2026-11-28), D095 (1) having made that question the rebuttal route; sign's backup edge to it, across semantic types since then, is marked across: D009 (game/order.yml; docs/c5-game.md, C5.3)"
 
 - id: D010
   title: An exception for an honest but unreliable source
@@ -2834,7 +2834,7 @@ decisions:
       scheme and the source-based schemes) bounds every route to the exception;
       undercutters that attack something other than knowability are kept. (5)
       The question ends "If so, how?".
-    recorded: "(2) is applied (step C5.2, 2026-11-27); (3) and (4) by step C5.3's code (2026-11-28, c150dec), (1) and (5) at its switch (2026-11-28, the game's data a0352a9944190d8b); docs/c5-game.md, C5.3"
+    recorded: "(2) is applied (step C5.2, 2026-11-27); (3) and (4) by step C5.3's code (2026-11-28, c150dec), (1) and (5) at its switch (2026-11-28, the game's data a0352a9944190d8b); docs/c5-game.md, C5.3. How far (3) reaches beyond the answer route is D103's question"
 
 - id: D100
   title: Evidence step 1's choices put to the owner
@@ -2913,6 +2913,26 @@ decisions:
       in every count of the batch. The guidelines say the same of any claim that
       states only a background condition of a premise.
     recorded: "Applied: the replay's guard and the agreement measures (step 1 after exchange 2, 2026-11-27); the guidelines (§3, a background condition) and 13292.8 in round 1's draft 3, part 4 (recode_d086_r1_d3.py, 2026-11-28): premise_backing, its target's formula unresolved, no question; not played, not scored as a relation, not verified"
+
+- id: D103
+  title: How far the profile's rule on sign reaches (P5)
+  question: >-
+    D099 (3) leaves sign's answer at practical reasoning's side-effect question
+    out of WAG's first profile until its warrant is reviewed (P5, since step
+    C5.3's code). Sign concludes a practical claim by three other routes, which
+    stay open and are pinned by item F's cases: a direct rebuttal of practical
+    reasoning made with sign (A8.6), sign for or against should_be_performed(A)
+    as a move about the statement (A8.7), and sign's answer at positive
+    consequences' side-effect question (A8.3, kept by D009). The warrant, from an
+    observed sign to what should be done, is the same. Should P5 reach them? The
+    developer recommends keeping the decided scope until the warrant's review:
+    reaching A8.3 would reopen D009 (candidate C027).
+  category: game
+  blocks: [game]
+  decider: owner
+  priority: 2
+  status: open
+  docs: ["docs/c5-game.md, C5.3 (P5's scope)", "docs/c5-item-f.md, A8", "docs/candidates.yml C027"]
 
 # --- Decided ------------------------------------------------------------------
 

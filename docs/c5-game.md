@@ -338,7 +338,7 @@ described in the book's direction (a value favours a goal), and sign's premise k
 | CQ:possibility | both | premise `possible_bring_about({P},{A})` (D088) | AS:sign |
 | CQ:goal_possible | practical_reasoning_goal | premise `possible_goal({G})` | AS:sign |
 | CQ:intervening_actions | practical_reasoning_goal | exception `intervening_actions({A},{G})` | — |
-| CQ:side_effect | both practical reasonings (game-only questions), AS:consequences | conclusion (the rebuttal route, D095 (1)) | AS:sign |
+| CQ:side_effect | both practical reasonings (game-only questions), AS:consequences | conclusion (the rebuttal route, D095 (1)) | AS:sign; AS:negative_consequences since step C5.3's switch (D099 (1)) |
 | CQ:bad_outweighs (new) | both practical reasonings (22.4/CQ7, 22.1/CQ5), AS:consequences, AS:consequences_modal | exception `bad_outweighs({A},{G})` | AS:bad_outweighs_good |
 | CQ:opposite_consequences | AS:negative_consequences | conclusion | AS:consequences |
 | CQ:good_outweighs (new) | AS:negative_consequences, AS:negative_consequences_modal | exception `good_outweighs({A},{G})` | AS:good_outweighs_bad |
@@ -377,7 +377,9 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
   bridges; the harm bridge has none either). D009's reason, D070's weighing reading of the side-effect question, has lapsed with D095 (1),
   whose rebuttal route is "as CQ:opposite_consequences is", which positive consequences backs: the
   owner decides (question 1). Meanwhile a further bad consequence argued by negative consequences
-  is played as a direct rebuttal of the conclusion.
+  is played as a direct rebuttal of the conclusion. *Superseded* at step C5.3's switch
+  (2026-11-28): D099 (1) adds the edge, so negative consequences answers CQ:side_effect, a rebuttal;
+  the harm bridge and the modal variant still have none (item F, A7.7 and A7.7b).
 - **Sign's three backup edges stay**; on practical reasoning the side-effect route moves to the
   conclusion, so sign's answer there becomes a rebuttal, as it is on positive consequences already.
   Whether a sign fits a practical conclusion is for sign's family (question 3).
@@ -386,7 +388,7 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
 
 ### Questions for the owner
 
-**Answered by the owner on 2026-11-27 (D099),** as the other reviewer answered them: (1) yes; (2) yes, P3 as implemented; (3) sign's answer at that route stays a reviewed candidate, outside the pilot's profile until its warrant is reviewed; (4) yes, D095 (3)'s list bounds every route to the exception, and undercutters that attack something other than knowability are kept; (5) "If so, how?". (2) is applied; (1), (3), (4) and (5) are to be applied in the game. The questions as they were put:
+**Answered by the owner on 2026-11-27 (D099),** as the other reviewer answered them: (1) yes; (2) yes, P3 as implemented; (3) sign's answer at that route stays a reviewed candidate, outside the pilot's profile until its warrant is reviewed; (4) yes, D095 (3)'s list bounds every route to the exception, and undercutters that attack something other than knowability are kept; (5) "If so, how?". (2) is applied at step C5.2 (2026-11-27); (3) and (4) by step C5.3's code (2026-11-28, c150dec); (1) and (5) at its switch (2026-11-28, the game's data `a0352a9944190d8b`). How far (3) reaches beyond the answer route is put to the owner (D103; P5's scope, below). The questions as they were put:
 
 1. A backup edge from negative consequences to CQ:side_effect, the mirror of positive consequences
    at CQ:opposite_consequences (D009 excluded it for a reason D095 (1) has removed)?
@@ -446,15 +448,18 @@ step applies the other four, written before the code (2026-11-28); the cases are
   enumeration of the moves about a statement leaves out, for the exception of a question that
   refuses Other, every scheme that does not back the question. On the shipped data, the first run
   of the golden set changed 24 of its 33 games, each first where its menu lost two offers: sign's
-  attack and defence at a practical-reasoning argument's CQ:side_effect (19 games), or sign and
-  analogy for a `worth_finding_out_first` statement (6); nothing was added to a menu. The golden
-  set is made again with the code, before the switch.
+  attack and defence at a practical-reasoning argument's CQ:side_effect (18 games), or sign and
+  analogy for a `worth_finding_out_first` statement (6); nothing was added to a menu. A 25th game
+  (the 19th, classic greedy against random, seeds 3 and 103) meets the first loss late and plays
+  the same moves. (Corrected after the independent review of the switch, N7, by a side-by-side
+  replay of each game on the builds before and after the code step; the page first said 19 and 6,
+  counting that game.) The golden set is made again with the code, before the switch.
 - **P5's scope** (the check of the plan, W2). P5 is the answer route D099 (3) names. Sign concludes
   a practical conclusion by other routes, which stay open and are pinned by cases: a direct rebuttal
   of practical reasoning made with sign (A8.6), sign against `should_be_performed(A)` as a move
   about the statement (A8.7), and sign's answer at positive consequences' side-effect question
   (A8.3, D009). The warrant (an observed sign to a practical conclusion) is the same, so whether P5
-  should reach them is put to the owner, with the developer's recommendation to keep the decided
+  should reach them is put to the owner (D103), with the developer's recommendation to keep the decided
   scope until the warrant's review, since reaching A8.3 would reopen D009; the route is recorded as
   a candidate (`docs/candidates.yml`).
 - **Two layers for (4).** NASCQ refuses a move about the exception, or against its negation, with
@@ -480,7 +485,9 @@ step applies the other four, written before the code (2026-11-28); the cases are
   the mark is still given twice. Added after the independent review of the switch (2026-11-28,
   N3; written before its test): XA5, a backup edge marked `across` whose scheme and question do not
   cross semantic types (the same type, or either has none): the lint warns that the mark is stale,
-  since it suppresses no warning; the shipped data has none.
+  since it suppresses no warning; the shipped data has none. Run on 2026-11-28 as written, its
+  planted defect caught (c5-item-f.md); with CQ:side_effect made of type causality again, the lint
+  now names sign's mark stale besides negative consequences' crossing.
 - `docs/scheme-registry/nascq-edges.md` made again (`wag-cli --edges`, TestEveryEdgeCase); the
   server's fixtures made on 092b6a6f48a672d2 (`internal/server/testdata/e1-before`) read the frozen
   copy; a scripted reference route for the new edge; the new edge placed after
@@ -510,9 +517,17 @@ gained the one new offer (the rebuttal by negative consequences at CQ:side_effec
 move the same, nothing removed, which a side-by-side replay of each game on both data showed
 (the workspace's `verify/c5/c53`); the scripted route A7.1 added, every other route unchanged. The
 gold re-pinned, nothing else changed in it. The batch-2 replay's moves are unchanged: the report
-differs only in the fingerprint, the export in its pins and the bridges' question text. The
-catalogue entries' notes (practical_reasoning1 and 2, positive and negative consequences), D099's
-record, the frozen copies' README, game-rules.md and item F say what changed.
+differs only in the fingerprint; the export in its pins, its fingerprint and the bridges' question
+text, and in what every replay changes (the build, the seed, the times). The catalogue entries'
+notes (practical_reasoning1 and 2, positive and negative consequences), D099's record, the frozen
+copies' README, game-rules.md and item F say what changed; this page's data table and choices,
+the bridges' entries and plan.md were brought up to date after the independent review of the
+switch (W1 to W4). The semantic type reaches beyond the lint (W5): it is shown in the model's
+prompt (each question with its type, and the schemes linked to it with theirs) and on the board's
+scheme card (a mark where the scheme's type is the question's). So a prompt on the new data reads
+"Side Effects (action)" where it read "(causality)", and lists negative consequences among the
+schemes linked to the question; the traces made on the old data (`internal/server/testdata/e1-before`)
+keep the old prompts, and replay only with `--data` on its frozen copy, `092b6a6f48a672d2`.
 
 ## Item F: the answer contract, per route
 

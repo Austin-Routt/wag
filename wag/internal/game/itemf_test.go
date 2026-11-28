@@ -263,6 +263,18 @@ func (g *fgame) outOfForce(names ...string) {
 	}
 }
 
+// recordedRebuttal checks that the last move is recorded as the answer to
+// cq of target, made with scheme: a rebuttal, accepted (item F, A7.1r).
+func (g *fgame) recordedRebuttal(cq, target, scheme string) {
+	g.t.Helper()
+	m := g.gs.MoveHistory[len(g.gs.MoveHistory)-1]
+	if a := m.Action; a.Type != "attack" || a.AnswersCQID != cq || a.TargetArgID != target || a.SchemeID != scheme ||
+		a.AttackType != "rebuttal" || m.Rejection != "" || len(m.ArgIDs) == 0 {
+		g.t.Fatalf("the move is recorded as %s %q %s at %s with %s (refused %q, arguments %v); want a rebuttal answering %s of %s with %s",
+			a.Type, a.AttackType, a.AnswersCQID, a.TargetArgID, a.SchemeID, m.Rejection, m.ArgIDs, cq, target, scheme)
+	}
+}
+
 func (g *fgame) conclusion(arg string) string {
 	g.t.Helper()
 	a := g.gs.Adapter.Graph.Arguments[arg]
@@ -659,6 +671,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		if got := g.conclusion(ans); got != "¬"+shouldTax {
 			t.Fatalf("the answer concludes %s", got)
 		}
+		g.recordedRebuttal("CQ:side_effect", c1, "AS:sign") // as A7.1r
 	})
 	t.Run("A5.2", func(t *testing.T) {
 		g := newFGame(t)
@@ -687,6 +700,7 @@ func TestItemFBackupEdges(t *testing.T) {
 		if got := g.conclusion(ans); got != shouldTax {
 			t.Fatalf("the answer concludes %s", got)
 		}
+		g.recordedRebuttal("CQ:opposite_consequences", n1, "AS:consequences") // as A7.1r
 	})
 	t.Run("A6.2", func(t *testing.T) {
 		g := newFGame(t)
@@ -749,6 +763,45 @@ func TestItemFStepC53(t *testing.T) {
 		g := newFGame(t)
 		n1 := g.n1()
 		g.refuse("Pro", answer("attack", "CQ:opposite_consequences", "AS:negative_consequences", n1, vb("A", "tax_meat", "G", "jobs_lost")), "S5")
+	})
+	// Added after the independent review of the switch (N1, N2), written
+	// before these tests: the new edge's record, its third target scheme,
+	// the defence it lets through only where it is, its own defence, and the
+	// schemes it does not reach.
+	t.Run("A7.1r", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, costlier))
+		g.recordedRebuttal("CQ:side_effect", c1, "AS:negative_consequences")
+	})
+	t.Run("A7.2b", func(t *testing.T) {
+		g := newFGame(t)
+		pg := g.pg()
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", pg, costlier))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+		g.inForce(pg)
+	})
+	t.Run("A7.5b", func(t *testing.T) {
+		g := newFGame(t)
+		n1 := g.n1()
+		g.refuse("Con", answer("support", "CQ:opposite_consequences", "AS:negative_consequences", n1, vb("A", "tax_meat", "G", "jobs_lost")), "S5")
+	})
+	t.Run("A7.6", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.refuse("Pro", answer("support", "CQ:side_effect", "AS:negative_consequences", c1, costlier), "S9")
+	})
+	t.Run("A7.7", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:bridge_possible_harm", c1, costlier), "S5")
+	})
+	t.Run("A7.7b", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences_modal", c1, costlier), "S5")
 	})
 	t.Run("A9.4", func(t *testing.T) {
 		g := newFGame(t)

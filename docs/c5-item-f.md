@@ -166,6 +166,8 @@ does not reach, and the move's record.
 | A7.7 | c1; Con answers CQ:side_effect of c1 with AS:bridge_possible_harm, A `tax_meat`, G `food_costlier` | refused, S5 (D099 (1) gave the edge to the categorical scheme only) |
 | A7.7b | c1; the same answer with AS:negative_consequences_modal | refused, S5 (as A7.7; with the edge, S9 would refuse it, its conclusion being modal) |
 
+Run on 2026-11-28, on the data a0352a9944190d8b: every outcome as written.
+
 ### A8. Sign at practical reasoning's rebuttal route (D099 (3); step C5.3)
 
 | Case | Board, then the move | Expected |
@@ -351,7 +353,8 @@ adapter now refuse a blank binding (A1.7b, A4.2b, and the engine's G-unbound).
   golden set on the shipped data with a profile (step 7's second part).
 - Recording-1 (a paid reply recovered after a crash, with no second call) belongs to G, the journal.
 - Every answer offered at every question concluding what its locus and polarity call for is
-  TestEveryEdgeCase's (the 243 answers of `docs/scheme-registry/nascq-edges.md`).
+  TestEveryEdgeCase's (the 246 answers of `docs/scheme-registry/nascq-edges.md`; 243 before step
+  C5.3's switch).
 
 ## Planted defects
 
@@ -466,4 +469,11 @@ the tests):
 | the edge given to the harm bridge and the modal variant as well | A7.7, A7.7b |
 | an answer at its target's conclusion recorded without its question | A7.1r (A5.1, A6.1) |
 | the lint not checking an `across` mark's edge (c5-game.md, C5.3) | XA5 |
+
+Planted on 2026-11-28 on a copy of the tree (the workspace's `verify/c5/c53/mutants-review.py`),
+each caught: the edge to CQ:opposite_consequences fails A7.5b, whose defence it lets through (and
+A6.2 and A7.5, by the rule's name only); P5 refusing every answer there fails A7.2 and A7.2b; S9
+skipped for a defence fails A7.6; the edges to the harm bridge and the modal variant fail A7.7, whose
+answer they let through, and A7.7b, refused then by S9 instead of S5; the record without its
+question fails A7.1r, A5.1 and A6.1; the lint not checking a mark fails XA5.
 

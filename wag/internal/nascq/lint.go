@@ -82,10 +82,17 @@ func (n *NASCQ) Lint() []LintIssue {
 		if sch == nil || q == nil {
 			continue
 		}
+		crosses := sch.SemanticType != "" && q.SemanticType != "" && sch.SemanticType != q.SemanticType
 		if sch.ThesisIndependent {
 			add(false, s, "thesis-independent, so its backup edge to %s is redundant", cq)
-		} else if sch.SemanticType != "" && q.SemanticType != "" && sch.SemanticType != q.SemanticType && e.Across == "" {
+		} else if crosses && e.Across == "" {
 			add(false, s, "backs %s across semantic types (%s answers %s)", cq, sch.SemanticType, q.SemanticType)
+		}
+		// A mark that suppresses no warning is stale: the edge it marks
+		// no longer crosses types (case XA5).
+		if e.Across != "" && !crosses {
+			add(false, s, "backs %s marked across by %s, but does not cross semantic types (%s answers %s): the mark is stale",
+				cq, e.Across, typeOrNone(sch.SemanticType), typeOrNone(q.SemanticType))
 		}
 	}
 
@@ -265,4 +272,12 @@ func (n *NASCQ) lintRole(id string, s *ASNode, add func(bool, string, string, ..
 			}
 		}
 	}
+}
+
+// typeOrNone names a semantic type for the lint's messages.
+func typeOrNone(t SemanticType) string {
+	if t == "" {
+		return "no type"
+	}
+	return string(t)
 }

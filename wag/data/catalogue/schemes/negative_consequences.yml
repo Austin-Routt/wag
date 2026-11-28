@@ -339,10 +339,13 @@ contrasts:
   status: drafted by Claude Code, 2026-10-22
 - scheme: practical_reasoning1
   text: A bad consequence offered as a reply to a practical-reasoning argument for
-    A is the side_effects exception of practical_reasoning1 or 2, and is coded as
-    a negative_consequences argument against the same A. Choose practical_reasoning1
-    only when the claim argues for an action from circumstances, a goal and a value.
-  status: drafted by Claude Code, 2026-10-22
+    A is coded as a negative_consequences argument against the same A, a rebuttal
+    at its conclusion (D070, D095 (1)); the game plays it as the answer to CQ:side_effect
+    since step C5.3''s switch (D099 (1)). A claim that the bad consequence matters
+    more than the goal argues the exception bad_outweighs(A,G), with bad_outweighs_good.
+    Choose practical_reasoning1 only when the claim argues for an action from circumstances,
+    a goal and a value.
+  status: drafted by Claude Code, 2026-11-28
 - scheme: negative_value
   text: Choose negative_value when the reason is a value that the agent judges bad
     and that tells against keeping a goal; choose negative_consequences when the reason
@@ -660,3 +663,9 @@ history:
   by: Claude Code
   what: 'Step C5.3''s switch (docs/c5-game.md): the game entry backs CQ:side_effect
     (D099 (1)); the game-questions discrepancy and its decision say so.'
+- date: "2026-11-28"
+  by: Claude Code
+  what: The contrast with practical_reasoning1 says how a bad consequence offered
+    against a practical-reasoning argument is coded since D070 (a rebuttal at its
+    conclusion, not the side_effects exception) and played since D099 (1) (the independent
+    review of step C5.3's switch, N7).
