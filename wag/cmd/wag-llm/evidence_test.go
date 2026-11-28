@@ -141,10 +141,17 @@ func TestY5Y6Y9TheReplayOfAGameWithARecordSet(t *testing.T) {
 	}
 }
 
+// beforeC53 is the frozen copy of the data the fixtures of
+// internal/server/testdata/e1-before were made on (092b6a6f48a672d2), which
+// the switch of step C5.3 changed: they replay with --data on it.
+var beforeC53 = filepath.Join("..", "..", "data", "frozen", "092b6a6f48a672d2")
+
 // Y7: a trace made before E1 (citations only, by the build of 4ebff26, a
-// game played to its end) replays on this build.
+// game played to its end) replays on this build, with the data it was
+// played with.
 func TestY7ATraceMadeBeforeE1Replays(t *testing.T) {
-	if err := replay(context.Background(), []string{filepath.Join("..", "..", "internal", "server", "testdata", "e1-before", "finished.trace.jsonl")}); err != nil {
+	trace := filepath.Join("..", "..", "internal", "server", "testdata", "e1-before", "finished.trace.jsonl")
+	if err := replay(context.Background(), []string{trace, "--data", beforeC53}); err != nil {
 		t.Fatalf("Y7: %v", err)
 	}
 }
@@ -166,7 +173,7 @@ func TestX7ADebateWithStrayEvidenceFieldsReplays(t *testing.T) {
 			t.Fatalf("the trace has no %s", want)
 		}
 	}
-	if err := replay(context.Background(), []string{trace}); err != nil {
+	if err := replay(context.Background(), []string{trace, "--data", beforeC53}); err != nil {
 		t.Fatalf("X7: %v", err)
 	}
 }

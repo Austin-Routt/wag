@@ -2834,7 +2834,7 @@ decisions:
       scheme and the source-based schemes) bounds every route to the exception;
       undercutters that attack something other than knowability are kept. (5)
       The question ends "If so, how?".
-    recorded: "(2) is applied (step C5.2); (1), (3), (4) and (5) are to be applied in the game (docs/c5-game.md)"
+    recorded: "(2) is applied (step C5.2, 2026-11-27); (3) and (4) by step C5.3's code (2026-11-28, c150dec), (1) and (5) at its switch (2026-11-28, the game's data a0352a9944190d8b); docs/c5-game.md, C5.3"
 
 - id: D100
   title: Evidence step 1's choices put to the owner

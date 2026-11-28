@@ -18,7 +18,8 @@ import (
 // as before; the citations, a source's reference URL and binding ids among
 // them, stay citations. (The replay is tested in cmd/wag-llm: a game
 // stopped early asks a replay for a call its trace does not have, under any
-// build.)
+// build.) They were made on the data 092b6a6f48a672d2, which the switch of
+// step C5.3 changed: they load, replay and resume on its frozen copy.
 
 // citedStrings are the citation strings of a game's arguments, and whether
 // any argument cites a binding.
@@ -50,7 +51,7 @@ func TestY7AGameMadeBeforeE1(t *testing.T) {
 		}
 	}
 	// The load.
-	_, ts := newTestServerWith(t)
+	_, ts := newFrozenServer(t, beforeC53)
 	var st State
 	if code := call(t, ts, "POST", "/api/load", string(export), &st); code != http.StatusOK {
 		t.Fatalf("Y7: the load: %d", code)
@@ -78,7 +79,7 @@ func TestY7AGameMadeBeforeE1(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	srv, ts2 := newTestServerWith(t)
+	srv, ts2 := newFrozenServer(t, beforeC53)
 	if err := srv.SetStore(store); err != nil {
 		t.Fatal(err)
 	}

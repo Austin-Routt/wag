@@ -705,12 +705,60 @@ func newFGameNoProfile(t *testing.T) *fgame {
 	return g
 }
 
-// Step C5.3 (D099), on today's data (docs/c5-item-f.md, A8 and A9): P5, the
-// offers, and D095 (3)'s list bounding every route to the bridges' exception.
-// A7 and A9.4 come with the switch, which changes the data.
+// Step C5.3 (D099) (docs/c5-item-f.md, A7 to A9): the backup edge from
+// negative consequences to CQ:side_effect, P5, the offers, D095 (3)'s list
+// bounding every route to the bridges' exception, and the question's text.
+// A8 and A9 but A9.4 ran first on the data before the switch; A7 and A9.4
+// came with the switch, which changed the data.
 func TestItemFStepC53(t *testing.T) {
 	strain := vb("A", "food_banks_report_strain")
 	worthRefused := "S5: " + worthDF + " is the exception"
+	costlier := vb("A", "tax_meat", "G", "food_costlier")
+	t.Run("A7.1", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, costlier))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+		// A rebuttal: c1 stays in force, and the weighing, c1's exception,
+		// is not established by it (the check of the plan, Q2).
+		g.inForce(c1)
+		g.mustNotIn(bad1)
+	})
+	t.Run("A7.2", func(t *testing.T) {
+		g := newFGame(t)
+		pr := g.pr()
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", pr, costlier))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+		g.inForce(pr)
+	})
+	t.Run("A7.3", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, vb("A", "subsidy_plants", "G", "food_costlier")), "S9")
+	})
+	t.Run("A7.4", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:consequences", c1, costlier), "S5")
+	})
+	t.Run("A7.5", func(t *testing.T) {
+		g := newFGame(t)
+		n1 := g.n1()
+		g.refuse("Pro", answer("attack", "CQ:opposite_consequences", "AS:negative_consequences", n1, vb("A", "tax_meat", "G", "jobs_lost")), "S5")
+	})
+	t.Run("A9.4", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		text := g.gs.QuestionText("CQ:worth_finding_out_first", bp)
+		if !strings.HasSuffix(text, "If so, how?") || strings.Contains(text, "Which way?") {
+			t.Fatalf("the question reads %q", text)
+		}
+	})
 	t.Run("A8.1", func(t *testing.T) {
 		g := newFGame(t)
 		pr := g.pr()
@@ -1132,9 +1180,17 @@ func TestItemFQuestionsAlone(t *testing.T) {
 func TestItemFDirectRebuttal(t *testing.T) {
 	neg := vb("A", "tax_meat", "G", "food_costlier")
 	t.Run("D1", func(t *testing.T) {
+		// Refused by S5 before step C5.3's switch; since it, by the owner's
+		// answer D099 (1) (the backup edge), accepted, a rebuttal: A7.1's
+		// outcome (docs/c5-item-f.md, D).
 		g := newFGame(t)
 		c1 := g.c1()
-		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, neg), "S5")
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, neg))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+		g.inForce(c1)
+		g.mustNotIn(bad1)
 	})
 	t.Run("D2 and D3", func(t *testing.T) {
 		g := newFGame(t)

@@ -134,12 +134,15 @@ ask_edges:
 backup_edges:
 - cq: CQ:side_effect
   scheme: AS:sign
+  across: D009
 - cq: CQ:possibility
   scheme: AS:sign
 - cq: CQ:goal_possible
   scheme: AS:sign
 - cq: CQ:opposite_consequences
   scheme: AS:consequences
+- cq: CQ:side_effect
+  scheme: AS:negative_consequences
 - cq: CQ:bad_outweighs
   scheme: AS:bad_outweighs_good
 - cq: CQ:good_outweighs

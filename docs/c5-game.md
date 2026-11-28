@@ -2,7 +2,7 @@
 
 **Status:** C5.1 is applied (2026-11-26: c9935ce, 17fd22a and the switch). D095 is decided (the
 owner, 2026-11-26), and its answer scheme for `worth_finding_out_first` is in `walton.yml`
-(proposal D095, applied 2026-11-26). C5.2 is done (2026-11-27): steps 1 to 7, the switch, the replay by instance and item F; step 8, the gates, two independent checks (of steps 7 and 8, in the workspace, `verify/c5/c52`) and their fixes, CI and the docs. The
+(proposal D095, applied 2026-11-26). C5.2 is done (2026-11-27): steps 1 to 7, the switch, the replay by instance and item F; step 8, the gates, two independent checks (of steps 7 and 8, in the workspace, `verify/c5/c52`) and their fixes, CI and the docs. C5.3, the owner's answers to C5's questions (D099), is applied (2026-11-28): the code (c150dec), the across mark (9050a10) and the switch, the game's data `a0352a9944190d8b` (below). The
 plan: version 1 (3bc7f0c) and version 2 (3471585) were each checked independently on
 2026-11-26 (in the workspace, verify/c5); version 3 put D095 to the owner; version 4 had D095 as
 decided and item F's cases from the independent review of 26 November; version 5 gave C5.2's order
@@ -495,6 +495,21 @@ digests made again where a move's board changes. (3) and (4) are code, with in-m
 they hold on today's data and change no byte of it. Then the batch-2 replay is made again (no claim
 uses these routes, so no move should change), the docs (game-rules.md for P5 and S5, the
 catalogue's entries, the README's counts), gates on both toolchains and an independent review.
+
+**Done at the switch** (2026-11-28). The data `a0352a9944190d8b` (lint and catalogue check clean),
+today's files frozen as `092b6a6f48a672d2`; item F's A7 and A9.4 run as written, D1 with A7.1's
+outcome, and four defects planted at the switch caught (c5-item-f.md); `nascq-edges.md` made
+again (246 answers offered, three more: negative consequences against the conclusion at the three
+schemes asked CQ:side_effect; three more linked but not offered, its answer for, which cannot be
+the answer, S9); the server's and `wag-llm`'s fixtures made on `092b6a6f48a672d2` load, replay and
+resume on its frozen copy. The golden set: 23 of the 33 games changed, each first where its menu
+gained the one new offer (the rebuttal by negative consequences at CQ:side_effect), every earlier
+move the same, nothing removed, which a side-by-side replay of each game on both data showed
+(the workspace's `verify/c5/c53`); the scripted route A7.1 added, every other route unchanged. The
+gold re-pinned, nothing else changed in it. The batch-2 replay's moves are unchanged: the report
+differs only in the fingerprint, the export in its pins and the bridges' question text. The
+catalogue entries' notes (practical_reasoning1 and 2, positive and negative consequences), D099's
+record, the frozen copies' README, game-rules.md and item F say what changed.
 
 ## Item F: the answer contract, per route
 

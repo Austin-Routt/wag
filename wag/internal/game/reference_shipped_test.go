@@ -152,6 +152,10 @@ func shippedRoutes() []struct {
 			n1 := g.n1()
 			g.play("Pro", answer("attack", "CQ:opposite_consequences", "AS:consequences", n1, vb("A", "tax_meat", "G", "emissions_fall")))
 		}},
+		{"A7.1 negative consequences at CQ:side_effect", func(g *fgame) {
+			c1 := g.c1()
+			g.play("Con", answer("attack", "CQ:side_effect", "AS:negative_consequences", c1, vb("A", "tax_meat", "G", "food_costlier")))
+		}},
 		{"B1 Other at CQ:too_slight", func(g *fgame) {
 			c1 := g.c1()
 			g.play("Con", answer("attack", "CQ:too_slight", nascq.OtherSchemeID, c1, other("the fall is tiny")))

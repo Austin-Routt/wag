@@ -2,7 +2,7 @@
 
 Made by `wag-cli --edges` from the game's data: for every critical question asked of a scheme (an ask edge), an argument of the scheme with the example values of its variables, then every answer the NASCQ allows (each backing scheme, against and for), each played on that game and undone. *Concludes* is what the answering argument concludes; *Check* says whether that is what the question's locus and the answer's polarity call for. A backing scheme that is linked but not offered is one whose conclusion cannot be the answer (S9).
 
-243 answers offered, 0 not as their locus says; 11 linked but not offered.
+246 answers offered, 0 not as their locus says; 14 linked but not offered.
 
 ### AS:analogy — CQ:difference (exception)
 
@@ -39,7 +39,7 @@ Did the claim really hold in the source case?
 
 ### AS:bridge_possible_good — CQ:worth_finding_out_first (exception)
 
-Should the possibility that doing ‘introduce a four-day week’ brings about ‘higher productivity’ be left out of the decision on ‘introduce a four-day week’ until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? Which way?
+Should the possibility that doing ‘introduce a four-day week’ brings about ‘higher productivity’ be left out of the decision on ‘introduce a four-day week’ until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? If so, how?
 
 | Answer | Backed by | Effect | Concludes | The answering argument | Check |
 |---|---|---|---|---|---|
@@ -52,7 +52,7 @@ Should the possibility that doing ‘introduce a four-day week’ brings about �
 
 ### AS:bridge_possible_harm — CQ:worth_finding_out_first (exception)
 
-Should the possibility that doing ‘license the pesticide’ brings about ‘harm to bees’ be left out of the decision on ‘license the pesticide’ until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? Which way?
+Should the possibility that doing ‘license the pesticide’ brings about ‘harm to bees’ be left out of the decision on ‘license the pesticide’ until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? If so, how?
 
 | Answer | Backed by | Effect | Concludes | The answering argument | Check |
 |---|---|---|---|---|---|
@@ -117,6 +117,8 @@ Would doing ‘introduce a carbon tax’ also bring about something bad?
 |---|---|---|---|---|---|
 | against (“yes”) | AS:expert_opinion | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:expert_opinion | support | `should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
+| against (“yes”) | AS:negative_consequences | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | Doing ‘introduce a carbon tax’ brings about ‘higher heating bills for poor households (2)’.; ‘Higher heating bills for poor households (2)’ is bad.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
+| for | AS:negative_consequences |  | `` |  | not offered: the scheme's conclusion cannot be the answer here (S9) |
 | against (“yes”) | AS:position_to_know | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:position_to_know | support | `should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
 | against (“yes”) | AS:sign | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘Wet streets (2)’ is observed.; C is generally indicated when ‘wet streets (2)’ holds.; ‘Wet streets (2)’ and C are strongly correlated.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
@@ -496,6 +498,8 @@ Would doing ‘introduce a carbon tax’ also bring about something bad?
 |---|---|---|---|---|---|
 | against (“yes”) | AS:expert_opinion | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:expert_opinion | support | `should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
+| against (“yes”) | AS:negative_consequences | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | Doing ‘introduce a carbon tax’ brings about ‘higher heating bills for poor households (2)’.; ‘Higher heating bills for poor households (2)’ is bad.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
+| for | AS:negative_consequences |  | `` |  | not offered: the scheme's conclusion cannot be the answer here (S9) |
 | against (“yes”) | AS:position_to_know | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:position_to_know | support | `should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
 | against (“yes”) | AS:sign | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘Wet streets (2)’ is observed.; C is generally indicated when ‘wet streets (2)’ holds.; ‘Wet streets (2)’ and C are strongly correlated.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
@@ -594,6 +598,8 @@ Would doing ‘introduce a carbon tax’ also bring about something bad?
 |---|---|---|---|---|---|
 | against (“yes”) | AS:expert_opinion | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:expert_opinion | support | `should_be_performed(introduce_a_carbon_tax)` | ‘The IPCC (2)’ is an expert in ‘climate science (2)’.; C is a matter of ‘climate science (2)’.; ‘The IPCC (2)’ says that C.; “‘The IPCC (2)’ says that C”, and this is based on evidence.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
+| against (“yes”) | AS:negative_consequences | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | Doing ‘introduce a carbon tax’ brings about ‘higher heating bills for poor households (2)’.; ‘Higher heating bills for poor households (2)’ is bad.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
+| for | AS:negative_consequences |  | `` |  | not offered: the scheme's conclusion cannot be the answer here (S9) |
 | against (“yes”) | AS:position_to_know | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |
 | for (“no”) | AS:position_to_know | support | `should_be_performed(introduce_a_carbon_tax)` | ‘A local resident (2)’ is in a position to know about ‘what happens in the village (2)’.; ‘A local resident (2)’ says that C.; C is a matter of ‘what happens in the village (2)’.; therefore ‘Introduce a carbon tax’ should be done. | ✓ |
 | against (“yes”) | AS:sign | rebuttal | `¬should_be_performed(introduce_a_carbon_tax)` | ‘Wet streets (2)’ is observed.; C is generally indicated when ‘wet streets (2)’ holds.; ‘Wet streets (2)’ and C are strongly correlated.; therefore ‘Introduce a carbon tax’ should not be done. | ✓ |

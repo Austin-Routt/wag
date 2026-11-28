@@ -275,10 +275,18 @@ func TestAcrossMarkNamesADecidedDecision(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !strings.Contains(string(b), first) {
+		// Since the switch (step C5.3) the shipped edge carries the mark:
+		// the case replaces it; before, it added one.
+		text, marked := string(b), first+"  across: D009\n"
+		switch {
+		case strings.Contains(text, marked):
+			text = strings.Replace(text, marked, first+"  across: "+c.id+"\n", 1)
+		case strings.Contains(text, first):
+			text = strings.Replace(text, first, first+"  across: "+c.id+"\n", 1)
+		default:
 			t.Fatalf("order.yml's backup edges do not start with %q", first)
 		}
-		if err := os.WriteFile(p, []byte(strings.Replace(string(b), first, first+"  across: "+c.id+"\n", 1)), 0o644); err != nil {
+		if err := os.WriteFile(p, []byte(text), 0o644); err != nil {
 			t.Fatal(err)
 		}
 		opt := DefaultOptions()

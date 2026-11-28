@@ -216,7 +216,12 @@ a rule of the dialogue, not a change of who proves an exception:
   and an undercutter of the question's argument is kept: it concludes neither
   the exception nor anything it presumes. An answer scheme (one that concludes
   the formula of the question it answers, D094 (g)) is offered only as an
-  answer, on its backup edges, never as a move of its own (S1).
+  answer, on its backup edges, never as a move of its own (S1). Since step
+  C5.3's switch, negative consequences backs CQ:side_effect (D099 (1)), as
+  positive consequences backs CQ:opposite_consequences: a further bad
+  consequence answers the side-effect question of positive consequences and
+  practical reasoning, a rebuttal at the conclusion; asked no question, it is
+  a direct rebuttal, as before.
 
 This formalizes the game's behaviour since October 2026, but for the two
 rules step C5.2 adds (an answer scheme only as an answer, a question that
@@ -224,7 +229,9 @@ refuses Other), which no reference game reaches, so no golden game moves.
 Step C5.3's rules (P5 below, and the bound on the exception) also change what
 the board and the computer players are offered, so 24 of the 33 golden games
 on the shipped data were made again, each first changed where its menu lost
-two offers (docs/c5-game.md, C5.3).
+two offers (docs/c5-game.md, C5.3). At step C5.3's switch the new backup edge
+added one offer to some menus, and 23 of the 33 were made again, each first
+changed where its menu gained that offer, every earlier move the same.
 
 **The profile** (D094 (b); D089, D091, D092, D063). A game made since
 step C5.2 has a profile, a discussion imported from Kialo included: the

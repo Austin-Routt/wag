@@ -82,7 +82,7 @@ critical_questions:
     id: CQ:worth_finding_out_first
     text: 'Should the possibility that doing {A} brings about {G} be left out of the
       decision on {A} until it is found out: can it be found out in time, reliably
-      enough to settle the question, at a cost and risk worth bearing? Which way?'
+      enough to settle the question, at a cost and risk worth bearing? If so, how?'
     locus: exception
     pattern: worth_finding_out_first(A,G)
   targets: [{formula: 'worth_finding_out_first(A,G)', locus: exception}]
@@ -102,7 +102,7 @@ critical_questions:
     or CQ2; docs/kialo-batch2/guidelines.md §3.1, OC15).'
   paraphrase: 'Should the possibility that doing A brings about G be left out of the
     decision on A until it is found out: can it be found out in time, reliably enough
-    to settle the question, at a cost and risk worth bearing? Which way?'
+    to settle the question, at a cost and risk worth bearing? If so, how?'
   answer: 'The critic, who raises it with an argument. Against: an argument of finding_out_first
     (D095), which names the investigation and argues that it would settle whether
     A brings G about, in time and at a cost and risk worth bearing (a trial, a pilot,

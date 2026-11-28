@@ -57,10 +57,11 @@
     {"cq": "CQ:worth_finding_out_first", "scheme": "AS:bridge_possible_harm", "locus": "exception", "pattern": "worth_finding_out_first({A},{G})"}
   ],
   "backup_edges": [
-    {"scheme": "AS:sign", "cq": "CQ:side_effect"},
+    {"scheme": "AS:sign", "cq": "CQ:side_effect", "across": "D009"},
     {"scheme": "AS:sign", "cq": "CQ:possibility"},
     {"scheme": "AS:sign", "cq": "CQ:goal_possible"},
     {"scheme": "AS:consequences", "cq": "CQ:opposite_consequences"},
+    {"scheme": "AS:negative_consequences", "cq": "CQ:side_effect"},
     {"scheme": "AS:bad_outweighs_good", "cq": "CQ:bad_outweighs"},
     {"scheme": "AS:good_outweighs_bad", "cq": "CQ:good_outweighs"},
     {"scheme": "AS:better_means", "cq": "CQ:other_means"},

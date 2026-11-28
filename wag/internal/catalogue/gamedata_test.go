@@ -277,10 +277,10 @@ func TestGameFiles(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, e := range raw.Ask {
-		edges.Ask = append(edges.Ask, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
+		edges.Ask = append(edges.Ask, GameEdge{CQ: e["cq"], Scheme: e["scheme"], Across: e["across"]})
 	}
 	for _, e := range raw.Backup {
-		edges.Backup = append(edges.Backup, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
+		edges.Backup = append(edges.Backup, GameEdge{CQ: e["cq"], Scheme: e["scheme"], Across: e["across"]})
 	}
 	if !reflect.DeepEqual(o.Ask, edges.Ask) || !reflect.DeepEqual(o.Backup, edges.Backup) {
 		t.Errorf("order.yml's edges are not edges.json's, in its order")

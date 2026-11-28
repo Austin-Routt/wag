@@ -1,0 +1,718 @@
+{
+  "AS:practical_reasoning": {
+    "carneades_id": "practical_reasoning1",
+    "name": "Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.7,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
+      },
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after action",
+        "example_en": "lower emissions"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized",
+        "example_en": "a stable climate"
+      },
+      "V": {
+        "type": "value",
+        "description": "Value promoted by the goal",
+        "example_en": "public health"
+      },
+      "P": {
+        "type": "agent",
+        "description": "Agent who would take the action",
+        "example_en": "the city council"
+      }
+    },
+    "premise_templates_en": [
+      "One of the goals of {P} is {G}",
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}",
+      "Achieving {G} would promote the value {V}"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state that realizes one of the agent's goals, which promotes a value.",
+    "cues_en": [
+      "should",
+      "ought to",
+      "we must",
+      "in order to",
+      "so that",
+      "goal",
+      "aim",
+      "achieve",
+      "promote",
+      "policy",
+      "plan to"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
+  },
+  "AS:consequences": {
+    "carneades_id": "positive_consequences",
+    "name": "Argument from Positive Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "G": {
+        "type": "event",
+        "description": "Good consequence",
+        "example_en": "cleaner air"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is good"],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An action should be performed because it brings about good consequences.",
+    "cues_en": [
+      "consequence",
+      "consequences",
+      "would lead to",
+      "will lead to",
+      "leads to",
+      "result in",
+      "results in",
+      "benefit",
+      "benefits",
+      "good outcome",
+      "because it would"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
+  },
+  "AS:values": {
+    "carneades_id": "positive_value",
+    "name": "Argument from Values",
+    "semantic_type": "value",
+    "thesis_independent": false,
+    "base_weight": 0.6,
+    "variables": {
+      "V": {
+        "type": "value",
+        "description": "Value being invoked",
+        "example_en": "fairness"
+      },
+      "A": {
+        "type": "entity",
+        "description": "Agent or judger",
+        "example_en": "most voters"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal affected",
+        "example_en": "equal pay"
+      }
+    },
+    "premise_templates_en": ["{V} is a positive value for {A}", "{V} supports the goal {G} for {A}"],
+    "conclusion_template_en": "{V} is a reason to keep the goal {G}",
+    "description_en": "A value that the agent judges positive is a reason to keep a goal it favours.",
+    "cues_en": [
+      "value",
+      "values",
+      "freedom",
+      "fairness",
+      "justice",
+      "equality",
+      "dignity",
+      "important to",
+      "matters",
+      "principle",
+      "right thing"
+    ],
+    "evidence": "",
+    "evidence_note_en": ""
+  },
+  "AS:sign": {
+    "carneades_id": "sign",
+    "name": "Argument from Sign",
+    "semantic_type": "causality",
+    "thesis_independent": false,
+    "base_weight": 0.6,
+    "variables": {
+      "A": {
+        "type": "event",
+        "description": "Observable sign or indicator",
+        "example_en": "wet streets"
+      },
+      "B": {
+        "type": "event",
+        "description": "Indicated condition",
+        "example_en": "it rained"
+      }
+    },
+    "premise_templates_en": ["{A} is observed", "{B} is generally indicated when {A} holds"],
+    "conclusion_template_en": "{B} holds in the current situation",
+    "answer_variable": "B",
+    "description_en": "Something is probably true because an observed sign usually indicates it.",
+    "cues_en": [
+      "sign",
+      "signs",
+      "indicates",
+      "indication",
+      "suggests",
+      "symptom",
+      "evidence of",
+      "shows that",
+      "points to",
+      "observed"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "where the sign was observed"
+  },
+  "AS:expert_opinion": {
+    "carneades_id": "expert_opinion",
+    "name": "Argument from Expert Opinion",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.7,
+    "variables": {
+      "W": {
+        "type": "entity",
+        "description": "Expert or credible source",
+        "example_en": "the IPCC"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Field of expertise",
+        "example_en": "climate science"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted",
+        "example_en": "human activity is warming the planet"
+      }
+    },
+    "premise_templates_en": ["{W} is an expert in {D}", "{S} is a matter of {D}", "{W} says that {S}"],
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because an expert in its field asserts it.",
+    "cues_en": [
+      "expert",
+      "experts",
+      "scientist",
+      "scientists",
+      "according to",
+      "study",
+      "studies",
+      "research",
+      "professor",
+      "doctor",
+      "dr",
+      "researchers",
+      "ipcc",
+      "peer reviewed"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where the expert asserts it (a citation or a link)"
+  },
+  "AS:position_to_know": {
+    "carneades_id": "position_to_know",
+    "name": "Argument from Position to Know",
+    "semantic_type": "truth",
+    "thesis_independent": true,
+    "base_weight": 0.65,
+    "variables": {
+      "W": {
+        "type": "entity",
+        "description": "Knowledgeable source",
+        "example_en": "a local resident"
+      },
+      "D": {
+        "type": "domain",
+        "description": "Domain of knowledge",
+        "example_en": "what happens in the village"
+      },
+      "S": {
+        "type": "proposition",
+        "description": "Proposition asserted",
+        "example_en": "the road floods every spring"
+      }
+    },
+    "premise_templates_en": [
+      "{W} is in a position to know about {D}",
+      "{W} says that {S}",
+      "{S} is a matter of {D}"
+    ],
+    "conclusion_template_en": "{S}",
+    "answer_variable": "S",
+    "description_en": "A claim is plausible because someone in a position to know asserts it.",
+    "cues_en": [
+      "witness",
+      "saw",
+      "eyewitness",
+      "insider",
+      "told me",
+      "reported",
+      "was there",
+      "first hand",
+      "firsthand",
+      "knows",
+      "in a position to know",
+      "official"
+    ],
+    "evidence": "required",
+    "evidence_note_en": "where they assert it (a citation or a link)"
+  },
+  "AS:analogy": {
+    "carneades_id": "analogy",
+    "name": "Argument from Analogy",
+    "semantic_type": "truth",
+    "thesis_independent": false,
+    "base_weight": 0.55,
+    "variables": {
+      "A": {
+        "type": "proposition",
+        "description": "Proposition claimed to hold",
+        "example_en": "a carbon tax cuts emissions"
+      },
+      "C": {
+        "type": "case",
+        "description": "Similar case",
+        "example_en": "Sweden's carbon tax"
+      }
+    },
+    "premise_templates_en": ["{C} is a similar case", "{A} is true in the case of {C}"],
+    "conclusion_template_en": "{A}",
+    "answer_variable": "A",
+    "description_en": "A claim holds here because it holds in a similar case.",
+    "cues_en": [
+      "like",
+      "similar",
+      "similarly",
+      "just as",
+      "analogous",
+      "analogy",
+      "same as",
+      "compare",
+      "as in",
+      "in the case of",
+      "precedent"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "the similar case"
+  },
+  "AS:practical_reasoning_goal": {
+    "carneades_id": "practical_reasoning2",
+    "name": "Instrumental Practical Reasoning",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "S1": {
+        "type": "state",
+        "description": "Current circumstances",
+        "example_en": "emissions are rising"
+      },
+      "A": {
+        "type": "action",
+        "description": "Action to be performed",
+        "example_en": "introduce a carbon tax"
+      },
+      "S2": {
+        "type": "state",
+        "description": "Future state after the action",
+        "example_en": "lower emissions"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal to be realized",
+        "example_en": "meet the 2030 climate target"
+      },
+      "P": {
+        "type": "agent",
+        "description": "Agent who would take the action",
+        "example_en": "the city council"
+      }
+    },
+    "premise_templates_en": [
+      "One of the goals of {P} is {G}",
+      "The current situation is {S1}",
+      "Doing {A} in the situation {S1} would lead to {S2}",
+      "The goal {G} would be achieved in {S2}"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "An agent should do an action because, in the current circumstances, it brings about a state in which the agent's goal is realized (goal-based, without values: Walton 2015; the book's practical inference, 22.1). For an argument that also names the value the goal promotes, use Practical Reasoning.",
+    "cues_en": [
+      "in order to",
+      "so that",
+      "so as to",
+      "means to",
+      "the way to",
+      "to achieve",
+      "to reach",
+      "our goal",
+      "the aim"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action would bring about the state"
+  },
+  "AS:negative_consequences": {
+    "carneades_id": "negative_consequences",
+    "name": "Argument from Negative Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "G": {
+        "type": "event",
+        "description": "Bad consequence",
+        "example_en": "higher heating bills for poor households"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {G}", "{G} is bad"],
+    "conclusion_template_en": "{A} should not be done",
+    "description_en": "An action should not be performed because it brings about bad consequences (the counterpart of positive consequences).",
+    "cues_en": [
+      "bad consequence",
+      "bad consequences",
+      "would cause",
+      "would harm",
+      "harm",
+      "harmful",
+      "danger",
+      "dangerous",
+      "risk",
+      "backfire",
+      "should not",
+      "shouldn't",
+      "downside"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the consequence"
+  },
+  "AS:consequences_modal": {
+    "carneades_id": "positive_consequences_modal",
+    "name": "Argument from Possible Positive Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a four-day week"
+      },
+      "G": {
+        "type": "event",
+        "description": "Good consequence that may follow",
+        "example_en": "higher productivity"
+      }
+    },
+    "premise_templates_en": ["Doing {A} may bring about {G}", "{G} is good"],
+    "conclusion_template_en": "{A} may be worth doing for the sake of {G}",
+    "description_en": "An action may be worth doing because it may bring about a good consequence. Its conclusion bears on the decision only through the bridge from a possible good, which carries it there when the chance matters enough (D008).",
+    "cues_en": [
+      "may lead to",
+      "might lead to",
+      "could lead to",
+      "may bring",
+      "might bring",
+      "could bring",
+      "possibly",
+      "a chance of",
+      "potential benefit"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action could bring about the consequence",
+    "role": "modal",
+    "weighs_as": "AS:consequences"
+  },
+  "AS:negative_consequences_modal": {
+    "carneades_id": "negative_consequences_modal",
+    "name": "Argument from Possible Negative Consequences",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "license the pesticide"
+      },
+      "G": {
+        "type": "event",
+        "description": "Bad consequence that may follow",
+        "example_en": "harm to bees"
+      }
+    },
+    "premise_templates_en": ["Doing {A} may bring about {G}", "{G} is bad"],
+    "conclusion_template_en": "{A} may be unwise to do because of {G}",
+    "description_en": "An action may be unwise to do because it may bring about a bad consequence. Its conclusion bears on the decision only through the bridge from a possible harm, which carries it there when the chance matters enough (D008).",
+    "cues_en": [
+      "may cause",
+      "might cause",
+      "could cause",
+      "may harm",
+      "might harm",
+      "could harm",
+      "risk of",
+      "a chance of",
+      "potential harm"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action could bring about the consequence",
+    "role": "modal",
+    "weighs_as": "AS:negative_consequences"
+  },
+  "AS:bridge_possible_good": {
+    "carneades_id": "bridge_from_possible_good",
+    "name": "From a Possible Good Consequence to the Action (bridge)",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a four-day week"
+      },
+      "G": {
+        "type": "event",
+        "description": "Good consequence that may follow",
+        "example_en": "higher productivity"
+      }
+    },
+    "premise_templates_en": [
+      "{A} may be worth doing for the sake of {G}",
+      "The chance that doing {A} brings about {G} is large enough, given what {G} would be, to bear on whether {A} should be done"
+    ],
+    "conclusion_template_en": "{A} should be done",
+    "description_en": "A possible good consequence counts for doing the action when its chance matters enough to the decision (D008). The move does not presume the possibility; an argument from possible positive consequences, a move of its own, supports it.",
+    "cues_en": ["worth the chance", "worth a try", "might pay off", "could pay off"],
+    "evidence": "",
+    "evidence_note_en": "",
+    "role": "bridge",
+    "weighs_as": "AS:consequences_modal",
+    "entry_premise": "may_be_worth_performing({A},{G})"
+  },
+  "AS:bridge_possible_harm": {
+    "carneades_id": "bridge_from_possible_harm",
+    "name": "From a Possible Bad Consequence to Not Acting (bridge)",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.65,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "license the pesticide"
+      },
+      "G": {
+        "type": "event",
+        "description": "Bad consequence that may follow",
+        "example_en": "harm to bees"
+      }
+    },
+    "premise_templates_en": [
+      "{A} may be unwise to do because of {G}",
+      "The chance that doing {A} brings about {G} is large enough, given what {G} would be, to bear on whether {A} should be done"
+    ],
+    "conclusion_template_en": "{A} should not be done",
+    "description_en": "A possible bad consequence counts against doing the action when its chance matters enough to the decision (D008). The move does not presume the possibility; an argument from possible negative consequences, a move of its own, supports it.",
+    "cues_en": [
+      "not worth the risk",
+      "too risky",
+      "better safe than sorry",
+      "the risk is too great"
+    ],
+    "evidence": "",
+    "evidence_note_en": "",
+    "role": "bridge",
+    "weighs_as": "AS:negative_consequences_modal",
+    "entry_premise": "may_be_unwise_to_perform({A},{G})"
+  },
+  "AS:bad_outweighs_good": {
+    "carneades_id": "bad_outweighs_good",
+    "name": "Weighing a Bad Consequence against a Good One",
+    "semantic_type": "value",
+    "thesis_independent": false,
+    "base_weight": 0.5,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "H": {
+        "type": "event",
+        "description": "Bad consequence that matters more",
+        "example_en": "higher heating bills for poor households"
+      },
+      "G": {
+        "type": "event",
+        "description": "The consequence or goal it outweighs",
+        "example_en": "lower emissions"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {H}", "{H} is bad", "{H} matters more than {G}"],
+    "conclusion_template_en": "Doing {A} has bad consequences that outweigh {G}",
+    "description_en": "The answer that a bad consequence of the action matters more than the good it is argued for (C003, D064, D075). It concludes the exception bad_outweighs(A,G) of the argument it answers.",
+    "cues_en": [
+      "outweigh",
+      "outweighs",
+      "matters more",
+      "not worth it",
+      "the cost is too high"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the bad consequence",
+    "role": "answer"
+  },
+  "AS:good_outweighs_bad": {
+    "carneades_id": "good_outweighs_bad",
+    "name": "Weighing a Good Consequence against a Bad One",
+    "semantic_type": "value",
+    "thesis_independent": false,
+    "base_weight": 0.5,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action",
+        "example_en": "introduce a carbon tax"
+      },
+      "H": {
+        "type": "event",
+        "description": "Good consequence that matters more",
+        "example_en": "cleaner air"
+      },
+      "G": {
+        "type": "event",
+        "description": "The consequence it outweighs",
+        "example_en": "higher heating bills"
+      }
+    },
+    "premise_templates_en": ["Doing {A} brings about {H}", "{H} is good", "{H} matters more than {G}"],
+    "conclusion_template_en": "Doing {A} has good consequences that outweigh {G}",
+    "description_en": "The answer that a good consequence of the action matters more than the harm it is argued against for (C003, D064, D075). It concludes the exception good_outweighs(A,G) of the argument it answers.",
+    "cues_en": [
+      "outweigh",
+      "outweighs",
+      "matters more",
+      "worth it anyway",
+      "the gain is greater"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the action brings about the good consequence",
+    "role": "answer"
+  },
+  "AS:better_means": {
+    "carneades_id": "better_means",
+    "name": "Argument from a Better Means",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.5,
+    "variables": {
+      "P": {
+        "type": "agent",
+        "description": "Agent who would take the action",
+        "example_en": "the city council"
+      },
+      "G": {
+        "type": "goal",
+        "description": "Goal both actions serve",
+        "example_en": "lower emissions"
+      },
+      "A": {
+        "type": "action",
+        "description": "Action argued for",
+        "example_en": "tax meat"
+      },
+      "A2": {
+        "type": "action",
+        "description": "Other action that would do better",
+        "example_en": "subsidize plant-based food"
+      }
+    },
+    "premise_templates_en": [
+      "One of the goals of {P} is {G}",
+      "It is possible for {P} to bring about {A2}",
+      "Doing {A2} brings about {G}",
+      "For {P}, {A2} would realize {G} more effectively than {A}, more surely, sooner or at lower cost"
+    ],
+    "conclusion_template_en": "There is a way for {P} to realize the goal {G} more effectively than {A}",
+    "description_en": "The answer that another action open to the agent would realize the goal more effectively, more surely, sooner or at lower cost (D075, D089); an action merely as good answers nothing (D006). A move made with it records which way the other action is better.",
+    "cues_en": [
+      "better way",
+      "more effective",
+      "more effectively",
+      "cheaper",
+      "sooner",
+      "instead",
+      "rather than",
+      "a better option"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source showing the other action would do better",
+    "role": "answer",
+    "distinct": [
+      ["A2", "A"]
+    ],
+    "comparison": true
+  },
+  "AS:finding_out_first": {
+    "carneades_id": "finding_out_first",
+    "name": "Argument for Finding Out First",
+    "semantic_type": "action",
+    "thesis_independent": false,
+    "base_weight": 0.5,
+    "variables": {
+      "A": {
+        "type": "action",
+        "description": "Action decided on",
+        "example_en": "switch to a four-day week"
+      },
+      "G": {
+        "type": "event",
+        "description": "Possible consequence to find out about",
+        "example_en": "higher productivity"
+      },
+      "I": {
+        "type": "entity",
+        "description": "Investigation that would settle it",
+        "example_en": "a six-month trial in one office"
+      }
+    },
+    "premise_templates_en": [
+      "{I} would settle, reliably enough for the decision, whether doing {A} brings about {G}",
+      "{I} can be done before the decision on {A} must be taken",
+      "The costs and risks of {I} are worth bearing to know whether doing {A} brings about {G} before that possibility counts in the decision"
+    ],
+    "conclusion_template_en": "It is worth finding out first whether doing {A} would bring about {G}, and until then that possibility should not count in deciding on {A}",
+    "description_en": "The answer that a possible consequence should be found out before it counts in the decision, since an investigation would settle it in time, reliably enough and at a cost worth bearing (D095 (3), on the owner's declaration under D053). It defeats both bridges about the same action and consequence. A bare claim that the consequence could be found out is not this scheme, and the game refuses it at the question.",
+    "cues_en": [
+      "find out first",
+      "wait and see",
+      "a trial",
+      "a pilot",
+      "test it first",
+      "study it first"
+    ],
+    "evidence": "recommended",
+    "evidence_note_en": "a source on the investigation, its timing and its cost",
+    "role": "answer"
+  }
+}

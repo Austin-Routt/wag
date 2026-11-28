@@ -280,15 +280,17 @@ critical_questions:
     it asks, at the conclusion, for a further bad consequence of A, argued as negative_consequences
     and weighed by the scheme weights (docs/kialo-batch2/guidelines.md §3.1, OC2).
     A claim that the consequence matters more than G is 22.1/CQ5''s exception, bad_outweighs(A,G).
-    No backup edge lets negative_consequences back this question (D009; the owner''s
-    question 1 in docs/c5-game.md), so such an argument is played as a direct rebuttal.'
+    Since step C5.3''s switch (2026-11-28) a backup edge lets negative_consequences
+    answer it (D099 (1)); asked no question, such an argument is a direct rebuttal,
+    as before.'
   paraphrase: Would doing A also bring about something bad?
   answer: 'The critic, who raises it with an argument. Against: a bad consequence
     of A, played as a rebuttal of the conclusion; the weights decide between it and
-    the argument. In the game the answer is backed by expert_opinion, position_to_know
-    or sign; an argument from negative consequences against A is played as a direct
-    rebuttal instead. A claim that the bad consequence matters more than G answers
-    22.1/CQ5. For: showing that A has no such consequence.'
+    the argument. In the game the answer is backed by negative_consequences (D099
+    (1)), expert_opinion or position_to_know; sign''s answer here is outside the first
+    profile until its warrant is reviewed (P5, D099 (3)), and a game with no profile
+    plays it. A claim that the bad consequence matters more than G answers 22.1/CQ5.
+    For: showing that A has no such consequence.'
   status: drafted by Claude Code, 2026-11-27
 - id: derived/other_goals_priority
   derived:
@@ -568,3 +570,9 @@ history:
   what: 'The contrast with practical_reasoning1 cites 13292.118 only: since round
     1''s draft 3, 13292.104 has no practical reasoning (the check of the D096 fixes
     and draft 3, W3)'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'Step C5.3 (docs/c5-game.md): a backup edge lets negative_consequences answer
+    game/CQ:side_effect (D099 (1)), a question of semantic type action since the switch;
+    sign''s answer to it here is outside the first profile (P5, D099 (3)); the question''s
+    note and answer say so.'

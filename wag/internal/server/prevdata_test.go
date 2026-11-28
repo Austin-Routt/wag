@@ -6,17 +6,25 @@ import (
 	"testing"
 )
 
-// The game's data before step C5.2 (wag/data/frozen/afd3335a23f12f41). The
-// records the tests keep (exports and games made before the switch) replay
-// on it, as a server started with --data on those files replays them
-// (docs/c5-game.md, C5.2): they were played with its schemes and questions.
-func prevData(t *testing.T) Data {
+// The frozen copies of the game's data (wag/data/frozen): before step C5.2
+// (afd3335a23f12f41) and before step C5.3 (092b6a6f48a672d2). The records the
+// tests keep (exports, games and traces made before a switch) replay on the
+// copy they were played with, as a server started with --data on those files
+// replays them (docs/c5-game.md): they were played with its schemes and
+// questions.
+const (
+	beforeC52 = "afd3335a23f12f41"
+	beforeC53 = "092b6a6f48a672d2"
+)
+
+// frozenData reads the frozen copy named by its fingerprint.
+func frozenData(t *testing.T, fp string) Data {
 	t.Helper()
-	const dir = "../../data/frozen/afd3335a23f12f41/"
+	dir := "../../data/frozen/" + fp + "/"
 	read := func(p string) []byte {
 		b, err := os.ReadFile(dir + p)
 		if err != nil {
-			t.Fatalf("the frozen pre-C5.2 data: %v", err)
+			t.Fatalf("the frozen data %s: %v", fp, err)
 		}
 		return b
 	}
@@ -24,14 +32,26 @@ func prevData(t *testing.T) Data {
 		Edges: read("nascq/edges.json"), Contexts: read("contexts.json")}
 }
 
-// newPrevServer is a test server on the frozen pre-C5.2 data.
-func newPrevServer(t *testing.T) (*Server, *httptest.Server) {
+// prevData is the game's data before step C5.2.
+func prevData(t *testing.T) Data {
 	t.Helper()
-	s, err := New(prevData(t), "")
+	return frozenData(t, beforeC52)
+}
+
+// newFrozenServer is a test server on the frozen copy named.
+func newFrozenServer(t *testing.T, fp string) (*Server, *httptest.Server) {
+	t.Helper()
+	s, err := New(frozenData(t, fp), "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	ts := httptest.NewServer(s.Handler())
 	t.Cleanup(ts.Close)
 	return s, ts
+}
+
+// newPrevServer is a test server on the frozen pre-C5.2 data.
+func newPrevServer(t *testing.T) (*Server, *httptest.Server) {
+	t.Helper()
+	return newFrozenServer(t, beforeC52)
 }

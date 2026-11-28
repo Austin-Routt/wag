@@ -1,8 +1,9 @@
 # Item F: the answer contract per route, written before the tests
 
 Step C5.2's step 7 (docs/c5-game.md, *Item F*): for each question and answer route of the data the
-game ships (fingerprint 092b6a6f48a672d2), the outcome a move must have, written here before any
-test of it ran (2026-11-27), each case with the decision it follows. The tests
+game ships (fingerprint 092b6a6f48a672d2; since step C5.3's switch on 2026-11-28, a0352a9944190d8b,
+on which every case holds as written but D1, as recorded below it), the outcome a move must have,
+written here before any test of it ran (2026-11-27), each case with the decision it follows. The tests
 (`wag/internal/game/itemf_test.go`) play these cases on the shipped data; each is paired with a
 planted defect it must catch (the last section). A case whose outcome turns out other than written
 here is not rewritten silently: the change, and whether the game or this page was wrong, is
@@ -145,6 +146,10 @@ needs the statement. The case is played on m+ and b+ (b+ concludes it), and is r
 | A7.4 | c1; Con answers CQ:side_effect of c1 with AS:consequences | refused, S5 (no backup edge) |
 | A7.5 | n1; Pro answers CQ:opposite_consequences of n1 with AS:negative_consequences | refused, S5 (the edge is CQ:side_effect's only) |
 
+Run at the switch (2026-11-28), on the data a0352a9944190d8b: every outcome as written. A7.1 also
+checks that c1 stays in force and `bad_outweighs(tax_meat,emissions_fall)` is not In (the check of
+the plan, Q2): a rebuttal does not establish the weighing.
+
 ### A8. Sign at practical reasoning's rebuttal route (D099 (3); step C5.3)
 
 | Case | Board, then the move | Expected |
@@ -275,7 +280,7 @@ refusal.
 
 | Case | Board, then the move | Expected |
 |---|---|---|
-| D1 | c1; Con answers CQ:side_effect of c1 with AS:negative_consequences, G `food_costlier` (owner's question 1) | refused, S5 |
+| D1 | c1; Con answers CQ:side_effect of c1 with AS:negative_consequences, G `food_costlier` (owner's question 1) | refused, S5, before step C5.3's switch; since it, A7.1's outcome (below) |
 | D2 | c1; Con argues the same against `should_be_performed(tax_meat)`, a move about the statement | accepted, a rebuttal |
 | D3 | D2 (a slight harm; Q1-E) | `bad_outweighs(tax_meat,emissions_fall)` is not In, and c1 is not out of force: the con argument does not establish the weighing |
 
@@ -283,7 +288,8 @@ Written 2026-11-28, before step C5.3's switch: D1's outcome changes at the switc
 answer D099 (1) (the backup edge), not by a defect: the answer is accepted, a rebuttal, which is A7.1.
 At the switch D1's test asserts A7.1's outcome, and the planted defect "S5 skips the backup-edge
 check" names A7.4 in D1's place. D2 and D3 hold as before: the move about the statement stays a
-direct rebuttal when no question is asked.
+direct rebuttal when no question is asked. Done at the switch (2026-11-28): D1's test asserts A7.1's
+outcome, and passes.
 
 ## E. The profile (D094 (b), D063, D095 (4))
 
@@ -340,7 +346,7 @@ Each defect is planted on a copy of the tree, and the tests named must fail:
 | S1 lets an answer scheme make a move of its own | A1.6 |
 | S2 reads a missing binding as empty | A1.7, A3.8, A4.2 |
 | S3 lets a scheme answer a question its target is not asked | A1.8 |
-| S5 skips the backup-edge check | A1.5, A1.9, A2.3, A2.5, A4.8, A5.4, A6.2, D1 |
+| S5 skips the backup-edge check | A1.5, A1.9, A2.3, A2.5, A5.4, A6.2, A7.4, A7.5 (before step C5.3: A4.8 and D1 too; see below) |
 | S5 lets Other answer the question that refuses it, or argue its exception | A4.3 |
 | S9 takes the answer's own G instead of the exception's | A1.4, A2.4, A3.6 |
 | S9 lets a modal argument support `should_be_performed(A)` | A4.10 |
@@ -422,4 +428,14 @@ Step C5.3's planted defects (2026-11-28, written before the tests):
 | P6 applied to every argument's undercutter | A9.3f |
 | D095 (3)'s list grown or shrunk | A9.7 |
 | the source-based schemes refused as a move about the exception (expert opinion) | A9.2b |
+| the question's text keeps "Which way?" | A9.4 |
+
+Planted at the switch (2026-11-28, on a copy of the tree with the switched data; the workspace's
+`verify/c5/c53/MUTANTS.md`), each caught: no backup edge from negative consequences to
+CQ:side_effect fails A7.1, A7.2, A7.3 (refused by S5 before S9 is reached) and D1; the edge given to
+CQ:opposite_consequences as well fails A6.2 and A7.5; S5 skipping the backup-edge check fails A1.5,
+A1.9, A2.3, A2.5, A5.4, A6.2, A7.4 and A7.5; the old text fails A9.4. A4.8, which caught the
+skipped check before step C5.3, is since then refused by the game's second layer too (an argument of
+sign or analogy cannot conclude the bridges' exception, D099 (4)), so that defect alone no longer
+fails it; the defects of the code step (the second layer's among them) are caught as recorded there.
 

@@ -1,4 +1,4 @@
-data 092b6a6f48a672d2 profile {"agent":"decider","actors":[{"id":"decider","text":"the one who decides whether to take the actions argued about"},{"id":"farmers","text":"farmers"}],"actions":[{"id":"tax_meat","actor":"decider","aliases":["meat_tax"]},{"id":"subsidy_plants","actor":"decider"},{"id":"farmers_strike","actor":"farmers"}],"situation":"the present one"}
+data a0352a9944190d8b profile {"agent":"decider","actors":[{"id":"decider","text":"the one who decides whether to take the actions argued about"},{"id":"farmers","text":"farmers"}],"actions":[{"id":"tax_meat","actor":"decider","aliases":["meat_tax"]},{"id":"subsidy_plants","actor":"decider"},{"id":"farmers_strike","actor":"farmers"}],"situation":"the present one"}
 A1.1 bad_outweighs_good at a consequence: moves=2 digest=9910dd2162af764c0ebb19567f58bf0c79a9db33603864cda97afe408c95cf16 state=005f6b9fa5294bc8bba694c0a761003646aa0114d6f0bd31479ec01a2dd7e4c5
 A1.2 one weighing for consequences and practical reasoning: moves=4 digest=79bf44e7c9f3674eb5c1de7bd0d0d54d6dbf4e139745d292e57a312fb0b04b4d state=ce4f0e37d5158ac7b2dc4c975185d285607cb1c51782ea02b8669b09f708383a
 A2.2 good_outweighs_bad for both negative arguments: moves=5 digest=4d4b05da9af51c8cbf453262ac1e66fe778a1e51641ac58bc51877748bb0c1b4 state=13d1b0b8a956a916860b36d2c61402b1602ac8db48f41a79eda5525c3a4d4ed8
@@ -10,6 +10,7 @@ A5.1 sign at CQ:side_effect: moves=2 digest=5eeb7e7aa75a17d76c64da3e049f90ad9ed9
 A5.2 sign at CQ:possibility: moves=2 digest=e4288a64efc8259d54682560a207ab7705ced0d170ef61fcf64bc73119550dbb state=5b474627417bd42c268b9068be40e71e4c42b383d7d0ac85c6113257b0050c61
 A5.3 sign at CQ:goal_possible: moves=2 digest=832b7a487e70a140e1dc62034c68d5818bf082df9f077fd4a6a6b9bc0a04712b state=6587eaf38ff248470806d7be19538138cbe8859dc9c2ce739ffe959eee17495f
 A6.1 consequences at CQ:opposite_consequences: moves=3 digest=a9aaeba1e11eb179c3332e0868623b128feb7d48e56393519067eb1f3f01841d state=e3b542f71cacef45ee6f2ba1c5d4f47d7afa6444584f02b1bb848ed52662586d
+A7.1 negative consequences at CQ:side_effect: moves=2 digest=5be5b5ddee15c474c7c7e45cd8accb244f487f79c63141cf9a3117de63178953 state=299f0cf1ed1ff74a3704536d2b0fd4faa934c10bf9b00488f0c0babfcb7e4147
 B1 Other at CQ:too_slight: moves=2 digest=0f20a8d1a6aefb6a246d99508a29097bd40ede03ca99e40c27d7fd1ba42ea874 state=f29ae707ddcf615c1a8b82634f332a923883d6229c4f9535d008ea0d79b70e3a
 B2 too_slight on both sides: moves=4 digest=a81ce63002d683c7108b82beb51fe9d66a6336c50c3f724592b5322760d83f74 state=e08403a4759932fbfcca0522f2ad5d1421c8bd76f3a5fe8f35ee3edc15fd3fa2
 B3 CQ:relevance asked of Other: moves=3 digest=9b8318e5d0202925c6388e4d41a31bbb425c5cd320ba86a41a3b3ea2db85bc73 state=d21cb15cf67fb728f8c70b2ec085aeebb61edc8e0fdbbb7150dbd4f8809f1645

@@ -17,6 +17,7 @@ walton:
     Press, Tuscaloosa and London, 1995, pp. 155-156.
 game:
   id: AS:negative_consequences
+  backs: ['CQ:side_effect']
   nascq:
     carneades_id: negative_consequences
     name: Argument from Negative Consequences
@@ -513,12 +514,16 @@ discrepancies:
     CQ:good_outweighs at the exception good_outweighs(A,G), 33/CQ3''s weighing route
     (D095 (1)), beside CQ:opposite_consequences at the conclusion, its rebuttal route,
     which AS:consequences backs; and CQ:too_slight and CQ:harm_discounted at the exceptions
-    of D065. The book''s modality is the modal variant''s (negative_consequences_modal).'
+    of D065. The book''s modality is the modal variant''s (negative_consequences_modal).
+    Since step C5.3''s switch (2026-11-28, D099 (1)) this scheme backs CQ:side_effect,
+    the side-effect question of positive consequences and practical reasoning: a further
+    bad consequence answers it, a rebuttal at their conclusion.'
   decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
     texts from the catalogue''s paraphrases, with the changes the entries list, except
     the backup edge that lets negative consequences answer the side-effect question,
     which D070 and D075 replace. CQ:field is kept. Every generated question gets a
     test that its formula target is one of its scheme''s. Applied at step C5.2 (2026-11-27).
+    D099 (1) added the backup edge D009 excluded, applied at step C5.3''s switch (2026-11-28).
     Before: open: when the NASCQ is generated from the catalogue (plan §6), take the
     game''s texts from these paraphrases and sit the evidence question on 33/CQ2 at
     the premise.'
@@ -651,3 +656,7 @@ history:
     CQ:too_slight''s four schemes share (one id is one question, the refinement of
     D094; neutral as to polarity, D053); the game-questions discrepancy and the notes
     say what changed.'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'Step C5.3''s switch (docs/c5-game.md): the game entry backs CQ:side_effect
+    (D099 (1)); the game-questions discrepancy and its decision say so.'

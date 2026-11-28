@@ -11,8 +11,8 @@
   "links.json": "bd7476bc9347caacacb48368b328c04c04612bb44cc804825418ef40817c04f7",
   "positions.json": "d631e3b9633787b26dbd874caa0c4c8c84886f02ac74a6b9e6b4e3474b6858ee",
   "nascq/schemes.json": "7e4dd0b560fbbf8cc416dbe0644e64cee8d48fd271577a3fb14405bc6979c4f8",
-  "nascq/critical_questions.json": "d2300b06194a61c850aa8198340b5b35903f5858316c69f12607a7d7b2f71435",
-  "nascq/edges.json": "724e46b0c83214cf2e4843701aadcb0f4a7d0ec91ef5cfa55979cffd4eacd63c"
+  "nascq/critical_questions.json": "29168977843f2efcb2ff8c243b72547feda814eb68e359a6073a44bb3386d160",
+  "nascq/edges.json": "96117e79baf130f53eb24b97d253a40665d28ca3038ed1bbe89ec020dd7f6b47"
  },
  "status": "Development material (D086): made by language models (the batch's adjudication, and the developer's drafts of the first gold, round by round: docs/d086-first-gold.md); no item is verified by a person yet.",
  "history": [

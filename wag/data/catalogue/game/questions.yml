@@ -20,7 +20,7 @@ questions:
 - id: CQ:side_effect
   record:
     name: Side Effects Question
-    semantic_type: causality
+    semantic_type: action
     answer_en:
       against: "yes"
       for: "no"

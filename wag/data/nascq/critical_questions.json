@@ -23,7 +23,7 @@
   },
   "CQ:side_effect": {
     "name": "Side Effects Question",
-    "semantic_type": "causality",
+    "semantic_type": "action",
     "question_template_en": "Would doing {A} also bring about something bad?",
     "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
@@ -343,7 +343,7 @@
   "CQ:worth_finding_out_first": {
     "name": "Finding Out First Question",
     "semantic_type": "action",
-    "question_template_en": "Should the possibility that doing {A} brings about {G} be left out of the decision on {A} until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? Which way?",
+    "question_template_en": "Should the possibility that doing {A} brings about {G} be left out of the decision on {A} until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? If so, how?",
     "answer_en": {"against": "yes", "for": "no"},
     "caes_mapping": {
       "positive_answer_type": "support",

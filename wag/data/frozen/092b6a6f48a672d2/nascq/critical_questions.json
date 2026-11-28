@@ -1,0 +1,377 @@
+{
+  "CQ:other_goals": {
+    "name": "Other Goals Question",
+    "semantic_type": "value",
+    "question_template_en": "Is there another goal of {P} that {G} itself would clash with?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:other_means": {
+    "name": "Other Means Question",
+    "semantic_type": "action",
+    "question_template_en": "Could {P} realize {G} more effectively by another action than {A}: more surely, sooner or at lower cost?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:side_effect": {
+    "name": "Side Effects Question",
+    "semantic_type": "causality",
+    "question_template_en": "Would doing {A} also bring about something bad?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "rebuttal",
+      "target": "conclusion"
+    }
+  },
+  "CQ:possibility": {
+    "name": "Possibility Question",
+    "semantic_type": "causality",
+    "question_template_en": "Can {P} actually do {A}?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:best_means": {
+    "name": "Best Means Question",
+    "semantic_type": "action",
+    "question_template_en": "Of {A} and the other actions open to {P}, which would achieve {G}, or reach {S2}, most surely, soonest or at least cost?",
+    "answer_en": {"against": "another action", "for": "the action argued for"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:evidence": {
+    "name": "Evidence Question",
+    "semantic_type": "truth",
+    "question_template_en": "What evidence shows that doing {A} would lead to {G}, and is it strong enough for the confidence with which the claim is made?",
+    "answer_en": {"against": "not enough", "for": "enough"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:likelihood": {
+    "name": "Likelihood Question",
+    "semantic_type": "truth",
+    "question_template_en": "How likely is it that doing {A} would actually lead to {G}?",
+    "answer_en": {"against": "unlikely", "for": "likely"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:other_event": {
+    "name": "Other Event Question",
+    "semantic_type": "causality",
+    "question_template_en": "Would some cause other than {B} account better for the observed {A}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:expertise": {
+    "name": "Expertise Question",
+    "semantic_type": "source",
+    "question_template_en": "Does {W} really have the knowledge of {D}, and the standing in it, that the argument credits {W} with?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:field": {
+    "name": "Field Question",
+    "semantic_type": "property",
+    "question_template_en": "Is {S} a matter that {D}, the domain in which {W} is cited, actually covers?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:opinion": {
+    "name": "Opinion Question",
+    "semantic_type": "truth",
+    "question_template_en": "Did {W} in fact put {S} forward as true, in words that amount to {S} or imply it?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:trustworthiness": {
+    "name": "Trustworthiness Question",
+    "semantic_type": "source",
+    "question_template_en": "Is there reason to doubt {W}'s personal reliability as a source, such as bias, dishonesty or carelessness?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:consistency": {
+    "name": "Consistency Question",
+    "semantic_type": "truth",
+    "question_template_en": "Does what other experts in {D} say conflict with {S}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:backup_evidence": {
+    "name": "Backup Evidence Question",
+    "semantic_type": "truth",
+    "question_template_en": "Has {W} any data, study or observation behind the claim that {S}, or is it an unsupported view?",
+    "answer_en": {"against": "an unsupported view", "for": "backed by evidence"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:position": {
+    "name": "Position to Know Question",
+    "semantic_type": "source",
+    "question_template_en": "Does {W} have the kind of access to {D} that would let {W} know whether {S} holds?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:difference": {
+    "name": "Difference Question",
+    "semantic_type": "property",
+    "question_template_en": "Do the two cases differ in a way that tells against the claim carried over to the target?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:truth": {
+    "name": "Truth Question",
+    "semantic_type": "truth",
+    "question_template_en": "Did the claim really hold in the source case?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:other_case": {
+    "name": "Other Case Question",
+    "semantic_type": "property",
+    "question_template_en": "Is there another case, much like the source, in which the counterpart of the claim did not hold?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:legitimate_value": {
+    "name": "Legitimate Value Question",
+    "semantic_type": "value",
+    "question_template_en": "Does {A} in fact regard {V} as a positive value?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:value_effect": {
+    "name": "Value Effect Question",
+    "semantic_type": "value",
+    "question_template_en": "Does {V}'s being positive bear on {A}'s goal {G} so as to favour it?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:conflicting_goals": {
+    "name": "Conflicting Goals Question",
+    "semantic_type": "value",
+    "question_template_en": "Is there another goal of {P} that {G} itself would clash with?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:intervening_actions": {
+    "name": "Intervening Actions Question",
+    "semantic_type": "causality",
+    "question_template_en": "Would further steps be needed after {A} before {G} is achieved?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:goal_possible": {
+    "name": "Goal Possibility Question",
+    "semantic_type": "causality",
+    "question_template_en": "Can {G} be reached at all, by any means?",
+    "answer_en": {"against": "no", "for": "yes"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:opposite_consequences": {
+    "name": "Opposite Consequences Question",
+    "semantic_type": "action",
+    "question_template_en": "Would doing {A} also bring about something good, to set against {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "rebuttal",
+      "target": "conclusion"
+    }
+  },
+  "CQ:bad_outweighs": {
+    "name": "Outweighing Harm Question",
+    "semantic_type": "value",
+    "question_template_en": "Would doing {A} have bad consequences that matter more than {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:good_outweighs": {
+    "name": "Outweighing Good Question",
+    "semantic_type": "value",
+    "question_template_en": "Would doing {A} have good consequences that matter more than {G}?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:too_slight": {
+    "name": "Slight Consequence Question",
+    "semantic_type": "value",
+    "question_template_en": "Granted that doing {A} would or could bring about {G}, is {G} too slight a consequence to count in deciding on {A}? (Reaching few does not make a consequence slight: one weighty gain or harm can decide.)",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:gain_discounted": {
+    "name": "Discounted Gain Question",
+    "semantic_type": "value",
+    "question_template_en": "Who would gain {G}, and does that make it count for less in deciding on {A}?",
+    "answer_en": {"against": "it counts for less", "for": "it counts in full"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:harm_discounted": {
+    "name": "Discounted Harm Question",
+    "semantic_type": "value",
+    "question_template_en": "On whom would {G} fall, and does that make it count for less in deciding on {A}?",
+    "answer_en": {"against": "it counts for less", "for": "it counts in full"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  },
+  "CQ:modal_likelihood": {
+    "name": "Real Chance Question",
+    "semantic_type": "possibility",
+    "question_template_en": "Is there a real chance that doing {A} leads to {G}, or is it no more than conceivable?",
+    "answer_en": {"against": "no more than conceivable", "for": "a real chance"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:modal_evidence": {
+    "name": "Possibility Evidence Question",
+    "semantic_type": "truth",
+    "question_template_en": "What evidence shows that doing {A} could lead to {G}, and is it enough for a real possibility?",
+    "answer_en": {"against": "not enough", "for": "enough"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:worth_finding_out_first": {
+    "name": "Finding Out First Question",
+    "semantic_type": "action",
+    "question_template_en": "Should the possibility that doing {A} brings about {G} be left out of the decision on {A} until it is found out: can it be found out in time, reliably enough to settle the question, at a cost and risk worth bearing? Which way?",
+    "answer_en": {"against": "yes", "for": "no"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    },
+    "refuse_other": true
+  },
+  "CQ:correlation": {
+    "name": "Correlation Question",
+    "semantic_type": "truth",
+    "question_template_en": "How closely does a finding like {A} go with {B}, as a dependable indicator of it or only a loose one?",
+    "answer_en": {"against": "loosely", "for": "closely"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undermining",
+      "target": "premise"
+    }
+  },
+  "CQ:honesty": {
+    "name": "Honesty Question",
+    "semantic_type": "source",
+    "question_template_en": "Is {W} a truthful and dependable source, or is there reason to doubt {W}'s word?",
+    "answer_en": {"against": "there is reason to doubt", "for": "truthful and dependable"},
+    "caes_mapping": {
+      "positive_answer_type": "support",
+      "negative_answer_type": "undercutter",
+      "target": "argument"
+    }
+  }
+}

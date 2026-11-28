@@ -177,11 +177,11 @@ critical_questions:
   paraphrase: Would doing A also bring about something bad?
   answer: 'The critic, who raises it with an argument. Against: a bad effect of A,
     played as a rebuttal of the conclusion; the weights decide between it and the
-    argument. In the game the answer is backed by expert_opinion, position_to_know
-    or sign: no backup edge lets negative_consequences back it, so an argument from
-    negative consequences against A is played as a direct rebuttal instead. A claim
-    that the bad effect outweighs G answers 33/CQ3 instead. For: showing that A has
-    no such effect.'
+    argument. In the game the answer is backed by negative_consequences (since step
+    C5.3''s switch, D099 (1)), expert_opinion, position_to_know or sign (D009); asked
+    no question, an argument from negative consequences against A is a direct rebuttal.
+    A claim that the bad effect outweighs G answers 33/CQ3 instead. For: showing that
+    A has no such effect.'
   status: drafted by Claude Code, 2026-10-23
 - id: walton/too_slight
   game:
@@ -561,19 +561,21 @@ discrepancies:
     bad_outweighs(A,G), 33/CQ3''s weighing route (D095 (1)), beside CQ:side_effect
     at the conclusion, its rebuttal route; and CQ:too_slight and CQ:gain_discounted
     at the exceptions of D065. The book''s modality is the modal variant''s (positive_consequences_modal).
-    No backup edge lets AS:negative_consequences back CQ:side_effect, the mirror of
-    AS:consequences backing CQ:opposite_consequences (D009; since D095 (1) made the
-    side-effect question the rebuttal route, the owner''s question 1 in docs/c5-game.md):
-    a further bad consequence argued by negative consequences is played as a direct
-    rebuttal of the conclusion.'
+    Since step C5.3''s switch (2026-11-28) a backup edge lets AS:negative_consequences
+    back CQ:side_effect, the mirror of AS:consequences backing CQ:opposite_consequences
+    (D099 (1): D009''s reason against it lapsed when D095 (1) made the side-effect
+    question the rebuttal route): a further bad consequence argued by negative consequences
+    answers it, a rebuttal at the conclusion, and, asked no question, is a direct
+    rebuttal as before.'
   decision: 'Decided 2026-11-22 (D009): Yes: the generated NASCQ takes its question
     texts from the catalogue''s paraphrases, with the changes the entries list, except
     the backup edge that lets negative consequences answer the side-effect question,
     which D070 and D075 replace. CQ:field is kept. Every generated question gets a
     test that its formula target is one of its scheme''s. Applied at step C5.2 (2026-11-27),
-    but for the backup edge, which D009 excludes. Before: open: when the NASCQ is
-    generated from the catalogue (plan §6), take the game''s texts from these paraphrases,
-    sit the evidence question on 33/CQ2 at the premise, add the backup edge AS:negative_consequences
+    but for the backup edge, which D009 excluded; D099 (1) added it, applied at step
+    C5.3''s switch (2026-11-28). Before: open: when the NASCQ is generated from the
+    catalogue (plan §6), take the game''s texts from these paraphrases, sit the evidence
+    question on 33/CQ2 at the premise, add the backup edge AS:negative_consequences
     → CQ:side_effect, and add the book''s 33/CQ3 at the exception bad_outweighs(A,G),
     beside CQ:side_effect at the conclusion (D055).'
   status: drafted by Claude Code, 2026-10-23
@@ -687,3 +689,8 @@ history:
     CQ:too_slight''s four schemes share (one id is one question, the refinement of
     D094; neutral as to polarity, D053); the game-questions discrepancy and the notes
     say what changed.'
+- date: "2026-11-28"
+  by: Claude Code
+  what: 'Step C5.3''s switch (docs/c5-game.md): a backup edge lets negative_consequences
+    answer game/CQ:side_effect (D099 (1)), a question of semantic type action since
+    then; the game-questions discrepancy and the question''s answer say so.'
