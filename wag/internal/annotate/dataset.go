@@ -203,22 +203,33 @@ func load(fsys fs.FS, dir, source string) (*Dataset, error) {
 	seen := map[string]bool{}
 	for i, raw := range in.Items {
 		var it struct {
-			ID   string `json:"kialo_claim_id"`
-			Text string `json:"text"`
+			ID   json.RawMessage `json:"kialo_claim_id"`
+			Text json.RawMessage `json:"text"`
 		}
 		// The same rule as an annotation file's (parseAnnotations): an ID of
 		// spaces is no ID, so a run never refuses claims it was given.
-		if err := json.Unmarshal(raw, &it); err != nil || strings.TrimSpace(it.ID) == "" {
+		var id, text string
+		if err := json.Unmarshal(raw, &it); err != nil || !isText(it.ID, &id) || strings.TrimSpace(id) == "" {
 			return nil, fmt.Errorf("%s: item %d has no kialo_claim_id", m.Items, i+1)
 		}
 		if err := canonicalNames(raw, []string{"kialo_claim_id", "text"}); err != nil {
 			return nil, fmt.Errorf("%s: item %d: %v", m.Items, i+1, err)
 		}
-		if seen[it.ID] {
-			return nil, fmt.Errorf("%s: two items are %s", m.Items, it.ID)
+		if seen[id] {
+			return nil, fmt.Errorf("%s: two items are %s", m.Items, id)
 		}
-		seen[it.ID] = true
-		d.Items = append(d.Items, Item{ID: it.ID, Text: it.Text, Raw: raw})
+		seen[id] = true
+		// A claim has a text, and a context the checks can read (F5 of the
+		// external review of exchange 3, cases SC7-SC10): before, an absent
+		// text was read as empty, a malformed context field was skipped, and
+		// R7 skipped a claim whose parents it could not read.
+		if !isText(it.Text, &text) {
+			return nil, fmt.Errorf("%s: item %d (%s) has no text", m.Items, i+1, id)
+		}
+		if err := checkContext(raw); err != nil {
+			return nil, fmt.Errorf("%s: %s: %v", m.Items, id, err)
+		}
+		d.Items = append(d.Items, Item{ID: id, Text: text, Raw: raw})
 	}
 	d.NItems = len(d.Items)
 	// The guidelines: the dataset's, else the built-in ones.
@@ -463,4 +474,61 @@ func Datasets(dir string) ([]*Dataset, []error) {
 		return strings.HasPrefix(out[j].ID, "folder:") && !strings.HasPrefix(out[i].ID, "folder:")
 	})
 	return out, errs
+}
+
+// isText reads v as a JSON string (not null, a number or any other value)
+// into s.
+func isText(v json.RawMessage, s *string) bool {
+	t := bytes.TrimSpace(v)
+	return len(t) > 0 && t[0] == '"' && json.Unmarshal(t, s) == nil
+}
+
+// readParents reads a claim's Kialo parents from its entry in items.json, by
+// their names as written (as validate.py and R19 read the context), each
+// "claim_id relation" in its order: none when kialo_parents is absent or null
+// (a dataset not made from Kialo has none), an error when it is not a list
+// or an entry is not an object with a text claim_id and relation (cases SC7
+// and SC9; before, R7 read any spelling of the names and skipped a claim
+// whose parents it could not read).
+func readParents(raw json.RawMessage) ([]string, error) {
+	var m map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &m); err != nil {
+		return nil, err
+	}
+	var entries []json.RawMessage
+	if v, ok := m["kialo_parents"]; ok && json.Unmarshal(v, &entries) != nil {
+		return nil, fmt.Errorf("kialo_parents is not a list")
+	}
+	out := make([]string, 0, len(entries))
+	for k, e := range entries {
+		var p map[string]json.RawMessage
+		var id, rel string
+		if json.Unmarshal(e, &p) != nil || !isText(p["claim_id"], &id) || !isText(p["relation"], &rel) {
+			return nil, fmt.Errorf("kialo_parents entry %d is not a Kialo parent (an object with a text claim_id and relation)", k+1)
+		}
+		out = append(out, id+" "+rel)
+	}
+	return out, nil
+}
+
+// checkContext refuses a claim's Kialo context the checks could not read
+// (F5 of the external review of exchange 3, case SC7): its parents as
+// readParents reads them, and its ancestors, siblings and children lists
+// where given and not null. An entry of those three that is not a claim is
+// R19's to skip (CT16), not refused.
+func checkContext(raw json.RawMessage) error {
+	if _, err := readParents(raw); err != nil {
+		return err
+	}
+	var m map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &m); err != nil {
+		return err
+	}
+	for _, f := range []string{"ancestors", "siblings", "children"} {
+		var entries []json.RawMessage
+		if v, ok := m[f]; ok && json.Unmarshal(v, &entries) != nil {
+			return fmt.Errorf("%s is not a list", f)
+		}
+	}
+	return nil
 }

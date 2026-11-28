@@ -55,7 +55,11 @@ WALTON_PATH = REPO + 'docs/scheme-registry/walton-clean/walton.yml'
 if not F2 and os.path.exists(DOC + 'format1/walton.yml'):
     WALTON_PATH = DOC + 'format1/walton.yml'
 lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
-items = json.load(open(ITEMS, encoding='utf-8'))['items']
+# items.json is checked whole before any rule reads it (source_errors, below).
+try:
+    ITEMS_DOC = json.load(open(ITEMS, encoding='utf-8'))
+except ValueError as e:
+    print(f'ERRORS (1):\nitems.json: is not JSON ({e})'); sys.exit(1)
 WALTON = yaml.safe_load(open(WALTON_PATH, encoding='utf-8'))
 W = {s['id']: s for s in WALTON['argument_schemes']}
 # walton.yml's predicates of no argument (sign's more_reliable/0): a formula,
@@ -158,6 +162,44 @@ def valid_date(d):
         return isinstance(d, str) and re.match(r'^\d{4}-\d{2}-\d{2}$', d) and bool(datetime.date.fromisoformat(d))
     except ValueError:
         return False
+
+def source_errors(doc):
+    """items.json, read whole before any rule reads it (docs/annotation-records.md §1; F5 of the
+    external review of exchange 3, cases SC1-SC6): its items a list of objects, each with a
+    kialo_claim_id (a text, not blank as Go trims it, used once) and a text; its context lists
+    where given and not null; kialo_parents a list (the thesis has []) of objects with a text
+    claim_id and relation, which R7 reads, and which finds the thesis by its empty list. An entry
+    of ancestors, siblings or children that is not a claim is R19's to skip (CT16), not refused."""
+    its = doc.get('items') if isinstance(doc, dict) else None
+    if not isinstance(its, list) or not all(isinstance(i, dict) for i in its):
+        return ['items.json: its items are not a list of objects']
+    out, seen = [], set()
+    for n, it in enumerate(its, 1):
+        cid = it.get('kialo_claim_id')
+        if not isinstance(cid, str) or cid.strip(GO_SPACE) == '':
+            out.append(f'items.json: item {n} has no kialo_claim_id'); continue
+        if cid in seen:
+            out.append(f'items.json: two items are {cid}'); continue
+        seen.add(cid)
+        if not isinstance(it.get('text'), str):
+            out.append(f'{cid}: in items.json, its text is not a text')
+        parents = it.get('kialo_parents')
+        if not isinstance(parents, list):
+            out.append(f'{cid}: in items.json, kialo_parents is not a list of its Kialo parents (the thesis has [])')
+        else:
+            for k, x in enumerate(parents, 1):
+                if not (isinstance(x, dict) and isinstance(x.get('claim_id'), str) and isinstance(x.get('relation'), str)):
+                    out.append(f'{cid}: in items.json, kialo_parents entry {k} is not a Kialo parent '
+                               '(an object with a text claim_id and relation)')
+        for field in ('ancestors', 'siblings', 'children'):
+            if it.get(field) is not None and not isinstance(it[field], list):
+                out.append(f'{cid}: in items.json, {field} is not a list')
+    return out
+
+SOURCE_ERRORS = source_errors(ITEMS_DOC)
+if SOURCE_ERRORS:
+    print(f'ERRORS ({len(SOURCE_ERRORS)}):'); print('\n'.join(SOURCE_ERRORS)); sys.exit(1)
+items = ITEMS_DOC['items']
 
 # 1. 50 items, in items.json order
 if not isinstance(gold.get('items'), list) or not all(isinstance(i, dict) for i in gold['items']):

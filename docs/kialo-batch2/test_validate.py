@@ -29,7 +29,7 @@ with open(os.path.join(DOC, 'case.json'), encoding='utf-8') as fh:
     CASE = json.load(fh)
 with open(os.path.join(DOC, 'items.json'), encoding='utf-8') as fh:
     ITEMS = json.load(fh)
-ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs): ')
+ERROR = re.compile(r'(\d+\.\d+|case\.json|inputs|items\.json): ')
 # The walton.yml the format-1 gold was made with (WAG 96c3c5a), and the copy
 # of it that validate.py reads for a format-1 file (format1/walton.yml; D092:
 # checked as it was made; proposal D008-D074).
@@ -1765,6 +1765,136 @@ class CiteNotText(unittest.TestCase):
                 self.assertEqual(code, 1, out)
                 self.assertNotIn('Traceback', out)
                 self.assertTrue(any(': R19 ' in e for e in errors), errors)
+
+class SourceShape(unittest.TestCase):
+    """Cases SC1-SC6 (docs/d086-first-gold.md §6; F5 of the external review of
+    exchange 3, ChatGPT's patch 03 with the check's changes): items.json is
+    read whole before any rule; a malformed one is refused with one line
+    naming the claim and the field, exit 1, no traceback. Each case is tried
+    at the thesis and at a later claim (the check's planted defect 03-d,
+    checking the first item only, survived the patch's own test), with the
+    falsy values too (03-b, reading "", 0, false or {} as empty, survived)."""
+
+    CLAIMS = ('13292.1', '13292.115')  # the thesis, and a later claim (the sixth)
+    NON_LISTS = ('not a list', 1, True, {'claim_id': '13292.11'}, '', 0, False, {})
+
+    def refused(self, items, line):
+        code, errors, out = run(copy.deepcopy(GOLD), items=items, english=False)
+        self.assertEqual(code, 1, out)
+        self.assertNotIn('Traceback', out)
+        self.assertEqual(errors, [line], out)
+
+    def accepted(self, items, gold=None):
+        code, errors, out = run(gold or copy.deepcopy(GOLD), items=items, english=False)
+        self.assertEqual((code, errors), (0, []), out)
+        self.assertNotIn('Traceback', out)
+
+    def source(self, cid, field, value, drop=False):
+        items = copy.deepcopy(ITEMS)
+        it = next(i for i in items['items'] if i['kialo_claim_id'] == cid)
+        if drop:
+            del it[field]
+        else:
+            it[field] = value
+        return items
+
+    def test_sc0_both_claims_are_items_with_every_field(self):
+        # The cases' claims: 13292.1 is the thesis (no Kialo parent), 13292.115 the sixth item.
+        ids = [i['kialo_claim_id'] for i in ITEMS['items']]
+        self.assertEqual((ids[0], ids[5]), self.CLAIMS)
+        for it in ITEMS['items'][:6:5]:
+            self.assertTrue(all(k in it for k in ('kialo_parents', 'ancestors', 'siblings', 'children')))
+        self.assertEqual(ITEMS['items'][0]['kialo_parents'], [])
+
+    def test_sc1_a_context_field_that_is_not_a_list(self):
+        for cid in self.CLAIMS:
+            for field in ('ancestors', 'siblings', 'children'):
+                for value in self.NON_LISTS:
+                    with self.subTest(claim=cid, field=field, value=value):
+                        self.refused(self.source(cid, field, value), f'{cid}: in items.json, {field} is not a list')
+
+    def test_sc2_a_context_field_null_or_absent(self):
+        for cid in self.CLAIMS:
+            for field in ('ancestors', 'siblings', 'children'):
+                for drop in (False, True):
+                    with self.subTest(claim=cid, field=field, absent=drop):
+                        self.accepted(self.source(cid, field, None, drop=drop))
+
+    def test_sc3_kialo_parents_absent_null_or_not_a_list(self):
+        for cid in self.CLAIMS:
+            for value in (None, 'absent') + self.NON_LISTS:
+                with self.subTest(claim=cid, value=value):
+                    items = self.source(cid, 'kialo_parents', value, drop=value == 'absent')
+                    self.refused(items, f'{cid}: in items.json, kialo_parents is not a list of its Kialo parents (the thesis has [])')
+
+    def test_sc4_a_kialo_parent_that_is_not_one(self):
+        good = {'claim_id': '13292.1', 'relation': 'pro', 'location_id': '13292.999'}
+        bad = ['13292.1', None]
+        for key in ('claim_id', 'relation'):
+            for v in ('absent', None, 3):
+                e = dict(good)
+                if v == 'absent':
+                    del e[key]
+                else:
+                    e[key] = v
+                bad.append(e)
+        for entry in bad:
+            with self.subTest(entry=entry):
+                # 13292.115's own parent first, the bad entry second: the entry is named by its place.
+                items = copy.deepcopy(ITEMS)
+                it = next(i for i in items['items'] if i['kialo_claim_id'] == '13292.115')
+                self.assertEqual(len(it['kialo_parents']), 1)
+                it['kialo_parents'].append(entry)
+                self.refused(items, '13292.115: in items.json, kialo_parents entry 2 is not a Kialo parent '
+                                    '(an object with a text claim_id and relation)')
+
+    def test_sc5_the_items_and_their_ids_and_texts(self):
+        whole = [({'discussion': ITEMS['discussion']}, 'items.json: its items are not a list of objects'),
+                 ({'discussion': ITEMS['discussion'], 'items': {}}, 'items.json: its items are not a list of objects'),
+                 ([], 'items.json: its items are not a list of objects'),
+                 (dict(ITEMS, items=ITEMS['items'] + ['13292.999']), 'items.json: its items are not a list of objects')]
+        for items, line in whole:
+            with self.subTest(items=str(items)[:60]):
+                self.refused(items, line)
+        for value in ('absent', 7, '\t ', None):
+            with self.subTest(id=value):
+                items = self.source('13292.115', 'kialo_claim_id', value, drop=value == 'absent')
+                self.refused(items, 'items.json: item 6 has no kialo_claim_id')
+        items = copy.deepcopy(ITEMS)
+        items['items'][5]['kialo_claim_id'] = '13292.1'
+        self.refused(items, 'items.json: two items are 13292.1')
+        for value in ('absent', 7, None):
+            with self.subTest(text=value):
+                items = self.source('13292.115', 'text', value, drop=value == 'absent')
+                self.refused(items, '13292.115: in items.json, its text is not a text')
+
+    def test_sc5b_an_items_json_that_is_not_json(self):
+        # Added with the code (not in the cases written before it): a file that is not JSON is said.
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'items.json')
+            with open(path, 'w', encoding='utf-8') as fh:
+                fh.write('{"items": [')
+            r = subprocess.run([sys.executable, '-I', '-B', os.path.join(DOC, 'validate.py'), '--items', path],
+                               capture_output=True, text=True)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertNotIn('Traceback', r.stdout + r.stderr)
+        self.assertTrue(r.stdout.startswith('ERRORS (1):\nitems.json: is not JSON ('), r.stdout)
+
+    def test_sc6_an_entry_that_is_not_a_claim_is_skipped(self):
+        # CT16's dataset, as validate.py reads it: 13292.25#1's inferred premise cites 13292.888888,
+        # a claim only a sibling lists, beside an entry that is not a claim.
+        g = copy.deepcopy(GOLD)
+        pm = next(p for p in inst(g, '13292.25#1')['premises'] if p.get('status') == 'inferred')
+        self.assertEqual(pm['cite'], '13292.7')
+        pm['cite'] = '13292.888888'
+        code, errors, out = run(copy.deepcopy(g), english=False)
+        self.assertEqual(code, 1, out)
+        self.assertTrue(errors and all(e.startswith('13292.25: R19 ') for e in errors), out)
+        items = copy.deepcopy(ITEMS)
+        it = next(i for i in items['items'] if i['kialo_claim_id'] == '13292.115')
+        it['siblings'] = ['junk', {'claim_id': '13292.888888'}] + it['siblings']
+        self.accepted(items, gold=g)
+
 
 class Repin(unittest.TestCase):
     """--repin pins the inputs only when nothing else is wrong."""

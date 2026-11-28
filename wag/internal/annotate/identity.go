@@ -70,8 +70,9 @@ func checkCitations(a Annotation, d *Dataset) []string {
 			}
 			// Each entry of a context list that is an object with a text
 			// claim_id names a known claim. An entry that is not is skipped
-			// and the rest of its list kept, as validate.py skips it (CT16);
-			// a field that is not a list is skipped whole.
+			// and the rest of its list kept, as validate.py skips it (CT16).
+			// An absent or null field names none; one that is not a list is
+			// refused when the dataset is read (checkContext, case SC7).
 			for _, f := range []string{"kialo_parents", "ancestors", "siblings", "children"} {
 				var entries []json.RawMessage
 				if json.Unmarshal(raw[f], &entries) != nil {
@@ -112,26 +113,15 @@ func checkCitations(a Annotation, d *Dataset) []string {
 }
 
 // kialoParents are a claim's Kialo parents in items.json, each "claim_id
-// relation", in its order; false if the dataset has no such item.
+// relation", in its order (readParents); false if the dataset has no such
+// item, or parents it cannot read, which a dataset read by load does not
+// have (checkContext).
 func (d *Dataset) kialoParents(claim string) ([]string, bool) {
 	for _, it := range d.Items {
-		if it.ID != claim {
-			continue
+		if it.ID == claim {
+			out, err := readParents(it.Raw)
+			return out, err == nil
 		}
-		var x struct {
-			Parents []struct {
-				ClaimID  string `json:"claim_id"`
-				Relation string `json:"relation"`
-			} `json:"kialo_parents"`
-		}
-		if json.Unmarshal(it.Raw, &x) != nil {
-			return nil, false
-		}
-		out := make([]string, len(x.Parents))
-		for i, p := range x.Parents {
-			out[i] = p.ClaimID + " " + p.Relation
-		}
-		return out, true
 	}
 	return nil, false
 }
