@@ -298,6 +298,7 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 |---|---|
 | `cq` | The question answered (`role.cq`), or none |
 | `target_instance` | Which inference of which claim the claim targets: the target claim with `primary`, or with `secondary:` and that instance's scheme and conclusion, read in the annotator's own file (ids are the annotator's own), so that two targets of different claims disagree even when each is its claim's primary inference (since 2026-11-26; before, the slot alone was compared, and 13292.29's two readings agreed). It measures the targeting decision, not how the target claim itself is coded, which its own fields measure: a different coding of a claim's primary instance does not spread to the claims that target it. A secondary target is named by that instance's scheme and conclusion, so a different coding of it does show in the claims that target it. A format-1 target is its claim's primary instance |
+| `target_instance_v2` | `target_instance` with a secondary target named by its structure: its scheme, its conclusion, its premises (each role and formula, sorted, without spaces) and who made it (`by`), so that two reconstructions of one claim with one scheme and conclusion and different premises disagree (since 2026-11-28, F6 of the external review of exchange 3, cases TS1-TS7 in `docs/d086-first-gold.md` §6; `target_instance` keeps its meaning). A primary target is its claim's `primary`, as in `target_instance`. A secondary target with a premise whose formula is unresolved is unresolved |
 | `target_formula` | The exact formula targeted; a format-1 conclusion target is its instance's conclusion. It does depend on how the target claim is coded: the formula attacked is that coding's |
 | `bindings` | The primary instance's bindings, every variable and its atom |
 | `instances` | Every instance's scheme and conclusion: how the claim was divided into inferences. An instance by the discussion (§13) is left out: it is not how the claim itself was divided (since 2026-11-27) |
@@ -306,8 +307,8 @@ A value that is unresolved, or that cannot be read in the annotator's file (a ta
 annotate), is left out of that field's agreement and counted apart (`unresolved`): missing data is
 neither agreement nor disagreement. Only what a field itself leaves open makes it unresolved: an
 unresolved instance leaves `target_instance` out. An unresolved formula or part leaves the relation
-unsettled (D102, since 2026-11-27): the claim's `role`, `cq`, `target_part`, `target_instance` and
-`target_formula` are all left out and counted, while its scheme, fit, polarity and target claim are
+unsettled (D102, since 2026-11-27): the claim's `role`, `cq`, `target_part`, `target_instance`
+(and `target_instance_v2`) and `target_formula` are all left out and counted, while its scheme, fit, polarity and target claim are
 compared as before (`agreement.py`'s `RELATION_FIELDS`, the Go `FieldIn`). In choosing the claims to
 review, an unresolved value differs from any other, so such a claim is reviewed against an annotator
 who settled the relation. With a
