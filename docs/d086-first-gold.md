@@ -128,6 +128,15 @@ readings; the owner's choice is written as the next draft and recorded as agreed
 and is then verified like any other item. An item agreed on and changed later is not agreed any more
 until it is reviewed again.
 
+The third review closes the round for each of its items (made precise on 2026-11-28, before that
+review came back). An item the reviewer agrees on is agreed. An item the reviewer objects to is
+agreed by the reviewer and the developer when the developer adopts the reviewer's correction as
+given: the fields the reviewer states, as stated, and nothing else but what the guidelines' rules
+write from them (a formula, a binding), each such detail named in the exchange's record, where the
+owner sees it when verifying. A correction the developer rejects, or adopts in part, or one whose
+recoding needs a choice the reviewer did not make, leaves the item disputed: it goes to the owner
+with both readings. So after the third review no item of the round waits for another review.
+
 ## 5. The owner's verification
 
 The owner verifies in the dashboard (`wag-server`, *Annotate*), as D086 and the plan say.
