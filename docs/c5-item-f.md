@@ -271,6 +271,18 @@ profile's: it holds in a game with no profile.
 | A9.12 | in a game with no profile (with one, P3 would speak first for an action no player declared): `worth_finding_out_first(farmers_strike,demand_falls)` on the board, another actor's action; Con argues for it with AS:sign | refused, S5 (consequence 1) |
 | A9.13 | a recorded game that argued the exception with sign before any bridge, made by a build that accepted it, loaded (server) | refused with a named error: WAG accepted it until this change (2026-11-28), and a build of an earlier commit replays it |
 
+Added 2026-11-28, before their tests, from the independent check of F1, F2 and F4 (the workspace's
+verify/x3-fixes/review-f1f2/REVIEW-f1f2.md, W2, W3 and N5): a move only S5's second layer refuses
+before any bridge, its recorded game, a recorded game played on other data, and the offers against
+the exception's negation. Section K holds the check's E1 and W1.
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A9.8d | `worth_finding_out_first(tax_meat,demand_falls)` on the board, no bridge; Con argues for it with Other as a direct move, its conclusion that formula (Other reuses the statement on the board) | refused, S5 ("an argument of Other cannot conclude"), with the form-only note |
+| A9.11b | an inquiry whose claim is `¬worth_finding_out_first(tax_meat,demand_falls)`, no bridge: the moves the game offers against the claim | only AS:expert_opinion and AS:position_to_know: arguing against the negation argues for the exception |
+| A9.13b | a recorded game with A9.8d's move, made by a build that accepted it (6916369), loaded | refused with A9.13's named error |
+| A9.13c | a recorded game played on other scheme data, one of whose moves this build refuses by the form, loaded on this build's data | refused with A9.13's named error, which also gives the other data's remedy: this build replays it with `--data` on the data the game was played with |
+
 ## B. Other and the thesis-independent schemes
 
 | Case | Board, then the move | Expected |
@@ -417,6 +429,76 @@ claim compared as text fails U1 and U2; a negation not taken off fails U1 and U2
 claim fails U2; every functor that starts with `undercut`, of any arity, refused fails U3 (by U1's and
 U2's tests, which hold U3's forms); wag-cli not checking fails U4; and the loader naming no change
 fails U5.
+
+Added 2026-11-28, before their tests, from the independent check of F1, F2 and F4 (W4, N2, N8): the
+engine keys a statement by its formula read with the negation identity (section K), which also takes a
+double negation off inside an argument, so `undercut(¬¬a11)` and `undercut((a11))` are the statement
+`undercut(a11)` for the engine. They are refused because every `undercut/1` is, whatever its argument;
+a check that refused only `undercut(a<digits>)` would let them through.
+
+| Case | Setup | Expected |
+|---|---|---|
+| U1b | the server's new game with the claim `undercut(¬¬a11)`, `undercut((a11))` or `¬undercut(¬¬a11)` | refused, as U1 |
+| U2b | the same claims given to NewGame directly | no claim is made, as U2 |
+
+A claim is checked when the game is made. The claim a game without one takes from its first argument
+(the conclusion of Pro's first argument) is not: that argument exists, so its undercutter names an
+argument already made, and the engine's names stay apart. wag-llm starts its games through the server's
+request, so a trace with a reserved claim gets U1's refusal (HTTP 400), not U5's named change.
+
+## K. A statement named as the engine keys it (the independent check of F1, F2 and F4)
+
+Added 2026-11-28, before their tests, from the independent check of F1, F2 and F4 (the workspace's
+verify/x3-fixes/review-f1f2/REVIEW-f1f2.md, E1, E2 and W1). The engine keys every statement by its
+formula read with the negation identity (`terms.Normalize`: `¬ p`, `¬(p)` and `¬p` are one key, `¬¬p`
+is `p`, `p(¬¬x)` is `p(x)`) and re-keys the board's statements so at every evaluation. WAG made a
+statement written with `¬` under its text as given, and read other formulas without the negation
+identity (`AddStatement` aside, which used the key), so a statement could be named one way by WAG
+and keyed another way by the engine:
+
+- a new game whose claim is `¬ p`, `¬(p)` or `¬¬p` stopped the server: building the new game's state
+  looked the claim up by its name, found nothing, and failed while the request held the server's lock,
+  so no other request was answered (E2);
+- with the claim `¬¬worth_finding_out_first(tax_meat,demand_falls)`, S5 read the claim's name, not its
+  key: sign against its negation and Other for it were taken, before or after a bridge, and the bridge
+  made later fell (E1, from before F1).
+
+WAG now makes every statement under the engine's key, so the claim is named as it is keyed (a claim
+written with two negations is the statement they cancel to); S5 reads a statement as the engine keys
+it; and a request that fails while it holds the server's lock releases it. F1's form check also reads a
+statement with a variable, each variable a constant of its own (W1: in a game with no profile, the
+bridge about the claim `should_be_performed(X)` has the exception `worth_finding_out_first(X,demand_falls)`,
+which S5 bounded before F1, by the bridge, and not since).
+
+| Case | Setup | Expected |
+|---|---|---|
+| K1 | the server's new inquiry with the claim `¬ p`, `¬(p)`, `¬¬p`, `¬ ¬ p` or `¬¬worth_finding_out_first(tax_meat,demand_falls)`; then the list of games | made (HTTP 200), its claim the engine's key (`¬p`, `¬p`, `p`, `p`, `worth_finding_out_first(tax_meat,demand_falls)`), on the board; the list answers |
+| K2 | NewGame with K1's claims | the game's claim is the engine's key and a position of its issue (the game's invariants hold) |
+| K3 | the adapter makes a statement from `¬ p`, `¬(p)`, `(q)`, `r( a )` and `s(¬¬x)`, then from `¬p`, `q`, `r(a)` and `s(x)` | one statement for each pair, named by its key (`¬p`, `q`, `r(a)`, `s(x)`): the second spelling finds the first statement; a text that is no formula (`¬the tax is good`, `the tax is good`) is named as before |
+| K4 | a session whose claim is not on the board (made by hand), its state built | no failure; the claim is not among the roots |
+| K5 | an inquiry whose claim is `¬¬worth_finding_out_first(tax_meat,demand_falls)`, and one whose claim is `¬(¬worth_finding_out_first(tax_meat,demand_falls))`, no bridge: Con argues against `¬worth_finding_out_first(tax_meat,demand_falls)` with AS:sign (a move about the statement); Con argues for the claim with Other as a direct move | refused, S5, each, with the form-only note |
+| K5b | K5's first game, m+ and b+, then K5's two moves | refused, S5, each; b+ in force |
+| K6 | the form check, the pattern `worth({A},{G})`, the statements `¬¬worth(a,g)`, `(worth(a,g))`, `worth/*c*/(a,g)`, `+worth(a,g)`, `--worth(a,g)`, `worth(¬¬a,g)`; and `¬worth(a,g)`, `-worth(a,g)`, `!worth(a,g)` | match each of the first six (the engine's key is `worth(a,g)`); none of the last three |
+| K7 | a game with no profile, the claim `should_be_performed(X)`: b+ about the claim (its exception `worth_finding_out_first(X,demand_falls)`) and m+ for its premise, then Con argues for that exception with AS:sign | refused, S5; b+ in force |
+| K7b | the same game, no bridge: `worth_finding_out_first(X,demand_falls)` on the board, Con argues for it with AS:sign | refused, S5, with the form-only note |
+| K8 | the form check with variables: `worth(A,g)` and `worth({A},{G})`; `worth(A,g)` and `worth(a,{G})`; `same(X,X)` and `same({X},{X})`; `same(X,Y)` and `same({X},{X})`; `same(_,_)` and `same({X},{X})` | match; no; match; no; no (a variable is read as a constant of its own, which no constant of the pattern equals; `_` is a new one at each place) |
+
+Planted for K1 to K8 and the additions to A9 and U:
+
+| Defect | Caught by |
+|---|---|
+| a statement written with `¬` made under its text as given (the code before) | K1, K2, K3, K5 |
+| a formula read without the negation identity (`terms.ReadString`) | K3 (`s(¬¬x)`) |
+| the claim looked up by its name in building the state, with no check | K4 |
+| the form check reading the statement without the negation identity | K6 |
+| the form check's shortcut taken for a statement that starts with `¬`, `(` or `+` | K6 |
+| a statement with a variable not matched (F1's code) | K7, K7b, K8 |
+| a variable matched to the pattern's constant, or two variables taken as one | K8 |
+| S5's second layer bounding a conclusion only at the bridges on the board (the check's R1) | A9.8d |
+| the second layer's refusal without the form-only note (the check's R2) | A9.13b |
+| the named error without the other data's remedy | A9.13c |
+| the offers bounded only for arguing for a statement, not against its negation (the check's R4) | A9.11b |
+| the undercutter's check reduced to `undercut(a<digits>)` (the check's S3) | U1b, U2b |
 
 ## Not here
 

@@ -315,6 +315,15 @@ who settled the relation. With a
 case record, an alias is read as its action first where an action stands (§3), in agreement and in
 the choice of claims to review alike.
 
+A value is compared as the Go measure reads it (added 2026-11-28, before its tests, from N6 of the
+independent check of F1, F2 and F4): the scheme's `walton_id` as written, with nothing taken off
+(agreement.py took Python's whitespace off it, so `" analogy"` and `analogy` agreed in Python and not
+in Go; validate.py refuses such an id, so no gold has one); and a formula's name and arguments trimmed
+of Go's whitespace only, U+001C to U+001F kept (`split_formula`, as Go's `splitFormula`; Python's own
+trim would take them off). Cases: AG1, one file's `walton_id` `" analogy"` (and `"analogy\u001c"`)
+and the other's `analogy` disagree in `scheme`, in agreement.py as in Go; AG2, `split_formula` on
+`p( a\u001c , b\u00a0)` gives `p` and `a\u001c`, `b`, as Go's `splitFormula` does.
+
 These fields are also the ones a run compares to decide which claims the reviewer reviews (*Review
 the disagreements*): a claim whose annotations differ in their exact target or bindings is reviewed,
 which it was not before this contract. On batch 2's two model annotations that is 48 claims of 50,
