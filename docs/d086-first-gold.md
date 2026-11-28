@@ -341,7 +341,7 @@ and 04):
 | T3 | A claim whose scheme the game lacks, played with Other | `coverage_gap`, as before |
 | T4 | A named question's answer that the game refuses, then played with Other at the statement | `failed`: the question's route was lost |
 | T5 | A claim coded Other that plays a free new argument (`other-new`) | `coverage_gap`, as before |
-| T6 | A claim coded Other whose executed conclusion is not its own annotated one | `failed` |
+| T6 | A claim coded Other whose executed conclusion is not its own annotated one | `failed`; corrected with F3 of the external review of exchange 3 (below) to `conclusion_changed` |
 | T7 | A claim coded Other with no conclusion formula | `failed` |
 | T8 | T7, the executed argument showing no conclusion either (T8 written after step 1's planted defects, which one rule survived, before its test) | `failed`: two missing conclusions are not the same conclusion |
 | T9 | A claim coded Other whose annotated conclusion is spelled with spaces, or with `not(...)` for `¬`, played with Other to the same formula (T9 written after the independent review of step 1, before its test) | `as_intended`: the formulas are compared, not their spelling |
@@ -476,6 +476,34 @@ refuses it (SC3): Go reads any dataset, and finds the thesis by the discussion's
 `thesis_claim_id`; `validate.py` checks the Kialo batch, whose every claim has the list. A dataset
 that a build of 12a15b7 or earlier read, skipping a malformed field, is refused by name; such a
 dataset is not WAG's (its Kialo import writes every list, and the built-in dataset passes).
+
+The external review of exchange 3, F3 (a move the game took in the intended scheme and role that
+concludes another proposition: 13292.224 and .233, played with expert opinion, conclude the statement
+they answer, since the engine binds expert opinion's answer variable to it, `carneades/answers.go`,
+and the replay labelled them `as_intended`). ChatGPT's patch 01 labelled them `failed`, which the
+README keeps for a move the game refused; with the changes of the workspace's check of it
+(`verify/chatgpt-x3-2026-11-28/CHECK-annotation.md` §1), a label of its own. Written before their
+tests and the code:
+
+| Case | Setup | Expected |
+|---|---|---|
+| T10 | A claim with a named scheme the game has, played for or against a statement, whose argument concludes another formula than its annotated conclusion | `conclusion_changed`, the row giving both formulas (`conclusion_change`) |
+| T11 | The same, its argument concluding the annotated conclusion | `as_intended` |
+| T12 | The same, its annotated conclusion null | `failed`, as T7: nothing to compare |
+| T13 | An answer through its question, with a named scheme and with Other, whose argument concludes another formula | `conclusion_changed`, each |
+| T14 | T13, its argument concluding the annotated conclusion | `as_intended`, each |
+| T15 | An answer at an exception, against the argument and for it, its annotated conclusion the exception and its negation (R8) | `as_intended`, each: the engine concludes the exception for an attack and its negation for a defence |
+| T16 | A new argument (no target statement), concluding its annotated conclusion, and another | `as_intended`; `conclusion_changed` |
+| T17 | A coverage gap played with Other at its target, its argument concluding another formula than the claim's own, and the same formula; a challenge | Labelled `coverage_gap`, with `conclusion_preserved` false, and true; a challenge has no `conclusion_preserved` (it makes no argument) |
+| T18 | The batch's replay | 13292.224 and .233 `conclusion_changed`; every other row's label as before; the summary counts the label |
+| T19 | An undercutter of an inference (OC18), its argument concluding `undercut(<its target>)` | `as_intended`, not compared: no `conclusion_preserved` |
+
+T6 is corrected: a claim coded Other whose argument concludes another formula than its own is
+`conclusion_changed` (it was `failed`): a changed conclusion has one label, for Other as for a named
+scheme. T7 and T8, with no conclusion to compare, stay `failed`. U8's fixture is corrected: its
+capturing server answered a premise question with `undercut(a1)`, and its answer concluded an
+unrelated formula, where the engine concludes the premise or its negation (`answers.go`); U8's
+expected outcome does not change.
 
 ## 7. Out of this plan
 
