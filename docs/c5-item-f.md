@@ -507,6 +507,31 @@ Planted for K1 to K8 and the additions to A9 and U:
 | the offers bounded only for arguing for a statement, not against its negation (the check's R4) | A9.11b |
 | the undercutter's check reduced to `undercut(a<digits>)` (the check's S3) | U1b, U2b |
 
+Added 2026-11-28, before their tests and the code, from the independent check of K (the workspace's
+verify/x3-fixes/review-k/REVIEW-k.md: K accepted; one new warning, WK1, and seven notes, each checked
+against the code). WK1: the bound by the exception's form is the data's, so the remedy the loader gives a
+game played on other data, "this build replays it with `--data` on the data of that version", holds
+only for data without the question that refuses Other; the loader said it for every such game, after
+the named error's own "This build cannot replay the game". A9.13c is corrected so, and A9.13d and
+A9.13e try the two kinds of data with games a build of 6916369 recorded (the check's, kept as
+testdata). NK1: the variable matcher's list case was untested.
+
+| Case | Setup | Expected |
+|---|---|---|
+| A9.13c | (corrected) a recorded game played on other scheme data, one of whose moves this build refuses by the form, loaded on this build's data | refused with A9.13's named error, its remedy for other data as it holds: if that data has no question that refuses Other, this build replays it with `--data` on it; if it has one, a build of commit 6916369 or earlier does. The message no longer also says that this build cannot replay the game |
+| A9.13d | a game a build of 6916369 recorded on the data `092b6a6f48a672d2`, which has the question, arguing the exception's form with sign before any bridge, loaded by this build on that data (as with `--data`) | refused with A9.13's named error and the same-data remedy: a build of 6916369 or earlier |
+| A9.13e | the same move, recorded by that build on the data `afd3335a23f12f41`, which has no question that refuses Other, loaded by this build on that data | loaded: its data bounds nothing by the form |
+| K8b | the form check with a list: `same([X],[X])` and `same({A},{A})`; `same([X],[Y])` and `same({A},{A})` | match; no (a variable inside a list is a constant of its own too) |
+
+Planted for them: the other data's remedy said whatever the data (A9.13c); the same-data remedy given for
+other data (A9.13c, A9.13d); the game's questions read from this build's own data, not the data it is
+played with (A9.13e; a defect that ignores whether a question refuses Other changes nothing on that old
+data, which asks no question at the exception); a list's variables left as variables (K8b). NK2 (the shortcut's `%` guard, which nothing needs), NK3 (the
+defensive `defer` and nil check) and NK4 (no test of a negated statement's display text, which is
+unchanged) change nothing; NK5 (an operator's opposite written `¬p && q`) and NK6 (`walton_id` absent:
+"none" in Python, "" in Go, which `validate.py` refuses) are from before; NK7: game-rules.md says what
+`wag-llm --replay` does with a recorded move the form bound now refuses.
+
 ## Not here
 
 - Replay-1, the 33 reference games on the frozen data (TestReferenceDigests), and Replay-2, the new
