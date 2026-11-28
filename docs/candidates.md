@@ -463,7 +463,7 @@ An argument that a consequence H of an action matters more than the consequence 
 
 | Where | Ref | Fit | What it shows | Found | Verified |
 |---|---|---|---|---|---|
-| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against 13292.108's exception, since 2026-11-24, OC7). | review of D055-D059 v1 | session check, 2026-10-22 |
+| kialo 13292 | 13292.127 | clean | Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against the environmental argument's exception since 2026-11-24, OC7; the discussion's, 13292.1#2, since D096). | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 13292 | 13292.43 | clean | Revenue is not why the tax is wanted; sustainability and animal welfare press harder than the lost revenue. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.12239 | clean | Good relationships also last longer without access to abortion, and that benefit may outweigh bad relationships enduring. | review of D055-D059 v1 | session check, 2026-10-22 |
 | kialo 5637 | 5637.14031 | strain | Bans meant to stop selective abortion cause more harm to disabled pregnant people; a comparison plus a new consequence. | review of D055-D059 v1 | session check, 2026-10-22 |

@@ -302,7 +302,9 @@ class Rules(unittest.TestCase):
     def test_the_gold_passes(self):
         out = self.passes(GOLD)
         self.assertIn('format 2', out)
-        self.assertNotIn('UNRESOLVED', out)
+        # The gold's one unresolved value: 13292.8's relation to 13292.115's premise (D102).
+        self.assertIn('UNRESOLVED (1)', out)
+        self.assertIn('13292.8: its target formula', out)
 
     def test_the_format1_copy_is_the_walton_it_was_made_with(self):
         self.assertEqual(WALTON_FORMAT1_COPY, WALTON_OF_FORMAT1,
@@ -878,7 +880,7 @@ class Rules(unittest.TestCase):
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': 'the step or the consequence argument'}
         out = self.passes(g)
-        self.assertIn('UNRESOLVED (1)', out)
+        self.assertIn('UNRESOLVED (2)', out)  # the planted one and 13292.8's (D102)
         self.assertIn('13292.12: its target instance (the step or the consequence argument)', out)
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': ''}
@@ -898,7 +900,7 @@ class Rules(unittest.TestCase):
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': '\x1c\x1d\x1e\x1f'}
         out = self.passes(g)
-        self.assertIn('UNRESOLVED (1)', out)
+        self.assertIn('UNRESOLVED (2)', out)  # the planted one and 13292.8's (D102)
         g = copy.deepcopy(GOLD)
         item(g, '13292.12')['target']['actual']['instance'] = {'unresolved': '\u3000\t\x85'}
         self.fails(g, '13292.12', ['R16'], 'target.actual.instance is not an instance id, or {"unresolved": why}')
@@ -1460,6 +1462,104 @@ class Discussion(unittest.TestCase):
         citer['cite'] = '13292.108'
         code, errors, out = run(g)
         self.assertFalse([e for e in errors if ' R20 ' in e], out)
+
+
+class DiscussionReview(unittest.TestCase):
+    """R20 after the independent review of D096's application: the halves of its conclusion rule, RC9's
+    allowed citation, a target through other_kialo_parents, and cases RC18, RC19 and RC21
+    (d086-first-gold.md §6)."""
+
+    def environmental(self, g):
+        return next(i for i in item(g, '13292.1')['instances'] if i.get('by') == 'the discussion')
+
+    def at_13292_7(self, g):
+        """The environmental argument, by the discussion, at 13292.7 (whose statement is the
+        negation of the thesis's), targeted by 13292.5."""
+        x = copy.deepcopy(self.environmental(g))
+        x['id'] = '13292.7#9'
+        item(g, '13292.7')['instances'].append(x)
+        t = item(g, '13292.5')['target']['actual']
+        t['claim'], t['instance'] = '13292.7', '13292.7#9'
+        return x
+
+    def test_rc7_its_claims_statement_negated(self):
+        # At the thesis (statement S), a reconstruction concluding ¬S: 13292.7#1 by the discussion.
+        g = copy.deepcopy(GOLD)
+        x = copy.deepcopy(primary(item(g, '13292.7')))
+        x.update(id='13292.1#9', primary=False, by='the discussion')
+        x['scheme']['fit'] = 'reconstructed'
+        for pm in x['premises']:
+            if pm['status'] == 'explicit':
+                pm['status'], pm['cite'] = 'inferred', '13292.7'
+        item(g, '13292.1')['instances'].append(x)
+        t = item(g, '13292.33')['target']['actual']
+        t['claim'], t['instance'] = '13292.1', '13292.1#9'
+        code, errors, out = run(g)
+        self.assertEqual((code, errors), (0, []), out)
+
+    def test_rc7_what_a_negated_statement_negates(self):
+        g = copy.deepcopy(GOLD)
+        self.at_13292_7(g)
+        code, errors, out = run(g)
+        self.assertEqual((code, errors), (0, []), out)
+
+    def test_rc9_citing_the_claim_for_a_formula_of_its_own_instance(self):
+        g = copy.deepcopy(GOLD)
+        other = item(g, '13292.204')['instances'][0]
+        other['premises'].append({'role': 'premise', 'formula': 'should_be_performed(tax_meat)', 'en': 'x',
+                                  'status': 'inferred', 'cite': '13292.1'})
+        code, errors, out = run(g)
+        self.assertEqual((code, errors), (0, []), out)
+        other['premises'][-1]['formula'] = 'current_circumstances(meat_production_and_consumption_harm_environment)'
+        code, errors, out = run(g)
+        self.assertEqual(code, 1, out)
+        self.assertEqual(len(errors), 1, errors)
+        self.assertIn("13292.204: R20 13292.204#1's premise current_circumstances(", errors[0])
+
+    def test_a_target_through_other_kialo_parents(self):
+        g = copy.deepcopy(GOLD)
+        x = copy.deepcopy(self.environmental(g))
+        x['id'] = '13292.121#9'
+        item(g, '13292.121')['instances'].append(x)
+        code, errors, out = run(g)
+        self.assertEqual(errors, ['13292.121: R20 13292.121#9 is by the discussion, but no item targets it: a '
+                                  'reconstruction is recorded for the claims that answer it'], out)
+        entry = item(g, '13292.180')['target']['other_kialo_parents'][0]
+        entry.update(instance='13292.121#9', part='conclusion', formula='should_be_performed(tax_meat)', role='rebuttal',
+                     cq=None, polarity='against')
+        code, errors, out = run(g)
+        self.assertEqual((code, errors), (0, []), out)
+
+    def test_rc18_a_reconstruction_cites_anothers_claim(self):
+        g = copy.deepcopy(GOLD)
+        x = self.at_13292_7(g)
+        for pm in x['premises']:
+            if pm.get('cite') == '13292.108':
+                pm['cite'] = '13292.1'
+        code, errors, out = run(g)
+        self.assertEqual(code, 1, out)
+        self.assertEqual(errors, ["13292.7: R20 13292.7#9's premise current_circumstances(meat_production_and_consumption_"
+                                  "harm_environment) cites 13292.1, but only the discussion's instance of 13292.1 has it: a "
+                                  "reconstruction is not a claim; cite the claim that states it, or mark it supplied"], out)
+
+    def test_rc19_only_its_own_claim_targets_it(self):
+        g = copy.deepcopy(GOLD)
+        x = copy.deepcopy(self.environmental(g))
+        x['id'] = '13292.7#9'
+        item(g, '13292.7')['instances'].append(x)
+        item(g, '13292.7')['target']['actual'] = dict(item(g, '13292.7')['target']['actual'], claim='13292.7',
+                                                      instance='13292.7#9')
+        code, errors, out = run(g)
+        self.assertEqual(code, 1, out)
+        self.assertIn('13292.7: R20 13292.7#9 is by the discussion, but no item targets it: a reconstruction is '
+                      'recorded for the claims that answer it', errors)
+
+    def test_rc21_a_character_go_does_not_take_for_space(self):
+        g = copy.deepcopy(GOLD)
+        self.environmental(g)['conclusion']['formula'] += '\x1c'
+        code, errors, out = run(g)
+        self.assertEqual(code, 1, out)
+        self.assertIn('13292.1: practical_reasoning2 conclusion differs', errors)
 
 
 class English(unittest.TestCase):

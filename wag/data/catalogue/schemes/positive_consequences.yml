@@ -376,12 +376,13 @@ examples:
     matters more, such as 13292.127 (starvation from less access to meat is worse
     than any harm of high meat consumption): the gold coded it against this argument''s
     bad_outweighs(A,G) until 2026-11-24; since practical reasoning has the outweighing
-    exception too (D070, D091), OC7''s one-instance rule puts it against 13292.108,
-    the earliest argument of the class on the board (docs/kialo-batch2/guidelines.md
-    §3.1, OC4, OC7). Since 2026-11-25 also pressed: walton/too_slight (most people
-    already eat less meat than the guidelines'' limit, so the gain would be a small
-    change in a few diets) and walton/gain_discounted_by_bearer (the gain would go
-    to the heaviest eaters, who chose their diet and could change it without a tax).'
+    exception too (D070, D091), OC7''s one-instance rule puts it against the environmental
+    argument (the discussion''s, 13292.1#2, since D096), the earliest argument of
+    the class on the board (docs/kialo-batch2/guidelines.md §3.1, OC4, OC7). Since
+    2026-11-25 also pressed: walton/too_slight (most people already eat less meat
+    than the guidelines'' limit, so the gain would be a small change in a few diets)
+    and walton/gain_discounted_by_bearer (the gain would go to the heaviest eaters,
+    who chose their diet and could change it without a tax).'
   status: drafted by Claude Code, 2026-11-25
 - text: A congestion charge would get traffic in the city centre moving again, so
     the council should bring one in.
@@ -425,9 +426,10 @@ examples:
   coding: 'A = rationing meat through personal carbon budgets; G = lower carbon emissions.
     Stated: brings_about(A,G). Supplied: good(G). Conclusion: should_be_performed(A).
     A is a rival to the thesis action. Since 2026-11-24 the gold treats the claim
-    as a proposal of another course for the same goal (action_amendment, at 13292.108''s
-    conclusion), not as an answer to its other-means question: it does not claim that
-    rationing does better (D006, D066).'
+    as a proposal of another course for the same goal (action_amendment, at the conclusion
+    of the environmental argument, the discussion''s 13292.1#2 since D096), not as
+    an answer to its other-means question: it does not claim that rationing does better
+    (D006, D066).'
   status: drafted by Claude Code, 2026-11-24
 - text: Governments should put a tax on meat and use some of those tax revenues to
     encourage research into developing synthetic meats.

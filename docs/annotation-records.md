@@ -154,7 +154,7 @@ Fields this contract does not name are allowed and not read.
 | `context` | no (the case's default) | A context of the case |
 | `scheme` | yes | `walton_id`, `compendium` (null if none), `wag_id` (null if none), `fit`, `confidence`, `alternatives`; `description` optional |
 | `bindings` | yes | Every variable of the scheme, each to an atom; in a fragment, a variable of formulas it does not state is `{"unstated": "<why>"}` |
-| `premises` | yes | As in format 1: `role`, `formula`, `en`, `status`; `note`, `cite` optional |
+| `premises` | yes | As in format 1: `role`, `formula`, `en`, `status`; `note` optional; `cite` when `status` is `inferred` (R19), and not needed otherwise |
 | `conclusion` | yes | `formula` (null only for `other` and `none`, and for a fragment whose conclusion names a variable it leaves unstated: no formula can be written without it), `en` |
 | `comparison` | in `better_means` | `more surely`, `sooner` or `at lower cost` (R9) |
 | `by` | no | `"the discussion"` on an instance that is not the claim's own but the argument the discussion needs for the claim (§13, D096); absent, the instance is the claim's |
@@ -249,7 +249,7 @@ annotator has not annotated cannot be looked up, and is not reported.
 | R16 | Every field of §4–§8, each of its type; nulls only where §8 allows them, markers only where it allows them; no `re_parented`; `kialo_parent` and `kialo_relation` as `items.json` has them; a gold names its case and pins every input it is checked against | in part: bindings (every variable, a fragment's unstated ones marked, and only formulas it binds), the target and polarity nulls, an empty target, `re_parented`, one primary instance, a fragment's conclusion |
 | R17 | A `verified` item's revision and its claim's text are the ones verified, `by` is the owner, and it has no unresolved value | no |
 | R18 | An instance whose fit is `explicit` has every premise-role formula (`role: premise`) explicit; an assumption or exception may be supplied (guidelines §5 item 6; since D086 round 1's draft 2, 2026-11-27) | yes |
-| R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it: a claim `items.json` lists, of the batch or of a claim's context (its parents, ancestors, siblings and children) (guidelines §2 item 3; since the same draft; the context's claims since the independent review of that draft) | no: the guidelines ask an annotator to cite the claim, but the output format (guidelines §4) has no `cite` field, so a model's record has none to check |
+| R19 | An inferred premise cites (`cite`) another claim of the discussion, the one that says it: a claim `items.json` lists, of the batch or of a claim's context (its parents, ancestors, siblings and children) (guidelines §2 item 3; since the same draft; the context's claims since the independent review of that draft) | yes, since 2026-11-28 (the output format, guidelines §4, has `cite`; ChatGPT's patch 02 of exchange 2): the citation's type, that it names another claim, and that the dataset lists it; with no dataset, the first two |
 | R20 | An instance by the discussion (§13, D096) is not primary; its fit is `reconstructed`; no premise of it is `explicit`, and at least one is `inferred` (cited, R19); it concludes the statement of the claim it is recorded at (that claim's primary conclusion) or its negation; an item of the batch targets it. A premise of another instance that cites the claim it is recorded at may not take a formula that only the discussion's instance has: the reconstruction is not a claim, and cannot be cited (since D086 round 1's draft 3, 2026-11-27) | in part: not primary, fit, no explicit premise, the conclusion |
 | R21 | In a gold, the English (`en`) of a formula that is one positive predicate over atoms of the lexicon, with a template in `walton.yml`, is that template filled with the atoms' lexicon texts, each in single quotes (guidelines §4: the English uses the `language` templates). A negation, a nested formula and a bare proposition are not checked, nor a file that is not a gold (since 2026-11-28: a template changed after a proposal's application, with the gold's English left as it was, passed every check once re-pinned) | no: the Go check reads no English |
 
@@ -376,10 +376,12 @@ item 4's limit (one supplied link of three in a claim's own practical reasoning)
 states; the discussion's argument is recorded because no claim states it, and its parts are cited
 where claims state them.
 
-**The claims around it.** A claim that states one of its premises is a fragment of it (guidelines
-§5 item 6: a fragment of its parent's argument), backing that premise (`premise_backing`), as
-13292.11 backs 13292.118's circumstances. A claim that answers another part targets it as any
-instance (§6). The challenge records that list the questions it is open to are in the record of the
+**The claims around it.** A claim filed for the claim it is recorded at that states one of its
+premises is a fragment of it (guidelines §5 item 6: a fragment of its parent's argument), backing that
+premise (`premise_backing`), as 13292.11 backs 13292.118's circumstances; so is a fragment of such a
+fragment (13292.6, filed for 13292.108, backs 13292.1#2's goal link). A premise that a claim filed
+elsewhere states is cited to it (13292.14, filed against 13292.13, for 13292.1#2's efficacy premise),
+and that claim keeps its own place. A claim that answers another part targets it as any instance (§6). The challenge records that list the questions it is open to are in the record of the
 claim it is recorded at (R10). A premise elsewhere may cite the claim that states a part, never the
 argument: a reconstruction is not a claim (R20).
 

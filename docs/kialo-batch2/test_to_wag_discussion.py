@@ -1,5 +1,6 @@
-"""The replay plays an instance by the discussion (D096): cases RC11-RC15 (d086-first-gold.md §6;
-annotation-records.md §13). A capturing transport stands in for the server."""
+"""The replay plays an instance by the discussion (D096): cases RC11-RC17 and RC20 (d086-first-gold.md §6;
+annotation-records.md §13). A capturing transport stands in for the server: it accepts every move but one
+it is told to refuse, and a question already raised about the same premise of the same argument."""
 import contextlib
 import copy
 import importlib.util
@@ -30,12 +31,13 @@ def instance(iid, scheme, formula, primary=True, premises=(), by=None, bindings=
 
 
 class DiscussionReplay(unittest.TestCase):
-    def run_replay(self, ann, refuse_scheme=None):
+    def run_replay(self, ann, refuse_scheme=None, refuse=None):
         items = {'discussion': {'thesis_claim_id': 'thesis'}, 'items': [
             {'kialo_claim_id': x['kialo_claim_id'], 'text': 'Synthetic routing fixture', 'kialo_parents': []}
             for x in ann['items']]}
         state = {'id': 'test', 'active': 'Pro', 'arguments': {}, 'statements': {CLAIM: {'label': 'out'}}}
         moves = []
+        asked = set()
 
         def transport(base, path, body=None):
             if path == '/api/meta':
@@ -50,9 +52,14 @@ class DiscussionReplay(unittest.TestCase):
                     state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
                     return {'result': {'accepted': True}}
                 if act['type'] == 'question':
+                    key = (act.get('target_arg_id'), act.get('target_premise_id'))
+                    if key in asked:
+                        return {'result': {'accepted': False, 'error': f"Q2: {act.get('answers_cq_id')} has already been "
+                                                                       f"raised about {key[0]}"}}
+                    asked.add(key)
                     state['active'] = 'Con' if state['active'] == 'Pro' else 'Pro'
                     return {'result': {'accepted': True}}
-                if refuse_scheme and act.get('scheme_id') == refuse_scheme:
+                if refuse_scheme and act.get('scheme_id') == refuse_scheme or refuse and refuse(body):
                     return {'result': {'accepted': False, 'error': 'S-test: scripted refusal'}}
                 aid = 'a' + str(len(state['arguments']) + 1)
                 stmt = act.get('target_stmt_id') or 'new_statement'
@@ -95,6 +102,7 @@ class DiscussionReplay(unittest.TestCase):
                          ('support', CLAIM, 'AS:positive_consequences'))
         self.assertEqual([d['instance'] for d in report['discussion']], ['thesis#2'])
         self.assertTrue(report['discussion'][0]['played'])
+        self.assertEqual(report['discussion'][0]['side'], 'pro')
         entry = next(x for x in report['moves'] if x['claim'] == 'reply')
         self.assertNotEqual(entry['integration'], 'cascade')
         self.assertEqual(entry['executed']['target_stmt'], PREMISE)
@@ -165,6 +173,105 @@ class DiscussionReplay(unittest.TestCase):
         q = [m['action'] for m in moves if m['action']['type'] == 'question']
         self.assertEqual(len(q), 1, moves)
         self.assertEqual((q[0]['target_arg_id'], q[0]['target_premise_id']), (frag['arg'], other))
+
+    def test_rc14_a_second_denial_is_a_duplicate(self):
+        ann = self.with_fragment(PREMISE)
+        deny = next(x for x in ann['items'] if x['kialo_claim_id'] == 'deny')
+        again = copy.deepcopy(deny)
+        again['kialo_claim_id'], again['instances'][0]['id'] = 'deny2', 'deny2#1'
+        ann['items'].append(again)
+        report, moves = self.run_replay(ann)
+        disc_arg = report['discussion'][0]['arg']
+        second = next(x for x in report['moves'] if x['claim'] == 'deny2')
+        self.assertEqual((second['integration'], second['executed']['target_arg']), ('duplicate', disc_arg))
+
+    def thesis_and(self, disc_formula, claims=()):
+        thesis = {'kialo_claim_id': 'thesis', 'instances': [
+            instance('thesis#1', 'none', CLAIM),
+            instance('thesis#2', 'positive_consequences', disc_formula, primary=False, premises=[PREMISE],
+                     by='the discussion', bindings={'A': 'tax_meat', 'G': 'less_emissions'})]}
+        return {'items': [thesis] + list(claims)}
+
+    def test_against_its_claims_statement(self):
+        report, moves = self.run_replay(self.thesis_and('¬' + CLAIM))
+        d = report['discussion'][0]
+        self.assertEqual((d['played'], d['side'], d['target_stmt']), (True, 'con', CLAIM))
+        act = moves[0]['action']
+        self.assertEqual((act['type'], act['target_stmt_id']), ('attack', CLAIM))
+
+    def test_rc16_what_a_negated_statement_negates(self):
+        con = {'kialo_claim_id': 'con', 'literal': ['The tax should not be adopted.'],
+               'instances': [instance('con#1', 'other', '¬' + CLAIM),
+                             instance('con#2', 'positive_consequences', CLAIM, primary=False, premises=[PREMISE],
+                                      by='the discussion', bindings={'A': 'tax_meat', 'G': 'less_emissions'})],
+               'role': {'kind': 'independent_con', 'polarity': 'against', 'cq': None},
+               'target': {'actual': {'claim': 'thesis', 'instance': 'thesis#1', 'part': 'conclusion', 'formula': CLAIM}}}
+        thesis = {'kialo_claim_id': 'thesis', 'instances': [instance('thesis#1', 'none', CLAIM)]}
+        report, moves = self.run_replay({'items': [thesis, con]})
+        d = report['discussion'][0]
+        self.assertEqual((d['instance'], d['played'], d['side'], d['target_stmt']), ('con#2', True, 'pro', CLAIM))
+        act = next(m['action'] for m in moves if 'con#2' in m.get('why', ''))
+        self.assertEqual((act['type'], act['target_stmt_id'], act['scheme_id']),
+                         ('support', CLAIM, 'AS:positive_consequences'))
+
+    def test_rc17_neither_its_claims_statement_nor_its_negation(self):
+        report, moves = self.run_replay(self.thesis_and(PREMISE))
+        d = report['discussion'][0]
+        self.assertFalse(d['played'])
+        self.assertIn('neither', d['error'])
+        self.assertEqual(moves, [])
+
+    def test_rc20_a_fragment_the_game_refuses(self):
+        report, moves = self.run_replay(self.with_fragment(PREMISE),
+                                        refuse=lambda body: body.get('why', '').startswith('Kialo frag:'))
+        disc_arg = report['discussion'][0]['arg']
+        frag = next(x for x in report['moves'] if x['claim'] == 'frag')
+        self.assertTrue(str(frag['played']).startswith('no:'), frag)
+        deny = next(x for x in report['moves'] if x['claim'] == 'deny')
+        self.assertEqual((deny['played'], deny['executed']['target_arg']), ('challenge', disc_arg))
+
+    def test_a_claim_not_played_leaves_its_reconstruction_off_the_board(self):
+        parent_stmt = 'brings_about(tax_meat,cheaper_veg)'
+        parent = {'kialo_claim_id': 'parent', 'literal': ['The tax makes vegetables cheaper.'],
+                  'instances': [instance('parent#1', 'other', parent_stmt),
+                                instance('parent#2', 'positive_consequences', parent_stmt, primary=False, premises=[PREMISE],
+                                         by='the discussion', bindings={'A': 'tax_meat', 'G': 'cheaper_veg'})],
+                  'role': {'kind': 'independent_pro', 'polarity': 'for', 'cq': None},
+                  'target': {'actual': {'claim': 'thesis', 'instance': 'thesis#1', 'part': 'conclusion', 'formula': CLAIM}}}
+        thesis = {'kialo_claim_id': 'thesis', 'instances': [instance('thesis#1', 'none', CLAIM)]}
+        report, moves = self.run_replay({'items': [thesis, parent]},
+                                        refuse=lambda body: body.get('why', '').startswith('Kialo parent:'))
+        d = report['discussion'][0]
+        self.assertEqual((d['instance'], d['played']), ('parent#2', False))
+        self.assertEqual(d['error'], 'its claim parent is not on the board')
+
+    def test_a_claim_with_no_statement(self):
+        ann = self.with_fragment(PREMISE)
+        frag = next(x for x in ann['items'] if x['kialo_claim_id'] == 'frag')
+        frag['instances'].append(instance('frag#2', 'positive_consequences', CLAIM, primary=False, premises=[PREMISE],
+                                          by='the discussion', bindings={'A': 'tax_meat', 'G': 'less_emissions'}))
+        report, moves = self.run_replay(ann)
+        d = next(x for x in report['discussion'] if x['instance'] == 'frag#2')
+        self.assertFalse(d['played'])
+        self.assertEqual(d['error'], 'frag has no statement for it to argue')
+
+    def test_a_reconstruction_is_not_played_as_a_carried_instance(self):
+        sub = 'brings_about(tax_meat,cheaper_veg)'
+        parent = {'kialo_claim_id': 'parent', 'literal': ['Cheaper vegetables are good.'],
+                  'instances': [instance('parent#1', 'positive_consequences', CLAIM, premises=[sub],
+                                         bindings={'A': 'tax_meat', 'G': 'cheaper_veg'}),
+                                instance('parent#2', 'positive_consequences', sub, primary=False, premises=[PREMISE],
+                                         by='the discussion', bindings={'A': 'tax_meat', 'G': 'cheaper_veg'})],
+                  'role': {'kind': 'independent_pro', 'polarity': 'for', 'cq': None},
+                  'target': {'actual': {'claim': 'thesis', 'instance': 'thesis#1', 'part': 'conclusion', 'formula': CLAIM}}}
+        thesis = {'kialo_claim_id': 'thesis', 'instances': [instance('thesis#1', 'none', CLAIM)]}
+        report, moves = self.run_replay({'items': [thesis, parent]})
+        self.assertFalse([m for m in moves if 'parent#2' in m.get('why', '')], moves)
+        entry = next(x for x in report['moves'] if x['claim'] == 'parent')
+        self.assertNotIn('secondary', entry)
+        d = report['discussion'][0]
+        self.assertEqual((d['instance'], d['played']), ('parent#2', False))
+        self.assertIn('neither', d['error'])
 
     def test_rc13_a_refused_discussion_instance(self):
         report, moves = self.run_replay(self.thesis_with_discussion(), refuse_scheme='AS:positive_consequences')

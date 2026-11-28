@@ -202,9 +202,10 @@ examples:
   kialo: "13292.174"
   coding: 'A = governments putting a tax on meat; G = producers using cheaper and
     more dangerous means of producing meat. The gold''s coding after the recode: the
-    bridge is the claim''s primary instance, whose conclusion meets 13292.108''s;
-    the modal argument is its secondary instance; that the possibility matters is
-    supplied, since the claim offers it as a reason against the tax. Pressed: walton/worth_finding_out_first
+    bridge is the claim''s primary instance, whose conclusion meets the environmental
+    argument''s (the discussion''s, 13292.1#2, since D096); the modal argument is
+    its secondary instance; that the possibility matters is supplied, since the claim
+    offers it as a reason against the tax. Pressed: walton/worth_finding_out_first
     (A tax in one region first would show, in time and with little harm, whether producers
     there cut corners before a national tax is decided); a challenge of matters_to_decision(A,G)
     (Where meat was taxed, one producer in a hundred cut corners: a chance that small

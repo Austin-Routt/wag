@@ -379,16 +379,16 @@ examples:
     industry, so the appropriate solution is to regulate this industry rather than
     penalize those who wish to consume meat.
   kialo: "13292.104"
-  coding: 'P = governments; A = regulate the animal farming industry; S1 = the farming
-    industry, not meat itself, is the problem; S2 = the industry is regulated; G =
-    the problems of meat are resolved. Stated: current_circumstances(S1), would_bring_about(A,S1,S2),
-    would_be_realized(G,S2) ("the appropriate solution"). Supplied: goal_of_agent(P,G).
-    Conclusion: should_be_performed(A). As the gold notes, S2 nearly restates A. Since
-    2026-11-24 this is a secondary instance: the claim''s answer to 22.1/CQ2 of the
-    environmental argument for the tax (13292.108) is its primary better_means instance,
-    that regulating the industry would reduce the harm more surely than the tax (D075,
-    D089).'
-  status: drafted by Claude Code, 2026-11-24
+  coding: 'Near miss: the only S2 the claim offers, a regulated industry, restates
+    the action, so practical reasoning adds nothing to it (batch-2 guidelines §5 item
+    4): a proposal with a purpose is positive_consequences (A = regulate the animal
+    farming industry; G = the problems of meat resolved; "the appropriate solution"
+    states brings_about(A,G)). The gold codes it so since round 1''s draft 3 (2026-11-28),
+    a secondary instance; the claim''s answer to the discussion''s environmental argument
+    (13292.1#2, D096) is its primary better_means instance, that regulating the industry
+    would reduce the harm more surely than the tax (D075, D089).'
+  near_miss: true
+  status: drafted by Claude Code, 2026-11-28
 - text: Taxing meat would raise the consumer price to reflect the real costs of meat
     consumption.
   kialo: "13292.118"

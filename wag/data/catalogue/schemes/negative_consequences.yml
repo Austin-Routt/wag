@@ -420,9 +420,9 @@ examples:
   kialo: "13292.13"
   coding: 'Near miss: it names no bad result of the tax; it only denies that the tax
     achieves what its supporters claim. A bare denial of the pros'' efficacy premise:
-    would_bring_about(A,S1,S2) of 13292.108 in the gold, and equally brings_about(A,G)
-    of 13292.115 (batch-2 guidelines §3); coded none, not an argument from negative
-    consequences.'
+    would_bring_about(A,S1,S2) of the discussion''s environmental argument in the
+    gold (13292.1#2, D096), and equally brings_about(A,G) of 13292.115 (batch-2 guidelines
+    §3); coded none, not an argument from negative consequences.'
   near_miss: true
   status: drafted by Claude Code, 2026-10-22
 - text: A meat tax is only the first step; once it exists it will be raised again

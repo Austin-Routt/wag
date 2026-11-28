@@ -51,6 +51,68 @@ func (d *Dataset) thesisID() string {
 	return x.Thesis
 }
 
+// checkCitations is R19 (guidelines §2 item 3), as validate.py checks it: an
+// inferred premise (of any role) cites another claim of the discussion, the
+// one that says it: a claim of the dataset, or of a claim's context (its
+// Kialo parents, ancestors, siblings and children). Whether the cited claim
+// says the premise is not checked: no check can, short of reading it. With
+// no dataset, only the citation's type and that it names another claim
+// (cases CT1-CT9; ChatGPT's patch 02 of exchange 2, written again here).
+func checkCitations(a Annotation, d *Dataset) []string {
+	var known map[string]bool
+	if d != nil {
+		known = map[string]bool{}
+		for _, it := range d.Items {
+			known[it.ID] = true
+			var ctx map[string][]struct {
+				ClaimID any `json:"claim_id"`
+			}
+			// A field that is not a list of objects is skipped, as validate.py
+			// skips an entry that is not an object or has no text id.
+			var raw map[string]json.RawMessage
+			if json.Unmarshal(it.Raw, &raw) != nil {
+				continue
+			}
+			ctx = map[string][]struct {
+				ClaimID any `json:"claim_id"`
+			}{}
+			for _, f := range []string{"kialo_parents", "ancestors", "siblings", "children"} {
+				var refs []struct {
+					ClaimID any `json:"claim_id"`
+				}
+				if json.Unmarshal(raw[f], &refs) == nil {
+					ctx[f] = refs
+				}
+			}
+			for _, refs := range ctx {
+				for _, r := range refs {
+					if id, ok := r.ClaimID.(string); ok {
+						known[id] = true
+					}
+				}
+			}
+		}
+	}
+	claim, _ := a["kialo_claim_id"].(string)
+	var out []string
+	insts, _ := a["instances"].([]any)
+	for _, x := range insts {
+		in, _ := x.(map[string]any)
+		pms, _ := in["premises"].([]any)
+		for _, y := range pms {
+			pm, _ := y.(map[string]any)
+			if pm["status"] != "inferred" {
+				continue
+			}
+			cite, ok := pm["cite"].(string)
+			if !ok || cite == claim || known != nil && !known[cite] {
+				out = append(out, fmt.Sprintf("R19 %v's premise %v is inferred but cites no other claim of the discussion (cite %s): cite the claim that says it, or mark it supplied (guidelines §2 item 3)", in["id"], pm["formula"], jsonText(pm["cite"])))
+			}
+		}
+	}
+	return out
+}
+
 // kialoParents are a claim's Kialo parents in items.json, each "claim_id
 // relation", in its order; false if the dataset has no such item.
 func (d *Dataset) kialoParents(claim string) ([]string, bool) {

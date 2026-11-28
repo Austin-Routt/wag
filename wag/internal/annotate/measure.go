@@ -634,6 +634,7 @@ func (c *Collection) CheckIn(a Annotation, d *Dataset, set map[string]Annotation
 		}
 	}
 	if format == 2 {
+		out = append(out, checkCitations(a, d)...)
 		out = append(out, c.checkIdentity(a, d, set)...)
 	}
 	return out

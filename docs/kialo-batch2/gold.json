@@ -55,6 +55,11 @@
    "date": "2026-11-28",
    "by": "decision D098 and the independent review of D040-D071-D097's application (recode_d098.py)",
    "what": "Decision D098 (guidelines §3.1, OC6 and OC10): 13292.45, an amended action, is at 13292.12#3's conclusion, the argument that cites the harm against the tax, as 13292.194, where it was at the causal step 13292.12#1; 13292.12's and 13292.194's records say so. From the independent review of D040-D071-D097's application: 13292.61#1's conclusion reads as walton.yml's template gives it (R21), and 13292.9#3's challenge at 28 CQ3 names a factor that keeps the harm from reducing revenue."
+  },
+  {
+   "date": "2026-11-28",
+   "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
+   "what": "Round 1, draft 3, part 4: exchange 2's two objections, accepted: 13292.8's relation to 13292.115's premise is unresolved (D102: premise_backing, its formula unresolved, no question); 13292.104#2 is positive consequences, since its S2 restated the action (§5 item 4), its challenge records following. 13292.192's notes say that the modal form carries the source's 'may' and that causes(E1,E2) is a tendency (D036); 13292.1#2's alternatives are written for the discussion's argument."
   }
  ],
  "items": [
@@ -95,11 +100,11 @@
       "alternatives": [
        {
         "walton_id": "practical_reasoning1",
-        "why_not": "no value is stated (environmental protection is implicit at most)"
+        "why_not": "no claim of the discussion states a value (environmental protection is implicit at most)"
        },
        {
         "walton_id": "positive_consequences",
-        "why_not": "the claim states no consequence of the tax, only the circumstances the tax would address"
+        "why_not": "the discussion states the circumstances the tax would address (13292.108) and how the tax would change them (13292.14), not only a good outcome"
        }
       ]
      },
@@ -271,6 +276,14 @@
        "notes"
       ],
       "what": "the environmental argument for the tax is the discussion's instance 13292.1#2 (D096): circumstances cited to 13292.108, efficacy to 13292.14, the rest supplied; the four challenge records of the environmental argument moved here from 13292.108"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
+      "fields": [
+       "instances.scheme"
+      ],
+      "what": "13292.1#2's alternatives are written for the discussion's argument; they were copied from 13292.108's record (the independent review of D096's application, W5)"
      }
     ]
    }
@@ -3233,105 +3246,57 @@
      "id": "13292.104#2",
      "primary": false,
      "scheme": {
-      "walton_id": "practical_reasoning2",
-      "compendium": "22.1",
-      "wag_id": "AS:practical_reasoning_goal",
+      "walton_id": "positive_consequences",
+      "compendium": "33.1",
+      "wag_id": "AS:consequences",
       "fit": "reconstructed",
       "confidence": 0.6,
       "alternatives": [
        {
-        "walton_id": "practical_reasoning1",
-        "why_not": "no value is stated, though 'penalize those who wish to consume meat' hints at fairness to consumers"
-       },
-       {
-        "walton_id": "positive_consequences",
-        "why_not": "the claim states the circumstances and the means-end link, not only a good outcome"
+        "walton_id": "practical_reasoning2",
+        "why_not": "the only state S2 it could name, a regulated industry, restates the action (guidelines §5 item 4)"
        }
       ]
      },
      "bindings": {
       "A": "regulate_animal_farming_industry",
-      "S1": "farming_industry_not_meat_is_problem",
-      "S2": "animal_farming_industry_regulated",
-      "G": "meat_problems_resolved",
-      "P": "governments"
+      "G": "meat_problems_resolved"
      },
      "premises": [
       {
        "role": "premise",
-       "formula": "goal_of_agent(governments,meat_problems_resolved)",
-       "en": "One of the goals of 'governments' is 'the problems associated with meat production and consumption are resolved'.",
-       "status": "supplied",
-       "note": "the agent's goal (D005, since 2026-11-24); the agent is the thesis's, governments, who would take the action"
-      },
-      {
-       "role": "premise",
-       "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
-       "en": "'the animal farming industry, not meat itself, is what is problematic' is the case in the current circumstances.",
-       "status": "explicit"
-      },
-      {
-       "role": "premise",
-       "formula": "would_bring_about(regulate_animal_farming_industry,farming_industry_not_meat_is_problem,animal_farming_industry_regulated)",
-       "en": "Performing 'governments regulate the animal farming industry' in 'the animal farming industry, not meat itself, is what is problematic' would bring about 'the animal farming industry is regulated'.",
+       "formula": "brings_about(regulate_animal_farming_industry,meat_problems_resolved)",
+       "en": "The action 'governments regulate the animal farming industry' brings about 'the problems associated with meat production and consumption are resolved'.",
        "status": "explicit",
-       "note": "analytic: regulating the industry yields a regulated industry. This S2 is close to the action restated, which §5 item 4 asks practical reasoning to avoid (S2 a state distinct from the action): a question for the guidelines (D086 exchange 1)"
+       "note": "'the appropriate solution': regulating the industry resolves the problems 13292.13 names"
       },
       {
        "role": "premise",
-       "formula": "would_be_realized(meat_problems_resolved,animal_farming_industry_regulated)",
-       "en": "'the problems associated with meat production and consumption are resolved' would be realized in 'the animal farming industry is regulated'.",
-       "status": "explicit",
-       "note": "\"the appropriate solution\"; the problems are those 13292.13 names"
-      },
-      {
-       "role": "assumption",
-       "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
-       "en": "It is possible for 'governments' to bring about 'governments regulate the animal farming industry'.",
+       "formula": "good(meat_problems_resolved)",
+       "en": "'the problems associated with meat production and consumption are resolved' is good.",
        "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that governments can do it (D088)"
-      },
-      {
-       "role": "assumption",
-       "formula": "possible_goal(meat_problems_resolved)",
-       "en": "'the problems associated with meat production and consumption are resolved' is possible.",
-       "status": "supplied",
-       "note": "assumption: presumed to hold unless questioned. Since 2026-11-24: that the goal can be reached (D088)"
-      },
-      {
-       "role": "exception",
-       "formula": "bring_about_more_effectively(governments,animal_farming_industry_regulated,regulate_animal_farming_industry)",
-       "en": "There is a way for 'governments' to reach the state 'the animal farming industry is regulated' more effectively than 'governments regulate the animal farming industry'.",
-       "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
-      },
-      {
-       "role": "exception",
-       "formula": "realize_more_effectively(governments,meat_problems_resolved,regulate_animal_farming_industry)",
-       "en": "There is a way for 'governments' to realize the goal 'the problems associated with meat production and consumption are resolved' more effectively than 'governments regulate the animal farming industry'.",
-       "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D089)"
-      },
-      {
-       "role": "exception",
-       "formula": "intervening_actions(regulate_animal_farming_industry,meat_problems_resolved)",
-       "en": "Intervening actions are needed after performing 'governments regulate the animal farming industry' to achieve 'the problems associated with meat production and consumption are resolved'.",
-       "status": "supplied",
-       "note": "exception: presumed not to hold unless shown"
+       "note": "the claim presupposes that resolving the problems is good"
       },
       {
        "role": "exception",
        "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
        "en": "The action 'governments regulate the animal farming industry' has bad consequences that outweigh 'the problems associated with meat production and consumption are resolved'.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: the claim that the action's bad consequences outweigh the goal (D070, D091; D055's formula); a plain side effect is a rebuttal at the conclusion"
+       "note": "exception: presumed not to hold unless shown. Since 2026-10-23 the sided exception of decision D055 (walton-clean/CHANGELOG.md), naming the consequence this argument cites."
       },
       {
        "role": "exception",
-       "formula": "incompatible_goal(governments,meat_problems_resolved)",
-       "en": "Another goal of 'governments' is incompatible with 'the problems associated with meat production and consumption are resolved'.",
+       "formula": "too_slight(regulate_animal_farming_industry,meat_problems_resolved)",
+       "en": "In deciding on action 'governments regulate the animal farming industry', 'the problems associated with meat production and consumption are resolved' is too slight a consequence to count.",
        "status": "supplied",
-       "note": "exception: presumed not to hold unless shown. Since 2026-11-24: scoped to the agent (D004)"
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
+      },
+      {
+       "role": "exception",
+       "formula": "gain_discounted_by_bearer(regulate_animal_farming_industry,meat_problems_resolved)",
+       "en": "In deciding on action 'governments regulate the animal farming industry', the gain 'the problems associated with meat production and consumption are resolved' counts for less because of whom it would go to.",
+       "status": "supplied",
+       "note": "exception: presumed not to hold unless shown. Since 2026-11-25 (decision D065, proposal D008-D074): how serious the consequence is and on whom it falls are exceptions of the consequence schemes, the critic's to support."
       }
      ],
      "conclusion": {
@@ -3418,40 +3383,32 @@
      "note": "the comparison: more surely"
     },
     {
-     "cq": null,
-     "wag_cq": null,
-     "type": "circumstances",
+     "cq": "33.1 CQ1",
+     "wag_cq": "CQ:likelihood",
+     "type": "likelihood",
      "instance": "13292.104#2",
-     "formula": "current_circumstances(farming_industry_not_meat_is_problem)",
-     "note": "no printed question; 13292.208 (non-cultured meat production is inherently problematic) contradicts it; the gold has 13292.208 at the better means' premise brings_about(regulate_animal_farming_industry,G) of 13292.104#1, where format 1 moved it (round 2 of the first gold takes up its target)"
-    },
-    {
-     "cq": null,
-     "wag_cq": null,
-     "type": "efficacy",
-     "instance": "13292.104#2",
-     "formula": "would_be_realized(meat_problems_resolved,animal_farming_industry_regulated)",
+     "formula": "brings_about(regulate_animal_farming_industry,meat_problems_resolved)",
      "note": "no printed CQ; can regulation remove harms that scale with consumption?"
     },
     {
-     "cq": "22.1 CQ4",
-     "wag_cq": "CQ:possibility",
-     "type": "efficacy",
-     "instance": "13292.104#2",
-     "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
-     "note": "feasibility of regulating the industry; also a premise of the primary better_means instance, possible_bring_about(P,A2) (D089)"
-    },
-    {
-     "cq": "22.1 CQ5",
+     "cq": "33.1 CQ3",
      "wag_cq": "CQ:bad_outweighs",
-     "type": "side effects that outweigh",
+     "type": "opposite consequences",
      "instance": "13292.104#2",
      "formula": "bad_outweighs(regulate_animal_farming_industry,meat_problems_resolved)",
      "note": "no claim of the batch argues that the other course's bad consequences outweigh its goal (D070); a plain side effect would be a rebuttal at the conclusion"
+    },
+    {
+     "cq": null,
+     "wag_cq": null,
+     "type": "feasibility",
+     "instance": "13292.104#1",
+     "formula": "possible_bring_about(governments,regulate_animal_farming_industry)",
+     "note": "that governments can regulate the industry, a premise of the better means (D089); 22.1 CQ4 asked it of the practical reasoning this claim's second instance was until draft 3"
     }
    ],
    "notes": {
-    "text": "Proposes another action, regulating the animal farming industry, for the goal the thesis's environmental argument pursues: the problem is the industry, not meat, so act on the industry 'rather than penalize those who wish to consume meat'. Read as a better means, it answers the exception of the discussion's environmental argument (13292.1#2; D096) realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat) (OC6; D075, D089): its primary instance is better_means, a cq_answer to the game's CQ:other_means (22.1 CQ2), with role.move alternative_means, against; re-parented from 13292.13. The comparison better_means needs, that regulation reaches the goal more surely than the tax, is supplied: the claim diagnoses the source of the problem and calls regulating it the appropriate solution, from which the comparison is reconstructed, not stated; 'rather than penalize those who wish to consume meat' adds a reason of fairness to consumers, which is not that comparison (D089). The argument for the other course is a secondary instance (practical reasoning, reconstructed: its goal premise is supplied); 'rather than' ties it to the thesis in a third (an argument from alternatives). Its own goal is the broader 'problems' of 13292.13, not only environmental harm. It also supports 13292.13 by implying that taxing consumers misses the source of the problems; 13292.208 replies that meat production is itself the problem.",
+    "text": "Proposes another action, regulating the animal farming industry, for the goal the thesis's environmental argument pursues: the problem is the industry, not meat, so act on the industry 'rather than penalize those who wish to consume meat'. Read as a better means, it answers the exception of the discussion's environmental argument (13292.1#2; D096) realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat) (OC6; D075, D089): its primary instance is better_means, a cq_answer to the game's CQ:other_means (22.1 CQ2), with role.move alternative_means, against; re-parented from 13292.13. The comparison better_means needs, that regulation reaches the goal more surely than the tax, is supplied: the claim diagnoses the source of the problem and calls regulating it the appropriate solution, from which the comparison is reconstructed, not stated; 'rather than penalize those who wish to consume meat' adds a reason of fairness to consumers, which is not that comparison (D089). The argument for the other course is a secondary instance: positive consequences of regulating the industry, a proposal with a purpose (guidelines §5 item 4: the only state S2 practical reasoning could name, a regulated industry, restates the action), its link explicit ('the appropriate solution'), its evaluation supplied; 'rather than' ties it to the thesis in a third (an argument from alternatives). Its own goal is the broader 'problems' of 13292.13, not only environmental harm. It also supports 13292.13 by implying that taxing consumers misses the source of the problems; 13292.208 replies that meat production is itself the problem.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -3520,6 +3477,16 @@
        "target"
       ],
       "what": "its target is the discussion's argument 13292.1#2 (D096), at the same exception; its goal premise is supplied: 13292.108 does not state the goal, and the discussion's argument is not a claim to cite (R20)"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
+      "fields": [
+       "challenges",
+       "instances",
+       "notes"
+      ],
+      "what": "13292.104#2 is positive_consequences (§5 item 4: its S2 restated the action), where it was practical reasoning; its challenge records follow (the feasibility record at the better means, the circumstances' dropped); exchange 2's objection, accepted"
      }
     ]
    }
@@ -5511,9 +5478,9 @@
     }
    ],
    "role": {
-    "kind": "cq_answer",
+    "kind": "premise_backing",
     "confidence": 0.5,
-    "cq": "CQ:likelihood",
+    "cq": null,
     "polarity": "for"
    },
    "target": {
@@ -5523,7 +5490,9 @@
      "claim": "13292.115",
      "instance": "13292.115#1",
      "part": "premise",
-     "formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)"
+     "formula": {
+      "unresolved": "the claim states a condition 13292.115's premise presupposes (excess consumption for the tax to reduce), not the premise; no recorded argument connects them (D102)"
+     }
     }
    },
    "evidence": {
@@ -5565,7 +5534,7 @@
     }
    ],
    "notes": {
-    "text": "Backs a background condition of 13292.115's premise brings_about(tax_meat,reduced_unhealthy_meat_consumption): that there is unhealthy (excess) meat consumption for the tax to reduce. That condition is not the premise, which says that the tax would reduce such consumption: the claim backs it only in part, and the step from excess consumption to the tax's reducing it is not argued. The target is the nearest formula the format offers (a target names no component of a premise), and the relation is partial. positive_consequences has CQ:likelihood (33.1 CQ1) on that premise, so the role is cq_answer with polarity for (R2). The step from 'more meat than dietary guidelines recommend' to unhealthy consumption rests on the guidelines' authority, coded as a secondary expert-opinion instance. Its children treat it as stating the problem: 13292.3 (curbing it cuts health costs) and 13292.29 (it is a personal choice).",
+    "text": "It states a background condition of 13292.115's premise brings_about(tax_meat,reduced_unhealthy_meat_consumption): that there is unhealthy (excess) meat consumption for the tax to reduce. That condition is not the premise, which says that the tax would reduce such consumption, and no claim argues the step from the one to the other. So its relation to the premise is unresolved (D102; guidelines §3): premise_backing of 13292.115#1's premise, its formula unresolved, no question. It is not played, not scored as a relation and not verified until an argument that connects them is recorded and reviewed. The step from 'more meat than dietary guidelines recommend' to unhealthy consumption rests on the guidelines' authority, coded as a secondary expert-opinion instance. Its children treat it as stating the problem: 13292.3 (curbing it cuts health costs) and 13292.29 (it is a personal choice).",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5589,6 +5558,16 @@
        "notes"
       ],
       "what": "D086 exchange 1, the reviewer's objection partly accepted: the note no longer equates the background condition (there is excess consumption) with the premise it backs (the tax would reduce it), as its 'i.e.' did; it says the backing is partial and the target the nearest formula the format offers. Not taken: the reviewer's unresolved or approximate target, since the format has no approximate target and an unresolved one could not be verified (R17); how to target a background condition that backs a premise in part is a question for the guidelines, to the owner. Scheme, role and target unchanged."
+     },
+     {
+      "date": "2026-11-28",
+      "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
+      "fields": [
+       "notes",
+       "role",
+       "target"
+      ],
+      "what": "D102: its relation to 13292.115's premise is unresolved (premise_backing, the formula {\"unresolved\": why}, no question), where it was a cq_answer to CQ:likelihood at that premise; exchange 2's objection, accepted"
      }
     ]
    }
@@ -5804,7 +5783,7 @@
        "formula": "causes(crop_production_increased,deforestation_for_cropland)",
        "en": "Event 'crop production increases' causes event 'forests are cleared for crop production'.",
        "status": "explicit",
-       "note": "\"may still occur\": a possibility"
+       "note": "\"may still occur\": the possibility is carried by the modal form (may_occur); causes(E1,E2) is a tendency, strong or weak (D036), whose strength 28 CQ1 asks"
       },
       {
        "role": "exception",
@@ -5859,7 +5838,7 @@
     }
    ],
    "notes": {
-    "text": "Attacks the link 13292.6 states (less meat demand -> less deforestation) with an offsetting causal chain: less meat -> more crops -> deforestation for cropland. Each step's cause is only possible, so cause_to_effect_modal (§5 item 11): 13292.192#1 (reduced meat consumption -> more crop production) and 13292.192#2 (more crop production -> deforestation for cropland), primary, since its conclusion reaches the target (§5 item 5). The target is 13292.6's stated would_be_realized(deforestation_slowed,reduced_meat_consumption); no critical question is about it, so premise_attack (§5 item 3), against. The chain shows only that some deforestation may still occur, which does not by itself contradict its slowing: the attack needs a further premise the claim does not state, that the land cleared for crops would match or exceed the pasture spared. Its child 13292.200 replies so: the claim was only that deforestation would slow or reverse.",
+    "text": "Attacks the link 13292.6 states (less meat demand -> less deforestation) with an offsetting causal chain: less meat -> more crops -> deforestation for cropland. Each step's cause is only possible, so cause_to_effect_modal (§5 item 11; the source's 'may' is carried by may_occur, and causes(E1,E2) is a tendency, strong or weak, D036): 13292.192#1 (reduced meat consumption -> more crop production) and 13292.192#2 (more crop production -> deforestation for cropland), primary, since its conclusion reaches the target (§5 item 5). The target is 13292.6's stated would_be_realized(deforestation_slowed,reduced_meat_consumption); no critical question is about it, so premise_attack (§5 item 3), against. The chain shows only that some deforestation may still occur, which does not by itself contradict its slowing: the attack needs a further premise the claim does not state, that the land cleared for crops would match or exceed the pasture spared. Its child 13292.200 replies so: the claim was only that deforestation would slow or reverse.",
     "candidate_pattern": null
    },
    "adjudication": {
@@ -5905,6 +5884,15 @@
        "instances.premises"
       ],
       "what": "13292.192#1's exception names its effect: interference(reduced_meat_consumption,crop_production_increased) (D071, D097); 13292.192#2's exception names its effect: interference(crop_production_increased,deforestation_for_cropland) (D071, D097)"
+     },
+     {
+      "date": "2026-11-28",
+      "by": "round 1's draft 3, part 4: exchange 2's objections, and D102 (recode_d086_r1_d3.py)",
+      "fields": [
+       "instances.premises",
+       "notes"
+      ],
+      "what": "the source's 'may' is carried by the modal form, and causes(E1,E2) is a tendency of any strength (D036): 13292.192#2's premise note and the item's note say so exactly (exchange 2)"
      }
     ]
    }

@@ -106,8 +106,9 @@ examples:
   coding: 'Near miss: what counts against the tax is a bad result it would bring about,
     not a value the speaker judges bad that the goal involves; negative_consequences_modal
     (A = a tax on meat, G = more dangerous meat production), since "might force" claims
-    the consequence only possible, carried to 13292.108''s conclusion by bridge_from_possible_harm,
-    as the gold codes it since 2026-11-25 (D008).'
+    the consequence only possible, carried to the environmental argument''s conclusion
+    (the discussion''s, 13292.1#2, since D096) by bridge_from_possible_harm, as the
+    gold codes it since 2026-11-25 (D008).'
   near_miss: true
   status: drafted by Claude Code, 2026-11-25
 discrepancies:

@@ -251,15 +251,27 @@ def main():
             wag2 = WALTON_TO_WAG.get(sw)
             conc = norm((ins.get("conclusion") or {}).get("formula"))
             rec = {"claim": owner, "instance": ins.get("id"), "scheme": sw, "wag_id": wag2, "conclusion": conc}
-            against = bool(stmt) and (conc == "¬" + stmt or stmt == "¬" + conc)
-            target = stmt[1:] if stmt.startswith("¬") and against else stmt
+            # The move argues the instance's own conclusion (RC16): the claim's statement, supported by the
+            # claim's side; its negation, by the other side, as an attack on the statement, or, when the
+            # statement is itself a negation, as support for what it negates.
+            if conc == stmt:
+                kind, target, against = "support", stmt, False
+            elif conc == "¬" + stmt:
+                kind, target, against = "attack", stmt, True
+            elif stmt.startswith("¬") and conc == stmt[1:]:
+                kind, target, against = "support", conc, True
+            else:
+                kind, target, against = None, None, None
             if not wag2:
                 rec.update(played=False, error=f"the game has no scheme for {sw}")
             elif not stmt:
                 rec.update(played=False, error=f"{owner} has no statement for it to argue")
+            elif kind is None:
+                rec.update(played=False, error=f"it concludes {conc or 'nothing'}, neither {owner}'s statement ({stmt}) "
+                                               "nor its negation (R20)")
             else:
                 who = side if not against else ("con" if side == "pro" else "pro")
-                act = {"type": "attack" if against else "support", "target_stmt_id": target, "scheme_id": wag2,
+                act = {"type": kind, "target_stmt_id": target, "scheme_id": wag2,
                        "variable_bindings": {k: words(v) for k, v in (ins.get("bindings") or {}).items()},
                        "text": (ins.get("conclusion") or {}).get("en") or conc}
                 why = f"Kialo {owner}: the discussion's instance {ins.get('id')}, {sw} (D096)"
@@ -425,6 +437,9 @@ def main():
         fragment = scheme.get("fit") == "fragment" and stmt and tpart.startswith("premise")
         if fragment:
             wag = None
+            # The premise it backs is on the board in the argument it backs, whether or not the
+            # fragment's own move is accepted (RC20): a move at it is made there (RC14).
+            backs[cid] = {"formula": norm(stmt), "trec": trec}
         if (a.get("role") or {}).get("kind") == "cq_answer" and wag and cq and str(cq).startswith("CQ:") and trec:
             act = {"type": "attack" if pol == "against" else "support", "target_arg_id": trec["arg"],
                    "answers_cq_id": cq, "scheme_id": wag, "variable_bindings": bindings, "text": literal}
@@ -543,7 +558,6 @@ def main():
             play_discussion(cid, a, side)
         if fragment and how == "other":
             entry["integration"] = "fragment"
-            backs[cid] = {"formula": norm(stmt), "trec": trec}
         elif how in ("cq", "statement", "new", "inference"):
             # Played with its scheme; as intended if in the intended role:
             # a CQ answer as a CQ answer, anything else as a move about a

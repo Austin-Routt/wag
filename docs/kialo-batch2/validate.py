@@ -18,7 +18,7 @@ except for the adjudication records and the pinned inputs.
 
 A file is format 2 when it says so ("format": "wag-annotation/2";
 docs/annotation-records.md, decision D092), else format 1: format 1 is
-checked by the rules it was made under (R1-R11), format 2 by R2-R17."""
+checked by the rules it was made under (R1-R11), format 2 by R2-R21."""
 import hashlib, json, os, re, sys
 import yaml
 
@@ -109,8 +109,10 @@ def atoms(f):
     return out
 
 def nows(f):
-    """A formula without spaces: 'f(a, b)' and 'f(a,b)' are the same formula."""
-    return re.sub(r'\s+', '', f or '')
+    """A formula without spaces: 'f(a, b)' and 'f(a,b)' are the same formula. Space is what Go's
+    strings.Fields takes for it (GO_SPACE, below), as the Go check's compact reads a formula: Python's
+    \\s also takes U+001C to U+001F (the independent review of D096's application, N1; RC21)."""
+    return re.sub('[' + re.escape(GO_SPACE) + ']+', '', f or '')
 
 def goals(ins):
     """An instance's goal premises, as goal_of_agent(P,G) (R9). Two-person
@@ -878,14 +880,14 @@ if F2:
         for ins in it['instances']:
             if ins.get('by') == 'the discussion':
                 DISCUSSION_INSTANCES[ins.get('id')] = (cid, ins)
-    targeted = set()
+    targeted = {}  # instance id -> the items whose target names it
     for it in gold['items']:
         if it.get('kialo_claim_id') in MALFORMED:
             continue
         t = it.get('target') or {}
         for o in [t.get('actual') or {}] + list(t.get('other_kialo_parents') or []):
             if isinstance(o, dict) and isinstance(o.get('instance'), str):
-                targeted.add(o['instance'])
+                targeted.setdefault(o['instance'], set()).add(it.get('kialo_claim_id'))
     for iid, (cid, ins) in DISCUSSION_INSTANCES.items():
         if ins.get('primary') is True:
             err(f'{cid}: R20 {iid} is by the discussion and is primary: the claim\'s primary instance is what it states')
@@ -904,7 +906,8 @@ if F2:
         if not stmt or concl not in (stmt, '¬' + stmt) and stmt != '¬' + concl:
             err(f'{cid}: R20 {iid} is by the discussion and concludes {concl or "nothing"}, neither {cid}\'s statement '
                 f'({stmt or "none"}) nor its negation: record it at the claim whose statement it argues')
-        if iid not in targeted:
+        # Another item's target: its own claim's does not count (RC19).
+        if not targeted.get(iid, set()) - {cid}:
             err(f'{cid}: R20 {iid} is by the discussion, but no item targets it: a reconstruction is recorded for the '
                 'claims that answer it')
     ANCHORS = {}
@@ -914,9 +917,9 @@ if F2:
         cid = it.get('kialo_claim_id')
         if cid in MALFORMED:
             continue
+        # Every instance, the discussion's own too (RC18): a reconstruction cannot cite another's claim for
+        # what only that reconstruction has.
         for ins in it['instances']:
-            if ins.get('by') == 'the discussion':
-                continue
             for pm in ins['premises']:
                 x = pm.get('cite')
                 if pm.get('status') != 'inferred' or x not in ANCHORS:

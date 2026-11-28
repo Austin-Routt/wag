@@ -653,7 +653,7 @@ candidates:
       - source: kialo
         ref: "13292.127"
         fit: clean
-        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against 13292.108's exception, since 2026-11-24, OC7).
+        note: Starvation from less access to meat is a worse threat than any harm of eating much meat; weighs against a class of consequences (the gold's primary instance since D055; coded with bad_outweighs_good, against the environmental argument's exception since 2026-11-24, OC7; the discussion's, 13292.1#2, since D096).
         found: review of D055-D059 v1
         verified: session check, 2026-10-22
       - source: kialo

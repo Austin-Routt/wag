@@ -2759,7 +2759,7 @@ decisions:
       13292.6, .13, .104 and .127 at its supplied premises; the claims at the
       circumstances 13292.108 states keep their targets. How a reconstruction is
       identified in the annotation records goes through a proposal.
-    recorded: "Applied 2026-11-27. The format: docs/annotation-records.md §13 (an instance by the discussion, rule R20), with cases RC1-RC15 written before their tests and code (docs/d086-first-gold.md §6); validate.py and the Go check (R20), agreement (the instances field leaves it out), the replay (to_wag.py plays it first, and a move at the premise a fragment backs at the argument it backs). The gold by recode_d096.py, round 1's draft 3, part 2: the thesis's instance 13292.1#2, by the discussion; 13292.108 a fragment backing its circumstances; 13292.5, .6, .13, .104, .127, .147 and .174 at 13292.1#2; 13 items recoded; the 7 claims pending Q1 released, and 13292.1, .5, .147 and .174, agreed at draft 1, back to review (d086-rounds.json)"
+    recorded: "Applied 2026-11-27. The format: docs/annotation-records.md §13 (an instance by the discussion, rule R20), with cases RC1-RC15 written before their tests and code (docs/d086-first-gold.md §6); validate.py and the Go check (R20), agreement (the instances field leaves it out), the replay (to_wag.py plays it first, and a move at the premise a fragment backs at the argument it backs). The gold by recode_d096.py, round 1's draft 3, part 2: the thesis's instance 13292.1#2, by the discussion; 13292.108 a fragment backing its circumstances; 13292.5, .6, .13, .104, .127, .147 and .174 at 13292.1#2 (13292.13 at its efficacy premise, which the decision calls supplied: the gold infers it, citing 13292.14, which states it, as §13 asks); 13 items recoded; the 7 claims pending Q1 released, and 13292.1, .5, .147 and .174, agreed at draft 1, back to review (d086-rounds.json). After the independent review of the application (wag-workspace verify/d096/REVIEW-application.md): the replay's move follows the reconstruction's own conclusion, R20's citation and target checks have no gap, Go checks R19, and the guidelines and §13 say whose instance it is and which claims back or are cited (2026-11-28)"
 
 - id: D097
   title: The causal exception names its effect
@@ -2912,7 +2912,7 @@ decisions:
       part and formula, counted as unresolved) and not verified (R17); it stays
       in every count of the batch. The guidelines say the same of any claim that
       states only a background condition of a premise.
-    recorded: "To be applied: the replay's guard, agreement.py and the Go agreement, the guidelines, and round 1's draft 3 (docs/d086-first-gold.md)"
+    recorded: "Applied: the replay's guard and the agreement measures (step 1 after exchange 2, 2026-11-27); the guidelines (§3, a background condition) and 13292.8 in round 1's draft 3, part 4 (recode_d086_r1_d3.py, 2026-11-28): premise_backing, its target's formula unresolved, no question; not played, not scored as a relation, not verified"
 
 # --- Decided ------------------------------------------------------------------
 

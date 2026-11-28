@@ -431,17 +431,26 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// circumstances (role, target_part, target_instance, target_formula,
 	// bindings, instances). D098 (2026-11-28): 13292.45, an amended action, is
 	// at 13292.12#3's conclusion, the argument that cites the harm, where it
-	// was at the causal step 13292.12#1 (target_instance).
-	want := map[string]float64{"scheme": 0.88, "instances": 0.7, "target_formula": 0.8, "role": 0.96,
-		"target_part": 0.9, "cq": 0.84, "target_instance": 0.66, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
+	// was at the causal step 13292.12#1 (target_instance). Draft 3's part 4
+	// (2026-11-28): 13292.8's relation to 13292.115's premise is unsettled
+	// (D102), so its role, question and target part, instance and formula are
+	// left out (unresolved, over 49); 13292.104#2 is positive consequences
+	// (instances).
+	want := map[string]float64{"scheme": 0.88, "instances": 0.68, "target_formula": 0.796, "role": 0.959,
+		"target_part": 0.898, "cq": 0.837, "target_instance": 0.653, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
+	unsettled := map[string]bool{"role": true, "cq": true, "target_part": true, "target_instance": true, "target_formula": true}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
 		if !ok {
 			w = 1
 		}
-		if fa.Agreement != w || fa.Unresolved != 0 || fa.N != 50 {
-			t.Errorf("%s: %+v, want agreement %v over 50", f, fa, w)
+		n, u := 50, 0
+		if unsettled[f] {
+			n, u = 49, 1
+		}
+		if fa.Agreement != w || fa.Unresolved != u || fa.N != n {
+			t.Errorf("%s: %+v, want agreement %v over %d", f, fa, w, n)
 		}
 	}
 	if v := FieldIn(d.Gold["13292.12"], "target_instance", d.Gold); v != "13292.9 secondary:cause_to_effect_modal:may_occur(meat_industry_harmed)" {
@@ -475,8 +484,10 @@ func TestAgreementLeavesUnresolvedOut(t *testing.T) {
 	inst(a["13292.7"], 0)["bindings"].(map[string]any)["G"] = map[string]any{"unresolved": "which harm"}
 	p := Agree("a", "gold", a, d.Gold)
 	// Only what a field itself leaves open makes it unresolved: the formula
-	// 13292.12 names is still compared.
-	for f, want := range map[string]int{"target_instance": 1, "target_formula": 0, "bindings": 1, "scheme": 0} {
+	// 13292.12 names is still compared. 13292.8's relation is unsettled in the
+	// gold (D102), on both sides: one more unresolved target instance and
+	// formula.
+	for f, want := range map[string]int{"target_instance": 2, "target_formula": 1, "bindings": 1, "scheme": 0} {
 		if fa := p.Fields[f]; fa.Unresolved != want || fa.N != 50-want || fa.Agreement != 1 {
 			t.Errorf("%s: %+v, want %d unresolved and full agreement on the rest", f, fa, want)
 		}
@@ -972,11 +983,12 @@ func TestTwoUnresolvedValuesDoNotAgree(t *testing.T) {
 	d, _ := builtin(t)
 	a := clone(t, d.Gold)
 	actualOf(a["13292.12"])["instance"] = map[string]any{"unresolved": "which inference"}
+	// With 13292.8's unsettled relation (D102), two unresolved values.
 	q := AgreeAssigned("a", "a again", a, clone(t, a), d.IDs())
-	if got := q.AllAssignedAgreement["target_instance"]; got != 49.0/50 {
-		t.Errorf("all-assigned agreement on target_instance: %v, want 49/50", got)
+	if got := q.AllAssignedAgreement["target_instance"]; got != 48.0/50 {
+		t.Errorf("all-assigned agreement on target_instance: %v, want 48/50", got)
 	}
-	if fa := q.Fields["target_instance"]; fa.Unresolved != 1 || fa.N != 49 || fa.Agreement != 1 {
+	if fa := q.Fields["target_instance"]; fa.Unresolved != 2 || fa.N != 48 || fa.Agreement != 1 {
 		t.Errorf("%+v", fa)
 	}
 }
@@ -1066,16 +1078,17 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	// Since D102 (2026-11-27) an unresolved formula (13292.45) or part
 	// (13292.7) leaves the relation unsettled, so those two claims' role,
 	// question and target part, instance and formula are all left out;
-	// 13292.33's unresolved instance leaves out its instance only.
+	// 13292.33's unresolved instance leaves out its instance only. The gold's
+	// own unsettled relation, 13292.8's (D102, draft 3), is one more of each.
 	p := Agree("a", "b", a, b)
-	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 3 || tf.Unresolved != 2 || ti.Agreement != 0.979 { // 46 of 47, rounded
+	if ti, tf := p.Fields["target_instance"], p.Fields["target_formula"]; ti.Unresolved != 4 || tf.Unresolved != 3 || ti.Agreement != 0.978 { // 45 of 46, rounded
 		t.Errorf("target_instance %+v, target_formula %+v", ti, tf)
 	}
-	if tp := p.Fields["target_part"]; tp.Unresolved != 2 {
+	if tp := p.Fields["target_part"]; tp.Unresolved != 3 {
 		t.Errorf("target_part %+v: the unsettled relations are not left out", tp)
 	}
 	for _, f := range []string{"role", "cq"} {
-		if fa := p.Fields[f]; fa.Unresolved != 2 {
+		if fa := p.Fields[f]; fa.Unresolved != 3 {
 			t.Errorf("%s %+v: the unsettled relations' %s are not left out (D102)", f, fa, f)
 		}
 	}
@@ -1091,7 +1104,9 @@ func TestAgreementPyMatchesGoOnTargets(t *testing.T) {
 	moved := map[string]bool{"13292.12": true, "13292.233": true, "13292.43": true, "13292.141": true, "13292.182": true, "13292.198": true, "13292.202": true, "13292.194": true,
 		"13292.108": true, "13292.5": true, "13292.147": true, "13292.174": true, "13292.13": true, "13292.6": true, "13292.104": true, "13292.127": true,
 		// D098: an amended action at the argument that cites the harm.
-		"13292.45": true}
+		"13292.45": true,
+		// D102: a background condition, its relation unsettled.
+		"13292.8": true}
 	for _, id := range d.IDs() {
 		x, y := FieldIn(old[id], "target_instance", old), FieldIn(d.Gold[id], "target_instance", d.Gold)
 		if (x != y) != moved[id] {
@@ -1443,8 +1458,9 @@ func TestTargetInstanceComparesTheClaim(t *testing.T) {
 		t.Errorf("the two readings: %q, %q", x, y)
 	}
 	p := Agree("a", "b", a, b)
-	if fa := p.Fields["target_instance"]; fa.N != 50 || fa.Agreement != 0.98 {
-		t.Errorf("target_instance %+v, want 49 of 50", fa)
+	// 13292.8's unsettled relation is left out (D102): 48 of 49.
+	if fa := p.Fields["target_instance"]; fa.N != 49 || fa.Agreement != 0.98 {
+		t.Errorf("target_instance %+v, want 48 of 49", fa)
 	}
 	if dis := Disagrees([]Annotation{a["13292.29"], b["13292.29"]}, a, b); strings.Join(dis, ",") != "target_claim,target_instance" {
 		t.Errorf("the disagreements: %v", dis)

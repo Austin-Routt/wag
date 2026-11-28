@@ -122,3 +122,46 @@ func TestDiscussionInstanceAgreement(t *testing.T) {
 		t.Fatalf("target_instance: %q, want %q", got, want)
 	}
 }
+
+// RC7's other halves (the independent review of D096's application, W2):
+// an instance by the discussion may conclude the negation of its claim's
+// statement, and a claim whose statement is a negation may carry one that
+// concludes what it negates.
+func TestDiscussionInstanceNegation(t *testing.T) {
+	inst := func(id string, primary bool, by, formula string) map[string]any {
+		in := map[string]any{"id": id, "primary": primary,
+			"scheme":     map[string]any{"walton_id": "positive_consequences", "fit": "reconstructed"},
+			"premises":   []any{map[string]any{"role": "premise", "formula": "good(g)", "status": "inferred", "cite": "c.9"}},
+			"conclusion": map[string]any{"formula": formula}}
+		if by != "" {
+			in["by"] = by
+		}
+		return in
+	}
+	for _, tc := range []struct {
+		name, own, disc string
+		bad             bool
+	}{
+		{"the statement", "should_be_performed(a)", "should_be_performed(a)", false},
+		{"its negation", "should_be_performed(a)", "¬should_be_performed(a)", false},
+		{"what a negated statement negates", "¬should_be_performed(a)", "should_be_performed(a)", false},
+		{"neither", "should_be_performed(a)", "should_be_performed(b)", true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			own := inst("c.0#1", true, "", tc.own)
+			out := checkDiscussion([]any{own, inst("c.0#2", false, "the discussion", tc.disc)}, own)
+			got := false
+			for _, p := range out {
+				if strings.Contains(p, "neither the claim's statement") {
+					got = true
+				}
+			}
+			if got != tc.bad {
+				t.Fatalf("reported %v, want %v: %v", got, tc.bad, out)
+			}
+			if !tc.bad && len(out) != 0 {
+				t.Fatalf("a sound instance is reported: %v", out)
+			}
+		})
+	}
+}
