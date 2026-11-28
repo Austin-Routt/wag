@@ -61,6 +61,12 @@
    "unresolved": 5,
    "all_assigned_agreement": 0.88
   },
+  "target_instance_v2": {
+   "agreement": 0.978,
+   "kappa": 0.974,
+   "unresolved": 5,
+   "all_assigned_agreement": 0.88
+  },
   "target_formula": {
    "agreement": 0.72,
    "kappa": 0.697,
@@ -286,6 +292,13 @@
    }
   ],
   "target_instance": [
+   {
+    "claim": "13292.29",
+    "A": "13292.1 primary",
+    "B": "13292.115 primary"
+   }
+  ],
+  "target_instance_v2": [
    {
     "claim": "13292.29",
     "A": "13292.1 primary",

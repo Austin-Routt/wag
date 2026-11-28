@@ -1,4 +1,4 @@
-"""Tests of agreement.py's exact target (docs/annotation-records.md §11).
+"""Tests of agreement.py's exact target (docs/annotation-records.md §11), with its structural version (F6).
 
 Run: python3 -I docs/kialo-batch2/test_agreement.py
 """
@@ -209,6 +209,75 @@ def _go_space(name):
     if len(found) != 1:
         raise AssertionError(f"{name}.py assigns GO_SPACE {len(found)} times")
     return found[0]
+
+
+def goal_instance(iid, goal, primary=False, by=None, order=1, spaced=False, unresolved=False):
+    """An instance of t.1 for its goal: practical reasoning concluding should_be_performed(tax), its
+    premises in the order given, a formula with spaces if asked, a premise unresolved if asked."""
+    ps = [{"role": "premise", "formula": "goal_of_agent( g , " + goal + " )" if spaced else "goal_of_agent(g," + goal + ")"},
+          {"role": "premise", "formula": "would_bring_about(tax," + goal + ")"},
+          {"role": "exception", "formula": "side_effect(tax)"}]
+    if unresolved:
+        ps[1]["formula"] = {"unresolved": "which effect"}
+    ins = {"id": iid, "primary": primary, "scheme": {"walton_id": "practical_reasoning2"},
+           "premises": ps[::order], "conclusion": {"formula": "should_be_performed(tax)"}}
+    if by:
+        ins["by"] = by
+    return ins
+
+
+def target_claim(*instances):
+    return {"kialo_claim_id": "t.1", "instances": list(instances)}
+
+
+class StructuralTarget(unittest.TestCase):
+    """Cases TS1-TS6 (d086-first-gold.md §6; F6 of the external review of exchange 3):
+    target_instance_v2 names a secondary target by its structure; target_instance keeps its
+    meaning. TS7, the Go measure on the same fixtures, is TestStructuralTargetMatchesPython."""
+
+    def values(self, S, instance, formula="should_be_performed(tax)", part="conclusion"):
+        item = target("t.1", instance, part, formula)
+        return ag.field_value("target_instance", item, S), ag.field_value("target_instance_v2", item, S)
+
+    def test_ts1_two_reconstructions_with_one_signature(self):
+        S = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env"),
+                                 goal_instance("t.1#3", "health"))}
+        v1a, v2a = self.values(S, "t.1#2")
+        v1b, v2b = self.values(S, "t.1#3")
+        self.assertEqual(v1a, v1b)  # the historical field: one signature
+        self.assertEqual(v1a, "t.1 secondary:practical_reasoning2:should_be_performed(tax)")
+        self.assertNotEqual(v2a, v2b)
+        self.assertEqual(v2a, "t.1 secondary:practical_reasoning2:should_be_performed(tax)"
+                              "[exception=side_effect(tax);premise=goal_of_agent(g,env);premise=would_bring_about(tax,env)]by=")
+
+    def test_ts2_the_same_reconstruction_however_written(self):
+        A = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env"))}
+        B = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env", order=-1, spaced=True))}
+        self.assertEqual(self.values(A, "t.1#2"), self.values(B, "t.1#2"))
+
+    def test_ts3_a_primary_target_is_its_claims_primary(self):
+        A = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True))}
+        B = {"t.1": target_claim(goal_instance("t.1#1", "health", primary=True))}
+        self.assertEqual(self.values(A, "t.1#1"), ("t.1 primary", "t.1 primary"))
+        self.assertEqual(self.values(B, "t.1#1"), ("t.1 primary", "t.1 primary"))
+
+    def test_ts4_a_premise_unresolved(self):
+        S = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env", unresolved=True))}
+        v1, v2 = self.values(S, "t.1#2")
+        self.assertEqual(v1, "t.1 secondary:practical_reasoning2:should_be_performed(tax)")
+        self.assertEqual(v2, ag.UNRESOLVED)
+
+    def test_ts5_by_the_discussion_or_the_claims_own(self):
+        S = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env"),
+                                 goal_instance("t.1#3", "env", by="the discussion"))}
+        self.assertEqual(self.values(S, "t.1#2")[0], self.values(S, "t.1#3")[0])
+        self.assertNotEqual(self.values(S, "t.1#2")[1], self.values(S, "t.1#3")[1])
+        self.assertTrue(self.values(S, "t.1#3")[1].endswith("]by=the discussion"))
+
+    def test_ts6_an_unsettled_relation_leaves_both_out(self):
+        S = {"t.1": target_claim(goal_instance("t.1#1", "env", primary=True), goal_instance("t.1#2", "env"))}
+        self.assertEqual(self.values(S, "t.1#2", formula={"unresolved": "which formula"}), (ag.UNRESOLVED, ag.UNRESOLVED))
+        self.assertIn("target_instance_v2", ag.RELATION_FIELDS)
 
 
 class CompactParity(unittest.TestCase):

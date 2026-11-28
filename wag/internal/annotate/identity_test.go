@@ -435,10 +435,12 @@ func TestAgreementFieldsAcrossFormats(t *testing.T) {
 	// (2026-11-28): 13292.8's relation to 13292.115's premise is unsettled
 	// (D102), so its role, question and target part, instance and formula are
 	// left out (unresolved, over 49); 13292.104#2 is positive consequences
-	// (instances).
+	// (instances). target_instance_v2 (F6 of the external review of exchange
+	// 3) as target_instance: a format-1 file names no secondary instance, so
+	// the two versions disagree on the same claims.
 	want := map[string]float64{"scheme": 0.88, "instances": 0.68, "target_formula": 0.796, "role": 0.959,
-		"target_part": 0.898, "cq": 0.837, "target_instance": 0.653, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
-	unsettled := map[string]bool{"role": true, "cq": true, "target_part": true, "target_instance": true, "target_formula": true}
+		"target_part": 0.898, "cq": 0.837, "target_instance": 0.653, "target_instance_v2": 0.653, "bindings": 0.9, "target_claim": 0.86, "re_parented": 0.96}
+	unsettled := map[string]bool{"role": true, "cq": true, "target_part": true, "target_instance": true, "target_instance_v2": true, "target_formula": true}
 	for _, f := range Fields {
 		fa := p.Fields[f]
 		w, ok := want[f]
@@ -487,7 +489,7 @@ func TestAgreementLeavesUnresolvedOut(t *testing.T) {
 	// 13292.12 names is still compared. 13292.8's relation is unsettled in the
 	// gold (D102), on both sides: one more unresolved target instance and
 	// formula.
-	for f, want := range map[string]int{"target_instance": 2, "target_formula": 1, "bindings": 1, "scheme": 0} {
+	for f, want := range map[string]int{"target_instance": 2, "target_instance_v2": 2, "target_formula": 1, "bindings": 1, "scheme": 0} {
 		if fa := p.Fields[f]; fa.Unresolved != want || fa.N != 50-want || fa.Agreement != 1 {
 			t.Errorf("%s: %+v, want %d unresolved and full agreement on the rest", f, fa, want)
 		}
@@ -496,7 +498,9 @@ func TestAgreementLeavesUnresolvedOut(t *testing.T) {
 	if q.AllAssignedAgreement["bindings"] != 49.0/50 {
 		t.Errorf("all-assigned agreement counts an unresolved value as agreeing: %v", q.AllAssignedAgreement["bindings"])
 	}
-	if dis := Disagrees([]Annotation{a["13292.12"], d.Gold["13292.12"]}, a, d.Gold); strings.Join(dis, ",") != "target_instance" {
+	// The target instance's two versions (target_instance_v2 since F6 of the
+	// external review of exchange 3) read one instance: both are unresolved.
+	if dis := Disagrees([]Annotation{a["13292.12"], d.Gold["13292.12"]}, a, d.Gold); strings.Join(dis, ",") != "target_instance,target_instance_v2" {
 		t.Errorf("an unresolved target instance and a resolved one differ: %v", dis)
 	}
 	// An unresolved formula is unresolved, even of a conclusion target whose
@@ -1462,7 +1466,8 @@ func TestTargetInstanceComparesTheClaim(t *testing.T) {
 	if fa := p.Fields["target_instance"]; fa.N != 49 || fa.Agreement != 0.98 {
 		t.Errorf("target_instance %+v, want 48 of 49", fa)
 	}
-	if dis := Disagrees([]Annotation{a["13292.29"], b["13292.29"]}, a, b); strings.Join(dis, ",") != "target_claim,target_instance" {
+	// Both versions of the target instance (F6) name the target claim.
+	if dis := Disagrees([]Annotation{a["13292.29"], b["13292.29"]}, a, b); strings.Join(dis, ",") != "target_claim,target_instance,target_instance_v2" {
 		t.Errorf("the disagreements: %v", dis)
 	}
 }

@@ -86,6 +86,23 @@ def signature(ins):
     return wid + ":" + compact(f)
 
 
+def structure(ins):
+    """What an instance says, not its id (Go's structure): its scheme and conclusion, its premises,
+    each role and formula, sorted, and who made it (by), so that two reconstructions of one claim with
+    one scheme and conclusion and different premises differ (F6 of the external review of exchange 3,
+    target_instance_v2). A premise whose formula is unresolved leaves it UNRESOLVED."""
+    ps = []
+    for p in ins.get("premises") or []:
+        p = p if isinstance(p, dict) else {}
+        if is_marker(p.get("formula"), "unresolved"):
+            return UNRESOLVED
+        role = p.get("role") if isinstance(p.get("role"), str) else ""
+        f = p.get("formula") if isinstance(p.get("formula"), str) else ""
+        ps.append(role + "=" + compact(f))
+    by = ins.get("by") if isinstance(ins.get("by"), str) else ""
+    return signature(ins) + "[" + ";".join(sorted(ps)) + "]by=" + by
+
+
 INSTANCE_ID = re.compile(r"^(.+)#([1-9][0-9]*)$")
 
 
@@ -140,6 +157,10 @@ def exact(item, which, S):
         return claim + " primary"
     if ins.get("primary") is True:
         return claim + " primary"
+    if which == "target_instance_v2":
+        # A secondary target by its structure, not its signature (F6; cases TS1-TS7).
+        st = structure(ins)
+        return UNRESOLVED if st == UNRESOLVED else claim + " secondary:" + st
     return claim + " secondary:" + signature(ins)
 
 
@@ -434,8 +455,8 @@ def family_of(families):
     return fam
 
 
-# The fields compared, each a function of an item (target_instance and target_formula also of the
-# annotator's own items, S, in which a target's instance is read).
+# The fields compared, each a function of an item (target_instance, target_instance_v2 and
+# target_formula also of the annotator's own items, S, in which a target's instance is read).
 FIELDS = {
     "scheme": scheme_id,
     "fit": fit,
@@ -447,6 +468,7 @@ FIELDS = {
     "evidence": lambda i: (i.get("evidence") or {}).get("status") or "none",
     "cq": lambda i: question(i),
     "target_instance": lambda i, S: exact(i, "target_instance", S),
+    "target_instance_v2": lambda i, S: exact(i, "target_instance_v2", S),
     "target_formula": lambda i, S: exact(i, "target_formula", S),
     "bindings": bindings,
     "instances": instances,
@@ -455,8 +477,9 @@ FIELDS = {
 # D102: an item whose target formula or part is unresolved has no settled relation to its target, so
 # its role, its question and its target's part, instance and formula are not compared: each is
 # unresolved, left out and counted. Its scheme, fit, polarity and target claim are compared as before.
-# An unresolved instance alone (a target claim not yet annotated) leaves only target_instance out.
-RELATION_FIELDS = ("role", "cq", "target_part", "target_instance", "target_formula")
+# An unresolved instance alone (a target claim not yet annotated) leaves only target_instance (and its
+# structural version, target_instance_v2) out.
+RELATION_FIELDS = ("role", "cq", "target_part", "target_instance", "target_instance_v2", "target_formula")
 
 
 def relation_unsettled(item):
@@ -473,7 +496,7 @@ def field_value(name, item, S):
     if name in RELATION_FIELDS and relation_unsettled(item):
         return UNRESOLVED
     fn = FIELDS[name]
-    return fn(item, S) if name in ("target_instance", "target_formula") else fn(item)
+    return fn(item, S) if name in ("target_instance", "target_instance_v2", "target_formula") else fn(item)
 
 
 def main():

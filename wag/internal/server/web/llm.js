@@ -294,7 +294,7 @@ function runPane() {
   const fmt = f => !f ? '' : !f.n ? `—${f.unresolved ? ` <span class="muted">(${f.unresolved} unresolved)</span>` : ''}`
     : `${f.agreement.toFixed(2)}${f.kappa != null ? ` <span class="muted">κ ${f.kappa.toFixed(2)}</span>` : ''}${f.unresolved ? ` <span class="muted" title="left out: unresolved, or a target the annotator's file does not hold">(${f.unresolved} unresolved)</span>` : ''}`;
   const fields = ['scheme', 'fit', 'role', 'polarity', 'target_claim', 'target_part', 're_parented', 'evidence',
-    'cq', 'target_instance', 'target_formula', 'bindings', 'instances'];
+    'cq', 'target_instance', 'target_instance_v2', 'target_formula', 'bindings', 'instances'];
   const agreeRows = [];
   if (rep) {
     for (const p of rep.pairs || []) agreeRows.push([`${p.a} ↔ ${p.b}`, p.items, p.fields]);
@@ -368,7 +368,7 @@ function annCard(name, a, problems, diff, cmp) {
       <tr${mark('fit')}><td>Fit</td><td>${esc(s.fit)}${s.confidence != null ? ` <span class="muted">(confidence ${esc(s.confidence)})</span>` : ''}</td></tr>
       <tr${mark('role') || mark('cq')}><td>Role</td><td>${esc(r.kind)}${r.cq ? ' — ' + esc(r.cq) : ''}</td></tr>
       <tr${mark('polarity')}><td>Polarity</td><td>${esc(r.polarity)}</td></tr>
-      <tr${mark('target_claim') || mark('target_part') || mark('target_instance') || mark('target_formula')}><td>Target</td><td>${esc(t.claim)}${t.instance ? ' <span class="muted">instance</span> <span class="mono">' + recVal(t.instance) + '</span>' : ''} · ${recVal(t.part)} ${t.formula ? '<span class="mono">' + recVal(t.formula) + '</span>' : ''}</td></tr>
+      <tr${mark('target_claim') || mark('target_part') || mark('target_instance') || mark('target_instance_v2') || mark('target_formula')}><td>Target</td><td>${esc(t.claim)}${t.instance ? ' <span class="muted">instance</span> <span class="mono">' + recVal(t.instance) + '</span>' : ''} · ${recVal(t.part)} ${t.formula ? '<span class="mono">' + recVal(t.formula) + '</span>' : ''}</td></tr>
       <tr${mark('re_parented')}><td>Re-parented</td><td>${esc(derived ?? stated)}${derived != null && stated != null && String(stated) !== derived ? ` <span class="muted small">(it says ${esc(stated)}; this is derived from the target)</span>` : ''}</td></tr>
       <tr${mark('evidence')}><td>Evidence</td><td>${esc((a.evidence || {}).status)}</td></tr>
       ${binds ? `<tr${mark('bindings')}><td>Bindings</td><td class="small">${binds}</td></tr>` : ''}

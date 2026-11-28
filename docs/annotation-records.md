@@ -306,7 +306,7 @@ format 1 (scheme, fit, role, polarity, target claim, target part, re-parenting, 
 A value that is unresolved, or that cannot be read in the annotator's file (a target claim it did not
 annotate), is left out of that field's agreement and counted apart (`unresolved`): missing data is
 neither agreement nor disagreement. Only what a field itself leaves open makes it unresolved: an
-unresolved instance leaves `target_instance` out. An unresolved formula or part leaves the relation
+unresolved instance leaves `target_instance` (and `target_instance_v2`) out. An unresolved formula or part leaves the relation
 unsettled (D102, since 2026-11-27): the claim's `role`, `cq`, `target_part`, `target_instance`
 (and `target_instance_v2`) and `target_formula` are all left out and counted, while its scheme, fit, polarity and target claim are
 compared as before (`agreement.py`'s `RELATION_FIELDS`, the Go `FieldIn`). In choosing the claims to

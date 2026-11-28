@@ -14,9 +14,11 @@ import (
 // by field: the eight of format 1, then, since the identity contract
 // (docs/annotation-records.md §11, D092), the question answered, the exact
 // target (the instance it names, read in the annotator's own file, and the
-// formula), the primary instance's bindings, and every instance.
+// formula), the primary instance's bindings, and every instance; since F6 of
+// the external review of exchange 3, target_instance_v2, a secondary target
+// named by its structure (docs/annotation-records.md §11).
 var Fields = []string{"scheme", "fit", "role", "polarity", "target_claim", "target_part", "re_parented", "evidence",
-	"cq", "target_instance", "target_formula", "bindings", "instances"}
+	"cq", "target_instance", "target_instance_v2", "target_formula", "bindings", "instances"}
 
 // Unresolved is the value of a field that cannot be compared: an annotator's
 // {"unresolved": why}, or a target its own file does not hold. It is left
@@ -52,10 +54,11 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 	// D102: a target whose formula or part is unresolved leaves the item's
 	// relation unsettled, so its role, question and target part, instance
 	// and formula are not compared (agreement.py's RELATION_FIELDS). An
-	// unresolved instance alone leaves only target_instance out, below.
+	// unresolved instance alone leaves only target_instance (and its
+	// structural version, target_instance_v2) out, below.
 	if relationUnsettled(actual) {
 		switch field {
-		case "role", "cq", "target_part", "target_instance", "target_formula":
+		case "role", "cq", "target_part", "target_instance", "target_instance_v2", "target_formula":
 			return Unresolved
 		}
 	}
@@ -131,7 +134,7 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 		}
 		sort.Strings(sigs)
 		return strings.Join(sigs, "|")
-	case "target_instance", "target_formula":
+	case "target_instance", "target_instance_v2", "target_formula":
 		if len(actual) == 0 {
 			return ""
 		}
@@ -179,9 +182,41 @@ func FieldIn(a Annotation, field string, set map[string]Annotation) string {
 		if p, _ := in["primary"].(bool); p {
 			return claim + " primary"
 		}
+		if field == "target_instance_v2" {
+			// A secondary target by its structure, not its signature (F6;
+			// cases TS1-TS7).
+			st := structure(in)
+			if st == Unresolved {
+				return Unresolved
+			}
+			return claim + " secondary:" + st
+		}
 		return claim + " secondary:" + signature(in)
 	}
 	return ""
+}
+
+// structure is what an instance says, not its id: its scheme and conclusion,
+// its premises, each role and formula, sorted, and who made it (by), so that
+// two reconstructions of one claim with one scheme and conclusion and
+// different premises differ (F6 of the external review of exchange 3,
+// target_instance_v2); as agreement.py's structure. A premise whose formula is
+// unresolved leaves it Unresolved.
+func structure(in map[string]any) string {
+	pms, _ := in["premises"].([]any)
+	ps := make([]string, 0, len(pms))
+	for _, x := range pms {
+		pm, _ := x.(map[string]any)
+		if isMarker(pm["formula"], "unresolved") {
+			return Unresolved
+		}
+		role, _ := pm["role"].(string)
+		f, _ := pm["formula"].(string)
+		ps = append(ps, role+"="+compact(f))
+	}
+	sort.Strings(ps)
+	by, _ := in["by"].(string)
+	return signature(in) + "[" + strings.Join(ps, ";") + "]by=" + by
 }
 
 // signature is what an instance names: its scheme and its conclusion.
