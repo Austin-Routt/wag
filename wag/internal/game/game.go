@@ -19,6 +19,7 @@
 package game
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -444,13 +445,29 @@ func NewGame(config GameConfig, adapter *carneades.Adapter, n *nascq.NASCQ, play
 	if len(config.Weights) > 0 {
 		gs.applyWeights(config.Weights)
 	}
-	if config.Objective == ObjectiveClaim && config.Claim != "" {
+	if config.Objective == ObjectiveClaim && config.Claim != "" && CheckClaimNamespace(config.Claim) == nil {
 		if id, err := adapter.MakeIssue(config.Claim, config.ClaimStandard); err == nil {
 			gs.Claim = id
 			adapter.Evaluate()
 		}
 	}
 	return gs
+}
+
+// ErrReservedClaim marks a claim in the engine's undercutter namespace.
+var ErrReservedClaim = errors.New("a claim cannot be about an argument not yet made")
+
+// CheckClaimNamespace refuses a claim that names, or whose opposite names, the
+// engine's undercutter of an argument, undercut(<id>): the engine writes that
+// statement when it makes argument <id>, replacing the claim's position on
+// the board, and WAG's own answer paths take it over, so a later argument
+// would be born undercut by moves made before it existed (F2 of the external
+// review of exchange 3). The server, wag-cli and NewGame check it.
+func CheckClaimNamespace(claim string) error {
+	if carneades.UndercutterStatement(claim) {
+		return fmt.Errorf("the claim %s names the engine's undercutter of an argument, undercut(...): %w", claim, ErrReservedClaim)
+	}
+	return nil
 }
 
 // SetClock sets the game's time source (nil: time.Now) and restarts the game

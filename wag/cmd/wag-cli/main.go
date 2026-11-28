@@ -219,6 +219,10 @@ func main() {
 			cfg.Profile.Actors = []game.ProfileActor{{ID: a}}
 		}
 	}
+	if err := game.CheckClaimNamespace(cfg.Claim); cfg.Claim != "" && err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
 	if cfg.Claim != "" {
 		if err := cfg.Profile.CheckClaim(cfg.Claim); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)

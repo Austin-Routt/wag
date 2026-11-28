@@ -355,6 +355,14 @@ stronger.
   - The central claim is `GameConfig.Claim`, or the conclusion of the first
     argument of the first seat.
   - It is at issue from the start, under `ClaimStandard`.
+  - It may not be, nor have as its opposite, a statement of the form the engine
+    gives an argument's undercutter, `undercut(<id>)` read as the engine reads
+    it (the server, wag-cli and the game refuse it; since 2026-11-28, F2 of the
+    external review of exchange 3). The engine writes that statement when it
+    makes argument `<id>`, so such a claim would be about an argument not yet
+    made, and a later argument would take it over. A game recorded with such a
+    claim loads with a build of commit f38d189 or earlier, and the loader says
+    so.
   - Even seats are pro and bear the burden of proof; odd seats are con.
   - Pro wins if the claim is In when the game ends, and con wins otherwise.
   - With one player it is solo belief revision: the result is the verdict,

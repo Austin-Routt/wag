@@ -33,3 +33,22 @@ func TestC2TheTerminalRefusesAnInquiryOfOnePlayer(t *testing.T) {
 		t.Fatalf("C1: a series of inquiries at the terminal: %v\n%s", err, out)
 	}
 }
+
+// U4 (docs/c5-item-f.md): the terminal refuses a claim in the engine's
+// undercutter namespace before the game starts.
+func TestU4TheTerminalRefusesAClaimInTheUndercuttersNamespace(t *testing.T) {
+	bin := filepath.Join(t.TempDir(), "wag-cli")
+	if out, err := exec.Command("go", "build", "-o", bin, ".").CombinedOutput(); err != nil {
+		t.Fatalf("build: %v\n%s", err, out)
+	}
+	for _, claim := range []string{"undercut(a11)", "¬undercut(a11)"} {
+		out, err := exec.Command(bin, "--claim", claim, "--p1", "random", "--p2", "greedy", "--turns", "2").CombinedOutput()
+		if err == nil || !strings.Contains(string(out), "names the engine's undercutter of an argument") {
+			t.Fatalf("%s: %v\n%s", claim, err, out)
+		}
+	}
+	out, err := exec.Command(bin, "--claim", "worth_finding_out_first(tax_meat,demand_falls)", "--p1", "random", "--p2", "greedy", "--turns", "2").CombinedOutput()
+	if err != nil || strings.Contains(string(out), "undercutter") {
+		t.Fatalf("another claim: %v\n%s", err, out)
+	}
+}

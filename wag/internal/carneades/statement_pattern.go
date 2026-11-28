@@ -54,3 +54,27 @@ func (a *Adapter) MatchesStatementPattern(stmtID, pattern string) bool {
 	_, ok = terms.Match(p, s, nil)
 	return ok
 }
+
+// UndercutterStatement reports whether formula, or the statement it negates,
+// is one the engine names for an argument's undercutter: undercut/1, as the
+// engine reads it. The engine writes undercut(<id>) when it makes argument
+// <id>, replacing a statement so named before (and WAG's own paths take one
+// over), so a claim so named would be about an argument not yet made (F2 of
+// the external review of exchange 3).
+func UndercutterStatement(formula string) bool {
+	t, ok := terms.ReadString(formula)
+	if !ok {
+		return false
+	}
+	for {
+		c, ok := t.(terms.Compound)
+		if !ok {
+			return false
+		}
+		if c.Functor == "¬" && len(c.Args) == 1 {
+			t = c.Args[0]
+			continue
+		}
+		return c.Functor == "undercut" && len(c.Args) == 1
+	}
+}

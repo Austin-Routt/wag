@@ -534,6 +534,9 @@ func (req *NewGameRequest) config(contexts []game.Context) (game.GameConfig, err
 	}
 	if strings.TrimSpace(req.Claim) != "" {
 		cfg.Objective, cfg.Claim = game.ObjectiveClaim, strings.TrimSpace(req.Claim)
+		if err := game.CheckClaimNamespace(cfg.Claim); err != nil {
+			return cfg, err
+		}
 		if cfg.Profile != nil {
 			if err := cfg.Profile.CheckClaim(cfg.Claim); err != nil {
 				return cfg, err

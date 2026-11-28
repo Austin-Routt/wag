@@ -147,6 +147,9 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 			r.Context, r.Weights = "", nil
 		}
 		cfg, err := r.config(s.contexts)
+		if errors.Is(err, game.ErrReservedClaim) {
+			return nil, fmt.Errorf("%w. WAG accepted such a claim until 2026-11-28 and refuses it since: this build cannot load the game; a WAG build of commit f38d189 or earlier can, and the export stays readable as a record", err)
+		}
 		if err != nil {
 			return nil, namelessName(err)
 		}

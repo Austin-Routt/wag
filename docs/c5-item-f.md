@@ -398,12 +398,25 @@ Planted for U1 to U5:
 
 | Defect | Caught by |
 |---|---|
-| the claim compared as text (`undercut( a11 )` taken) | U1 |
+| the claim compared as text, even with its spaces and one `¬` taken off (`¬(undercut(a11))` and `¬¬undercut(a11)` taken) | U1, U2 |
 | a negation not taken off (`¬undercut(a11)` taken, whose opposite is the reserved statement) | U1, U2 |
 | NewGame makes the claim the server refuses | U2 |
 | every functor that starts with `undercut`, or `undercut` of any arity, refused | U3 |
 | wag-cli not checking the claim | U4 |
 | the loader naming no change | U5 |
+
+Corrected before the tests' commit (2026-11-28): U1 and U2 also take `undercut (a11)` and
+`¬(undercut(a11))`. Probed with the engine's reader: the first is read as `undercut(a11)`, and the
+second's opposite is `undercut(a11)`; a text comparison that drops the spaces and one `¬` misses the
+second, and `¬¬undercut(a11)`. A quoted functor (`'undercut'(a11)`) is another statement for the
+engine, as are `-undercut(a11)` and `not(undercut(a11))`, so they stay accepted.
+
+Recorded with the code (2026-11-28): U1 to U5 ran as written, with U1 and U2's two added forms.
+Planted on a copy of the tree (the workspace's `verify/x3-fixes/f2-mutants.py`), each caught: the
+claim compared as text fails U1 and U2; a negation not taken off fails U1 and U2; NewGame making the
+claim fails U2; every functor that starts with `undercut`, of any arity, refused fails U3 (by U1's and
+U2's tests, which hold U3's forms); wag-cli not checking fails U4; and the loader naming no change
+fails U5.
 
 ## Not here
 
