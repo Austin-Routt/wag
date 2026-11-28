@@ -131,6 +131,21 @@ func TestGameFlow(t *testing.T) {
 	if len(opts) != 13 || len(generic) != 7 || generic["possible_bring_about(decider,carbon_tax)"] || !generic["would_bring_about(carbon_tax,status_quo,lower_emissions)"] {
 		t.Fatalf("%d move options on a1, the generic question about %v", len(opts), generic)
 	}
+	// The board offers no answer the game's profile refuses: sign's answer
+	// to practical reasoning's CQ:side_effect is left out (P5, D099 (3);
+	// docs/c5-item-f.md A8.5), the source-based schemes are not.
+	sideEffect := false
+	for _, o := range opts {
+		if o.CQ == "CQ:side_effect" {
+			sideEffect = true
+			if !strings.Contains(strings.Join(o.Schemes, " "), "AS:expert_opinion") || strings.Contains(strings.Join(o.Schemes, " "), "AS:sign") {
+				t.Fatalf("CQ:side_effect of a1 offers %v", o.Schemes)
+			}
+		}
+	}
+	if !sideEffect {
+		t.Fatal("CQ:side_effect is not offered at a1")
+	}
 	q := nascq.ProposedAction{Type: "question", AnswersCQID: "CQ:possibility", TargetArgID: "a1"}
 	mr = post(t, ts, "/api/games/"+st.ID+"/move", map[string]interface{}{"action": q})
 	if len(mr.State.Questions) != 1 || mr.State.Statements["possible_bring_about(decider,carbon_tax)"].Label != "out" {

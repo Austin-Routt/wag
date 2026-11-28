@@ -339,18 +339,25 @@ func (n *NASCQ) validateStatement(action ProposedAction, graph GraphQuerier) (*V
 		}
 		va.CaesAttackType = action.AttackType
 	}
-	// A question that refuses Other (D095 (3)) refuses it however its
-	// exception is argued: an argument made with Other that concludes the
-	// exception, as a move about it (or against its negation), is refused as
-	// an answer made with Other at the question would be (S5).
-	if s := n.Schemes[action.SchemeID]; s != nil && s.Free {
+	// A question that refuses Other (D095 (3)) bounds every route to its
+	// exception (D099 (4)): a move that argues for the exception (about it,
+	// or against its negation) is made with a scheme that backs the question
+	// (Backs), as an answer at the question is, not with Other, well made or
+	// not, nor with a scheme that concludes any statement but does not back
+	// the question (sign, analogy). Arguing against the exception is not
+	// bounded (S5).
+	if s := n.Schemes[action.SchemeID]; s != nil {
 		concl := action.TargetStmtID
 		if action.Type == "attack" {
 			concl = info.Opposite
 		}
 		if concl != "" {
-			if cq := n.RefusingQuestion(concl, graph); cq != "" {
-				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)",
+			if cq := n.RefusingQuestion(concl, graph); cq != "" && !n.Backs(cq, s) {
+				if s.Free {
+					return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about, and that question refuses Other (D095 (3)): make it out with a scheme that backs the question (%s)",
+						concl, cq, strings.Join(n.typedBackups(cq), ", "))
+				}
+				return nil, fmt.Errorf("S5: %s is the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s",
 					concl, cq, strings.Join(n.typedBackups(cq), ", "))
 			}
 		}
@@ -372,6 +379,19 @@ func (n *NASCQ) RefusingQuestion(stmt string, graph GraphQuerier) string {
 			if l := n.LocusOf(cqID, sid); l.Kind == LocusException && graph.ExceptionMatching(argID, l.Pattern) == stmt {
 				return cqID
 			}
+		}
+	}
+	return ""
+}
+
+// RefusingQuestionOf returns the question asked of the argument, at one of
+// its exceptions, that refuses Other (D095 (3)), the bridges' question, or
+// "" if it is asked none.
+func (n *NASCQ) RefusingQuestionOf(argID string, graph GraphQuerier) string {
+	sid := graph.ArgumentSchemeID(argID)
+	for _, cqID := range n.askIndex[sid] {
+		if cq := n.Questions[cqID]; cq != nil && cq.RefuseOther && n.LocusOf(cqID, sid).Kind == LocusException {
+			return cqID
 		}
 	}
 	return ""
@@ -744,6 +764,26 @@ func (n *NASCQ) WeightOf(s *ASNode) float64 {
 
 // typedBackups names the schemes that back a question other than Other:
 // its backup edges' and the thesis-independent ones.
+// Backs tells whether the scheme backs the question: it is on one of the
+// question's backup edges, or thesis-independent (the source-based schemes
+// back every question), and it is not Other where the question refuses it
+// (D095 (3)). A question that refuses Other is answered, and its exception
+// argued by any route, only with a scheme that backs it (D099 (4)).
+func (n *NASCQ) Backs(cqID string, s *ASNode) bool {
+	if s == nil {
+		return false
+	}
+	if q := n.Questions[cqID]; s.Free && q != nil && q.RefuseOther {
+		return false
+	}
+	for _, b := range n.GetBackupSchemes(cqID) {
+		if b.ID == s.ID {
+			return true
+		}
+	}
+	return false
+}
+
 // BackupNames are the names of the schemes that back a question's answer,
 // but the user-defined one: the schemes an answer to a question that
 // refuses Other is made with (D095 (3)).

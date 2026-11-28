@@ -292,9 +292,18 @@ func (n *NASCQ) EnumerateStatementActions(graph GraphQuerier, stmtIDs []string) 
 					attackType = "undermining"
 				}
 			}
+			// The exception of a question that refuses Other is argued for
+			// only with a scheme that backs the question (D099 (4)).
+			refusing := ""
+			if concl != "" {
+				refusing = n.RefusingQuestion(concl, graph)
+			}
 			for _, id := range sortedSchemeIDs(n.Schemes) {
 				s := n.Schemes[id]
 				if s.Role == RoleAnswer { // offered only as an answer (D094 (g))
+					continue
+				}
+				if refusing != "" && !n.Backs(refusing, s) {
 					continue
 				}
 				var fixed map[string]string

@@ -441,7 +441,7 @@ func (gs *GameState) BuildObservation() *Observation {
 	// Enumerate available action templates: the answers to critical
 	// questions, and the arguments for and against the statements on the
 	// board.
-	actions := gs.NASCQ.EnumerateActions(gs.bridge, argIDs)
+	actions := gs.EnumerateActions(argIDs)
 	actions = append(actions, gs.NASCQ.EnumerateStatementActions(gs.bridge, gs.BoardStatements())...)
 	// The game binds an agent place to the profile's agent (P2): no player
 	// fills it, a person at the terminal included.

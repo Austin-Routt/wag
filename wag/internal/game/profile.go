@@ -353,7 +353,7 @@ func (gs *GameState) beforeValidation(a nascq.ProposedAction) (nascq.ProposedAct
 }
 
 // Validate validates a move as a turn would, without playing it: the
-// profile's rules (P1 to P4) around NASCQ's (S0 to S9). The preview uses
+// profile's rules (P1 to P5) around NASCQ's (S0 to S9). The preview uses
 // it, so that it accepts the moves the game accepts.
 func (gs *GameState) Validate(a nascq.ProposedAction) (*nascq.ValidatedAction, error) {
 	a, p, err := gs.beforeValidation(a)
@@ -373,7 +373,8 @@ func (gs *GameState) Validate(a nascq.ProposedAction) (*nascq.ValidatedAction, e
 // afterValidation applies the profile to the values a validated move binds,
 // its own and the ones its target fixes: each action declared (P1) and the
 // agent's (P3), the actions a scheme keeps apart distinct, and a recorded
-// comparison where the scheme asks for one (P4).
+// comparison where the scheme asks for one (P4); and it refuses an answer
+// the profile leaves out until its warrant is reviewed (P5).
 func (gs *GameState) afterValidation(va *nascq.ValidatedAction, p *Profile) error {
 	if p == nil {
 		return nil
@@ -411,7 +412,60 @@ func (gs *GameState) afterValidation(va *nascq.ValidatedAction, p *Profile) erro
 	if s.Comparison && !containsString(Comparisons, va.Comparison) {
 		return fmt.Errorf("P4: %s records how the alternative is better (comparison: %s; D089)", s.Name, strings.Join(Comparisons, ", "))
 	}
+	if why := gs.unreviewedAnswer(va.SchemeID, va.AnswersCQID, va.TargetArgID); why != "" {
+		return fmt.Errorf("P5: %s does not answer %s of %s in WAG's first profile: that answer stays a reviewed candidate until its warrant is reviewed (%s)",
+			s.Name, va.AnswersCQID, gs.bridge.ArgumentSchemeID(va.TargetArgID), why)
+	}
 	return nil
+}
+
+// unreviewedAnswer returns why the profile leaves out the answer made with
+// the scheme to the question asked of the target argument (P5), or "" if it
+// does not. A move that answers no question is no such answer.
+func (gs *GameState) unreviewedAnswer(scheme, cq, targetArg string) string {
+	if cq == "" || targetArg == "" {
+		return ""
+	}
+	target := gs.bridge.ArgumentSchemeID(targetArg)
+	for _, u := range unreviewedAnswers {
+		if u.scheme == scheme && u.cq == cq && containsString(u.targets, target) {
+			return u.why
+		}
+	}
+	return ""
+}
+
+// EnumerateActions lists the moves NASCQ offers about the arguments given
+// (nascq.EnumerateActions) that the game accepts: in a game with a profile,
+// not the answers it leaves out (P5), so that the board and the computer
+// players offer no move the profile refuses.
+func (gs *GameState) EnumerateActions(argIDs []string) []nascq.ActionTemplate {
+	ts := gs.NASCQ.EnumerateActions(gs.bridge, argIDs)
+	if gs.Profile == nil {
+		return ts
+	}
+	out := ts[:0]
+	for _, t := range ts {
+		if t.Type == "question" || gs.unreviewedAnswer(t.SchemeID, t.AnswersCQID, t.TargetArgID) == "" {
+			out = append(out, t)
+		}
+	}
+	return out
+}
+
+// unreviewedAnswers are the answers the data offers (a backup edge) that
+// WAG's first profile leaves out until their warrant is reviewed (P5): the
+// answer scheme, the question, and the schemes of the arguments it is asked
+// of. A game with no profile plays them, as it plays every move the profile
+// would refuse.
+var unreviewedAnswers = []struct {
+	scheme, cq string
+	targets    []string
+	why        string
+}{
+	// Sign's answer at practical reasoning's rebuttal route (D099 (3)); at
+	// positive consequences' it is played as before (D009).
+	{"AS:sign", "CQ:side_effect", []string{"AS:practical_reasoning", "AS:practical_reasoning_goal"}, "D099 (3)"},
 }
 
 // practicalClaim matches a recommendation, should_be_performed(A) or its

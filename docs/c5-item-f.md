@@ -13,7 +13,8 @@ labels and texts, arguments, issues and assumptions), the open questions and the
 before. The rules come in this order (game-rules.md): the profile's P1 for the move's declarations
 and its own action values, and P2; NASCQ's S0 to S9 and Q1; P1 for the values a target fixes, P3,
 P4 and P5 (step C5.3); Q2 for a question; then, once the move is placed, the adapter's refusal (a premise that is
-the argument's own conclusion), the cycle check, S5 for a refused exception and G1. A rule's refusal
+the argument's own conclusion), the cycle check, S5 for a refused exception, P6 for an undercutter's
+ground (step C5.3) and G1. A rule's refusal
 (S, P, Q, G) is recorded in the move history once, with its penalty; the adapter's refusal and the
 cycle check's leave no record and cost nothing. (Corrected after the independent check of step 7:
 the page first put P1's own values after NASCQ, and said every refusal is recorded.) *Out of force* means the

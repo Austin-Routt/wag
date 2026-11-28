@@ -3170,3 +3170,48 @@ candidates:
       - "Questions on the chooser's knowledge, coercion, time and alternatives: a preference is not the same as welfare, or as permission. (ChatGPT's stage review, 2026-11-22; D083 waits for the sketch)"
     open:
       - "All three sightings are in the abortion discussion (5637); is the pattern found elsewhere (consumer choice, risky sports)?"
+  - id: C027
+    name: Sign's argument for or against a practical conclusion
+    kind: link
+    relation:
+      kind: rule
+      base: [sign, practical_reasoning1, practical_reasoning2, positive_consequences]
+      why: >-
+        Not a scheme: a rule for where sign, which concludes any statement from
+        an observed sign, may conclude a practical claim, should_be_performed(A)
+        or its negation; its warrant must connect the observation to what should
+        be done.
+    group: practical-conclusions
+    decision: D099
+    found:
+      - "the other reviewer's answer to C5's question 3, 2026-11-27, which the owner adopted (D099 (3)); the independent check of step C5.3's plan, 2026-11-28 (W2)"
+    confidence: medium
+    what: >-
+      Sign answers CQ:side_effect by its backup edge (D009): a further bad
+      consequence, argued from a sign, rebuts the practical conclusion. D099 (3)
+      leaves that answer out of WAG's first profile at practical reasoning until
+      its warrant is reviewed (the profile's P5), while D009 keeps it at positive
+      consequences. The same inference stays open by three other routes: a direct
+      rebuttal of practical reasoning made with sign, sign for or against
+      should_be_performed(A) as a move about the statement, and the answer at
+      positive consequences, which concludes the same statement.
+    compares: the routes by which sign concludes a practical claim
+    concludes: whether the profile admits sign at a practical conclusion, by route
+    exempt: >-
+      A route of the game's data, left out of the first profile in part by D099
+      (3), shown by the game's cases (docs/c5-item-f.md, A8); not a pattern that
+      data has to show.
+    closest:
+      - item: D099 (3)
+        why: It leaves out only the answer at practical reasoning's side-effect question.
+      - item: D009
+        why: It keeps sign's backup edges, at positive consequences too.
+    related:
+      - candidate: C014
+        how: Both concern the arguments that meet a practical conclusion.
+    sources:
+      - "The other reviewer's answer to C5's question 3 (wag-workspace reviews/2026-11-27, the gameplay review, section 6), which the owner adopted: sign at a practical rebuttal is a reviewed candidate route, not an automatically sound inference from an observation to what should be done; its warrant must connect the two (our paraphrase)."
+    needs:
+      - "The warrant's review: whether a sign of a further bad consequence, with the consequence's badness, can rebut a practical conclusion, and on which routes."
+    open:
+      - "Should P5 reach the direct rebuttal, the move about the statement and the answer at positive consequences (docs/c5-game.md, C5.3)?"

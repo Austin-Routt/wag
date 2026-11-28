@@ -233,6 +233,15 @@ func (gs *GameState) executeTurn(action nascq.ProposedAction) (*TurnResult, erro
 		return gs.rejectInvalid(player, action, msg), nil
 	}
 
+	// P6 (D099 (4)): in a game with a profile, an undercutter of an argument
+	// whose question refuses Other that answers no question declares that it
+	// attacks something other than whether the consequence could be found
+	// out first, which is the question's.
+	if msg := gs.undeclaredUndercut(argIDs, validated); msg != "" {
+		gs.Adapter.Restore(checkpoint)
+		return gs.rejectInvalid(player, action, msg), nil
+	}
+
 	// G1: a move must not restate an argument already in the graph (same
 	// scheme, conclusion and premises, whoever made it). Repeating a support
 	// move used to score it again every turn.
@@ -544,22 +553,30 @@ func (gs *GameState) applyAction(
 }
 
 // refusedException returns why a move's arguments, once placed, make out
-// the exception of a question that refuses Other (D095 (3)) without its
-// answer: an argument of Other that concludes it, or an argument that
-// presumes it as a premise; "" if none does. A scheme that backs the
-// question concludes it as the answer, which S5 checks at the question.
+// the exception of a question that refuses Other (D095 (3)) by a route D095
+// (3)'s list does not bound: an argument that concludes it made with a
+// scheme that does not back the question (Other; or sign and analogy, which
+// conclude any statement, by a move about it: D099 (4)), or an argument that
+// presumes it as a premise; "" if none does. The schemes that back the
+// question (its answer scheme, on its backup edge, and the source-based
+// schemes, which back every question) conclude it as the answer, which S5
+// checks at the question, or by a move about it. An undercutter of the
+// question's argument concludes neither, and is kept (D099 (4)).
 func (gs *GameState) refusedException(argIDs []string, va *nascq.ValidatedAction) string {
 	s := gs.NASCQ.GetScheme(va.SchemeID)
-	free := s != nil && s.Free
 	for _, id := range argIDs {
 		arg := gs.Adapter.Graph.Arguments[id]
 		if arg == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
 			continue // an exception argument's premise is not presumed
 		}
-		if free && arg.Conclusion != nil {
-			if cq := gs.NASCQ.RefusingQuestion(arg.Conclusion.Id, gs.bridge); cq != "" {
-				return fmt.Sprintf("S5: an argument of Other cannot conclude %s, the exception CQ %q asks about: that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
-					arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+		if arg.Conclusion != nil {
+			if cq := gs.NASCQ.RefusingQuestion(arg.Conclusion.Id, gs.bridge); cq != "" && !gs.NASCQ.Backs(cq, s) {
+				if s == nil || s.Free {
+					return fmt.Sprintf("S5: an argument of Other cannot conclude %s, the exception CQ %q asks about: that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
+						arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+				}
+				return fmt.Sprintf("S5: an argument of %s cannot conclude %s, the exception CQ %q asks about: only a scheme that backs that question makes it out (D095 (3), D099 (4)): %s",
+					s.Name, arg.Conclusion.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
 			}
 		}
 		for _, p := range arg.Premises {
@@ -569,6 +586,51 @@ func (gs *GameState) refusedException(argIDs []string, va *nascq.ValidatedAction
 			if cq := gs.NASCQ.RefusingQuestion(p.Stmt.Id, gs.bridge); cq != "" {
 				return fmt.Sprintf("S5: a move cannot presume %s as a premise: it is the exception CQ %q asks about, and that question refuses Other (D095 (3)); make it out with a scheme that backs the question (%s)",
 					p.Stmt.Id, cq, strings.Join(gs.NASCQ.BackupNames(cq), ", "))
+			}
+		}
+	}
+	return ""
+}
+
+// undeclaredUndercut returns why a move's arguments, once placed, undercut
+// an argument whose question refuses Other (a bridge) without the ground the
+// profile asks for (P6, D099 (4)), or "" if they do not: an argument that
+// concludes the bridge's undercut statement, made by a move that answers no
+// question (a direct undercutter, an argument for the undercut statement, or
+// Other's argument whose conclusion is that statement), declares
+// "ground": "other", for an attack on something other than whether the
+// consequence could be found out first. Whether it could is the question's,
+// answered with the schemes that back it; a game reads formulas, not the
+// free text, so the declaration is recorded with the move for the review
+// (D053). A game with no profile does not ask for it.
+func (gs *GameState) undeclaredUndercut(argIDs []string, va *nascq.ValidatedAction) string {
+	if gs.Profile == nil || va.AnswersCQID != "" || va.Ground == nascq.GroundOther {
+		return ""
+	}
+	for _, id := range argIDs {
+		arg := gs.Adapter.Graph.Arguments[id]
+		if arg == nil || arg.Conclusion == nil || carneades.ArgumentRole(arg) != carneades.RoleMain {
+			continue
+		}
+		for _, target := range sortedArgIDs(gs) {
+			t := gs.Adapter.Graph.Arguments[target]
+			if t.Undercutter == nil || t.Undercutter.Id != arg.Conclusion.Id {
+				continue
+			}
+			cq := gs.NASCQ.RefusingQuestionOf(target, gs.bridge)
+			if cq == "" {
+				continue
+			}
+			backs := strings.Join(gs.NASCQ.BackupNames(cq), ", ")
+			switch va.Ground {
+			case "":
+				return fmt.Sprintf("P6: an undercutter of %s, whose question CQ %q refuses Other, declares its ground: \"ground\": \"other\" for an attack on something other than whether the consequence could be found out first, which is the question's, answered with %s (D099 (4))",
+					target, cq, backs)
+			case nascq.GroundKnowability:
+				return fmt.Sprintf("P6: whether the consequence of %s could be found out first is CQ %q's: answer it with %s, not with an undercutter (D095 (3), D099 (4))",
+					target, cq, backs)
+			default:
+				return fmt.Sprintf("P6: an undercutter of %s declares the ground \"other\" (D099 (4)), not %q", target, va.Ground)
 			}
 		}
 	}

@@ -895,7 +895,7 @@ func moveOf(m map[string]interface{}, evidence bool) (nascq.ProposedAction, bool
 	// is a new argument). null counts as absent.
 	textKeys := []string{"scheme_id", "scheme", "target_arg_id", "target", "argument",
 		"answers_cq_id", "cq", "question", "critical_question", "target_premise_id", "premise",
-		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "text", "argument_text", "words"}
+		"target_stmt_id", "statement", "stmt", "target_statement", "attack_type", "ground", "text", "argument_text", "words"}
 	if evidence {
 		textKeys = append(textKeys, "binding_id", "binding", "revision")
 	}
@@ -953,6 +953,7 @@ func moveOf(m map[string]interface{}, evidence bool) (nascq.ProposedAction, bool
 		TargetPremiseID: str("target_premise_id", "premise"),
 		TargetStmtID:    str("target_stmt_id", "statement", "stmt", "target_statement"),
 		AttackType:      str("attack_type"),
+		Ground:          str("ground"),
 		Text:            str("text", "argument_text", "words")}
 	for _, k := range []string{"variable_bindings", "bindings", "slots", "variables", "parts"} {
 		if vb, ok := m[k].(map[string]interface{}); ok {

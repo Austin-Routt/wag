@@ -259,6 +259,14 @@ func (l Locus) AttackType() string {
 	return ""
 }
 
+// The grounds an undercutter of a bridge declares (ProposedAction.Ground):
+// another than knowability, which a game with a profile admits (P6), and
+// knowability itself, which it refuses: that is the bridge's question's.
+const (
+	GroundOther       = "other"
+	GroundKnowability = "knowability"
+)
+
 // ProposedAction represents a player's intended move before validation.
 // The NASCQ layer validates this against its structural rules (S1–S8)
 // and produces a ValidatedAction if all checks pass.
@@ -296,6 +304,11 @@ type ProposedAction struct {
 	// Comparison is how the alternative of a scheme that records one is
 	// better: "surely", "sooner" or "cheaper" (D089).
 	Comparison string `json:"comparison,omitempty"`
+	// Ground is what an undercutter of an argument whose question refuses
+	// Other (a bridge) attacks, when it answers no question: GroundOther, for
+	// an attack on something other than whether the consequence could be
+	// found out first, which is the question's (D099 (4); the profile's P6).
+	Ground string `json:"ground,omitempty"`
 
 	// An evidence act (docs/e1-evidence.md), of type "evidence_offer",
 	// "evidence_consent" or "evidence_withdraw": an offer of a claim of the

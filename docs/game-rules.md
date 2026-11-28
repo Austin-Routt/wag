@@ -208,13 +208,23 @@ a rule of the dialogue, not a change of who proves an exception:
   question refuses Other (D095 (3)): then only its typed answers may, and a
   well-made Other is refused too (S5), whether it answers the question or
   argues the exception as a move about the statement (or against its
-  negation). An answer scheme (one that concludes the formula of the
-  question it answers, D094 (g)) is offered only as an answer, on its backup
-  edges, never as a move of its own (S1).
+  negation). The schemes that back such a question bound every route to its
+  exception (D099 (4)): its answer scheme and the source-based schemes argue
+  for the exception, as an answer or by a move about it; sign and analogy,
+  which conclude any statement, are refused there as Other is (S5), and the
+  board does not offer them. Arguing against the exception is not bounded,
+  and an undercutter of the question's argument is kept: it concludes neither
+  the exception nor anything it presumes. An answer scheme (one that concludes
+  the formula of the question it answers, D094 (g)) is offered only as an
+  answer, on its backup edges, never as a move of its own (S1).
 
 This formalizes the game's behaviour since October 2026, but for the two
 rules step C5.2 adds (an answer scheme only as an answer, a question that
 refuses Other), which no reference game reaches, so no golden game moves.
+Step C5.3's rules (P5 below, and the bound on the exception) also change what
+the board and the computer players are offered, so 24 of the 33 golden games
+on the shipped data were made again, each first changed where its menu lost
+two offers (docs/c5-game.md, C5.3).
 
 **The profile** (D094 (b); D089, D091, D092, D063). A game made since
 step C5.2 has a profile, a discussion imported from Kialo included: the
@@ -255,8 +265,30 @@ as the action). Its rules come before and after NASCQ's (S0 to S9):
   refused without it. Its P, G and A are the answered exception's (S9), so
   its goal premise is the answered argument's.
 
+- **P5.** An answer the data offers but WAG's first profile leaves out
+  until its warrant is reviewed is refused, and the board and the computer
+  players are not offered it: sign's answer to CQ:side_effect of practical
+  reasoning (`AS:practical_reasoning`, `AS:practical_reasoning_goal`), of
+  either polarity (D099 (3)). Sign's answer to positive consequences'
+  side-effect question is played as before (D009), and a game with no
+  profile plays both.
+
+- **P6.** An undercutter of an argument whose question refuses Other (a
+  bridge, whose question asks whether the consequence is worth finding out
+  first), made by a move that answers no question (a direct undercutter, or
+  an argument for the argument's undercut statement), declares its ground:
+  `"ground": "other"`, for an attack on something other than whether the
+  consequence could be found out first (D099 (4)). That is the question's,
+  answered with the schemes that back it, so a move that declares no ground,
+  or `"ground": "knowability"`, is refused and pointed to the question. The
+  game reads formulas, not the free text, so the declaration is recorded
+  with the move, and whether the ground is truly another is the review's
+  (D053). An undercutter of any other argument declares nothing.
+
 P1 (the declarations) and P2 are checked before NASCQ's rules, P1 (the
-values) and P3 and P4 after them; a preview checks a move as a turn does.
+values), P3, P4 and P5 after them, and P6 once the move is placed (it reads
+what the move's arguments conclude, by whatever route); a preview checks a
+move as a turn does.
 The situation is shown and recorded, not checked move by move (D089).
 Computer players argue about the agent's actions, and declare the new ones
 they name.

@@ -203,6 +203,35 @@ func TestQuestionRefusesOther(t *testing.T) {
 	}
 }
 
+// Backs (D095 (3), D099 (4)): the schemes on a question's backup edges and
+// the thesis-independent ones back it, Other too unless the question refuses
+// it; a scheme with an answer variable that is neither does not.
+func TestBacks(t *testing.T) {
+	n := loadRoles(t)
+	n.EnableOther()
+	n.Schemes["AS:signlike"] = &ASNode{ID: "AS:signlike", Name: "Sign-like", AnswerVariable: "B",
+		Variables: map[string]VariableSpec{"A": {Type: "event"}, "B": {Type: "event"}}}
+	for _, c := range []struct {
+		cq, scheme string
+		want       bool
+	}{
+		{"CQ:wf", "AS:fof", true},          // its backup edge
+		{"CQ:wf", "AS:expert", true},       // a source-based scheme backs every question
+		{"CQ:wf", OtherSchemeID, false},    // the question refuses Other
+		{"CQ:wf", "AS:signlike", false},    // concludes any statement, backs nothing
+		{"CQ:wf", "AS:cons", false},        // no edge
+		{"CQ:slight", OtherSchemeID, true}, // a question that takes Other
+		{"CQ:slight", "AS:fof", false},
+	} {
+		if got := n.Backs(c.cq, n.Schemes[c.scheme]); got != c.want {
+			t.Errorf("Backs(%s, %s) = %v, want %v", c.cq, c.scheme, got, c.want)
+		}
+	}
+	if n.Backs("CQ:wf", nil) {
+		t.Error("no scheme backs a question")
+	}
+}
+
 // A modal variant weighs as its categorical counterpart, a bridge as its
 // modal variant, so as the counterpart too, with no multiplier; an answer
 // scheme as the argument it answers (D094 (g)). The counterpart's weight is

@@ -49,3 +49,16 @@ func TestReplySourcesMustBeText(t *testing.T) {
 		t.Errorf("error does not name evidence: %v", err)
 	}
 }
+
+// A model's reply carries an undercutter's ground (the profile's P6, D099
+// (4)); a ground given as anything but text is refused by name, as the
+// other text parts are.
+func TestReplyGround(t *testing.T) {
+	a, err := ParseReply(`{"type":"attack","attack_type":"undercutter","target_arg_id":"a2","scheme_id":"AS:other","ground":"other","variable_bindings":{"P1":"the vote comes first"}}`)
+	if err != nil || a.Ground != "other" {
+		t.Fatalf("the ground: %q %v", a.Ground, err)
+	}
+	if _, err := ParseReply(`{"type":"attack","attack_type":"undercutter","target_arg_id":"a2","scheme_id":"AS:other","ground":["other"]}`); err == nil || !strings.Contains(err.Error(), `"ground" must be text`) {
+		t.Fatalf("a ground that is not text: %v", err)
+	}
+}

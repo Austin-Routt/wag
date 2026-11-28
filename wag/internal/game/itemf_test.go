@@ -215,7 +215,7 @@ func (g *fgame) mustOut(stmt string) {
 	}
 }
 
-// ruleRefusal tells whether a refusal is a rule's (S0 to S9, P1 to P4, Q1,
+// ruleRefusal tells whether a refusal is a rule's (S0 to S9, P1 to P5, Q1,
 // Q2, G1), which the history records with its penalty.
 func ruleRefusal(rule string) bool {
 	return len(rule) >= 2 && strings.ContainsRune("SPQG", rune(rule[0])) && rule[1] >= '0' && rule[1] <= '9'
@@ -692,6 +692,271 @@ func TestItemFBackupEdges(t *testing.T) {
 		g := newFGame(t)
 		n1 := g.n1()
 		g.refuse("Pro", answer("attack", "CQ:opposite_consequences", "AS:negative_consequences", n1, vb("A", "tax_meat", "G", "jobs_lost")), "S5")
+	})
+}
+
+// newFGameNoProfile is item F's board without a profile, as a game made
+// before step C5.2: no rule of the profile (P1 to P5) applies, and a move
+// binds practical reasoning's P itself.
+func newFGameNoProfile(t *testing.T) *fgame {
+	t.Helper()
+	g := newFGame(t)
+	g.gs.Config.Profile, g.gs.Profile = nil, nil
+	return g
+}
+
+// Step C5.3 (D099), on today's data (docs/c5-item-f.md, A8 and A9): P5, the
+// offers, and D095 (3)'s list bounding every route to the bridges' exception.
+// A7 and A9.4 come with the switch, which changes the data.
+func TestItemFStepC53(t *testing.T) {
+	strain := vb("A", "food_banks_report_strain")
+	worthRefused := "S5: " + worthDF + " is the exception"
+	t.Run("A8.1", func(t *testing.T) {
+		g := newFGame(t)
+		pr := g.pr()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:sign", pr, strain), "P5")
+	})
+	t.Run("A8.1b", func(t *testing.T) {
+		g := newFGame(t)
+		pr := g.pr()
+		g.refuse("Pro", answer("support", "CQ:side_effect", "AS:sign", pr, vb("A", "emissions_fell_where_meat_was_taxed")), "P5")
+	})
+	t.Run("A8.2", func(t *testing.T) {
+		g := newFGame(t)
+		pg := g.pg()
+		g.refuse("Con", answer("attack", "CQ:side_effect", "AS:sign", pg, strain), "P5")
+	})
+	t.Run("A8.3", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:sign", c1, strain))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+	})
+	t.Run("A8.4", func(t *testing.T) {
+		g := newFGameNoProfile(t)
+		pr := g.play("Pro", support("AS:practical_reasoning", vb("A", "tax_meat", "S1", "high_emissions", "S2", "low_emissions",
+			"G", "emissions_fall", "V", "sustainability", "P", DefaultAgent)))
+		ans := g.play("Con", answer("attack", "CQ:side_effect", "AS:sign", pr, strain))
+		if got := g.conclusion(ans); got != "¬"+shouldTax {
+			t.Fatalf("the answer concludes %s", got)
+		}
+	})
+	t.Run("A8.5", func(t *testing.T) {
+		// The answers made with sign to CQ:side_effect that the game offers
+		// about the argument, by polarity.
+		signAnswers := func(g *fgame, arg string) map[string]bool {
+			m := map[string]bool{}
+			for _, a := range g.gs.EnumerateActions([]string{arg}) {
+				if a.TargetArgID == arg && a.AnswersCQID == "CQ:side_effect" && a.SchemeID == "AS:sign" {
+					m[a.Type] = true
+				}
+			}
+			return m
+		}
+		g := newFGame(t)
+		c1, pr := g.c1(), g.pr()
+		if m := signAnswers(g, pr); len(m) != 0 {
+			t.Errorf("the answers P5 refuses are offered at pr: %v", m)
+		}
+		if m := signAnswers(g, c1); !m["attack"] || !m["support"] {
+			t.Errorf("A5.1's answers are not offered at c1: %v", m)
+		}
+		for _, a := range g.gs.BuildObservation().AvailableActions {
+			if a.TargetArgID == pr && a.AnswersCQID == "CQ:side_effect" && a.SchemeID == "AS:sign" {
+				t.Errorf("offered to the computer players: %+v", a)
+			}
+		}
+		h := newFGameNoProfile(t)
+		prh := h.play("Pro", support("AS:practical_reasoning", vb("A", "tax_meat", "S1", "high_emissions", "S2", "low_emissions",
+			"G", "emissions_fall", "V", "sustainability", "P", DefaultAgent)))
+		if m := signAnswers(h, prh); !m["attack"] || !m["support"] {
+			t.Errorf("without a profile, sign's answers at pr are not offered: %v", m)
+		}
+	})
+
+	t.Run("A8.6", func(t *testing.T) {
+		g := newFGame(t)
+		pr := g.pr()
+		r := g.play("Con", nascq.ProposedAction{Type: "attack", AttackType: "rebuttal", SchemeID: "AS:sign", TargetArgID: pr, VariableBindings: strain})
+		if got := g.conclusion(r); got != "¬"+shouldTax {
+			t.Fatalf("the rebuttal concludes %s", got)
+		}
+	})
+	t.Run("A8.7", func(t *testing.T) {
+		g := newFGame(t)
+		g.pr()
+		r := g.play("Con", about("attack", "AS:sign", shouldTax, strain))
+		if got := g.conclusion(r); got != "¬"+shouldTax {
+			t.Fatalf("the argument concludes %s", got)
+		}
+	})
+
+	t.Run("A9.1", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		g.bPlus("demand_falls")
+		g.refuse("Con", about("support", "AS:sign", worthDF, vb("A", "a_pilot_is_planned")), worthRefused)
+		g.refuse("Con", about("support", "AS:analogy", worthDF, vb("C", "the_sugar_tax")), worthRefused)
+	})
+	t.Run("A9.1b", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		g.bPlus("demand_falls")
+		g.play("Pro", about("attack", nascq.OtherSchemeID, worthDF, vb("P1", "the decision cannot wait")))
+		g.refuse("Con", about("attack", "AS:sign", "¬"+worthDF, vb("A", "a_pilot_is_planned")), worthRefused)
+	})
+	t.Run("A9.2", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		src := g.play("Con", about("support", "AS:position_to_know", worthDF, vb("W", "the_farm_ministry", "D", "farm_markets")))
+		if got := g.conclusion(src); got != worthDF {
+			t.Fatalf("the source's argument concludes %s", got)
+		}
+		g.mustIn(worthDF)
+		g.outOfForce(bp)
+	})
+	t.Run("A9.2b", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		src := g.play("Con", about("support", "AS:expert_opinion", worthDF, vb("W", "dr_lee", "D", "food_economics")))
+		if got := g.conclusion(src); got != worthDF {
+			t.Fatalf("the expert's argument concludes %s", got)
+		}
+		g.mustIn(worthDF)
+		g.outOfForce(bp)
+	})
+	// An undercutter of b+ answering no question, made with the scheme given.
+	undercut := func(bp, scheme, ground string) nascq.ProposedAction {
+		b := map[string]string{
+			nascq.OtherSchemeID: "P1",
+			"AS:sign":           "A",
+			"AS:analogy":        "C",
+		}[scheme]
+		return nascq.ProposedAction{Type: "attack", AttackType: "undercutter", SchemeID: scheme, TargetArgID: bp, Ground: ground,
+			VariableBindings: vb(b, "the_vote_comes_first")}
+	}
+	t.Run("A9.3", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		g.play("Con", undercut(bp, nascq.OtherSchemeID, nascq.GroundOther))
+		g.outOfForce(bp)
+		g.mustNotIn(worthDF)
+		if m := g.gs.MoveHistory[len(g.gs.MoveHistory)-1]; m.Action.Ground != nascq.GroundOther {
+			t.Fatalf("the move's record keeps the ground %q", m.Action.Ground)
+		}
+	})
+	t.Run("A9.3b", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		for _, ground := range []string{"", nascq.GroundKnowability} {
+			g.refuse("Con", undercut(bp, nascq.OtherSchemeID, ground), "P6")
+			if !strings.Contains(g.gs.LastRejection, `CQ "CQ:worth_finding_out_first"`) {
+				t.Errorf("ground %q: the refusal does not name the question: %s", ground, g.gs.LastRejection)
+			}
+		}
+	})
+	t.Run("A9.3c", func(t *testing.T) {
+		for _, scheme := range []string{"AS:sign", "AS:analogy"} {
+			g := newFGame(t)
+			g.mPlus("demand_falls")
+			bp := g.bPlus("demand_falls")
+			g.refuse("Con", undercut(bp, scheme, ""), "P6")
+			g.play("Con", undercut(bp, scheme, nascq.GroundOther))
+			g.outOfForce(bp)
+		}
+	})
+	t.Run("A9.3d", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		bp := g.bPlus("demand_falls")
+		g.play("Con", undercut(bp, nascq.OtherSchemeID, nascq.GroundOther))
+		u := g.gs.Adapter.Graph.Arguments[bp].Undercutter
+		if u == nil {
+			t.Fatal("b+ has no undercut statement")
+		}
+		g.refuse("Con", about("support", "AS:sign", u.Id, vb("A", "the_vote_comes_first")), "P6")
+	})
+	t.Run("A9.3e", func(t *testing.T) {
+		g := newFGameNoProfile(t)
+		g.play("Pro", support("AS:consequences_modal", vb("A", "tax_meat", "G", "demand_falls")))
+		bp := g.play("Pro", support("AS:bridge_possible_good", vb("A", "tax_meat", "G", "demand_falls")))
+		g.play("Con", undercut(bp, nascq.OtherSchemeID, ""))
+		g.outOfForce(bp)
+	})
+	t.Run("A9.3f", func(t *testing.T) {
+		g := newFGame(t)
+		c1 := g.c1()
+		g.play("Con", undercut(c1, nascq.OtherSchemeID, ""))
+		g.outOfForce(c1)
+	})
+	t.Run("A9.5", func(t *testing.T) {
+		// The schemes offered for and against the exception, sorted.
+		check := func(what string, ts []nascq.ActionTemplate) {
+			t.Helper()
+			offered := map[string][]string{}
+			for _, a := range ts {
+				if a.TargetStmtID == worthDF {
+					offered[a.Type] = append(offered[a.Type], a.SchemeID)
+				}
+			}
+			sort.Strings(offered["support"])
+			sort.Strings(offered["attack"])
+			if got, want := strings.Join(offered["support"], " "), "AS:expert_opinion AS:position_to_know"; got != want {
+				t.Errorf("%s, for the exception: %q, want %q", what, got, want)
+			}
+			if got, want := strings.Join(offered["attack"], " "), "AS:analogy AS:expert_opinion AS:other AS:position_to_know AS:sign"; got != want {
+				t.Errorf("%s, against the exception: %q, want %q", what, got, want)
+			}
+		}
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		g.bPlus("demand_falls")
+		// The moves about the statement, as the board lists them when it is
+		// chosen (the server's statement moves).
+		check("the statement's moves", g.gs.NASCQ.EnumerateStatementActions(g.gs.Bridge(), []string{worthDF}))
+		// The computer players' menu lists a statement an argument concludes.
+		g.play("Con", about("support", "AS:position_to_know", worthDF, vb("W", "the_farm_ministry", "D", "farm_markets")))
+		check("the computer players' menu", g.gs.BuildObservation().AvailableActions)
+	})
+	t.Run("A9.7", func(t *testing.T) {
+		g := newFGame(t)
+		var ids []string
+		for _, s := range g.gs.NASCQ.GetBackupSchemes("CQ:worth_finding_out_first") {
+			if !s.Free {
+				ids = append(ids, s.ID)
+			}
+		}
+		sort.Strings(ids)
+		if got, want := strings.Join(ids, " "), "AS:expert_opinion AS:finding_out_first AS:position_to_know"; got != want {
+			t.Fatalf("D095 (3)'s list is %q, want %q", got, want)
+		}
+	})
+	t.Run("A9.6", func(t *testing.T) {
+		g := newFGame(t)
+		g.mPlus("demand_falls")
+		g.bPlus("demand_falls")
+		g.gs.Adapter.AddStatement("placed_premise", "a placed premise")
+		id, err := g.gs.Adapter.AddArgumentDirect("Con", "sign", []string{"placed_premise"}, worthDF, 0.5)
+		if err != nil {
+			t.Fatal(err)
+		}
+		g.gs.Adapter.SetArgumentMeta(id, carneades.RoleKey, carneades.RoleMain)
+		for scheme, want := range map[string]string{
+			"AS:sign":             "S5: an argument of Argument from Sign cannot conclude " + worthDF,
+			nascq.OtherSchemeID:   "S5: an argument of Other cannot conclude " + worthDF,
+			"AS:position_to_know": "",
+		} {
+			got := g.gs.refusedException([]string{id}, &nascq.ValidatedAction{ProposedAction: nascq.ProposedAction{SchemeID: scheme}})
+			if (want == "") != (got == "") || !strings.HasPrefix(got, want) {
+				t.Errorf("%s: %q, want %q", scheme, got, want)
+			}
+		}
 	})
 }
 

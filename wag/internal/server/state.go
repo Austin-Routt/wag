@@ -607,7 +607,7 @@ func (s *Session) stateFor(who role) *State {
 func moves(gs *game.GameState, target string) []MoveOption {
 	ms := &MovesState{Targets: map[string][]MoveOption{}}
 	index := map[string]int{}
-	for _, t := range gs.NASCQ.EnumerateActions(gs.Bridge(), []string{target}) {
+	for _, t := range gs.EnumerateActions([]string{target}) {
 		if t.TargetArgID == "" {
 			continue
 		}
@@ -713,7 +713,7 @@ func stmtMoves(gs *game.GameState, stmtID string) *StmtMoves {
 		}
 	}
 	carneades.SortArgumentIDs(argIDs)
-	for _, t := range gs.NASCQ.EnumerateActions(gs.Bridge(), argIDs) {
+	for _, t := range gs.EnumerateActions(argIDs) {
 		if t.Type == "question" && t.LocusStmtID == stmtID {
 			sm.Challenges = append(sm.Challenges, Challenge{Arg: t.TargetArgID, Owner: ownerOf(gs.Adapter.Graph.Arguments[t.TargetArgID]),
 				CQ: t.AnswersCQID, Name: t.CQName, Question: gs.QuestionAbout(t.AnswersCQID, t.TargetArgID, stmtID)})
