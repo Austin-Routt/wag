@@ -38,6 +38,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	caes "github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
@@ -162,17 +163,6 @@ func generateStatementIDFromText(text string) string {
 //
 // IMPORTANT: Caller must hold a.mu.
 func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
-	// Negated statements (¬ prefix) are not parseable Prolog terms.
-	// Carneades uses "¬" + id as raw map keys (see caf.go complement()).
-	// Skip the term parser to avoid "EOF missing term" stderr warnings.
-	if strings.HasPrefix(idOrText, "¬") {
-		if stmt, exists := a.Graph.Statements[idOrText]; exists {
-			return stmt
-		}
-		stmt := &caes.Statement{Id: idOrText, Text: idOrText, Metadata: caes.NewMetadata()}
-		a.Graph.Statements[idOrText] = stmt
-		return stmt
-	}
 	// Empty strings are not valid statement IDs. Reject early to avoid
 	// "EOF missing term" warnings from terms.ReadString("").
 	if strings.TrimSpace(idOrText) == "" {
@@ -186,22 +176,43 @@ func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
 		return stmt
 	}
 
-	// Attempt to parse as a Prolog term for canonical representation.
-	if t, ok := terms.ReadString(idOrText); ok {
-		// Use the canonical term string as the ID.
-		id := t.String()
-		if stmt, exists := a.Graph.Statements[id]; exists {
+	// A formula is named by the key the engine gives it: terms.Normalize reads
+	// it with the negation identity (ReadFormula: "¬ p", "¬(p)" and "¬p" are
+	// one key, "¬¬p" is "p", "s(¬¬x)" is "s(x)"), and the engine re-keys the
+	// board's statements so at each evaluation (caes.go). A statement named
+	// otherwise is not found under its name once the board is evaluated: a
+	// claim "¬ p" stopped the server, and S5 read "¬¬p" as another statement
+	// than p (docs/c5-item-f.md, section K; AddStatement keys so already).
+	// (Negation signs alone are no formula: not read, to avoid the reader's
+	// "EOF missing term" warning.)
+	if !onlyNegations(idOrText) {
+		if t, ok := terms.ReadFormula(idOrText); ok {
+			id := t.String()
+			if stmt, exists := a.Graph.Statements[id]; exists {
+				return stmt
+			}
+			// A negation keeps its id as its text, as before; another formula
+			// is said by the Theory's Language map if available.
+			text := id
+			if !strings.HasPrefix(id, "¬") && a.Graph.Theory != nil && a.Graph.Theory.Language != nil {
+				if langText := a.Graph.Theory.Language.Apply(t); strings.TrimSpace(langText) != "" {
+					text = langText
+				}
+			}
+			stmt := &caes.Statement{Id: id, Text: text, Metadata: caes.NewMetadata()}
+			a.Graph.Statements[id] = stmt
 			return stmt
 		}
-		// Format display text via the Theory's Language map if available.
-		text := t.String()
-		if a.Graph.Theory != nil && a.Graph.Theory.Language != nil {
-			if langText := a.Graph.Theory.Language.Apply(t); strings.TrimSpace(langText) != "" {
-				text = langText
-			}
+	}
+
+	// A negated text that is no formula keeps its text as its name (the
+	// engine's key for it too: terms.Normalize leaves it as it is).
+	if strings.HasPrefix(idOrText, "¬") {
+		if stmt, exists := a.Graph.Statements[idOrText]; exists {
+			return stmt
 		}
-		stmt := &caes.Statement{Id: id, Text: text, Metadata: caes.NewMetadata()}
-		a.Graph.Statements[id] = stmt
+		stmt := &caes.Statement{Id: idOrText, Text: idOrText, Metadata: caes.NewMetadata()}
+		a.Graph.Statements[idOrText] = stmt
 		return stmt
 	}
 
@@ -221,6 +232,11 @@ func (a *Adapter) findOrCreateStatement(idOrText string) *caes.Statement {
 	stmt := &caes.Statement{Id: id, Text: idOrText, Metadata: caes.NewMetadata()}
 	a.Graph.Statements[id] = stmt
 	return stmt
+}
+
+// onlyNegations reports whether s holds negation signs and spaces only.
+func onlyNegations(s string) bool {
+	return strings.TrimFunc(s, func(r rune) bool { return r == '¬' || unicode.IsSpace(r) }) == ""
 }
 
 // nextArgID returns an unused argument ID of the form "aN" (e.g., "a1", "a2").

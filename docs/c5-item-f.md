@@ -483,6 +483,13 @@ which S5 bounded before F1, by the bridge, and not since).
 | K7b | the same game, no bridge: `worth_finding_out_first(X,demand_falls)` on the board, Con argues for it with AS:sign | refused, S5, with the form-only note |
 | K8 | the form check with variables: `worth(A,g)` and `worth({A},{G})`; `worth(A,g)` and `worth(a,{G})`; `same(X,X)` and `same({X},{X})`; `same(X,Y)` and `same({X},{X})`; `same(_,_)` and `same({X},{X})` | match; no; match; no; no (a variable is read as a constant of its own, which no constant of the pattern equals; `_` is a new one at each place) |
 
+Corrected before the tests' commit (2026-11-28), on their first run on the code before: the engine's
+reader reads `_` as an atom, not a variable, so `same(_,_)` is a ground statement whose two arguments
+are one atom, and it matches `same({X},{X})` (K8's last pair: match). And the board of K7 and K7b,
+whose statements hold the claim's variable, fails the game's own admission check ("key not a ground
+atomic formula"), which a game with a profile never meets (its claim's action is an atom): K7's moves
+are made without that check after each, and the bound holds all the same.
+
 Planted for K1 to K8 and the additions to A9 and U:
 
 | Defect | Caught by |
@@ -651,4 +658,11 @@ path taken for a statement with a space before "(" fail the matcher's unit cases
 (`TestStatementPatternMatchesTheForm`); S5's refusal without the form-only note, the loader without
 the named change, and the named change taken for other data's refusal fail A9.13; and the offers'
 check skipped before any bridge fails A9.11.
+
+Corrected 2026-11-28 (the independent check of F1, F2 and F4, N1): two of those defects are named
+wrong. "The named change taken for other data's refusal" does the reverse: it removes the named
+change's exemption, so other data's message is given in its place (A9.13 fails all the same). "The
+offers' check skipped before any bridge" turns the form bound off inside `RefusingQuestion`, for both
+of S5's layers as well as the offers, and was run against A9.11 only; a defect in the offers alone
+(the check's R3) fails A9.11 too, so what was recorded holds.
 

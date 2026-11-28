@@ -359,9 +359,11 @@ def primary(item):
 
 
 def scheme_id(item):
+    """The primary instance's walton_id as written, as Go's FieldIn reads it (AG1, docs/annotation-records.md
+    §11: Python's strip took off what Go keeps)."""
     s = (primary(item).get("scheme") or {})
-    sid = (s.get("walton_id") or "none").strip()
-    return sid if sid else "none"
+    sid = s.get("walton_id")
+    return sid if isinstance(sid, str) and sid else "none"
 
 
 def fit(item):

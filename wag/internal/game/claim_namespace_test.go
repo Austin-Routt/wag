@@ -9,7 +9,10 @@ import (
 // undercutter namespace, read as the engine reads it with its negations taken
 // off, and makes a claim of another form.
 func TestU2U3NewGameAndTheUndercuttersNamespace(t *testing.T) {
-	for _, claim := range []string{"undercut(a11)", "undercut( a11 )", "undercut (a11)", "¬undercut(a11)", "¬¬undercut(a11)", "¬(undercut(a11))"} {
+	// U2b (the check of F1, F2 and F4, W4): the engine keys undercut(¬¬a11)
+	// and undercut((a11)) as undercut(a11).
+	for _, claim := range []string{"undercut(a11)", "undercut( a11 )", "undercut (a11)", "¬undercut(a11)", "¬¬undercut(a11)", "¬(undercut(a11))",
+		"undercut(¬¬a11)", "undercut((a11))", "¬undercut(¬¬a11)"} {
 		if err := CheckClaimNamespace(claim); !errors.Is(err, ErrReservedClaim) {
 			t.Errorf("%s: %v, want the reserved claim refused", claim, err)
 		}

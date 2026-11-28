@@ -302,5 +302,33 @@ class CompactParity(unittest.TestCase):
                 self.assertEqual(sorted(_go_space(name)), sorted(want))
 
 
+
+class GoReading(unittest.TestCase):
+    """AG1 and AG2 (docs/annotation-records.md §11; N6 of the independent check of F1, F2 and F4): a
+    value is compared as the Go measure reads it."""
+
+    def test_the_scheme_as_written(self):
+        # AG1: Go's FieldIn reads walton_id as written; agreement.py took Python's whitespace off it.
+        item = lambda wid: {"instances": [{"primary": True, "scheme": {"walton_id": wid}}]}
+        for wid in (" analogy", "analogy ", "analogy\u001c", "\u001canalogy"):
+            with self.subTest(walton_id=repr(wid)):
+                self.assertEqual(ag.field_value("scheme", item(wid), {}), wid)
+                self.assertNotEqual(ag.field_value("scheme", item(wid), {}), ag.field_value("scheme", item("analogy"), {}))
+        self.assertEqual(ag.field_value("scheme", item("analogy"), {}), "analogy")
+
+    def test_split_formula_trims_gos_spaces_only(self):
+        # AG2: Go's splitFormula trims with strings.TrimSpace; U+001C to U+001F are kept.
+        self.assertEqual(ag.split_formula("p( a\u001c , b\u00a0)"), ("p", ["a\u001c", "b"]))
+        for cp in (0x1C, 0x1D, 0x1E, 0x1F):
+            with self.subTest(codepoint=hex(cp)):
+                self.assertEqual(ag.split_formula("p(a" + chr(cp) + ",b)"), ("p", ["a" + chr(cp), "b"]))
+                self.assertEqual(ag.split_formula("q" + chr(cp) + "(a)"), ("q" + chr(cp), ["a"]))
+                # At the formula's ends too (the check's T4: Python's strip there took them off).
+                self.assertEqual(ag.split_formula(chr(cp) + "p(a)"), (chr(cp) + "p", ["a"]))
+                self.assertEqual(ag.split_formula("p(a)" + chr(cp)), ("p(a)" + chr(cp), []))
+        for cp in GO_SPACES:
+            with self.subTest(codepoint=hex(cp)):
+                self.assertEqual(ag.split_formula(chr(cp) + "p(" + chr(cp) + "a" + chr(cp) + ")" + chr(cp)), ("p", ["a"]))
+
 if __name__ == "__main__":
     unittest.main()

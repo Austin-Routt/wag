@@ -687,11 +687,16 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 			}
 			gs.Evidence = ev
 		}
-		s.mu.Lock()
-		ss := s.add(gs, req.Seats, title, "new", req.Seed)
-		ss.Request = &req
-		st := ss.buildState()
-		s.mu.Unlock()
+		// The lock is released however the state's building ends: a request
+		// that failed holding it left every other request waiting (the
+		// independent check of F1, F2 and F4, E2).
+		st := func() *State {
+			s.mu.Lock()
+			defer s.mu.Unlock()
+			ss := s.add(gs, req.Seats, title, "new", req.Seed)
+			ss.Request = &req
+			return ss.buildState()
+		}()
 		writeJSON(w, st)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -1293,11 +1298,13 @@ func (s *Server) handleKialoImport(w http.ResponseWriter, r *http.Request) {
 		httpError(w, err, http.StatusBadRequest)
 		return
 	}
-	s.mu.Lock()
-	ss := s.add(gs, []Seat{{Name: kialo.ProPlayer, Kind: "human"}, {Name: kialo.ConPlayer, Kind: "human"}}, rep.Title, "kialo:"+rep.Discussion, rand.Int63())
-	ss.Import = rep
-	st := ss.buildState()
-	s.mu.Unlock()
+	st := func() *State {
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		ss := s.add(gs, []Seat{{Name: kialo.ProPlayer, Kind: "human"}, {Name: kialo.ConPlayer, Kind: "human"}}, rep.Title, "kialo:"+rep.Discussion, rand.Int63())
+		ss.Import = rep
+		return ss.buildState()
+	}()
 	writeJSON(w, map[string]interface{}{"state": st, "report": rep})
 }
 

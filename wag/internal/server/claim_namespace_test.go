@@ -17,7 +17,9 @@ import (
 // loads a game recorded with such a claim.
 func TestU1U3U5TheUndercuttersNamespace(t *testing.T) {
 	s, ts := newTestServerWith(t)
-	for _, claim := range []string{"undercut(a11)", "undercut( a11 )", "undercut (a11)", "¬undercut(a11)", "¬¬undercut(a11)", "¬(undercut(a11))"} {
+	// U1b (the check of F1, F2 and F4, W4).
+	for _, claim := range []string{"undercut(a11)", "undercut( a11 )", "undercut (a11)", "¬undercut(a11)", "¬¬undercut(a11)", "¬(undercut(a11))",
+		"undercut(¬¬a11)", "undercut((a11))", "¬undercut(¬¬a11)"} {
 		req := NewGameRequest{Mode: "inquiry", Claim: claim, Seats: twoHumans}
 		if _, err := req.config(s.contexts); !errors.Is(err, game.ErrReservedClaim) {
 			t.Errorf("U1 %s: %v", claim, err)

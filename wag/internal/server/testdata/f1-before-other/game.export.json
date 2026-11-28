@@ -1,0 +1,94 @@
+{
+ "title": "nameless",
+ "source": "new",
+ "seats": [
+  {
+   "name": "Ann",
+   "kind": "human"
+  },
+  {
+   "name": "Bob",
+   "kind": "human"
+  }
+ ],
+ "config": {
+  "mode": "inquiry",
+  "objective": "claim",
+  "scoring": "live",
+  "max_rounds": 20,
+  "claim_standard": "PE",
+  "allow_other": true,
+  "any_premise": true
+ },
+ "request": {
+  "title": "",
+  "mode": "inquiry",
+  "seats": [
+   {
+    "name": "Ann",
+    "kind": "human"
+   },
+   {
+    "name": "Bob",
+    "kind": "human"
+   }
+  ],
+  "claim": "worth_finding_out_first(tax_meat,demand_falls)",
+  "allow_other": true,
+  "moderated": false,
+  "require_evidence": false,
+  "seed": 42
+ },
+ "history": [
+  {
+   "TurnNumber": 1,
+   "PlayerID": "Ann",
+   "Action": {
+    "type": "support",
+    "attack_type": "",
+    "target_arg_id": "",
+    "target_premise_id": "",
+    "scheme_id": "AS:other",
+    "answers_cq_id": "",
+    "variable_bindings": {
+     "C": "worth_finding_out_first(tax_meat,demand_falls)",
+     "P1": "a pilot is planned"
+    }
+   },
+   "Abstained": false,
+   "ArgIDs": [
+    "a1"
+   ],
+   "Presumptions": [
+    "a2"
+   ],
+   "Weight": 0.5,
+   "ScoreDelta": 5,
+   "LabelsBefore": {
+    "worth_finding_out_first(tax_meat,demand_falls)": 2,
+    "¬worth_finding_out_first(tax_meat,demand_falls)": 2
+   },
+   "LabelsAfter": {
+    "text_7d564bb5e2a6d00e": 1,
+    "worth_finding_out_first(tax_meat,demand_falls)": 1,
+    "¬worth_finding_out_first(tax_meat,demand_falls)": 2
+   },
+   "ScoreDeltas": {
+    "Ann": 5
+   },
+   "Scorable": true,
+   "TimedOut": false,
+   "Resigned": false,
+   "Moderation": "",
+   "Decision": "",
+   "DecisionStmt": ""
+  }
+ ],
+ "import": null,
+ "data_sha256": "a0352a9944190d8b",
+ "pins": {
+  "engine_sha256": "58dfedc7a231ba2a136b692944e2281f4448008a5906df0990ccc6d96082afba",
+  "catalogue_sha256": "7f0c02e54c8f01e83f20544a257ead9f2fcc18af9e6d7cca32eba7df022eb676",
+  "nascq_sha256": "36f0ad7d25342c53daedd453e583a9afeb2e1eb7c88798083a2cd0ebb6b37087"
+ }
+}

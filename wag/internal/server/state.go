@@ -534,12 +534,18 @@ func (s *Session) buildState() *State {
 		ss.Explain = explain(gs, st, ss)
 	}
 
-	// Roots: the claim, then conclusions that are nobody's premise.
+	// Roots: the claim, then conclusions that are nobody's premise. A claim
+	// not on the board (none is, since statements are named by the engine's
+	// key: docs/c5-item-f.md, K4) is no root.
 	if gs.Claim != "" {
 		if _, ok := st.Statements[gs.Claim]; !ok {
-			stmt(ag.Statements[gs.Claim])
+			if x := ag.Statements[gs.Claim]; x != nil {
+				stmt(x)
+			}
 		}
-		st.Roots = append(st.Roots, gs.Claim)
+		if st.Statements[gs.Claim] != nil {
+			st.Roots = append(st.Roots, gs.Claim)
+		}
 	}
 	var roots []string
 	for _, id := range ids {

@@ -120,8 +120,7 @@ func (ss *Session) Prompt() string {
 	if p := gs.Profile; p != nil {
 		ss.promptProfile(w, p)
 	}
-	if gs.Claim != "" {
-		c := st.Statements[gs.Claim]
+	if c := st.Statements[gs.Claim]; gs.Claim != "" && c != nil {
 		w("## The claim\n%s %s It is now %s. %s\n\n", ref(gs.Claim), gs.Say(gs.Claim), strings.ToUpper(c.Label), c.Explain)
 	}
 	ss.promptLastMove(w, me.ID, refs)

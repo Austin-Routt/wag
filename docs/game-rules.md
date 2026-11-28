@@ -226,7 +226,16 @@ a rule of the dialogue, not a change of who proves an exception:
   could make the statement In first and the bridge, made later, stood
   defeated. S5's refusal says when it bounds by the form alone ("no bridge on
   the board has it as its exception yet"). A game that recorded such a move
-  replays with a build of commit 6916369 or earlier, and the loader says so.
+  replays with a build of commit 6916369 or earlier (with the scheme data it
+  was played with), and the loader says so; one played on data without the
+  question replays on this build with `--data` on that data. S5 reads a
+  statement as the engine keys it (since 2026-11-28; the independent check of
+  F1, F2 and F4): the engine reads a formula with the negation identity
+  (`¬ p`, `¬(p)` and `¬p` are one statement, `¬¬p` is `p`), and WAG names
+  every statement so, a claim too, so `¬¬worth_finding_out_first(...)` is the
+  exception. A variable in a statement (a game with no profile can hold the
+  claim's) is a constant of its own, so the bridge about `should_be_performed(X)`
+  has its exception `worth_finding_out_first(X,demand_falls)` bounded too.
   An answer scheme (one that concludes
   the formula of the question it answers, D094 (g)) is offered only as an
   answer, on its backup edges, never as a move of its own (S1). Since step
@@ -355,14 +364,25 @@ stronger.
   - The central claim is `GameConfig.Claim`, or the conclusion of the first
     argument of the first seat.
   - It is at issue from the start, under `ClaimStandard`.
-  - It may not be, nor have as its opposite, a statement of the form the engine
-    gives an argument's undercutter, `undercut(<id>)` read as the engine reads
-    it (the server, wag-cli and the game refuse it; since 2026-11-28, F2 of the
+  - The claim is named as the engine keys it (`¬ p` is `¬p`, `¬¬p` is `p`;
+    since 2026-11-28, the independent check of F1, F2 and F4: a claim written
+    otherwise stopped the server).
+  - A claim given when the game is made may not be, nor have as its opposite,
+    a statement of the form the engine gives an argument's undercutter,
+    `undercut(<id>)` read as the engine reads it (the server and wag-cli
+    refuse it, and the game makes no such claim; since 2026-11-28, F2 of the
     external review of exchange 3). The engine writes that statement when it
     makes argument `<id>`, so such a claim would be about an argument not yet
-    made, and a later argument would take it over. A game recorded with such a
-    claim loads with a build of commit f38d189 or earlier, and the loader says
-    so.
+    made, and a later argument would take it over. Every `undercut/1` is
+    refused, whatever its argument: the engine keys `undercut(¬¬a11)` and
+    `undercut((a11))` as `undercut(a11)`, and `¬¬undercut(a11)` as
+    `undercut(a11)` too. The claim a game without one takes from its first
+    argument is not checked: that argument exists, so its undercutter is
+    about an argument already made. A game recorded with such a claim loads
+    with a build of commit f38d189 or earlier (with the scheme data it was
+    played with), and the loader says so; wag-llm starts its games through
+    the server's request, so a trace with such a claim is refused (HTTP 400)
+    without that note.
   - Even seats are pro and bear the burden of proof; odd seats are con.
   - Pro wins if the claim is In when the game ends, and con wins otherwise.
   - With one player it is solo belief revision: the result is the verdict,

@@ -148,7 +148,8 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 		}
 		cfg, err := r.config(s.contexts)
 		if errors.Is(err, game.ErrReservedClaim) {
-			return nil, fmt.Errorf("%w. WAG accepted such a claim until 2026-11-28 and refuses it since: this build cannot load the game; a WAG build of commit f38d189 or earlier can, and the export stays readable as a record", err)
+			return nil, fmt.Errorf("%w. WAG accepted such a claim until 2026-11-28 and refuses it since: this build cannot load the game; a WAG build of commit f38d189 or earlier can, "+
+				"with the scheme data the game was played with (--data, if they are not that build's own), and the export stays readable as a record", err)
 		}
 		if err != nil {
 			return nil, namelessName(err)
@@ -201,6 +202,13 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 			if !same && !errors.Is(err, errBridgeRetired) && !errors.Is(err, errNameless) && !errors.Is(err, errExceptionForm) {
 				return nil, fmt.Errorf("move %d (%s): %v. The game was played with other scheme data (%s; this server's is %s): "+
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
+			}
+			// The bound by the exception's form is the data's: data without a
+			// question that refuses Other bounds nothing (A9.13c; the check of
+			// F1, F2 and F4, W2), so this build replays such a game on its data.
+			if !same && errors.Is(err, errExceptionForm) {
+				return nil, fmt.Errorf("move %d (%s): %w. The game was played with other scheme data (%s; this server's is %s): "+
+					"this build replays it with --data on the data of that version", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
 			return nil, fmt.Errorf("move %d (%s): %w", i+1, m.PlayerID, err)
 		}
@@ -406,7 +414,8 @@ func replay(gs *game.GameState, m game.Move) error {
 			return namelessRemedy(what)
 		}
 		if !played && strings.HasPrefix(res.Error, "S5:") && strings.Contains(res.Error, nascq.FormOnly) {
-			return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of commit 6916369 or earlier can, and the export stays readable as a record",
+			return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of commit 6916369 or earlier can, with the scheme data the game was played with "+
+				"(--data, if they are not that build's own), and the export stays readable as a record",
 				errExceptionForm, strings.TrimSuffix(res.Error, nascq.FormOnly))
 		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(recorded), outcome(played), res.Error)
