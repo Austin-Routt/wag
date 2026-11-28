@@ -408,7 +408,7 @@ new texts ask "what" or "who", not yes or no), with a test that each question ha
 
 The owner answered the five questions above on 2026-11-27 (D099). (2) is applied (P3, step C5.2). This
 step applies the other four, written before the code (2026-11-28); the cases are in
-[`c5-item-f.md`](c5-item-f.md), sections A7-A9 and A4's additions, written before their tests.
+[`c5-item-f.md`](c5-item-f.md), sections A7-A9, written before their tests.
 
 - **(1) A backup edge from negative consequences to CQ:side_effect** (`game/order.yml`): a further bad
   consequence argued with `negative_consequences` answers the side-effect question of practical
@@ -428,10 +428,16 @@ step applies the other four, written before the code (2026-11-28); the cases are
   analogy, which bind their conclusion to any statement and so could argue
   `worth_finding_out_first(A,G)` by a move about it (the check of the switch, N-12), are refused
   there as Other is; a move that presumes the exception as a premise is refused as before.
-  Undercutters are kept: S5 reads what an argument concludes or presumes, and an undercutter of a
-  bridge concludes neither. The game reads formulas, not free text, so an Other undercutter whose
-  premise is only that the consequence could be found out cannot be told from one about something
-  else: it is kept, and what it says is for the players and the review (D053).
+  The undercutters D099 (4) keeps are those "that attack something other than knowability"; the
+  game reads formulas, not free text, so it cannot tell them apart, and the other reviewer's answer,
+  which the owner adopted, asks for an explicit admission rule. A profile rule, **P6**: an
+  undercutter of an argument whose question refuses Other (a bridge) that answers no question (a
+  direct undercutter, or an argument for the argument's undercut statement) declares its ground,
+  `"ground": "other"`, for an attack on something other than whether the consequence could be found
+  out first; a move that declares none, or declares `"knowability"`, is refused and pointed to the
+  question and its answers. The declaration is recorded with the move, and whether the ground is
+  truly another is the review's (D053). (Corrected after the independent check of this plan, E1: it
+  first kept every undercutter, a departure from D099 (4)'s words.)
 - **(5) CQ:worth_finding_out_first's text ends "If so, how?"** (the two bridges' entries, from which
   the text is generated).
 - **The offers** (added 2026-11-28, with the code's first run): the moves the board and the computer
@@ -443,10 +449,37 @@ step applies the other four, written before the code (2026-11-28); the cases are
   attack and defence at a practical-reasoning argument's CQ:side_effect (19 games), or sign and
   analogy for a `worth_finding_out_first` statement (6); nothing was added to a menu. The golden
   set is made again with the code, before the switch.
+- **P5's scope** (the check of the plan, W2). P5 is the answer route D099 (3) names. Sign concludes
+  a practical conclusion by other routes, which stay open and are pinned by cases: a direct rebuttal
+  of practical reasoning made with sign (A8.6), sign against `should_be_performed(A)` as a move
+  about the statement (A8.7), and sign's answer at positive consequences' side-effect question
+  (A8.3, D009). The warrant (an observed sign to a practical conclusion) is the same, so whether P5
+  should reach them is put to the owner, with the developer's recommendation to keep the decided
+  scope until the warrant's review, since reaching A8.3 would reopen D009; the route is recorded as
+  a candidate (`docs/candidates.yml`).
 - **Two layers for (4).** NASCQ refuses a move about the exception, or against its negation, with
   a scheme that does not back the question, before the move is placed; the game's check after
   placement refuses any argument a move places that concludes the exception with such a scheme, a
   second layer as at C5.2 (A4.3).
+
+**The switch's further parts** (from the independent check of this plan, W1 and Q4):
+
+- CQ:side_effect becomes of semantic type `action`, as CQ:opposite_consequences, its mirror: since
+  D095 (1) it asks for a further bad consequence at a practical conclusion, a rebuttal. One of its
+  answer schemes then crosses types whichever type it has: sign (`causality`) concludes a practical
+  claim from an observed sign, the warrant D099 (3) leaves out of the profile at practical reasoning
+  and D009 keeps at positive consequences. Its backup edge records that, `across: D009` in
+  `game/order.yml`; the lint takes a backup edge across types that names a decided decision, and
+  the catalogue check that the decision is decided. The shipped data lints clean
+  (TestShippedDataLoading), as before.
+- `docs/scheme-registry/nascq-edges.md` made again (`wag-cli --edges`, TestEveryEdgeCase); the
+  server's fixtures made on 092b6a6f48a672d2 (`internal/server/testdata/e1-before`) read the frozen
+  copy; a scripted reference route for the new edge; the new edge placed after
+  CQ:opposite_consequences' in `order.yml` (the order fixes the offered moves).
+- The docs the switch reaches: the catalogue entries' notes that say no such edge exists
+  (practical_reasoning1, practical_reasoning2, positive_consequences), this page's choices and data
+  table, D099's record, the frozen copies' README, item F's fingerprint and rule order, and
+  game-rules.md.
 
 **The switch.** (1) and (5) change the game's data, so its fingerprint changes once, in one commit,
 as at C5.2: the generated files with the catalogue's; the frozen copy of today's files

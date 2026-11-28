@@ -11,8 +11,8 @@ recorded below it.
 *Refused* means: the move is refused with the rule named, and the graph (its statements with their
 labels and texts, arguments, issues and assumptions), the open questions and the profile are as
 before. The rules come in this order (game-rules.md): the profile's P1 for the move's declarations
-and its own action values, and P2; NASCQ's S0 to S9 and Q1; P1 for the values a target fixes, P3
-and P4; Q2 for a question; then, once the move is placed, the adapter's refusal (a premise that is
+and its own action values, and P2; NASCQ's S0 to S9 and Q1; P1 for the values a target fixes, P3,
+P4 and P5 (step C5.3); Q2 for a question; then, once the move is placed, the adapter's refusal (a premise that is
 the argument's own conclusion), the cycle check, S5 for a refused exception and G1. A rule's refusal
 (S, P, Q, G) is recorded in the move history once, with its penalty; the adapter's refusal and the
 cycle check's leave no record and cost nothing. (Corrected after the independent check of step 7:
@@ -163,6 +163,15 @@ practical-reasoning argument in five of the golden games on the shipped data).
 | A8.1b | pr; Pro defends pr at CQ:side_effect with AS:sign (the positive answer) | refused, P5 |
 | A8.5 | pr; the moves the game offers about pr (`GameState.EnumerateActions`, which the board and the computer players list) | no answer made with AS:sign to CQ:side_effect, of either polarity, and A5.1's two at c1 still offered; in a game with no profile, both offered at pr |
 
+Added 2026-11-28 after the independent check of the plan (W2), before their tests: P5 is the answer
+route D099 (3) names. Sign concludes a practical conclusion by other routes too, which stay open and
+are pinned here; whether P5 should reach them is put to the owner (c5-game.md, C5.3).
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A8.6 | pr; Con rebuts pr directly with AS:sign (an attack of type rebuttal, answering no question) | accepted |
+| A8.7 | pr; Con argues against `should_be_performed(tax_meat)` with AS:sign, a move about the statement | accepted |
+
 ### A9. The bridges' exception bounded (D099 (4), (5); step C5.3)
 
 | Case | Board, then the move | Expected |
@@ -184,6 +193,33 @@ conclude") is a second layer, tested on an argument placed directly.
 | A9.1b | m+, b+; once Pro has argued against the exception with Other (accepted), Con argues against that negation with AS:sign | refused, S5, before the move is placed |
 | A9.5 | m+, b+; the moves the game offers about `worth_finding_out_first(tax_meat,demand_falls)` | for it, only AS:expert_opinion and AS:position_to_know (AS:finding_out_first is offered only as the answer); against it, as before, every scheme that can conclude its negation: Other, sign, analogy and the two source-based schemes |
 | A9.6 | m+, b+; an argument of sign, of Other and of position to know, each concluding the exception, placed on the board directly and checked as a move's arguments (the game's S5) | refused for sign and Other, with the scheme named; kept for position to know |
+
+Recorded at the first run (2026-11-28): the computer players' menu lists the moves about the
+statements that arguments conclude or use, not about every exception on the board, so with m+ and
+b+ alone it lists none about the exception. A9.5 reads the statement's own moves, which the board
+lists when the statement is chosen, and the players' menu once A9.2's argument concludes the
+exception; both as written. The cases' outcomes were all as written.
+
+Corrected 2026-11-28 after the independent check of the plan (E1), before the code was committed:
+A9.3 was written on the plan's first version, which kept every undercutter of a bridge. D099 (4)
+keeps the undercutters "that attack something other than knowability", on the other reviewer's
+answer, which the owner adopted: an explicit admission rule, since the game cannot read the free
+text. So a profile rule, **P6**: an undercutter of an argument whose question refuses Other (a
+bridge), answering no question (a direct undercutter, or an argument for the argument's undercut
+statement), declares its ground, `"ground": "other"`; a move that declares none, or declares
+`"knowability"`, is refused and pointed to the question and its answers. A9.3 ran once as first
+written, on the uncommitted code (accepted); its outcome as corrected below replaces it.
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A9.2b | m+, b+; Con argues for the exception with AS:expert_opinion, a move about the statement | accepted; the exception In; b+ out of force |
+| A9.3 | m+, b+; Con undercuts b+ directly with Other, its premise a free text, declaring `"ground": "other"` | accepted; b+ out of force; the exception not In; the move's record keeps the ground |
+| A9.3b | m+, b+; the same undercutter with no ground, and with `"ground": "knowability"` | refused, P6, both, naming CQ:worth_finding_out_first |
+| A9.3c | m+, b+; the same undercutter made with AS:sign and with AS:analogy: with no ground, and with `"ground": "other"` | refused, P6, without; accepted with it |
+| A9.3d | A9.3, then Con argues for b+'s undercut statement with AS:sign, a move about the statement, with no ground | refused, P6 |
+| A9.3e | m+, b+, in a game with no profile; A9.3b's undercutter, with no ground | accepted: P6 is a rule of the profile |
+| A9.3f | c1; Con undercuts c1 directly with Other, with no ground | accepted: P6 binds only an argument whose question refuses Other |
+| A9.7 | the schemes that back CQ:worth_finding_out_first, Other aside (D095 (3)'s list) | AS:finding_out_first, AS:expert_opinion and AS:position_to_know |
 
 ## B. Other and the thesis-independent schemes
 
@@ -377,4 +413,12 @@ Step C5.3's planted defects (2026-11-28, written before the tests):
 | NASCQ's route about the statement refusing only Other (the game's layer left to catch it) | A9.1, A9.1b (NASCQ's message) |
 | the offers keep the schemes that do not back the question, or drop the source-based ones | A9.5 |
 | the game's S5 refusing only Other, or refusing the source-based schemes | A9.6 |
+| P6 removed | A9.3b, A9.3c, A9.3d |
+| P6 accepting the ground "knowability" | A9.3b |
+| P6 checking only Other's undercutters | A9.3c |
+| P6 checking only direct undercutters, not the move about the undercut statement | A9.3d |
+| P6 applied in a game with no profile | A9.3e |
+| P6 applied to every argument's undercutter | A9.3f |
+| D095 (3)'s list grown or shrunk | A9.7 |
+| the source-based schemes refused as a move about the exception (expert opinion) | A9.2b |
 
