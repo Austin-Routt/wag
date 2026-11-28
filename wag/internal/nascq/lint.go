@@ -84,7 +84,7 @@ func (n *NASCQ) Lint() []LintIssue {
 		}
 		if sch.ThesisIndependent {
 			add(false, s, "thesis-independent, so its backup edge to %s is redundant", cq)
-		} else if sch.SemanticType != "" && q.SemanticType != "" && sch.SemanticType != q.SemanticType {
+		} else if sch.SemanticType != "" && q.SemanticType != "" && sch.SemanticType != q.SemanticType && e.Across == "" {
 			add(false, s, "backs %s across semantic types (%s answers %s)", cq, sch.SemanticType, q.SemanticType)
 		}
 	}

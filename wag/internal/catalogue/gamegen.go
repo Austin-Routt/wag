@@ -282,7 +282,7 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 
 	// The backup edges, in order.yml's order.
 	var backup []interface{}
-	backed := map[GameEdge]bool{}
+	backed := map[[2]string]bool{} // by question and scheme: a mark does not make another edge
 	askedQ := map[string]bool{}
 	for a := range asked {
 		askedQ[a.CQ] = true
@@ -295,11 +295,15 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 			fail("%s/%s: the backup edge %s by %s: no such question", GameDir, GameOrderFile, b.CQ, b.Scheme)
 		case !askedQ[b.CQ]:
 			fail("%s/%s: the backup edge %s by %s backs a question no scheme asks", GameDir, GameOrderFile, b.CQ, b.Scheme)
-		case backed[b]:
+		case backed[[2]string{b.CQ, b.Scheme}]:
 			fail("%s/%s: the backup edge %s by %s twice", GameDir, GameOrderFile, b.CQ, b.Scheme)
 		default:
-			backed[b] = true
-			backup = append(backup, yaml.MapSlice{{Key: "scheme", Value: b.Scheme}, {Key: "cq", Value: b.CQ}})
+			backed[[2]string{b.CQ, b.Scheme}] = true
+			edge := yaml.MapSlice{{Key: "scheme", Value: b.Scheme}, {Key: "cq", Value: b.CQ}}
+			if b.Across != "" {
+				edge = append(edge, yaml.MapItem{Key: "across", Value: b.Across})
+			}
+			backup = append(backup, edge)
 		}
 	}
 
@@ -322,7 +326,7 @@ func GenerateGame(entries map[string]*Entry, d *GameData, src GameSources) (*Gam
 	errs = append(errs, questionFaults(asks)...)
 	backs := map[string][]string{}
 	for _, b := range d.Order.Backup {
-		if backed[b] && !in(backs[b.Scheme], b.CQ) {
+		if backed[[2]string{b.CQ, b.Scheme}] && !in(backs[b.Scheme], b.CQ) {
 			backs[b.Scheme] = append(backs[b.Scheme], b.CQ)
 		}
 	}

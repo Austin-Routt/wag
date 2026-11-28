@@ -43,6 +43,11 @@ type GameQuestion struct {
 type GameEdge struct {
 	CQ     string `yaml:"cq"`
 	Scheme string `yaml:"scheme"`
+	// Across names the decided decision that admits a backup edge whose
+	// scheme answers a question of another semantic type (step C5.3,
+	// D009): the lint takes it, and the catalogue check that the decision
+	// is decided. Ask edges have none.
+	Across string `yaml:"across,omitempty"`
 }
 
 // GameOrder is the order of the NASCQ's schemes and edges. The order of the
@@ -121,7 +126,7 @@ func parseGameRaw(f Files) (*gameRaw, error) {
 		g.ask = append(g.ask, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
 	}
 	for _, e := range edges.Backup {
-		g.backup = append(g.backup, GameEdge{CQ: e["cq"], Scheme: e["scheme"]})
+		g.backup = append(g.backup, GameEdge{CQ: e["cq"], Scheme: e["scheme"], Across: e["across"]})
 	}
 	var core struct {
 		Schemes []yaml.MapSlice `yaml:"argument_schemes"`

@@ -197,6 +197,10 @@ type Edge struct {
 	CQ          string `json:"cq,omitempty"`     // CQ node ID (plan format)
 	Scheme      string `json:"scheme,omitempty"` // AS node ID (plan format)
 	Description string `json:"description,omitempty"`
+	// Across names the decided decision that admits a backup edge whose
+	// scheme answers a question of another semantic type; the lint does not
+	// warn of it (the catalogue checks the decision; step C5.3).
+	Across string `json:"across,omitempty"`
 
 	// Locus and Pattern (ask edges only) say which part of the scheme the
 	// question is about; see Locus. Without them the CQ's caes_mapping

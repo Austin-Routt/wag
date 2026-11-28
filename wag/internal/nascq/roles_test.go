@@ -328,3 +328,30 @@ func TestActionDeclJSON(t *testing.T) {
 		t.Error("a bare id was taken as a declaration")
 	}
 }
+
+// Cases XA1 and XA2 (docs/c5-game.md, C5.3's switch): a backup edge whose
+// scheme answers a question of another semantic type is warned of, unless
+// it is marked across by a decision (the catalogue checks the decision).
+func TestLintAcross(t *testing.T) {
+	n := loadRoles(t)
+	across := func() int {
+		c := 0
+		for _, i := range n.Lint() {
+			if strings.Contains(i.Msg, "across semantic types") {
+				c++
+			}
+		}
+		return c
+	}
+	if c := across(); c != 0 {
+		t.Fatalf("the fixture: %d warnings", c)
+	}
+	n.Questions["CQ:wf"].SemanticType = "action" // Finding Out First is causality
+	if c := across(); c != 1 {
+		t.Errorf("XA1: %d warnings, want 1", c)
+	}
+	n.BackupEdges[0].Across = "D009"
+	if c := across(); c != 0 {
+		t.Errorf("XA2: %d warnings, want 0", c)
+	}
+}

@@ -244,3 +244,52 @@ func TestGameGenVariablesAndBackedQuestions(t *testing.T) {
 		t.Errorf("a backed question no scheme asks (%s): %v", backed, err)
 	}
 }
+
+// Case XA3 (docs/c5-game.md, C5.3's switch): a backup edge's across mark
+// names a decision the register has, and has decided.
+func TestAcrossMarkNamesADecidedDecision(t *testing.T) {
+	s := sources(t)
+	reg, err := LoadRegister(root)
+	if err != nil || reg == nil {
+		t.Fatalf("the register: %v", err)
+	}
+	open := ""
+	for _, d := range reg.Decisions {
+		if d.Status != "decided" {
+			open = d.ID
+			break
+		}
+	}
+	if open == "" {
+		t.Skip("no open decision in the register")
+	}
+	const first = "backup_edges:\n- cq: CQ:side_effect\n  scheme: AS:sign\n"
+	for _, c := range []struct{ id, want string }{
+		{"D999", "which the register does not have"},
+		{open, "not decided"},
+		{"D009", ""},
+	} {
+		dir := generate(t, s)
+		p := filepath.Join(dir, GameDir, GameOrderFile)
+		b, err := os.ReadFile(p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(string(b), first) {
+			t.Fatalf("order.yml's backup edges do not start with %q", first)
+		}
+		if err := os.WriteFile(p, []byte(strings.Replace(string(b), first, first+"  across: "+c.id+"\n", 1)), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		opt := DefaultOptions()
+		opt.Register = reg
+		r, err := Check(dir, s, opt)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := findings(r, GameDir+"/"+GameOrderFile, "across semantic types by "+c.id)
+		if c.want == "" && len(got) != 0 || c.want != "" && (len(got) != 1 || !strings.Contains(got[0], c.want)) {
+			t.Errorf("across %s: %v, want %q", c.id, got, c.want)
+		}
+	}
+}

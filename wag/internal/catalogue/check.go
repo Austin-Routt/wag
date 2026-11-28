@@ -161,6 +161,30 @@ func Check(dir string, src *Sources, opt Options) (*Report, error) {
 	if err != nil {
 		r.Findings = append(r.Findings, Finding{File: GameDir, Error: true, Msg: "the game's files cannot be made from it: " + err.Error()})
 	}
+	// A backup edge across semantic types names a decided decision (the
+	// across mark, step C5.3; case XA3).
+	if gameDir != nil && opt.Register != nil {
+		for _, b := range gameDir.Order.Backup {
+			if b.Across == "" {
+				continue
+			}
+			status := ""
+			for _, d := range opt.Register.Decisions {
+				if d.ID == b.Across {
+					status = d.Status
+				}
+			}
+			switch status {
+			case "decided":
+			case "":
+				r.Findings = append(r.Findings, Finding{File: GameDir + "/" + GameOrderFile, Error: true,
+					Msg: fmt.Sprintf("the backup edge %s by %s is across semantic types by %s, which the register does not have", b.CQ, b.Scheme, b.Across)})
+			default:
+				r.Findings = append(r.Findings, Finding{File: GameDir + "/" + GameOrderFile, Error: true,
+					Msg: fmt.Sprintf("the backup edge %s by %s is across semantic types by %s, which is %s, not decided", b.CQ, b.Scheme, b.Across, status)})
+			}
+		}
+	}
 	// The game's data in the catalogue (step C5.1): GameDir's files.
 	if files, err := g.GameFiles(); err != nil {
 		r.Findings = append(r.Findings, Finding{File: GameDir, Error: true, Msg: err.Error()})

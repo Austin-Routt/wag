@@ -2,12 +2,14 @@ package catalogue
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
 
+	"github.com/yourorg/wag/internal/nascq"
 	"gopkg.in/yaml.v2"
 )
 
@@ -161,6 +163,11 @@ func TestGameGenFindsFaults(t *testing.T) {
 					es["analogy.yml"].Game.NASCQ[i].Value = "sign"
 				}
 			}
+		}},
+		{"a backup edge twice, once marked across (XA4)", "twice", func(t *testing.T, es map[string]*Entry, d *GameData) {
+			b := d.Order.Backup[0]
+			b.Across = "D009"
+			d.Order.Backup = append(d.Order.Backup, b)
 		}},
 		{"an ask edge twice", "the ask edge CQ:other_goals of AS:practical_reasoning twice", func(t *testing.T, es map[string]*Entry, d *GameData) {
 			d.Order.Ask = append(d.Order.Ask, d.Order.Ask[0])
@@ -529,5 +536,38 @@ func TestWriteJSON(t *testing.T) {
 		if err := writeJSON(&b, bad, "", false, false); err == nil {
 			t.Errorf("%#v: no error", bad)
 		}
+	}
+}
+
+// Case XA4 (docs/c5-game.md, C5.3's switch): the generator writes a backup
+// edge's across mark into edges.json, and the game reads it back.
+func TestGameGenAcrossMark(t *testing.T) {
+	src := sources(t)
+	es, d := freshGame(t)
+	d.Order.Backup[0].Across = "D009"
+	gen, err := GenerateGame(es, d, src.GameSources())
+	if err != nil {
+		t.Fatal(err)
+	}
+	var edges struct {
+		Backup []map[string]string `json:"backup_edges"`
+	}
+	if err := json.Unmarshal(gen.Files["nascq/edges.json"], &edges); err != nil {
+		t.Fatal(err)
+	}
+	if got := edges.Backup[0]["across"]; got != "D009" {
+		t.Fatalf("the first backup edge's mark is %q", got)
+	}
+	for _, e := range edges.Backup[1:] {
+		if _, ok := e["across"]; ok {
+			t.Fatalf("an edge not marked has a mark: %v", e)
+		}
+	}
+	n, err := nascq.LoadFromBytes(gen.Files["nascq/schemes.json"], gen.Files["nascq/critical_questions.json"], gen.Files["nascq/edges.json"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if n.BackupEdges[0].Across != "D009" {
+		t.Fatalf("the game reads the mark as %q", n.BackupEdges[0].Across)
 	}
 }
