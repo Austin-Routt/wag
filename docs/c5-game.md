@@ -477,7 +477,10 @@ step applies the other four, written before the code (2026-11-28); the cases are
   edge marked `across: D009`: no warning; XA3, a mark naming a decision the register does not have,
   or one not decided: the catalogue check refuses it; XA4, the generator writes the mark into
   `edges.json` and reads it back (the reproduction test), and an edge given twice with and without
-  the mark is still given twice.
+  the mark is still given twice. Added after the independent review of the switch (2026-11-28,
+  N3; written before its test): XA5, a backup edge marked `across` whose scheme and question do not
+  cross semantic types (the same type, or either has none): the lint warns that the mark is stale,
+  since it suppresses no warning; the shipped data has none.
 - `docs/scheme-registry/nascq-edges.md` made again (`wag-cli --edges`, TestEveryEdgeCase); the
   server's fixtures made on 092b6a6f48a672d2 (`internal/server/testdata/e1-before`) read the frozen
   copy; a scripted reference route for the new edge; the new edge placed after

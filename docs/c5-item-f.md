@@ -150,6 +150,22 @@ Run at the switch (2026-11-28), on the data a0352a9944190d8b: every outcome as w
 checks that c1 stays in force and `bad_outweighs(tax_meat,emissions_fall)` is not In (the check of
 the plan, Q2): a rebuttal does not establish the weighing.
 
+Added after the independent review of the switch (2026-11-28, N1 and N2), written before their
+tests. A7.5 makes A6.2's move, which S9 would refuse even with the edge (negative consequences
+cannot conclude `should_be_performed(tax_meat)`), so it shows the edge's absence only by the rule's
+name; A7.5b is the move the edge would let through. The others pin the new edge's routes that only
+the generated table (`nascq-edges.md`) pinned: its defence, its third target scheme, the schemes it
+does not reach, and the move's record.
+
+| Case | Board, then the move | Expected |
+|---|---|---|
+| A7.1r | A7.1's move | recorded in the move history as an answer to CQ:side_effect of c1: the question, the target, the scheme and the attack type rebuttal (A5.1 and A6.1 likewise, at their questions) |
+| A7.2b | pg; the same answer to pg's CQ:side_effect | accepted, a rebuttal: it concludes `¬should_be_performed(tax_meat)`; pg stays in force |
+| A7.5b | n1; Con defends n1 at CQ:opposite_consequences with AS:negative_consequences, G `jobs_lost` | refused, S5 (the edge is CQ:side_effect's only; with it, S9 would accept the defence, which concludes n1's conclusion) |
+| A7.6 | c1; Pro defends c1 at CQ:side_effect with AS:negative_consequences, G `food_costlier` | refused, S9 (a defence concludes c1's conclusion, `should_be_performed(tax_meat)`; negative consequences concludes its negation) |
+| A7.7 | c1; Con answers CQ:side_effect of c1 with AS:bridge_possible_harm, A `tax_meat`, G `food_costlier` | refused, S5 (D099 (1) gave the edge to the categorical scheme only) |
+| A7.7b | c1; the same answer with AS:negative_consequences_modal | refused, S5 (as A7.7; with the edge, S9 would refuse it, its conclusion being modal) |
+
 ### A8. Sign at practical reasoning's rebuttal route (D099 (3); step C5.3)
 
 | Case | Board, then the move | Expected |
@@ -438,4 +454,16 @@ A1.9, A2.3, A2.5, A5.4, A6.2, A7.4 and A7.5; the old text fails A9.4. A4.8, whic
 skipped check before step C5.3, is since then refused by the game's second layer too (an argument of
 sign or analogy cannot conclude the bridges' exception, D099 (4)), so that defect alone no longer
 fails it; the defects of the code step (the second layer's among them) are caught as recorded there.
+
+Planted for the cases added after the independent review of the switch (2026-11-28, written before
+the tests):
+
+| Defect | Caught by |
+|---|---|
+| the edge given to CQ:opposite_consequences as well | A7.5b (the defence accepted) |
+| P5 refusing every answer at practical reasoning's CQ:side_effect, not only sign's | A7.2, A7.2b |
+| S9 skipped for a defence (an answer that supports its target) | A7.6 |
+| the edge given to the harm bridge and the modal variant as well | A7.7, A7.7b |
+| an answer at its target's conclusion recorded without its question | A7.1r (A5.1, A6.1) |
+| the lint not checking an `across` mark's edge (c5-game.md, C5.3) | XA5 |
 
