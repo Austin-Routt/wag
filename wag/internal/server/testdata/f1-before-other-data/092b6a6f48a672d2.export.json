@@ -1,0 +1,419 @@
+{
+ "build": {
+  "github.com/anthropics/anthropic-sdk-go": "v1.80.0",
+  "go": "go1.24.13",
+  "goarch": "amd64",
+  "google.golang.org/genai": "v1.73.0",
+  "goos": "linux"
+ },
+ "config": {
+  "mode": "inquiry",
+  "objective": "claim",
+  "scoring": "live",
+  "max_rounds": 20,
+  "claim_standard": "PE",
+  "allow_other": true,
+  "any_premise": true
+ },
+ "data_sha256": "092b6a6f48a672d2",
+ "events": [
+  {
+   "at": "2026-11-28T09:11:26.788471842Z",
+   "what": "move",
+   "player": "Ann",
+   "action": "support AS:sign",
+   "ok": true
+  }
+ ],
+ "exported_at": "2026-11-28T09:11:26.789719331Z",
+ "format": "wag-export/2",
+ "history": [
+  {
+   "TurnNumber": 1,
+   "PlayerID": "Ann",
+   "Action": {
+    "type": "support",
+    "attack_type": "",
+    "target_arg_id": "",
+    "target_premise_id": "",
+    "scheme_id": "AS:sign",
+    "answers_cq_id": "",
+    "variable_bindings": {
+     "A": "a_pilot_is_planned",
+     "B": "worth_finding_out_first(tax_meat,demand_falls)"
+    },
+    "target_stmt_id": "worth_finding_out_first(tax_meat,demand_falls)"
+   },
+   "Abstained": false,
+   "ArgIDs": [
+    "a1"
+   ],
+   "Presumptions": [
+    "a2",
+    "a3",
+    "a4"
+   ],
+   "Weight": 0.6,
+   "ScoreDelta": 6,
+   "LabelsBefore": {
+    "worth_finding_out_first(tax_meat,demand_falls)": 2,
+    "¬worth_finding_out_first(tax_meat,demand_falls)": 2
+   },
+   "LabelsAfter": {
+    "finding_true(a_pilot_is_planned)": 1,
+    "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)": 1,
+    "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))": 1,
+    "worth_finding_out_first(tax_meat,demand_falls)": 1,
+    "¬worth_finding_out_first(tax_meat,demand_falls)": 2
+   },
+   "ScoreDeltas": {
+    "Ann": 6
+   },
+   "Scorable": true,
+   "TimedOut": false,
+   "Resigned": false,
+   "Moderation": "",
+   "Decision": "",
+   "DecisionStmt": ""
+  }
+ ],
+ "import": null,
+ "llm": null,
+ "notes": null,
+ "other_arguments": null,
+ "pins": {
+  "engine_sha256": "58dfedc7a231ba2a136b692944e2281f4448008a5906df0990ccc6d96082afba",
+  "catalogue_sha256": "dd4e8e3c00766f0a4f27e8147ac74e5e545c29f7417e060b45d6400b1530c8de",
+  "nascq_sha256": "a0b2171de0f5d8f06bf2fb8a361da1d79270fe39cc0850b1421f7c12f82b195b"
+ },
+ "played_ns": 3104790,
+ "request": {
+  "title": "",
+  "mode": "inquiry",
+  "seats": [
+   {
+    "name": "Ann",
+    "kind": "human"
+   },
+   {
+    "name": "Bob",
+    "kind": "human"
+   }
+  ],
+  "claim": "worth_finding_out_first(tax_meat,demand_falls)",
+  "allow_other": true,
+  "moderated": false,
+  "require_evidence": false,
+  "seed": 1795857086786714473,
+  "profile": {
+   "agent": "decider",
+   "actors": [
+    {
+     "id": "decider",
+     "text": "the one who decides whether to take the actions argued about"
+    }
+   ],
+   "situation": "the present one"
+  }
+ },
+ "seats": [
+  {
+   "name": "Ann",
+   "kind": "human"
+  },
+  {
+   "name": "Bob",
+   "kind": "human"
+  }
+ ],
+ "source": "new",
+ "state": {
+  "id": "1",
+  "version": 2,
+  "title": "WAG — inquiry",
+  "source": "new",
+  "config": {
+   "mode": "inquiry",
+   "objective": "claim",
+   "scoring": "live",
+   "max_rounds": 20,
+   "claim_standard": "PE",
+   "allow_other": true,
+   "any_premise": true
+  },
+  "round": 1,
+  "active": "Bob",
+  "active_ai": "",
+  "players": [
+   {
+    "id": "Ann",
+    "kind": "human",
+    "score": 6
+   },
+   {
+    "id": "Bob",
+    "kind": "human",
+    "score": 0
+   }
+  ],
+  "claim": "worth_finding_out_first(tax_meat,demand_falls)",
+  "verdict": "In",
+  "over": false,
+  "profile": {
+   "agent": "decider",
+   "actors": [
+    {
+     "id": "decider",
+     "text": "the one who decides whether to take the actions argued about"
+    }
+   ],
+   "situation": "the present one"
+  },
+  "statements": {
+   "finding_true(a_pilot_is_planned)": {
+    "id": "finding_true(a_pilot_is_planned)",
+    "text": "‘A pilot is planned’ is observed.",
+    "label": "in",
+    "pro": [],
+    "con": [],
+    "questions": [],
+    "premise_of": [
+     "a1"
+    ],
+    "exception_of": [],
+    "presumed_by": [
+     "Ann"
+    ],
+    "explain": "Presumed: it holds until someone attacks or questions it."
+   },
+   "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)": {
+    "id": "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)",
+    "text": "“It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing” is generally indicated when ‘a pilot is planned’ holds.",
+    "label": "in",
+    "pro": [],
+    "con": [],
+    "questions": [],
+    "premise_of": [
+     "a1"
+    ],
+    "exception_of": [],
+    "presumed_by": [
+     "Ann"
+    ],
+    "explain": "Presumed: it holds until someone attacks or questions it."
+   },
+   "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))": {
+    "id": "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))",
+    "text": "‘A pilot is planned’ and “it is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing” are strongly correlated.",
+    "label": "in",
+    "pro": [],
+    "con": [],
+    "questions": [],
+    "premise_of": [
+     "a1"
+    ],
+    "exception_of": [],
+    "presumed_by": [
+     "Ann"
+    ],
+    "explain": "Presumed: it holds until someone attacks or questions it."
+   },
+   "worth_finding_out_first(tax_meat,demand_falls)": {
+    "id": "worth_finding_out_first(tax_meat,demand_falls)",
+    "text": "It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+    "label": "in",
+    "issue": "issue:worth_finding_out_first(tax_meat,demand_falls)",
+    "standard": "PE",
+    "opposite": "¬worth_finding_out_first(tax_meat,demand_falls)",
+    "pro": [
+     "a1"
+    ],
+    "con": [],
+    "questions": [],
+    "premise_of": [],
+    "exception_of": [],
+    "presumed_by": [],
+    "explain": "At issue under PE: for it a1 (0.60), against it nothing in force; it wins."
+   },
+   "¬worth_finding_out_first(tax_meat,demand_falls)": {
+    "id": "¬worth_finding_out_first(tax_meat,demand_falls)",
+    "text": "It is not worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’: that possibility counts in deciding on the action now.",
+    "label": "out",
+    "issue": "issue:worth_finding_out_first(tax_meat,demand_falls)",
+    "standard": "PE",
+    "opposite": "worth_finding_out_first(tax_meat,demand_falls)",
+    "pro": [],
+    "con": [
+     "a1"
+    ],
+    "questions": [],
+    "premise_of": [],
+    "exception_of": [],
+    "presumed_by": [],
+    "explain": "At issue under PE: for it nothing in force, against it a1 (0.60); it does not win."
+   }
+  },
+  "arguments": {
+   "a1": {
+    "id": "a1",
+    "owner": "Ann",
+    "role": "main",
+    "scheme": "AS:sign",
+    "scheme_name": "Argument from Sign",
+    "weight": 0.6,
+    "base_weight": 0.6,
+    "in_force": true,
+    "conclusion": "worth_finding_out_first(tax_meat,demand_falls)",
+    "premises": [
+     "finding_true(a_pilot_is_planned)",
+     "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)",
+     "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))"
+    ],
+    "premise_texts": [
+     "‘A pilot is planned’ is observed.",
+     "C is generally indicated when ‘a pilot is planned’ holds.",
+     "‘A pilot is planned’ and C are strongly correlated."
+    ],
+    "cqs": [
+     {
+      "cq": "CQ:correlation",
+      "name": "Correlation Question",
+      "question": "How closely does a finding like ‘a pilot is planned’ go with “it is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing”, as a dependable indicator of it or only a loose one?",
+      "locus": "premise",
+      "stmts": [
+       "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))"
+      ]
+     },
+     {
+      "cq": "CQ:other_event",
+      "name": "Other Event Question",
+      "question": "Would some cause other than “it is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing” account better for the observed ‘a pilot is planned’?",
+      "locus": "argument"
+     },
+     {
+      "cq": "CQ:premise_acceptable",
+      "name": "Challenge",
+      "question": "Why should we accept this premise?",
+      "locus": "premise",
+      "stmts": [
+       "finding_true(a_pilot_is_planned)",
+       "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)"
+      ]
+     }
+    ],
+    "move": 0
+   }
+  },
+  "roots": [
+   "worth_finding_out_first(tax_meat,demand_falls)"
+  ],
+  "board_statements": [
+   "finding_true(a_pilot_is_planned)",
+   "indicated_true(worth_finding_out_first(tax_meat,demand_falls),a_pilot_is_planned)",
+   "strong_correlation(a_pilot_is_planned,worth_finding_out_first(tax_meat,demand_falls))",
+   "worth_finding_out_first(tax_meat,demand_falls)"
+  ],
+  "questions": [],
+  "log": [
+   {
+    "index": 0,
+    "round": 1,
+    "player": "Ann",
+    "text": "Ann argues for “It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing”: It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing. [Argument from Sign, a1]",
+    "accepted": true,
+    "deltas": {
+     "Ann": 6
+    },
+    "args": [
+     "a1"
+    ],
+    "kind": "for",
+    "stmt": "worth_finding_out_first(tax_meat,demand_falls)",
+    "stmt_text": "It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+    "answer": "It is worth finding out first whether action ‘tax meat’ would bring about ‘demand falls’, and until then that possibility should not count in deciding on the action: it can be found out in time, reliably enough to settle the question, at a cost and risk worth bearing.",
+    "scheme": "Argument from Sign",
+    "effects": [
+     "The claim is now IN (it was out)."
+    ]
+   }
+  ],
+  "can_move": true,
+  "notes": [],
+  "seat_kind": "human"
+ },
+ "title": "WAG — inquiry",
+ "traces": [
+  {
+   "format": "wag-trace/2",
+   "type": "decision",
+   "id": "d0",
+   "order": 1,
+   "game": "1",
+   "seq": 0,
+   "turn": 0,
+   "move": 0,
+   "round": 1,
+   "player": "Ann",
+   "seat": "human",
+   "time": "2026-11-28T09:11:26.788218496Z",
+   "attempt": 1,
+   "action": {
+    "type": "support",
+    "attack_type": "",
+    "target_arg_id": "",
+    "target_premise_id": "",
+    "scheme_id": "AS:sign",
+    "answers_cq_id": "",
+    "variable_bindings": {
+     "A": "a_pilot_is_planned",
+     "B": "worth_finding_out_first(tax_meat,demand_falls)"
+    },
+    "target_stmt_id": "worth_finding_out_first(tax_meat,demand_falls)"
+   },
+   "result": {
+    "accepted": true,
+    "arg_ids": [
+     "a1"
+    ],
+    "score_delta": 6
+   },
+   "claim_before": "out",
+   "claim_after": "in",
+   "effects": [
+    "The claim is now IN (it was out)."
+   ]
+  }
+ ],
+ "verdicts": [
+  {
+   "context": "this game",
+   "name": "The weights of this game",
+   "claim": "in"
+  },
+  {
+   "context": "everyday",
+   "name": "Everyday discussion",
+   "claim": "in"
+  },
+  {
+   "context": "policy",
+   "name": "Policy question",
+   "claim": "in"
+  },
+  {
+   "context": "scientific",
+   "name": "Scientific question",
+   "claim": "in"
+  },
+  {
+   "context": "legal",
+   "name": "Legal case (criminal)",
+   "claim": "in"
+  },
+  {
+   "context": "equal",
+   "name": "Equal weights",
+   "claim": "in"
+  }
+ ]
+}

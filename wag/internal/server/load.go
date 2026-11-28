@@ -204,11 +204,16 @@ func (s *Server) loadAs(e *Export, inspect bool, decisions []Trace, seed int64) 
 					"start the server with --data on the data of that version to replay it exactly", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
 			}
 			// The bound by the exception's form is the data's: data without a
-			// question that refuses Other bounds nothing (A9.13c; the check of
-			// F1, F2 and F4, W2), so this build replays such a game on its data.
-			if !same && errors.Is(err, errExceptionForm) {
-				return nil, fmt.Errorf("move %d (%s): %w. The game was played with other scheme data (%s; this server's is %s): "+
-					"this build replays it with --data on the data of that version", i+1, m.PlayerID, err, orUnknown(playedWith), s.data.Hash())
+			// question that refuses Other bounds nothing, so this build replays
+			// such a game on that data, and data with one bounds it as this
+			// data does (A9.13c-A9.13e; the check of K, WK1). Which the game's
+			// data is, this server does not know.
+			var form *exceptionFormError
+			if !same && errors.As(err, &form) {
+				return nil, fmt.Errorf("move %d (%s): %w: %s. The game was played with other scheme data (%s; this server's is %s): "+
+					"if that data has no question that refuses Other, this build replays it with --data on the data of that version; "+
+					"if it has one, a WAG build of commit 6916369 or earlier does, with that data, and the export stays readable as a record",
+					i+1, m.PlayerID, errExceptionForm, form.refusal, orUnknown(playedWith), s.data.Hash())
 			}
 			return nil, fmt.Errorf("move %d (%s): %w", i+1, m.PlayerID, err)
 		}
@@ -319,9 +324,22 @@ var errNameless = errors.New("the game records a value or a name that names noth
 // exception. WAG accepted it until 2026-11-28 (commit 6916369 and before),
 // when S5 looked only at the bridges on the board, and refuses it since, by
 // the exception's form (D099 (4); F1 of the external review of exchange 3),
-// with any data. S5's refusal says so (nascq.FormOnly).
+// with data that has the question refusing Other; data without one bounds
+// nothing by the form. S5's refusal says so (nascq.FormOnly).
 var errExceptionForm = errors.New("it argued or presumed a statement of a protected exception's form before any bridge had it as its exception, " +
 	"which WAG accepted until 2026-11-28 and refuses since, by the exception's form (S5, D099 (4): docs/game-rules.md)")
+
+// exceptionFormError is errExceptionForm with S5's refusal. On the data the
+// game was played with, its remedy is a build of 6916369 or earlier; the
+// loader words the remedy for a game played on other data itself.
+type exceptionFormError struct{ refusal string }
+
+func (e *exceptionFormError) Error() string {
+	return errExceptionForm.Error() + ": " + e.refusal + ". This build cannot replay the game; a WAG build of commit 6916369 or earlier can, " +
+		"with the scheme data the game was played with (--data, if they are not that build's own), and the export stays readable as a record"
+}
+
+func (e *exceptionFormError) Unwrap() error { return errExceptionForm }
 
 // namelessRemedy says what replays a game errNameless refuses.
 func namelessRemedy(what string) error {
@@ -414,9 +432,7 @@ func replay(gs *game.GameState, m game.Move) error {
 			return namelessRemedy(what)
 		}
 		if !played && strings.HasPrefix(res.Error, "S5:") && strings.Contains(res.Error, nascq.FormOnly) {
-			return fmt.Errorf("%w: %s. This build cannot replay the game; a WAG build of commit 6916369 or earlier can, with the scheme data the game was played with "+
-				"(--data, if they are not that build's own), and the export stays readable as a record",
-				errExceptionForm, strings.TrimSuffix(res.Error, nascq.FormOnly))
+			return &exceptionFormError{refusal: strings.TrimSuffix(res.Error, nascq.FormOnly)}
 		}
 		return fmt.Errorf("it was recorded as %s, but replayed as %s (%s)", outcome(recorded), outcome(played), res.Error)
 	}

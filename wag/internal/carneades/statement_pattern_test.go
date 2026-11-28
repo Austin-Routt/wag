@@ -34,6 +34,10 @@ func TestStatementPatternMatchesTheForm(t *testing.T) {
 		{"variables_different", "same(X,Y)", "same({X},{X})", false},
 		{"underscore_is_an_atom", "same(_,_)", "same({X},{X})", true},
 		{"bridge_exception_of_a_variable_claim", "worth_finding_out_first(X,demand_falls)", "worth_finding_out_first({A},{G})", true},
+		// K8b (the independent check of K, NK1): a variable inside a list is
+		// a constant of its own too.
+		{"variable_in_a_list_repeated", "same([X],[X])", "same({A},{A})", true},
+		{"variables_in_lists_different", "same([X],[Y])", "same({A},{A})", false},
 		// K6: the statement as the engine keys it (the negation identity, a
 		// comment, unary + and a doubled -); unary - and ! are other
 		// statements, as its negation is ("negative", above).

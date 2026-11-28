@@ -228,7 +228,11 @@ a rule of the dialogue, not a change of who proves an exception:
   the board has it as its exception yet"). A game that recorded such a move
   replays with a build of commit 6916369 or earlier (with the scheme data it
   was played with), and the loader says so; one played on data without the
-  question replays on this build with `--data` on that data. S5 reads a
+  question replays on this build with `--data` on that data, which bounds
+  nothing by the form; the loader's message for a game played on other data
+  gives both remedies, each with its condition. A model player's trace with such a move
+  does not replay on this build either: `wag-llm --replay` reports where the
+  replay differs from the trace, from the refused move on. S5 reads a
   statement as the engine keys it (since 2026-11-28; the independent check of
   F1, F2 and F4): the engine reads a formula with the negation identity
   (`¬ p`, `¬(p)` and `¬p` are one statement, `¬¬p` is `p`), and WAG names
