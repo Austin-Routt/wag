@@ -1957,12 +1957,19 @@ class SourceShape(unittest.TestCase):
         for value in ('NaN', 'Infinity', '-Infinity'):
             with self.subTest(value=value):
                 self.refused(self.json_with(f'"x": {value}'), f'items.json: is not JSON ({value} is not a JSON value)')
-        # An integer of 5,000 digits, and nesting 9,998 deep, in a member no rule reads: read
-        # (Python refused the first, beyond its 4,300 digits; Go reads both).
+        # An integer of 5,000 digits, and nesting 10,000 deep (Go's bound), in a member no rule reads:
+        # read (Python refused the first, beyond its 4,300 digits, and its C reader stops short of the
+        # second, how short by version: 994 levels in 3.11, about 9,998 in 3.12 and 3.13; Go reads both).
         self.accepted(self.json_with('"x": ' + '7' * 5000))
-        self.accepted(self.json_with('"x": ' + '[' * 9997 + ']' * 9997))
-        # Nested 20,000 deep: refused, one line (it raised RecursionError).
-        self.refused(self.json_with('"x": ' + '[' * 20000 + ']' * 20000), 'items.json: is nested deeper than it can be read')
+        self.accepted(self.json_with('"x": ' + '[' * 9999 + ']' * 9999))
+        # One level deeper, and nested 20,000 deep: refused, one line, as Go refuses them (the second
+        # raised RecursionError).
+        for depth in (10000, 20000):
+            with self.subTest(depth=depth + 1):
+                self.refused(self.json_with('"x": ' + '[' * depth + ']' * depth),
+                             'items.json: is nested deeper than Go reads, 10,000 levels')
+        # A bracket in a text is no nesting.
+        self.accepted(self.json_with('"x": "' + '[' * 20000 + '"'))
         # A lone surrogate escape is read as U+FFFD, as Go reads it: in a text, read; in an id whose
         # item is refused, the line says it (both raised UnicodeEncodeError); and two ids that differ
         # only there are one id given twice.

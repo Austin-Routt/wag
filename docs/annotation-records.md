@@ -60,8 +60,9 @@ JSON as Go reads it (SC15, SC16): UTF-8, no member given twice in one object, no
 number of any length, a lone surrogate escape read as U+FFFD (so two ids that differ only there are
 one id given twice); an id is blank when Go's `strings.TrimSpace` leaves nothing of it (U+00A0 or
 U+3000 alone is blank, U+001C is not), and is otherwise used as written (`" 13292.1"` and
-`"13292.1"` are two ids). `validate.py` refuses nesting deeper than Python's reader goes, 9,998
-levels, where Go reads 10,000 (an `items.json` is five deep). An entry of `ancestors`, `siblings`
+`"13292.1"` are two ids); nesting deeper than Go reads, 10,000 levels, is refused by both, and
+`validate.py` reads to that depth in any Python, whose own C reader stops short of it (an `items.json`
+is five deep). An entry of `ancestors`, `siblings`
 or `children` that is not a claim (an object with a text `claim_id`) is skipped and the others kept
 (R19, case CT16). `validate.py` also refuses a claim whose `kialo_parents` is absent or null, since
 it finds the thesis by its empty list (`[]`); Go reads such a claim as having no Kialo parent, as a

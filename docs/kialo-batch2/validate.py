@@ -19,7 +19,7 @@ except for the adjudication records and the pinned inputs.
 A file is format 2 when it says so ("format": "wag-annotation/2";
 docs/annotation-records.md, decision D092), else format 1: format 1 is
 checked by the rules it was made under (R1-R11), format 2 by R2-R21."""
-import hashlib, json, os, re, sys
+import hashlib, itertools, json, json.scanner, os, re, sys
 import yaml
 
 DOC = os.path.dirname(os.path.abspath(__file__)) + '/'
@@ -59,13 +59,24 @@ lex = json.load(open(DOC + 'lexicon.json', encoding='utf-8'))
 LONE_SURROGATE = re.compile('[\ud800-\udfff]')
 
 
+GO_DEPTH = 10000  # the nesting encoding/json reads (its maxNestingDepth)
+
+
+def nesting(text):
+    """How deep a JSON text's arrays and objects nest, its strings left out (they may hold brackets)."""
+    s = re.sub(r'[^\[\]{}]', '', re.sub(r'"(?:[^"\\]|\\.)*"', '""', text))
+    return max(itertools.accumulate(1 if c in '[{' else -1 for c in s), default=0)
+
+
 def go_json(raw):
     """items.json read as Go reads it (checkedJSON, wag/internal/annotate/json_check.go; cases SC15 and
     SC16, the independent check of F3, F5 and F6). Refused, with its reason: a file that is not UTF-8;
     one that is not JSON (NaN and Infinity are not); a member given twice in one object; nesting deeper
-    than Python's reader goes, 9,998 (Go reads 10,000; an items.json is five deep). Read: a number of any
-    length, and a lone surrogate escape as U+FFFD, as Go reads it, so that two names, or two ids, that
-    differ only there are one name, or one id, given twice."""
+    than Go reads, 10,000 levels (an items.json is five deep). Read: a number of any length, and a lone
+    surrogate escape as U+FFFD, as Go reads it, so that two names, or two ids, that differ only there are
+    one name, or one id, given twice. Python's C reader stops short of Go's depth, how short by version
+    (994 levels in 3.11, about 9,997 in 3.12 and 9,998 in 3.13: found by CI's Python 3.12), so deeper
+    files are read by its pure-Python reader, with room for Go's depth."""
     def once(pairs):
         obj = {}
         for k, v in pairs:
@@ -80,7 +91,7 @@ def go_json(raw):
 
     def fffd(doc):
         """The strings the object hook does not see, values and those in lists, walked without
-        recursion: a file nested 9,998 deep is read, not refused with a traceback."""
+        recursion: a file nested as deep as Go reads is read, not refused with a traceback."""
         if isinstance(doc, str):
             return LONE_SURROGATE.sub('\ufffd', doc)
         stack = [doc] if isinstance(doc, (dict, list)) else []
@@ -96,9 +107,22 @@ def go_json(raw):
         text = raw.decode('utf-8')
     except UnicodeDecodeError:
         raise ValueError('is not UTF-8')
+    if nesting(text) > GO_DEPTH:
+        raise ValueError(f'is nested deeper than Go reads, {GO_DEPTH:,} levels')
+    kw = dict(object_pairs_hook=once, parse_constant=no_constant,
+              parse_int=lambda t: int(t) if len(t) <= 4000 else float(t))
     try:
-        doc = json.loads(text, object_pairs_hook=once, parse_constant=no_constant,
-                         parse_int=lambda t: int(t) if len(t) <= 4000 else float(t))
+        try:
+            doc = json.loads(text, **kw)
+        except RecursionError:
+            dec = json.JSONDecoder(**kw)
+            dec.scan_once = json.scanner.py_make_scanner(dec)
+            limit = sys.getrecursionlimit()
+            sys.setrecursionlimit(limit + 3 * GO_DEPTH)
+            try:
+                doc = dec.decode(text)
+            finally:
+                sys.setrecursionlimit(limit)
     except json.JSONDecodeError as e:
         raise ValueError(f'is not JSON ({e})')
     except RecursionError:
