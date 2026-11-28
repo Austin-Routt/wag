@@ -18,7 +18,7 @@ spec.loader.exec_module(replay)
 
 class UnresolvedTargets(unittest.TestCase):
     def route(self, fields=(), role='cq_answer', cq='CQ:likelihood', wid='verbal_classification',
-              polarity='for', part='premise', malformed=None):
+              polarity='for', part='premise', malformed=None, conclusion=None):
         claim = 'should_be_performed(tax_meat)'
         premise = 'brings_about(tax_meat,reduced_unhealthy_meat_consumption)'
         def instance(cid, scheme, formula):
@@ -35,7 +35,7 @@ class UnresolvedTargets(unittest.TestCase):
              'role':{'kind':'independent_pro','polarity':'for'},
              'target':{'actual':{'claim':'thesis','part':'conclusion','formula':claim}}},
             {'kialo_claim_id':'reply','literal':['A background condition only.'],
-             'instances':[instance('reply',wid,'background_condition')],
+             'instances':[instance('reply',wid,conclusion or 'background_condition')],
              'role':{'kind':role,'cq':cq,'polarity':polarity},'target':{'actual':target}}]}
         items={'discussion':{'thesis_claim_id':'thesis'},'items':[
             {'kialo_claim_id':x['kialo_claim_id'],'text':'Synthetic routing control','kialo_parents':[]}
@@ -54,7 +54,12 @@ class UnresolvedTargets(unittest.TestCase):
                     state['active']='Con' if state['active']=='Pro' else 'Pro'
                     return {'result':{'accepted':True}}
                 aid='a'+str(len(state['arguments'])+1)
-                if act.get('attack_type')=='undercutter' or act.get('answers_cq_id'):
+                if act.get('answers_cq_id') and act.get('target_premise_id'):
+                    # An answer at a premise concludes the premise, or its negation (answers.go), not
+                    # undercut(...): U8's fixture, corrected with F3 (the external review of exchange 3).
+                    conclusion=act['target_premise_id']
+                    if act['type']=='attack':conclusion='¬'+conclusion
+                elif act.get('attack_type')=='undercutter' or act.get('answers_cq_id'):
                     conclusion='undercut('+act['target_arg_id']+')'
                 else:conclusion=act.get('target_stmt_id') or 'new_statement'
                 state['arguments'][aid]={'conclusion':conclusion}
@@ -144,7 +149,9 @@ class UnresolvedTargets(unittest.TestCase):
         self.assertEqual(moves,[])
 
     def test_u8_resolved_named_cq_control_is_answered_at_its_target(self):
-        entry,moves=self.route(wid='expert_opinion')
+        # The control concludes the premise it backs (corrected with F3: the old fixture's answer
+        # concluded background_condition, and its capturing server undercut(a1), neither as the engine does).
+        entry,moves=self.route(wid='expert_opinion',conclusion='brings_about(tax_meat,reduced_unhealthy_meat_consumption)')
         self.assertEqual(entry['played'],'cq')
         self.assertEqual(entry['integration'],'as_intended')
         self.assertEqual(len(moves),1)

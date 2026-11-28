@@ -34,8 +34,18 @@ Each claim's entry in the report keeps what the annotation intended
 (`intended`: scheme, role, target, question) apart from what was played
 (`executed`), and says how they relate (`integration`):
 
-  - as_intended: played with its scheme, in the role the annotation gives
-    (or, for a bare denial, as the challenge the guidelines prescribe);
+  - as_intended: played with its scheme, in the role the annotation gives,
+    its argument concluding the annotation's own conclusion (or, for a bare
+    denial, as the challenge the guidelines prescribe; for an inference
+    target, as an undercutter of its argument);
+  - conclusion_changed: played as intended in scheme and role, but its
+    argument concludes another formula than the annotation's conclusion: the
+    game took the move with another proposition (cases T6, T10, T13, T16). The
+    engine binds an answer variable to the statement answered (expert
+    opinion's S, carneades/answers.go), so an expert answering through a
+    question, or arguing for the statement, is credited with that statement,
+    whatever the claim itself concludes (13292.224 and .233). The row gives
+    both formulas (`conclusion_change`);
   - coverage_gap: its scheme is not one the game has, so it was played with
     Other: the game lacks the scheme, the annotation is not at fault;
   - fragment: the claim states a premise of its target's argument (fit
@@ -44,9 +54,9 @@ Each claim's entry in the report keeps what the annotation intended
   - failed: the game has its scheme, but rejected the intended move, and the
     claim was played with Other or not at all: a failed test of the scheme,
     of its questions or of the annotation, even when the Other move is legal;
-    or a claim coded Other, played with Other, whose argument does not
-    conclude its own annotated conclusion (none, or another one: cases T6-T8)
-    or that lost its named question's route;
+    or a claim played in its role whose annotated conclusion, or its
+    argument's, is missing: there is nothing to compare (cases T7, T8, T12);
+    or a claim coded Other that lost its named question's route;
   - duplicate: a challenge of a premise another claim already challenged;
   - cascade: its target was itself not played as intended, so the premise
     or statement it is about is not on the board; or its target is a
@@ -58,6 +68,12 @@ Each claim's entry in the report keeps what the annotation intended
     validate.py refuses); a clarification, a claim with no scheme and no
     target, or no side; or a claim whose scheme the game lacks, whose move with
     Other the game refused.
+
+Each row whose move made an argument (not a challenge, nor an undercutter of
+an inference) also says whether that argument concludes the annotation's own
+conclusion (`conclusion_preserved`: true or false, null when either formula is
+missing), whatever its label: a coverage gap or a fragment played with Other
+at its target may conclude the target, not the claim (case T17).
 """
 
 import argparse
@@ -575,17 +591,30 @@ def main():
             # Other was the annotation's own scheme, not a substitute for a
             # missing named scheme. A direct statement route still fails to
             # preserve an explicitly named game-CQ answer if that route failed.
+            # Its conclusion is compared below, as every route's is.
             intended_cq = entry["intended"]["role"] == "cq_answer" and str(cq or "").startswith("CQ:")
-            expected = norm(entry["intended"].get("conclusion"))
-            actual = norm(entry["executed"].get("conclusion"))
-            # Other can support an existing target without preserving its own
-            # annotated conclusion. A missing conclusion proves no exact fit.
-            same_conclusion = bool(expected) and expected == actual
-            entry["integration"] = "as_intended" if same_conclusion and not intended_cq else "failed"
+            entry["integration"] = "failed" if intended_cq else "as_intended"
         elif how in ("other", "other-new"):
             entry["integration"] = "coverage_gap" if not wag else "failed"
         else:
             entry["integration"] = "failed" if wag else "not_played"
+        # The annotation's own conclusion, kept or changed (F3 of the external
+        # review of exchange 3; cases T6, T7, T8, T10-T17). A move the game took
+        # in the intended scheme and role can still conclude another formula:
+        # the engine binds an answer variable to the statement answered
+        # (carneades/answers.go), and a statement can fix a conclusion
+        # variable (the retry above leaves it out). An undercutter of an
+        # inference (OC18) concludes undercut(its argument) by design, and a
+        # challenge makes no argument: neither is compared.
+        if how in ("cq", "statement", "new", "other", "other-new", "cq-other") and tpart != "inference":
+            expected = norm(entry["intended"].get("conclusion"))
+            actual = norm((entry.get("executed") or {}).get("conclusion"))
+            entry["conclusion_preserved"] = (expected == actual) if expected and actual else None
+            if entry["integration"] == "as_intended" and not (expected and actual):
+                entry["integration"] = "failed"  # nothing to compare (T7, T8, T12)
+            elif entry["integration"] == "as_intended" and expected != actual:
+                entry["integration"] = "conclusion_changed"
+                entry["conclusion_change"] = {"annotated": expected, "executed": actual}
         if entry["integration"] in ("failed", "not_played") and played_with_other(tclaim) and \
                 any("S8" in x or "S7" in x for x in errors):
             entry["integration"] = "cascade"
@@ -608,7 +637,7 @@ def main():
                "secondary_played": sum(1 for e in report for x in e.get("secondary") or [] if x.get("played")),
                "not_played": sum(1 for e in report if str(e.get("played", "")).startswith("no")),
                "integration": {k: sum(1 for e in report if e.get("integration") == k)
-                               for k in ("as_intended", "fragment", "coverage_gap", "failed", "duplicate", "cascade", "not_played")},
+                               for k in ("as_intended", "conclusion_changed", "fragment", "coverage_gap", "failed", "duplicate", "cascade", "not_played")},
                "data_sha256": call(base, f"/api/games/{gid}/export").get("data_sha256"),
                "discussion": discussion,
                "moves": report}

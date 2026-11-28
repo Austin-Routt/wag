@@ -9,7 +9,8 @@
  "secondary_played": 3,
  "not_played": 10,
  "integration": {
-  "as_intended": 27,
+  "as_intended": 25,
+  "conclusion_changed": 2,
   "fragment": 4,
   "coverage_gap": 7,
   "failed": 1,
@@ -89,7 +90,8 @@
     "arg": "a14",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.9",
@@ -130,7 +132,8 @@
      "arg": "a23"
     }
    ],
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.108",
@@ -161,7 +164,8 @@
     "arg": "a29",
     "conclusion": "current_circumstances(meat_production_and_consumption_harm_environment)"
    },
-   "integration": "fragment"
+   "integration": "fragment",
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.115",
@@ -192,7 +196,8 @@
     "arg": "a31",
     "conclusion": "should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.118",
@@ -223,7 +228,8 @@
     "arg": "a37",
     "conclusion": "should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.25",
@@ -254,7 +260,8 @@
     "arg": "a48",
     "conclusion": "too_slight(tax_meat,food_less_affordable_for_poor)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.33",
@@ -285,7 +292,8 @@
     "arg": "a50",
     "conclusion": "¬brings_about(tax_meat,food_less_affordable_for_poor)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.180",
@@ -316,7 +324,8 @@
     "arg": "a52",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.36",
@@ -347,7 +356,8 @@
     "arg": "a58",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.127",
@@ -378,7 +388,8 @@
     "arg": "a64",
     "conclusion": "bad_outweighs(tax_meat,environmental_harm_from_meat_reduced)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.14",
@@ -409,7 +420,8 @@
     "arg": "a68",
     "conclusion": "text_8571dd05e1a30e4d"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.61",
@@ -443,7 +455,8 @@
    "fallback_after": [
     "new: S2: missing variable binding(s): [A C]"
    ],
-   "integration": "failed"
+   "integration": "failed",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.145",
@@ -474,7 +487,8 @@
     "arg": "a72",
     "conclusion": "should_be_performed(tax_meat_and_fund_synthetic_meat_research)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.174",
@@ -515,7 +529,8 @@
      "arg": "a81"
     }
    ],
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.104",
@@ -546,7 +561,8 @@
     "arg": "a87",
     "conclusion": "realize_more_effectively(governments,environmental_harm_from_meat_reduced,tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.169",
@@ -605,7 +621,8 @@
     "arg": "a93",
     "conclusion": "would_be_realized(meat_price_reflects_real_costs,higher_meat_price)"
    },
-   "integration": "fragment"
+   "integration": "fragment",
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.11",
@@ -636,7 +653,8 @@
     "arg": "a95",
     "conclusion": "current_circumstances(meat_price_below_real_costs)"
    },
-   "integration": "fragment"
+   "integration": "fragment",
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.43",
@@ -667,7 +685,8 @@
     "arg": "a97",
     "conclusion": "good_outweighs(tax_meat,tax_revenue_reduced)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.121",
@@ -708,7 +727,8 @@
      "arg": "a104"
     }
    ],
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.135",
@@ -795,7 +815,8 @@
     "arg": "a111",
     "conclusion": "current_circumstances(meat_production_and_consumption_harm_environment)"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.6",
@@ -826,7 +847,8 @@
     "arg": "a113",
     "conclusion": "would_be_realized(environmental_harm_from_meat_reduced,reduced_meat_consumption)"
    },
-   "integration": "fragment"
+   "integration": "fragment",
+   "conclusion_preserved": null
   },
   {
    "claim": "13292.12",
@@ -878,7 +900,8 @@
     "arg": "a115",
     "conclusion": "current_circumstances(meat_production_and_consumption_harm_environment)"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.8",
@@ -935,7 +958,8 @@
     "arg": "a117",
     "conclusion": "text_83170f5d76133e77"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.192",
@@ -987,7 +1011,8 @@
     "arg": "a119",
     "conclusion": "good(reduced_unhealthy_meat_consumption)"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.30",
@@ -1018,7 +1043,8 @@
     "arg": "a121",
     "conclusion": "should_be_performed(tax_meat)"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.141",
@@ -1070,7 +1096,8 @@
     "arg": "a123",
     "conclusion": "should_be_performed(ration_meat_via_carbon_budgets)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.182",
@@ -1122,7 +1149,8 @@
     "arg": "a129",
     "conclusion": "should_be_performed(tax_only_highest_emitting_meats)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.194",
@@ -1216,7 +1244,8 @@
     "arg": "a141",
     "conclusion": "¬brings_about(tax_meat,starvation_from_reduced_meat_access)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.208",
@@ -1275,7 +1304,12 @@
     "arg": "a144",
     "conclusion": "current_circumstances(meat_price_below_real_costs)"
    },
-   "integration": "as_intended"
+   "integration": "conclusion_changed",
+   "conclusion_preserved": false,
+   "conclusion_change": {
+    "annotated": "external_ghg_costs_highest_for_animal_products",
+    "executed": "current_circumstances(meat_price_below_real_costs)"
+   }
   },
   {
    "claim": "13292.233",
@@ -1306,7 +1340,12 @@
     "arg": "a151",
     "conclusion": "¬may_bring_about(tax_meat,unhealthy_meat_underconsumption)"
    },
-   "integration": "as_intended"
+   "integration": "conclusion_changed",
+   "conclusion_preserved": false,
+   "conclusion_change": {
+    "annotated": "meat_reduction_improves_health",
+    "executed": "¬may_bring_about(tax_meat,unhealthy_meat_underconsumption)"
+   }
   },
   {
    "claim": "13292.235",
@@ -1337,7 +1376,8 @@
     "arg": "a158",
     "conclusion": "should_be_performed(tax_meat_with_accompanying_measures)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.29",
@@ -1368,7 +1408,8 @@
     "arg": "a164",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "coverage_gap"
+   "integration": "coverage_gap",
+   "conclusion_preserved": false
   },
   {
    "claim": "13292.45",
@@ -1420,7 +1461,8 @@
     "arg": "a166",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.56",
@@ -1451,7 +1493,8 @@
     "arg": "a172",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   },
   {
    "claim": "13292.123",
@@ -1482,7 +1525,8 @@
     "arg": "a178",
     "conclusion": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
    },
-   "integration": "as_intended"
+   "integration": "as_intended",
+   "conclusion_preserved": true
   }
  ]
 }
