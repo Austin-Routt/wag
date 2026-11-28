@@ -2,20 +2,20 @@
  "game": "1",
  "claim": "should_be_performed(tax_meat)",
  "claim_label": "out",
- "played": 40,
+ "played": 39,
  "with_their_scheme": 20,
  "as_challenges": 4,
- "with_other": 16,
+ "with_other": 15,
  "secondary_played": 3,
- "not_played": 9,
+ "not_played": 10,
  "integration": {
   "as_intended": 27,
   "fragment": 4,
-  "coverage_gap": 8,
+  "coverage_gap": 7,
   "failed": 1,
   "duplicate": 1,
   "cascade": 7,
-  "not_played": 1
+  "not_played": 2
  },
  "data_sha256": "092b6a6f48a672d2",
  "discussion": [
@@ -883,33 +883,28 @@
   {
    "claim": "13292.8",
    "scheme": "verbal_classification",
-   "role": "cq_answer",
+   "role": "premise_backing",
    "intended": {
     "walton_id": "verbal_classification",
     "wag_id": null,
     "fit": "reconstructed",
-    "role": "cq_answer",
-    "cq": "CQ:likelihood",
+    "role": "premise_backing",
+    "cq": null,
     "polarity": "for",
     "target_claim": "13292.115",
     "target_instance": "13292.115#1",
     "target_part": "premise",
-    "target_formula": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
+    "target_formula": {
+     "unresolved": "the claim states a condition 13292.115's premise presupposes (excess consumption for the tax to reduce), not the premise; no recorded argument connects them (D102)"
+    },
     "conclusion": "instance(north_american_meat_consumption,unhealthy_meat_consumption)"
    },
-   "played": "other",
-   "arg": "a117",
-   "executed": {
-    "how": "other",
-    "scheme_id": "AS:other",
-    "cq": null,
-    "target_arg": null,
-    "target_stmt": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)",
-    "type": "support",
-    "arg": "a117",
-    "conclusion": "brings_about(tax_meat,reduced_unhealthy_meat_consumption)"
-   },
-   "integration": "coverage_gap"
+   "played": "no: unresolved target: formula",
+   "executed": null,
+   "integration": "not_played",
+   "unresolved_target": {
+    "formula": "the claim states a condition 13292.115's premise presupposes (excess consumption for the tax to reduce), not the premise; no recorded argument connects them (D102)"
+   }
   },
   {
    "claim": "13292.46",
@@ -929,7 +924,7 @@
     "conclusion": "evaluation_justified(beef_warrants_higher_tax,tax_beef_more_than_wild_game)"
    },
    "played": "other-new",
-   "arg": "a119",
+   "arg": "a117",
    "executed": {
     "how": "other-new",
     "scheme_id": "AS:other",
@@ -937,7 +932,7 @@
     "target_arg": null,
     "target_stmt": null,
     "type": "support",
-    "arg": "a119",
+    "arg": "a117",
     "conclusion": "text_83170f5d76133e77"
    },
    "integration": "coverage_gap"
@@ -981,7 +976,7 @@
     "conclusion": "good(reduced_meat_consumption)"
    },
    "played": "other",
-   "arg": "a121",
+   "arg": "a119",
    "executed": {
     "how": "other",
     "scheme_id": "AS:other",
@@ -989,7 +984,7 @@
     "target_arg": null,
     "target_stmt": "good(reduced_unhealthy_meat_consumption)",
     "type": "support",
-    "arg": "a121",
+    "arg": "a119",
     "conclusion": "good(reduced_unhealthy_meat_consumption)"
    },
    "integration": "coverage_gap"
@@ -1012,7 +1007,7 @@
     "conclusion": "should_be_performed(tax_meat)"
    },
    "played": "other",
-   "arg": "a123",
+   "arg": "a121",
    "executed": {
     "how": "other",
     "scheme_id": "AS:other",
@@ -1020,7 +1015,7 @@
     "target_arg": null,
     "target_stmt": "should_be_performed(tax_meat)",
     "type": "support",
-    "arg": "a123",
+    "arg": "a121",
     "conclusion": "should_be_performed(tax_meat)"
    },
    "integration": "coverage_gap"
@@ -1064,7 +1059,7 @@
     "conclusion": "should_be_performed(ration_meat_via_carbon_budgets)"
    },
    "played": "new",
-   "arg": "a125",
+   "arg": "a123",
    "executed": {
     "how": "new",
     "scheme_id": "AS:consequences",
@@ -1072,7 +1067,7 @@
     "target_arg": null,
     "target_stmt": null,
     "type": "support",
-    "arg": "a125",
+    "arg": "a123",
     "conclusion": "should_be_performed(ration_meat_via_carbon_budgets)"
    },
    "integration": "as_intended"
@@ -1116,7 +1111,7 @@
     "conclusion": "should_be_performed(tax_only_highest_emitting_meats)"
    },
    "played": "new",
-   "arg": "a131",
+   "arg": "a129",
    "executed": {
     "how": "new",
     "scheme_id": "AS:practical_reasoning_goal",
@@ -1124,7 +1119,7 @@
     "target_arg": null,
     "target_stmt": null,
     "type": "support",
-    "arg": "a131",
+    "arg": "a129",
     "conclusion": "should_be_performed(tax_only_highest_emitting_meats)"
    },
    "integration": "as_intended"
@@ -1210,7 +1205,7 @@
     "conclusion": "¬brings_about(tax_meat,starvation_from_reduced_meat_access)"
    },
    "played": "other",
-   "arg": "a143",
+   "arg": "a141",
    "executed": {
     "how": "other",
     "scheme_id": "AS:other",
@@ -1218,7 +1213,7 @@
     "target_arg": null,
     "target_stmt": "brings_about(tax_meat,starvation_from_reduced_meat_access)",
     "type": "attack",
-    "arg": "a143",
+    "arg": "a141",
     "conclusion": "¬brings_about(tax_meat,starvation_from_reduced_meat_access)"
    },
    "integration": "as_intended"
@@ -1269,7 +1264,7 @@
     "conclusion": "external_ghg_costs_highest_for_animal_products"
    },
    "played": "statement",
-   "arg": "a146",
+   "arg": "a144",
    "executed": {
     "how": "statement",
     "scheme_id": "AS:expert_opinion",
@@ -1277,7 +1272,7 @@
     "target_arg": null,
     "target_stmt": "current_circumstances(meat_price_below_real_costs)",
     "type": "support",
-    "arg": "a146",
+    "arg": "a144",
     "conclusion": "current_circumstances(meat_price_below_real_costs)"
    },
    "integration": "as_intended"
@@ -1300,7 +1295,7 @@
     "conclusion": "meat_reduction_improves_health"
    },
    "played": "cq",
-   "arg": "a153",
+   "arg": "a151",
    "executed": {
     "how": "cq",
     "scheme_id": "AS:expert_opinion",
@@ -1308,7 +1303,7 @@
     "target_arg": "a104",
     "target_stmt": null,
     "type": "attack",
-    "arg": "a153",
+    "arg": "a151",
     "conclusion": "¬may_bring_about(tax_meat,unhealthy_meat_underconsumption)"
    },
    "integration": "as_intended"
@@ -1331,7 +1326,7 @@
     "conclusion": "should_be_performed(tax_meat_with_accompanying_measures)"
    },
    "played": "new",
-   "arg": "a160",
+   "arg": "a158",
    "executed": {
     "how": "new",
     "scheme_id": "AS:consequences",
@@ -1339,7 +1334,7 @@
     "target_arg": null,
     "target_stmt": null,
     "type": "support",
-    "arg": "a160",
+    "arg": "a158",
     "conclusion": "should_be_performed(tax_meat_with_accompanying_measures)"
    },
    "integration": "as_intended"
@@ -1362,7 +1357,7 @@
     "conclusion": "evaluation_justified(individual_liberty_over_meat_eating,state_stays_out_of_meat_eating)"
    },
    "played": "other",
-   "arg": "a166",
+   "arg": "a164",
    "executed": {
     "how": "other",
     "scheme_id": "AS:other",
@@ -1370,7 +1365,7 @@
     "target_arg": null,
     "target_stmt": "should_be_performed(tax_meat)",
     "type": "attack",
-    "arg": "a166",
+    "arg": "a164",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "integration": "coverage_gap"
@@ -1414,7 +1409,7 @@
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "played": "statement",
-   "arg": "a168",
+   "arg": "a166",
    "executed": {
     "how": "statement",
     "scheme_id": "AS:negative_consequences",
@@ -1422,7 +1417,7 @@
     "target_arg": null,
     "target_stmt": "should_be_performed(tax_meat)",
     "type": "attack",
-    "arg": "a168",
+    "arg": "a166",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "integration": "as_intended"
@@ -1445,7 +1440,7 @@
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "played": "statement",
-   "arg": "a174",
+   "arg": "a172",
    "executed": {
     "how": "statement",
     "scheme_id": "AS:negative_consequences",
@@ -1453,7 +1448,7 @@
     "target_arg": null,
     "target_stmt": "¬should_be_performed(tax_meat)",
     "type": "support",
-    "arg": "a174",
+    "arg": "a172",
     "conclusion": "¬should_be_performed(tax_meat)"
    },
    "integration": "as_intended"
@@ -1476,7 +1471,7 @@
     "conclusion": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
    },
    "played": "cq",
-   "arg": "a180",
+   "arg": "a178",
    "executed": {
     "how": "cq",
     "scheme_id": "AS:better_means",
@@ -1484,7 +1479,7 @@
     "target_arg": "a37",
     "target_stmt": null,
     "type": "attack",
-    "arg": "a180",
+    "arg": "a178",
     "conclusion": "realize_more_effectively(governments,meat_price_reflects_real_costs,tax_meat)"
    },
    "integration": "as_intended"

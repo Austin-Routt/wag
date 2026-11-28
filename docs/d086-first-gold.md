@@ -925,3 +925,20 @@ and 13292.61#1's conclusion, in the game's phrasing, is re-rendered. The templat
 would keep") narrows the decided "interferes with": put to the owner as a choice of its own. 13292.12
 and .194 (round 1) are at draft 3, not reviewed; 13292.9, .45 and .61 are round 2's.
 
+**Part 4: exchange 2's objections and verdicts, and the review of D096's application
+(`recode_d086_r1_d3.py`, 2026-11-28).** Exchange 2 agreed with 11 of its 13 items and objected to two,
+both accepted. 13292.8 states a condition 13292.115's premise presupposes, excess consumption for the
+tax to reduce, not the premise: its relation is unresolved by the owner's rule D102 (`premise_backing`,
+its target's formula `{"unresolved": why}`, no question), so it is not played (39 claims played), not
+scored as a relation and not verified. 13292.104#2 restated the action as its S2, which §5 item 4 does
+not allow: it is positive consequences (`brings_about(A,G)` explicit, `good(G)` supplied), its
+challenge records following (the feasibility record at the better means, whose premise it is).
+13292.192's notes say that the modal form carries the source's "may" and that `causes(E1,E2)` is a
+tendency of any strength (D036). `d086-rounds.json` records exchange 2's verdicts; the four agreed items
+unchanged since (13292.25, .218, .43, .204) are agreed at that revision. The guidelines' output format
+asks for `cite` on an inferred premise, and the Go check reads it (R19, cases CT1-CT9; ChatGPT's patch 02,
+written again). The independent review of D096's application (approve with changes) found two latent
+errors and gaps in R20's checks and tests: the replay plays a reconstruction for its own conclusion,
+R20's citation and target rules have no gap, formulas are compared with Go's space set, and 13292.1#2's
+alternatives are written for it (cases RC16-RC21).
+
